@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<expdeitions>
+    <item id="1">
+        <no>1</no>
+        <krname>연습해역</krname>
+        <time>15</time>
+    </item>
+    <item id="2">
+        <no>2</no>
+        <krname>장거리연습항해</krname>
+        <time>30</time>
+    </item>
+    <item id="3">
+        <no>3</no>
+        <krname>경비임무</krname>
+        <time>20</time>
+    </item>
+    <item id="4">
+        <no>4</no>
+        <krname>대잠경계임무</krname>
+        <time>50</time>
+    </item>
+    <item id="5">
+        <no>5</no>
+        <krname>해상호위임무</krname>
+        <time>90</time>
+    </item>
+    <item id="6">
+        <no>6</no>
+        <krname>방공사격연습</krname>
+        <time>40</time>
+    </item>
+    <item id="7">
+        <no>7</no>
+        <krname>관함식연습</krname>
+        <time>60</time>
+    </item>
+    <item id="8">
+        <no>8</no>
+        <krname>관함식</krname>
+        <time>180</time>
+    </item>
+    <item id="9">
+        <no>9</no>
+        <krname>유조선호위임무</krname>
+        <time>240</time>
+    </item>
+    <item id="10">
+        <no>10</no>
+        <krname>강행정찰임무</krname>
+        <time>90</time>
+    </item>
+    <item id="11">
+        <no>11</no>
+        <krname>보크사이트수송임무</krname>
+        <time>300</time>
+    </item>
+    <item id="12">
+        <no>12</no>
+        <krname>자원수송임무</krname>
+        <time>480</time>
+    </item>
+    <item id="13">
+        <no>13</no>
+        <krname>쥐수송작전</krname>
+        <time>240</time>
+    </item>
+    <item id="14">
+        <no>14</no>
+        <krname>포위육전대철수작전</krname>
+        <time>360</time>
+    </item>
+    <item id="15">
+        <no>15</no>
+        <krname>미끼기동부대지원작전</krname>
+        <time>720</time>
+    </item>
+    <item id="16">
+        <no>16</no>
+        <krname>함대결전지원작전</krname>
+        <time>900</time>
+    </item>
+    <item id="17">
+        <no>17</no>
+        <krname>적지정찰작전</krname>
+        <time>45</time>
+    </item>
+    <item id="18">
+        <no>18</no>
+        <krname>항공기수송작전</krname>
+        <time>300</time>
+    </item>
+    <item id="19">
+        <no>19</no>
+        <krname>북호작전</krname>
+        <time>360</time>
+    </item>
+    <item id="20">
+        <no>20</no>
+        <krname>잠수함초계작전</krname>
+        <time>120</time>
+    </item>
+    <item id="21">
+        <no>21</no>
+        <krname>북방쥐수송작전</krname>
+        <time>140</time>
+    </item>
+    <item id="22">
+        <no>22</no>
+        <krname>함대연습</krname>
+        <time>180</time>
+    </item>
+    <item id="23">
+        <no>23</no>
+        <krname>항공전함운용연습</krname>
+        <time>240</time>
+    </item>
+    <item id="24">
+        <no>24</no>
+        <krname>북방항로해상호위</krname>
+        <time>500</time>
+    </item>
+    <item id="25">
+        <no>25</no>
+        <krname>통상파괴작전</krname>
+        <time>2400</time>
+    </item>
+    <item id="26">
+        <no>26</no>
+        <krname>적모항공습작전</krname>
+        <time>4800</time>
+    </item>
+    <item id="27">
+        <no>27</no>
+        <krname>잠수함통상파괴작전</krname>
+        <time>1200</time>
+    </item>
+    <item id="28">
+        <no>28</no>
+        <krname>서방해역봉쇄작전</krname>
+        <time>1500</time>
+    </item>
+    <item id="29">
+        <no>29</no>
+        <krname>잠수함파견연습</krname>
+        <time>1440</time>
+    </item>
+    <item id="30">
+        <no>30</no>
+        <krname>잠수함파견작전</krname>
+        <time>2880</time>
+    </item>
+    <item id="31">
+        <no>31</no>
+        <krname>해외함과의접촉</krname>
+        <time>120</time>
+    </item>
+    <item id="32">
+        <no>32</no>
+        <krname>원양연습항해</krname>
+        <time>1440</time>
+    </item>
+    <item id="33" special="1">
+        <no>33</no>
+        <krname>전방지원함대</krname>
+        <time>15</time>
+    </item>
+    <item id="34" special="1">
+        <no>34</no>
+        <krname>함대결전지원임무</krname>
+        <time>30</time>
+    </item>
+    <item id="35">
+        <no>35</no>
+        <krname>MO작전</krname>
+        <time>420</time>
+    </item>
+    <item id="36">
+        <no>36</no>
+        <krname>수상기지건설</krname>
+        <time>540</time>
+    </item>
+    <item id="37">
+        <no>37</no>
+        <krname>도쿄급행1</krname>
+        <time>165</time>
+    </item>
+    <item id="38">
+        <no>38</no>
+        <krname>도쿄급행2</krname>
+        <time>175</time>
+    </item>
+    <item id="39">
+        <no>39</no>
+        <krname>원양잠수함작전</krname>
+        <time>1800</time>
+    </item>
+    <item id="40">
+        <no>40</no>
+        <krname>수상기전선운송</krname>
+        <time>410</time>
+    </item>
+</expdeitions>
