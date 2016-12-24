@@ -47,7 +47,7 @@ public class KcaHandler implements Runnable {
 	}
 	
 	public void run(){
-		KcaProxyServer.incDelays();
+
 		String data;
 		try {
 			if (gzipped) {
@@ -84,7 +84,7 @@ public class KcaHandler implements Runnable {
 		}
 		handler = null;
 		bytes = null;
-		KcaProxyServer.decDelays();
+
 		//Log.e("KCA", "RefCnt: "+String.valueOf(contentBuf.refCnt()));
 		Log.e("KCA", "Data Processed: "+url);
 	}

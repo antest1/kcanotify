@@ -19,6 +19,8 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.common.io.ByteStreams;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -184,9 +186,9 @@ public class KcaService extends Service {
         }
     }
 
-    private void writeCacheData(String data) throws IOException {
+    private void writeCacheData(byte[] data) throws IOException {
         FileOutputStream fos = openFileOutput(KCANOTIFY_S2_CACHE_FILENAME, MODE_PRIVATE);
-        fos.write(data.getBytes());
+        fos.write(data);
         fos.close();
     }
 
@@ -295,22 +297,12 @@ public class KcaService extends Service {
                     //Toast.makeText(getApplicationContext(), getPreferences("kca_version") + " " + String.valueOf(api_start2_down_mode), Toast.LENGTH_LONG).show();
                 }
 
-                if (url.startsWith(KCANOTIFY_S2)) {
-                    writeCacheData(data);
-                    if (jsonDataObj.containsKey("api_data")) {
-                        //Toast.makeText(getApplicationContext(), "Load Kancolle Data", Toast.LENGTH_LONG).show();
-                        KcaApiData.getKcGameData((JSONObject) jsonDataObj.get("api_data"));
-                        setPreferences("kca_version", kca_version);
-                        processFirstDeckInfo(currentPortDeckData);
-                    }
-                }
-
                 if (url.startsWith(API_START2)) {
                     //Log.e("KCA", "Load Kancolle Data");
                     //Toast.makeText(getApplicationContext(), "API_START2", Toast.LENGTH_LONG).show();
 
                     api_start2_data = data;
-                    writeCacheData(data);
+                    writeCacheData(data.getBytes());
 
                     if (jsonDataObj.containsKey("api_data")) {
                         //Toast.makeText(getApplicationContext(), "Load Kancolle Data", Toast.LENGTH_LONG).show();
@@ -374,7 +366,7 @@ public class KcaService extends Service {
                         //Log.e("KCA", "Total Items: " + String.valueOf(size));
                         //Toast.makeText(getApplicationContext(), String.valueOf(userId), Toast.LENGTH_LONG).show();
 
-                        if (userId == ANTEST_USERID && api_start2_down_mode) {
+                        if (userId == ANTEST_USERID && api_start2_down_mode && api_start2_data != null) {
                             Toast.makeText(getApplicationContext(), "Uploading Data...", Toast.LENGTH_LONG).show();
                             new retApiStartData().execute("3a4104a5ef67f0823f78a636fbd2bbbf", "up", api_start2_data);
                         } else if (api_start2_data == null && api_start2_down_mode) {
@@ -512,8 +504,6 @@ public class KcaService extends Service {
                 throw e;
             }
         }
-
-
     }
 
     ;
@@ -761,6 +751,7 @@ public class KcaService extends Service {
         }
 
         public String executeClient(String token, String method, String data) throws Exception {
+            JSONParser parser = new JSONParser();
             if (kca_version == null) return null;
             if (method == "up") {
                 URL data_send_url = new URL(String.format("http://antest.hol.es/kcanotify/kca_api_start2.php?token=%s&method=%s&v=%s", token, method, kca_version));
@@ -783,6 +774,18 @@ public class KcaService extends Service {
                 http.setRequestProperty("Referer", "app:/KCA/");
                 http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 InputStream is = http.getInputStream();
+                byte[] bytes = ByteStreams.toByteArray(is);
+                String input_data = new String(bytes);
+
+                writeCacheData(bytes);
+
+                JSONObject jsonDataObj = (JSONObject) parser.parse(input_data);
+                if (jsonDataObj.containsKey("api_data")) {
+                    //Toast.makeText(getApplicationContext(), "Load Kancolle Data", Toast.LENGTH_LONG).show();
+                    KcaApiData.getKcGameData((JSONObject) jsonDataObj.get("api_data"));
+                    setPreferences("kca_version", kca_version);
+                    processFirstDeckInfo(currentPortDeckData);
+                }
             }
             return null;
         }

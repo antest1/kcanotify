@@ -1,7 +1,14 @@
 package com.antest1.kcanotify;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.littleshoot.proxy.HttpFilters;
 import org.littleshoot.proxy.HttpFiltersAdapter;
 import org.littleshoot.proxy.HttpFiltersSource;
@@ -10,15 +17,22 @@ import org.littleshoot.proxy.HttpProxyServer;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
 import android.content.Context;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
+import io.netty.handler.codec.http.DefaultFullHttpRequest;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpVersion;
 
 public class KcaProxyServer {
 	private static boolean is_on;
@@ -26,23 +40,12 @@ public class KcaProxyServer {
 	private static final int PORT = 24110;
 	public static Context cntx;
 	public static Handler handler;
-	private static final String KCA_HOST = "Host: 203.104.209.7";
-	private static final String KC_APP_REFERER = "Referer: app:/AppMain.swf/";
-	private static final String KCANOTIFY_REFERER = "Referer: app:/KCA/";
+
+	private static final String KCA_HOST = "203.104.209.7";
+	private static final String KC_APP_REFERER = "app:/AppMain.swf/";
 	private static final String HTTP_CONTENT_ENCODING = HttpHeaders.Names.CONTENT_ENCODING;
 
-	public static int delays = 20;
-	public static void incDelays() {
-		if (delays < 50) {
-			delays += 10;
-		}
-	}
-
-	public static void decDelays() {
-		if (delays > 20) {
-			delays -= 10;
-		}
-	}
+    private static final String KCA_USERAGENT = String.format("Kca/%s ", BuildConfig.VERSION_NAME);
 
 	public static ExecutorService executorService = Executors.newScheduledThreadPool(15);
 
@@ -54,8 +57,8 @@ public class KcaProxyServer {
 		handler = h;
 		HttpFiltersSource filtersSource = getFiltersSource();
 		proxyServer = DefaultHttpProxyServer.bootstrap().withPort(PORT).withAllowLocalOnly(false)
-				.withConnectTimeout(120000).withFiltersSource(filtersSource).withName("FilterProxy").start();
-		// //Log.e("KCA", "Start");
+				.withConnectTimeout(20000).withFiltersSource(filtersSource).withName("FilterProxy").start();
+		Log.e("KCA", "Start");
 	}
 
 	public static void stop() {
@@ -73,13 +76,10 @@ public class KcaProxyServer {
 
 	private static HttpFiltersSource getFiltersSource() {
 		return new HttpFiltersSourceAdapter() {
+            @Override
+            public int getMaximumRequestBufferSizeInBytes() { return 128 * 1024 * 1024; }
 
-			@Override
-			public int getMaximumResponseBufferSizeInBytes() {
-				return 128 * 1024 * 1024;
-			}
-
-			@Override
+            @Override
 			public HttpFilters filterRequest(HttpRequest originalRequest) {
 
 				return new HttpFiltersAdapter(originalRequest) {
@@ -87,19 +87,18 @@ public class KcaProxyServer {
 					boolean isKcsRes = false;
 					boolean isKcaRes = false;
 					boolean isKcaVer = false;
-					boolean isKcaApiS2 = false;
 					boolean is_kca = false;
 
 					String currentUrl = "";
 
 					@Override
 					public HttpResponse proxyToServerRequest(HttpObject httpObject) {
-						if (httpObject instanceof HttpRequest) {
+						if (httpObject instanceof FullHttpRequest) {
 							is_kca = false;
-							HttpRequest request = (HttpRequest) httpObject;
+							FullHttpRequest request = (FullHttpRequest) httpObject;
 							String requestUri = request.getUri();
 
-							if(request.headers().contains(HttpHeaders.Names.ACCEPT_ENCODING)) {
+                            if(request.headers().contains(HttpHeaders.Names.ACCEPT_ENCODING)) {
 								String acceptEncodingData = request.headers().get(HttpHeaders.Names.ACCEPT_ENCODING).trim();
 								if (acceptEncodingData.endsWith(",")) {
 									acceptEncodingData = acceptEncodingData.concat(" sdch");
@@ -107,102 +106,128 @@ public class KcaProxyServer {
 								}
 							}
 
-							Log.e("KCA", "Request " + request);
-							Log.e("KCA", request.toString());
 							String[] requestData = request.toString().split("\n");
-
+                            String requestHeaderString = "";
 							boolean isKcRequest = false;
 							isKcaVer = requestUri.startsWith("/kca/version");
 							isKcsApi = requestUri.startsWith("/kcsapi/api_");
 							isKcsRes = requestUri.startsWith("/kcs/resources");
 							isKcaRes = requestUri.startsWith("/kca/resources");
-							isKcaApiS2 = requestUri.startsWith("/kcanotify/kca_api_start2.php");
-							for (int i = 0; i < requestData.length; i++) {
-								if (requestData[i].startsWith(KC_APP_REFERER) || requestData[i].startsWith(KCA_HOST)
-										|| requestData[i].startsWith(KCANOTIFY_REFERER)) {
-									isKcRequest = true;
-									break;
-								}
-							}
 
-							if (isKcRequest && (isKcaVer || isKcsApi || isKcsRes || isKcaRes || isKcaApiS2)) {
-								// Log.e("KCA", "Request " + requestUri);
-								// //Log.e("KCA", request.getUri());
-								is_kca = true;
-								currentUrl = requestUri;
-								try {
-									Thread.sleep(delays);
-									//Log.e("KCA", "Delay " + String.valueOf(delays));
-									//Log.e("KCA", "Request " + requestUri);
-								} catch(InterruptedException ex) {
-									Thread.currentThread().interrupt();
-								}
+                            boolean isTestRequest = false;
+                            boolean isInternalRequest = false;
+
+                            Iterator<Map.Entry<String, String>> requestHeader = request.headers().iterator();
+                            while (requestHeader.hasNext()) {
+                                Map.Entry<String, String> data = requestHeader.next();
+                                String key = data.getKey();
+                                String value = data.getValue();
+                                requestHeaderString += key + ": " + value + "\r\n";
+                                if (key.equals(HttpHeaders.Names.REFERER)) {
+                                    if (value.startsWith(KC_APP_REFERER)) {
+                                        isKcRequest = true;
+                                    }
+                                }
+                                if (key.equals(HttpHeaders.Names.HOST)) {
+                                    if (value.startsWith(KCA_HOST)) {
+                                        isKcRequest = true;
+                                    }
+                                }
+                                if (key.equals(HttpHeaders.Names.USER_AGENT)) {
+                                    if (value.contains(KCA_USERAGENT)) {
+                                        isInternalRequest = true;
+                                    }
+                                }
+                            }
+
+                            if (isInternalRequest) {
+                                Log.e("KCA", "Request(I) " + request.getUri());
+                                String useragent = HttpHeaders.getHeader(request, HttpHeaders.Names.USER_AGENT).replaceAll(KCA_USERAGENT, "").trim();
+                                request.headers().set(HttpHeaders.Names.USER_AGENT, useragent);
+                                return null;
+                            }
+
+                            //if (isKcRequest  && !isInternalRequest && (isKcaVer || isKcsApi || isKcsRes || isKcaRes || isKcaApiS2)) {
+                            if (isKcRequest  && !isInternalRequest && (isKcsApi || isKcaVer)) {
+                                /*
+                                Log.e("KCA", "Request " + request);
+                                Log.e("KCA", requestHeaderString);
+
+                                ByteBuf contentBuf = request.content();
+                                byte[] bytes = new byte[contentBuf.readableBytes()];
+                                int readerIndex = contentBuf.readerIndex();
+                                contentBuf.getBytes(readerIndex, bytes);
+                                String s = new String(bytes);
+                                Log.e("KCA", request.getUri() + " " + s);
+                                */
+                                Log.e("KCA", "Request " + request.getUri());
+
+                                ByteBuf contentBuf = request.content();
+                                boolean gzipped = false;
+                                byte[] bytes = new byte[contentBuf.readableBytes()];
+                                int readerIndex = contentBuf.readerIndex();
+                                contentBuf.getBytes(readerIndex, bytes);
+                                String requestBody = new String(bytes);
+
+                                try {
+                                    JSONParser parser = new JSONParser();
+                                    String responseData = new KcaRequest().execute(request.getUri(), request.getMethod().name(), requestHeaderString, requestBody).get();
+                                    JSONObject responseObject = (JSONObject) parser.parse(responseData);
+                                    String responseHeader = (String) responseObject.get("header");
+                                    int statusCode = Integer.valueOf((String)responseObject.get("status"));
+                                    byte[] responseBody = Base64.decode((String)responseObject.get("data"), Base64.DEFAULT);
+                                    ByteBuf buffer = Unpooled.wrappedBuffer(responseBody);
+                                    HttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.valueOf(statusCode), buffer);
+                                    for (String line: responseHeader.split("\r\n")) {
+                                        String[] entry = line.trim().split(": ");
+                                        HttpHeaders.setHeader(response, entry[0], entry[1]);
+                                    }
+                                    //HttpHeaders.setContentLength(response, buffer.readableBytes());
+                                    //HttpHeaders.setHeader(response, HttpHeaders.Names.CONTENT_TYPE, "text/html");
+                                    is_kca = true;
+                                    currentUrl = requestUri;
+
+                                    if (response.headers().contains(HTTP_CONTENT_ENCODING)) {
+                                        if (response.headers().get(HTTP_CONTENT_ENCODING).startsWith("gzip")) {
+                                            gzipped = true;
+                                        }
+                                    }
+
+                                    KcaHandler k = new KcaHandler(handler, currentUrl, responseBody, gzipped);
+                                    executorService.execute(k);
+
+                                    return response;
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
 							}
 						}
 						return null;
 					}
-					
-					@Override
-					public HttpObject serverToProxyResponse(HttpObject httpObject) {
-						boolean gzipped = false;
-
-						if (httpObject instanceof FullHttpResponse) {
-
-							FullHttpResponse response = (FullHttpResponse) httpObject;
-
-
-							//Log.e("KCA", "Response " + currentUrl + " " +
-							//String.valueOf(contentBuf.readableBytes()));
-
-							if (response.headers().contains(HTTP_CONTENT_ENCODING)) {
-								if (response.headers().get(HTTP_CONTENT_ENCODING).startsWith("gzip")) {
-									gzipped = true;
-								}
-							}
-							
-							if (is_kca) {
-
-
-								if (isKcsApi || isKcaVer || isKcaApiS2) {
-									ByteBuf contentBuf = response.content();
-									Log.e("KCA", "Response " + currentUrl + " " + String.valueOf(contentBuf.readableBytes()));
-									byte[] bytes = new byte[contentBuf.readableBytes()];
-									int readerIndex = contentBuf.readerIndex();
-									contentBuf.getBytes(readerIndex, bytes);
-
-									KcaHandler k = new KcaHandler(handler, currentUrl, bytes, gzipped);
-									executorService.execute(k);
-
-									response = null;
-									contentBuf = null;
-									bytes = null;
-								}
-							}
-
-						}
-
-						return httpObject;
-
-					}
 
 					@Override
 					public void proxyToServerConnectionSucceeded(ChannelHandlerContext serverCtx) {
+                        //Log.e("KCA", "proxyToServerConnectionSucceeded");
 						ChannelPipeline pipeline = serverCtx.pipeline();
+                        /*
 						if (pipeline.get("inflater") != null) {
 							// Log.e("KCA", "remove inflater");
 							pipeline.remove("inflater");
-						}
-						/*
-						 * if (pipeline.get("aggregator") != null) {
-						 * //Log.e("KCA", "remove aggregator");
-						 * pipeline.remove("aggregator"); }
-						 */
+						}*/
+                        /*
+						 if (pipeline.get("aggregator") != null) {
+                            Log.e("KCA", "remove aggregator");
+                            pipeline.remove("aggregator");
+                         }
+                         */
 						super.proxyToServerConnectionSucceeded(serverCtx);
 					}
-
 				};
 			}
-
 		};
 	}
 
