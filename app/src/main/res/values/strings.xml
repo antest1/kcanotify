@@ -5,4 +5,11 @@
 
     <string name="developer_email">alias_n@live.com</string>
     <string name="error_text">오류가 발생했습니다. 개발자에게 오류 로그를 보내주세요.</string>
+
+
+    <string name="seek_type_0">단순합</string>
+    <string name="seek_type_1">33식/1</string>
+    <string name="seek_type_3">33식/3</string>
+    <string name="seek_type_4">33식/4</string>
+
 </resources>

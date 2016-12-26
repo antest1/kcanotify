@@ -12,7 +12,7 @@ public class KcaDeckInfo {
     // Formula 33 (2016.12.26)
     // Reference: http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
     //            http://kancolle-calc.net/deckbuilder.html
-    public static double getSeekValue(JSONArray deckPortData, int deckid, boolean isCombined, int Cn) {
+    public static double getSeekValue(JSONArray deckPortData, int deckid, int Cn) {
         double pureTotalSeek = 0.0;
         double totalSeek = 0.0;
 

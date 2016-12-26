@@ -20,6 +20,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
+import com.google.common.io.Resources;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -229,6 +230,10 @@ public class KcaService extends Service {
         nHandler = new kcaNotificationHandler();
         kcaExpeditionRunnableList = new KcaExpedition[3];
         isPortAccessed = false;
+
+        if(getPreferences("kca_seek_cn").equals("")) {
+            setPreferences("kca_seek_cn", "1");
+        }
 
         KcaBattle.setHandler(nHandler);
         KcaProxyServer.start(handler);
@@ -577,35 +582,25 @@ public class KcaService extends Service {
             return;
         }
 
-        List<String> ship_names = new ArrayList<String>();
-        long arrive_time;
-        String deck_name;
-
-        JSONObject deck = (JSONObject) data.get(0);
-        JSONArray apiShip = (JSONArray) deck.get("api_ship");
-        for (int i = 0; i < apiShip.size(); i++) {
-            int ship_id = intv(apiShip.get(i));
-            if (ship_id != -1) {
-                JSONObject user_ship_data = getUserShipDataById(ship_id, "ship_id,lv");
-                if (user_ship_data == null) {
-                    kcaFirstDeckInfo = "error loading user_ship_data";
-                    return;
-                }
-                int ship_kc_id = intv(user_ship_data.get("ship_id"));
-                int ship_lv = intv(user_ship_data.get("lv"));
-
-                JSONObject kc_ship_data = getKcShipDataById(ship_kc_id, "name");
-                if (kc_ship_data == null) {
-                    kcaFirstDeckInfo = String.format("error loading kc_ship_data %d", ship_kc_id);
-                    return;
-                }
-
-                String ship_name = (String) kc_ship_data.get("name");
-                ship_names.add(String.format("%s(%d)", ship_name, ship_lv));
-                //ship_names.add(String.valueOf(KcaApiData.kcItemData.size()));
-            }
+        int cn = Integer.valueOf(getPreferences("kca_seek_cn"));
+        String seekType = "";
+        switch(cn) {
+            case 1:
+                seekType = getResources().getString(R.string.seek_type_1);
+                break;
+            case 3:
+                seekType = getResources().getString(R.string.seek_type_3);
+                break;
+            case 4:
+                seekType = getResources().getString(R.string.seek_type_3);
+                break;
+            default:
+                seekType = getResources().getString(R.string.seek_type_0);
+                break;
         }
-        kcaFirstDeckInfo = "제1함대: ".concat(joinStr(ship_names, ", "));
+
+        double seekValue = KcaDeckInfo.getSeekValue(data, 0, cn);
+        kcaFirstDeckInfo = String.format("색적(%s): %.2f", seekType, Math.floor(seekValue*100)/100);
         setFrontViewNotifier(FRONT_NONE, 0, null);
     }
 
