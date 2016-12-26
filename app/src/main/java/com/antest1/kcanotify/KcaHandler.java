@@ -37,23 +37,25 @@ public class KcaHandler implements Runnable {
 	FullHttpResponse response;
 
 	boolean gzipped;
-	byte[] bytes;
+	byte[] requestBytes;
+	byte[] responseBytes;
 	
-	public KcaHandler(Handler h, String u, byte[] b, boolean gz){
+	public KcaHandler(Handler h, String u, byte[] b1, byte[] b2, boolean gz){
 		handler = h;
 		url = u;
-		bytes = b;
+		requestBytes = b1;
+		responseBytes = b2;
 		gzipped = gz;
 	}
 	
 	public void run(){
 
-		String data;
+		String data, reqData = "";
 		try {
 			if (gzipped) {
 				ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 				GZIPInputStream gzipInStream;
-				gzipInStream = new GZIPInputStream(new BufferedInputStream(new ByteArrayInputStream(bytes)));
+				gzipInStream = new GZIPInputStream(new BufferedInputStream(new ByteArrayInputStream(responseBytes)));
 
 				int size;
 				byte[] buffer = new byte[BufferSize];
@@ -64,13 +66,16 @@ public class KcaHandler implements Runnable {
 				outStream.close();
 				data = new String(outStream.toByteArray());
 			} else {
-				data = new String(bytes);
+				data = new String(responseBytes);
+				reqData = new String(requestBytes);
 			}
+
 			//parseJSON(url, data);
 			Bundle bundle = new Bundle();
 			bundle.putString("url", url.replace("/kcsapi", ""));
+			bundle.putString("request", reqData);
 			bundle.putString("data", data.replace("svdata=", ""));
-			
+
 			Message msg = handler.obtainMessage();
 			msg.setData(bundle);
 			
@@ -83,7 +88,7 @@ public class KcaHandler implements Runnable {
 			e.printStackTrace();
 		}
 		handler = null;
-		bytes = null;
+		responseBytes = null;
 
 		//Log.e("KCA", "RefCnt: "+String.valueOf(contentBuf.refCnt()));
 		Log.e("KCA", "Data Processed: "+url);

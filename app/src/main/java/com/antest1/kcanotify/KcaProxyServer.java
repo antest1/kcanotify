@@ -164,14 +164,14 @@ public class KcaProxyServer {
 
                                 ByteBuf contentBuf = request.content();
                                 boolean gzipped = false;
-                                byte[] bytes = new byte[contentBuf.readableBytes()];
+                                byte[] requestBody = new byte[contentBuf.readableBytes()];
                                 int readerIndex = contentBuf.readerIndex();
-                                contentBuf.getBytes(readerIndex, bytes);
-                                String requestBody = new String(bytes);
+                                contentBuf.getBytes(readerIndex, requestBody);
+                                String requestBodyStr = new String(requestBody);
 
                                 try {
                                     JSONParser parser = new JSONParser();
-                                    String responseData = new KcaRequest().execute(request.getUri(), request.getMethod().name(), requestHeaderString, requestBody).get();
+                                    String responseData = new KcaRequest().execute(request.getUri(), request.getMethod().name(), requestHeaderString, requestBodyStr).get();
                                     JSONObject responseObject = (JSONObject) parser.parse(responseData);
                                     String responseHeader = (String) responseObject.get("header");
                                     int statusCode = Integer.valueOf((String)responseObject.get("status"));
@@ -193,7 +193,7 @@ public class KcaProxyServer {
                                         }
                                     }
 
-                                    KcaHandler k = new KcaHandler(handler, currentUrl, responseBody, gzipped);
+                                    KcaHandler k = new KcaHandler(handler, currentUrl, requestBody, responseBody, gzipped);
                                     executorService.execute(k);
 
                                     return response;

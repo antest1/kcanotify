@@ -269,6 +269,7 @@ public class KcaService extends Service {
         public void handleMessage(Message msg) {
             String url = msg.getData().getString("url");
             String data = msg.getData().getString("data");
+            String request = msg.getData().getString("request");
 
             if (!KcaProxyServer.is_on() || url.length() == 0 || viewNotifi == null) {
                 return;
