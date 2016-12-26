@@ -39,10 +39,10 @@ public class KcaBattle {
     public static final String API_REQ_COMBINED_GOBACKPORT = "/api_req_combined_battle/goback_port"; // 퇴피
 
     public static final String KCA_API_NOTI_HEAVY_DMG = "/kca_api/noti_heavy_dmg";
+    public static final String KCA_API_NOTI_GOBAKCPORT = "/kca_api/noti_gobackport";
 
     public static final int COMBINED_A = 1;
     public static final int COMBINED_W = 2;
-    public static final int COMBINED_T = 3;
 
     public static int[] maxhps = new int[13];
     public static int[] nowhps = new int[13];
@@ -622,6 +622,15 @@ public class KcaBattle {
 			 */
         }
 
+        if (url.equals(API_REQ_COMBINED_GOBACKPORT)) {
+            JSONObject battleResultInfo = new JSONObject();
+            Bundle bundle = new Bundle();
+            bundle.putString("url", KCA_API_NOTI_GOBAKCPORT);
+            bundle.putString("data", battleResultInfo.toJSONString());
+            Message sMsg = sHandler.obtainMessage();
+            sMsg.setData(bundle);
+            sHandler.sendMessage(sMsg);
+        }
 
         if (url.equals(API_REQ_COMBINED_BATTLE_EC) || url.equals(API_REQ_COMBINED_BATTLE_EACH) || url.equals(API_REQ_COMBINED_BATTLE_EACH_WATER)) {
             int combined_type = 0;

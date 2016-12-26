@@ -6,6 +6,8 @@
     <string name="developer_email">alias_n@live.com</string>
     <string name="error_text">오류가 발생했습니다. 개발자에게 오류 로그를 보내주세요.</string>
 
+    <string name="heavy_damaged">대파당한 함선이 있습니다!</string>
+    <string name="goback_left">퇴피는 왼쪽</string>
 
     <string name="seek_type_0">단순합</string>
     <string name="seek_type_1">33식/1</string>

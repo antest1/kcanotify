@@ -132,6 +132,7 @@ public class KcaService extends Service {
     public static final String KCA_API_NOTI_EXP_CANCELED = "/kca_api/noti_exp_canceled";
     public static final String KCA_API_NOTI_HEAVY_DMG = "/kca_api/noti_heavy_dmg";
     public static final String KCA_API_NOTI_BATTLE_INFO = "/kca_api/noti_battle_info";
+    public static final String KCA_API_NOTI_GOBACKPORT = "/kca_api/noti_gobackport";
 
     public static final int NOTI_FRONT = 0;
     public static final int NOTI_EXP = 1;
@@ -545,7 +546,17 @@ public class KcaService extends Service {
                         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(1500);
                     }
-                    Toast.makeText(getApplicationContext(), "대파당한 함선이 있습니다!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.heavy_damaged), Toast.LENGTH_LONG).show();
+                    setFrontViewNotifier(FRONT_NONE, 0, null);
+                    Notifi_M.notify(getNotiIdx(NOTI_FRONT, 1), viewNotifi.build());
+                }
+
+                if (url.startsWith(KCA_API_NOTI_GOBACKPORT)) {
+                    if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
+                        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(300);
+                    }
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.goback_left), Toast.LENGTH_LONG).show();
                     setFrontViewNotifier(FRONT_NONE, 0, null);
                     Notifi_M.notify(getNotiIdx(NOTI_FRONT, 1), viewNotifi.build());
                 }
