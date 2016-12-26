@@ -18,6 +18,9 @@ public class KcaApiData {
 	public static Map<Integer, JSONObject> userShipData = new HashMap<Integer, JSONObject>();
 	public static Map<Integer, JSONObject> userItemData = new HashMap<Integer, JSONObject>();
 
+	public static int level = 0;
+	public static long experience = 0;
+
 	// Equipment Constants (api_type 2)
 	public static final int T2_GUN_SMALL = 1;
 	public static final int T2_GUN_MEDIUM = 2;
@@ -79,6 +82,7 @@ public class KcaApiData {
 	private static Integer intv(Object o) {
 		return ((Long) o).intValue();
 	}
+	private static Long longv(Object o) { return (Long) o; }
 
 	public static int getKcGameData(JSONObject api_data) {
 		//Log.e("KCA", "getKcGameData Called");
@@ -108,8 +112,23 @@ public class KcaApiData {
 		return kcGameData != null;
 	}
 
+
+	public static int getLevel() {
+		return level;
+	}
+
+	public static long getExperience() {
+		return experience;
+	}
+
 	public static int getPortData(JSONObject api_data) {
 		Set<Integer> prevItemIds = new HashSet<Integer>(userShipData.keySet());
+		if (api_data.containsKey("api_basic")) {
+			JSONObject basicInfo = (JSONObject) api_data.get("api_basic");
+			level = intv(basicInfo.get("api_level"));
+			experience = longv(basicInfo.get("api_experience"));
+		}
+
 		if (api_data.containsKey("api_ship")) {
 			JSONArray shipDataArray = (JSONArray) api_data.get("api_ship");
 			JSONObject temp;
@@ -206,7 +225,36 @@ public class KcaApiData {
 		}
 	}
 
-	public static JSONObject getItemStatusById(int id, String list) {
+	public static JSONObject getUserItemStatusById(int id, String list, String kclist) {
+		if(userItemData.containsKey(id)) {
+			int kc_item_id = intv(userItemData.get(id).get("api_slotitem_id"));
+			JSONObject kcData = getKcItemStatusById(kc_item_id, kclist);
+			JSONObject userData = userItemData.get(id);
+
+			if (list == "all") {
+				for(Object k: userData.keySet()) {
+					kcData.put(k, userData.get(k));
+				}
+			} else {
+				String[] requestList = list.split(",");
+				for(int i=0; i<requestList.length; i++) {
+					String orig_api_item = requestList[i];
+					String api_item = orig_api_item;
+					if(!api_item.startsWith("api_")) {
+						api_item = "api_" + api_item;
+					}
+					if(userData.containsKey(api_item)) {
+						kcData.put(orig_api_item, userData.get(api_item));
+					}
+				}
+			}
+			return kcData;
+		} else {
+			return null;
+		}
+	}
+
+	public static JSONObject getKcItemStatusById(int id, String list) {
 		JSONObject temp = new JSONObject();
 		if(kcItemData.containsKey(id)) {
 			if (list == "all") {
