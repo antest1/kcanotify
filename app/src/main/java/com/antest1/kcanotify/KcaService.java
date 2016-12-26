@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,6 +46,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
+
+import static com.antest1.kcanotify.KcaApiData.addUserItem;
+import static com.antest1.kcanotify.KcaApiData.addUserShip;
+import static com.antest1.kcanotify.KcaApiData.deleteUserItem;
+import static com.antest1.kcanotify.KcaApiData.deleteUserShip;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
@@ -65,6 +71,11 @@ public class KcaService extends Service {
 
     public static final String API_REQ_HENSEI_CHANGE = "/api_req_hensei/change";
     public static final String API_REQ_HENSEI_PRESET = "/api_req_hensei/preset_select";
+
+    public static final String API_REQ_KOUSYOU_CREATETIEM = "/api_req_kousyou/createitem";
+    public static final String API_REQ_KOUSYOU_DESTROYITEM = "/api_req_kousyou/destroyitem2";
+    public static final String API_REQ_KOUSYOU_GETSHIP = "/api_req_kousyou/getship";
+    public static final String API_REQ_KOUSYOU_DESTROYSHIP = "/api_req_kousyou/destroyship";
 
     public static final String API_REQ_MAP_START = "/api_req_map/start";
     public static final String API_REQ_MAP_NEXT = "/api_req_map/next";
@@ -377,6 +388,45 @@ public class KcaService extends Service {
                     }
 
                 }
+
+                if (url.startsWith(API_REQ_KOUSYOU_CREATETIEM)) {
+                    if (jsonDataObj.containsKey("api_data")) {
+                        JSONObject api_data = (JSONObject) jsonDataObj.get("api_data");
+                        KcaApiData.addUserItem(api_data);
+                    }
+                }
+
+                if (url.startsWith(API_REQ_KOUSYOU_DESTROYITEM)) {
+                    String[] requestData = request.split("&");
+                    for(int i=0; i<requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if(decodedData.startsWith("api_slotitem_ids")) {
+                            String itemlist = decodedData.replace("api_slotitem_ids=", "");
+                            KcaApiData.deleteUserItem(itemlist);
+                            break;
+                        }
+                    }
+                }
+
+                if (url.startsWith(API_REQ_KOUSYOU_GETSHIP)) {
+                    if (jsonDataObj.containsKey("api_data")) {
+                        JSONObject api_data = (JSONObject) jsonDataObj.get("api_data");
+                        KcaApiData.addUserShip(api_data);
+                    }
+                }
+
+                if (url.startsWith(API_REQ_KOUSYOU_DESTROYSHIP)) {
+                    String[] requestData = request.split("&");
+                    for(int i=0; i<requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if(decodedData.startsWith("api_ship_id")) {
+                            String itemlist = decodedData.replace("api_ship_id=", "");
+                            KcaApiData.deleteUserShip(itemlist);
+                            break;
+                        }
+                    }
+                }
+
             } catch (ParseException e) {
                 // TODO Auto-generated catch block
                 //Log.e("KCA", "ParseError");

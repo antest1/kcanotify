@@ -2,8 +2,11 @@ package com.antest1.kcanotify;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
@@ -79,10 +82,24 @@ public class KcaApiData {
 	public static final int T2_RADER_LARGE_II = 93;
 	public static final int T2_SCOUT_II = 94;
 
+
+	public static final int[] T2LIST_AIRCRAFTS = {T2_FIGHTER, T2_BOMBER, T2_TORPEDO_BOMBER, T2_SCOUT, T2_SEA_SCOUT, T2_SEA_BOMBER, T2_FLYING_BOAT,
+			T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER, T2_JET_SCOUT};
+
 	private static Integer intv(Object o) {
 		return ((Long) o).intValue();
 	}
 	private static Long longv(Object o) { return (Long) o; }
+	private static String joinStr(List<String> list, String delim) {
+		String resultStr = "";
+		int i;
+		for (i = 0; i < list.size() - 1; i++) {
+			resultStr = resultStr.concat(list.get(i));
+			resultStr = resultStr.concat(delim);
+		}
+		resultStr = resultStr.concat(list.get(i));
+		return resultStr;
+	}
 
 	public static int getKcGameData(JSONObject api_data) {
 		//Log.e("KCA", "getKcGameData Called");
@@ -275,5 +292,80 @@ public class KcaApiData {
 			return null;
 		}
 		
+	}
+
+	public static boolean isItemAircraft(int id) {
+		int result = Arrays.binarySearch(T2LIST_AIRCRAFTS, id);
+		if (result > 0) return true;
+		else return false;
+	}
+
+	public static void addUserShip(JSONObject api_data) {
+		if (api_data.containsKey("api_id")) {
+			int shipId = intv(api_data.get("api_id"));
+			JSONObject shipData = (JSONObject) api_data.get("api_ship");
+			userShipData.put(shipId, shipData);
+			int shipKcId = intv(api_data.get("api_ship_id"));
+			String shipName = (String) getKcShipDataById(shipKcId, "name").get("name");
+			Log.e("KCA", String.format("add ship %d (%s)", shipId, shipName));
+
+			JSONArray shipSlotItemData = (JSONArray) api_data.get("api_slotitem");
+			for (int i=0; i<shipSlotItemData.size(); i++) {
+				addUserItem((JSONObject) shipSlotItemData.get(i));
+			}
+		}
+	}
+
+	public static void deleteUserShip(String api_ship_id) {
+		int shipId = Integer.valueOf(api_ship_id);
+		JSONObject shipKcData = getUserShipDataById(shipId,"ship_id,slot");
+
+		int shipKcId = intv(shipKcData.get("ship_id"));
+		JSONArray shipSlotItem = (JSONArray) shipKcData.get("slot");
+		List<String> shipSlotItemList = new ArrayList<String>();
+		for (int i=0; i<shipSlotItem.size(); i++) {
+			int item = intv(shipSlotItem.get(i));
+			if (item != -1) {
+				shipSlotItemList.add(String.valueOf(item));
+			}
+		}
+		deleteUserItem(joinStr(shipSlotItemList, ","));
+		userShipData.remove(shipId);
+
+		String shipName = (String) getKcShipDataById(shipKcId, "name").get("name");
+		Log.e("KCA", String.format("remove ship %d (%s)",shipId, shipName));
+	}
+
+	public static void addUserItem(JSONObject api_data) {
+		JSONObject item = null;
+		if (api_data.containsKey("api_create_flag") && intv(api_data.get("api_create_flag")) == 1) {
+			item = (JSONObject) api_data.get("api_slot_item");
+		} else if(api_data.containsKey("api_slotitem_id")) {
+			item = api_data;
+		}
+		if (item != null) {
+			int item_id = intv(item.get("api_id"));
+			int kc_item_id = intv(item.get("api_slotitem_id"));
+			int itemType = intv(((JSONArray) getKcItemStatusById(kc_item_id, "type").get("type")).get(2));
+			item.put("api_locked", 0);
+			item.put("api_level", 0);
+			if(isItemAircraft(itemType)) {
+				item.put("api_alv", 0);
+			}
+			userItemData.put(item_id, item);
+			String itemName = (String) getKcItemStatusById(kc_item_id, "name").get("name");
+			Log.e("KCA", String.format("add item %d (%s)",item_id, itemName));
+		}
+	}
+
+	public static void deleteUserItem(String list) {
+		Log.e("KCA", list);
+		String[] requestList = list.split(",");
+		for (int i=0; i<requestList.length; i++) {
+			int itemId = Integer.valueOf(requestList[i]);
+			String itemName = (String) getUserItemStatusById(itemId, "id", "name").get("name");
+			userItemData.remove(Integer.valueOf(requestList[i]));
+			Log.e("KCA", String.format("remove item %d (%s)",itemId, itemName));
+		}
 	}
 }
