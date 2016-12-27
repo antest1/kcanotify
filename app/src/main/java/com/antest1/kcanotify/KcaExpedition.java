@@ -98,7 +98,7 @@ public class KcaExpedition implements Runnable {
                         Message sMsg = sHandler.obtainMessage();
                         sMsg.setData(bundle);
                         sHandler.sendMessage(sMsg);
-                        this.sendEmptyMessageDelayed(div, 1000);
+                        this.sendEmptyMessageDelayed(div, 500);
                     } else {
                         left_time_str[kantai_idx] = null;
                         complete_time_check[kantai_idx] = -1;
