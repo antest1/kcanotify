@@ -14,4 +14,8 @@
     <string name="seek_type_3">33식/3</string>
     <string name="seek_type_4">33식/4</string>
 
+    <string name="speed_fast">고속</string>
+    <string name="speed_slow">저속</string>
+    <string name="speed_mixed">혼성</string>
+
 </resources>
