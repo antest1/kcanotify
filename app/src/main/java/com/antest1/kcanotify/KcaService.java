@@ -68,6 +68,8 @@ public class KcaService extends Service {
     public static final String API_START2 = "/api_start2";
     public static final String API_GET_MEMBER_REQUIRED_INFO = "/api_get_member/require_info";
     public static final String API_GET_MEMBER_DECK = "/api_get_member/deck";
+    public static final String API_GET_MEMBER_SHIP_DECK = "/api_get_member/ship_deck";
+    public static final String API_GET_MEMBER_SLOT_ITEM = "/api_get_member/slot_item";
     public static final String API_REQ_MISSION_RETURN = "/api_req_mission/return_instruction";
 
     public static final String API_REQ_HENSEI_CHANGE = "/api_req_hensei/change";
@@ -350,30 +352,6 @@ public class KcaService extends Service {
 
                 }
 
-                if (API_BATTLE_REQS.contains(url)) {
-                    //Log.e("KCA", "Battle Handler Called");
-                    if (jsonDataObj.containsKey("api_data")) {
-                        JSONObject battleApiData = (JSONObject) jsonDataObj.get("api_data");
-                        KcaBattle.processData(url, battleApiData);
-                    }
-                }
-
-                if (url.startsWith(API_GET_MEMBER_DECK)) {
-                    //Log.e("KCA", "Expedition Handler Called");
-                    if (jsonDataObj.containsKey("api_data")) {
-                        JSONArray reqGetMemberDeckApiData = (JSONArray) jsonDataObj.get("api_data");
-                        processExpeditionInfo(reqGetMemberDeckApiData);
-                    }
-                }
-
-                if (url.startsWith(API_REQ_MISSION_RETURN)) {
-                    //Log.e("KCA", "Expedition Handler Called");
-                    if (jsonDataObj.containsKey("api_data")) {
-                        JSONObject reqGetMemberDeckApiData = (JSONObject) jsonDataObj.get("api_data");
-                        cancelExpeditionInfo(reqGetMemberDeckApiData);
-                    }
-                }
-
                 if (url.startsWith(API_GET_MEMBER_REQUIRED_INFO)) {
                     //Log.e("KCA", "Load Item Data");
 
@@ -392,7 +370,46 @@ public class KcaService extends Service {
                             new retApiStartData().execute("", "down", "");
                         }
                     }
+                }
 
+                if (API_BATTLE_REQS.contains(url)) {
+                    //Log.e("KCA", "Battle Handler Called");
+                    if (jsonDataObj.containsKey("api_data")) {
+                        JSONObject battleApiData = (JSONObject) jsonDataObj.get("api_data");
+                        KcaBattle.processData(url, battleApiData);
+                    }
+                }
+
+                if (url.startsWith(API_GET_MEMBER_SHIP_DECK)) {
+                    if (jsonDataObj.containsKey("api_data")) {
+                        JSONObject api_data = (JSONObject) jsonDataObj.get("api_data");
+                        JSONArray api_deck_data = (JSONArray) api_data.get("api_deck_data");
+                        KcaApiData.updatePortDataOnBattle(api_data);
+                        processFirstDeckInfo(api_deck_data);
+                    }
+                }
+
+                if (url.startsWith(API_GET_MEMBER_DECK)) {
+                    //Log.e("KCA", "Expedition Handler Called");
+                    if (jsonDataObj.containsKey("api_data")) {
+                        JSONArray reqGetMemberDeckApiData = (JSONArray) jsonDataObj.get("api_data");
+                        processExpeditionInfo(reqGetMemberDeckApiData);
+                    }
+                }
+
+                if (url.startsWith(API_GET_MEMBER_SLOT_ITEM)) {
+                    if (jsonDataObj.containsKey("api_data")) {
+                        JSONArray api_data = (JSONArray) jsonDataObj.get("api_data");
+                        KcaApiData.updateSlotItemData(api_data);
+                    }
+                }
+
+                if (url.startsWith(API_REQ_MISSION_RETURN)) {
+                    //Log.e("KCA", "Expedition Handler Called");
+                    if (jsonDataObj.containsKey("api_data")) {
+                        JSONObject reqGetMemberDeckApiData = (JSONObject) jsonDataObj.get("api_data");
+                        cancelExpeditionInfo(reqGetMemberDeckApiData);
+                    }
                 }
 
                 if (url.startsWith(API_REQ_KOUSYOU_CREATETIEM)) {
@@ -573,13 +590,13 @@ public class KcaService extends Service {
         }
     }
 
-    ;
-
     private Integer intv(Object o) {
         return ((Long) o).intValue();
     }
 
     private void processFirstDeckInfo(JSONArray data) {
+        String delimeter = " | ";
+
         if (!isGameDataLoaded()) {
             Log.e("KCA", "processFirstDeckInfo: Game Data is Null");
             new retApiStartData().execute("", "down", "");
@@ -591,6 +608,8 @@ public class KcaService extends Service {
         if (data == null) {
             kcaFirstDeckInfo = "data is null";
             return;
+        } else {
+            kcaFirstDeckInfo = "";
         }
 
         int cn = Integer.valueOf(getPreferences("kca_seek_cn"));
@@ -610,8 +629,50 @@ public class KcaService extends Service {
                 break;
         }
 
-        double seekValue = KcaDeckInfo.getSeekValue(data, 0, cn);
-        kcaFirstDeckInfo = String.format("색적(%s): %.2f", seekType, Math.floor(seekValue*100)/100);
+        JSONArray deckInfoData = new JSONArray();
+        JSONObject infoData = null;
+
+        String airPowerValue = "";
+        int[] airPowerRange = KcaDeckInfo.getAirPowerRange(data, 0);
+        if (airPowerRange[0] > 0 && airPowerRange[1] > 0) {
+            airPowerValue = String.format("제공: %d-%d", airPowerRange[0], airPowerRange[1]);
+            infoData = new JSONObject();
+            infoData.put("is_landscape_only", 1);
+            infoData.put("value", airPowerValue);
+            deckInfoData.add(infoData);
+        }
+
+        String seekValue =  String.format("색적(%s): %.2f", seekType, KcaDeckInfo.getSeekValue(data, 0, cn));
+        infoData = new JSONObject();
+        infoData.put("is_landscape_only", 1);
+        infoData.put("value", seekValue);
+        deckInfoData.add(infoData);
+
+        String conditionValue = String.format("피로도: %s", KcaDeckInfo.getConditionStatus(data, 0));
+        infoData = new JSONObject();
+        infoData.put("is_landscape_only", 0);
+        infoData.put("value", conditionValue);
+        deckInfoData.add(infoData);
+
+        int speedValue = KcaDeckInfo.getSpeed(data, 0);
+        String speedStringValue = "";
+        switch(speedValue) {
+            case KcaApiData.SPEED_FAST:
+                speedStringValue = getResources().getString(R.string.speed_fast);
+                break;
+            case KcaApiData.SPEED_SLOW:
+                speedStringValue = getResources().getString(R.string.speed_slow);
+                break;
+            default:
+                speedStringValue = getResources().getString(R.string.speed_mixed);
+                break;
+        }
+        infoData = new JSONObject();
+        infoData.put("is_landscape_only", 1);
+        infoData.put("value", speedStringValue);
+        deckInfoData.add(infoData);
+
+        kcaFirstDeckInfo = deckInfoData.toJSONString();
         setFrontViewNotifier(FRONT_NONE, 0, null);
     }
 
@@ -691,7 +752,20 @@ public class KcaService extends Service {
         String expString = "";
 
         //notifiString = notifiString.concat("색적: 33.45 / 제공: 180 / 고속함대\n");
-        notifiString = notifiString.concat(kcaFirstDeckInfo).concat("\n");
+        JSONParser parser = new JSONParser();
+        try {
+            JSONArray deckInfo = (JSONArray) parser.parse(kcaFirstDeckInfo);
+            List<String> deckInfoStringList = new ArrayList<String>();
+            for (Object item: deckInfo) {
+                JSONObject data = (JSONObject) item;
+                if (intv(data.get("is_landscape_only")) == 0 || is_landscape) {
+                    deckInfoStringList.add((String) data.get("value"));
+                }
+            }
+            notifiString = notifiString.concat(joinStr(deckInfoStringList, " | ")).concat("\n");
+        } catch (ParseException e) {
+            notifiString = notifiString.concat(kcaFirstDeckInfo).concat("\n");
+        }
 
         List<String> kcaExpStrList = new ArrayList<String>();
         for (int i = 0; i < 3; i++) {

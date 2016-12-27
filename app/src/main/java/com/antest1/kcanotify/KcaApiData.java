@@ -86,6 +86,17 @@ public class KcaApiData {
 	public static final int[] T2LIST_AIRCRAFTS = {T2_FIGHTER, T2_BOMBER, T2_TORPEDO_BOMBER, T2_SCOUT, T2_SEA_SCOUT, T2_SEA_BOMBER, T2_FLYING_BOAT,
 			T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER, T2_JET_SCOUT};
 
+	public static final int[] BASIC_MASTERY_MIN_BONUS = {0, 10, 25, 40, 55, 70, 85, 100};
+	public static final int[] BASIC_MASTERY_MAX_BONUS = {9, 24, 39, 54, 69, 84, 99, 120};
+
+	public static final int[] FIGHTER_MASTERY_BONUS = {0, 0, 2, 5, 9, 14, 14, 22, 0, 0, 0};
+	public static final int[] SEA_BOMBER_MASTERY_BONUS = {0, 0, 1, 1, 1, 3, 3, 6, 0, 0, 0};
+
+	public static final int SPEED_FAST = 10;
+	public static final int SPEED_SLOW = 5;
+	public static final int SPEED_NONE = 0;
+	public static final int SPEED_MIXED = 15;
+
 	private static Integer intv(Object o) {
 		return ((Long) o).intValue();
 	}
@@ -164,6 +175,35 @@ public class KcaApiData {
 			userShipData.remove(i);
 		}
 		return userShipData.size();
+	}
+
+	public static int updatePortDataOnBattle(JSONObject api_data) {
+		if (api_data.containsKey("api_ship_data")) {
+			JSONArray shipDataArray = (JSONArray) api_data.get("api_ship_data");
+			JSONObject temp;
+			for (ListIterator<JSONObject> itr = shipDataArray.listIterator(); itr.hasNext();) {
+				temp = itr.next();
+				Integer api_id = ((Long) temp.get("api_id")).intValue();
+				userShipData.put(api_id, temp);
+			}
+			return shipDataArray.size();
+		} else {
+			return -1;
+		}
+	}
+
+	public static int updateSlotItemData(JSONArray api_data) {
+		JSONObject temp;
+		if (api_data != null) {
+			for (ListIterator<JSONObject> itr = api_data.listIterator(); itr.hasNext();) {
+				temp = itr.next();
+				Integer api_id = ((Long) temp.get("api_id")).intValue();
+				userShipData.put(api_id, temp);
+			}
+			return api_data.size();
+		} else {
+			return -1;
+		}
 	}
 
 	public static Integer getUserId(JSONObject api_data) {
