@@ -18,7 +18,7 @@ public class KcaExpedition implements Runnable {
     public int kantai_idx;
     public String kantai_name;
     public int left_time;
-    public static Handler sHandler;
+    public Handler sHandler;
     public static Map<Integer, HashMap<String, String>> expeditionData;
     public static String[] left_time_str = {null, null, null};
     public static long[] complete_time_check = {-1, -1, -1};
@@ -39,27 +39,6 @@ public class KcaExpedition implements Runnable {
     public boolean isHandlerLive() {
         return mHandler != null;
     }
-
-    public static void setHandler(Handler h) {
-        sHandler = h;
-        viewHandler.sendEmptyMessage(0);
-    }
-
-    public static Handler viewHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            if (!KcaService.isServiceOn) return;
-            int div = msg.what;
-
-            JSONObject leftExpInfo = new JSONObject();
-            Bundle bundle = new Bundle();
-            bundle.putString("url", KcaService.KCA_API_NOTI_EXP_LEFT);
-            bundle.putString("data", leftExpInfo.toJSONString());
-            Message sMsg = sHandler.obtainMessage();
-            sMsg.setData(bundle);
-            sHandler.sendMessage(sMsg);
-            this.sendEmptyMessageDelayed(div, 1000);
-        }
-    };
 
     public KcaExpedition(int no, int kidx, String name, long time, Handler h) {
         mission_no = no;
@@ -111,7 +90,14 @@ public class KcaExpedition implements Runnable {
 						sHandler.sendMessage(sMsg);
 						*/
                         //Log.e("KCA", String.valueOf(mission_no));
+                        JSONObject leftExpInfo = new JSONObject();
                         left_time_str[kantai_idx] = String.format("[%02d] %s", mission_no, strTime);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("url", KcaService.KCA_API_NOTI_EXP_LEFT);
+                        bundle.putString("data", leftExpInfo.toJSONString());
+                        Message sMsg = sHandler.obtainMessage();
+                        sMsg.setData(bundle);
+                        sHandler.sendMessage(sMsg);
                         this.sendEmptyMessageDelayed(div, 1000);
                     } else {
                         left_time_str[kantai_idx] = null;

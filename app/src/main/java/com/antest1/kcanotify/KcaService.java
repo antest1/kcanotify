@@ -244,7 +244,6 @@ public class KcaService extends Service {
         isServiceOn = true;
 
         KcaBattle.setHandler(nHandler);
-        KcaExpedition.setHandler(nHandler);
 
         return START_STICKY;
     }
