@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import android.app.Notification;
 import android.app.Notification.Builder;
+import android.app.Notification.BigTextStyle;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -20,7 +21,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
-import com.google.common.io.Resources;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -48,14 +48,7 @@ import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 
-import static com.antest1.kcanotify.KcaApiData.addUserItem;
-import static com.antest1.kcanotify.KcaApiData.addUserShip;
-import static com.antest1.kcanotify.KcaApiData.deleteUserItem;
-import static com.antest1.kcanotify.KcaApiData.deleteUserShip;
-import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
-import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
-import static com.antest1.kcanotify.KcaApiData.kcGameData;
 
 public class KcaService extends Service {
     public static final int ANTEST_USERID = 15108389;
@@ -149,9 +142,9 @@ public class KcaService extends Service {
 
     AudioManager mAudioManager;
 
-    NotificationManager Notifi_M;
-    Notification Notifi;
-    Builder viewNotifi;
+    NotificationManager notifiManager;
+    Builder viewNotificationBuilder;
+    BigTextStyle viewNotificationText;
     public static boolean noti_vibr_on = true;
 
     kcaServiceHandler handler;
@@ -227,7 +220,7 @@ public class KcaService extends Service {
         API_BATTLE_REQS = Arrays.asList(API_BATTLE_REQ_LIST);
 
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        Notifi_M = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         handler = new kcaServiceHandler();
         nHandler = new kcaNotificationHandler();
@@ -238,23 +231,20 @@ public class KcaService extends Service {
             setPreferences("kca_seek_cn", "1");
         }
 
-        KcaBattle.setHandler(nHandler);
         KcaProxyServer.start(handler);
 
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, kcIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        viewNotifi = new Notification.Builder(getApplicationContext())
-                // .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                // R.drawable.ic_launcher))
-                .setSmallIcon(R.mipmap.ic_stat_notify)
-                .setContentTitle(String.format("%s 동작중", getResources().getText(R.string.app_name)))
-                .setStyle(new Notification.BigTextStyle().bigText("깡들리티에서 게임을 시작해주세요"))
-                .setTicker(String.format("%s 동작중", getResources().getText(R.string.app_name)))
-                .setContentIntent(pendingIntent)
-                .setOngoing(true).setAutoCancel(false);
 
-        startForeground(getNotiIdx(NOTI_FRONT, 1), viewNotifi.build());
+        String initTitle = String.format("%s 동작중", getResources().getText(R.string.app_name));
+        String initContent = "깡들리티에서 게임을 시작해주세요";
+        String initSubContent = String.format("%s %s", getResources().getText(R.string.app_name), BuildConfig.VERSION_NAME);
+
+        startForeground(getNotificationId(NOTI_FRONT, 1), createViewNotification(initTitle, initContent, initSubContent));
         isServiceOn = true;
+
+        KcaBattle.setHandler(nHandler);
+        KcaExpedition.setHandler(nHandler);
 
         return START_STICKY;
     }
@@ -275,10 +265,66 @@ public class KcaService extends Service {
         nHandler = null;
 
         stopForeground(true);
-        Notifi_M.cancelAll();
-        viewNotifi = null;
+        notifiManager.cancelAll();
+        viewNotificationBuilder = null;
         KcaProxyServer.stop();
         isServiceOn = false;
+    }
+
+    private Notification createViewNotification(String title, String content1, String content2) {
+        if (viewNotificationBuilder == null) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, kcIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            viewNotificationText = new Notification.BigTextStyle();
+            viewNotificationBuilder = new Notification.Builder(getApplicationContext())
+                    .setSmallIcon(R.mipmap.ic_stat_notify)
+                    .setContentTitle(title)
+                    .setStyle(viewNotificationText.bigText(content1))
+                    .setStyle(viewNotificationText.setSummaryText(content2))
+                    .setTicker(title)
+                    .setContentIntent(pendingIntent)
+                    .setPriority(Notification.PRIORITY_MAX)
+                    .setOngoing(true).setAutoCancel(false);
+
+        } else {
+            if(title != null) {
+                viewNotificationBuilder.setContentTitle(title);
+                viewNotificationBuilder.setTicker(title);
+            }
+            if (content1 != null) {
+                viewNotificationBuilder.setStyle(viewNotificationText.bigText(content1));
+            }
+            if (content2 != null) {
+                viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(content2));
+            }
+        }
+        return viewNotificationBuilder.build();
+    }
+
+    private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag) {
+        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, kcIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        String title = "";
+        String content = String.format("<%s> 가\n%d번 원정에서 복귀했습니다.", kantaiName, missionNo);
+        if (cancelFlag) {
+            title = String.format("%d번 원정(%s) 취소", missionNo, missionName);
+        } else {
+            title = String.format("%d번 원정(%s) 도착", missionNo, missionName);
+        }
+
+        Notification Notifi = new Notification.Builder(getApplicationContext()).setSmallIcon(R.mipmap.ic_stat_notify)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setTicker(title)
+                .setContentIntent(pendingIntent).build();
+        if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
+            Notifi.defaults = Notification.DEFAULT_VIBRATE;
+        } else {
+            Notifi.vibrate = new long[]{-1};
+        }
+        Notifi.flags = Notification.FLAG_AUTO_CANCEL;
+        setFrontViewNotifier(FRONT_NONE, 0, null);
+        return Notifi;
     }
 
     class kcaServiceHandler extends Handler {
@@ -290,7 +336,7 @@ public class KcaService extends Service {
             String data = msg.getData().getString("data");
             String request = msg.getData().getString("request");
 
-            if (!KcaProxyServer.is_on() || url.length() == 0 || viewNotifi == null) {
+            if (!KcaProxyServer.is_on() || url.length() == 0 || viewNotificationBuilder == null) {
                 return;
             }
 
@@ -348,8 +394,6 @@ public class KcaService extends Service {
                         }
                     }
                     setFrontViewNotifier(FRONT_NONE, 0, null);
-                    Notifi_M.notify(getNotiIdx(NOTI_FRONT, 1), viewNotifi.build());
-
                 }
 
                 if (url.startsWith(API_GET_MEMBER_REQUIRED_INFO)) {
@@ -466,8 +510,6 @@ public class KcaService extends Service {
         }
     }
 
-    ;
-
     class kcaNotificationHandler extends Handler {
         JSONParser jsonParser = new JSONParser();
 
@@ -476,79 +518,45 @@ public class KcaService extends Service {
             String url = msg.getData().getString("url");
             String data = msg.getData().getString("data");
 
-            if (!KcaProxyServer.is_on() || !isPortAccessed || viewNotifi == null || url.length() == 0) {
+            if (!KcaProxyServer.is_on() || !isPortAccessed || viewNotificationBuilder == null || url.length() == 0) {
                 return;
             }
-
-            // //Log.e("KCA", "Noti Handle " + url);
 
             JSONObject jsonDataObj;
             try {
                 jsonDataObj = (JSONObject) jsonParser.parse(data);
                 if (url.startsWith(KCA_API_NOTI_EXP_LEFT)) {
                     // //Log.e("KCA", "Expedition Notification Handler Called");
-                    //int kantai_idx = ((Long) jsonDataObj.get("idx")).intValue();
+                    //int kantaiIndex = ((Long) jsonDataObj.get("idx")).intValue();
                     //String str_data = (String) jsonDataObj.get("str");
                     setFrontViewNotifier(FRONT_NONE, 0, null);
-                    Notifi_M.notify(getNotiIdx(NOTI_FRONT, 1), viewNotifi.build());
                 }
 
                 if (url.startsWith(KCA_API_NOTI_EXP_CANCELED)) {
                     // //Log.e("KCA", "Expedition Notification Handler Called");
                     jsonDataObj = (JSONObject) jsonParser.parse(data);
-                    int kantai_idx = ((Long) jsonDataObj.get("kantai_idx")).intValue();
-                    String kantai_name = (String) jsonDataObj.get("kantai_name");
-                    int mission_no = ((Long) jsonDataObj.get("mission_no")).intValue();
-                    String mission_krname = (String) jsonDataObj.get("mission_krname");
-                    Intent intent = new Intent(KcaService.this, MainActivity.class);
+                    int kantaiIndex = ((Long) jsonDataObj.get("kantai_idx")).intValue();
+                    String kantaiName = (String) jsonDataObj.get("kantai_name");
+                    int missionNo = ((Long) jsonDataObj.get("mission_no")).intValue();
+                    String missionName = (String) jsonDataObj.get("mission_krname");
+                    //Intent intent = new Intent(KcaService.this, MainActivity.class);
 
-                    kcaExpeditionInfoList[kantai_idx] = "";
-                    PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, kcIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
-                    Notifi = new Notification.Builder(getApplicationContext()).setSmallIcon(R.mipmap.ic_stat_notify)
-                            .setContentTitle(String.format("%d번 원정(%s) 취소", mission_no, mission_krname))
-                            .setContentText(String.format("<%s> 가\n%d번 원정에서 복귀했습니다.", kantai_name, mission_no))
-                            .setTicker(String.format("<%s>: n%d번 원정 취소", kantai_name, mission_no))
-                            .setContentIntent(pendingIntent).build();
-                    //if (noti_vibr_on) {
-                    if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-                        Notifi.defaults = Notification.DEFAULT_VIBRATE;
-                    } else {
-                        Notifi.vibrate = new long[]{-1};
-                    }
-                    Notifi.flags = Notification.FLAG_AUTO_CANCEL;
-                    setFrontViewNotifier(FRONT_NONE, 0, null);
-                    Notifi_M.notify(getNotiIdx(NOTI_FRONT, 1), viewNotifi.build());
-                    Notifi_M.notify(getNotiIdx(NOTI_EXP, mission_no), Notifi);
+                    kcaExpeditionInfoList[kantaiIndex] = "";
+                    notifiManager.notify(getNotificationId(NOTI_EXP, missionNo), createExpeditionNotification(missionNo, missionName, kantaiName, true));
                 }
 
                 if (url.startsWith(KCA_API_NOTI_EXP_FIN)) {
                     // //Log.e("KCA", "Expedition Notification Handler Called");
                     jsonDataObj = (JSONObject) jsonParser.parse(data);
-                    int kantai_idx = ((Long) jsonDataObj.get("kantai_idx")).intValue();
-                    String kantai_name = (String) jsonDataObj.get("kantai_name");
-                    int mission_no = ((Long) jsonDataObj.get("mission_no")).intValue();
-                    String mission_krname = (String) jsonDataObj.get("mission_krname");
-                    Intent intent = new Intent(KcaService.this, MainActivity.class);
+                    int kantaiIndex = ((Long) jsonDataObj.get("kantai_idx")).intValue();
+                    String kantaiName = (String) jsonDataObj.get("kantai_name");
+                    int missionNo = ((Long) jsonDataObj.get("mission_no")).intValue();
+                    String missionName = (String) jsonDataObj.get("mission_krname");
+                    //Intent intent = new Intent(KcaService.this, MainActivity.class);
 
-                    kcaExpeditionInfoList[kantai_idx] = "";
-                    PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, kcIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
-                    Notifi = new Notification.Builder(getApplicationContext()).setSmallIcon(R.mipmap.ic_stat_notify)
-                            .setContentTitle(String.format("%d번 원정(%s) 도착", mission_no, mission_krname))
-                            .setContentText(String.format("<%s> 가\n%d번 원정에서 복귀했습니다.", kantai_name, mission_no))
-                            .setTicker(String.format("<%s>: n%d번 원정에서 복귀", kantai_name, mission_no))
-                            .setContentIntent(pendingIntent).build();
-                    //if (noti_vibr_on) {
-                    if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-                        Notifi.defaults = Notification.DEFAULT_VIBRATE;
-                    } else {
-                        Notifi.vibrate = new long[]{-1};
-                    }
-                    Notifi.flags = Notification.FLAG_AUTO_CANCEL;
-                    setFrontViewNotifier(FRONT_NONE, 0, null);
-                    Notifi_M.notify(getNotiIdx(NOTI_FRONT, 1), viewNotifi.build());
-                    Notifi_M.notify(getNotiIdx(NOTI_EXP, mission_no), Notifi);
+                    kcaExpeditionInfoList[kantaiIndex] = "";
+                    kcaExpeditionInfoList[kantaiIndex] = "";
+                    notifiManager.notify(getNotificationId(NOTI_EXP, missionNo), createExpeditionNotification(missionNo, missionName, kantaiName, false));
                 }
 
                 if (url.startsWith(KCA_API_NOTI_BATTLE_INFO)) {
@@ -565,7 +573,6 @@ public class KcaService extends Service {
                     }
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.heavy_damaged), Toast.LENGTH_LONG).show();
                     setFrontViewNotifier(FRONT_NONE, 0, null);
-                    Notifi_M.notify(getNotiIdx(NOTI_FRONT, 1), viewNotifi.build());
                 }
 
                 if (url.startsWith(KCA_API_NOTI_GOBACKPORT)) {
@@ -575,7 +582,6 @@ public class KcaService extends Service {
                     }
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.goback_left), Toast.LENGTH_LONG).show();
                     setFrontViewNotifier(FRONT_NONE, 0, null);
-                    Notifi_M.notify(getNotiIdx(NOTI_FRONT, 1), viewNotifi.build());
                 }
 
             } catch (ParseException e) {
@@ -637,21 +643,17 @@ public class KcaService extends Service {
         if (airPowerRange[0] > 0 && airPowerRange[1] > 0) {
             airPowerValue = String.format("제공: %d-%d", airPowerRange[0], airPowerRange[1]);
             infoData = new JSONObject();
-            infoData.put("is_landscape_only", 1);
-            infoData.put("value", airPowerValue);
+            infoData.put("is_portrait_newline", 0);
+            infoData.put("portrait_value", airPowerValue);
+            infoData.put("landscape_value", airPowerValue);
             deckInfoData.add(infoData);
         }
 
         String seekValue =  String.format("색적(%s): %.2f", seekType, KcaDeckInfo.getSeekValue(data, 0, cn));
         infoData = new JSONObject();
-        infoData.put("is_landscape_only", 1);
-        infoData.put("value", seekValue);
-        deckInfoData.add(infoData);
-
-        String conditionValue = String.format("피로도: %s", KcaDeckInfo.getConditionStatus(data, 0));
-        infoData = new JSONObject();
-        infoData.put("is_landscape_only", 0);
-        infoData.put("value", conditionValue);
+        infoData.put("is_portrait_newline", 0);
+        infoData.put("portrait_value", seekValue);
+        infoData.put("landscape_value", seekValue);
         deckInfoData.add(infoData);
 
         int speedValue = KcaDeckInfo.getSpeed(data, 0);
@@ -668,8 +670,16 @@ public class KcaService extends Service {
                 break;
         }
         infoData = new JSONObject();
-        infoData.put("is_landscape_only", 1);
-        infoData.put("value", speedStringValue);
+        infoData.put("is_portrait_newline", 1);
+        infoData.put("portrait_value", speedStringValue);
+        infoData.put("landscape_value", speedStringValue.concat(getResources().getString(R.string.speed_postfix)));
+        deckInfoData.add(infoData);
+
+        String conditionValue = String.format("피로도: %s", KcaDeckInfo.getConditionStatus(data, 0));
+        infoData = new JSONObject();
+        infoData.put("is_portrait_newline", 0);
+        infoData.put("portrait_value", conditionValue);
+        infoData.put("landscape_value", conditionValue);
         deckInfoData.add(infoData);
 
         kcaFirstDeckInfo = deckInfoData.toJSONString();
@@ -728,43 +738,44 @@ public class KcaService extends Service {
                 break;
             }
         }
-
         kcaExpeditionRunnableList[idx].canceled(arrive_time);
-        /*
-		kcaExpeditionList[idx].interrupt();
-		kcaExpeditionList[idx] = null;
-		kcaExpeditionInfoList[idx] = "";
-		*/
     }
 
     public void setFrontViewNotifier(int type, int id, String content) {
-
         boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        boolean is_portrait = !is_landscape;
         boolean no_exp_flag = true;
 
+        String notifiTitle = "";
         if (heavyDamagedMode) {
-            viewNotifi.setContentTitle(String.format("[대파 있음!] %s 동작중", getResources().getText(R.string.app_name)));
+            notifiTitle = String.format("[대파 있음!] %s 동작중", getResources().getText(R.string.app_name));
         } else {
-            viewNotifi.setContentTitle(String.format("%s 동작중", getResources().getText(R.string.app_name)));
+            notifiTitle = String.format("%s 동작중", getResources().getText(R.string.app_name));
         }
 
         String notifiString = "";
+        String expeditionString = "";
         String expString = "";
 
-        //notifiString = notifiString.concat("색적: 33.45 / 제공: 180 / 고속함대\n");
         JSONParser parser = new JSONParser();
         try {
             JSONArray deckInfo = (JSONArray) parser.parse(kcaFirstDeckInfo);
             List<String> deckInfoStringList = new ArrayList<String>();
             for (Object item: deckInfo) {
                 JSONObject data = (JSONObject) item;
-                if (intv(data.get("is_landscape_only")) == 0 || is_landscape) {
-                    deckInfoStringList.add((String) data.get("value"));
+                if (is_portrait) {
+                    deckInfoStringList.add((String) data.get("portrait_value"));
+                } else {
+                    deckInfoStringList.add((String) data.get("landscape_value"));
+                }
+                if (intv(data.get("is_portrait_newline")) == 1 && is_portrait) {
+                    notifiString = notifiString.concat(joinStr(deckInfoStringList, " / ")).concat("\n");
+                    deckInfoStringList.clear();
                 }
             }
-            notifiString = notifiString.concat(joinStr(deckInfoStringList, " | ")).concat("\n");
+            notifiString = notifiString.concat(joinStr(deckInfoStringList, " / "));
         } catch (ParseException e) {
-            notifiString = notifiString.concat(kcaFirstDeckInfo).concat("\n");
+            notifiString = notifiString.concat(kcaFirstDeckInfo);
         }
 
         List<String> kcaExpStrList = new ArrayList<String>();
@@ -776,16 +787,15 @@ public class KcaService extends Service {
         }
 
         if (no_exp_flag) {
-            notifiString = notifiString.concat("원정나간 함대가 없습니다.");
+            expeditionString = expeditionString.concat("원정나간 함대가 없습니다.");
         } else {
-            notifiString = notifiString.concat("원정 남은 시간: ");
-            if (!is_landscape) {
-                notifiString = notifiString.concat("\n");
+            if (is_landscape) {
+                expeditionString = expeditionString.concat("원정 남은 시간: ");
+                //expeditionString = expeditionString.concat("\n");
             }
-            notifiString = notifiString.concat(joinStr(kcaExpStrList, " / "));
+            expeditionString = expeditionString.concat(joinStr(kcaExpStrList, " / "));
         }
-        viewNotifi.setStyle(new Notification.BigTextStyle().bigText(notifiString));
-
+        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), createViewNotification(notifiTitle, notifiString, expeditionString));
     }
 
     private String joinStr(List<String> list, String delim) {
@@ -852,7 +862,7 @@ public class KcaService extends Service {
         return null;
     }
 
-    private int getNotiIdx(int type, int n) {
+    private int getNotificationId(int type, int n) {
         return n + 1000 * type;
     }
 

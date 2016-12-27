@@ -17,5 +17,7 @@
     <string name="speed_fast">고속</string>
     <string name="speed_slow">저속</string>
     <string name="speed_mixed">혼성</string>
+    <string name="speed_postfix">함대</string>
+
 
 </resources>
