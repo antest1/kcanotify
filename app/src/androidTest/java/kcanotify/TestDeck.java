@@ -58,7 +58,10 @@ public class TestDeck {
         KcaApiData.getPortData(api_data3);
 
         JSONArray api_deckport = (JSONArray) api_data3.get("api_deck_port");
-        Log.e("KCA", String.valueOf(Math.floor(KcaDeckInfo.getSeekValue(api_deckport, 0,  1)*100)/100));
+        Log.e("KCA", String.valueOf(KcaDeckInfo.getSeekValue(api_deckport, 0,  1)));
+
+        int[] testAirPower = KcaDeckInfo.getAirPowerRange(api_deckport, 0);
+        Log.e("KCA", String.format("AAC: %d - %d", testAirPower[0], testAirPower[1]));
     }
 
 }
