@@ -48,7 +48,7 @@ public class KcaHandler implements Runnable {
 	}
 	
 	public void run(){
-
+		if(handler == null) return;
 		String data, reqData = "";
 		try {
 			reqData = new String(requestBytes);

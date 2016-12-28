@@ -68,15 +68,38 @@
                 android:layout_marginStart="5dp"
                 android:background="#D6D6D6"
                 android:text="OPEN GAME" />
+
         </LinearLayout>
 
 
-
-        <TextView
-            android:id="@+id/textDescription"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_height="match_parent"
+            android:layout_weight=".5">
+
+            <TextView
+                android:id="@+id/textDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnUpdate"
+                android:text="CHECK UPDATE"
+                android:layout_gravity="bottom|right"
+                android:layout_alignParentBottom="true"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorAccent"
+                android:textAllCaps="true"
+                android:textStyle="normal|bold"
+                android:layout_alignParentEnd="true"
+                android:background="#00000000"
+                android:clickable="true"
+                android:minHeight="0dp"
+                android:minWidth="0dp" />
+        </RelativeLayout>
 
     </LinearLayout>
 </RelativeLayout>
