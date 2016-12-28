@@ -1,16 +1,13 @@
 package com.antest1.kcanotify;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.simple.JSONObject;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
-import static android.R.attr.name;
+import com.google.gson.JsonObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class KcaExpedition implements Runnable {
     public int mission_no;
@@ -90,11 +87,11 @@ public class KcaExpedition implements Runnable {
 						sHandler.sendMessage(sMsg);
 						*/
                         //Log.e("KCA", String.valueOf(mission_no));
-                        JSONObject leftExpInfo = new JSONObject();
+                        JsonObject leftExpInfo = new JsonObject();
                         left_time_str[kantai_idx] = String.format("[%02d] %s", mission_no, strTime);
                         Bundle bundle = new Bundle();
                         bundle.putString("url", KcaService.KCA_API_NOTI_EXP_LEFT);
-                        bundle.putString("data", leftExpInfo.toJSONString());
+                        bundle.putString("data", leftExpInfo.toString());
                         Message sMsg = sHandler.obtainMessage();
                         sMsg.setData(bundle);
                         sHandler.sendMessage(sMsg);
@@ -104,16 +101,16 @@ public class KcaExpedition implements Runnable {
                         complete_time_check[kantai_idx] = -1;
 
                         if (!check_canceled(kantai_idx)) {
-                            JSONObject endExpInfo = new JSONObject();
+                            JsonObject endExpInfo = new JsonObject();
 
-                            endExpInfo.put("kantai_idx", kantai_idx);
-                            endExpInfo.put("kantai_name", kantai_name);
-                            endExpInfo.put("mission_no", mission_no);
-                            endExpInfo.put("mission_krname", mission_krname);
+                            endExpInfo.addProperty("kantai_idx", kantai_idx);
+                            endExpInfo.addProperty("kantai_name", kantai_name);
+                            endExpInfo.addProperty("mission_no", mission_no);
+                            endExpInfo.addProperty("mission_krname", mission_krname);
 
                             Bundle bundle = new Bundle();
                             bundle.putString("url", KcaService.KCA_API_NOTI_EXP_FIN);
-                            bundle.putString("data", endExpInfo.toJSONString());
+                            bundle.putString("data", endExpInfo.toString());
                             Message sMsg = sHandler.obtainMessage();
                             sMsg.setData(bundle);
 
@@ -140,19 +137,19 @@ public class KcaExpedition implements Runnable {
     }
 
     public void canceled(long arrive_time) {
-        JSONObject endExpInfo = new JSONObject();
+        JsonObject endExpInfo = new JsonObject();
 
-        endExpInfo.put("kantai_idx", kantai_idx);
-        endExpInfo.put("kantai_name", kantai_name);
-        endExpInfo.put("mission_no", mission_no);
-        endExpInfo.put("mission_krname", mission_krname);
+        endExpInfo.addProperty("kantai_idx", kantai_idx);
+        endExpInfo.addProperty("kantai_name", kantai_name);
+        endExpInfo.addProperty("mission_no", mission_no);
+        endExpInfo.addProperty("mission_krname", mission_krname);
 
         complete_time_check[kantai_idx] = arrive_time;
         canceled_flag[kantai_idx] = true;
 
         Bundle bundle = new Bundle();
         bundle.putString("url", KcaService.KCA_API_NOTI_EXP_CANCELED);
-        bundle.putString("data", endExpInfo.toJSONString());
+        bundle.putString("data", endExpInfo.toString());
         Message sMsg = sHandler.obtainMessage();
         sMsg.setData(bundle);
 

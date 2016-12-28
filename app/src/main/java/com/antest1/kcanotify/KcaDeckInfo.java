@@ -2,8 +2,9 @@ package com.antest1.kcanotify;
 
 import android.util.Log;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public class KcaDeckInfo {
     // Formula 33 (2016.12.26)
     // Reference: http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
     //            http://kancolle-calc.net/deckbuilder.html
-    public static double getSeekValue(JSONArray deckPortData, int deckid, int Cn) {
+    public static double getSeekValue(JsonArray deckPortData, int deckid, int Cn) {
         double pureTotalSeek = 0.0;
         double totalSeek = 0.0;
 
@@ -25,24 +26,24 @@ public class KcaDeckInfo {
         hqPenalty = Math.ceil(0.4*userLevel);
 
         int noShipCount = 6;
-        JSONArray deckShipIdList = (JSONArray) ((JSONObject) deckPortData.get(deckid)).get("api_ship");
+        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for(int i=0; i<deckShipIdList.size(); i++) {
-            int shipId = intv(deckShipIdList.get(i));
+            int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 noShipCount -= 1;
-                JSONObject shipData = KcaApiData.getUserShipDataById(shipId, "slot,sakuteki");
-                int shipSeek = intv(((JSONArray) shipData.get("sakuteki")).get(0));
+                JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "slot,sakuteki");
+                int shipSeek = shipData.get("sakuteki").getAsJsonArray().get(0).getAsInt();
                 pureTotalSeek += shipSeek;
 
-                JSONArray shipItem = (JSONArray) shipData.get("slot");
+                JsonArray shipItem = (JsonArray) shipData.get("slot");
                 for (int j = 0; j < shipItem.size(); j++) {
-                    int item_id = intv(shipItem.get(j));
+                    int item_id = shipItem.get(j).getAsInt();
                     if (item_id != -1) {
-                        JSONObject itemData = KcaApiData.getUserItemStatusById (item_id, "level,alv", "name,type,saku");
-                        String itemName = (String)itemData.get("name");
-                        int itemLevel = intv(itemData.get("level"));
-                        int itemType = intv(((JSONArray) itemData.get("type")).get(2));
-                        int itemSeek = intv(itemData.get("saku"));
+                        JsonObject itemData = KcaApiData.getUserItemStatusById (item_id, "level,alv", "name,type,saku");
+                        String itemName = itemData.get("name").getAsString();
+                        int itemLevel = itemData.get("level").getAsInt();
+                        int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                        int itemSeek = itemData.get("saku").getAsInt();
                         shipSeek -= itemSeek;
 
                         switch (itemType) {
@@ -81,15 +82,15 @@ public class KcaDeckInfo {
         return Math.floor(totalSeek*100)/100;
     }
 
-    public static String getConditionStatus(JSONArray deckPortData, int deckid) {
+    public static String getConditionStatus(JsonArray deckPortData, int deckid) {
         String getConditionInfo = "";
         List<String> conditionList = new ArrayList<String>();
-        JSONArray deckShipIdList = (JSONArray) ((JSONObject) deckPortData.get(deckid)).get("api_ship");
+        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for(int i=0; i<deckShipIdList.size(); i++) {
-            int shipId = intv(deckShipIdList.get(i));
+            int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
-                JSONObject shipData = KcaApiData.getUserShipDataById(shipId, "cond");
-                int shipCondition = intv(shipData.get("cond"));
+                JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "cond");
+                int shipCondition = shipData.get("cond").getAsInt();
                 conditionList.add(String.valueOf(shipCondition));
             }
         }
@@ -154,31 +155,35 @@ public class KcaDeckInfo {
         return rangeAAC;
     }
 
-    public static int[] getAirPowerRange(JSONArray deckPortData, int deckid) {
+    public static int[] getAirPowerRange(JsonArray deckPortData, int deckid) {
         int[] totalRangeAAC = {0, 0};
 
-        JSONArray deckShipIdList = (JSONArray) ((JSONObject) deckPortData.get(deckid)).get("api_ship");
+        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for(int i=0; i<deckShipIdList.size(); i++) {
-            int shipId = intv(deckShipIdList.get(i));
+            int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
-                JSONObject shipData = KcaApiData.getUserShipDataById(shipId, "slot,onslot");
-
-                JSONArray shipItem = (JSONArray) shipData.get("slot");
-                JSONArray shipSlotCount = (JSONArray) shipData.get("onslot");
+                JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id,lv,slot,onslot");
+                int shipKcId = shipData.get("ship_id").getAsInt();
+                int shipLv = shipData.get("lv").getAsInt();
+                JsonObject shipKcData = KcaApiData.getKcShipDataById(shipKcId, "name");
+                String shipName = shipKcData.get("name").getAsString();
+                Log.e("KCA", String.format("%s (%s)", shipName, shipLv));
+                JsonArray shipItem = (JsonArray) shipData.get("slot");
+                JsonArray shipSlotCount = (JsonArray) shipData.get("onslot");
                 for (int j = 0; j < shipItem.size(); j++) {
-                    int item_id = intv(shipItem.get(j));
-                    int slot = intv(shipSlotCount.get(j));
+                    int item_id = shipItem.get(j).getAsInt();
+                    int slot = shipSlotCount.get(j).getAsInt();
                     if (item_id != -1) {
-                        JSONObject itemData = KcaApiData.getUserItemStatusById(item_id, "level,alv", "name,type,tyku");
-                        String itemName = (String) itemData.get("name");
-                        int itemLevel = intv(itemData.get("level"));
+                        JsonObject itemData = KcaApiData.getUserItemStatusById(item_id, "level,alv", "name,type,tyku");
+                        String itemName = itemData.get("name").getAsString();
+                        int itemLevel = itemData.get("level").getAsInt();
                         int itemMastery = 0;
-                        if (itemData.containsKey("alv")) {
-                            itemMastery = intv(itemData.get("alv"));
+                        if (itemData.has("alv")) {
+                            itemMastery = itemData.get("alv").getAsInt();
                         }
-                        int itemType = intv(((JSONArray) itemData.get("type")).get(2));
-                        int itemAAC = intv(itemData.get("tyku"));
-
+                        int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                        int itemAAC = itemData.get("tyku").getAsInt();
+                        Log.e("KCA", String.format("- %s %d %d", itemName, itemLevel, slot));
                         double baseAAC = calcBasicAAC(calcReinforcedAAC(itemType, itemAAC, itemLevel), slot);
                         double[] masteryAAC = calcSlotAACFromMastery(itemType, itemMastery, 0);
 
@@ -191,18 +196,18 @@ public class KcaDeckInfo {
         return totalRangeAAC;
     }
 
-    public static int getSpeed(JSONArray deckPortData, int deckid) {
+    public static int getSpeed(JsonArray deckPortData, int deckid) {
         boolean is_fast_flag = true;
         boolean is_slow_flag = true;
 
-        JSONArray deckShipIdList = (JSONArray) ((JSONObject) deckPortData.get(deckid)).get("api_ship");
+        JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().get("api_ship").getAsJsonArray();
         for(int i=0; i<deckShipIdList.size(); i++) {
-            int shipId = intv(deckShipIdList.get(i));
+            int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
-                JSONObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id");
-                int shipKcId = intv(shipData.get("ship_id"));
-                JSONObject shipKcData = KcaApiData.getKcShipDataById(shipKcId, "soku");
-                int soku = intv(shipKcData.get("soku"));
+                JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id");
+                int shipKcId = shipData.get("ship_id").getAsInt();
+                JsonObject shipKcData = KcaApiData.getKcShipDataById(shipKcId, "soku");
+                int soku = shipKcData.get("soku").getAsInt();
                 if (soku == KcaApiData.SPEED_FAST) {
                     is_slow_flag = false;
                 } else if (soku == KcaApiData.SPEED_SLOW) {
@@ -230,10 +235,6 @@ public class KcaDeckInfo {
         }
         resultStr = resultStr.concat(list.get(i));
         return resultStr;
-    }
-
-    private static Integer intv(Object o) {
-        return ((Long) o).intValue();
     }
 
 }

@@ -1,32 +1,32 @@
 package com.antest1.kcanotify;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import android.content.Context;
+import android.os.Handler;
+import android.util.Base64;
+import android.util.Log;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import org.littleshoot.proxy.HttpFilters;
 import org.littleshoot.proxy.HttpFiltersAdapter;
 import org.littleshoot.proxy.HttpFiltersSource;
 import org.littleshoot.proxy.HttpFiltersSourceAdapter;
 import org.littleshoot.proxy.HttpProxyServer;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
-import android.content.Context;
-import android.os.Handler;
-import android.util.Base64;
-import android.util.Log;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
@@ -170,12 +170,11 @@ public class KcaProxyServer {
                                 String requestBodyStr = new String(requestBody);
 
                                 try {
-                                    JSONParser parser = new JSONParser();
                                     String responseData = new KcaRequest().execute(request.getUri(), request.getMethod().name(), requestHeaderString, requestBodyStr).get();
-                                    JSONObject responseObject = (JSONObject) parser.parse(responseData);
-                                    String responseHeader = (String) responseObject.get("header");
-                                    int statusCode = Integer.valueOf((String)responseObject.get("status"));
-                                    byte[] responseBody = Base64.decode((String)responseObject.get("data"), Base64.DEFAULT);
+                                    JsonObject responseObject = new JsonParser().parse(responseData).getAsJsonObject();
+                                    String responseHeader = responseObject.get("header").getAsString();
+                                    int statusCode = responseObject.get("status").getAsInt();
+                                    byte[] responseBody = Base64.decode(responseObject.get("data").getAsString(), Base64.DEFAULT);
                                     ByteBuf buffer = Unpooled.wrappedBuffer(responseBody);
                                     HttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.valueOf(statusCode), buffer);
                                     for (String line: responseHeader.split("\r\n")) {
@@ -200,8 +199,6 @@ public class KcaProxyServer {
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 } catch (ExecutionException e) {
-                                    e.printStackTrace();
-                                } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
 							}

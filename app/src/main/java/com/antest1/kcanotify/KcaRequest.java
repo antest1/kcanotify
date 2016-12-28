@@ -5,8 +5,8 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.google.common.io.ByteStreams;
-
-import org.json.simple.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -114,7 +114,7 @@ public class KcaRequest extends AsyncTask<String, Void, String> {
 
             int code = http.getResponseCode();
 
-            JSONObject responseData = new JSONObject();
+            JsonObject responseData = new JsonObject();
             String responseHeaderString = "";
             Map<String, List<String>> map = http.getHeaderFields();
             for (Map.Entry<String, List<String>> entry : map.entrySet()) {
@@ -122,16 +122,16 @@ public class KcaRequest extends AsyncTask<String, Void, String> {
                     responseHeaderString += String.format("%s: %s\r\n", entry.getKey(), joinStr(entry.getValue(), "; "));
                 }
             }
-            responseData.put("status", String.valueOf(code));
-            responseData.put("header", responseHeaderString);
+            responseData.addProperty("status", String.valueOf(code));
+            responseData.addProperty("header", responseHeaderString);
 
             InputStream is = http.getInputStream();
             byte[] bytes = ByteStreams.toByteArray(is);
             String bytesData = Base64.encodeToString(bytes, Base64.DEFAULT);
             //Log.e("KCA", bytesData);
-            responseData.put("data", bytesData);
+            responseData.addProperty("data", bytesData);
 
-            return responseData.toJSONString();
+            return responseData.toString();
         } catch(java.net.SocketTimeoutException e) {
             return TIMEOUT_CODE;
         } catch (Exception e) {

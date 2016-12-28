@@ -21,11 +21,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -60,6 +61,7 @@ public class KcaService extends Service {
     public static final String API_PORT = "/api_port/port";
     public static final String API_START2 = "/api_start2";
     public static final String API_GET_MEMBER_REQUIRED_INFO = "/api_get_member/require_info";
+    public static final String API_REQ_MEMBER_PRESET_DECK = "/api_get_member/preset_deck";
     public static final String API_GET_MEMBER_DECK = "/api_get_member/deck";
     public static final String API_GET_MEMBER_SHIP_DECK = "/api_get_member/ship_deck";
     public static final String API_GET_MEMBER_SLOT_ITEM = "/api_get_member/slot_item";
@@ -156,7 +158,7 @@ public class KcaService extends Service {
     String kca_version;
     String api_start2_data = null;
     boolean api_start2_down_mode = false;
-    JSONArray currentPortDeckData = null;
+    JsonArray currentPortDeckData = null;
     SharedPreferences preferences;
 
     private String getPreferences(String key) {
@@ -172,9 +174,8 @@ public class KcaService extends Service {
         editor.commit();
     }
 
-    private JSONObject readCacheData() {
+    private JsonObject readCacheData() {
         try {
-            JSONParser jsonParser = new JSONParser();
             FileInputStream fis = openFileInput(KCANOTIFY_S2_CACHE_FILENAME);
             byte[] cache_data = new byte[fis.available()];
             //Toast.makeText(getApplicationContext(), String.format("Loading Cached Data %d", fis.available()), Toast.LENGTH_LONG).show();
@@ -182,14 +183,12 @@ public class KcaService extends Service {
                 ;
             }
             String cache_data_str = new String(cache_data, 0, cache_data.length);
-            return (JSONObject) jsonParser.parse(cache_data_str);
+            return new JsonParser().parse(cache_data_str).getAsJsonObject();
         } catch (FileNotFoundException e) {
             new retApiStartData().execute("", "down", "");
             return null;
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
-        } catch (ParseException e) {
             return null;
         }
     }
@@ -237,7 +236,7 @@ public class KcaService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, kcIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         String initTitle = String.format("%s 동작중", getResources().getText(R.string.app_name));
-        String initContent = "깡들리티에서 게임을 시작해주세요";
+        String initContent = "깡들리티에서 게임을 실행해주세요";
         String initSubContent = String.format("%s %s", getResources().getText(R.string.app_name), BuildConfig.VERSION_NAME);
 
         startForeground(getNotificationId(NOTI_FRONT, 1), createViewNotification(initTitle, initContent, initSubContent));
@@ -327,8 +326,6 @@ public class KcaService extends Service {
     }
 
     class kcaServiceHandler extends Handler {
-        JSONParser jsonParser = new JSONParser();
-
         @Override
         public void handleMessage(Message msg) {
             String url = msg.getData().getString("url");
@@ -339,23 +336,23 @@ public class KcaService extends Service {
                 return;
             }
 
-            JSONObject jsonDataObj;
+            JsonObject jsonDataObj;
             try {
-                jsonDataObj = (JSONObject) jsonParser.parse(data);
+                jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
 
                 if (url.startsWith(KCA_VERSION)) {
                     //Toast.makeText(getApplicationContext(), "KCA_VERSION", Toast.LENGTH_LONG).show();
-                    JSONObject api_version = (JSONObject) jsonDataObj.get("api");
-                    kca_version = (String) api_version.get("api_start2");
+                    JsonObject api_version = jsonDataObj.get("api").getAsJsonObject();
+                    kca_version = api_version.get("api_start2").getAsString();
                     if (!getPreferences("kca_version").equals(kca_version)) {
                         api_start2_down_mode = true;
                     } else {
                         api_start2_down_mode = false;
-                        JSONObject kcDataObj = readCacheData();
+                        JsonObject kcDataObj = readCacheData();
                         //Log.e("KCA", kcDataObj.toJSONString());
-                        if (kcDataObj != null && kcDataObj.containsKey("api_data")) {
+                        if (kcDataObj != null && kcDataObj.has("api_data")) {
                             //Toast.makeText(getApplicationContext(), "Load Kancolle Data", Toast.LENGTH_LONG).show();
-                            KcaApiData.getKcGameData((JSONObject) kcDataObj.get("api_data"));
+                            KcaApiData.getKcGameData(kcDataObj.get("api_data").getAsJsonObject());
                             setPreferences("kca_version", kca_version);
                         }
                     }
@@ -369,9 +366,9 @@ public class KcaService extends Service {
                     api_start2_data = data;
                     writeCacheData(data.getBytes());
 
-                    if (jsonDataObj.containsKey("api_data")) {
+                    if (jsonDataObj.has("api_data")) {
                         //Toast.makeText(getApplicationContext(), "Load Kancolle Data", Toast.LENGTH_LONG).show();
-                        KcaApiData.getKcGameData((JSONObject) jsonDataObj.get("api_data"));
+                        KcaApiData.getKcGameData(jsonDataObj.get("api_data").getAsJsonObject());
                         setPreferences("kca_version", kca_version);
                     }
 
@@ -381,12 +378,12 @@ public class KcaService extends Service {
                     isPortAccessed = true;
                     heavyDamagedMode = false;
                     Log.e("KCA", "Port Handler Called");
-                    if (jsonDataObj.containsKey("api_data")) {
-                        JSONObject reqPortApiData = (JSONObject) jsonDataObj.get("api_data");
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject reqPortApiData = jsonDataObj.get("api_data").getAsJsonObject();
                         int size = KcaApiData.getPortData(reqPortApiData);
                         //Log.e("KCA", "Total Ships: " + String.valueOf(size));
-                        if (reqPortApiData.containsKey("api_deck_port")) {
-                            JSONArray reqPortDeckApiData = (JSONArray) reqPortApiData.get("api_deck_port");
+                        if (reqPortApiData.has("api_deck_port")) {
+                            JsonArray reqPortDeckApiData = reqPortApiData.get("api_deck_port").getAsJsonArray();
                             currentPortDeckData = reqPortDeckApiData;
                             processFirstDeckInfo(currentPortDeckData);
                             processExpeditionInfo(currentPortDeckData);
@@ -398,8 +395,8 @@ public class KcaService extends Service {
                 if (url.startsWith(API_GET_MEMBER_REQUIRED_INFO)) {
                     //Log.e("KCA", "Load Item Data");
 
-                    if (jsonDataObj.containsKey("api_data")) {
-                        JSONObject requiredInfoApiData = (JSONObject) jsonDataObj.get("api_data");
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject requiredInfoApiData = jsonDataObj.get("api_data").getAsJsonObject();
                         int size = KcaApiData.getSlotItemData(requiredInfoApiData);
                         int userId = KcaApiData.getUserId(requiredInfoApiData);
                         //Log.e("KCA", "Total Items: " + String.valueOf(size));
@@ -417,16 +414,16 @@ public class KcaService extends Service {
 
                 if (API_BATTLE_REQS.contains(url)) {
                     //Log.e("KCA", "Battle Handler Called");
-                    if (jsonDataObj.containsKey("api_data")) {
-                        JSONObject battleApiData = (JSONObject) jsonDataObj.get("api_data");
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject battleApiData = jsonDataObj.get("api_data").getAsJsonObject();
                         KcaBattle.processData(url, battleApiData);
                     }
                 }
 
                 if (url.startsWith(API_GET_MEMBER_SHIP_DECK)) {
-                    if (jsonDataObj.containsKey("api_data")) {
-                        JSONObject api_data = (JSONObject) jsonDataObj.get("api_data");
-                        JSONArray api_deck_data = (JSONArray) api_data.get("api_deck_data");
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject api_data = jsonDataObj.get("api_data").getAsJsonObject();
+                        JsonArray api_deck_data = (JsonArray) api_data.get("api_deck_data");
                         KcaApiData.updatePortDataOnBattle(api_data);
                         processFirstDeckInfo(api_deck_data);
                     }
@@ -434,30 +431,30 @@ public class KcaService extends Service {
 
                 if (url.startsWith(API_GET_MEMBER_DECK)) {
                     //Log.e("KCA", "Expedition Handler Called");
-                    if (jsonDataObj.containsKey("api_data")) {
-                        JSONArray reqGetMemberDeckApiData = (JSONArray) jsonDataObj.get("api_data");
+                    if (jsonDataObj.has("api_data")) {
+                        JsonArray reqGetMemberDeckApiData = jsonDataObj.get("api_data").getAsJsonArray();
                         processExpeditionInfo(reqGetMemberDeckApiData);
-                    }
-                }
-
-                if (url.startsWith(API_GET_MEMBER_SLOT_ITEM)) {
-                    if (jsonDataObj.containsKey("api_data")) {
-                        JSONArray api_data = (JSONArray) jsonDataObj.get("api_data");
-                        KcaApiData.updateSlotItemData(api_data);
                     }
                 }
 
                 if (url.startsWith(API_REQ_MISSION_RETURN)) {
                     //Log.e("KCA", "Expedition Handler Called");
-                    if (jsonDataObj.containsKey("api_data")) {
-                        JSONObject reqGetMemberDeckApiData = (JSONObject) jsonDataObj.get("api_data");
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject reqGetMemberDeckApiData = jsonDataObj.get("api_data").getAsJsonObject();
                         cancelExpeditionInfo(reqGetMemberDeckApiData);
                     }
                 }
 
+                if (url.startsWith(API_GET_MEMBER_SLOT_ITEM)) {
+                    if (jsonDataObj.has("api_data")) {
+                        JsonArray api_data = jsonDataObj.get("api_data").getAsJsonArray();
+                        KcaApiData.updateSlotItemData(api_data);
+                    }
+                }
+
                 if (url.startsWith(API_REQ_KOUSYOU_CREATETIEM)) {
-                    if (jsonDataObj.containsKey("api_data")) {
-                        JSONObject api_data = (JSONObject) jsonDataObj.get("api_data");
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject api_data = jsonDataObj.get("api_data").getAsJsonObject();
                         KcaApiData.addUserItem(api_data);
                     }
                 }
@@ -475,8 +472,8 @@ public class KcaService extends Service {
                 }
 
                 if (url.startsWith(API_REQ_KOUSYOU_GETSHIP)) {
-                    if (jsonDataObj.containsKey("api_data")) {
-                        JSONObject api_data = (JSONObject) jsonDataObj.get("api_data");
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject api_data = jsonDataObj.get("api_data").getAsJsonObject();
                         KcaApiData.addUserShip(api_data);
                     }
                 }
@@ -493,7 +490,7 @@ public class KcaService extends Service {
                     }
                 }
 
-            } catch (ParseException e) {
+            } catch (JsonSyntaxException e) {
                 // TODO Auto-generated catch block
                 //Log.e("KCA", "ParseError");
                 //Log.e("KCA", data);
@@ -510,7 +507,6 @@ public class KcaService extends Service {
     }
 
     class kcaNotificationHandler extends Handler {
-        JSONParser jsonParser = new JSONParser();
 
         @Override
         public void handleMessage(Message msg) {
@@ -521,9 +517,9 @@ public class KcaService extends Service {
                 return;
             }
 
-            JSONObject jsonDataObj;
+            JsonObject jsonDataObj;
             try {
-                jsonDataObj = (JSONObject) jsonParser.parse(data);
+                jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
                 if (url.startsWith(KCA_API_NOTI_EXP_LEFT)) {
                     // //Log.e("KCA", "Expedition Notification Handler Called");
                     //int kantaiIndex = ((Long) jsonDataObj.get("idx")).intValue();
@@ -533,11 +529,10 @@ public class KcaService extends Service {
 
                 if (url.startsWith(KCA_API_NOTI_EXP_CANCELED)) {
                     // //Log.e("KCA", "Expedition Notification Handler Called");
-                    jsonDataObj = (JSONObject) jsonParser.parse(data);
-                    int kantaiIndex = ((Long) jsonDataObj.get("kantai_idx")).intValue();
-                    String kantaiName = (String) jsonDataObj.get("kantai_name");
-                    int missionNo = ((Long) jsonDataObj.get("mission_no")).intValue();
-                    String missionName = (String) jsonDataObj.get("mission_krname");
+                    int kantaiIndex = jsonDataObj.get("kantai_idx").getAsInt();
+                    String kantaiName = jsonDataObj.get("kantai_name").getAsString();
+                    int missionNo = jsonDataObj.get("mission_no").getAsInt();
+                    String missionName = jsonDataObj.get("mission_krname").getAsString();
                     //Intent intent = new Intent(KcaService.this, MainActivity.class);
 
                     kcaExpeditionInfoList[kantaiIndex] = "";
@@ -546,11 +541,10 @@ public class KcaService extends Service {
 
                 if (url.startsWith(KCA_API_NOTI_EXP_FIN)) {
                     // //Log.e("KCA", "Expedition Notification Handler Called");
-                    jsonDataObj = (JSONObject) jsonParser.parse(data);
-                    int kantaiIndex = ((Long) jsonDataObj.get("kantai_idx")).intValue();
-                    String kantaiName = (String) jsonDataObj.get("kantai_name");
-                    int missionNo = ((Long) jsonDataObj.get("mission_no")).intValue();
-                    String missionName = (String) jsonDataObj.get("mission_krname");
+                    int kantaiIndex = jsonDataObj.get("kantai_idx").getAsInt();
+                    String kantaiName = jsonDataObj.get("kantai_name").getAsString();
+                    int missionNo = jsonDataObj.get("mission_no").getAsInt();
+                    String missionName = jsonDataObj.get("mission_krname").getAsString();
                     //Intent intent = new Intent(KcaService.this, MainActivity.class);
 
                     kcaExpeditionInfoList[kantaiIndex] = "";
@@ -559,8 +553,7 @@ public class KcaService extends Service {
                 }
 
                 if (url.startsWith(KCA_API_NOTI_BATTLE_INFO)) {
-                    jsonDataObj = (JSONObject) jsonParser.parse(data);
-                    String message = (String) jsonDataObj.get("msg");
+                    String message = jsonDataObj.get("msg").getAsString();
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 }
 
@@ -583,7 +576,7 @@ public class KcaService extends Service {
                     setFrontViewNotifier(FRONT_NONE, 0, null);
                 }
 
-            } catch (ParseException e) {
+            } catch (JsonSyntaxException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
@@ -595,11 +588,7 @@ public class KcaService extends Service {
         }
     }
 
-    private Integer intv(Object o) {
-        return ((Long) o).intValue();
-    }
-
-    private void processFirstDeckInfo(JSONArray data) {
+    private void processFirstDeckInfo(JsonArray data) {
         String delimeter = " | ";
 
         if (!isGameDataLoaded()) {
@@ -634,25 +623,25 @@ public class KcaService extends Service {
                 break;
         }
 
-        JSONArray deckInfoData = new JSONArray();
-        JSONObject infoData = null;
+        JsonArray deckInfoData = new JsonArray();
+        JsonObject infoData = null;
 
         String airPowerValue = "";
         int[] airPowerRange = KcaDeckInfo.getAirPowerRange(data, 0);
         if (airPowerRange[0] > 0 && airPowerRange[1] > 0) {
             airPowerValue = String.format("제공: %d-%d", airPowerRange[0], airPowerRange[1]);
-            infoData = new JSONObject();
-            infoData.put("is_portrait_newline", 0);
-            infoData.put("portrait_value", airPowerValue);
-            infoData.put("landscape_value", airPowerValue);
+            infoData = new JsonObject();
+            infoData.addProperty("is_portrait_newline", 0);
+            infoData.addProperty("portrait_value", airPowerValue);
+            infoData.addProperty("landscape_value", airPowerValue);
             deckInfoData.add(infoData);
         }
 
         String seekValue =  String.format("색적(%s): %.2f", seekType, KcaDeckInfo.getSeekValue(data, 0, cn));
-        infoData = new JSONObject();
-        infoData.put("is_portrait_newline", 0);
-        infoData.put("portrait_value", seekValue);
-        infoData.put("landscape_value", seekValue);
+        infoData = new JsonObject();
+        infoData.addProperty("is_portrait_newline", 0);
+        infoData.addProperty("portrait_value", seekValue);
+        infoData.addProperty("landscape_value", seekValue);
         deckInfoData.add(infoData);
 
         int speedValue = KcaDeckInfo.getSpeed(data, 0);
@@ -668,37 +657,37 @@ public class KcaService extends Service {
                 speedStringValue = getResources().getString(R.string.speed_mixed);
                 break;
         }
-        infoData = new JSONObject();
-        infoData.put("is_portrait_newline", 1);
-        infoData.put("portrait_value", speedStringValue);
-        infoData.put("landscape_value", speedStringValue.concat(getResources().getString(R.string.speed_postfix)));
+        infoData = new JsonObject();
+        infoData.addProperty("is_portrait_newline", 1);
+        infoData.addProperty("portrait_value", speedStringValue);
+        infoData.addProperty("landscape_value", speedStringValue.concat(getResources().getString(R.string.speed_postfix)));
         deckInfoData.add(infoData);
 
         String conditionValue = String.format("피로도: %s", KcaDeckInfo.getConditionStatus(data, 0));
-        infoData = new JSONObject();
-        infoData.put("is_portrait_newline", 0);
-        infoData.put("portrait_value", conditionValue);
-        infoData.put("landscape_value", conditionValue);
+        infoData = new JsonObject();
+        infoData.addProperty("is_portrait_newline", 0);
+        infoData.addProperty("portrait_value", conditionValue);
+        infoData.addProperty("landscape_value", conditionValue);
         deckInfoData.add(infoData);
 
-        kcaFirstDeckInfo = deckInfoData.toJSONString();
+        kcaFirstDeckInfo = deckInfoData.toString();
         setFrontViewNotifier(FRONT_NONE, 0, null);
     }
 
-    private void processExpeditionInfo(JSONArray data) {
+    private void processExpeditionInfo(JsonArray data) {
         //Log.e("KCA", "processExpeditionInfo Called");
         int deck_id, mission_no;
         long arrive_time;
         String deck_name;
         for (int i = 1; i < data.size(); i++) {
             int idx = i - 1; // 1=>0, 2=>1, 3=>2 (0: Fleet #1)
-            JSONObject deck = (JSONObject) data.get(i);
-            deck_id = ((Long) deck.get("api_id")).intValue();
-            deck_name = (String) deck.get("api_name");
-            JSONArray apiMission = (JSONArray) deck.get("api_mission");
-            if (((Long) apiMission.get(0)).intValue() == 1) {
-                mission_no = ((Long) apiMission.get(1)).intValue();
-                arrive_time = (Long) apiMission.get(2);
+            JsonObject deck = (JsonObject) data.get(i);
+            deck_id = deck.get("api_id").getAsInt();
+            deck_name = deck.get("api_name").getAsString();
+            JsonArray apiMission = (JsonArray) deck.get("api_mission");
+            if (apiMission.get(0).getAsInt() == 1) {
+                mission_no = apiMission.get(1).getAsInt();
+                arrive_time = apiMission.get(2).getAsLong();
             } else {
                 mission_no = -1;
                 arrive_time = -1;
@@ -726,10 +715,10 @@ public class KcaService extends Service {
         setFrontViewNotifier(FRONT_NONE, 0, null);
     }
 
-    private void cancelExpeditionInfo(JSONObject data) {
-        JSONArray canceled_info = (JSONArray) data.get("api_mission");
-        int canceled_mission_no = ((Long) canceled_info.get(1)).intValue();
-        long arrive_time = (Long) canceled_info.get(2);
+    private void cancelExpeditionInfo(JsonObject data) {
+        JsonArray canceled_info = (JsonArray) data.get("api_mission");
+        int canceled_mission_no = canceled_info.get(1).getAsInt();
+        long arrive_time = canceled_info.get(2).getAsInt();
         int idx = -1;
         for (int i = 0; i < 3; i++) {
             if (kcaExpeditionRunnableList[i].mission_no == canceled_mission_no) {
@@ -756,26 +745,22 @@ public class KcaService extends Service {
         String expeditionString = "";
         String expString = "";
 
-        JSONParser parser = new JSONParser();
-        try {
-            JSONArray deckInfo = (JSONArray) parser.parse(kcaFirstDeckInfo);
-            List<String> deckInfoStringList = new ArrayList<String>();
-            for (Object item: deckInfo) {
-                JSONObject data = (JSONObject) item;
-                if (is_portrait) {
-                    deckInfoStringList.add((String) data.get("portrait_value"));
-                } else {
-                    deckInfoStringList.add((String) data.get("landscape_value"));
-                }
-                if (intv(data.get("is_portrait_newline")) == 1 && is_portrait) {
-                    notifiString = notifiString.concat(joinStr(deckInfoStringList, " / ")).concat("\n");
-                    deckInfoStringList.clear();
-                }
+        JsonArray deckInfo = new JsonParser().parse(kcaFirstDeckInfo).getAsJsonArray();
+        List<String> deckInfoStringList = new ArrayList<String>();
+        for (Object item: deckInfo) {
+            JsonObject data = (JsonObject) item;
+            if (is_portrait) {
+                 deckInfoStringList.add(data.get("portrait_value").getAsString());
+            } else {
+                deckInfoStringList.add(data.get("landscape_value").getAsString());
             }
-            notifiString = notifiString.concat(joinStr(deckInfoStringList, " / "));
-        } catch (ParseException e) {
-            notifiString = notifiString.concat(kcaFirstDeckInfo);
+            if (data.get("is_portrait_newline").getAsInt() == 1 && is_portrait) {
+                notifiString = notifiString.concat(joinStr(deckInfoStringList, " / ")).concat("\n");
+                deckInfoStringList.clear();
+            }
         }
+        notifiString = notifiString.concat(joinStr(deckInfoStringList, " / "));
+
 
         List<String> kcaExpStrList = new ArrayList<String>();
         for (int i = 0; i < 3; i++) {
@@ -891,7 +876,6 @@ public class KcaService extends Service {
         }
 
         public String executeClient(String token, String method, String data) throws Exception {
-            JSONParser parser = new JSONParser();
             if (kca_version == null) return null;
             if (method == "up") {
                 URL data_send_url = new URL(String.format("http://antest.hol.es/kcanotify/kca_api_start2.php?token=%s&method=%s&v=%s", token, method, kca_version));
@@ -913,16 +897,17 @@ public class KcaService extends Service {
                 http.setDoInput(true);
                 http.setRequestProperty("Referer", "app:/KCA/");
                 http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                http.getResponseCode();
                 InputStream is = http.getInputStream();
                 byte[] bytes = ByteStreams.toByteArray(is);
                 String input_data = new String(bytes);
 
                 writeCacheData(bytes);
+                JsonObject jsonDataObj = new JsonParser().parse(input_data).getAsJsonObject();
 
-                JSONObject jsonDataObj = (JSONObject) parser.parse(input_data);
-                if (jsonDataObj.containsKey("api_data")) {
+                if (jsonDataObj.has("api_data")) {
                     //Toast.makeText(getApplicationContext(), "Load Kancolle Data", Toast.LENGTH_LONG).show();
-                    KcaApiData.getKcGameData((JSONObject) jsonDataObj.get("api_data"));
+                    KcaApiData.getKcGameData(jsonDataObj.get("api_data").getAsJsonObject());
                     setPreferences("kca_version", kca_version);
                     processFirstDeckInfo(currentPortDeckData);
                 }

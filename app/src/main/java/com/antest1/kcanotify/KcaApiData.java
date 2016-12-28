@@ -2,27 +2,30 @@ package com.antest1.kcanotify;
 
 import android.util.Log;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 public class KcaApiData {
-	public static JSONObject kcGameData = null;
-	public static Map<Integer, JSONObject> kcShipData = new HashMap<Integer, JSONObject>();
-	public static Map<Integer, JSONObject> kcItemData = new HashMap<Integer, JSONObject>();
-	public static Map<Integer, JSONObject> userShipData = new HashMap<Integer, JSONObject>();
-	public static Map<Integer, JSONObject> userItemData = new HashMap<Integer, JSONObject>();
+	public static JsonObject kcGameData = null;
+	public static Map<Integer, JsonObject> kcShipData = new HashMap<Integer, JsonObject>();
+	public static Map<Integer, JsonObject> kcItemData = new HashMap<Integer, JsonObject>();
+	public static Map<Integer, JsonObject> userShipData = new HashMap<Integer, JsonObject>();
+	public static Map<Integer, JsonObject> userItemData = new HashMap<Integer, JsonObject>();
 
 	public static int level = 0;
-	public static long experience = 0;
+	public static Integer experience = 0;
 
 	// Equipment Constants (api_type 2)
 	public static final int T2_GUN_SMALL = 1;
@@ -97,10 +100,6 @@ public class KcaApiData {
 	public static final int SPEED_NONE = 0;
 	public static final int SPEED_MIXED = 15;
 
-	private static Integer intv(Object o) {
-		return ((Long) o).intValue();
-	}
-	private static Long longv(Object o) { return (Long) o; }
 	private static String joinStr(List<String> list, String delim) {
 		String resultStr = "";
 		int i;
@@ -112,28 +111,29 @@ public class KcaApiData {
 		return resultStr;
 	}
 
-	public static int getKcGameData(JSONObject api_data) {
+	public static int getKcGameData(JsonObject api_data) {
 		//Log.e("KCA", "getKcGameData Called");
 		kcGameData = api_data;
-		if (kcGameData.containsKey("api_mst_ship")) {
-			JSONArray shipStatusArray = (JSONArray) kcGameData.get("api_mst_ship");
-			JSONObject temp;
-			for (ListIterator<JSONObject> itr = shipStatusArray.listIterator(); itr.hasNext();) {
+		if (kcGameData.has("api_mst_ship")) {
+			JsonArray shipStatusArray = (JsonArray) kcGameData.get("api_mst_ship");
+			JsonElement temp;
+			for (Iterator<JsonElement> itr = shipStatusArray.iterator(); itr.hasNext();) {
 				temp = itr.next();
-				Integer api_id = ((Long) temp.get("api_id")).intValue();
-				kcShipData.put(api_id, temp);
+				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
+				kcShipData.put(api_id, temp.getAsJsonObject());
 			}
 		}
-		if (kcGameData.containsKey("api_mst_slotitem")) {
-			JSONArray itemStatusArray = (JSONArray) kcGameData.get("api_mst_slotitem");
-			JSONObject temp;
-			for (ListIterator<JSONObject> itr = itemStatusArray.listIterator(); itr.hasNext();) {
+		if (kcGameData.has("api_mst_slotitem")) {
+			JsonArray itemStatusArray = (JsonArray) kcGameData.get("api_mst_slotitem");
+			JsonElement temp;
+			for (Iterator<JsonElement> itr = itemStatusArray.iterator(); itr.hasNext();) {
 				temp = itr.next();
-				Integer api_id = ((Long) temp.get("api_id")).intValue();
-				kcItemData.put(api_id, temp);
+				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
+				kcItemData.put(api_id, temp.getAsJsonObject());
 			}
 		}
-		return kcGameData.size();
+
+		return kcGameData.entrySet().size();
 	}
 
 	public static boolean isGameDataLoaded() {
@@ -145,28 +145,28 @@ public class KcaApiData {
 		return level;
 	}
 
-	public static long getExperience() {
+	public static Integer getExperience() {
 		return experience;
 	}
 
-	public static int getPortData(JSONObject api_data) {
+	public static int getPortData(JsonObject api_data) {
 		Set<Integer> prevItemIds = new HashSet<Integer>(userShipData.keySet());
-		if (api_data.containsKey("api_basic")) {
-			JSONObject basicInfo = (JSONObject) api_data.get("api_basic");
-			level = intv(basicInfo.get("api_level"));
-			experience = longv(basicInfo.get("api_experience"));
+		if (api_data.has("api_basic")) {
+			JsonObject basicInfo = (JsonObject) api_data.get("api_basic");
+			level = basicInfo.get("api_level").getAsInt();
+			experience = basicInfo.get("api_experience").getAsInt();
 		}
 
-		if (api_data.containsKey("api_ship")) {
-			JSONArray shipDataArray = (JSONArray) api_data.get("api_ship");
-			JSONObject temp;
-			for (ListIterator<JSONObject> itr = shipDataArray.listIterator(); itr.hasNext();) {
+		if (api_data.has("api_ship")) {
+			JsonArray shipDataArray = (JsonArray) api_data.get("api_ship");
+			JsonElement temp;
+			for (Iterator<JsonElement> itr = shipDataArray.iterator(); itr.hasNext();) {
 				temp = itr.next();
-				Integer api_id = ((Long) temp.get("api_id")).intValue();
+				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
 				if(!prevItemIds.contains(api_id)) {
-					userShipData.put(api_id, temp);
+					userShipData.put(api_id, temp.getAsJsonObject());
 				} else if(!userShipData.get(api_id).equals(temp)) {
-					userShipData.put(api_id, temp);
+					userShipData.put(api_id, temp.getAsJsonObject());
 				}
 				prevItemIds.remove(api_id);
 			}
@@ -177,14 +177,14 @@ public class KcaApiData {
 		return userShipData.size();
 	}
 
-	public static int updatePortDataOnBattle(JSONObject api_data) {
-		if (api_data.containsKey("api_ship_data")) {
-			JSONArray shipDataArray = (JSONArray) api_data.get("api_ship_data");
-			JSONObject temp;
-			for (ListIterator<JSONObject> itr = shipDataArray.listIterator(); itr.hasNext();) {
+	public static int updatePortDataOnBattle(JsonObject api_data) {
+		if (api_data.has("api_ship_data")) {
+			JsonArray shipDataArray = (JsonArray) api_data.get("api_ship_data");
+			JsonElement temp;
+			for (Iterator<JsonElement> itr = shipDataArray.iterator(); itr.hasNext();) {
 				temp = itr.next();
-				Integer api_id = ((Long) temp.get("api_id")).intValue();
-				userShipData.put(api_id, temp);
+				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
+				userShipData.put(api_id, temp.getAsJsonObject());
 			}
 			return shipDataArray.size();
 		} else {
@@ -192,13 +192,13 @@ public class KcaApiData {
 		}
 	}
 
-	public static int updateSlotItemData(JSONArray api_data) {
-		JSONObject temp;
+	public static int updateSlotItemData(JsonArray api_data) {
+		JsonElement temp;
 		if (api_data != null) {
-			for (ListIterator<JSONObject> itr = api_data.listIterator(); itr.hasNext();) {
+			for (Iterator<JsonElement> itr = api_data.iterator(); itr.hasNext();) {
 				temp = itr.next();
-				Integer api_id = ((Long) temp.get("api_id")).intValue();
-				userShipData.put(api_id, temp);
+				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
+				userShipData.put(api_id, temp.getAsJsonObject());
 			}
 			return api_data.size();
 		} else {
@@ -206,27 +206,27 @@ public class KcaApiData {
 		}
 	}
 
-	public static Integer getUserId(JSONObject api_data) {
+	public static Integer getUserId(JsonObject api_data) {
 		Set<Integer> prevItemIds = new HashSet<Integer>(userItemData.keySet());
-		if (api_data.containsKey("api_basic")) {
-			JSONObject basic = (JSONObject) api_data.get("api_basic");
-			return intv(basic.get("api_member_id"));
+		if (api_data.has("api_basic")) {
+			JsonObject basic = api_data.get("api_basic").getAsJsonObject();
+			return basic.get("api_member_id").getAsInt();
 		}
 		return -1;
 	}
 
-	public static int getSlotItemData(JSONObject api_data) {
+	public static int getSlotItemData(JsonObject api_data) {
 		Set<Integer> prevItemIds = new HashSet<Integer>(userItemData.keySet());
-		if (api_data.containsKey("api_slot_item")) {
-			JSONArray slotItemApiData = (JSONArray) api_data.get("api_slot_item");
-			JSONObject temp;
-			for (ListIterator<JSONObject> itr = slotItemApiData.listIterator(); itr.hasNext();) {
+		if (api_data.has("api_slot_item")) {
+			JsonArray slotItemApiData = (JsonArray) api_data.get("api_slot_item");
+			JsonElement temp;
+			for (Iterator<JsonElement> itr = slotItemApiData.iterator(); itr.hasNext();) {
 				temp = itr.next();
-				Integer api_id = ((Long) temp.get("api_id")).intValue();
+				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
 				if(!prevItemIds.contains(api_id)) {
-					userItemData.put(api_id, temp);
-				} else if(!userItemData.get(api_id).equals(temp)) {
-					userItemData.put(api_id, temp);
+					userItemData.put(api_id, temp.getAsJsonObject());
+				} else if(!userItemData.get(api_id).equals(temp.getAsJsonObject())) {
+					userItemData.put(api_id, temp.getAsJsonObject());
 				}
 				prevItemIds.remove(api_id);
 			}
@@ -237,10 +237,10 @@ public class KcaApiData {
 		return userItemData.size();
 	}
 
-	public static JSONObject getKcShipDataById(int id, String list) {
-		JSONObject temp = new JSONObject();
+	public static JsonObject getKcShipDataById(int id, String list) {
+		JsonObject temp = new JsonObject();
 		if(kcShipData.containsKey(id)) {
-			if (list == "all") {
+			if (list.equals("all")) {
 				return kcShipData.get(id);
 			} else {
 				String[] requestList = list.split(",");
@@ -250,7 +250,7 @@ public class KcaApiData {
 					if(!api_item.startsWith("api_")) {
 						api_item = "api_" + api_item;
 					}
-					temp.put(orig_api_item, kcShipData.get(id).get(api_item));
+					temp.add(orig_api_item, kcShipData.get(id).get(api_item));
 				}
 				return temp;
 			}
@@ -260,10 +260,10 @@ public class KcaApiData {
 		}
 	}
 
-	public static JSONObject getUserShipDataById(int id, String list) {
-		JSONObject temp = new JSONObject();
+	public static JsonObject getUserShipDataById(int id, String list) {
+		JsonObject temp = new JsonObject();
 		if(userShipData.containsKey(id)) {
-			if (list == "all") {
+			if (list.equals("all")) {
 				return userShipData.get(id);
 			} else {
 				String[] requestList = list.split(",");
@@ -273,7 +273,7 @@ public class KcaApiData {
 					if(!api_item.startsWith("api_")) {
 						api_item = "api_" + api_item;
 					}
-					temp.put(orig_api_item, userShipData.get(id).get(api_item));
+					temp.add(orig_api_item, userShipData.get(id).get(api_item));
 				}
 				return temp;
 			}
@@ -282,15 +282,15 @@ public class KcaApiData {
 		}
 	}
 
-	public static JSONObject getUserItemStatusById(int id, String list, String kclist) {
+	public static JsonObject getUserItemStatusById(int id, String list, String kclist) {
 		if(userItemData.containsKey(id)) {
-			int kc_item_id = intv(userItemData.get(id).get("api_slotitem_id"));
-			JSONObject kcData = getKcItemStatusById(kc_item_id, kclist);
-			JSONObject userData = userItemData.get(id);
+			int kc_item_id = userItemData.get(id).get("api_slotitem_id").getAsInt();
+			JsonObject kcData = getKcItemStatusById(kc_item_id, kclist);
+			JsonObject userData = userItemData.get(id);
 
-			if (list == "all") {
-				for(Object k: userData.keySet()) {
-					kcData.put(k, userData.get(k));
+			if (list.equals("all")) {
+				for(Map.Entry<String, JsonElement> k: userData.entrySet()) {
+					kcData.add(k.getKey(), userData.get(k.getKey()));
 				}
 			} else {
 				String[] requestList = list.split(",");
@@ -300,8 +300,8 @@ public class KcaApiData {
 					if(!api_item.startsWith("api_")) {
 						api_item = "api_" + api_item;
 					}
-					if(userData.containsKey(api_item)) {
-						kcData.put(orig_api_item, userData.get(api_item));
+					if(userData.has(api_item)) {
+						kcData.add(orig_api_item, userData.get(api_item));
 					}
 				}
 			}
@@ -311,10 +311,10 @@ public class KcaApiData {
 		}
 	}
 
-	public static JSONObject getKcItemStatusById(int id, String list) {
-		JSONObject temp = new JSONObject();
+	public static JsonObject getKcItemStatusById(int id, String list) {
+		JsonObject temp = new JsonObject();
 		if(kcItemData.containsKey(id)) {
-			if (list == "all") {
+			if (list.equals("all")) {
 				return kcItemData.get(id);
 			} else {
 				String[] requestList = list.split(",");
@@ -324,9 +324,9 @@ public class KcaApiData {
 					if(!api_item.startsWith("api_")) {
 						api_item = "api_" + api_item;
 					}
-					temp.put(orig_api_item, kcItemData.get(id).get(api_item));
+					temp.add(orig_api_item, kcItemData.get(id).get(api_item));
 				}
-				return temp;
+				return temp.getAsJsonObject();
 			}
 		} else {
 			return null;
@@ -340,31 +340,31 @@ public class KcaApiData {
 		else return false;
 	}
 
-	public static void addUserShip(JSONObject api_data) {
-		if (api_data.containsKey("api_id")) {
-			int shipId = intv(api_data.get("api_id"));
-			JSONObject shipData = (JSONObject) api_data.get("api_ship");
+	public static void addUserShip(JsonObject api_data) {
+		if (api_data.has("api_id")) {
+			int shipId = api_data.get("api_id").getAsInt();
+			JsonObject shipData = (JsonObject) api_data.get("api_ship");
 			userShipData.put(shipId, shipData);
-			int shipKcId = intv(api_data.get("api_ship_id"));
-			String shipName = (String) getKcShipDataById(shipKcId, "name").get("name");
+			int shipKcId = api_data.get("api_ship_id").getAsInt();
+			String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
 			Log.e("KCA", String.format("add ship %d (%s)", shipId, shipName));
 
-			JSONArray shipSlotItemData = (JSONArray) api_data.get("api_slotitem");
+			JsonArray shipSlotItemData = (JsonArray) api_data.get("api_slotitem");
 			for (int i=0; i<shipSlotItemData.size(); i++) {
-				addUserItem((JSONObject) shipSlotItemData.get(i));
+				addUserItem((JsonObject) shipSlotItemData.get(i));
 			}
 		}
 	}
 
 	public static void deleteUserShip(String api_ship_id) {
 		int shipId = Integer.valueOf(api_ship_id);
-		JSONObject shipKcData = getUserShipDataById(shipId,"ship_id,slot");
+		JsonObject shipKcData = getUserShipDataById(shipId,"ship_id,slot");
 
-		int shipKcId = intv(shipKcData.get("ship_id"));
-		JSONArray shipSlotItem = (JSONArray) shipKcData.get("slot");
+		int shipKcId = shipKcData.get("ship_id").getAsInt();
+		JsonArray shipSlotItem = (JsonArray) shipKcData.get("slot");
 		List<String> shipSlotItemList = new ArrayList<String>();
 		for (int i=0; i<shipSlotItem.size(); i++) {
-			int item = intv(shipSlotItem.get(i));
+			int item = shipSlotItem.get(i).getAsInt();
 			if (item != -1) {
 				shipSlotItemList.add(String.valueOf(item));
 			}
@@ -372,28 +372,28 @@ public class KcaApiData {
 		deleteUserItem(joinStr(shipSlotItemList, ","));
 		userShipData.remove(shipId);
 
-		String shipName = (String) getKcShipDataById(shipKcId, "name").get("name");
+		String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
 		Log.e("KCA", String.format("remove ship %d (%s)",shipId, shipName));
 	}
 
-	public static void addUserItem(JSONObject api_data) {
-		JSONObject item = null;
-		if (api_data.containsKey("api_create_flag") && intv(api_data.get("api_create_flag")) == 1) {
-			item = (JSONObject) api_data.get("api_slot_item");
-		} else if(api_data.containsKey("api_slotitem_id")) {
+	public static void addUserItem(JsonObject api_data) {
+		JsonObject item = null;
+		if (api_data.has("api_create_flag") && api_data.get("api_create_flag").getAsInt() == 1) {
+			item = (JsonObject) api_data.get("api_slot_item");
+		} else if(api_data.has("api_slotitem_id")) {
 			item = api_data;
 		}
 		if (item != null) {
-			int item_id = intv(item.get("api_id"));
-			int kc_item_id = intv(item.get("api_slotitem_id"));
-			int itemType = intv(((JSONArray) getKcItemStatusById(kc_item_id, "type").get("type")).get(2));
-			item.put("api_locked", 0);
-			item.put("api_level", 0);
+			int item_id = item.get("api_id").getAsInt();
+			int kc_item_id = item.get("api_slotitem_id").getAsInt();
+			int itemType = getKcItemStatusById(kc_item_id, "type").get("type").getAsJsonArray().get(2).getAsInt();
+			item.addProperty("api_locked", 0);
+			item.addProperty("api_level", 0);
 			if(isItemAircraft(itemType)) {
-				item.put("api_alv", 0);
+				item.addProperty("api_alv", 0);
 			}
 			userItemData.put(item_id, item);
-			String itemName = (String) getKcItemStatusById(kc_item_id, "name").get("name");
+			String itemName = getKcItemStatusById(kc_item_id, "name").get("name").getAsString();
 			Log.e("KCA", String.format("add item %d (%s)",item_id, itemName));
 		}
 	}
@@ -403,7 +403,7 @@ public class KcaApiData {
 		String[] requestList = list.split(",");
 		for (int i=0; i<requestList.length; i++) {
 			int itemId = Integer.valueOf(requestList[i]);
-			String itemName = (String) getUserItemStatusById(itemId, "id", "name").get("name");
+			String itemName = getUserItemStatusById(itemId, "id", "name").get("name").getAsString();
 			userItemData.remove(Integer.valueOf(requestList[i]));
 			Log.e("KCA", String.format("remove item %d (%s)",itemId, itemName));
 		}
