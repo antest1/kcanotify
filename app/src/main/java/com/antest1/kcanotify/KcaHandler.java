@@ -51,6 +51,7 @@ public class KcaHandler implements Runnable {
 
 		String data, reqData = "";
 		try {
+			reqData = new String(requestBytes);
 			if (gzipped) {
 				ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 				GZIPInputStream gzipInStream;
@@ -66,7 +67,6 @@ public class KcaHandler implements Runnable {
 				data = new String(outStream.toByteArray());
 			} else {
 				data = new String(responseBytes);
-				reqData = new String(requestBytes);
 			}
 
 			//parseJSON(url, data);
