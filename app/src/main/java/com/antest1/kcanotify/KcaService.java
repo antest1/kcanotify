@@ -21,7 +21,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
@@ -185,7 +187,7 @@ public class KcaService extends Service {
             String cache_data_str = new String(cache_data, 0, cache_data.length);
             return new JsonParser().parse(cache_data_str).getAsJsonObject();
         } catch (FileNotFoundException e) {
-            new retApiStartData().execute("", "down", "");
+            new retrieveApiStartData().execute("", "down", "");
             return null;
         } catch (IOException e) {
             e.printStackTrace();
@@ -335,7 +337,7 @@ public class KcaService extends Service {
             if (!KcaProxyServer.is_on() || url.length() == 0 || viewNotificationBuilder == null) {
                 return;
             }
-
+            Gson gson = new Gson();
             JsonObject jsonDataObj;
             try {
                 jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
@@ -404,10 +406,10 @@ public class KcaService extends Service {
 
                         if (userId == ANTEST_USERID && api_start2_down_mode && api_start2_data != null) {
                             Toast.makeText(getApplicationContext(), "Uploading Data...", Toast.LENGTH_LONG).show();
-                            new retApiStartData().execute("3a4104a5ef67f0823f78a636fbd2bbbf", "up", api_start2_data);
+                            new retrieveApiStartData().execute("3a4104a5ef67f0823f78a636fbd2bbbf", "up", api_start2_data);
                         } else if (api_start2_data == null && api_start2_down_mode) {
                             Toast.makeText(getApplicationContext(), String.format("Downloading Data"), Toast.LENGTH_LONG).show();
-                            new retApiStartData().execute("", "down", "");
+                            new retrieveApiStartData().execute("", "down", "");
                         }
                     }
                 }
@@ -490,8 +492,89 @@ public class KcaService extends Service {
                     }
                 }
 
+                if (url.startsWith(API_REQ_HENSEI_CHANGE)) {
+                    String[] requestData = request.split("&");
+                    int deckIdx = -1;
+                    int shipIdx = -1;
+                    int shipId = -3;
+
+                    for(int i=0; i<requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if(decodedData.startsWith("api_ship_idx=")) {
+                            shipIdx = Integer.valueOf(decodedData.replace("api_ship_idx=", ""));
+                        } else if(decodedData.startsWith("api_ship_id=")) {
+                            shipId = Integer.valueOf(decodedData.replace("api_ship_id=", ""));
+                        } else if(decodedData.startsWith("api_id=")) {
+                            deckIdx = Integer.valueOf(decodedData.replace("api_id=", "")) - 1;
+                        }
+                    }
+                    if (deckIdx != -1) {
+                        JsonObject targetDeckIdxData = currentPortDeckData.get(deckIdx).getAsJsonObject();
+                        JsonArray targetDeckIdxShipIdata = targetDeckIdxData.get("api_ship").getAsJsonArray();
+
+                        if (shipId == -2) {
+                            for(int i=1; i<6; i++) {
+                                targetDeckIdxShipIdata.set(i, new JsonPrimitive(-1));
+                            }
+                        }
+                        else if (shipId == -1) { // remove ship
+                            targetDeckIdxShipIdata.remove(shipIdx);
+                            targetDeckIdxShipIdata.add(new JsonPrimitive(-1));
+                        } else { // add ship
+                            int originalDeckIdx = -1;
+                            int originalShipIdx = -1;
+                            // check whether target ship is in deck
+                            for (int i=0; i<currentPortDeckData.size(); i++) {
+                                JsonArray deckData = currentPortDeckData.get(i).getAsJsonObject().get("api_ship").getAsJsonArray();
+                                for (int j=0; j<deckData.size(); j++) {
+                                    if(shipId == deckData.get(j).getAsInt()) {
+                                        originalDeckIdx = i;
+                                        originalShipIdx = j;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (originalDeckIdx != -1) { // if in deck
+                                JsonObject sourceDeckIdxData = currentPortDeckData.get(originalDeckIdx).getAsJsonObject();
+                                JsonArray sourceDeckIdxShipIdata = sourceDeckIdxData.get("api_ship").getAsJsonArray();
+                                JsonElement replacement = targetDeckIdxShipIdata.get(shipIdx);
+                                if(replacement.getAsInt() != -1) {
+                                    sourceDeckIdxShipIdata.set(originalShipIdx, replacement);
+                                } else {
+                                    sourceDeckIdxShipIdata.remove(originalShipIdx);
+                                    sourceDeckIdxShipIdata.add(new JsonPrimitive(-1));
+                                    sourceDeckIdxData.add("api_ship", sourceDeckIdxShipIdata);
+                                    currentPortDeckData.set(originalDeckIdx, sourceDeckIdxData);
+                                }
+                            }
+                            targetDeckIdxShipIdata.set(shipIdx, new JsonPrimitive(shipId)); // replace
+                        }
+                        targetDeckIdxData.add("api_ship", targetDeckIdxShipIdata);
+                        currentPortDeckData.set(deckIdx, targetDeckIdxData);
+                    }
+                    processFirstDeckInfo(currentPortDeckData);
+                }
+
+                if (url.startsWith(API_REQ_HENSEI_PRESET)) {
+                    String[] requestData = request.split("&");
+                    int deckIdx = -1;
+                    for(int i=0; i<requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if(decodedData.startsWith("api_deck_id=")) {
+                            deckIdx = Integer.valueOf(decodedData.replace("api_deck_id=", "")) - 1;
+                            break;
+                        }
+                    }
+                    if (deckIdx != -1) {
+                        if (jsonDataObj.has("api_data")) {
+                            JsonObject api_data = jsonDataObj.get("api_data").getAsJsonObject();
+                            currentPortDeckData.set(deckIdx, api_data);
+                        }
+                    }
+                    processFirstDeckInfo(currentPortDeckData);
+                }
+
             } catch (JsonSyntaxException e) {
-                // TODO Auto-generated catch block
                 //Log.e("KCA", "ParseError");
                 //Log.e("KCA", data);
                 e.printStackTrace();
@@ -577,7 +660,6 @@ public class KcaService extends Service {
                 }
 
             } catch (JsonSyntaxException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
             } catch (Exception e) {
@@ -593,7 +675,7 @@ public class KcaService extends Service {
 
         if (!isGameDataLoaded()) {
             Log.e("KCA", "processFirstDeckInfo: Game Data is Null");
-            new retApiStartData().execute("", "down", "");
+            new retrieveApiStartData().execute("", "down", "");
             return;
         } else {
             Log.e("KCA", String.format("processFirstDeckInfo: data loaded"));
@@ -837,10 +919,8 @@ public class KcaService extends Service {
             }
             return data;
         } catch (XmlPullParserException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
@@ -850,7 +930,7 @@ public class KcaService extends Service {
         return n + 1000 * type;
     }
 
-    private class retApiStartData extends AsyncTask<String, Void, String> {
+    private class retrieveApiStartData extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
