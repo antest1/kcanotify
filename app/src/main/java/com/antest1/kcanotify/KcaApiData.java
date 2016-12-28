@@ -139,7 +139,6 @@ public class KcaApiData {
 		return kcGameData != null;
 	}
 
-
 	public static int getLevel() {
 		return level;
 	}
@@ -237,6 +236,7 @@ public class KcaApiData {
 	}
 
 	public static JsonObject getKcShipDataById(int id, String list) {
+		if (kcGameData == null) return null;
 		JsonObject temp = new JsonObject();
 		if(kcShipData.containsKey(id)) {
 			if (list.equals("all")) {
@@ -282,6 +282,7 @@ public class KcaApiData {
 	}
 
 	public static JsonObject getUserItemStatusById(int id, String list, String kclist) {
+		if (kcGameData == null) return null;
 		if(userItemData.containsKey(id)) {
 			int kc_item_id = userItemData.get(id).get("api_slotitem_id").getAsInt();
 			JsonObject kcData = getKcItemStatusById(kc_item_id, kclist);
@@ -311,6 +312,7 @@ public class KcaApiData {
 	}
 
 	public static JsonObject getKcItemStatusById(int id, String list) {
+		if (kcGameData == null) return null;
 		JsonObject temp = new JsonObject();
 		if(kcItemData.containsKey(id)) {
 			if (list.equals("all")) {
@@ -340,6 +342,7 @@ public class KcaApiData {
 	}
 
 	public static void addUserShip(JsonObject api_data) {
+		if (kcGameData == null) return;
 		if (api_data.has("api_id")) {
 			int shipId = api_data.get("api_id").getAsInt();
 			JsonObject shipData = (JsonObject) api_data.get("api_ship");
@@ -356,6 +359,7 @@ public class KcaApiData {
 	}
 
 	public static void updateUserShip(JsonObject api_data) {
+		if (kcGameData == null) return;
 		if (api_data.has("api_id")) {
 			int shipId = api_data.get("api_id").getAsInt();
 			userShipData.put(shipId, api_data);
@@ -366,6 +370,7 @@ public class KcaApiData {
 	}
 
 	public static void deleteUserShip(String api_ship_id) {
+		if (kcGameData == null) return;
 		int shipId = Integer.valueOf(api_ship_id);
 		JsonObject shipKcData = getUserShipDataById(shipId,"ship_id,slot");
 
@@ -386,6 +391,7 @@ public class KcaApiData {
 	}
 
 	public static void addUserItem(JsonObject api_data) {
+		if (kcGameData == null) return;
 		JsonObject item = null;
 		if (api_data.has("api_create_flag") && api_data.get("api_create_flag").getAsInt() == 1) {
 			item = (JsonObject) api_data.get("api_slot_item");
@@ -408,6 +414,7 @@ public class KcaApiData {
 	}
 
 	public static void deleteUserItem(String list) {
+		if (kcGameData == null) return;
 		Log.e("KCA", list);
 		String[] requestList = list.split(",");
 		for (int i=0; i<requestList.length; i++) {
