@@ -254,6 +254,48 @@ public class KcaDeckInfo {
         }
     }
 
+    public static int checkHeavyDamageExist(JsonArray deckPortData, int deckid) {
+        int[] status = {0, 0, 0, 0, 0, 0};
+        JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
+        for(int i=0; i<deckShipIdList.size(); i++) {
+            int shipId = deckShipIdList.get(i).getAsInt();
+            if (shipId != -1) {
+                JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "nowhp,maxhp,slot,slot_ex");
+                int shipNowHp = shipData.get("nowhp").getAsInt();
+                int shipMaxHp = shipData.get("maxhp").getAsInt();
+                if (shipNowHp * 4 <= shipMaxHp) {
+                    status[i] = 2;
+                }
+
+                JsonArray shipItem = (JsonArray) shipData.get("slot");
+                for (int j = 0; j < shipItem.size(); j++) {
+                    int item_id = shipItem.get(j).getAsInt();
+                    if (item_id != -1) {
+                        JsonObject itemData = KcaApiData.getUserItemStatusById(item_id, "id", "type");
+                        int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                        if (itemType == KcaApiData.T2_DAMECON && status[i] != 0) {
+                            status[i] = 1;
+                        }
+                    }
+                }
+                int ex_item_id = shipData.get("slot_ex").getAsInt();
+                if(ex_item_id != 0) {
+                    JsonObject itemData = KcaApiData.getUserItemStatusById(ex_item_id, "id", "type");
+                    int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                    if (itemType == KcaApiData.T2_DAMECON && status[i] != 0) {
+                        status[i] = 1;
+                    }
+                }
+            }
+        }
+
+        int heavyExist = 0;
+        for(int i=0; i<status.length; i++) {
+            heavyExist = Math.max(heavyExist, status[i]);
+        }
+        return heavyExist;
+    }
+
     // TODO: Damecon Check
 
     private static String joinStr(List<String> list, String delim) {

@@ -80,6 +80,7 @@ public class KcaService extends Service {
     public static final String API_REQ_KOUSYOU_GETSHIP = "/api_req_kousyou/getship";
     public static final String API_REQ_KOUSYOU_DESTROYSHIP = "/api_req_kousyou/destroyship";
 
+    public static final String API_GET_MEMBER_MAPINFO = "/api_get_member/mapinfo";
     public static final String API_REQ_MAP_START = "/api_req_map/start";
     public static final String API_REQ_MAP_NEXT = "/api_req_map/next";
     public static final String API_REQ_SORTIE_BATTLE = "/api_req_sortie/battle";
@@ -142,9 +143,13 @@ public class KcaService extends Service {
     public static final int FRONT_NONE = 0;
     public static final int FRONT_EXP_SET = 2;
 
+    public static final int HD_NONE = 0;
+    public static final int HD_DAMECON = 1;
+    public static final int HD_DANGER = 2;
+
     public static boolean isServiceOn = false;
     public static boolean isPortAccessed = false;
-    public static boolean heavyDamagedMode = false;
+    public static int heavyDamagedMode = 0;
     public static Intent kcIntent = null;
 
     AudioManager mAudioManager;
@@ -159,7 +164,7 @@ public class KcaService extends Service {
     Thread[] kcaExpeditionList = new Thread[3];
     KcaExpedition[] kcaExpeditionRunnableList = new KcaExpedition[3];
     String[] kcaExpeditionInfoList = new String[3];
-    String kcaFirstDeckInfo = "깡들리티에서 게임을 시작해주세요";
+    String kcaFirstDeckInfo = "깡들리티에서 게임을 실행해주세요";
     String kca_version;
     String api_start2_data = null;
     boolean api_start2_down_mode = false;
@@ -385,7 +390,7 @@ public class KcaService extends Service {
 
                 if (url.startsWith(API_PORT)) {
                     isPortAccessed = true;
-                    heavyDamagedMode = false;
+                    heavyDamagedMode = HD_NONE;
                     Log.e("KCA", "Port Handler Called");
                     if (jsonDataObj.has("api_data")) {
                         JsonObject reqPortApiData = jsonDataObj.get("api_data").getAsJsonObject();
@@ -397,6 +402,27 @@ public class KcaService extends Service {
                             processFirstDeckInfo(currentPortDeckData);
                             processExpeditionInfo(currentPortDeckData);
                         }
+                    }
+                    setFrontViewNotifier(FRONT_NONE, 0, null);
+                }
+
+                if (url.startsWith(API_GET_MEMBER_MAPINFO)) {
+                    heavyDamagedMode = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 0);
+                    switch(heavyDamagedMode) {
+                        case HD_DAMECON:
+                        case HD_DANGER:
+                            if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
+                                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                                v.vibrate(1500);
+                            }
+                            if(heavyDamagedMode == HD_DANGER) {
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.heavy_damaged), Toast.LENGTH_LONG).show();
+                            } else if (heavyDamagedMode == HD_DAMECON) {
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG).show();
+                            }
+                            break;
+                        default:
+                            break;
                     }
                     setFrontViewNotifier(FRONT_NONE, 0, null);
                 }
@@ -692,12 +718,16 @@ public class KcaService extends Service {
                 }
 
                 if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {
-                    heavyDamagedMode = true;
+                    heavyDamagedMode = HD_DANGER;
                     if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
                         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(1500);
                     }
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.heavy_damaged), Toast.LENGTH_LONG).show();
+                    if(heavyDamagedMode == HD_DANGER) {
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.heavy_damaged), Toast.LENGTH_LONG).show();
+                    } else if (heavyDamagedMode == HD_DAMECON) {
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG).show();
+                    }
                     setFrontViewNotifier(FRONT_NONE, 0, null);
                 }
 
@@ -868,10 +898,16 @@ public class KcaService extends Service {
         boolean no_exp_flag = true;
 
         String notifiTitle = "";
-        if (heavyDamagedMode) {
-            notifiTitle = String.format("[대파 있음!] %s 동작중", getResources().getText(R.string.app_name));
-        } else {
-            notifiTitle = String.format("%s 동작중", getResources().getText(R.string.app_name));
+        switch(heavyDamagedMode) {
+            case HD_DAMECON:
+                notifiTitle = String.format("[대파/다메콘 있음!] %s 동작중", getResources().getText(R.string.app_name));
+                break;
+            case HD_DANGER:
+                notifiTitle = String.format("[대파 있음!] %s 동작중", getResources().getText(R.string.app_name));
+                break;
+            default:
+                notifiTitle = String.format("%s 동작중", getResources().getText(R.string.app_name));
+                break;
         }
 
         String notifiString = "";
