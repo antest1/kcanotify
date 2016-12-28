@@ -165,9 +165,6 @@ public class KcaDeckInfo {
                 JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id,lv,slot,onslot");
                 int shipKcId = shipData.get("ship_id").getAsInt();
                 int shipLv = shipData.get("lv").getAsInt();
-                JsonObject shipKcData = KcaApiData.getKcShipDataById(shipKcId, "name");
-                String shipName = shipKcData.get("name").getAsString();
-                Log.e("KCA", String.format("%s (%s)", shipName, shipLv));
                 JsonArray shipItem = (JsonArray) shipData.get("slot");
                 JsonArray shipSlotCount = (JsonArray) shipData.get("onslot");
                 for (int j = 0; j < shipItem.size(); j++) {
@@ -183,7 +180,6 @@ public class KcaDeckInfo {
                         }
                         int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                         int itemAAC = itemData.get("tyku").getAsInt();
-                        Log.e("KCA", String.format("- %s %d %d", itemName, itemLevel, slot));
                         double baseAAC = calcBasicAAC(calcReinforcedAAC(itemType, itemAAC, itemLevel), slot);
                         double[] masteryAAC = calcSlotAACFromMastery(itemType, itemMastery, 0);
 
@@ -225,6 +221,40 @@ public class KcaDeckInfo {
         }
         return KcaApiData.SPEED_NONE; // Unreachable
     }
+
+    public static void debugPortInfo(JsonArray deckPortData, int deckid) {
+        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
+        for(int i=0; i<deckShipIdList.size(); i++) {
+            int shipId = deckShipIdList.get(i).getAsInt();
+            if (shipId != -1) {
+                JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id,lv,slot,onslot");
+                int shipKcId = shipData.get("ship_id").getAsInt();
+                int shipLv = shipData.get("lv").getAsInt();
+                JsonObject shipKcData = KcaApiData.getKcShipDataById(shipKcId, "name");
+                String shipName = shipKcData.get("name").getAsString();
+                Log.e("KCA", String.format("%s (%s)", shipName, shipLv));
+                JsonArray shipItem = (JsonArray) shipData.get("slot");
+                JsonArray shipSlotCount = (JsonArray) shipData.get("onslot");
+                for (int j = 0; j < shipItem.size(); j++) {
+                    int item_id = shipItem.get(j).getAsInt();
+                    int slot = shipSlotCount.get(j).getAsInt();
+                    if (item_id != -1) {
+                        JsonObject itemData = KcaApiData.getUserItemStatusById(item_id, "level,alv", "name,type,tyku");
+                        String itemName = itemData.get("name").getAsString();
+                        int itemLevel = itemData.get("level").getAsInt();
+                        int itemMastery = 0;
+                        if (itemData.has("alv")) {
+                            itemMastery = itemData.get("alv").getAsInt();
+                        }
+                        int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                        Log.e("KCA", String.format("- %s %d %d %d", itemName, itemLevel, itemMastery, slot));
+                    }
+                }
+            }
+        }
+    }
+
+    // TODO: Damecon Check
 
     private static String joinStr(List<String> list, String delim) {
         String resultStr = "";
