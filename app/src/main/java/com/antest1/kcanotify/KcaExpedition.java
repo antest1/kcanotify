@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class KcaExpedition implements Runnable {
     public static int start_delay = 2;
     public static int server_delay = 60;
     public Handler mHandler = null;
+    private Gson gson = new Gson();
 
     private boolean check_canceled(int idx) {
         if (canceled_flag[idx]) {
@@ -91,7 +93,7 @@ public class KcaExpedition implements Runnable {
                         left_time_str[kantai_idx] = String.format("[%02d] %s", mission_no, strTime);
                         Bundle bundle = new Bundle();
                         bundle.putString("url", KcaService.KCA_API_NOTI_EXP_LEFT);
-                        bundle.putString("data", leftExpInfo.toString());
+                        bundle.putString("data", gson.toJson(leftExpInfo));
                         Message sMsg = sHandler.obtainMessage();
                         sMsg.setData(bundle);
                         sHandler.sendMessage(sMsg);
@@ -110,7 +112,7 @@ public class KcaExpedition implements Runnable {
 
                             Bundle bundle = new Bundle();
                             bundle.putString("url", KcaService.KCA_API_NOTI_EXP_FIN);
-                            bundle.putString("data", endExpInfo.toString());
+                            bundle.putString("data", gson.toJson(endExpInfo));
                             Message sMsg = sHandler.obtainMessage();
                             sMsg.setData(bundle);
 
@@ -149,7 +151,7 @@ public class KcaExpedition implements Runnable {
 
         Bundle bundle = new Bundle();
         bundle.putString("url", KcaService.KCA_API_NOTI_EXP_CANCELED);
-        bundle.putString("data", endExpInfo.toString());
+        bundle.putString("data", gson.toJson(endExpInfo));
         Message sMsg = sHandler.obtainMessage();
         sMsg.setData(bundle);
 

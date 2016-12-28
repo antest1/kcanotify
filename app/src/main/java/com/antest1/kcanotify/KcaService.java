@@ -165,6 +165,7 @@ public class KcaService extends Service {
     boolean api_start2_down_mode = false;
     JsonArray currentPortDeckData = null;
     SharedPreferences preferences;
+    Gson gson = new Gson();
 
     public static boolean getServiceStatus() {
         return isServiceOn;
@@ -344,7 +345,6 @@ public class KcaService extends Service {
             if (!KcaProxyServer.is_on() || url.length() == 0 || viewNotificationBuilder == null) {
                 return;
             }
-            Gson gson = new Gson();
             JsonObject jsonDataObj;
             try {
                 jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
@@ -712,7 +712,7 @@ public class KcaService extends Service {
 
             } catch (JsonSyntaxException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "오류가 발생하였습니다.", Toast.LENGTH_LONG).show();
                 onDestroy();
@@ -803,7 +803,7 @@ public class KcaService extends Service {
         infoData.addProperty("landscape_value", conditionValue);
         deckInfoData.add(infoData);
 
-        kcaFirstDeckInfo = deckInfoData.toString();
+        kcaFirstDeckInfo = gson.toJson(deckInfoData);
         setFrontViewNotifier(FRONT_NONE, 0, null);
     }
 
@@ -877,23 +877,25 @@ public class KcaService extends Service {
         String notifiString = "";
         String expeditionString = "";
         String expString = "";
-
-        JsonArray deckInfo = new JsonParser().parse(kcaFirstDeckInfo).getAsJsonArray();
-        List<String> deckInfoStringList = new ArrayList<String>();
-        for (Object item: deckInfo) {
-            JsonObject data = (JsonObject) item;
-            if (is_portrait) {
-                 deckInfoStringList.add(data.get("portrait_value").getAsString());
-            } else {
-                deckInfoStringList.add(data.get("landscape_value").getAsString());
+        if(isJSONValid(kcaFirstDeckInfo)) {
+            JsonArray deckInfo = new JsonParser().parse(kcaFirstDeckInfo).getAsJsonArray();
+            List<String> deckInfoStringList = new ArrayList<String>();
+            for (Object item : deckInfo) {
+                JsonObject data = (JsonObject) item;
+                if (is_portrait) {
+                    deckInfoStringList.add(data.get("portrait_value").getAsString());
+                } else {
+                    deckInfoStringList.add(data.get("landscape_value").getAsString());
+                }
+                if (data.get("is_portrait_newline").getAsInt() == 1 && is_portrait) {
+                    notifiString = notifiString.concat(joinStr(deckInfoStringList, " / ")).concat("\n");
+                    deckInfoStringList.clear();
+                }
             }
-            if (data.get("is_portrait_newline").getAsInt() == 1 && is_portrait) {
-                notifiString = notifiString.concat(joinStr(deckInfoStringList, " / ")).concat("\n");
-                deckInfoStringList.clear();
-            }
+            notifiString = notifiString.concat(joinStr(deckInfoStringList, " / "));
+        } else {
+            notifiString = kcaFirstDeckInfo;
         }
-        notifiString = notifiString.concat(joinStr(deckInfoStringList, " / "));
-
 
         List<String> kcaExpStrList = new ArrayList<String>();
         for (int i = 0; i < 3; i++) {
@@ -976,6 +978,17 @@ public class KcaService extends Service {
         }
         return null;
     }
+
+    public static boolean isJSONValid(String jsonInString) {
+        Gson gson = new Gson();
+        try {
+            gson.fromJson(jsonInString, Object.class);
+            return true;
+        } catch(com.google.gson.JsonSyntaxException ex) {
+            return false;
+        }
+    }
+
 
     private int getNotificationId(int type, int n) {
         return n + 1000 * type;

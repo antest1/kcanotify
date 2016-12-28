@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -56,7 +57,7 @@ public class KcaBattle {
     public static List<Integer> escapelist = new ArrayList<Integer>();
     public static List<Integer> escapecblist = new ArrayList<Integer>();
 
-
+    private static Gson gson = new Gson();
     public static Handler sHandler;
 
     public static void setHandler(Handler h) {
@@ -1127,7 +1128,7 @@ public class KcaBattle {
             if (checkCombinedHeavyDamagedExist()) {
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_HEAVY_DMG);
-                bundle.putString("data", battleResultInfo.toString());
+                bundle.putString("data", gson.toJson(battleResultInfo));
                 Message sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
 
