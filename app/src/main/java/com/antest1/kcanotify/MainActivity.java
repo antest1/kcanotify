@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         serverTempStop();
                     } else {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-                        alertDialog.setMessage(String.format("최신 업데이트가 있습니다(%s).\n다운로드하시겠습니까?", recentVersion));
+                        alertDialog.setMessage(String.format("업데이트가 있습니다(%s).\n다운로드하시겠습니까?", recentVersion));
                         alertDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
