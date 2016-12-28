@@ -72,6 +72,9 @@ public class KcaService extends Service {
     public static final String API_REQ_HENSEI_CHANGE = "/api_req_hensei/change";
     public static final String API_REQ_HENSEI_PRESET = "/api_req_hensei/preset_select";
 
+    public static final String API_GET_MEMBER_SHIP3 = "/api_get_member/ship3";
+    public static final String API_REQ_KAISOU_SLOT_DEPRIVE = "/api_req_kaisou/slot_deprive";
+
     public static final String API_REQ_KOUSYOU_CREATETIEM = "/api_req_kousyou/createitem";
     public static final String API_REQ_KOUSYOU_DESTROYITEM = "/api_req_kousyou/destroyitem2";
     public static final String API_REQ_KOUSYOU_GETSHIP = "/api_req_kousyou/getship";
@@ -163,6 +166,10 @@ public class KcaService extends Service {
     JsonArray currentPortDeckData = null;
     SharedPreferences preferences;
 
+    public static boolean getServiceStatus() {
+        return isServiceOn;
+    }
+
     private String getPreferences(String key) {
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         return pref.getString(key, "");
@@ -208,7 +215,7 @@ public class KcaService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (!MainActivity.isKcaProxyOn) {
+        if (!MainActivity.isKcaServiceOn) {
             stopSelf();
         }
 
@@ -252,7 +259,7 @@ public class KcaService extends Service {
     // 서비스가 종료될 때 할 작업
 
     public void onDestroy() {
-        MainActivity.isKcaProxyOn = false;
+        MainActivity.isKcaServiceOn = false;
         for (int i = 0; i < 3; i++) {
             if (kcaExpeditionList[i] != null) {
                 kcaExpeditionRunnableList[i].stopHandler();
@@ -267,7 +274,7 @@ public class KcaService extends Service {
         stopForeground(true);
         notifiManager.cancelAll();
         viewNotificationBuilder = null;
-        KcaProxyServer.stop();
+        //KcaProxyServer.stop();
         isServiceOn = false;
     }
 
@@ -481,15 +488,29 @@ public class KcaService extends Service {
                 }
 
                 if (url.startsWith(API_REQ_KOUSYOU_DESTROYSHIP)) {
+                    String targetShip = "";
                     String[] requestData = request.split("&");
                     for(int i=0; i<requestData.length; i++) {
                         String decodedData = URLDecoder.decode(requestData[i], "utf-8");
                         if(decodedData.startsWith("api_ship_id")) {
-                            String itemlist = decodedData.replace("api_ship_id=", "");
-                            KcaApiData.deleteUserShip(itemlist);
+                            targetShip = decodedData.replace("api_ship_id=", "");
+                            KcaApiData.deleteUserShip(targetShip);
                             break;
                         }
                     }
+                    for (int i=0; i<currentPortDeckData.size(); i++) {
+                        JsonObject deckData = currentPortDeckData.get(i).getAsJsonObject();
+                        JsonArray deckShipData = deckData.get("api_ship").getAsJsonArray();
+                        for (int j=0; j<deckShipData.size(); j++) {
+                            if(targetShip.equals(String.valueOf(deckShipData.get(j).getAsInt()))) {
+                                deckShipData.set(j, new JsonPrimitive(-1));
+                                deckData.add("api_ship", deckShipData);
+                                currentPortDeckData.set(i, deckData);
+                                break;
+                            }
+                        }
+                    }
+                    processFirstDeckInfo(currentPortDeckData);
                 }
 
                 if (url.startsWith(API_REQ_HENSEI_CHANGE)) {
@@ -570,6 +591,36 @@ public class KcaService extends Service {
                             JsonObject api_data = jsonDataObj.get("api_data").getAsJsonObject();
                             currentPortDeckData.set(deckIdx, api_data);
                         }
+                    }
+                    processFirstDeckInfo(currentPortDeckData);
+                }
+
+                if (url.startsWith(API_GET_MEMBER_SHIP3)) {
+                    String[] requestData = request.split("&");
+                    int userShipId = -1;
+                    for(int i=0; i<requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if(decodedData.startsWith("api_shipid=")) {
+                            userShipId = Integer.valueOf(decodedData.replace("api_shipid=", ""));
+                            break;
+                        }
+                    }
+                    if (userShipId != -1) {
+                        if (jsonDataObj.has("api_data")) {
+                            JsonObject api_data = jsonDataObj.get("api_data").getAsJsonObject();
+                            currentPortDeckData = api_data.get("api_deck_data").getAsJsonArray();
+                            KcaApiData.updateUserShip(api_data.get("api_ship_data").getAsJsonArray().get(0).getAsJsonObject());
+                        }
+                    }
+                    processFirstDeckInfo(currentPortDeckData);
+                }
+
+                if(url.startsWith(API_REQ_KAISOU_SLOT_DEPRIVE)) {
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject api_data = jsonDataObj.get("api_data").getAsJsonObject();
+                        JsonObject api_ship_data = api_data.get("api_ship_data").getAsJsonObject();
+                        KcaApiData.updateUserShip(api_ship_data.get("api_set_ship").getAsJsonObject());
+                        KcaApiData.updateUserShip(api_ship_data.get("api_unset_ship").getAsJsonObject());
                     }
                     processFirstDeckInfo(currentPortDeckData);
                 }

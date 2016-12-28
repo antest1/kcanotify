@@ -16,7 +16,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
-
 public class KcaApiData {
 	public static JsonObject kcGameData = null;
 	public static Map<Integer, JsonObject> kcShipData = new HashMap<Integer, JsonObject>();
@@ -353,6 +352,16 @@ public class KcaApiData {
 			for (int i=0; i<shipSlotItemData.size(); i++) {
 				addUserItem((JsonObject) shipSlotItemData.get(i));
 			}
+		}
+	}
+
+	public static void updateUserShip(JsonObject api_data) {
+		if (api_data.has("api_id")) {
+			int shipId = api_data.get("api_id").getAsInt();
+			userShipData.put(shipId, api_data);
+			int shipKcId = api_data.get("api_ship_id").getAsInt();
+			String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
+			Log.e("KCA", String.format("update ship %d (%s)", shipId, shipName));
 		}
 	}
 
