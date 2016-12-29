@@ -196,7 +196,10 @@ public class KcaApiData {
 			for (Iterator<JsonElement> itr = api_data.iterator(); itr.hasNext();) {
 				temp = itr.next();
 				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
-				userShipData.put(api_id, temp.getAsJsonObject());
+				if(!userItemData.containsKey(api_id)) {
+					Log.e("KCA", String.valueOf(api_id) + " added");
+				}
+				userItemData.put(api_id, temp.getAsJsonObject());
 			}
 			return api_data.size();
 		} else {
@@ -285,6 +288,7 @@ public class KcaApiData {
 		if (kcGameData == null) return null;
 		if(userItemData.containsKey(id)) {
 			int kc_item_id = userItemData.get(id).get("api_slotitem_id").getAsInt();
+			Log.e("KCA", "kc item id " + String.valueOf(id));
 			JsonObject kcData = getKcItemStatusById(kc_item_id, kclist);
 			JsonObject userData = userItemData.get(id);
 
@@ -307,6 +311,7 @@ public class KcaApiData {
 			}
 			return kcData;
 		} else {
+			Log.e("KCA", String.valueOf(id) + " not found");
 			return null;
 		}
 	}
