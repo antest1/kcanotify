@@ -3,6 +3,7 @@ package com.antest1.kcanotify;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
@@ -28,6 +29,7 @@ import io.netty.handler.codec.http.HttpMethod;
 
 public class KcaRequest extends AsyncTask<String, Void, String> {
     public static final String TIMEOUT_CODE = "timeout";
+    public static final String ERROR_CODE = "erroroccured";
     @Override
     protected String doInBackground(String... params) {
         String content = "123";
@@ -35,12 +37,16 @@ public class KcaRequest extends AsyncTask<String, Void, String> {
             for (int i=0; i<3; i++) {
                 Log.e("KCA", "KcaRequest Request");
                 content = Request(params[0], params[1], params[2], params[3]);
-                if (!content.equals(TIMEOUT_CODE)) break;
+                if (!content.equals(TIMEOUT_CODE) && !content.equals(ERROR_CODE)) break;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.e("KCA", "KcaRequest Responsed "+String.valueOf(content.length()));
+        if (content.equals(ERROR_CODE)) {
+            Log.e("KCA", "KcaRequest Error: "+params[0]);
+        } else {
+            Log.e("KCA", "KcaRequest Responsed "+String.valueOf(content.length()));
+        }
         return content;
     }
 
@@ -136,7 +142,7 @@ public class KcaRequest extends AsyncTask<String, Void, String> {
             return TIMEOUT_CODE;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return ERROR_CODE;
         }
     }
 
