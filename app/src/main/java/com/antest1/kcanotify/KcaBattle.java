@@ -57,6 +57,14 @@ public class KcaBattle {
     public static List<Integer> escapelist = new ArrayList<Integer>();
     public static List<Integer> escapecblist = new ArrayList<Integer>();
 
+    public static boolean[] dameconflag = new boolean[7];
+    public static boolean[] dameconcbflag = new boolean[7];
+
+    public static final int HD_NONE = 0;
+    public static final int HD_DAMECON = 1;
+    public static final int HD_DANGER = 2;
+
+
     private static Gson gson = new Gson();
     public static Handler sHandler;
 
@@ -64,15 +72,56 @@ public class KcaBattle {
         sHandler = h;
     }
 
-    public static boolean checkHeavyDamagedExist() {
+    public static int checkHeavyDamagedExist() {
+        int status = HD_NONE;
         for (int i = 1; i < afterhps.length; i++) {
             if (maxhps[i] == -1 || i > 6) {
-                return false;
+                return status;
             } else if (afterhps[i] * 4 <= maxhps[i]) {
-                return true;
+                if(dameconflag[i]) {
+                    status = Math.max(status, HD_DAMECON);
+                } else {
+                    status = Math.max(status, HD_DANGER);
+                    if (status == HD_DANGER) {
+                        return status;
+                    }
+                }
             }
         }
-        return false;
+        return status;
+    }
+
+    public static int checkCombinedHeavyDamagedExist() {
+        int status = HD_NONE;
+        for (int i = 1; i < afterhps.length; i++) {
+            if (maxhps[i] == -1 || i > 6) {
+                break;
+            } else if (afterhps[i] * 4 <= maxhps[i] && !escapelist.contains(i)) {
+                if(dameconflag[i]) {
+                    status = Math.max(status, HD_DAMECON);
+                } else {
+                    status = Math.max(status, HD_DANGER);
+                    if (status == HD_DANGER) {
+                        return status;
+                    }
+                }
+            }
+        }
+        for (int i = 1; i < aftercbhps.length; i++) {
+            if (maxcbhps[i] == -1 || i > 6) {
+                break;
+            } else if (aftercbhps[i] * 4 <= maxcbhps[i] && !escapecblist.contains(i)) {
+                if(dameconcbflag[i]) {
+                    status = Math.max(status, HD_DAMECON);
+                } else {
+                    status = Math.max(status, HD_DANGER);
+                    if (status == HD_DANGER) {
+                        return status;
+                    }
+                }
+            }
+        }
+        return status;
     }
 
     public static void cleanData() {
@@ -97,24 +146,6 @@ public class KcaBattle {
         for (int i = 0; i < aftercbhps.length; i++) {
             aftercbhps[i] = 0;
         }
-    }
-
-    public static boolean checkCombinedHeavyDamagedExist() {
-        for (int i = 1; i < afterhps.length; i++) {
-            if (maxhps[i] == -1 || i > 6) {
-                break;
-            } else if (afterhps[i] * 4 <= maxhps[i] && !escapelist.contains(i)) {
-                return true;
-            }
-        }
-        for (int i = 1; i < aftercbhps.length; i++) {
-            if (maxcbhps[i] == -1 || i > 6) {
-                break;
-            } else if (aftercbhps[i] * 4 <= maxcbhps[i] && !escapecblist.contains(i)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static int getFriendIdx(int i) {
@@ -381,8 +412,10 @@ public class KcaBattle {
 
         if (url.equals(API_REQ_SORTIE_BATTLE_RESULT)) {
             JsonObject battleResultInfo = new JsonObject();
-            Log.e("KCA", "CheckHeavyDamaged " + String.valueOf(checkHeavyDamagedExist()));
-            if (checkHeavyDamagedExist()) {
+            int checkresult = checkHeavyDamagedExist();
+            Log.e("KCA", "CheckHeavyDamaged " + String.valueOf(checkresult));
+            if (checkresult != HD_NONE) {
+                battleResultInfo.addProperty("data", checkresult);
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_HEAVY_DMG);
                 bundle.putString("data", gson.toJson(battleResultInfo));
@@ -1130,8 +1163,10 @@ public class KcaBattle {
 
         if (url.equals(API_REQ_COMBINED_BATTLERESULT)) {
             JsonObject battleResultInfo = new JsonObject();
-            Log.e("KCA", "CheckHeavyDamaged " + String.valueOf(checkCombinedHeavyDamagedExist()));
-            if (checkCombinedHeavyDamagedExist()) {
+            int checkresult = checkCombinedHeavyDamagedExist();
+            Log.e("KCA", "CheckHeavyDamaged " + String.valueOf(checkresult));
+            if (checkresult != HD_NONE) {
+                battleResultInfo.addProperty("data", checkresult);
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_HEAVY_DMG);
                 bundle.putString("data", gson.toJson(battleResultInfo));

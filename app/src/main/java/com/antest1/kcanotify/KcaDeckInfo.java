@@ -296,7 +296,37 @@ public class KcaDeckInfo {
         return heavyExist;
     }
 
-    // TODO: Damecon Check
+    public static boolean[] getDameconStatus(JsonArray deckPortData, int deckid) {
+        boolean[] dameconStatus = {false,false,false,false,false,false,false};
+        JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
+        for(int i=0; i<deckShipIdList.size(); i++) {
+            int idx = i+1;
+            int shipId = deckShipIdList.get(i).getAsInt();
+            if (shipId != -1) {
+                JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "slot,slot_ex");
+                JsonArray shipItem = (JsonArray) shipData.get("slot");
+                for (int j = 0; j < shipItem.size(); j++) {
+                    int item_id = shipItem.get(j).getAsInt();
+                    if (item_id != -1) {
+                        JsonObject itemData = KcaApiData.getUserItemStatusById(item_id, "id", "type");
+                        int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                        if (itemType == KcaApiData.T2_DAMECON) {
+                            dameconStatus[idx] = true;
+                        }
+                    }
+                }
+                int ex_item_id = shipData.get("slot_ex").getAsInt();
+                if(ex_item_id != 0) {
+                    JsonObject itemData = KcaApiData.getUserItemStatusById(ex_item_id, "id", "type");
+                    int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                    if (itemType == KcaApiData.T2_DAMECON) {
+                        dameconStatus[idx] = true;
+                    }
+                }
+            }
+        }
+        return dameconStatus;
+    }
 
     private static String joinStr(List<String> list, String delim) {
         String resultStr = "";

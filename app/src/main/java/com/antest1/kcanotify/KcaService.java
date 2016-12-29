@@ -475,6 +475,13 @@ public class KcaService extends Service {
                         JsonObject api_data = jsonDataObj.get("api_data").getAsJsonObject();
                         JsonArray api_deck_data = (JsonArray) api_data.get("api_deck_data");
                         KcaApiData.updatePortDataOnBattle(api_data);
+                        for(int i=0; i<api_deck_data.size(); i++) {
+                            if (i==0) {
+                                KcaBattle.dameconflag = KcaDeckInfo.getDameconStatus(api_deck_data, 0);
+                            } else if(i==1) {
+                                KcaBattle.dameconcbflag = KcaDeckInfo.getDameconStatus(api_deck_data, 1);
+                            }
+                        }
                         processFirstDeckInfo(api_deck_data);
                     }
                 }
@@ -753,7 +760,7 @@ public class KcaService extends Service {
                 }
 
                 if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {
-                    heavyDamagedMode = HD_DANGER;
+                    heavyDamagedMode = jsonDataObj.get("data").getAsInt();
                     if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
                         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(1500);
