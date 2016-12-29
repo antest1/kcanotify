@@ -73,6 +73,7 @@ public class KcaService extends Service {
     public static final String API_REQ_HENSEI_PRESET = "/api_req_hensei/preset_select";
 
     public static final String API_GET_MEMBER_SHIP3 = "/api_get_member/ship3";
+    public static final String API_REQ_KAISOU_SLOT_EXCHANGE = "/api_req_kaisou/slot_exchange";
     public static final String API_REQ_KAISOU_SLOT_DEPRIVE = "/api_req_kaisou/slot_deprive";
 
     public static final String API_REQ_KOUSYOU_CREATETIEM = "/api_req_kousyou/createitem";
@@ -338,6 +339,20 @@ public class KcaService extends Service {
         Notifi.flags = Notification.FLAG_AUTO_CANCEL;
         setFrontViewNotifier(FRONT_NONE, 0, null);
         return Notifi;
+    }
+
+    private void toastInfo() {
+        int cn = getSeekCn();
+        String seekType = getSeekType();
+        int[] airPowerRange = KcaDeckInfo.getAirPowerRange(currentPortDeckData, 0);
+        String airPowerValue = String.format("제공: %d-%d", airPowerRange[0], airPowerRange[1]);
+        String seekValue =  String.format("색적(%s): %.2f", seekType, KcaDeckInfo.getSeekValue(currentPortDeckData, 0, cn));
+        List<String> toastList = new ArrayList<String>();
+        if (airPowerRange[1] >         0) {
+            toastList.add(airPowerValue);
+        }
+        toastList.add(seekValue);
+        Toast.makeText(getApplicationContext(), joinStr(toastList, " / "), Toast.LENGTH_LONG).show();
     }
 
     class kcaServiceHandler extends Handler {
@@ -639,6 +654,25 @@ public class KcaService extends Service {
                         }
                     }
                     processFirstDeckInfo(currentPortDeckData);
+                    toastInfo();
+                }
+
+                if(url.startsWith(API_REQ_KAISOU_SLOT_EXCHANGE)) {
+                    String[] requestData = request.split("&");
+                    int userShipId = -1;
+                    for(int i=0; i<requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if(decodedData.startsWith("api_id=")) {
+                            userShipId = Integer.valueOf(decodedData.replace("api_id=", ""));
+                            break;
+                        }
+                    }
+                    if (userShipId != -1 && jsonDataObj.has("api_data")) {
+                        JsonObject api_data = jsonDataObj.get("api_data").getAsJsonObject();
+                        KcaApiData.updateUserShipSlot(userShipId, api_data);
+                    }
+                    processFirstDeckInfo(currentPortDeckData);
+                    toastInfo();
                 }
 
                 if(url.startsWith(API_REQ_KAISOU_SLOT_DEPRIVE)) {
@@ -649,6 +683,7 @@ public class KcaService extends Service {
                         KcaApiData.updateUserShip(api_ship_data.get("api_unset_ship").getAsJsonObject());
                     }
                     processFirstDeckInfo(currentPortDeckData);
+                    toastInfo();
                 }
 
             } catch (JsonSyntaxException e) {
@@ -751,6 +786,30 @@ public class KcaService extends Service {
         }
     }
 
+    private int getSeekCn() {
+        return Integer.valueOf(getPreferences("kca_seek_cn"));
+    }
+
+    private String getSeekType() {
+        int cn = Integer.valueOf(getPreferences("kca_seek_cn"));
+        String seekType = "";
+        switch(cn) {
+            case 1:
+                seekType = getResources().getString(R.string.seek_type_1);
+                break;
+            case 3:
+                seekType = getResources().getString(R.string.seek_type_3);
+                break;
+            case 4:
+                seekType = getResources().getString(R.string.seek_type_3);
+                break;
+            default:
+                seekType = getResources().getString(R.string.seek_type_0);
+                break;
+        }
+        return seekType;
+    }
+
     private void processFirstDeckInfo(JsonArray data) {
         String delimeter = " | ";
 
@@ -769,22 +828,8 @@ public class KcaService extends Service {
             kcaFirstDeckInfo = "";
         }
 
-        int cn = Integer.valueOf(getPreferences("kca_seek_cn"));
-        String seekType = "";
-        switch(cn) {
-            case 1:
-                seekType = getResources().getString(R.string.seek_type_1);
-                break;
-            case 3:
-                seekType = getResources().getString(R.string.seek_type_3);
-                break;
-            case 4:
-                seekType = getResources().getString(R.string.seek_type_3);
-                break;
-            default:
-                seekType = getResources().getString(R.string.seek_type_0);
-                break;
-        }
+        int cn = getSeekCn();
+        String seekType = getSeekType();
 
         JsonArray deckInfoData = new JsonArray();
         JsonObject infoData = null;
