@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="깡들리티 설정" >
+        <ListPreference
+            android:id="@+id/seek_type_value"
+            android:defaultValue="1"
+            android:entries="@array/seekTypeOption"
+            android:entryValues="@array/seekTypeOptionValue"
+            android:key="kca_seek_cn"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="색적 계산방식 선택"
+         />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="opendb_api_use"
+            android:summary = "http://swaytwig.com/opendb/"
+            android:title="OpenDB에 데이터 전송" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="어플리케이션 정보" >
+        <Preference
+            android:key="kca_version"
+            android:title="현재 어플리케이션 버전"
+            android:defaultValue=" "
+            android:summary="@string/app_version"/>
+        <Preference
+            android:key="check_update"
+            android:defaultValue=""
+            android:title="업데이트 확인"
+            />
+        <Preference
+            android:title="건의/오류 보고"
+            android:summary="개발자에게 메일 전송">
+            <intent
+                android:action="android.intent.action.SENDTO"
+                android:data="mailto:kcanotify@gmail.com" />
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>
