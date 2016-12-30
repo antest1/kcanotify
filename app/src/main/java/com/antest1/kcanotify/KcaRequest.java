@@ -32,7 +32,7 @@ public class KcaRequest extends AsyncTask<String, Void, String> {
     public static final String ERROR_CODE = "erroroccured";
     @Override
     protected String doInBackground(String... params) {
-        String content = "123";
+        String content = "";
         try {
             for (int i=0; i<3; i++) {
                 Log.e("KCA", "KcaRequest Request");
@@ -97,7 +97,7 @@ public class KcaRequest extends AsyncTask<String, Void, String> {
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
             http.setConnectTimeout(15000);
-            http.setReadTimeout(2500);
+            http.setReadTimeout(2000);
             http.setDoInput(true);
 
             for (int i = 0; i < header.length; i++) {
