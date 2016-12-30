@@ -710,7 +710,7 @@ public class KcaService extends Service {
                     toastInfo();
                 }
 
-                if(url.startsWith(API_REQ_KOUSYOU_REMOEL_SLOT)) {
+                if(url.equals(API_REQ_KOUSYOU_REMOEL_SLOT)) {
                     if (KcaApiData.isGameDataLoaded()) {
                         int[] kcShipData = KcaDeckInfo.getKcShipList(currentPortDeckData, 0);
                         int flagship = kcShipData[0];
@@ -729,9 +729,9 @@ public class KcaService extends Service {
                             }
                         }
 
-                        JsonObject itemData = KcaApiData.getUserItemStatusById(itemId, "slotitem_id,lv", "");
+                        JsonObject itemData = KcaApiData.getUserItemStatusById(itemId, "slotitem_id,level", "");
                         int itemKcId = itemData.get("slotitem_id").getAsInt();
-                        int level = itemData.get("lv").getAsInt();
+                        int level = itemData.get("level").getAsInt();
                         int api_remodel_flag = 0;
                         if (jsonDataObj.has("api_data")) {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
