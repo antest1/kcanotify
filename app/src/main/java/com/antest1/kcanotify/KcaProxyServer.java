@@ -48,7 +48,7 @@ public class KcaProxyServer {
 
     private static final String KCA_USERAGENT = String.format("Kca/%s ", BuildConfig.VERSION_NAME);
 
-	public static ExecutorService executorService = Executors.newCachedThreadPool();
+	public static ExecutorService executorService = Executors.newScheduledThreadPool(15);
 
 	public KcaProxyServer() {
 		proxyServer = null;

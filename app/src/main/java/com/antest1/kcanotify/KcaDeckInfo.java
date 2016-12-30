@@ -232,6 +232,19 @@ public class KcaDeckInfo {
         return KcaApiData.SPEED_NONE; // Unreachable
     }
 
+    public static int[] getKcShipList(JsonArray deckPortData, int deckid) {
+        int[] kcShipList = new int[6];
+        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
+        for(int i=0; i<deckShipIdList.size(); i++) {
+            int shipId = deckShipIdList.get(i).getAsInt();
+            if (shipId != -1) {
+                JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id");
+                kcShipList[i] = shipData.get("ship_id").getAsInt();
+            }
+        }
+        return kcShipList;
+    }
+
     public static void debugPortInfo(JsonArray deckPortData, int deckid) {
         JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for(int i=0; i<deckShipIdList.size(); i++) {
@@ -289,7 +302,8 @@ public class KcaDeckInfo {
                     }
                 }
                 int ex_item_id = shipData.get("slot_ex").getAsInt();
-                if(ex_item_id != 0) {
+                if(ex_item_id != 0 && ex_item_id != -1) {
+                    Log.e("KCA", String.valueOf(ex_item_id));
                     JsonObject itemData = KcaApiData.getUserItemStatusById(ex_item_id, "id", "type");
                     int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                     if (itemType == KcaApiData.T2_DAMECON && status[i] != 0) {

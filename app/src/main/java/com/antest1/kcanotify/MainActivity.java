@@ -1,23 +1,16 @@
 package com.antest1.kcanotify;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.XmlResourceParser;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,22 +18,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.io.ByteStreams;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
-import java.util.zip.GZIPOutputStream;
 
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -212,9 +194,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences.Editor editor = pref.edit();
         for(String prefKey: PREFS_LIST) {
             if(!pref.contains(prefKey)) {
+                Log.e("KCA", prefKey + " pref add");
                 switch(prefKey) {
                     case PREF_KCA_SEEK_CN:
                         editor.putString(prefKey, String.valueOf(SEEK_33CN1));
+                        break;
+                    case PREF_OPENDB_API_USE:
+                        editor.putBoolean(prefKey, false);
                         break;
                     default:
                         editor.putString(prefKey, "");

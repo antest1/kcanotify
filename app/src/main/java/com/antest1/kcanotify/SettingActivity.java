@@ -75,7 +75,7 @@ public class SettingActivity extends AppCompatActivity {
             getPreferenceManager().setSharedPreferencesName("pref");
             //SharedPreferences prefs = this.getActivity().getSharedPreferences("pref", MODE_PRIVATE);
             getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-
+            addPreferencesFromResource(R.xml.pref_settings);
             Map<String, ?> allEntries = getPreferenceManager().getSharedPreferences().getAll();
             for(String key: allEntries.keySet()) {
                 Preference pref = findPreference(key);

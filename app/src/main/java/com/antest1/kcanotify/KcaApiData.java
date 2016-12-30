@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.content.res.AssetManager;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -25,6 +26,13 @@ public class KcaApiData {
 
 	public static int level = 0;
 	public static Integer experience = 0;
+
+	public static int maxShipSize = 0;
+	public static int maxItemSize = 0;
+	public static int getShipCountInBattle = 0;
+
+	public static JsonObject mapEdgeInfo = new JsonObject();
+	public static int[] eventMapDifficulty = new int[10];
 
 	// Equipment Constants (api_type 2)
 	public static final int T2_GUN_SMALL = 1;
@@ -131,7 +139,8 @@ public class KcaApiData {
 				kcItemData.put(api_id, temp.getAsJsonObject());
 			}
 		}
-
+		Log.e("KCA", "ship: ".concat(String.valueOf(kcShipData.size())));
+		Log.e("KCA", "item: ".concat(String.valueOf(kcItemData.size())));
 		return kcGameData.entrySet().size();
 	}
 
@@ -145,6 +154,41 @@ public class KcaApiData {
 
 	public static Integer getExperience() {
 		return experience;
+	}
+
+	public static void addShipCountInBattle() { getShipCountInBattle += 1; }
+	public static void resetShipCountInBattle() { getShipCountInBattle = 0; }
+
+	public static boolean checkUserShipMax() { return maxShipSize == (userShipData.size() + getShipCountInBattle); }
+	public static boolean checkUserItemMax() { return maxItemSize == userItemData.size(); }
+	public static boolean checkUserPortEnough() { return !(checkUserShipMax() || checkUserItemMax()); }
+
+	public static int getEventMapDifficulty(int no) {
+		return eventMapDifficulty[no];
+	}
+
+	public static void setEventMapDifficulty(int no, int diff) {
+		eventMapDifficulty[no] = diff;
+	}
+
+	public static int getShipSize() {
+		return userShipData.size();
+	}
+
+	public static void loadMapEdgeInfo(JsonObject data) {
+		mapEdgeInfo = data;
+	}
+
+	public static String getCurrentNodeAlphabet(int maparea, int mapno, int no) {
+		String currentMapString = String.format("%d-%d", maparea, mapno);
+		if (mapEdgeInfo != null && mapEdgeInfo.has(currentMapString)) {
+			JsonArray nodeInfo = mapEdgeInfo.getAsJsonObject(currentMapString)
+											.getAsJsonArray(String.valueOf(no));
+			return nodeInfo.get(1).getAsString();
+		}
+		else {
+			return String.valueOf(no);
+		}
 	}
 
 	public static int getPortData(JsonObject api_data) {
@@ -402,8 +446,8 @@ public class KcaApiData {
 		Log.e("KCA", String.format("remove ship %d (%s)",shipId, shipName));
 	}
 
-	public static void addUserItem(JsonObject api_data) {
-		if (kcGameData == null) return;
+	public static int addUserItem(JsonObject api_data) {
+		if (kcGameData == null) return -1;
 		JsonObject item = null;
 		if (api_data.has("api_create_flag") && api_data.get("api_create_flag").getAsInt() == 1) {
 			item = (JsonObject) api_data.get("api_slot_item");
@@ -422,6 +466,9 @@ public class KcaApiData {
 			userItemData.put(item_id, item);
 			String itemName = getKcItemStatusById(kc_item_id, "name").get("name").getAsString();
 			Log.e("KCA", String.format("add item %d (%s)",item_id, itemName));
+			return kc_item_id;
+		} else {
+			return 0;
 		}
 	}
 
@@ -436,4 +483,5 @@ public class KcaApiData {
 			Log.e("KCA", String.format("remove item %d (%s)",itemId, itemName));
 		}
 	}
+
 }

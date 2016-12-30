@@ -7,6 +7,7 @@ public final class KcaConstants {
     public static final String KCA_VERSION = "/kca/version.json";
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
     public static final String KCANOTIFY_S2_CACHE_FILENAME = "kca_api_start2";
+    public static final String KCANOTIFY_USERITEM_CACHE_FILENAME = "kca_userslotitem";
 
 
     public static final String API_PORT = "/api_port/port";
@@ -29,6 +30,11 @@ public final class KcaConstants {
     public static final String API_REQ_KOUSYOU_DESTROYITEM = "/api_req_kousyou/destroyitem2";
     public static final String API_REQ_KOUSYOU_GETSHIP = "/api_req_kousyou/getship";
     public static final String API_REQ_KOUSYOU_DESTROYSHIP = "/api_req_kousyou/destroyship";
+    public static final String API_REQ_KOUSYOU_REMOEL_SLOT = "/api_req_kousyou/remodel_slot";
+
+    public static final String API_REQ_KOUSYOU_CREATESHIP = "/api_req_kousyou/createship";
+    public static final String API_GET_MEMBER_KDOCK = "/api_get_member/kdock";
+
 
     public static final String API_GET_MEMBER_MAPINFO = "/api_get_member/mapinfo";
     public static final String API_REQ_MAP_START = "/api_req_map/start";
@@ -79,13 +85,30 @@ public final class KcaConstants {
             API_REQ_COMBINED_GOBACKPORT
     };
 
+    public static final int API_NODE_EVENT_TYPE_NOEVENT = 1;
+    public static final int API_NODE_EVENT_TYPE_OBTAIN = 2;
+    public static final int API_NODE_EVENT_TYPE_LOSS = 3;
+    public static final int API_NODE_EVENT_TYPE_NORMAL = 4;
+    public static final int API_NODE_EVENT_TYPE_BOSS = 5;
+    public static final int API_NODE_EVENT_TYPE_TPOINT = 6;
+    public static final int API_NODE_EVENT_TYPE_AIRBATTLE = 7;
+    public static final int API_NODE_EVENT_TYPE_PORT = 8;
+    public static final int API_NODE_EVENT_TYPE_AIRSEARCH = 9;
+    public static final int API_NODE_EVENT_TYPE_LDAIRBATTLE = 10;
+    public static final int API_NODE_EVENT_TYPE_NIGHTSTART = 31;
+
     public static final String KCA_API_NOTI_EXP_LEFT = "/kca_api/noti_exp_left";
     public static final String KCA_API_NOTI_EXP_FIN = "/kca_api/noti_exp_fin";
     public static final String KCA_API_NOTI_EXP_CANCELED = "/kca_api/noti_exp_canceled";
     public static final String KCA_API_NOTI_HEAVY_DMG = "/kca_api/noti_heavy_dmg";
+    public static final String KCA_API_NOTI_BATTLE_NODE = "/kca_api/noti_battle_node";
     public static final String KCA_API_NOTI_BATTLE_INFO = "/kca_api/noti_battle_info";
     public static final String KCA_API_NOTI_GOBACKPORT = "/kca_api/noti_gobackport";
+    public static final String KCA_API_NOTI_BATTLE_DROPINFO = "/kca_api/noti_battle_dropinfo";
+
     public static final String KCA_API_PREP_CN_CHANGED = "/kca_api/pref_cn_changed";
+
+    public static final String KCA_API_OPENDB_FAILED = "/kca_api/opendb_failed";
 
     public static final int SEEK_PURE = 0;
     public static final int SEEK_33CN1 = 1;
@@ -110,14 +133,14 @@ public final class KcaConstants {
 
     public static final String PREF_KCA_VERSION = "kca_version";
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
-    public static final String PREF_OEPNDB_API_USE = "opendb_api_use";
+    public static final String PREF_OPENDB_API_USE = "opendb_api_use";
     public static final String PREF_CHECK_UPDATE = "check_update";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
             PREF_KCA_VERSION,
             PREF_KCA_SEEK_CN,
-            PREF_OEPNDB_API_USE
+            PREF_OPENDB_API_USE
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

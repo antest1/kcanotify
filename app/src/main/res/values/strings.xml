@@ -22,5 +22,18 @@
     <string name="speed_mixed">혼성</string>
     <string name="speed_postfix">함대</string>
 
+    <string name="opendb_failed_msg">OpenDB 데이터 처리 오류 발생</string>
+
+    <string name="node_info_noevent">%s (기분탓)</string>
+    <string name="node_info_obtain">%s (자원방)</string>
+    <string name="node_info_loss">%s (소용돌이)</string>
+    <string name="node_info_normal">%s</string>
+    <string name="node_info_boss">%s (보스방)</string>
+    <string name="node_info_tpoint">%s (수송포인트)</string>
+    <string name="node_info_airbattle">%s (아웃레인지)</string>
+    <string name="node_info_port">%s (응 돌아가)</string>
+    <string name="node_info_airsearch">%s (항공정찰)</string>
+    <string name="node_info_ldairbattle">%s (공습전)</string>
+    <string name="node_info_nightbattle">%s (야전방)</string>
 
 </resources>
