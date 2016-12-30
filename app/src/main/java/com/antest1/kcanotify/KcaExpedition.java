@@ -10,6 +10,8 @@ import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.antest1.kcanotify.KcaConstants.*;
+
 public class KcaExpedition implements Runnable {
     public int mission_no;
     public String mission_krname;
@@ -82,7 +84,7 @@ public class KcaExpedition implements Runnable {
 						// mission_no, mission_krname, krname_space, strTime));
 						leftExpInfo.put("str", String.format("[%02d] %s", mission_no, strTime));
 						Bundle bundle = new Bundle();
-						bundle.putString("url", KcaService.KCA_API_NOTI_EXP_LEFT);
+						bundle.putString("url", KCA_API_NOTI_EXP_LEFT);
 						bundle.putString("data", leftExpInfo.toJSONString());
 						Message sMsg = sHandler.obtainMessage();
 						sMsg.setData(bundle);
@@ -92,7 +94,7 @@ public class KcaExpedition implements Runnable {
                         JsonObject leftExpInfo = new JsonObject();
                         left_time_str[kantai_idx] = String.format("[%02d] %s", mission_no, strTime);
                         Bundle bundle = new Bundle();
-                        bundle.putString("url", KcaService.KCA_API_NOTI_EXP_LEFT);
+                        bundle.putString("url", KCA_API_NOTI_EXP_LEFT);
                         bundle.putString("data", gson.toJson(leftExpInfo));
                         Message sMsg = sHandler.obtainMessage();
                         sMsg.setData(bundle);
@@ -111,7 +113,7 @@ public class KcaExpedition implements Runnable {
                             endExpInfo.addProperty("mission_krname", mission_krname);
 
                             Bundle bundle = new Bundle();
-                            bundle.putString("url", KcaService.KCA_API_NOTI_EXP_FIN);
+                            bundle.putString("url", KCA_API_NOTI_EXP_FIN);
                             bundle.putString("data", gson.toJson(endExpInfo));
                             Message sMsg = sHandler.obtainMessage();
                             sMsg.setData(bundle);
@@ -150,7 +152,7 @@ public class KcaExpedition implements Runnable {
         canceled_flag[kantai_idx] = true;
 
         Bundle bundle = new Bundle();
-        bundle.putString("url", KcaService.KCA_API_NOTI_EXP_CANCELED);
+        bundle.putString("url", KCA_API_NOTI_EXP_CANCELED);
         bundle.putString("data", gson.toJson(endExpInfo));
         Message sMsg = sHandler.obtainMessage();
         sMsg.setData(bundle);

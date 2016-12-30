@@ -9,6 +9,9 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
+
+
 public class KcaDeckInfo {
     // Formula 33 (2016.12.26)
     // Reference: http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
@@ -34,52 +37,59 @@ public class KcaDeckInfo {
                 JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "slot,sakuteki");
                 int shipSeek = shipData.get("sakuteki").getAsJsonArray().get(0).getAsInt();
                 pureTotalSeek += shipSeek;
+                if (Cn != SEEK_PURE) {
+                    JsonArray shipItem = (JsonArray) shipData.get("slot");
+                    for (int j = 0; j < shipItem.size(); j++) {
+                        int item_id = shipItem.get(j).getAsInt();
+                        if (item_id != -1) {
+                            JsonObject itemData = KcaApiData.getUserItemStatusById (item_id, "level,alv", "name,type,saku");
+                            String itemName = itemData.get("name").getAsString();
+                            int itemLevel = itemData.get("level").getAsInt();
+                            int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                            int itemSeek = itemData.get("saku").getAsInt();
+                            shipSeek -= itemSeek;
 
-                JsonArray shipItem = (JsonArray) shipData.get("slot");
-                for (int j = 0; j < shipItem.size(); j++) {
-                    int item_id = shipItem.get(j).getAsInt();
-                    if (item_id != -1) {
-                        JsonObject itemData = KcaApiData.getUserItemStatusById (item_id, "level,alv", "name,type,saku");
-                        String itemName = itemData.get("name").getAsString();
-                        int itemLevel = itemData.get("level").getAsInt();
-                        int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
-                        int itemSeek = itemData.get("saku").getAsInt();
-                        shipSeek -= itemSeek;
-
-                        switch (itemType) {
-                            case KcaApiData.T2_TORPEDO_BOMBER:
-                                totalEquipSeek += 0.8 * itemSeek;
-                                break;
-                            case KcaApiData.T2_SCOUT:
-                                totalEquipSeek += 1 * itemSeek;
-                                break;
-                            case KcaApiData.T2_SCOUT_II:
-                                totalEquipSeek += 1 * itemSeek;
-                                break;
-                            case KcaApiData.T2_SEA_SCOUT:
-                                totalEquipSeek += 1.2 * (itemSeek + 1.2 * Math.sqrt(itemLevel));
-                                break;
-                            case KcaApiData.T2_SEA_BOMBER:
-                                totalEquipSeek += 1.1 * itemSeek;
-                                break;
-                            case KcaApiData.T2_RADAR_LARGE:
-                                totalEquipSeek += 0.6 * (itemSeek + 1.4 * Math.sqrt(itemLevel));
-                                break;
-                            case KcaApiData.T2_RADAR_SMALL:
-                                totalEquipSeek += 0.6 * (itemSeek + 1.25 * Math.sqrt(itemLevel));
-                                break;
-                            default:
-                                totalEquipSeek += 0.6 * itemSeek;
-                                break;
+                            switch (itemType) {
+                                case KcaApiData.T2_TORPEDO_BOMBER:
+                                    totalEquipSeek += 0.8 * itemSeek;
+                                    break;
+                                case KcaApiData.T2_SCOUT:
+                                    totalEquipSeek += 1 * itemSeek;
+                                    break;
+                                case KcaApiData.T2_SCOUT_II:
+                                    totalEquipSeek += 1 * itemSeek;
+                                    break;
+                                case KcaApiData.T2_SEA_SCOUT:
+                                    totalEquipSeek += 1.2 * (itemSeek + 1.2 * Math.sqrt(itemLevel));
+                                    break;
+                                case KcaApiData.T2_SEA_BOMBER:
+                                    totalEquipSeek += 1.1 * itemSeek;
+                                    break;
+                                case KcaApiData.T2_RADAR_LARGE:
+                                    totalEquipSeek += 0.6 * (itemSeek + 1.4 * Math.sqrt(itemLevel));
+                                    break;
+                                case KcaApiData.T2_RADAR_SMALL:
+                                    totalEquipSeek += 0.6 * (itemSeek + 1.25 * Math.sqrt(itemLevel));
+                                    break;
+                                default:
+                                    totalEquipSeek += 0.6 * itemSeek;
+                                    break;
+                            }
                         }
                     }
+                    totalShipSeek += Math.sqrt(shipSeek);
                 }
-                totalShipSeek += Math.sqrt(shipSeek);
             }
         }
-        noShipBonus =  2*noShipCount;
-        totalSeek = totalShipSeek + Cn * totalEquipSeek - hqPenalty + noShipBonus;
-        return Math.floor(totalSeek*100)/100;
+
+        if (Cn == SEEK_PURE) {
+            return pureTotalSeek;
+        } else {
+            noShipBonus =  2*noShipCount;
+            totalSeek = totalShipSeek + Cn * totalEquipSeek - hqPenalty + noShipBonus;
+
+            return Math.floor(totalSeek*100)/100;
+        }
     }
 
     public static String getConditionStatus(JsonArray deckPortData, int deckid) {

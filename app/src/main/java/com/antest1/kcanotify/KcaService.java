@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -49,104 +50,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
-
+import static com.antest1.kcanotify.KcaConstants.*;
 
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 
+
 public class KcaService extends Service {
     public static final int ANTEST_USERID = 15108389;
-    public static final String KCA_VERSION = "/kca/version.json";
-    public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
-    public static final String KCANOTIFY_S2_CACHE_FILENAME = "kca_api_start2";
-
-
-    public static final String API_PORT = "/api_port/port";
-    public static final String API_START2 = "/api_start2";
-    public static final String API_GET_MEMBER_REQUIRED_INFO = "/api_get_member/require_info";
-    public static final String API_REQ_MEMBER_PRESET_DECK = "/api_get_member/preset_deck";
-    public static final String API_GET_MEMBER_DECK = "/api_get_member/deck";
-    public static final String API_GET_MEMBER_SHIP_DECK = "/api_get_member/ship_deck";
-    public static final String API_GET_MEMBER_SLOT_ITEM = "/api_get_member/slot_item";
-    public static final String API_REQ_MISSION_RETURN = "/api_req_mission/return_instruction";
-
-    public static final String API_REQ_HENSEI_CHANGE = "/api_req_hensei/change";
-    public static final String API_REQ_HENSEI_PRESET = "/api_req_hensei/preset_select";
-
-    public static final String API_GET_MEMBER_SHIP3 = "/api_get_member/ship3";
-    public static final String API_REQ_KAISOU_SLOT_EXCHANGE = "/api_req_kaisou/slot_exchange";
-    public static final String API_REQ_KAISOU_SLOT_DEPRIVE = "/api_req_kaisou/slot_deprive";
-
-    public static final String API_REQ_KOUSYOU_CREATETIEM = "/api_req_kousyou/createitem";
-    public static final String API_REQ_KOUSYOU_DESTROYITEM = "/api_req_kousyou/destroyitem2";
-    public static final String API_REQ_KOUSYOU_GETSHIP = "/api_req_kousyou/getship";
-    public static final String API_REQ_KOUSYOU_DESTROYSHIP = "/api_req_kousyou/destroyship";
-
-    public static final String API_GET_MEMBER_MAPINFO = "/api_get_member/mapinfo";
-    public static final String API_REQ_MAP_START = "/api_req_map/start";
-    public static final String API_REQ_MAP_NEXT = "/api_req_map/next";
-    public static final String API_REQ_SORTIE_BATTLE = "/api_req_sortie/battle";
-    public static final String API_REQ_SORTIE_BATTLE_MIDNIGHT = "/api_req_battle_midnight/battle";
-    public static final String API_REQ_SORTIE_BATTLE_MIDNIGHT_SP = "/api_req_battle_midnight/sp_midnight";
-    public static final String API_REQ_SORTIE_AIRBATTLE = "/api_req_sortie/airbattle";
-    public static final String API_REQ_SORTIE_LDAIRBATTLE = "/api_req_sortie/ld_airbattle";
-    public static final String API_REQ_SORTIE_BATTLE_RESULT = "/api_req_sortie/battleresult";
-
-    public static final String API_REQ_COMBINED_BATTLE = "/api_req_combined_battle/battle"; // 기동
-    public static final String API_REQ_COMBINED_BATTLE_WATER = "/api_req_combined_battle/battle_water"; // 수상
-    public static final String API_REQ_COMBINED_BATTLE_EC = "/api_req_combined_battle/ec_battle"; // 단일-연합
-    public static final String API_REQ_COMBINED_BATTLE_EACH = "/api_req_combined_battle/each_battle"; // 기동-연합
-    public static final String API_REQ_COMBINED_BATTLE_EACH_WATER = "/api_req_combined_battle/each_battle_water"; // 수상-연합
-
-    public static final String API_REQ_COMBINED_AIRBATTLE = "/api_req_combined_battle/airbattle"; // 아웃레인지
-    public static final String API_REQ_COMBINED_LDAIRBATTLE = "/api_req_combined_battle/ld_airbattle"; // 공습
-
-    public static final String API_REQ_COMBINED_BATTLE_MIDNIGHT = "/api_req_combined_battle/midnight_battle";
-    public static final String API_REQ_COMBINED_BATTLE_MIDNIGHT_SP = "/api_req_combined_battle/sp_midnight";
-    public static final String API_REQ_COMBINED_BATTLE_MIDNIGHT_EC = "/api_req_combined_battle/ec_midnight_battle"; // 단대연 야전
-
-    public static final String API_REQ_COMBINED_BATTLERESULT = "/api_req_combined_battle/battleresult";
-    public static final String API_REQ_COMBINED_GOBACKPORT = "/api_req_combined_battle/goback_port"; // 퇴피
-
-    public static List<String> API_BATTLE_REQS;
-    public static final String[] API_BATTLE_REQ_LIST = new String[]{
-            API_REQ_MAP_START,
-            API_REQ_MAP_NEXT,
-            API_REQ_SORTIE_BATTLE,
-            API_REQ_SORTIE_BATTLE_MIDNIGHT,
-            API_REQ_SORTIE_BATTLE_MIDNIGHT_SP,
-            API_REQ_SORTIE_AIRBATTLE,
-            API_REQ_SORTIE_LDAIRBATTLE,
-            API_REQ_SORTIE_BATTLE_RESULT,
-            API_REQ_COMBINED_BATTLE,
-            API_REQ_COMBINED_BATTLE_WATER,
-            API_REQ_COMBINED_AIRBATTLE,
-            API_REQ_COMBINED_LDAIRBATTLE,
-            API_REQ_COMBINED_BATTLE_MIDNIGHT,
-            API_REQ_COMBINED_BATTLE_MIDNIGHT_SP,
-            API_REQ_COMBINED_BATTLE_EC,
-            API_REQ_COMBINED_BATTLE_EACH,
-            API_REQ_COMBINED_BATTLE_EACH_WATER,
-            API_REQ_COMBINED_BATTLE_MIDNIGHT_EC,
-            API_REQ_COMBINED_BATTLERESULT,
-            API_REQ_COMBINED_GOBACKPORT
-    };
-
-    public static final String KCA_API_NOTI_EXP_LEFT = "/kca_api/noti_exp_left";
-    public static final String KCA_API_NOTI_EXP_FIN = "/kca_api/noti_exp_fin";
-    public static final String KCA_API_NOTI_EXP_CANCELED = "/kca_api/noti_exp_canceled";
-    public static final String KCA_API_NOTI_HEAVY_DMG = "/kca_api/noti_heavy_dmg";
-    public static final String KCA_API_NOTI_BATTLE_INFO = "/kca_api/noti_battle_info";
-    public static final String KCA_API_NOTI_GOBACKPORT = "/kca_api/noti_gobackport";
-
-    public static final int NOTI_FRONT = 0;
-    public static final int NOTI_EXP = 1;
-
-    public static final int FRONT_NONE = 0;
-    public static final int FRONT_EXP_SET = 2;
-
-    public static final int HD_NONE = 0;
-    public static final int HD_DAMECON = 1;
-    public static final int HD_DANGER = 2;
 
     public static boolean isServiceOn = false;
     public static boolean isPortAccessed = false;
@@ -177,16 +87,34 @@ public class KcaService extends Service {
         return isServiceOn;
     }
 
-    private String getPreferences(String key) {
+    private boolean checkKeyInPreferences(String key) {
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        return pref.contains(key);
+    }
+
+    private String getStringPreferences(String key) {
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         return pref.getString(key, "");
     }
 
+    private Boolean getBooleanPreferences(String key) {
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        return pref.getBoolean(key, false);
+    }
+
     // 값 저장하기
-    private void setPreferences(String key, String value) {
+    private void setPreferences(String key, Object value) {
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString(key, value);
+        if(value instanceof String) {
+            editor.putString(key, (String)value);
+        } else if (value instanceof Boolean) {
+            editor.putBoolean(key, (Boolean)value);
+        } else if (value instanceof Integer) {
+            editor.putInt(key, (Integer)value);
+        } else {
+            editor.putString(key, value.toString());
+        }
         editor.commit();
     }
 
@@ -232,7 +160,6 @@ public class KcaService extends Service {
         }
 
         KcaExpedition.expeditionData = getExpeditionData();
-        API_BATTLE_REQS = Arrays.asList(API_BATTLE_REQ_LIST);
 
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -241,10 +168,6 @@ public class KcaService extends Service {
         nHandler = new kcaNotificationHandler();
         kcaExpeditionRunnableList = new KcaExpedition[3];
         isPortAccessed = false;
-
-        if(getPreferences("kca_seek_cn").equals("")) {
-            setPreferences("kca_seek_cn", "1");
-        }
 
         KcaProxyServer.start(handler);
 
@@ -259,6 +182,7 @@ public class KcaService extends Service {
         isServiceOn = true;
 
         KcaBattle.setHandler(nHandler);
+        SettingActivity.setHandler(nHandler);
 
         return START_STICKY;
     }
@@ -373,7 +297,7 @@ public class KcaService extends Service {
                     //Toast.makeText(getApplicationContext(), "KCA_VERSION", Toast.LENGTH_LONG).show();
                     JsonObject api_version = jsonDataObj.get("api").getAsJsonObject();
                     kca_version = api_version.get("api_start2").getAsString();
-                    if (!getPreferences("kca_version").equals(kca_version)) {
+                    if (!getStringPreferences("kca_version").equals(kca_version)) {
                         api_start2_down_mode = true;
                     } else {
                         api_start2_down_mode = false;
@@ -782,6 +706,10 @@ public class KcaService extends Service {
                     setFrontViewNotifier(FRONT_NONE, 0, null);
                 }
 
+                if (url.startsWith(KCA_API_PREP_CN_CHANGED)) {
+                    processFirstDeckInfo(currentPortDeckData);
+                }
+
             } catch (JsonSyntaxException e) {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
@@ -794,11 +722,11 @@ public class KcaService extends Service {
     }
 
     private int getSeekCn() {
-        return Integer.valueOf(getPreferences("kca_seek_cn"));
+        return Integer.valueOf(getStringPreferences("kca_seek_cn"));
     }
 
     private String getSeekType() {
-        int cn = Integer.valueOf(getPreferences("kca_seek_cn"));
+        int cn = Integer.valueOf(getStringPreferences("kca_seek_cn"));
         String seekType = "";
         switch(cn) {
             case 1:
@@ -808,7 +736,7 @@ public class KcaService extends Service {
                 seekType = getResources().getString(R.string.seek_type_3);
                 break;
             case 4:
-                seekType = getResources().getString(R.string.seek_type_3);
+                seekType = getResources().getString(R.string.seek_type_4);
                 break;
             default:
                 seekType = getResources().getString(R.string.seek_type_0);
@@ -851,8 +779,13 @@ public class KcaService extends Service {
             infoData.addProperty("landscape_value", airPowerValue);
             deckInfoData.add(infoData);
         }
+        String seekValue = "";
+        if (cn == SEEK_PURE) {
+            seekValue =  String.format("색적(%s): %d", seekType, (int) KcaDeckInfo.getSeekValue(data, 0, cn));
+        } else {
+            seekValue =  String.format("색적(%s): %.2f", seekType, KcaDeckInfo.getSeekValue(data, 0, cn));
 
-        String seekValue =  String.format("색적(%s): %.2f", seekType, KcaDeckInfo.getSeekValue(data, 0, cn));
+        }
         infoData = new JsonObject();
         infoData.addProperty("is_portrait_newline", 0);
         infoData.addProperty("portrait_value", seekValue);

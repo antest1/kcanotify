@@ -3,15 +3,20 @@ package com.antest1.kcanotify;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,19 +38,28 @@ import java.net.URL;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
+import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
+import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public final static String KC_PACKAGE_NAME = "com.dmm.dmmlabo.kancolle";
     public static boolean isKcaServiceOn = false;
 
-    Button btnStart, btnCheck, btnWifi, btnApn, btnUpdate;
+    Toolbar toolbar;
+
+    Button btnStart, btnCheck, btnWifi, btnApn;
     TextView textDescription;
     Boolean is_kca_installed = false;
-    public static String currentVersion = BuildConfig.VERSION_NAME;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         // Toast.makeText(getApplicationContext(),
         // String.valueOf(KcaProxyServer.is_on), Toast.LENGTH_LONG).show();
@@ -56,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnWifi = (Button) findViewById(R.id.btnWifi);
         btnApn = (Button) findViewById(R.id.btnApn);
         textDescription = (TextView) findViewById(R.id.textDescription);
-        btnUpdate = (Button) findViewById(R.id.btnUpdate);
 
         btnStart.setBackgroundResource(R.color.colorBtn);
         btnWifi.setBackgroundResource(R.color.colorBtn);
@@ -71,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btnWifi).setOnClickListener(this);
         findViewById(R.id.btnApn).setOnClickListener(this);
         findViewById(R.id.btnApn).setOnClickListener(this);
-        findViewById(R.id.btnUpdate).setOnClickListener(this);
 
         if (isPackageExist(KC_PACKAGE_NAME)) {
             // Toast.makeText(getApplicationContext(),
@@ -82,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             is_kca_installed = false;
         }
+        setDefaultPreferences();
     }
 
     @Override
@@ -118,10 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-            return true;
-        } else if (id == R.id.action_settings) {
-            startActivity(new Intent(Settings.ACTION_APN_SETTINGS));
+            startActivity(new Intent(this, SettingActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -161,10 +171,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getId() == R.id.btnApn) {
             startActivity(new Intent(Settings.ACTION_APN_SETTINGS));
         }
-
-        if (v.getId() == R.id.btnUpdate) {
-            new getRecentVersion().execute();
-        }
     }
 
     public boolean isPackageExist(String name) {
@@ -201,107 +207,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private class getRecentVersion extends AsyncTask<Context, String, String> {
-
-        private void serverTempStart() {
-            if(!KcaProxyServer.is_on()) KcaProxyServer.start(null);
-        }
-
-        private void serverTempStop() {
-            if(KcaProxyServer.handler == null) KcaProxyServer.stop();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            serverTempStart();
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(Context... params) {
-            String content = null;
-            try {
-                content = executeClient();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return content;
-        }
-
-        public byte[] gzipcompress(String value) throws Exception {
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            GZIPOutputStream gzipOutStream = new GZIPOutputStream(
-                    new BufferedOutputStream(byteArrayOutputStream));
-            gzipOutStream.write(value.getBytes());
-            gzipOutStream.finish();
-            gzipOutStream.close();
-
-            return byteArrayOutputStream.toByteArray();
-        }
-
-        public String executeClient() {
-
-            URL data_send_url = null;
-            try {
-                data_send_url = new URL(String.format("http://antest.hol.es/kcanotify/v.php"));
-                HttpURLConnection http = (HttpURLConnection) data_send_url.openConnection();
-                http.setRequestMethod("GET");
-                http.setDoInput(true);
-                http.setRequestProperty("Referer", "app:/KCA/");
-                http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                http.getResponseCode();
-                InputStream is = http.getInputStream();
-                byte[] bytes = ByteStreams.toByteArray(is);
-                String input_data = new String(bytes);
-
-                return input_data;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (result == null) {
-                Toast.makeText(getApplicationContext(), "업데이트 확인에 문제가 발생했습니다.", Toast.LENGTH_LONG).show();
-                serverTempStop();
-            } else {
-                JsonObject jsonDataObj = new JsonParser().parse(result).getAsJsonObject();
-                if (jsonDataObj.has("version")) {
-                    String recentVersion = jsonDataObj.get("version").getAsString();
-                    if (recentVersion.equals(currentVersion)) {
-                        Toast.makeText(getApplicationContext(), String.format("최신 버전입니다(%s).", currentVersion), Toast.LENGTH_LONG).show();
-                        serverTempStop();
-                    } else {
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-                        alertDialog.setMessage(String.format("업데이트가 있습니다(%s).\n다운로드하시겠습니까?", recentVersion));
-                        alertDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String downloadUrl = "http://bit.ly/2hNln5o";
-                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
-                                startActivity(i);
-                            }
-                        });
-                        alertDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                serverTempStop();
-                            }
-                        });
-                        AlertDialog alert = alertDialog.create();
-                        alert.setIcon(R.mipmap.ic_launcher);
-                        alert.setTitle("최신 업데이트 확인");
-                        alert.show();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "업데이트 서버 데이터 오류", Toast.LENGTH_LONG).show();
-                    serverTempStop();
+    private void setDefaultPreferences() {
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        for(String prefKey: PREFS_LIST) {
+            if(!pref.contains(prefKey)) {
+                switch(prefKey) {
+                    case PREF_KCA_SEEK_CN:
+                        editor.putString(prefKey, String.valueOf(SEEK_33CN1));
+                        break;
+                    default:
+                        editor.putString(prefKey, "");
+                        break;
                 }
             }
         }
+        editor.commit();
     }
 
 }
