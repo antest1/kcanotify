@@ -11,7 +11,9 @@ public final class KcaConstants {
 
 
     public static final String API_PORT = "/api_port/port";
+    public static final String API_WORLD_GET_ID = "/api_world/get_id";
     public static final String API_START2 = "/api_start2";
+    public static final String API_REQ_MEMBER_GET_INCENTIVE = "/api_req_member/get_incentive";
     public static final String API_GET_MEMBER_REQUIRED_INFO = "/api_get_member/require_info";
     public static final String API_REQ_MEMBER_PRESET_DECK = "/api_get_member/preset_deck";
     public static final String API_GET_MEMBER_DECK = "/api_get_member/deck";
@@ -26,6 +28,9 @@ public final class KcaConstants {
     public static final String API_REQ_KAISOU_SLOT_EXCHANGE = "/api_req_kaisou/slot_exchange";
     public static final String API_REQ_KAISOU_SLOT_DEPRIVE = "/api_req_kaisou/slot_deprive";
 
+    public static final String API_GET_MEMBER_NDOCK = "/api_get_member/ndock";
+    public static final String API_REQ_NYUKYO_SPEEDCHAGNE = "/api_req_nyukyo/speedchange";
+
     public static final String API_REQ_KOUSYOU_CREATETIEM = "/api_req_kousyou/createitem";
     public static final String API_REQ_KOUSYOU_DESTROYITEM = "/api_req_kousyou/destroyitem2";
     public static final String API_REQ_KOUSYOU_GETSHIP = "/api_req_kousyou/getship";
@@ -34,7 +39,6 @@ public final class KcaConstants {
 
     public static final String API_REQ_KOUSYOU_CREATESHIP = "/api_req_kousyou/createship";
     public static final String API_GET_MEMBER_KDOCK = "/api_get_member/kdock";
-
 
     public static final String API_GET_MEMBER_MAPINFO = "/api_get_member/mapinfo";
     public static final String API_REQ_MAP_START = "/api_req_map/start";
@@ -85,17 +89,28 @@ public final class KcaConstants {
             API_REQ_COMBINED_GOBACKPORT
     };
 
-    public static final int API_NODE_EVENT_TYPE_NOEVENT = 1;
-    public static final int API_NODE_EVENT_TYPE_OBTAIN = 2;
-    public static final int API_NODE_EVENT_TYPE_LOSS = 3;
-    public static final int API_NODE_EVENT_TYPE_NORMAL = 4;
-    public static final int API_NODE_EVENT_TYPE_BOSS = 5;
-    public static final int API_NODE_EVENT_TYPE_TPOINT = 6;
-    public static final int API_NODE_EVENT_TYPE_AIRBATTLE = 7;
-    public static final int API_NODE_EVENT_TYPE_PORT = 8;
-    public static final int API_NODE_EVENT_TYPE_AIRSEARCH = 9;
-    public static final int API_NODE_EVENT_TYPE_LDAIRBATTLE = 10;
-    public static final int API_NODE_EVENT_TYPE_NIGHTSTART = 31;
+    public static final int API_NODE_EVENT_ID_OBTAIN = 2;
+    public static final int API_NODE_EVENT_ID_LOSS = 3;
+    public static final int API_NODE_EVENT_ID_NORMAL = 4;
+    public static final int API_NODE_EVENT_ID_BOSS = 5;
+    public static final int API_NODE_EVENT_ID_NOEVENT = 6;
+    public static final int API_NODE_EVENT_ID_AIR = 7;
+    public static final int API_NODE_EVENT_ID_SENDAN = 8;
+    public static final int API_NODE_EVENT_ID_TPOINT = 9;
+    public static final int API_NODE_EVENT_ID_LDAIRBATTLE = 10;
+
+    public static final int API_NODE_EVENT_KIND_NOBATTLE = 0;
+    public static final int API_NODE_EVENT_KIND_BATTLE = 1;
+    public static final int API_NODE_EVENT_KIND_NIGHTBATTLE = 2;
+    public static final int API_NODE_EVENT_KIND_NIGHTDAYBATTLE = 3;
+    public static final int API_NODE_EVENT_KIND_AIRBATTLE = 4;
+    public static final int API_NODE_EVENT_KIND_ECBATTLE = 5;
+    public static final int API_NODE_EVENT_KIND_LDAIRBATTLE = 6;
+
+    public static final int API_NODE_EVENT_KIND_ACTIVECELL = 2;
+
+    public static final int API_NODE_EVENT_KIND_AIRSEARCH = 0;
+
 
     public static final String KCA_API_NOTI_EXP_LEFT = "/kca_api/noti_exp_left";
     public static final String KCA_API_NOTI_EXP_FIN = "/kca_api/noti_exp_fin";
@@ -105,7 +120,7 @@ public final class KcaConstants {
     public static final String KCA_API_NOTI_BATTLE_INFO = "/kca_api/noti_battle_info";
     public static final String KCA_API_NOTI_GOBACKPORT = "/kca_api/noti_gobackport";
     public static final String KCA_API_NOTI_BATTLE_DROPINFO = "/kca_api/noti_battle_dropinfo";
-
+    public static final String KCA_API_NOTI_DOCK_FIN = "/kca_api/noti_dock_fin";
     public static final String KCA_API_PREP_CN_CHANGED = "/kca_api/pref_cn_changed";
 
     public static final String KCA_API_OPENDB_FAILED = "/kca_api/opendb_failed";
@@ -118,6 +133,7 @@ public final class KcaConstants {
 
     public static final int NOTI_FRONT = 0;
     public static final int NOTI_EXP = 1;
+    public static final int NOTI_DOCK = 2;
 
     public static final int FRONT_NONE = 0;
     public static final int FRONT_EXP_SET = 2;
@@ -135,12 +151,17 @@ public final class KcaConstants {
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
     public static final String PREF_OPENDB_API_USE = "opendb_api_use";
     public static final String PREF_CHECK_UPDATE = "check_update";
+    public static final String PREF_KCA_NOTI_EXP = "notify_expedition";
+    public static final String PREF_KCA_NOTI_DOCK = "notify_docking";
+
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
             PREF_KCA_VERSION,
             PREF_KCA_SEEK_CN,
-            PREF_OPENDB_API_USE
+            PREF_OPENDB_API_USE,
+            PREF_KCA_NOTI_EXP,
+            PREF_KCA_NOTI_DOCK
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

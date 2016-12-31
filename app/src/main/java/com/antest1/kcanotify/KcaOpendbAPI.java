@@ -127,7 +127,7 @@ public class KcaOpendbAPI {
                     JsonObject responseData = new JsonObject();
                     InputStream is = http.getInputStream();
                     byte[] bytes = ByteStreams.toByteArray(is);
-                    String bytesData = Base64.encodeToString(bytes, Base64.DEFAULT);
+                    String bytesData = new String(bytes);
                     if(bytesData.contains("Invalid")) {
                         return FAILED_CODE;
                     } else {

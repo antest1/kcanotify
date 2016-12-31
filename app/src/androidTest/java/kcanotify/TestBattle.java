@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.antest1.kcanotify.KcaConstants.API_REQ_SORTIE_BATTLE;
+
 @RunWith(AndroidJUnit4.class)
 @SmallTest
 public class TestBattle {
@@ -27,7 +29,7 @@ public class TestBattle {
         //String api_data_str = "{\"api_result\":1,\"api_result_msg\":\"\\u6210\\u529f\",\"api_data\":{\"api_active_deck\":[1,1],\"api_deck_id\":1,\"api_ship_ke\":[-1,586,615,615,592,578,578],\"api_ship_ke_combined\":[-1,555,527,527,577,576,576],\"api_ship_lv\":[-1,1,1,1,1,1,1],\"api_ship_lv_combined\":[-1,1,1,1,1,1,1],\"api_nowhps\":[-1,18,71,79,60,39,43,176,0,0,0,0,0],\"api_maxhps\":[-1,37,92,88,78,58,43,350,96,96,66,40,40],\"api_nowhps_combined\":[-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0],\"api_maxhps_combined\":[-1,-1,-1,-1,-1,-1,-1,57,76,76,38,37,37],\"api_eSlot\":[[547,548,549,532,-1],[556,557,558,558,-1],[556,557,558,558,-1],[550,550,545,525,-1],[502,515,542,-1,-1],[502,515,542,-1,-1]],\"api_eSlot_combined\":[[506,525,542,543,-1],[505,506,515,525,-1],[505,506,515,525,-1],[502,515,542,-1,-1],[502,545,542,-1,-1],[502,545,542,-1,-1]],\"api_fParam\":[[58,56,114,52],[115,0,120,107],[53,0,93,83],[70,0,88,83],[77,83,83,79],[63,139,49,63]],\"api_eParam\":[[180,0,130,150],[25,0,50,80],[25,0,50,80],[64,92,96,68],[48,84,38,33],[48,84,38,33]],\"api_eParam_combined\":[[48,80,30,39],[68,48,40,70],[68,48,40,70],[44,72,36,29],[38,66,32,26],[38,66,32,26]],\"api_touch_plane\":[\"102\",-1],\"api_flare_pos\":[-1,-1],\"api_hougeki\":{\"api_at_list\":[-1,1,7,2,6],\"api_df_list\":[-1,[7,7],[5],[7,7],[7,7]],\"api_si_list\":[-1,[\"122\",\"122\"],[-1],[\"161\",\"161\"],[\"179\",\"179\"]],\"api_cl_list\":[-1,[1,1],[1],[1,1],[1,1]],\"api_sp_list\":[-1,1,0,1,3],\"api_damage\":[-1,[12,11],[25],[59,49],[112,138]]}}}";
         JsonObject api_data = new JsonParser().parse(api_data_str).getAsJsonObject();
 
-        KcaBattle.processData(KcaBattle.API_REQ_SORTIE_BATTLE, api_data);
+        KcaBattle.processData(API_REQ_SORTIE_BATTLE, api_data);
     }
 
 }

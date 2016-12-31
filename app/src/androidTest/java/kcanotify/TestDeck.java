@@ -8,6 +8,7 @@ import com.antest1.kcanotify.KcaApiData;
 import com.antest1.kcanotify.KcaBattle;
 import com.antest1.kcanotify.KcaDeckInfo;
 import com.google.common.io.ByteStreams;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -59,6 +60,16 @@ public class TestDeck {
 
         int[] testAirPower = KcaDeckInfo.getAirPowerRange(api_deckport, 0);
         Log.e("KCA", String.format("AAC: %d - %d", testAirPower[0], testAirPower[1]));
+
+        Gson gson = new Gson();
+
+
+        int itemId = 9299;
+        JsonObject itemData = KcaApiData.getUserItemStatusById(itemId, "slotitem_id,level", "");
+        Log.e("KCA", gson.toJson(itemData));
+        int itemKcId = itemData.get("slotitem_id").getAsInt();
+        int level = itemData.get("level").getAsInt();
+
     }
 
 }

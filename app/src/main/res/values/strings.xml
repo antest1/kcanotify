@@ -29,11 +29,16 @@
     <string name="node_info_loss">%s (소용돌이)</string>
     <string name="node_info_normal">%s</string>
     <string name="node_info_boss">%s (보스방)</string>
-    <string name="node_info_tpoint">%s (수송포인트)</string>
+    <string name="node_info_boss_nightbattle">%s (보스방/야간전)</string>
+    <string name="node_info_boss_nightdaybattle">%s (보스방/야간전->주간전)</string>
+    <string name="node_info_boss_ecbattle">%s (보스방/적 연합함대)</string>
     <string name="node_info_airbattle">%s (아웃레인지)</string>
-    <string name="node_info_port">%s (응 돌아가)</string>
     <string name="node_info_airsearch">%s (항공정찰)</string>
     <string name="node_info_ldairbattle">%s (공습전)</string>
-    <string name="node_info_nightbattle">%s (야전방)</string>
-
+    <string name="node_info_nightbattle">%s (야간전)</string>
+    <string name="node_info_nightdaybattle">%s (야간전->주간전)</string>
+    <string name="node_info_tpoint">%s (수송포인트)</string>
+    <string name="node_info_activecell">%s (능동분기)</string>
+    <string name="node_info_sendan">%s (선단호위 끝)</string>
+    <string name="node_info_ecbattle">%s (적 연합함대)</string>
 </resources>

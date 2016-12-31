@@ -164,7 +164,8 @@ public class KcaBattle {
             }
 
             JsonObject nodeInfo = new JsonObject();
-            nodeInfo.addProperty("type", api_event_id);
+            nodeInfo.addProperty("kind", api_event_kind);
+            nodeInfo.addProperty("id", api_event_id);
             nodeInfo.addProperty("data", currentNodeAlphabet);
             Bundle bundle = new Bundle();
             bundle.putString("url", KCA_API_NOTI_BATTLE_NODE);
@@ -180,14 +181,15 @@ public class KcaBattle {
             currentNode = api_data.get("api_no").getAsInt();
             int api_event_kind = api_data.get("api_event_kind").getAsInt();
             int api_event_id = api_data.get("api_event_id").getAsInt();
-            if (api_event_kind == 1 && api_event_id == API_NODE_EVENT_TYPE_BOSS) { // Reach Booss (event id = 5)
+            if (api_event_id == API_NODE_EVENT_ID_BOSS) { // Reach Booss (event id = 5)
                 isBossReached = true;
             }
 
             String currentNodeAlphabet = KcaApiData.getCurrentNodeAlphabet(currentMapArea, currentMapNo, currentNode);
             JsonObject nodeInfo = new JsonObject();
 
-            nodeInfo.addProperty("type", api_event_id);
+            nodeInfo.addProperty("kind", api_event_kind);
+            nodeInfo.addProperty("id", api_event_id);
             nodeInfo.addProperty("data", currentNodeAlphabet);
 
             Bundle bundle = new Bundle();
@@ -443,6 +445,9 @@ public class KcaBattle {
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
             }
+
+            Log.e("KCA", String.valueOf(KcaApiData.checkUserItemMax()) + String.valueOf(KcaApiData.checkUserShipMax()));
+            Log.e("KCA", String.valueOf(KcaApiData.checkUserPortEnough()));
 
             if(KcaApiData.checkUserPortEnough()) {
                 JsonObject dropInfo = new JsonObject();

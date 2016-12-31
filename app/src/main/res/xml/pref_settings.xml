@@ -17,6 +17,18 @@
             android:key="opendb_api_use"
             android:summary = "http://swaytwig.com/opendb/"
             android:title="OpenDB에 데이터 전송" />
+
+    </PreferenceCategory>
+    <PreferenceCategory android:title="알림 설정" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="notify_expedition"
+            android:title="원정 알림" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="notify_docking"
+            android:title="입거 알림" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="어플리케이션 정보" >

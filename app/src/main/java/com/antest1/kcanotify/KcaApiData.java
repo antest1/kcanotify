@@ -1,12 +1,17 @@
 package com.antest1.kcanotify;
 
 import android.content.res.AssetManager;
+import android.content.res.XmlResourceParser;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,8 +26,10 @@ public class KcaApiData {
 	public static JsonObject kcGameData = null;
 	public static Map<Integer, JsonObject> kcShipData = new HashMap<Integer, JsonObject>();
 	public static Map<Integer, JsonObject> kcItemData = new HashMap<Integer, JsonObject>();
-	public static Map<Integer, JsonObject> userShipData = new HashMap<Integer, JsonObject>();
-	public static Map<Integer, JsonObject> userItemData = new HashMap<Integer, JsonObject>();
+	public static Map<Integer, JsonObject> userShipData = null;
+	public static Map<Integer, JsonObject> userItemData = null;
+
+	public static Map<String, String> kcShipTranslationData = null;
 
 	public static int level = 0;
 	public static Integer experience = 0;
@@ -172,9 +179,20 @@ public class KcaApiData {
 	public static int getEventMapDifficulty(int no) {
 		return eventMapDifficulty[no];
 	}
-
 	public static void setEventMapDifficulty(int no, int diff) {
 		eventMapDifficulty[no] = diff;
+	}
+
+	public static boolean checkKrTranslation() {
+		return kcShipTranslationData != null;
+	}
+
+	public static String getShipTranslation(String jp_name) {
+		if (kcShipTranslationData != null && kcShipTranslationData.containsKey(jp_name)) {
+			return kcShipTranslationData.get(jp_name);
+		} else {
+			return jp_name;
+		}
 	}
 
 	public static int getShipSize() {
@@ -184,6 +202,7 @@ public class KcaApiData {
 	public static void loadMapEdgeInfo(JsonObject data) {
 		mapEdgeInfo = data;
 	}
+
 
 	public static String getCurrentNodeAlphabet(int maparea, int mapno, int no) {
 		String currentMapString = String.format("%d-%d", maparea, mapno);
@@ -198,13 +217,18 @@ public class KcaApiData {
 	}
 
 	public static int getPortData(JsonObject api_data) {
-		Set<Integer> prevItemIds = new HashSet<Integer>(userShipData.keySet());
+		Set<Integer> prevItemIds;
+		if (userShipData == null) {
+			userShipData = new HashMap<Integer, JsonObject>();
+			prevItemIds = new HashSet<Integer>();
+		} else {
+			prevItemIds = new HashSet<Integer>(userShipData.keySet());
+		}
 		if (api_data.has("api_basic")) {
 			JsonObject basicInfo = (JsonObject) api_data.get("api_basic");
 			level = basicInfo.get("api_level").getAsInt();
 			experience = basicInfo.get("api_experience").getAsInt();
 		}
-
 		if (api_data.has("api_ship")) {
 			JsonArray shipDataArray = (JsonArray) api_data.get("api_ship");
 			JsonElement temp;
@@ -267,7 +291,13 @@ public class KcaApiData {
 	}
 
 	public static int getSlotItemData(JsonObject api_data) {
-		Set<Integer> prevItemIds = new HashSet<Integer>(userItemData.keySet());
+		Set<Integer> prevItemIds;
+		if (userItemData == null) {
+			userItemData = new HashMap<Integer, JsonObject>();
+			prevItemIds = new HashSet<Integer>();
+		} else {
+			prevItemIds = new HashSet<Integer>(userItemData.keySet());
+		}
 		if (api_data.has("api_slot_item")) {
 			JsonArray slotItemApiData = (JsonArray) api_data.get("api_slot_item");
 			JsonElement temp;
