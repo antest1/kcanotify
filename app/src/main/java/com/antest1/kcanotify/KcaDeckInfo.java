@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
@@ -112,8 +113,13 @@ public class KcaDeckInfo {
     // Air Power Calculation (2016.12.27)
     // Reference: http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
     //            http://kancolle-calc.net/aircrafts.html
-    private static double calcBasicAAC(double aac, int carry) {
-        return Math.sqrt(carry) * aac;
+    private static double calcBasicAAC(int type, double aac, int carry) {
+        Log.e("KCA", "type " + String.valueOf(type == KcaApiData.T2_SEA_SCOUT) );
+        if(Arrays.binarySearch(KcaApiData.T2LIST_FIGHT_AIRCRAFTS, type) < 0) {
+            return 0;
+        } else {
+            return Math.sqrt(carry) * aac;
+        }
     }
 
     private static double calcReinforcedAAC(int type, int aac, int reinforce) {
@@ -190,7 +196,7 @@ public class KcaDeckInfo {
                         }
                         int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                         int itemAAC = itemData.get("tyku").getAsInt();
-                        double baseAAC = calcBasicAAC(calcReinforcedAAC(itemType, itemAAC, itemLevel), slot);
+                        double baseAAC = calcBasicAAC(itemType, calcReinforcedAAC(itemType, itemAAC, itemLevel), slot);
                         double[] masteryAAC = calcSlotAACFromMastery(itemType, itemMastery, 0);
 
                         totalRangeAAC[0] += (int)Math.floor(baseAAC + masteryAAC[0]);
