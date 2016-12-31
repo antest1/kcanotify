@@ -3,7 +3,7 @@
     <string name="app_version">beta1.4</string>
     <string name="action_settings">깡들리티 설정</string>
 
-    <string name="description_proxy"><b>Proxy Info</b>: localhost / 24110\n\n<b>Help</b>\nWi-Fi와 모바일 네트워크(APN)에 대해 프록시를 설정한 후, 왼쪽 하단을 ON으로 바꾸고 게임을 열면 된다.\n\n※ 주의: 프록시를 설정한 이후 ON으로 세팅하지 않으면 인터넷 연결이 되지 않으므로 사용하지 않을 때는 프록시 설정을 없애두자. (ON 상태에서는 인터넷 사용 가능)\n\n - Wifi Setting: http://bit.ly/2fMhK1N (2번 뒷부분)\n - APN Setting: http://bit.ly/2g0RLoB\n\n<b>주요 기능</b>\n - 원정 및 입거 알림\n - 대파 알림\n - 색적/제공치/피로도 표시\n - 출격 중 현재 위치 알림\n - OpenDB에 데이터 전송</string>
+    <string name="description_proxy"><b>Proxy Info</b>: localhost / 24110\n\n<b>Help</b>\nWi-Fi와 모바일 네트워크(APN)에 대해 프록시를 설정한 후, 왼쪽 하단을 ON으로 바꾸고 게임을 열면 된다.\n\n※ 주의: 프록시를 설정한 이후 ON으로 세팅하지 않으면 인터넷 연결이 되지 않으므로 사용하지 않을 때는 프록시 설정을 없애두자. (ON 상태에서는 인터넷 사용 가능)\n\n - Wifi Setting: http://bit.ly/2fMhK1N (2번 뒷부분)\n - APN Setting: http://bit.ly/2g0RLoB\n\n<b>주요 기능</b>\n - 원정 및 입거 알림\n - 대파 알림 (출격 중 및 출격 전)\n - 색적/제공치/피로도 표시\n - 출격 중 현재 위치 표시\n - OpenDB에 데이터 전송</string>
 
     <string name="developer_email">alias_n@live.com</string>
     <string name="error_text">오류가 발생했습니다. 개발자에게 오류 로그를 보내주세요.</string>
