@@ -54,6 +54,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import static com.antest1.kcanotify.KcaApiData.isUserItemDataLoaded;
 import static com.antest1.kcanotify.KcaConstants.*;
 
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
@@ -195,7 +197,7 @@ public class KcaService extends Service {
 
         String initTitle = String.format("%s 동작중", getResources().getText(R.string.app_name));
         String initContent = "깡들리티에서 게임을 실행해주세요";
-        String initSubContent = String.format("%s %s", getResources().getText(R.string.app_name), BuildConfig.VERSION_NAME);
+        String initSubContent = String.format("%s %s", getResources().getText(R.string.app_name), getResources().getString(R.string.app_version));
 
         startForeground(getNotificationId(NOTI_FRONT, 1), createViewNotification(initTitle, initContent, initSubContent));
         isServiceOn = true;
@@ -958,7 +960,7 @@ public class KcaService extends Service {
 
     private void processFirstDeckInfo(JsonArray data) {
         String delimeter = " | ";
-        if (!isGameDataLoaded()) {
+        if (!isGameDataLoaded() && !isUserItemDataLoaded()) {
             Log.e("KCA", "processFirstDeckInfo: Game Data is Null");
             new retrieveApiStartData().execute("", "down", "");
             return;

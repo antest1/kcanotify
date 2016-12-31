@@ -92,9 +92,11 @@ public class KcaApiData {
 	public static final int T2_RADER_LARGE_II = 93;
 	public static final int T2_SCOUT_II = 94;
 
-
 	public static final int[] T2LIST_AIRCRAFTS = {T2_FIGHTER, T2_BOMBER, T2_TORPEDO_BOMBER, T2_SCOUT, T2_SEA_SCOUT, T2_SEA_BOMBER, T2_FLYING_BOAT,
 			T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER, T2_JET_SCOUT};
+
+	public static final int[] T2LIST_FIGHT_AIRCRAFTS = {T2_FIGHTER, T2_BOMBER, T2_TORPEDO_BOMBER, T2_SEA_BOMBER,
+			T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER};
 
 	public static final int[] BASIC_MASTERY_MIN_BONUS = {0, 10, 25, 40, 55, 70, 85, 100};
 	public static final int[] BASIC_MASTERY_MAX_BONUS = {9, 24, 39, 54, 69, 84, 99, 120};
@@ -146,6 +148,10 @@ public class KcaApiData {
 
 	public static boolean isGameDataLoaded() {
 		return kcGameData != null;
+	}
+
+	public static boolean isUserItemDataLoaded() {
+		return userItemData != null;
 	}
 
 	public static int getLevel() {
