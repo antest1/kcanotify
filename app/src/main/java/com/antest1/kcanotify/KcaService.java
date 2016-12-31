@@ -253,7 +253,8 @@ public class KcaService extends Service {
 
     private Notification createViewNotification(String title, String content1, String content2) {
         if (viewNotificationBuilder == null) {
-            PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, kcIntent,
+            Intent aIntent = new Intent(KcaService.this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             viewNotificationText = new Notification.BigTextStyle();
             viewNotificationBuilder = new Notification.Builder(getApplicationContext())
