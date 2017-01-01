@@ -367,6 +367,7 @@ public class KcaService extends Service {
                     //Toast.makeText(getApplicationContext(), "KCA_VERSION", Toast.LENGTH_LONG).show();
                     JsonObject api_version = jsonDataObj.get("api").getAsJsonObject();
                     kca_version = api_version.get("api_start2").getAsString();
+                    Log.e("KCA", kca_version);
                     if (!getStringPreferences("kca_version").equals(kca_version)) {
                         api_start2_down_mode = true;
                     } else {
@@ -1488,7 +1489,6 @@ public class KcaService extends Service {
 
         public String executeClient(String token, String method, String data) {
             HttpURLConnection http = null;
-            if (KcaApiData.isGameDataLoaded()) return null;
             try {
                 if (method.equals("up")) {
                     URL data_send_url = new URL(String.format("http://antest.hol.es/kcanotify/kca_api_start2.php?token=%s&method=%s&v=%s", token, method, kca_version));
@@ -1503,6 +1503,7 @@ public class KcaService extends Service {
                     outStream.close();
                     http.getResponseCode();
                 } else {
+                    if (KcaApiData.isGameDataLoaded()) return null;
                     kcaFirstDeckInfo = "게임 데이터 로딩 중";
                     URL data_send_url;
                     if(kca_version == null) {
@@ -1514,12 +1515,15 @@ public class KcaService extends Service {
                     http.setRequestMethod("GET");
                     http.setDoInput(true);
                     http.setRequestProperty("Referer", "app:/KCA/");
+                    http.setRequestProperty("Accept-Encoding", "gzip");
                     http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                     http.getResponseCode();
 
                     InputStream is = http.getInputStream();
-                    byte[] bytes = gzipdecompress(ByteStreams.toByteArray(is));
+                    //byte[] bytes = gzipdecompress(ByteStreams.toByteArray(is));
+                    byte[] bytes = ByteStreams.toByteArray(is);
                     String input_data = new String(bytes);
+                    Log.e("KCA", input_data);
 
                     writeCacheData(bytes, KCANOTIFY_S2_CACHE_FILENAME);
                     JsonObject jsonDataObj = new JsonParser().parse(input_data).getAsJsonObject();
