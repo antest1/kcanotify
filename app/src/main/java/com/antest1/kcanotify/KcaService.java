@@ -230,7 +230,7 @@ public class KcaService extends Service {
             }
         }
         for (int i = 0; i < 4; i++) {
-            if (kcaDockingList[i] != null) {
+            if (kcaDockingRunnableList[i] != null) {
                 kcaDockingRunnableList[i].stopHandler();
                 kcaDockingList[i].interrupt();
                 kcaDockingList[i] = null;
@@ -1184,8 +1184,13 @@ public class KcaService extends Service {
             }
             //Log.e("KCA", String.format("%d: %d / %d",i, mission_no, arrive_time));
             //Log.e("KCA", String.valueOf(i) + " " + String.valueOf(KcaExpedition.complete_time_check[idx]));
-            if (kcaExpeditionList[idx] != null) {
-                if (mission_no == -1) {
+            if (kcaExpeditionRunnableList[idx] != null) {
+                if (arrive_time != kcaExpeditionRunnableList[idx].getArriveTime()) {
+                    kcaExpeditionList[idx].interrupt();
+                    kcaExpeditionRunnableList[idx] = new KcaExpedition(mission_no, idx, deck_name, arrive_time, nHandler);
+                    kcaExpeditionList[idx] = new Thread(kcaExpeditionRunnableList[idx]);
+                    kcaExpeditionList[idx].start();
+                } else if (mission_no == -1) {
                     //Log.e("KCA", "Fleet " + String.valueOf(idx) + " not in exp");
                     kcaExpeditionList[idx].interrupt();
                     kcaExpeditionList[idx] = null;

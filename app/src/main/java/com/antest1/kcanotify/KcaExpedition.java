@@ -41,6 +41,10 @@ public class KcaExpedition implements Runnable {
         return mHandler != null;
     }
 
+    public long getArriveTime() {
+        return complete_time_check[kantai_idx];
+    }
+
     public KcaExpedition(int no, int kidx, String name, long time, Handler h) {
         mission_no = no;
         mission_krname = expeditionData.get(mission_no).get("krname");

@@ -52,6 +52,7 @@ public class KcaDocking implements Runnable {
                 left_time = (int) ((complete_time_check[dock_no] - System.currentTimeMillis()) / 1000) - start_delay;
                 if (complete_time_check[dock_no] != -1) {
                     if (left_time >= server_delay) {
+                        //Log.e("KCA", String.format("ndock %d: %s", dock_no, strTime));
                         this.sendEmptyMessageDelayed(msg.what, 1000);
                     } else {
                         sendDockingFinished(false);
