@@ -261,7 +261,7 @@ public class KcaService extends Service {
                     PendingIntent.FLAG_UPDATE_CURRENT);
             viewNotificationText = new Notification.BigTextStyle();
             viewNotificationBuilder = new Notification.Builder(getApplicationContext())
-                    .setSmallIcon(R.mipmap.noti_icon)
+                    .setSmallIcon(R.mipmap.noti_icon2)
                     .setContentTitle(title)
                     .setStyle(viewNotificationText.bigText(content1))
                     .setStyle(viewNotificationText.setSummaryText(content2))
