@@ -115,7 +115,7 @@ public final class KcaConstants {
 
     public static final int API_NODE_EVENT_KIND_AIRSEARCH = 0;
 
-
+    public static final String KCA_API_DATA_LOADED = "/kca_api/data_loaded";
     public static final String KCA_API_NOTI_EXP_LEFT = "/kca_api/noti_exp_left";
     public static final String KCA_API_NOTI_EXP_FIN = "/kca_api/noti_exp_fin";
     public static final String KCA_API_NOTI_EXP_CANCELED = "/kca_api/noti_exp_canceled";

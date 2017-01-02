@@ -2,6 +2,9 @@ package com.antest1.kcanotify;
 
 import android.content.res.AssetManager;
 import android.content.res.XmlResourceParser;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -22,8 +25,13 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import static com.antest1.kcanotify.KcaConstants.KCA_API_DATA_LOADED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_BATTLE_DROPINFO;
+
 public class KcaApiData {
 	public static JsonObject kcGameData = null;
+	public static boolean dataLoadTriggered = false;
+
 	public static Map<Integer, JsonObject> kcShipData = new HashMap<Integer, JsonObject>();
 	public static Map<Integer, JsonObject> kcItemData = new HashMap<Integer, JsonObject>();
 	public static Map<Integer, JsonObject> userShipData = null;
@@ -40,6 +48,8 @@ public class KcaApiData {
 
 	public static JsonObject mapEdgeInfo = new JsonObject();
 	public static int[] eventMapDifficulty = new int[10];
+
+	public static Handler sHandler = null;
 
 	// Equipment Constants (api_type 2)
 	public static final int T2_GUN_SMALL = 1;
@@ -116,6 +126,10 @@ public class KcaApiData {
 	public static final int SPEED_NONE = 0;
 	public static final int SPEED_MIXED = 15;
 
+	public static void setHandler(Handler h) {
+		sHandler = h;
+	}
+
 	private static String joinStr(List<String> list, String delim) {
 		String resultStr = "";
 		int i;
@@ -125,6 +139,14 @@ public class KcaApiData {
 		}
 		resultStr = resultStr.concat(list.get(i));
 		return resultStr;
+	}
+
+	public static boolean checkDataLoadTriggered() {
+		return dataLoadTriggered;
+	}
+
+	public static void setDataLoadTriggered() {
+		dataLoadTriggered = true;
 	}
 
 	public static int getKcGameData(JsonObject api_data) {
@@ -148,8 +170,18 @@ public class KcaApiData {
 				kcItemData.put(api_id, temp.getAsJsonObject());
 			}
 		}
-		Log.e("KCA", "ship: ".concat(String.valueOf(kcShipData.size())));
-		Log.e("KCA", "item: ".concat(String.valueOf(kcItemData.size())));
+
+		JsonObject data = new JsonObject();
+		data.addProperty("ship", kcShipData.size());
+        data.addProperty("item", kcItemData.size());
+
+		Bundle bundle = new Bundle();
+		bundle.putString("url", KCA_API_DATA_LOADED);
+		bundle.putString("data", data.toString());
+		Message sMsg = sHandler.obtainMessage();
+		sMsg.setData(bundle);
+		sHandler.sendMessage(sMsg);
+
 		return kcGameData.entrySet().size();
 	}
 

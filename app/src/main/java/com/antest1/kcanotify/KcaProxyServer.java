@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -48,6 +49,7 @@ public class KcaProxyServer {
 
     private static final String KCA_USERAGENT = String.format("Kca/%s ", BuildConfig.VERSION_NAME);
 
+    public static KcaRequest2 kcaRequest = new KcaRequest2();
 	public static ExecutorService executorService = Executors.newScheduledThreadPool(15);
 
 	public KcaProxyServer() {
@@ -152,17 +154,6 @@ public class KcaProxyServer {
 
                             //if (isKcRequest  && !isInternalRequest && (isKcaVer || isKcsApi || isKcsRes || isKcaRes || isKcaApiS2)) {
                             if (isKcRequest  && !isInternalRequest && (isKcsApi || isKcaVer)) {
-                                /*
-                                Log.e("KCA", "Request " + request);
-                                Log.e("KCA", requestHeaderString);
-
-                                ByteBuf contentBuf = request.content();
-                                byte[] bytes = new byte[contentBuf.readableBytes()];
-                                int readerIndex = contentBuf.readerIndex();
-                                contentBuf.getBytes(readerIndex, bytes);
-                                String s = new String(bytes);
-                                Log.e("KCA", request.getUri() + " " + s);
-                                */
                                 Log.e("KCA", "Request " + request.getUri());
 
                                 ByteBuf contentBuf = request.content();
@@ -173,10 +164,13 @@ public class KcaProxyServer {
                                 String requestBodyStr = new String(requestBody);
 
                                 try {
-                                    String responseData = new KcaRequest().execute(request.getUri(), request.getMethod().name(), requestHeaderString, requestBodyStr).get();
+                                    String responseData = kcaRequest.post(request.getUri(), requestHeaderString, requestBodyStr);
+
                                     JsonObject responseObject = new JsonParser().parse(responseData).getAsJsonObject();
                                     String responseHeader = responseObject.get("header").getAsString();
                                     int statusCode = responseObject.get("status").getAsInt();
+
+                                    Log.e("KCA", String.valueOf(statusCode));
                                     byte[] responseBody = Base64.decode(responseObject.get("data").getAsString(), Base64.DEFAULT);
                                     ByteBuf buffer = Unpooled.wrappedBuffer(responseBody);
                                     HttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.valueOf(statusCode), buffer);
@@ -199,9 +193,7 @@ public class KcaProxyServer {
                                     executorService.execute(k);
 
                                     return response;
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                } catch (ExecutionException e) {
+                                } catch (IOException e) {
                                     e.printStackTrace();
                                 }
 							}

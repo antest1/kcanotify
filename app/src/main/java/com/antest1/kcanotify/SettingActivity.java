@@ -35,6 +35,11 @@ import java.net.URL;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import static com.antest1.kcanotify.KcaConstants.*;
 
 
@@ -160,38 +165,23 @@ public class SettingActivity extends AppCompatActivity {
             return content;
         }
 
-        public byte[] gzipcompress(String value) throws Exception {
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            GZIPOutputStream gzipOutStream = new GZIPOutputStream(
-                    new BufferedOutputStream(byteArrayOutputStream));
-            gzipOutStream.write(value.getBytes());
-            gzipOutStream.finish();
-            gzipOutStream.close();
-
-            return byteArrayOutputStream.toByteArray();
-        }
-
         public String executeClient() {
+            final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
+            OkHttpClient client = new OkHttpClient.Builder().build();
 
-            URL data_send_url = null;
+            String checkUrl = String.format("http://antest.hol.es/kcanotify/v.php");
+            Request.Builder builder = new Request.Builder().url(checkUrl).get();
+            builder.addHeader("Referer", "app:/KCA/");
+            builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
+            Request request = builder.build();
+
             try {
-                data_send_url = new URL(String.format("http://antest.hol.es/kcanotify/v.php"));
-                HttpURLConnection http = (HttpURLConnection) data_send_url.openConnection();
-                http.setRequestMethod("GET");
-                http.setDoInput(true);
-                http.setRequestProperty("Referer", "app:/KCA/");
-                http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                http.getResponseCode();
-                InputStream is = http.getInputStream();
-                byte[] bytes = ByteStreams.toByteArray(is);
-                String input_data = new String(bytes);
-
-                return input_data;
-            } catch (IOException e) {
-                e.printStackTrace();
+                Response response = client.newCall(request).execute();
+                return response.body().string();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                return "IOException_Check";
             }
-            return null;
         }
 
         @Override

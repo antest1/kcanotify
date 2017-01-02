@@ -11,6 +11,7 @@ import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -24,6 +25,11 @@ import java.util.Map;
 
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static com.antest1.kcanotify.KcaConstants.KCA_API_OPENDB_FAILED;
 
@@ -71,6 +77,9 @@ public class KcaOpendbAPI {
     }
 
     public static class opendbRequest extends AsyncTask<String, Void, String> {
+        final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
+        OkHttpClient client = new OkHttpClient.Builder().build();
+
         @Override
         protected String doInBackground(String... params) {
             String content = "";
@@ -104,31 +113,22 @@ public class KcaOpendbAPI {
         }
 
         public String Request(String uri, String data) throws Exception {
-            URL url =  new URL("http://swaytwig.com".concat(uri));
-            HttpURLConnection http = null;
+            String url = "http://swaytwig.com".concat(uri);
+
+            RequestBody body;
             try {
-                http = (HttpURLConnection) url.openConnection();
-                http.setRequestMethod(HttpMethod.POST.name());
-                http.setConnectTimeout(15000);
-                http.setReadTimeout(2500);
-                http.setDoInput(true);
+                body = RequestBody.create(FORM_DATA, data);
+                Request.Builder builder = new Request.Builder().url(url).post(body);
+                builder.addHeader("User-Agent", String.format("Kca/%s ", BuildConfig.VERSION_NAME));
+                builder.addHeader("Referer", "app:/KCA/");
+                builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
+                Request request = builder.build();
 
-                http.setRequestProperty("User-Agent", String.format("Kca/%s ", BuildConfig.VERSION_NAME));
-                http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                Response response = client.newCall(request).execute();
 
-                http.setDoOutput(true);
-                OutputStream outStream = http.getOutputStream();
-                outStream.write(data.getBytes());
-                outStream.flush();
-                outStream.close();
-
-                int code = http.getResponseCode();
+                int code = response.code();
                 if (code == HttpResponseStatus.OK.code()) {
-                    JsonObject responseData = new JsonObject();
-                    InputStream is = http.getInputStream();
-                    byte[] bytes = ByteStreams.toByteArray(is);
-                    String bytesData = new String(bytes);
-                    if(bytesData.contains("Invalid")) {
+                    if(response.body().string().contains("Invalid")) {
                         return FAILED_CODE;
                     } else {
                         return SUCCESSED_CODE;
@@ -136,27 +136,12 @@ public class KcaOpendbAPI {
                 } else {
                     return FAILED_CODE;
                 }
-            } catch(java.net.SocketTimeoutException e) {
-                return TIMEOUT_CODE;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return ERROR_CODE;
-            } finally {
-                if (http != null) http.disconnect();
-            }
-        }
-    }
 
-    private static String makeParameter(Map<String, String> map) {
-        List<String> paramList = new ArrayList<String>();
-        for (Map.Entry<String, String> entry: map.entrySet()) {
-            try {
-                paramList.add(URLEncoder.encode(entry.getKey().concat("=").concat(entry.getValue()), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                paramList.add(entry.getKey().concat("=").concat(entry.getValue()));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "IOException_OPENDB";
             }
         }
-        return joinStr(paramList, "&");
     }
 
     private static String joinStr(List<String> list, String delim) {
