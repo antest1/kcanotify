@@ -114,7 +114,6 @@ public class KcaDeckInfo {
     // Reference: http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
     //            http://kancolle-calc.net/aircrafts.html
     private static double calcBasicAAC(int type, double aac, int carry) {
-        Log.e("KCA", "type " + String.valueOf(type == KcaApiData.T2_SEA_SCOUT) );
         if(Arrays.binarySearch(KcaApiData.T2LIST_FIGHT_AIRCRAFTS, type) < 0) {
             return 0;
         } else {

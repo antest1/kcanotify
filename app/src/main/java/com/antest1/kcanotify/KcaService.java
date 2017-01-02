@@ -13,6 +13,7 @@ import android.content.res.AssetManager;
 import android.content.res.AssetManager.AssetInputStream;
 import android.content.res.Configuration;
 import android.content.res.XmlResourceParser;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -57,6 +58,7 @@ import java.util.zip.GZIPOutputStream;
 
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.isUserItemDataLoaded;
+import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaConstants.*;
 
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
@@ -69,6 +71,7 @@ public class KcaService extends Service {
     public static boolean isPortAccessed = false;
     public static int heavyDamagedMode = 0;
     public static int checkKdockId = -1;
+    public static boolean kaisouProcessFlag = false;
     public static String currentNode = "";
     public static Intent kcIntent = null;
 
@@ -258,7 +261,7 @@ public class KcaService extends Service {
                     PendingIntent.FLAG_UPDATE_CURRENT);
             viewNotificationText = new Notification.BigTextStyle();
             viewNotificationBuilder = new Notification.Builder(getApplicationContext())
-                    .setSmallIcon(R.mipmap.ic_stat_notify)
+                    .setSmallIcon(R.mipmap.noti_icon)
                     .setContentTitle(title)
                     .setStyle(viewNotificationText.bigText(content1))
                     .setStyle(viewNotificationText.setSummaryText(content2))
@@ -293,7 +296,9 @@ public class KcaService extends Service {
             title = String.format("%d번 원정(%s) 도착", missionNo, missionName);
         }
 
-        Notification Notifi = new Notification.Builder(getApplicationContext()).setSmallIcon(R.mipmap.ic_stat_notify)
+        Notification Notifi = new Notification.Builder(getApplicationContext())
+                .setSmallIcon(R.mipmap.expedition_notify_icon)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.expedition_notify_bigicon))
                 .setContentTitle(title)
                 .setContentText(content)
                 .setTicker(title)
@@ -319,7 +324,9 @@ public class KcaService extends Service {
             content = String.format("제%d도크 내 칸무스의 정비가 완료되었습니다.", dockId+1);
         }
 
-        Notification Notifi = new Notification.Builder(getApplicationContext()).setSmallIcon(R.mipmap.ic_stat_notify)
+        Notification Notifi = new Notification.Builder(getApplicationContext())
+                .setSmallIcon(R.mipmap.docking_notify_icon)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.dockng_notify_bigicon))
                 .setContentTitle(title)
                 .setContentText(content)
                 .setTicker(title)
@@ -767,8 +774,19 @@ public class KcaService extends Service {
                                 KcaApiData.updateUserShip(api_data.get("api_ship_data").getAsJsonArray().get(0).getAsJsonObject());
                             }
                         }
-                        processFirstDeckInfo(currentPortDeckData);
-                        toastInfo();
+                        if(kaisouProcessFlag) {
+                            processFirstDeckInfo(currentPortDeckData);
+                            toastInfo();
+                            kaisouProcessFlag = false;
+                        }
+                    }
+
+                    if (url.startsWith(API_REQ_KAISOU_SLOTSET)) {
+                        kaisouProcessFlag = true;
+                    }
+
+                    if (url.startsWith(API_REQ_KAISOU_UNSLOTSET_ALL)) {
+                        kaisouProcessFlag = true;
                     }
 
                     if (url.startsWith(API_REQ_KAISOU_SLOT_EXCHANGE)) {
@@ -800,49 +818,68 @@ public class KcaService extends Service {
                         toastInfo();
                     }
 
+                    if (url.startsWith(API_REQ_KAISOU_POWERUP)) {
+                        String[] requestData = request.split("&");
+                        int targetId = -1;
+                        String itemIds = "";
+                        for (int i = 0; i < requestData.length; i++) {
+                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                            if (decodedData.startsWith("api_id=")) {
+                                targetId = Integer.valueOf(decodedData.replace("api_id=", ""));
+                            }
+                            if (decodedData.startsWith("api_id_items=")) {
+                                itemIds = decodedData.replace("api_id_items=", "");
+                            }
+                        }
+                        if (jsonDataObj.has("api_data")) {
+                            JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                            currentPortDeckData = api_data.getAsJsonArray("api_deck");
+                            updateUserShip(api_data.getAsJsonObject("api_ship"));
+                            KcaApiData.deleteUserShip(itemIds);
+                        }
+                        processFirstDeckInfo(currentPortDeckData);
+                    }
+
                     if (url.equals(API_REQ_KOUSYOU_REMOEL_SLOT)) {
-                        if (KcaApiData.isGameDataLoaded()) {
-                            int[] kcShipData = KcaDeckInfo.getKcShipList(currentPortDeckData, 0);
-                            int flagship = kcShipData[0];
-                            int assistant = kcShipData[1];
+                        int[] kcShipData = KcaDeckInfo.getKcShipList(currentPortDeckData, 0);
+                        int flagship = kcShipData[0];
+                        int assistant = kcShipData[1];
 
-                            String[] requestData = request.split("&");
-                            int certainFlag = 0;
-                            int itemId = 0;
-                            for (int i = 0; i < requestData.length; i++) {
-                                String decodedData = URLDecoder.decode(requestData[i], "utf-8");
-                                if (decodedData.startsWith("api_certain_flag=")) {
-                                    certainFlag = Integer.valueOf(decodedData.replace("api_certain_flag=", ""));
-                                }
-                                if (decodedData.startsWith("api_slot_id=")) {
-                                    itemId = Integer.valueOf(decodedData.replace("api_slot_id=", ""));
-                                }
+                        String[] requestData = request.split("&");
+                        int certainFlag = 0;
+                        int itemId = 0;
+                        for (int i = 0; i < requestData.length; i++) {
+                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                            if (decodedData.startsWith("api_certain_flag=")) {
+                                certainFlag = Integer.valueOf(decodedData.replace("api_certain_flag=", ""));
                             }
+                            if (decodedData.startsWith("api_slot_id=")) {
+                                itemId = Integer.valueOf(decodedData.replace("api_slot_id=", ""));
+                                }
+                        }
 
-                            JsonObject itemData = KcaApiData.getUserItemStatusById(itemId, "slotitem_id,level", "");
-                            int itemKcId = itemData.get("slotitem_id").getAsInt();
-                            int level = itemData.get("level").getAsInt();
-                            int api_remodel_flag = 0;
-                            if (jsonDataObj.has("api_data")) {
-                                JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
-                                api_remodel_flag = api_data.get("api_remodel_flag").getAsInt();
-                                if (certainFlag == 1 || api_remodel_flag == 1) {
-                                    JsonObject api_after_slot = api_data.get("api_after_slot").getAsJsonObject();
-                                    JsonArray api_slot_item = new JsonArray();
-                                    api_slot_item.add(api_after_slot);
-                                    KcaApiData.updateSlotItemData(api_slot_item);
-                                }
-                                JsonArray use_slot_id = api_data.getAsJsonArray("api_use_slot_id");
-                                List<String> use_slot_id_list = new ArrayList<String>();
-                                for (JsonElement id : use_slot_id) {
-                                    use_slot_id_list.add(id.getAsString());
-                                }
-                                KcaApiData.deleteUserItem(joinStr(use_slot_id_list, ","));
+                        JsonObject itemData = KcaApiData.getUserItemStatusById(itemId, "slotitem_id,level", "");
+                        int itemKcId = itemData.get("slotitem_id").getAsInt();
+                        int level = itemData.get("level").getAsInt();
+                        int api_remodel_flag = 0;
+                        if (jsonDataObj.has("api_data")) {
+                            JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                            api_remodel_flag = api_data.get("api_remodel_flag").getAsInt();
+                            if (certainFlag == 1 || api_remodel_flag == 1) {
+                                JsonObject api_after_slot = api_data.get("api_after_slot").getAsJsonObject();
+                                JsonArray api_slot_item = new JsonArray();
+                                api_slot_item.add(api_after_slot);
+                                KcaApiData.updateSlotItemData(api_slot_item);
                             }
-
-                            if (certainFlag != 1 && isOpendbEnabled()) {
-                                KcaOpendbAPI.sendRemodelData(flagship, assistant, itemKcId, level, api_remodel_flag);
+                            JsonArray use_slot_id = api_data.getAsJsonArray("api_use_slot_id");
+                            List<String> use_slot_id_list = new ArrayList<String>();
+                            for (JsonElement id : use_slot_id) {
+                                use_slot_id_list.add(id.getAsString());
                             }
+                            KcaApiData.deleteUserItem(joinStr(use_slot_id_list, ","));
+                        }
+                        if (certainFlag != 1 && isOpendbEnabled()) {
+                            KcaOpendbAPI.sendRemodelData(flagship, assistant, itemKcId, level, api_remodel_flag);
                         }
                     }
                 }

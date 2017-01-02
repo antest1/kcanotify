@@ -461,25 +461,31 @@ public class KcaApiData {
 		}
 	}
 
-	public static void deleteUserShip(String api_ship_id) {
+	public static void deleteUserShip(String list) {
 		if (kcGameData == null) return;
-		int shipId = Integer.valueOf(api_ship_id);
-		JsonObject shipKcData = getUserShipDataById(shipId,"ship_id,slot");
 
-		int shipKcId = shipKcData.get("ship_id").getAsInt();
-		JsonArray shipSlotItem = (JsonArray) shipKcData.get("slot");
-		List<String> shipSlotItemList = new ArrayList<String>();
-		for (int i=0; i<shipSlotItem.size(); i++) {
-			int item = shipSlotItem.get(i).getAsInt();
-			if (item != -1) {
-				shipSlotItemList.add(String.valueOf(item));
+		String[] requestList = list.split(",");
+		for (int i=0; i<requestList.length; i++) {
+			int shipId = Integer.valueOf(requestList[i]);
+			JsonObject shipKcData = getUserShipDataById(shipId,"ship_id,slot");
+
+			int shipKcId = shipKcData.get("ship_id").getAsInt();
+			JsonArray shipSlotItem = (JsonArray) shipKcData.get("slot");
+			List<String> shipSlotItemList = new ArrayList<String>();
+			for (int j=0; j<shipSlotItem.size(); j++) {
+				int item = shipSlotItem.get(j).getAsInt();
+				if (item != -1) {
+					shipSlotItemList.add(String.valueOf(item));
+				}
 			}
-		}
-		deleteUserItem(joinStr(shipSlotItemList, ","));
-		userShipData.remove(shipId);
+			if(shipSlotItemList.size() > 0) {
+				deleteUserItem(joinStr(shipSlotItemList, ","));
+			}
+			userShipData.remove(shipId);
 
-		String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
-		Log.e("KCA", String.format("remove ship %d (%s)",shipId, shipName));
+			String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
+			Log.e("KCA", String.format("remove ship %d (%s)",shipId, shipName));
+		}
 	}
 
 	public static int addUserItem(JsonObject api_data) {
