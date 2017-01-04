@@ -50,6 +50,8 @@ public class KcaApiData {
 	public static int[] eventMapDifficulty = new int[10];
 
 	public static Handler sHandler = null;
+	public static boolean isEventTime = false;
+
 
 	// Equipment Constants (api_type 2)
 	public static final int T2_GUN_SMALL = 1;
@@ -168,6 +170,17 @@ public class KcaApiData {
 				temp = itr.next();
 				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
 				kcItemData.put(api_id, temp.getAsJsonObject());
+			}
+		}
+		if (kcGameData.has("api_mst_maparea")) {
+			JsonArray mapAreaData = kcGameData.getAsJsonArray("api_mst_maparea");
+			isEventTime = false;
+			for(JsonElement e: mapAreaData) {
+				int api_type = e.getAsJsonObject().get("api_type").getAsInt();
+				if (api_type != 0) {
+					isEventTime = true;
+					break;
+				}
 			}
 		}
 

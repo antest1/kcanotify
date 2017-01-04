@@ -16,6 +16,7 @@ import android.content.res.XmlResourceParser;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -38,6 +39,7 @@ import com.google.gson.JsonSyntaxException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -74,6 +76,7 @@ import okhttp3.Response;
 
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
+import static com.antest1.kcanotify.KcaApiData.isEventTime;
 import static com.antest1.kcanotify.KcaApiData.isUserItemDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.setDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
@@ -529,23 +532,34 @@ public class KcaService extends Service {
                     }
 
                     if (url.startsWith(API_GET_MEMBER_MAPINFO)) {
-                        heavyDamagedMode = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 0);
-                        switch (heavyDamagedMode) {
+                        int firstHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 0);
+                        int secondHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 1);
+
+                        int checkvalue = 0;
+                        if (KcaApiData.isEventTime) {
+                            checkvalue = Math.max(firstHeavyDamaged, secondHeavyDamaged);
+                        } else {
+                            checkvalue = firstHeavyDamaged;
+                        }
+
+                        KcaBattle.setStartHeavyDamageExist(checkvalue);
+                        switch (checkvalue) {
                             case HD_DAMECON:
                             case HD_DANGER:
                                 if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
                                     Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                                     v.vibrate(1500);
                                 }
-                                if (heavyDamagedMode == HD_DANGER) {
+                                if (checkvalue == HD_DANGER) {
                                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.heavy_damaged), Toast.LENGTH_LONG).show();
-                                } else if (heavyDamagedMode == HD_DAMECON) {
+                                } else if (checkvalue == HD_DAMECON) {
                                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG).show();
                                 }
                                 break;
                             default:
                                 break;
                         }
+
                         setFrontViewNotifier(FRONT_NONE, 0, null);
 
                         if (jsonDataObj.has("api_data")) {
@@ -567,6 +581,29 @@ public class KcaService extends Service {
                         //Log.e("KCA", "Battle Handler Called");
                         if (jsonDataObj.has("api_data")) {
                             JsonObject battleApiData = jsonDataObj.getAsJsonObject("api_data");
+                            if(url.startsWith(API_REQ_MAP_START)) {
+                                JsonObject api_data = new JsonObject();
+                                JsonArray api_deck_data = new JsonArray();
+                                JsonArray api_ship_data = new JsonArray();
+
+                                api_deck_data.add(currentPortDeckData.get(0));
+                                JsonArray firstShipInfo = currentPortDeckData.get(0).getAsJsonObject().getAsJsonArray("api_ship");
+                                for (JsonElement e: firstShipInfo) {
+                                    int ship_id = e.getAsInt();
+                                    api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
+                                }
+                                if (KcaApiData.isEventTime) {
+                                    api_deck_data.add(currentPortDeckData.get(1));
+                                    JsonArray secondShipInfo = currentPortDeckData.get(1).getAsJsonObject().getAsJsonArray("api_ship");
+                                    for (JsonElement e: secondShipInfo) {
+                                        int ship_id = e.getAsInt();
+                                        api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
+                                    }
+                                }
+                                api_data.add("api_deck_data", api_deck_data);
+                                api_data.add("api_ship_data", api_ship_data);
+                                KcaBattle.setHpData(api_data);
+                            }
                             KcaBattle.processData(url, battleApiData);
                         }
                     }
@@ -583,6 +620,7 @@ public class KcaService extends Service {
                                     KcaBattle.dameconcbflag = KcaDeckInfo.getDameconStatus(api_deck_data, 1);
                                 }
                             }
+                            KcaBattle.setHpData(api_data);
                             processFirstDeckInfo(api_deck_data);
                         }
                     }
@@ -893,12 +931,14 @@ public class KcaService extends Service {
                                 api_slot_item.add(api_after_slot);
                                 KcaApiData.updateSlotItemData(api_slot_item);
                             }
-                            JsonArray use_slot_id = api_data.getAsJsonArray("api_use_slot_id");
+                            JsonElement use_slot_id = api_data.get("api_use_slot_id");
                             List<String> use_slot_id_list = new ArrayList<String>();
-                            for (JsonElement id : use_slot_id) {
-                                use_slot_id_list.add(id.getAsString());
+                            if (use_slot_id != null) {
+                                for (JsonElement id : use_slot_id.getAsJsonArray()) {
+                                    use_slot_id_list.add(id.getAsString());
+                                }
+                                KcaApiData.deleteUserItem(joinStr(use_slot_id_list, ","));
                             }
-                            KcaApiData.deleteUserItem(joinStr(use_slot_id_list, ","));
                         }
                         if (certainFlag != 1 && isOpendbEnabled()) {
                             KcaOpendbAPI.sendRemodelData(flagship, assistant, itemKcId, level, api_remodel_flag);
@@ -1098,6 +1138,29 @@ public class KcaService extends Service {
 
                 if (url.startsWith(KCA_API_OPENDB_FAILED)) {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.opendb_failed_msg), Toast.LENGTH_SHORT).show();
+                }
+
+                if (url.startsWith(KCA_API_PROCESS_BATTLE_FAILED)) {
+                    String app_version = BuildConfig.VERSION_NAME;
+                    String api_data = jsonDataObj.get("api_data").getAsString();
+                    String api_url = jsonDataObj.get("api_url").getAsString();
+                    String api_node = jsonDataObj.get("api_node").getAsString();
+                    String token = "df1629d6820907e7a09ea1e98d3041c2";
+
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT).show();
+                    String dataSendUrl = String.format("http://antest.hol.es/kcanotify/errorlog.php?token=%s&url=%s&node=%s&v=%s", token, api_url, api_node, app_version);
+                    AjaxCallback<String> cb = new AjaxCallback<String>() {
+                        @Override
+                        public void callback(String url, String data, AjaxStatus status) {
+                            // do nothing
+                        }
+                    };
+                    AQuery aq = new AQuery(KcaService.this);
+                    cb.header("Referer", "app:/KCA/");
+                    cb.header("Content-Type", "application/x-www-form-urlencoded");
+                    HttpEntity entity = new ByteArrayEntity(api_data.getBytes());
+                    cb.param(AQuery.POST_ENTITY, entity);
+                    aq.ajax(dataSendUrl, String.class, cb);
                 }
 
             } catch (JsonSyntaxException e) {
