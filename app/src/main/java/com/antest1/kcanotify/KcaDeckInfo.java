@@ -345,7 +345,7 @@ public class KcaDeckInfo {
                     }
                 }
                 int ex_item_id = shipData.get("slot_ex").getAsInt();
-                if(ex_item_id != 0) {
+                if(ex_item_id != 0 && ex_item_id != -1) {
                     JsonObject itemData = KcaApiData.getUserItemStatusById(ex_item_id, "id", "type");
                     int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                     if (itemType == KcaApiData.T2_DAMECON) {
