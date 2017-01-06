@@ -23,6 +23,7 @@ import java.util.List;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
@@ -206,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case PREF_KCA_NOTI_DOCK:
                     case PREF_KCA_NOTI_EXP:
+                    case PREF_KCA_NOTI_V_HD:
                         editor.putBoolean(prefKey, true);
                         break;
                     default:

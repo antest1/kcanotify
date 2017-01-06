@@ -16,7 +16,6 @@ import android.content.res.XmlResourceParser;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -39,8 +38,6 @@ import com.google.gson.JsonSyntaxException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.entity.StringEntity;
-import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -51,34 +48,24 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
-import static com.antest1.kcanotify.KcaApiData.isEventTime;
 import static com.antest1.kcanotify.KcaApiData.isUserItemDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.setDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
@@ -99,6 +86,7 @@ public class KcaService extends Service {
     public static Intent kcIntent = null;
 
     AudioManager mAudioManager;
+    Vibrator vibrator = null;
 
     NotificationManager notifiManager;
     Builder viewNotificationBuilder;
@@ -216,6 +204,7 @@ public class KcaService extends Service {
 
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         handler = new kcaServiceHandler();
         nHandler = new kcaNotificationHandler();
@@ -548,9 +537,8 @@ public class KcaService extends Service {
                         switch (checkvalue) {
                             case HD_DAMECON:
                             case HD_DANGER:
-                                if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-                                    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                    v.vibrate(1500);
+                                if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT && isHDVibrateEnabled()) {
+                                    vibrator.vibrate(1500);
                                 }
                                 if (checkvalue == HD_DANGER) {
                                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.heavy_damaged), Toast.LENGTH_LONG).show();
@@ -1168,9 +1156,8 @@ public class KcaService extends Service {
 
                 if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {
                     heavyDamagedMode = jsonDataObj.get("data").getAsInt();
-                    if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-                        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                        v.vibrate(1500);
+                    if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT && isHDVibrateEnabled()) {
+                        vibrator.vibrate(1500);
                     }
                     if (heavyDamagedMode == HD_DANGER) {
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.heavy_damaged), Toast.LENGTH_LONG).show();
@@ -1181,9 +1168,8 @@ public class KcaService extends Service {
                 }
 
                 if (url.startsWith(KCA_API_NOTI_GOBACKPORT)) {
-                    if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-                        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                        v.vibrate(300);
+                    if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT && isHDVibrateEnabled()) {
+                        vibrator.vibrate(300);
                     }
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.goback_left), Toast.LENGTH_LONG).show();
                     setFrontViewNotifier(FRONT_NONE, 0, null);
@@ -1271,6 +1257,10 @@ public class KcaService extends Service {
 
     private boolean isDockNotifyEnabled() {
         return getBooleanPreferences(PREF_KCA_NOTI_DOCK);
+    }
+
+    private boolean isHDVibrateEnabled() {
+        return getBooleanPreferences(PREF_KCA_NOTI_V_HD);
     }
 
     private String getSeekType() {

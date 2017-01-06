@@ -23,12 +23,20 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="notify_expedition"
-            android:title="원정 알림" />
+            android:title="원정 알림"
+            android:summary="원정 도착 시 상단 알림 및 진동 여부 설정" />
 
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="notify_docking"
-            android:title="입거 알림" />
+            android:title="입거 알림"
+            android:summary="입거 완료 시 상단 알림 및 진동 여부 설정" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="notify_vibrate_heavydamaged"
+            android:title="대파 진동 알림"
+            android:summary="대파 알림 시 진동 여부 설정 (알림은 항상 활성)" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="어플리케이션 정보" >

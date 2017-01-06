@@ -158,7 +158,7 @@ public final class KcaConstants {
     public static final String PREF_CHECK_UPDATE = "check_update";
     public static final String PREF_KCA_NOTI_EXP = "notify_expedition";
     public static final String PREF_KCA_NOTI_DOCK = "notify_docking";
-
+    public static final String PREF_KCA_NOTI_V_HD = "notify_vibrate_heavydamaged";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -166,7 +166,8 @@ public final class KcaConstants {
             PREF_KCA_SEEK_CN,
             PREF_OPENDB_API_USE,
             PREF_KCA_NOTI_EXP,
-            PREF_KCA_NOTI_DOCK
+            PREF_KCA_NOTI_DOCK,
+            PREF_KCA_NOTI_V_HD
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);
