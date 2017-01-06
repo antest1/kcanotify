@@ -53,11 +53,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -953,11 +955,66 @@ public class KcaService extends Service {
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "오류가 발생하였습니다.", Toast.LENGTH_LONG).show();
-                setServiceDown();
-                throw e;
+                String app_version = BuildConfig.VERSION_NAME;
+                String token = "a49467944c34d567fa7f2b051a59c808";
+                String api_url = "";
+                String api_request = request.replaceAll("api_token=[0-9a-f]{40}", "");
+
+                try {
+                    api_url = URLEncoder.encode(url, "utf-8");
+                    api_request = URLEncoder.encode(request, "utf-8");
+                } catch (UnsupportedEncodingException e1) {
+                    e1.printStackTrace();
+                }
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.service_failed_msg), Toast.LENGTH_SHORT).show();
+                String dataSendUrl = String.format("http://antest.hol.es/kcanotify/errorlog_main.php?token=%s&url=%s&request=%s&v=%s", token, api_url, api_request, app_version);
+                AjaxCallback<String> cb = new AjaxCallback<String>() {
+                    @Override
+                    public void callback(String url, String data, AjaxStatus status) {
+                        // do nothing
+                    }
+                };
+                AQuery aq = new AQuery(KcaService.this);
+                cb.header("Referer", "app:/KCA/");
+                cb.header("Content-Type", "application/x-www-form-urlencoded");
+                HttpEntity entity = null;
+
+                JsonObject sendData = new JsonObject();
+                sendData.addProperty("data", data);
+                sendData.addProperty("error", e.toString());
+                String sendDataString = sendData.toString();
+
+                try {
+                    entity = new ByteArrayEntity(gzipcompress(sendDataString));
+                } catch (IOException e1) {
+                    entity = new ByteArrayEntity(sendDataString.getBytes());
+                    dataSendUrl = dataSendUrl.concat("&gzipfail=1");
+                }
+                cb.param(AQuery.POST_ENTITY, entity);
+                aq.ajax(dataSendUrl, String.class, cb);
             }
         }
+    }
+
+    public byte[] gzipcompress(String value) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        GZIPOutputStream gzipOutStream = new GZIPOutputStream(
+                new BufferedOutputStream(byteArrayOutputStream));
+        gzipOutStream.write(value.getBytes());
+        gzipOutStream.finish();
+        gzipOutStream.close();
+
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    public byte[] gzipdecompress(byte[] contentBytes) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            ByteStreams.copy(new GZIPInputStream(new ByteArrayInputStream(contentBytes)), out);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return out.toByteArray();
     }
 
     class kcaNotificationHandler extends Handler {
@@ -997,7 +1054,7 @@ public class KcaService extends Service {
 
                     kcaExpeditionInfoList[kantaiIndex] = "";
                     if (isExpNotifyEnabled()) {
-                        notifiManager.notify(getNotificationId(NOTI_EXP, missionNo), createExpeditionNotification(missionNo, missionName, kantaiName, true));
+                        notifiManager.notify(getNotificationId(NOTI_EXP, kantaiIndex), createExpeditionNotification(missionNo, missionName, kantaiName, true));
                     }
                 }
 
@@ -1011,7 +1068,7 @@ public class KcaService extends Service {
 
                     kcaExpeditionInfoList[kantaiIndex] = "";
                     if (isExpNotifyEnabled()) {
-                        notifiManager.notify(getNotificationId(NOTI_EXP, missionNo), createExpeditionNotification(missionNo, missionName, kantaiName, false));
+                        notifiManager.notify(getNotificationId(NOTI_EXP, kantaiIndex), createExpeditionNotification(missionNo, missionName, kantaiName, false));
                     }
                 }
 
@@ -1148,7 +1205,7 @@ public class KcaService extends Service {
                     String token = "df1629d6820907e7a09ea1e98d3041c2";
 
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT).show();
-                    String dataSendUrl = String.format("http://antest.hol.es/kcanotify/errorlog.php?token=%s&url=%s&node=%s&v=%s", token, api_url, api_node, app_version);
+                    String dataSendUrl = String.format("http://antest.hol.es/kcanotify/errorlog_battle.php?token=%s&url=%s&node=%s&v=%s", token, api_url, api_node, app_version);
                     AjaxCallback<String> cb = new AjaxCallback<String>() {
                         @Override
                         public void callback(String url, String data, AjaxStatus status) {
@@ -1167,9 +1224,35 @@ public class KcaService extends Service {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
             } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "오류가 발생하였습니다.", Toast.LENGTH_LONG).show();
-                setServiceDown();
-                throw e;
+                String app_version = BuildConfig.VERSION_NAME;
+                String token = "8988e900c3ea9bb1c9df330c4833c144";
+                String kca_url = "";
+                try {
+                    kca_url = URLEncoder.encode(url, "utf-8");
+                } catch (UnsupportedEncodingException e1) {
+                    e1.printStackTrace();
+                }
+
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.service_failed_msg), Toast.LENGTH_SHORT).show();
+                String dataSendUrl = String.format("http://antest.hol.es/kcanotify/errorlog_notify.php?token=%s&url=%s&v=%s", token, kca_url, app_version);
+                AjaxCallback<String> cb = new AjaxCallback<String>() {
+                    @Override
+                    public void callback(String url, String data, AjaxStatus status) {
+                        // do nothing
+                    }
+                };
+
+                JsonObject sendData = new JsonObject();
+                sendData.addProperty("data", data);
+                sendData.addProperty("error", e.toString());
+                String sendDataString = sendData.toString();
+
+                AQuery aq = new AQuery(KcaService.this);
+                cb.header("Referer", "app:/KCA/");
+                cb.header("Content-Type", "application/x-www-form-urlencoded");
+                HttpEntity entity = new ByteArrayEntity(sendDataString.getBytes());
+                cb.param(AQuery.POST_ENTITY, entity);
+                aq.ajax(dataSendUrl, String.class, cb);
             }
         }
     }
@@ -1315,6 +1398,7 @@ public class KcaService extends Service {
             }
             //Log.e("KCA", String.format("%d: %d / %d",i, mission_no, arrive_time));
             //Log.e("KCA", String.valueOf(i) + " " + String.valueOf(KcaExpedition.complete_time_check[idx]));
+            notifiManager.cancel(getNotificationId(NOTI_EXP, idx));
             if (kcaExpeditionRunnableList[idx] != null) {
                 if (arrive_time != kcaExpeditionRunnableList[idx].getArriveTime()) {
                     kcaExpeditionList[idx].interrupt();
@@ -1372,6 +1456,7 @@ public class KcaService extends Service {
                         kcaDockingList[dockId].interrupt();
                         kcaDockingRunnableList[dockId] = null;
                         if (shipId != 0) {
+                            notifiManager.cancel(getNotificationId(NOTI_DOCK, dockId));
                             kcaDockingRunnableList[dockId] = new KcaDocking(dockId, shipId, completeTime, nHandler);
                             kcaDockingList[dockId] = new Thread(kcaDockingRunnableList[dockId]);
                             kcaDockingList[dockId].start();
@@ -1381,6 +1466,7 @@ public class KcaService extends Service {
                     }
                 } else {
                     if (state == 1) {
+                        notifiManager.cancel(getNotificationId(NOTI_DOCK, dockId));
                         kcaDockingRunnableList[dockId] = new KcaDocking(dockId, shipId, completeTime, nHandler);
                         kcaDockingList[dockId] = new Thread(kcaDockingRunnableList[dockId]);
                         kcaDockingList[dockId].start();
@@ -1594,27 +1680,6 @@ public class KcaService extends Service {
             content = executeClient(params[0], params[1], params[2]);
 
             return content;
-        }
-
-        public byte[] gzipcompress(String value) throws IOException {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            GZIPOutputStream gzipOutStream = new GZIPOutputStream(
-                    new BufferedOutputStream(byteArrayOutputStream));
-            gzipOutStream.write(value.getBytes());
-            gzipOutStream.finish();
-            gzipOutStream.close();
-
-            return byteArrayOutputStream.toByteArray();
-        }
-
-        public byte[] gzipdecompress(byte[] contentBytes) {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            try {
-                ByteStreams.copy(new GZIPInputStream(new ByteArrayInputStream(contentBytes)), out);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return out.toByteArray();
         }
 
         public String executeClient(String token, String method, String data) {
