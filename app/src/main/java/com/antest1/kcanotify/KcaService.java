@@ -48,6 +48,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -72,6 +74,8 @@ import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaConstants.*;
 
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
+import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 
 public class KcaService extends Service {
@@ -299,15 +303,19 @@ public class KcaService extends Service {
         return viewNotificationBuilder.build();
     }
 
-    private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag) {
+    private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag, boolean caFlag) {
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, kcIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         String title = "";
-        String content = String.format("<%s> 가\n%d번 원정에서 복귀했습니다.", kantaiName, missionNo);
+        String content = "";
         if (cancelFlag) {
             title = String.format("%d번 원정(%s) 취소", missionNo, missionName);
+            content = String.format("%d번 원정 중인 <%s> 가 귀환합니다.", missionNo, kantaiName);
         } else {
+            String postfix = "복귀했습니다";
+            if(caFlag) postfix = "명령에 의해 귀환하였습니다.";
             title = String.format("%d번 원정(%s) 도착", missionNo, missionName);
+            content = String.format("<%s> 가\n%d번 원정에서 ".concat(postfix), kantaiName, missionNo);
         }
 
         Notification Notifi = new Notification.Builder(getApplicationContext())
@@ -469,6 +477,19 @@ public class KcaService extends Service {
                     return;
                 }
 
+                if (url.startsWith(API_REQ_MISSION_RESULT)) {
+                    int deck_id = -1;
+                    String[] requestData = request.split("&");
+                    for (int i = 0; i < requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if (decodedData.startsWith("api_deck_id")) {
+                            deck_id = Integer.valueOf(decodedData.replace("api_deck_id=", "")) - 1;
+                            break;
+                        }
+                    }
+                    notifiManager.cancel(getNotificationId(NOTI_EXP, deck_id-1));
+                }
+
                 if (url.startsWith(API_GET_MEMBER_NDOCK)) {
                     if (jsonDataObj.has("api_data")) {
                         JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
@@ -537,7 +558,7 @@ public class KcaService extends Service {
                         switch (checkvalue) {
                             case HD_DAMECON:
                             case HD_DANGER:
-                                if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT && isHDVibrateEnabled()) {
+                                if (isHDVibrateEnabled()) {
                                     vibrator.vibrate(1500);
                                 }
                                 if (checkvalue == HD_DANGER) {
@@ -943,14 +964,23 @@ public class KcaService extends Service {
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
+                e.printStackTrace();
+
                 String app_version = BuildConfig.VERSION_NAME;
                 String token = "a49467944c34d567fa7f2b051a59c808";
                 String api_url = "";
-                String api_request = request.replaceAll("api_token=[0-9a-f]{40}", "");
-
+                String api_request = "";
+                List<String> filtered_resquest_list = new ArrayList<String>();
                 try {
                     api_url = URLEncoder.encode(url, "utf-8");
-                    api_request = URLEncoder.encode(request, "utf-8");
+                    String[] requestData = request.split("&");
+                    for (int i = 0; i < requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if (!decodedData.startsWith("api_token")) {
+                            filtered_resquest_list.add(requestData[i]);
+                        }
+                    }
+                    api_request = URLEncoder.encode(joinStr(filtered_resquest_list, "&"), "utf-8");
                 } catch (UnsupportedEncodingException e1) {
                     e1.printStackTrace();
                 }
@@ -969,11 +999,12 @@ public class KcaService extends Service {
 
                 JsonObject sendData = new JsonObject();
                 sendData.addProperty("data", data);
-                sendData.addProperty("error", e.toString());
+                sendData.addProperty("error", getStringFromException(e));
                 String sendDataString = sendData.toString();
 
                 try {
                     entity = new ByteArrayEntity(gzipcompress(sendDataString));
+                    cb.header("Content-Encoding", "gzip");
                 } catch (IOException e1) {
                     entity = new ByteArrayEntity(sendDataString.getBytes());
                     dataSendUrl = dataSendUrl.concat("&gzipfail=1");
@@ -1040,9 +1071,8 @@ public class KcaService extends Service {
                     String missionName = jsonDataObj.get("mission_krname").getAsString();
                     //Intent intent = new Intent(KcaService.this, MainActivity.class);
 
-                    kcaExpeditionInfoList[kantaiIndex] = "";
                     if (isExpNotifyEnabled()) {
-                        notifiManager.notify(getNotificationId(NOTI_EXP, kantaiIndex), createExpeditionNotification(missionNo, missionName, kantaiName, true));
+                        notifiManager.notify(getNotificationId(NOTI_EXP, kantaiIndex), createExpeditionNotification(missionNo, missionName, kantaiName, true, false));
                     }
                 }
 
@@ -1052,11 +1082,13 @@ public class KcaService extends Service {
                     String kantaiName = jsonDataObj.get("kantai_name").getAsString();
                     int missionNo = jsonDataObj.get("mission_no").getAsInt();
                     String missionName = jsonDataObj.get("mission_krname").getAsString();
+                    boolean missionCanceled = jsonDataObj.get("mission_canceled").getAsBoolean();
                     //Intent intent = new Intent(KcaService.this, MainActivity.class);
 
                     kcaExpeditionInfoList[kantaiIndex] = "";
                     if (isExpNotifyEnabled()) {
-                        notifiManager.notify(getNotificationId(NOTI_EXP, kantaiIndex), createExpeditionNotification(missionNo, missionName, kantaiName, false));
+                        Log.e("KCA", "fin " + String.valueOf(kantaiIndex));
+                        notifiManager.notify(getNotificationId(NOTI_EXP, kantaiIndex), createExpeditionNotification(missionNo, missionName, kantaiName, false, missionCanceled));
                     }
                 }
 
@@ -1156,7 +1188,7 @@ public class KcaService extends Service {
 
                 if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {
                     heavyDamagedMode = jsonDataObj.get("data").getAsInt();
-                    if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT && isHDVibrateEnabled()) {
+                    if (isHDVibrateEnabled()) {
                         vibrator.vibrate(1500);
                     }
                     if (heavyDamagedMode == HD_DANGER) {
@@ -1188,6 +1220,7 @@ public class KcaService extends Service {
                     String api_data = jsonDataObj.get("api_data").getAsString();
                     String api_url = jsonDataObj.get("api_url").getAsString();
                     String api_node = jsonDataObj.get("api_node").getAsString();
+                    String api_error = jsonDataObj.get("api_error").getAsString();
                     String token = "df1629d6820907e7a09ea1e98d3041c2";
 
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT).show();
@@ -1198,10 +1231,16 @@ public class KcaService extends Service {
                             // do nothing
                         }
                     };
+
+                    JsonObject sendData = new JsonObject();
+                    sendData.addProperty("data", api_data);
+                    sendData.addProperty("error",  api_error);
+                    String sendDataString = sendData.toString();
+
                     AQuery aq = new AQuery(KcaService.this);
                     cb.header("Referer", "app:/KCA/");
                     cb.header("Content-Type", "application/x-www-form-urlencoded");
-                    HttpEntity entity = new ByteArrayEntity(api_data.getBytes());
+                    HttpEntity entity = new ByteArrayEntity(sendDataString.getBytes());
                     cb.param(AQuery.POST_ENTITY, entity);
                     aq.ajax(dataSendUrl, String.class, cb);
                 }
@@ -1210,6 +1249,8 @@ public class KcaService extends Service {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
             } catch (Exception e) {
+                e.printStackTrace();
+
                 String app_version = BuildConfig.VERSION_NAME;
                 String token = "8988e900c3ea9bb1c9df330c4833c144";
                 String kca_url = "";
@@ -1230,7 +1271,7 @@ public class KcaService extends Service {
 
                 JsonObject sendData = new JsonObject();
                 sendData.addProperty("data", data);
-                sendData.addProperty("error", e.toString());
+                sendData.addProperty("error",  getStringFromException(e));
                 String sendDataString = sendData.toString();
 
                 AQuery aq = new AQuery(KcaService.this);
@@ -1388,18 +1429,19 @@ public class KcaService extends Service {
             }
             //Log.e("KCA", String.format("%d: %d / %d",i, mission_no, arrive_time));
             //Log.e("KCA", String.valueOf(i) + " " + String.valueOf(KcaExpedition.complete_time_check[idx]));
-            notifiManager.cancel(getNotificationId(NOTI_EXP, idx));
             if (kcaExpeditionRunnableList[idx] != null) {
-                if (arrive_time != kcaExpeditionRunnableList[idx].getArriveTime()) {
-                    kcaExpeditionList[idx].interrupt();
-                    kcaExpeditionRunnableList[idx] = new KcaExpedition(mission_no, idx, deck_name, arrive_time, nHandler);
-                    kcaExpeditionList[idx] = new Thread(kcaExpeditionRunnableList[idx]);
-                    kcaExpeditionList[idx].start();
-                } else if (mission_no == -1) {
+                if (mission_no == -1) {
                     //Log.e("KCA", "Fleet " + String.valueOf(idx) + " not in exp");
                     kcaExpeditionList[idx].interrupt();
                     kcaExpeditionList[idx] = null;
                     kcaExpeditionRunnableList[idx] = null;
+                } else if (arrive_time != kcaExpeditionRunnableList[idx].getArriveTime()
+                        && !kcaExpeditionRunnableList[idx].getCanceledStatus()) {
+                    notifiManager.cancel(getNotificationId(NOTI_EXP, idx));
+                    kcaExpeditionList[idx].interrupt();
+                    kcaExpeditionRunnableList[idx] = new KcaExpedition(mission_no, idx, deck_name, arrive_time, nHandler);
+                    kcaExpeditionList[idx] = new Thread(kcaExpeditionRunnableList[idx]);
+                    kcaExpeditionList[idx].start();
                 }
             } else {
                 if (mission_no != -1 && (KcaExpedition.complete_time_check[idx] != arrive_time ||
@@ -1418,14 +1460,17 @@ public class KcaService extends Service {
     private void cancelExpeditionInfo(JsonObject data) {
         JsonArray canceled_info = (JsonArray) data.get("api_mission");
         int canceled_mission_no = canceled_info.get(1).getAsInt();
-        long arrive_time = canceled_info.get(2).getAsInt();
+        long arrive_time = canceled_info.get(2).getAsLong();
         int idx = -1;
         for (int i = 0; i < 3; i++) {
-            if (kcaExpeditionRunnableList[i].mission_no == canceled_mission_no) {
-                idx = i;
-                break;
+            if(kcaExpeditionRunnableList[i] != null) {
+                if (kcaExpeditionRunnableList[i].mission_no == canceled_mission_no) {
+                    idx = i;
+                    break;
+                }
             }
         }
+        Log.e("KCA", "Arrive time: "+String.valueOf(arrive_time));
         kcaExpeditionRunnableList[idx].canceled(arrive_time);
     }
 
@@ -1537,16 +1582,7 @@ public class KcaService extends Service {
         notifiManager.notify(getNotificationId(NOTI_FRONT, 1), createViewNotification(notifiTitle, notifiString, expeditionString));
     }
 
-    private String joinStr(List<String> list, String delim) {
-        String resultStr = "";
-        int i;
-        for (i = 0; i < list.size() - 1; i++) {
-            resultStr = resultStr.concat(list.get(i));
-            resultStr = resultStr.concat(delim);
-        }
-        resultStr = resultStr.concat(list.get(i));
-        return resultStr;
-    }
+
 
     private Map<Integer, HashMap<String, String>> getExpeditionData() {
         Map<Integer, HashMap<String, String>> data = new HashMap<Integer, HashMap<String, String>>();

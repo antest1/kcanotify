@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
+import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 
 public class KcaDeckInfo {
@@ -355,17 +356,6 @@ public class KcaDeckInfo {
             }
         }
         return dameconStatus;
-    }
-
-    private static String joinStr(List<String> list, String delim) {
-        String resultStr = "";
-        int i;
-        for (i = 0; i < list.size() - 1; i++) {
-            resultStr = resultStr.concat(list.get(i));
-            resultStr = resultStr.concat(delim);
-        }
-        resultStr = resultStr.concat(list.get(i));
-        return resultStr;
     }
 
 }

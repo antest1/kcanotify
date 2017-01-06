@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.antest1.kcanotify.KcaApiData.kcMissionData;
 import static com.antest1.kcanotify.KcaConstants.*;
 
 public class KcaExpedition implements Runnable {
@@ -36,6 +37,8 @@ public class KcaExpedition implements Runnable {
             return false;
         }
     }
+
+    public boolean getCanceledStatus() { return canceled_flag[kantai_idx]; }
 
     public boolean isHandlerLive() {
         return mHandler != null;
@@ -108,13 +111,14 @@ public class KcaExpedition implements Runnable {
                         left_time_str[kantai_idx] = null;
                         complete_time_check[kantai_idx] = -1;
 
-                        if (!check_canceled(kantai_idx)) {
+                        if(kcMissionData.get(mission_no).get("api_return_flag").getAsInt() == 1) {
                             JsonObject endExpInfo = new JsonObject();
 
                             endExpInfo.addProperty("kantai_idx", kantai_idx);
                             endExpInfo.addProperty("kantai_name", kantai_name);
                             endExpInfo.addProperty("mission_no", mission_no);
                             endExpInfo.addProperty("mission_krname", mission_krname);
+                            endExpInfo.addProperty("mission_canceled", canceled_flag[kantai_idx]);
 
                             Bundle bundle = new Bundle();
                             bundle.putString("url", KCA_API_NOTI_EXP_FIN);

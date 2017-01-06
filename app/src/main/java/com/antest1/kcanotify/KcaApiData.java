@@ -27,6 +27,7 @@ import java.util.Set;
 
 import static com.antest1.kcanotify.KcaConstants.KCA_API_DATA_LOADED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_BATTLE_DROPINFO;
+import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaApiData {
 	public static JsonObject kcGameData = null;
@@ -37,6 +38,7 @@ public class KcaApiData {
 	public static Map<Integer, JsonObject> userShipData = null;
 	public static Map<Integer, JsonObject> userItemData = null;
 
+	public static Map<Integer, JsonObject> kcMissionData = new HashMap<Integer, JsonObject>();
 	public static Map<String, String> kcShipTranslationData = null;
 
 	public static int level = 0;
@@ -132,17 +134,6 @@ public class KcaApiData {
 		sHandler = h;
 	}
 
-	private static String joinStr(List<String> list, String delim) {
-		String resultStr = "";
-		int i;
-		for (i = 0; i < list.size() - 1; i++) {
-			resultStr = resultStr.concat(list.get(i));
-			resultStr = resultStr.concat(delim);
-		}
-		resultStr = resultStr.concat(list.get(i));
-		return resultStr;
-	}
-
 	public static boolean checkDataLoadTriggered() {
 		return dataLoadTriggered;
 	}
@@ -181,6 +172,14 @@ public class KcaApiData {
 					isEventTime = true;
 					break;
 				}
+			}
+		}
+
+		if(kcGameData.has("api_mst_mission")) {
+			JsonArray missionData = kcGameData.getAsJsonArray("api_mst_mission");
+			for(JsonElement e: missionData) {
+				int api_id = e.getAsJsonObject().get("api_id").getAsInt();
+				kcMissionData.put(api_id, e.getAsJsonObject());
 			}
 		}
 

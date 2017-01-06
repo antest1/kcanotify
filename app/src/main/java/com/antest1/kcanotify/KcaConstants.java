@@ -20,6 +20,8 @@ public final class KcaConstants {
     public static final String API_GET_MEMBER_SHIP_DECK = "/api_get_member/ship_deck";
     public static final String API_GET_MEMBER_SLOT_ITEM = "/api_get_member/slot_item";
     public static final String API_REQ_MISSION_RETURN = "/api_req_mission/return_instruction";
+    public static final String API_REQ_MISSION_RESULT= "/api_req_mission/result";
+
 
     public static final String API_REQ_HENSEI_CHANGE = "/api_req_hensei/change";
     public static final String API_REQ_HENSEI_PRESET = "/api_req_hensei/preset_select";
