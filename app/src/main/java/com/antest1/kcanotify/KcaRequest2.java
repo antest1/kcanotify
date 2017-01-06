@@ -23,7 +23,7 @@ import okhttp3.Response;
 public class KcaRequest2 {
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(15000, TimeUnit.MILLISECONDS)
-            .readTimeout(1500, TimeUnit.MILLISECONDS)
+            .readTimeout(2000, TimeUnit.MILLISECONDS)
             .build();
 
     public static final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
