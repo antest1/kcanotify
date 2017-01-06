@@ -21,6 +21,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 
 public class KcaBattle {
     public static int[] maxhps = new int[13];
@@ -1346,6 +1347,7 @@ public class KcaBattle {
                 errorInfo.addProperty("api_data", api_data.toString());
                 errorInfo.addProperty("api_url", URLEncoder.encode(url, "utf-8"));
                 errorInfo.addProperty("api_node", URLEncoder.encode(String.format("%d-%d-%s", currentMapArea, currentMapNo, currentNodeAlphabet), "utf-8"));
+                errorInfo.addProperty("api_error", getStringFromException(e));
             } catch (UnsupportedEncodingException e1) {
                 e1.printStackTrace();
             }

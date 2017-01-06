@@ -20,6 +20,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.antest1.kcanotify.KcaUtils.joinStr;
+
 public class KcaRequest2 {
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(15000, TimeUnit.MILLISECONDS)
@@ -76,14 +78,4 @@ public class KcaRequest2 {
 
     }
 
-    private static String joinStr(List<String> list, String delim) {
-        String resultStr = "";
-        int i;
-        for (i = 0; i < list.size() - 1; i++) {
-            resultStr = resultStr.concat(list.get(i));
-            resultStr = resultStr.concat(delim);
-        }
-        resultStr = resultStr.concat(list.get(i));
-        return resultStr;
-    }
 }

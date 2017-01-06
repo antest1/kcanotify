@@ -143,16 +143,4 @@ public class KcaOpendbAPI {
             }
         }
     }
-
-    private static String joinStr(List<String> list, String delim) {
-        String resultStr = "";
-        int i;
-        for (i = 0; i < list.size() - 1; i++) {
-            resultStr = resultStr.concat(list.get(i));
-            resultStr = resultStr.concat(delim);
-        }
-        resultStr = resultStr.concat(list.get(i));
-        return resultStr;
-    }
-
 }
