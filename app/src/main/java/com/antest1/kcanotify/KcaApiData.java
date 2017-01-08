@@ -187,13 +187,14 @@ public class KcaApiData {
 		data.addProperty("ship", kcShipData.size());
         data.addProperty("item", kcItemData.size());
 
-		Bundle bundle = new Bundle();
-		bundle.putString("url", KCA_API_DATA_LOADED);
-		bundle.putString("data", data.toString());
-		Message sMsg = sHandler.obtainMessage();
-		sMsg.setData(bundle);
-		sHandler.sendMessage(sMsg);
-
+		if(sHandler != null) {
+			Bundle bundle = new Bundle();
+			bundle.putString("url", KCA_API_DATA_LOADED);
+			bundle.putString("data", data.toString());
+			Message sMsg = sHandler.obtainMessage();
+			sMsg.setData(bundle);
+			sHandler.sendMessage(sMsg);
+		}
 		return kcGameData.entrySet().size();
 	}
 

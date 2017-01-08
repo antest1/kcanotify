@@ -75,8 +75,7 @@ import static com.antest1.kcanotify.KcaConstants.*;
 
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
-import static com.antest1.kcanotify.KcaUtils.joinStr;
-
+import static com.antest1.kcanotify.KcaUtils.*;
 
 public class KcaService extends Service {
     public static final int ANTEST_USERID = 15108389;
@@ -108,7 +107,7 @@ public class KcaService extends Service {
     KcaDocking[] kcaDockingRunnableList = new KcaDocking[4];
 
     String kcaFirstDeckInfo = "깡들리티에서 게임을 실행해주세요";
-    String kca_version;
+    static String kca_version;
     String api_start2_data = null;
     boolean api_start2_down_mode = false;
     JsonArray currentPortDeckData = null;
@@ -124,55 +123,28 @@ public class KcaService extends Service {
     }
 
     private String getStringPreferences(String key) {
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        return pref.getString(key, "");
+        return KcaUtils.getStringPreferences(getApplicationContext(), key);
     }
 
     private Boolean getBooleanPreferences(String key) {
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        return pref.getBoolean(key, false);
+        return KcaUtils.getBooleanPreferences(getApplicationContext(), key);
     }
 
     // 값 저장하기
-    private void setPreferences(String key, Object value) {
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        if (value instanceof String) {
-            editor.putString(key, (String) value);
-        } else if (value instanceof Boolean) {
-            editor.putBoolean(key, (Boolean) value);
-        } else if (value instanceof Integer) {
-            editor.putInt(key, (Integer) value);
-        } else {
-            editor.putString(key, value.toString());
-        }
-        editor.commit();
+    public void setPreferences(String key, Object value) {
+        KcaUtils.setPreferences(getApplicationContext(), key, value);
     }
 
     private JsonObject readCacheData(String filename) {
-        try {
-            FileInputStream fis = openFileInput(filename);
-            byte[] cache_data = new byte[fis.available()];
-            //Toast.makeText(getApplicationContext(), String.format("Loading Cached Data %d", fis.available()), Toast.LENGTH_LONG).show();
-            while (fis.read(cache_data) != -1) {
-                ;
-            }
-            String cache_data_str = new String(cache_data, 0, cache_data.length);
-            return new JsonParser().parse(cache_data_str).getAsJsonObject();
-        } catch (FileNotFoundException e) {
-            //new retrieveApiStartData().execute("", "down", "");
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return KcaUtils.readCacheData(getApplicationContext(), filename);
     }
-
-    private void writeCacheData(byte[] data, String filename) throws IOException {
+    /*
+    public void writeCacheData(byte[] data, String filename) throws IOException {
         FileOutputStream fos = openFileOutput(filename, MODE_PRIVATE);
         fos.write(data);
         fos.close();
     }
+*/
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -229,6 +201,8 @@ public class KcaService extends Service {
         startForeground(getNotificationId(NOTI_FRONT, 1), createViewNotification(initTitle, initContent, initSubContent));
         isServiceOn = true;
 
+        KcaExpedition.setContext(getApplicationContext());
+
         KcaBattle.setHandler(nHandler);
         KcaApiData.setHandler(nHandler);
         KcaOpendbAPI.setHandler(nHandler);
@@ -272,33 +246,21 @@ public class KcaService extends Service {
     }
 
     private Notification createViewNotification(String title, String content1, String content2) {
-        if (viewNotificationBuilder == null) {
-            Intent aIntent = new Intent(KcaService.this, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            viewNotificationText = new Notification.BigTextStyle();
-            viewNotificationBuilder = new Notification.Builder(getApplicationContext())
-                    .setSmallIcon(R.mipmap.noti_icon2)
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.noti_icon1))
-                    .setContentTitle(title)
-                    .setStyle(viewNotificationText.bigText(content1))
-                    .setStyle(viewNotificationText.setSummaryText(content2))
-                    .setTicker(title)
-                    .setContentIntent(pendingIntent)
-                    .setPriority(Notification.PRIORITY_MAX)
-                    .setOngoing(true).setAutoCancel(false);
-
-        } else {
-            if (title != null) {
-                viewNotificationBuilder.setContentTitle(title);
-                viewNotificationBuilder.setTicker(title);
-            }
-            if (content1 != null) {
-                viewNotificationBuilder.setStyle(viewNotificationText.bigText(content1));
-            }
-            if (content2 != null) {
-                viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(content2));
-            }
+        Intent aIntent = new Intent(KcaService.this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        viewNotificationText = new Notification.BigTextStyle();
+        viewNotificationBuilder = new Notification.Builder(getApplicationContext())
+                .setSmallIcon(R.mipmap.noti_icon2)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.noti_icon1))
+                .setContentTitle(title)
+                .setStyle(viewNotificationText.bigText(content1))
+                .setTicker(title)
+                .setContentIntent(pendingIntent)
+                .setPriority(Notification.PRIORITY_MAX)
+                .setOngoing(true).setAutoCancel(false);
+        if(isExpViewEnabled()) {
+            viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(content2));
         }
         return viewNotificationBuilder.build();
     }
@@ -313,7 +275,7 @@ public class KcaService extends Service {
             content = String.format("%d번 원정 중인 <%s> 가 귀환합니다.", missionNo, kantaiName);
         } else {
             String postfix = "복귀했습니다";
-            if(caFlag) postfix = "명령에 의해 귀환하였습니다.";
+            if (caFlag) postfix = "명령에 의해 귀환하였습니다.";
             title = String.format("%d번 원정(%s) 도착", missionNo, missionName);
             content = String.format("<%s> 가\n%d번 원정에서 ".concat(postfix), kantaiName, missionNo);
         }
@@ -427,7 +389,7 @@ public class KcaService extends Service {
                     //Toast.makeText(getApplicationContext(), "API_START2", Toast.LENGTH_LONG).show();
 
                     api_start2_data = data;
-                    writeCacheData(data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
+                    writeCacheData(getApplicationContext(), data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
 
                     if (jsonDataObj.has("api_data")) {
                         //Toast.makeText(getApplicationContext(), "Load Kancolle Data", Toast.LENGTH_LONG).show();
@@ -487,7 +449,7 @@ public class KcaService extends Service {
                             break;
                         }
                     }
-                    notifiManager.cancel(getNotificationId(NOTI_EXP, deck_id-1));
+                    notifiManager.cancel(getNotificationId(NOTI_EXP, deck_id - 1));
                 }
 
                 if (url.startsWith(API_GET_MEMBER_NDOCK)) {
@@ -592,21 +554,21 @@ public class KcaService extends Service {
                         //Log.e("KCA", "Battle Handler Called");
                         if (jsonDataObj.has("api_data")) {
                             JsonObject battleApiData = jsonDataObj.getAsJsonObject("api_data");
-                            if(url.startsWith(API_REQ_MAP_START)) {
+                            if (url.startsWith(API_REQ_MAP_START)) {
                                 JsonObject api_data = new JsonObject();
                                 JsonArray api_deck_data = new JsonArray();
                                 JsonArray api_ship_data = new JsonArray();
 
                                 api_deck_data.add(currentPortDeckData.get(0));
                                 JsonArray firstShipInfo = currentPortDeckData.get(0).getAsJsonObject().getAsJsonArray("api_ship");
-                                for (JsonElement e: firstShipInfo) {
+                                for (JsonElement e : firstShipInfo) {
                                     int ship_id = e.getAsInt();
                                     api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
                                 }
                                 if (KcaApiData.isEventTime) {
                                     api_deck_data.add(currentPortDeckData.get(1));
                                     JsonArray secondShipInfo = currentPortDeckData.get(1).getAsJsonObject().getAsJsonArray("api_ship");
-                                    for (JsonElement e: secondShipInfo) {
+                                    for (JsonElement e : secondShipInfo) {
                                         int ship_id = e.getAsInt();
                                         api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
                                     }
@@ -1050,7 +1012,7 @@ public class KcaService extends Service {
             JsonObject jsonDataObj;
             try {
                 jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
-                if(url.startsWith(KCA_API_DATA_LOADED)) {
+                if (url.startsWith(KCA_API_DATA_LOADED)) {
                     Log.e("KCA", String.format("Ship: %d", jsonDataObj.get("ship").getAsInt()));
                     Log.e("KCA", String.format("Item: %d", jsonDataObj.get("item").getAsInt()));
                     processFirstDeckInfo(currentPortDeckData);
@@ -1060,7 +1022,9 @@ public class KcaService extends Service {
                     // //Log.e("KCA", "Expedition Notification Handler Called");
                     //int kantaiIndex = ((Long) jsonDataObj.get("idx")).intValue();
                     //String str_data = (String) jsonDataObj.get("str");
-                    setFrontViewNotifier(FRONT_NONE, 0, null);
+                    if(isExpViewEnabled()) {
+                        setFrontViewNotifier(FRONT_NONE, 0, null);
+                    }
                 }
 
                 if (url.startsWith(KCA_API_NOTI_EXP_CANCELED)) {
@@ -1234,7 +1198,7 @@ public class KcaService extends Service {
 
                     JsonObject sendData = new JsonObject();
                     sendData.addProperty("data", api_data);
-                    sendData.addProperty("error",  api_error);
+                    sendData.addProperty("error", api_error);
                     String sendDataString = sendData.toString();
 
                     AQuery aq = new AQuery(KcaService.this);
@@ -1271,7 +1235,7 @@ public class KcaService extends Service {
 
                 JsonObject sendData = new JsonObject();
                 sendData.addProperty("data", data);
-                sendData.addProperty("error",  getStringFromException(e));
+                sendData.addProperty("error", getStringFromException(e));
                 String sendDataString = sendData.toString();
 
                 AQuery aq = new AQuery(KcaService.this);
@@ -1290,6 +1254,10 @@ public class KcaService extends Service {
 
     private boolean isOpendbEnabled() {
         return getBooleanPreferences(PREF_OPENDB_API_USE);
+    }
+
+    private boolean isExpViewEnabled() {
+        return getBooleanPreferences(PREF_KCA_EXP_VIEW);
     }
 
     private boolean isExpNotifyEnabled() {
@@ -1463,14 +1431,14 @@ public class KcaService extends Service {
         long arrive_time = canceled_info.get(2).getAsLong();
         int idx = -1;
         for (int i = 0; i < 3; i++) {
-            if(kcaExpeditionRunnableList[i] != null) {
+            if (kcaExpeditionRunnableList[i] != null) {
                 if (kcaExpeditionRunnableList[i].mission_no == canceled_mission_no) {
                     idx = i;
                     break;
                 }
             }
         }
-        Log.e("KCA", "Arrive time: "+String.valueOf(arrive_time));
+        Log.e("KCA", "Arrive time: " + String.valueOf(arrive_time));
         kcaExpeditionRunnableList[idx].canceled(arrive_time);
     }
 
@@ -1569,19 +1537,19 @@ public class KcaService extends Service {
                 kcaExpStrList.add(KcaExpedition.left_time_str[i]);
             }
         }
-
-        if (no_exp_flag) {
-            expeditionString = expeditionString.concat("원정나간 함대가 없습니다.");
-        } else {
-            if (is_landscape) {
-                expeditionString = expeditionString.concat("원정 남은 시간: ");
-                //expeditionString = expeditionString.concat("\n");
+        if(isExpViewEnabled()) {
+            if (no_exp_flag) {
+                expeditionString = expeditionString.concat("원정나간 함대가 없습니다.");
+            } else {
+                if (is_landscape) {
+                    expeditionString = expeditionString.concat("원정 남은 시간: ");
+                    //expeditionString = expeditionString.concat("\n");
+                }
+                expeditionString = expeditionString.concat(joinStr(kcaExpStrList, " / "));
             }
-            expeditionString = expeditionString.concat(joinStr(kcaExpStrList, " / "));
         }
         notifiManager.notify(getNotificationId(NOTI_FRONT, 1), createViewNotification(notifiTitle, notifiString, expeditionString));
     }
-
 
 
     private Map<Integer, HashMap<String, String>> getExpeditionData() {
@@ -1715,7 +1683,7 @@ public class KcaService extends Service {
                     AjaxCallback<String> cb = new AjaxCallback<String>() {
                         @Override
                         public void callback(String url, String data, AjaxStatus status) {
-                            if(status.getCode() == HttpResponseStatus.OK.code()) {
+                            if (status.getCode() == HttpResponseStatus.OK.code()) {
                                 Toast.makeText(getApplicationContext(), "Data Uploaded", Toast.LENGTH_LONG).show();
                             }
                         }
@@ -1741,8 +1709,8 @@ public class KcaService extends Service {
                         @Override
                         public void callback(String url, String data, AjaxStatus status) {
                             try {
-                                writeCacheData(data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
-                                KcaApiData.getKcGameData( gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
+                                writeCacheData(getApplicationContext(), data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
+                                KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
                                 if (kca_version == null) {
                                     kca_version = status.getHeader("X-Api-Version");
                                 }
@@ -1770,4 +1738,9 @@ public class KcaService extends Service {
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setFrontViewNotifier(FRONT_NONE, 0, null);
+    }
 }

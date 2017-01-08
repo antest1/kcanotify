@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
@@ -205,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case PREF_OPENDB_API_USE:
                         editor.putBoolean(prefKey, false);
                         break;
+                    case PREF_KCA_EXP_VIEW:
                     case PREF_KCA_NOTI_DOCK:
                     case PREF_KCA_NOTI_EXP:
                     case PREF_KCA_NOTI_V_HD:

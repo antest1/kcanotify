@@ -21,26 +21,27 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.common.io.ByteStreams;
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxCallback;
+import com.androidquery.callback.AjaxStatus;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Map;
-import java.util.zip.GZIPOutputStream;
 
+import io.netty.handler.codec.http.HttpResponseStatus;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_PREP_CN_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
+import static com.antest1.kcanotify.KcaService.kca_version;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -84,11 +85,20 @@ public class SettingActivity extends AppCompatActivity {
             Map<String, ?> allEntries = getPreferenceManager().getSharedPreferences().getAll();
             for(String key: allEntries.keySet()) {
                 Preference pref = findPreference(key);
-                if (key.equals("check_update")) {
+                if (key.equals(PREF_CHECK_UPDATE)) {
                     pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
                             new getRecentVersion(getActivity()).execute();
+                            return false;
+                        }
+                    });
+                }
+                if (key.equals(PREF_KCA_DOWNLOAD_DATA)) {
+                    pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            new getKcaStart2Data(getActivity()).execute();
                             return false;
                         }
                     });
@@ -224,5 +234,78 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private static class getKcaStart2Data extends AsyncTask<Context, String, String> {
+        Context context;
+        String result = null;
+        public getKcaStart2Data(Context ctx) {
+            context = ctx;
+        }
+
+        private void serverTempStart() {
+            if(!KcaProxyServer.is_on()) KcaProxyServer.start(null);
+        }
+
+        private void serverTempStop() {
+            if(KcaProxyServer.handler == null) KcaProxyServer.stop();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            serverTempStart();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Context... params) {
+            String content = null;
+            try {
+                content = executeClient();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return content;
+        }
+
+        public String executeClient() {
+            String dataUrl;
+            if (kca_version == null) {
+                dataUrl = String.format("http://antest.hol.es/kcanotify/kca_api_start2.php?v=recent");
+            } else {
+                dataUrl = String.format("http://antest.hol.es/kcanotify/kca_api_start2.php?v=%s", kca_version);
+            }
+
+            AjaxCallback<String> cb = new AjaxCallback<String>() {
+                @Override
+                public void callback(String url, String data, AjaxStatus status) {
+                    try {
+                        if(status.getCode() == HttpResponseStatus.OK.code()) {
+                            KcaUtils.writeCacheData(context, data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
+                            KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
+                            if (kca_version == null) {
+                                kca_version = status.getHeader("X-Api-Version");
+                            }
+                            KcaUtils.setPreferences(context, "kca_version", kca_version);
+                            KcaApiData.setDataLoadTriggered();
+                            Toast.makeText(context.getApplicationContext(), "게임 데이터 다운로드 완료", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(context.getApplicationContext(), "서버 오류 발생 ".concat(status.getMessage()), Toast.LENGTH_LONG).show();
+                        }
+                    } catch (IOException e1) {
+                        Toast.makeText(context.getApplicationContext(), "I/O Error when writing cache data", Toast.LENGTH_LONG).show();
+                        Log.e("KCA", "I/O Error");
+                    }
+
+                }
+            };
+            AQuery aq = new AQuery(context);
+            cb.header("Referer", "app:/KCA/");
+            cb.header("Content-Type", "application/x-www-form-urlencoded");
+            Log.e("KCA", dataUrl);
+            aq.ajax(dataUrl, String.class, cb);
+            return null;
+        }
+
     }
 }

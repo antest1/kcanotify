@@ -26,7 +26,8 @@
         </activity>
 
         <service
-            android:name=".KcaService" >
+            android:name=".KcaService"
+            android:configChanges="orientation|screenSize" >
         </service>
     </application>
 

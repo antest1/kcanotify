@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,7 @@ import static com.antest1.kcanotify.KcaApiData.kcMissionData;
 import static com.antest1.kcanotify.KcaConstants.*;
 
 public class KcaExpedition implements Runnable {
+    public static Context ctx;
     public int mission_no;
     public String mission_krname;
     public int kantai_idx;
@@ -38,6 +40,8 @@ public class KcaExpedition implements Runnable {
         }
     }
 
+    public static void setContext(Context context) { ctx = context; }
+
     public boolean getCanceledStatus() { return canceled_flag[kantai_idx]; }
 
     public boolean isHandlerLive() {
@@ -61,6 +65,7 @@ public class KcaExpedition implements Runnable {
         mHandler = new Handler() {
             public void handleMessage(Message msg) {
                 if (!KcaService.isServiceOn) return;
+                if (KcaUtils.getBooleanPreferences(ctx, PREF_KCA_EXP_VIEW)) return;
 
                 int div = msg.what;
                 //// Log.e("KCA", "From "+String.valueOf(div));

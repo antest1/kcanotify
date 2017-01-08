@@ -18,6 +18,18 @@
             android:summary = "http://swaytwig.com/opendb/"
             android:title="OpenDB에 데이터 전송" />
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="expedition_view"
+            android:title="원정 남은 시간 실시간 표시"
+            android:summary="상단의 남은 원정 시간 실시간 표시 여부" />
+
+        <Preference
+            android:key="download_data"
+            android:defaultValue=""
+            android:title="게임 데이터 다운로드"
+            android:summary="게임 데이터가 로딩되지 않을 때 사용" />
+
     </PreferenceCategory>
     <PreferenceCategory android:title="알림 설정" >
         <CheckBoxPreference

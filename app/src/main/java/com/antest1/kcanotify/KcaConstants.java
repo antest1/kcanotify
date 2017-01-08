@@ -157,6 +157,8 @@ public final class KcaConstants {
     public static final String PREF_KCA_VERSION = "kca_version";
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
     public static final String PREF_OPENDB_API_USE = "opendb_api_use";
+    public static final String PREF_KCA_EXP_VIEW = "expedition_view";
+    public static final String PREF_KCA_DOWNLOAD_DATA = "download_data";
     public static final String PREF_CHECK_UPDATE = "check_update";
     public static final String PREF_KCA_NOTI_EXP = "notify_expedition";
     public static final String PREF_KCA_NOTI_DOCK = "notify_docking";
@@ -167,6 +169,8 @@ public final class KcaConstants {
             PREF_KCA_VERSION,
             PREF_KCA_SEEK_CN,
             PREF_OPENDB_API_USE,
+            PREF_KCA_EXP_VIEW,
+            PREF_KCA_DOWNLOAD_DATA,
             PREF_KCA_NOTI_EXP,
             PREF_KCA_NOTI_DOCK,
             PREF_KCA_NOTI_V_HD
