@@ -38,9 +38,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_PREP_CN_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaService.kca_version;
 
 
@@ -118,17 +121,21 @@ public class SettingActivity extends AppCompatActivity {
                 String kca_url = "";
                 Bundle bundle = new Bundle();
                 switch(key) {
-                    case "kca_seek_cn":
-                        kca_url = KCA_API_PREP_CN_CHANGED;
+                    case PREF_KCA_SEEK_CN:
+                        kca_url = KCA_API_PREF_CN_CHANGED;
                         break;
+                    case PREF_KCA_EXP_VIEW:
+                        kca_url = KCA_API_PREF_EXPVIEW_CHANGED;
                     default:
                         break;
                 }
-                bundle.putString("url", kca_url);
-                bundle.putString("data", gson.toJson(dmpData));
-                Message sMsg = sHandler.obtainMessage();
-                sMsg.setData(bundle);
-                sHandler.sendMessage(sMsg);
+                if (kca_url.length() != 0) {
+                    bundle.putString("url", kca_url);
+                    bundle.putString("data", gson.toJson(dmpData));
+                    Message sMsg = sHandler.obtainMessage();
+                    sMsg.setData(bundle);
+                    sHandler.sendMessage(sMsg);
+                }
             }
             Preference pref = findPreference(key);
             if (pref instanceof ListPreference) {

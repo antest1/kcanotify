@@ -65,7 +65,6 @@ public class KcaExpedition implements Runnable {
         mHandler = new Handler() {
             public void handleMessage(Message msg) {
                 if (!KcaService.isServiceOn) return;
-                if (KcaUtils.getBooleanPreferences(ctx, PREF_KCA_EXP_VIEW)) return;
 
                 int div = msg.what;
                 //// Log.e("KCA", "From "+String.valueOf(div));
@@ -103,14 +102,16 @@ public class KcaExpedition implements Runnable {
 						sHandler.sendMessage(sMsg);
 						*/
                         //Log.e("KCA", String.valueOf(mission_no));
-                        JsonObject leftExpInfo = new JsonObject();
-                        left_time_str[kantai_idx] = String.format("[%02d] %s", mission_no, strTime);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("url", KCA_API_NOTI_EXP_LEFT);
-                        bundle.putString("data", gson.toJson(leftExpInfo));
-                        Message sMsg = sHandler.obtainMessage();
-                        sMsg.setData(bundle);
-                        sHandler.sendMessage(sMsg);
+                        if (KcaUtils.getBooleanPreferences(ctx, PREF_KCA_EXP_VIEW)) {
+                            JsonObject leftExpInfo = new JsonObject();
+                            left_time_str[kantai_idx] = String.format("[%02d] %s", mission_no, strTime);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("url", KCA_API_NOTI_EXP_LEFT);
+                            bundle.putString("data", gson.toJson(leftExpInfo));
+                            Message sMsg = sHandler.obtainMessage();
+                            sMsg.setData(bundle);
+                            sHandler.sendMessage(sMsg);
+                        }
                         this.sendEmptyMessageDelayed(div, 1000);
                     } else {
                         left_time_str[kantai_idx] = null;

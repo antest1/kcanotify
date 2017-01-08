@@ -127,7 +127,8 @@ public final class KcaConstants {
     public static final String KCA_API_NOTI_GOBACKPORT = "/kca_api/noti_gobackport";
     public static final String KCA_API_NOTI_BATTLE_DROPINFO = "/kca_api/noti_battle_dropinfo";
     public static final String KCA_API_NOTI_DOCK_FIN = "/kca_api/noti_dock_fin";
-    public static final String KCA_API_PREP_CN_CHANGED = "/kca_api/pref_cn_changed";
+    public static final String KCA_API_PREF_CN_CHANGED = "/kca_api/pref_cn_changed";
+    public static final String KCA_API_PREF_EXPVIEW_CHANGED = "/kca_api/pref_expview_changed";
 
     public static final String KCA_API_PROCESS_BATTLE_FAILED = "/kca_api/process_battle_failed";
     public static final String KCA_API_OPENDB_FAILED = "/kca_api/opendb_failed";

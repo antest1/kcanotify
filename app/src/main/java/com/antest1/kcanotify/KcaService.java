@@ -44,12 +44,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -1171,8 +1166,12 @@ public class KcaService extends Service {
                     setFrontViewNotifier(FRONT_NONE, 0, null);
                 }
 
-                if (url.startsWith(KCA_API_PREP_CN_CHANGED)) {
+                if (url.startsWith(KCA_API_PREF_CN_CHANGED)) {
                     processFirstDeckInfo(currentPortDeckData);
+                }
+
+                if (url.startsWith(KCA_API_PREF_EXPVIEW_CHANGED)) {
+                    setFrontViewNotifier(FRONT_NONE, 0, null);
                 }
 
                 if (url.startsWith(KCA_API_OPENDB_FAILED)) {
