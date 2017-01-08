@@ -9,6 +9,9 @@ public final class KcaConstants {
     public static final String KCANOTIFY_S2_CACHE_FILENAME = "kca_api_start2";
     public static final String KCANOTIFY_USERITEM_CACHE_FILENAME = "kca_userslotitem";
 
+    public static final int KC_REFERER_APP = 1;
+    public static final int KC_REFERER_BROWSER = 2;
+
 
     public static final String API_PORT = "/api_port/port";
     public static final String API_WORLD_GET_ID = "/api_world/get_id";

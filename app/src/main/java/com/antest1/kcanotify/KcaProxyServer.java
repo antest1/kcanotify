@@ -44,13 +44,28 @@ public class KcaProxyServer {
 	public static Handler handler;
 
 	private static final String KCA_HOST = "203.104.209.7";
-	private static final String KC_APP_REFERER = "app:/AppMain.swf/";
-	private static final String HTTP_CONTENT_ENCODING = HttpHeaders.Names.CONTENT_ENCODING;
+    private static final String KC_APP_REFERER = "app:/AppMain.swf/";
+    private static final String KC_BROWSER_REFERER = "kcs/mainD2.swf";
+    private static final String HTTP_CONTENT_ENCODING = HttpHeaders.Names.CONTENT_ENCODING;
 
     private static final String KCA_USERAGENT = String.format("Kca/%s ", BuildConfig.VERSION_NAME);
+    private static final String KC_NEAT_HOST = "kancolle-neat.rhcloud.com";
+    private static final String KC_NEAT_VIEW = "view_kancolle.php";
 
     public static KcaRequest2 kcaRequest = new KcaRequest2();
 	public static ExecutorService executorService = Executors.newScheduledThreadPool(15);
+
+    public static String currentRefererInfo = "";
+
+    public static int getReferer() {
+        if (currentRefererInfo.contains(KC_APP_REFERER)) {
+            return KcaConstants.KC_REFERER_APP;
+        } else if(currentRefererInfo.contains(KC_BROWSER_REFERER)){
+            return KcaConstants.KC_REFERER_BROWSER;
+        } else {
+            return 0;
+        }
+    }
 
 	public KcaProxyServer() {
 		proxyServer = null;
@@ -114,6 +129,7 @@ public class KcaProxyServer {
 							String[] requestData = request.toString().split("\n");
                             String requestHeaderString = "";
 							boolean isKcRequest = false;
+                            boolean isNeatRequest = false;
 							isKcaVer = requestUri.startsWith("/kca/version");
 							isKcsApi = requestUri.startsWith("/kcsapi/api_");
 							isKcsRes = requestUri.startsWith("/kcs/resources");
@@ -129,13 +145,16 @@ public class KcaProxyServer {
                                 String value = data.getValue();
                                 requestHeaderString += key + ": " + value + "\r\n";
                                 if (key.equals(HttpHeaders.Names.REFERER)) {
-                                    if (value.startsWith(KC_APP_REFERER)) {
+                                    if (value.startsWith(KC_APP_REFERER) || value.contains(KC_BROWSER_REFERER)) {
                                         isKcRequest = true;
                                     }
                                 }
                                 if (key.equals(HttpHeaders.Names.HOST)) {
                                     if (value.startsWith(KCA_HOST)) {
                                         isKcRequest = true;
+                                    }
+                                    if(value.contains(KC_NEAT_HOST)) {
+                                        isNeatRequest = true;
                                     }
                                 }
                                 if (key.equals(HttpHeaders.Names.USER_AGENT)) {
@@ -162,7 +181,7 @@ public class KcaProxyServer {
                                 int readerIndex = contentBuf.readerIndex();
                                 contentBuf.getBytes(readerIndex, requestBody);
                                 String requestBodyStr = new String(requestBody);
-
+                                currentRefererInfo = request.headers().get(HttpHeaders.Names.REFERER);
                                 try {
                                     String responseData = kcaRequest.post(request.getUri(), requestHeaderString, requestBodyStr);
 
@@ -197,6 +216,50 @@ public class KcaProxyServer {
                                     e.printStackTrace();
                                 }
 							}
+
+                            if(isNeatRequest && requestUri.contains(KC_NEAT_VIEW)) {
+                                ByteBuf contentBuf = request.content();
+                                boolean gzipped = false;
+                                byte[] requestBody = new byte[contentBuf.readableBytes()];
+                                int readerIndex = contentBuf.readerIndex();
+                                contentBuf.getBytes(readerIndex, requestBody);
+                                String requestBodyStr = new String(requestBody);
+                                currentRefererInfo = request.headers().get(HttpHeaders.Names.REFERER);
+                                try {
+                                    String responseData = kcaRequest.post(request.getUri(), requestHeaderString, requestBodyStr);
+                                    // Replace for phone
+
+                                    JsonObject responseObject = new JsonParser().parse(responseData).getAsJsonObject();
+                                    String responseHeader = responseObject.get("header").getAsString();
+                                    int statusCode = responseObject.get("status").getAsInt();
+
+                                    Log.e("KCA", String.valueOf(statusCode));
+                                    byte[] responseBody = Base64.decode(responseObject.get("data").getAsString(), Base64.DEFAULT);
+                                    String bodyContent = new String(KcaUtils.gzipdecompress(responseBody));
+
+                                    bodyContent = bodyContent.replace("<title>", "<meta name=\"viewport\" content=\"width=850,user-scalable=no\"/>\n<title>");
+                                    bodyContent = bodyContent.replace("<style>", "<style>body {background-color: black;}\n");
+                                    bodyContent = bodyContent.replace("margin-top:-16px; margin-left:-50px;", "margin-top:-16px;");
+                                    bodyContent = bodyContent.replace("width=\"900\" height=\"1200\"", "width=\"800\" height=\"495\"");
+
+                                    Log.e("KCA", bodyContent);
+
+                                    responseBody = KcaUtils.gzipcompress(bodyContent);
+                                    ByteBuf buffer = Unpooled.wrappedBuffer(responseBody);
+                                    HttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.valueOf(statusCode), buffer);
+                                    for (String line: responseHeader.split("\r\n")) {
+                                        String[] entry = line.trim().split(": ");
+                                        HttpHeaders.setHeader(response, entry[0], entry[1]);
+                                    }
+                                    //HttpHeaders.setContentLength(response, buffer.readableBytes());
+                                    //HttpHeaders.setHeader(response, HttpHeaders.Names.CONTENT_TYPE, "text/html");
+                                    currentUrl = requestUri;
+                                    return response;
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
 						}
 						return null;
 					}

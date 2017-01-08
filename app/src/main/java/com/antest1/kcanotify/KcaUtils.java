@@ -3,9 +3,13 @@ package com.antest1.kcanotify;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.common.io.ByteStreams;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,6 +17,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by Gyeong Bok Lee on 2017-01-07.
@@ -85,5 +91,26 @@ public class KcaUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static byte[] gzipcompress(String value) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        GZIPOutputStream gzipOutStream = new GZIPOutputStream(
+                new BufferedOutputStream(byteArrayOutputStream));
+        gzipOutStream.write(value.getBytes());
+        gzipOutStream.finish();
+        gzipOutStream.close();
+
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    public static byte[] gzipdecompress(byte[] contentBytes) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            ByteStreams.copy(new GZIPInputStream(new ByteArrayInputStream(contentBytes)), out);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return out.toByteArray();
     }
 }

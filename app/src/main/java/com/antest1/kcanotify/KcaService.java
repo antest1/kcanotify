@@ -69,7 +69,6 @@ import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaConstants.*;
 
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
-import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.*;
 
 public class KcaService extends Service {
@@ -389,7 +388,10 @@ public class KcaService extends Service {
                     if (jsonDataObj.has("api_data")) {
                         //Toast.makeText(getApplicationContext(), "Load Kancolle Data", Toast.LENGTH_LONG).show();
                         KcaApiData.getKcGameData(jsonDataObj.getAsJsonObject("api_data"));
-                        setPreferences("kca_version", kca_version);
+                        setDataLoadTriggered();
+                        if(KcaProxyServer.getReferer() == KC_REFERER_APP) {
+                            setPreferences("kca_version", kca_version);
+                        }
                     }
                     return;
                 }
@@ -470,8 +472,10 @@ public class KcaService extends Service {
                 }
 
                 // Game Data Dependent Tasks
-                if (!checkDataLoadTriggered() || !isUserItemDataLoaded()) {
+                if (!isUserItemDataLoaded()) {
                     Toast.makeText(getApplicationContext(), "깡들리티에서 게임을 다시 시작해주세요", Toast.LENGTH_LONG).show();
+                } else if(!checkDataLoadTriggered()) {
+                    Toast.makeText(getApplicationContext(), "깡들리티 설정에서 게임 데이터를 받아주세요", Toast.LENGTH_LONG).show();
                 } else {
                     if (url.startsWith(API_PORT)) {
                         isPortAccessed = true;
@@ -972,26 +976,7 @@ public class KcaService extends Service {
         }
     }
 
-    public byte[] gzipcompress(String value) throws IOException {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        GZIPOutputStream gzipOutStream = new GZIPOutputStream(
-                new BufferedOutputStream(byteArrayOutputStream));
-        gzipOutStream.write(value.getBytes());
-        gzipOutStream.finish();
-        gzipOutStream.close();
 
-        return byteArrayOutputStream.toByteArray();
-    }
-
-    public byte[] gzipdecompress(byte[] contentBytes) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            ByteStreams.copy(new GZIPInputStream(new ByteArrayInputStream(contentBytes)), out);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return out.toByteArray();
-    }
 
     class kcaNotificationHandler extends Handler {
 
@@ -1710,10 +1695,12 @@ public class KcaService extends Service {
                             try {
                                 writeCacheData(getApplicationContext(), data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
                                 KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
-                                if (kca_version == null) {
-                                    kca_version = status.getHeader("X-Api-Version");
+                                if(KcaProxyServer.getReferer() == KC_REFERER_APP) {
+                                    if (kca_version == null) {
+                                        kca_version = status.getHeader("X-Api-Version");
+                                    }
+                                    setPreferences("kca_version", kca_version);
                                 }
-                                setPreferences("kca_version", kca_version);
                             } catch (IOException e1) {
                                 Toast.makeText(getApplicationContext(), "I/O Error when writing cache data", Toast.LENGTH_LONG).show();
                                 Log.e("KCA", "I/O Error");
