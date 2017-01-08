@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button b = (Button) v;
         // mDatagramSocketThread = new DatagramSocketThread();
         // mDatagramSocketThread.start();
-        if (v.getId() == R.id.btnStart && KcaProxyServer.is_on() && is_kca_installed) {
+        if (v.getId() == R.id.btnStart && isKcaServiceOn && is_kca_installed) {
             startActivity(KcaService.kcIntent);
             finish();
         }
