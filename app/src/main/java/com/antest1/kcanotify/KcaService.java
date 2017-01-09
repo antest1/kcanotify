@@ -185,9 +185,6 @@ public class KcaService extends Service {
         AbstractAjaxCallback.setGZip(true);
         KcaProxyServer.start(handler);
 
-        Intent aIntent = new Intent(KcaService.this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, kcIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         String initTitle = String.format("%s 동작중", getResources().getText(R.string.app_name));
         String initContent = "깡들리티에서 게임을 실행해주세요";
         String initSubContent = String.format("%s %s", getResources().getText(R.string.app_name), getResources().getString(R.string.app_version));
