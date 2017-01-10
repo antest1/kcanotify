@@ -15,6 +15,11 @@ import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 
 public class KcaDeckInfo {
+    public static final int SPEEDFLAG_SLOW = 1 << 3;
+    public static final int SPEEDFLAG_FAST = 1 << 2;
+    public static final int SPEEDFLAG_FASTPLUS = 1 << 1;
+    public static final int SPEEDFLAG_SUPERFAST = 1 << 0;
+
     // Formula 33 (2016.12.26)
     // Reference: http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
     //            http://kancolle-calc.net/deckbuilder.html
@@ -208,34 +213,60 @@ public class KcaDeckInfo {
         return totalRangeAAC;
     }
 
+    public static int getSpeedFlagValue(boolean s, boolean f, boolean fp, boolean sf) {
+        int value = 0;
+        if(s) value += SPEEDFLAG_SLOW;
+        if(f) value += SPEEDFLAG_FAST;
+        if(fp) value += SPEEDFLAG_FASTPLUS;
+        if(sf) value += SPEEDFLAG_SUPERFAST;
+        return value;
+    }
+
+
     public static int getSpeed(JsonArray deckPortData, int deckid) {
-        boolean is_fast_flag = true;
-        boolean is_slow_flag = true;
+        boolean is_slow_flag = false;
+        boolean is_fast_flag = false;
+        boolean is_fastplus_flag = false;
+        boolean is_superfast_flag = false;
 
         JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().get("api_ship").getAsJsonArray();
+
+        // Retrieve Speed (soku) Information
         for(int i=0; i<deckShipIdList.size(); i++) {
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
-                JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id");
-                int shipKcId = shipData.get("ship_id").getAsInt();
-                JsonObject shipKcData = KcaApiData.getKcShipDataById(shipKcId, "soku");
-                int soku = shipKcData.get("soku").getAsInt();
-                if (soku == KcaApiData.SPEED_FAST) {
-                    is_slow_flag = false;
-                } else if (soku == KcaApiData.SPEED_SLOW) {
-                    is_fast_flag = false;
-                }
-                if (!is_slow_flag && !is_fast_flag) {
-                    return KcaApiData.SPEED_MIXED;
+                JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "soku");
+                int soku = shipData.get("soku").getAsInt();
+                if (soku == KcaApiData.SPEED_SLOW) {
+                    is_slow_flag = true;
+                } else if (soku == KcaApiData.SPEED_FAST) {
+                    is_fast_flag = true;
+                } else if (soku == KcaApiData.SPEED_FASTPLUS) {
+                    is_fastplus_flag = true;
+                } else if (soku == KcaApiData.SPEED_SUPERFAST) {
+                    is_superfast_flag = true;
                 }
             }
         }
-        if(is_fast_flag) {
-            return KcaApiData.SPEED_FAST;
-        } else if(is_slow_flag) {
+
+        int flag = getSpeedFlagValue(is_slow_flag, is_fast_flag, is_fastplus_flag, is_superfast_flag);
+        if (flag > SPEEDFLAG_SLOW) {
+            return KcaApiData.SPEED_MIXED_NORMAL;
+        } else if (flag == SPEEDFLAG_SLOW) {
             return KcaApiData.SPEED_SLOW;
+        } else if (flag > SPEEDFLAG_FAST) {
+            return KcaApiData.SPEED_MIXED_FAST;
+        } else if (flag == SPEEDFLAG_FAST) {
+            return KcaApiData.SPEED_FAST;
+        } else if (flag > SPEEDFLAG_FASTPLUS) {
+            return KcaApiData.SPEED_MIXED_FASTPLUS;
+        } else if (flag == SPEEDFLAG_FASTPLUS) {
+            return KcaApiData.SPEED_FASTPLUS;
+        } else if (flag == SPEEDFLAG_SUPERFAST) {
+            return KcaApiData.SPEED_SUPERFAST;
+        } else {
+            return KcaApiData.SPEED_NONE; // Unreachable
         }
-        return KcaApiData.SPEED_NONE; // Unreachable
     }
 
     public static int[] getKcShipList(JsonArray deckPortData, int deckid) {

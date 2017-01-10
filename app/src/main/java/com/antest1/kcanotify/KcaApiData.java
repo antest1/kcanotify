@@ -125,10 +125,15 @@ public class KcaApiData {
 	public static final int[] FIGHTER_MASTERY_BONUS = {0, 0, 2, 5, 9, 14, 14, 22, 0, 0, 0};
 	public static final int[] SEA_BOMBER_MASTERY_BONUS = {0, 0, 1, 1, 1, 3, 3, 6, 0, 0, 0};
 
-	public static final int SPEED_FAST = 10;
-	public static final int SPEED_SLOW = 5;
 	public static final int SPEED_NONE = 0;
-	public static final int SPEED_MIXED = 15;
+	public static final int SPEED_SLOW = 5;
+	public static final int SPEED_FAST = 10;
+	public static final int SPEED_FASTPLUS = 15;
+	public static final int SPEED_SUPERFAST = 20;
+
+	public static final int SPEED_MIXED_NORMAL = 100;
+	public static final int SPEED_MIXED_FAST = 101;
+	public static final int SPEED_MIXED_FASTPLUS = 102;
 
 	public static void setHandler(Handler h) {
 		sHandler = h;

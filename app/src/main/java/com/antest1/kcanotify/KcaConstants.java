@@ -32,7 +32,7 @@ public final class KcaConstants {
     public static final String API_GET_MEMBER_SHIP3 = "/api_get_member/ship3";
 
     public static final String API_REQ_KAISOU_SLOTSET = "/api_req_kaisou/slotset";
-    public static final String API_REQ_KAISOU_UNSLOTSET_ALL = "/api_req_kaisou/unslotset_all";
+    public static final String API_REQ_KAISOU_UNSLOTSET_ALL = "/api_req_kaisou/unsetslot_all";
     public static final String API_REQ_KAISOU_SLOT_EXCHANGE = "/api_req_kaisou/slot_exchange";
     public static final String API_REQ_KAISOU_SLOT_DEPRIVE = "/api_req_kaisou/slot_deprive";
     public static final String API_REQ_KAISOU_POWERUP = "/api_req_kaisou/powerup";

@@ -1331,14 +1331,29 @@ public class KcaService extends Service {
         int speedValue = KcaDeckInfo.getSpeed(data, 0);
         String speedStringValue = "";
         switch (speedValue) {
+            case KcaApiData.SPEED_SUPERFAST:
+                speedStringValue = getResources().getString(R.string.speed_superfast);
+                break;
+            case KcaApiData.SPEED_FASTPLUS:
+                speedStringValue = getResources().getString(R.string.speed_fastplus);
+                break;
             case KcaApiData.SPEED_FAST:
                 speedStringValue = getResources().getString(R.string.speed_fast);
                 break;
             case KcaApiData.SPEED_SLOW:
                 speedStringValue = getResources().getString(R.string.speed_slow);
                 break;
+            case KcaApiData.SPEED_MIXED_FASTPLUS:
+                speedStringValue = getResources().getString(R.string.speed_mixed_fastplus);
+                break;
+            case KcaApiData.SPEED_MIXED_FAST:
+                speedStringValue = getResources().getString(R.string.speed_mixed_fast);
+                break;
+            case KcaApiData.SPEED_MIXED_NORMAL:
+                speedStringValue = getResources().getString(R.string.speed_mixed_normal);
+                break;
             default:
-                speedStringValue = getResources().getString(R.string.speed_mixed);
+                speedStringValue = getResources().getString(R.string.speed_none);
                 break;
         }
         infoData = new JsonObject();
