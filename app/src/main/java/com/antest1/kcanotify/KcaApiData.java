@@ -233,6 +233,14 @@ public class KcaApiData {
 		eventMapDifficulty[no] = diff;
 	}
 
+	public static boolean getReturnFlag(int mission_no) {
+		if(mission_no%100 == 33 || mission_no%100 == 34 ) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	public static boolean checkKrTranslation() {
 		return kcShipTranslationData != null;
 	}

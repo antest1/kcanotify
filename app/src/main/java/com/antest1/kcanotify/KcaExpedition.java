@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
 import static com.antest1.kcanotify.KcaApiData.kcMissionData;
 import static com.antest1.kcanotify.KcaConstants.*;
 
@@ -117,7 +118,7 @@ public class KcaExpedition implements Runnable {
                         left_time_str[kantai_idx] = null;
                         complete_time_check[kantai_idx] = -1;
 
-                        if(kcMissionData.get(mission_no).get("api_return_flag").getAsInt() == 1) {
+                        if(getReturnFlag(mission_no)) {
                             JsonObject endExpInfo = new JsonObject();
 
                             endExpInfo.addProperty("kantai_idx", kantai_idx);
