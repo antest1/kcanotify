@@ -1395,13 +1395,14 @@ public class KcaService extends Service {
             //Log.e("KCA", String.valueOf(i) + " " + String.valueOf(KcaExpedition.complete_time_check[idx]));
             if (kcaExpeditionRunnableList[idx] != null) {
                 if (mission_no == -1) {
-                    //Log.e("KCA", "Fleet " + String.valueOf(idx) + " not in exp");
+                    kcaExpeditionRunnableList[idx].kill();
                     kcaExpeditionList[idx].interrupt();
                     kcaExpeditionList[idx] = null;
                     kcaExpeditionRunnableList[idx] = null;
                 } else if (arrive_time != kcaExpeditionRunnableList[idx].getArriveTime()
                         && !kcaExpeditionRunnableList[idx].getCanceledStatus()) {
                     notifiManager.cancel(getNotificationId(NOTI_EXP, idx));
+                    kcaExpeditionRunnableList[idx].kill();
                     kcaExpeditionList[idx].interrupt();
                     kcaExpeditionRunnableList[idx] = new KcaExpedition(mission_no, idx, deck_name, arrive_time, nHandler);
                     kcaExpeditionList[idx] = new Thread(kcaExpeditionRunnableList[idx]);

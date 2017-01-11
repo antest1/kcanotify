@@ -22,6 +22,7 @@ public class KcaExpedition implements Runnable {
     public int kantai_idx;
     public String kantai_name;
     public int left_time;
+    public boolean is_alive;
     public Handler sHandler;
     public static Map<Integer, HashMap<String, String>> expeditionData;
     public static String[] left_time_str = {null, null, null};
@@ -103,6 +104,10 @@ public class KcaExpedition implements Runnable {
 						sHandler.sendMessage(sMsg);
 						*/
                         //Log.e("KCA", String.valueOf(mission_no));
+                        if (!is_alive) {
+                            left_time_str[kantai_idx] = null;
+                            return;
+                        }
                         if (KcaUtils.getBooleanPreferences(ctx, PREF_KCA_EXP_VIEW)) {
                             JsonObject leftExpInfo = new JsonObject();
                             left_time_str[kantai_idx] = String.format("[%02d] %s", mission_no, strTime);
@@ -145,6 +150,7 @@ public class KcaExpedition implements Runnable {
 
     @Override
     public void run() {
+        is_alive = true;
         int max_left_time = Integer.parseInt(expeditionData.get(mission_no).get("time")) * 60 - start_delay; // Minutes
         // ->
         // Seconds
@@ -178,4 +184,6 @@ public class KcaExpedition implements Runnable {
     public void stopHandler() {
         mHandler = null;
     }
+
+    public void kill() { is_alive = false; }
 }
