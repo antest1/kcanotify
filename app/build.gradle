@@ -1,24 +1,45 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.model.application'
+model {
+    android {
+        compileSdkVersion 25
+        buildToolsVersion "25.0.2"
+        defaultConfig {
+            applicationId "com.antest1.kcanotify"
+            minSdkVersion.apiLevel 16
+            targetSdkVersion.apiLevel 25
+            versionCode 1
+            versionName "2.0dev"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
 
-android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
-    defaultConfig {
-        applicationId "com.antest1.kcanotify"
-        minSdkVersion 16
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0.2r3"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        ndk {
+            platformVersion = "16"
+            moduleName = "netguard"
+            toolchain = "clang"
+            ldLibs.add("log")
+        }
+
+        sources {
+            main {
+                jni {
+                    source {
+                        srcDirs.removeAll()
+                        srcDirs.add('src/main/jni/netguard')
+                    }
+                    exportedHeaders {
+                    }
+                }
+            }
+        }
+
+        buildTypes {
+            release {
+                minifyEnabled true
+                proguardFiles.add(file('proguard-rules.pro'))
+            }
         }
     }
 }
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

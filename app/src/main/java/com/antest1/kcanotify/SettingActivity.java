@@ -157,17 +157,8 @@ public class SettingActivity extends AppCompatActivity {
             context = ctx;
         }
 
-        private void serverTempStart() {
-            if(!KcaProxyServer.is_on()) KcaProxyServer.start(null);
-        }
-
-        private void serverTempStop() {
-            if(KcaProxyServer.handler == null) KcaProxyServer.stop();
-        }
-
         @Override
         protected void onPreExecute() {
-            serverTempStart();
             super.onPreExecute();
         }
 
@@ -205,14 +196,12 @@ public class SettingActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             if (result == null) {
                 Toast.makeText(context.getApplicationContext(), "업데이트 확인에 문제가 발생했습니다.", Toast.LENGTH_LONG).show();
-                serverTempStop();
             } else {
                 JsonObject jsonDataObj = new JsonParser().parse(result).getAsJsonObject();
                 if (jsonDataObj.has("version")) {
                     String recentVersion = jsonDataObj.get("version").getAsString();
                     if (recentVersion.equals(currentVersion)) {
                         Toast.makeText(context.getApplicationContext(), String.format("최신 버전입니다(%s).", currentVersion), Toast.LENGTH_LONG).show();
-                        serverTempStop();
                     } else {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                         alertDialog.setMessage(String.format("업데이트가 있습니다(%s).\n다운로드하시겠습니까?", recentVersion));
@@ -227,7 +216,7 @@ public class SettingActivity extends AppCompatActivity {
                         alertDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                serverTempStop();
+                                // None
                             }
                         });
                         AlertDialog alert = alertDialog.create();
@@ -237,7 +226,6 @@ public class SettingActivity extends AppCompatActivity {
                     }
                 } else {
                     Toast.makeText(context.getApplicationContext(), "업데이트 서버 데이터 오류", Toast.LENGTH_LONG).show();
-                    serverTempStop();
                 }
             }
         }
@@ -250,17 +238,8 @@ public class SettingActivity extends AppCompatActivity {
             context = ctx;
         }
 
-        private void serverTempStart() {
-            if(!KcaProxyServer.is_on()) KcaProxyServer.start(null);
-        }
-
-        private void serverTempStop() {
-            if(KcaProxyServer.handler == null) KcaProxyServer.stop();
-        }
-
         @Override
         protected void onPreExecute() {
-            serverTempStart();
             super.onPreExecute();
         }
 

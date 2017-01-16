@@ -58,3 +58,26 @@
     public static *** w(...);
     public static *** wtf(...);
 }
+
+#NetGuard
+-keepnames class eu.faircode.netguard.** { *; }
+
+#JNI
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+#JNI callbacks
+-keep class eu.faircode.netguard.Allowed { *; }
+-keep class eu.faircode.netguard.Packet { *; }
+-keep class eu.faircode.netguard.ResourceRecord { *; }
+-keep class eu.faircode.netguard.Usage { *; }
+-keep class com.antest1.kcanotify.KcaVpnService {
+    void nativeExit(java.lang.String);
+    void nativeError(int, java.lang.String);
+    void logPacket(eu.faircode.netguard.Packet);
+    void dnsResolved(eu.faircode.netguard.ResourceRecord);
+    boolean isDomainBlocked(java.lang.String);
+    eu.faircode.netguard.Allowed isAddressAllowed(eu.faircode.netguard.Packet);
+    void accountUsage(eu.faircode.netguard.Usage);
+}

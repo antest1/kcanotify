@@ -16,13 +16,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
-/**
- * Created by Gyeong Bok Lee on 2017-01-07.
- */
 
 public class KcaUtils {
     public static String getStringFromException(Exception ex) {
@@ -112,5 +109,43 @@ public class KcaUtils {
             throw new RuntimeException(e);
         }
         return out.toByteArray();
+    }
+
+    private static int bytetoint(byte[] arr) {
+        int csize = 0;
+        for(int i=0; i<arr.length; i++) {
+            csize = csize << 4;
+            if(arr[i] >= 0x30 && arr[i] <= 0x39) {
+                csize += arr[i] - 0x30; // (0x30 = '0')
+            } else if (arr[i] >= 0x61 && arr[i] <= 0x66) {
+                csize += arr[i] - 0x61 + 0x0a; // (0x61 = 'a')
+            } else if (arr[i] >= 0x41 && arr[i] <= 0x46) {
+                csize += arr[i] - 0x41 + 0x0a; // (0x41 = 'A')
+            }
+        }
+        return csize;
+    }
+
+    public static byte[] unchunkdata(byte[] contentBytes) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int startIdx = 0;
+        for (int i=0; i<contentBytes.length - 1; i++) {
+            if(contentBytes[i] == '\r' && contentBytes[i+1] == '\n') {
+                int size = bytetoint(Arrays.copyOfRange(contentBytes, startIdx, i));
+                if(size == 0) break;
+                int dataStart = i+2;
+                out.write(Arrays.copyOfRange(contentBytes, dataStart, dataStart+size));
+                startIdx = dataStart+size+2; // \r\n padding
+                i = startIdx - 1;
+            }
+        }
+        return out.toByteArray();
+    }
+
+    private static String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (final byte b : a)
+            sb.append(String.format("%02x ", b & 0xff));
+        return sb.toString();
     }
 }

@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -147,7 +148,9 @@ public class KcaService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (!MainActivity.isKcaServiceOn) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Log.e("KCA", String.valueOf(prefs.contains("svcenabled")));
+        if (!prefs.getBoolean("svcenabled", false)) {
             stopSelf();
         }
 
@@ -183,7 +186,6 @@ public class KcaService extends Service {
         isPortAccessed = false;
 
         AbstractAjaxCallback.setGZip(true);
-        KcaProxyServer.start(handler);
 
         String initTitle = String.format("%s 동작중", getResources().getText(R.string.app_name));
         String initContent = "깡들리티에서 게임을 실행해주세요";
@@ -193,6 +195,8 @@ public class KcaService extends Service {
         isServiceOn = true;
 
         KcaExpedition.setContext(getApplicationContext());
+
+        KcaVpnData.setHandler(handler);
 
         KcaBattle.setHandler(nHandler);
         KcaApiData.setHandler(nHandler);
@@ -233,7 +237,8 @@ public class KcaService extends Service {
 
     public void onDestroy() {
         setServiceDown();
-        KcaProxyServer.stop();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putBoolean("svcenabled", false).apply();
     }
 
     private Notification createViewNotification(String title, String content1, String content2) {
@@ -242,8 +247,8 @@ public class KcaService extends Service {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         viewNotificationText = new Notification.BigTextStyle();
         viewNotificationBuilder = new Notification.Builder(getApplicationContext())
-                .setSmallIcon(R.mipmap.noti_icon2)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.noti_icon1))
+                .setSmallIcon(R.mipmap.noti_icon4)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.noti_icon3))
                 .setContentTitle(title)
                 .setStyle(viewNotificationText.bigText(content1))
                 .setTicker(title)
@@ -334,11 +339,12 @@ public class KcaService extends Service {
     class kcaServiceHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String url = msg.getData().getString("url");
             String data = msg.getData().getString("data");
             String request = msg.getData().getString("request");
 
-            if (!KcaProxyServer.is_on() || url.length() == 0 || viewNotificationBuilder == null) {
+            if(!prefs.getBoolean("enabled", false) || url.length() == 0 || viewNotificationBuilder == null) {
                 return;
             }
             JsonObject jsonDataObj;
@@ -386,9 +392,7 @@ public class KcaService extends Service {
                         //Toast.makeText(getApplicationContext(), "Load Kancolle Data", Toast.LENGTH_LONG).show();
                         KcaApiData.getKcGameData(jsonDataObj.getAsJsonObject("api_data"));
                         setDataLoadTriggered();
-                        if(KcaProxyServer.getReferer() == KC_REFERER_APP) {
-                            setPreferences("kca_version", kca_version);
-                        }
+                        setPreferences("kca_version", kca_version);
                     }
                     return;
                 }
@@ -979,10 +983,11 @@ public class KcaService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String url = msg.getData().getString("url");
             String data = msg.getData().getString("data");
 
-            if (!KcaProxyServer.is_on() || !isPortAccessed || viewNotificationBuilder == null || url.length() == 0) {
+            if(!prefs.getBoolean("enabled", false) || !isPortAccessed || url.length() == 0 || viewNotificationBuilder == null) {
                 return;
             }
 
@@ -1708,12 +1713,10 @@ public class KcaService extends Service {
                             try {
                                 writeCacheData(getApplicationContext(), data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
                                 KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
-                                if(KcaProxyServer.getReferer() == KC_REFERER_APP) {
-                                    if (kca_version == null) {
-                                        kca_version = status.getHeader("X-Api-Version");
-                                    }
-                                    setPreferences("kca_version", kca_version);
+                                if (kca_version == null) {
+                                    kca_version = status.getHeader("X-Api-Version");
                                 }
+                                setPreferences("kca_version", kca_version);
                             } catch (IOException e1) {
                                 Toast.makeText(getApplicationContext(), "I/O Error when writing cache data", Toast.LENGTH_LONG).show();
                                 Log.e("KCA", "I/O Error");
