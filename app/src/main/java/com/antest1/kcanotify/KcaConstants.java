@@ -158,6 +158,9 @@ public final class KcaConstants {
 
     public static final List<String> API_BATTLE_REQS = Arrays.asList(API_BATTLE_REQ_LIST);
 
+    public static final String PREF_VPN_ENABLED = "enabled";
+    public static final String PREF_SVC_ENABLED = "svcenabled";
+
     public static final String PREF_KCA_VERSION = "kca_version";
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
     public static final String PREF_OPENDB_API_USE = "opendb_api_use";

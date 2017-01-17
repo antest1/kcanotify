@@ -52,17 +52,18 @@ public class SettingActivity extends AppCompatActivity {
     public static Handler sHandler;
     static Gson gson = new Gson();
     public static String currentVersion = BuildConfig.VERSION_NAME;
+    public static final String TAG = "KCA";
 
-   @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-       super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_setting);
-       toolbar = (Toolbar) findViewById(R.id.toolbar);
-       setSupportActionBar(toolbar);
-       getSupportActionBar().setTitle(getResources().getString(R.string.action_settings));
-       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_setting);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getResources().getString(R.string.action_settings));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-       getFragmentManager().beginTransaction()
+        getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new PrefsFragment(), null).commit();
     }
 
@@ -86,7 +87,7 @@ public class SettingActivity extends AppCompatActivity {
             getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
             addPreferencesFromResource(R.xml.pref_settings);
             Map<String, ?> allEntries = getPreferenceManager().getSharedPreferences().getAll();
-            for(String key: allEntries.keySet()) {
+            for (String key : allEntries.keySet()) {
                 Preference pref = findPreference(key);
                 if (key.equals(PREF_CHECK_UPDATE)) {
                     pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -120,7 +121,7 @@ public class SettingActivity extends AppCompatActivity {
                 JsonObject dmpData = new JsonObject();
                 String kca_url = "";
                 Bundle bundle = new Bundle();
-                switch(key) {
+                switch (key) {
                     case PREF_KCA_SEEK_CN:
                         kca_url = KCA_API_PREF_CN_CHANGED;
                         break;
@@ -195,37 +196,43 @@ public class SettingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             if (result == null) {
-                Toast.makeText(context.getApplicationContext(), "업데이트 확인에 문제가 발생했습니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
             } else {
                 JsonObject jsonDataObj = new JsonParser().parse(result).getAsJsonObject();
                 if (jsonDataObj.has("version")) {
                     String recentVersion = jsonDataObj.get("version").getAsString();
                     if (recentVersion.equals(currentVersion)) {
-                        Toast.makeText(context.getApplicationContext(), String.format("최신 버전입니다(%s).", currentVersion), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context.getApplicationContext(),
+                                String.format(context.getString(R.string.sa_checkupdate_latest), currentVersion),
+                                Toast.LENGTH_LONG).show();
                     } else {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-                        alertDialog.setMessage(String.format("업데이트가 있습니다(%s).\n다운로드하시겠습니까?", recentVersion));
-                        alertDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String downloadUrl = "http://bit.ly/2hNln5o";
-                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
-                                context.startActivity(i);
-                            }
-                        });
-                        alertDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // None
-                            }
-                        });
+                        alertDialog.setMessage(String.format(context.getString(R.string.sa_checkupdate_hasupdate), recentVersion));
+                        alertDialog.setPositiveButton(context.getString(R.string.dialog_ok),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String downloadUrl = context.getString(R.string.app_download_link);
+                                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
+                                        context.startActivity(i);
+                                    }
+                                });
+                        alertDialog.setNegativeButton(context.getString(R.string.dialog_cancel),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // None
+                                    }
+                                });
                         AlertDialog alert = alertDialog.create();
                         alert.setIcon(R.mipmap.ic_launcher);
-                        alert.setTitle("최신 업데이트 확인");
+                        alert.setTitle(context.getString(R.string.sa_checkupdate_dialogtitle));
                         alert.show();
                     }
                 } else {
-                    Toast.makeText(context.getApplicationContext(), "업데이트 서버 데이터 오류", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context.getApplicationContext(),
+                            context.getString(R.string.sa_checkupdate_servererror),
+                            Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -234,6 +241,7 @@ public class SettingActivity extends AppCompatActivity {
     private static class getKcaStart2Data extends AsyncTask<Context, String, String> {
         Context context;
         String result = null;
+
         public getKcaStart2Data(Context ctx) {
             context = ctx;
         }
@@ -257,16 +265,16 @@ public class SettingActivity extends AppCompatActivity {
         public String executeClient() {
             String dataUrl;
             if (kca_version == null) {
-                dataUrl = String.format("http://antest.hol.es/kcanotify/kca_api_start2.php?v=recent");
+                dataUrl = String.format(context.getString(R.string.api_start2_recent_version_link));
             } else {
-                dataUrl = String.format("http://antest.hol.es/kcanotify/kca_api_start2.php?v=%s", kca_version);
+                dataUrl = String.format(context.getString(R.string.api_start2_version_link), kca_version);
             }
 
             AjaxCallback<String> cb = new AjaxCallback<String>() {
                 @Override
                 public void callback(String url, String data, AjaxStatus status) {
                     try {
-                        if(status.getCode() == HttpResponseStatus.OK.code()) {
+                        if (status.getCode() == HttpResponseStatus.OK.code()) {
                             KcaUtils.writeCacheData(context, data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
                             KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
                             if (kca_version == null) {
@@ -274,21 +282,29 @@ public class SettingActivity extends AppCompatActivity {
                             }
                             KcaUtils.setPreferences(context, "kca_version", kca_version);
                             KcaApiData.setDataLoadTriggered();
-                            Toast.makeText(context.getApplicationContext(), "게임 데이터 다운로드 완료", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context.getApplicationContext(),
+                                    context.getString(R.string.sa_getupdate_finished),
+                                    Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(context.getApplicationContext(), "서버 오류 발생 ".concat(status.getMessage()), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context.getApplicationContext(),
+                                    String.format(context.getString(R.string.sa_getupdate_servererror), status.getMessage()),
+                                    Toast.LENGTH_LONG).show();
                         }
                     } catch (IOException e1) {
-                        Toast.makeText(context.getApplicationContext(), "I/O Error when writing cache data", Toast.LENGTH_LONG).show();
-                        Log.e("KCA", "I/O Error");
+                        Toast.makeText(context.getApplicationContext(),
+                                context.getString(R.string.sa_getupdate_ioexceptionerror),
+                                Toast.LENGTH_LONG).show();
+                        //Log.e(TAG, "I/O Error");
                     }
 
                 }
             };
+
+            Toast.makeText(context.getApplicationContext(), context.getString(R.string.sa_getupdate_started), Toast.LENGTH_LONG).show();
             AQuery aq = new AQuery(context);
             cb.header("Referer", "app:/KCA/");
             cb.header("Content-Type", "application/x-www-form-urlencoded");
-            Log.e("KCA", dataUrl);
+            //Log.e(TAG, dataUrl);
             aq.ajax(dataUrl, String.class, cb);
             return null;
         }

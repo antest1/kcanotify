@@ -1,11 +1,23 @@
 <resources>
+    <!-- Application Information -->
     <string name="app_name">시제 깡들리티</string>
-    <string name="app_version">2.0 dev</string>
+    <string name="app_version">2.0 dev 2</string>
     <string name="action_settings">깡들리티 설정</string>
-
-    <string name="description_proxy"><b>Help</b>\n상단 2개 버튼(VPN,SVC) 활성화 이후 게임 실행\n\n※ VPN을 끄면 칸코레에서 데이터를 받아오지 않음\n※ SVC를 끄면 알람 등의 기능 이용 불가 (추후 패치 예정)\n\n<b>주요 기능</b>\n - 원정 및 입거 알림\n - 대파 알림 (출격 중 및 출격 전)\n - 색적/제공치/피로도 표시\n - 출격 중 현재 위치 표시\n - OpenDB에 데이터 전송</string>
-
     <string name="developer_email">kcanotify@gmail.com</string>
+    <string name="app_download_link">http://bit.ly/2hNln5o</string>
+
+    <!-- Link Information -->
+    <string name="api_start2_recent_version_link">http://antest.hol.es/kcanotify/kca_api_start2.php?v=recent</string>
+    <string name="api_start2_version_link" formatted="false">http://antest.hol.es/kcanotify/kca_api_start2.php?v=%s</string>
+    <string name="api_start2_upload_link" formatted="false">http://antest.hol.es/kcanotify/kca_api_start2.php?token=%s&amp;method=%s&amp;v=%s</string>
+    <string name="errorlog_service_link" formatted="false">http://antest.hol.es/kcanotify/errorlog_main.php?token=%s&amp;url=%s&amp;request=%s&amp;v=%s</string>
+    <string name="errorlog_battle_link" formatted="false">http://antest.hol.es/kcanotify/errorlog_battle.php?token=%s&amp;url=%s&amp;node=%s&amp;v=%s</string>
+    <string name="errorlog_notify_link" formatted="false">http://antest.hol.es/kcanotify/errorlog_notify.php?token=%s&amp;url=%s&amp;v=%s</string>
+
+    <!-- Common Text -->
+    <string name="dialog_ok">확인</string>
+    <string name="dialog_cancel">취소</string>
+
     <string name="error_text">오류가 발생했습니다. 개발자에게 오류 로그를 보내주세요.</string>
 
     <string name="heavy_damaged">대파당한 함선이 있습니다!</string>
@@ -16,6 +28,11 @@
     <string name="seek_type_1">33식/1</string>
     <string name="seek_type_3">33식/3</string>
     <string name="seek_type_4">33식/4</string>
+
+    <string name="seek_type_0_detail">단순합산</string>
+    <string name="seek_type_1_detail">33식/Cn=1 (2&#45;5)</string>
+    <string name="seek_type_3_detail">33식/Cn=3 (6&#45;2,6&#45;3)</string>
+    <string name="seek_type_4_detail">33식/Cn=4 (3&#45;5,6&#45;1)</string>
 
     <string name="speed_superfast">초고속</string>
     <string name="speed_fastplus">고속+</string>
@@ -31,21 +48,93 @@
     <string name="process_battle_failed_msg">전투 데이터 처리 오류 발생. 개발자에게 정보를 전송합니다.</string>
     <string name="service_failed_msg">데이터 처리 오류 발생, 개발자에게 정보를 전송합니다.\n깡들리티를 재시작하는 것을 권장합니다.</string>
 
-    <string name="node_info_noevent">%s (기분탓)</string>
-    <string name="node_info_obtain">%s (자원방)</string>
-    <string name="node_info_loss">%s (소용돌이)</string>
-    <string name="node_info_normal">%s</string>
-    <string name="node_info_boss">%s (보스방)</string>
-    <string name="node_info_boss_nightbattle">%s (보스방/야간전)</string>
-    <string name="node_info_boss_nightdaybattle">%s (보스방/야간전->주간전)</string>
-    <string name="node_info_boss_ecbattle">%s (보스방/적 연합함대)</string>
-    <string name="node_info_airbattle">%s (아웃레인지)</string>
-    <string name="node_info_airsearch">%s (항공정찰)</string>
-    <string name="node_info_ldairbattle">%s (공습전)</string>
-    <string name="node_info_nightbattle">%s (야간전)</string>
-    <string name="node_info_nightdaybattle">%s (야간전->주간전)</string>
-    <string name="node_info_tpoint">%s (수송포인트)</string>
-    <string name="node_info_activecell">%s (능동분기)</string>
-    <string name="node_info_sendan">%s (선단호위 끝)</string>
-    <string name="node_info_ecbattle">%s (적 연합함대)</string>
+    <string name="node_info_noevent" formatted="false">%s (기분탓)</string>
+    <string name="node_info_obtain" formatted="false">%s (자원방)</string>
+    <string name="node_info_loss" formatted="false">%s (소용돌이)</string>
+    <string name="node_info_normal" formatted="false">%s</string>
+    <string name="node_info_boss" formatted="false">%s (보스방)</string>
+    <string name="node_info_boss_nightbattle" formatted="false">%s (보스방/야간전)</string>
+    <string name="node_info_boss_nightdaybattle" formatted="false">%s (보스방/야간전->주간전)</string>
+    <string name="node_info_boss_ecbattle" formatted="false">%s (보스방/적 연합함대)</string>
+    <string name="node_info_airbattle" formatted="false">%s (아웃레인지)</string>
+    <string name="node_info_airsearch" formatted="false">%s (항공정찰)</string>
+    <string name="node_info_ldairbattle" formatted="false">%s (공습전)</string>
+    <string name="node_info_nightbattle" formatted="false">%s (야간전)</string>
+    <string name="node_info_nightdaybattle" formatted="false">%s (야간전->주간전)</string>
+    <string name="node_info_tpoint" formatted="false">%s (수송포인트)</string>
+    <string name="node_info_activecell" formatted="false">%s (능동분기)</string>
+    <string name="node_info_sendan" formatted="false">%s (선단호위 끝)</string>
+    <string name="node_info_ecbattle" formatted="false">%s (적 연합함대)</string>
+
+    <!-- MainActivity Strings -->
+    <string name="ma_toast_kancolle_not_installed">칸코레가 설치되어 있지 않습니다.</string>
+    <string name="description"><b>Help</b>\n상단 2개 버튼(VPN, SVC) 활성화 이후 게임 실행\n\n※ VPN을 끄면 칸코레에서 데이터를 받아오지 않음\n※ SVC를 끄면 알람 등의 기능 이용 불가 (추후 패치 예정)\n\n<b>주요 기능</b>\n - 원정 및 입거 알림\n - 대파 알림 (출격 중 및 출격 전)\n - 색적/제공치/피로도 표시\n - 출격 중 현재 위치 표시\n - OpenDB에 데이터 전송</string>
+
+    <!-- SettingActivity Strings -->
+    <string name="sa_checkupdate_latest" formatted="false">최신 버전입니다. (%s)</string>
+    <string name="sa_checkupdate_hasupdate" formatted="false">업데이트가 있습니다. (%s)\n다운로드하시겠습니까?</string>
+    <string name="sa_checkupdate_dialogtitle">최신 업데이트 확인</string>
+    <string name="sa_checkupdate_nodataerror">업데이트 확인에 문제가 발생했습니다.</string>
+    <string name="sa_checkupdate_servererror">업데이트 서버 오류</string>
+
+    <string name="sa_getupdate_finished">게임 데이터 다운로드 완료</string>
+    <string name="sa_getupdate_started">게임 데이터 다운로드 중&#8230;</string>
+    <string name="sa_getupdate_servererror" formatted="false">서버 오류 발생: %s</string>
+    <string name="sa_getupdate_ioexceptionerror">데이터 저장 중 오류 발생</string>
+
+    <!-- KcaService Strings -->
+    <string name="kca_init_title" formatted="false">%s 동작중</string>
+    <string name="kca_init_content">깡들리티에서 게임을 실행해주세요</string>
+
+    <string name="kca_noti_title_exp_canceled" formatted="false">%d번 원정(%s) 취소</string>
+    <string name="kca_noti_content_exp_canceled" formatted="false">%d번 원정 중인 &lt;%s&gt; 가 귀환합니다.</string>
+    <string name="kca_noti_title_exp_finished" formatted="false">%d번 원정(%s) 도착</string>
+    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; 가 %d번 원정에서 복귀했습니다.</string>
+    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; 가 %d번 원정에서 명령에 의해 귀환하였습니다.</string>
+
+    <string name="kca_noti_title_dock_finished" formatted="false">제%d도크 정비 완료</string>
+    <string name="kca_noti_content_dock_finished" formatted="false">제%d도크: %s의 정비가 완료되었습니다.</string>
+    <string name="kca_noti_content_dock_finished_nodata" formatted="false">제%d도크 내 칸무스의 정비가 완료되었습니다.</string>
+
+    <string name="kca_toast_airpower" formatted="false">제공: %d-%d</string>
+    <string name="kca_toast_seekvalue_d" formatted="false">색적(%s): %.2f</string>
+    <string name="kca_toast_seekvalue_f" formatted="false">색적(%s): %.2f</string>
+
+    <string name="kca_toast_restart_at_kcanotify">깡들리티에서 게임을 다시 시작해주세요</string>
+    <string name="kca_toast_get_data_at_settings">깡들리티 설정에서 게임 데이터를 받아주세요</string>
+    <string name="kca_toast_loading_data">게임 데이터 로딩 중</string>
+    <string name="kca_toast_ioexceptionerror">데이터 캐시에 쓰는 중 오류 발생</string>
+
+    <string name="kca_view_condition" formatted="false">피로도: %s</string>
+    <string name="kca_view_hdmg_damecon_format" formatted="false">[대파/다메콘 있음!] %s 동작중 %s</string>
+    <string name="kca_view_hdmg_format" formatted="false">[대파 있음!] %s 동작중 %s</string>
+    <string name="kca_view_normal_format" formatted="false">%s 동작중 %s</string>
+
+    <string name="kca_view_noexpedition">원정나간 함대가 없습니다.</string>
+    <string name="kca_view_expedition_header">원정 남은 시간: </string>
+
+    <!-- Setting Strings -->
+    <string name="setting_menu_kand_head">깡들리티 설정</string>
+    <string name="setting_menu_kand_title_saku_cal">색적 계산방식 선택</string>
+    <string name="setting_menu_kand_title_opendb">OpenDB에 데이터 전송</string>
+    <string name="setting_menu_kand_desc_opendb">http://swaytwig.com/opendb/</string>
+    <string name="setting_menu_kand_title_exp_realtime_show">OpenDB에 데이터 전송</string>
+    <string name="setting_menu_kand_desc_exp_realtime_show">상단의 남은 원정 시간 실시간 표시 여부</string>
+    <string name="setting_menu_kand_title_game_data_down">게임 데이터 다운로드</string>
+    <string name="setting_menu_kand_desc_game_data_down">게임 데이터가 로딩되지 않을 때 사용</string>
+
+    <string name="setting_menu_noti_head">알림 설정</string>
+    <string name="setting_menu_noti_title_exp">원정 알림</string>
+    <string name="setting_menu_noti_desc_exp">원정 도착 시 상단 알림 및 진동 여부 설정</string>
+    <string name="setting_menu_noti_title_dock">입거 알림</string>
+    <string name="setting_menu_noti_desc_dock">입거 완료 시 상단 알림 및 잔동 여부 설정</string>
+    <string name="setting_menu_noti_title_hdmg_vib">대파 진동 알림</string>
+    <string name="setting_menu_noti_desc_hdmg_vib">대파 알림 시 진동 여부 설정 (알림은 항상 활성)</string>
+
+    <string name="setting_menu_app_head">어플리케이션 정보</string>
+    <string name="setting_menu_app_title_current">현재 어플리케이션 버전</string>
+    <string name="setting_menu_app_title_updatecheck">업데이트 확인</string>
+    <string name="setting_menu_app_title_contact">건의/오류 보고</string>
+    <string name="setting_menu_app_desc_contact">개발자에게 메일 전송</string>
+
 </resources>

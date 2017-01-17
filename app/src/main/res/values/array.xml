@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="seekTypeOption">
-        <item>단순합산</item>
-        <item>33식/Cn=1 (2-5)</item>
-        <item>33식/Cn=3 (6-2,6-3)</item>
-        <item>33식/Cn=4 (3-5,6-1)</item>
+        <item>@string/seek_type_0_detail</item>
+        <item>@string/seek_type_1_detail</item>
+        <item>@string/seek_type_3_detail</item>
+        <item>@string/seek_type_4_detail</item>
     </string-array>
 
     <string-array name="seekTypeOptionValue">

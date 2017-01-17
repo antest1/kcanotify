@@ -31,22 +31,22 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
+import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
+import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "KCAV";
     public final static String KC_PACKAGE_NAME = "com.dmm.dmmlabo.kancolle";
     private static final int REQUEST_VPN = 1;
-    private static final int REQUEST_SVC = 2;
-
 
     public static boolean isKcaServiceOn = false;
     Toolbar toolbar;
 
     private boolean running = false;
     private AlertDialog dialogVpn = null;
-    public static Context ctx;
-
+    Context ctx;
+    Intent kcIntent;
     ToggleButton vpnbtn, svcbtn;
     Button kcbtn;
     TextView textDescription = null;
@@ -57,9 +57,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vpn_main);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        prefs.edit().putBoolean(PREF_SVC_ENABLED, KcaService.getServiceStatus()).apply();
+
+        if (isPackageExist(KC_PACKAGE_NAME)) {
+            kcIntent = getPackageManager().getLaunchIntentForPackage(KC_PACKAGE_NAME);
+            kcIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            KcaService.setKcIntent(kcIntent);
+            is_kca_installed = true;
+        } else {
+            is_kca_installed = false;
+        }
 
         vpnbtn = (ToggleButton) findViewById(R.id.vpnbtn);
         vpnbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -70,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         final Intent prepare = VpnService.prepare(MainActivity.this);
                         if (prepare == null) {
-                            Log.i(TAG, "Prepare done");
+                            //Log.i(TAG, "Prepare done");
                             onActivityResult(REQUEST_VPN, RESULT_OK, null);
                         } else {
                             startActivityForResult(prepare, REQUEST_VPN);
@@ -81,51 +92,45 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     KcaVpnService.stop("switch off", MainActivity.this);
-                    prefs.edit().putBoolean("enabled", false).apply();
+                    prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
                 }
             }
         });
 
         svcbtn = (ToggleButton) findViewById(R.id.svcbtn);
-        svcbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        svcbtn.setOnClickListener(new CompoundButton.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 Intent intent = new Intent(MainActivity.this, KcaService.class);
-                if(isChecked) {
+                if(!prefs.getBoolean(PREF_SVC_ENABLED,false)) {
                     if (is_kca_installed) {
-                        onActivityResult(REQUEST_SVC, RESULT_OK, intent);
+                        prefs.edit().putBoolean(PREF_SVC_ENABLED, true).apply();
+                        setCheckBtn();
+                        startService(intent);
                     } else {
-                        Toast.makeText(getApplicationContext(), "칸코레가 설치되어 있지 않습니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.ma_toast_kancolle_not_installed), Toast.LENGTH_LONG).show();
                     }
                 } else {
                     stopService(intent);
                 }
-
             }
         });
 
         kcbtn = (Button) findViewById(R.id.kcbtn);
+        kcbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(kcIntent);
+                finish();
+            }
+        });
 
         textDescription = (TextView) findViewById(R.id.textDescription);
-        textDescription.setText(R.string.description_proxy);
+        textDescription.setText(R.string.description);
         Linkify.addLinks(textDescription, Linkify.WEB_URLS);
 
         ctx = getApplicationContext();
-
-        if (isPackageExist(KC_PACKAGE_NAME)) {
-            final Intent kcIntent = getPackageManager().getLaunchIntentForPackage(KC_PACKAGE_NAME);
-            kcIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            is_kca_installed = true;
-            kcbtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(kcIntent);
-                    finish();
-                }
-            });
-        } else {
-            is_kca_installed = false;
-        }
         setDefaultPreferences();
     }
 
@@ -151,12 +156,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void setVpnBtn() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        vpnbtn.setChecked(prefs.getBoolean("enabled", false));
+        vpnbtn.setChecked(prefs.getBoolean(PREF_VPN_ENABLED, false));
     }
 
     public void setCheckBtn() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        svcbtn.setChecked(prefs.getBoolean("svcenabled", false));
+        svcbtn.setChecked(prefs.getBoolean(PREF_SVC_ENABLED, false));
     }
 
     @Override
@@ -232,22 +237,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.i(TAG, "onActivityResult request=" + requestCode + " result=" + resultCode + " ok=" + (resultCode == RESULT_OK));
+        //Log.i(TAG, "onActivityResult request=" + requestCode + " result=" + resultCode + " ok=" + (resultCode == RESULT_OK));
         if (requestCode == REQUEST_VPN) {
-            Log.e("KCA", "Request_vpn");
-            prefs.edit().putBoolean("enabled", resultCode == RESULT_OK).apply();
+            prefs.edit().putBoolean(PREF_VPN_ENABLED, resultCode == RESULT_OK).apply();
             if (resultCode == RESULT_OK) {
                 KcaVpnService.start("prepared", this);
             } else if (resultCode == RESULT_CANCELED) {
                 // Canceled
-            }
-        } else if (requestCode == REQUEST_SVC) {
-            Log.e("KCA", "Request_svc");
-            Log.e("KCA", String.valueOf(resultCode == RESULT_OK));
-            prefs.edit().putBoolean("svcenabled", resultCode == RESULT_OK).apply();
-            if (resultCode == RESULT_OK) {
-                setCheckBtn();
-                startService(data);
             }
         }
     }
