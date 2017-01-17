@@ -315,21 +315,26 @@ public class KcaVpnService extends VpnService {
 
     @Override
     public void onDestroy() {
+        try {
+            if (vpn != null) {
+                stopNative(vpn, true);
+                stopVPN(vpn);
+                vpn = null;
+                unprepare();
+            }
+        } catch (Throwable ex) {
+            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+        }
         jni_done();
         super.onDestroy();
     }
 
     @Override
     public void onRevoke() {
+
         Log.i(TAG, "Revoke");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putBoolean("enabled", false).apply();
-        if (vpn != null) {
-            stopNative(vpn, true);
-            stopVPN(vpn);
-            vpn = null;
-            unprepare();
-        }
         super.onRevoke();
     }
 
