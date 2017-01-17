@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/setting_menu_kand_head" >
+    <PreferenceCategory android:title="@string/setting_menu_kand_head">
         <ListPreference
             android:id="@+id/seek_type_value"
             android:defaultValue="1"
@@ -9,65 +9,72 @@
             android:key="kca_seek_cn"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="@string/setting_menu_kand_title_saku_cal"
-         />
+            android:title="@string/setting_menu_kand_title_saku_cal" />
 
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="opendb_api_use"
-            android:title="@string/setting_menu_kand_title_opendb"
-            android:summary = "@string/setting_menu_kand_desc_opendb" />
+            android:summary="@string/setting_menu_kand_desc_opendb"
+            android:title="@string/setting_menu_kand_title_opendb" />
 
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="expedition_view"
-            android:title="@string/setting_menu_kand_title_exp_realtime_show"
-            android:summary="@string/setting_menu_kand_desc_exp_realtime_show" />
+            android:summary="@string/setting_menu_kand_desc_exp_realtime_show"
+            android:title="@string/setting_menu_kand_title_exp_realtime_show" />
 
         <Preference
-            android:key="download_data"
             android:defaultValue=""
-            android:title="@string/setting_menu_kand_title_game_data_down"
-            android:summary="@string/setting_menu_kand_desc_game_data_down" />
+            android:key="download_data"
+            android:summary="@string/setting_menu_kand_desc_game_data_down"
+            android:title="@string/setting_menu_kand_title_game_data_down" />
 
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/setting_menu_noti_head" >
+    <PreferenceCategory android:title="@string/setting_menu_noti_head">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="notify_expedition"
-            android:title="@string/setting_menu_noti_title_exp"
-            android:summary="@string/setting_menu_noti_desc_exp" />
+            android:summary="@string/setting_menu_noti_desc_exp"
+            android:title="@string/setting_menu_noti_title_exp" />
 
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="notify_docking"
-            android:title="@string/setting_menu_noti_title_dock"
-            android:summary="@string/setting_menu_noti_desc_dock" />
+            android:summary="@string/setting_menu_noti_desc_dock"
+            android:title="@string/setting_menu_noti_title_dock" />
 
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="notify_vibrate_heavydamaged"
-            android:title="@string/setting_menu_noti_title_hdmg_vib"
-            android:summary="@string/setting_menu_noti_desc_hdmg_vib" />
+            android:summary="@string/setting_menu_noti_desc_hdmg_vib"
+            android:title="@string/setting_menu_noti_title_hdmg_vib" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/setting_menu_app_head" >
+    <PreferenceCategory android:title="@string/setting_menu_app_head">
         <Preference
-            android:key="kca_version"
-            android:title="@string/setting_menu_app_title_current"
             android:defaultValue=" "
-            android:summary="@string/app_version"/>
+            android:key="kca_version"
+            android:summary="@string/app_version"
+            android:title="@string/setting_menu_app_title_current" />
         <Preference
-            android:key="check_update"
             android:defaultValue=""
-            android:title="@string/setting_menu_app_title_updatecheck"
-            />
+            android:key="check_update"
+            android:title="@string/setting_menu_app_title_updatecheck" />
         <Preference
-            android:title="@string/setting_menu_app_title_contact"
-            android:summary="@string/setting_menu_app_desc_contact">
+            android:summary="@string/setting_menu_app_desc_contact"
+            android:title="@string/setting_menu_app_title_contact">
             <intent
                 android:action="android.intent.action.SENDTO"
                 android:data="mailto:kcanotify@gmail.com" />
+        </Preference>
+        <Preference
+            android:defaultValue=""
+            android:key="app_information"
+            android:title="@string/setting_menu_app_info">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.antest1.kcanotify"
+                android:targetClass="com.antest1.kcanotify.KcaInfoActivity" />
         </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -299,8 +299,6 @@ public class SettingActivity extends AppCompatActivity {
 
                 }
             };
-
-            Toast.makeText(context.getApplicationContext(), context.getString(R.string.sa_getupdate_started), Toast.LENGTH_LONG).show();
             AQuery aq = new AQuery(context);
             cb.header("Referer", "app:/KCA/");
             cb.header("Content-Type", "application/x-www-form-urlencoded");
