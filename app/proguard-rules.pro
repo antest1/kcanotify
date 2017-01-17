@@ -49,6 +49,12 @@
 -keep class org.acra.** { *; }
 
 -dontwarn android.test.**
+-keep public class android.widget.** { *; }
+
+#Support library
+-keep class android.support.v7.widget.** { *; }
+-dontwarn android.support.v4.**
+
 
 -assumenosideeffects class android.util.Log {
     public static *** d(...);
@@ -58,6 +64,9 @@
     public static *** w(...);
     public static *** wtf(...);
 }
+
+-keepnames class com.antest1.kcanotify.** { *; }
+
 
 #NetGuard
 -keepnames class eu.faircode.netguard.** { *; }
@@ -81,3 +90,9 @@
     eu.faircode.netguard.Allowed isAddressAllowed(eu.faircode.netguard.Packet);
     void accountUsage(eu.faircode.netguard.Usage);
 }
+
+-keep class com.antest1.kcanotify.KcaVpnData {
+    int containsKcaServer(byte[], byte[]);
+    void getDataFromNative(byte[], int, int, byte[], byte[]);
+ }
+
