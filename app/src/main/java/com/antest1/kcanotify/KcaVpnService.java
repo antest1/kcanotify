@@ -182,14 +182,6 @@ public class KcaVpnService extends VpnService {
                 }
             }
 
-            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            if (tm != null && !phone_state &&
-                    Util.hasPhoneStatePermission(KcaVpnService.this)) {
-                tm.listen(phoneStateListener, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE | PhoneStateListener.LISTEN_SERVICE_STATE);
-                phone_state = true;
-                Log.i(TAG, "Listening to service state changes");
-            }
-
             try {
                 switch (cmd) {
                     case start:
@@ -358,14 +350,6 @@ public class KcaVpnService extends VpnService {
         if (registeredInteractiveState) {
             unregisterReceiver(interactiveStateReceiver);
             registeredInteractiveState = false;
-        }
-
-        if (phone_state) {
-            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            if (tm != null) {
-                tm.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
-                phone_state = false;
-            }
         }
 
         try {
@@ -750,47 +734,6 @@ public class KcaVpnService extends VpnService {
             Log.i(TAG, "Received " + intent);
             Util.logExtras(intent);
             reload("connectivity changed", KcaVpnService.this);
-        }
-    };
-
-    private PhoneStateListener phoneStateListener = new PhoneStateListener() {
-        private String last_generation = null;
-        private int last_international = -1;
-
-        @Override
-        public void onDataConnectionStateChanged(int state, int networkType) {
-            if (state == TelephonyManager.DATA_CONNECTED) {
-                String current_generation = Util.getNetworkGeneration(KcaVpnService.this);
-                Log.i(TAG, "Data connected generation=" + current_generation);
-
-                if (last_generation == null || !last_generation.equals(current_generation)) {
-                    Log.i(TAG, "New network generation=" + current_generation);
-                    last_generation = current_generation;
-
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(KcaVpnService.this);
-                    if (prefs.getBoolean("unmetered_2g", false) ||
-                            prefs.getBoolean("unmetered_3g", false) ||
-                            prefs.getBoolean("unmetered_4g", false))
-                        reload("data connection state changed", KcaVpnService.this);
-                }
-            }
-        }
-
-        @Override
-        public void onServiceStateChanged(ServiceState serviceState) {
-            if (serviceState.getState() == ServiceState.STATE_IN_SERVICE) {
-                int current_international = (Util.isInternational(KcaVpnService.this) ? 1 : 0);
-                Log.i(TAG, "In service international=" + current_international);
-
-                if (last_international != current_international) {
-                    Log.i(TAG, "New international=" + current_international);
-                    last_international = current_international;
-
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(KcaVpnService.this);
-                    if (prefs.getBoolean("national_roaming", false))
-                        reload("service state changed", KcaVpnService.this);
-                }
-            }
         }
     };
 
