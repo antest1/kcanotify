@@ -1,7 +1,7 @@
 <resources>
     <!-- Application Information -->
     <string name="app_name">시제 깡들리티</string>
-    <string name="app_version">2.0 dev 2</string>
+    <string name="app_version">2.0 dev 3</string>
     <string name="action_settings">깡들리티 설정</string>
     <string name="developer_email">kcanotify@gmail.com</string>
     <string name="app_download_link">http://bit.ly/2hNln5o</string>
@@ -109,13 +109,14 @@
     <string name="kca_toast_loading_data">게임 데이터 로딩 중</string>
     <string name="kca_toast_ioexceptionerror">데이터 캐시에 쓰는 중 오류 발생</string>
 
+    <string name="kca_view_activate_vpn">VPN 서비스를 활성화해주세요</string>
     <string name="kca_view_condition" formatted="false">피로도: %s</string>
     <string name="kca_view_hdmg_damecon_format" formatted="false">[대파/다메콘 있음!] %s 동작중 %s</string>
     <string name="kca_view_hdmg_format" formatted="false">[대파 있음!] %s 동작중 %s</string>
     <string name="kca_view_normal_format" formatted="false">%s 동작중 %s</string>
 
     <string name="kca_view_noexpedition">원정나간 함대가 없습니다.</string>
-    <string name="kca_view_expedition_header">원정 남은 시간: </string>
+    <string name="kca_view_expedition_header">원정 남은 시간:</string>
 
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">깡들리티 설정</string>

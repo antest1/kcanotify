@@ -2,12 +2,16 @@ package com.antest1.kcanotify;
 
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Handler;
@@ -17,6 +21,9 @@ import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.os.Process;
@@ -34,6 +41,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -80,6 +88,10 @@ public class KcaVpnService extends VpnService {
     private static volatile PowerManager.WakeLock wlInstance = null;
     public static boolean is_on = false;
 
+    private boolean registeredInteractiveState = false;
+    private boolean phone_state = false;
+    private boolean last_interactive = false;
+    private static final String ACTION_SCREEN_OFF_DELAYED = "com.antest1.kcanotify.SCREEN_OFF_DELAYED";
 
     public enum Command {run, start, reload, stop, stats, set, householding, watchdog}
 
@@ -150,6 +162,34 @@ public class KcaVpnService extends VpnService {
             Command cmd = (Command) intent.getSerializableExtra(EXTRA_COMMAND);
             String reason = intent.getStringExtra(EXTRA_REASON);
             Log.e(TAG, cmd.toString() + " " + reason);
+
+            if (prefs.getBoolean("screen_on", true)) {
+                Log.i(TAG, "Started listening for interactive state changes");
+                if (prefs.getBoolean("screen_on", true)) {
+                    last_interactive = Util.isInteractive(KcaVpnService.this);
+                    IntentFilter ifInteractive = new IntentFilter();
+                    ifInteractive.addAction(Intent.ACTION_SCREEN_ON);
+                    ifInteractive.addAction(Intent.ACTION_SCREEN_OFF);
+                    ifInteractive.addAction(ACTION_SCREEN_OFF_DELAYED);
+                    registerReceiver(interactiveStateReceiver, ifInteractive);
+                    registeredInteractiveState = true;
+                }
+            } else {
+                Log.i(TAG, "Stopped listening for interactive state changes");
+                if (registeredInteractiveState) {
+                    unregisterReceiver(interactiveStateReceiver);
+                    registeredInteractiveState = false;
+                }
+            }
+
+            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            if (tm != null && !phone_state &&
+                    Util.hasPhoneStatePermission(KcaVpnService.this)) {
+                tm.listen(phoneStateListener, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE | PhoneStateListener.LISTEN_SERVICE_STATE);
+                phone_state = true;
+                Log.i(TAG, "Listening to service state changes");
+            }
+
             try {
                 switch (cmd) {
                     case start:
@@ -315,6 +355,19 @@ public class KcaVpnService extends VpnService {
 
     @Override
     public void onDestroy() {
+        if (registeredInteractiveState) {
+            unregisterReceiver(interactiveStateReceiver);
+            registeredInteractiveState = false;
+        }
+
+        if (phone_state) {
+            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            if (tm != null) {
+                tm.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
+                phone_state = false;
+            }
+        }
+
         try {
             if (vpn != null) {
                 stopNative(vpn, true);
@@ -590,7 +643,7 @@ public class KcaVpnService extends VpnService {
     // Called from native code
     private void dnsResolved(ResourceRecord rr) {
         /*
-        if (DatabaseHelper.getInstance(ServiceSinkhole.this).insertDns(rr)) {
+        if (DatabaseHelper.getInstance(KcaVpnService.this).insertDns(rr)) {
             Log.i(TAG, "New IP " + rr);
             prepareUidIPFilters(rr.QName);
         }*/
@@ -634,6 +687,112 @@ public class KcaVpnService extends VpnService {
         */
     }
 
+    private BroadcastReceiver interactiveStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "Received " + intent);
+            Util.logExtras(intent);
+
+            // Check if rules needs to be reloaded
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(KcaVpnService.this);
+            int delay = Integer.parseInt(prefs.getString("screen_delay", "0"));
+            boolean interactive = Intent.ACTION_SCREEN_ON.equals(intent.getAction());
+
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(ACTION_SCREEN_OFF_DELAYED), PendingIntent.FLAG_UPDATE_CURRENT);
+            am.cancel(pi);
+
+            if (interactive || delay == 0) {
+                last_interactive = interactive;
+                reload("interactive state changed", KcaVpnService.this);
+            } else {
+                if (ACTION_SCREEN_OFF_DELAYED.equals(intent.getAction())) {
+                    last_interactive = interactive;
+                    reload("interactive state changed", KcaVpnService.this);
+                } else {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+                        am.set(AlarmManager.RTC_WAKEUP, new Date().getTime() + delay * 60 * 1000L, pi);
+                    else
+                        am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, new Date().getTime() + delay * 60 * 1000L, pi);
+                }
+            }
+        }
+    };
+
+    private BroadcastReceiver idleStateReceiver = new BroadcastReceiver() {
+        @Override
+        @TargetApi(Build.VERSION_CODES.M)
+        public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "Received " + intent);
+            Util.logExtras(intent);
+
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            Log.i(TAG, "device idle=" + pm.isDeviceIdleMode());
+
+            // Reload rules when coming from idle mode
+            if (!pm.isDeviceIdleMode())
+                reload("idle state changed", KcaVpnService.this);
+        }
+    };
+
+    private BroadcastReceiver connectivityChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Filter VPN connectivity changes
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                int networkType = intent.getIntExtra(ConnectivityManager.EXTRA_NETWORK_TYPE, ConnectivityManager.TYPE_DUMMY);
+                if (networkType == ConnectivityManager.TYPE_VPN)
+                    return;
+            }
+
+            // Reload rules
+            Log.i(TAG, "Received " + intent);
+            Util.logExtras(intent);
+            reload("connectivity changed", KcaVpnService.this);
+        }
+    };
+
+    private PhoneStateListener phoneStateListener = new PhoneStateListener() {
+        private String last_generation = null;
+        private int last_international = -1;
+
+        @Override
+        public void onDataConnectionStateChanged(int state, int networkType) {
+            if (state == TelephonyManager.DATA_CONNECTED) {
+                String current_generation = Util.getNetworkGeneration(KcaVpnService.this);
+                Log.i(TAG, "Data connected generation=" + current_generation);
+
+                if (last_generation == null || !last_generation.equals(current_generation)) {
+                    Log.i(TAG, "New network generation=" + current_generation);
+                    last_generation = current_generation;
+
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(KcaVpnService.this);
+                    if (prefs.getBoolean("unmetered_2g", false) ||
+                            prefs.getBoolean("unmetered_3g", false) ||
+                            prefs.getBoolean("unmetered_4g", false))
+                        reload("data connection state changed", KcaVpnService.this);
+                }
+            }
+        }
+
+        @Override
+        public void onServiceStateChanged(ServiceState serviceState) {
+            if (serviceState.getState() == ServiceState.STATE_IN_SERVICE) {
+                int current_international = (Util.isInternational(KcaVpnService.this) ? 1 : 0);
+                Log.i(TAG, "In service international=" + current_international);
+
+                if (last_international != current_international) {
+                    Log.i(TAG, "New international=" + current_international);
+                    last_international = current_international;
+
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(KcaVpnService.this);
+                    if (prefs.getBoolean("national_roaming", false))
+                        reload("service state changed", KcaVpnService.this);
+                }
+            }
+        }
+    };
 
     public static void start(String reason, Context context) {
         Intent intent = new Intent(context, KcaVpnService.class);

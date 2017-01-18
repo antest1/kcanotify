@@ -249,8 +249,10 @@ public class KcaService extends Service {
             content = String.format(getString(R.string.kca_noti_content_exp_canceled), missionNo, kantaiName);
         } else {
             title = String.format(getString(R.string.kca_noti_title_exp_finished), missionNo, missionName);
-            if(caFlag) content = String.format(getString(R.string.kca_noti_content_exp_finished_canceled), kantaiName, missionNo);
-            else content = String.format(getString(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNo);
+            if (caFlag)
+                content = String.format(getString(R.string.kca_noti_content_exp_finished_canceled), kantaiName, missionNo);
+            else
+                content = String.format(getString(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNo);
 
         }
 
@@ -332,12 +334,14 @@ public class KcaService extends Service {
     }
 
     public void handleServiceMessage(Message msg) {
+
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String url = msg.getData().getString("url");
         String data = msg.getData().getString("data");
         String request = msg.getData().getString("request");
 
-        if (!prefs.getBoolean("enabled", false) || url.length() == 0 || viewNotificationBuilder == null) {
+        if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.length() == 0 || viewNotificationBuilder == null) {
             return;
         }
 
@@ -418,15 +422,6 @@ public class KcaService extends Service {
                 if (jsonDataObj.has("api_data")) {
                     JsonArray reqGetMemberDeckApiData = jsonDataObj.get("api_data").getAsJsonArray();
                     processExpeditionInfo(reqGetMemberDeckApiData);
-                }
-                return;
-            }
-
-            if (url.startsWith(API_REQ_MISSION_RETURN)) {
-                //Log.e("KCA", "Expedition Handler Called");
-                if (jsonDataObj.has("api_data")) {
-                    JsonObject reqGetMemberDeckApiData = jsonDataObj.getAsJsonObject("api_data");
-                    cancelExpeditionInfo(reqGetMemberDeckApiData);
                 }
                 return;
             }
@@ -589,6 +584,15 @@ public class KcaService extends Service {
                         KcaBattle.setHpData(api_data);
                         processFirstDeckInfo(api_deck_data);
                     }
+                }
+
+                if (url.startsWith(API_REQ_MISSION_RETURN)) {
+                    //Log.e("KCA", "Expedition Handler Called");
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject reqGetMemberDeckApiData = jsonDataObj.getAsJsonObject("api_data");
+                        cancelExpeditionInfo(reqGetMemberDeckApiData);
+                    }
+                    return;
                 }
 
                 if (url.startsWith(API_GET_MEMBER_SLOT_ITEM)) {
@@ -991,7 +995,7 @@ public class KcaService extends Service {
         String url = msg.getData().getString("url");
         String data = msg.getData().getString("data");
 
-        if (!prefs.getBoolean("enabled", false) || !isPortAccessed || url.length() == 0 || viewNotificationBuilder == null) {
+        if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || !isPortAccessed || url.length() == 0 || viewNotificationBuilder == null) {
             return;
         }
 
@@ -1288,6 +1292,7 @@ public class KcaService extends Service {
     }
 
     private void processFirstDeckInfo(JsonArray data) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String delimeter = " | ";
         if (!isGameDataLoaded()) {
             Log.e("KCA", "processFirstDeckInfo: Game Data is Null");
@@ -1444,6 +1449,7 @@ public class KcaService extends Service {
                 }
             }
         }
+        if (idx == -1) return;
         Log.e("KCA", "Arrive time: " + String.valueOf(arrive_time));
         kcaExpeditionRunnableList[idx].canceled(arrive_time);
     }
@@ -1492,50 +1498,56 @@ public class KcaService extends Service {
     }
 
     public void setFrontViewNotifier(int type, int id, String content) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         boolean is_portrait = !is_landscape;
         boolean no_exp_flag = true;
 
-        String nodeString = "";
-        if (currentNode.length() > 0) {
-            nodeString = String.format("[%s]", currentNodeInfo.replaceAll("[()]", "").replaceAll("\\s", "/"));
-        }
         String notifiTitle = "";
-        switch (heavyDamagedMode) {
-            case HD_DAMECON:
-                notifiTitle = String.format(getString(R.string.kca_view_hdmg_damecon_format), getString(R.string.app_name), nodeString);
-                break;
-            case HD_DANGER:
-                notifiTitle = String.format(getString(R.string.kca_view_hdmg_format), getString(R.string.app_name), nodeString);
-                break;
-            default:
-                notifiTitle = String.format(getString(R.string.kca_view_normal_format), getString(R.string.app_name), nodeString);
-                break;
-        }
-
         String notifiString = "";
         String expeditionString = "";
-        String expString = "";
-        try {
-            JsonArray deckInfo = new JsonParser().parse(kcaFirstDeckInfo).getAsJsonArray();
-            List<String> deckInfoStringList = new ArrayList<String>();
-            for (Object item : deckInfo) {
-                JsonObject data = (JsonObject) item;
-                if (is_portrait) {
-                    deckInfoStringList.add(data.get("portrait_value").getAsString());
-                } else {
-                    deckInfoStringList.add(data.get("landscape_value").getAsString());
-                }
-                if (data.get("is_portrait_newline").getAsInt() == 1 && is_portrait) {
-                    notifiString = notifiString.concat(joinStr(deckInfoStringList, " / ")).concat("\n");
-                    deckInfoStringList.clear();
-                }
-            }
-            notifiString = notifiString.concat(joinStr(deckInfoStringList, " / "));
-        } catch (Exception e) {
-            notifiString = kcaFirstDeckInfo;
-        }
 
+        if (!prefs.getBoolean(PREF_VPN_ENABLED, false)) {
+            notifiTitle = String.format(getString(R.string.kca_view_normal_format), getString(R.string.app_name), "");
+            notifiString = getString(R.string.kca_view_activate_vpn);
+        } else {
+            String nodeString = "";
+            if (currentNode.length() > 0) {
+                nodeString = String.format("[%s]", currentNodeInfo.replaceAll("[()]", "").replaceAll("\\s", "/"));
+            }
+            switch (heavyDamagedMode) {
+                case HD_DAMECON:
+                    notifiTitle = String.format(getString(R.string.kca_view_hdmg_damecon_format), getString(R.string.app_name), nodeString);
+                    break;
+                case HD_DANGER:
+                    notifiTitle = String.format(getString(R.string.kca_view_hdmg_format), getString(R.string.app_name), nodeString);
+                    break;
+                default:
+                    notifiTitle = String.format(getString(R.string.kca_view_normal_format), getString(R.string.app_name), nodeString);
+                    break;
+            }
+
+            String expString = "";
+            try {
+                JsonArray deckInfo = new JsonParser().parse(kcaFirstDeckInfo).getAsJsonArray();
+                List<String> deckInfoStringList = new ArrayList<String>();
+                for (Object item : deckInfo) {
+                    JsonObject data = (JsonObject) item;
+                    if (is_portrait) {
+                        deckInfoStringList.add(data.get("portrait_value").getAsString());
+                    } else {
+                        deckInfoStringList.add(data.get("landscape_value").getAsString());
+                    }
+                    if (data.get("is_portrait_newline").getAsInt() == 1 && is_portrait) {
+                        notifiString = notifiString.concat(joinStr(deckInfoStringList, " / ")).concat("\n");
+                        deckInfoStringList.clear();
+                    }
+                }
+                notifiString = notifiString.concat(joinStr(deckInfoStringList, " / "));
+            } catch (Exception e) {
+                notifiString = kcaFirstDeckInfo;
+            }
+        }
         List<String> kcaExpStrList = new ArrayList<String>();
         for (int i = 0; i < 3; i++) {
             if (KcaExpedition.left_time_str[i] != null) {
@@ -1543,12 +1555,13 @@ public class KcaService extends Service {
                 kcaExpStrList.add(KcaExpedition.left_time_str[i]);
             }
         }
+
         if (isExpViewEnabled()) {
             if (no_exp_flag) {
                 expeditionString = expeditionString.concat(getString(R.string.kca_view_noexpedition));
             } else {
                 if (is_landscape) {
-                    expeditionString = expeditionString.concat(getString(R.string.kca_view_expedition_header));
+                    expeditionString = expeditionString.concat(getString(R.string.kca_view_expedition_header)).concat(" ");
                     //expeditionString = expeditionString.concat("\n");
                 }
                 expeditionString = expeditionString.concat(joinStr(kcaExpStrList, " / "));
