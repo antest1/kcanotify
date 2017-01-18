@@ -434,7 +434,6 @@ void check_tcp_socket(const struct arguments *args,
                 log_android(ANDROID_LOG_WARN, "KCAV: %d", s->tcp.forward->data[0]);
                 log_android(ANDROID_LOG_WARN, "saddr: %s", source);
                 log_android(ANDROID_LOG_WARN, "taddr: %s", dest);
-                test(s->tcp.forward->data, s->tcp.forward->len, KCA_REQUEST, source, dest);
 
                 while (s->tcp.forward != NULL &&
                        s->tcp.forward->seq + s->tcp.forward->sent == s->tcp.remote_seq &&
@@ -444,7 +443,7 @@ void check_tcp_socket(const struct arguments *args,
                                 s->tcp.forward->seq - s->tcp.remote_start,
                                 s->tcp.forward->seq + s->tcp.forward->len - s->tcp.remote_start,
                                 s->tcp.forward->sent);
-
+                    test(s->tcp.forward->data, s->tcp.forward->len, KCA_REQUEST, source, dest);
                     ssize_t sent = send(s->socket,
                                         s->tcp.forward->data + s->tcp.forward->sent,
                                         s->tcp.forward->len - s->tcp.forward->sent,

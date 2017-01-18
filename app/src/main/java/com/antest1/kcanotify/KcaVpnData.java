@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.antest1.kcanotify.KcaUtils.byteArrayToHex;
 import static com.antest1.kcanotify.KcaUtils.gzipdecompress;
 import static com.antest1.kcanotify.KcaUtils.unchunkdata;
 
@@ -98,19 +99,31 @@ public class KcaVpnData {
         */
 
         //head = head.substring(0, Math.min(60, head.length()));
-        if (type == REQUEST && (head.startsWith("GET") || head.startsWith("POST"))) {
-            state = REQUEST;
-            String[] header = head.split("\r\n");
-            kcdataflag = checkKcApi(header[0]);
-            requestUri = header[0].split(" ")[1];
-            int head_size = head.length() + 4;
+        if (type == REQUEST) {
+            if (head.startsWith("GET") || head.startsWith("POST")) {
+                state = REQUEST;
+                String[] header = head.split("\r\n");
+                kcdataflag = checkKcApi(header[0]);
+                requestUri = header[0].split(" ")[1];
+                if(head.startsWith("POST")) {
+                    if (head.length() == data.length) { // No data
+                        requestData = new byte[]{};
+                    } else {
+                        int head_size = head.length() + 4;
+                        requestData = Arrays.copyOfRange(data, head_size, data.length);
+                    }
+                } else {
+                    requestData = new byte[]{};
+                }
+                responseData = new byte[]{};
 
-            requestData = Arrays.copyOfRange(data, head_size, data.length);
-            responseData = new byte[]{};
-
-            isreadyflag = false;
-            gzipflag = false;
-            chunkflag = false;
+                isreadyflag = false;
+                gzipflag = false;
+                chunkflag = false;
+            }
+            else {
+                requestData = Bytes.concat(requestData, data);
+            }
 
         } else if (type == RESPONSE) {
             state = RESPONSE;
