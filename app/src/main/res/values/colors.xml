@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2C3E50</color>
-    <color name="colorPrimaryDark">#1D2935</color>
-    <color name="colorAccent">#16A085</color>
-    <color name="colorBtn">#D6D6D6</color>
+    <color name="colorPrimary">#2c3e50</color>
+    <color name="colorPrimaryDark">#1d2935</color>
+    <color name="colorAccent">#16a085</color>
+    <color name="colorBtn">#d6d6d6</color>
+    <color name="white">#ffffff</color>
+
+    <color name="colorBattle">#ff0000</color>
+    <color name="colorBossBattle">#d50000</color>
+    <color name="colorItem">#6bc613</color>
+    <color name="colorNone">#60c1d4</color>
+    <color name="colorVortex">#af85e8</color>
+    <color name="colorNightBattle">#200a40</color>
+    <color name="colorAirBattle">#4e342e</color>
+
+    <color name="colorProgressBack">#d6d6d6</color>
+    <color name="colorNormalState">#64dd17</color>
+    <color name="colorLightDmgState">#ffee58</color>
+    <color name="colorModerateDmgState">#f9a825</color>
+    <color name="colorHeavyDmgState">#ff5252</color>
+    <color name="colorHeavyDmgStateWarn">#ff5252</color>
+
+    <color name="colorElite">#d50000</color>
+    <color name="colorFlagship">#fbc02d</color>
+
+    <color name="colorRankS">#fbc02d</color>
+    <color name="colorRankA">#d50000</color>
+    <color name="colorRankB">#f98b25</color>
+    <color name="colorRankC">#c7b623</color>
+    <color name="colorRankD">#4c9308</color>
+    <color name="colorRankE">#1a9cb6</color>
+
+
 </resources>

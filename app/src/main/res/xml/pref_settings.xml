@@ -24,10 +24,16 @@
             android:title="@string/setting_menu_kand_title_exp_realtime_show" />
 
         <Preference
+        android:defaultValue=""
+        android:key="download_data"
+        android:summary="@string/setting_menu_kand_desc_game_data_down"
+        android:title="@string/setting_menu_kand_title_game_data_down" />
+
+        <Preference
             android:defaultValue=""
-            android:key="download_data"
-            android:summary="@string/setting_menu_kand_desc_game_data_down"
-            android:title="@string/setting_menu_kand_title_game_data_down" />
+            android:key="overlay_setting"
+            android:summary="@string/setting_menu_kand_desc_overlay_setting"
+            android:title="@string/setting_menu_kand_title_overlay_setting" />
 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_menu_noti_head">

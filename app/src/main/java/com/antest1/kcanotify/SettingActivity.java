@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,12 +9,15 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +48,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
+import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaService.kca_version;
 
 
@@ -53,6 +58,7 @@ public class SettingActivity extends AppCompatActivity {
     static Gson gson = new Gson();
     public static String currentVersion = BuildConfig.VERSION_NAME;
     public static final String TAG = "KCA";
+    public static final int REQUEST_OVERLAY_PERMISSION = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +71,7 @@ public class SettingActivity extends AppCompatActivity {
 
         getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new PrefsFragment(), null).commit();
+
     }
 
     @Override
@@ -107,11 +114,42 @@ public class SettingActivity extends AppCompatActivity {
                         }
                     });
                 }
+                if (key.equals(PREF_OVERLAY_SETTING)) {
+                    pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                showObtainingPermissionOverlayWindow();
+                            } else {
+                                Toast.makeText(getActivity(), getString(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT).show();
+                            }
+                            return false;
+                        }
+                    });
+                }
                 if (pref instanceof ListPreference) {
                     ListPreference etp = (ListPreference) pref;
                     pref.setSummary(etp.getEntry());
                 }
 
+            }
+        }
+
+        @TargetApi(Build.VERSION_CODES.M)
+        public void showObtainingPermissionOverlayWindow() {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
+            startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION);
+        }
+
+        @Override
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == REQUEST_OVERLAY_PERMISSION) {
+                if(Settings.canDrawOverlays(getActivity())) {
+                    Toast.makeText(getActivity(), getString(R.string.sa_overlay_ok), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.sa_overlay_no), Toast.LENGTH_SHORT).show();
+                }
             }
         }
 

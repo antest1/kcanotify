@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -37,6 +38,9 @@
             android:icon="@mipmap/noti_icon3"
             android:configChanges="orientation|screenSize" >
         </service>
+
+        <service android:name=".KcaViewButtonService" />
+        <service android:name=".KcaBattleViewService" />
 
         <service android:name=".KcaVpnService"
             android:icon="@mipmap/noti_icon3"

@@ -64,6 +64,7 @@ public class KcaExpedition implements Runnable {
         sHandler = h;
 
         complete_time_check[kantai_idx] = time;
+        canceled_flag[kantai_idx] = false;
         mHandler = new Handler() {
             public void handleMessage(Message msg) {
                 if (!KcaService.isServiceOn) return;

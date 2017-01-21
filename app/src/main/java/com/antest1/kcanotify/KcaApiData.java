@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
@@ -25,563 +26,696 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
-import static com.antest1.kcanotify.KcaConstants.KCA_API_DATA_LOADED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_BATTLE_DROPINFO;
+import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaApiData {
-	public static JsonObject kcGameData = null;
-	public static boolean dataLoadTriggered = false;
+    public static JsonObject kcGameData = null;
+    public static boolean dataLoadTriggered = false;
 
-	public static Map<Integer, JsonObject> kcShipData = new HashMap<Integer, JsonObject>();
-	public static Map<Integer, JsonObject> kcItemData = new HashMap<Integer, JsonObject>();
-	public static Map<Integer, JsonObject> userShipData = null;
-	public static Map<Integer, JsonObject> userItemData = null;
+    public static Map<Integer, JsonObject> kcShipData = new HashMap<Integer, JsonObject>();
+    public static Map<Integer, JsonObject> kcItemData = new HashMap<Integer, JsonObject>();
+    public static Map<Integer, JsonObject> userShipData = null;
+    public static Map<Integer, JsonObject> userItemData = null;
 
-	public static Map<Integer, JsonObject> kcMissionData = new HashMap<Integer, JsonObject>();
-	public static Map<String, String> kcShipTranslationData = null;
+    public static Map<Integer, JsonObject> kcMissionData = new HashMap<Integer, JsonObject>();
+    public static Map<String, String> kcShipTranslationData = null;
 
-	public static int level = 0;
-	public static Integer experience = 0;
+    public static int level = 0;
+    public static Integer experience = 0;
 
-	public static int maxShipSize = 0;
-	public static int maxItemSize = 0;
-	public static int getShipCountInBattle = 0;
+    public static int maxShipSize = 0;
+    public static int maxItemSize = 0;
+    public static int getShipCountInBattle = 0;
 
-	public static JsonObject mapEdgeInfo = new JsonObject();
-	public static int[] eventMapDifficulty = new int[10];
+    public static JsonObject mapEdgeInfo = new JsonObject();
+    public static int[] eventMapDifficulty = new int[10];
 
-	public static Handler sHandler = null;
-	public static boolean isEventTime = false;
+    public static Handler sHandler = null;
+    public static boolean isEventTime = false;
 
 
-	// Equipment Constants (api_type 2)
-	public static final int T2_GUN_SMALL = 1;
-	public static final int T2_GUN_MEDIUM = 2;
-	public static final int T2_GUN_LARGE = 3;
-	public static final int T2_SUB_GUN = 4;
-	public static final int T2_TORPEDO = 5;
-	public static final int T2_FIGHTER = 6;
-	public static final int T2_BOMBER = 7;
-	public static final int T2_TORPEDO_BOMBER = 8;
-	public static final int T2_SCOUT = 9;
-	public static final int T2_SEA_SCOUT = 10;
-	public static final int T2_SEA_BOMBER = 11;
-	public static final int T2_RADAR_SMALL = 12;
-	public static final int T2_RADAR_LARGE = 13;
-	public static final int T2_SONAR = 14;
-	public static final int T2_DEPTH_CHARGE = 15; // 폭뢰
-	public static final int T2_EXT_ARMOR = 16; // NOT USED
-	public static final int T2_TURBINE = 17; // 기관부강화
-	public static final int T2_SANSHIKIDAN = 18;
-	public static final int T2_AP_SHELL = 19;
-	public static final int T2_VT_FUZE = 20; // NOT USED
-	public static final int T2_MACHINE_GUN = 21;
-	public static final int T2_KOHYOTEKI = 22;
-	public static final int T2_DAMECON = 23;
-	public static final int T2_LANDING_CRAFT= 24;
-	public static final int T2_AUTOGYRO = 25;
-	public static final int T2_ANTISUB_PATROL = 26;
-	public static final int T2_EXT_ARMOR_M = 27;
-	public static final int T2_EXT_ARMOR_L = 28;
-	public static final int T2_SEARCHLIGHT = 29;
-	public static final int T2_DRUM_CAN = 30;
-	public static final int T2_REPAIR_INFRA = 31;
-	public static final int T2_SS_TORPEDO = 32;
-	public static final int T2_STAR_SHELL = 33;
-	public static final int T2_COMMAND_FAC = 34;
-	public static final int T2_AVI_PERSONNEL = 35;
-	public static final int T2_ANTI_AIR_DEVICE = 36;
-	public static final int T2_ANTI_GROUND_EQIP = 37;
-	public static final int T2_GUN_LARGE_II = 38;
-	public static final int T2_SHIP_PERSONNEL = 39;
-	public static final int T2_SONAR_LARGE = 40;
-	public static final int T2_FLYING_BOAT = 41;
-	public static final int T2_SEARCHLIGHT_LARGE = 42;
-	public static final int T2_COMBAT_FOOD = 43;
-	public static final int T2_SUPPLIES = 44;
-	public static final int T2_SEA_FIGHTER = 45;
-	public static final int T2_AMP_TANK = 46;
-	public static final int T2_LBA_AIRCRAFT = 47;
-	public static final int T2_ITCP_FIGHTER = 48;
+    // Equipment Constants (api_type 2)
+    public static final int T2_GUN_SMALL = 1;
+    public static final int T2_GUN_MEDIUM = 2;
+    public static final int T2_GUN_LARGE = 3;
+    public static final int T2_SUB_GUN = 4;
+    public static final int T2_TORPEDO = 5;
+    public static final int T2_FIGHTER = 6;
+    public static final int T2_BOMBER = 7;
+    public static final int T2_TORPEDO_BOMBER = 8;
+    public static final int T2_SCOUT = 9;
+    public static final int T2_SEA_SCOUT = 10;
+    public static final int T2_SEA_BOMBER = 11;
+    public static final int T2_RADAR_SMALL = 12;
+    public static final int T2_RADAR_LARGE = 13;
+    public static final int T2_SONAR = 14;
+    public static final int T2_DEPTH_CHARGE = 15; // 폭뢰
+    public static final int T2_EXT_ARMOR = 16; // NOT USED
+    public static final int T2_TURBINE = 17; // 기관부강화
+    public static final int T2_SANSHIKIDAN = 18;
+    public static final int T2_AP_SHELL = 19;
+    public static final int T2_VT_FUZE = 20; // NOT USED
+    public static final int T2_MACHINE_GUN = 21;
+    public static final int T2_KOHYOTEKI = 22;
+    public static final int T2_DAMECON = 23;
+    public static final int T2_LANDING_CRAFT = 24;
+    public static final int T2_AUTOGYRO = 25;
+    public static final int T2_ANTISUB_PATROL = 26;
+    public static final int T2_EXT_ARMOR_M = 27;
+    public static final int T2_EXT_ARMOR_L = 28;
+    public static final int T2_SEARCHLIGHT = 29;
+    public static final int T2_DRUM_CAN = 30;
+    public static final int T2_REPAIR_INFRA = 31;
+    public static final int T2_SS_TORPEDO = 32;
+    public static final int T2_STAR_SHELL = 33;
+    public static final int T2_COMMAND_FAC = 34;
+    public static final int T2_AVI_PERSONNEL = 35;
+    public static final int T2_ANTI_AIR_DEVICE = 36;
+    public static final int T2_ANTI_GROUND_EQIP = 37;
+    public static final int T2_GUN_LARGE_II = 38;
+    public static final int T2_SHIP_PERSONNEL = 39;
+    public static final int T2_SONAR_LARGE = 40;
+    public static final int T2_FLYING_BOAT = 41;
+    public static final int T2_SEARCHLIGHT_LARGE = 42;
+    public static final int T2_COMBAT_FOOD = 43;
+    public static final int T2_SUPPLIES = 44;
+    public static final int T2_SEA_FIGHTER = 45;
+    public static final int T2_AMP_TANK = 46;
+    public static final int T2_LBA_AIRCRAFT = 47;
+    public static final int T2_ITCP_FIGHTER = 48;
 
-	public static final int T2_JET_FIGHTER = 56;
-	public static final int T2_JET_BOMBER = 57;
-	public static final int T2_JET_TORPEDO_BOMBER = 58;
-	public static final int T2_JET_SCOUT = 59;
+    public static final int T2_JET_FIGHTER = 56;
+    public static final int T2_JET_BOMBER = 57;
+    public static final int T2_JET_TORPEDO_BOMBER = 58;
+    public static final int T2_JET_SCOUT = 59;
 
-	public static final int T2_RADER_LARGE_II = 93;
-	public static final int T2_SCOUT_II = 94;
+    public static final int T2_RADER_LARGE_II = 93;
+    public static final int T2_SCOUT_II = 94;
 
-	public static final int[] T2LIST_AIRCRAFTS = {T2_FIGHTER, T2_BOMBER, T2_TORPEDO_BOMBER, T2_SCOUT, T2_SEA_SCOUT, T2_SEA_BOMBER, T2_FLYING_BOAT,
-			T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER, T2_JET_SCOUT};
+    public static final int[] T2LIST_AIRCRAFTS = {T2_FIGHTER, T2_BOMBER, T2_TORPEDO_BOMBER, T2_SCOUT, T2_SEA_SCOUT, T2_SEA_BOMBER, T2_FLYING_BOAT,
+            T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER, T2_JET_SCOUT};
 
-	public static final int[] T2LIST_FIGHT_AIRCRAFTS = {T2_FIGHTER, T2_BOMBER, T2_TORPEDO_BOMBER, T2_SEA_BOMBER,
-			T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER};
+    public static final int[] T2LIST_FIGHT_AIRCRAFTS = {T2_FIGHTER, T2_BOMBER, T2_TORPEDO_BOMBER, T2_SEA_BOMBER,
+            T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER};
 
-	public static final int[] BASIC_MASTERY_MIN_BONUS = {0, 10, 25, 40, 55, 70, 85, 100};
-	public static final int[] BASIC_MASTERY_MAX_BONUS = {9, 24, 39, 54, 69, 84, 99, 120};
+    public static final int[] BASIC_MASTERY_MIN_BONUS = {0, 10, 25, 40, 55, 70, 85, 100};
+    public static final int[] BASIC_MASTERY_MAX_BONUS = {9, 24, 39, 54, 69, 84, 99, 120};
 
-	public static final int[] FIGHTER_MASTERY_BONUS = {0, 0, 2, 5, 9, 14, 14, 22, 0, 0, 0};
-	public static final int[] SEA_BOMBER_MASTERY_BONUS = {0, 0, 1, 1, 1, 3, 3, 6, 0, 0, 0};
+    public static final int[] FIGHTER_MASTERY_BONUS = {0, 0, 2, 5, 9, 14, 14, 22, 0, 0, 0};
+    public static final int[] SEA_BOMBER_MASTERY_BONUS = {0, 0, 1, 1, 1, 3, 3, 6, 0, 0, 0};
 
-	public static final int SPEED_NONE = 0;
-	public static final int SPEED_SLOW = 5;
-	public static final int SPEED_FAST = 10;
-	public static final int SPEED_FASTPLUS = 15;
-	public static final int SPEED_SUPERFAST = 20;
+    public static final int SPEED_NONE = 0;
+    public static final int SPEED_SLOW = 5;
+    public static final int SPEED_FAST = 10;
+    public static final int SPEED_FASTPLUS = 15;
+    public static final int SPEED_SUPERFAST = 20;
 
-	public static final int SPEED_MIXED_NORMAL = 100;
-	public static final int SPEED_MIXED_FAST = 101;
-	public static final int SPEED_MIXED_FASTPLUS = 102;
+    public static final int SPEED_MIXED_NORMAL = 100;
+    public static final int SPEED_MIXED_FAST = 101;
+    public static final int SPEED_MIXED_FASTPLUS = 102;
 
-	public static void setHandler(Handler h) {
-		sHandler = h;
-	}
+    public static void setHandler(Handler h) {
+        sHandler = h;
+    }
 
-	public static boolean checkDataLoadTriggered() {
-		return dataLoadTriggered;
-	}
+    public static boolean checkDataLoadTriggered() {
+        return dataLoadTriggered;
+    }
 
-	public static void setDataLoadTriggered() {
-		dataLoadTriggered = true;
-	}
+    public static void setDataLoadTriggered() {
+        dataLoadTriggered = true;
+    }
 
-	public static int getKcGameData(JsonObject api_data) {
-		//Log.e("KCA", "getKcGameData Called");
-		kcGameData = api_data;
-		if (kcGameData.has("api_mst_ship")) {
-			JsonArray shipStatusArray = (JsonArray) kcGameData.get("api_mst_ship");
-			JsonElement temp;
-			for (Iterator<JsonElement> itr = shipStatusArray.iterator(); itr.hasNext();) {
-				temp = itr.next();
-				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
-				kcShipData.put(api_id, temp.getAsJsonObject());
-			}
-		}
-		if (kcGameData.has("api_mst_slotitem")) {
-			JsonArray itemStatusArray = (JsonArray) kcGameData.get("api_mst_slotitem");
-			JsonElement temp;
-			for (Iterator<JsonElement> itr = itemStatusArray.iterator(); itr.hasNext();) {
-				temp = itr.next();
-				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
-				kcItemData.put(api_id, temp.getAsJsonObject());
-			}
-		}
-		if (kcGameData.has("api_mst_maparea")) {
-			JsonArray mapAreaData = kcGameData.getAsJsonArray("api_mst_maparea");
-			isEventTime = false;
-			for(JsonElement e: mapAreaData) {
-				int api_type = e.getAsJsonObject().get("api_type").getAsInt();
-				if (api_type != 0) {
-					isEventTime = true;
-					break;
-				}
-			}
-		}
+    public static int getKcGameData(JsonObject api_data) {
+        //Log.e("KCA", "getKcGameData Called");
+        kcGameData = api_data;
+        if (kcGameData.has("api_mst_ship")) {
+            JsonArray shipStatusArray = (JsonArray) kcGameData.get("api_mst_ship");
+            JsonElement temp;
+            for (Iterator<JsonElement> itr = shipStatusArray.iterator(); itr.hasNext(); ) {
+                temp = itr.next();
+                Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
+                kcShipData.put(api_id, temp.getAsJsonObject());
+            }
+        }
+        if (kcGameData.has("api_mst_slotitem")) {
+            JsonArray itemStatusArray = (JsonArray) kcGameData.get("api_mst_slotitem");
+            JsonElement temp;
+            for (Iterator<JsonElement> itr = itemStatusArray.iterator(); itr.hasNext(); ) {
+                temp = itr.next();
+                Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
+                kcItemData.put(api_id, temp.getAsJsonObject());
+            }
+        }
+        if (kcGameData.has("api_mst_maparea")) {
+            JsonArray mapAreaData = kcGameData.getAsJsonArray("api_mst_maparea");
+            isEventTime = false;
+            for (JsonElement e : mapAreaData) {
+                int api_type = e.getAsJsonObject().get("api_type").getAsInt();
+                if (api_type != 0) {
+                    isEventTime = true;
+                    break;
+                }
+            }
+        }
 
-		if(kcGameData.has("api_mst_mission")) {
-			JsonArray missionData = kcGameData.getAsJsonArray("api_mst_mission");
-			for(JsonElement e: missionData) {
-				int api_id = e.getAsJsonObject().get("api_id").getAsInt();
-				kcMissionData.put(api_id, e.getAsJsonObject());
-			}
-		}
+        if (kcGameData.has("api_mst_mission")) {
+            JsonArray missionData = kcGameData.getAsJsonArray("api_mst_mission");
+            for (JsonElement e : missionData) {
+                int api_id = e.getAsJsonObject().get("api_id").getAsInt();
+                kcMissionData.put(api_id, e.getAsJsonObject());
+            }
+        }
 
-		JsonObject data = new JsonObject();
-		data.addProperty("ship", kcShipData.size());
+        JsonObject data = new JsonObject();
+        data.addProperty("ship", kcShipData.size());
         data.addProperty("item", kcItemData.size());
 
-		if(sHandler != null) {
-			Bundle bundle = new Bundle();
-			bundle.putString("url", KCA_API_DATA_LOADED);
-			bundle.putString("data", data.toString());
-			Message sMsg = sHandler.obtainMessage();
-			sMsg.setData(bundle);
-			sHandler.sendMessage(sMsg);
-		}
-		return kcGameData.entrySet().size();
-	}
+        if (sHandler != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString("url", KCA_API_DATA_LOADED);
+            bundle.putString("data", data.toString());
+            Message sMsg = sHandler.obtainMessage();
+            sMsg.setData(bundle);
+            sHandler.sendMessage(sMsg);
+        }
+        return kcGameData.entrySet().size();
+    }
 
-	public static boolean isGameDataLoaded() {
-		return kcGameData != null;
-	}
+    public static boolean isGameDataLoaded() {
+        return kcGameData != null;
+    }
 
-	public static boolean isUserItemDataLoaded() {
-		return userItemData != null;
-	}
+    public static boolean isUserItemDataLoaded() {
+        return userItemData != null;
+    }
 
-	public static int getLevel() {
-		return level;
-	}
+    public static int getLevel() {
+        return level;
+    }
 
-	public static Integer getExperience() {
-		return experience;
-	}
+    public static Integer getExperience() {
+        return experience;
+    }
 
-	public static void addShipCountInBattle() { getShipCountInBattle += 1; }
-	public static void resetShipCountInBattle() { getShipCountInBattle = 0; }
+    public static void addShipCountInBattle() {
+        getShipCountInBattle += 1;
+    }
 
-	public static boolean checkUserShipMax() { return maxShipSize == (userShipData.size() + getShipCountInBattle); }
-	public static boolean checkUserItemMax() { return maxItemSize == userItemData.size(); }
-	public static boolean checkUserPortEnough() { return !(checkUserShipMax() || checkUserItemMax()); }
+    public static void resetShipCountInBattle() {
+        getShipCountInBattle = 0;
+    }
 
-	public static int getEventMapDifficulty(int no) {
-		return eventMapDifficulty[no];
-	}
-	public static void setEventMapDifficulty(int no, int diff) {
-		eventMapDifficulty[no] = diff;
-	}
+    public static boolean checkUserShipMax() {
+        return maxShipSize == (userShipData.size() + getShipCountInBattle);
+    }
 
-	public static boolean getReturnFlag(int mission_no) {
-		if(mission_no%100 == 33 || mission_no%100 == 34 ) {
-			return false;
-		} else {
-			return true;
-		}
-	}
+    public static boolean checkUserItemMax() {
+        return maxItemSize == userItemData.size();
+    }
 
-	public static boolean checkKrTranslation() {
-		return kcShipTranslationData != null;
-	}
+    public static boolean checkUserPortEnough() {
+        return !(checkUserShipMax() || checkUserItemMax());
+    }
 
-	public static String getShipTranslation(String jp_name) {
-		if (kcShipTranslationData != null && kcShipTranslationData.containsKey(jp_name)) {
-			return kcShipTranslationData.get(jp_name);
-		} else {
-			return jp_name;
-		}
-	}
+    public static int getEventMapDifficulty(int no) {
+        return eventMapDifficulty[no];
+    }
 
-	public static int getShipSize() {
-		return userShipData.size();
-	}
+    public static void setEventMapDifficulty(int no, int diff) {
+        eventMapDifficulty[no] = diff;
+    }
 
-	public static void loadMapEdgeInfo(JsonObject data) {
-		mapEdgeInfo = data;
-	}
+    public static boolean getReturnFlag(int mission_no) {
+        if (mission_no % 100 == 33 || mission_no % 100 == 34) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean checkKrTranslation() {
+        return kcShipTranslationData != null;
+    }
+
+    public static String getShipTranslation(String jp_name) {
+        if (kcShipTranslationData != null && kcShipTranslationData.containsKey(jp_name)) {
+            return kcShipTranslationData.get(jp_name);
+        } else {
+            return jp_name;
+        }
+    }
+
+    public static int getShipSize() {
+        return userShipData.size();
+    }
+
+    public static void loadMapEdgeInfo(JsonObject data) {
+        mapEdgeInfo = data;
+    }
 
 
-	public static String getCurrentNodeAlphabet(int maparea, int mapno, int no) {
-		String currentMapString = String.format("%d-%d", maparea, mapno);
-		if (mapEdgeInfo != null && mapEdgeInfo.has(currentMapString)) {
-			JsonArray nodeInfo = mapEdgeInfo.getAsJsonObject(currentMapString)
-											.getAsJsonArray(String.valueOf(no));
-			return nodeInfo.get(1).getAsString();
-		}
-		else {
-			return String.valueOf(no);
-		}
-	}
+    public static String getCurrentNodeAlphabet(int maparea, int mapno, int no) {
+        String currentMapString = String.format("%d-%d", maparea, mapno);
+        if (mapEdgeInfo != null && mapEdgeInfo.has(currentMapString)) {
+            JsonArray nodeInfo = mapEdgeInfo.getAsJsonObject(currentMapString)
+                    .getAsJsonArray(String.valueOf(no));
+            return nodeInfo.get(1).getAsString();
+        } else {
+            return String.valueOf(no);
+        }
+    }
 
-	public static int getPortData(JsonObject api_data) {
-		Set<Integer> prevItemIds;
-		if (userShipData == null) {
-			userShipData = new HashMap<Integer, JsonObject>();
-			prevItemIds = new HashSet<Integer>();
-		} else {
-			prevItemIds = new HashSet<Integer>(userShipData.keySet());
-		}
-		if (api_data.has("api_basic")) {
-			JsonObject basicInfo = (JsonObject) api_data.get("api_basic");
-			level = basicInfo.get("api_level").getAsInt();
-			experience = basicInfo.get("api_experience").getAsInt();
-		}
-		if (api_data.has("api_ship")) {
-			JsonArray shipDataArray = (JsonArray) api_data.get("api_ship");
-			JsonElement temp;
-			for (Iterator<JsonElement> itr = shipDataArray.iterator(); itr.hasNext();) {
-				temp = itr.next();
-				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
-				if(!prevItemIds.contains(api_id)) {
-					userShipData.put(api_id, temp.getAsJsonObject());
-				} else if(!userShipData.get(api_id).equals(temp)) {
-					userShipData.put(api_id, temp.getAsJsonObject());
-				}
-				prevItemIds.remove(api_id);
-			}
-		}
-		for (Integer i: prevItemIds) {
-			userShipData.remove(i);
-		}
-		return userShipData.size();
-	}
+    public static int getPortData(JsonObject api_data) {
+        Set<Integer> prevItemIds;
+        if (userShipData == null) {
+            userShipData = new HashMap<Integer, JsonObject>();
+            prevItemIds = new HashSet<Integer>();
+        } else {
+            prevItemIds = new HashSet<Integer>(userShipData.keySet());
+        }
+        if (api_data.has("api_basic")) {
+            JsonObject basicInfo = (JsonObject) api_data.get("api_basic");
+            level = basicInfo.get("api_level").getAsInt();
+            experience = basicInfo.get("api_experience").getAsInt();
+        }
+        if (api_data.has("api_ship")) {
+            JsonArray shipDataArray = (JsonArray) api_data.get("api_ship");
+            JsonElement temp;
+            for (Iterator<JsonElement> itr = shipDataArray.iterator(); itr.hasNext(); ) {
+                temp = itr.next();
+                Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
+                if (!prevItemIds.contains(api_id)) {
+                    userShipData.put(api_id, temp.getAsJsonObject());
+                } else if (!userShipData.get(api_id).equals(temp)) {
+                    userShipData.put(api_id, temp.getAsJsonObject());
+                }
+                prevItemIds.remove(api_id);
+            }
+        }
+        for (Integer i : prevItemIds) {
+            userShipData.remove(i);
+        }
+        return userShipData.size();
+    }
 
-	public static int updatePortDataOnBattle(JsonObject api_data) {
-		if (api_data.has("api_ship_data")) {
-			JsonArray shipDataArray = (JsonArray) api_data.get("api_ship_data");
-			JsonElement temp;
-			for (Iterator<JsonElement> itr = shipDataArray.iterator(); itr.hasNext();) {
-				temp = itr.next();
-				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
-				userShipData.put(api_id, temp.getAsJsonObject());
-			}
-			return shipDataArray.size();
-		} else {
-			return -1;
-		}
-	}
+    public static int updatePortDataOnBattle(JsonObject api_data) {
+        if (api_data.has("api_ship_data")) {
+            JsonArray shipDataArray = (JsonArray) api_data.get("api_ship_data");
+            JsonElement temp;
+            for (Iterator<JsonElement> itr = shipDataArray.iterator(); itr.hasNext(); ) {
+                temp = itr.next();
+                Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
+                userShipData.put(api_id, temp.getAsJsonObject());
+            }
+            return shipDataArray.size();
+        } else {
+            return -1;
+        }
+    }
 
-	public static int updateSlotItemData(JsonArray api_data) {
-		JsonElement temp;
-		if (api_data != null) {
-			for (Iterator<JsonElement> itr = api_data.iterator(); itr.hasNext();) {
-				temp = itr.next();
-				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
-				if(!userItemData.containsKey(api_id)) {
-					Log.e("KCA", String.valueOf(api_id) + " added");
-				}
-				userItemData.put(api_id, temp.getAsJsonObject());
-			}
-			return api_data.size();
-		} else {
-			return -1;
-		}
-	}
+    public static int updateSlotItemData(JsonArray api_data) {
+        JsonElement temp;
+        if (api_data != null) {
+            for (Iterator<JsonElement> itr = api_data.iterator(); itr.hasNext(); ) {
+                temp = itr.next();
+                Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
+                if (!userItemData.containsKey(api_id)) {
+                    Log.e("KCA", String.valueOf(api_id) + " added");
+                }
+                userItemData.put(api_id, temp.getAsJsonObject());
+            }
+            return api_data.size();
+        } else {
+            return -1;
+        }
+    }
 
-	public static Integer getUserId(JsonObject api_data) {
-		Set<Integer> prevItemIds = new HashSet<Integer>(userItemData.keySet());
-		if (api_data.has("api_basic")) {
-			JsonObject basic = api_data.get("api_basic").getAsJsonObject();
-			return basic.get("api_member_id").getAsInt();
-		}
-		return -1;
-	}
+    public static Integer getUserId(JsonObject api_data) {
+        Set<Integer> prevItemIds = new HashSet<Integer>(userItemData.keySet());
+        if (api_data.has("api_basic")) {
+            JsonObject basic = api_data.get("api_basic").getAsJsonObject();
+            return basic.get("api_member_id").getAsInt();
+        }
+        return -1;
+    }
 
-	public static int getSlotItemData(JsonObject api_data) {
-		Set<Integer> prevItemIds;
-		if (userItemData == null) {
-			userItemData = new HashMap<Integer, JsonObject>();
-			prevItemIds = new HashSet<Integer>();
-		} else {
-			prevItemIds = new HashSet<Integer>(userItemData.keySet());
-		}
-		if (api_data.has("api_slot_item")) {
-			JsonArray slotItemApiData = (JsonArray) api_data.get("api_slot_item");
-			JsonElement temp;
-			for (Iterator<JsonElement> itr = slotItemApiData.iterator(); itr.hasNext();) {
-				temp = itr.next();
-				Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
-				if(!prevItemIds.contains(api_id)) {
-					userItemData.put(api_id, temp.getAsJsonObject());
-				} else if(!userItemData.get(api_id).equals(temp.getAsJsonObject())) {
-					userItemData.put(api_id, temp.getAsJsonObject());
-				}
-				prevItemIds.remove(api_id);
-			}
-		}
-		for (Integer i: prevItemIds) {
-			userItemData.remove(i);
-		}
-		return userItemData.size();
-	}
+    public static int getSlotItemData(JsonObject api_data) {
+        Set<Integer> prevItemIds;
+        if (userItemData == null) {
+            userItemData = new HashMap<Integer, JsonObject>();
+            prevItemIds = new HashSet<Integer>();
+        } else {
+            prevItemIds = new HashSet<Integer>(userItemData.keySet());
+        }
+        if (api_data.has("api_slot_item")) {
+            JsonArray slotItemApiData = (JsonArray) api_data.get("api_slot_item");
+            JsonElement temp;
+            for (Iterator<JsonElement> itr = slotItemApiData.iterator(); itr.hasNext(); ) {
+                temp = itr.next();
+                Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
+                if (!prevItemIds.contains(api_id)) {
+                    userItemData.put(api_id, temp.getAsJsonObject());
+                } else if (!userItemData.get(api_id).equals(temp.getAsJsonObject())) {
+                    userItemData.put(api_id, temp.getAsJsonObject());
+                }
+                prevItemIds.remove(api_id);
+            }
+        }
+        for (Integer i : prevItemIds) {
+            userItemData.remove(i);
+        }
+        return userItemData.size();
+    }
 
-	public static JsonObject getKcShipDataById(int id, String list) {
-		if (kcGameData == null) return null;
-		JsonObject temp = new JsonObject();
-		if(kcShipData.containsKey(id)) {
-			if (list.equals("all")) {
-				return kcShipData.get(id);
-			} else {
-				String[] requestList = list.split(",");
-				for (int i=0; i<requestList.length; i++) {
-					String orig_api_item = requestList[i];
-					String api_item = orig_api_item;
-					if(!api_item.startsWith("api_")) {
-						api_item = "api_" + api_item;
-					}
-					temp.add(orig_api_item, kcShipData.get(id).get(api_item));
-				}
-				return temp;
-			}
-		} else {
-			Log.e("KCA", String.valueOf(id) + " not in list");
-			return null;
-		}
-	}
+    public static JsonObject getKcShipDataById(int id, String list) {
+        if (kcGameData == null) return null;
+        JsonObject temp = new JsonObject();
+        if (kcShipData.containsKey(id)) {
+            if (list.equals("all")) {
+                return kcShipData.get(id);
+            } else {
+                String[] requestList = list.split(",");
+                for (int i = 0; i < requestList.length; i++) {
+                    String orig_api_item = requestList[i];
+                    String api_item = orig_api_item;
+                    if (!api_item.startsWith("api_")) {
+                        api_item = "api_" + api_item;
+                    }
+                    temp.add(orig_api_item, kcShipData.get(id).get(api_item));
+                }
+                return temp;
+            }
+        } else {
+            Log.e("KCA", String.valueOf(id) + " not in list");
+            return null;
+        }
+    }
 
-	public static JsonObject getUserShipDataById(int id, String list) {
-		JsonObject temp = new JsonObject();
-		if(userShipData.containsKey(id)) {
-			if (list.equals("all")) {
-				return userShipData.get(id);
-			} else {
-				String[] requestList = list.split(",");
-				for (int i=0; i<requestList.length; i++) {
-					String orig_api_item = requestList[i];
-					String api_item = orig_api_item;
-					if(!api_item.startsWith("api_")) {
-						api_item = "api_" + api_item;
-					}
-					temp.add(orig_api_item, userShipData.get(id).get(api_item));
-				}
-				return temp;
-			}
-		} else {
-			return null;
-		}
-	}
+    public static JsonObject getUserShipDataById(int id, String list) {
+        JsonObject temp = new JsonObject();
+        if (userShipData.containsKey(id)) {
+            if (list.equals("all")) {
+                return userShipData.get(id);
+            } else {
+                String[] requestList = list.split(",");
+                for (int i = 0; i < requestList.length; i++) {
+                    String orig_api_item = requestList[i];
+                    String api_item = orig_api_item;
+                    if (!api_item.startsWith("api_")) {
+                        api_item = "api_" + api_item;
+                    }
+                    temp.add(orig_api_item, userShipData.get(id).get(api_item));
+                }
+                return temp;
+            }
+        } else {
+            return null;
+        }
+    }
 
-	public static JsonObject getUserItemStatusById(int id, String list, String kclist) {
-		if (kcGameData == null) return null;
-		if(userItemData.containsKey(id)) {
-			int kc_item_id = userItemData.get(id).get("api_slotitem_id").getAsInt();
-			JsonObject kcData = getKcItemStatusById(kc_item_id, kclist);
-			JsonObject userData = userItemData.get(id);
+    public static JsonObject getUserItemStatusById(int id, String list, String kclist) {
+        if (kcGameData == null) return null;
+        if (userItemData.containsKey(id)) {
+            int kc_item_id = userItemData.get(id).get("api_slotitem_id").getAsInt();
+            JsonObject kcData = getKcItemStatusById(kc_item_id, kclist);
+            JsonObject userData = userItemData.get(id);
 
-			if (list.equals("all")) {
-				for(Map.Entry<String, JsonElement> k: userData.entrySet()) {
-					kcData.add(k.getKey(), userData.get(k.getKey()));
-				}
-			} else {
-				String[] requestList = list.split(",");
-				for(int i=0; i<requestList.length; i++) {
-					String orig_api_item = requestList[i];
-					String api_item = orig_api_item;
-					if(!api_item.startsWith("api_")) {
-						api_item = "api_" + api_item;
-					}
-					if(userData.has(api_item)) {
-						kcData.add(orig_api_item, userData.get(api_item));
-					}
-				}
-			}
-			return kcData;
-		} else {
-			return null;
-		}
-	}
+            if (list.equals("all")) {
+                for (Map.Entry<String, JsonElement> k : userData.entrySet()) {
+                    kcData.add(k.getKey(), userData.get(k.getKey()));
+                }
+            } else {
+                String[] requestList = list.split(",");
+                for (int i = 0; i < requestList.length; i++) {
+                    String orig_api_item = requestList[i];
+                    String api_item = orig_api_item;
+                    if (!api_item.startsWith("api_")) {
+                        api_item = "api_" + api_item;
+                    }
+                    if (userData.has(api_item)) {
+                        kcData.add(orig_api_item, userData.get(api_item));
+                    }
+                }
+            }
+            return kcData;
+        } else {
+            return null;
+        }
+    }
 
-	public static JsonObject getKcItemStatusById(int id, String list) {
-		if (kcGameData == null) return null;
-		JsonObject temp = new JsonObject();
-		if(kcItemData.containsKey(id)) {
-			if (list.equals("all")) {
-				return kcItemData.get(id);
-			} else {
-				String[] requestList = list.split(",");
-				for (int i=0; i<requestList.length; i++) {
-					String orig_api_item = requestList[i];
-					String api_item = orig_api_item;
-					if(!api_item.startsWith("api_")) {
-						api_item = "api_" + api_item;
-					}
-					temp.add(orig_api_item, kcItemData.get(id).get(api_item));
-				}
-				return temp.getAsJsonObject();
-			}
-		} else {
-			return null;
-		}
-		
-	}
+    public static JsonObject getKcItemStatusById(int id, String list) {
+        if (kcGameData == null) return null;
+        JsonObject temp = new JsonObject();
+        if (kcItemData.containsKey(id)) {
+            if (list.equals("all")) {
+                return kcItemData.get(id);
+            } else {
+                String[] requestList = list.split(",");
+                for (int i = 0; i < requestList.length; i++) {
+                    String orig_api_item = requestList[i];
+                    String api_item = orig_api_item;
+                    if (!api_item.startsWith("api_")) {
+                        api_item = "api_" + api_item;
+                    }
+                    temp.add(orig_api_item, kcItemData.get(id).get(api_item));
+                }
+                return temp.getAsJsonObject();
+            }
+        } else {
+            return null;
+        }
 
-	public static boolean isItemAircraft(int id) {
-		int result = Arrays.binarySearch(T2LIST_AIRCRAFTS, id);
-		if (result > 0) return true;
-		else return false;
-	}
+    }
 
-	public static void addUserShip(JsonObject api_data) {
-		if (kcGameData == null) return;
-		if (api_data.has("api_id")) {
-			int shipId = api_data.get("api_id").getAsInt();
-			JsonObject shipData = (JsonObject) api_data.get("api_ship");
-			userShipData.put(shipId, shipData);
-			int shipKcId = api_data.get("api_ship_id").getAsInt();
-			String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
-			Log.e("KCA", String.format("add ship %d (%s)", shipId, shipName));
+    public static boolean isItemAircraft(int id) {
+        int result = Arrays.binarySearch(T2LIST_AIRCRAFTS, id);
+        if (result > 0) return true;
+        else return false;
+    }
 
-			JsonArray shipSlotItemData = (JsonArray) api_data.get("api_slotitem");
-			for (int i=0; i<shipSlotItemData.size(); i++) {
-				addUserItem((JsonObject) shipSlotItemData.get(i));
-			}
-		}
-	}
+    public static void addUserShip(JsonObject api_data) {
+        if (kcGameData == null) return;
+        if (api_data.has("api_id")) {
+            int shipId = api_data.get("api_id").getAsInt();
+            JsonObject shipData = (JsonObject) api_data.get("api_ship");
+            userShipData.put(shipId, shipData);
+            int shipKcId = api_data.get("api_ship_id").getAsInt();
+            String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
+            Log.e("KCA", String.format("add ship %d (%s)", shipId, shipName));
 
-	public static void updateUserShip(JsonObject api_data) {
-		if (kcGameData == null) return;
-		if (api_data.has("api_id")) {
-			int shipId = api_data.get("api_id").getAsInt();
-			userShipData.put(shipId, api_data);
-			int shipKcId = api_data.get("api_ship_id").getAsInt();
-			String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
-			Log.e("KCA", String.format("update ship %d (%s)", shipId, shipName));
-		}
-	}
+            JsonArray shipSlotItemData = (JsonArray) api_data.get("api_slotitem");
+            for (int i = 0; i < shipSlotItemData.size(); i++) {
+                addUserItem((JsonObject) shipSlotItemData.get(i));
+            }
+        }
+    }
 
-	public static void updateUserShipSlot(int shipId, JsonObject api_data) {
-		if (kcGameData == null) return;
-		if (api_data.has("api_slot")) {
-			JsonObject shipData = userShipData.get(shipId).getAsJsonObject();
-			shipData.add("api_slot", api_data.getAsJsonArray("api_slot"));
-			userShipData.put(shipId, shipData);
-		}
-	}
+    public static void updateUserShip(JsonObject api_data) {
+        if (kcGameData == null) return;
+        if (api_data.has("api_id")) {
+            int shipId = api_data.get("api_id").getAsInt();
+            userShipData.put(shipId, api_data);
+            int shipKcId = api_data.get("api_ship_id").getAsInt();
+            String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
+            Log.e("KCA", String.format("update ship %d (%s)", shipId, shipName));
+        }
+    }
 
-	public static void deleteUserShip(String list) {
-		if (kcGameData == null) return;
+    public static void updateUserShipSlot(int shipId, JsonObject api_data) {
+        if (kcGameData == null) return;
+        if (api_data.has("api_slot")) {
+            JsonObject shipData = userShipData.get(shipId).getAsJsonObject();
+            shipData.add("api_slot", api_data.getAsJsonArray("api_slot"));
+            userShipData.put(shipId, shipData);
+        }
+    }
 
-		String[] requestList = list.split(",");
-		for (int i=0; i<requestList.length; i++) {
-			int shipId = Integer.valueOf(requestList[i]);
-			JsonObject shipKcData = getUserShipDataById(shipId,"ship_id,slot");
+    public static void deleteUserShip(String list) {
+        if (kcGameData == null) return;
 
-			int shipKcId = shipKcData.get("ship_id").getAsInt();
-			JsonArray shipSlotItem = (JsonArray) shipKcData.get("slot");
-			List<String> shipSlotItemList = new ArrayList<String>();
-			for (int j=0; j<shipSlotItem.size(); j++) {
-				int item = shipSlotItem.get(j).getAsInt();
-				if (item != -1) {
-					shipSlotItemList.add(String.valueOf(item));
-				}
-			}
-			if(shipSlotItemList.size() > 0) {
-				deleteUserItem(joinStr(shipSlotItemList, ","));
-			}
-			userShipData.remove(shipId);
+        String[] requestList = list.split(",");
+        for (int i = 0; i < requestList.length; i++) {
+            int shipId = Integer.valueOf(requestList[i]);
+            JsonObject shipKcData = getUserShipDataById(shipId, "ship_id,slot");
 
-			String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
-			Log.e("KCA", String.format("remove ship %d (%s)",shipId, shipName));
-		}
-	}
+            int shipKcId = shipKcData.get("ship_id").getAsInt();
+            JsonArray shipSlotItem = (JsonArray) shipKcData.get("slot");
+            List<String> shipSlotItemList = new ArrayList<String>();
+            for (int j = 0; j < shipSlotItem.size(); j++) {
+                int item = shipSlotItem.get(j).getAsInt();
+                if (item != -1) {
+                    shipSlotItemList.add(String.valueOf(item));
+                }
+            }
+            if (shipSlotItemList.size() > 0) {
+                deleteUserItem(joinStr(shipSlotItemList, ","));
+            }
+            userShipData.remove(shipId);
 
-	public static int addUserItem(JsonObject api_data) {
-		if (kcGameData == null) return -1;
-		JsonObject item = null;
-		if (api_data.has("api_create_flag") && api_data.get("api_create_flag").getAsInt() == 1) {
-			item = (JsonObject) api_data.get("api_slot_item");
-		} else if(api_data.has("api_slotitem_id")) {
-			item = api_data;
-		}
-		if (item != null) {
-			int item_id = item.get("api_id").getAsInt();
-			int kc_item_id = item.get("api_slotitem_id").getAsInt();
-			int itemType = getKcItemStatusById(kc_item_id, "type").get("type").getAsJsonArray().get(2).getAsInt();
-			item.addProperty("api_locked", 0);
-			item.addProperty("api_level", 0);
-			if(isItemAircraft(itemType)) {
-				item.addProperty("api_alv", 0);
-			}
-			userItemData.put(item_id, item);
-			String itemName = getKcItemStatusById(kc_item_id, "name").get("name").getAsString();
-			Log.e("KCA", String.format("add item %d (%s)",item_id, itemName));
-			return kc_item_id;
-		} else {
-			return 0;
-		}
-	}
+            String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
+            Log.e("KCA", String.format("remove ship %d (%s)", shipId, shipName));
+        }
+    }
 
-	public static void deleteUserItem(String list) {
-		if (kcGameData == null) return;
-		Log.e("KCA", list);
-		String[] requestList = list.split(",");
-		for (int i=0; i<requestList.length; i++) {
-			int itemId = Integer.valueOf(requestList[i]);
-			String itemName = getUserItemStatusById(itemId, "id", "name").get("name").getAsString();
-			userItemData.remove(Integer.valueOf(requestList[i]));
-			Log.e("KCA", String.format("remove item %d (%s)",itemId, itemName));
-		}
-	}
+    public static int addUserItem(JsonObject api_data) {
+        if (kcGameData == null) return -1;
+        JsonObject item = null;
+        if (api_data.has("api_create_flag") && api_data.get("api_create_flag").getAsInt() == 1) {
+            item = (JsonObject) api_data.get("api_slot_item");
+        } else if (api_data.has("api_slotitem_id")) {
+            item = api_data;
+        }
+        if (item != null) {
+            int item_id = item.get("api_id").getAsInt();
+            int kc_item_id = item.get("api_slotitem_id").getAsInt();
+            int itemType = getKcItemStatusById(kc_item_id, "type").get("type").getAsJsonArray().get(2).getAsInt();
+            item.addProperty("api_locked", 0);
+            item.addProperty("api_level", 0);
+            if (isItemAircraft(itemType)) {
+                item.addProperty("api_alv", 0);
+            }
+            userItemData.put(item_id, item);
+            String itemName = getKcItemStatusById(kc_item_id, "name").get("name").getAsString();
+            Log.e("KCA", String.format("add item %d (%s)", item_id, itemName));
+            return kc_item_id;
+        } else {
+            return 0;
+        }
+    }
 
+    public static void deleteUserItem(String list) {
+        if (kcGameData == null) return;
+        Log.e("KCA", list);
+        String[] requestList = list.split(",");
+        for (int i = 0; i < requestList.length; i++) {
+            int itemId = Integer.valueOf(requestList[i]);
+            String itemName = getUserItemStatusById(itemId, "id", "name").get("name").getAsString();
+            userItemData.remove(Integer.valueOf(requestList[i]));
+            Log.e("KCA", String.format("remove item %d (%s)", itemId, itemName));
+        }
+    }
+
+    public static String getNodeFullInfo(Context context, String currentNode, int id, int kind, boolean includeNormal) {
+        String currentNodeInfo = "";
+        switch (id) {
+            case API_NODE_EVENT_ID_OBTAIN:
+                currentNodeInfo = String.format(context.getString(R.string.node_info_obtain), currentNode);
+                break;
+            case API_NODE_EVENT_ID_LOSS:
+                currentNodeInfo = String.format(context.getString(R.string.node_info_loss), currentNode);
+                break;
+            case API_NODE_EVENT_ID_NORMAL:
+                if (kind == API_NODE_EVENT_KIND_BATTLE) {
+                    if (includeNormal) {
+                        currentNodeInfo = String.format(context.getString(R.string.node_info_normal_battle), currentNode);
+                    } else {
+                        currentNodeInfo = String.format(context.getString(R.string.node_info_normal), currentNode);
+                    }
+                } else if (kind == API_NODE_EVENT_KIND_NIGHTBATTLE) {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_nightbattle), currentNode);
+                } else if (kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE) {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_nightdaybattle), currentNode);
+                } else if (kind == API_NODE_EVENT_KIND_AIRBATTLE) {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_airbattle), currentNode);
+                } else if (kind == API_NODE_EVENT_KIND_ECBATTLE) {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_ecbattle), currentNode);
+                } else if (kind == API_NODE_EVENT_KIND_LDAIRBATTLE) {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_ldairbattle), currentNode);
+                }
+                break;
+            case API_NODE_EVENT_ID_BOSS:
+                if (kind == API_NODE_EVENT_KIND_BATTLE) {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_boss), currentNode);
+                } else if (kind == API_NODE_EVENT_KIND_NIGHTBATTLE) {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_boss_nightbattle), currentNode);
+                } else if (kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE) {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_boss_nightdaybattle), currentNode);
+                } else if (kind == API_NODE_EVENT_KIND_ECBATTLE) {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_boss_ecbattle), currentNode);
+                }
+                break;
+            case API_NODE_EVENT_ID_NOEVENT:
+                currentNodeInfo = String.format(context.getString(R.string.node_info_noevent), currentNode);
+                break;
+            case API_NODE_EVENT_ID_TPOINT:
+                currentNodeInfo = String.format(context.getString(R.string.node_info_tpoint), currentNode);
+                break;
+            case API_NODE_EVENT_ID_AIR:
+                if (kind == API_NODE_EVENT_KIND_AIRSEARCH) {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_airsearch), currentNode);
+                } else if (kind == API_NODE_EVENT_KIND_AIRBATTLE) {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_airbattle), currentNode);
+                }
+                break;
+            case API_NODE_EVENT_ID_SENDAN:
+                currentNodeInfo = String.format(context.getString(R.string.node_info_sendan), currentNode);
+                break;
+            case API_NODE_EVENT_ID_LDAIRBATTLE:
+                currentNodeInfo = String.format(context.getString(R.string.node_info_ldairbattle), currentNode);
+                break;
+            default:
+                currentNodeInfo = String.format(context.getString(R.string.node_info_normal), currentNode);
+                break;
+        }
+        return currentNodeInfo;
+    }
+
+    public static String getFormationString(Context context, int v) {
+        switch(v) {
+            case FORMATION_LAH:
+                return context.getString(R.string.formation_lineahead);
+            case FORMATION_DLN:
+                return context.getString(R.string.formation_doubleline);
+            case FORMATION_DIA:
+                return context.getString(R.string.formation_diamond);
+            case FORMATION_ECH:
+                return context.getString(R.string.formation_echelon);
+            case FORMATION_LAB:
+                return context.getString(R.string.formation_lineabreast);
+            case FORMATION_C1:
+                return context.getString(R.string.formation_c1);
+            case FORMATION_C2:
+                return context.getString(R.string.formation_c2);
+            case FORMATION_C3:
+                return context.getString(R.string.formation_c3);
+            case FORMATION_C4:
+                return context.getString(R.string.formation_c4);
+            default:
+                return "";
+        }
+    }
+
+    public static String getEngagementString(Context context, int v) {
+        switch(v) {
+            case ENGAGE_PARL:
+                return context.getString(R.string.engagement_parallel);
+            case ENGAGE_HDON:
+                return context.getString(R.string.engagement_headon);
+            case ENGAGE_TADV:
+                return context.getString(R.string.engagement_t_advantage);
+            case ENGAGE_TDIS:
+                return context.getString(R.string.engagement_t_disadvantage);
+            default:
+                return "";
+        }
+    }
+    public static String getAirForceResultString(Context context, int v) {
+        switch(v) {
+            case AIR_SUPERMACY:
+                return context.getString(R.string.air_supermacy);
+            case AIR_SUPERIORITY:
+                return context.getString(R.string.air_superiority);
+            case AIR_PARITY:
+                return context.getString(R.string.air_parity);
+            case AIR_DENIAL:
+                return context.getString(R.string.air_denial);
+            case AIR_INCAPABILITY:
+                return context.getString(R.string.air_incapability);
+            default:
+                Log.e("KCA", "Unknown Value: "+String.valueOf(v));
+                return "";
+        }
+    }
 }

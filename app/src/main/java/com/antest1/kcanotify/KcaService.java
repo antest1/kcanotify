@@ -16,11 +16,14 @@ import android.content.res.XmlResourceParser;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -71,6 +74,8 @@ import static com.antest1.kcanotify.KcaUtils.*;
 public class KcaService extends Service {
     public static final int ANTEST_USERID = 15108389;
 
+    private String android_id;
+
     public static boolean isServiceOn = false;
     public static boolean isPortAccessed = false;
     public static int heavyDamagedMode = 0;
@@ -79,6 +84,7 @@ public class KcaService extends Service {
     public static String currentNode = "";
     public static String currentNodeInfo = "";
     public static Intent kcIntent = null;
+    public static boolean isInBattle;
 
     AudioManager mAudioManager;
     Vibrator vibrator = null;
@@ -90,6 +96,7 @@ public class KcaService extends Service {
 
     kcaServiceHandler handler;
     kcaNotificationHandler nHandler;
+    LocalBroadcastManager broadcaster;
 
     Thread[] kcaExpeditionList = new Thread[3];
     KcaExpedition[] kcaExpeditionRunnableList = new KcaExpedition[3];
@@ -132,6 +139,9 @@ public class KcaService extends Service {
             stopSelf();
         }
 
+        android_id =  Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        Log.e("KCA", android_id);
+
         for (int i = 0; i < 3; i++) {
             kcaExpeditionList[i] = null;
             kcaExpeditionInfoList[i] = "";
@@ -159,6 +169,8 @@ public class KcaService extends Service {
 
         handler = new kcaServiceHandler(this);
         nHandler = new kcaNotificationHandler(this);
+        broadcaster = LocalBroadcastManager.getInstance(this);
+
         kcaExpeditionRunnableList = new KcaExpedition[3];
         kcaDockingRunnableList = new KcaDocking[4];
         isPortAccessed = false;
@@ -491,6 +503,11 @@ public class KcaService extends Service {
                         }
                     }
                     setFrontViewNotifier(FRONT_NONE, 0, null);
+                    if(isInBattle) {
+                        stopService(new Intent(this, KcaViewButtonService.class));
+                        isInBattle = false;
+                    }
+
                 }
 
                 if (url.startsWith(API_GET_MEMBER_MAPINFO)) {
@@ -539,10 +556,17 @@ public class KcaService extends Service {
                 // TODO: add handler for selecting event map rank
 
                 if (API_BATTLE_REQS.contains(url)) {
-                    //Log.e("KCA", "Battle Handler Called");
                     if (jsonDataObj.has("api_data")) {
                         JsonObject battleApiData = jsonDataObj.getAsJsonObject("api_data");
-                        if (url.startsWith(API_REQ_MAP_START)) {
+                        if (url.startsWith(API_REQ_MAP_START) || url.startsWith(API_REQ_PRACTICE_BATTLE)) {
+                            isInBattle = true;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                                    && !Settings.canDrawOverlays(getApplicationContext())) {
+                                // Can not draw overlays: pass
+                            } else {
+                                startService(new Intent(this, KcaViewButtonService.class));
+                            }
+
                             JsonObject api_data = new JsonObject();
                             JsonArray api_deck_data = new JsonArray();
                             JsonArray api_ship_data = new JsonArray();
@@ -551,19 +575,21 @@ public class KcaService extends Service {
                             JsonArray firstShipInfo = currentPortDeckData.get(0).getAsJsonObject().getAsJsonArray("api_ship");
                             for (JsonElement e : firstShipInfo) {
                                 int ship_id = e.getAsInt();
-                                api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
+                                if (ship_id != -1)
+                                    api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
                             }
                             if (KcaApiData.isEventTime) {
                                 api_deck_data.add(currentPortDeckData.get(1));
                                 JsonArray secondShipInfo = currentPortDeckData.get(1).getAsJsonObject().getAsJsonArray("api_ship");
                                 for (JsonElement e : secondShipInfo) {
                                     int ship_id = e.getAsInt();
-                                    api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
+                                    if (ship_id != -1)
+                                        api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
                                 }
                             }
                             api_data.add("api_deck_data", api_deck_data);
                             api_data.add("api_ship_data", api_ship_data);
-                            KcaBattle.setHpData(api_data);
+                            KcaBattle.setDeckPortData(api_data);
                         }
                         KcaBattle.processData(url, battleApiData);
                     }
@@ -581,7 +607,7 @@ public class KcaService extends Service {
                                 KcaBattle.dameconcbflag = KcaDeckInfo.getDameconStatus(api_deck_data, 1);
                             }
                         }
-                        KcaBattle.setHpData(api_data);
+                        KcaBattle.setDeckPortData(api_data);
                         processFirstDeckInfo(api_deck_data);
                     }
                 }
@@ -593,6 +619,13 @@ public class KcaService extends Service {
                         cancelExpeditionInfo(reqGetMemberDeckApiData);
                     }
                     return;
+                }
+
+                if(url.startsWith(API_REQ_MEMBER_GET_PRACTICE_ENEMYINFO)) {
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                        KcaBattle.currentEnemyDeckName = api_data.get("api_deckname").getAsString();
+                    }
                 }
 
                 if (url.startsWith(API_GET_MEMBER_SLOT_ITEM)) {
@@ -957,17 +990,11 @@ public class KcaService extends Service {
             HttpEntity entity = null;
 
             JsonObject sendData = new JsonObject();
-            sendData.addProperty("data", data);
+            //sendData.addProperty("data", data);
             sendData.addProperty("error", getStringFromException(e));
             String sendDataString = sendData.toString();
 
-            try {
-                entity = new ByteArrayEntity(gzipcompress(sendDataString));
-                cb.header("Content-Encoding", "gzip");
-            } catch (IOException e1) {
-                entity = new ByteArrayEntity(sendDataString.getBytes());
-                dataSendUrl = dataSendUrl.concat("&gzipfail=1");
-            }
+            entity = new ByteArrayEntity(sendDataString.getBytes());
             cb.param(AQuery.POST_ENTITY, entity);
             aq.ajax(dataSendUrl, String.class, cb);
         }
@@ -1057,73 +1084,28 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_INFO)) {
-                String message = jsonDataObj.get("msg").getAsString();
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(KCA_MSG_BATTLE_INFO);
+                intent.putExtra(KCA_MSG_DATA, data);
+                broadcaster.sendBroadcast(intent);
             }
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_NODE)) {
                 // Reference: https://github.com/andanteyk/ElectronicObserver/blob/1052a7b177a62a5838b23387ff35283618f688dd/ElectronicObserver/Other/Information/apilist.txt
-                currentNode = jsonDataObj.get("data").getAsString();
-                int id = jsonDataObj.get("id").getAsInt();
-                int kind = jsonDataObj.get("kind").getAsInt();
+                if(jsonDataObj.has("api_maparea_id")) {
+                    int currentMapArea = jsonDataObj.get("api_maparea_id").getAsInt();
+                    int currentMapNo = jsonDataObj.get("api_mapinfo_no").getAsInt();
+                    int currentNode = jsonDataObj.get("api_no").getAsInt();
+                    String currentNodeAlphabet = KcaApiData.getCurrentNodeAlphabet(currentMapArea, currentMapNo, currentNode);
+                    int api_event_kind = jsonDataObj.get("api_event_kind").getAsInt();
+                    int api_event_id = jsonDataObj.get("api_event_id").getAsInt();
 
-                switch (id) {
-                    case API_NODE_EVENT_ID_OBTAIN:
-                        currentNodeInfo = String.format(getString(R.string.node_info_obtain), currentNode);
-                        break;
-                    case API_NODE_EVENT_ID_LOSS:
-                        currentNodeInfo = String.format(getString(R.string.node_info_loss), currentNode);
-                        break;
-                    case API_NODE_EVENT_ID_NORMAL:
-                        if (kind == API_NODE_EVENT_KIND_BATTLE) {
-                            currentNodeInfo = String.format(getString(R.string.node_info_normal), currentNode);
-                        } else if (kind == API_NODE_EVENT_KIND_NIGHTBATTLE) {
-                            currentNodeInfo = String.format(getString(R.string.node_info_nightbattle), currentNode);
-                        } else if (kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE) {
-                            currentNodeInfo = String.format(getString(R.string.node_info_nightdaybattle), currentNode);
-                        } else if (kind == API_NODE_EVENT_KIND_AIRBATTLE) {
-                            currentNodeInfo = String.format(getString(R.string.node_info_airbattle), currentNode);
-                        } else if (kind == API_NODE_EVENT_KIND_ECBATTLE) {
-                            currentNodeInfo = String.format(getString(R.string.node_info_ecbattle), currentNode);
-                        } else if (kind == API_NODE_EVENT_KIND_LDAIRBATTLE) {
-                            currentNodeInfo = String.format(getString(R.string.node_info_ldairbattle), currentNode);
-                        }
-                        break;
-                    case API_NODE_EVENT_ID_BOSS:
-                        if (kind == API_NODE_EVENT_KIND_BATTLE) {
-                            currentNodeInfo = String.format(getString(R.string.node_info_boss), currentNode);
-                        } else if (kind == API_NODE_EVENT_KIND_NIGHTBATTLE) {
-                            currentNodeInfo = String.format(getString(R.string.node_info_boss_nightbattle), currentNode);
-                        } else if (kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE) {
-                            currentNodeInfo = String.format(getString(R.string.node_info_boss_nightdaybattle), currentNode);
-                        } else if (kind == API_NODE_EVENT_KIND_ECBATTLE) {
-                            currentNodeInfo = String.format(getString(R.string.node_info_boss_ecbattle), currentNode);
-                        }
-                        break;
-                    case API_NODE_EVENT_ID_NOEVENT:
-                        currentNodeInfo = String.format(getString(R.string.node_info_noevent), currentNode);
-                        break;
-                    case API_NODE_EVENT_ID_TPOINT:
-                        currentNodeInfo = String.format(getString(R.string.node_info_tpoint), currentNode);
-                        break;
-                    case API_NODE_EVENT_ID_AIR:
-                        if (kind == API_NODE_EVENT_KIND_AIRSEARCH) {
-                            currentNodeInfo = String.format(getString(R.string.node_info_airsearch), currentNode);
-                        } else if (kind == API_NODE_EVENT_KIND_AIRBATTLE) {
-                            currentNodeInfo = String.format(getString(R.string.node_info_airbattle), currentNode);
-                        }
-                        break;
-                    case API_NODE_EVENT_ID_SENDAN:
-                        currentNodeInfo = String.format(getString(R.string.node_info_sendan), currentNode);
-                        break;
-                    case API_NODE_EVENT_ID_LDAIRBATTLE:
-                        currentNodeInfo = String.format(getString(R.string.node_info_ldairbattle), currentNode);
-                        break;
-                    default:
-                        currentNodeInfo = String.format(getString(R.string.node_info_normal), currentNode);
-                        break;
+                    currentNodeInfo = KcaApiData.getNodeFullInfo(getApplicationContext(), currentNodeAlphabet, api_event_id, api_event_kind, false);
+
+                    Toast.makeText(getApplicationContext(), currentNodeInfo, Toast.LENGTH_LONG).show();
                 }
-                Toast.makeText(getApplicationContext(), currentNodeInfo, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(KCA_MSG_BATTLE_NODE);
+                intent.putExtra(KCA_MSG_DATA, data);
+                broadcaster.sendBroadcast(intent);
                 setFrontViewNotifier(FRONT_NONE, 0, null);
             }
 
@@ -1147,6 +1129,9 @@ public class KcaService extends Service {
                 }
                 if (heavyDamagedMode == HD_DANGER) {
                     Toast.makeText(getApplicationContext(), getString(R.string.heavy_damaged), Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
+                    intent.putExtra(KCA_MSG_DATA, "");
+                    broadcaster.sendBroadcast(intent);
                 } else if (heavyDamagedMode == HD_DAMECON) {
                     Toast.makeText(getApplicationContext(), getString(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG).show();
                 }

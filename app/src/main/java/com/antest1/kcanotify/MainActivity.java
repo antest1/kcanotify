@@ -1,13 +1,17 @@
 package com.antest1.kcanotify;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.net.VpnService;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG = "KCAV";
     public final static String KC_PACKAGE_NAME = "com.dmm.dmmlabo.kancolle";
     private static final int REQUEST_VPN = 1;
+    public static final int REQUEST_OVERLAY_PERMISSION = 2;
 
     public static boolean isKcaServiceOn = false;
     Toolbar toolbar;
@@ -52,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textDescription = null;
 
     Boolean is_kca_installed = false;
+    private WindowManager windowManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +139,11 @@ public class MainActivity extends AppCompatActivity {
 
         ctx = getApplicationContext();
         setDefaultPreferences();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(getApplicationContext())) {
+            Toast.makeText(this, getString(R.string.ma_toast_overay_diabled), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

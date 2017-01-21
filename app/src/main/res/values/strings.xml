@@ -1,7 +1,7 @@
 <resources>
     <!-- Application Information -->
     <string name="app_name">시제 깡들리티</string>
-    <string name="app_version">2.0 dev 4</string>
+    <string name="app_version">2.0.0</string>
     <string name="action_settings">깡들리티 설정</string>
     <string name="developer_email">kcanotify@gmail.com</string>
     <string name="app_download_link">http://bit.ly/2hNln5o</string>
@@ -52,6 +52,7 @@
     <string name="node_info_obtain" formatted="false">%s (자원방)</string>
     <string name="node_info_loss" formatted="false">%s (소용돌이)</string>
     <string name="node_info_normal" formatted="false">%s</string>
+    <string name="node_info_normal_battle" formatted="false">%s (적군조우)</string>
     <string name="node_info_boss" formatted="false">%s (보스방)</string>
     <string name="node_info_boss_nightbattle" formatted="false">%s (보스방/야간전)</string>
     <string name="node_info_boss_nightdaybattle" formatted="false">%s (보스방/야간전->주간전)</string>
@@ -65,10 +66,12 @@
     <string name="node_info_activecell" formatted="false">%s (능동분기)</string>
     <string name="node_info_sendan" formatted="false">%s (선단호위 끝)</string>
     <string name="node_info_ecbattle" formatted="false">%s (적 연합함대)</string>
+    <string name="node_info_practice" formatted="false">연습전</string>
 
     <!-- MainActivity Strings -->
     <string name="ma_toast_kancolle_not_installed">칸코레가 설치되어 있지 않습니다.</string>
-    <string name="description"><b>Help</b>\n상단 2개 버튼(VPN, SVC) 활성화 이후 게임 실행\n\n※ VPN을 끄면 칸코레에서 데이터를 받아오지 않음\n※ SVC를 끄면 알람 등의 기능 이용 불가 (추후 패치 예정)\n\n<b>주요 기능</b>\n - 원정 및 입거 알림\n - 대파 알림 (출격 중 및 출격 전)\n - 색적/제공치/피로도 표시\n - 출격 중 현재 위치 표시\n - OpenDB에 데이터 전송</string>
+    <string name="ma_toast_overay_diabled">전투예보에 필요한 화면 오버레이 권한이 설정되지 않았습니다.\n설정 > 화면 오버레이 설정에서 권한을 설정하세요.</string>
+    <string name="description"><b>Help</b>\n상단 2개 버튼(VPN, SVC) 활성화 이후 게임 실행\n\n※ VPN을 끄면 칸코레에서 데이터를 받아오지 않음\n※ SVC를 끄면 알람 등의 기능 이용 불가 (추후 패치 예정)\n\n<b>주요 기능</b>\n - 원정 및 입거 알림\n - 대파 알림 (출격 중 및 출격 전)\n - 색적/제공치/피로도 표시\n - 출격 중 현재 위치 표시\n - 전투 예보 (beta)\n - OpenDB에 데이터 전송</string>
 
     <!-- SettingActivity Strings -->
     <string name="sa_checkupdate_latest" formatted="false">최신 버전입니다. (%s)</string>
@@ -81,6 +84,10 @@
     <string name="sa_getupdate_started">게임 데이터 다운로드 중&#8230;</string>
     <string name="sa_getupdate_servererror" formatted="false">서버 오류 발생: %s</string>
     <string name="sa_getupdate_ioexceptionerror">데이터 저장 중 오류 발생</string>
+
+    <string name="sa_overlay_under_m">안드로이드 6.0 (마시멜로) 이상에서만 필요한 기능입니다.</string>
+    <string name="sa_overlay_ok">화면 오버레이 권한이 설정되었습니다.</string>
+    <string name="sa_overlay_no">화면 오버레이 권한이 설정되지 않았습니다. (전투예보 이용 불가)</string>
 
     <!-- InfoActivity Strings -->
     <string name="ia_license" formatted="false">Copyright &#169; 2016-2017 by antest1(IE10)</string>
@@ -127,6 +134,8 @@
     <string name="setting_menu_kand_desc_exp_realtime_show">상단의 남은 원정 시간 실시간 표시 여부</string>
     <string name="setting_menu_kand_title_game_data_down">게임 데이터 다운로드</string>
     <string name="setting_menu_kand_desc_game_data_down">게임 데이터가 로딩되지 않을 때 사용</string>
+    <string name="setting_menu_kand_title_overlay_setting">화면 오버레이 설정</string>
+    <string name="setting_menu_kand_desc_overlay_setting">다른 앱 위에 그리기 권한 설정 (전투예보 기능에 필요)</string>
 
     <string name="setting_menu_noti_head">알림 설정</string>
     <string name="setting_menu_noti_title_exp">원정 알림</string>
@@ -143,4 +152,40 @@
     <string name="setting_menu_app_desc_contact">개발자에게 메일 전송</string>
     <string name="setting_menu_app_info">시제 깡들리티 정보</string>
 
+    <!-- BattleView Strings -->
+    <string name="formation_lineahead">단종진</string>
+    <string name="formation_doubleline">복종진</string>
+    <string name="formation_diamond">윤형진</string>
+    <string name="formation_echelon">제형진</string>
+    <string name="formation_lineabreast">단횡진</string>
+    <string name="formation_c1">제1경계항행서열(대잠경계)</string>
+    <string name="formation_c2">제2경계항행서열(전방경계)</string>
+    <string name="formation_c3">제3경계항행서열(윤형진)</string>
+    <string name="formation_c4">제4경계항행서열(전투대형)</string>
+
+    <string name="engagement_label">교전형태</string>
+    <string name="engagement_t_advantage">T유리</string>
+    <string name="engagement_parallel">동항전</string>
+    <string name="engagement_headon">반항전</string>
+    <string name="engagement_t_disadvantage">T유리</string>
+
+    <string name="air_label">제공종류</string>
+    <string name="air_supermacy">제공권확보</string>
+    <string name="air_superiority">제공우세</string>
+    <string name="air_parity">제공균등</string>
+    <string name="air_denial">제공열세</string>
+    <string name="air_incapability">제공권상실</string>
+
+    <string name="enemy_fleet_name">적 함대</string>
+
+    <string name="yomi_flagship">flagship</string>
+    <string name="yomi_elite">elite</string>
+
+    <string name="rank_ss">완전승리S</string>
+    <string name="rank_s">S승리</string>
+    <string name="rank_a">A승리</string>
+    <string name="rank_b">B승리</string>
+    <string name="rank_c">C패배</string>
+    <string name="rank_d">D패배</string>
+    <string name="rank_e">E패배</string>
 </resources>

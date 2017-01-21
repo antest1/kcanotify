@@ -75,6 +75,10 @@ public final class KcaConstants {
     public static final String API_REQ_COMBINED_BATTLERESULT = "/api_req_combined_battle/battleresult";
     public static final String API_REQ_COMBINED_GOBACKPORT = "/api_req_combined_battle/goback_port"; // 퇴피
 
+    public static final String API_REQ_MEMBER_GET_PRACTICE_ENEMYINFO = "/api_req_member/get_practice_enemyinfo";
+    public static final String API_REQ_PRACTICE_BATTLE = "/api_req_practice/battle";
+    public static final String API_REQ_PRACTICE_MIDNIGHT_BATTLE = "/api_req_practice/midnight_battle";
+
     public static final String[] API_BATTLE_REQ_LIST = new String[]{
             API_REQ_MAP_START,
             API_REQ_MAP_NEXT,
@@ -95,7 +99,10 @@ public final class KcaConstants {
             API_REQ_COMBINED_BATTLE_EACH_WATER,
             API_REQ_COMBINED_BATTLE_MIDNIGHT_EC,
             API_REQ_COMBINED_BATTLERESULT,
-            API_REQ_COMBINED_GOBACKPORT
+            API_REQ_COMBINED_GOBACKPORT,
+
+            API_REQ_PRACTICE_BATTLE,
+            API_REQ_PRACTICE_MIDNIGHT_BATTLE
     };
 
     public static final int API_NODE_EVENT_ID_OBTAIN = 2;
@@ -133,6 +140,13 @@ public final class KcaConstants {
     public static final String KCA_API_PREF_CN_CHANGED = "/kca_api/pref_cn_changed";
     public static final String KCA_API_PREF_EXPVIEW_CHANGED = "/kca_api/pref_expview_changed";
 
+    public static final String KCA_MSG_BATTLE_NODE = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_NODE";
+    public static final String KCA_MSG_BATTLE_INFO = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_INFO";
+    public static final String KCA_MSG_BATTLE_HDMG = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_HDMG";
+    public static final String KCA_MSG_BATTLE_VIEW_REFRESH = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_VIEW_REFRESH";
+    public static final String KCA_MSG_BATTLE_VIEW_HDMG = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_VIEW_HDMG";
+    public static final String KCA_MSG_DATA = "com.antest1.kcanotify.KcaService.KCA_MSG_DATA";
+
     public static final String KCA_API_PROCESS_BATTLE_FAILED = "/kca_api/process_battle_failed";
     public static final String KCA_API_OPENDB_FAILED = "/kca_api/opendb_failed";
 
@@ -158,6 +172,41 @@ public final class KcaConstants {
 
     public static final List<String> API_BATTLE_REQS = Arrays.asList(API_BATTLE_REQ_LIST);
 
+    public static final int VIEW_HP_MAX = 100;
+    public static final int STATE_NORMAL = 0;
+    public static final int STATE_LIGHTDMG = 1;
+    public static final int STATE_MODERATEDMG = 2;
+    public static final int STATE_HEAVYDMG = 3;
+
+    public static final int FORMATION_LAH = 1;
+    public static final int FORMATION_DLN = 2;
+    public static final int FORMATION_DIA = 3;
+    public static final int FORMATION_ECH = 4;
+    public static final int FORMATION_LAB = 5;
+    public static final int FORMATION_C1 = 11;
+    public static final int FORMATION_C2 = 12;
+    public static final int FORMATION_C3 = 13;
+    public static final int FORMATION_C4 = 14;
+
+    public static final int ENGAGE_PARL = 1;
+    public static final int ENGAGE_HDON = 2;
+    public static final int ENGAGE_TADV = 3;
+    public static final int ENGAGE_TDIS = 4;
+
+    public static final int AIR_PARITY = 0;
+    public static final int AIR_SUPERMACY = 1;
+    public static final int AIR_SUPERIORITY = 2;
+    public static final int AIR_DENIAL = 3;
+    public static final int AIR_INCAPABILITY = 4;
+
+    public static final int JUDGE_E = 0;
+    public static final int JUDGE_D = 1;
+    public static final int JUDGE_C = 2;
+    public static final int JUDGE_B = 3;
+    public static final int JUDGE_A = 4;
+    public static final int JUDGE_S = 5;
+    public static final int JUDGE_SS = 6;
+
     public static final String PREF_VPN_ENABLED = "enabled";
     public static final String PREF_SVC_ENABLED = "svcenabled";
 
@@ -165,6 +214,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
     public static final String PREF_OPENDB_API_USE = "opendb_api_use";
     public static final String PREF_KCA_EXP_VIEW = "expedition_view";
+    public static final String PREF_OVERLAY_SETTING = "overlay_setting";
     public static final String PREF_KCA_DOWNLOAD_DATA = "download_data";
     public static final String PREF_CHECK_UPDATE = "check_update";
     public static final String PREF_KCA_NOTI_EXP = "notify_expedition";
@@ -177,6 +227,7 @@ public final class KcaConstants {
             PREF_KCA_SEEK_CN,
             PREF_OPENDB_API_USE,
             PREF_KCA_EXP_VIEW,
+            PREF_OVERLAY_SETTING,
             PREF_KCA_DOWNLOAD_DATA,
             PREF_KCA_NOTI_EXP,
             PREF_KCA_NOTI_DOCK,
