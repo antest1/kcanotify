@@ -362,6 +362,7 @@ public class KcaService extends Service {
             jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
 
             if (url.startsWith(KCA_VERSION)) {
+                stopService(new Intent(this, KcaViewButtonService.class));
                 //Toast.makeText(getApplicationContext(), "KCA_VERSION", Toast.LENGTH_LONG).show();
                 JsonObject api_version = jsonDataObj.get("api").getAsJsonObject();
                 kca_version = api_version.get("api_start2").getAsString();
