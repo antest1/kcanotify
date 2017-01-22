@@ -718,4 +718,33 @@ public class KcaApiData {
                 return "";
         }
     }
+
+    public static String getItemString(Context context, int v) {
+        switch(v) {
+            case ITEM_FUEL:
+                return context.getString(R.string.item_fuel);
+            case ITEM_AMMO:
+                return context.getString(R.string.item_ammo);
+            case ITEM_STEL:
+                return context.getString(R.string.item_stel);
+            case ITEM_BAUX:
+                return context.getString(R.string.item_baux);
+            case ITEM_BRNR:
+                return context.getString(R.string.item_brnr);
+            case ITEM_BGTZ:
+                return context.getString(R.string.item_bgtz);
+            case ITEM_MMAT:
+                return context.getString(R.string.item_mmat);
+            case ITEM_KMAT:
+                return context.getString(R.string.item_kmat);
+            case ITEM_BOXS:
+                return context.getString(R.string.item_boxs);
+            case ITEM_BOXM:
+                return context.getString(R.string.item_boxm);
+            case ITEM_BOXL:
+                return context.getString(R.string.item_boxl);
+            default:
+                return "";
+        }
+    }
 }

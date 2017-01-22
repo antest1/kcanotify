@@ -194,4 +194,17 @@
     <string name="rank_c">C패배</string>
     <string name="rank_d">D패배</string>
     <string name="rank_e">E패배</string>
+
+    <string name="item_fuel">연료</string>
+    <string name="item_ammo">탄약</string>
+    <string name="item_stel">강재</string>
+    <string name="item_baux">보키</string>
+    <string name="item_brnr">고속건조재</string>
+    <string name="item_bgtz">고속수복재</string>
+    <string name="item_mmat">개발자재</string>
+    <string name="item_kmat">개수자재</string>
+    <string name="item_boxs">가구함(소)</string>
+    <string name="item_boxm">가구함(중)</string>
+    <string name="item_boxl">가구함(대)</string>
+
 </resources>

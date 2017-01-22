@@ -26,13 +26,16 @@ import android.widget.TextView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import static com.antest1.kcanotify.KcaApiData.getAirForceResultString;
 import static com.antest1.kcanotify.KcaApiData.getCurrentNodeAlphabet;
 import static com.antest1.kcanotify.KcaApiData.getEngagementString;
 import static com.antest1.kcanotify.KcaApiData.getFormationString;
+import static com.antest1.kcanotify.KcaApiData.getItemString;
 import static com.antest1.kcanotify.KcaApiData.getNodeFullInfo;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaConstants.*;
@@ -144,7 +147,9 @@ public class KcaBattleViewService extends Service {
         return i + 6;
     }
 
-    public static int getFriendCbIdx(int i) { return i - 6; }
+    public static int getFriendCbIdx(int i) {
+        return i - 6;
+    }
 
     public static int getEnemyCbIdx(int i) {
         return i;
@@ -200,6 +205,34 @@ public class KcaBattleViewService extends Service {
                 ((TextView) battleview.findViewById(R.id.battle_engagement)).setText("");
                 ((TextView) battleview.findViewById(R.id.enemy_fleet_name)).setText("");
                 ((TextView) battleview.findViewById(R.id.battle_airpower)).setText("");
+
+                if(api_event_type == API_NODE_EVENT_ID_OBTAIN || api_event_type == API_NODE_EVENT_ID_AIR) {
+                    JsonArray api_itemget = api_data.getAsJsonArray("api_itemget");
+                    List<String> itemTextList = new ArrayList<String>();
+                    for (int i = 0; i < api_itemget.size(); i++) {
+                        JsonObject itemdata = api_itemget.get(i).getAsJsonObject();
+                        String itemname = getItemString(getApplicationContext(), itemdata.get("api_id").getAsInt());
+                        int itemgetcount = itemdata.get("api_getcount").getAsInt();
+                        itemTextList.add(String.format("%s +%d", itemname, itemgetcount));
+                    }
+                    ((TextView) battleview.findViewById(R.id.battle_result)).setText(KcaUtils.joinStr(itemTextList, " / "));
+                    ((TextView) battleview.findViewById(R.id.battle_result))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItem));
+                } else if (api_event_type == API_NODE_EVENT_ID_LOSS)  {
+                    JsonObject api_happening = api_data.getAsJsonObject("api_happening");
+                    String itemname = getItemString(getApplicationContext(), api_happening.get("api_mst_id").getAsInt());
+                    int itemgetcount = api_happening.get("api_count").getAsInt();
+                    ((TextView) battleview.findViewById(R.id.battle_result)).setText(String.format("%s -%d", itemname, itemgetcount));
+                    ((TextView) battleview.findViewById(R.id.battle_result))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorVortex));
+                } else if (api_event_type == API_NODE_EVENT_ID_SENDAN) {
+                    JsonObject api_itemget_eo_comment = api_data.getAsJsonObject("api_itemget_eo_comment");
+                    String itemname = getItemString(getApplicationContext(), api_itemget_eo_comment.get("api_id").getAsInt());
+                    int itemgetcount = api_itemget_eo_comment.get("api_getcount").getAsInt();
+                    ((TextView) battleview.findViewById(R.id.battle_result)).setText(String.format("%s +%d", itemname, itemgetcount));
+                    ((TextView) battleview.findViewById(R.id.battle_result))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorNone));
+                }
 
                 switch (api_color_no) {
                     case 2:
@@ -296,7 +329,7 @@ public class KcaBattleViewService extends Service {
                                     }
                                     ((TextView) battleview.findViewById(shipLevelViewList[j + 1])).setText(makeLvString(level));
                                     ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setText(makeHpString(nowhp, maxhp));
-                                    if(fc_flag || ec_flag) {
+                                    if (fc_flag || ec_flag) {
                                         ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
                                     } else {
                                         ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
@@ -464,7 +497,7 @@ public class KcaBattleViewService extends Service {
                         ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setText(makeHpString(afterhp, maxhp));
                         ((ProgressBar) battleview.findViewById(shipHpBarViewList[i])).setProgress(hpPercent);
                         ((ProgressBar) battleview.findViewById(shipHpBarViewList[i])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
-                        if(fc_flag || ec_flag) {
+                        if (fc_flag || ec_flag) {
                             ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
                         } else {
                             ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);

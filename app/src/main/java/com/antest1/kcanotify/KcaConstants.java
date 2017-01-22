@@ -210,6 +210,18 @@ public final class KcaConstants {
     public static final int JUDGE_S = 5;
     public static final int JUDGE_SS = 6;
 
+    public static final int ITEM_FUEL = 1;
+    public static final int ITEM_AMMO = 2;
+    public static final int ITEM_STEL = 3;
+    public static final int ITEM_BAUX = 4;
+    public static final int ITEM_BRNR = 5;
+    public static final int ITEM_BGTZ = 6;
+    public static final int ITEM_MMAT = 7;
+    public static final int ITEM_KMAT = 8;
+    public static final int ITEM_BOXS = 10;
+    public static final int ITEM_BOXM = 11;
+    public static final int ITEM_BOXL = 12;
+
     public static final String PREF_VPN_ENABLED = "enabled";
     public static final String PREF_SVC_ENABLED = "svcenabled";
 
