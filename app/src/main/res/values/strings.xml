@@ -9,7 +9,7 @@
     <!-- Link Information -->
     <string name="api_start2_recent_version_link">http://antest.hol.es/kcanotify/kca_api_start2.php?v=recent</string>
     <string name="api_start2_version_link" formatted="false">http://antest.hol.es/kcanotify/kca_api_start2.php?v=%s</string>
-    <string name="api_start2_upload_link" formatted="false">http://antest.hol.es/kcanotify/kca_api_start2.php?token=%s&amp;method=%s&amp;v=%s</string>
+    <string name="api_start2_upload_link" formatted="false">http://antest.hol.es/kcanotify/kca_api_start2.php?token=%s&amp;dtoken=%s&amp;method=%s&amp;v=%s</string>
     <string name="errorlog_service_link" formatted="false">http://antest.hol.es/kcanotify/errorlog_main.php?token=%s&amp;url=%s&amp;request=%s&amp;v=%s</string>
     <string name="errorlog_battle_link" formatted="false">http://antest.hol.es/kcanotify/errorlog_battle.php?token=%s&amp;url=%s&amp;node=%s&amp;v=%s</string>
     <string name="errorlog_notify_link" formatted="false">http://antest.hol.es/kcanotify/errorlog_notify.php?token=%s&amp;url=%s&amp;v=%s</string>
@@ -177,9 +177,13 @@
     <string name="air_incapability">제공권상실</string>
 
     <string name="enemy_fleet_name">적 함대</string>
+    <string name="enemy_main_fleet_name">적 본함대</string>
+    <string name="enemy_combined_fleet_name">적 호위함대</string>
 
     <string name="yomi_flagship">flagship</string>
     <string name="yomi_elite">elite</string>
+    <string name="yomi_flagship_short">F</string>
+    <string name="yomi_elite_short">E</string>
 
     <string name="rank_ss">완전승리S</string>
     <string name="rank_s">S승리</string>

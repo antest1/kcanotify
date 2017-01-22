@@ -147,6 +147,9 @@ public final class KcaConstants {
     public static final String KCA_MSG_BATTLE_VIEW_HDMG = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_VIEW_HDMG";
     public static final String KCA_MSG_DATA = "com.antest1.kcanotify.KcaService.KCA_MSG_DATA";
 
+    public static final String KCA_MSG_BUTTON_TOP = "com.antest1.kcanotify.KcaBattleViewService.KCA_MSG_BUTTON_TOP";
+    public static final String KCA_MSG_VIEW_HIDE = "com.antest1.kcanotify.KcaViewButtonService.KCA_MSG_VIEW_HIDE";
+
     public static final String KCA_API_PROCESS_BATTLE_FAILED = "/kca_api/process_battle_failed";
     public static final String KCA_API_OPENDB_FAILED = "/kca_api/opendb_failed";
 

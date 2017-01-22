@@ -41,6 +41,7 @@ public class KcaViewButtonService extends Service {
     private BroadcastReceiver battleinfo_receiver;
     private BroadcastReceiver battlehdmg_receiver;
     private BroadcastReceiver battlenode_receiver;
+    private BroadcastReceiver buttontop_receiver;
     private View mView;
     private WindowManager mManager;
     private boolean isViewEnabled;
@@ -49,6 +50,7 @@ public class KcaViewButtonService extends Service {
     WindowManager.LayoutParams mParams;
 
     public static JsonObject currentApiData;
+    public static int type;
     public static int clickcount;
 
     public static JsonObject getCurrentApiData() {
@@ -80,7 +82,7 @@ public class KcaViewButtonService extends Service {
                 Intent intent_send = new Intent(KCA_MSG_BATTLE_VIEW_REFRESH);
                 intent_send.putExtra(KCA_MSG_DATA, s);
                 broadcaster.sendBroadcast(intent_send);
-                //Log.e("KCA", "KCA_MSG_BATTLE_INFO Received: \n".concat(s));
+                Log.e("KCA", "KCA_MSG_BATTLE_INFO Received: \n".concat(s));
             }
         };
         battlenode_receiver = new BroadcastReceiver() {
@@ -91,7 +93,7 @@ public class KcaViewButtonService extends Service {
                 Intent intent_send = new Intent(KCA_MSG_BATTLE_VIEW_REFRESH);
                 intent_send.putExtra(KCA_MSG_DATA, s);
                 broadcaster.sendBroadcast(intent_send);
-                //Log.e("KCA", "KCA_MSG_BATTLE_NODE Received: \n".concat(s));
+                Log.e("KCA", "KCA_MSG_BATTLE_NODE Received: \n".concat(s));
             }
         };
         battlehdmg_receiver = new BroadcastReceiver() {
@@ -100,14 +102,15 @@ public class KcaViewButtonService extends Service {
                 String s = intent.getStringExtra(KCA_MSG_DATA);
                 Intent intent_send = new Intent(KCA_MSG_BATTLE_VIEW_HDMG);
                 intent_send.putExtra(KCA_MSG_DATA, "");
-                if(viewbutton != null) {
-                    viewbutton.getDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                            R.color.colorHeavyDmgStateWarn), PorterDuff.Mode.MULTIPLY);
-                }
+
+                ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                        R.color.colorHeavyDmgStateWarn), PorterDuff.Mode.MULTIPLY);
+
                 broadcaster.sendBroadcast(intent_send);
-                //Log.e("KCA", "KCA_MSG_BATTLE_HDMG Received: \n".concat(s));
+                Log.e("KCA", "KCA_MSG_BATTLE_HDMG Received");
             }
         };
+
         LocalBroadcastManager.getInstance(this).registerReceiver((battleinfo_receiver), new IntentFilter(KCA_MSG_BATTLE_INFO));
         LocalBroadcastManager.getInstance(this).registerReceiver((battlenode_receiver), new IntentFilter(KCA_MSG_BATTLE_NODE));
         LocalBroadcastManager.getInstance(this).registerReceiver((battlehdmg_receiver), new IntentFilter(KCA_MSG_BATTLE_HDMG));
@@ -143,10 +146,11 @@ public class KcaViewButtonService extends Service {
 
     @Override
     public void onDestroy() {
-        mManager.removeViewImmediate(mView);
+        mManager.removeView(mView);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battleinfo_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlenode_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlehdmg_receiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(buttontop_receiver);
         stopService(new Intent(getBaseContext(), KcaBattleViewService.class));
         super.onDestroy();
     }

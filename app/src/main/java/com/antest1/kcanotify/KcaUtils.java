@@ -113,9 +113,9 @@ public class KcaUtils {
 
     private static int bytetoint(byte[] arr) {
         int csize = 0;
-        for(int i=0; i<arr.length; i++) {
+        for (int i = 0; i < arr.length; i++) {
             csize = csize << 4;
-            if(arr[i] >= 0x30 && arr[i] <= 0x39) {
+            if (arr[i] >= 0x30 && arr[i] <= 0x39) {
                 csize += arr[i] - 0x30; // (0x30 = '0')
             } else if (arr[i] >= 0x61 && arr[i] <= 0x66) {
                 csize += arr[i] - 0x61 + 0x0a; // (0x61 = 'a')
@@ -129,13 +129,13 @@ public class KcaUtils {
     public static byte[] unchunkdata(byte[] contentBytes) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         int startIdx = 0;
-        for (int i=0; i<contentBytes.length - 1; i++) {
-            if(contentBytes[i] == '\r' && contentBytes[i+1] == '\n') {
+        for (int i = 0; i < contentBytes.length - 1; i++) {
+            if (contentBytes[i] == '\r' && contentBytes[i + 1] == '\n') {
                 int size = bytetoint(Arrays.copyOfRange(contentBytes, startIdx, i));
-                if(size == 0) break;
-                int dataStart = i+2;
-                out.write(Arrays.copyOfRange(contentBytes, dataStart, dataStart+size));
-                startIdx = dataStart+size+2; // \r\n padding
+                if (size == 0) break;
+                int dataStart = i + 2;
+                out.write(Arrays.copyOfRange(contentBytes, dataStart, dataStart + size));
+                startIdx = dataStart + size + 2; // \r\n padding
                 i = startIdx - 1;
             }
         }
@@ -147,5 +147,13 @@ public class KcaUtils {
         for (final byte b : a)
             sb.append(String.format("%02x ", b & 0xff));
         return sb.toString();
+    }
+
+    public static boolean[] makeExcludeFlag(int[] list) {
+        boolean[] flag = {false,false,false,false,false,false};
+        for (int i = 0; i < list.length; i++) {
+            flag[list[i]] = true;
+        }
+        return flag;
     }
 }

@@ -23,7 +23,7 @@ public class KcaDeckInfo {
     // Formula 33 (2016.12.26)
     // Reference: http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
     //            http://kancolle-calc.net/deckbuilder.html
-    public static double getSeekValue(JsonArray deckPortData, int deckid, int Cn) {
+    public static double getSeekValue(JsonArray deckPortData, int deckid, int Cn, boolean[] exclude_flag) {
         double pureTotalSeek = 0.0;
         double totalSeek = 0.0;
 
@@ -36,8 +36,10 @@ public class KcaDeckInfo {
         hqPenalty = Math.ceil(0.4*userLevel);
 
         int noShipCount = 6;
+        boolean excludeflagexist = (exclude_flag != null);
         JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for(int i=0; i<deckShipIdList.size(); i++) {
+            if(excludeflagexist && exclude_flag[i]) continue;
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 noShipCount -= 1;
@@ -176,11 +178,12 @@ public class KcaDeckInfo {
         return rangeAAC;
     }
 
-    public static int[] getAirPowerRange(JsonArray deckPortData, int deckid) {
+    public static int[] getAirPowerRange(JsonArray deckPortData, int deckid, boolean[] exclude_flag) {
         int[] totalRangeAAC = {0, 0};
-
+        boolean excludeflagexist = (exclude_flag != null);
         JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for(int i=0; i<deckShipIdList.size(); i++) {
+            if(excludeflagexist && exclude_flag[i]) continue;
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id,lv,slot,onslot");
@@ -223,16 +226,18 @@ public class KcaDeckInfo {
     }
 
 
-    public static int getSpeed(JsonArray deckPortData, int deckid) {
+    public static int getSpeed(JsonArray deckPortData, int deckid, boolean[] exclude_flag) {
         boolean is_slow_flag = false;
         boolean is_fast_flag = false;
         boolean is_fastplus_flag = false;
         boolean is_superfast_flag = false;
 
+        boolean excludeflagexist = (exclude_flag != null);
         JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().get("api_ship").getAsJsonArray();
 
         // Retrieve Speed (soku) Information
         for(int i=0; i<deckShipIdList.size(); i++) {
+            if(excludeflagexist && exclude_flag[i]) continue;
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "soku");

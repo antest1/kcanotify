@@ -140,7 +140,6 @@ public class KcaService extends Service {
         }
 
         android_id =  Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        Log.e("KCA", android_id);
 
         for (int i = 0; i < 3; i++) {
             kcaExpeditionList[i] = null;
@@ -227,6 +226,7 @@ public class KcaService extends Service {
 
     public void onDestroy() {
         setServiceDown();
+        stopService(new Intent(this, KcaViewButtonService.class));
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putBoolean("svcenabled", false).apply();
     }
@@ -317,9 +317,9 @@ public class KcaService extends Service {
         if (!KcaApiData.isGameDataLoaded()) return;
         int cn = getSeekCn();
         String seekType = getSeekType();
-        int[] airPowerRange = KcaDeckInfo.getAirPowerRange(currentPortDeckData, 0);
+        int[] airPowerRange = KcaDeckInfo.getAirPowerRange(currentPortDeckData, 0, null);
         String airPowerValue = String.format(getString(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
-        String seekValue = String.format(getString(R.string.kca_toast_seekvalue_f), seekType, KcaDeckInfo.getSeekValue(currentPortDeckData, 0, cn));
+        String seekValue = String.format(getString(R.string.kca_toast_seekvalue_f), seekType, KcaDeckInfo.getSeekValue(currentPortDeckData, 0, cn, null));
         List<String> toastList = new ArrayList<String>();
         if (airPowerRange[1] > 0) {
             toastList.add(airPowerValue);
@@ -402,7 +402,9 @@ public class KcaService extends Service {
                     //Toast.makeText(getApplicationContext(), "Load Kancolle Data", Toast.LENGTH_LONG).show();
                     KcaApiData.getKcGameData(jsonDataObj.getAsJsonObject("api_data"));
                     setDataLoadTriggered();
-                    setPreferences(getApplicationContext(), "kca_version", kca_version);
+                    if(kca_version != null) {
+                        setPreferences(getApplicationContext(), "kca_version", kca_version);
+                    }
                 }
                 return;
             }
@@ -500,6 +502,14 @@ public class KcaService extends Service {
                         if (reqPortApiData.has("api_ndock")) {
                             JsonArray nDockData = reqPortApiData.getAsJsonArray("api_ndock");
                             processDockingInfo(nDockData);
+                        }
+                        if (reqPortApiData.has("api_combined_flag")) {
+                            int combined_flag = reqPortApiData.get("api_combined_flag").getAsInt();
+                            if(combined_flag > 0) {
+                                KcaBattle.isCombined = true;
+                            } else {
+                                KcaBattle.isCombined = false;
+                            }
                         }
                     }
                     setFrontViewNotifier(FRONT_NONE, 0, null);
@@ -1305,7 +1315,7 @@ public class KcaService extends Service {
         JsonObject infoData = null;
 
         String airPowerValue = "";
-        int[] airPowerRange = KcaDeckInfo.getAirPowerRange(data, 0);
+        int[] airPowerRange = KcaDeckInfo.getAirPowerRange(data, 0, null);
         if (airPowerRange[0] > 0 && airPowerRange[1] > 0) {
             airPowerValue = String.format(getString(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
             infoData = new JsonObject();
@@ -1316,9 +1326,9 @@ public class KcaService extends Service {
         }
         String seekValue = "";
         if (cn == SEEK_PURE) {
-            seekValue = String.format(getString(R.string.kca_toast_seekvalue_d), seekType, (int) KcaDeckInfo.getSeekValue(data, 0, cn));
+            seekValue = String.format(getString(R.string.kca_toast_seekvalue_d), seekType, (int) KcaDeckInfo.getSeekValue(data, 0, cn, null));
         } else {
-            seekValue = String.format(getString(R.string.kca_toast_seekvalue_f), seekType, KcaDeckInfo.getSeekValue(data, 0, cn));
+            seekValue = String.format(getString(R.string.kca_toast_seekvalue_f), seekType, KcaDeckInfo.getSeekValue(data, 0, cn, null));
 
         }
         infoData = new JsonObject();
@@ -1327,7 +1337,7 @@ public class KcaService extends Service {
         infoData.addProperty("landscape_value", seekValue);
         deckInfoData.add(infoData);
 
-        int speedValue = KcaDeckInfo.getSpeed(data, 0);
+        int speedValue = KcaDeckInfo.getSpeed(data, 0, null);
         String speedStringValue = "";
         switch (speedValue) {
             case KcaApiData.SPEED_SUPERFAST:
@@ -1683,7 +1693,7 @@ public class KcaService extends Service {
         public String executeClient(String token, String method, String data) {
             try {
                 if (method.equals("up")) {
-                    String dataSendUrl = String.format(getString(R.string.api_start2_upload_link), token, method, kca_version);
+                    String dataSendUrl = String.format(getString(R.string.api_start2_upload_link), token, android_id, method, kca_version);
                     AjaxCallback<String> cb = new AjaxCallback<String>() {
                         @Override
                         public void callback(String url, String data, AjaxStatus status) {
