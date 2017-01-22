@@ -1458,6 +1458,7 @@ public class KcaService extends Service {
         for (int i = 0; i < data.size(); i++) {
             JsonObject ndockData = data.get(i).getAsJsonObject();
             state = ndockData.get("api_state").getAsInt();
+            notifiManager.cancel(getNotificationId(NOTI_DOCK, i));
             if (state != -1) {
                 dockId = ndockData.get("api_id").getAsInt() - 1;
                 shipId = ndockData.get("api_ship_id").getAsInt();
@@ -1468,7 +1469,6 @@ public class KcaService extends Service {
                         kcaDockingList[dockId].interrupt();
                         kcaDockingRunnableList[dockId] = null;
                         if (shipId != 0) {
-                            notifiManager.cancel(getNotificationId(NOTI_DOCK, dockId));
                             kcaDockingRunnableList[dockId] = new KcaDocking(dockId, shipId, completeTime, nHandler);
                             kcaDockingList[dockId] = new Thread(kcaDockingRunnableList[dockId]);
                             kcaDockingList[dockId].start();
@@ -1478,7 +1478,6 @@ public class KcaService extends Service {
                     }
                 } else {
                     if (state == 1) {
-                        notifiManager.cancel(getNotificationId(NOTI_DOCK, dockId));
                         kcaDockingRunnableList[dockId] = new KcaDocking(dockId, shipId, completeTime, nHandler);
                         kcaDockingList[dockId] = new Thread(kcaDockingRunnableList[dockId]);
                         kcaDockingList[dockId].start();
