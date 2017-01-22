@@ -217,6 +217,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
     public static final String PREF_OPENDB_API_USE = "opendb_api_use";
     public static final String PREF_KCA_EXP_VIEW = "expedition_view";
+    public static final String PREF_KCA_BATTLEVIEW_USE = "battleview_use";
     public static final String PREF_OVERLAY_SETTING = "overlay_setting";
     public static final String PREF_KCA_DOWNLOAD_DATA = "download_data";
     public static final String PREF_CHECK_UPDATE = "check_update";
@@ -230,6 +231,7 @@ public final class KcaConstants {
             PREF_KCA_SEEK_CN,
             PREF_OPENDB_API_USE,
             PREF_KCA_EXP_VIEW,
+            PREF_KCA_BATTLEVIEW_USE,
             PREF_OVERLAY_SETTING,
             PREF_KCA_DOWNLOAD_DATA,
             PREF_KCA_NOTI_EXP,

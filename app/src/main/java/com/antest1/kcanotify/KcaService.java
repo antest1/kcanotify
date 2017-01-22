@@ -570,11 +570,13 @@ public class KcaService extends Service {
                         JsonObject battleApiData = jsonDataObj.getAsJsonObject("api_data");
                         if (url.startsWith(API_REQ_MAP_START) || url.startsWith(API_REQ_PRACTICE_BATTLE)) {
                             isInBattle = true;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                                    && !Settings.canDrawOverlays(getApplicationContext())) {
-                                // Can not draw overlays: pass
-                            } else {
-                                startService(new Intent(this, KcaViewButtonService.class));
+                            if(getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                                        && !Settings.canDrawOverlays(getApplicationContext())) {
+                                    // Can not draw overlays: pass
+                                } else {
+                                    startService(new Intent(this, KcaViewButtonService.class));
+                                }
                             }
 
                             JsonObject api_data = new JsonObject();

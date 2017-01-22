@@ -30,6 +30,7 @@ import android.widget.ToggleButton;
 import java.util.List;
 
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
@@ -39,6 +40,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
+import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "KCAV";
@@ -140,9 +142,11 @@ public class MainActivity extends AppCompatActivity {
         ctx = getApplicationContext();
         setDefaultPreferences();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
-            Toast.makeText(this, getString(R.string.ma_toast_overay_diabled), Toast.LENGTH_LONG).show();
+        if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                    && !Settings.canDrawOverlays(getApplicationContext())) {
+                Toast.makeText(this, getString(R.string.ma_toast_overay_diabled), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -234,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_KCA_EXP_VIEW:
                     case PREF_KCA_NOTI_DOCK:
                     case PREF_KCA_NOTI_EXP:
+                    case PREF_KCA_BATTLEVIEW_USE:
                     case PREF_KCA_NOTI_V_HD:
                         editor.putBoolean(prefKey, true);
                         break;

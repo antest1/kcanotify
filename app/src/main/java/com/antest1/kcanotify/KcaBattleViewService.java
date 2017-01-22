@@ -290,6 +290,7 @@ public class KcaBattleViewService extends Service {
                                     ((TextView) battleview.findViewById(shipNameViewList[j + 1])).setText(kcname);
                                     if (fc_flag) {
                                         ((TextView) battleview.findViewById(shipNameViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                                        battleview.findViewById(shipNameViewList[j + 1]).setPadding(0, 2, 0, 0);
                                     } else {
                                         ((TextView) battleview.findViewById(shipNameViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                                     }
@@ -335,6 +336,7 @@ public class KcaBattleViewService extends Service {
                                     ((TextView) battleview.findViewById(shipNameCombinedViewList[j + 1])).setText(kcname);
                                     if (fc_flag) {
                                         ((TextView) battleview.findViewById(shipNameCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                                        battleview.findViewById(shipNameCombinedViewList[j + 1]).setPadding(0, 2, 0, 0);
                                     } else {
                                         ((TextView) battleview.findViewById(shipNameCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                                     }
@@ -416,11 +418,17 @@ public class KcaBattleViewService extends Service {
                         if (ec_flag) {
                             if (kcname.length() > 7) {
                                 ((TextView) battleview.findViewById(shipNameViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                                battleview.findViewById(shipNameViewList[getEnemyIdx(i)]).setPadding(0, 4, 0, 0);
                             } else {
                                 ((TextView) battleview.findViewById(shipNameViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                             }
                         }
                         if (!is_practice) {
+                            if (fc_flag || ec_flag) {
+                                ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
+                            } else {
+                                ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                            }
                             if (kcyomi.equals(getString(R.string.yomi_elite))) {
                                 if (fc_flag && ec_flag) {
                                     ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText(getString(R.string.yomi_elite_short));
@@ -487,10 +495,12 @@ public class KcaBattleViewService extends Service {
                             ((TextView) battleview.findViewById(shipNameCombinedViewList[getEnemyIdx(i)])).setText(kcname);
                             if (kcname.length() > 7) {
                                 ((TextView) battleview.findViewById(shipNameCombinedViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                                battleview.findViewById(shipNameCombinedViewList[getEnemyIdx(i)]).setPadding(0, 4, 0, 0);
                             } else {
                                 ((TextView) battleview.findViewById(shipNameCombinedViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                             }
                             if (!is_practice) {
+                                ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
                                 if (kcyomi.equals(getString(R.string.yomi_elite))) {
                                     ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText(kcyomi);
                                     ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)]))
@@ -518,7 +528,7 @@ public class KcaBattleViewService extends Service {
                             ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setText(makeHpString(afterhp_combined, maxhp_combined));
                             ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgress(hpPercent);
                             ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
-                            ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+                            ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
                         }
                         nowhps_combined[i] = api_nowhps_combined.get(i).getAsInt();
                         afterhps_combined[i] = api_afterhps_combined.get(i).getAsInt();

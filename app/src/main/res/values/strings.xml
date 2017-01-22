@@ -91,7 +91,7 @@
 
     <!-- InfoActivity Strings -->
     <string name="ia_license" formatted="false">Copyright &#169; 2016-2017 by antest1(IE10)</string>
-    <string name="ia_gpl" formatted="false">By using %s, you agree to the &lt;a href="http://www.gnu.org/licenses/gpl.txt"&gt;GNU General Public License 3.0&lt;/a&gt;. The whole source code is available on the &lt;a href="https://github.com/antest1/kcanotify/"&gt;Github repository&lt;/a&gt;.</string>
+    <string name="ia_gpl" formatted="false">By using %s, you agree to the &lt;a href="http://www.gnu.org/licenses/gpl.txt"&gt;GNU General Public License 3.0&lt;/a&gt;. The whole source code is available on &lt;a href="https://github.com/antest1/kcanotify/"&gt;github repository&lt;/a&gt;.</string>
 
     <!-- KcaService Strings -->
     <string name="kca_init_title" formatted="false">%s 동작중</string>
@@ -134,6 +134,8 @@
     <string name="setting_menu_kand_desc_exp_realtime_show">상단의 남은 원정 시간 실시간 표시 여부</string>
     <string name="setting_menu_kand_title_game_data_down">게임 데이터 다운로드</string>
     <string name="setting_menu_kand_desc_game_data_down">게임 데이터가 로딩되지 않을 때 사용</string>
+    <string name="setting_menu_kand_title_battleview_use">(베타기능) 전투예보 사용</string>
+    <string name="setting_menu_kand_desc_battleview_use">출격 및 연습전에서의 전투예보 사용 여부</string>
     <string name="setting_menu_kand_title_overlay_setting">화면 오버레이 설정</string>
     <string name="setting_menu_kand_desc_overlay_setting">다른 앱 위에 그리기 권한 설정 (전투예보 기능에 필요)</string>
 

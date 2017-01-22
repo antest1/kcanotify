@@ -29,8 +29,15 @@
         android:summary="@string/setting_menu_kand_desc_game_data_down"
         android:title="@string/setting_menu_kand_title_game_data_down" />
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="battleview_use"
+            android:summary="@string/setting_menu_kand_desc_battleview_use"
+            android:title="@string/setting_menu_kand_title_battleview_use" />
+
         <Preference
             android:defaultValue=""
+            android:dependency="battleview_use"
             android:key="overlay_setting"
             android:summary="@string/setting_menu_kand_desc_overlay_setting"
             android:title="@string/setting_menu_kand_title_overlay_setting" />
