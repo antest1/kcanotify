@@ -23,6 +23,8 @@
     <color name="colorHeavyDmgState">#ff5252</color>
     <color name="colorHeavyDmgStateWarn">#ff5252</color>
 
+    <color name="colorHeavyDmgStatePanel">#b71c1c</color>
+
     <color name="colorElite">#d50000</color>
     <color name="colorFlagship">#fbc02d</color>
 

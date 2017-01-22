@@ -749,7 +749,7 @@ public class KcaBattleViewService extends Service {
                 //mViewBackup = mView;
                 //mManager.removeView(mView);
                 ((LinearLayout) mView.findViewById(R.id.battleviewpanel))
-                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHeavyDmgState));
+                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHeavyDmgStatePanel));
                 //mManager.addView(mView, mParams);
                 if (KcaViewButtonService.getClickCount() == 0) {
                     mView.setVisibility(View.GONE);
