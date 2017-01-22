@@ -456,6 +456,12 @@ public class KcaBattleViewService extends Service {
                         ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setText(makeHpString(afterhp, maxhp));
                         ((ProgressBar) battleview.findViewById(shipHpBarViewList[i])).setProgress(hpPercent);
                         ((ProgressBar) battleview.findViewById(shipHpBarViewList[i])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
+                        if(fc_flag || ec_flag) {
+                            ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+                        } else {
+                            ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                        }
+
                     }
                     nowhps[i] = api_nowhps.get(i).getAsInt();
                     afterhps[i] = api_afterhps.get(i).getAsInt();
@@ -512,6 +518,7 @@ public class KcaBattleViewService extends Service {
                             ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setText(makeHpString(afterhp_combined, maxhp_combined));
                             ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgress(hpPercent);
                             ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
+                            ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
                         }
                         nowhps_combined[i] = api_nowhps_combined.get(i).getAsInt();
                         afterhps_combined[i] = api_afterhps_combined.get(i).getAsInt();
@@ -629,14 +636,14 @@ public class KcaBattleViewService extends Service {
             enemy_combined_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.25f));
         } else if (fc_flag) {
             enemy_combined_fleet.setVisibility(View.GONE);
-            friend_main_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.32f));
-            enemy_main_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.36f));
-            friend_combined_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.32f));
+            friend_main_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.325f));
+            enemy_main_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.35f));
+            friend_combined_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.325f));
         } else if (ec_flag) {
             friend_combined_fleet.setVisibility(View.GONE);
-            friend_main_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.36f));
-            enemy_main_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.32f));
-            enemy_combined_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.32f));
+            friend_main_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.35f));
+            enemy_main_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.325f));
+            enemy_combined_fleet.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.325f));
         } else {
             friend_combined_fleet.setVisibility(View.GONE);
             enemy_combined_fleet.setVisibility(View.GONE);
