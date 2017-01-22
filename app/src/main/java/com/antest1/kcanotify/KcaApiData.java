@@ -637,7 +637,11 @@ public class KcaApiData {
                 }
                 break;
             case API_NODE_EVENT_ID_NOEVENT:
-                currentNodeInfo = String.format(context.getString(R.string.node_info_noevent), currentNode);
+                if (kind == API_NODE_EVENT_KIND_SELECTABLE) {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_selectable), currentNode);
+                } else {
+                    currentNodeInfo = String.format(context.getString(R.string.node_info_noevent), currentNode);
+                }
                 break;
             case API_NODE_EVENT_ID_TPOINT:
                 currentNodeInfo = String.format(context.getString(R.string.node_info_tpoint), currentNode);

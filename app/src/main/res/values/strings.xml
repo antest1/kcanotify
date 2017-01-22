@@ -63,11 +63,10 @@
     <string name="node_info_nightbattle" formatted="false">%s (야간전)</string>
     <string name="node_info_nightdaybattle" formatted="false">%s (야간전->주간전)</string>
     <string name="node_info_tpoint" formatted="false">%s (수송포인트)</string>
-    <string name="node_info_activecell" formatted="false">%s (능동분기)</string>
+    <string name="node_info_selectable" formatted="false">%s (능동분기)</string>
     <string name="node_info_sendan" formatted="false">%s (선단호위 끝)</string>
     <string name="node_info_ecbattle" formatted="false">%s (적 연합함대)</string>
     <string name="node_info_practice" formatted="false">연습전</string>
-
     <!-- MainActivity Strings -->
     <string name="ma_toast_kancolle_not_installed">칸코레가 설치되어 있지 않습니다.</string>
     <string name="ma_toast_overay_diabled">전투예보에 필요한 화면 오버레이 권한이 설정되지 않았습니다.\n설정 > 화면 오버레이 설정에서 권한을 설정하세요.</string>
@@ -155,6 +154,8 @@
     <string name="setting_menu_app_info">시제 깡들리티 정보</string>
 
     <!-- BattleView Strings -->
+    <string name="battleview_error">처리 중 오류가 발생하였습니다.</string>
+
     <string name="formation_lineahead">단종진</string>
     <string name="formation_doubleline">복종진</string>
     <string name="formation_diamond">윤형진</string>
@@ -198,7 +199,7 @@
     <string name="item_fuel">연료</string>
     <string name="item_ammo">탄약</string>
     <string name="item_stel">강재</string>
-    <string name="item_baux">보키</string>
+    <string name="item_baux">보크사이트</string>
     <string name="item_brnr">고속건조재</string>
     <string name="item_bgtz">고속수복재</string>
     <string name="item_mmat">개발자재</string>

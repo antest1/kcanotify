@@ -123,7 +123,7 @@ public final class KcaConstants {
     public static final int API_NODE_EVENT_KIND_ECBATTLE = 5;
     public static final int API_NODE_EVENT_KIND_LDAIRBATTLE = 6;
 
-    public static final int API_NODE_EVENT_KIND_ACTIVECELL = 2;
+    public static final int API_NODE_EVENT_KIND_SELECTABLE = 2;
 
     public static final int API_NODE_EVENT_KIND_AIRSEARCH = 0;
 

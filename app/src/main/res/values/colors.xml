@@ -9,8 +9,10 @@
     <color name="colorBattle">#ff0000</color>
     <color name="colorBossBattle">#d50000</color>
     <color name="colorItem">#6bc613</color>
+    <color name="colorItemSpecial">#388e3c</color>
     <color name="colorNone">#60c1d4</color>
     <color name="colorVortex">#af85e8</color>
+    <color name="colorSelectable">#4e7bff</color>
     <color name="colorNightBattle">#200a40</color>
     <color name="colorAirBattle">#4e342e</color>
 

@@ -22,8 +22,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -206,7 +208,7 @@ public class KcaBattleViewService extends Service {
                 ((TextView) battleview.findViewById(R.id.enemy_fleet_name)).setText("");
                 ((TextView) battleview.findViewById(R.id.battle_airpower)).setText("");
 
-                if(api_event_type == API_NODE_EVENT_ID_OBTAIN || api_event_type == API_NODE_EVENT_ID_AIR) {
+                if (api_event_id == API_NODE_EVENT_ID_OBTAIN) {
                     JsonArray api_itemget = api_data.getAsJsonArray("api_itemget");
                     List<String> itemTextList = new ArrayList<String>();
                     for (int i = 0; i < api_itemget.size(); i++) {
@@ -218,14 +220,23 @@ public class KcaBattleViewService extends Service {
                     ((TextView) battleview.findViewById(R.id.battle_result)).setText(KcaUtils.joinStr(itemTextList, " / "));
                     ((TextView) battleview.findViewById(R.id.battle_result))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItem));
-                } else if (api_event_type == API_NODE_EVENT_ID_LOSS)  {
+                } else if (api_event_id == API_NODE_EVENT_ID_AIR) {
+                    JsonObject itemdata = api_data.getAsJsonObject("api_itemget");
+                    String itemname = getItemString(getApplicationContext(), itemdata.get("api_id").getAsInt());
+                    int itemgetcount = itemdata.get("api_getcount").getAsInt();
+                    ((TextView) battleview.findViewById(R.id.battle_result)).setText(String.format("%s +%d", itemname, itemgetcount));
+                    ((TextView) battleview.findViewById(R.id.battle_result))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItemSpecial));
+                } else if (api_event_id == API_NODE_EVENT_ID_LOSS) {
                     JsonObject api_happening = api_data.getAsJsonObject("api_happening");
                     String itemname = getItemString(getApplicationContext(), api_happening.get("api_mst_id").getAsInt());
                     int itemgetcount = api_happening.get("api_count").getAsInt();
                     ((TextView) battleview.findViewById(R.id.battle_result)).setText(String.format("%s -%d", itemname, itemgetcount));
                     ((TextView) battleview.findViewById(R.id.battle_result))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorVortex));
-                } else if (api_event_type == API_NODE_EVENT_ID_SENDAN) {
+                } else if (api_event_id == API_NODE_EVENT_ID_SENDAN) {
+                    ((LinearLayout) mView.findViewById(R.id.battleviewpanel))
+                            .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                     JsonObject api_itemget_eo_comment = api_data.getAsJsonObject("api_itemget_eo_comment");
                     String itemname = getItemString(getApplicationContext(), api_itemget_eo_comment.get("api_id").getAsInt());
                     int itemgetcount = api_itemget_eo_comment.get("api_getcount").getAsInt();
@@ -236,10 +247,13 @@ public class KcaBattleViewService extends Service {
 
                 switch (api_color_no) {
                     case 2:
+                        battleview.findViewById(R.id.battle_node)
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItem));
+                        break;
                     case 6:
                     case 9:
                         battleview.findViewById(R.id.battle_node)
-                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItem));
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItemSpecial));
                         break;
                     case 3:
                         battleview.findViewById(R.id.battle_node)
@@ -247,8 +261,14 @@ public class KcaBattleViewService extends Service {
                         break;
                     case 4:
                         if (api_event_id == API_NODE_EVENT_ID_NOEVENT) {
-                            battleview.findViewById(R.id.battle_node)
-                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorNone));
+                            if (api_event_type == API_NODE_EVENT_KIND_SELECTABLE) { // selectable
+                                battleview.findViewById(R.id.battle_node)
+                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorSelectable));
+                            } else {
+                                battleview.findViewById(R.id.battle_node)
+                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorNone));
+                            }
+
                         } else {
                             battleview.findViewById(R.id.battle_node)
                                     .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBattle));
@@ -744,13 +764,18 @@ public class KcaBattleViewService extends Service {
                 Log.e("KCA", "=> Received Intent");
                 //mViewBackup = mView;
                 //mManager.removeView(mView);
-                setView();
-                if (KcaViewButtonService.getClickCount() == 0) {
-                    mView.setVisibility(View.GONE);
+                try {
+                    setView();
+                    if (KcaViewButtonService.getClickCount() == 0) {
+                        mView.setVisibility(View.GONE);
+                    }
+                    //mManager.addView(mView, mParams);
+                    mView.invalidate();
+                    mManager.updateViewLayout(mView, mParams);
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.battleview_error), Toast.LENGTH_LONG).show();
                 }
-                //mManager.addView(mView, mParams);
-                mView.invalidate();
-                mManager.updateViewLayout(mView, mParams);
+
             }
         };
         LocalBroadcastManager.getInstance(this).registerReceiver((hdmgreceiver), new IntentFilter(KCA_MSG_BATTLE_VIEW_HDMG));
