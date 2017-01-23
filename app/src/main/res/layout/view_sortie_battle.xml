@@ -253,7 +253,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:id="@+id/fm_1_hp_txt"
@@ -263,7 +264,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -279,16 +281,18 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/fm_1_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -312,7 +316,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:id="@+id/fm_2_hp_txt"
@@ -322,7 +327,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -338,16 +344,18 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/fm_2_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -371,7 +379,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:id="@+id/fm_3_hp_txt"
@@ -381,7 +390,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -397,16 +407,18 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/fm_3_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -430,7 +442,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:id="@+id/fm_4_hp_txt"
@@ -440,7 +453,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -456,16 +470,18 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/fm_4_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -489,7 +505,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:id="@+id/fm_5_hp_txt"
@@ -499,7 +516,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -515,16 +533,18 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/fm_5_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -548,7 +568,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:id="@+id/fm_6_hp_txt"
@@ -558,7 +579,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -574,16 +596,18 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/fm_6_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -695,7 +719,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:id="@+id/fs_1_hp_txt"
@@ -705,7 +730,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -721,16 +747,18 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/fs_1_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -754,7 +782,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:id="@+id/fs_2_hp_txt"
@@ -764,7 +793,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -780,16 +810,18 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/fs_2_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -813,7 +845,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:id="@+id/fs_3_hp_txt"
@@ -823,7 +856,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -839,16 +873,18 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/fs_3_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -872,7 +908,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:id="@+id/fs_4_hp_txt"
@@ -882,7 +919,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -898,16 +936,18 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/fs_4_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -931,7 +971,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:id="@+id/fs_5_hp_txt"
@@ -941,7 +982,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -957,16 +999,18 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/fs_5_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -990,7 +1034,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:id="@+id/fs_6_hp_txt"
@@ -1000,7 +1045,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1016,16 +1062,18 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/fs_6_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -1131,7 +1179,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
 
                                 <TextView
                                     android:id="@+id/es_1_name"
@@ -1160,7 +1209,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1176,15 +1226,17 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/es_1_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1205,7 +1257,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
 
                                 <TextView
                                     android:id="@+id/es_2_name"
@@ -1234,7 +1287,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1250,15 +1304,17 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/es_2_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1279,7 +1335,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
 
                                 <TextView
                                     android:id="@+id/es_3_name"
@@ -1308,7 +1365,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1324,15 +1382,17 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/es_3_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1353,7 +1413,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
 
                                 <TextView
                                     android:id="@+id/es_4_name"
@@ -1382,7 +1443,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1398,15 +1460,17 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/es_4_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1427,7 +1491,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
 
                                 <TextView
                                     android:id="@+id/es_5_name"
@@ -1456,7 +1521,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1472,15 +1538,17 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/es_5_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1501,7 +1569,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
 
                                 <TextView
                                     android:id="@+id/es_6_name"
@@ -1530,7 +1599,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1546,15 +1616,17 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/es_6_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -1660,7 +1732,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
 
                                 <TextView
                                     android:id="@+id/em_1_name"
@@ -1690,7 +1763,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1706,15 +1780,17 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/em_1_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1735,7 +1811,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
 
                                 <TextView
                                     android:id="@+id/em_2_name"
@@ -1765,7 +1842,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1781,15 +1859,17 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/em_2_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1810,7 +1890,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
 
                                 <TextView
                                     android:id="@+id/em_3_name"
@@ -1840,7 +1921,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1856,15 +1938,17 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/em_3_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1885,7 +1969,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
 
                                 <TextView
                                     android:id="@+id/em_4_name"
@@ -1915,7 +2000,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1931,15 +2017,17 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/em_4_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1960,7 +2048,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
 
                                 <TextView
                                     android:id="@+id/em_5_name"
@@ -1990,7 +2079,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -2006,15 +2096,17 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/em_5_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -2035,7 +2127,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6">
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
 
                                 <TextView
                                     android:id="@+id/em_6_name"
@@ -2065,7 +2158,8 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="11sp"
                                 android:minHeight="14sp"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -2081,15 +2175,17 @@
 
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
-                                android:layout_weight="0.6" />
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
 
                             <ProgressBar
                                 android:id="@+id/em_6_hp_bar"
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="4dp"
                                 android:max="100"
-                                android:layout_weight="0.4" />
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

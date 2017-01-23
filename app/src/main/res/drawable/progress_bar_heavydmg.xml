@@ -20,7 +20,7 @@
         <shape android:shape="rectangle"
             android:tint="@color/colorProgressBack">
             <size android:height="4dp" />
-            <solid android:color="@color/white" />
+            <solid android:color="@color/colorProgressBack" />
         </shape>
     </item>
     <item android:id="@android:id/secondaryProgress"
@@ -29,7 +29,7 @@
             <shape android:shape="rectangle"
                 android:tint="@color/colorHeavyDmgState">
                 <size android:height="4dp" />
-                <solid android:color="@color/white" />
+                <solid android:color="@color/colorHeavyDmgState" />
             </shape>
         </scale>
     </item>
@@ -39,7 +39,7 @@
             <shape android:shape="rectangle"
                 android:tint="@color/colorHeavyDmgState">
                 <size android:height="4dp" />
-                <solid android:color="@color/white" />
+                <solid android:color="@color/colorHeavyDmgState" />
             </shape>
         </scale>
     </item>
