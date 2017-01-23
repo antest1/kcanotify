@@ -29,6 +29,7 @@ import android.widget.ToggleButton;
 
 import java.util.List;
 
+import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
@@ -41,10 +42,10 @@ import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
+import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "KCAV";
-    public final static String KC_PACKAGE_NAME = "com.dmm.dmmlabo.kancolle";
     private static final int REQUEST_VPN = 1;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
 
@@ -72,14 +73,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         prefs.edit().putBoolean(PREF_SVC_ENABLED, KcaService.getServiceStatus()).apply();
 
-        if (isPackageExist(KC_PACKAGE_NAME)) {
-            kcIntent = getPackageManager().getLaunchIntentForPackage(KC_PACKAGE_NAME);
-            kcIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            KcaService.setKcIntent(kcIntent);
-            is_kca_installed = true;
-        } else {
-            is_kca_installed = false;
-        }
+        kcIntent = getKcIntent(getApplicationContext());
+        is_kca_installed = (kcIntent != null);
 
         vpnbtn = (ToggleButton) findViewById(R.id.vpnbtn);
         vpnbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -198,28 +193,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public boolean isPackageExist(String name) {
-        boolean isExist = false;
-
-        PackageManager pkgMgr = getPackageManager();
-        List<ResolveInfo> mApps;
-        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        mApps = pkgMgr.queryIntentActivities(mainIntent, 0);
-
-        try {
-            for (int i = 0; i < mApps.size(); i++) {
-                if (mApps.get(i).activityInfo.packageName.startsWith(name)) {
-                    isExist = true;
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            isExist = false;
-        }
-        return isExist;
     }
 
     private void setDefaultPreferences() {

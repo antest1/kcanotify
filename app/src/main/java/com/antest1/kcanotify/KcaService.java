@@ -9,6 +9,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.AssetManager.AssetInputStream;
 import android.content.res.Configuration;
@@ -83,7 +85,6 @@ public class KcaService extends Service {
     public static boolean kaisouProcessFlag = false;
     public static String currentNode = "";
     public static String currentNodeInfo = "";
-    public static Intent kcIntent = null;
     public static boolean isInBattle;
 
     AudioManager mAudioManager;
@@ -115,11 +116,6 @@ public class KcaService extends Service {
     public static boolean getServiceStatus() {
         return isServiceOn;
     }
-
-    public static void setKcIntent(Intent intent) {
-        kcIntent = intent;
-    }
-
 
     private boolean checkKeyInPreferences(String key) {
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
@@ -231,6 +227,30 @@ public class KcaService extends Service {
         prefs.edit().putBoolean("svcenabled", false).apply();
     }
 
+    public boolean isPackageExist(String name) {
+        boolean isExist = false;
+
+        PackageManager pkgMgr = getPackageManager();
+        List<ResolveInfo> mApps;
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        mApps = pkgMgr.queryIntentActivities(mainIntent, 0);
+
+        try {
+            for (int i = 0; i < mApps.size(); i++) {
+                if (mApps.get(i).activityInfo.packageName.startsWith(name)) {
+                    isExist = true;
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            isExist = false;
+        }
+        return isExist;
+    }
+
+
+
     private Notification createViewNotification(String title, String content1, String content2) {
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
@@ -252,7 +272,7 @@ public class KcaService extends Service {
     }
 
     private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag, boolean caFlag) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, kcIntent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, getKcIntent(getApplicationContext()),
                 PendingIntent.FLAG_UPDATE_CURRENT);
         String title = "";
         String content = "";
@@ -286,7 +306,7 @@ public class KcaService extends Service {
     }
 
     private Notification createDockingNotification(int dockId, String shipName) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, kcIntent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, getKcIntent(getApplicationContext()),
                 PendingIntent.FLAG_UPDATE_CURRENT);
         String title = String.format(getString(R.string.kca_noti_title_dock_finished), dockId + 1);
         String content = "";

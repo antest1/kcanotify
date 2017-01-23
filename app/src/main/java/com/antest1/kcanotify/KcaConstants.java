@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class KcaConstants {
+    public final static String KC_PACKAGE_NAME = "com.dmm.dmmlabo.kancolle";
+
     public static final String KCA_VERSION = "/kca/version.json";
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
     public static final String KCANOTIFY_S2_CACHE_FILENAME = "kca_api_start2";
