@@ -135,8 +135,10 @@ public class KcaVpnData {
                     for (String line : header) {
                         if (line.startsWith("Content-Encoding: ")) {
                             if (line.contains("gzip")) gzipflag = true;
+                            else gzipflag = false;
                         } else if (line.startsWith("Transfer-Encoding")) {
                             if (line.contains("chunked")) chunkflag = true;
+                            else chunkflag = false;
                         }
                     }
                     datapart = Arrays.copyOfRange(data, head.length() + 4, data.length);
@@ -144,21 +146,18 @@ public class KcaVpnData {
                     datapart = data;
                 }
 
-                if (gzipflag) {
-                    if (chunkflag) {
-                        responseData = Bytes.concat(responseData, datapart);
-                        if (isChunkEnd(datapart)) {
-                            isreadyflag = true;
-                            responseData = unchunkAllData(gzipflag);
-                        }
-                    } else {
+                if (chunkflag) {
+                    responseData = Bytes.concat(responseData, datapart);
+                    if (isChunkEnd(datapart)) {
                         isreadyflag = true;
-                        responseData = gzipdecompress(datapart);
+                        responseData = unchunkAllData(gzipflag);
                     }
                 } else {
                     isreadyflag = true;
-                    responseData = datapart;
+                    if(gzipflag) responseData = gzipdecompress(datapart);
+                    else responseData = datapart;
                 }
+
                 if(isreadyflag) {
                     //Log.e("KCA", String.valueOf(responseData.length));
                     KcaHandler k = new KcaHandler(handler, requestUri, requestData, responseData, false);
