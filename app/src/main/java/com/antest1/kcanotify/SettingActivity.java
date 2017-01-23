@@ -216,7 +216,7 @@ public class SettingActivity extends AppCompatActivity {
             final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
             OkHttpClient client = new OkHttpClient.Builder().build();
 
-            String checkUrl = String.format("http://antest.hol.es/kcanotify/v.php");
+            String checkUrl = String.format(context.getString(R.string.kcanotify_checkversion_link));
             Request.Builder builder = new Request.Builder().url(checkUrl).get();
             builder.addHeader("Referer", "app:/KCA/");
             builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -236,6 +236,7 @@ public class SettingActivity extends AppCompatActivity {
             if (result == null) {
                 Toast.makeText(context.getApplicationContext(), context.getString(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
             } else {
+                Log.e("KCA", "Received: "+result);
                 JsonObject jsonDataObj = new JsonParser().parse(result).getAsJsonObject();
                 if (jsonDataObj.has("version")) {
                     String recentVersion = jsonDataObj.get("version").getAsString();
