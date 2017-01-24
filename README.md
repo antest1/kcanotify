@@ -26,7 +26,6 @@ Download
 - 색적/제공치/피로도 표시
 - 출격 중 현재 위치 표시
 - 전투 예보 (beta)
-  - (심해)연합함대 해역을 제외한 해역들, 연습전
 - OpenDB에 데이터 전송
 
 
@@ -35,12 +34,13 @@ Attribution
 - 이 프로젝트는 칸코레 어플리케이션의 데이터를 캡쳐하기 위해 [NetGuard](https://github.com/M66B/NetGuard/)의 소스를 일부 차용 및 수정하여 사용하고 있습니다. NetGuard의 라이선스는 [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt)이며 이에 따라서 시제 깡들리티 역시 해당 라이선스를 가집니다.
 - 칸무스명의 한글 번역은 [KanColleViewer](https://github.com/CirnoV/KanColleViewer)의 데이터를 사용하고 있습니다.
 - 해역 노드 정보는 [KC3Kai](https://github.com/KC3Kai/KC3Kai)의 데이터를 사용하고 있습니다. 
+- 색적 및 제공치 계산식은 [艦隊シミュレーター＆デッキビルダー](http://kancolle-calc.net/deckbuilder.html)의 코드를 일부 차용 및 수정하여 작성되었습니다.
 
 문의
 -------
 건의나 오류 등이 문의사항은 아래의 이메일을 통해 보내주세요. 
 
-Translations to other languages are welcomed. (contact to developer to email)
+Translations to other languages are welcomed. (please contact to developer to email)
 
 E-mail: kcanotify@gmail.com
 
