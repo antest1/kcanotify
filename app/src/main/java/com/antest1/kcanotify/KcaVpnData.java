@@ -96,6 +96,7 @@ public class KcaVpnData {
             if (head.startsWith("GET") || head.startsWith("POST")) {
                 state = REQUEST;
                 requestData = new byte[]{};
+                responseData = new byte[]{};
                 String[] header = head.split("\r\n");
                 kcdataflag = checkKcApi(header[0]);
                 requestUri = header[0].split(" ")[1];
