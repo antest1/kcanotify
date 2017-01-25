@@ -591,6 +591,17 @@ public class KcaService extends Service {
                         JsonObject battleApiData = jsonDataObj.getAsJsonObject("api_data");
                         if (url.startsWith(API_REQ_MAP_START) || url.startsWith(API_REQ_PRACTICE_BATTLE)) {
                             isInBattle = true;
+
+                            int deck_id = 0;
+                            String[] requestData = request.split("&");
+                            for (int i = 0; i < requestData.length; i++) {
+                                String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                                if (decodedData.startsWith("api_deck_id")) {
+                                    deck_id = Integer.valueOf(decodedData.replace("api_deck_id=", "")) - 1;
+                                    break;
+                                }
+                            }
+
                             if(getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                                         && !Settings.canDrawOverlays(getApplicationContext())) {
@@ -604,17 +615,25 @@ public class KcaService extends Service {
                             JsonArray api_deck_data = new JsonArray();
                             JsonArray api_ship_data = new JsonArray();
 
-                            api_deck_data.add(currentPortDeckData.get(0));
-                            JsonArray firstShipInfo = currentPortDeckData.get(0).getAsJsonObject().getAsJsonArray("api_ship");
-                            for (JsonElement e : firstShipInfo) {
-                                int ship_id = e.getAsInt();
-                                if (ship_id != -1)
-                                    api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
-                            }
-                            if (KcaApiData.isEventTime) {
+                            if (KcaApiData.isEventTime) { // TODO: Combined Fleet for Event
+                                api_deck_data.add(currentPortDeckData.get(0));
+                                JsonArray firstShipInfo = currentPortDeckData.get(0).getAsJsonObject().getAsJsonArray("api_ship");
+                                for (JsonElement e : firstShipInfo) {
+                                    int ship_id = e.getAsInt();
+                                    if (ship_id != -1)
+                                        api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
+                                }
                                 api_deck_data.add(currentPortDeckData.get(1));
                                 JsonArray secondShipInfo = currentPortDeckData.get(1).getAsJsonObject().getAsJsonArray("api_ship");
                                 for (JsonElement e : secondShipInfo) {
+                                    int ship_id = e.getAsInt();
+                                    if (ship_id != -1)
+                                        api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
+                                }
+                            } else {
+                                api_deck_data.add(currentPortDeckData.get(deck_id));
+                                JsonArray firstShipInfo = currentPortDeckData.get(deck_id).getAsJsonObject().getAsJsonArray("api_ship");
+                                for (JsonElement e : firstShipInfo) {
                                     int ship_id = e.getAsInt();
                                     if (ship_id != -1)
                                         api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
