@@ -7,13 +7,13 @@
     <string name="app_download_link">http://bit.ly/2hNln5o</string>
 
     <!-- Link Information -->
-    <string name="kcanotify_checkversion_link">http://kcanotifynet.ipage.com/kcanotify/v.php</string>
-    <string name="api_start2_recent_version_link">http://kcanotifynet.ipage.com/kcanotify/kca_api_start2.php?v=recent</string>
-    <string name="api_start2_version_link" formatted="false">http://kcanotifynet.ipage.com/kcanotify/kca_api_start2.php?v=%s</string>
-    <string name="api_start2_upload_link" formatted="false">http://kcanotifynet.ipage.com/kcanotify/kca_api_start2.php?token=%s&amp;dtoken=%s&amp;method=%s&amp;v=%s</string>
-    <string name="errorlog_service_link" formatted="false">http://kcanotifynet.ipage.com/kcanotify/errorlog_main.php?token=%s&amp;url=%s&amp;request=%s&amp;v=%s</string>
-    <string name="errorlog_battle_link" formatted="false">http://kcanotifynet.ipage.com/kcanotify/errorlog_battle.php?token=%s&amp;url=%s&amp;node=%s&amp;v=%s</string>
-    <string name="errorlog_notify_link" formatted="false">http://kcanotifynet.ipage.com/kcanotify/errorlog_notify.php?token=%s&amp;url=%s&amp;v=%s</string>
+    <string name="kcanotify_checkversion_link">http://swaytwig.com/kcanotify/v.php</string>
+    <string name="api_start2_recent_version_link">http://swaytwig.com/kcanotify/kca_api_start2.php?v=recent</string>
+    <string name="api_start2_version_link" formatted="false">http://swaytwig.com/kcanotify/kca_api_start2.php?v=%s</string>
+    <string name="api_start2_upload_link" formatted="false">http://swaytwig.com/kcanotify/kca_api_start2.php?token=%s&amp;dtoken=%s&amp;method=%s&amp;v=%s</string>
+    <string name="errorlog_service_link" formatted="false">http://swaytwig.com/kcanotify/errorlog_main.php?token=%s&amp;url=%s&amp;request=%s&amp;v=%s</string>
+    <string name="errorlog_battle_link" formatted="false">http://swaytwig.com/kcanotify/errorlog_battle.php?token=%s&amp;url=%s&amp;node=%s&amp;v=%s</string>
+    <string name="errorlog_notify_link" formatted="false">http://swaytwig.com/kcanotify/errorlog_notify.php?token=%s&amp;url=%s&amp;v=%s</string>
 
     <!-- Common Text -->
     <string name="dialog_ok">확인</string>
@@ -114,6 +114,7 @@
     <string name="kca_toast_restart_at_kcanotify">깡들리티에서 게임을 다시 시작해주세요</string>
     <string name="kca_toast_get_data_at_settings">깡들리티 설정에서 게임 데이터를 받아주세요</string>
     <string name="kca_toast_loading_data">게임 데이터 로딩 중</string>
+    <string name="kca_toast_inconsistent_data">현재 버전의 데이터가 원격 서버에 업로드하지 않았습니다.\n잠시 후(10~20분 뒤) 다시 시도해주세요.</string>
     <string name="kca_toast_ioexceptionerror">데이터 캐시에 쓰는 중 오류 발생</string>
 
     <string name="kca_view_activate_vpn">VPN 서비스를 활성화해주세요</string>

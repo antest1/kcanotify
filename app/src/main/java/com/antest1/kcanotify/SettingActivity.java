@@ -326,7 +326,7 @@ public class SettingActivity extends AppCompatActivity {
                                     Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(context.getApplicationContext(),
-                                    String.format(context.getString(R.string.sa_getupdate_servererror), status.getMessage()),
+                                    String.format(context.getString(R.string.sa_getupdate_servererror), String.valueOf(status.getCode())),
                                     Toast.LENGTH_LONG).show();
                         }
                     } catch (IOException e1) {

@@ -1721,6 +1721,8 @@ public class KcaService extends Service {
                         public void callback(String url, String data, AjaxStatus status) {
                             if (status.getCode() == HttpResponseStatus.OK.code()) {
                                 Toast.makeText(getApplicationContext(), "Data Uploaded", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Error: " + status.getError(), Toast.LENGTH_LONG).show();
                             }
                         }
                     };
@@ -1745,12 +1747,15 @@ public class KcaService extends Service {
                         @Override
                         public void callback(String url, String data, AjaxStatus status) {
                             try {
-                                writeCacheData(getApplicationContext(), data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
-                                KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
-                                if (kca_version == null) {
-                                    kca_version = status.getHeader("X-Api-Version");
+                                String remote_kca_version = status.getHeader("X-Api-Version");
+                                if (kca_version != null && !kca_version.equals(remote_kca_version)) {
+                                    Toast.makeText(getApplicationContext(), getString(R.string.kca_toast_inconsistent_data), Toast.LENGTH_LONG).show();
+                                } else {
+                                    if (kca_version == null) kca_version = remote_kca_version;
+                                    writeCacheData(getApplicationContext(), data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
+                                    KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
+                                    setPreferences(getApplicationContext(), "kca_version", kca_version);
                                 }
-                                setPreferences(getApplicationContext(), "kca_version", kca_version);
                             } catch (IOException e1) {
                                 Toast.makeText(getApplicationContext(), getString(R.string.kca_toast_ioexceptionerror), Toast.LENGTH_LONG).show();
                                 Log.e("KCA", "I/O Error");
