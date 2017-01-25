@@ -89,42 +89,21 @@ public class KcaVpnData {
         String saddrstr = new String(source);
         String taddrstr = new String(target);
 
-        //Log.e("KCA", saddrstr + " -> " + taddrstr);
-        //Log.e("KCA", String.valueOf(type) + " / "  + String.valueOf(data.length));
         String[] head_body = s.split("\r\n\r\n", 2);
         String head = head_body[0];
-        /*
-        if (type == REQUEST && head.startsWith("POST") && head_body.length > 1) body = head_body[1];
-        if (type == RESPONSE && head.startsWith("HTTP")) body = head_body[1];
-        */
-
         //head = head.substring(0, Math.min(60, head.length()));
         if (type == REQUEST) {
             if (head.startsWith("GET") || head.startsWith("POST")) {
                 state = REQUEST;
+                requestData = new byte[]{};
                 String[] header = head.split("\r\n");
                 kcdataflag = checkKcApi(header[0]);
                 requestUri = header[0].split(" ")[1];
-                if(head.startsWith("POST")) {
-                    if (head.length() == data.length) { // No data
-                        requestData = new byte[]{};
-                    } else {
-                        int head_size = head.length() + 4;
-                        requestData = Arrays.copyOfRange(data, head_size, data.length);
-                    }
-                } else {
-                    requestData = new byte[]{};
-                }
-                responseData = new byte[]{};
-
                 isreadyflag = false;
                 gzipflag = false;
                 chunkflag = false;
             }
-            else {
-                requestData = Bytes.concat(requestData, data);
-            }
-
+            requestData = Bytes.concat(requestData, data);
         } else if (type == RESPONSE) {
             state = RESPONSE;
             if (!kcdataflag) {
@@ -159,14 +138,18 @@ public class KcaVpnData {
                 }
 
                 if(isreadyflag) {
+                    String requestStr = new String(requestData);
+                    String[] requestHeadBody = requestStr.split("\r\n\r\n", 2);
+                    byte[] requestBody = new byte[]{};
+                    if(requestHeadBody[1].length() > 0) {
+                        requestBody = requestHeadBody[1].getBytes();
+                    }
                     //Log.e("KCA", String.valueOf(responseData.length));
-                    KcaHandler k = new KcaHandler(handler, requestUri, requestData, responseData, false);
+                    KcaHandler k = new KcaHandler(handler, requestUri, requestBody, responseData, false);
                     executorService.execute(k);
                     isreadyflag = false;
                 }
             }
-
-
         }
     }
 
