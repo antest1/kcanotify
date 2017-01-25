@@ -681,50 +681,65 @@ public class KcaBattle {
 
             }
 
-            if (url.equals(API_REQ_SORTIE_BATTLE_RESULT)) {
-                nowhps = afterhps;
-
-                JsonObject battleResultInfo = new JsonObject();
-                int checkresult = checkHeavyDamagedExist();
-                Log.e("KCA", "CheckHeavyDamaged " + String.valueOf(checkresult));
-
+            if (url.equals(API_REQ_SORTIE_BATTLE_RESULT) || url.equals(API_REQ_PRACTICE_BATTLE_RESULT)) {
                 Bundle bundle;
                 Message sMsg;
 
-                if (checkresult != HD_NONE) {
-                    battleResultInfo.addProperty("data", checkresult);
-                    bundle = new Bundle();
-                    bundle.putString("url", KCA_API_NOTI_HEAVY_DMG);
-                    bundle.putString("data", gson.toJson(battleResultInfo));
-                    sMsg = sHandler.obtainMessage();
-                    sMsg.setData(bundle);
-                    sHandler.sendMessage(sMsg);
-                }
+                nowhps = afterhps;
 
-                Log.e("KCA", String.valueOf(KcaApiData.checkUserItemMax()) + String.valueOf(KcaApiData.checkUserShipMax()));
-                Log.e("KCA", String.valueOf(KcaApiData.checkUserPortEnough()));
+                if(url.equals(API_REQ_SORTIE_BATTLE_RESULT)) {
+                    JsonObject heavyDamagedInfo = new JsonObject();
+                    int checkresult = checkHeavyDamagedExist();
+                    Log.e("KCA", "CheckHeavyDamaged " + String.valueOf(checkresult));
 
-                if (KcaApiData.checkUserPortEnough()) {
-                    JsonObject dropInfo = new JsonObject();
-                    dropInfo.addProperty("world", currentMapArea);
-                    dropInfo.addProperty("map", currentMapNo);
-                    dropInfo.addProperty("node", currentNode);
-                    dropInfo.addProperty("rank", api_data.get("api_win_rank").getAsString());
-                    dropInfo.addProperty("maprank", 0);
-                    if (api_data.has("api_get_ship")) {
-                        int api_ship_id = api_data.getAsJsonObject("api_get_ship").get("api_ship_id").getAsInt();
-                        dropInfo.addProperty("result", api_ship_id);
-                        KcaApiData.addShipCountInBattle();
-                    } else {
-                        dropInfo.addProperty("result", 0);
+                    if (checkresult != HD_NONE) {
+                        heavyDamagedInfo.addProperty("data", checkresult);
+                        bundle = new Bundle();
+                        bundle.putString("url", KCA_API_NOTI_HEAVY_DMG);
+                        bundle.putString("data", gson.toJson(heavyDamagedInfo));
+                        sMsg = sHandler.obtainMessage();
+                        sMsg.setData(bundle);
+                        sHandler.sendMessage(sMsg);
                     }
-                    bundle = new Bundle();
-                    bundle.putString("url", KCA_API_NOTI_BATTLE_DROPINFO);
-                    bundle.putString("data", gson.toJson(dropInfo));
-                    sMsg = sHandler.obtainMessage();
-                    sMsg.setData(bundle);
-                    sHandler.sendMessage(sMsg);
+
+                    Log.e("KCA", String.valueOf(KcaApiData.checkUserItemMax()) + String.valueOf(KcaApiData.checkUserShipMax()));
+                    Log.e("KCA", String.valueOf(KcaApiData.checkUserPortEnough()));
+
+                    if (KcaApiData.checkUserPortEnough()) {
+                        JsonObject dropInfo = new JsonObject();
+                        dropInfo.addProperty("world", currentMapArea);
+                        dropInfo.addProperty("map", currentMapNo);
+                        dropInfo.addProperty("node", currentNode);
+                        dropInfo.addProperty("rank", api_data.get("api_win_rank").getAsString());
+                        dropInfo.addProperty("maprank", 0);
+                        if (api_data.has("api_get_ship")) {
+                            int api_ship_id = api_data.getAsJsonObject("api_get_ship").get("api_ship_id").getAsInt();
+                            dropInfo.addProperty("result", api_ship_id);
+                            KcaApiData.addShipCountInBattle();
+                        } else {
+                            dropInfo.addProperty("result", 0);
+                        }
+                        bundle = new Bundle();
+                        bundle.putString("url", KCA_API_NOTI_BATTLE_DROPINFO);
+                        bundle.putString("data", gson.toJson(dropInfo));
+                        sMsg = sHandler.obtainMessage();
+                        sMsg.setData(bundle);
+                        sHandler.sendMessage(sMsg);
+                    }
                 }
+
+                JsonObject battleResultInfo = api_data;
+                JsonArray api_afterhps = (JsonArray) new JsonParser().parse(gson.toJson(afterhps));
+                battleResultInfo.addProperty("api_url", url);
+
+                bundle = new Bundle();
+                bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
+                bundle.putString("data", battleResultInfo.toString());
+
+                sMsg = sHandler.obtainMessage();
+                sMsg.setData(bundle);
+
+                sHandler.sendMessage(sMsg);
             }
 
             if (url.equals(API_REQ_COMBINED_BATTLE) || url.equals(API_REQ_COMBINED_BATTLE_WATER)) {

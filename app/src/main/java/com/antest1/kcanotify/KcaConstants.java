@@ -80,6 +80,7 @@ public final class KcaConstants {
     public static final String API_REQ_MEMBER_GET_PRACTICE_ENEMYINFO = "/api_req_member/get_practice_enemyinfo";
     public static final String API_REQ_PRACTICE_BATTLE = "/api_req_practice/battle";
     public static final String API_REQ_PRACTICE_MIDNIGHT_BATTLE = "/api_req_practice/midnight_battle";
+    public static final String API_REQ_PRACTICE_BATTLE_RESULT = "/api_req_practice/battle_result";
 
     public static final String[] API_BATTLE_REQ_LIST = new String[]{
             API_REQ_MAP_START,
@@ -104,7 +105,8 @@ public final class KcaConstants {
             API_REQ_COMBINED_GOBACKPORT,
 
             API_REQ_PRACTICE_BATTLE,
-            API_REQ_PRACTICE_MIDNIGHT_BATTLE
+            API_REQ_PRACTICE_MIDNIGHT_BATTLE,
+            API_REQ_PRACTICE_BATTLE_RESULT
     };
 
     public static final int API_NODE_EVENT_ID_OBTAIN = 2;
