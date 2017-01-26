@@ -1,13 +1,21 @@
+<!--
+
+For Translators:
+Please check original strings.xml at Github:
+https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings.xml
+
+-->
+
 <resources>
     <!-- Application Information -->
-    <string name="app_name">시제 깡들리티</string>
-    <string name="app_brand">시제 깡들리티</string> <!-- Do Not Translate Here -->
-    <string name="app_version">2.0.0 rev2</string>
-    <string name="action_settings">깡들리티 설정</string>
+    <string name="app_name">Kcanotify</string>
+    <string name="app_brand">시제 깡들리티</string> <!-- Do not translate here -->
+    <string name="app_version">2.0.1</string>
+    <string name="action_settings">Settings</string>
     <string name="developer_email">kcanotify@gmail.com</string>
     <string name="app_download_link">http://bit.ly/2hNln5o</string>
 
-    <!-- Link Information, Do Not Translate Here -->
+    <!-- Link Information -->
     <string name="kcanotify_checkversion_link">http://swaytwig.com/kcanotify/v.php</string>
     <string name="api_start2_recent_version_link">http://swaytwig.com/kcanotify/kca_api_start2.php?v=recent</string>
     <string name="api_start2_version_link" formatted="false">http://swaytwig.com/kcanotify/kca_api_start2.php?v=%s</string>
@@ -17,198 +25,198 @@
     <string name="errorlog_notify_link" formatted="false">http://swaytwig.com/kcanotify/errorlog_notify.php?token=%s&amp;url=%s&amp;v=%s</string>
 
     <!-- Common Text -->
-    <string name="dialog_ok">확인</string>
-    <string name="dialog_cancel">취소</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
 
-    <string name="error_text">오류가 발생했습니다. 개발자에게 오류 로그를 보내주세요.</string>
+    <string name="error_text">An error occured. Please contact the developer.</string>
 
-    <string name="heavy_damaged">대파당한 함선이 있습니다!</string>
-    <string name="heavy_damaged_damecon">대파당한 함선이 있습니다! (다메콘 있음)</string>
-    <string name="goback_left">퇴피는 왼쪽</string>
+    <string name="heavy_damaged">A ship is heavily damaged!</string>
+    <string name="heavy_damaged_damecon">A ship is heavily damaged! (Damecon available)</string>
+    <string name="goback_left">Press LEFT button to escort the ship.</string>
 
-    <string name="seek_type_0">단순합</string>
-    <string name="seek_type_1">33식/1</string>
-    <string name="seek_type_3">33식/3</string>
-    <string name="seek_type_4">33식/4</string>
+    <string name="seek_type_0">Sum</string>
+    <string name="seek_type_1">F33/1</string>
+    <string name="seek_type_3">F33/3</string>
+    <string name="seek_type_4">F33/4</string>
 
-    <string name="seek_type_0_detail">단순합산</string>
-    <string name="seek_type_1_detail">33식/Cn=1 (2&#45;5)</string>
-    <string name="seek_type_3_detail">33식/Cn=3 (6&#45;2,6&#45;3)</string>
-    <string name="seek_type_4_detail">33식/Cn=4 (3&#45;5,6&#45;1)</string>
+    <string name="seek_type_0_detail">Total Sum</string>
+    <string name="seek_type_1_detail">Formula 33/Cn=1 (2&#45;5)</string>
+    <string name="seek_type_3_detail">Formula 33/Cn=3 (6&#45;2,6&#45;3)</string>
+    <string name="seek_type_4_detail">Formula 33/Cn=4 (3&#45;5,6&#45;1)</string>
 
-    <string name="speed_superfast">초고속</string>
-    <string name="speed_fastplus">고속+</string>
-    <string name="speed_fast">고속</string>
-    <string name="speed_slow">저속</string>
-    <string name="speed_mixed_normal">저속혼성</string>
-    <string name="speed_mixed_fast">고속혼성</string>
-    <string name="speed_mixed_fastplus">고속+혼성</string>
+    <string name="speed_superfast">Fastest</string>
+    <string name="speed_fastplus">Fast+</string>
+    <string name="speed_fast">Fast</string>
+    <string name="speed_slow">Slow</string>
+    <string name="speed_mixed_normal">Mixed(Slow)</string>
+    <string name="speed_mixed_fast">Mixed(Fast)</string>
+    <string name="speed_mixed_fastplus">Mixed(Fast+)</string>
     <string name="speed_none">\?\?</string>
-    <string name="speed_postfix">함대</string>
+    <string name="speed_postfix">&#160;Fleet</string>
 
-    <string name="opendb_failed_msg">OpenDB 데이터 처리 오류 발생</string>
-    <string name="process_battle_failed_msg">전투 데이터 처리 오류 발생. 개발자에게 정보를 전송합니다.</string>
-    <string name="service_failed_msg">데이터 처리 오류 발생, 개발자에게 정보를 전송합니다.\n깡들리티를 재시작하는 것을 권장합니다.</string>
+    <string name="opendb_failed_msg">An error occured while sending data to OpenDB.</string>
+    <string name="process_battle_failed_msg">An error occured while processing battle data. The error log will be sent to the developer.</string>
+    <string name="service_failed_msg">An error occured while processing battle data. The error log will be sent to the developer.\nIt is recommended that you restart kcanotify.</string>
 
-    <string name="node_info_noevent" formatted="false">%s (기분탓)</string>
-    <string name="node_info_obtain" formatted="false">%s (자원방)</string>
-    <string name="node_info_loss" formatted="false">%s (소용돌이)</string>
+    <string name="node_info_noevent" formatted="false">%s (Battle Avoided)</string>
+    <string name="node_info_obtain" formatted="false">%s (Resources Found)</string>
+    <string name="node_info_loss" formatted="false">%s (Maelstrom)</string>
     <string name="node_info_normal" formatted="false">%s</string>
-    <string name="node_info_normal_battle" formatted="false">%s (적군조우)</string>
-    <string name="node_info_boss" formatted="false">%s (보스방)</string>
-    <string name="node_info_boss_nightbattle" formatted="false">%s (보스방/야간전)</string>
-    <string name="node_info_boss_nightdaybattle" formatted="false">%s (보스방/야간전->주간전)</string>
-    <string name="node_info_boss_ecbattle" formatted="false">%s (보스방/적 연합함대)</string>
-    <string name="node_info_airbattle" formatted="false">%s (아웃레인지)</string>
-    <string name="node_info_airsearch" formatted="false">%s (항공정찰)</string>
-    <string name="node_info_ldairbattle" formatted="false">%s (공습전)</string>
-    <string name="node_info_nightbattle" formatted="false">%s (야간전)</string>
-    <string name="node_info_nightdaybattle" formatted="false">%s (야간전->주간전)</string>
-    <string name="node_info_tpoint" formatted="false">%s (수송포인트)</string>
-    <string name="node_info_selectable" formatted="false">%s (능동분기)</string>
-    <string name="node_info_sendan" formatted="false">%s (선단호위 끝)</string>
-    <string name="node_info_ecbattle" formatted="false">%s (적 연합함대)</string>
-    <string name="node_info_practice" formatted="false">연습전</string>
+    <string name="node_info_normal_battle" formatted="false">%s (Enemy)</string>
+    <string name="node_info_boss" formatted="false">%s (Boss)</string>
+    <string name="node_info_boss_nightbattle" formatted="false">%s (Boss/Night)</string>
+    <string name="node_info_boss_nightdaybattle" formatted="false">%s (Boss/Night->Day)</string>
+    <string name="node_info_boss_ecbattle" formatted="false">%s (Boss/Enemy Combined)</string>
+    <string name="node_info_airbattle" formatted="false">%s (Aerial Battle)</string>
+    <string name="node_info_airsearch" formatted="false">%s (Recon)</string>
+    <string name="node_info_ldairbattle" formatted="false">%s (Enemy Raid)</string>
+    <string name="node_info_nightbattle" formatted="false">%s (Night Battle)</string>
+    <string name="node_info_nightdaybattle" formatted="false">%s (Night->Day)</string>
+    <string name="node_info_tpoint" formatted="false">%s (TP Load)</string>
+    <string name="node_info_selectable" formatted="false">%s (Node Selection)</string>
+    <string name="node_info_sendan" formatted="false">%s (Large Resource Point)</string>
+    <string name="node_info_ecbattle" formatted="false">%s (Enemy Combined)</string>
+    <string name="node_info_practice" formatted="false">PVP</string>
     <!-- MainActivity Strings -->
-    <string name="ma_toast_kancolle_not_installed">칸코레가 설치되어 있지 않습니다.</string>
-    <string name="ma_toast_overay_diabled">전투예보에 필요한 화면 오버레이 권한이 설정되지 않았습니다.\n설정 > 화면 오버레이 설정에서 권한을 설정하세요.</string>
-    <string name="description"><b>Help</b>\n상단 2개 버튼(VPN, SVC) 활성화 이후 게임 실행\n\n※ VPN을 끄면 칸코레에서 데이터를 받아오지 않음\n※ SVC를 끄면 알람 등의 기능 이용 불가 (추후 패치 예정)\n\n<b>주요 기능</b>\n - 원정 및 입거 알림\n - 대파 알림 (출격 중 및 출격 전)\n - 색적/제공치/피로도 표시\n - 출격 중 현재 위치 표시\n - 전투 예보 (beta)\n - OpenDB에 데이터 전송</string>
+    <string name="ma_toast_kancolle_not_installed">Kancolle For Android is not installed.</string>
+    <string name="ma_toast_overay_diabled">Screen Overlay Permission is required for BattleView.\nEnable Screen Overlay at Settings > Screen Overlay Settings.</string>
+    <string name="description"><b>Help</b>\nTurn on VPN and SVC then run Kancolle\n\n※ VPN is required for detecting game data. \n※ You cannot receive notifications if SVC is disabled (for now)\n\n<b>Main Features</b>\n - Expedition/Docking notifications \n - Heavy Damage Alert (prior to/during combat)\n - LoS/FP/Fatigue indicators\n - Node tracking during sorties\n - BattleView (Beta)\n - Send statistics to OpenDB (optional)</string>
 
     <!-- SettingActivity Strings -->
-    <string name="sa_checkupdate_latest" formatted="false">최신 버전입니다. (%s)</string>
-    <string name="sa_checkupdate_hasupdate" formatted="false">업데이트가 있습니다. (%s)\n다운로드하시겠습니까?</string>
-    <string name="sa_checkupdate_dialogtitle">최신 업데이트 확인</string>
-    <string name="sa_checkupdate_nodataerror">업데이트 확인에 문제가 발생했습니다.</string>
-    <string name="sa_checkupdate_servererror">업데이트 서버 오류</string>
+    <string name="sa_checkupdate_latest" formatted="false">You have the latest version. (%s)</string>
+    <string name="sa_checkupdate_hasupdate" formatted="false">An update is available. (%s)\nDo you wish to download it?</string>
+    <string name="sa_checkupdate_dialogtitle">Check for updates.</string>
+    <string name="sa_checkupdate_nodataerror">There was a problem checking for updates.</string>
+    <string name="sa_checkupdate_servererror">Update server error.</string>
 
-    <string name="sa_getupdate_finished">게임 데이터 다운로드 완료</string>
-    <string name="sa_getupdate_started">게임 데이터 다운로드 중&#8230;</string>
-    <string name="sa_getupdate_servererror" formatted="false">서버 오류 발생: %s</string>
-    <string name="sa_getupdate_ioexceptionerror">데이터 저장 중 오류 발생</string>
+    <string name="sa_getupdate_finished">Game Data Download Completed</string>
+    <string name="sa_getupdate_started">Downloading Game Data&#8230;</string>
+    <string name="sa_getupdate_servererror" formatted="false">A Server Error Occured: %s</string>
+    <string name="sa_getupdate_ioexceptionerror">An error occured while saving data.</string>
 
-    <string name="sa_overlay_under_m">안드로이드 6.0 (마시멜로) 미만의 경우 설정할 필요가 없습니다.</string>
-    <string name="sa_overlay_ok">화면 오버레이 권한이 설정되었습니다.</string>
-    <string name="sa_overlay_no">화면 오버레이 권한이 설정되지 않았습니다. (전투예보 이용 불가)</string>
+    <string name="sa_overlay_under_m">This setting is not required for Android versions below 6.0.</string>
+    <string name="sa_overlay_ok">Allow Screen Overlay: On</string>
+    <string name="sa_overlay_no">Allow Screen Overlay: Off (BattleView will be disabled)</string>
 
     <!-- InfoActivity Strings -->
     <string name="ia_license" formatted="false">Copyright &#169; 2016-2017 by antest1(IE10)</string>
     <string name="ia_gpl" formatted="false">By using %s, you agree to the &lt;a href="http://www.gnu.org/licenses/gpl.txt"&gt;GNU General Public License 3.0&lt;/a&gt;. The whole source code is available on &lt;a href="https://github.com/antest1/kcanotify/"&gt;github repository&lt;/a&gt;.</string>
 
     <!-- KcaService Strings -->
-    <string name="kca_init_title" formatted="false">%s 동작중</string>
-    <string name="kca_init_content">깡들리티에서 게임을 실행해주세요</string>
+    <string name="kca_init_title" formatted="false">%s Waiting</string>
+    <string name="kca_init_content">Please open the game from within kcanotify.</string>
 
-    <string name="kca_noti_title_exp_canceled" formatted="false">%d번 원정(%s) 취소</string>
-    <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt; 가 %d번 원정으로부터 귀환합니다.</string>
-    <string name="kca_noti_title_exp_finished" formatted="false">%d번 원정(%s) 도착</string>
-    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; 가 %d번 원정에서 복귀했습니다.</string>
-    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; 가 %d번 원정에서 명령에 의해 귀환하였습니다.</string>
+    <string name="kca_noti_title_exp_canceled" formatted="false">Expedition %d (%s) has been canceled.</string>
+    <string name="kca_noti_content_exp_canceled" formatted="false"> &lt;%s&gt; has been recalled from Expedition %d.</string>
+    <string name="kca_noti_title_exp_finished" formatted="false">Expedition %d (%s) has completed.</string>
+    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; has returned from Expedition %d.</string>
+    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; has returned from Expedition %d (Canceled).</string>
 
-    <string name="kca_noti_title_dock_finished" formatted="false">제%d도크 정비 완료</string>
-    <string name="kca_noti_content_dock_finished" formatted="false">제%d도크: %s의 정비가 완료되었습니다.</string>
-    <string name="kca_noti_content_dock_finished_nodata" formatted="false">제%d도크 내 칸무스의 정비가 완료되었습니다.</string>
+    <string name="kca_noti_title_dock_finished" formatted="false">Dock %d: Repair complete.</string>
+    <string name="kca_noti_content_dock_finished" formatted="false">Dock %d: %s has been repaired.</string>
+    <string name="kca_noti_content_dock_finished_nodata" formatted="false">Dock %d: Ship Repair complete.</string>
 
-    <string name="kca_toast_airpower" formatted="false">제공: %d-%d</string>
-    <string name="kca_toast_seekvalue_d" formatted="false">색적(%s): %d</string>
-    <string name="kca_toast_seekvalue_f" formatted="false">색적(%s): %.2f</string>
+    <string name="kca_toast_airpower" formatted="false">FP: %d-%d</string>
+    <string name="kca_toast_seekvalue_d" formatted="false">LoS(%s): %d</string>
+    <string name="kca_toast_seekvalue_f" formatted="false">LoS(%s): %.2f</string>
 
-    <string name="kca_toast_restart_at_kcanotify">깡들리티에서 게임을 다시 시작해주세요</string>
-    <string name="kca_toast_get_data_at_settings">깡들리티 설정에서 게임 데이터를 받아주세요</string>
-    <string name="kca_toast_loading_data">게임 데이터 로딩 중</string>
-    <string name="kca_toast_inconsistent_data">현재 버전의 데이터가 원격 서버에 업로드하지 않았습니다.\n잠시 후(10~20분 뒤) 다시 시도해주세요.</string>
-    <string name="kca_toast_ioexceptionerror">데이터 캐시에 쓰는 중 오류 발생</string>
+    <string name="kca_toast_restart_at_kcanotify">Please restart the game using kcanotify.</string>
+    <string name="kca_toast_get_data_at_settings">Download game data using kcanotify Settings.</string>
+    <string name="kca_toast_loading_data">Loading game data</string>
+    <string name="kca_toast_inconsistent_data">There is no data for current api version in kcanotify server.\nPlease restart the kcanotify later(about 10~20 min).</string>
+    <string name="kca_toast_ioexceptionerror">An error occured while writing to data cache.</string>
 
-    <string name="kca_view_activate_vpn">VPN 서비스를 활성화해주세요</string>
-    <string name="kca_view_condition" formatted="false">피로도: %s</string>
-    <string name="kca_view_hdmg_damecon_format" formatted="false">[대파/다메콘 있음!] %s 동작중 %s</string>
-    <string name="kca_view_hdmg_format" formatted="false">[대파 있음!] %s 동작중 %s</string>
-    <string name="kca_view_normal_format" formatted="false">%s 동작중 %s</string>
+    <string name="kca_view_activate_vpn">Please Activate VPN Service.</string>
+    <string name="kca_view_condition" formatted="false">Morale: %s</string>
+    <string name="kca_view_hdmg_damecon_format" formatted="false">[Provisions/Damecon available!] %s Ready %s</string>
+    <string name="kca_view_hdmg_format" formatted="false">[Provisions available!] %s Ready %s</string>
+    <string name="kca_view_normal_format" formatted="false">%s Ready %s</string>
 
-    <string name="kca_view_noexpedition">원정나간 함대가 없습니다.</string>
-    <string name="kca_view_expedition_header">원정 남은 시간:</string>
+    <string name="kca_view_noexpedition">No expeditions are running.</string>
+    <string name="kca_view_expedition_header">Time Remaining:</string>
 
     <!-- Setting Strings -->
-    <string name="setting_menu_kand_head">깡들리티 설정</string>
-    <string name="setting_menu_kand_title_saku_cal">색적 계산방식 선택</string>
-    <string name="setting_menu_kand_title_opendb">OpenDB에 데이터 전송</string>
+    <string name="setting_menu_kand_head">Kcanotify Settings</string>
+    <string name="setting_menu_kand_title_saku_cal">Select LoS formula</string>
+    <string name="setting_menu_kand_title_opendb">Send game statistics to OpenDB</string>
     <string name="setting_menu_kand_desc_opendb">http://swaytwig.com/opendb/</string>
-    <string name="setting_menu_kand_title_exp_realtime_show">원정 남은 시간 실시간 표시</string>
-    <string name="setting_menu_kand_desc_exp_realtime_show">상단의 남은 원정 시간 실시간 표시 여부</string>
-    <string name="setting_menu_kand_title_game_data_down">게임 데이터 다운로드</string>
-    <string name="setting_menu_kand_desc_game_data_down">게임 데이터가 로딩되지 않을 때 사용</string>
-    <string name="setting_menu_kand_title_battleview_use">(베타기능) 전투예보 사용</string>
-    <string name="setting_menu_kand_desc_battleview_use">출격 및 연습전에서의 전투예보 사용 여부</string>
-    <string name="setting_menu_kand_title_overlay_setting">화면 오버레이 설정</string>
-    <string name="setting_menu_kand_desc_overlay_setting">다른 앱 위에 그리기 권한 설정 (전투예보 기능에 필요)</string>
+    <string name="setting_menu_kand_title_exp_realtime_show">Track Expedition Time</string>
+    <string name="setting_menu_kand_desc_exp_realtime_show">Display remaining time for Expeditions on the navbar</string>
+    <string name="setting_menu_kand_title_game_data_down">Download Game Data</string>
+    <string name="setting_menu_kand_desc_game_data_down">Use if game data was not loaded automatically.</string>
+    <string name="setting_menu_kand_title_battleview_use">Use BattleView (Beta)</string>
+    <string name="setting_menu_kand_desc_battleview_use">Display battle results during sortie.</string>
+    <string name="setting_menu_kand_title_overlay_setting">Screen Overlay Settings</string>
+    <string name="setting_menu_kand_desc_overlay_setting">Set Screen Overlay Permission (required for BattleView).</string>
 
-    <string name="setting_menu_noti_head">알림 설정</string>
-    <string name="setting_menu_noti_title_exp">원정 알림</string>
-    <string name="setting_menu_noti_desc_exp">원정 도착 시 상단 알림 및 진동 여부 설정</string>
-    <string name="setting_menu_noti_title_dock">입거 알림</string>
-    <string name="setting_menu_noti_desc_dock">입거 완료 시 상단 알림 및 진동 여부 설정</string>
-    <string name="setting_menu_noti_title_hdmg_vib">대파 진동 알림</string>
-    <string name="setting_menu_noti_desc_hdmg_vib">대파 알림 시 진동 여부 설정 (알림은 항상 활성)</string>
+    <string name="setting_menu_noti_head">Notification Settings</string>
+    <string name="setting_menu_noti_title_exp">Expedition</string>
+    <string name="setting_menu_noti_desc_exp">Screen notification + vibrate on expedition arrival.</string>
+    <string name="setting_menu_noti_title_dock">Docking</string>
+    <string name="setting_menu_noti_desc_dock">Screen notification + vibrate when docking completes.</string>
+    <string name="setting_menu_noti_title_hdmg_vib">Heavy Damage Vibration Alert</string>
+    <string name="setting_menu_noti_desc_hdmg_vib">Vibrate when a ship is heavily damaged (Notification will always appear).</string>
 
-    <string name="setting_menu_app_head">어플리케이션 정보</string>
-    <string name="setting_menu_app_title_current">현재 어플리케이션 버전</string>
-    <string name="setting_menu_app_title_updatecheck">업데이트 확인</string>
-    <string name="setting_menu_app_title_contact">건의/오류 보고</string>
-    <string name="setting_menu_app_desc_contact">개발자에게 메일 전송</string>
-    <string name="setting_menu_app_info">시제 깡들리티 정보</string>
+    <string name="setting_menu_app_head">Application Information</string>
+    <string name="setting_menu_app_title_current">Current Version</string>
+    <string name="setting_menu_app_title_updatecheck">Check For Updates</string>
+    <string name="setting_menu_app_title_contact">Submit a Suggestion or Error Report</string>
+    <string name="setting_menu_app_desc_contact">Send an E-mail to the developer</string>
+    <string name="setting_menu_app_info">About kcanotify</string>
 
     <!-- BattleView Strings -->
-    <string name="battleview_error">처리 중 오류가 발생하였습니다.</string>
+    <string name="battleview_error">An error occured while processing battle data.</string>
 
-    <string name="formation_lineahead">단종진</string>
-    <string name="formation_doubleline">복종진</string>
-    <string name="formation_diamond">윤형진</string>
-    <string name="formation_echelon">제형진</string>
-    <string name="formation_lineabreast">단횡진</string>
-    <string name="formation_c1">제1경계항행서열(대잠경계)</string>
-    <string name="formation_c2">제2경계항행서열(전방경계)</string>
-    <string name="formation_c3">제3경계항행서열(윤형진)</string>
-    <string name="formation_c4">제4경계항행서열(전투대형)</string>
+    <string name="formation_lineahead">Line Ahead</string>
+    <string name="formation_doubleline">Double Line</string>
+    <string name="formation_diamond">Diamond</string>
+    <string name="formation_echelon">Echelon</string>
+    <string name="formation_lineabreast">Line Abreast</string>
+    <string name="formation_c1">CF1(Anti-Sub)</string>
+    <string name="formation_c2">CF2(Forward)</string>
+    <string name="formation_c3">CF3(Ring)</string>
+    <string name="formation_c4">CF4(Battle)</string>
 
-    <string name="engagement_label">교전형태</string>
-    <string name="engagement_t_advantage">T유리</string>
-    <string name="engagement_parallel">동항전</string>
-    <string name="engagement_headon">반항전</string>
-    <string name="engagement_t_disadvantage">T불리</string>
+    <string name="engagement_label">Engagement</string>
+    <string name="engagement_t_advantage">Green T</string>
+    <string name="engagement_parallel">Parallel</string>
+    <string name="engagement_headon">Head-on</string>
+    <string name="engagement_t_disadvantage">Red T</string>
 
-    <string name="air_label">제공종류</string>
-    <string name="air_supermacy">제공권확보</string>
-    <string name="air_superiority">제공우세</string>
-    <string name="air_parity">제공균등</string>
-    <string name="air_denial">제공열세</string>
-    <string name="air_incapability">제공권상실</string>
+    <string name="air_label">Air Results</string>
+    <string name="air_supermacy">AS+</string>
+    <string name="air_superiority">AS</string>
+    <string name="air_parity">AP</string>
+    <string name="air_denial">AD</string>
+    <string name="air_incapability">AI</string>
 
-    <string name="enemy_fleet_name">적 함대</string>
-    <string name="enemy_main_fleet_name">적 본함대</string>
-    <string name="enemy_combined_fleet_name">적 호위함대</string>
+    <string name="enemy_fleet_name">Enemy Fleet</string>
+    <string name="enemy_main_fleet_name">Enemy Main Fleet</string>
+    <string name="enemy_combined_fleet_name">Enemy Support Fleet</string>
 
     <string name="yomi_flagship">flagship</string>
     <string name="yomi_elite">elite</string>
     <string name="yomi_flagship_short">F</string>
     <string name="yomi_elite_short">E</string>
 
-    <string name="rank_ss">완전승리S</string>
-    <string name="rank_s">S승리</string>
-    <string name="rank_a">A승리</string>
-    <string name="rank_b">B승리</string>
-    <string name="rank_c">C패배</string>
-    <string name="rank_d">D패배</string>
-    <string name="rank_e">E패배</string>
+    <string name="rank_ss">SS</string>
+    <string name="rank_s">S</string>
+    <string name="rank_a">A</string>
+    <string name="rank_b">B</string>
+    <string name="rank_c">C</string>
+    <string name="rank_d">D</string>
+    <string name="rank_e">E</string>
 
-    <string name="item_fuel">연료</string>
-    <string name="item_ammo">탄약</string>
-    <string name="item_stel">강재</string>
-    <string name="item_baux">보크사이트</string>
-    <string name="item_brnr">고속건조재</string>
-    <string name="item_bgtz">고속수복재</string>
-    <string name="item_mmat">개발자재</string>
-    <string name="item_kmat">개수자재</string>
-    <string name="item_boxs">가구함(소)</string>
-    <string name="item_boxm">가구함(중)</string>
-    <string name="item_boxl">가구함(대)</string>
+    <string name="item_fuel">Fuel</string>
+    <string name="item_ammo">Ammo</string>
+    <string name="item_stel">Steel</string>
+    <string name="item_baux">Bauxite</string>
+    <string name="item_brnr">Blowtorches</string>
+    <string name="item_bgtz">Buckets</string>
+    <string name="item_mmat">Devmats</string>
+    <string name="item_kmat">Screws</string>
+    <string name="item_boxs">Furniture Boxes (S)</string>
+    <string name="item_boxm">Furniture Boxes (M)</string>
+    <string name="item_boxl">Furniture Boxes (L)</string>
 
 </resources>

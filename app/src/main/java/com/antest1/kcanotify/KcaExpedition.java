@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public class KcaExpedition implements Runnable {
     public int left_time;
     public boolean is_alive;
     public Handler sHandler;
-    public static Map<Integer, HashMap<String, String>> expeditionData;
+    public static JsonArray expeditionData;
     public static String[] left_time_str = {null, null, null};
     public static long[] complete_time_check = {-1, -1, -1};
     public static boolean[] canceled_flag = {false, false, false};
@@ -55,8 +56,11 @@ public class KcaExpedition implements Runnable {
     }
 
     public KcaExpedition(int no, int kidx, String name, long time, Handler h) {
+        if(KcaApiData.kcSimpleExpeditionData == null) return;
+
         mission_no = no;
-        mission_krname = expeditionData.get(mission_no).get("krname");
+        mission_krname = KcaApiData.kcSimpleExpeditionData.get(mission_no-1).getAsJsonObject()
+                .get(String.format("name-".concat(KcaService.currentLocale))).getAsString();
         kantai_idx = kidx;
         kantai_name = name;
 
@@ -152,7 +156,7 @@ public class KcaExpedition implements Runnable {
     @Override
     public void run() {
         is_alive = true;
-        int max_left_time = Integer.parseInt(expeditionData.get(mission_no).get("time")) * 60 - start_delay; // Minutes
+        int max_left_time = KcaApiData.kcSimpleExpeditionData.get(mission_no-1).getAsJsonObject().get("time").getAsInt() * 60 - start_delay; // Minutes
         // ->
         // Seconds
         int calculated_left_time = (int) ((complete_time_check[kantai_idx] - System.currentTimeMillis()) / 1000) - start_delay;

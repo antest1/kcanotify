@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -39,7 +42,7 @@ public class KcaApiData {
     public static Map<Integer, JsonObject> userItemData = null;
 
     public static Map<Integer, JsonObject> kcMissionData = new HashMap<Integer, JsonObject>();
-    public static Map<String, String> kcShipTranslationData = null;
+    //public static Map<String, String> kcShipTranslationData = null;
 
     public static int level = 0;
     public static Integer experience = 0;
@@ -50,6 +53,11 @@ public class KcaApiData {
 
     public static JsonObject mapEdgeInfo = new JsonObject();
     public static int[] eventMapDifficulty = new int[10];
+
+    public static JsonObject kcShipTranslationData = new JsonObject();
+    public static JsonObject kcShipAbbrData = new JsonObject(); // For English
+    public static JsonArray kcSimpleExpeditionData = new JsonArray();
+
 
     public static Handler sHandler = null;
     public static boolean isEventTime = false;
@@ -259,22 +267,98 @@ public class KcaApiData {
         return kcShipTranslationData != null;
     }
 
-    public static String getShipTranslation(String jp_name) {
-        if (kcShipTranslationData != null && kcShipTranslationData.containsKey(jp_name)) {
-            return kcShipTranslationData.get(jp_name);
-        } else {
-            return jp_name;
+    public static String getShipTranslation(String jp_name, boolean abbr) {
+        String name = jp_name;
+        String name_suffix = "";
+        JsonObject suffixes = kcShipTranslationData.getAsJsonObject("suffixes");
+        for(Map.Entry<String, JsonElement> entry: suffixes.entrySet()) {
+            if(jp_name.endsWith(entry.getKey())) {
+                name = name.replaceAll(entry.getKey(), "");
+                name_suffix = entry.getValue().getAsString();
+                break;
+            }
         }
+
+        if(kcShipTranslationData.has(name)) {
+            name = kcShipTranslationData.get(name).getAsString();
+        }
+
+        if(abbr) {
+            for(Map.Entry<String, JsonElement> entry: kcShipAbbrData.entrySet()) {
+                if(name.startsWith(entry.getKey())) {
+                    name = name.replaceAll(entry.getKey(), entry.getValue().getAsString());
+                    break;
+                }
+            }
+        }
+
+        return name.concat(name_suffix);
     }
 
     public static int getShipSize() {
         return userShipData.size();
     }
 
-    public static void loadMapEdgeInfo(JsonObject data) {
-        mapEdgeInfo = data;
+    public static int loadMapEdgeInfoFromAssets(AssetManager am) {
+        try {
+            AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("edges.json");
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            JsonElement edgesData = new JsonParser().parse(new String(bytes));
+            if (edgesData.isJsonObject()) {
+                mapEdgeInfo = edgesData.getAsJsonObject();
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (IOException e) {
+            return 0;
+        }
     }
 
+    public static int loadShipTranslationDataFromAssets(AssetManager am, String locale) {
+        try {
+            if (!locale.equals("ko") && !locale.equals("en")) {
+                locale = "en";
+            }
+            AssetManager.AssetInputStream ais =
+                    (AssetManager.AssetInputStream) am.open(String.format("ships-%s.json", locale));
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            JsonElement data = new JsonParser().parse(new String(bytes));
+
+            AssetManager.AssetInputStream ais_abbr =
+                    (AssetManager.AssetInputStream) am.open("en-abbr.json");
+            byte[] bytes_abbr = ByteStreams.toByteArray(ais_abbr);
+            JsonElement data_abbr = new JsonParser().parse(new String(bytes_abbr));
+
+            if (data.isJsonObject()) {
+                kcShipTranslationData = data.getAsJsonObject();
+                kcShipAbbrData = data_abbr.getAsJsonObject();
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
+    public static int loadSimpleExpeditionInfoFromAssets(AssetManager am) {
+        try {
+            AssetManager.AssetInputStream ais =
+                    (AssetManager.AssetInputStream) am.open("simple_expedition.json");
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            Log.e("KCA", new String(bytes));
+            JsonElement data = new JsonParser().parse(new String(bytes));
+            if (data.isJsonArray()) {
+                kcSimpleExpeditionData = data.getAsJsonArray();
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (IOException e) {
+            return 0;
+        }
+    }
 
     public static String getCurrentNodeAlphabet(int maparea, int mapno, int no) {
         String currentMapString = String.format("%d-%d", maparea, mapno);

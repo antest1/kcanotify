@@ -339,7 +339,7 @@ public class KcaBattleViewService extends Service {
                                     int nowhp = data.get("api_nowhp").getAsInt();
                                     int level = data.get("api_lv").getAsInt();
                                     JsonObject kcShipData = KcaApiData.getKcShipDataById(data.get("api_ship_id").getAsInt(), "name");
-                                    String kcname = getShipTranslation(kcShipData.get("name").getAsString());
+                                    String kcname = getShipTranslation(kcShipData.get("name").getAsString(), false);
                                     ((TextView) battleview.findViewById(shipNameViewList[j + 1])).setText(kcname);
                                     ((TextView) battleview.findViewById(shipNameViewList[j + 1]))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
@@ -389,7 +389,7 @@ public class KcaBattleViewService extends Service {
                                     int nowhp = data.get("api_nowhp").getAsInt();
                                     int level = data.get("api_lv").getAsInt();
                                     JsonObject kcShipData = KcaApiData.getKcShipDataById(data.get("api_ship_id").getAsInt(), "name");
-                                    String kcname = getShipTranslation(kcShipData.get("name").getAsString());
+                                    String kcname = getShipTranslation(kcShipData.get("name").getAsString(), false);
                                     ((TextView) battleview.findViewById(shipNameCombinedViewList[j + 1])).setText(kcname);
                                     ((TextView) battleview.findViewById(shipNameCombinedViewList[j + 1]))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
@@ -470,8 +470,8 @@ public class KcaBattleViewService extends Service {
                     } else {
                         int level = api_ship_lv.get(i).getAsInt();
                         JsonObject kcShipData = KcaApiData.getKcShipDataById(api_ship_ke.get(i).getAsInt(), "name,yomi");
-                        String kcname = getShipTranslation(kcShipData.get("name").getAsString());
-                        String kcyomi = getShipTranslation(kcShipData.get("yomi").getAsString());
+                        String kcname = getShipTranslation(kcShipData.get("name").getAsString(), true);
+                        String kcyomi = kcShipData.get("yomi").getAsString();
 
                         ((TextView) battleview.findViewById(shipNameViewList[getEnemyIdx(i)])).setText(kcname);
                         if (ec_flag) {
@@ -548,8 +548,8 @@ public class KcaBattleViewService extends Service {
                         } else {
                             int level = api_ship_lv.get(i).getAsInt();
                             JsonObject kcShipData = KcaApiData.getKcShipDataById(api_ship_ke_combined.get(i).getAsInt(), "name,yomi");
-                            String kcname = getShipTranslation(kcShipData.get("name").getAsString());
-                            String kcyomi = getShipTranslation(kcShipData.get("yomi").getAsString());
+                            String kcname = getShipTranslation(kcShipData.get("name").getAsString(), true);
+                            String kcyomi = kcShipData.get("yomi").getAsString();
 
                             ((TextView) battleview.findViewById(shipNameCombinedViewList[getEnemyIdx(i)])).setText(kcname);
                             if (kcname.length() > 7) {
@@ -561,11 +561,11 @@ public class KcaBattleViewService extends Service {
                             if (!is_practice) {
                                 ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
                                 if (kcyomi.equals(getString(R.string.yomi_elite))) {
-                                    ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText(kcyomi);
+                                    ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText(getString(R.string.yomi_elite_short));
                                     ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)]))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorElite));
                                 } else if (kcyomi.equals(getString(R.string.yomi_flagship))) {
-                                    ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText(kcyomi);
+                                    ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText(getString(R.string.yomi_flagship_short));
                                     ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)]))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFlagship));
                                 }
