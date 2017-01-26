@@ -14,6 +14,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.AssetManager.AssetInputStream;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -57,6 +58,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -66,6 +68,9 @@ import okhttp3.OkHttpClient;
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.isUserItemDataLoaded;
+import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.setDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaConstants.*;
@@ -77,6 +82,7 @@ public class KcaService extends Service {
     public static final int ANTEST_USERID = 15108389;
 
     private String android_id;
+    public static String currentLocale;
 
     public static boolean isServiceOn = false;
     public static boolean isPortAccessed = false;
@@ -142,21 +148,22 @@ public class KcaService extends Service {
             kcaExpeditionInfoList[i] = "";
         }
 
-        KcaExpedition.expeditionData = getExpeditionData();
-        KcaApiData.kcShipTranslationData = getShipTranslationData();
         AssetManager assetManager = getResources().getAssets();
-        try {
-            AssetInputStream ais = (AssetInputStream) assetManager.open("edges.json");
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            JsonElement edgesData = new JsonParser().parse(new String(bytes));
-            if (edgesData.isJsonObject()) {
-                KcaApiData.loadMapEdgeInfo(edgesData.getAsJsonObject());
-            } else {
-                Toast.makeText(getApplicationContext(), "Invalid Map Edge Data", Toast.LENGTH_LONG).show();
-            }
-        } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), "Map Edge Data Not Found", Toast.LENGTH_LONG).show();
+        int loadMapEdgeInfoResult = loadMapEdgeInfoFromAssets(assetManager);
+        if(loadMapEdgeInfoResult != 1) {
+            Toast.makeText(this, "Error loading Map Edge Info", Toast.LENGTH_LONG).show();
         }
+
+        currentLocale = Locale.getDefault().getLanguage();
+        Log.e("KCA", currentLocale);
+        int loadShipTranslationDataResult = loadShipTranslationDataFromAssets(assetManager, currentLocale);
+        if(loadShipTranslationDataResult != 1) {
+            Toast.makeText(this, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+        }
+
+        loadSimpleExpeditionInfoFromAssets(assetManager);
+        KcaExpedition.expeditionData = KcaApiData.kcSimpleExpeditionData;
+
 
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -278,7 +285,7 @@ public class KcaService extends Service {
         String content = "";
         if (cancelFlag) {
             title = String.format(getString(R.string.kca_noti_title_exp_canceled), missionNo, missionName);
-            content = String.format(getString(R.string.kca_noti_content_exp_canceled), missionNo, kantaiName);
+            content = String.format(getString(R.string.kca_noti_content_exp_canceled), kantaiName, missionNo);
         } else {
             title = String.format(getString(R.string.kca_noti_title_exp_finished), missionNo, missionName);
             if (caFlag)
@@ -1164,7 +1171,7 @@ public class KcaService extends Service {
 
             if (url.startsWith(KCA_API_NOTI_DOCK_FIN)) {
                 int dockId = jsonDataObj.get("dock_no").getAsInt();
-                String shipName = getShipTranslation(jsonDataObj.get("ship_name").getAsString());
+                String shipName = getShipTranslation(jsonDataObj.get("ship_name").getAsString(), false);
                 if (isDockNotifyEnabled()) {
                     notifiManager.notify(getNotificationId(NOTI_DOCK, dockId), createDockingNotification(dockId, shipName));
                 }
@@ -1642,103 +1649,6 @@ public class KcaService extends Service {
         }
         notifiManager.notify(getNotificationId(NOTI_FRONT, 1), createViewNotification(notifiTitle, notifiString, expeditionString));
     }
-
-
-    private Map<Integer, HashMap<String, String>> getExpeditionData() {
-        Map<Integer, HashMap<String, String>> data = new HashMap<Integer, HashMap<String, String>>();
-        XmlResourceParser xpp = getResources().getXml(R.xml.expeditions);
-        try {
-            xpp.next();
-            int eventType = xpp.getEventType();
-            int mode = -1;
-            int currentNo = 0;
-            HashMap<String, String> item = null;
-            int childItemNo = 3;
-            while (eventType != XmlPullParser.END_DOCUMENT) {
-                if (eventType == XmlPullParser.START_DOCUMENT) {
-                    // Start Of Document
-                } else if (eventType == XmlPullParser.START_TAG) {
-                    if (xpp.getName().startsWith("item")) {
-                        mode = 0;
-                        item = new HashMap<String, String>();
-                    } else if (xpp.getName().startsWith("no")) {
-                        mode = 1;
-                    } else if (xpp.getName().startsWith("krname")) {
-                        mode = 2;
-                    } else if (xpp.getName().startsWith("time")) {
-                        mode = 3;
-                    }
-                } else if (eventType == XmlPullParser.END_TAG) {
-                    if (mode > 0) {
-                        mode = (mode - 1) / childItemNo;
-                    } else if (mode == 0) {
-                        data.put(currentNo, item);
-                        mode = -1;
-                    }
-                } else if (eventType == XmlPullParser.TEXT) {
-                    if (mode == 1) {
-                        currentNo = Integer.parseInt(xpp.getText());
-                    } else if (mode == 2) {
-                        item.put("krname", xpp.getText());
-                    } else if (mode == 3) {
-                        item.put("time", xpp.getText());
-                    }
-                }
-                eventType = xpp.next();
-            }
-            return data;
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private Map<String, String> getShipTranslationData() {
-        Map<String, String> data = new HashMap<String, String>();
-        int mode = 0;
-        String jp_name = "";
-        String kr_name = "";
-        XmlResourceParser xpp = getResources().getXml(R.xml.ships_translation);
-        try {
-            xpp.next();
-            int eventType = xpp.getEventType();
-            while (eventType != XmlPullParser.END_DOCUMENT) {
-                if (eventType == XmlPullParser.START_DOCUMENT) {
-                    // Start Of Document
-                } else if (eventType == XmlPullParser.START_TAG) {
-                    if (xpp.getName().startsWith("Ship")) {
-                        mode = 0;
-                        jp_name = "";
-                        kr_name = "";
-                    } else if (xpp.getName().startsWith("JP-Name")) {
-                        mode = 1;
-                    } else if (xpp.getName().startsWith("TR-Name")) {
-                        mode = 2;
-                    }
-                } else if (eventType == XmlPullParser.END_TAG) {
-                    if (xpp.getName().startsWith("Ship")) {
-                        data.put(jp_name, kr_name);
-                    }
-                } else if (eventType == XmlPullParser.TEXT) {
-                    if (mode == 1) {
-                        jp_name = xpp.getText();
-                    } else if (mode == 2) {
-                        kr_name = xpp.getText();
-                    }
-                }
-                eventType = xpp.next();
-            }
-            return data;
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 
     public static boolean isJSONValid(String jsonInString) {
         Gson gson = new Gson();
