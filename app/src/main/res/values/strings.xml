@@ -1,12 +1,13 @@
 <resources>
     <!-- Application Information -->
     <string name="app_name">시제 깡들리티</string>
+    <string name="app_brand">시제 깡들리티</string> <!-- Do Not Translate Here -->
     <string name="app_version">2.0.0 rev2</string>
     <string name="action_settings">깡들리티 설정</string>
     <string name="developer_email">kcanotify@gmail.com</string>
     <string name="app_download_link">http://bit.ly/2hNln5o</string>
 
-    <!-- Link Information -->
+    <!-- Link Information, Do Not Translate Here -->
     <string name="kcanotify_checkversion_link">http://swaytwig.com/kcanotify/v.php</string>
     <string name="api_start2_recent_version_link">http://swaytwig.com/kcanotify/kca_api_start2.php?v=recent</string>
     <string name="api_start2_version_link" formatted="false">http://swaytwig.com/kcanotify/kca_api_start2.php?v=%s</string>
