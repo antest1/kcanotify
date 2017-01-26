@@ -116,8 +116,8 @@ public class KcaViewButtonService extends Service {
         LocalBroadcastManager.getInstance(this).registerReceiver((battlehdmg_receiver), new IntentFilter(KCA_MSG_BATTLE_HDMG));
         LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = mInflater.inflate(R.layout.view_button, null);
-
         viewbutton = (ImageView) mView.findViewById(R.id.viewbutton);
+        viewbutton.getDrawable().clearColorFilter();
         viewbutton.setOnTouchListener(mViewTouchListener);
         mParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
