@@ -164,7 +164,7 @@ public class KcaBattleViewService extends Service {
         else return STATE_HEAVYDMG;
     }
 
-    public Drawable getProgressDrawable(Context context, int value) {
+    public Drawable getProgressDrawable(Context context, float value) {
         if (value > 75) {
             return ContextCompat.getDrawable(context, R.drawable.progress_bar_normal);
         } else if (value > 50) {
@@ -359,8 +359,8 @@ public class KcaBattleViewService extends Service {
                                         ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                                     }
 
-                                    int hpPercent = nowhp * VIEW_HP_MAX / maxhp;
-                                    ((ProgressBar) battleview.findViewById(shipHpBarViewList[j + 1])).setProgress(hpPercent);
+                                    float hpPercent = nowhp * VIEW_HP_MAX / (float) maxhp;
+                                    ((ProgressBar) battleview.findViewById(shipHpBarViewList[j + 1])).setProgress(Math.round(hpPercent));
                                     ((ProgressBar) battleview.findViewById(shipHpBarViewList[j + 1])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
 
                                     battleview.findViewById(shipViewList[j + 1]).setVisibility(View.VISIBLE);
@@ -403,8 +403,8 @@ public class KcaBattleViewService extends Service {
                                     ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).setText(makeHpString(nowhp, maxhp));
                                     ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
 
-                                    int hpPercent = nowhp * VIEW_HP_MAX / maxhp;
-                                    ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[j + 1])).setProgress(hpPercent);
+                                    float hpPercent = nowhp * VIEW_HP_MAX / (float) maxhp;
+                                    ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[j + 1])).setProgress(Math.round(hpPercent));
                                     ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[j + 1])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
 
                                     battleview.findViewById(shipCombinedViewList[j + 1]).setVisibility(View.VISIBLE);
@@ -519,9 +519,9 @@ public class KcaBattleViewService extends Service {
                     int afterhp = api_afterhps.get(i).getAsInt();
                     if (maxhp == -1) continue;
                     else {
-                        int hpPercent = afterhp * VIEW_HP_MAX / maxhp;
+                        float hpPercent = afterhp * VIEW_HP_MAX / (float) maxhp;
                         ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setText(makeHpString(afterhp, maxhp));
-                        ((ProgressBar) battleview.findViewById(shipHpBarViewList[i])).setProgress(hpPercent);
+                        ((ProgressBar) battleview.findViewById(shipHpBarViewList[i])).setProgress(Math.round(hpPercent));
                         ((ProgressBar) battleview.findViewById(shipHpBarViewList[i])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
                         if (fc_flag || ec_flag) {
                             ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
@@ -583,9 +583,9 @@ public class KcaBattleViewService extends Service {
                         int afterhp_combined = api_afterhps_combined.get(i).getAsInt();
                         if (maxhp_combined == -1) continue;
                         else {
-                            int hpPercent = afterhp_combined * VIEW_HP_MAX / maxhp_combined;
+                            float hpPercent = afterhp_combined * VIEW_HP_MAX / (float) maxhp_combined;
                             ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setText(makeHpString(afterhp_combined, maxhp_combined));
-                            ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgress(hpPercent);
+                            ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgress(Math.round(hpPercent));
                             ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
                             ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
                         }
