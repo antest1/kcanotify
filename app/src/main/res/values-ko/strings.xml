@@ -2,7 +2,7 @@
     <!-- Application Information -->
     <string name="app_name">시제 깡들리티</string>
     <string name="app_brand">시제 깡들리티</string> <!-- Do Not Translate Here -->
-    <string name="app_version">2.0.0 rev2</string>
+    <string name="app_version">2.0.1</string>
     <string name="action_settings">깡들리티 설정</string>
     <string name="developer_email">kcanotify@gmail.com</string>
     <string name="app_download_link">http://bit.ly/2hNln5o</string>
@@ -129,6 +129,8 @@
 
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">깡들리티 설정</string>
+    <string name="setting_menu_kand_title_language">언어 선택</string>
+    <string name="setting_menu_kand_desc_language">사용하고자 하는 언어</string>
     <string name="setting_menu_kand_title_saku_cal">색적 계산방식 선택</string>
     <string name="setting_menu_kand_title_opendb">OpenDB에 데이터 전송</string>
     <string name="setting_menu_kand_desc_opendb">http://swaytwig.com/opendb/</string>

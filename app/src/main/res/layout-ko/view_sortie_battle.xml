@@ -1,0 +1,2199 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/battleviewlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:orientation="vertical"
+    android:padding="4sp">
+
+    <ScrollView
+        android:id="@+id/battleview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:padding="8dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:id="@+id/battleviewpanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp">
+
+                <TextView
+                    android:id="@+id/battle_node"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_weight="1"
+                    android:minWidth="72dp"
+
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp" />
+
+                <TextView
+                    android:id="@+id/battle_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginStart="32dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/battle_engagement_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+
+
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="10sp"
+                            android:text="@string/engagement_label"
+                            android:minWidth="48dp" />
+
+                        <TextView
+                            android:id="@+id/battle_engagement"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_weight="1"
+
+
+                            android:textColor="@android:color/white"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/battle_airpower_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_weight="1"
+
+
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="10sp"
+                            android:text="@string/air_label"
+                            android:minWidth="48dp" />
+
+                        <TextView
+                            android:id="@+id/battle_airpower"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_weight="1"
+
+
+                            android:textColor="@android:color/white"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:orientation="horizontal"
+                android:transitionGroup="false"
+                android:weightSum="1"
+                android:id="@+id/fleetview">
+
+                <LinearLayout
+                    android:id="@+id/friend_main_fleet"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:layout_weight="0.5"
+                    android:layout_width="0dp">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/friend_fleet_info1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/friend_fleet_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#eeeeee"
+                                    android:textSize="10sp" />
+
+                                <TextView
+                                    android:id="@+id/friend_fleet_formation"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="end"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@android:color/darker_gray"
+                                    android:textSize="10sp"
+                                    android:paddingLeft="8sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:background="@android:color/darker_gray"
+                            android:paddingBottom="0.5dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="0dp"
+                            android:scaleType="fitXY"
+                            android:src="@android:drawable/divider_horizontal_bright"
+                            android:id="@+id/imageView2" />
+
+                        <TextView
+                            android:id="@+id/friend_fleet_damage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:paddingBottom="0.5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="0dp"
+                        android:scaleType="fitXY"
+                        android:src="@android:drawable/divider_horizontal_bright" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fm_1">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fm_1_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <TextView
+                                android:id="@+id/fm_1_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fm_1_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/fm_1_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fm_2">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fm_2_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <TextView
+                                android:id="@+id/fm_2_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fm_2_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/fm_2_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:elevation="1dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fm_3">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fm_3_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <TextView
+                                android:id="@+id/fm_3_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fm_3_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/fm_3_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:elevation="1dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fm_4">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fm_4_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <TextView
+                                android:id="@+id/fm_4_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fm_4_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/fm_4_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:elevation="1dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fm_5">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fm_5_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <TextView
+                                android:id="@+id/fm_5_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fm_5_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/fm_5_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:elevation="1dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fm_6">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fm_6_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <TextView
+                                android:id="@+id/fm_6_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fm_6_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/fm_6_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:elevation="1dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/friend_combined_fleet"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    
+                    android:layout_weight="0.25"
+                    android:layout_width="0dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/friend_combined_fleet_info1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/friend_combined_fleet_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#eeeeee"
+                                    android:textSize="10sp" />
+
+                                <TextView
+                                    android:id="@+id/friend_combined_fleet_formation"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="end"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@android:color/darker_gray"
+                                    android:textSize="10sp"
+                                    android:paddingLeft="8sp" />
+
+                            </LinearLayout>
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:background="@android:color/darker_gray"
+                                android:paddingBottom="0.5dp"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:paddingTop="0dp"
+                                android:scaleType="fitXY"
+                                android:src="@android:drawable/divider_horizontal_bright"
+                                android:id="@+id/imageView"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/friend_combined_fleet_damage"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/darker_gray"
+                                android:textSize="10sp"
+                                android:layout_weight="1" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:paddingBottom="0.5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="0dp"
+                        android:scaleType="fitXY"
+                        android:src="@android:drawable/divider_horizontal_bright" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fs_1">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fs_1_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <TextView
+                                android:id="@+id/fs_1_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fs_1_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/fs_1_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:elevation="1dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fs_2">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fs_2_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <TextView
+                                android:id="@+id/fs_2_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fs_2_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/fs_2_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:elevation="1dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fs_3">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fs_3_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <TextView
+                                android:id="@+id/fs_3_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fs_3_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/fs_3_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:elevation="1dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fs_4">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fs_4_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <TextView
+                                android:id="@+id/fs_4_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fs_4_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/fs_4_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:elevation="1dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fs_5">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fs_5_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <TextView
+                                android:id="@+id/fs_5_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fs_5_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/fs_5_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:elevation="1dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fs_6">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fs_6_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <TextView
+                                android:id="@+id/fs_6_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/fs_6_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/fs_6_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:elevation="1dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/enemy_combined_fleet"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:elevation="1dp"
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/enemy_combined_fleet_info1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/enemy_combined_fleet_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#eeeeee"
+                                    android:textSize="10sp" />
+
+                                <TextView
+                                    android:id="@+id/enemy_combined_fleet_formation"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="end"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@android:color/darker_gray"
+                                    android:textSize="10sp"
+                                    android:paddingLeft="8sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:background="@android:color/darker_gray"
+                            android:paddingBottom="0.5dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="0dp"
+                            android:scaleType="fitXY"
+                            android:src="@android:drawable/divider_horizontal_bright"
+                            android:id="@+id/imageView0"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/enemy_combined_fleet_damage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:paddingBottom="0.5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="0dp"
+                        android:scaleType="fitXY"
+                        android:src="@android:drawable/divider_horizontal_bright" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:id="@+id/es_1">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
+
+                                <TextView
+                                    android:id="@+id/es_1_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14sp"
+                                    android:minHeight="14sp" />
+
+                                <TextView
+                                    android:id="@+id/es_1_yomi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/es_1_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/es_1_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/es_1_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:id="@+id/es_2">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
+
+                                <TextView
+                                    android:id="@+id/es_2_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14sp"
+                                    android:minHeight="14sp" />
+
+                                <TextView
+                                    android:id="@+id/es_2_yomi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/es_2_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/es_2_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/es_2_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:id="@+id/es_3">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
+
+                                <TextView
+                                    android:id="@+id/es_3_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14sp"
+                                    android:minHeight="14sp" />
+
+                                <TextView
+                                    android:id="@+id/es_3_yomi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/es_3_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/es_3_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/es_3_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:id="@+id/es_4">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
+
+                                <TextView
+                                    android:id="@+id/es_4_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14sp"
+                                    android:minHeight="14sp" />
+
+                                <TextView
+                                    android:id="@+id/es_4_yomi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/es_4_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/es_4_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/es_4_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:id="@+id/es_5">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
+
+                                <TextView
+                                    android:id="@+id/es_5_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14sp"
+                                    android:minHeight="14sp" />
+
+                                <TextView
+                                    android:id="@+id/es_5_yomi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/es_5_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/es_5_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/es_5_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:id="@+id/es_6">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
+
+                                <TextView
+                                    android:id="@+id/es_6_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14sp"
+                                    android:minHeight="14sp" />
+
+                                <TextView
+                                    android:id="@+id/es_6_yomi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/es_6_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/es_6_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/es_6_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/enemy_main_fleet"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:elevation="1dp"
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/enemy_fleet_info1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/enemy_fleet_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#eeeeee"
+                                    android:textSize="10sp" />
+
+                                <TextView
+                                    android:id="@+id/enemy_fleet_formation"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="end"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@android:color/darker_gray"
+                                    android:textSize="10sp"
+                                    android:paddingLeft="8sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:background="@android:color/darker_gray"
+                            android:paddingBottom="0.5dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="0dp"
+                            android:scaleType="fitXY"
+                            android:src="@android:drawable/divider_horizontal_bright"
+                            android:id="@+id/imageView6"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/enemy_fleet_damage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:paddingBottom="0.5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="0dp"
+                        android:scaleType="fitXY"
+                        android:src="@android:drawable/divider_horizontal_bright" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:id="@+id/em_1">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
+
+                                <TextView
+                                    android:id="@+id/em_1_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14sp"
+                                    android:minHeight="14sp"
+                                     />
+
+                                <TextView
+                                    android:id="@+id/em_1_yomi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/em_1_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/em_1_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/em_1_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:id="@+id/em_2">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
+
+                                <TextView
+                                    android:id="@+id/em_2_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14sp"
+                                    android:minHeight="14sp"
+                                     />
+
+                                <TextView
+                                    android:id="@+id/em_2_yomi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/em_2_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/em_2_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/em_2_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:id="@+id/em_3">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
+
+                                <TextView
+                                    android:id="@+id/em_3_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14sp"
+                                    android:minHeight="14sp"
+                                     />
+
+                                <TextView
+                                    android:id="@+id/em_3_yomi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/em_3_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/em_3_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/em_3_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:id="@+id/em_4">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
+
+                                <TextView
+                                    android:id="@+id/em_4_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14sp"
+                                    android:minHeight="14sp"
+                                     />
+
+                                <TextView
+                                    android:id="@+id/em_4_yomi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/em_4_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/em_4_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/em_4_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:id="@+id/em_5">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
+
+                                <TextView
+                                    android:id="@+id/em_5_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14sp"
+                                    android:minHeight="14sp"
+                                     />
+
+                                <TextView
+                                    android:id="@+id/em_5_yomi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/em_5_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/em_5_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/em_5_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:id="@+id/em_6">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical">
+
+                                <TextView
+                                    android:id="@+id/em_6_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14sp"
+                                    android:minHeight="14sp"
+                                     />
+
+                                <TextView
+                                    android:id="@+id/em_6_yomi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/em_6_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="11sp"
+                                android:minHeight="14sp"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/em_6_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:layout_weight="0.6"
+                                android:layout_gravity="center_vertical" />
+
+                            <ProgressBar
+                                android:id="@+id/em_6_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:max="100"
+                                android:layout_weight="0.4"
+                                android:layout_gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
+
