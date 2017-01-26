@@ -34,8 +34,9 @@ public final class KcaConstants {
     public static final String API_GET_MEMBER_SHIP3 = "/api_get_member/ship3";
 
     public static final String API_REQ_KAISOU_SLOTSET = "/api_req_kaisou/slotset";
+    public static final String API_REQ_KAISOU_SLOTSET_EX = "/api_req_kaisou/slotset_ex";
     public static final String API_REQ_KAISOU_UNSLOTSET_ALL = "/api_req_kaisou/unsetslot_all";
-    public static final String API_REQ_KAISOU_SLOT_EXCHANGE = "/api_req_kaisou/slot_exchange";
+    public static final String API_REQ_KAISOU_SLOT_EXCHANGE = "/api_req_kaisou/slot_exchange_index";
     public static final String API_REQ_KAISOU_SLOT_DEPRIVE = "/api_req_kaisou/slot_deprive";
     public static final String API_REQ_KAISOU_POWERUP = "/api_req_kaisou/powerup";
 
@@ -156,6 +157,8 @@ public final class KcaConstants {
 
     public static final String KCA_API_PROCESS_BATTLE_FAILED = "/kca_api/process_battle_failed";
     public static final String KCA_API_OPENDB_FAILED = "/kca_api/opendb_failed";
+
+    public static final String KCA_API_VPN_DATA_ERROR = "/kca_api/vpn_data_error";
 
     public static final int SEEK_PURE = 0;
     public static final int SEEK_33CN1 = 1;

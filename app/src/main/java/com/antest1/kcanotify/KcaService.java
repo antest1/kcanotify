@@ -543,7 +543,10 @@ public class KcaService extends Service {
 
                 if (url.startsWith(API_GET_MEMBER_MAPINFO)) {
                     int firstHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 0);
-                    int secondHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 1);
+                    int secondHeavyDamaged = 0;
+                    if (currentPortDeckData.size() >= 2) {
+                        secondHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 1);
+                    }
 
                     int checkvalue = 0;
                     if (KcaApiData.isEventTime) {
@@ -900,6 +903,10 @@ public class KcaService extends Service {
                     kaisouProcessFlag = true;
                 }
 
+                if (url.startsWith(API_REQ_KAISOU_SLOTSET_EX)) {
+                    kaisouProcessFlag = true;
+                }
+
                 if (url.startsWith(API_REQ_KAISOU_UNSLOTSET_ALL)) {
                     kaisouProcessFlag = true;
                 }
@@ -1000,6 +1007,36 @@ public class KcaService extends Service {
                     }
                 }
             }
+
+            if (url.equals(KCA_API_VPN_DATA_ERROR)) { // VPN Data Dump Send
+                String app_version = BuildConfig.VERSION_NAME;
+                String token = "a49467944c34d567fa7f2b051a59c808";
+                String api_url = jsonDataObj.get("uri").getAsString();
+                String api_request = "see_data";
+
+                Toast.makeText(getApplicationContext(), getString(R.string.service_failed_msg), Toast.LENGTH_SHORT).show();
+                String dataSendUrl = String.format(getString(R.string.errorlog_service_link), token, api_url, api_request, app_version);
+                AjaxCallback<String> cb = new AjaxCallback<String>() {
+                    @Override
+                    public void callback(String url, String data, AjaxStatus status) {
+                        // do nothing
+                    }
+                };
+                AQuery aq = new AQuery(KcaService.this);
+                cb.header("Referer", "app:/KCA/");
+                cb.header("Content-Type", "application/x-www-form-urlencoded");
+                HttpEntity entity = null;
+
+                JsonObject sendData = new JsonObject();
+                //sendData.addProperty("data", data);
+                sendData.addProperty("error", jsonDataObj.toString());
+                String sendDataString = sendData.toString();
+
+                entity = new ByteArrayEntity(sendDataString.getBytes());
+                cb.param(AQuery.POST_ENTITY, entity);
+                aq.ajax(dataSendUrl, String.class, cb);
+            }
+
         } catch (JsonSyntaxException e) {
             //Log.e("KCA", "ParseError");
             //Log.e("KCA", data);
