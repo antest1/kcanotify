@@ -1,0 +1,203 @@
+[{
+    "no": "1",
+    "name-ko": "연습해역",
+    "name-en": "Practice Voyage",
+    "time": "15"
+}, {
+    "no": "2",
+    "name-ko": "장거리연습항해",
+    "name-en": "Long Distance Training Voyage",
+    "time": "30"
+}, {
+    "no": "3",
+    "name-ko": "경비임무",
+    "name-en": "Security Tasks",
+    "time": "20"
+}, {
+    "no": "4",
+    "name-ko": "대잠경계임무",
+    "name-en": "Anti-Submarine Alert",
+    "time": "50"
+}, {
+    "no": "5",
+    "name-ko": "해상호위임무",
+    "name-en": "Maritime Security Missions",
+    "time": "90"
+}, {
+    "no": "6",
+    "name-ko": "방공사격연습",
+    "name-en": "Anti-Air Exercises",
+    "time": "40"
+}, {
+    "no": "7",
+    "name-ko": "관함식연습",
+    "name-en": "Ceremonial Dress Rehearsal",
+    "time": "60"
+}, {
+    "no": "8",
+    "name-ko": "관함식",
+    "name-en": "Naval Review",
+    "time": "180"
+}, {
+    "no": "9",
+    "name-ko": "유조선호위임무",
+    "name-en": "Tanker Escort Duties",
+    "time": "240"
+}, {
+    "no": "10",
+    "name-ko": "강행정찰임무",
+    "name-en": "Attack Force Recon Missions",
+    "time": "90"
+}, {
+    "no": "11",
+    "name-ko": "보크사이트수송임무",
+    "name-en": "Bauxite Transport Missions",
+    "time": "300"
+}, {
+    "no": "12",
+    "name-ko": "자원수송임무",
+    "name-en": "Resource Transportation Missions",
+    "time": "480"
+}, {
+    "no": "13",
+    "name-ko": "쥐수송작전",
+    "name-en": "Rat Transportation Strategy",
+    "time": "240"
+}, {
+    "no": "14",
+    "name-ko": "포위육전대철수작전",
+    "name-en": "Siege-Corps Withdrawal Strategies",
+    "time": "360"
+}, {
+    "no": "15",
+    "name-ko": "미끼기동부대지원작전",
+    "name-en": "Decoy Task Force Assistance Operations",
+    "time": "720"
+}, {
+    "no": "16",
+    "name-ko": "함대결전지원작전",
+    "name-en": "Fleet Battle Support Strategy",
+    "time": "900"
+}, {
+    "no": "17",
+    "name-ko": "적지정찰작전",
+    "name-en": "Enemy Territory Reconnaissance Operations",
+    "time": "45"
+}, {
+    "no": "18",
+    "name-ko": "항공기수송작전",
+    "name-en": "Aircraft Transport Strategy",
+    "time": "300"
+}, {
+    "no": "19",
+    "name-ko": "북호작전",
+    "name-en": "Northern Offensive Operations",
+    "time": "360"
+}, {
+    "no": "20",
+    "name-ko": "잠수함초계작전",
+    "name-en": "Submarine Patrol",
+    "time": "120"
+}, {
+    "no": "21",
+    "name-ko": "북방쥐수송작전",
+    "name-en": "Northern Rat Transportation Strategy",
+    "time": "140"
+}, {
+    "no": "22",
+    "name-ko": "함대연습",
+    "name-en": "Fleet Exercises",
+    "time": "180"
+}, {
+    "no": "23",
+    "name-ko": "항공전함운용연습",
+    "name-en": "Aviation Battleship Exercises",
+    "time": "240"
+}, {
+    "no": "24",
+    "name-ko": "북방항로해상호위",
+    "name-en": "Guard the North Sea Route",
+    "time": "500"
+}, {
+    "no": "25",
+    "name-ko": "통상파괴작전",
+    "name-en": "Trade-Route Destruction Strategy",
+    "time": "2400"
+}, {
+    "no": "26",
+    "name-ko": "적모항공습작전",
+    "name-en": "Bombing Campaign on the Enemy Home-Port",
+    "time": "4800"
+}, {
+    "no": "27",
+    "name-ko": "잠수함통상파괴작전",
+    "name-en": "Submarine Commerce Destruction Strategy",
+    "time": "1200"
+}, {
+    "no": "28",
+    "name-ko": "서방해역봉쇄작전",
+    "name-en": "Western Sea Blockade Operation",
+    "time": "1500"
+}, {
+    "no": "29",
+    "name-ko": "잠수함파견연습",
+    "name-en": "Submarine Dispatch Exercises",
+    "time": "1440"
+}, {
+    "no": "30",
+    "name-ko": "잠수함파견작전",
+    "name-en": "Submarine Dispatch Operations",
+    "time": "2880"
+}, {
+    "no": "31",
+    "name-ko": "해외함과의접촉",
+    "name-en": "Contacting Foreign Vessels",
+    "time": "120"
+}, {
+    "no": "32",
+    "name-ko": "원양연습항해",
+    "name-en": "Seafaring Training",
+    "time": "1440"
+}, {
+    "-special": "1",
+    "no": "33",
+    "name-ko": "전방지원함대",
+    "name-en": "Vanguard Support Missions (1)",
+    "time": "15"
+}, {
+    "-special": "1",
+    "no": "34",
+    "name-ko": "함대결전지원임무",
+    "name-en": "Vangard Support Missions (2)",
+    "time": "30"
+}, {
+    "no": "35",
+    "name-ko": "MO작전",
+    "name-en": "MO Operations",
+    "time": "420"
+}, {
+    "no": "36",
+    "name-ko": "수상기지건설",
+    "name-en": "Water Base Construction",
+    "time": "540"
+}, {
+    "no": "37",
+    "name-ko": "도쿄급행1",
+    "name-en": "Tokyo Express (1)",
+    "time": "165"
+}, {
+    "no": "38",
+    "name-ko": "도쿄급행2",
+    "name-en": "Tokyo Express (2)",
+    "time": "175"
+}, {
+    "no": "39",
+    "name-ko": "원양잠수함작전",
+    "name-en": "Deep-Sea Submarine Warfare",
+    "time": "1800"
+}, {
+    "no": "40",
+    "name-ko": "수상기전선운송",
+    "name-en": "Seaplane Delivery on the Front Lines",
+    "time": "410"
+}]
