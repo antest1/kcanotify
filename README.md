@@ -42,6 +42,8 @@ Attribution
 
 Translations to other languages are welcomed. (please contact to developer to email)
 
+**※ From 2.0.1, English is default language for non-korean locale.**
+
 E-mail: kcanotify@gmail.com
 
 
