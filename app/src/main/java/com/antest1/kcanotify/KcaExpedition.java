@@ -60,7 +60,7 @@ public class KcaExpedition implements Runnable {
 
         mission_no = no;
         mission_krname = KcaApiData.kcSimpleExpeditionData.get(mission_no-1).getAsJsonObject()
-                .get(String.format("name-".concat(KcaService.currentLocale))).getAsString();
+                .get(String.format("name-".concat(KcaUtils.getStringPreferences(ctx, PREF_KCA_LANGUAGE)))).getAsString();
         kantai_idx = kidx;
         kantai_name = name;
 

@@ -28,11 +28,13 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.List;
+import java.util.Locale;
 
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
@@ -43,6 +45,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
+import static com.antest1.kcanotify.KcaUtils.getLocaleInArray;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "KCAV";
@@ -63,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
     Boolean is_kca_installed = false;
     private WindowManager windowManager;
 
+    public MainActivity() {
+        LocaleUtils.updateConfig(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.app_name);
         prefs.edit().putBoolean(PREF_SVC_ENABLED, KcaService.getServiceStatus()).apply();
 
         kcIntent = getKcIntent(getApplicationContext());
@@ -107,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 Intent intent = new Intent(MainActivity.this, KcaService.class);
-                if(!prefs.getBoolean(PREF_SVC_ENABLED,false)) {
+                if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
                     if (is_kca_installed) {
                         prefs.edit().putBoolean(PREF_SVC_ENABLED, true).apply();
                         setCheckBtn();
@@ -214,6 +222,9 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_KCA_BATTLEVIEW_USE:
                     case PREF_KCA_NOTI_V_HD:
                         editor.putBoolean(prefKey, true);
+                        break;
+                    case PREF_KCA_LANGUAGE:
+                        editor.putString(prefKey, getLocaleInArray(this, Locale.getDefault().getLanguage()));
                         break;
                     default:
                         editor.putString(prefKey, "");

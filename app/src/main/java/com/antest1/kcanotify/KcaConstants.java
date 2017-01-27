@@ -233,6 +233,7 @@ public final class KcaConstants {
     public static final String PREF_SVC_ENABLED = "svcenabled";
 
     public static final String PREF_KCA_VERSION = "kca_version";
+    public static final String PREF_KCA_LANGUAGE = "kca_language";
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
     public static final String PREF_OPENDB_API_USE = "opendb_api_use";
     public static final String PREF_KCA_EXP_VIEW = "expedition_view";
@@ -247,6 +248,7 @@ public final class KcaConstants {
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
             PREF_KCA_VERSION,
+            PREF_KCA_LANGUAGE,
             PREF_KCA_SEEK_CN,
             PREF_OPENDB_API_USE,
             PREF_KCA_EXP_VIEW,

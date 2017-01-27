@@ -14,4 +14,15 @@
         <item >4</item>
     </string-array>
 
+    <string-array name="languageOption">
+        <item>@string/language_ko</item>
+        <item>@string/language_en</item>
+    </string-array>
+
+    <string-array name="languageOptionValue" translatable="false">
+        <item>ko</item>
+        <item>en</item>
+    </string-array>
+
+
 </resources>

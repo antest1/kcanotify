@@ -9,7 +9,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 <resources>
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
-    <string name="app_brand">시제 깡들리티</string> <!-- Do not translate here -->
+    <string name="app_brand" traslatable="false">시제 깡들리티</string> <!-- Do not translate here -->
     <string name="app_version">2.0.1</string>
     <string name="action_settings">Settings</string>
     <string name="developer_email">kcanotify@gmail.com</string>
@@ -43,6 +43,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="seek_type_1_detail">Formula 33/Cn=1 (2&#45;5)</string>
     <string name="seek_type_3_detail">Formula 33/Cn=3 (6&#45;2,6&#45;3)</string>
     <string name="seek_type_4_detail">Formula 33/Cn=4 (3&#45;5,6&#45;1)</string>
+
+    <string name="language_default" translatable="false">ko</string>
+    <string name="language_ko" traslatable="false" translatable="false">한국어</string>
+    <string name="language_en" traslatable="false" translatable="false">English</string>
 
     <string name="speed_superfast">Fastest</string>
     <string name="speed_fastplus">Fast+</string>
@@ -98,6 +102,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_overlay_ok">Allow Screen Overlay: On</string>
     <string name="sa_overlay_no">Allow Screen Overlay: Off (BattleView will be disabled)</string>
 
+    <string name="sa_language_changed">Please restart kcanotify to apply new language setting.</string>
+
     <!-- InfoActivity Strings -->
     <string name="ia_license" formatted="false">Copyright &#169; 2016-2017 by antest1(IE10)</string>
     <string name="ia_gpl" formatted="false">By using %s, you agree to the &lt;a href="http://www.gnu.org/licenses/gpl.txt"&gt;GNU General Public License 3.0&lt;/a&gt;. The whole source code is available on &lt;a href="https://github.com/antest1/kcanotify/"&gt;github repository&lt;/a&gt;.</string>
@@ -137,6 +143,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">Kcanotify Settings</string>
+    <string name="setting_menu_kand_title_language">Language Settings</string>
     <string name="setting_menu_kand_title_saku_cal">Select LoS formula</string>
     <string name="setting_menu_kand_title_opendb">Send game statistics to OpenDB</string>
     <string name="setting_menu_kand_desc_opendb">http://swaytwig.com/opendb/</string>

@@ -218,5 +218,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="item_boxs">Furniture Boxes (S)</string>
     <string name="item_boxm">Furniture Boxes (M)</string>
     <string name="item_boxl">Furniture Boxes (L)</string>
+    <string name="sa_language_changed">Please restart kcanotify to apply new language setting.</string>
+    <string name="setting_menu_kand_title_language" translatable="false">Language Settings</string>
 
 </resources>

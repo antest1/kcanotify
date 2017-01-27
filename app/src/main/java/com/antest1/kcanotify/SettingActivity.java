@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +34,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Map;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -47,9 +49,11 @@ import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaService.kca_version;
+import static com.antest1.kcanotify.KcaUtils.getLocaleInArray;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -60,6 +64,10 @@ public class SettingActivity extends AppCompatActivity {
     public static final String TAG = "KCA";
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
 
+    public SettingActivity() {
+        LocaleUtils.updateConfig(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,8 +77,9 @@ public class SettingActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getResources().getString(R.string.action_settings));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new PrefsFragment(), null).commit();
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.fragment_container, new PrefsFragment()).commit();
 
     }
 
@@ -91,8 +100,8 @@ public class SettingActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             getPreferenceManager().setSharedPreferencesName("pref");
             //SharedPreferences prefs = this.getActivity().getSharedPreferences("pref", MODE_PRIVATE);
-            getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
             addPreferencesFromResource(R.xml.pref_settings);
+            getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
             Map<String, ?> allEntries = getPreferenceManager().getSharedPreferences().getAll();
             for (String key : allEntries.keySet()) {
                 Preference pref = findPreference(key);
@@ -127,6 +136,16 @@ public class SettingActivity extends AppCompatActivity {
                         }
                     });
                 }
+                if (key.equals(PREF_KCA_LANGUAGE)) {
+                    pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            LocaleUtils.setLocale(new Locale((String) newValue));
+                            Toast.makeText(getActivity(), getString(R.string.sa_language_changed), Toast.LENGTH_LONG).show();
+                            return true;
+                        }
+                    });
+                }
                 if (pref instanceof ListPreference) {
                     ListPreference etp = (ListPreference) pref;
                     pref.setSummary(etp.getEntry());
@@ -145,7 +164,7 @@ public class SettingActivity extends AppCompatActivity {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             if (requestCode == REQUEST_OVERLAY_PERMISSION) {
-                if(Settings.canDrawOverlays(getActivity())) {
+                if (Settings.canDrawOverlays(getActivity())) {
                     Toast.makeText(getActivity(), getString(R.string.sa_overlay_ok), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.sa_overlay_no), Toast.LENGTH_SHORT).show();
@@ -236,7 +255,7 @@ public class SettingActivity extends AppCompatActivity {
             if (result == null) {
                 Toast.makeText(context.getApplicationContext(), context.getString(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
             } else {
-                Log.e("KCA", "Received: "+result);
+                Log.e("KCA", "Received: " + result);
                 JsonObject jsonDataObj = new JsonParser().parse(result).getAsJsonObject();
                 if (jsonDataObj.has("version")) {
                     String recentVersion = jsonDataObj.get("version").getAsString();

@@ -210,5 +210,7 @@
     <string name="item_boxs">가구함(소)</string>
     <string name="item_boxm">가구함(중)</string>
     <string name="item_boxl">가구함(대)</string>
+    <string name="setting_menu_kand_title_language">언어 설정</string>
+    <string name="sa_language_changed">변경된 언어 설정을 적용하려면 깡들리티를 다시 시작하세요. (Please restart kcanotify)</string>
 
 </resources>

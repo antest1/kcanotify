@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.VpnService;
 import android.os.Build;
@@ -55,6 +56,8 @@ import eu.faircode.netguard.Util;
 
 public class KcaVpnService extends VpnService {
     private final static String TAG = "KCAV";
+
+    Resources resources;
 
     private KcaVpnService.Builder last_builder = null;
     private static ParcelFileDescriptor vpn = null;
@@ -317,7 +320,6 @@ public class KcaVpnService extends VpnService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         Log.e(TAG, "Received " + intent);
 
         getLock(this).acquire();

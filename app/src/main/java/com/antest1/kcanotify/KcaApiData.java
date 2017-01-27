@@ -682,6 +682,7 @@ public class KcaApiData {
     }
 
     public static String getNodeFullInfo(Context context, String currentNode, int id, int kind, boolean includeNormal) {
+
         String currentNodeInfo = "";
         switch (id) {
             case API_NODE_EVENT_ID_OBTAIN:

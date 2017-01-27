@@ -1,10 +1,17 @@
 package com.antest1.kcanotify;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.WindowManager;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonObject;
@@ -21,10 +28,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 
 public class KcaUtils {
     public static String getStringFromException(Exception ex) {
@@ -192,6 +201,43 @@ public class KcaUtils {
             return kcIntent;
         } else {
             return null;
+        }
+    }
+
+    public static String getLocaleInArray(Context context, String locale) {
+        List<String> localeList = Arrays.asList(context.getResources().getStringArray(R.array.languageOptionValue));
+        if(localeList.contains(locale)) {
+            return locale;
+        } else {
+            return "en";
+        }
+    }
+
+    public static Context getContextWithLocale(Context ac, Context bc) {
+        Locale locale = new Locale(getStringPreferences(ac, PREF_KCA_LANGUAGE));
+        Configuration configuration = new Configuration(ac.getResources().getConfiguration());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            configuration.setLocale(locale);
+            return bc.createConfigurationContext(configuration);
+        } else {
+            configuration.locale = locale;
+            DisplayMetrics metrics = new DisplayMetrics();
+            bc.getResources().updateConfiguration(configuration, bc.getResources().getDisplayMetrics());
+            return bc;
+        }
+    }
+
+    public static String getStringWithLocale(Context ac, Context bc, int id) {
+        Locale locale = new Locale(getStringPreferences(ac, PREF_KCA_LANGUAGE));
+        Configuration configuration = new Configuration(ac.getResources().getConfiguration());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            configuration.setLocale(locale);
+            return bc.createConfigurationContext(configuration).getResources().getString(id);
+        } else {
+            configuration.locale = locale;
+            DisplayMetrics metrics = new DisplayMetrics();
+            bc.getResources().updateConfiguration(configuration, bc.getResources().getDisplayMetrics());
+            return bc.getResources().getString(id);
         }
     }
 }
