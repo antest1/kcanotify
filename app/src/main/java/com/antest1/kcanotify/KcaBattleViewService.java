@@ -24,11 +24,19 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxCallback;
+import com.androidquery.callback.AjaxStatus;
 import com.google.common.io.Resources;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.ByteArrayEntity;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -43,6 +51,7 @@ import static com.antest1.kcanotify.KcaApiData.getNodeFullInfo;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 
 
 public class KcaBattleViewService extends Service {
@@ -56,6 +65,7 @@ public class KcaBattleViewService extends Service {
     public static int[] startNowHps;
     public static int[] startNowHpsCombined;
 
+    boolean error_flag = false;
     boolean fc_flag = false;
     boolean ec_flag = false;
 
@@ -139,6 +149,10 @@ public class KcaBattleViewService extends Service {
 
     private static String makeHpString(int currenthp, int maxhp) {
         return String.format("HP %d/%d", currenthp, maxhp);
+    }
+
+    public String getStringWithLocale(int id) {
+        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
     private static String makeLvString(int level) {
@@ -248,7 +262,6 @@ public class KcaBattleViewService extends Service {
                     ((TextView) battleview.findViewById(R.id.battle_result))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorNone));
                 }
-
                 switch (api_color_no) {
                     case 2:
                         battleview.findViewById(R.id.battle_node)
@@ -737,16 +750,49 @@ public class KcaBattleViewService extends Service {
         }
     }
 
-    public void setView() {
-        //if(mViewBackup != null) mView = mViewBackup;
-        api_data = KcaViewButtonService.getCurrentApiData();
-        battleview = (ScrollView) mView.findViewById(R.id.battleview);
-        battleview.setOnTouchListener(mViewTouchListener);
-        setBattleview();
-    }
+    public int setView() {
+        try {
+            error_flag = false;
+            api_data = KcaViewButtonService.getCurrentApiData();
+            battleview = (ScrollView) mView.findViewById(R.id.battleview);
+            setBattleview();
+            battleview.setOnTouchListener(mViewTouchListener);
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            error_flag = true;
+            mView.setVisibility(View.GONE);
+            String app_version = BuildConfig.VERSION_NAME;
+            String token = "df1629d6820907e7a09ea1e98d3041c2";
+            String kca_url = "";
+            try {
+                kca_url = URLEncoder.encode(KCA_MSG_BATTLE_VIEW_REFRESH, "utf-8");
+            } catch (UnsupportedEncodingException e1) {
+                e1.printStackTrace();
+            }
+            Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.battleview_error), Toast.LENGTH_SHORT).show();
+            String dataSendUrl = String.format(getStringWithLocale(R.string.errorlog_battle_link), token, kca_url, "BV",  app_version);
+            AjaxCallback<String> cb = new AjaxCallback<String>() {
+                @Override
+                public void callback(String url, String data, AjaxStatus status) {
+                   // do nothing
+                }
+            };
 
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
+            JsonObject sendData = new JsonObject();
+            sendData.addProperty("data", api_data.toString());
+            sendData.addProperty("error", getStringFromException(e));
+            String sendDataString = sendData.toString();
+
+            AQuery aq = new AQuery(KcaBattleViewService.this);
+            cb.header("Referer", "app:/KCA/");
+            cb.header("Content-Type", "application/x-www-form-urlencoded");
+            HttpEntity entity = new ByteArrayEntity(sendDataString.getBytes());
+            cb.param(AQuery.POST_ENTITY, entity);
+            aq.ajax(dataSendUrl, String.class, cb);
+
+            return 1;
+        }
     }
 
     @Override
@@ -758,7 +804,6 @@ public class KcaBattleViewService extends Service {
         //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mInflater = LayoutInflater.from(contextWithLocale);
         mView = mInflater.inflate(R.layout.view_sortie_battle, null);
-        //setView();
         mParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -792,27 +837,26 @@ public class KcaBattleViewService extends Service {
                 Log.e("KCA", "=> Received Intent");
                 //mViewBackup = mView;
                 //mManager.removeView(mView);
-                try {
-                    setView();
+                int setViewResult = setView();
+                if (setViewResult == 0) {
                     if (KcaViewButtonService.getClickCount() == 0) {
                         mView.setVisibility(View.GONE);
                     }
                     //mManager.addView(mView, mParams);
                     mView.invalidate();
                     mManager.updateViewLayout(mView, mParams);
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.battleview_error), Toast.LENGTH_LONG).show();
                 }
-
             }
         };
         LocalBroadcastManager.getInstance(this).registerReceiver((hdmgreceiver), new IntentFilter(KCA_MSG_BATTLE_VIEW_HDMG));
         LocalBroadcastManager.getInstance(this).registerReceiver((refreshreceiver), new IntentFilter(KCA_MSG_BATTLE_VIEW_REFRESH));
     }
 
+
     @Override
     public void onDestroy() {
         active = false;
+        mView.setVisibility(View.GONE);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(hdmgreceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
         super.onDestroy();
@@ -820,7 +864,9 @@ public class KcaBattleViewService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mView.setVisibility(View.VISIBLE);
+        if (!error_flag) {
+            mView.setVisibility(View.VISIBLE);
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
