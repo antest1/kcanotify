@@ -1,20 +1,10 @@
 <resources>
     <!-- Application Information -->
     <string name="app_name">시제 깡들리티</string>
-    <string name="app_brand">시제 깡들리티</string> <!-- Do Not Translate Here -->
-    <string name="app_version">2.0.1</string>
+    <!-- Do Not Translate Here -->
     <string name="action_settings">깡들리티 설정</string>
-    <string name="developer_email">kcanotify@gmail.com</string>
-    <string name="app_download_link">http://bit.ly/2hNln5o</string>
 
     <!-- Link Information, Do Not Translate Here -->
-    <string name="kcanotify_checkversion_link">http://swaytwig.com/kcanotify/v.php</string>
-    <string name="api_start2_recent_version_link">http://swaytwig.com/kcanotify/kca_api_start2.php?v=recent</string>
-    <string name="api_start2_version_link" formatted="false">http://swaytwig.com/kcanotify/kca_api_start2.php?v=%s</string>
-    <string name="api_start2_upload_link" formatted="false">http://swaytwig.com/kcanotify/kca_api_start2.php?token=%s&amp;dtoken=%s&amp;method=%s&amp;v=%s</string>
-    <string name="errorlog_service_link" formatted="false">http://swaytwig.com/kcanotify/errorlog_main.php?token=%s&amp;url=%s&amp;request=%s&amp;v=%s</string>
-    <string name="errorlog_battle_link" formatted="false">http://swaytwig.com/kcanotify/errorlog_battle.php?token=%s&amp;url=%s&amp;node=%s&amp;v=%s</string>
-    <string name="errorlog_notify_link" formatted="false">http://swaytwig.com/kcanotify/errorlog_notify.php?token=%s&amp;url=%s&amp;v=%s</string>
 
     <!-- Common Text -->
     <string name="dialog_ok">확인</string>
@@ -91,8 +81,6 @@
     <string name="sa_overlay_no">화면 오버레이 권한이 설정되지 않았습니다. (전투예보 이용 불가)</string>
 
     <!-- InfoActivity Strings -->
-    <string name="ia_license" formatted="false">Copyright &#169; 2016-2017 by antest1(IE10)</string>
-    <string name="ia_gpl" formatted="false">By using %s, you agree to the &lt;a href="http://www.gnu.org/licenses/gpl.txt"&gt;GNU General Public License 3.0&lt;/a&gt;. The whole source code is available on &lt;a href="https://github.com/antest1/kcanotify/"&gt;github repository&lt;/a&gt;.</string>
 
     <!-- KcaService Strings -->
     <string name="kca_init_title" formatted="false">%s 동작중</string>
@@ -131,7 +119,6 @@
     <string name="setting_menu_kand_head">깡들리티 설정</string>
     <string name="setting_menu_kand_title_saku_cal">색적 계산방식 선택</string>
     <string name="setting_menu_kand_title_opendb">OpenDB에 데이터 전송</string>
-    <string name="setting_menu_kand_desc_opendb">http://swaytwig.com/opendb/</string>
     <string name="setting_menu_kand_title_exp_realtime_show">원정 남은 시간 실시간 표시</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">상단의 남은 원정 시간 실시간 표시 여부</string>
     <string name="setting_menu_kand_title_game_data_down">게임 데이터 다운로드</string>
@@ -210,7 +197,7 @@
     <string name="item_boxs">가구함(소)</string>
     <string name="item_boxm">가구함(중)</string>
     <string name="item_boxl">가구함(대)</string>
-    <string name="setting_menu_kand_title_language">언어 설정</string>
     <string name="sa_language_changed">변경된 언어 설정을 적용하려면 깡들리티를 다시 시작하세요. (Please restart kcanotify)</string>
+    <string name="setting_menu_kand_title_language">언어 설정</string>
 
 </resources>

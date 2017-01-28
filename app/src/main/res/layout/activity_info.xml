@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/AppName"
-            android:text="@string/app_name"
+            android:text="@string/app_brand"
             android:textAlignment="center"
             android:textSize="36sp" />
 
