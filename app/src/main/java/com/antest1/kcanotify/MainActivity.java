@@ -133,8 +133,12 @@ public class MainActivity extends AppCompatActivity {
         kcbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(kcIntent);
-                finish();
+                if(is_kca_installed) {
+                    startActivity(kcIntent);
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.ma_toast_kancolle_not_installed), Toast.LENGTH_LONG).show();
+                }
             }
         });
 
