@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:clickable="false"
     android:orientation="vertical"
-    android:padding="4dp">
+    android:padding="4dp"
+    android:visibility="gone">
 
     <ScrollView
         android:id="@+id/battleview"
