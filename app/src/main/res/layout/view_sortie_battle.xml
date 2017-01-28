@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:clickable="false"
     android:orientation="vertical"
-    android:padding="4sp">
+    android:padding="4dp">
 
     <ScrollView
         android:id="@+id/battleview"
@@ -46,7 +46,7 @@
                     android:layout_marginRight="32dp"
                     android:layout_weight="1"
                     android:minWidth="72dp"
-
+                    android:textSize="14dp"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:paddingLeft="8dp"
@@ -63,7 +63,7 @@
 
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
-                    android:textSize="18sp" />
+                    android:textSize="18dp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
 
 
                             android:textColor="@android:color/darker_gray"
-                            android:textSize="10sp"
+                            android:textSize="10dp"
                             android:text="@string/engagement_label"
                             android:minWidth="48dp" />
 
@@ -101,7 +101,7 @@
 
 
                             android:textColor="@android:color/white"
-                            android:textSize="10sp" />
+                            android:textSize="10dp" />
 
                     </LinearLayout>
 
@@ -120,7 +120,7 @@
 
 
                             android:textColor="@android:color/darker_gray"
-                            android:textSize="10sp"
+                            android:textSize="10dp"
                             android:text="@string/air_label"
                             android:minWidth="48dp" />
 
@@ -133,7 +133,7 @@
 
 
                             android:textColor="@android:color/white"
-                            android:textSize="10sp" />
+                            android:textSize="10dp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -182,7 +182,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="#eeeeee"
-                                    android:textSize="10sp" />
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/friend_fleet_formation"
@@ -192,8 +192,8 @@
                                     android:layout_gravity="end"
                                     android:textAlignment="textEnd"
                                     android:textColor="@android:color/darker_gray"
-                                    android:textSize="10sp"
-                                    android:paddingLeft="8sp" />
+                                    android:textSize="10dp"
+                                    android:paddingLeft="8dp" />
 
                             </LinearLayout>
 
@@ -217,7 +217,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/darker_gray"
-                            android:textSize="10sp" />
+                            android:textSize="10dp" />
 
                     </LinearLayout>
 
@@ -251,8 +251,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="14sp"
-                                android:minHeight="14sp"
+                                android:textSize="14dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -262,8 +262,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -280,7 +280,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -314,8 +314,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="14sp"
-                                android:minHeight="14sp"
+                                android:textSize="14dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -325,8 +325,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -343,7 +343,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -377,8 +377,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="14sp"
-                                android:minHeight="14sp"
+                                android:textSize="14dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -388,8 +388,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -406,7 +406,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -440,8 +440,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="14sp"
-                                android:minHeight="14sp"
+                                android:textSize="14dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -451,8 +451,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -469,7 +469,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -503,8 +503,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="14sp"
-                                android:minHeight="14sp"
+                                android:textSize="14dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -514,8 +514,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -532,7 +532,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -566,8 +566,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="14sp"
-                                android:minHeight="14sp"
+                                android:textSize="14dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -577,8 +577,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -595,7 +595,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -646,7 +646,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="#eeeeee"
-                                    android:textSize="10sp" />
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/friend_combined_fleet_formation"
@@ -656,8 +656,8 @@
                                     android:layout_gravity="end"
                                     android:textAlignment="textEnd"
                                     android:textColor="@android:color/darker_gray"
-                                    android:textSize="10sp"
-                                    android:paddingLeft="8sp" />
+                                    android:textSize="10dp"
+                                    android:paddingLeft="8dp" />
 
                             </LinearLayout>
 
@@ -680,7 +680,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@android:color/darker_gray"
-                                android:textSize="10sp"
+                                android:textSize="10dp"
                                 android:layout_weight="1" />
 
                         </LinearLayout>
@@ -717,8 +717,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="14sp"
-                                android:minHeight="14sp"
+                                android:textSize="14dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -728,8 +728,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -746,7 +746,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -780,8 +780,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="14sp"
-                                android:minHeight="14sp"
+                                android:textSize="14dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -791,8 +791,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -809,7 +809,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -843,8 +843,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="14sp"
-                                android:minHeight="14sp"
+                                android:textSize="14dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -854,8 +854,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -872,7 +872,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -906,8 +906,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="14sp"
-                                android:minHeight="14sp"
+                                android:textSize="14dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -917,8 +917,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -935,7 +935,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -969,8 +969,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="14sp"
-                                android:minHeight="14sp"
+                                android:textSize="14dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -980,8 +980,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -998,7 +998,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -1032,8 +1032,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="14sp"
-                                android:minHeight="14sp"
+                                android:textSize="14dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -1043,8 +1043,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -1061,7 +1061,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -1110,7 +1110,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="#eeeeee"
-                                    android:textSize="10sp" />
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/enemy_combined_fleet_formation"
@@ -1120,8 +1120,8 @@
                                     android:layout_gravity="end"
                                     android:textAlignment="textEnd"
                                     android:textColor="@android:color/darker_gray"
-                                    android:textSize="10sp"
-                                    android:paddingLeft="8sp" />
+                                    android:textSize="10dp"
+                                    android:paddingLeft="8dp" />
 
                             </LinearLayout>
 
@@ -1146,7 +1146,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/darker_gray"
-                            android:textSize="10sp" />
+                            android:textSize="10dp" />
 
                     </LinearLayout>
 
@@ -1188,8 +1188,8 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="14sp"
-                                    android:minHeight="14sp" />
+                                    android:textSize="14dp"
+                                    android:minHeight="14dp" />
 
                                 <TextView
                                     android:id="@+id/es_1_yomi"
@@ -1198,7 +1198,7 @@
                                     android:layout_marginLeft="4dp"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="9sp" />
+                                    android:textSize="9dp" />
                             </LinearLayout>
 
                             <TextView
@@ -1207,8 +1207,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -1225,7 +1225,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -1266,8 +1266,8 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="14sp"
-                                    android:minHeight="14sp" />
+                                    android:textSize="14dp"
+                                    android:minHeight="14dp" />
 
                                 <TextView
                                     android:id="@+id/es_2_yomi"
@@ -1276,7 +1276,7 @@
                                     android:layout_marginLeft="4dp"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="9sp" />
+                                    android:textSize="9dp" />
                             </LinearLayout>
 
                             <TextView
@@ -1285,8 +1285,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -1303,7 +1303,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -1344,8 +1344,8 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="14sp"
-                                    android:minHeight="14sp" />
+                                    android:textSize="14dp"
+                                    android:minHeight="14dp" />
 
                                 <TextView
                                     android:id="@+id/es_3_yomi"
@@ -1354,7 +1354,7 @@
                                     android:layout_marginLeft="4dp"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="9sp" />
+                                    android:textSize="9dp" />
                             </LinearLayout>
 
                             <TextView
@@ -1363,8 +1363,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -1381,7 +1381,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -1422,8 +1422,8 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="14sp"
-                                    android:minHeight="14sp" />
+                                    android:textSize="14dp"
+                                    android:minHeight="14dp" />
 
                                 <TextView
                                     android:id="@+id/es_4_yomi"
@@ -1432,7 +1432,7 @@
                                     android:layout_marginLeft="4dp"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="9sp" />
+                                    android:textSize="9dp" />
                             </LinearLayout>
 
                             <TextView
@@ -1441,8 +1441,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -1459,7 +1459,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -1500,8 +1500,8 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="14sp"
-                                    android:minHeight="14sp" />
+                                    android:textSize="14dp"
+                                    android:minHeight="14dp" />
 
                                 <TextView
                                     android:id="@+id/es_5_yomi"
@@ -1510,7 +1510,7 @@
                                     android:layout_marginLeft="4dp"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="9sp" />
+                                    android:textSize="9dp" />
                             </LinearLayout>
 
                             <TextView
@@ -1519,8 +1519,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -1537,7 +1537,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -1578,8 +1578,8 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="14sp"
-                                    android:minHeight="14sp" />
+                                    android:textSize="14dp"
+                                    android:minHeight="14dp" />
 
                                 <TextView
                                     android:id="@+id/es_6_yomi"
@@ -1588,7 +1588,7 @@
                                     android:layout_marginLeft="4dp"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="9sp" />
+                                    android:textSize="9dp" />
                             </LinearLayout>
 
                             <TextView
@@ -1597,8 +1597,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -1615,7 +1615,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -1663,7 +1663,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="#eeeeee"
-                                    android:textSize="10sp" />
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/enemy_fleet_formation"
@@ -1673,8 +1673,8 @@
                                     android:layout_gravity="end"
                                     android:textAlignment="textEnd"
                                     android:textColor="@android:color/darker_gray"
-                                    android:textSize="10sp"
-                                    android:paddingLeft="8sp" />
+                                    android:textSize="10dp"
+                                    android:paddingLeft="8dp" />
 
                             </LinearLayout>
 
@@ -1699,7 +1699,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/darker_gray"
-                            android:textSize="10sp" />
+                            android:textSize="10dp" />
 
                     </LinearLayout>
 
@@ -1741,8 +1741,8 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="14sp"
-                                    android:minHeight="14sp"
+                                    android:textSize="14dp"
+                                    android:minHeight="14dp"
                                      />
 
                                 <TextView
@@ -1752,7 +1752,7 @@
                                     android:layout_marginLeft="4dp"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="9sp" />
+                                    android:textSize="9dp" />
                             </LinearLayout>
 
                             <TextView
@@ -1761,8 +1761,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -1779,7 +1779,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -1820,8 +1820,8 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="14sp"
-                                    android:minHeight="14sp"
+                                    android:textSize="14dp"
+                                    android:minHeight="14dp"
                                      />
 
                                 <TextView
@@ -1831,7 +1831,7 @@
                                     android:layout_marginLeft="4dp"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="9sp" />
+                                    android:textSize="9dp" />
                             </LinearLayout>
 
                             <TextView
@@ -1840,8 +1840,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -1858,7 +1858,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -1899,8 +1899,8 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="14sp"
-                                    android:minHeight="14sp"
+                                    android:textSize="14dp"
+                                    android:minHeight="14dp"
                                      />
 
                                 <TextView
@@ -1910,7 +1910,7 @@
                                     android:layout_marginLeft="4dp"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="9sp" />
+                                    android:textSize="9dp" />
                             </LinearLayout>
 
                             <TextView
@@ -1919,8 +1919,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -1937,7 +1937,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -1978,8 +1978,8 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="14sp"
-                                    android:minHeight="14sp"
+                                    android:textSize="14dp"
+                                    android:minHeight="14dp"
                                      />
 
                                 <TextView
@@ -1989,7 +1989,7 @@
                                     android:layout_marginLeft="4dp"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="9sp" />
+                                    android:textSize="9dp" />
                             </LinearLayout>
 
                             <TextView
@@ -1998,8 +1998,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -2016,7 +2016,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -2057,8 +2057,8 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="14sp"
-                                    android:minHeight="14sp"
+                                    android:textSize="14dp"
+                                    android:minHeight="14dp"
                                      />
 
                                 <TextView
@@ -2068,7 +2068,7 @@
                                     android:layout_marginLeft="4dp"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="9sp" />
+                                    android:textSize="9dp" />
                             </LinearLayout>
 
                             <TextView
@@ -2077,8 +2077,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -2095,7 +2095,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
@@ -2136,8 +2136,8 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="14sp"
-                                    android:minHeight="14sp"
+                                    android:textSize="14dp"
+                                    android:minHeight="14dp"
                                      />
 
                                 <TextView
@@ -2147,7 +2147,7 @@
                                     android:layout_marginLeft="4dp"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="9sp" />
+                                    android:textSize="9dp" />
                             </LinearLayout>
 
                             <TextView
@@ -2156,8 +2156,8 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:minHeight="14sp"
+                                android:textSize="11dp"
+                                android:minHeight="14dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
                         </LinearLayout>
@@ -2174,7 +2174,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical" />
 
