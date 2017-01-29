@@ -54,6 +54,24 @@
 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_menu_noti_head">
+        <ListPreference
+            android:defaultValue="@string/sound_kind_value_vibrate"
+            android:entries="@array/soundOption"
+            android:entryValues="@array/soundOptionValue"
+            android:key="notify_sound_kind"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/setting_menu_noti_title_kind" />
+
+        <RingtonePreference
+            android:summary="@string/setting_menu_noti_desc_ringtone"
+            android:title="@string/setting_menu_noti_title_ringtone"
+            android:key="notify_ringtone"
+            android:ringtoneType="notification"
+            android:showDefault="true"
+            android:showSilent="true"
+            android:defaultValue="DEFAULT_NOTIFICATION_URI"/>
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="notify_expedition"
@@ -71,6 +89,7 @@
             android:key="notify_vibrate_heavydamaged"
             android:summary="@string/setting_menu_noti_desc_hdmg_vib"
             android:title="@string/setting_menu_noti_title_hdmg_vib" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/setting_menu_app_head">

@@ -19,6 +19,8 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -299,18 +301,34 @@ public class KcaService extends Service {
 
         }
 
-        Notification Notifi = new Notification.Builder(getApplicationContext())
+        Notification.Builder builder = new Notification.Builder(getApplicationContext())
                 .setSmallIcon(R.mipmap.expedition_notify_icon)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.expedition_notify_bigicon))
                 .setContentTitle(title)
                 .setContentText(content)
                 .setTicker(title)
-                .setContentIntent(pendingIntent).build();
-        if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-            Notifi.defaults = Notification.DEFAULT_VIBRATE;
-        } else {
-            Notifi.vibrate = new long[]{-1};
+                .setContentIntent(pendingIntent);
+
+        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
+        if (soundKind.equals(getString(R.string.sound_kind_value_normal))) {
+            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                builder.setSound(Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
+            } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+                builder.setDefaults(Notification.DEFAULT_VIBRATE);
+            } else {
+                builder.setDefaults(0);
+            }
+        } else if (soundKind.equals(getString(R.string.sound_kind_value_vibrate))) {
+            if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
+                builder.setDefaults(Notification.DEFAULT_VIBRATE);
+            } else {
+                builder.setDefaults(0);
+            }
+        } else if (soundKind.equals(getString(R.string.sound_kind_value_mute))){
+            builder.setDefaults(0);
         }
+
+        Notification Notifi = builder.build();
         Notifi.flags = Notification.FLAG_AUTO_CANCEL;
         setFrontViewNotifier(FRONT_NONE, 0, null);
         return Notifi;
@@ -327,18 +345,33 @@ public class KcaService extends Service {
             content = String.format(getStringWithLocale(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
         }
 
-        Notification Notifi = new Notification.Builder(getApplicationContext())
+        Notification.Builder builder = new Notification.Builder(getApplicationContext())
                 .setSmallIcon(R.mipmap.docking_notify_icon)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.dockng_notify_bigicon))
                 .setContentTitle(title)
                 .setContentText(content)
                 .setTicker(title)
-                .setContentIntent(pendingIntent).build();
-        if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-            Notifi.defaults = Notification.DEFAULT_VIBRATE;
-        } else {
-            Notifi.vibrate = new long[]{-1};
+                .setContentIntent(pendingIntent);
+        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
+        if (soundKind.equals(getString(R.string.sound_kind_value_normal))) {
+            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                builder.setSound(Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
+            } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+                builder.setDefaults(Notification.DEFAULT_VIBRATE);
+            } else {
+                builder.setDefaults(0);
+            }
+        } else if (soundKind.equals(getString(R.string.sound_kind_value_vibrate))) {
+            if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
+                builder.setDefaults(Notification.DEFAULT_VIBRATE);
+            } else {
+                builder.setDefaults(0);
+            }
+        } else if (soundKind.equals(getString(R.string.sound_kind_value_mute))){
+            builder.setDefaults(0);
         }
+
+        Notification Notifi = builder.build();
         Notifi.flags = Notification.FLAG_AUTO_CANCEL;
         setFrontViewNotifier(FRONT_NONE, 0, null);
         return Notifi;

@@ -30,6 +30,7 @@ import android.widget.ToggleButton;
 import java.util.List;
 import java.util.Locale;
 
+import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
@@ -37,6 +38,8 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
@@ -147,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         Linkify.addLinks(textDescription, Linkify.WEB_URLS);
 
         ctx = getApplicationContext();
+        PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
 
         if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)) {
@@ -229,6 +233,12 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case PREF_KCA_LANGUAGE:
                         editor.putString(prefKey, getLocaleInArray(this, Locale.getDefault().getLanguage()));
+                        break;
+                    case PREF_KCA_NOTI_SOUND_KIND:
+                        editor.putString(prefKey, getString(R.string.sound_kind_value_vibrate));
+                        break;
+                    case PREF_KCA_NOTI_RINGTONE:
+                        editor.putString(prefKey, DEFAULT_NOTIFICATION_URI.toString());
                         break;
                     default:
                         editor.putString(prefKey, "");

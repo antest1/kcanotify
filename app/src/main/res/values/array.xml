@@ -24,5 +24,17 @@
         <item>en</item>
     </string-array>
 
+    <string-array name="soundOption">
+        <item>@string/sound_kind_normal</item>
+        <item>@string/sound_kind_vibrate</item>
+        <item>@string/sound_kind_mute</item>
+    </string-array>
+
+    <string-array name="soundOptionValue" translatable="false">
+        <item>@string/sound_kind_value_normal</item>
+        <item>@string/sound_kind_value_vibrate</item>
+        <item>@string/sound_kind_value_mute</item>
+    </string-array>
+
 
 </resources>

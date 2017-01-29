@@ -207,5 +207,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="item_boxl">Furniture Boxes (L)</string>
     <string name="sa_language_changed">Please restart kcanotify to apply new language setting.</string>
     <string name="setting_menu_kand_title_language">Language Settings</string>
+    <string name="setting_menu_noti_title_ringtone">Ringtones</string>
+    <string name="setting_menu_noti_desc_ringtone">Choose a ringtone</string>
+    <string name="settings_string_silent">Silent</string>
+    <string name="setting_menu_noti_title_kind">Sound mode</string>
+    <string name="sound_kind_mute">Mute</string>
+    <string name="sound_kind_normal">Sound</string>
+    <string name="sound_kind_vibrate">Vibrate</string>
 
 </resources>

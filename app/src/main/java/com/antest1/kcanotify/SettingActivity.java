@@ -8,6 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.database.Cursor;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -17,6 +20,8 @@ import android.os.Message;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.RingtonePreference;
+import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
@@ -63,7 +68,7 @@ public class SettingActivity extends AppCompatActivity {
     public static String currentVersion = BuildConfig.VERSION_NAME;
     public static final String TAG = "KCA";
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
-
+    public static String silentText;
     public SettingActivity() {
         LocaleUtils.updateConfig(this);
     }
@@ -76,7 +81,7 @@ public class SettingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.action_settings));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        silentText = getString(R.string.settings_string_silent);;
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.fragment_container, new PrefsFragment()).commit();
@@ -95,9 +100,12 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public static class PrefsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
+        public Context context;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            context = getActivity().getApplicationContext();
             getPreferenceManager().setSharedPreferencesName("pref");
             //SharedPreferences prefs = this.getActivity().getSharedPreferences("pref", MODE_PRIVATE);
             addPreferencesFromResource(R.xml.pref_settings);
@@ -109,7 +117,7 @@ public class SettingActivity extends AppCompatActivity {
                     pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            new getRecentVersion(getActivity()).execute();
+                            new getRecentVersion(context).execute();
                             return false;
                         }
                     });
@@ -118,7 +126,7 @@ public class SettingActivity extends AppCompatActivity {
                     pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            new getKcaStart2Data(getActivity()).execute();
+                            new getKcaStart2Data(context).execute();
                             return false;
                         }
                     });
@@ -130,7 +138,7 @@ public class SettingActivity extends AppCompatActivity {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 showObtainingPermissionOverlayWindow();
                             } else {
-                                Toast.makeText(getActivity(), getString(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, getString(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT).show();
                             }
                             return false;
                         }
@@ -141,17 +149,38 @@ public class SettingActivity extends AppCompatActivity {
                         @Override
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
                             LocaleUtils.setLocale(new Locale((String) newValue));
-                            Toast.makeText(getActivity(), getString(R.string.sa_language_changed), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, getString(R.string.sa_language_changed), Toast.LENGTH_LONG).show();
                             return true;
                         }
                     });
                 }
-                if (pref instanceof ListPreference) {
+
+                if (pref instanceof RingtonePreference) {
+                    String ringtone_uri = pref.getSharedPreferences().getString(key, "DEFAULT_NOTIFICATION_URI");
+                    if(ringtone_uri.length() == 0) {
+                        pref.setSummary(silentText);
+                    } else {
+                        Uri ringtoneUri = Uri.parse(ringtone_uri);
+                        Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
+                        String name = ringtone.getTitle(context);
+                        if(RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION) == null) {
+                            String defaultSilentUnknown = RingtoneManager.getRingtone(context, null).getTitle(context);
+                            pref.setSummary(name.replace(defaultSilentUnknown, silentText));
+                        } else {
+                            pref.setSummary(name);
+                        }
+                    }
+                } else if (pref instanceof ListPreference) {
                     ListPreference etp = (ListPreference) pref;
                     pref.setSummary(etp.getEntry());
                 }
-
             }
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            context = getActivity().getApplicationContext();
         }
 
         @TargetApi(Build.VERSION_CODES.M)
@@ -163,6 +192,7 @@ public class SettingActivity extends AppCompatActivity {
         @Override
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == REQUEST_OVERLAY_PERMISSION) {
                 if (Settings.canDrawOverlays(getActivity())) {
                     Toast.makeText(getActivity(), getString(R.string.sa_overlay_ok), Toast.LENGTH_SHORT).show();
@@ -196,11 +226,26 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
             Preference pref = findPreference(key);
-            if (pref instanceof ListPreference) {
+
+            if (pref instanceof RingtonePreference) {
+                String ringtone_uri = pref.getSharedPreferences().getString(key, "DEFAULT_NOTIFICATION_URI");
+                if(ringtone_uri.length() == 0) {
+                    pref.setSummary(silentText);
+                } else {
+                    Uri ringtoneUri = Uri.parse(ringtone_uri);
+                    Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
+                    String name = ringtone.getTitle(context);
+                    if(RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION) == null) {
+                        String defaultSilentUnknown = RingtoneManager.getRingtone(context, null).getTitle(context);
+                        pref.setSummary(name.replace(defaultSilentUnknown, silentText));
+                    } else {
+                        pref.setSummary(name);
+                    }
+                }
+            } else if (pref instanceof ListPreference) {
                 ListPreference etp = (ListPreference) pref;
                 pref.setSummary(etp.getEntry());
             }
-
         }
     }
 
@@ -209,9 +254,9 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private static class getRecentVersion extends AsyncTask<Context, String, String> {
-        Activity context;
+        Context context;
 
-        public getRecentVersion(Activity ctx) {
+        public getRecentVersion(Context ctx) {
             context = ctx;
         }
 

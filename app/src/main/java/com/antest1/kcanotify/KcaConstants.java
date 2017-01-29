@@ -241,6 +241,8 @@ public final class KcaConstants {
     public static final String PREF_OVERLAY_SETTING = "overlay_setting";
     public static final String PREF_KCA_DOWNLOAD_DATA = "download_data";
     public static final String PREF_CHECK_UPDATE = "check_update";
+    public static final String PREF_KCA_NOTI_SOUND_KIND = "notify_sound_kind";
+    public static final String PREF_KCA_NOTI_RINGTONE = "notify_ringtone";
     public static final String PREF_KCA_NOTI_EXP = "notify_expedition";
     public static final String PREF_KCA_NOTI_DOCK = "notify_docking";
     public static final String PREF_KCA_NOTI_V_HD = "notify_vibrate_heavydamaged";
@@ -255,6 +257,8 @@ public final class KcaConstants {
             PREF_KCA_BATTLEVIEW_USE,
             PREF_OVERLAY_SETTING,
             PREF_KCA_DOWNLOAD_DATA,
+            PREF_KCA_NOTI_SOUND_KIND,
+            PREF_KCA_NOTI_RINGTONE,
             PREF_KCA_NOTI_EXP,
             PREF_KCA_NOTI_DOCK,
             PREF_KCA_NOTI_V_HD

@@ -507,22 +507,26 @@ public class KcaBattleViewService extends Service {
                             } else {
                                 ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
                             }
-                            if (kcyomi.equals(getStringWithLocale(R.string.yomi_elite))) {
-                                if (fc_flag || ec_flag) {
-                                    ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText(getStringWithLocale(R.string.yomi_elite_short));
+                            if(kcname.contains("Class")) {
+                                if (kcyomi.equals(getStringWithLocale(R.string.yomi_elite))) {
+                                    if (fc_flag || ec_flag) {
+                                        ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText(getStringWithLocale(R.string.yomi_elite_short));
+                                    } else {
+                                        ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText(kcyomi);
+                                    }
+                                    ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)]))
+                                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorElite));
+                                } else if (kcyomi.equals(getStringWithLocale(R.string.yomi_flagship))) {
+                                    if (fc_flag || ec_flag) {
+                                        ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText(getStringWithLocale(R.string.yomi_flagship_short));
+                                    } else {
+                                        ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText(kcyomi);
+                                    }
+                                    ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)]))
+                                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFlagship));
                                 } else {
-                                    ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText(kcyomi);
+                                    ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText("");
                                 }
-                                ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)]))
-                                        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorElite));
-                            } else if (kcyomi.equals(getStringWithLocale(R.string.yomi_flagship))) {
-                                if (fc_flag || ec_flag) {
-                                    ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText(getStringWithLocale(R.string.yomi_flagship_short));
-                                } else {
-                                    ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText(kcyomi);
-                                }
-                                ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)]))
-                                        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFlagship));
                             }
                         }
                         battleview.findViewById(shipViewList[getEnemyIdx(i)]).setVisibility(View.VISIBLE);
@@ -580,14 +584,18 @@ public class KcaBattleViewService extends Service {
                             }
                             if (!is_practice) {
                                 ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
-                                if (kcyomi.equals(getStringWithLocale(R.string.yomi_elite))) {
-                                    ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText(getStringWithLocale(R.string.yomi_elite_short));
-                                    ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)]))
-                                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorElite));
-                                } else if (kcyomi.equals(getStringWithLocale(R.string.yomi_flagship))) {
-                                    ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText(getStringWithLocale(R.string.yomi_flagship_short));
-                                    ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)]))
-                                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFlagship));
+                                if(kcname.contains("Class")) {
+                                    if (kcyomi.equals(getStringWithLocale(R.string.yomi_elite))) {
+                                        ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText(getStringWithLocale(R.string.yomi_elite_short));
+                                        ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)]))
+                                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorElite));
+                                    } else if (kcyomi.equals(getStringWithLocale(R.string.yomi_flagship))) {
+                                        ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText(getStringWithLocale(R.string.yomi_flagship_short));
+                                        ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)]))
+                                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFlagship));
+                                    } else {
+                                        ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText("");
+                                    }
                                 }
                             }
                             battleview.findViewById(shipCombinedViewList[getEnemyIdx(i)]).setVisibility(View.VISIBLE);
