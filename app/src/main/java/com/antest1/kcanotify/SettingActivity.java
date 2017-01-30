@@ -59,6 +59,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaService.kca_version;
 import static com.antest1.kcanotify.KcaUtils.getLocaleInArray;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -253,7 +254,7 @@ public class SettingActivity extends AppCompatActivity {
         sHandler = h;
     }
 
-    private static class getRecentVersion extends AsyncTask<Context, String, String> {
+    public static class getRecentVersion extends AsyncTask<Context, String, String> {
         Context context;
 
         public getRecentVersion(Context ctx) {
@@ -291,7 +292,7 @@ public class SettingActivity extends AppCompatActivity {
                 return response.body().string();
             } catch (IOException e1) {
                 e1.printStackTrace();
-                return "IOException_Check";
+                return "";
             }
         }
 
@@ -299,7 +300,7 @@ public class SettingActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             if (result == null) {
                 Toast.makeText(context.getApplicationContext(), context.getString(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
-            } else {
+            } else if (result.length() > 0) {
                 Log.e("KCA", "Received: " + result);
                 JsonObject jsonDataObj = new JsonParser().parse(result).getAsJsonObject();
                 if (jsonDataObj.has("version")) {
