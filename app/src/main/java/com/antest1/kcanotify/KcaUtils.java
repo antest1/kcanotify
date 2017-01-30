@@ -8,6 +8,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -164,7 +167,7 @@ public class KcaUtils {
     }
 
     public static boolean[] makeExcludeFlag(int[] list) {
-        boolean[] flag = {false,false,false,false,false,false};
+        boolean[] flag = {false, false, false, false, false, false};
         for (int i = 0; i < list.length; i++) {
             flag[list[i]] = true;
         }
@@ -206,7 +209,7 @@ public class KcaUtils {
 
     public static String getLocaleInArray(Context context, String locale) {
         List<String> localeList = Arrays.asList(context.getResources().getStringArray(R.array.languageOptionValue));
-        if(localeList.contains(locale)) {
+        if (localeList.contains(locale)) {
             return locale;
         } else {
             return "en";
@@ -240,4 +243,23 @@ public class KcaUtils {
             return bc.getResources().getString(id);
         }
     }
+
+    public static void playNotificationSound(Context context, Uri uri) {
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(context, uri);
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
+            mediaPlayer.prepare();
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.release();
+                }
+            });
+            mediaPlayer.start();
+        } catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

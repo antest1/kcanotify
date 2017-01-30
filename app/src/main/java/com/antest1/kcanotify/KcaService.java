@@ -19,6 +19,8 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -604,6 +606,13 @@ public class KcaService extends Service {
                         case HD_DAMECON:
                         case HD_DANGER:
                             if (isHDVibrateEnabled()) {
+                                String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
+                                if (soundKind.equals(getString(R.string.sound_kind_value_normal))) {
+                                    if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                                        Uri notificationUri = Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
+                                        KcaUtils.playNotificationSound(getApplicationContext(), notificationUri);
+                                    }
+                                }
                                 vibrator.vibrate(1500);
                             }
                             if (checkvalue == HD_DANGER) {
@@ -1257,6 +1266,13 @@ public class KcaService extends Service {
             if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {
                 heavyDamagedMode = jsonDataObj.get("data").getAsInt();
                 if (isHDVibrateEnabled()) {
+                    String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
+                    if (soundKind.equals(getString(R.string.sound_kind_value_normal))) {
+                        if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                            Uri notificationUri = Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
+                            KcaUtils.playNotificationSound(getApplicationContext(), notificationUri);
+                        }
+                    }
                     vibrator.vibrate(1500);
                 }
                 if (heavyDamagedMode == HD_DANGER) {
