@@ -214,5 +214,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sound_kind_mute">Mute</string>
     <string name="sound_kind_normal">Sound</string>
     <string name="sound_kind_vibrate">Vibrate</string>
+    <string name="ma_permission_readext_confirmed">Allow Read External Storage: On</string>
+    <string name="ma_permission_readext_denied">Allow Read External Storage: Off (You can use only system notification sound)</string>
 
 </resources>

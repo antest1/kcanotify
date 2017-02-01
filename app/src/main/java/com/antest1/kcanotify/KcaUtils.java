@@ -251,18 +251,15 @@ public class KcaUtils {
         }
     }
 
-    public static void playNotificationSound(Context context, Uri uri) {
-        MediaPlayer mediaPlayer = new MediaPlayer();
+    public static void playNotificationSound(MediaPlayer mediaPlayer, Context context, Uri uri) {
         try {
+            if(mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+            }
             mediaPlayer.setDataSource(context, uri);
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
             mediaPlayer.prepare();
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mp.release();
-                }
-            });
             mediaPlayer.start();
         } catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
             e.printStackTrace();

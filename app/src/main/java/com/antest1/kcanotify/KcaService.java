@@ -102,7 +102,7 @@ public class KcaService extends Service {
 
     AudioManager mAudioManager;
     Vibrator vibrator = null;
-
+    MediaPlayer mediaPlayer;
     NotificationManager notifiManager;
     Builder viewNotificationBuilder;
     BigTextStyle viewNotificationText;
@@ -174,6 +174,15 @@ public class KcaService extends Service {
         loadSimpleExpeditionInfoFromAssets(assetManager);
         KcaExpedition.expeditionData = KcaApiData.kcSimpleExpeditionData;
 
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            public void onCompletion(MediaPlayer mp) {
+                Log.i("Completion Listener","Song Complete");
+                mp.stop();
+                mp.reset();
+            }
+        });
+
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -229,6 +238,9 @@ public class KcaService extends Service {
 
         handler = null;
         nHandler = null;
+
+        mediaPlayer.release();
+        mediaPlayer = null;
 
         stopForeground(true);
         notifiManager.cancelAll();
@@ -607,10 +619,12 @@ public class KcaService extends Service {
                         case HD_DANGER:
                             if (isHDVibrateEnabled()) {
                                 String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
+                                Log.e("KCA", soundKind);
                                 if (soundKind.equals(getString(R.string.sound_kind_value_normal))) {
                                     if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                                        Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
                                         Uri notificationUri = Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
-                                        KcaUtils.playNotificationSound(getApplicationContext(), notificationUri);
+                                        KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
                                     }
                                 }
                                 vibrator.vibrate(1500);
@@ -1270,7 +1284,8 @@ public class KcaService extends Service {
                     if (soundKind.equals(getString(R.string.sound_kind_value_normal))) {
                         if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
                             Uri notificationUri = Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
-                            KcaUtils.playNotificationSound(getApplicationContext(), notificationUri);
+                            Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
+                            KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
                         }
                     }
                     vibrator.vibrate(1500);

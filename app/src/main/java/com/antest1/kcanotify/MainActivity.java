@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG = "KCAV";
     private static final int REQUEST_VPN = 1;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
+    public static final int REQUEST_READEXT_PERMISSION = 3;
 
     public static boolean isKcaServiceOn = false;
     Toolbar toolbar;
@@ -136,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         kcbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(is_kca_installed) {
+                if (is_kca_installed) {
                     startActivity(kcIntent);
                     finish();
                 } else {
@@ -152,6 +157,10 @@ public class MainActivity extends AppCompatActivity {
         ctx = getApplicationContext();
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READEXT_PERMISSION);
+        }
 
         if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -259,6 +268,19 @@ public class MainActivity extends AppCompatActivity {
                 KcaVpnService.start("prepared", this);
             } else if (resultCode == RESULT_CANCELED) {
                 // Canceled
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode) {
+            case REQUEST_READEXT_PERMISSION: {
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, getString(R.string.ma_permission_readext_confirmed), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, getString(R.string.ma_permission_readext_denied), Toast.LENGTH_LONG).show();
+                }
             }
         }
     }

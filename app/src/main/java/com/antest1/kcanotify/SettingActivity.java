@@ -141,6 +141,7 @@ public class SettingActivity extends AppCompatActivity {
                         }
                     });
                 }
+
                 if (key.equals(PREF_KCA_LANGUAGE)) {
                     pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                         @Override
