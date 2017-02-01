@@ -119,6 +119,8 @@ public class KcaVpnData {
                 state = RESPONSE;
                 if (!kcdataflag) {
                     // No Process
+                    responseData = new byte[]{};
+                    requestData = new byte[]{};
                 } else {
                     responseData = Bytes.concat(responseData, data);
                     String responseDataStr = new String(responseData);
@@ -170,8 +172,8 @@ public class KcaVpnData {
                         KcaHandler k = new KcaHandler(handler, requestUri, requestBody, responseBody, false);
                         executorService.execute(k);
 
-                        responseData = null;
-                        requestData = null;
+                        responseData = new byte[]{};
+                        requestData = new byte[]{};
                         isreadyflag = false;
                     }
                 }

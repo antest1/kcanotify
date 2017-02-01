@@ -15,17 +15,16 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.google.common.net.HttpHeaders;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpHeaders;
+
 
 public class KcaHandler implements Runnable {
 	public Handler handler;
 
-	private static final String HTTP_CONTENT_ENCODING = HttpHeaders.Names.CONTENT_ENCODING;
+	private static final String HTTP_CONTENT_ENCODING = HttpHeaders.CONTENT_ENCODING;
 	
 	public static final int BufferSize = 4096;
 	
@@ -33,8 +32,6 @@ public class KcaHandler implements Runnable {
 	public static Map<String, JsonObject> data = new HashMap<String, JsonObject>();
 
 	String url;
-	FullHttpResponse response;
-
 	boolean gzipped;
 	byte[] requestBytes;
 	byte[] responseBytes;

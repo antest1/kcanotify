@@ -16,7 +16,6 @@
 #   public *;
 #}
 
--dontwarn io.netty.**
 -dontwarn okhttp3.**
 -dontwarn okio.**
 -dontwarn org.slf4j.**
@@ -29,7 +28,6 @@
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
 -dontwarn org.apache.log4j.**
--dontwarn org.littleshoot.**
 
 # Jzlib
 -keep class com.jcraft.jzlib.** { *; }

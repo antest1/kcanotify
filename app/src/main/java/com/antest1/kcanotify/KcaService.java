@@ -48,6 +48,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
 import org.xmlpull.v1.XmlPullParser;
@@ -66,7 +67,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import io.netty.handler.codec.http.HttpResponseStatus;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 
@@ -1737,7 +1737,7 @@ public class KcaService extends Service {
                     AjaxCallback<String> cb = new AjaxCallback<String>() {
                         @Override
                         public void callback(String url, String data, AjaxStatus status) {
-                            if (status.getCode() == HttpResponseStatus.OK.code()) {
+                            if (status.getCode() == HttpStatus.SC_OK) {
                                 Toast.makeText(getApplicationContext(), "Data Uploaded", Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(getApplicationContext(), "Error: " + status.getError(), Toast.LENGTH_LONG).show();

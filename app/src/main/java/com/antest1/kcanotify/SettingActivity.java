@@ -1,14 +1,12 @@
 package com.antest1.kcanotify;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -21,7 +19,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.RingtonePreference;
-import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
@@ -38,11 +35,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.apache.commons.httpclient.HttpStatus;
+
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
-import io.netty.handler.codec.http.HttpResponseStatus;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -58,8 +56,6 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaService.kca_version;
-import static com.antest1.kcanotify.KcaUtils.getLocaleInArray;
-import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -378,7 +374,7 @@ public class SettingActivity extends AppCompatActivity {
                 @Override
                 public void callback(String url, String data, AjaxStatus status) {
                     try {
-                        if (status.getCode() == HttpResponseStatus.OK.code()) {
+                        if (status.getCode() == HttpStatus.SC_OK) {
                             KcaUtils.writeCacheData(context, data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
                             KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
                             if (kca_version == null) {
