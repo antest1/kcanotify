@@ -20,6 +20,10 @@ import com.google.common.io.ByteStreams;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+
+import org.apache.commons.httpclient.ChunkedInputStream;
+import org.apache.commons.httpclient.ChunkedOutputStream;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,6 +31,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
@@ -144,19 +150,20 @@ public class KcaUtils {
     }
 
     public static byte[] unchunkdata(byte[] contentBytes) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        int startIdx = 0;
-        for (int i = 0; i < contentBytes.length - 1; i++) {
-            if (contentBytes[i] == '\r' && contentBytes[i + 1] == '\n') {
-                int size = bytetoint(Arrays.copyOfRange(contentBytes, startIdx, i));
-                if (size == 0) break;
-                int dataStart = i + 2;
-                out.write(Arrays.copyOfRange(contentBytes, dataStart, dataStart + size));
-                startIdx = dataStart + size + 2; // \r\n padding
-                i = startIdx - 1;
-            }
+        byte[] unchunkedData = null;
+        byte[] buffer = new byte[1024];
+        ByteArrayInputStream bis = new ByteArrayInputStream(contentBytes);
+        ChunkedInputStream cis = new ChunkedInputStream(bis);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        int read = -1;
+        while((read = cis.read(buffer)) != -1) {
+            bos.write(buffer, 0, read);
         }
-        return out.toByteArray();
+        unchunkedData = bos.toByteArray();
+        bos.close();
+
+        return unchunkedData;
     }
 
     public static String byteArrayToHex(byte[] a) {
