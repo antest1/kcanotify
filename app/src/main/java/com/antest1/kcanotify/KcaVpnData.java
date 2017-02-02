@@ -64,7 +64,6 @@ public class KcaVpnData {
 
     static String requestUri = "";
     static boolean kcdataflag = false;
-    static byte[] datapart;
     static boolean gzipflag = false;
     static boolean chunkflag = false;
     static boolean isreadyflag = false;
@@ -117,71 +116,69 @@ public class KcaVpnData {
                 requestData = Bytes.concat(requestData, data);
             } else if (type == RESPONSE) {
                 state = RESPONSE;
-                if (!kcdataflag) {
-                    // No Process
-                    responseData = new byte[]{};
-                    requestData = new byte[]{};
-                } else {
-                    responseData = Bytes.concat(responseData, data);
-                    String responseDataStr = new String(responseData);
-                    if (responseHeaderPart.length() == 0 && responseDataStr.contains("\r\n\r\n")) {
-                        responseHeaderPart = responseDataStr.split("\r\n\r\n")[0];
-                        String[] headers = responseHeaderPart.split("\r\n");
-                        for (String line : headers) {
-                            if (line.startsWith("Content-Encoding: ")) {
-                                if (line.contains("gzip")) gzipflag = true;
-                                else gzipflag = false;
-                            } else if (line.startsWith("Transfer-Encoding")) {
-                                if (line.contains("chunked")) {
-                                    chunkflag = true;
-                                    responseBodyLength = -1;
-                                } else chunkflag = false;
-                            } else if (line.startsWith("Content-Length")) {
-                                chunkflag = false;
-                                responseBodyLength = Integer.parseInt(line.replaceAll("Content-Length: ", "").trim());
-                            }
+                responseData = Bytes.concat(responseData, data);
+                String responseDataStr = new String(responseData);
+                if (responseHeaderPart.length() == 0 && responseDataStr.contains("\r\n\r\n")) {
+                    responseHeaderPart = responseDataStr.split("\r\n\r\n")[0];
+                    String[] headers = responseHeaderPart.split("\r\n");
+                    for (String line : headers) {
+                        if (line.startsWith("Content-Encoding: ")) {
+                            if (line.contains("gzip")) gzipflag = true;
+                            else gzipflag = false;
+                        } else if (line.startsWith("Transfer-Encoding")) {
+                            if (line.contains("chunked")) {
+                                chunkflag = true;
+                                responseBodyLength = -1;
+                            } else chunkflag = false;
+                        } else if (line.startsWith("Content-Length")) {
+                            chunkflag = false;
+                            responseBodyLength = Integer.parseInt(line.replaceAll("Content-Length: ", "").trim());
                         }
                     }
+                }
 
-                    if (chunkflag && isChunkEnd(responseData)) {
-                        isreadyflag = true;
-                    } else if (responseData.length == responseHeaderPart.length() + 4 + responseBodyLength) {
-                        isreadyflag = true;
+                if (chunkflag && isChunkEnd(responseData)) {
+                    isreadyflag = true;
+                } else if (responseData.length == responseHeaderPart.length() + 4 + responseBodyLength) {
+                    isreadyflag = true;
+                }
+
+                if (isreadyflag) {
+                    String requestStr = new String(requestData);
+                    String[] requestHeadBody = requestStr.split("\r\n\r\n", 2);
+                    byte[] requestBody = new byte[]{};
+                    if (requestHeadBody[1].length() > 0) {
+                        requestBody = requestHeadBody[1].getBytes();
+                    }
+                    Log.e("KCA", String.valueOf(responseData.length));
+                    Log.e("KCA", String.valueOf(responseHeaderPart.length()));
+                    Log.e("KCA", "====================================");
+                    byte[] responseBody = Arrays.copyOfRange(responseData, responseHeaderPart.length() + 4, responseData.length);
+                    if (chunkflag) {
+                        Log.e("KCA", byteArrayToHex(Arrays.copyOfRange(responseBody, 0, 15)));
+                        Log.e("KCA", byteArrayToHex(Arrays.copyOfRange(responseBody, responseBody.length - 15, responseBody.length)));
+                        responseBody = unchunkAllData(responseBody, gzipflag);
+                    } else if (gzipflag) {
+                        responseBody = gzipdecompress(responseBody);
                     }
 
-                    if (isreadyflag) {
-                        String requestStr = new String(requestData);
-                        String[] requestHeadBody = requestStr.split("\r\n\r\n", 2);
-                        byte[] requestBody = new byte[]{};
-                        if (requestHeadBody[1].length() > 0) {
-                            requestBody = requestHeadBody[1].getBytes();
-                        }
-                        Log.e("KCA", String.valueOf(responseData.length));
-                        Log.e("KCA", String.valueOf(responseHeaderPart.length()));
-                        Log.e("KCA", "====================================");
-                        byte[] responseBody = Arrays.copyOfRange(responseData, responseHeaderPart.length() + 4, responseData.length);
-                        if (chunkflag) {
-                            Log.e("KCA", byteArrayToHex(Arrays.copyOfRange(responseBody, 0, 15)));
-                            Log.e("KCA", byteArrayToHex(Arrays.copyOfRange(responseBody, responseBody.length - 15, responseBody.length)));
-                            responseBody = unchunkAllData(responseBody, gzipflag);
-                        } else if (gzipflag) {
-                            responseBody = gzipdecompress(responseBody);
-                        }
-
-                        //Log.e("KCA", String.valueOf(responseData.length));
+                    //Log.e("KCA", String.valueOf(responseData.length));
+                    if(checkKcApi(requestUri)) {
                         KcaHandler k = new KcaHandler(handler, requestUri, requestBody, responseBody, false);
                         executorService.execute(k);
-
-                        responseData = new byte[]{};
-                        requestData = new byte[]{};
-                        isreadyflag = false;
                     }
+
+                    responseData = new byte[]{};
+                    requestData = new byte[]{};
+                    isreadyflag = false;
                 }
             }
         } catch (IOException e) {
+            e.printStackTrace();
             String error_uri = KCA_API_VPN_DATA_ERROR;
             String empty_request = "";
             JsonObject error_data = new JsonObject();
+            error_data.addProperty("error", getStringFromException(e));
             error_data.addProperty("uri", requestUri);
             error_data.addProperty("request", byteArrayToHex(requestData));
             error_data.addProperty("response", byteArrayToHex(responseData));
