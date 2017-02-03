@@ -220,5 +220,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="raid_type4">Perfect LBAS Defense</string>
     <string name="raid_type3">LB Damaged</string>
     <string name="raid_type2">Resources Loss/LB Damaged</string>
+    <string name="getship_label">Drop</string>
+    <string name="getship_none">(None)</string>
+    <string name="setting_menu_kand_title_drop_visible">Show Drop Info</string>
+    <string name="setting_menu_kand_desc_drop_visible">Show dropped ship name in BattleView</string>
+    <string name="getship_max">(Slot is Full)</string>
 
 </resources>

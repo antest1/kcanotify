@@ -52,6 +52,13 @@
             android:summary="@string/setting_menu_kand_desc_overlay_setting"
             android:title="@string/setting_menu_kand_title_overlay_setting" />
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="battleview_use"
+            android:key="showdrop_setting"
+            android:summary="@string/setting_menu_kand_desc_drop_visible"
+            android:title="@string/setting_menu_kand_title_drop_visible" />
+
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_menu_noti_head">
         <ListPreference

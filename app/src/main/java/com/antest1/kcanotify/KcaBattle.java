@@ -729,8 +729,10 @@ public class KcaBattle {
                 }
 
                 JsonObject battleResultInfo = api_data;
-                JsonArray api_afterhps = (JsonArray) new JsonParser().parse(gson.toJson(afterhps));
                 battleResultInfo.addProperty("api_url", url);
+                if(url.equals(API_REQ_PRACTICE_BATTLE_RESULT)) {
+                    battleResultInfo.addProperty("api_practice_flag", true);
+                }
 
                 bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
@@ -1529,14 +1531,14 @@ public class KcaBattle {
 
                 Bundle bundle;
                 Message sMsg;
-                JsonObject battleResultInfo = new JsonObject();
+                JsonObject heavyDamagedInfo = new JsonObject();
                 int checkresult = checkCombinedHeavyDamagedExist();
                 Log.e("KCA", "CheckHeavyDamaged " + String.valueOf(checkresult));
                 if (checkresult != HD_NONE) {
-                    battleResultInfo.addProperty("data", checkresult);
+                    heavyDamagedInfo.addProperty("data", checkresult);
                     bundle = new Bundle();
                     bundle.putString("url", KCA_API_NOTI_HEAVY_DMG);
-                    bundle.putString("data", gson.toJson(battleResultInfo));
+                    bundle.putString("data", gson.toJson(heavyDamagedInfo));
                     sMsg = sHandler.obtainMessage();
                     sMsg.setData(bundle);
                     sHandler.sendMessage(sMsg);
@@ -1560,6 +1562,21 @@ public class KcaBattle {
                 bundle.putString("data", gson.toJson(dropInfo));
                 sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
+                sHandler.sendMessage(sMsg);
+
+                JsonObject battleResultInfo = api_data;
+                battleResultInfo.addProperty("api_url", url);
+                if(url.equals(API_REQ_PRACTICE_BATTLE_RESULT)) {
+                    battleResultInfo.addProperty("api_practice_flag", true);
+                }
+
+                bundle = new Bundle();
+                bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
+                bundle.putString("data", battleResultInfo.toString());
+
+                sMsg = sHandler.obtainMessage();
+                sMsg.setData(bundle);
+
                 sHandler.sendMessage(sMsg);
             }
         } catch (Exception e) {

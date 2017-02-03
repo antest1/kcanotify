@@ -212,5 +212,10 @@
     <string name="raid_type2">자원/기항대 피해 발생</string>
     <string name="raid_type3">기항대 피해 발생</string>
     <string name="raid_type4">완전방공 성공</string>
+    <string name="getship_label">드롭</string>
+    <string name="getship_none">(없음)</string>
+    <string name="setting_menu_kand_title_drop_visible">함선 드랍 정보 표시</string>
+    <string name="setting_menu_kand_desc_drop_visible">전투예보에서 드랍된 칸무스 이름 표시</string>
+    <string name="getship_max">(슬롯 여유 없음)</string>
 
 </resources>

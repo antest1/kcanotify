@@ -47,6 +47,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
+import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
@@ -238,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_KCA_NOTI_EXP:
                     case PREF_KCA_BATTLEVIEW_USE:
                     case PREF_KCA_NOTI_V_HD:
+                    case PREF_SHOWDROP_SETTING:
                         editor.putBoolean(prefKey, true);
                         break;
                     case PREF_KCA_LANGUAGE:
