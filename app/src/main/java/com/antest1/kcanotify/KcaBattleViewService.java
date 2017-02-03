@@ -262,6 +262,40 @@ public class KcaBattleViewService extends Service {
                     ((TextView) battleview.findViewById(R.id.battle_result))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorNone));
                 }
+
+                if(api_data.has("api_destruction_battle")) {
+                    JsonObject api_destruction_battle = api_data.getAsJsonObject("api_destruction_battle");
+                    int api_lost_kind = api_destruction_battle.get("api_lost_kind").getAsInt();
+                    switch(api_lost_kind) {
+                        case RAID_LOST_TYPE_1:
+                            ((TextView) battleview.findViewById(R.id.battle_result)).setText(getString(R.string.raid_type1));
+                            ((TextView) battleview.findViewById(R.id.battle_result))
+                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRaidDamaged));
+                            break;
+                        case RAID_LOST_TYPE_2:
+                            ((TextView) battleview.findViewById(R.id.battle_result)).setText(getString(R.string.raid_type2));
+                            ((TextView) battleview.findViewById(R.id.battle_result))
+                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRaidHeavyDamaged));
+                            break;
+                        case RAID_LOST_TYPE_3:
+                            ((TextView) battleview.findViewById(R.id.battle_result)).setText(getString(R.string.raid_type3));
+                            ((TextView) battleview.findViewById(R.id.battle_result))
+                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRaidDamaged));
+                            break;
+                        case RAID_LOST_TYPE_4:
+                            ((TextView) battleview.findViewById(R.id.battle_result)).setText(getString(R.string.raid_type4));
+                            ((TextView) battleview.findViewById(R.id.battle_result))
+                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRaidNoDamaged));
+                            break;
+                        default:
+                            break;
+                    }
+                    JsonObject api_air_based_attack = api_destruction_battle.getAsJsonObject("api_air_based_attack");
+                    int api_disp_seiku = api_air_based_attack.getAsJsonObject("api_stage1").get("api_disp_seiku").getAsInt();
+                    ((TextView) battleview.findViewById(R.id.battle_airpower))
+                            .setText(getAirForceResultString(contextWithLocale, api_disp_seiku));
+                }
+
                 switch (api_color_no) {
                     case 2:
                         battleview.findViewById(R.id.battle_node)

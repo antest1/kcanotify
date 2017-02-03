@@ -216,5 +216,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sound_kind_vibrate">Vibrate</string>
     <string name="ma_permission_readext_confirmed">Allow Read External Storage: On</string>
     <string name="ma_permission_readext_denied">Allow Read External Storage: Off (You can use only system notification sound)</string>
+    <string name="raid_type1">Resources Loss</string>
+    <string name="raid_type4">Perfect LBAS Defense</string>
+    <string name="raid_type3">LB Damaged</string>
+    <string name="raid_type2">Resources Loss/LB Damaged</string>
 
 </resources>

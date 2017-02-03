@@ -208,5 +208,9 @@
     <string name="sound_kind_mute">무음</string>
     <string name="ma_permission_readext_confirmed">파일 읽기 권한이 설정되었습니다.</string>
     <string name="ma_permission_readext_denied">읽기 권한이 설정되지 않았습니다. (시스템 알림음만 사용 가능)</string>
+    <string name="raid_type1">자원 피해 발생</string>
+    <string name="raid_type2">자원/기항대 피해 발생</string>
+    <string name="raid_type3">기항대 피해 발생</string>
+    <string name="raid_type4">완전방공 성공</string>
 
 </resources>

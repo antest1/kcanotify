@@ -209,6 +209,11 @@ public final class KcaConstants {
     public static final int AIR_DENIAL = 3;
     public static final int AIR_INCAPABILITY = 4;
 
+    public static final int RAID_LOST_TYPE_1 = 1;
+    public static final int RAID_LOST_TYPE_2 = 2;
+    public static final int RAID_LOST_TYPE_3 = 3;
+    public static final int RAID_LOST_TYPE_4 = 4;
+
     public static final int JUDGE_E = 0;
     public static final int JUDGE_D = 1;
     public static final int JUDGE_C = 2;
