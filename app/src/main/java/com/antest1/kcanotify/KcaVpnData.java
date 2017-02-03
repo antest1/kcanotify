@@ -116,9 +116,9 @@ public class KcaVpnData {
                 requestData = Bytes.concat(requestData, data);
             } else if (type == RESPONSE) {
                 state = RESPONSE;
-                responseData = Bytes.concat(responseData, data);
-                String responseDataStr = new String(responseData);
-                if (responseHeaderPart.length() == 0 && responseDataStr.contains("\r\n\r\n")) {
+                if (responseHeaderPart.length() == 0) {
+                    responseData = new byte[]{};
+                    String responseDataStr = new String(data);
                     responseHeaderPart = responseDataStr.split("\r\n\r\n")[0];
                     String[] headers = responseHeaderPart.split("\r\n");
                     for (String line : headers) {
@@ -136,7 +136,7 @@ public class KcaVpnData {
                         }
                     }
                 }
-
+                responseData = Bytes.concat(responseData, data);
                 if (chunkflag && isChunkEnd(responseData)) {
                     isreadyflag = true;
                 } else if (responseData.length == responseHeaderPart.length() + 4 + responseBodyLength) {
@@ -167,7 +167,7 @@ public class KcaVpnData {
                         KcaHandler k = new KcaHandler(handler, requestUri, requestBody, responseBody, false);
                         executorService.execute(k);
                     }
-
+                    requestUri = "";
                     responseData = new byte[]{};
                     requestData = new byte[]{};
                     isreadyflag = false;
