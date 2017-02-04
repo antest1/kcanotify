@@ -398,11 +398,16 @@ public class KcaService extends Service {
         int[] airPowerRange = KcaDeckInfo.getAirPowerRange(currentPortDeckData, 0, null);
         String airPowerValue = String.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
         String seekValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, KcaDeckInfo.getSeekValue(currentPortDeckData, 0, cn, null));
+        int[] tp = KcaDeckInfo.getTPValue(currentPortDeckData, 0, null);
+        String tpValue = String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[0], tp[1]);
         List<String> toastList = new ArrayList<String>();
         if (airPowerRange[1] > 0) {
             toastList.add(airPowerValue);
         }
         toastList.add(seekValue);
+        if (tp[0] > 0) {
+            toastList.add(tpValue);
+        }
         Toast.makeText(getApplicationContext(), joinStr(toastList, " / "), Toast.LENGTH_LONG).show();
     }
 
@@ -1484,6 +1489,7 @@ public class KcaService extends Service {
             seekValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, KcaDeckInfo.getSeekValue(data, 0, cn, null));
 
         }
+
         infoData = new JsonObject();
         infoData.addProperty("is_portrait_newline", 0);
         infoData.addProperty("portrait_value", seekValue);
@@ -1521,14 +1527,30 @@ public class KcaService extends Service {
         infoData = new JsonObject();
         infoData.addProperty("is_portrait_newline", 1);
         infoData.addProperty("portrait_value", speedStringValue);
-        infoData.addProperty("landscape_value", speedStringValue.concat(getStringWithLocale(R.string.speed_postfix)));
+        //infoData.addProperty("landscape_value", speedStringValue.concat(getStringWithLocale(R.string.speed_postfix)));
+        infoData.addProperty("landscape_value", speedStringValue);
         deckInfoData.add(infoData);
 
-        String conditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, 0));
+        String firstConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, 0));
+        infoData = new JsonObject();
+        infoData.addProperty("is_portrait_newline", 1);
+        infoData.addProperty("portrait_value", firstConditionValue);
+        infoData.addProperty("landscape_value", firstConditionValue);
+        deckInfoData.add(infoData);
+        /*
+        String secondConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, 1));
+        infoData = new JsonObject();
+        infoData.addProperty("is_portrait_newline", 1);
+        infoData.addProperty("portrait_value", secondConditionValue);
+        infoData.addProperty("landscape_value", secondConditionValue);
+        deckInfoData.add(infoData);
+        */
+        int[] tp = KcaDeckInfo.getTPValue(data, 0, null);
+        String tpValue = String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[0], tp[1]);
         infoData = new JsonObject();
         infoData.addProperty("is_portrait_newline", 0);
-        infoData.addProperty("portrait_value", conditionValue);
-        infoData.addProperty("landscape_value", conditionValue);
+        infoData.addProperty("portrait_value", tpValue);
+        infoData.addProperty("landscape_value", tpValue);
         deckInfoData.add(infoData);
 
         kcaFirstDeckInfo = gson.toJson(deckInfoData);

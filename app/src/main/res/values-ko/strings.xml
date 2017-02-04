@@ -99,6 +99,7 @@
     <string name="kca_toast_airpower" formatted="false">제공: %d-%d</string>
     <string name="kca_toast_seekvalue_d" formatted="false">색적(%s): %d</string>
     <string name="kca_toast_seekvalue_f" formatted="false">색적(%s): %.2f</string>
+    <string name="kca_toast_tpvalue" formatted="false">TP: %d/%d</string>
 
     <string name="kca_toast_restart_at_kcanotify">깡들리티에서 게임을 다시 시작해주세요</string>
     <string name="kca_toast_get_data_at_settings">깡들리티 설정에서 게임 데이터를 받아주세요</string>
@@ -217,5 +218,7 @@
     <string name="setting_menu_kand_title_drop_visible">함선 드랍 정보 표시</string>
     <string name="setting_menu_kand_desc_drop_visible">전투예보에서 드랍된 칸무스 이름 표시</string>
     <string name="getship_max">(슬롯 여유 없음)</string>
+    <string name="kca_view_tpvalue" formatted="false" >TP: %d/%d</string>
+    <string name="ship_name_class">급</string>
 
 </resources>

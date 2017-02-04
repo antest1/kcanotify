@@ -38,9 +38,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_fastplus">Fast+</string>
     <string name="speed_fast">Fast</string>
     <string name="speed_slow">Slow</string>
-    <string name="speed_mixed_normal">Mixed(Slow)</string>
-    <string name="speed_mixed_fast">Mixed(Fast)</string>
-    <string name="speed_mixed_fastplus">Mixed(Fast+)</string>
+    <string name="speed_mixed_normal">Mixed(S)</string>
+    <string name="speed_mixed_fast">Mixed(F)</string>
+    <string name="speed_mixed_fastplus">Mixed(F+)</string>
     <string name="speed_none">\?\?</string>
     <string name="speed_postfix">&#160;Fleet</string>
 
@@ -107,6 +107,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_toast_airpower" formatted="false">FP: %d-%d</string>
     <string name="kca_toast_seekvalue_d" formatted="false">LoS(%s): %d</string>
     <string name="kca_toast_seekvalue_f" formatted="false">LoS(%s): %.2f</string>
+    <string name="kca_toast_tpvalue" formatted="false">TP: %d/%d</string>
 
     <string name="kca_toast_restart_at_kcanotify">Please restart the game using kcanotify.</string>
     <string name="kca_toast_get_data_at_settings">Download game data using kcanotify Settings.</string>
@@ -225,5 +226,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_drop_visible">Show Drop Info</string>
     <string name="setting_menu_kand_desc_drop_visible">Show dropped ship name in BattleView</string>
     <string name="getship_max">(Slot is Full)</string>
+    <string name="kca_view_tpvalue" formatted="false" >TP: %d/%d</string>
+    <string name="ship_name_class">Class</string>
 
 </resources>

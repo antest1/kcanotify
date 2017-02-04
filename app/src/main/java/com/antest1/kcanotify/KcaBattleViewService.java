@@ -552,7 +552,7 @@ public class KcaBattleViewService extends Service {
                             } else {
                                 ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
                             }
-                            if (kcname.contains("Class")) {
+                            if (kcname.contains(getStringWithLocale(R.string.ship_name_class))) {
                                 if (kcyomi.equals(getStringWithLocale(R.string.yomi_elite))) {
                                     if (fc_flag || ec_flag) {
                                         ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText(getStringWithLocale(R.string.yomi_elite_short));
@@ -625,7 +625,7 @@ public class KcaBattleViewService extends Service {
                             ((TextView) battleview.findViewById(shipLevelCombinedViewList[getEnemyIdx(i)])).setText(makeLvString(level));
 
                             ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
-                            if (kcname.contains("Class")) {
+                            if (kcname.contains(getStringWithLocale(R.string.ship_name_class))) {
                                 if (kcyomi.equals(getStringWithLocale(R.string.yomi_elite))) {
                                     ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText(getStringWithLocale(R.string.yomi_elite_short));
                                     ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)]))

@@ -62,6 +62,30 @@ public class KcaApiData {
     public static Handler sHandler = null;
     public static boolean isEventTime = false;
 
+    // Ship Type Constants (api_stype)
+    public static final int STYPE_ES = 1;
+    public static final int STYPE_DD = 2;
+    public static final int STYPE_CL = 3;
+    public static final int STYPE_CLT = 4;
+    public static final int STYPE_CA = 5;
+    public static final int STYPE_CAV = 6;
+    public static final int STYPE_CVL = 7;
+    public static final int STYPE_FBB = 8;
+    public static final int STYPE_BB = 9;
+    public static final int STYPE_BBV = 10;
+    public static final int STYPE_CV = 11;
+    public static final int STYPE_XBB = 12;
+    public static final int STYPE_SS = 13;
+    public static final int STYPE_SSV = 14;
+    public static final int STYPE_AP = 15;
+    public static final int STYPE_AV = 16;
+    public static final int STYPE_LHA = 17;
+    public static final int STYPE_CVB = 18;
+    public static final int STYPE_AR = 19;
+    public static final int STYPE_AS = 20;
+    public static final int STYPE_CT= 21;
+    public static final int STYPE_AO = 22;
+
 
     // Equipment Constants (api_type 2)
     public static final int T2_GUN_SMALL = 1;
