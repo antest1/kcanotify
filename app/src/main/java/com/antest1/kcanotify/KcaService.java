@@ -75,6 +75,7 @@ import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.isUserItemDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadItemTranslationDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.setDataLoadTriggered;
@@ -179,10 +180,10 @@ public class KcaService extends Service {
             Toast.makeText(this, "Error loading Translation Info", Toast.LENGTH_LONG).show();
         }
 
-
-
         loadSimpleExpeditionInfoFromAssets(assetManager);
         KcaExpedition.expeditionData = KcaApiData.kcSimpleExpeditionData;
+
+        loadShipInitEquipCountFromAssets(assetManager);
 
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -579,7 +580,6 @@ public class KcaService extends Service {
                     isPortAccessed = true;
                     heavyDamagedMode = HD_NONE;
                     currentNode = "";
-                    KcaApiData.resetShipCountInBattle();
                     Log.e("KCA", "Port Handler Called");
                     if (jsonDataObj.has("api_data")) {
                         JsonObject reqPortApiData = jsonDataObj.getAsJsonObject("api_data");

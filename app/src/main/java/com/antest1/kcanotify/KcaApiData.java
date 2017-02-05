@@ -50,6 +50,7 @@ public class KcaApiData {
     public static int maxShipSize = 0;
     public static int maxItemSize = 0;
     public static int getShipCountInBattle = 0;
+    public static int getItemCountInBattle = 0;
 
     public static JsonObject mapEdgeInfo = new JsonObject();
     public static int[] eventMapDifficulty = new int[10];
@@ -59,7 +60,7 @@ public class KcaApiData {
 
     public static JsonObject kcShipAbbrData = new JsonObject(); // For English
     public static JsonArray kcSimpleExpeditionData = new JsonArray();
-
+    public static JsonObject kcShipInitEquipCount = new JsonObject();
 
     public static Handler sHandler = null;
     public static boolean isEventTime = false;
@@ -256,9 +257,22 @@ public class KcaApiData {
     public static void addShipCountInBattle() {
         getShipCountInBattle += 1;
     }
+    public static void addItemCountInBattle(int ship_id) {
+        if (kcShipInitEquipCount != null) {
+            String ship_id_str = String.valueOf(ship_id);
+            int item_count = 0;
+            if (kcShipInitEquipCount.has(ship_id_str)) {
+                item_count = kcShipInitEquipCount.get(ship_id_str).getAsInt();
+            }
+            getItemCountInBattle += item_count;
+        }
+    }
 
     public static void resetShipCountInBattle() {
         getShipCountInBattle = 0;
+    }
+    public static void resetItemCountInBattle() {
+        getItemCountInBattle = 0;
     }
 
     public static boolean checkUserShipMax() {
@@ -266,7 +280,8 @@ public class KcaApiData {
     }
 
     public static boolean checkUserItemMax() {
-        return maxItemSize == userItemData.size();
+        Log.e("KCA", String.format("Item: %d - %d", maxItemSize, userItemData.size()));
+        return maxItemSize <= (userItemData.size() + getItemCountInBattle);
     }
 
     public static boolean checkUserPortEnough() {
@@ -406,6 +421,24 @@ public class KcaApiData {
             JsonElement data = new JsonParser().parse(new String(bytes));
             if (data.isJsonArray()) {
                 kcSimpleExpeditionData = data.getAsJsonArray();
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
+    public static int loadShipInitEquipCountFromAssets(AssetManager am) {
+        try {
+            AssetManager.AssetInputStream ais =
+                    (AssetManager.AssetInputStream) am.open("ships_init_equip_count.json");
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            Log.e("KCA", new String(bytes));
+            JsonElement data = new JsonParser().parse(new String(bytes));
+            if (data.isJsonObject()) {
+                kcShipInitEquipCount = data.getAsJsonObject();
                 return 1;
             } else {
                 return -1;

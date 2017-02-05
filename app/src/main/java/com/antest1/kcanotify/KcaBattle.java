@@ -344,6 +344,8 @@ public class KcaBattle {
         try {
             // Log.e("KCA", "processData: "+url );
             if (url.equals(API_REQ_MAP_START)) {
+                KcaApiData.resetShipCountInBattle();
+                KcaApiData.resetItemCountInBattle();
                 int checkresult = startHeavyDamageExist;
                 if (checkresult != HD_NONE) {
                     JsonObject battleResultInfo = new JsonObject();
@@ -716,6 +718,7 @@ public class KcaBattle {
                             int api_ship_id = api_data.getAsJsonObject("api_get_ship").get("api_ship_id").getAsInt();
                             dropInfo.addProperty("result", api_ship_id);
                             KcaApiData.addShipCountInBattle();
+                            KcaApiData.addItemCountInBattle(api_ship_id);
                         } else {
                             dropInfo.addProperty("result", 0);
                         }
@@ -1554,6 +1557,7 @@ public class KcaBattle {
                     int api_ship_id = api_data.getAsJsonObject("api_get_ship").get("api_ship_id").getAsInt();
                     dropInfo.addProperty("result", api_ship_id);
                     KcaApiData.addShipCountInBattle();
+                    KcaApiData.addItemCountInBattle(api_ship_id);
                 } else {
                     dropInfo.addProperty("result", 0);
                 }
