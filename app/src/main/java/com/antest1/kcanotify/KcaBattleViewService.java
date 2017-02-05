@@ -391,13 +391,15 @@ public class KcaBattleViewService extends Service {
                 if (deckportdata != null) {
                     JsonArray deckData = deckportdata.getAsJsonArray("api_deck_data");
                     JsonArray portData = deckportdata.getAsJsonArray("api_ship_data");
+                    friendShipData = new JsonArray();
+                    friendCombinedShipData = new JsonArray();
+
                     for (int i = 7; i < 13; i++) {
                         battleview.findViewById(shipViewList[i]).setVisibility(View.INVISIBLE);
                         battleview.findViewById(shipCombinedViewList[i]).setVisibility(View.INVISIBLE);
                     }
                     for (int i = 0; i < deckData.size(); i++) {
                         if (i == 0) {
-                            friendShipData = new JsonArray();
                             JsonObject mainDeckData = deckData.get(i).getAsJsonObject();
                             ((TextView) battleview.findViewById(R.id.friend_fleet_name)).
                                     setText(mainDeckData.get("api_name").getAsString());
@@ -457,7 +459,6 @@ public class KcaBattleViewService extends Service {
                                 }
                             }
                         } else if (i == 1) { // TODO: CHECK NEEDED
-                            friendCombinedShipData = new JsonArray();
                             JsonObject combinedDeckData = deckData.get(i).getAsJsonObject();
                             ((TextView) battleview.findViewById(R.id.friend_combined_fleet_name)).
                                     setText(combinedDeckData.get("api_name").getAsString());
@@ -861,7 +862,6 @@ public class KcaBattleViewService extends Service {
     public void setItemViewLayout(int id) {
         if (id == -1) return;
         int realID = id - 1;
-        Log.e("KCA", "realID: " + String.valueOf(realID));
         JsonObject data;
         boolean friendflag = false;
         if (realID < 20) { // Main
@@ -1152,20 +1152,25 @@ public class KcaBattleViewService extends Service {
                 case MotionEvent.ACTION_DOWN:
                     if(!isTouchDown) {
                         isTouchDown = true;
-                        setItemViewLayout(getshipidx(v.getId()));
-                        itemViewParams = new WindowManager.LayoutParams(
-                                WindowManager.LayoutParams.WRAP_CONTENT,
-                                WindowManager.LayoutParams.WRAP_CONTENT,
-                                WindowManager.LayoutParams.TYPE_PHONE,
-                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                                PixelFormat.TRANSLUCENT);
-                        itemViewParams.x = (int) (event.getRawX() + xMargin);
-                        itemViewParams.y = (int) event.getRawY();
-                        itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
-                        if (itemView.getParent() != null) {
-                            mManager.updateViewLayout(itemView, itemViewParams);
-                        } else {
-                            mManager.addView(itemView, itemViewParams);
+                        try {
+                            setItemViewLayout(getshipidx(v.getId()));
+                            itemViewParams = new WindowManager.LayoutParams(
+                                    WindowManager.LayoutParams.WRAP_CONTENT,
+                                    WindowManager.LayoutParams.WRAP_CONTENT,
+                                    WindowManager.LayoutParams.TYPE_PHONE,
+                                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                    PixelFormat.TRANSLUCENT);
+                            itemViewParams.x = (int) (event.getRawX() + xMargin);
+                            itemViewParams.y = (int) event.getRawY();
+                            itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
+                            if (itemView.getParent() != null) {
+                                mManager.updateViewLayout(itemView, itemViewParams);
+                            } else {
+                                mManager.addView(itemView, itemViewParams);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            sendReport(e);
                         }
                     }
                     Log.e("KCA", "ACTION_DOWN");
