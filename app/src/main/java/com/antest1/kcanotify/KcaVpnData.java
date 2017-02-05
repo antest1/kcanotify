@@ -181,7 +181,12 @@ public class KcaVpnData {
             error_data.addProperty("error", getStringFromException(e));
             error_data.addProperty("uri", requestUri);
             error_data.addProperty("request", byteArrayToHex(requestData));
-            error_data.addProperty("response", byteArrayToHex(responseData));
+            String responseDataStr = byteArrayToHex(responseData);
+            if (responseDataStr.length() > 240) {
+                error_data.addProperty("response", responseDataStr.substring(0, 240));
+            } else {
+                error_data.addProperty("response", responseDataStr);
+            }
             KcaHandler k = new KcaHandler(handler, error_uri, empty_request.getBytes(), error_data.toString().getBytes(), false);
             executorService.execute(k);
             Log.e("KCA", getStringFromException(e));
