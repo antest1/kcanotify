@@ -630,7 +630,7 @@ public class KcaApiData {
 
     public static boolean isItemAircraft(int id) {
         int result = Arrays.binarySearch(T2LIST_AIRCRAFTS, id);
-        if (result > 0) return true;
+        if (result > -1) return true;
         else return false;
     }
 
