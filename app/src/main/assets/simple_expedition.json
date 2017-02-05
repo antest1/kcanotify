@@ -159,13 +159,11 @@
     "name-en": "Seafaring Training",
     "time": "1440"
 }, {
-    "-special": "1",
     "no": "33",
     "name-ko": "전방지원함대",
     "name-en": "Vanguard Support Missions (1)",
     "time": "15"
 }, {
-    "-special": "1",
     "no": "34",
     "name-ko": "함대결전지원임무",
     "name-en": "Vangard Support Missions (2)",
@@ -200,4 +198,14 @@
     "name-ko": "수상기전선운송",
     "name-en": "Seaplane Delivery on the Front Lines",
     "time": "410"
+}, {
+    "no": "133",
+    "name-ko": "[E]전방지원함대",
+    "name-en": "[E] Vanguard Support Missions (1)",
+    "time": "15"
+}, {
+    "no": "134",
+    "name-ko": "[E] 함대결전지원임무",
+    "name-en": "[E] Vangard Support Missions (2)",
+    "time": "30"
 }]
