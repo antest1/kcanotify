@@ -685,8 +685,11 @@ public class KcaService extends Service {
                                 KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
                             }
                         }
-                        boolean mcondition = soundKind.equals(getString(R.string.sound_kind_value_mute));
-                        if(!mcondition || (mcondition && ((isHeavyDamagedFlag && isHDVibrateEnabled()) || (isNotSuppliedFlag && isNSVibrateEnabled())))) {
+                        boolean mcondition = !soundKind.equals(getString(R.string.sound_kind_value_mute));
+                        boolean hcondition = (isHeavyDamagedFlag && isHDVibrateEnabled());
+                        boolean ncondition = (isNotSuppliedFlag && isNSVibrateEnabled());
+
+                        if(mcondition || hcondition || ncondition) {
                             vibrator.vibrate(1500);
                         }
                         Toast.makeText(getApplicationContext(), message.trim(), Toast.LENGTH_LONG).show();
