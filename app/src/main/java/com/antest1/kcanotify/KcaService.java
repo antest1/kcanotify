@@ -73,6 +73,7 @@ import okhttp3.OkHttpClient;
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.isUserItemDataLoaded;
+import static com.antest1.kcanotify.KcaApiData.loadItemTranslationDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
@@ -97,6 +98,7 @@ public class KcaService extends Service {
     public static String currentNode = "";
     public static String currentNodeInfo = "";
     public static boolean isInBattle;
+    public static boolean isCombined;
 
     Context contextWithLocale;
 
@@ -123,7 +125,7 @@ public class KcaService extends Service {
     static String kca_version;
     String api_start2_data = null;
     boolean api_start2_down_mode = false;
-    JsonArray currentPortDeckData = null;
+    public JsonArray currentPortDeckData = null;
     Gson gson = new Gson();
 
     public static boolean getServiceStatus() {
@@ -170,6 +172,14 @@ public class KcaService extends Service {
         if (loadShipTranslationDataResult != 1) {
             Toast.makeText(this, "Error loading Translation Info", Toast.LENGTH_LONG).show();
         }
+
+        int loadItemTranslationDataResult = loadItemTranslationDataFromAssets(assetManager,
+                getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
+        if (loadItemTranslationDataResult != 1) {
+            Toast.makeText(this, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+        }
+
+
 
         loadSimpleExpeditionInfoFromAssets(assetManager);
         KcaExpedition.expeditionData = KcaApiData.kcSimpleExpeditionData;
@@ -589,6 +599,7 @@ public class KcaService extends Service {
                         }
                         if (reqPortApiData.has("api_combined_flag")) {
                             int combined_flag = reqPortApiData.get("api_combined_flag").getAsInt();
+                            isCombined = (combined_flag > 0);
                             if (combined_flag > 0) {
                                 KcaBattle.isCombined = true;
                             } else {
@@ -604,62 +615,85 @@ public class KcaService extends Service {
 
                 }
 
-                if (url.startsWith(API_GET_MEMBER_MAPINFO)) {
-                    int firstHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 0);
-                    int secondHeavyDamaged = 0;
-                    if (currentPortDeckData.size() >= 2) {
-                        secondHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 1);
-                    }
-
-                    int checkvalue = 0;
-                    if (KcaApiData.isEventTime) {
-                        checkvalue = Math.max(firstHeavyDamaged, secondHeavyDamaged);
-                    } else {
-                        checkvalue = firstHeavyDamaged;
-                    }
-
-                    KcaBattle.setStartHeavyDamageExist(checkvalue);
-                    switch (checkvalue) {
-                        case HD_DAMECON:
-                        case HD_DANGER:
-                            if (isHDVibrateEnabled()) {
-                                String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-                                Log.e("KCA", soundKind);
-                                if (soundKind.equals(getString(R.string.sound_kind_value_normal))) {
-                                    if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                                        Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
-                                        Uri notificationUri = Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
-                                        KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
-                                    }
+                if (url.startsWith(API_GET_MEMBER_MAPINFO) || url.startsWith(API_GET_MEMBER_MISSION)) {
+                    // Event Check Part
+                    // TODO: add handler for selecting event map rank
+                    if (url.startsWith(API_GET_MEMBER_MAPINFO) && jsonDataObj.has("api_data")) {
+                        if (isHDVibrateEnabled()) {
+                            JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                            JsonArray api_map_info = api_data.getAsJsonArray("api_map_info");
+                            int eventMapCount = 0;
+                            for (JsonElement map : api_map_info) {
+                                JsonObject mapData = map.getAsJsonObject();
+                                if (mapData.has("api_eventmap")) {
+                                    eventMapCount += 1;
+                                    KcaApiData.setEventMapDifficulty(eventMapCount, mapData.get("api_selected_rank").getAsInt());
                                 }
-                                vibrator.vibrate(1500);
-                            }
-                            if (checkvalue == HD_DANGER) {
-                                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.heavy_damaged), Toast.LENGTH_LONG).show();
-                            } else if (checkvalue == HD_DAMECON) {
-                                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG).show();
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-
-                    setFrontViewNotifier(FRONT_NONE, 0, null);
-
-                    if (jsonDataObj.has("api_data")) {
-                        JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
-                        JsonArray api_map_info = api_data.getAsJsonArray("api_map_info");
-                        int eventMapCount = 0;
-                        for (JsonElement map : api_map_info) {
-                            JsonObject mapData = map.getAsJsonObject();
-                            if (mapData.has("api_eventmap")) {
-                                eventMapCount += 1;
-                                KcaApiData.setEventMapDifficulty(eventMapCount, mapData.get("api_selected_rank").getAsInt());
                             }
                         }
                     }
+
+                    // Notification Part
+                    String message = "";
+                    boolean isHeavyDamagedFlag = false;
+                    boolean isNotSuppliedFlag = false;
+
+                    for(int i=0; i<currentPortDeckData.size(); i++) {
+                        if(url.startsWith(API_GET_MEMBER_MISSION) && i==0) continue;
+                        if(KcaDeckInfo.checkNotSuppliedExist(currentPortDeckData, i)) {
+                            isNotSuppliedFlag = true;
+                            message = message.concat(String.format(getStringWithLocale(R.string.not_supplied), i+1)).concat("\n");
+                        }
+                    }
+
+                    if(url.startsWith(API_GET_MEMBER_MAPINFO)) {
+                        int firstHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 0);
+                        int secondHeavyDamaged = 0;
+                        if (currentPortDeckData.size() >= 2) {
+                            secondHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 1);
+                        }
+
+                        int checkvalue = 0;
+                        if (KcaApiData.isEventTime) {
+                            checkvalue = Math.max(firstHeavyDamaged, secondHeavyDamaged);
+                        } else {
+                            checkvalue = firstHeavyDamaged;
+                        }
+
+                        KcaBattle.setStartHeavyDamageExist(checkvalue);
+                        switch (checkvalue) {
+                            case HD_DAMECON:
+                            case HD_DANGER:
+                                isHeavyDamagedFlag = true;
+                                if (checkvalue == HD_DANGER) {
+                                    message = message.concat(getStringWithLocale(R.string.heavy_damaged)).concat("\n");
+                                } else if (checkvalue == HD_DAMECON) {
+                                    message = message.concat(getStringWithLocale(R.string.heavy_damaged_damecon)).concat("\n");
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    if (message.length() > 0) {
+                        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
+                        if (soundKind.equals(getString(R.string.sound_kind_value_normal))) {
+                            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                                Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
+                                Uri notificationUri = Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
+                                KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
+                            }
+                        }
+                        boolean mcondition = soundKind.equals(getString(R.string.sound_kind_value_mute));
+                        if(!mcondition || (mcondition && ((isHeavyDamagedFlag && isHDVibrateEnabled()) || (isNotSuppliedFlag && isNSVibrateEnabled())))) {
+                            vibrator.vibrate(1500);
+                        }
+                        Toast.makeText(getApplicationContext(), message.trim(), Toast.LENGTH_LONG).show();
+                    }
+
+                    setFrontViewNotifier(FRONT_NONE, 0, null);
                 }
-                // TODO: add handler for selecting event map rank
 
                 if (API_BATTLE_REQS.contains(url)) {
                     if (jsonDataObj.has("api_data")) {
@@ -1419,6 +1453,10 @@ public class KcaService extends Service {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_V_HD);
     }
 
+    private boolean isNSVibrateEnabled() {
+        return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_V_NS);
+    }
+
     private String getSeekType() {
         int cn = Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
         String seekType = "";
@@ -1477,26 +1515,35 @@ public class KcaService extends Service {
         if (airPowerRange[0] > 0 && airPowerRange[1] > 0) {
             airPowerValue = String.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
             infoData = new JsonObject();
-            infoData.addProperty("is_portrait_newline", 0);
+            infoData.addProperty("is_newline", 0);
             infoData.addProperty("portrait_value", airPowerValue);
             infoData.addProperty("landscape_value", airPowerValue);
             deckInfoData.add(infoData);
         }
-        String seekValue = "";
+
+        double seekValue = 0;
+        String seekStringValue = "";
+        seekValue = KcaDeckInfo.getSeekValue(data, 0, cn, null);
+        if(isCombined) seekValue += KcaDeckInfo.getSeekValue(data, 1, cn, null);
         if (cn == SEEK_PURE) {
-            seekValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), seekType, (int) KcaDeckInfo.getSeekValue(data, 0, cn, null));
+            seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), seekType, (int)seekValue);
         } else {
-            seekValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, KcaDeckInfo.getSeekValue(data, 0, cn, null));
-
+            seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, seekValue);
         }
-
         infoData = new JsonObject();
+        infoData.addProperty("is_newline", 0);
         infoData.addProperty("is_portrait_newline", 0);
-        infoData.addProperty("portrait_value", seekValue);
-        infoData.addProperty("landscape_value", seekValue);
+        infoData.addProperty("portrait_value", seekStringValue);
+        infoData.addProperty("landscape_value", seekStringValue);
         deckInfoData.add(infoData);
 
-        int speedValue = KcaDeckInfo.getSpeed(data, 0, null);
+        int speedValue = 0;
+        if(isCombined) {
+            speedValue = Math.min(KcaDeckInfo.getSpeed(data, 0, null), KcaDeckInfo.getSpeed(data, 1, null));
+        } else {
+            speedValue = KcaDeckInfo.getSpeed(data, 0, null);
+        }
+
         String speedStringValue = "";
         switch (speedValue) {
             case KcaApiData.SPEED_SUPERFAST:
@@ -1524,34 +1571,44 @@ public class KcaService extends Service {
                 speedStringValue = getStringWithLocale(R.string.speed_none);
                 break;
         }
+
         infoData = new JsonObject();
-        infoData.addProperty("is_portrait_newline", 1);
+        infoData.addProperty("is_newline", 0);
         infoData.addProperty("portrait_value", speedStringValue);
         //infoData.addProperty("landscape_value", speedStringValue.concat(getStringWithLocale(R.string.speed_postfix)));
         infoData.addProperty("landscape_value", speedStringValue);
         deckInfoData.add(infoData);
 
-        String firstConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, 0));
-        infoData = new JsonObject();
-        infoData.addProperty("is_portrait_newline", 1);
-        infoData.addProperty("portrait_value", firstConditionValue);
-        infoData.addProperty("landscape_value", firstConditionValue);
-        deckInfoData.add(infoData);
-        /*
-        String secondConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, 1));
-        infoData = new JsonObject();
-        infoData.addProperty("is_portrait_newline", 1);
-        infoData.addProperty("portrait_value", secondConditionValue);
-        infoData.addProperty("landscape_value", secondConditionValue);
-        deckInfoData.add(infoData);
-        */
         int[] tp = KcaDeckInfo.getTPValue(data, 0, null);
         String tpValue = String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[0], tp[1]);
         infoData = new JsonObject();
-        infoData.addProperty("is_portrait_newline", 0);
+        infoData.addProperty("is_newline", 1);
         infoData.addProperty("portrait_value", tpValue);
         infoData.addProperty("landscape_value", tpValue);
         deckInfoData.add(infoData);
+
+        if (isCombined) {
+            String firstConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, 0));
+            infoData = new JsonObject();
+            infoData.addProperty("is_newline", 1);
+            infoData.addProperty("portrait_value", firstConditionValue);
+            infoData.addProperty("landscape_value", firstConditionValue);
+            deckInfoData.add(infoData);
+
+            String secondConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, 1));
+            infoData = new JsonObject();
+            infoData.addProperty("is_newline", 0);
+            infoData.addProperty("portrait_value", secondConditionValue);
+            infoData.addProperty("landscape_value", secondConditionValue);
+            deckInfoData.add(infoData);
+        } else {
+            String firstConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, 0));
+            infoData = new JsonObject();
+            infoData.addProperty("is_newline", 0);
+            infoData.addProperty("portrait_value", firstConditionValue);
+            infoData.addProperty("landscape_value", firstConditionValue);
+            deckInfoData.add(infoData);
+        }
 
         kcaFirstDeckInfo = gson.toJson(deckInfoData);
         setFrontViewNotifier(FRONT_NONE, 0, null);
@@ -1707,7 +1764,7 @@ public class KcaService extends Service {
                     } else {
                         deckInfoStringList.add(data.get("landscape_value").getAsString());
                     }
-                    if (data.get("is_portrait_newline").getAsInt() == 1 && is_portrait) {
+                    if (data.get("is_newline").getAsInt() == 1 || (data.has("is_portrait_newline") && is_portrait)) {
                         notifiString = notifiString.concat(joinStr(deckInfoStringList, " / ")).concat("\n");
                         deckInfoStringList.clear();
                     }

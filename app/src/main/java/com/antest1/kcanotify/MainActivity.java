@@ -45,6 +45,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_NS;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
@@ -239,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_KCA_NOTI_EXP:
                     case PREF_KCA_BATTLEVIEW_USE:
                     case PREF_KCA_NOTI_V_HD:
+                    case PREF_KCA_NOTI_V_NS:
                     case PREF_SHOWDROP_SETTING:
                         editor.putBoolean(prefKey, true);
                         break;

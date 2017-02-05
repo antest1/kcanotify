@@ -55,6 +55,8 @@ public class KcaApiData {
     public static int[] eventMapDifficulty = new int[10];
 
     public static JsonObject kcShipTranslationData = new JsonObject();
+    public static JsonObject kcItemTranslationData = new JsonObject();
+
     public static JsonObject kcShipAbbrData = new JsonObject(); // For English
     public static JsonArray kcSimpleExpeditionData = new JsonArray();
 
@@ -319,6 +321,14 @@ public class KcaApiData {
         return name.concat(name_suffix);
     }
 
+    public static String getItemTranslation(String jp_name) {
+        String name = jp_name;
+        if(kcItemTranslationData.has(name)) {
+            name = kcItemTranslationData.get(name).getAsString();
+        }
+        return name;
+    }
+
     public static int getShipSize() {
         return userShipData.size();
     }
@@ -357,6 +367,27 @@ public class KcaApiData {
             if (data.isJsonObject()) {
                 kcShipTranslationData = data.getAsJsonObject();
                 kcShipAbbrData = data_abbr.getAsJsonObject();
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
+    public static int loadItemTranslationDataFromAssets(AssetManager am, String locale) {
+        try {
+            if (!locale.equals("ko") && !locale.equals("en")) {
+                locale = "en";
+            }
+            AssetManager.AssetInputStream ais =
+                    (AssetManager.AssetInputStream) am.open(String.format("items-%s.json", locale));
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            JsonElement data = new JsonParser().parse(new String(bytes));
+
+            if (data.isJsonObject()) {
+                kcItemTranslationData = data.getAsJsonObject();
                 return 1;
             } else {
                 return -1;

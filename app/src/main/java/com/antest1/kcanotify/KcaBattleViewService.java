@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -13,11 +14,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -48,11 +51,17 @@ import static com.antest1.kcanotify.KcaApiData.getCurrentNodeAlphabet;
 import static com.antest1.kcanotify.KcaApiData.getEngagementString;
 import static com.antest1.kcanotify.KcaApiData.getFormationString;
 import static com.antest1.kcanotify.KcaApiData.getItemString;
+import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
+import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
+import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getNodeFullInfo;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
+import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
+import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
+import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 
 
@@ -67,6 +76,9 @@ public class KcaBattleViewService extends Service {
     public static int[] startNowHps;
     public static int[] startNowHpsCombined;
 
+    public static JsonArray friendShipData, friendCombinedShipData;
+    public static JsonArray enemyShipData, enemyCombinedShipData;
+
     static boolean error_flag = false;
     boolean fc_flag = false;
     boolean ec_flag = false;
@@ -74,9 +86,10 @@ public class KcaBattleViewService extends Service {
     JsonArray api_formation;
     JsonObject api_kouku;
 
-    private View mView;
+    private View mView, itemView;
     private WindowManager mManager;
-    private View mViewBackup;
+
+    int displayWidth = 0;
 
     private int[] shipViewList = {0,
             R.id.fm_1, R.id.fm_2, R.id.fm_3, R.id.fm_4, R.id.fm_5, R.id.fm_6,
@@ -135,6 +148,8 @@ public class KcaBattleViewService extends Service {
     private int[] shipYomiCombinedViewList = {0, 0, 0, 0, 0, 0, 0,
             R.id.es_1_yomi, R.id.es_2_yomi, R.id.es_3_yomi, R.id.es_4_yomi, R.id.es_5_yomi, R.id.es_6_yomi
     };
+
+    private int[] slotViewList = {R.id.item1, R.id.item2, R.id.item3, R.id.item4, R.id.item5};
 
     WindowManager.LayoutParams mParams;
     ScrollView battleview;
@@ -237,7 +252,6 @@ public class KcaBattleViewService extends Service {
                         ((TextView) battleview.findViewById(R.id.battle_getship)).setText(getStringWithLocale(R.string.getship_max));
                     }
                 }
-
 
                 if (api_event_id == API_NODE_EVENT_ID_OBTAIN) {
                     JsonArray api_itemget = api_data.getAsJsonArray("api_itemget");
@@ -373,6 +387,7 @@ public class KcaBattleViewService extends Service {
                 }
 
                 JsonObject deckportdata = api_data.getAsJsonObject("api_deck_port");
+
                 if (deckportdata != null) {
                     JsonArray deckData = deckportdata.getAsJsonArray("api_deck_data");
                     JsonArray portData = deckportdata.getAsJsonArray("api_ship_data");
@@ -382,6 +397,7 @@ public class KcaBattleViewService extends Service {
                     }
                     for (int i = 0; i < deckData.size(); i++) {
                         if (i == 0) {
+                            friendShipData = new JsonArray();
                             JsonObject mainDeckData = deckData.get(i).getAsJsonObject();
                             ((TextView) battleview.findViewById(R.id.friend_fleet_name)).
                                     setText(mainDeckData.get("api_name").getAsString());
@@ -401,6 +417,13 @@ public class KcaBattleViewService extends Service {
                                 } else {
                                     //Log.e("KCA", String.format("%d: visible", j + 1));
                                     JsonObject data = shipData.getAsJsonObject(String.valueOf(mainDeck.get(j)));
+                                    JsonObject kcdata = getKcShipDataById(data.get("api_ship_id").getAsInt(), "maxeq");
+                                    JsonObject itemdata = new JsonObject();
+                                    itemdata.add("api_slot", data.get("api_slot"));
+                                    itemdata.add("api_slot_ex", data.get("api_slot_ex"));
+                                    itemdata.add("api_onslot", data.get("api_onslot"));
+                                    itemdata.add("api_maxslot", kcdata.get("maxeq"));
+                                    friendShipData.add(itemdata);
                                     int maxhp = data.get("api_maxhp").getAsInt();
                                     int nowhp = data.get("api_nowhp").getAsInt();
                                     int level = data.get("api_lv").getAsInt();
@@ -434,6 +457,7 @@ public class KcaBattleViewService extends Service {
                                 }
                             }
                         } else if (i == 1) { // TODO: CHECK NEEDED
+                            friendCombinedShipData = new JsonArray();
                             JsonObject combinedDeckData = deckData.get(i).getAsJsonObject();
                             ((TextView) battleview.findViewById(R.id.friend_combined_fleet_name)).
                                     setText(combinedDeckData.get("api_name").getAsString());
@@ -452,6 +476,13 @@ public class KcaBattleViewService extends Service {
                                 } else {
                                     //Log.e("KCA", String.format("%d: visible", j + 1));
                                     JsonObject data = shipData.getAsJsonObject(String.valueOf(combinedDeck.get(j)));
+                                    JsonObject kcdata = getKcShipDataById(data.get("api_ship_id").getAsInt(), "maxeq");
+                                    JsonObject itemdata = new JsonObject();
+                                    itemdata.add("api_slot", data.get("api_slot"));
+                                    itemdata.add("api_slot_ex", data.get("api_slot_ex"));
+                                    itemdata.add("api_onslot", data.get("api_onslot"));
+                                    itemdata.add("api_maxslot", kcdata.get("maxeq"));
+                                    friendCombinedShipData.add(itemdata);
                                     int maxhp = data.get("api_maxhp").getAsInt();
                                     int nowhp = data.get("api_nowhp").getAsInt();
                                     int level = data.get("api_lv").getAsInt();
@@ -481,6 +512,8 @@ public class KcaBattleViewService extends Service {
 
             if (api_data.has("api_ship_ke")) { // Battle (Common)
                 Log.e("KCA", "BATTLE");
+                enemyShipData = new JsonArray();
+                enemyCombinedShipData = new JsonArray();
                 JsonArray api_ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 JsonArray api_ship_lv = api_data.getAsJsonArray("api_ship_lv");
                 Log.e("KCA", api_data.toString());
@@ -492,6 +525,13 @@ public class KcaBattleViewService extends Service {
                 Arrays.fill(afterhps, -1);
                 Arrays.fill(nowhps_combined, -1);
                 Arrays.fill(nowhps_combined, -1);
+
+                JsonArray eSlot = api_data.getAsJsonArray("api_eSlot");
+                for (int i=0; i<eSlot.size(); i++) {
+                    JsonObject itemdata = new JsonObject();
+                    itemdata.add("api_slot", eSlot.get(i));
+                    enemyShipData.add(itemdata);
+                }
 
                 boolean start_flag = api_data.has("api_formation");
                 if (start_flag) { // day/sp_night Battle Process
@@ -607,6 +647,13 @@ public class KcaBattleViewService extends Service {
                             setText(getStringWithLocale(R.string.enemy_main_fleet_name));
                     ((TextView) battleview.findViewById(R.id.enemy_combined_fleet_name)).
                             setText(getStringWithLocale(R.string.enemy_combined_fleet_name));
+
+                    JsonArray eSlotCombined = api_data.getAsJsonArray("api_eSlot_combined");
+                    for (int i=0; i<eSlotCombined.size(); i++) {
+                        JsonObject itemdata = new JsonObject();
+                        itemdata.add("api_slot", eSlotCombined.get(i));
+                        enemyCombinedShipData.add(itemdata);
+                    }
 
                     JsonArray api_ship_ke_combined = api_data.getAsJsonArray("api_ship_ke_combined");
                     for (int i = 1; i < api_ship_ke_combined.size(); i++) {
@@ -807,6 +854,157 @@ public class KcaBattleViewService extends Service {
         }
     }
 
+    public void setItemViewLayout(int id) {
+        if (id == -1) return;
+        int realID = id - 1;
+        JsonObject data;
+        boolean friendflag = false;
+        if (realID < 20) { // Main
+            if (realID < 6) {
+                friendflag = true;
+                data = friendShipData.get(realID).getAsJsonObject();
+            } else {
+                friendflag = false;
+                data = enemyShipData.get(realID - 6).getAsJsonObject();
+            }
+        } else { // Combined
+            realID = realID % 20;
+            if (realID <= 6) {
+                friendflag = true;
+                data = friendCombinedShipData.get(realID).getAsJsonObject();
+            } else {
+                friendflag = false;
+                data = enemyCombinedShipData.get(realID - 6).getAsJsonObject();
+            }
+        }
+        Log.e("KCA", data.toString());
+        JsonArray slot = data.getAsJsonArray("api_slot");
+        JsonArray onslot = null;
+        JsonArray maxslot = null;
+        if(data.has("api_onslot")) {
+            onslot = data.getAsJsonArray("api_onslot");
+            maxslot = data.getAsJsonArray("api_maxslot");
+        }
+        int slot_count = 0;
+        int onslot_count = 0;
+        int slot_ex = 0;
+        if(data.has("api_slot_ex")) {
+            slot_ex = data.get("api_slot_ex").getAsInt();
+        }
+        for (int i = 0; i < slot.size(); i++) {
+            int item_id = slot.get(i).getAsInt();
+            if (item_id == -1) {
+                itemView.findViewById(slotViewList[i]).setVisibility(View.GONE);
+                itemView.findViewById(getId(String.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.GONE);
+            } else {
+                slot_count += 1;
+                JsonObject kcItemData;
+                int lv = 0;
+                int alv = -1;
+                if (onslot != null) {
+                    Log.e("KCA", "item_id: " + String.valueOf(item_id));
+                    kcItemData = getUserItemStatusById(item_id, "level,alv", "type,name");
+                    Log.e("KCA", kcItemData.toString());
+                    lv = kcItemData.get("level").getAsInt();
+                    if (kcItemData.has("alv")) {
+                        alv = kcItemData.get("alv").getAsInt();
+                    }
+
+                    if (lv > 0) {
+                        ((TextView) itemView.findViewById(getId(String.format("item%d_level", i + 1), R.id.class)))
+                                .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
+                        itemView.findViewById(getId(String.format("item%d_level", i + 1), R.id.class)).setVisibility(View.VISIBLE);
+                    } else {
+                        itemView.findViewById(getId(String.format("item%d_level", i + 1), R.id.class)).setVisibility(View.GONE);
+                    }
+
+                    if (alv > 0) {
+                        ((TextView) itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class)))
+                                .setText(getStringWithLocale(getId(String.format("alv_%d", alv), R.string.class)));
+                        itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.VISIBLE);
+                    } else {
+                        itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.GONE);
+                    }
+
+                    int itemtype = kcItemData.getAsJsonArray("type").get(2).getAsInt();
+                    if (isItemAircraft(itemtype)) {
+                        onslot_count += 1;
+                        Log.e("KCA", "ID: "+String.valueOf(itemtype));
+                        int nowSlotValue = onslot.get(i).getAsInt();
+                        int maxSlotValue = maxslot.get(i).getAsInt();
+                        ((TextView) itemView.findViewById(getId(String.format("item%d_slot", i + 1), R.id.class)))
+                                .setText(String.format("[%02d/%02d]", nowSlotValue, maxSlotValue));
+                        itemView.findViewById(getId(String.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.VISIBLE);
+                    } else {
+                        itemView.findViewById(getId(String.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.INVISIBLE);
+                    }
+                }
+                else {
+                    kcItemData = getKcItemStatusById(item_id, "type,name");
+                    itemView.findViewById(getId(String.format("item%d_level", i + 1), R.id.class)).setVisibility(View.GONE);
+                    itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.GONE);
+                    itemView.findViewById(getId(String.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.GONE);
+                }
+
+                String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
+                int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
+
+                int typeres = 0;
+                try {
+                    typeres = getId(String.format("item_%d", type), R.mipmap.class);
+                } catch (Exception e) {
+                    typeres = R.mipmap.item_0;
+                }
+                ((TextView) itemView.findViewById(getId(String.format("item%d_name", i + 1), R.id.class))).setText(kcItemName);
+                ((ImageView) itemView.findViewById(getId(String.format("item%d_icon", i + 1), R.id.class))).setImageResource(typeres);
+                itemView.findViewById(slotViewList[i]).setVisibility(View.VISIBLE);
+            }
+        }
+
+        if(onslot_count == 0) {
+            for(int i=0; i<slot.size(); i++) {
+                itemView.findViewById(getId(String.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.GONE);
+            }
+        }
+
+        if (slot_ex > 0) {
+            // EX_SLOT
+            slot_count += 1;
+            JsonObject kcItemData = getUserItemStatusById(slot_ex, "level", "type,name");
+            String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
+            int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
+            int lv = kcItemData.get("level").getAsInt();
+            int typeres = 0;
+            try {
+                typeres = getId(String.format("item_%d", type), R.mipmap.class);
+            } catch (Exception e) {
+                typeres = R.mipmap.item_0;
+            }
+            ((TextView) itemView.findViewById(R.id.item_ex_name)).setText(kcItemName);
+            ((ImageView) itemView.findViewById(R.id.item_ex_icon)).setImageResource(typeres);
+            if (lv > 0) {
+                ((TextView) itemView.findViewById(R.id.item_ex_level))
+                        .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
+                itemView.findViewById(R.id.item_ex_level).setVisibility(View.VISIBLE);
+            } else {
+                itemView.findViewById(R.id.item_ex_level).setVisibility(View.GONE);
+            }
+            itemView.findViewById(R.id.view_slot_ex).setVisibility(View.VISIBLE);
+        } else {
+            itemView.findViewById(R.id.view_slot_ex).setVisibility(View.GONE);
+        }
+
+        if (slot_count == 0) {
+            ((TextView) itemView.findViewById(R.id.item1_name)).setText(getStringWithLocale(R.string.slot_empty));
+            ((ImageView) itemView.findViewById(R.id.item1_icon)).setImageResource(R.mipmap.item_0);
+            itemView.findViewById(R.id.item1_level).setVisibility(View.GONE);
+            itemView.findViewById(R.id.item1_alv).setVisibility(View.GONE);
+            itemView.findViewById(R.id.item1_slot).setVisibility(View.GONE);
+            itemView.findViewById(slotViewList[0]).setVisibility(View.VISIBLE);
+        }
+        itemView.setVisibility(View.VISIBLE);
+    }
+
     public int setView() {
         try {
             error_flag = false;
@@ -830,6 +1028,7 @@ public class KcaBattleViewService extends Service {
             //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mInflater = LayoutInflater.from(contextWithLocale);
             mView = mInflater.inflate(R.layout.view_sortie_battle, null);
+            itemView = mInflater.inflate(R.layout.view_battleview_items, null);
             mParams = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.MATCH_PARENT,
@@ -840,6 +1039,11 @@ public class KcaBattleViewService extends Service {
 
             mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             mManager.addView(mView, mParams);
+
+            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            displayWidth = size.x;
 
             hdmgreceiver = new BroadcastReceiver() {
                 @Override
@@ -889,6 +1093,7 @@ public class KcaBattleViewService extends Service {
     public void onDestroy() {
         active = false;
         mView.setVisibility(View.GONE);
+        itemView.setVisibility(View.GONE);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(hdmgreceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
         super.onDestroy();
@@ -900,6 +1105,12 @@ public class KcaBattleViewService extends Service {
             mView.setVisibility(View.VISIBLE);
             battleview = (ScrollView) mView.findViewById(R.id.battleview);
             battleview.setOnTouchListener(mViewTouchListener);
+            for (int i = 1; i < shipViewList.length; i++) {
+                battleview.findViewById(shipNameViewList[i]).setOnTouchListener(shipViewTouchListener);
+            }
+            for (int i = 1; i < shipCombinedViewList.length; i++) {
+                battleview.findViewById(shipNameCombinedViewList[i]).setOnTouchListener(shipViewTouchListener);
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -924,8 +1135,56 @@ public class KcaBattleViewService extends Service {
             }
             return false;
         }
-
     };
+
+    private View.OnTouchListener shipViewTouchListener = new View.OnTouchListener() {
+        WindowManager.LayoutParams itemViewParams;
+        int xMargin = 200;
+        boolean isTouchDown = false;
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    if(!isTouchDown) {
+                        isTouchDown = true;
+                        setItemViewLayout(getshipidx(v.getId()));
+                        itemViewParams = new WindowManager.LayoutParams(
+                                WindowManager.LayoutParams.WRAP_CONTENT,
+                                WindowManager.LayoutParams.WRAP_CONTENT,
+                                WindowManager.LayoutParams.TYPE_PHONE,
+                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                PixelFormat.TRANSLUCENT);
+                        itemViewParams.x = (int) (event.getRawX() + xMargin);
+                        itemViewParams.y = (int) event.getRawY();
+                        itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
+                        if (itemView.getParent() != null) {
+                            mManager.updateViewLayout(itemView, itemViewParams);
+                        } else {
+                            mManager.addView(itemView, itemViewParams);
+                        }
+                    }
+                    Log.e("KCA", "ACTION_DOWN");
+                    return true;
+                case MotionEvent.ACTION_UP:
+                    itemView.setVisibility(View.GONE);
+                    isTouchDown = false;
+                    Log.e("KCA", "ACTION_UP");
+                    return false;
+                default:
+                    return false;
+            }
+        }
+    };
+
+    private int getshipidx(int rid) {
+        for (int i = 1; i < shipNameViewList.length; i++) {
+            if (rid == shipNameViewList[i]) return i;
+        }
+        for (int i = 1; i < shipNameCombinedViewList.length; i++) {
+            if (rid == shipNameCombinedViewList[i]) return 20 + i;
+        }
+        return -1;
+    }
 
     private void sendReport(Exception e) {
         error_flag = true;

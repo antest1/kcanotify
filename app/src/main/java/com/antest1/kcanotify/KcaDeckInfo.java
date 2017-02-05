@@ -474,4 +474,23 @@ public class KcaDeckInfo {
         return dameconStatus;
     }
 
+    public static boolean checkNotSuppliedExist(JsonArray deckPortData, int deckid) {
+        JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
+        for (int i = 0; i < deckShipIdList.size(); i++) {
+            int shipId = deckShipIdList.get(i).getAsInt();
+            if (shipId != -1) {
+                JsonObject shipData = getUserShipDataById(shipId, "ship_id,fuel,bull");
+                int fuel = shipData.get("fuel").getAsInt();
+                int bull = shipData.get("bull").getAsInt();
+                int kcShipId = shipData.get("ship_id").getAsInt();
+                JsonObject kcShipData = getKcShipDataById(kcShipId, "fuel_max,bull_max");
+                int fuel_max = kcShipData.get("fuel_max").getAsInt();
+                int bull_max = kcShipData.get("bull_max").getAsInt();
+                if (fuel_max != fuel || bull_max != bull) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

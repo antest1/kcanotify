@@ -136,6 +136,8 @@
     <string name="setting_menu_noti_desc_dock">입거 완료 시 상단 알림 및 진동 여부 설정</string>
     <string name="setting_menu_noti_title_hdmg_vib">대파 진동 알림</string>
     <string name="setting_menu_noti_desc_hdmg_vib">대파 알림 시 진동 여부 설정 (알림은 항상 활성)</string>
+    <string name="setting_menu_noti_title_nspl_vib">보급 미완료 진동 알림</string>
+    <string name="setting_menu_noti_desc_nspl_vib">보급 미완료 함대가 있을 시 진동 여부 설정\n(알림은 항상 활성)</string>
 
     <string name="setting_menu_app_head">어플리케이션 정보</string>
     <string name="setting_menu_app_title_current">현재 어플리케이션 버전</string>
@@ -220,5 +222,8 @@
     <string name="getship_max">(슬롯 여유 없음)</string>
     <string name="kca_view_tpvalue" formatted="false" >TP: %d/%d</string>
     <string name="ship_name_class">급</string>
-
+    <string name="slot_empty">(장비 없음)</string>
+    <string name="kca_view_condition_1" formatted="false">피로도 #1: %s</string>
+    <string name="kca_view_condition_2" formatted="false">피로도 #2: %s</string>
+    <string name="not_supplied" formatted="false">제%d함대가 보급되지 않았습니다!</string>
 </resources>

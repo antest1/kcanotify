@@ -97,6 +97,12 @@
             android:summary="@string/setting_menu_noti_desc_hdmg_vib"
             android:title="@string/setting_menu_noti_title_hdmg_vib" />
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="notify_vibrate_notsupplied"
+            android:summary="@string/setting_menu_noti_desc_nspl_vib"
+            android:title="@string/setting_menu_noti_title_nspl_vib" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/setting_menu_app_head">

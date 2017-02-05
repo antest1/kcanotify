@@ -41,4 +41,7 @@
     <color name="colorRaidDamaged">#f98b25</color>
     <color name="colorRaidHeavyDamaged">#ff5252</color>
 
+    <color name="itemlevel">#16a085</color>
+    <color name="itemalv1">#64b5f6</color>
+    <color name="itemalv2">#fbc02d</color>
 </resources>

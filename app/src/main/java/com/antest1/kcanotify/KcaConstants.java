@@ -53,6 +53,7 @@ public final class KcaConstants {
     public static final String API_GET_MEMBER_KDOCK = "/api_get_member/kdock";
 
     public static final String API_GET_MEMBER_MAPINFO = "/api_get_member/mapinfo";
+    public static final String API_GET_MEMBER_MISSION = "/api_get_member/mission";
     public static final String API_REQ_MAP_START = "/api_req_map/start";
     public static final String API_REQ_MAP_NEXT = "/api_req_map/next";
     public static final String API_REQ_SORTIE_BATTLE = "/api_req_sortie/battle";
@@ -252,6 +253,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_NOTI_EXP = "notify_expedition";
     public static final String PREF_KCA_NOTI_DOCK = "notify_docking";
     public static final String PREF_KCA_NOTI_V_HD = "notify_vibrate_heavydamaged";
+    public static final String PREF_KCA_NOTI_V_NS = "notify_vibrate_notsupplied";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -268,7 +270,8 @@ public final class KcaConstants {
             PREF_KCA_NOTI_RINGTONE,
             PREF_KCA_NOTI_EXP,
             PREF_KCA_NOTI_DOCK,
-            PREF_KCA_NOTI_V_HD
+            PREF_KCA_NOTI_V_HD,
+            PREF_KCA_NOTI_V_NS
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);
