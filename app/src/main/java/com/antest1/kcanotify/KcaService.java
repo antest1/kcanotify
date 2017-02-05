@@ -739,6 +739,8 @@ public class KcaService extends Service {
                                     if (ship_id != -1)
                                         api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
                                 }
+                                KcaBattle.dameconflag = KcaDeckInfo.getDameconStatus(api_deck_data, 0);
+                                KcaBattle.dameconcbflag = KcaDeckInfo.getDameconStatus(api_deck_data, 1);
                             } else {
                                 api_deck_data.add(currentPortDeckData.get(deck_id));
                                 JsonArray firstShipInfo = currentPortDeckData.get(deck_id).getAsJsonObject().getAsJsonArray("api_ship");
@@ -747,6 +749,7 @@ public class KcaService extends Service {
                                     if (ship_id != -1)
                                         api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
                                 }
+                                KcaBattle.dameconflag = KcaDeckInfo.getDameconStatus(api_deck_data, 0);
                             }
                             api_data.add("api_deck_data", api_deck_data);
                             api_data.add("api_ship_data", api_ship_data);
