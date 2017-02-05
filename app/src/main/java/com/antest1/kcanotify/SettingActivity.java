@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,7 +22,6 @@ import android.preference.PreferenceFragment;
 import android.preference.RingtonePreference;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
