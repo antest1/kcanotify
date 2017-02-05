@@ -53,6 +53,9 @@
 -keep class android.support.v7.widget.** { *; }
 -dontwarn android.support.v4.**
 
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
 
 -assumenosideeffects class android.util.Log {
     public static *** d(...);
