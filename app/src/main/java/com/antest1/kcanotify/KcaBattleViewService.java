@@ -612,6 +612,8 @@ public class KcaBattleViewService extends Service {
                                 } else {
                                     ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText("");
                                 }
+                            } else {
+                                ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText("");
                             }
                         }
                         battleview.findViewById(shipViewList[getEnemyIdx(i)]).setVisibility(View.VISIBLE);
@@ -684,6 +686,8 @@ public class KcaBattleViewService extends Service {
                                 } else {
                                     ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText("");
                                 }
+                            } else {
+                                ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText("");
                             }
                             battleview.findViewById(shipCombinedViewList[getEnemyIdx(i)]).setVisibility(View.VISIBLE);
                         }
@@ -798,7 +802,7 @@ public class KcaBattleViewService extends Service {
                     ((TextView) battleview.findViewById(shipNameViewList[mvp_idx]))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorMVP));
                 }
-                if (api_data.has("api_mvp_combined")) {
+                if (api_data.has("api_mvp_combined") || !api_data.get("api_mvp_combined").isJsonNull()) {
                     int mvp_idx_combined = api_data.get("api_mvp_combined").getAsInt();
                     if (mvp_idx_combined != -1) {
                         ((TextView) battleview.findViewById(shipNameCombinedViewList[mvp_idx_combined]))
@@ -857,6 +861,7 @@ public class KcaBattleViewService extends Service {
     public void setItemViewLayout(int id) {
         if (id == -1) return;
         int realID = id - 1;
+        Log.e("KCA", "realID: " + String.valueOf(realID));
         JsonObject data;
         boolean friendflag = false;
         if (realID < 20) { // Main
@@ -869,7 +874,7 @@ public class KcaBattleViewService extends Service {
             }
         } else { // Combined
             realID = realID % 20;
-            if (realID <= 6) {
+            if (realID < 6) {
                 friendflag = true;
                 data = friendCombinedShipData.get(realID).getAsJsonObject();
             } else {
