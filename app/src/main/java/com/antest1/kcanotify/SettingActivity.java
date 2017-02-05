@@ -1,7 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +22,7 @@ import android.preference.PreferenceFragment;
 import android.preference.RingtonePreference;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -114,7 +115,7 @@ public class SettingActivity extends AppCompatActivity {
                     pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            new getRecentVersion(context).execute();
+                            new getRecentVersion(getActivity()).execute();
                             return false;
                         }
                     });
@@ -252,10 +253,12 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public static class getRecentVersion extends AsyncTask<Context, String, String> {
+        Activity activity;
         Context context;
 
-        public getRecentVersion(Context ctx) {
-            context = ctx;
+        public getRecentVersion(Activity a) {
+            activity = a;
+            context = a.getApplicationContext();
         }
 
         @Override
@@ -307,7 +310,7 @@ public class SettingActivity extends AppCompatActivity {
                                 String.format(context.getString(R.string.sa_checkupdate_latest), currentVersion),
                                 Toast.LENGTH_LONG).show();
                     } else {
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
                         alertDialog.setMessage(String.format(context.getString(R.string.sa_checkupdate_hasupdate), recentVersion));
                         alertDialog.setPositiveButton(context.getString(R.string.dialog_ok),
                                 new DialogInterface.OnClickListener() {
