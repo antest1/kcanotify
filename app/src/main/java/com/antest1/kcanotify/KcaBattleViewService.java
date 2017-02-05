@@ -101,6 +101,11 @@ public class KcaBattleViewService extends Service {
             R.id.em_1_name, R.id.em_2_name, R.id.em_3_name, R.id.em_4_name, R.id.em_5_name, R.id.em_6_name
     };
 
+    private int[] shipNameAreaViewList = {0,
+            R.id.fm_1_name, R.id.fm_2_name, R.id.fm_3_name, R.id.fm_4_name, R.id.fm_5_name, R.id.fm_6_name,
+            R.id.em_1_name_area, R.id.em_2_name_area, R.id.em_3_name_area, R.id.em_4_name_area, R.id.em_5_name_area, R.id.em_6_name_area
+    };
+
     private int[] shipLevelViewList = {0,
             R.id.fm_1_lv, R.id.fm_2_lv, R.id.fm_3_lv, R.id.fm_4_lv, R.id.fm_5_lv, R.id.fm_6_lv,
             R.id.em_1_lv, R.id.em_2_lv, R.id.em_3_lv, R.id.em_4_lv, R.id.em_5_lv, R.id.em_6_lv
@@ -128,6 +133,11 @@ public class KcaBattleViewService extends Service {
     private int[] shipNameCombinedViewList = {0,
             R.id.fs_1_name, R.id.fs_2_name, R.id.fs_3_name, R.id.fs_4_name, R.id.fs_5_name, R.id.fs_6_name,
             R.id.es_1_name, R.id.es_2_name, R.id.es_3_name, R.id.es_4_name, R.id.es_5_name, R.id.es_6_name
+    };
+
+    private int[] shipNameAreaCombinedViewList = {0,
+            R.id.fs_1_name, R.id.fs_2_name, R.id.fs_3_name, R.id.fs_4_name, R.id.fs_5_name, R.id.fs_6_name,
+            R.id.es_1_name_area, R.id.es_2_name_area, R.id.es_3_name_area, R.id.es_4_name_area, R.id.es_5_name_area, R.id.es_6_name_area
     };
 
     private int[] shipLevelCombinedViewList = {0,
@@ -1111,10 +1121,12 @@ public class KcaBattleViewService extends Service {
             battleview = (ScrollView) mView.findViewById(R.id.battleview);
             battleview.setOnTouchListener(mViewTouchListener);
             for (int i = 1; i < shipViewList.length; i++) {
-                battleview.findViewById(shipNameViewList[i]).setOnTouchListener(shipViewTouchListener);
+                battleview.findViewById(shipNameAreaViewList[i]).setOnTouchListener(shipViewTouchListener);
+                battleview.findViewById(shipLevelViewList[i]).setOnTouchListener(shipViewTouchListener);
             }
             for (int i = 1; i < shipCombinedViewList.length; i++) {
-                battleview.findViewById(shipNameCombinedViewList[i]).setOnTouchListener(shipViewTouchListener);
+                battleview.findViewById(shipNameAreaCombinedViewList[i]).setOnTouchListener(shipViewTouchListener);
+                battleview.findViewById(shipLevelCombinedViewList[i]).setOnTouchListener(shipViewTouchListener);
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -1187,11 +1199,11 @@ public class KcaBattleViewService extends Service {
     };
 
     private int getshipidx(int rid) {
-        for (int i = 1; i < shipNameViewList.length; i++) {
-            if (rid == shipNameViewList[i]) return i;
+        for (int i = 1; i < shipNameAreaViewList.length; i++) {
+            if (rid == shipNameAreaViewList[i] || rid == shipLevelViewList[i]) return i;
         }
-        for (int i = 1; i < shipNameCombinedViewList.length; i++) {
-            if (rid == shipNameCombinedViewList[i]) return 20 + i;
+        for (int i = 1; i < shipNameAreaCombinedViewList.length; i++) {
+            if (rid == shipNameAreaCombinedViewList[i] || rid == shipLevelCombinedViewList[i]) return 20 + i;
         }
         return -1;
     }

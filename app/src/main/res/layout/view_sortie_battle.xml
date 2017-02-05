@@ -1275,7 +1275,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6"
-                                android:layout_gravity="center_vertical">
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/es_1_name_area">
 
                                 <TextView
                                     android:id="@+id/es_1_name"
@@ -1358,7 +1359,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6"
-                                android:layout_gravity="center_vertical">
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/es_2_name_area">
 
                                 <TextView
                                     android:id="@+id/es_2_name"
@@ -1441,7 +1443,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6"
-                                android:layout_gravity="center_vertical">
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/es_3_name_area">
 
                                 <TextView
                                     android:id="@+id/es_3_name"
@@ -1524,7 +1527,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6"
-                                android:layout_gravity="center_vertical">
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/es_4_name_area">
 
                                 <TextView
                                     android:id="@+id/es_4_name"
@@ -1607,7 +1611,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6"
-                                android:layout_gravity="center_vertical">
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/es_5_name_area">
 
                                 <TextView
                                     android:id="@+id/es_5_name"
@@ -1690,7 +1695,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6"
-                                android:layout_gravity="center_vertical">
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/es_6_name_area">
 
                                 <TextView
                                     android:id="@+id/es_6_name"
@@ -1858,7 +1864,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6"
-                                android:layout_gravity="center_vertical">
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/em_1_name_area">
 
                                 <TextView
                                     android:id="@+id/em_1_name"
@@ -1942,7 +1949,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6"
-                                android:layout_gravity="center_vertical">
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/em_2_name_area">
 
                                 <TextView
                                     android:id="@+id/em_2_name"
@@ -2026,7 +2034,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6"
-                                android:layout_gravity="center_vertical">
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/em_3_name_area">
 
                                 <TextView
                                     android:id="@+id/em_3_name"
@@ -2110,7 +2119,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6"
-                                android:layout_gravity="center_vertical">
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/em_4_name_area">
 
                                 <TextView
                                     android:id="@+id/em_4_name"
@@ -2194,7 +2204,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6"
-                                android:layout_gravity="center_vertical">
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/em_5_name_area">
 
                                 <TextView
                                     android:id="@+id/em_5_name"
@@ -2278,7 +2289,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.6"
-                                android:layout_gravity="center_vertical">
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/em_6_name_area">
 
                                 <TextView
                                     android:id="@+id/em_6_name"
