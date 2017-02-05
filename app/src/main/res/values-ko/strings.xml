@@ -131,9 +131,9 @@
 
     <string name="setting_menu_noti_head">알림 설정</string>
     <string name="setting_menu_noti_title_exp">원정 알림</string>
-    <string name="setting_menu_noti_desc_exp">원정 도착 시 상단 알림 및 진동 여부 설정</string>
+    <string name="setting_menu_noti_desc_exp">원정 도착 시 상단 알림 설정</string>
     <string name="setting_menu_noti_title_dock">입거 알림</string>
-    <string name="setting_menu_noti_desc_dock">입거 완료 시 상단 알림 및 진동 여부 설정</string>
+    <string name="setting_menu_noti_desc_dock">입거 완료 시 상단 알림 설정</string>
     <string name="setting_menu_noti_title_hdmg_vib">대파 진동 알림</string>
     <string name="setting_menu_noti_desc_hdmg_vib">대파 알림 시 진동 여부 설정 (알림은 항상 활성)</string>
     <string name="setting_menu_noti_title_nspl_vib">보급 미완료 진동 알림</string>
