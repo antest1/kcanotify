@@ -870,7 +870,7 @@ public class KcaBattleViewService extends Service {
     }
 
     public void setItemViewLayout(int id) {
-        if (id == -1) return;
+        if (api_data == null || id == -1) return;
         int realID = id - 1;
         JsonObject data;
         boolean friendflag = false;

@@ -335,21 +335,26 @@ public class KcaService extends Service {
                 .setContentIntent(pendingIntent);
 
         String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-        if (soundKind.equals(getString(R.string.sound_kind_value_normal))) {
+        if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
             if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                if(soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
+                    builder.setDefaults(Notification.DEFAULT_VIBRATE);
+                }
                 builder.setSound(Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
             } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                 builder.setDefaults(Notification.DEFAULT_VIBRATE);
             } else {
                 builder.setDefaults(0);
             }
-        } else if (soundKind.equals(getString(R.string.sound_kind_value_vibrate))) {
+        }
+        if (soundKind.equals(getString(R.string.sound_kind_value_vibrate))) {
             if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
                 builder.setDefaults(Notification.DEFAULT_VIBRATE);
             } else {
                 builder.setDefaults(0);
             }
-        } else if (soundKind.equals(getString(R.string.sound_kind_value_mute))){
+        }
+        if (soundKind.equals(getString(R.string.sound_kind_value_mute))){
             builder.setDefaults(0);
         }
 
@@ -378,21 +383,26 @@ public class KcaService extends Service {
                 .setTicker(title)
                 .setContentIntent(pendingIntent);
         String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-        if (soundKind.equals(getString(R.string.sound_kind_value_normal))) {
+        if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
             if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                if(soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
+                    builder.setDefaults(Notification.DEFAULT_VIBRATE);
+                }
                 builder.setSound(Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
             } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                 builder.setDefaults(Notification.DEFAULT_VIBRATE);
             } else {
                 builder.setDefaults(0);
             }
-        } else if (soundKind.equals(getString(R.string.sound_kind_value_vibrate))) {
+        }
+        if (soundKind.equals(getString(R.string.sound_kind_value_vibrate))) {
             if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
                 builder.setDefaults(Notification.DEFAULT_VIBRATE);
             } else {
                 builder.setDefaults(0);
             }
-        } else if (soundKind.equals(getString(R.string.sound_kind_value_mute))){
+        }
+        if (soundKind.equals(getString(R.string.sound_kind_value_mute))){
             builder.setDefaults(0);
         }
 
@@ -677,21 +687,20 @@ public class KcaService extends Service {
                     }
 
                     if (message.length() > 0) {
-                        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-                        if (soundKind.equals(getString(R.string.sound_kind_value_normal))) {
-                            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                                Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
-                                Uri notificationUri = Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
-                                KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
-                            }
-                        }
-                        boolean mcondition = !soundKind.equals(getString(R.string.sound_kind_value_mute));
                         boolean hcondition = (isHeavyDamagedFlag && isHDVibrateEnabled());
                         boolean ncondition = (isNotSuppliedFlag && isNSVibrateEnabled());
-
-                        if(mcondition || hcondition || ncondition) {
+                        if(hcondition || ncondition) {
+                            String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
+                            if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
+                                if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                                    Uri notificationUri = Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
+                                    Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
+                                    KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
+                                }
+                            }
                             vibrator.vibrate(1500);
                         }
+
                         Toast.makeText(getApplicationContext(), message.trim(), Toast.LENGTH_LONG).show();
                     }
 
@@ -1324,9 +1333,9 @@ public class KcaService extends Service {
 
             if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {
                 heavyDamagedMode = jsonDataObj.get("data").getAsInt();
-                if (isHDVibrateEnabled()) {
+                if(isHDVibrateEnabled()) {
                     String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-                    if (soundKind.equals(getString(R.string.sound_kind_value_normal))) {
+                    if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
                         if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
                             Uri notificationUri = Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
                             Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
@@ -1335,6 +1344,7 @@ public class KcaService extends Service {
                     }
                     vibrator.vibrate(1500);
                 }
+
                 if (heavyDamagedMode == HD_DANGER) {
                     Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.heavy_damaged), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);

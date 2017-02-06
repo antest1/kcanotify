@@ -134,10 +134,10 @@
     <string name="setting_menu_noti_desc_exp">원정 도착 시 상단 알림 설정</string>
     <string name="setting_menu_noti_title_dock">입거 알림</string>
     <string name="setting_menu_noti_desc_dock">입거 완료 시 상단 알림 설정</string>
-    <string name="setting_menu_noti_title_hdmg_vib">대파 진동 알림</string>
-    <string name="setting_menu_noti_desc_hdmg_vib">대파 알림 시 진동 여부 설정 (알림은 항상 활성)</string>
-    <string name="setting_menu_noti_title_nspl_vib">보급 미완료 진동 알림</string>
-    <string name="setting_menu_noti_desc_nspl_vib">보급 미완료 함대가 있을 시 진동 여부 설정\n(알림은 항상 활성)</string>
+    <string name="setting_menu_noti_title_hdmg_vib">대파 알림</string>
+    <string name="setting_menu_noti_desc_hdmg_vib">대파 발생 시 소리/진동 알림 여부 설정 (토스트는 항상 활성)</string>
+    <string name="setting_menu_noti_title_nspl_vib">보급 미완료 알림</string>
+    <string name="setting_menu_noti_desc_nspl_vib">보급 미완료 함대가 있을 시 소리/진동 알림 여부 설정 (토스트는 항상 활성)</string>
 
     <string name="setting_menu_app_head">어플리케이션 정보</string>
     <string name="setting_menu_app_title_current">현재 어플리케이션 버전</string>
@@ -226,4 +226,5 @@
     <string name="kca_view_condition_1" formatted="false">피로도 #1: %s</string>
     <string name="kca_view_condition_2" formatted="false">피로도 #2: %s</string>
     <string name="not_supplied" formatted="false">제%d함대가 보급되지 않았습니다!</string>
+    <string name="sound_kind_mixed">소리+진동</string>
 </resources>

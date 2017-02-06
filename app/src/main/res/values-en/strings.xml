@@ -142,10 +142,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_exp">Screen notification on expedition arrival.</string>
     <string name="setting_menu_noti_title_dock">Docking</string>
     <string name="setting_menu_noti_desc_dock">Screen notification when docking completes.</string>
-    <string name="setting_menu_noti_title_hdmg_vib">Heavy Damage Vibration Alert</string>
-    <string name="setting_menu_noti_desc_hdmg_vib">Vibrate when a ship is heavily damaged (Notification will always appear).</string>
-    <string name="setting_menu_noti_title_nspl_vib">Incomplete Supply Vibration Alert</string>
-    <string name="setting_menu_noti_desc_nspl_vib">Vibrate when incompletely supplied fleet exist (Notification will always appear).</string>
+    <string name="setting_menu_noti_title_hdmg_vib">Heavy Damage Alert</string>
+    <string name="setting_menu_noti_desc_hdmg_vib">Sound/Vibrate when a ship is heavily damaged (Toast will always appear).</string>
+    <string name="setting_menu_noti_title_nspl_vib">Incomplete Supply Alert</string>
+    <string name="setting_menu_noti_desc_nspl_vib">Sound/Vibrate when incompletely supplied fleet exist (Toast will always appear).</string>
 
     <string name="setting_menu_app_head">Application Information</string>
     <string name="setting_menu_app_title_current">Current Version</string>
@@ -228,10 +228,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_drop_visible">Show Drop Info</string>
     <string name="setting_menu_kand_desc_drop_visible">Show dropped ship name in BattleView</string>
     <string name="getship_max">(Slot is Full)</string>
-    <string name="kca_view_tpvalue" formatted="false" >TP: %d/%d</string>
+    <string name="kca_view_tpvalue" formatted="false">TP: %d/%d</string>
     <string name="ship_name_class">Class</string>
     <string name="slot_empty">(No Equipment)</string>
     <string name="kca_view_condition_1" formatted="false">Morale #1: %s</string>
     <string name="kca_view_condition_2" formatted="false">Morale #2: %s</string>
     <string name="not_supplied" formatted="false">Fleet %d is not supplied!</string>
+    <string name="sound_kind_mixed">Sound+Vibrate</string>
 </resources>
