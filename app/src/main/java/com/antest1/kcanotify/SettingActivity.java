@@ -115,7 +115,7 @@ public class SettingActivity extends AppCompatActivity {
                     pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            new getRecentVersion(getActivity()).execute();
+                            new getRecentVersion(getActivity(), true).execute();
                             return false;
                         }
                     });
@@ -255,10 +255,11 @@ public class SettingActivity extends AppCompatActivity {
     public static class getRecentVersion extends AsyncTask<Context, String, String> {
         Activity activity;
         Context context;
-
-        public getRecentVersion(Activity a) {
+        boolean toastflag;
+        public getRecentVersion(Activity a, boolean tf) {
             activity = a;
             context = a.getApplicationContext();
+            toastflag = tf;
         }
 
         @Override
@@ -306,9 +307,11 @@ public class SettingActivity extends AppCompatActivity {
                 if (jsonDataObj.has("version")) {
                     String recentVersion = jsonDataObj.get("version").getAsString();
                     if (recentVersion.equals(currentVersion)) {
-                        Toast.makeText(context.getApplicationContext(),
-                                String.format(context.getString(R.string.sa_checkupdate_latest), currentVersion),
-                                Toast.LENGTH_LONG).show();
+                        if(toastflag) {
+                            Toast.makeText(context.getApplicationContext(),
+                                    String.format(context.getString(R.string.sa_checkupdate_latest), currentVersion),
+                                    Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
                         alertDialog.setMessage(String.format(context.getString(R.string.sa_checkupdate_hasupdate), recentVersion));

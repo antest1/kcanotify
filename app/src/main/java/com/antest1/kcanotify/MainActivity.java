@@ -33,6 +33,7 @@ import android.widget.ToggleButton;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
@@ -64,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean isKcaServiceOn = false;
     Toolbar toolbar;
-
     private boolean running = false;
     private AlertDialog dialogVpn = null;
     Context ctx;
@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     KcaVpnService.stop("switch off", MainActivity.this);
                     prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
                 }
+                new SettingActivity.getRecentVersion(MainActivity.this, false).execute();
             }
         });
 
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (is_kca_installed) {
                     startActivity(kcIntent);
-                    finish();
+                    //finish();
                 } else {
                     Toast.makeText(getApplicationContext(), getString(R.string.ma_toast_kancolle_not_installed), Toast.LENGTH_LONG).show();
                 }
