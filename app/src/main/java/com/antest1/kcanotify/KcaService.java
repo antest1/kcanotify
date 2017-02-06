@@ -188,7 +188,7 @@ public class KcaService extends Service {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             public void onCompletion(MediaPlayer mp) {
-                Log.i("Completion Listener","Song Complete");
+                Log.i("Completion Listener", "Song Complete");
                 mp.stop();
                 mp.reset();
             }
@@ -337,7 +337,7 @@ public class KcaService extends Service {
         String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
         if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
             if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                if(soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
+                if (soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
                     builder.setDefaults(Notification.DEFAULT_VIBRATE);
                 }
                 builder.setSound(Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
@@ -354,7 +354,7 @@ public class KcaService extends Service {
                 builder.setDefaults(0);
             }
         }
-        if (soundKind.equals(getString(R.string.sound_kind_value_mute))){
+        if (soundKind.equals(getString(R.string.sound_kind_value_mute))) {
             builder.setDefaults(0);
         }
 
@@ -385,7 +385,7 @@ public class KcaService extends Service {
         String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
         if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
             if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                if(soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
+                if (soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
                     builder.setDefaults(Notification.DEFAULT_VIBRATE);
                 }
                 builder.setSound(Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
@@ -402,7 +402,7 @@ public class KcaService extends Service {
                 builder.setDefaults(0);
             }
         }
-        if (soundKind.equals(getString(R.string.sound_kind_value_mute))){
+        if (soundKind.equals(getString(R.string.sound_kind_value_mute))) {
             builder.setDefaults(0);
         }
 
@@ -629,16 +629,14 @@ public class KcaService extends Service {
                     // Event Check Part
                     // TODO: add handler for selecting event map rank
                     if (url.startsWith(API_GET_MEMBER_MAPINFO) && jsonDataObj.has("api_data")) {
-                        if (isHDVibrateEnabled()) {
-                            JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
-                            JsonArray api_map_info = api_data.getAsJsonArray("api_map_info");
-                            int eventMapCount = 0;
-                            for (JsonElement map : api_map_info) {
-                                JsonObject mapData = map.getAsJsonObject();
-                                if (mapData.has("api_eventmap")) {
-                                    eventMapCount += 1;
-                                    KcaApiData.setEventMapDifficulty(eventMapCount, mapData.get("api_selected_rank").getAsInt());
-                                }
+                        JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                        JsonArray api_map_info = api_data.getAsJsonArray("api_map_info");
+                        int eventMapCount = 0;
+                        for (JsonElement map : api_map_info) {
+                            JsonObject mapData = map.getAsJsonObject();
+                            if (mapData.has("api_eventmap")) {
+                                eventMapCount += 1;
+                                KcaApiData.setEventMapDifficulty(eventMapCount, mapData.get("api_selected_rank").getAsInt());
                             }
                         }
                     }
@@ -648,15 +646,15 @@ public class KcaService extends Service {
                     boolean isHeavyDamagedFlag = false;
                     boolean isNotSuppliedFlag = false;
 
-                    for(int i=0; i<currentPortDeckData.size(); i++) {
-                        if(url.startsWith(API_GET_MEMBER_MISSION) && i==0) continue;
-                        if(KcaDeckInfo.checkNotSuppliedExist(currentPortDeckData, i)) {
+                    for (int i = 0; i < currentPortDeckData.size(); i++) {
+                        if (url.startsWith(API_GET_MEMBER_MISSION) && i == 0) continue;
+                        if (KcaDeckInfo.checkNotSuppliedExist(currentPortDeckData, i)) {
                             isNotSuppliedFlag = true;
-                            message = message.concat(String.format(getStringWithLocale(R.string.not_supplied), i+1)).concat("\n");
+                            message = message.concat(String.format(getStringWithLocale(R.string.not_supplied), i + 1)).concat("\n");
                         }
                     }
 
-                    if(url.startsWith(API_GET_MEMBER_MAPINFO)) {
+                    if (url.startsWith(API_GET_MEMBER_MAPINFO)) {
                         int firstHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 0);
                         int secondHeavyDamaged = 0;
                         if (currentPortDeckData.size() >= 2) {
@@ -689,7 +687,7 @@ public class KcaService extends Service {
                     if (message.length() > 0) {
                         boolean hcondition = (isHeavyDamagedFlag && isHDVibrateEnabled());
                         boolean ncondition = (isNotSuppliedFlag && isNSVibrateEnabled());
-                        if(hcondition || ncondition) {
+                        if (hcondition || ncondition) {
                             String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
                             if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
                                 if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
@@ -1333,7 +1331,7 @@ public class KcaService extends Service {
 
             if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {
                 heavyDamagedMode = jsonDataObj.get("data").getAsInt();
-                if(isHDVibrateEnabled()) {
+                if (isHDVibrateEnabled()) {
                     String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
                     if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
                         if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
@@ -1540,9 +1538,9 @@ public class KcaService extends Service {
         double seekValue = 0;
         String seekStringValue = "";
         seekValue = KcaDeckInfo.getSeekValue(data, 0, cn, null);
-        if(isCombined) seekValue += KcaDeckInfo.getSeekValue(data, 1, cn, null);
+        if (isCombined) seekValue += KcaDeckInfo.getSeekValue(data, 1, cn, null);
         if (cn == SEEK_PURE) {
-            seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), seekType, (int)seekValue);
+            seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), seekType, (int) seekValue);
         } else {
             seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, seekValue);
         }
@@ -1554,7 +1552,7 @@ public class KcaService extends Service {
         deckInfoData.add(infoData);
 
         int speedValue = 0;
-        if(isCombined) {
+        if (isCombined) {
             speedValue = Math.min(KcaDeckInfo.getSpeed(data, 0, null), KcaDeckInfo.getSpeed(data, 1, null));
         } else {
             speedValue = KcaDeckInfo.getSpeed(data, 0, null);
@@ -1910,9 +1908,9 @@ public class KcaService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: "+newConfig.getLocales().get(0).getLanguage());
+            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage());
         } else {
-            Log.e("KCA", "lang: "+newConfig.locale.getLanguage());
+            Log.e("KCA", "lang: " + newConfig.locale.getLanguage());
         }
         // Force Locale Setting
         Locale locale = new Locale(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
@@ -1922,9 +1920,9 @@ public class KcaService extends Service {
             newConfig.locale = locale;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: "+newConfig.getLocales().get(0).getLanguage());
+            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage());
         } else {
-            Log.e("KCA", "lang: "+newConfig.locale.getLanguage());
+            Log.e("KCA", "lang: " + newConfig.locale.getLanguage());
         }
         super.onConfigurationChanged(newConfig);
         //setFrontViewNotifier(FRONT_NONE, 0, null);
