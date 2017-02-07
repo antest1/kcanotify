@@ -101,7 +101,7 @@ public class KcaVpnService extends VpnService {
     public static boolean checkOn() {
         return is_on;
     }
-
+    /*
     synchronized private static PowerManager.WakeLock getLock(Context context) {
         if (wlInstance == null) {
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -110,7 +110,7 @@ public class KcaVpnService extends VpnService {
         }
         return wlInstance;
     }
-
+    */
     private final class CommandHandler extends Handler {
         public int queue = 0;
 
@@ -146,6 +146,7 @@ public class KcaVpnService extends VpnService {
                     queue--;
                     //reportQueueSize();
                 }
+                /*
                 try {
                     PowerManager.WakeLock wl = getLock(KcaVpnService.this);
                     if (wl.isHeld())
@@ -156,6 +157,7 @@ public class KcaVpnService extends VpnService {
                 } catch (Throwable ex) {
                     Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
                 }
+                */
             }
         }
 
@@ -322,7 +324,7 @@ public class KcaVpnService extends VpnService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e(TAG, "Received " + intent);
 
-        getLock(this).acquire();
+        //getLock(this).acquire();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean enabled = prefs.getBoolean("enabled", false);
@@ -370,11 +372,12 @@ public class KcaVpnService extends VpnService {
 
     @Override
     public void onRevoke() {
-
         Log.i(TAG, "Revoke");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().putBoolean("enabled", false).apply();
-        super.onRevoke();
+        if(!prefs.getBoolean("svcenabled", false)) {
+            prefs.edit().putBoolean("enabled", false).apply();
+            super.onRevoke();
+        }
     }
 
     private Builder getBuilder(List<Rule> listAllowed, List<Rule> listRule) {

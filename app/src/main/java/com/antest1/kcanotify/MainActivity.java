@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             startActivityForResult(prepare, REQUEST_VPN);
                         }
+                        new SettingActivity.getRecentVersion(MainActivity.this, false).execute();
                     } catch (Throwable ex) {
                         // Prepare failed
                         Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
@@ -116,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                     KcaVpnService.stop("switch off", MainActivity.this);
                     prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
                 }
-                new SettingActivity.getRecentVersion(MainActivity.this, false).execute();
             }
         });
 
