@@ -1147,6 +1147,7 @@ public class KcaBattleViewService extends Service {
                     clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                     if (clickDuration < MAX_CLICK_DURATION) {
                         mView.setVisibility(View.GONE);
+                        itemView.setVisibility(View.GONE);
                     }
                     break;
             }
