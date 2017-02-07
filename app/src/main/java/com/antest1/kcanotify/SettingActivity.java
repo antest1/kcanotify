@@ -321,6 +321,7 @@ public class SettingActivity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int which) {
                                         String downloadUrl = context.getString(R.string.app_download_link);
                                         Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         context.startActivity(i);
                                     }
                                 });
