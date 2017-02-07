@@ -298,6 +298,7 @@ public class KcaService extends Service {
                 .setSmallIcon(R.mipmap.noti_icon4)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.noti_icon3))
                 .setContentTitle(title)
+                .setContentText(getStringWithLocale(R.string.kca_view_context_expand))
                 .setStyle(viewNotificationText.bigText(content1))
                 .setTicker(title)
                 .setContentIntent(pendingIntent)
@@ -662,13 +663,12 @@ public class KcaService extends Service {
                         }
 
                         int checkvalue = 0;
-                        if (KcaApiData.isEventTime) {
+                        if (isCombined) {
                             checkvalue = Math.max(firstHeavyDamaged, secondHeavyDamaged);
                         } else {
                             checkvalue = firstHeavyDamaged;
                         }
 
-                        KcaBattle.setStartHeavyDamageExist(checkvalue);
                         switch (checkvalue) {
                             case HD_DAMECON:
                             case HD_DANGER:
@@ -733,8 +733,9 @@ public class KcaService extends Service {
                             JsonObject api_data = new JsonObject();
                             JsonArray api_deck_data = new JsonArray();
                             JsonArray api_ship_data = new JsonArray();
+                            int checkvalue = 0;
 
-                            if (KcaApiData.isEventTime) { // TODO: Combined Fleet for Event
+                            if (isCombined) { // TODO: Combined Fleet for Event
                                 api_deck_data.add(currentPortDeckData.get(0));
                                 JsonArray firstShipInfo = currentPortDeckData.get(0).getAsJsonObject().getAsJsonArray("api_ship");
                                 for (JsonElement e : firstShipInfo) {
@@ -751,7 +752,16 @@ public class KcaService extends Service {
                                 }
                                 KcaBattle.dameconflag = KcaDeckInfo.getDameconStatus(api_deck_data, 0);
                                 KcaBattle.dameconcbflag = KcaDeckInfo.getDameconStatus(api_deck_data, 1);
+
+                                int firstHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 0);
+                                int secondHeavyDamaged = 0;
+                                if (currentPortDeckData.size() >= 2) {
+                                    secondHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, 1);
+                                }
+                                checkvalue = Math.max(firstHeavyDamaged, secondHeavyDamaged);
                             } else {
+                                int fleetHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(currentPortDeckData, deck_id);
+                                checkvalue = fleetHeavyDamaged;
                                 api_deck_data.add(currentPortDeckData.get(deck_id));
                                 JsonArray firstShipInfo = currentPortDeckData.get(deck_id).getAsJsonObject().getAsJsonArray("api_ship");
                                 for (JsonElement e : firstShipInfo) {
@@ -764,6 +774,7 @@ public class KcaService extends Service {
                             api_data.add("api_deck_data", api_deck_data);
                             api_data.add("api_ship_data", api_ship_data);
                             KcaBattle.setDeckPortData(api_data);
+                            KcaBattle.setStartHeavyDamageExist(checkvalue);
                         }
                         KcaBattle.processData(url, battleApiData);
                     }
