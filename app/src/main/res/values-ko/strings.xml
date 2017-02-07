@@ -227,4 +227,11 @@
     <string name="kca_view_condition_2" formatted="false">피로도 #2: %s</string>
     <string name="not_supplied" formatted="false">제%d함대가 보급되지 않았습니다!</string>
     <string name="sound_kind_mixed">소리+진동</string>
+    <string name="viewbutton_hide">요정님: ㅂㅂ</string>
+    <string name="fairy_hidden_notification_action_remove">제거하기</string>
+    <string name="fairy_hidden_notification_action_return">다시 표시하기</string>
+    <string name="fairy_hidden_notification_title">요정님이 숨김됨</string>
+    <string name="fairy_hidden_notification_text">아래로 펼쳐서 동작을 선택하세요</string>
+    <string name="fairy_hidden_notification_bigtext">동작을 선택하세요</string>
+    <string name="kca_view_context_expand">아래로 펼쳐서 내용 표시</string>
 </resources>

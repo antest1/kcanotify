@@ -138,7 +138,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_view_hdmg_damecon_format" formatted="false">[Provisions/Damecon available!] %s Ready %s</string>
     <string name="kca_view_hdmg_format" formatted="false">[Provisions available!] %s Ready %s</string>
     <string name="kca_view_normal_format" formatted="false">%s Ready %s</string>
-
+    <string name="kca_view_context_expand">Swipe down to show content</string>
     <string name="kca_view_noexpedition">No expeditions are running.</string>
     <string name="kca_view_expedition_header">Time Remaining:</string>
 
@@ -267,4 +267,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="not_supplied" formatted="false">Fleet %d is not supplied!</string>
     <string name="sound_kind_mixed">Sound+Vibrate</string>
     <string name="sound_kind_value_mixed" translatable="false">mixed</string>
+    <string name="viewbutton_hide">Fairy: bye-bye!</string>
+    <string name="fairy_hidden_notification_title">Fairy Hidden</string>
+    <string name="fairy_hidden_notification_text">Swipe down to select action</string>
+    <string name="fairy_hidden_notification_bigtext">select action</string>
+    <string name="fairy_hidden_notification_action_return">Show Again</string>
+    <string name="fairy_hidden_notification_action_remove">Remove</string>
 </resources>
