@@ -52,6 +52,7 @@ public class KcaBattle {
     public static int currentEventMapRank = 0;
 
     public static boolean isCombined = false;
+    public static boolean isEndReached = false;
     public static boolean isBossReached = false;
     public static int startHeavyDamageExist;
 
@@ -364,6 +365,7 @@ public class KcaBattle {
                 currentMapNo = api_data.get("api_mapinfo_no").getAsInt();
                 currentNode = api_data.get("api_no").getAsInt();
                 isBossReached = false;
+                isEndReached = false;
                 currentEnemyDeckName = "";
 
                 int api_event_kind = api_data.get("api_event_kind").getAsInt();
@@ -410,7 +412,7 @@ public class KcaBattle {
                 if (api_event_id == API_NODE_EVENT_ID_BOSS) { // Reach Booss (event id = 5)
                     isBossReached = true;
                 }
-
+                isEndReached = (api_data.get("api_next").getAsInt() == 0);
                 String currentNodeAlphabet = KcaApiData.getCurrentNodeAlphabet(currentMapArea, currentMapNo, currentNode);
 
                 JsonObject nodeInfo = api_data;
@@ -689,7 +691,7 @@ public class KcaBattle {
 
                 nowhps = afterhps;
 
-                if(url.equals(API_REQ_SORTIE_BATTLE_RESULT)) {
+                if(!isEndReached && url.equals(API_REQ_SORTIE_BATTLE_RESULT)) {
                     JsonObject heavyDamagedInfo = new JsonObject();
                     int checkresult = checkHeavyDamagedExist();
                     Log.e("KCA", "CheckHeavyDamaged " + String.valueOf(checkresult));
@@ -1534,17 +1536,20 @@ public class KcaBattle {
 
                 Bundle bundle;
                 Message sMsg;
-                JsonObject heavyDamagedInfo = new JsonObject();
-                int checkresult = checkCombinedHeavyDamagedExist();
-                Log.e("KCA", "CheckHeavyDamaged " + String.valueOf(checkresult));
-                if (checkresult != HD_NONE) {
-                    heavyDamagedInfo.addProperty("data", checkresult);
-                    bundle = new Bundle();
-                    bundle.putString("url", KCA_API_NOTI_HEAVY_DMG);
-                    bundle.putString("data", gson.toJson(heavyDamagedInfo));
-                    sMsg = sHandler.obtainMessage();
-                    sMsg.setData(bundle);
-                    sHandler.sendMessage(sMsg);
+
+                if (!isEndReached) {
+                    int checkresult = checkCombinedHeavyDamagedExist();
+                    Log.e("KCA", "CheckHeavyDamaged " + String.valueOf(checkresult));
+                    if (checkresult != HD_NONE) {
+                        JsonObject heavyDamagedInfo = new JsonObject();
+                        heavyDamagedInfo.addProperty("data", checkresult);
+                        bundle = new Bundle();
+                        bundle.putString("url", KCA_API_NOTI_HEAVY_DMG);
+                        bundle.putString("data", gson.toJson(heavyDamagedInfo));
+                        sMsg = sHandler.obtainMessage();
+                        sMsg.setData(bundle);
+                        sHandler.sendMessage(sMsg);
+                    }
                 }
 
                 JsonObject dropInfo = new JsonObject();
