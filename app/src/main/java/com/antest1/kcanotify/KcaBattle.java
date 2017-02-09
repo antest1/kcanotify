@@ -162,6 +162,28 @@ public class KcaBattle {
         return f.intValue();
     }
 
+    public static boolean isMainFleetInNight(int[] aftercbhps, int[] nowcbhps) {
+        int[] enemyAfterHps = Arrays.copyOfRange(aftercbhps, 7, 13);
+        int[] enemyNowHps = Arrays.copyOfRange(nowcbhps, 7, 13);
+
+        int enemyCount = 6;
+        int enemySunkCount = 0;
+        for (int i = 0; i < 6; i++) {
+            if(enemyNowHps[i] == -1) {
+                enemyCount -= 1;
+            } else {
+                if(enemyAfterHps[i] <= 0)
+                    enemySunkCount += 1;
+            }
+        }
+
+        if (enemyCount > 1 && (enemySunkCount >= (int)Math.floor(0.7*enemyCount))) { // A~SS
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static JsonObject calculateRank(int[] afterhps, int[] nowhps, int[] aftercbhps, int[] nowcbhps) {
         JsonObject result = new JsonObject();
 

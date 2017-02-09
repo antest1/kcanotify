@@ -44,4 +44,6 @@
     <color name="itemlevel">#16a085</color>
     <color name="itemalv1">#64b5f6</color>
     <color name="itemalv2">#fbc02d</color>
+
+    <color name="colorNightTargetFleet">#64b5f6</color>
 </resources>
