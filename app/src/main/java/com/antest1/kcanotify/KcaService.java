@@ -86,9 +86,6 @@ import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaUtils.*;
 
 public class KcaService extends Service {
-    public static final int ANTEST_USERID = 15108389;
-
-    private String android_id;
     public static String currentLocale;
 
     public static boolean isServiceOn = false;
@@ -155,7 +152,6 @@ public class KcaService extends Service {
             stopSelf();
         }
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-        android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         for (int i = 0; i < 3; i++) {
             kcaExpeditionList[i] = null;
@@ -525,10 +521,7 @@ public class KcaService extends Service {
                     //Log.e("KCA", "Total Items: " + String.valueOf(size));
                     //Toast.makeText(contextWithLocale, String.valueOf(userId), Toast.LENGTH_LONG).show();
 
-                    if (userId == ANTEST_USERID && api_start2_down_mode && api_start2_data != null) {
-                        Toast.makeText(getApplicationContext(), "Uploading Data...", Toast.LENGTH_LONG).show();
-                        new retrieveApiStartData().execute("3a4104a5ef67f0823f78a636fbd2bbbf", "up", api_start2_data);
-                    } else if (api_start2_data == null && api_start2_down_mode) {
+                    if (api_start2_data == null && api_start2_down_mode) {
                         Toast.makeText(getApplicationContext(), String.format("Downloading Data"), Toast.LENGTH_LONG).show();
                         new retrieveApiStartData().execute("", "down", "");
                         setDataLoadTriggered();
@@ -1850,67 +1843,40 @@ public class KcaService extends Service {
         }
 
         public String executeClient(String token, String method, String data) {
-            try {
-                if (method.equals("up")) {
-                    String dataSendUrl = String.format(getStringWithLocale(R.string.api_start2_upload_link), token, android_id, method, kca_version);
-                    AjaxCallback<String> cb = new AjaxCallback<String>() {
-                        @Override
-                        public void callback(String url, String data, AjaxStatus status) {
-                            if (status.getCode() == HttpStatus.SC_OK) {
-                                Toast.makeText(getApplicationContext(), "Data Uploaded", Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Error: " + status.getError(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    };
-                    AQuery aq = new AQuery(KcaService.this);
-                    cb.header("Referer", "app:/KCA/");
-                    cb.header("Content-Type", "application/x-www-form-urlencoded");
-                    HttpEntity entity = new ByteArrayEntity(gzipcompress(data));
-                    cb.param(AQuery.POST_ENTITY, entity);
-                    aq.ajax(dataSendUrl, String.class, cb);
+            if (KcaApiData.isGameDataLoaded()) return null;
+            kcaFirstDeckInfo = getStringWithLocale(R.string.kca_toast_loading_data);
+            String dataUrl;
+            if (kca_version == null) {
+                dataUrl = String.format(getStringWithLocale(R.string.api_start2_recent_version_link));
+            } else {
+                dataUrl = String.format(getStringWithLocale(R.string.api_start2_version_link), kca_version);
+            }
 
-                } else {
-                    if (KcaApiData.isGameDataLoaded()) return null;
-                    kcaFirstDeckInfo = getStringWithLocale(R.string.kca_toast_loading_data);
-                    String dataUrl;
-                    if (kca_version == null) {
-                        dataUrl = String.format(getStringWithLocale(R.string.api_start2_recent_version_link));
-                    } else {
-                        dataUrl = String.format(getStringWithLocale(R.string.api_start2_version_link), kca_version);
+            AjaxCallback<String> cb = new AjaxCallback<String>() {
+                @Override
+                public void callback(String url, String data, AjaxStatus status) {
+                    try {
+                        String remote_kca_version = status.getHeader("X-Api-Version");
+                        if (kca_version != null && !kca_version.equals(remote_kca_version)) {
+                            Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.kca_toast_inconsistent_data), Toast.LENGTH_LONG).show();
+                        } else {
+                            if (kca_version == null) kca_version = remote_kca_version;
+                            writeCacheData(getApplicationContext(), data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
+                            KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
+                            setPreferences(getApplicationContext(), "kca_version", kca_version);
+                        }
+                    } catch (IOException e1) {
+                        Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.kca_toast_ioexceptionerror), Toast.LENGTH_LONG).show();
+                        Log.e("KCA", "I/O Error");
                     }
 
-                    AjaxCallback<String> cb = new AjaxCallback<String>() {
-                        @Override
-                        public void callback(String url, String data, AjaxStatus status) {
-                            try {
-                                String remote_kca_version = status.getHeader("X-Api-Version");
-                                if (kca_version != null && !kca_version.equals(remote_kca_version)) {
-                                    Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.kca_toast_inconsistent_data), Toast.LENGTH_LONG).show();
-                                } else {
-                                    if (kca_version == null) kca_version = remote_kca_version;
-                                    writeCacheData(getApplicationContext(), data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
-                                    KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
-                                    setPreferences(getApplicationContext(), "kca_version", kca_version);
-                                }
-                            } catch (IOException e1) {
-                                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.kca_toast_ioexceptionerror), Toast.LENGTH_LONG).show();
-                                Log.e("KCA", "I/O Error");
-                            }
-
-                        }
-                    };
-                    AQuery aq = new AQuery(KcaService.this);
-                    cb.header("Referer", "app:/KCA/");
-                    cb.header("Content-Type", "application/x-www-form-urlencoded");
-                    Log.e("KCA", dataUrl);
-                    aq.ajax(dataUrl, String.class, cb);
                 }
-            } catch (ProtocolException | MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            };
+            AQuery aq = new AQuery(KcaService.this);
+            cb.header("Referer", "app:/KCA/");
+            cb.header("Content-Type", "application/x-www-form-urlencoded");
+            Log.e("KCA", dataUrl);
+            aq.ajax(dataUrl, String.class, cb);
 
             return null;
         }
