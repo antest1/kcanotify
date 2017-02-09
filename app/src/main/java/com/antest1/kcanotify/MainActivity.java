@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             startActivityForResult(prepare, REQUEST_VPN);
                         }
-                        new SettingActivity.getRecentVersion(MainActivity.this, false).execute();
                     } catch (Throwable ex) {
                         // Prepare failed
                         Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
@@ -171,6 +170,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.ma_toast_overay_diabled), Toast.LENGTH_LONG).show();
             }
         }
+
+        new SettingActivity.getRecentVersion(MainActivity.this, false).execute();
     }
 
     @Override
