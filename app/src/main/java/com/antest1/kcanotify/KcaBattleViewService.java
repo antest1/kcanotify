@@ -936,6 +936,9 @@ public class KcaBattleViewService extends Service {
                     if (alv > 0) {
                         ((TextView) itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class)))
                                 .setText(getStringWithLocale(getId(String.format("alv_%d", alv), R.string.class)));
+                        int alvColorId = (alv <= 3) ? 1 : 2;
+                        itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), getId(String.format("itemalv%d", alvColorId), R.color.class)));
                         itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.VISIBLE);
                     } else {
                         itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.GONE);
