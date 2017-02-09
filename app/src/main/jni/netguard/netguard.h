@@ -522,4 +522,4 @@ int is_writable(int fd);
 
 long long get_ms();
 
-void test(char* data, int size, int type, char* saddr, char* taddr);
+void test(char* data, int size, int type, char* saddr, char* taddr, int sport, int tport);

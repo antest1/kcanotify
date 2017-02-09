@@ -52,7 +52,7 @@ dependencies {
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile group: 'com.googlecode.android-query', name: 'android-query', version: '0.25.9'
     compile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
-
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
 
     compile 'ch.acra:acra:4.9.0'
     testCompile 'junit:junit:4.12'

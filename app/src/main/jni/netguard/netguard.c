@@ -862,7 +862,7 @@ jbyteArray cstr2jbyteArray( JNIEnv *env, const char *nativeStr, int size)
     return javaBytes;
 }
 
-void test(char* data, int size, int type, char* saddr, char* taddr) {
+void test(char* data, int size, int type, char* saddr, char* taddr, int sport, int tport) {
     jclass target_class = NULL;
     jmethodID method_callback = NULL;
     JNIEnv *env;
@@ -876,8 +876,8 @@ void test(char* data, int size, int type, char* saddr, char* taddr) {
         int result = (*env)->CallStaticIntMethod(env, clsData, method_callback, s, t);
         if (result == 1) {
             jbyteArray a = cstr2jbyteArray(env, data, size);
-            method_callback = (*env)->GetStaticMethodID(env, clsData, "getDataFromNative", "([BII[B[B)V");
-            (*env)->CallStaticVoidMethod(env, clsData, method_callback, a, size, type, s, t);
+            method_callback = (*env)->GetStaticMethodID(env, clsData, "getDataFromNative", "([BII[B[BII)V");
+            (*env)->CallStaticVoidMethod(env, clsData, method_callback, a, size, type, s, t, sport, tport);
             (*env)->DeleteLocalRef(env, a);
         }
         (*env)->DeleteLocalRef(env, s);
