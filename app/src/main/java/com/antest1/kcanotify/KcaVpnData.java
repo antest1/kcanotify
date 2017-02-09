@@ -72,7 +72,6 @@ public class KcaVpnData {
     static boolean chunkflag = false;
     static boolean isreadyflag = false;
 
-    static String responseHeaderPart = "";
     static int responseBodyLength = -1;
 
     private static Map<Integer, String> portToUri = new HashMap<Integer, String>();
@@ -81,6 +80,7 @@ public class KcaVpnData {
     private static Map<Integer, Integer> portToResponseHeaderLength = new HashMap<Integer, Integer>();
     private static Map<Integer, Integer> portToLength = new HashMap<Integer, Integer>();
     private static Map<Integer, Boolean> portToGzipped = new HashMap<Integer, Boolean>();
+    private static Map<Integer, String> portToResponseHeaderPart = new HashMap<Integer, String>();
 
     public static void setHandler(Handler h) {
         handler = h;
@@ -116,7 +116,7 @@ public class KcaVpnData {
                     state = REQUEST;
                     portToRequestData.put(sport, new Byte[]{});
                     portToResponseData.put(sport, new Byte[]{});
-                    responseHeaderPart = "";
+                    portToResponseHeaderPart.put(sport, "");
                     String[] header = head.split("\r\n");
                     kcdataflag = checkKcApi(header[0]);
                     requestUri = header[0].split(" ")[1];
@@ -129,24 +129,29 @@ public class KcaVpnData {
                 portToRequestData.put(sport, ArrayUtils.toObject(Bytes.concat(ArrayUtils.toPrimitive(requestData), data)));
             } else if (type == RESPONSE) {
                 state = RESPONSE;
-                if (responseHeaderPart.length() == 0) {
+                if (portToResponseHeaderPart.get(tport).length() == 0) {
                     portToResponseData.put(tport, new Byte[]{});
+                    String prevResponseHeaderPart = portToResponseHeaderPart.get(tport);
                     String responseDataStr = new String(data);
-                    responseHeaderPart = responseDataStr.split("\r\n\r\n")[0];
-                    portToResponseHeaderLength.put(tport, responseHeaderPart.length());
-                    String[] headers = responseHeaderPart.split("\r\n");
-                    for (String line : headers) {
-                        if (line.startsWith("Content-Encoding: ")) {
-                            portToGzipped.put(tport, line.contains("gzip"));
-                            Log.e("KCA", String.valueOf(tport) + " gzip " + portToGzipped.get(tport));
-                        } else if (line.startsWith("Transfer-Encoding")) {
-                            if (line.contains("chunked")) {
-                                portToLength.put(tport, -1);
-                                responseBodyLength = -1;
+                    if (!responseDataStr.contains("\r\n\r\n")) {
+                        portToResponseHeaderPart.put(tport, prevResponseHeaderPart.concat(responseDataStr));
+                    } else {
+                        portToResponseHeaderPart.put(tport, prevResponseHeaderPart.concat(responseDataStr.split("\r\n\r\n", 2)[0]));
+                        portToResponseHeaderLength.put(tport, portToResponseHeaderPart.get(tport).length());
+                        String[] headers = portToResponseHeaderPart.get(tport).split("\r\n");
+                        for (String line : headers) {
+                            if (line.startsWith("Content-Encoding: ")) {
+                                portToGzipped.put(tport, line.contains("gzip"));
+                                Log.e("KCA", String.valueOf(tport) + " gzip " + portToGzipped.get(tport));
+                            } else if (line.startsWith("Transfer-Encoding")) {
+                                if (line.contains("chunked")) {
+                                    portToLength.put(tport, -1);
+                                    responseBodyLength = -1;
+                                }
+                            } else if (line.startsWith("Content-Length")) {
+                                portToLength.put(tport, Integer.parseInt(line.replaceAll("Content-Length: ", "").trim()));
+                                responseBodyLength = Integer.parseInt(line.replaceAll("Content-Length: ", "").trim());
                             }
-                        } else if (line.startsWith("Content-Length")) {
-                            portToLength.put(tport, Integer.parseInt(line.replaceAll("Content-Length: ", "").trim()));
-                            responseBodyLength = Integer.parseInt(line.replaceAll("Content-Length: ", "").trim());
                         }
                     }
                 }
@@ -168,11 +173,11 @@ public class KcaVpnData {
                     if (requestHeadBody[1].length() > 0) {
                         requestBody = requestHeadBody[1].getBytes();
                     }
-                    Log.e("KCA", String.valueOf(responseData.length));
-                    Log.e("KCA", String.valueOf(responseHeaderPart.length()));
-                    Log.e("KCA", "====================================");
                     byte[] responseData = ArrayUtils.toPrimitive(portToResponseData.get(tport));
                     byte[] responseBody = Arrays.copyOfRange(responseData, portToResponseHeaderLength.get(tport) + 4, responseData.length);
+                    Log.e("KCA", String.valueOf(responseData.length));
+                    Log.e("KCA", String.valueOf(portToResponseHeaderPart.get(tport).length()));
+                    Log.e("KCA", "====================================");
                     if (chunkflag) {
                         Log.e("KCA", byteArrayToHex(Arrays.copyOfRange(responseBody, 0, 15)));
                         Log.e("KCA", byteArrayToHex(Arrays.copyOfRange(responseBody, responseBody.length - 15, responseBody.length)));
