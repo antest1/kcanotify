@@ -171,6 +171,7 @@ public class KcaViewButtonService extends Service {
     @Override
     public void onDestroy() {
         mManager.removeView(mView);
+        notificationManager.cancel(FAIRY_NOTIFICATION_ID);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battleinfo_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlenode_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlehdmg_receiver);
