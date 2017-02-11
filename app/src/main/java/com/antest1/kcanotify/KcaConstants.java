@@ -63,6 +63,8 @@ public final class KcaConstants {
     public static final String API_REQ_SORTIE_LDAIRBATTLE = "/api_req_sortie/ld_airbattle";
     public static final String API_REQ_SORTIE_BATTLE_RESULT = "/api_req_sortie/battleresult";
 
+    public static final String API_REQ_MAP_SELECT_EVENTMAP_RANK = "api_req_map/select_eventmap_rank";
+
     public static final String API_REQ_COMBINED_BATTLE = "/api_req_combined_battle/battle"; // 기동
     public static final String API_REQ_COMBINED_BATTLE_WATER = "/api_req_combined_battle/battle_water"; // 수상
     public static final String API_REQ_COMBINED_BATTLE_EC = "/api_req_combined_battle/ec_battle"; // 단일-연합

@@ -619,6 +619,23 @@ public class KcaService extends Service {
 
                 }
 
+                if(url.startsWith(API_REQ_MAP_SELECT_EVENTMAP_RANK)) {
+                    String[] requestData = request.split("&");
+                    int mapno = 0;
+                    int rank = 0;
+                    for (int i = 0; i < requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if (decodedData.startsWith("api_map_no")) {
+                            mapno = Integer.valueOf(decodedData.replace("api_map_no=", ""));
+                            break;
+                        } else if (decodedData.startsWith("api_rank")) {
+                            rank = Integer.valueOf(decodedData.replace("api_rank=", ""));
+                            break;
+                        }
+                    }
+                    KcaApiData.setEventMapDifficulty(mapno, rank);
+                }
+
                 if (url.startsWith(API_GET_MEMBER_MAPINFO) || url.startsWith(API_GET_MEMBER_MISSION)) {
                     // Event Check Part
                     // TODO: add handler for selecting event map rank
@@ -630,7 +647,9 @@ public class KcaService extends Service {
                             JsonObject mapData = map.getAsJsonObject();
                             if (mapData.has("api_eventmap")) {
                                 eventMapCount += 1;
-                                KcaApiData.setEventMapDifficulty(eventMapCount, mapData.get("api_selected_rank").getAsInt());
+                                JsonObject eventData = mapData.getAsJsonObject("api_eventmap");
+                                if (eventData.has("api_selected_rank"))
+                                    KcaApiData.setEventMapDifficulty(eventMapCount, eventData.get("api_selected_rank").getAsInt());
                             }
                         }
                     }
