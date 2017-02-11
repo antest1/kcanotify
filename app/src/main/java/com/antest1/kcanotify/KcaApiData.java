@@ -140,6 +140,9 @@ public class KcaApiData {
     public static final int T2_LBA_AIRCRAFT = 47;
     public static final int T2_ITCP_FIGHTER = 48;
 
+    public static final int T2_SAIUN_PART = 50;
+    public static final int T2_SUBMARINE_RADER = 51;
+
     public static final int T2_JET_FIGHTER = 56;
     public static final int T2_JET_BOMBER = 57;
     public static final int T2_JET_TORPEDO_BOMBER = 58;
