@@ -474,6 +474,20 @@ public class KcaBattle {
                         }
                     }
                 }
+
+                if (api_data.has("api_air_base_attack") && !api_data.get("api_air_base_attack").isJsonNull()) {
+                    JsonArray airbase_attack = api_data.getAsJsonArray("api_air_base_attack");
+                    for (int i = 0; i < airbase_attack.size(); i++) {
+                        JsonObject airbase_attack_info = airbase_attack.get(i).getAsJsonObject();
+                        JsonObject airbase_attack_stage3 = airbase_attack_info.getAsJsonObject("api_stage3");
+                        JsonArray airbase_attack_edam = airbase_attack_stage3.getAsJsonArray("api_edam");
+                        for (int j = 1; j < airbase_attack_edam.size(); j++) {
+                            int e_idx = getEnemyIdx(j);
+                            afterhps[e_idx] -= cnv(airbase_attack_edam.get(j));
+                        }
+                    }
+                }
+
                 // 항공전 Stage 3
                 if (!api_data.get("api_kouku").isJsonNull()) {
                     JsonObject kouku = api_data.getAsJsonObject("api_kouku");
