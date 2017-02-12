@@ -1538,8 +1538,12 @@ public class KcaBattle {
                         JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
                         for (int t = 0; t < target.size(); t++) {
                             int target_idx = cnv(target.get(t));
-                            if (activedeck[1] == 1) {
-                                afterhps[target_idx] -= cnv(target_dmg.get(t));
+                            if (i > 6) {
+                                if (activedeck[1] == 1) {
+                                    afterhps[target_idx] -= cnv(target_dmg.get(t));
+                                } else {
+                                    aftercbhps[target_idx] -= cnv(target_dmg.get(t));
+                                }
                             } else {
                                 aftercbhps[target_idx] -= cnv(target_dmg.get(t));
                             }
