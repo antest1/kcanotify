@@ -166,6 +166,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="formation_c2">CF2(Forward)</string>
     <string name="formation_c3">CF3(Ring)</string>
     <string name="formation_c4">CF4(Battle)</string>
+    <string name="formation_c1_short">Anti-Sub</string>
+    <string name="formation_c2_short">Forward</string>
+    <string name="formation_c3_short">Ring</string>
+    <string name="formation_c4_short">Battle</string>
 
     <string name="engagement_label">Engagement</string>
     <string name="engagement_t_advantage">Green T</string>

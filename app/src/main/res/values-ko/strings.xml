@@ -158,6 +158,10 @@
     <string name="formation_c2">제2경계항행서열(전방경계)</string>
     <string name="formation_c3">제3경계항행서열(윤형진)</string>
     <string name="formation_c4">제4경계항행서열(전투대형)</string>
+    <string name="formation_c1_short">대잠경계</string>
+    <string name="formation_c2_short">전방경계</string>
+    <string name="formation_c3_short">윤형진</string>
+    <string name="formation_c4_short">전투대형</string>
 
     <string name="engagement_label">교전형태</string>
     <string name="engagement_t_advantage">T유리</string>

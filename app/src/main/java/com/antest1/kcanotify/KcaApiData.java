@@ -842,7 +842,7 @@ public class KcaApiData {
         return currentNodeInfo;
     }
 
-    public static String getFormationString(Context context, int v) {
+    public static String getFormationString(Context context, int v, boolean is_short) {
         switch(v) {
             case FORMATION_LAH:
                 return context.getString(R.string.formation_lineahead);
@@ -855,13 +855,17 @@ public class KcaApiData {
             case FORMATION_LAB:
                 return context.getString(R.string.formation_lineabreast);
             case FORMATION_C1:
-                return context.getString(R.string.formation_c1);
+                if (is_short) return context.getString(R.string.formation_c1_short);
+                else return context.getString(R.string.formation_c1);
             case FORMATION_C2:
-                return context.getString(R.string.formation_c2);
+                if (is_short) return context.getString(R.string.formation_c2_short);
+                else return context.getString(R.string.formation_c2);
             case FORMATION_C3:
-                return context.getString(R.string.formation_c3);
+                if (is_short) return context.getString(R.string.formation_c3_short);
+                else return context.getString(R.string.formation_c3);
             case FORMATION_C4:
-                return context.getString(R.string.formation_c4);
+                if (is_short) return context.getString(R.string.formation_c4_short);
+                else return context.getString(R.string.formation_c4);
             default:
                 return "";
         }

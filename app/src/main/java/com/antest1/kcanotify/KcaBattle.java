@@ -871,7 +871,7 @@ public class KcaBattle {
                 }
 
                 // 항공전 Stage 3
-                if (!api_data.get("api_kouku").isJsonNull()) {
+                if (api_data.has("api_kouku") && !api_data.get("api_kouku").isJsonNull()) {
                     JsonObject kouku = api_data.getAsJsonObject("api_kouku");
                     if (!kouku.get("api_stage3").isJsonNull()) {
                         JsonObject kouku_stage3 = kouku.getAsJsonObject("api_stage3");
@@ -895,7 +895,7 @@ public class KcaBattle {
                 }
 
                 // 지원함대
-                if (!api_data.get("api_support_info").isJsonNull()) {
+                if (api_data.has("api_support_info") && !api_data.get("api_support_info").isJsonNull()) {
                     JsonObject support_info = api_data.getAsJsonObject("api_support_info");
                     JsonArray damage = new JsonArray();
                     if (!support_info.get("api_support_airatack").isJsonNull()) {
@@ -913,7 +913,7 @@ public class KcaBattle {
                 }
 
                 // 선제대잠
-                if (!api_data.get("api_opening_taisen").isJsonNull()) {
+                if (api_data.has("api_opening_taisen") && !api_data.get("api_opening_taisen").isJsonNull()) {
                     JsonObject opening_taisen = api_data.getAsJsonObject("api_opening_taisen");
                     JsonArray df_list = opening_taisen.getAsJsonArray("api_df_list");
                     JsonArray df_damage = opening_taisen.getAsJsonArray("api_damage");
@@ -928,7 +928,7 @@ public class KcaBattle {
                 }
 
                 // 개막뇌격
-                if (!api_data.get("api_opening_atack").isJsonNull()) {
+                if (api_data.has("api_opening_atack") && !api_data.get("api_opening_atack").isJsonNull()) {
                     JsonObject openingattack = api_data.getAsJsonObject("api_opening_atack");
                     JsonArray openingattack_fdam = openingattack.getAsJsonArray("api_fdam");
                     JsonArray openingattack_edam = openingattack.getAsJsonArray("api_edam");
@@ -943,7 +943,7 @@ public class KcaBattle {
                 // 포격전
                 for (int n = 1; n <= 3; n++) {
                     String api_name = String.format("api_hougeki%d", n);
-                    if (!api_data.get(api_name).isJsonNull()) {
+                    if (api_data.has(api_name) && !api_data.get(api_name).isJsonNull()) {
                         JsonObject hougeki = api_data.getAsJsonObject(api_name);
                         JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
                         JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
@@ -951,10 +951,9 @@ public class KcaBattle {
                             JsonArray target = df_list.get(i).getAsJsonArray();
                             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
                             for (int t = 0; t < target.size(); t++) {
-
+                                int target_idx = target.get(t).getAsInt();
                                 if (combined_type == COMBINED_A) {
                                     if (n == 1) {
-                                        int target_idx = cnv(target.get(t));
                                         if (target_idx <= 6) {
                                             aftercbhps[target_idx] -= cnv(target_dmg.get(t));
                                         } else {
@@ -964,7 +963,6 @@ public class KcaBattle {
                                         afterhps[cnv(target.get(t))] -= cnv(target_dmg.get(t));
                                     }
                                 } else if (combined_type == COMBINED_W) {
-                                    int target_idx = target.get(t).getAsInt();
                                     if (n == 3) {
                                         if (target_idx <= 6) {
                                             aftercbhps[target_idx] -= cnv(target_dmg.get(t));
@@ -975,14 +973,16 @@ public class KcaBattle {
                                         afterhps[target_idx] -= cnv(target_dmg.get(t));
                                     }
                                 }
-
                             }
                         }
+                        String hpInfo1 = Arrays.toString(afterhps);
+                        String hpInfo2 = Arrays.toString(aftercbhps);
+                        Log.e("KCA", "hpInfo: " + hpInfo1 + " / " + hpInfo2);
                     }
                 }
 
                 // 폐막뇌격
-                if (!api_data.get("api_raigeki").isJsonNull()) {
+                if (api_data.has("api_raigeki") && !api_data.get("api_raigeki").isJsonNull()) {
                     JsonObject raigeki = api_data.getAsJsonObject("api_raigeki");
                     JsonArray openingattack_fdam = raigeki.getAsJsonArray("api_fdam");
                     JsonArray openingattack_edam = raigeki.getAsJsonArray("api_edam");
@@ -1005,6 +1005,7 @@ public class KcaBattle {
                 JsonObject battleResultInfo = api_data;
                 JsonArray api_afterhps = (JsonArray) new JsonParser().parse(gson.toJson(afterhps));
                 JsonArray api_afterhps_combined = (JsonArray) new JsonParser().parse(gson.toJson(aftercbhps));
+                battleResultInfo.addProperty("api_url", url);
                 battleResultInfo.add("api_afterhps", api_afterhps);
                 battleResultInfo.add("api_afterhps_combined", api_afterhps_combined);
 
