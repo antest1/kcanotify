@@ -1617,6 +1617,11 @@ public class KcaService extends Service {
         deckInfoData.add(infoData);
 
         int[] tp = KcaDeckInfo.getTPValue(data, 0, null);
+        if (isCombined) {
+            int[] tp_c = KcaDeckInfo.getTPValue(data, 1, null);
+            tp[0] += tp_c[0];
+            tp[1] += tp_c[1];
+        }
         String tpValue = String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[0], tp[1]);
         infoData = new JsonObject();
         infoData.addProperty("is_newline", 1);
