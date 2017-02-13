@@ -59,7 +59,7 @@ public class KcaApiData {
     public static JsonObject kcItemTranslationData = new JsonObject();
 
     public static JsonObject kcShipAbbrData = new JsonObject(); // For English
-    public static JsonArray kcSimpleExpeditionData = new JsonArray();
+    public static JsonObject kcSimpleExpeditionData = new JsonObject();
     public static JsonObject kcShipInitEquipCount = new JsonObject();
 
     public static Handler sHandler = null;
@@ -300,7 +300,7 @@ public class KcaApiData {
     }
 
     public static boolean getReturnFlag(int mission_no) {
-        if (mission_no % 100 == 33 || mission_no % 100 == 34) {
+        if (mission_no  == 33 || mission_no  == 34 || mission_no > 100) {
             return false;
         } else {
             return true;
@@ -423,7 +423,11 @@ public class KcaApiData {
             Log.e("KCA", new String(bytes));
             JsonElement data = new JsonParser().parse(new String(bytes));
             if (data.isJsonArray()) {
-                kcSimpleExpeditionData = data.getAsJsonArray();
+                JsonArray array = data.getAsJsonArray();
+                for(JsonElement item: array) {
+                    JsonObject expdata = item.getAsJsonObject();
+                    kcSimpleExpeditionData.add(expdata.get("no").getAsString(), expdata);
+                }
                 return 1;
             } else {
                 return -1;

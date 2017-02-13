@@ -25,7 +25,7 @@ public class KcaExpedition implements Runnable {
     public int left_time;
     public boolean is_alive;
     public Handler sHandler;
-    public static JsonArray expeditionData;
+    public static JsonObject expeditionData;
     public static String[] left_time_str = {null, null, null};
     public static long[] complete_time_check = {-1, -1, -1};
     public static boolean[] canceled_flag = {false, false, false};
@@ -59,7 +59,7 @@ public class KcaExpedition implements Runnable {
         if(KcaApiData.kcSimpleExpeditionData == null) return;
 
         mission_no = no;
-        mission_krname = KcaApiData.kcSimpleExpeditionData.get(mission_no-1).getAsJsonObject()
+        mission_krname = KcaApiData.kcSimpleExpeditionData.getAsJsonObject(String.valueOf(mission_no))
                 .get(String.format("name-".concat(KcaUtils.getStringPreferences(ctx, PREF_KCA_LANGUAGE)))).getAsString();
         kantai_idx = kidx;
         kantai_name = name;
@@ -156,7 +156,7 @@ public class KcaExpedition implements Runnable {
     @Override
     public void run() {
         is_alive = true;
-        int max_left_time = KcaApiData.kcSimpleExpeditionData.get(mission_no-1).getAsJsonObject().get("time").getAsInt() * 60 - start_delay; // Minutes
+        int max_left_time = KcaApiData.kcSimpleExpeditionData.getAsJsonObject(String.valueOf(mission_no)).get("time").getAsInt() * 60 - start_delay; // Minutes
         // ->
         // Seconds
         int calculated_left_time = (int) ((complete_time_check[kantai_idx] - System.currentTimeMillis()) / 1000) - start_delay;

@@ -208,4 +208,14 @@
     "name-ko": "[E] 함대결전지원임무",
     "name-en": "[E] Vangard Support Missions (2)",
     "time": "30"
+}, {
+    "no": "205",
+    "name-ko": "[E]전방지원함대",
+    "name-en": "[E] Vanguard Support Missions (1)",
+    "time": "15"
+}, {
+    "no": "206",
+    "name-ko": "[E] 함대결전지원임무",
+    "name-en": "[E] Vangard Support Missions (2)",
+    "time": "30"
 }]
