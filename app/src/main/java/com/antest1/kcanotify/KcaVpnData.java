@@ -4,6 +4,7 @@ package com.antest1.kcanotify;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.IntegerRes;
 import android.util.Log;
 
 import com.google.common.io.ByteStreams;
@@ -17,8 +18,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -67,7 +70,6 @@ public class KcaVpnData {
     public static byte[] responseData = {};
 
     static String requestUri = "";
-    static boolean kcdataflag = false;
     static boolean gzipflag = false;
     static boolean chunkflag = false;
     static boolean isreadyflag = false;
@@ -81,6 +83,8 @@ public class KcaVpnData {
     private static Map<Integer, Integer> portToLength = new HashMap<Integer, Integer>();
     private static Map<Integer, Boolean> portToGzipped = new HashMap<Integer, Boolean>();
     private static Map<Integer, String> portToResponseHeaderPart = new HashMap<Integer, String>();
+
+    private static Queue<Integer> ignoreResponseList = new LinkedList<Integer>();
 
     public static void setHandler(Handler h) {
         handler = h;
@@ -114,21 +118,28 @@ public class KcaVpnData {
             if (type == REQUEST) {
                 if (head.startsWith("GET") || head.startsWith("POST")) {
                     state = REQUEST;
-                    portToRequestData.put(sport, new Byte[]{});
-                    portToResponseData.put(sport, new Byte[]{});
-                    portToResponseHeaderPart.put(sport, "");
-                    String[] header = head.split("\r\n");
-                    kcdataflag = checkKcApi(header[0]);
-                    requestUri = header[0].split(" ")[1];
                     isreadyflag = false;
-                    portToGzipped.put(sport, false);
-                    portToLength.put(sport, 0);
+                    String[] header = head.split("\r\n");
+                    requestUri = header[0].split(" ")[1];
                     portToUri.put(sport, requestUri);
+                    if(!checkKcRes(requestUri)) {
+                        portToRequestData.put(sport, new Byte[]{});
+                        portToResponseData.put(sport, new Byte[]{});
+                        portToResponseHeaderPart.put(sport, "");
+                        portToGzipped.put(sport, false);
+                        portToLength.put(sport, 0);
+                    }
                 }
-                Byte[] requestData = portToRequestData.get(sport);
-                portToRequestData.put(sport, ArrayUtils.toObject(Bytes.concat(ArrayUtils.toPrimitive(requestData), data)));
+                if (!checkKcRes(portToUri.get(sport))) {
+                    Byte[] requestData = portToRequestData.get(sport);
+                    portToRequestData.put(sport, ArrayUtils.toObject(Bytes.concat(ArrayUtils.toPrimitive(requestData), data)));
+                }
             } else if (type == RESPONSE) {
                 state = RESPONSE;
+                if (checkKcRes(portToUri.get(tport))) {
+                    Log.e("KCA", portToUri.get(tport) + " ignored");
+                    return;
+                }
                 if (portToResponseHeaderPart.get(tport).length() == 0) {
                     portToResponseData.put(tport, new Byte[]{});
                     String prevResponseHeaderPart = portToResponseHeaderPart.get(tport);
@@ -227,6 +238,13 @@ public class KcaVpnData {
         boolean isKcsApi = uri.contains("/kcsapi/api_");
         //Log.e("KCA", uri + " " + String.valueOf(isKcaVer || isKcsApi));
         return (isKcaVer || isKcsApi);
+    }
+
+    private static boolean checkKcRes(String uri) {
+        boolean isKcaRes = uri.contains("/kcs/resources");
+        boolean isKcsSound = uri.contains("/kcs/sound");
+        //Log.e("KCA", uri + " " + String.valueOf(isKcaVer || isKcsApi));
+        return (isKcaRes || isKcsSound);
     }
 
     private static byte[] unchunkAllData(byte[] data, boolean gzipped) throws IOException {

@@ -398,6 +398,13 @@ public class KcaBattleViewService extends Service {
 
                 JsonObject deckportdata = api_data.getAsJsonObject("api_deck_port");
 
+                JsonArray api_escape = new JsonArray();
+                JsonArray api_escape_combined = new JsonArray();
+                if (api_data.has("api_escape")) {
+                    api_escape = api_data.getAsJsonArray("api_escape");
+                    api_escape_combined = api_data.getAsJsonArray("api_escape_combined");
+                }
+
                 if (deckportdata != null) {
                     JsonArray deckData = deckportdata.getAsJsonArray("api_deck_data");
                     JsonArray portData = deckportdata.getAsJsonArray("api_ship_data");
@@ -468,7 +475,16 @@ public class KcaBattleViewService extends Service {
                                     battleview.findViewById(shipViewList[j + 1]).setVisibility(View.VISIBLE);
                                 }
                             }
+
+                            for (int j = 0; j < api_escape.size(); j++) {
+                                int idx = api_escape.get(j).getAsInt();
+                                ((TextView) battleview.findViewById(shipHpTxtViewList[idx])).setText(getStringWithLocale(R.string.battleview_text_retreated));
+                                ((TextView) battleview.findViewById(shipHpTxtViewList[idx])).setGravity(Gravity.CENTER_HORIZONTAL);
+                                battleview.findViewById(shipHpTxtViewList[idx])
+                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRetreated));
+                            }
                             Log.e("KCA", "FSD: " + String.valueOf(friendShipData.size()));
+
                         } else if (i == 1) { // TODO: CHECK NEEDED
                             JsonObject combinedDeckData = deckData.get(i).getAsJsonObject();
                             ((TextView) battleview.findViewById(R.id.friend_combined_fleet_name)).
@@ -506,7 +522,6 @@ public class KcaBattleViewService extends Service {
                                     ((TextView) battleview.findViewById(shipNameCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
                                     ((TextView) battleview.findViewById(shipLevelCombinedViewList[j + 1])).setText(makeLvString(level));
                                     ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).setText(makeHpString(nowhp, maxhp));
-
                                     ((TextView) battleview.findViewById(shipLevelCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
                                     ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
 
@@ -517,6 +532,15 @@ public class KcaBattleViewService extends Service {
                                     battleview.findViewById(shipCombinedViewList[j + 1]).setVisibility(View.VISIBLE);
                                 }
                             }
+
+                            for (int j = 0; j < api_escape_combined.size(); j++) {
+                                int idx = api_escape_combined.get(j).getAsInt();
+                                ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[idx])).setText(getStringWithLocale(R.string.battleview_text_retreated));
+                                ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[idx])).setGravity(Gravity.CENTER_HORIZONTAL);
+                                battleview.findViewById(shipHpTxtCombinedViewList[idx])
+                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRetreated));
+                            }
+
                             Log.e("KCA", "FCSD: " + String.valueOf(friendCombinedShipData.size()));
                         }
                     }
@@ -657,14 +681,14 @@ public class KcaBattleViewService extends Service {
                     afterhps[i] = api_afterhps.get(i).getAsInt();
                 }
 
-                if(api_data.has("api_maxhps_combined")) {
+                if (api_data.has("api_maxhps_combined")) {
                     JsonArray api_maxhps_combined = api_data.getAsJsonArray("api_maxhps_combined");
                     JsonArray api_nowhps_combined = api_data.getAsJsonArray("api_nowhps_combined");
                     JsonArray api_afterhps_combined = api_data.getAsJsonArray("api_afterhps_combined");
 
                     for (int i = 1; i < api_maxhps_combined.size(); i++) {
-                        int maxhp = api_maxhps_combined .get(i).getAsInt();
-                        int afterhp = api_afterhps_combined .get(i).getAsInt();
+                        int maxhp = api_maxhps_combined.get(i).getAsInt();
+                        int afterhp = api_afterhps_combined.get(i).getAsInt();
                         if (maxhp == -1) continue;
                         else {
                             float hpPercent = afterhp * VIEW_HP_MAX / (float) maxhp;
@@ -1110,8 +1134,15 @@ public class KcaBattleViewService extends Service {
                     Log.e("KCA", "=> Received Intent");
                     //mViewBackup = mView;
                     //mManager.removeView(mView);
-                    ((LinearLayout) mView.findViewById(R.id.battleviewpanel))
-                            .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHeavyDmgStatePanel));
+                    String value = intent.getExtras().getString(KCA_MSG_DATA, "0");
+                    if (value.contains("1")) {
+                        ((LinearLayout) mView.findViewById(R.id.battleviewpanel))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHeavyDmgStatePanel));
+                    } else {
+                        ((LinearLayout) mView.findViewById(R.id.battleviewpanel))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                    }
+
                     //mManager.addView(mView, mParams);
                     if (KcaViewButtonService.getClickCount() == 0) {
                         mView.setVisibility(View.GONE);

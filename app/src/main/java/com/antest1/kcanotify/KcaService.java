@@ -789,6 +789,8 @@ public class KcaService extends Service {
                             KcaBattle.setStartHeavyDamageExist(checkvalue);
                         }
                         KcaBattle.processData(url, battleApiData);
+                    } else if (url.equals(API_REQ_COMBINED_GOBACKPORT)) {
+                        KcaBattle.processData(url, null);
                     }
                 }
 
@@ -1354,25 +1356,32 @@ public class KcaService extends Service {
 
             if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {
                 heavyDamagedMode = jsonDataObj.get("data").getAsInt();
-                if (isHDVibrateEnabled()) {
-                    String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-                    if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
-                        if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                            Uri notificationUri = Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
-                            Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
-                            KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
+                if (heavyDamagedMode != HD_NONE) {
+                    if (isHDVibrateEnabled()) {
+                        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
+                        if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
+                            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                                Uri notificationUri = Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
+                                Log.e("KCA", getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
+                                KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
+                            }
                         }
+                        vibrator.vibrate(1500);
                     }
-                    vibrator.vibrate(1500);
                 }
 
                 if (heavyDamagedMode == HD_DANGER) {
                     Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.heavy_damaged), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
-                    intent.putExtra(KCA_MSG_DATA, "");
+                    intent.putExtra(KCA_MSG_DATA, "1");
                     broadcaster.sendBroadcast(intent);
-                } else if (heavyDamagedMode == HD_DAMECON) {
-                    Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG).show();
+                } else {
+                    if (heavyDamagedMode == HD_DAMECON) {
+                        Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG).show();
+                    }
+                    Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
+                    intent.putExtra(KCA_MSG_DATA, "0");
+                    broadcaster.sendBroadcast(intent);
                 }
                 setFrontViewNotifier(FRONT_NONE, 0, null);
             }

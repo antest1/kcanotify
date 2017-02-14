@@ -114,11 +114,13 @@ public class KcaViewButtonService extends Service {
             public void onReceive(Context context, Intent intent) {
                 String s = intent.getStringExtra(KCA_MSG_DATA);
                 Intent intent_send = new Intent(KCA_MSG_BATTLE_VIEW_HDMG);
-                intent_send.putExtra(KCA_MSG_DATA, "");
-
-                ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                        R.color.colorHeavyDmgStateWarn), PorterDuff.Mode.MULTIPLY);
-
+                intent_send.putExtra(KCA_MSG_DATA, s);
+                if (s.contains("1")) {
+                    ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                            R.color.colorHeavyDmgStateWarn), PorterDuff.Mode.MULTIPLY);
+                } else {
+                    ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().clearColorFilter();
+                }
                 broadcaster.sendBroadcast(intent_send);
                 Log.e("KCA", "KCA_MSG_BATTLE_HDMG Received");
             }

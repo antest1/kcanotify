@@ -238,4 +238,5 @@
     <string name="fairy_hidden_notification_text">아래로 펼쳐서 동작을 선택하세요</string>
     <string name="fairy_hidden_notification_bigtext">동작을 선택하세요</string>
     <string name="kca_view_context_expand">아래로 펼쳐서 내용 표시</string>
+    <string name="battleview_text_retreated">퇴피완료</string>
 </resources>
