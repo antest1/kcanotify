@@ -459,7 +459,10 @@ public class KcaBattleViewService extends Service {
                                     }
 
                                     ((TextView) battleview.findViewById(shipLevelViewList[j + 1])).setText(makeLvString(level));
-                                    ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setText(makeHpString(nowhp, maxhp));
+                                    if(!((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).getText().toString()
+                                            .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
+                                        ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setText(makeHpString(nowhp, maxhp));
+                                    }
                                     if (fc_flag || ec_flag) {
                                         ((TextView) battleview.findViewById(shipLevelViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
                                         ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
@@ -521,7 +524,10 @@ public class KcaBattleViewService extends Service {
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                                     ((TextView) battleview.findViewById(shipNameCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
                                     ((TextView) battleview.findViewById(shipLevelCombinedViewList[j + 1])).setText(makeLvString(level));
-                                    ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).setText(makeHpString(nowhp, maxhp));
+                                    if(!((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).getText().toString()
+                                            .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
+                                        ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).setText(makeHpString(nowhp, maxhp));
+                                    }
                                     ((TextView) battleview.findViewById(shipLevelCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
                                     ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
 
@@ -667,7 +673,10 @@ public class KcaBattleViewService extends Service {
                     if (maxhp == -1) continue;
                     else {
                         float hpPercent = afterhp * VIEW_HP_MAX / (float) maxhp;
-                        ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setText(makeHpString(afterhp, maxhp));
+                        if(!((TextView) battleview.findViewById(shipHpTxtViewList[i])).getText().toString()
+                                .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
+                            ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setText(makeHpString(afterhp, maxhp));
+                        }
                         ((ProgressBar) battleview.findViewById(shipHpBarViewList[i])).setProgress(Math.round(hpPercent));
                         ((ProgressBar) battleview.findViewById(shipHpBarViewList[i])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
                         if (fc_flag || ec_flag) {
@@ -692,7 +701,10 @@ public class KcaBattleViewService extends Service {
                         if (maxhp == -1) continue;
                         else {
                             float hpPercent = afterhp * VIEW_HP_MAX / (float) maxhp;
-                            ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setText(makeHpString(afterhp, maxhp));
+                            if(!((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).getText().toString()
+                                    .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
+                                ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setText(makeHpString(afterhp, maxhp));
+                            }
                             ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgress(Math.round(hpPercent));
                             ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
                             if (fc_flag || ec_flag) {
