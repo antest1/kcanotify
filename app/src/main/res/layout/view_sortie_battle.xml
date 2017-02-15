@@ -189,8 +189,8 @@
                     android:id="@+id/friend_main_fleet"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
                     android:layout_weight="0.5"
                     android:layout_width="0dp">
 
@@ -692,8 +692,8 @@
                     android:id="@+id/friend_combined_fleet"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
                     
                     android:layout_weight="0.25"
                     android:layout_width="0dp"
@@ -1200,8 +1200,8 @@
                     android:id="@+id/enemy_combined_fleet"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
                     android:elevation="1dp"
                     android:layout_weight="0.3"
                     android:layout_width="0dp">
@@ -1801,8 +1801,8 @@
                     android:id="@+id/enemy_main_fleet"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
                     android:elevation="1dp"
                     android:layout_weight="0.3"
                     android:layout_width="0dp">
