@@ -504,11 +504,13 @@ public class KcaBattle {
                     JsonArray airbase_attack = api_data.getAsJsonArray("api_air_base_attack");
                     for (int i = 0; i < airbase_attack.size(); i++) {
                         JsonObject airbase_attack_info = airbase_attack.get(i).getAsJsonObject();
-                        JsonObject airbase_attack_stage3 = airbase_attack_info.getAsJsonObject("api_stage3");
-                        JsonArray airbase_attack_edam = airbase_attack_stage3.getAsJsonArray("api_edam");
-                        for (int j = 1; j < airbase_attack_edam.size(); j++) {
-                            int e_idx = getEnemyIdx(j);
-                            afterhps[e_idx] -= cnv(airbase_attack_edam.get(j));
+                        if (isKeyExist(airbase_attack_info, "api_stage3")) {
+                            JsonObject airbase_attack_stage3 = airbase_attack_info.getAsJsonObject("api_stage3");
+                            JsonArray airbase_attack_edam = airbase_attack_stage3.getAsJsonArray("api_edam");
+                            for (int j = 1; j < airbase_attack_edam.size(); j++) {
+                                int e_idx = getEnemyIdx(j);
+                                afterhps[e_idx] -= cnv(airbase_attack_edam.get(j));
+                            }
                         }
                     }
                 }
@@ -868,11 +870,13 @@ public class KcaBattle {
                     JsonArray airbase_attack = api_data.getAsJsonArray("api_air_base_attack");
                     for (int i = 0; i < airbase_attack.size(); i++) {
                         JsonObject airbase_attack_info = airbase_attack.get(i).getAsJsonObject();
-                        JsonObject airbase_attack_stage3 = airbase_attack_info.getAsJsonObject("api_stage3");
-                        JsonArray airbase_attack_edam = airbase_attack_stage3.getAsJsonArray("api_edam");
-                        for (int j = 1; j < airbase_attack_edam.size(); j++) {
-                            int e_idx = getEnemyIdx(j);
-                            afterhps[e_idx] -= cnv(airbase_attack_edam.get(j));
+                        if (isKeyExist(airbase_attack_info, "api_stage3")) {
+                            JsonObject airbase_attack_stage3 = airbase_attack_info.getAsJsonObject("api_stage3");
+                            JsonArray airbase_attack_edam = airbase_attack_stage3.getAsJsonArray("api_edam");
+                            for (int j = 1; j < airbase_attack_edam.size(); j++) {
+                                int e_idx = getEnemyIdx(j);
+                                afterhps[e_idx] -= cnv(airbase_attack_edam.get(j));
+                            }
                         }
                     }
                 }
@@ -1251,7 +1255,7 @@ public class KcaBattle {
                                         if (target_idx > 6) {
                                             target_idx = getEnemyCbIdx(target_idx);
                                             aftercbhps[target_idx] -= damage_value;
-                                        } else {
+                                        } else if (target_idx != -1) {
                                             target_idx = getEnemyIdx(target_idx);
                                             afterhps[target_idx] -= damage_value;
                                         }
@@ -1259,7 +1263,7 @@ public class KcaBattle {
                                         if (target_idx > 6) {
                                             target_idx = getFriendCbIdx(target_idx);
                                             aftercbhps[target_idx] -= damage_value;
-                                        } else {
+                                        } else if (target_idx != -1) {
                                             target_idx = getFriendIdx(target_idx);
                                             afterhps[target_idx] -= damage_value;
                                         }
@@ -1406,8 +1410,10 @@ public class KcaBattle {
 
             if (url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT) || url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT_SP)) {
                 // reset maxhps_combined data
-                for (int i = 0; i < api_data.getAsJsonArray("api_maxhps_combined").size(); i++) {
-                    api_data.getAsJsonArray("api_maxhps_combined").set(i, new JsonPrimitive(maxcbhps[i]));
+                if (url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT)) {
+                    for (int i = 0; i < api_data.getAsJsonArray("api_maxhps_combined").size(); i++) {
+                        api_data.getAsJsonArray("api_maxhps_combined").set(i, new JsonPrimitive(maxcbhps[i]));
+                    }
                 }
 
                 cleanData();
@@ -1452,7 +1458,7 @@ public class KcaBattle {
                             int target_idx = target.get(t).getAsInt();
                             if (target_idx > 6) {
                                 afterhps[target_idx] -= cnv(target_dmg.get(t));
-                            } else {
+                            } else if (target_idx != -1) {
                                 aftercbhps[target_idx] -= cnv(target_dmg.get(t));
                             }
                         }
@@ -1524,7 +1530,7 @@ public class KcaBattle {
                                 } else {
                                     aftercbhps[target_idx] -= cnv(target_dmg.get(t));
                                 }
-                            } else {
+                            } else if (target_idx != -1) {
                                 aftercbhps[target_idx] -= cnv(target_dmg.get(t));
                             }
                         }
