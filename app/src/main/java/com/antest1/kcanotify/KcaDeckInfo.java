@@ -332,8 +332,14 @@ public class KcaDeckInfo {
                         case STYPE_AO:
                             totalTP += 15;
                             break;
+                        case STYPE_SSV:
+                            totalTP += 1;
                         default:
                             break;
+                    }
+
+                    if (kcShipId == 487) { // kinu kai ni
+                        totalTP += 8;
                     }
 
                     JsonArray shipItem = (JsonArray) shipData.get("slot");
