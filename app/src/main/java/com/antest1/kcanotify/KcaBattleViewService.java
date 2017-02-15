@@ -91,6 +91,10 @@ public class KcaBattleViewService extends Service {
 
     int displayWidth = 0;
 
+    public static final int ERORR_INIT = 0;
+    public static final int ERORR_VIEW = 1;
+    public static final int ERORR_ITEMVIEW = 2;
+
     private int[] shipViewList = {0,
             R.id.fm_1, R.id.fm_2, R.id.fm_3, R.id.fm_4, R.id.fm_5, R.id.fm_6,
             R.id.em_1, R.id.em_2, R.id.em_3, R.id.em_4, R.id.em_5, R.id.em_6
@@ -1107,7 +1111,7 @@ public class KcaBattleViewService extends Service {
             return 0;
         } catch (Exception e) {
             e.printStackTrace();
-            sendReport(e);
+            sendReport(e, ERORR_VIEW);
             return 1;
         }
     }
@@ -1185,7 +1189,7 @@ public class KcaBattleViewService extends Service {
         } catch (Exception e) {
             active = false;
             error_flag = true;
-            sendReport(e);
+            sendReport(e, ERORR_INIT);
             stopSelf();
         }
     }
@@ -1253,7 +1257,9 @@ public class KcaBattleViewService extends Service {
                     if (!isTouchDown) {
                         isTouchDown = true;
                         try {
-                            setItemViewLayout(getshipidx(v.getId()));
+                            int selected = getshipidx(v.getId());
+                            api_data.addProperty("api_touched_idx", selected);
+                            setItemViewLayout(selected);
                             itemViewParams = new WindowManager.LayoutParams(
                                     WindowManager.LayoutParams.WRAP_CONTENT,
                                     WindowManager.LayoutParams.WRAP_CONTENT,
@@ -1270,7 +1276,7 @@ public class KcaBattleViewService extends Service {
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            sendReport(e);
+                            sendReport(e, KcaBattleViewService.ERORR_ITEMVIEW);
                         }
                     }
                     Log.e("KCA", "ACTION_DOWN");
@@ -1297,7 +1303,7 @@ public class KcaBattleViewService extends Service {
         return -1;
     }
 
-    private void sendReport(Exception e) {
+    private void sendReport(Exception e, int type) {
         error_flag = true;
         mView.setVisibility(View.GONE);
         String app_version = BuildConfig.VERSION_NAME;
@@ -1317,6 +1323,12 @@ public class KcaBattleViewService extends Service {
             }
         };
         JsonObject sendData = new JsonObject();
+        if(type == ERORR_ITEMVIEW) {
+            api_data.add("api_fs_data", friendShipData);
+            api_data.add("api_fsc_data", friendCombinedShipData);
+            api_data.add("api_es_data", enemyShipData);
+            api_data.add("api_esc_data", enemyCombinedShipData);
+        }
         sendData.addProperty("data", api_data.toString());
         sendData.addProperty("error", getStringFromException(e));
         String sendDataString = sendData.toString();
