@@ -1019,6 +1019,21 @@ public class KcaService extends Service {
                     processFirstDeckInfo(currentPortDeckData);
                 }
 
+                if (url.startsWith(API_REQ_HENSEI_COMBINED)) {
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                        int api_combined = api_data.get("api_combined").getAsInt();
+                        isCombined = (api_combined > 0);
+                        if (api_combined > 0) {
+                            KcaBattle.isCombined = true;
+                        } else {
+                            KcaBattle.isCombined = false;
+                        }
+                    }
+                    Log.e("KCA", "Combined: "+String.valueOf(isCombined));
+                    processFirstDeckInfo(currentPortDeckData);
+                }
+
                 if (url.startsWith(API_GET_MEMBER_SHIP3)) {
                     String[] requestData = request.split("&");
                     int userShipId = -1;
