@@ -413,10 +413,10 @@ public class KcaService extends Service {
         if (!KcaApiData.isGameDataLoaded()) return;
         int cn = getSeekCn();
         String seekType = getSeekType();
-        int[] airPowerRange = KcaDeckInfo.getAirPowerRange(currentPortDeckData, 0, null);
+        int[] airPowerRange = KcaDeckInfo.getAirPowerRange(currentPortDeckData, 0, KcaBattle.getEscapeFlag());
         String airPowerValue = String.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
-        String seekValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, KcaDeckInfo.getSeekValue(currentPortDeckData, 0, cn, null));
-        int[] tp = KcaDeckInfo.getTPValue(currentPortDeckData, 0, null);
+        String seekValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, KcaDeckInfo.getSeekValue(currentPortDeckData, 0, cn, KcaBattle.getEscapeFlag()));
+        int[] tp = KcaDeckInfo.getTPValue(currentPortDeckData, "0", KcaBattle.getEscapeFlag());
         String tpValue = String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[0], tp[1]);
         List<String> toastList = new ArrayList<String>();
         if (airPowerRange[1] > 0) {
@@ -447,8 +447,6 @@ public class KcaService extends Service {
     }
 
     public void handleServiceMessage(Message msg) {
-
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String url = msg.getData().getString("url");
         String data = msg.getData().getString("data");
@@ -588,6 +586,14 @@ public class KcaService extends Service {
                     if (jsonDataObj.has("api_data")) {
                         JsonObject reqPortApiData = jsonDataObj.getAsJsonObject("api_data");
                         int size = KcaApiData.getPortData(reqPortApiData);
+
+                        if (reqPortApiData.has("api_combined_flag")) {
+                            int combined_flag = reqPortApiData.get("api_combined_flag").getAsInt();
+                            isCombined = (combined_flag > 0);
+                            KcaBattle.isCombined = isCombined;
+                            KcaBattle.cleanEscapeList();
+                        }
+
                         if (reqPortApiData.has("api_basic")) {
                             processBasicInfo(reqPortApiData.getAsJsonObject("api_basic"));
                         }
@@ -600,15 +606,6 @@ public class KcaService extends Service {
                         if (reqPortApiData.has("api_ndock")) {
                             JsonArray nDockData = reqPortApiData.getAsJsonArray("api_ndock");
                             processDockingInfo(nDockData);
-                        }
-                        if (reqPortApiData.has("api_combined_flag")) {
-                            int combined_flag = reqPortApiData.get("api_combined_flag").getAsInt();
-                            isCombined = (combined_flag > 0);
-                            if (combined_flag > 0) {
-                                KcaBattle.isCombined = true;
-                            } else {
-                                KcaBattle.isCombined = false;
-                            }
                         }
                     }
                     setFrontViewNotifier(FRONT_NONE, 0, null);
@@ -1584,8 +1581,8 @@ public class KcaService extends Service {
 
         double seekValue = 0;
         String seekStringValue = "";
-        seekValue = KcaDeckInfo.getSeekValue(data, 0, cn, null);
-        if (isCombined) seekValue += KcaDeckInfo.getSeekValue(data, 1, cn, null);
+        seekValue = KcaDeckInfo.getSeekValue(data, 0, cn, KcaBattle.getEscapeFlag());
+        if (isCombined) seekValue += KcaDeckInfo.getSeekValue(data, 1, cn, KcaBattle.getEscapeFlag());
         if (cn == SEEK_PURE) {
             seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), seekType, (int) seekValue);
         } else {
@@ -1600,9 +1597,9 @@ public class KcaService extends Service {
 
         int speedValue = 0;
         if (isCombined) {
-            speedValue = Math.min(KcaDeckInfo.getSpeed(data, 0, null), KcaDeckInfo.getSpeed(data, 1, null));
+            speedValue = KcaDeckInfo.getSpeed(data, "0,1", KcaBattle.getEscapeFlag());
         } else {
-            speedValue = KcaDeckInfo.getSpeed(data, 0, null);
+            speedValue = KcaDeckInfo.getSpeed(data, "0", KcaBattle.getEscapeFlag());
         }
 
         String speedStringValue = "";
@@ -1640,11 +1637,11 @@ public class KcaService extends Service {
         infoData.addProperty("landscape_value", speedStringValue);
         deckInfoData.add(infoData);
 
-        int[] tp = KcaDeckInfo.getTPValue(data, 0, null);
+        int[] tp = new int[2];
         if (isCombined) {
-            int[] tp_c = KcaDeckInfo.getTPValue(data, 1, null);
-            tp[0] += tp_c[0];
-            tp[1] += tp_c[1];
+            tp = KcaDeckInfo.getTPValue(data, "0,1", KcaBattle.getEscapeFlag());
+        } else {
+            tp = KcaDeckInfo.getTPValue(data, "0", KcaBattle.getEscapeFlag());
         }
         String tpValue = String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[0], tp[1]);
         infoData = new JsonObject();
@@ -1654,14 +1651,14 @@ public class KcaService extends Service {
         deckInfoData.add(infoData);
 
         if (isCombined) {
-            String firstConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, 0));
+            String firstConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition_1), KcaDeckInfo.getConditionStatus(data, 0));
             infoData = new JsonObject();
             infoData.addProperty("is_newline", 1);
             infoData.addProperty("portrait_value", firstConditionValue);
             infoData.addProperty("landscape_value", firstConditionValue);
             deckInfoData.add(infoData);
 
-            String secondConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, 1));
+            String secondConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition_2), KcaDeckInfo.getConditionStatus(data, 1));
             infoData = new JsonObject();
             infoData.addProperty("is_newline", 0);
             infoData.addProperty("portrait_value", secondConditionValue);

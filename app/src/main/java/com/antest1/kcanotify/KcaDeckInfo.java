@@ -184,7 +184,8 @@ public class KcaDeckInfo {
         boolean excludeflagexist = (exclude_flag != null);
         JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
-            if (excludeflagexist && exclude_flag[i]) continue;
+            int excludeflagid = deckid * 6 + i + 1; // 1 ~ 13
+            if (excludeflagexist && exclude_flag[excludeflagid]) continue;
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 JsonObject shipData = getUserShipDataById(shipId, "ship_id,lv,slot,onslot");
@@ -227,33 +228,41 @@ public class KcaDeckInfo {
     }
 
 
-    public static int getSpeed(JsonArray deckPortData, int deckid, boolean[] exclude_flag) {
+    public static int getSpeed(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
         boolean is_slow_flag = false;
         boolean is_fast_flag = false;
         boolean is_fastplus_flag = false;
         boolean is_superfast_flag = false;
 
         boolean excludeflagexist = (exclude_flag != null);
-        JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().get("api_ship").getAsJsonArray();
 
-        // Retrieve Speed (soku) Information
-        for (int i = 0; i < deckShipIdList.size(); i++) {
-            if (excludeflagexist && exclude_flag[i]) continue;
-            int shipId = deckShipIdList.get(i).getAsInt();
-            if (shipId != -1) {
-                JsonObject shipData = getUserShipDataById(shipId, "soku");
-                int soku = shipData.get("soku").getAsInt();
-                if (soku == SPEED_SLOW) {
-                    is_slow_flag = true;
-                } else if (soku == SPEED_FAST) {
-                    is_fast_flag = true;
-                } else if (soku == SPEED_FASTPLUS) {
-                    is_fastplus_flag = true;
-                } else if (soku == SPEED_SUPERFAST) {
-                    is_superfast_flag = true;
+        String[] decklist = deckid_list.split(",");
+
+        for (int n = 0; n < decklist.length; n++) {
+            int deckid = Integer.parseInt(decklist[n]);
+            JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().get("api_ship").getAsJsonArray();
+
+            // Retrieve Speed (soku) Information
+            for (int i = 0; i < deckShipIdList.size(); i++) {
+                int excludeflagid = deckid * 6 + i + 1; // 1 ~ 13
+                if (excludeflagexist && exclude_flag[excludeflagid]) continue;
+                int shipId = deckShipIdList.get(i).getAsInt();
+                if (shipId != -1) {
+                    JsonObject shipData = getUserShipDataById(shipId, "soku");
+                    int soku = shipData.get("soku").getAsInt();
+                    if (soku == SPEED_SLOW) {
+                        is_slow_flag = true;
+                    } else if (soku == SPEED_FAST) {
+                        is_fast_flag = true;
+                    } else if (soku == SPEED_FASTPLUS) {
+                        is_fastplus_flag = true;
+                    } else if (soku == SPEED_SUPERFAST) {
+                        is_superfast_flag = true;
+                    }
                 }
             }
         }
+
 
         int flag = getSpeedFlagValue(is_slow_flag, is_fast_flag, is_fastplus_flag, is_superfast_flag);
         if (flag > SPEEDFLAG_SLOW) {
@@ -275,74 +284,81 @@ public class KcaDeckInfo {
         }
     }
 
-    public static int[] getTPValue(JsonArray deckPortData, int deckid, boolean[] exclude_flag) {
+    public static int[] getTPValue(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
         double totalTP = 0.0;
 
         boolean excludeflagexist = (exclude_flag != null);
-        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
-        for (int i = 0; i < deckShipIdList.size(); i++) {
-            if (excludeflagexist && exclude_flag[i]) continue;
-            int shipId = deckShipIdList.get(i).getAsInt();
-            if (shipId != -1) {
-                JsonObject shipData = getUserShipDataById(shipId, "slot,ship_id");
-                int kcShipId = shipData.get("ship_id").getAsInt();
-                JsonObject kcShipData = getKcShipDataById(kcShipId, "stype");
-                int stype = kcShipData.get("stype").getAsInt();
 
-                switch(stype) {
-                    case STYPE_DD:
-                        totalTP += 5;
-                        break;
-                    case STYPE_CL:
-                        totalTP += 2;
-                        break;
-                    case STYPE_CAV:
-                        totalTP += 4;
-                        break;
-                    case STYPE_BBV:
-                        totalTP += 7;
-                        break;
-                    case STYPE_AV:
-                        totalTP += 9;
-                        break;
-                    case STYPE_LHA:
-                        totalTP += 12;
-                        break;
-                    case STYPE_AS:
-                        totalTP += 7;
-                        break;
-                    case STYPE_CT:
-                        totalTP += 6;
-                        break;
-                    case STYPE_AO:
-                        totalTP += 15;
-                        break;
-                    default:
-                        break;
-                }
+        String[] decklist = deckid_list.split(",");
 
-                JsonArray shipItem = (JsonArray) shipData.get("slot");
-                for (int j = 0; j < shipItem.size(); j++) {
-                    int item_id = shipItem.get(j).getAsInt();
-                    if (item_id != -1) {
-                        JsonObject itemData = getUserItemStatusById(item_id, "level", "type");
-                        int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+        for (int n = 0; n < decklist.length; n++) {
+            int deckid = Integer.parseInt(decklist[n]);
+            JsonArray deckShipIdList = ((JsonObject) deckPortData.get(deckid)).getAsJsonArray("api_ship");
+            for (int i = 0; i < deckShipIdList.size(); i++) {
+                int excludeflagid = deckid * 6 + i + 1; // 1 ~ 13
+                if (excludeflagexist && exclude_flag[excludeflagid]) continue;
+                int shipId = deckShipIdList.get(i).getAsInt();
+                if (shipId != -1) {
+                    JsonObject shipData = getUserShipDataById(shipId, "slot,ship_id");
+                    int kcShipId = shipData.get("ship_id").getAsInt();
+                    JsonObject kcShipData = getKcShipDataById(kcShipId, "stype");
+                    int stype = kcShipData.get("stype").getAsInt();
 
-                        switch (itemType) {
-                            case T2_DRUM_CAN:
-                                totalTP += 5.0;
-                                break;
-                            case T2_LANDING_CRAFT:
-                                totalTP += 8.0;
-                                break;
-                            case T2_AMP_TANK:
-                                totalTP += 2.0;
-                                break;
-                            case T2_COMBAT_FOOD:
-                                totalTP += 1.0;
-                                break;
-                            default:
-                                break;
+                    switch (stype) {
+                        case STYPE_DD:
+                            totalTP += 5;
+                            break;
+                        case STYPE_CL:
+                            totalTP += 2;
+                            break;
+                        case STYPE_CAV:
+                            totalTP += 4;
+                            break;
+                        case STYPE_BBV:
+                            totalTP += 7;
+                            break;
+                        case STYPE_AV:
+                            totalTP += 9;
+                            break;
+                        case STYPE_LHA:
+                            totalTP += 12;
+                            break;
+                        case STYPE_AS:
+                            totalTP += 7;
+                            break;
+                        case STYPE_CT:
+                            totalTP += 6;
+                            break;
+                        case STYPE_AO:
+                            totalTP += 15;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    JsonArray shipItem = (JsonArray) shipData.get("slot");
+                    for (int j = 0; j < shipItem.size(); j++) {
+                        int item_id = shipItem.get(j).getAsInt();
+                        if (item_id != -1) {
+                            JsonObject itemData = getUserItemStatusById(item_id, "level", "type");
+                            int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+
+                            switch (itemType) {
+                                case T2_DRUM_CAN:
+                                    totalTP += 5.0;
+                                    break;
+                                case T2_LANDING_CRAFT:
+                                    totalTP += 8.0;
+                                    break;
+                                case T2_AMP_TANK:
+                                    totalTP += 2.0;
+                                    break;
+                                case T2_COMBAT_FOOD:
+                                    totalTP += 1.0;
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                 }

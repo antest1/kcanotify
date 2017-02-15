@@ -165,6 +165,23 @@ public class KcaBattle {
         return f.intValue();
     }
 
+    public static void cleanEscapeList() {
+        escapedata = null;
+        escapelist.clear();
+        escapecblist.clear();
+    }
+
+    public static boolean[] getEscapeFlag() {
+        boolean[] flag = new boolean[13];
+        for (int i = 0; i < escapelist.size(); i++) {
+            flag[escapelist.get(i)] = true;
+        }
+        for (int i = 0; i < escapecblist.size(); i++) {
+            flag[escapecblist.get(i) + 6] = true;
+        }
+        return flag;
+    }
+
     public static boolean isKeyExist(JsonObject data, String key) {
         return (data.has(key) && !data.get(key).isJsonNull());
     }
@@ -397,9 +414,7 @@ public class KcaBattle {
                     sHandler.sendMessage(sMsg);
                 }
 
-                escapedata = null;
-                escapelist.clear();
-                escapecblist.clear();
+                cleanEscapeList();
 
                 currentMapArea = api_data.get("api_maparea_id").getAsInt();
                 currentMapNo = api_data.get("api_mapinfo_no").getAsInt();
