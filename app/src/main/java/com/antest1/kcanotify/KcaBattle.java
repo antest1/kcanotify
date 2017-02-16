@@ -106,6 +106,8 @@ public class KcaBattle {
         for (int i = 1; i < maxcbhps.length; i++) {
             if (maxcbhps[i] == -1 || i > 6) {
                 break;
+            } else if (i == 1) {
+                continue; // first ship never sunk
             } else if (nowcbhps[i] * 4 <= maxcbhps[i] && !escapecblist.contains(i)) {
                 if (dameconcbflag[i]) {
                     status = Math.max(status, HD_DAMECON);
