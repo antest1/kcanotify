@@ -463,7 +463,7 @@ public class KcaBattleViewService extends Service {
                                     }
 
                                     ((TextView) battleview.findViewById(shipLevelViewList[j + 1])).setText(makeLvString(level));
-                                    if(!((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).getText().toString()
+                                    if (!((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).getText().toString()
                                             .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
                                         ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setText(makeHpString(nowhp, maxhp));
                                     }
@@ -528,7 +528,7 @@ public class KcaBattleViewService extends Service {
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                                     ((TextView) battleview.findViewById(shipNameCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
                                     ((TextView) battleview.findViewById(shipLevelCombinedViewList[j + 1])).setText(makeLvString(level));
-                                    if(!((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).getText().toString()
+                                    if (!((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).getText().toString()
                                             .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
                                         ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).setText(makeHpString(nowhp, maxhp));
                                     }
@@ -677,7 +677,7 @@ public class KcaBattleViewService extends Service {
                     if (maxhp == -1) continue;
                     else {
                         float hpPercent = afterhp * VIEW_HP_MAX / (float) maxhp;
-                        if(!((TextView) battleview.findViewById(shipHpTxtViewList[i])).getText().toString()
+                        if (!((TextView) battleview.findViewById(shipHpTxtViewList[i])).getText().toString()
                                 .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
                             ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setText(makeHpString(afterhp, maxhp));
                         }
@@ -705,7 +705,7 @@ public class KcaBattleViewService extends Service {
                         if (maxhp == -1) continue;
                         else {
                             float hpPercent = afterhp * VIEW_HP_MAX / (float) maxhp;
-                            if(!((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).getText().toString()
+                            if (!((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).getText().toString()
                                     .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
                                 ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setText(makeHpString(afterhp, maxhp));
                             }
@@ -1258,7 +1258,6 @@ public class KcaBattleViewService extends Service {
                         isTouchDown = true;
                         try {
                             int selected = getshipidx(v.getId());
-                            api_data.addProperty("api_touched_idx", selected);
                             setItemViewLayout(selected);
                             itemViewParams = new WindowManager.LayoutParams(
                                     WindowManager.LayoutParams.WRAP_CONTENT,
@@ -1294,11 +1293,20 @@ public class KcaBattleViewService extends Service {
 
     private int getshipidx(int rid) {
         for (int i = 1; i < shipNameAreaViewList.length; i++) {
-            if (rid == shipNameAreaViewList[i] || rid == shipLevelViewList[i]) return i;
+            if (rid == shipNameAreaViewList[i] || rid == shipLevelViewList[i]) {
+                api_data.addProperty("api_touched_idx", i);
+                if (i <= 6 && i > friendShipData.size()) return -1;
+                if (i > 6 && i - 6 > enemyShipData.size()) return -1;
+                return i;
+            }
         }
         for (int i = 1; i < shipNameAreaCombinedViewList.length; i++) {
-            if (rid == shipNameAreaCombinedViewList[i] || rid == shipLevelCombinedViewList[i])
+            if (rid == shipNameAreaCombinedViewList[i] || rid == shipLevelCombinedViewList[i]) {
+                api_data.addProperty("api_touched_idx", 20 + i);
+                if (i <= 6 && i > friendCombinedShipData.size()) return -1;
+                if (i > 6 && i - 6 > enemyCombinedShipData.size()) return -1;
                 return 20 + i;
+            }
         }
         return -1;
     }
@@ -1323,7 +1331,7 @@ public class KcaBattleViewService extends Service {
             }
         };
         JsonObject sendData = new JsonObject();
-        if(type == ERORR_ITEMVIEW) {
+        if (type == ERORR_ITEMVIEW) {
             api_data.add("api_fs_data", friendShipData);
             api_data.add("api_fsc_data", friendCombinedShipData);
             api_data.add("api_es_data", enemyShipData);
