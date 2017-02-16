@@ -158,11 +158,12 @@ public class KcaViewButtonService extends Service {
         mParams.y = height - vh;
         mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mManager.addView(mView, mParams);
+        mView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(intent.getAction() != null && intent.getAction().equals(RETURN_FAIRY_ACTION)) {
+        if(intent != null && intent.getAction() != null && intent.getAction().equals(RETURN_FAIRY_ACTION)) {
             mView.setVisibility(View.VISIBLE);
         }
         notificationManager.cancel(FAIRY_NOTIFICATION_ID);

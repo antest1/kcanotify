@@ -1503,6 +1503,10 @@ public class KcaBattle {
             }
 
             if (url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT_EC)) {
+                for (int i = 0; i < api_data.getAsJsonArray("api_maxhps_combined").size(); i++) {
+                    api_data.getAsJsonArray("api_maxhps_combined").set(i, new JsonPrimitive(maxcbhps[i]));
+                }
+
                 cleanData();
                 cleanCbData();
 

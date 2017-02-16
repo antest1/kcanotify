@@ -718,23 +718,26 @@ public class KcaApiData {
         for (int i = 0; i < requestList.length; i++) {
             int shipId = Integer.valueOf(requestList[i]);
             JsonObject shipKcData = getUserShipDataById(shipId, "ship_id,slot");
-
-            int shipKcId = shipKcData.get("ship_id").getAsInt();
-            JsonArray shipSlotItem = (JsonArray) shipKcData.get("slot");
-            List<String> shipSlotItemList = new ArrayList<String>();
-            for (int j = 0; j < shipSlotItem.size(); j++) {
-                int item = shipSlotItem.get(j).getAsInt();
-                if (item != -1) {
-                    shipSlotItemList.add(String.valueOf(item));
+            if (shipKcData != null) {
+                int shipKcId = shipKcData.get("ship_id").getAsInt();
+                JsonArray shipSlotItem = (JsonArray) shipKcData.get("slot");
+                List<String> shipSlotItemList = new ArrayList<String>();
+                for (int j = 0; j < shipSlotItem.size(); j++) {
+                    int item = shipSlotItem.get(j).getAsInt();
+                    if (item != -1) {
+                        shipSlotItemList.add(String.valueOf(item));
+                    }
                 }
-            }
-            if (shipSlotItemList.size() > 0) {
-                deleteUserItem(joinStr(shipSlotItemList, ","));
-            }
-            userShipData.remove(shipId);
+                if (shipSlotItemList.size() > 0) {
+                    deleteUserItem(joinStr(shipSlotItemList, ","));
+                }
+                userShipData.remove(shipId);
 
-            String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
-            Log.e("KCA", String.format("remove ship %d (%s)", shipId, shipName));
+                String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
+                Log.e("KCA", String.format("remove ship %d (%s)", shipId, shipName));
+            } else {
+                Log.e("KCA", String.format("Not found info with %d", shipId));
+            }
         }
     }
 

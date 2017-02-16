@@ -804,7 +804,7 @@ public class KcaService extends Service {
                             }
                         }
                         KcaBattle.setDeckPortData(api_data);
-                        processFirstDeckInfo(api_deck_data);
+                        processFirstDeckInfo(currentPortDeckData);
                     }
                 }
 
