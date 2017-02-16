@@ -28,7 +28,8 @@ public class KcaApplication extends Application {
     public void onCreate() {
         super.onCreate();
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        LocaleUtils.setLocale(new Locale(pref.getString(PREF_KCA_LANGUAGE, "en")));
+        LocaleUtils.setLocale(new Locale(pref.getString(PREF_KCA_LANGUAGE,
+                KcaUtils.getLocaleInArray(getApplicationContext(), Locale.getDefault().getLanguage()))));
         LocaleUtils.updateConfig(this, getBaseContext().getResources().getConfiguration());
         ACRA.init(this);
     }
