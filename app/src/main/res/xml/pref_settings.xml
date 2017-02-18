@@ -114,6 +114,7 @@
         <Preference
             android:defaultValue=""
             android:key="check_update"
+            android:summary="@string/setting_menu_app_desc_updatecheck"
             android:title="@string/setting_menu_app_title_updatecheck" />
         <Preference
             android:summary="@string/setting_menu_app_desc_contact"

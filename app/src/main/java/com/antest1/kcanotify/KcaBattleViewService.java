@@ -54,6 +54,7 @@ import static com.antest1.kcanotify.KcaApiData.getItemString;
 import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
+import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getNodeFullInfo;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
@@ -237,14 +238,14 @@ public class KcaBattleViewService extends Service {
                 int api_no = api_data.get("api_no").getAsInt();
                 String currentNode = getCurrentNodeAlphabet(api_maparea_id, api_mapinfo_no, api_no);
                 int api_event_id = api_data.get("api_event_id").getAsInt();
-                int api_event_type = api_data.get("api_event_kind").getAsInt();
+                int api_event_kind = api_data.get("api_event_kind").getAsInt();
                 int api_color_no = api_data.get("api_color_no").getAsInt();
-                currentNodeInfo = getNodeFullInfo(contextWithLocale, currentNode, api_event_id, api_event_type, true);
+                currentNodeInfo = getNodeFullInfo(contextWithLocale, currentNode, api_event_id, api_event_kind, true);
                 currentNodeInfo = currentNodeInfo.replaceAll("[()]", "");
 
                 // View Settings
                 fc_flag = KcaBattle.isCombined;
-                ec_flag = (api_event_type == API_NODE_EVENT_KIND_ECBATTLE);
+                ec_flag = (api_event_kind == API_NODE_EVENT_KIND_ECBATTLE);
                 setViewLayout(fc_flag, false);
 
                 ((TextView) battleview.findViewById(R.id.battle_node)).setText(currentNodeInfo);
@@ -337,51 +338,8 @@ public class KcaBattleViewService extends Service {
                             .setText(getAirForceResultString(contextWithLocale, api_disp_seiku));
                 }
 
-                switch (api_color_no) {
-                    case 2:
-                        battleview.findViewById(R.id.battle_node)
-                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItem));
-                        break;
-                    case 6:
-                    case 9:
-                        battleview.findViewById(R.id.battle_node)
-                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItemSpecial));
-                        break;
-                    case 3:
-                        battleview.findViewById(R.id.battle_node)
-                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorVortex));
-                        break;
-                    case 4:
-                        if (api_event_id == API_NODE_EVENT_ID_NOEVENT) {
-                            if (api_event_type == API_NODE_EVENT_KIND_SELECTABLE) { // selectable
-                                battleview.findViewById(R.id.battle_node)
-                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorSelectable));
-                            } else {
-                                battleview.findViewById(R.id.battle_node)
-                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorNone));
-                            }
-
-                        } else {
-                            battleview.findViewById(R.id.battle_node)
-                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBattle));
-                        }
-                        break;
-                    case 5:
-                        battleview.findViewById(R.id.battle_node)
-                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBossBattle));
-                        break;
-                    case 7:
-                    case 10:
-                        battleview.findViewById(R.id.battle_node)
-                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAirBattle));
-                        break;
-                    case 8:
-                        battleview.findViewById(R.id.battle_node)
-                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorNone));
-                        break;
-                    default:
-                        break;
-                }
+                battleview.findViewById(R.id.battle_node)
+                        .setBackgroundColor(getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
             }
 
             if (api_data.has("api_deck_port")) { // common sortie, practice
@@ -797,7 +755,7 @@ public class KcaBattleViewService extends Service {
                     startNowHps = nowhps;
                     startNowHpsCombined = nowhps_combined;
                     if (api_data.has("api_ship_ke_combined")) {
-                        boolean midnightflag = KcaBattle.isMainFleetInNight(afterhps_combined, startNowHpsCombined);
+                        boolean midnightflag = KcaBattle.isMainFleetInNight(afterhps, startNowHps, afterhps_combined, startNowHpsCombined);
                         if (midnightflag) {
                             ((TextView) battleview.findViewById(R.id.enemy_fleet_name))
                                     .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorNightTargetFleet));

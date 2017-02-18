@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -17,8 +18,10 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import com.google.common.io.ByteStreams;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 
 
 import org.apache.commons.httpclient.ChunkedInputStream;
@@ -30,6 +33,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -97,19 +101,17 @@ public class KcaUtils {
 
     public static JsonObject readCacheData(Context ctx, String filename) {
         try {
+            JsonObject data = new JsonObject();
+            JsonParser parser = new JsonParser();
+
             FileInputStream fis = ctx.openFileInput(filename);
-            byte[] cache_data = new byte[fis.available()];
-            //Toast.makeText(getApplicationContext(), String.format("Loading Cached Data %d", fis.available()), Toast.LENGTH_LONG).show();
-            while (fis.read(cache_data) != -1) {
-                ;
-            }
-            String cache_data_str = new String(cache_data, 0, cache_data.length);
-            return new JsonParser().parse(cache_data_str).getAsJsonObject();
+            InputStreamReader fisr = new InputStreamReader(fis);
+            JsonElement jsonElement = parser.parse(fisr);
+            data = jsonElement.getAsJsonObject();
+            return data;
         } catch (FileNotFoundException e) {
-            //new retrieveApiStartData().execute("", "down", "");
-            return null;
-        } catch (IOException e) {
             e.printStackTrace();
+            //new retrieveApiStartData().execute("", "down", "");
             return null;
         }
     }
@@ -275,5 +277,13 @@ public class KcaUtils {
             throw new RuntimeException("No resource ID found for: "
                     + resourceName + " / " + c, e);
         }
+    }
+
+    public static int adjustAlpha(int color, float factor) {
+        int alpha = Math.round(Color.alpha(color) * factor);
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        return Color.argb(alpha, red, green, blue);
     }
 }

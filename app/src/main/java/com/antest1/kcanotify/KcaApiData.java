@@ -6,6 +6,7 @@ import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -86,7 +87,7 @@ public class KcaApiData {
     public static final int STYPE_CVB = 18;
     public static final int STYPE_AR = 19;
     public static final int STYPE_AS = 20;
-    public static final int STYPE_CT= 21;
+    public static final int STYPE_CT = 21;
     public static final int STYPE_AO = 22;
 
 
@@ -186,7 +187,7 @@ public class KcaApiData {
     }
 
     public static int getKcGameData(JsonObject api_data) {
-        //Log.e("KCA", "getKcGameData Called");
+        Log.e("KCA", "getKcGameData Called");
         kcGameData = api_data;
         if (kcGameData.has("api_mst_ship")) {
             JsonArray shipStatusArray = (JsonArray) kcGameData.get("api_mst_ship");
@@ -230,6 +231,7 @@ public class KcaApiData {
         data.addProperty("ship", kcShipData.size());
         data.addProperty("item", kcItemData.size());
 
+        dataLoadTriggered = true;
         if (sHandler != null) {
             Bundle bundle = new Bundle();
             bundle.putString("url", KCA_API_DATA_LOADED);
@@ -237,6 +239,7 @@ public class KcaApiData {
             Message sMsg = sHandler.obtainMessage();
             sMsg.setData(bundle);
             sHandler.sendMessage(sMsg);
+        } else {
         }
         return kcGameData.entrySet().size();
     }
@@ -260,6 +263,7 @@ public class KcaApiData {
     public static void addShipCountInBattle() {
         getShipCountInBattle += 1;
     }
+
     public static void addItemCountInBattle(int ship_id) {
         if (kcShipInitEquipCount != null) {
             String ship_id_str = String.valueOf(ship_id);
@@ -274,6 +278,7 @@ public class KcaApiData {
     public static void resetShipCountInBattle() {
         getShipCountInBattle = 0;
     }
+
     public static void resetItemCountInBattle() {
         getItemCountInBattle = 0;
     }
@@ -300,7 +305,7 @@ public class KcaApiData {
     }
 
     public static boolean getReturnFlag(int mission_no) {
-        if (mission_no  == 33 || mission_no  == 34 || mission_no > 100) {
+        if (mission_no == 33 || mission_no == 34 || mission_no > 100) {
             return false;
         } else {
             return true;
@@ -315,21 +320,21 @@ public class KcaApiData {
         String name = jp_name;
         String name_suffix = "";
         JsonObject suffixes = kcShipTranslationData.getAsJsonObject("suffixes");
-        for(Map.Entry<String, JsonElement> entry: suffixes.entrySet()) {
-            if(jp_name.endsWith(entry.getKey())) {
+        for (Map.Entry<String, JsonElement> entry : suffixes.entrySet()) {
+            if (jp_name.endsWith(entry.getKey())) {
                 name = name.replaceAll(entry.getKey(), "");
                 name_suffix = entry.getValue().getAsString();
                 break;
             }
         }
 
-        if(kcShipTranslationData.has(name)) {
+        if (kcShipTranslationData.has(name)) {
             name = kcShipTranslationData.get(name).getAsString();
         }
 
-        if(abbr) {
-            for(Map.Entry<String, JsonElement> entry: kcShipAbbrData.entrySet()) {
-                if(name.startsWith(entry.getKey())) {
+        if (abbr) {
+            for (Map.Entry<String, JsonElement> entry : kcShipAbbrData.entrySet()) {
+                if (name.startsWith(entry.getKey())) {
                     name = name.replaceAll(entry.getKey(), entry.getValue().getAsString());
                     break;
                 }
@@ -341,7 +346,7 @@ public class KcaApiData {
 
     public static String getItemTranslation(String jp_name) {
         String name = jp_name;
-        if(kcItemTranslationData.has(name)) {
+        if (kcItemTranslationData.has(name)) {
             name = kcItemTranslationData.get(name).getAsString();
         }
         return name;
@@ -420,11 +425,11 @@ public class KcaApiData {
             AssetManager.AssetInputStream ais =
                     (AssetManager.AssetInputStream) am.open("simple_expedition.json");
             byte[] bytes = ByteStreams.toByteArray(ais);
-            Log.e("KCA", new String(bytes));
+            //Log.e("KCA", new String(bytes));
             JsonElement data = new JsonParser().parse(new String(bytes));
             if (data.isJsonArray()) {
                 JsonArray array = data.getAsJsonArray();
-                for(JsonElement item: array) {
+                for (JsonElement item : array) {
                     JsonObject expdata = item.getAsJsonObject();
                     kcSimpleExpeditionData.add(expdata.get("no").getAsString(), expdata);
                 }
@@ -442,7 +447,7 @@ public class KcaApiData {
             AssetManager.AssetInputStream ais =
                     (AssetManager.AssetInputStream) am.open("ships_init_equip_count.json");
             byte[] bytes = ByteStreams.toByteArray(ais);
-            Log.e("KCA", new String(bytes));
+            //Log.e("KCA", new String(bytes));
             JsonElement data = new JsonParser().parse(new String(bytes));
             if (data.isJsonObject()) {
                 kcShipInitEquipCount = data.getAsJsonObject();
@@ -683,10 +688,11 @@ public class KcaApiData {
             int shipKcId = api_data.get("api_ship_id").getAsInt();
             String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
             Log.e("KCA", String.format("add ship %d (%s)", shipId, shipName));
-
-            JsonArray shipSlotItemData = (JsonArray) api_data.get("api_slotitem");
-            for (int i = 0; i < shipSlotItemData.size(); i++) {
-                addUserItem((JsonObject) shipSlotItemData.get(i));
+            if (api_data.has("api_slotitem") && !api_data.get("api_slotitem").isJsonNull()) {
+                JsonArray shipSlotItemData = (JsonArray) api_data.get("api_slotitem");
+                for (int i = 0; i < shipSlotItemData.size(); i++) {
+                    addUserItem((JsonObject) shipSlotItemData.get(i));
+                }
             }
         }
     }
@@ -849,8 +855,40 @@ public class KcaApiData {
         return currentNodeInfo;
     }
 
+    public static int getNodeColor(Context context, int api_event_id, int api_event_kind, int api_color_no) {
+        switch (api_color_no) {
+            case 2:
+                return ContextCompat.getColor(context, R.color.colorItem);
+            case 6:
+            case 9:
+                return ContextCompat.getColor(context, R.color.colorItemSpecial);
+            case 3:
+                return ContextCompat.getColor(context, R.color.colorVortex);
+            case 4:
+                if (api_event_id == API_NODE_EVENT_ID_NOEVENT) {
+                    if (api_event_kind == API_NODE_EVENT_KIND_SELECTABLE) { // selectable
+                        return ContextCompat.getColor(context, R.color.colorSelectable);
+                    } else {
+                        return ContextCompat.getColor(context, R.color.colorNone);
+                    }
+                } else {
+                    return ContextCompat.getColor(context, R.color.colorBattle);
+                }
+            case 5:
+                return ContextCompat.getColor(context, R.color.colorBossBattle);
+            case 7:
+            case 10:
+                return ContextCompat.getColor(context, R.color.colorAirBattle);
+            case 8:
+                return ContextCompat.getColor(context, R.color.colorNone);
+            default:
+                return ContextCompat.getColor(context, R.color.colorPrimaryDark);
+        }
+    }
+
+
     public static String getFormationString(Context context, int v, boolean is_short) {
-        switch(v) {
+        switch (v) {
             case FORMATION_LAH:
                 return context.getString(R.string.formation_lineahead);
             case FORMATION_DLN:
@@ -879,7 +917,7 @@ public class KcaApiData {
     }
 
     public static String getEngagementString(Context context, int v) {
-        switch(v) {
+        switch (v) {
             case ENGAGE_PARL:
                 return context.getString(R.string.engagement_parallel);
             case ENGAGE_HDON:
@@ -892,8 +930,9 @@ public class KcaApiData {
                 return "";
         }
     }
+
     public static String getAirForceResultString(Context context, int v) {
-        switch(v) {
+        switch (v) {
             case AIR_SUPERMACY:
                 return context.getString(R.string.air_supermacy);
             case AIR_SUPERIORITY:
@@ -905,13 +944,13 @@ public class KcaApiData {
             case AIR_INCAPABILITY:
                 return context.getString(R.string.air_incapability);
             default:
-                Log.e("KCA", "Unknown Value: "+String.valueOf(v));
+                Log.e("KCA", "Unknown Value: " + String.valueOf(v));
                 return "";
         }
     }
 
     public static String getItemString(Context context, int v) {
-        switch(v) {
+        switch (v) {
             case ITEM_FUEL:
                 return context.getString(R.string.item_fuel);
             case ITEM_AMMO:

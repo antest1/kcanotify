@@ -188,26 +188,61 @@ public class KcaBattle {
         return (data.has(key) && !data.get(key).isJsonNull());
     }
 
-    public static boolean isMainFleetInNight(int[] aftercbhps, int[] nowcbhps) {
-        int[] enemyAfterHps = Arrays.copyOfRange(aftercbhps, 7, 13);
-        int[] enemyNowHps = Arrays.copyOfRange(nowcbhps, 7, 13);
+    public static boolean isMainFleetInNight(int[] afterhps, int[] nowhps, int[] aftercbhps, int[] nowcbhps) {
+        int[] enemyAfterHps = Ints.concat(Arrays.copyOfRange(afterhps, 7, 13), Arrays.copyOfRange(aftercbhps, 7, 13));
+        int[] enemyNowHps = Ints.concat(Arrays.copyOfRange(nowhps, 7, 13), Arrays.copyOfRange(nowcbhps, 7, 13));
+        boolean[] enemySunk = new boolean[12];
 
-        int enemyCount = 6;
-        int enemySunkCount = 0;
+        int enemyMainCount = 6;
+        int enemyCbCount = 6;
+
+        int enemyMainSunkCount = 0;
+        int enemyCbSunkCount = 0;
+        int enemyCbGoodHealth = 0;
+
+        Log.e("KCA", "nb-enemyAfterHps " + Arrays.toString(enemyAfterHps));
+        Log.e("KCA", "nb-enemyNowHps " + Arrays.toString(enemyNowHps));
+
         for (int i = 0; i < 6; i++) {
             if (enemyNowHps[i] == -1) {
-                enemyCount -= 1;
+                enemyMainCount -= 1;
             } else {
-                if (enemyAfterHps[i] <= 0)
-                    enemySunkCount += 1;
+                enemySunk[i] = (enemyAfterHps[i] <= 0);
+                if (enemySunk[i]) {
+                    enemyMainSunkCount += 1;
+                }
             }
         }
 
-        if (enemyCount > 1 && (enemySunkCount >= (int) Math.floor(0.7 * enemyCount))) { // A~SS
-            return true;
-        } else {
-            return false;
+        for (int i = 6; i < 12; i++) {
+            if (enemyNowHps[i] == -1) {
+                enemyCbCount -= 1;
+            } else {
+                enemySunk[i] = (enemyAfterHps[i] <= 0);
+                if (enemySunk[i]) {
+                    enemyCbSunkCount += 1;
+                } else {
+                    if (enemyAfterHps[i] * 4 > enemyNowHps[i]) {
+                        enemyCbGoodHealth += 1;
+                    }
+                }
+            }
         }
+
+        Log.e("KCA", "nb-enemyCbCount " + String.valueOf(enemyCbCount));
+        Log.e("KCA", "nb-enemyCbSunkCount " + String.valueOf(enemyCbSunkCount));
+        Log.e("KCA", "nb-enemyCbGoodHealth " + String.valueOf(enemyCbGoodHealth));
+
+        if (!enemySunk[7] && enemyCbGoodHealth >= 2) {
+            return false;
+        } else if (enemyCbGoodHealth >= 3) {
+            return false;
+        } else if (enemyMainSunkCount == enemyMainCount && enemyCbSunkCount != enemyCbCount) {
+            return false;
+        } else {
+            return true;
+        }
+
     }
 
     public static JsonObject calculateRank(int[] afterhps, int[] nowhps, int[] aftercbhps, int[] nowcbhps) {
@@ -868,16 +903,23 @@ public class KcaBattle {
                             afterhps[f_idx] -= cnv(inj_kouku_fdam.get(i));
                             afterhps[e_idx] -= cnv(inj_kouku_edam.get(i));
                         }
+
                     }
                     if (isKeyExist(inj_kouku, "api_stage3_combined")) {
                         JsonObject inj_kouku_stage3_combined = inj_kouku.get("api_stage3_combined").getAsJsonObject();
-                        JsonArray inj_kouku_fdam_combined = inj_kouku_stage3_combined.getAsJsonArray("api_fdam");
-                        JsonArray inj_kouku_edam_combined = inj_kouku_stage3_combined.getAsJsonArray("api_edam");
-                        for (int i = 1; i < inj_kouku_fdam_combined.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            int e_idx = getEnemyIdx(i);
-                            aftercbhps[f_idx] -= cnv(inj_kouku_fdam_combined.get(i));
-                            aftercbhps[e_idx] -= cnv(inj_kouku_edam_combined.get(i));
+                        if(isKeyExist(inj_kouku_stage3_combined, "api_fdam")) {
+                            JsonArray inj_kouku_fdam_combined = inj_kouku_stage3_combined.getAsJsonArray("api_fdam");
+                            for (int i = 1; i < inj_kouku_fdam_combined.size(); i++) {
+                                int f_idx = getFriendIdx(i);
+                                aftercbhps[f_idx] -= cnv(inj_kouku_fdam_combined.get(i));
+                            }
+                        }
+                        if(isKeyExist(inj_kouku_stage3_combined, "api_edam")) {
+                            JsonArray inj_kouku_edam_combined = inj_kouku_stage3_combined.getAsJsonArray("api_edam");
+                            for (int i = 1; i < inj_kouku_edam_combined.size(); i++) {
+                                int e_idx = getEnemyIdx(i);
+                                aftercbhps[e_idx] -= cnv(inj_kouku_edam_combined.get(i));
+                            }
                         }
                     }
                 }
@@ -1089,15 +1131,22 @@ public class KcaBattle {
                             afterhps[e_idx] -= cnv(inj_kouku_edam.get(i));
                         }
                     }
+
                     if (isKeyExist(inj_kouku, "api_stage3_combined")) {
-                        JsonObject inj_kouku_stage3_combined = inj_kouku.getAsJsonObject("api_stage3_combined");
-                        JsonArray inj_kouku_fdam_combined = inj_kouku_stage3_combined.getAsJsonArray("api_fdam");
-                        JsonArray inj_kouku_edam_combined = inj_kouku_stage3_combined.getAsJsonArray("api_edam");
-                        for (int i = 1; i < inj_kouku_fdam_combined.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            int e_idx = getEnemyIdx(i);
-                            aftercbhps[f_idx] -= cnv(inj_kouku_fdam_combined.get(i));
-                            aftercbhps[e_idx] -= cnv(inj_kouku_edam_combined.get(i));
+                        JsonObject inj_kouku_stage3_combined = inj_kouku.get("api_stage3_combined").getAsJsonObject();
+                        if(isKeyExist(inj_kouku_stage3_combined, "api_fdam")) {
+                            JsonArray inj_kouku_fdam_combined = inj_kouku_stage3_combined.getAsJsonArray("api_fdam");
+                            for (int i = 1; i < inj_kouku_fdam_combined.size(); i++) {
+                                int f_idx = getFriendIdx(i);
+                                aftercbhps[f_idx] -= cnv(inj_kouku_fdam_combined.get(i));
+                            }
+                        }
+                        if(isKeyExist(inj_kouku_stage3_combined, "api_edam")) {
+                            JsonArray inj_kouku_edam_combined = inj_kouku_stage3_combined.getAsJsonArray("api_edam");
+                            for (int i = 1; i < inj_kouku_edam_combined.size(); i++) {
+                                int e_idx = getEnemyIdx(i);
+                                aftercbhps[e_idx] -= cnv(inj_kouku_edam_combined.get(i));
+                            }
                         }
                     }
                 }

@@ -286,12 +286,12 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:maxLines="1"
-                                android:ellipsize="end" />
+                                android:ellipsize="end"
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fm_1_hp_txt"
@@ -299,7 +299,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -320,7 +320,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/fm_1_hp_bar"
@@ -356,12 +356,12 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:maxLines="1"
-                                android:ellipsize="end" />
+                                android:ellipsize="end"
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fm_2_hp_txt"
@@ -369,7 +369,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -390,7 +390,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/fm_2_hp_bar"
@@ -426,12 +426,12 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:maxLines="1"
-                                android:ellipsize="end" />
+                                android:ellipsize="end"
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fm_3_hp_txt"
@@ -439,7 +439,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -460,7 +460,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/fm_3_hp_bar"
@@ -496,12 +496,12 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:maxLines="1"
-                                android:ellipsize="end" />
+                                android:ellipsize="end"
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fm_4_hp_txt"
@@ -509,7 +509,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -530,7 +530,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/fm_4_hp_bar"
@@ -566,12 +566,12 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:maxLines="1"
-                                android:ellipsize="end" />
+                                android:ellipsize="end"
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fm_5_hp_txt"
@@ -579,7 +579,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -600,7 +600,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/fm_5_hp_bar"
@@ -636,12 +636,12 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:maxLines="1"
-                                android:ellipsize="end" />
+                                android:ellipsize="end"
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fm_6_hp_txt"
@@ -649,7 +649,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -670,7 +670,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/fm_6_hp_bar"
@@ -794,12 +794,12 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:maxLines="1"
-                                android:ellipsize="end" />
+                                android:ellipsize="end"
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fs_1_hp_txt"
@@ -807,7 +807,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -828,7 +828,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/fs_1_hp_bar"
@@ -864,12 +864,12 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:maxLines="1"
-                                android:ellipsize="end" />
+                                android:ellipsize="end"
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fs_2_hp_txt"
@@ -877,7 +877,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -898,7 +898,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/fs_2_hp_bar"
@@ -934,12 +934,12 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:maxLines="1"
-                                android:ellipsize="end" />
+                                android:ellipsize="end"
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fs_3_hp_txt"
@@ -947,7 +947,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -968,7 +968,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/fs_3_hp_bar"
@@ -1004,12 +1004,12 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:maxLines="1"
-                                android:ellipsize="end" />
+                                android:ellipsize="end"
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fs_4_hp_txt"
@@ -1017,7 +1017,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -1038,7 +1038,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/fs_4_hp_bar"
@@ -1074,12 +1074,12 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:maxLines="1"
-                                android:ellipsize="end" />
+                                android:ellipsize="end"
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fs_5_hp_txt"
@@ -1087,7 +1087,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -1108,7 +1108,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/fs_5_hp_bar"
@@ -1144,12 +1144,12 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:maxLines="1"
-                                android:ellipsize="end" />
+                                android:ellipsize="end"
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fs_6_hp_txt"
@@ -1157,7 +1157,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -1178,7 +1178,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/fs_6_hp_bar"
@@ -1308,10 +1308,10 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="13dp"
                                     android:minHeight="10dp"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:ellipsize="end"
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/es_1_yomi"
@@ -1329,7 +1329,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -1350,7 +1350,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/es_1_hp_bar"
@@ -1394,10 +1394,10 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="13dp"
                                     android:minHeight="10dp"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:ellipsize="end"
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/es_2_yomi"
@@ -1415,7 +1415,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -1436,7 +1436,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/es_2_hp_bar"
@@ -1480,10 +1480,10 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="13dp"
                                     android:minHeight="10dp"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:ellipsize="end"
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/es_3_yomi"
@@ -1501,7 +1501,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -1522,7 +1522,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/es_3_hp_bar"
@@ -1566,10 +1566,10 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="13dp"
                                     android:minHeight="10dp"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:ellipsize="end"
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/es_4_yomi"
@@ -1587,7 +1587,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -1608,7 +1608,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/es_4_hp_bar"
@@ -1652,10 +1652,10 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="13dp"
                                     android:minHeight="10dp"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:ellipsize="end"
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/es_5_yomi"
@@ -1673,7 +1673,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -1694,7 +1694,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/es_5_hp_bar"
@@ -1738,10 +1738,10 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="13dp"
                                     android:minHeight="10dp"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:ellipsize="end"
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/es_6_yomi"
@@ -1759,7 +1759,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -1780,7 +1780,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/es_6_hp_bar"
@@ -1909,10 +1909,10 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="13dp"
                                     android:minHeight="10dp"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:ellipsize="end"
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/em_1_yomi"
@@ -1930,7 +1930,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -1951,7 +1951,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/em_1_hp_bar"
@@ -1995,10 +1995,10 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="13dp"
                                     android:minHeight="10dp"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:ellipsize="end"
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/em_2_yomi"
@@ -2016,7 +2016,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -2037,7 +2037,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/em_2_hp_bar"
@@ -2081,10 +2081,10 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="13dp"
                                     android:minHeight="10dp"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:ellipsize="end"
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/em_3_yomi"
@@ -2102,7 +2102,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -2123,7 +2123,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/em_3_hp_bar"
@@ -2167,10 +2167,10 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="13dp"
                                     android:minHeight="10dp"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:ellipsize="end"
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/em_4_yomi"
@@ -2188,7 +2188,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -2209,7 +2209,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/em_4_hp_bar"
@@ -2253,10 +2253,10 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="13dp"
                                     android:minHeight="10dp"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:ellipsize="end"
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/em_5_yomi"
@@ -2274,7 +2274,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -2295,7 +2295,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/em_5_hp_bar"
@@ -2339,10 +2339,10 @@
                                     android:layout_height="wrap_content"
 
                                     android:textColor="@android:color/white"
-                                    android:textSize="13dp"
                                     android:minHeight="10dp"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:ellipsize="end"
+                                    android:textSize="10dp" />
 
                                 <TextView
                                     android:id="@+id/em_6_yomi"
@@ -2360,7 +2360,7 @@
                                 android:layout_height="wrap_content"
 
                                 android:textColor="@android:color/white"
-                                android:textSize="13dp"
+                                android:textSize="9dp"
                                 android:minHeight="10dp"
                                 android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical" />
@@ -2381,7 +2381,7 @@
                                 android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
                                 android:minHeight="9dp"
-                                android:textSize="11dp" />
+                                android:textSize="9dp" />
 
                             <ProgressBar
                                 android:id="@+id/em_6_hp_bar"
