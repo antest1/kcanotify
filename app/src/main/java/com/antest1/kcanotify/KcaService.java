@@ -761,7 +761,9 @@ public class KcaService extends Service {
                                         && !Settings.canDrawOverlays(getApplicationContext())) {
                                     // Can not draw overlays: pass
                                 } else {
-                                    startService(new Intent(this, KcaViewButtonService.class));
+                                    Intent intent = new Intent(this, KcaViewButtonService.class)
+                                            .setAction(KcaViewButtonService.SHOW_BATTLE_INFO);
+                                    startService(intent);
                                 }
                             }
 
@@ -1791,7 +1793,7 @@ public class KcaService extends Service {
                 shipId = ndockData.get("api_ship_id").getAsInt();
                 completeTime = ndockData.get("api_complete_time").getAsLong();
 
-                if (kcaDockingList[dockId] != null) { // Overwrite Data?
+                if (kcaDockingRunnableList[dockId] != null) { // Overwrite Data?
                     if (kcaDockingRunnableList[dockId].ship_id != shipId) {
                         kcaDockingList[dockId].interrupt();
                         kcaDockingRunnableList[dockId] = null;

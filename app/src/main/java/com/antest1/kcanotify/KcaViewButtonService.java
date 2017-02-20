@@ -45,7 +45,13 @@ public class KcaViewButtonService extends Service {
     public static final int FAIRY_NOTIFICATION_ID = 10118;
     public static final String RETURN_FAIRY_ACTION = "return_fairy_action";
     public static final String REMOVE_FAIRY_ACTION = "remove_fairy_action";
+    public static final String SHOW_BATTLE_INFO = "show_battle_info";
+    public static final String SHOW_QUEST_INFO = "show_mission_info";
 
+    public static final int BATTLE_MODE = 1;
+    public static final int QUEST_MODE = 2;
+
+    private int status = -1;
     private LocalBroadcastManager broadcaster;
     private BroadcastReceiver battleinfo_receiver;
     private BroadcastReceiver battlehdmg_receiver;
@@ -84,6 +90,7 @@ public class KcaViewButtonService extends Service {
     public void onCreate() {
         super.onCreate();
         clickcount = 0;
+        status = -1;
         mHandler = new Handler();
         startService(new Intent(getBaseContext(), KcaBattleViewService.class));
         broadcaster = LocalBroadcastManager.getInstance(this);
@@ -163,11 +170,20 @@ public class KcaViewButtonService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(intent != null && intent.getAction() != null && intent.getAction().equals(RETURN_FAIRY_ACTION)) {
+        if(intent != null && intent.getAction() != null) {
+            if (intent.getAction().equals(RETURN_FAIRY_ACTION)) {
+                // Do Nothing
+            }
+            if (intent.getAction().equals(SHOW_BATTLE_INFO)) {
+                status = BATTLE_MODE;
+            }
+            if (intent.getAction().equals(SHOW_QUEST_INFO)) {
+                status = QUEST_MODE;
+            }
             mView.setVisibility(View.VISIBLE);
         }
         notificationManager.cancel(FAIRY_NOTIFICATION_ID);
-        Log.e("KCA-V", "onStartCommand");
+        Log.e("KCA-V", String.format("onStartCommand %d", status));
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -179,7 +195,10 @@ public class KcaViewButtonService extends Service {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlenode_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlehdmg_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(buttontop_receiver);
-        stopService(new Intent(getBaseContext(), KcaBattleViewService.class));
+        if (status == BATTLE_MODE) {
+            stopService(new Intent(getBaseContext(), KcaBattleViewService.class));
+        }
+        status = -1;
         super.onDestroy();
     }
 
@@ -211,7 +230,9 @@ public class KcaViewButtonService extends Service {
                     long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                     if (clickDuration < MAX_CLICK_DURATION) {
                         clickcount += 1;
-                        startService(new Intent(getBaseContext(), KcaBattleViewService.class));
+                        if (status == BATTLE_MODE) {
+                            startService(new Intent(getBaseContext(), KcaBattleViewService.class));
+                        }
                     }
                     int[] locations = new int[2];
                     mView.getLocationOnScreen(locations);
