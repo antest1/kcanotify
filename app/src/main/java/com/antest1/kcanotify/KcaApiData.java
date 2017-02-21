@@ -570,6 +570,16 @@ public class KcaApiData {
         for (Integer i : prevItemIds) {
             userItemData.remove(i);
         }
+
+        JsonObject data = new JsonObject();
+        if (sHandler != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString("url", KCA_API_DATA_LOADED);
+            bundle.putString("data", data.toString());
+            Message sMsg = sHandler.obtainMessage();
+            sMsg.setData(bundle);
+            sHandler.sendMessage(sMsg);
+        }
         return userItemData.size();
     }
 

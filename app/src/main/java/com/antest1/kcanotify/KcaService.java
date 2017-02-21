@@ -1308,7 +1308,9 @@ public class KcaService extends Service {
                 Log.e("KCA", String.format("Ship: %d", jsonDataObj.get("ship").getAsInt()));
                 Log.e("KCA", String.format("Item: %d", jsonDataObj.get("item").getAsInt()));
                 api_start2_loading_flag = false;
-                processFirstDeckInfo(currentPortDeckData);
+                if(isUserItemDataLoaded()) {
+                    processFirstDeckInfo(currentPortDeckData);
+                }
             }
 
             if (url.startsWith(KCA_API_NOTI_EXP_LEFT)) {
