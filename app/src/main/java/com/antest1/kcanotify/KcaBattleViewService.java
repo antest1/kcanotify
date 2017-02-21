@@ -59,6 +59,7 @@ import static com.antest1.kcanotify.KcaApiData.getNodeFullInfo;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
+import static com.antest1.kcanotify.KcaBattle.deckportdata;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
@@ -77,6 +78,7 @@ public class KcaBattleViewService extends Service {
     public static int[] startNowHps;
     public static int[] startNowHpsCombined;
 
+    public static JsonObject deckportdata = null;
     public static JsonArray friendShipData, friendCombinedShipData;
     public static JsonArray enemyShipData, enemyCombinedShipData;
 
@@ -358,7 +360,7 @@ public class KcaBattleViewService extends Service {
                             .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItem));
                 }
 
-                JsonObject deckportdata = api_data.getAsJsonObject("api_deck_port");
+                deckportdata = api_data.getAsJsonObject("api_deck_port");
 
                 JsonArray api_escape = new JsonArray();
                 JsonArray api_escape_combined = new JsonArray();
@@ -1156,6 +1158,7 @@ public class KcaBattleViewService extends Service {
     @Override
     public void onDestroy() {
         active = false;
+        deckportdata = null;
         mView.setVisibility(View.GONE);
         itemView.setVisibility(View.GONE);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(hdmgreceiver);
@@ -1290,6 +1293,7 @@ public class KcaBattleViewService extends Service {
         };
         JsonObject sendData = new JsonObject();
         if (type == ERORR_ITEMVIEW) {
+            api_data.add("api_deckport", deckportdata);
             api_data.add("api_fs_data", friendShipData);
             api_data.add("api_fsc_data", friendCombinedShipData);
             api_data.add("api_es_data", enemyShipData);
