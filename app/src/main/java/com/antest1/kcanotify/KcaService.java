@@ -1049,11 +1049,7 @@ public class KcaService extends Service {
                         JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                         int api_combined = api_data.get("api_combined").getAsInt();
                         isCombined = (api_combined > 0);
-                        if (api_combined > 0) {
-                            KcaBattle.isCombined = true;
-                        } else {
-                            KcaBattle.isCombined = false;
-                        }
+                        KcaBattle.isCombined = api_combined > 0;
                     }
                     Log.e("KCA", "Combined: " + String.valueOf(isCombined));
                     processFirstDeckInfo(currentPortDeckData);
@@ -1305,8 +1301,10 @@ public class KcaService extends Service {
         try {
             jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
             if (url.startsWith(KCA_API_DATA_LOADED)) {
-                Log.e("KCA", String.format("Ship: %d", jsonDataObj.get("ship").getAsInt()));
-                Log.e("KCA", String.format("Item: %d", jsonDataObj.get("item").getAsInt()));
+                if (jsonDataObj.has("ship")) {
+                    Log.e("KCA", String.format("Ship: %d", jsonDataObj.get("ship").getAsInt()));
+                    Log.e("KCA", String.format("Item: %d", jsonDataObj.get("item").getAsInt()));
+                }
                 api_start2_loading_flag = false;
                 if(isUserItemDataLoaded()) {
                     processFirstDeckInfo(currentPortDeckData);
