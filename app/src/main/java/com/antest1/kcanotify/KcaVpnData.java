@@ -63,7 +63,7 @@ public class KcaVpnData {
             "203.104.209.7"     // Kancolle Android Server
     };
     private static List<String> kcaServers = new ArrayList<String>(Arrays.asList(kcaServerList));
-    public static ExecutorService executorService = Executors.newCachedThreadPool();
+    public static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public static int state = NONE;
     public static byte[] requestData = {};
