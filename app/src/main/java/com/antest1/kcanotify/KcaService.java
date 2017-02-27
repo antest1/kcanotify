@@ -58,7 +58,10 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
@@ -462,7 +465,7 @@ public class KcaService extends Service {
     public void handleServiceMessage(Message msg) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String url = msg.getData().getString("url");
-        String data = msg.getData().getString("data");
+        Reader data = new InputStreamReader(new ByteArrayInputStream(msg.getData().getByteArray("data")));
         String request = msg.getData().getString("request");
 
         if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.length() == 0 || viewNotificationBuilder == null) {
@@ -471,6 +474,7 @@ public class KcaService extends Service {
 
         JsonObject jsonDataObj;
         try {
+            data.skip("svdata=".length());
             jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
 
             if (url.startsWith(KCA_VERSION)) {
@@ -510,8 +514,8 @@ public class KcaService extends Service {
                 //Log.e("KCA", "Load Kancolle Data");
                 //Toast.makeText(contextWithLocale, "API_START2", Toast.LENGTH_LONG).show();
 
-                api_start2_data = data;
-                writeCacheData(getApplicationContext(), data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
+                api_start2_data = jsonDataObj.toString();
+                writeCacheData(getApplicationContext(), api_start2_data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
 
                 if (jsonDataObj.has("api_data")) {
                     //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();

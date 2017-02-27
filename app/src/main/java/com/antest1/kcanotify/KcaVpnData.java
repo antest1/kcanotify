@@ -201,7 +201,7 @@ public class KcaVpnData {
                     //Log.e("KCA", String.valueOf(responseData.length));
                     String requestUri = portToUri.get(tport);
                     if(checkKcApi(requestUri)) {
-                        KcaHandler k = new KcaHandler(handler, requestUri, requestBody, responseBody, false);
+                        KcaHandler k = new KcaHandler(handler, requestUri, requestBody, responseBody);
                         executorService.execute(k);
                     }
                     portToUri.remove(tport);
@@ -227,7 +227,7 @@ public class KcaVpnData {
             } else {
                 error_data.addProperty("response", responseDataStr);
             }
-            KcaHandler k = new KcaHandler(handler, error_uri, empty_request.getBytes(), error_data.toString().getBytes(), false);
+            KcaHandler k = new KcaHandler(handler, error_uri, empty_request.getBytes(), error_data.toString().getBytes());
             executorService.execute(k);
             Log.e("KCA", getStringFromException(e));
         }
