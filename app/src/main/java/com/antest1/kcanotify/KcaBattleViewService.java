@@ -297,7 +297,7 @@ public class KcaBattleViewService extends Service {
                     ((TextView) battleview.findViewById(R.id.battle_result))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorVortex));
                 } else if (api_event_id == API_NODE_EVENT_ID_SENDAN) {
-                    ((LinearLayout) mView.findViewById(R.id.battleviewpanel))
+                    mView.findViewById(R.id.battleviewpanel)
                             .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                     JsonObject api_itemget_eo_comment = api_data.getAsJsonObject("api_itemget_eo_comment");
                     String itemname = getItemString(contextWithLocale, api_itemget_eo_comment.get("api_id").getAsInt());
@@ -393,7 +393,29 @@ public class KcaBattleViewService extends Service {
                                 shipData.add(String.valueOf(data.get("api_id").getAsInt()), data);
                             }
 
+                            for (int j = 0; j < api_escape.size(); j++) {
+                                int idx = api_escape.get(j).getAsInt();
+                                ((TextView) battleview.findViewById(shipHpTxtViewList[idx])).setText(getStringWithLocale(R.string.battleview_text_retreated));
+                                ((TextView) battleview.findViewById(shipHpTxtViewList[idx])).setGravity(Gravity.CENTER_HORIZONTAL);
+                                battleview.findViewById(shipHpTxtViewList[idx])
+                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRetreated));
+                            }
+
                             for (int j = 0; j < mainDeck.size(); j++) {
+                                if (fc_flag || ec_flag) {
+                                    ((TextView) battleview.findViewById(shipNameViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+                                } else {
+                                    ((TextView) battleview.findViewById(shipNameViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                                }
+
+                                if (fc_flag || ec_flag) {
+                                    ((TextView) battleview.findViewById(shipLevelViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                                    ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                                } else {
+                                    ((TextView) battleview.findViewById(shipLevelViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+                                    ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                                }
+
                                 if (mainDeck.get(j).getAsInt() == -1) {
                                     //Log.e("KCA", String.format("%d: invisible", j + 1));
                                     battleview.findViewById(shipViewList[j + 1]).setVisibility(View.INVISIBLE);
@@ -416,43 +438,22 @@ public class KcaBattleViewService extends Service {
                                     ((TextView) battleview.findViewById(shipNameViewList[j + 1]))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
-                                    if (fc_flag || ec_flag) {
-                                        ((TextView) battleview.findViewById(shipNameViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
-                                    } else {
-                                        ((TextView) battleview.findViewById(shipNameViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-                                    }
-
                                     ((TextView) battleview.findViewById(shipLevelViewList[j + 1])).setText(makeLvString(level));
                                     if (!((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).getText().toString()
                                             .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
                                         ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setText(makeHpString(nowhp, maxhp));
                                     }
-                                    if (fc_flag || ec_flag) {
-                                        ((TextView) battleview.findViewById(shipLevelViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
-                                        ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
-                                    } else {
-                                        ((TextView) battleview.findViewById(shipLevelViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
-                                        ((TextView) battleview.findViewById(shipHpTxtViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-                                    }
 
                                     float hpPercent = nowhp * VIEW_HP_MAX / (float) maxhp;
                                     ((ProgressBar) battleview.findViewById(shipHpBarViewList[j + 1])).setProgress(Math.round(hpPercent));
                                     ((ProgressBar) battleview.findViewById(shipHpBarViewList[j + 1])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
-
                                     battleview.findViewById(shipViewList[j + 1]).setVisibility(View.VISIBLE);
                                 }
                             }
 
-                            for (int j = 0; j < api_escape.size(); j++) {
-                                int idx = api_escape.get(j).getAsInt();
-                                ((TextView) battleview.findViewById(shipHpTxtViewList[idx])).setText(getStringWithLocale(R.string.battleview_text_retreated));
-                                ((TextView) battleview.findViewById(shipHpTxtViewList[idx])).setGravity(Gravity.CENTER_HORIZONTAL);
-                                battleview.findViewById(shipHpTxtViewList[idx])
-                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRetreated));
-                            }
                             Log.e("KCA", "FSD: " + String.valueOf(friendShipData.size()));
 
-                        } else if (i == 1) { // TODO: CHECK NEEDED
+                        } else if (i == 1) {
                             JsonObject combinedDeckData = deckData.get(i).getAsJsonObject();
                             ((TextView) battleview.findViewById(R.id.friend_combined_fleet_name)).
                                     setText(combinedDeckData.get("api_name").getAsString());
@@ -464,7 +465,19 @@ public class KcaBattleViewService extends Service {
                                 shipData.add(String.valueOf(data.get("api_id").getAsInt()), data);
                             }
 
+                            for (int j = 0; j < api_escape_combined.size(); j++) {
+                                int idx = api_escape_combined.get(j).getAsInt();
+                                ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[idx])).setText(getStringWithLocale(R.string.battleview_text_retreated));
+                                ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[idx])).setGravity(Gravity.CENTER_HORIZONTAL);
+                                battleview.findViewById(shipHpTxtCombinedViewList[idx])
+                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRetreated));
+                            }
+
                             for (int j = 0; j < combinedDeck.size(); j++) {
+                                ((TextView) battleview.findViewById(shipNameCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+                                ((TextView) battleview.findViewById(shipLevelCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                                ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+
                                 if (combinedDeck.get(j).getAsInt() == -1) {
                                     //Log.e("KCA", String.format("%d: invisible", j + 1));
                                     battleview.findViewById(shipCombinedViewList[j + 1]).setVisibility(View.INVISIBLE);
@@ -486,29 +499,16 @@ public class KcaBattleViewService extends Service {
                                     ((TextView) battleview.findViewById(shipNameCombinedViewList[j + 1])).setText(kcname);
                                     ((TextView) battleview.findViewById(shipNameCombinedViewList[j + 1]))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-                                    ((TextView) battleview.findViewById(shipNameCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
                                     ((TextView) battleview.findViewById(shipLevelCombinedViewList[j + 1])).setText(makeLvString(level));
                                     if (!((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).getText().toString()
                                             .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
                                         ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).setText(makeHpString(nowhp, maxhp));
                                     }
-                                    ((TextView) battleview.findViewById(shipLevelCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
-                                    ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
-
                                     float hpPercent = nowhp * VIEW_HP_MAX / (float) maxhp;
                                     ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[j + 1])).setProgress(Math.round(hpPercent));
                                     ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[j + 1])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
-
                                     battleview.findViewById(shipCombinedViewList[j + 1]).setVisibility(View.VISIBLE);
                                 }
-                            }
-
-                            for (int j = 0; j < api_escape_combined.size(); j++) {
-                                int idx = api_escape_combined.get(j).getAsInt();
-                                ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[idx])).setText(getStringWithLocale(R.string.battleview_text_retreated));
-                                ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[idx])).setGravity(Gravity.CENTER_HORIZONTAL);
-                                battleview.findViewById(shipHpTxtCombinedViewList[idx])
-                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRetreated));
                             }
 
                             Log.e("KCA", "FCSD: " + String.valueOf(friendCombinedShipData.size()));
@@ -577,6 +577,16 @@ public class KcaBattleViewService extends Service {
                 }
 
                 for (int i = 1; i < api_ship_ke.size(); i++) {
+                    if (fc_flag || ec_flag) {
+                        ((TextView) battleview.findViewById(shipLevelViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                        ((TextView) battleview.findViewById(shipNameViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+                        ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                    } else {
+                        ((TextView) battleview.findViewById(shipLevelViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+                        ((TextView) battleview.findViewById(shipNameViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                        ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+                    }
+
                     if (api_ship_ke.get(i).getAsInt() == -1) {
                         battleview.findViewById(shipViewList[getEnemyIdx(i)]).setVisibility(View.INVISIBLE);
                     } else {
@@ -587,19 +597,8 @@ public class KcaBattleViewService extends Service {
 
                         ((TextView) battleview.findViewById(shipNameViewList[getEnemyIdx(i)])).setText(kcname);
                         ((TextView) battleview.findViewById(shipLevelViewList[getEnemyIdx(i)])).setText(makeLvString(level));
-                        if (fc_flag || ec_flag) {
-                            ((TextView) battleview.findViewById(shipLevelViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
-                            ((TextView) battleview.findViewById(shipNameViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
-                        } else {
-                            ((TextView) battleview.findViewById(shipLevelViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
-                            ((TextView) battleview.findViewById(shipNameViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-                        }
+
                         if (!is_practice) {
-                            if (fc_flag || ec_flag) {
-                                ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
-                            } else {
-                                ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
-                            }
                             if (kcname.contains(getStringWithLocale(R.string.ship_name_class))) {
                                 if (kcyomi.equals(getStringWithLocale(R.string.yomi_elite))) {
                                     if (fc_flag || ec_flag) {
@@ -632,6 +631,12 @@ public class KcaBattleViewService extends Service {
                 JsonArray api_nowhps = api_data.getAsJsonArray("api_nowhps");
                 JsonArray api_afterhps = api_data.getAsJsonArray("api_afterhps");
                 for (int i = 1; i < api_maxhps.size(); i++) {
+                    if (fc_flag || ec_flag) {
+                        ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                    } else {
+                        ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                    }
+
                     int maxhp = api_maxhps.get(i).getAsInt();
                     int afterhp = api_afterhps.get(i).getAsInt();
                     if (maxhp == -1) continue;
@@ -643,12 +648,6 @@ public class KcaBattleViewService extends Service {
                         }
                         ((ProgressBar) battleview.findViewById(shipHpBarViewList[i])).setProgress(Math.round(hpPercent));
                         ((ProgressBar) battleview.findViewById(shipHpBarViewList[i])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
-                        if (fc_flag || ec_flag) {
-                            ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
-                        } else {
-                            ((TextView) battleview.findViewById(shipHpTxtViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-                        }
-
                     }
                     nowhps[i] = api_nowhps.get(i).getAsInt();
                     afterhps[i] = api_afterhps.get(i).getAsInt();
@@ -660,6 +659,12 @@ public class KcaBattleViewService extends Service {
                     JsonArray api_afterhps_combined = api_data.getAsJsonArray("api_afterhps_combined");
 
                     for (int i = 1; i < api_maxhps_combined.size(); i++) {
+                        if (fc_flag || ec_flag) {
+                            ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                        } else {
+                            ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                        }
+
                         int maxhp = api_maxhps_combined.get(i).getAsInt();
                         int afterhp = api_afterhps_combined.get(i).getAsInt();
                         if (maxhp == -1) continue;
@@ -671,12 +676,6 @@ public class KcaBattleViewService extends Service {
                             }
                             ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgress(Math.round(hpPercent));
                             ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
-                            if (fc_flag || ec_flag) {
-                                ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
-                            } else {
-                                ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-                            }
-
                         }
                         nowhps_combined[i] = api_nowhps_combined.get(i).getAsInt();
                         afterhps_combined[i] = api_afterhps_combined.get(i).getAsInt();
@@ -699,6 +698,10 @@ public class KcaBattleViewService extends Service {
                     Log.e("KCA", "ECSD: " + String.valueOf(enemyCombinedShipData.size()));
                     JsonArray api_ship_ke_combined = api_data.getAsJsonArray("api_ship_ke_combined");
                     for (int i = 1; i < api_ship_ke_combined.size(); i++) {
+                        ((TextView) battleview.findViewById(shipNameCombinedViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+                        ((TextView) battleview.findViewById(shipLevelCombinedViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                        ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+
                         if (api_ship_ke_combined.get(i).getAsInt() == -1) {
                             battleview.findViewById(shipCombinedViewList[getEnemyIdx(i)]).setVisibility(View.INVISIBLE);
                         } else {
@@ -707,13 +710,9 @@ public class KcaBattleViewService extends Service {
                             String kcname = getShipTranslation(kcShipData.get("name").getAsString(), true);
                             String kcyomi = kcShipData.get("yomi").getAsString();
 
-                            ((TextView) battleview.findViewById(shipNameCombinedViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
                             ((TextView) battleview.findViewById(shipNameCombinedViewList[getEnemyIdx(i)])).setText(kcname);
-
-                            ((TextView) battleview.findViewById(shipLevelCombinedViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
                             ((TextView) battleview.findViewById(shipLevelCombinedViewList[getEnemyIdx(i)])).setText(makeLvString(level));
 
-                            ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
                             if (kcname.contains(getStringWithLocale(R.string.ship_name_class))) {
                                 if (kcyomi.equals(getStringWithLocale(R.string.yomi_elite))) {
                                     ((TextView) battleview.findViewById(shipYomiCombinedViewList[getEnemyIdx(i)])).setText(getStringWithLocale(R.string.yomi_elite_short));
@@ -737,6 +736,8 @@ public class KcaBattleViewService extends Service {
                     JsonArray api_nowhps_combined = api_data.getAsJsonArray("api_nowhps_combined");
                     JsonArray api_afterhps_combined = api_data.getAsJsonArray("api_afterhps_combined");
                     for (int i = 7; i < api_maxhps_combined.size(); i++) {
+                        ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+
                         int maxhp_combined = api_maxhps_combined.get(i).getAsInt();
                         int afterhp_combined = api_afterhps_combined.get(i).getAsInt();
                         if (maxhp_combined == -1) continue;
@@ -745,7 +746,6 @@ public class KcaBattleViewService extends Service {
                             ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setText(makeHpString(afterhp_combined, maxhp_combined));
                             ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgress(Math.round(hpPercent));
                             ((ProgressBar) battleview.findViewById(shipHpBarCombinedViewList[i])).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
-                            ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[i])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
                         }
                         nowhps_combined[i] = api_nowhps_combined.get(i).getAsInt();
                         afterhps_combined[i] = api_afterhps_combined.get(i).getAsInt();
@@ -1112,10 +1112,10 @@ public class KcaBattleViewService extends Service {
                     //mManager.removeView(mView);
                     String value = intent.getExtras().getString(KCA_MSG_DATA, "0");
                     if (value.contains("1")) {
-                        ((LinearLayout) mView.findViewById(R.id.battleviewpanel))
+                        mView.findViewById(R.id.battleviewpanel)
                                 .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHeavyDmgStatePanel));
                     } else {
-                        ((LinearLayout) mView.findViewById(R.id.battleviewpanel))
+                        mView.findViewById(R.id.battleviewpanel)
                                 .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                     }
 

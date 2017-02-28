@@ -14,9 +14,9 @@
         android:id="@+id/battleview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignWithParentIfMissing="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignWithParentIfMissing="true"
         android:layout_centerVertical="true">
 
         <LinearLayout
@@ -26,20 +26,20 @@
             android:alpha="0.8"
             android:background="@color/colorPrimaryDark"
             android:orientation="vertical"
-            android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:paddingEnd="8dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:paddingStart="8dp">
+            android:paddingStart="8dp"
+            android:paddingTop="8dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
                 android:paddingBottom="4dp"
-                android:paddingTop="4dp"
-                android:layout_marginBottom="8dp">
+                android:paddingTop="4dp">
 
                 <TextView
                     android:id="@+id/battle_node"
@@ -52,11 +52,11 @@
                     android:layout_marginRight="16dp"
                     android:layout_weight="1"
                     android:minWidth="72dp"
-                    android:textSize="14dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/battle_result"
@@ -79,42 +79,38 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:orientation="horizontal"
+                        android:id="@+id/battle_engagement_row"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:id="@+id/battle_engagement_row">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/battle_engagement_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-
-
-                            android:textColor="@android:color/darker_gray"
-                            android:textSize="10dp"
+                            android:minWidth="60dp"
                             android:text="@string/engagement_label"
-                            android:minWidth="60dp" />
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="10dp" />
 
                         <TextView
                             android:id="@+id/battle_engagement"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-
-
                             android:textColor="@android:color/white"
                             android:textSize="10dp" />
 
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
+                        android:id="@+id/battle_airpower_row"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:id="@+id/battle_airpower_row">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/battle_airpower_label"
@@ -123,28 +119,26 @@
                             android:layout_centerVertical="true"
 
 
-                            android:textColor="@android:color/darker_gray"
-                            android:textSize="10dp"
+                            android:minWidth="60dp"
                             android:text="@string/air_label"
-                            android:minWidth="60dp" />
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="10dp" />
 
                         <TextView
                             android:id="@+id/battle_airpower"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-
-
                             android:textColor="@android:color/white"
                             android:textSize="10dp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
+                        android:id="@+id/battle_getship_row"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:id="@+id/battle_getship_row">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/battle_getship_label"
@@ -153,18 +147,16 @@
                             android:layout_centerVertical="true"
 
 
-                            android:textColor="@android:color/darker_gray"
-                            android:textSize="10dp"
+                            android:minWidth="60dp"
                             android:text="@string/getship_label"
-                            android:minWidth="60dp" />
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="10dp" />
 
                         <TextView
                             android:id="@+id/battle_getship"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-
-
                             android:textColor="@android:color/white"
                             android:textSize="10dp" />
 
@@ -175,6 +167,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/fleetview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="8dp"
@@ -182,22 +175,21 @@
                 android:layout_marginRight="12dp"
                 android:orientation="horizontal"
                 android:transitionGroup="false"
-                android:weightSum="1"
-                android:id="@+id/fleetview">
+                android:weightSum="1">
 
                 <LinearLayout
                     android:id="@+id/friend_main_fleet"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:orientation="vertical"
                     android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:layout_weight="0.5"
-                    android:layout_width="0dp">
+                    android:paddingRight="4dp">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:id="@+id/friend_fleet_info1"
@@ -206,10 +198,10 @@
                             android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/friend_fleet_name"
@@ -222,18 +214,19 @@
                                     android:id="@+id/friend_fleet_formation"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
                                     android:layout_gravity="end"
+                                    android:layout_weight="1"
+                                    android:paddingLeft="8dp"
                                     android:textAlignment="textEnd"
                                     android:textColor="@android:color/darker_gray"
-                                    android:textSize="10dp"
-                                    android:paddingLeft="8dp" />
+                                    android:textSize="10dp" />
 
                             </LinearLayout>
 
                         </LinearLayout>
 
                         <ImageView
+                            android:id="@+id/imageView2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
@@ -243,8 +236,7 @@
                             android:paddingRight="5dp"
                             android:paddingTop="0dp"
                             android:scaleType="fitXY"
-                            android:src="@android:drawable/divider_horizontal_bright"
-                            android:id="@+id/imageView2" />
+                            android:src="@android:drawable/divider_horizontal_bright" />
 
                         <TextView
                             android:id="@+id/friend_fleet_damage"
@@ -268,58 +260,55 @@
                         android:src="@android:drawable/divider_horizontal_bright" />
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/fm_1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fm_1"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fm_1_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:minHeight="10dp"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:maxLines="1"
+                                android:layout_weight="0.6"
                                 android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fm_1_hp_txt"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fm_1_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -327,69 +316,65 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/fm_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fm_2"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fm_2_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:minHeight="10dp"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:maxLines="1"
+                                android:layout_weight="0.6"
                                 android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/fm_2_hp_txt"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fm_2_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -397,40 +382,39 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:elevation="1dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/fm_3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fm_3"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fm_3_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:minHeight="10dp"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:maxLines="1"
+                                android:layout_weight="0.6"
                                 android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="10dp" />
 
                             <TextView
@@ -438,28 +422,28 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fm_3_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -467,40 +451,40 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.4"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/fm_4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fm_4"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fm_4_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:minHeight="10dp"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:maxLines="1"
+                                android:layout_weight="0.6"
                                 android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="10dp" />
 
                             <TextView
@@ -508,28 +492,28 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fm_4_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -537,40 +521,40 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.4"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/fm_5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fm_5"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fm_5_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:minHeight="10dp"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:maxLines="1"
+                                android:layout_weight="0.6"
                                 android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="10dp" />
 
                             <TextView
@@ -578,28 +562,28 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fm_5_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -607,40 +591,40 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.4"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/fm_6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fm_6"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fm_6_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:minHeight="10dp"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:maxLines="1"
+                                android:layout_weight="0.6"
                                 android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="10dp" />
 
                             <TextView
@@ -648,28 +632,28 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fm_6_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -677,12 +661,12 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.4"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
@@ -690,13 +674,13 @@
 
                 <LinearLayout
                     android:id="@+id/friend_combined_fleet"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.25"
                     android:orientation="vertical"
+
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
-                    
-                    android:layout_weight="0.25"
-                    android:layout_width="0dp"
                     android:visibility="gone">
 
                     <LinearLayout
@@ -706,16 +690,16 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
                             <LinearLayout
-                                android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/friend_combined_fleet_name"
@@ -728,36 +712,36 @@
                                     android:id="@+id/friend_combined_fleet_formation"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
                                     android:layout_gravity="end"
+                                    android:layout_weight="1"
+                                    android:paddingLeft="8dp"
                                     android:textAlignment="textEnd"
                                     android:textColor="@android:color/darker_gray"
-                                    android:textSize="10dp"
-                                    android:paddingLeft="8dp" />
+                                    android:textSize="10dp" />
 
                             </LinearLayout>
 
                             <ImageView
+                                android:id="@+id/imageView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="1dp"
+                                android:layout_weight="1"
                                 android:background="@android:color/darker_gray"
                                 android:paddingBottom="0.5dp"
                                 android:paddingLeft="5dp"
                                 android:paddingRight="5dp"
                                 android:paddingTop="0dp"
                                 android:scaleType="fitXY"
-                                android:src="@android:drawable/divider_horizontal_bright"
-                                android:id="@+id/imageView"
-                                android:layout_weight="1" />
+                                android:src="@android:drawable/divider_horizontal_bright" />
 
                             <TextView
                                 android:id="@+id/friend_combined_fleet_damage"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:textColor="@android:color/darker_gray"
-                                android:textSize="10dp"
-                                android:layout_weight="1" />
+                                android:textSize="10dp" />
 
                         </LinearLayout>
 
@@ -776,29 +760,29 @@
                         android:src="@android:drawable/divider_horizontal_bright" />
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/fs_1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fs_1"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fs_1_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:minHeight="10dp"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:maxLines="1"
+                                android:layout_weight="0.6"
                                 android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="10dp" />
 
                             <TextView
@@ -806,28 +790,28 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fs_1_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -835,40 +819,40 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.4"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/fs_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fs_2"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fs_2_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:minHeight="10dp"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:maxLines="1"
+                                android:layout_weight="0.6"
                                 android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="10dp" />
 
                             <TextView
@@ -876,28 +860,28 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fs_2_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -905,40 +889,40 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.4"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/fs_3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fs_3"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fs_3_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:minHeight="10dp"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:maxLines="1"
+                                android:layout_weight="0.6"
                                 android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="10dp" />
 
                             <TextView
@@ -946,28 +930,28 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fs_3_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -975,40 +959,40 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.4"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/fs_4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fs_4"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fs_4_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:minHeight="10dp"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:maxLines="1"
+                                android:layout_weight="0.6"
                                 android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="10dp" />
 
                             <TextView
@@ -1016,28 +1000,28 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fs_4_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -1045,40 +1029,40 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.4"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/fs_5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fs_5"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fs_5_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:minHeight="10dp"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:maxLines="1"
+                                android:layout_weight="0.6"
                                 android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="10dp" />
 
                             <TextView
@@ -1086,28 +1070,28 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fs_5_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -1115,40 +1099,40 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.4"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/fs_6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fs_6"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fs_6_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:minHeight="10dp"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:maxLines="1"
+                                android:layout_weight="0.6"
                                 android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="10dp" />
 
                             <TextView
@@ -1156,28 +1140,28 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/fs_6_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -1185,12 +1169,12 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.4"
                                 android:elevation="1dp"
                                 android:max="100"
-                                android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
@@ -1198,18 +1182,19 @@
 
                 <LinearLayout
                     android:id="@+id/enemy_combined_fleet"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:elevation="0dp"
                     android:orientation="vertical"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
-                    android:elevation="1dp"
-                    android:layout_weight="0.3"
-                    android:layout_width="0dp">
+                    android:visibility="gone">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:id="@+id/enemy_combined_fleet_info1"
@@ -1218,10 +1203,10 @@
                             android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/enemy_combined_fleet_name"
@@ -1234,30 +1219,30 @@
                                     android:id="@+id/enemy_combined_fleet_formation"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
                                     android:layout_gravity="end"
+                                    android:layout_weight="1"
+                                    android:paddingLeft="8dp"
                                     android:textAlignment="textEnd"
                                     android:textColor="@android:color/darker_gray"
-                                    android:textSize="10dp"
-                                    android:paddingLeft="8dp" />
+                                    android:textSize="10dp" />
 
                             </LinearLayout>
 
                         </LinearLayout>
 
                         <ImageView
+                            android:id="@+id/imageView0"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
+                            android:layout_weight="1"
                             android:background="@android:color/darker_gray"
                             android:paddingBottom="0.5dp"
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
                             android:paddingTop="0dp"
                             android:scaleType="fitXY"
-                            android:src="@android:drawable/divider_horizontal_bright"
-                            android:id="@+id/imageView0"
-                            android:layout_weight="1" />
+                            android:src="@android:drawable/divider_horizontal_bright" />
 
                         <TextView
                             android:id="@+id/enemy_combined_fleet_damage"
@@ -1281,36 +1266,35 @@
                         android:src="@android:drawable/divider_horizontal_bright" />
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/es_1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="0.4"
-                        android:id="@+id/es_1"
-                        android:layout_marginTop="2dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:id="@+id/es_1_name_area"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/es_1_name_area">
+                                android:layout_weight="0.6"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/es_1_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
-                                    android:textColor="@android:color/white"
-                                    android:minHeight="10dp"
-                                    android:maxLines="1"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
                                     android:textSize="10dp" />
 
                                 <TextView
@@ -1327,29 +1311,27 @@
                                 android:id="@+id/es_1_hp_txt"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/es_1_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -1357,46 +1339,45 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/es_2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="0.4"
-                        android:id="@+id/es_2"
-                        android:layout_marginTop="2dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:id="@+id/es_2_name_area"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/es_2_name_area">
+                                android:layout_weight="0.6"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/es_2_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
-                                    android:textColor="@android:color/white"
-                                    android:minHeight="10dp"
-                                    android:maxLines="1"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
                                     android:textSize="10dp" />
 
                                 <TextView
@@ -1404,7 +1385,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="4dp"
-
                                     android:textColor="@android:color/white"
                                     android:textSize="9dp" />
                             </LinearLayout>
@@ -1413,29 +1393,27 @@
                                 android:id="@+id/es_2_hp_txt"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/es_2_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -1443,46 +1421,45 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/es_3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="0.4"
-                        android:id="@+id/es_3"
-                        android:layout_marginTop="2dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:id="@+id/es_3_name_area"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/es_3_name_area">
+                                android:layout_weight="0.6"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/es_3_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
-                                    android:textColor="@android:color/white"
-                                    android:minHeight="10dp"
-                                    android:maxLines="1"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
                                     android:textSize="10dp" />
 
                                 <TextView
@@ -1499,29 +1476,27 @@
                                 android:id="@+id/es_3_hp_txt"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/es_3_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -1529,46 +1504,45 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/es_4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="0.4"
-                        android:id="@+id/es_4"
-                        android:layout_marginTop="2dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:id="@+id/es_4_name_area"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/es_4_name_area">
+                                android:layout_weight="0.6"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/es_4_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
-                                    android:textColor="@android:color/white"
-                                    android:minHeight="10dp"
-                                    android:maxLines="1"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
                                     android:textSize="10dp" />
 
                                 <TextView
@@ -1585,29 +1559,27 @@
                                 android:id="@+id/es_4_hp_txt"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/es_4_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -1615,46 +1587,45 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/es_5"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="0.4"
-                        android:id="@+id/es_5"
-                        android:layout_marginTop="2dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:id="@+id/es_5_name_area"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/es_5_name_area">
+                                android:layout_weight="0.6"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/es_5_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
-                                    android:textColor="@android:color/white"
-                                    android:minHeight="10dp"
-                                    android:maxLines="1"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
                                     android:textSize="10dp" />
 
                                 <TextView
@@ -1662,7 +1633,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="4dp"
-
                                     android:textColor="@android:color/white"
                                     android:textSize="9dp" />
                             </LinearLayout>
@@ -1671,29 +1641,27 @@
                                 android:id="@+id/es_5_hp_txt"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/es_5_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -1701,46 +1669,45 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/es_6"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="0.4"
-                        android:id="@+id/es_6"
-                        android:layout_marginTop="2dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:id="@+id/es_6_name_area"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/es_6_name_area">
+                                android:layout_weight="0.6"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/es_6_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
-                                    android:textColor="@android:color/white"
-                                    android:minHeight="10dp"
-                                    android:maxLines="1"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
                                     android:textSize="10dp" />
 
                                 <TextView
@@ -1757,29 +1724,27 @@
                                 android:id="@+id/es_6_hp_txt"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/es_6_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -1787,11 +1752,11 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
@@ -1799,18 +1764,18 @@
 
                 <LinearLayout
                     android:id="@+id/enemy_main_fleet"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:elevation="0dp"
                     android:orientation="vertical"
                     android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:elevation="1dp"
-                    android:layout_weight="0.3"
-                    android:layout_width="0dp">
+                    android:paddingRight="4dp">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:id="@+id/enemy_fleet_info1"
@@ -1819,10 +1784,10 @@
                             android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/enemy_fleet_name"
@@ -1835,30 +1800,30 @@
                                     android:id="@+id/enemy_fleet_formation"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
                                     android:layout_gravity="end"
+                                    android:layout_weight="1"
+                                    android:paddingLeft="8dp"
                                     android:textAlignment="textEnd"
                                     android:textColor="@android:color/darker_gray"
-                                    android:textSize="10dp"
-                                    android:paddingLeft="8dp" />
+                                    android:textSize="10dp" />
 
                             </LinearLayout>
 
                         </LinearLayout>
 
                         <ImageView
+                            android:id="@+id/imageView6"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
+                            android:layout_weight="1"
                             android:background="@android:color/darker_gray"
                             android:paddingBottom="0.5dp"
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
                             android:paddingTop="0dp"
                             android:scaleType="fitXY"
-                            android:src="@android:drawable/divider_horizontal_bright"
-                            android:id="@+id/imageView6"
-                            android:layout_weight="1" />
+                            android:src="@android:drawable/divider_horizontal_bright" />
 
                         <TextView
                             android:id="@+id/enemy_fleet_damage"
@@ -1882,36 +1847,35 @@
                         android:src="@android:drawable/divider_horizontal_bright" />
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/em_1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="0.4"
-                        android:id="@+id/em_1"
-                        android:layout_marginTop="2dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:id="@+id/em_1_name_area"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/em_1_name_area">
+                                android:layout_weight="0.6"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/em_1_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
-                                    android:textColor="@android:color/white"
-                                    android:minHeight="10dp"
-                                    android:maxLines="1"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
                                     android:textSize="10dp" />
 
                                 <TextView
@@ -1919,7 +1883,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="4dp"
-
                                     android:textColor="@android:color/white"
                                     android:textSize="9dp" />
                             </LinearLayout>
@@ -1929,28 +1892,27 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/em_1_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -1958,46 +1920,45 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/em_2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="0.4"
-                        android:id="@+id/em_2"
-                        android:layout_marginTop="2dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:id="@+id/em_2_name_area"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/em_2_name_area">
+                                android:layout_weight="0.6"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/em_2_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
-                                    android:textColor="@android:color/white"
-                                    android:minHeight="10dp"
-                                    android:maxLines="1"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
                                     android:textSize="10dp" />
 
                                 <TextView
@@ -2014,29 +1975,27 @@
                                 android:id="@+id/em_2_hp_txt"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/em_2_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -2044,46 +2003,45 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/em_3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="0.4"
-                        android:id="@+id/em_3"
-                        android:layout_marginTop="2dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:id="@+id/em_3_name_area"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/em_3_name_area">
+                                android:layout_weight="0.6"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/em_3_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
-                                    android:textColor="@android:color/white"
-                                    android:minHeight="10dp"
-                                    android:maxLines="1"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
                                     android:textSize="10dp" />
 
                                 <TextView
@@ -2100,29 +2058,27 @@
                                 android:id="@+id/em_3_hp_txt"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/em_3_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -2130,46 +2086,45 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/em_4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="0.4"
-                        android:id="@+id/em_4"
-                        android:layout_marginTop="2dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:id="@+id/em_4_name_area"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/em_4_name_area">
+                                android:layout_weight="0.6"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/em_4_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
-                                    android:textColor="@android:color/white"
-                                    android:minHeight="10dp"
-                                    android:maxLines="1"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
                                     android:textSize="10dp" />
 
                                 <TextView
@@ -2186,29 +2141,27 @@
                                 android:id="@+id/em_4_hp_txt"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/em_4_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -2216,46 +2169,45 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/em_5"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="0.4"
-                        android:id="@+id/em_5"
-                        android:layout_marginTop="2dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:id="@+id/em_5_name_area"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/em_5_name_area">
+                                android:layout_weight="0.6"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/em_5_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
-                                    android:textColor="@android:color/white"
-                                    android:minHeight="10dp"
-                                    android:maxLines="1"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
                                     android:textSize="10dp" />
 
                                 <TextView
@@ -2273,28 +2225,28 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/em_5_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -2302,46 +2254,46 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:id="@+id/em_6"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
                         android:layout_weight="0.4"
-                        android:id="@+id/em_6"
-                        android:layout_marginTop="2dp">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <LinearLayout
-                                android:orientation="horizontal"
+                                android:id="@+id/em_6_name_area"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/em_6_name_area">
+                                android:layout_weight="0.6"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/em_6_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
 
-                                    android:textColor="@android:color/white"
-                                    android:minHeight="10dp"
-                                    android:maxLines="1"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
                                     android:textSize="10dp" />
 
                                 <TextView
@@ -2359,28 +2311,28 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:minHeight="10dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
-                                android:layout_gravity="center_vertical" />
+                                android:minHeight="10dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/em_6_lv"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
-                                android:textColor="@android:color/white"
-                                android:layout_weight="0.6"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
                                 android:minHeight="9dp"
+                                android:textColor="@android:color/white"
                                 android:textSize="9dp" />
 
                             <ProgressBar
@@ -2388,11 +2340,11 @@
                                 style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
                                 android:layout_width="0dp"
                                 android:layout_height="4dp"
-                                android:max="100"
-                                android:layout_weight="0.4"
                                 android:layout_gravity="center_vertical"
-                                android:minHeight="9dp"
+                                android:layout_weight="0.4"
+                                android:max="100"
                                 android:maxHeight="11dp"
+                                android:minHeight="9dp"
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
