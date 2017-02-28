@@ -20,72 +20,38 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 
-
 public class KcaHandler implements Runnable {
-	public Handler handler;
+    public Handler handler;
 
-	private static final String HTTP_CONTENT_ENCODING = HttpHeaders.CONTENT_ENCODING;
-	
-	public static final int BufferSize = 4096;
-	
-	public static Map<String, Boolean> flag = new HashMap<String, Boolean>();
-	public static Map<String, JsonObject> data = new HashMap<String, JsonObject>();
+    private static final String HTTP_CONTENT_ENCODING = HttpHeaders.CONTENT_ENCODING;
 
-	String url;
-	boolean gzipped;
-	byte[] requestBytes;
-	byte[] responseBytes;
-	
-	public KcaHandler(Handler h, String u, byte[] b1, byte[] b2, boolean gz){
-		handler = h;
-		url = u;
-		requestBytes = b1;
-		responseBytes = b2;
-		gzipped = gz;
-	}
-	
-	public void run(){
-		if(handler == null) return;
-		String data, reqData = "";
-		try {
-			reqData = new String(requestBytes);
-			if (gzipped) {
-				ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-				GZIPInputStream gzipInStream;
-				gzipInStream = new GZIPInputStream(new BufferedInputStream(new ByteArrayInputStream(responseBytes)));
+    public static final int BufferSize = 4096;
 
-				int size;
-				byte[] buffer = new byte[BufferSize];
-				while ((size = gzipInStream.read(buffer)) > 0) {
-					outStream.write(buffer, 0, size);
-				}
-				outStream.flush();
-				outStream.close();
-				data = new String(outStream.toByteArray());
-			} else {
-				data = new String(responseBytes);
-			}
+    public static Map<String, Boolean> flag = new HashMap<String, Boolean>();
+    public static Map<String, JsonObject> data = new HashMap<String, JsonObject>();
 
-			//parseJSON(url, data);
-			Bundle bundle = new Bundle();
-			bundle.putString("url", url.replace("/kcsapi", ""));
-			bundle.putString("request", reqData);
-			bundle.putString("data", data.replace("svdata=", ""));
+    String url;
+    byte[] requestBytes;
+    byte[] responseBytes;
 
-			Message msg = handler.obtainMessage();
-			msg.setData(bundle);
-			
-			handler.sendMessage(msg);
-			
-			bundle = null;
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		handler = null;
-		responseBytes = null;
+    public KcaHandler(Handler h, String u, byte[] b1, byte[] b2) {
+        handler = h;
+        url = u;
+        requestBytes = b1;
+        responseBytes = b2;
+    }
 
-		Log.e("KCA", "Data Processed: "+url);
-	}
+    public void run() {
+        if (handler == null) return;
+        String reqData = new String(requestBytes);
+        Bundle bundle = new Bundle();
+        bundle.putString("url", url.replace("/kcsapi", ""));
+        bundle.putString("request", reqData);
+        bundle.putByteArray("data", responseBytes);
+        Message msg = handler.obtainMessage();
+        msg.setData(bundle);
+
+        handler.sendMessage(msg);
+        Log.e("KCA", "Data Processed: " + url);
+    }
 }
