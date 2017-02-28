@@ -23,10 +23,6 @@ import com.google.gson.JsonParser;
 public class KcaHandler implements Runnable {
     public Handler handler;
 
-    private static final String HTTP_CONTENT_ENCODING = HttpHeaders.CONTENT_ENCODING;
-
-    public static final int BufferSize = 4096;
-
     public static Map<String, Boolean> flag = new HashMap<String, Boolean>();
     public static Map<String, JsonObject> data = new HashMap<String, JsonObject>();
 
