@@ -124,10 +124,16 @@
     <string name="setting_menu_kand_desc_exp_realtime_show">상단의 남은 원정 시간 실시간 표시 여부</string>
     <string name="setting_menu_kand_title_game_data_down">게임 데이터 다운로드</string>
     <string name="setting_menu_kand_desc_game_data_down">게임 데이터가 로딩되지 않을 때 사용</string>
-    <string name="setting_menu_kand_title_battleview_use">(베타기능) 전투예보 사용</string>
-    <string name="setting_menu_kand_desc_battleview_use">출격 및 연습전에서의 전투예보 사용 여부</string>
-    <string name="setting_menu_kand_title_overlay_setting">화면 오버레이 설정</string>
-    <string name="setting_menu_kand_desc_overlay_setting">다른 앱 위에 그리기 권한 설정 (전투예보 기능에 필요)</string>
+
+    <string name="setting_menu_view_head">전투예보/임무번역 설정</string>
+    <string name="setting_menu_view_title_overlay_setting">화면 오버레이 설정</string>
+    <string name="setting_menu_view_desc_overlay_setting">다른 앱 위에 그리기 권한 설정 (전투예보 기능에 필요)</string>
+    <string name="setting_menu_view_title_battleview_use">전투예보 사용</string>
+    <string name="setting_menu_view_desc_battleview_use">출격 및 연습전에서의 전투예보 사용 여부</string>
+    <string name="setting_menu_view_title_drop_visible">함선 드랍 정보 표시</string>
+    <string name="setting_menu_view_desc_drop_visible">전투예보에서 드랍된 칸무스 이름 표시</string>
+    <string name="setting_menu_view_desc_questview_use">임무 화면에서 임무 번역 및 정보 표시</string>
+    <string name="setting_menu_view_title_questview_use">임무번역 사용</string>
 
     <string name="setting_menu_noti_head">알림 설정</string>
     <string name="setting_menu_noti_title_exp">원정 알림</string>
@@ -221,8 +227,6 @@
     <string name="raid_type4">완전방공 성공</string>
     <string name="getship_label">드롭</string>
     <string name="getship_none">(없음)</string>
-    <string name="setting_menu_kand_title_drop_visible">함선 드랍 정보 표시</string>
-    <string name="setting_menu_kand_desc_drop_visible">전투예보에서 드랍된 칸무스 이름 표시</string>
     <string name="getship_max">(슬롯 여유 없음)</string>
     <string name="kca_view_tpvalue" formatted="false" >TP: %d/%d</string>
     <string name="ship_name_class">급</string>
@@ -239,4 +243,22 @@
     <string name="fairy_hidden_notification_bigtext">동작을 선택하세요</string>
     <string name="kca_view_context_expand">아래로 펼쳐서 내용 표시</string>
     <string name="battleview_text_retreated">퇴피완료</string>
+
+    <string name="quest_category_1">편</string>
+    <string name="quest_category_2">출</string>
+    <string name="quest_category_3">연</string>
+    <string name="quest_category_4">원</string>
+    <string name="quest_category_5">보</string>
+    <string name="quest_category_6">공</string>
+    <string name="quest_category_7">개</string>
+    <string name="quest_category_8">출</string>
+    <string name="quest_category_9">타</string>
+
+    <string name="quest_type_1">일</string>
+    <string name="quest_type_2">주</string>
+    <string name="quest_type_3">월</string>
+    <string name="quest_type_4">단</string>
+    <string name="quest_type_5">타</string>
+
+    <string name="questview_page" formatted="false">페이지 %d/%d</string>
 </resources>

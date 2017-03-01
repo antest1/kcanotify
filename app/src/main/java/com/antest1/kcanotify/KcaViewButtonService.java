@@ -40,23 +40,28 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_NODE;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_HDMG;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
+import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_LIST;
+import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_VIEW_LIST;
 
 public class KcaViewButtonService extends Service {
     public static final int FAIRY_NOTIFICATION_ID = 10118;
     public static final String RETURN_FAIRY_ACTION = "return_fairy_action";
     public static final String REMOVE_FAIRY_ACTION = "remove_fairy_action";
     public static final String SHOW_BATTLE_INFO = "show_battle_info";
-    public static final String SHOW_QUEST_INFO = "show_mission_info";
+    public static final String SHOW_QUEST_INFO = "show_quest_info";
+    public static final String REFRESH_QUESTVIEW_ACTION = "refresh_questview";
+    public static final String SHOW_QUESTVIEW_ACTION = "show_questview";
 
     public static final int BATTLE_MODE = 1;
     public static final int QUEST_MODE = 2;
 
+    private boolean hidden = false;
     private int status = -1;
     private LocalBroadcastManager broadcaster;
     private BroadcastReceiver battleinfo_receiver;
     private BroadcastReceiver battlehdmg_receiver;
     private BroadcastReceiver battlenode_receiver;
-    private BroadcastReceiver buttontop_receiver;
+    private BroadcastReceiver questlist_receiver;
     private View mView;
     private WindowManager mManager;
     private Handler mHandler;
@@ -90,9 +95,9 @@ public class KcaViewButtonService extends Service {
     public void onCreate() {
         super.onCreate();
         clickcount = 0;
+        hidden = false;
         status = -1;
         mHandler = new Handler();
-        startService(new Intent(getBaseContext(), KcaBattleViewService.class));
         broadcaster = LocalBroadcastManager.getInstance(this);
         battleinfo_receiver = new BroadcastReceiver() {
             @Override
@@ -170,19 +175,25 @@ public class KcaViewButtonService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(intent != null && intent.getAction() != null) {
+        if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(RETURN_FAIRY_ACTION)) {
-                // Do Nothing
+                hidden = false;
             }
             if (intent.getAction().equals(SHOW_BATTLE_INFO)) {
                 status = BATTLE_MODE;
+                startService(new Intent(getBaseContext(), KcaBattleViewService.class));
             }
             if (intent.getAction().equals(SHOW_QUEST_INFO)) {
                 status = QUEST_MODE;
+                Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
+                qintent.setAction(REFRESH_QUESTVIEW_ACTION);
+                startService(qintent);
             }
-            mView.setVisibility(View.VISIBLE);
         }
-        notificationManager.cancel(FAIRY_NOTIFICATION_ID);
+        if (!hidden) {
+            mView.setVisibility(View.VISIBLE);
+            notificationManager.cancel(FAIRY_NOTIFICATION_ID);
+        }
         Log.e("KCA-V", String.format("onStartCommand %d", status));
         return super.onStartCommand(intent, flags, startId);
     }
@@ -194,9 +205,11 @@ public class KcaViewButtonService extends Service {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battleinfo_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlenode_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlehdmg_receiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(buttontop_receiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(questlist_receiver);
         if (status == BATTLE_MODE) {
             stopService(new Intent(getBaseContext(), KcaBattleViewService.class));
+        } else if (status == QUEST_MODE) {
+            stopService(new Intent(getBaseContext(), KcaQuestViewService.class));
         }
         status = -1;
         super.onDestroy();
@@ -210,8 +223,7 @@ public class KcaViewButtonService extends Service {
         private static final int LONG_CLICK_DURATION = 800;
 
         private long startClickTime;
-        private long recentClickTime;
-        private boolean longPressTriggered = false;
+
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
@@ -232,6 +244,10 @@ public class KcaViewButtonService extends Service {
                         clickcount += 1;
                         if (status == BATTLE_MODE) {
                             startService(new Intent(getBaseContext(), KcaBattleViewService.class));
+                        } else if (status == QUEST_MODE) {
+                            Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
+                            qintent.setAction(SHOW_QUESTVIEW_ACTION);
+                            startService(qintent);
                         }
                     }
                     int[] locations = new int[2];
@@ -239,7 +255,6 @@ public class KcaViewButtonService extends Service {
                     int xx = locations[0];
                     int yy = locations[1];
                     Log.e("KCA", String.format("Coord: %d %d", xx, yy));
-                    longPressTriggered = false;
                     break;
 
                 case MotionEvent.ACTION_MOVE:
@@ -249,7 +264,7 @@ public class KcaViewButtonService extends Service {
                     mParams.x = mViewX + x;
                     mParams.y = mViewY + y;
                     mManager.updateViewLayout(mView, mParams);
-                    if(Math.abs(x) > 20 || Math.abs(y) > 20) {
+                    if (Math.abs(x) > 20 || Math.abs(y) > 20) {
                         Log.e("KCA", "Callback Canceled");
                         mHandler.removeCallbacks(mRunnable);
                     }
@@ -263,6 +278,7 @@ public class KcaViewButtonService extends Service {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
+            hidden = true;
             vibrator.vibrate(100);
             Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
             mView.setVisibility(View.GONE);

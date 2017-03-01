@@ -1,6 +1,5 @@
 package com.antest1.kcanotify;
 
-import android.app.Application;
 import android.app.Notification;
 import android.app.Notification.Builder;
 import android.app.Notification.BigTextStyle;
@@ -13,18 +12,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
-import android.content.res.AssetManager.AssetInputStream;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -43,7 +36,6 @@ import com.androidquery.AQuery;
 import com.androidquery.callback.AbstractAjaxCallback;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
-import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -52,11 +44,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -64,15 +53,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -86,7 +72,7 @@ import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
-import static com.antest1.kcanotify.KcaApiData.setDataLoadTriggered;
+import static com.antest1.kcanotify.KcaApiData.loadQuestInfoDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaConstants.*;
 
@@ -185,6 +171,12 @@ public class KcaService extends Service {
                 getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
         if (loadItemTranslationDataResult != 1) {
             Toast.makeText(this, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+        }
+
+        int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromAssets(assetManager,
+                getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
+        if (loadQuestInfoTranslationDataResult != 1) {
+            Toast.makeText(this, "Error loading Quest Info", Toast.LENGTH_LONG).show();
         }
 
         loadSimpleExpeditionInfoFromAssets(assetManager);
@@ -301,7 +293,7 @@ public class KcaService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.noti_icon3);
-        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         viewNotificationText = new Notification.BigTextStyle();
         viewNotificationBuilder = new Notification.Builder(getApplicationContext())
                 .setSmallIcon(R.mipmap.noti_icon4)
@@ -335,8 +327,8 @@ public class KcaService extends Service {
                 content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNo);
 
         }
-        Drawable drawable = ContextCompat.getDrawable(this,  R.mipmap.expedition_notify_bigicon);
-        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+        Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon);
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         Notification.Builder builder = new Notification.Builder(getApplicationContext())
                 .setSmallIcon(R.mipmap.expedition_notify_icon)
                 .setLargeIcon(bitmap)
@@ -386,8 +378,8 @@ public class KcaService extends Service {
             content = String.format(getStringWithLocale(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
         }
 
-        Drawable drawable = ContextCompat.getDrawable(this,  R.mipmap.dockng_notify_bigicon);
-        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+        Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.dockng_notify_bigicon);
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         Notification.Builder builder = new Notification.Builder(getApplicationContext())
                 .setSmallIcon(R.mipmap.docking_notify_icon)
                 .setLargeIcon(bitmap)
@@ -465,7 +457,8 @@ public class KcaService extends Service {
     public void handleServiceMessage(Message msg) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String url = msg.getData().getString("url");
-        Reader data = new InputStreamReader(new ByteArrayInputStream(msg.getData().getByteArray("data")));
+        byte[] raw = msg.getData().getByteArray("data");
+        Reader data = new InputStreamReader(new ByteArrayInputStream(raw));
         String request = msg.getData().getString("request");
 
         if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.length() == 0 || viewNotificationBuilder == null) {
@@ -474,7 +467,10 @@ public class KcaService extends Service {
 
         JsonObject jsonDataObj;
         try {
-            data.skip("svdata=".length());
+            String init = new String(Arrays.copyOfRange(raw, 0, 7));
+            if (init.contains("svdata=")) {
+                data.skip("svdata=".length());
+            }
             jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
 
             if (url.startsWith(KCA_VERSION)) {
@@ -592,6 +588,7 @@ public class KcaService extends Service {
 
             if (url.startsWith(API_PORT)) {
                 isPortAccessed = true;
+                stopService(new Intent(this, KcaViewButtonService.class));
                 if (jsonDataObj.has("api_data")) {
                     JsonObject reqPortApiData = jsonDataObj.getAsJsonObject("api_data");
                     KcaApiData.getPortData(reqPortApiData);
@@ -601,11 +598,26 @@ public class KcaService extends Service {
                 }
             }
 
+            if (url.startsWith(API_GET_MEMBER_QUESTLIST)) {
+                if (getBooleanPreferences(getApplicationContext(), PREF_KCA_QUESTVIEW_USE)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                            && !Settings.canDrawOverlays(getApplicationContext())) {
+                        // Can not draw overlays: pass
+                    } else if (jsonDataObj.has("api_data")) {
+                        JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                        KcaQuestViewService.setApiData(api_data);
+                        Intent intent = new Intent(this, KcaViewButtonService.class)
+                                .setAction(KcaViewButtonService.SHOW_QUEST_INFO);
+                        startService(intent);
+                    }
+                }
+            }
+
             // Game Data Dependent Tasks
             if (!isUserItemDataLoaded()) {
                 Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG).show();
             } else if (!checkDataLoadTriggered()) {
-                if(!api_start2_loading_flag) {
+                if (!api_start2_loading_flag) {
                     Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG).show();
                     new retrieveApiStartData().execute("", "down", "");
                 }
@@ -641,11 +653,7 @@ public class KcaService extends Service {
                         }
                     }
                     setFrontViewNotifier(FRONT_NONE, 0, null);
-                    if (isInBattle) {
-                        stopService(new Intent(this, KcaViewButtonService.class));
-                        isInBattle = false;
-                    }
-
+                    isInBattle = false;
                 }
 
                 if (url.startsWith(API_REQ_MAP_SELECT_EVENTMAP_RANK)) {
@@ -1296,8 +1304,8 @@ public class KcaService extends Service {
         String data = msg.getData().getString("data");
 
         if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.length() == 0 || viewNotificationBuilder == null) {
-            Log.e("KCA", "url: "+ url);
-            Log.e("KCA", "viewNotificationBuilder: "+String.valueOf(viewNotificationBuilder == null));
+            Log.e("KCA", "url: " + url);
+            Log.e("KCA", "viewNotificationBuilder: " + String.valueOf(viewNotificationBuilder == null));
             return;
         }
 
@@ -1310,7 +1318,7 @@ public class KcaService extends Service {
                     Log.e("KCA", String.format("Item: %d", jsonDataObj.get("item").getAsInt()));
                 }
                 api_start2_loading_flag = false;
-                if(isUserItemDataLoaded()) {
+                if (isUserItemDataLoaded()) {
                     processFirstDeckInfo(currentPortDeckData);
                 }
             }

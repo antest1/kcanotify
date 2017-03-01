@@ -53,6 +53,8 @@ public final class KcaConstants {
     public static final String API_REQ_KOUSYOU_CREATESHIP = "/api_req_kousyou/createship";
     public static final String API_GET_MEMBER_KDOCK = "/api_get_member/kdock";
 
+    public static final String API_GET_MEMBER_QUESTLIST = "/api_get_member/questlist";
+
     public static final String API_GET_MEMBER_MAPINFO = "/api_get_member/mapinfo";
     public static final String API_GET_MEMBER_MISSION = "/api_get_member/mission";
     public static final String API_REQ_MAP_START = "/api_req_map/start";
@@ -64,7 +66,7 @@ public final class KcaConstants {
     public static final String API_REQ_SORTIE_LDAIRBATTLE = "/api_req_sortie/ld_airbattle";
     public static final String API_REQ_SORTIE_BATTLE_RESULT = "/api_req_sortie/battleresult";
 
-    public static final String API_REQ_MAP_SELECT_EVENTMAP_RANK = "api_req_map/select_eventmap_rank";
+    public static final String API_REQ_MAP_SELECT_EVENTMAP_RANK = "/api_req_map/select_eventmap_rank";
 
     public static final String API_REQ_COMBINED_BATTLE = "/api_req_combined_battle/battle"; // 기동
     public static final String API_REQ_COMBINED_BATTLE_WATER = "/api_req_combined_battle/battle_water"; // 수상
@@ -152,8 +154,10 @@ public final class KcaConstants {
     public static final String KCA_MSG_BATTLE_NODE = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_NODE";
     public static final String KCA_MSG_BATTLE_INFO = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_INFO";
     public static final String KCA_MSG_BATTLE_HDMG = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_HDMG";
+    public static final String KCA_MSG_QUEST_LIST = "com.antest1.kcanotify.KcaService.KCA_MSG_QUEST_LIST";
     public static final String KCA_MSG_BATTLE_VIEW_REFRESH = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_VIEW_REFRESH";
     public static final String KCA_MSG_BATTLE_VIEW_HDMG = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_VIEW_HDMG";
+    public static final String KCA_MSG_QUEST_VIEW_LIST = "com.antest1.kcanotify.KcaService.KCA_MSG_QUEST_VIEW_LIST";
     public static final String KCA_MSG_DATA = "com.antest1.kcanotify.KcaService.KCA_MSG_DATA";
 
     public static final String KCA_MSG_BUTTON_TOP = "com.antest1.kcanotify.KcaBattleViewService.KCA_MSG_BUTTON_TOP";
@@ -247,6 +251,7 @@ public final class KcaConstants {
     public static final String PREF_OPENDB_API_USE = "opendb_api_use";
     public static final String PREF_KCA_EXP_VIEW = "expedition_view";
     public static final String PREF_KCA_BATTLEVIEW_USE = "battleview_use";
+    public static final String PREF_KCA_QUESTVIEW_USE = "questview_use";
     public static final String PREF_OVERLAY_SETTING = "overlay_setting";
     public static final String PREF_SHOWDROP_SETTING = "showdrop_setting";
     public static final String PREF_KCA_DOWNLOAD_DATA = "download_data";
@@ -266,6 +271,7 @@ public final class KcaConstants {
             PREF_OPENDB_API_USE,
             PREF_KCA_EXP_VIEW,
             PREF_KCA_BATTLEVIEW_USE,
+            PREF_KCA_QUESTVIEW_USE,
             PREF_OVERLAY_SETTING,
             PREF_SHOWDROP_SETTING,
             PREF_KCA_DOWNLOAD_DATA,

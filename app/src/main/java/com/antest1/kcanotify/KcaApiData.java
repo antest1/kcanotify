@@ -58,6 +58,7 @@ public class KcaApiData {
 
     public static JsonObject kcShipTranslationData = new JsonObject();
     public static JsonObject kcItemTranslationData = new JsonObject();
+    public static JsonObject kcQuestInfoData = new JsonObject();
 
     public static JsonObject kcShipAbbrData = new JsonObject(); // For English
     public static JsonObject kcSimpleExpeditionData = new JsonObject();
@@ -305,11 +306,7 @@ public class KcaApiData {
     }
 
     public static boolean getReturnFlag(int mission_no) {
-        if (mission_no == 33 || mission_no == 34 || mission_no > 100) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(mission_no == 33 || mission_no == 34 || mission_no > 100);
     }
 
     public static boolean checkKrTranslation() {
@@ -411,6 +408,27 @@ public class KcaApiData {
 
             if (data.isJsonObject()) {
                 kcItemTranslationData = data.getAsJsonObject();
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
+    public static int loadQuestInfoDataFromAssets(AssetManager am, String locale) {
+        try {
+            if (!locale.equals("ko") && !locale.equals("en")) {
+                locale = "en";
+            }
+            AssetManager.AssetInputStream ais =
+                    (AssetManager.AssetInputStream) am.open(String.format("quests-%s.json", locale));
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            JsonElement data = new JsonParser().parse(new String(bytes));
+
+            if (data.isJsonObject()) {
+                kcQuestInfoData = data.getAsJsonObject();
                 return 1;
             } else {
                 return -1;
@@ -685,8 +703,7 @@ public class KcaApiData {
 
     public static boolean isItemAircraft(int id) {
         int result = Arrays.binarySearch(T2LIST_AIRCRAFTS, id);
-        if (result > -1) return true;
-        else return false;
+        return result > -1;
     }
 
     public static void addUserShip(JsonObject api_data) {

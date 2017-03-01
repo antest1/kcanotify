@@ -48,4 +48,28 @@
     <color name="colorNightTargetFleet">#64b5f6</color>
     <color name="colorRetreated">#757575</color>
 
+    <color name="colorQuestViewMemo">#64b5f6</color>
+    <color name="colorQuestCategory1">#388e3c</color>
+    <color name="colorQuestCategory2">#d50000</color>
+    <color name="colorQuestCategory3">#6bc613</color>
+    <color name="colorQuestCategory4">#60c1d4</color>
+    <color name="colorQuestCategory5">#c7b623</color>
+    <color name="colorQuestCategory6">#6d4c41</color>
+    <color name="colorQuestCategory7">#af85e8</color>
+    <color name="colorQuestCategory8">#d50000</color>
+    <color name="colorQuestCategory9">#757575</color>
+
+    <color name="colorQuestType1">#6ebbf6</color>
+    <color name="colorQuestType2">#77dde9</color>
+    <color name="colorQuestType3">#b5dd60</color>
+    <color name="colorQuestType4">#fbc02e</color>
+    <color name="colorQuestType5">#f98c27</color>
+
+    <color name="colorQuestProgress1">#6bc613</color>
+    <color name="colorQuestProgress2">#31834c</color>
+
+    <color name="colorQuestState1">#ffffff</color>
+    <color name="colorQuestState2">#f98c27</color>
+    <color name="colorQuestState3">#6ebbf6</color>
+
 </resources>

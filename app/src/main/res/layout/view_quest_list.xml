@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/questviewlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:orientation="vertical"
+    android:padding="4dp"
+    android:visibility="visible">
+
+    <ScrollView
+        android:id="@+id/questview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true">
+
+        <LinearLayout
+            android:id="@+id/questviewpanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/quest_page"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Page 1"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical" />
+
+                <ImageView
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/ic_cancel"
+                    android:id="@+id/quest_exit"
+                    android:layout_width="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/ic_cancel" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="2dp"
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray"
+                android:paddingBottom="0.5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="0dp"
+                android:scaleType="fitXY"
+                android:src="@android:drawable/divider_horizontal_bright" />
+
+            <LinearLayout
+                android:id="@+id/quest1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="60dp"
+                android:orientation="horizontal"
+                android:padding="2dp">
+
+                <LinearLayout
+                    android:id="@+id/quest1_info"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="0dp">
+
+                    <TextView
+                        android:id="@+id/quest1_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="1dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/colorRankA"
+                        android:gravity="center"
+                        android:text="출"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/quest1_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="1dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/colorQuestCategory1"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:text="일"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/quest1_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginTop="1dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/quest1_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/quest1_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:text="적 함대를 격파하라!"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/quest1_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/colorQuestProgress2"
+                            android:text="TextView"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            tools:text="80%"
+                            android:paddingEnd="3dp"
+                            android:textAlignment="center"
+                            android:paddingBottom="1dp"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:paddingStart="3dp"
+                            android:paddingTop="1dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/quest1_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="5dp"
+                        android:text="함대를 출격시켜 적 함대를 포착하여 격멸하라!"
+                        android:textColor="@color/white"
+                        android:textSize="11dp"
+                        android:maxLines="2"
+                        android:scrollbars="vertical" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/quest2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="60dp"
+                android:orientation="horizontal"
+                android:padding="2dp">
+
+                <LinearLayout
+                    android:id="@+id/quest2_info"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="0dp">
+
+                    <TextView
+                        android:id="@+id/quest2_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="1dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/colorRankA"
+                        android:gravity="center"
+                        android:text="출"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/quest2_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="1dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/colorQuestCategory1"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:text="일"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/quest2_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginTop="1dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/quest2_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/quest2_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:text="적 함대를 격파하라!"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/quest2_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/colorQuestProgress2"
+                            android:text="TextView"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            tools:text="80%"
+                            android:paddingEnd="3dp"
+                            android:textAlignment="center"
+                            android:paddingBottom="1dp"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:paddingStart="3dp"
+                            android:paddingTop="1dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/quest2_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="5dp"
+                        android:text="함대를 출격시켜 적 함대를 포착하여 격멸하라!"
+                        android:textColor="@color/white"
+                        android:textSize="11dp"
+                        android:maxLines="2"
+                        android:scrollbars="vertical" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/quest3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="60dp"
+                android:orientation="horizontal"
+                android:padding="2dp">
+
+                <LinearLayout
+                    android:id="@+id/quest3_info"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="0dp">
+
+                    <TextView
+                        android:id="@+id/quest3_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="1dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/colorRankA"
+                        android:gravity="center"
+                        android:text="출"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/quest3_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="1dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/colorQuestCategory1"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:text="일"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/quest3_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginTop="1dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/quest3_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/quest3_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:text="적 함대를 격파하라!"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/quest3_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/colorQuestProgress2"
+                            android:text="TextView"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            tools:text="80%"
+                            android:paddingEnd="3dp"
+                            android:textAlignment="center"
+                            android:paddingBottom="1dp"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:paddingStart="3dp"
+                            android:paddingTop="1dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/quest3_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="5dp"
+                        android:text="함대를 출격시켜 적 함대를 포착하여 격멸하라!"
+                        android:textColor="@color/white"
+                        android:textSize="11dp"
+                        android:maxLines="2"
+                        android:scrollbars="vertical" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/quest4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="60dp"
+                android:orientation="horizontal"
+                android:padding="2dp">
+
+                <LinearLayout
+                    android:id="@+id/quest4_info"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="0dp">
+
+                    <TextView
+                        android:id="@+id/quest4_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="1dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/colorRankA"
+                        android:gravity="center"
+                        android:text="출"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/quest4_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="1dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/colorQuestCategory1"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:text="일"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/quest4_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginTop="1dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/quest4_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/quest4_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:text="적 함대를 격파하라!"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/quest4_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/colorQuestProgress2"
+                            android:text="TextView"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            tools:text="80%"
+                            android:paddingEnd="3dp"
+                            android:textAlignment="center"
+                            android:paddingBottom="1dp"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:paddingStart="3dp"
+                            android:paddingTop="1dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/quest4_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="5dp"
+                        android:text="함대를 출격시켜 적 함대를 포착하여 격멸하라!"
+                        android:textColor="@color/white"
+                        android:textSize="11dp"
+                        android:maxLines="2"
+                        android:scrollbars="vertical" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/quest5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="60dp"
+                android:orientation="horizontal"
+                android:padding="2dp">
+
+                <LinearLayout
+                    android:id="@+id/quest5_info"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="0dp">
+
+                    <TextView
+                        android:id="@+id/quest5_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="1dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/colorRankA"
+                        android:gravity="center"
+                        android:text="출"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/quest5_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="1dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/colorQuestCategory1"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:text="일"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/quest5_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginTop="1dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/quest5_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/quest5_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:text="적 함대를 격파하라!"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/quest5_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/colorQuestProgress2"
+                            android:text="TextView"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            tools:text="80%"
+                            android:paddingEnd="3dp"
+                            android:textAlignment="center"
+                            android:paddingBottom="1dp"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:paddingStart="3dp"
+                            android:paddingTop="1dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/quest5_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="5dp"
+                        android:text="함대를 출격시켜 적 함대를 포착하여 격멸하라!"
+                        android:textColor="@color/white"
+                        android:textSize="11dp"
+                        android:maxLines="2"
+                        android:scrollbars="vertical" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
+

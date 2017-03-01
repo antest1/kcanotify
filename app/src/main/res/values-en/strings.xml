@@ -132,10 +132,16 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_exp_realtime_show">Display remaining time for Expeditions on the navbar</string>
     <string name="setting_menu_kand_title_game_data_down">Download Game Data</string>
     <string name="setting_menu_kand_desc_game_data_down">Use if game data was not loaded automatically.</string>
-    <string name="setting_menu_kand_title_battleview_use">Use BattleView (Beta)</string>
-    <string name="setting_menu_kand_desc_battleview_use">Display battle results during sortie.</string>
-    <string name="setting_menu_kand_title_overlay_setting">Screen Overlay Settings</string>
-    <string name="setting_menu_kand_desc_overlay_setting">Set Screen Overlay Permission (required for BattleView).</string>
+
+    <string name="setting_menu_view_head">BattleView/QuestView Settings</string>
+    <string name="setting_menu_view_title_overlay_setting">Screen Overlay Settings</string>
+    <string name="setting_menu_view_desc_overlay_setting">Set Screen Overlay Permission (required for BattleView).</string>
+    <string name="setting_menu_view_title_battleview_use">Use BattleView</string>
+    <string name="setting_menu_view_desc_battleview_use">Display battle results during sortie.</string>
+    <string name="setting_menu_view_title_drop_visible">Show Drop Info</string>
+    <string name="setting_menu_view_desc_drop_visible">Show dropped ship name in BattleView</string>
+    <string name="setting_menu_view_title_questview_use">Use QuestView</string>
+    <string name="setting_menu_view_desc_questview_use">Display quest translation and information.</string>
 
     <string name="setting_menu_noti_head">Notification Settings</string>
     <string name="setting_menu_noti_title_exp">Expedition</string>
@@ -229,8 +235,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="raid_type2">Resources Loss/LB Damaged</string>
     <string name="getship_label">Drop</string>
     <string name="getship_none">(None)</string>
-    <string name="setting_menu_kand_title_drop_visible">Show Drop Info</string>
-    <string name="setting_menu_kand_desc_drop_visible">Show dropped ship name in BattleView</string>
     <string name="getship_max">(Slot is Full)</string>
     <string name="kca_view_tpvalue" formatted="false">TP: %d/%d</string>
     <string name="ship_name_class">Class</string>
@@ -247,4 +251,22 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fairy_hidden_notification_bigtext">select action</string>
     <string name="kca_view_context_expand">Swipe down to show content</string>
     <string name="battleview_text_retreated">Retreated</string>
+
+    <string name="quest_category_1">A</string>
+    <string name="quest_category_2">B</string>
+    <string name="quest_category_3">C</string>
+    <string name="quest_category_4">D</string>
+    <string name="quest_category_5">E</string>
+    <string name="quest_category_6">F</string>
+    <string name="quest_category_7">G</string>
+    <string name="quest_category_8">SB</string>
+    <string name="quest_category_9">N</string>
+
+    <string name="quest_type_1">D</string>
+    <string name="quest_type_2">W</string>
+    <string name="quest_type_3">M</string>
+    <string name="quest_type_4">S</string>
+    <string name="quest_type_5">O</string>
+
+    <string name="questview_page" formatted="false">Page %d/%d</string>
 </resources>

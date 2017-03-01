@@ -50,7 +50,8 @@
             android:configChanges="locale|layoutDirection" />
         <service
             android:name=".KcaBattleViewService" />
-
+        <service
+            android:name=".KcaQuestViewService" />
         <service
             android:name=".KcaVpnService"
             android:icon="@mipmap/noti_icon3"
