@@ -550,30 +550,30 @@ public class KcaBattleViewService extends Service {
                     } else {
                         api_kouku = null;
                     }
-                }
 
-                // fleet formation and engagement show
-                ((TextView) battleview.findViewById(R.id.friend_fleet_formation)).
-                        setText(getFormationString(contextWithLocale, api_formation.get(0).getAsInt(), fc_flag));
-                ((TextView) battleview.findViewById(R.id.enemy_fleet_formation)).
-                        setText(getFormationString(contextWithLocale, api_formation.get(1).getAsInt(), fc_flag));
-                ((TextView) battleview.findViewById(R.id.battle_engagement)).
-                        setText(getEngagementString(contextWithLocale, api_formation.get(2).getAsInt()));
+                    // fleet formation and engagement show
+                    ((TextView) battleview.findViewById(R.id.friend_fleet_formation)).
+                            setText(getFormationString(contextWithLocale, api_formation.get(0).getAsInt(), fc_flag));
+                    ((TextView) battleview.findViewById(R.id.enemy_fleet_formation)).
+                            setText(getFormationString(contextWithLocale, api_formation.get(1).getAsInt(), fc_flag));
+                    ((TextView) battleview.findViewById(R.id.battle_engagement)).
+                            setText(getEngagementString(contextWithLocale, api_formation.get(2).getAsInt()));
 
-                // airforce result
-                if (api_kouku != null && !api_kouku.get("api_stage1").isJsonNull()) {
-                    JsonObject api_stage1 = api_kouku.getAsJsonObject("api_stage1");
-                    int api_disp_seiku = api_stage1.get("api_disp_seiku").getAsInt();
-                    ((TextView) battleview.findViewById(R.id.battle_airpower))
-                            .setText(getAirForceResultString(contextWithLocale, api_disp_seiku));
-                }
+                    // airforce result
+                    if (api_kouku != null && !api_kouku.get("api_stage1").isJsonNull()) {
+                        JsonObject api_stage1 = api_kouku.getAsJsonObject("api_stage1");
+                        int api_disp_seiku = api_stage1.get("api_disp_seiku").getAsInt();
+                        ((TextView) battleview.findViewById(R.id.battle_airpower))
+                                .setText(getAirForceResultString(contextWithLocale, api_disp_seiku));
+                    }
 
-                if (KcaBattle.currentEnemyDeckName.length() > 0) {
-                    ((TextView) battleview.findViewById(R.id.enemy_fleet_name)).
-                            setText(KcaBattle.currentEnemyDeckName);
-                } else {
-                    ((TextView) battleview.findViewById(R.id.enemy_fleet_name)).
-                            setText(getStringWithLocale(R.string.enemy_fleet_name));
+                    if (KcaBattle.currentEnemyDeckName.length() > 0) {
+                        ((TextView) battleview.findViewById(R.id.enemy_fleet_name)).
+                                setText(KcaBattle.currentEnemyDeckName);
+                    } else {
+                        ((TextView) battleview.findViewById(R.id.enemy_fleet_name)).
+                                setText(getStringWithLocale(R.string.enemy_fleet_name));
+                    }
                 }
 
                 for (int i = 1; i < api_ship_ke.size(); i++) {

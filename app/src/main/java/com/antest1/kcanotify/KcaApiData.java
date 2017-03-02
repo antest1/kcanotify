@@ -806,9 +806,12 @@ public class KcaApiData {
         String[] requestList = list.split(",");
         for (int i = 0; i < requestList.length; i++) {
             int itemId = Integer.valueOf(requestList[i]);
-            String itemName = getUserItemStatusById(itemId, "id", "name").get("name").getAsString();
-            userItemData.remove(Integer.valueOf(requestList[i]));
-            Log.e("KCA", String.format("remove item %d (%s)", itemId, itemName));
+            JsonObject itemData = getUserItemStatusById(itemId, "id", "name");
+            if (itemData != null) {
+                String itemName = getUserItemStatusById(itemId, "id", "name").get("name").getAsString();
+                userItemData.remove(Integer.valueOf(requestList[i]));
+                Log.e("KCA", String.format("remove item %d (%s)", itemId, itemName));
+            }
         }
     }
 
