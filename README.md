@@ -34,7 +34,7 @@ Download
 Attribution
 -------
 - 이 프로젝트는 칸코레 어플리케이션의 데이터를 캡쳐하기 위해 [NetGuard](https://github.com/M66B/NetGuard/)의 소스를 일부 차용 및 수정하여 사용하고 있습니다. NetGuard의 라이선스는 [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt)이며 이에 따라서 시제 깡들리티 역시 해당 라이선스를 가집니다.
-- 칸무스명 및 장비명의 번역 데이터는 [kc3-translations](https://github.com/KC3Kai/kc3-translations)의 데이터를 변형하여 사용하고 있습니다.
+- 칸무스명 및 장비명, 퀘스트 번역 데이터는 [kc3-translations](https://github.com/KC3Kai/kc3-translations)의 데이터를 변형하여 사용하고 있습니다.
   - License for kc3-translations: The MIT License [Text](https://github.com/KC3Kai/kc3-translations/blob/master/LICENSE)
 - 해역 노드 정보는 [KC3Kai](https://github.com/KC3Kai/KC3Kai)의 데이터를 사용하고 있습니다. 
   - License for KC3Kai: The MIT License [Text](https://github.com/KC3Kai/KC3Kai/blob/master/LICENSE)
