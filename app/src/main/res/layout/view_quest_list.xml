@@ -37,7 +37,8 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:id="@+id/quest_head">
 
                 <TextView
                     android:id="@+id/quest_page"

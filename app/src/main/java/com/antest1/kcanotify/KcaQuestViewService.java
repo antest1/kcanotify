@@ -189,8 +189,7 @@ public class KcaQuestViewService extends Service {
             mInflater = LayoutInflater.from(contextWithLocale);
             mView = mInflater.inflate(R.layout.view_quest_list, null);
             questview = (ScrollView) mView.findViewById(R.id.questview);
-            ImageView exitbtn = (ImageView) questview.findViewById(R.id.quest_exit);
-            exitbtn.setOnTouchListener(mViewTouchListener);
+            questview.findViewById(R.id.quest_head).setOnTouchListener(mViewTouchListener);
 
             mParams = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
