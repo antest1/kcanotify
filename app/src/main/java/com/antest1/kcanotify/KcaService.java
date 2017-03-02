@@ -755,7 +755,7 @@ public class KcaService extends Service {
                 if (API_BATTLE_REQS.contains(url)) {
                     if (jsonDataObj.has("api_data")) {
                         JsonObject battleApiData = jsonDataObj.getAsJsonObject("api_data");
-                        if (url.startsWith(API_REQ_MAP_START) || url.startsWith(API_REQ_PRACTICE_BATTLE)) {
+                        if (url.equals(API_REQ_MAP_START) || url.equals(API_REQ_PRACTICE_BATTLE)) {
                             isInBattle = true;
 
                             int deck_id = 0;

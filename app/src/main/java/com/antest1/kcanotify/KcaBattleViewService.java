@@ -65,6 +65,10 @@ import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
+import static com.antest1.kcanotify.KcaViewButtonService.REFRESH_BATTLEVIEW_ACTION;
+import static com.antest1.kcanotify.KcaViewButtonService.REFRESH_QUESTVIEW_ACTION;
+import static com.antest1.kcanotify.KcaViewButtonService.SHOW_BATTLEVIEW_ACTION;
+import static com.antest1.kcanotify.KcaViewButtonService.SHOW_QUESTVIEW_ACTION;
 
 
 public class KcaBattleViewService extends Service {
@@ -187,6 +191,10 @@ public class KcaBattleViewService extends Service {
 
     public String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
+    }
+
+    public static void setApiData(JsonObject data) {
+        api_data = data;
     }
 
     private static String makeLvString(int level) {
@@ -1133,6 +1141,7 @@ public class KcaBattleViewService extends Service {
                     Log.e("KCA", "=> Received Intent");
                     //mViewBackup = mView;
                     //mManager.removeView(mView);
+
                     int setViewResult = setView();
                     if (setViewResult == 0) {
                         if (KcaViewButtonService.getClickCount() == 0) {
@@ -1168,6 +1177,12 @@ public class KcaBattleViewService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null) {
+            if (intent.getAction().equals(SHOW_BATTLEVIEW_ACTION)) {
+                mView.setVisibility(View.VISIBLE);
+            }
+        }
+
         if (!error_flag) {
             mView.setVisibility(View.VISIBLE);
             battleview.setOnTouchListener(mViewTouchListener);
@@ -1256,16 +1271,16 @@ public class KcaBattleViewService extends Service {
         for (int i = 1; i < shipNameAreaViewList.length; i++) {
             if (rid == shipNameAreaViewList[i] || rid == shipLevelViewList[i]) {
                 api_data.addProperty("api_touched_idx", i);
-                if (i <= 6 && i > friendShipData.size()) return -1;
-                if (i > 6 && i - 6 > enemyShipData.size()) return -1;
+                if (friendShipData == null || (i <= 6 && i > friendShipData.size())) return -1;
+                if (enemyShipData == null || (i > 6 && i - 6 > enemyShipData.size())) return -1;
                 return i;
             }
         }
         for (int i = 1; i < shipNameAreaCombinedViewList.length; i++) {
             if (rid == shipNameAreaCombinedViewList[i] || rid == shipLevelCombinedViewList[i]) {
                 api_data.addProperty("api_touched_idx", 20 + i);
-                if (i <= 6 && i > friendCombinedShipData.size()) return -1;
-                if (i > 6 && i - 6 > enemyCombinedShipData.size()) return -1;
+                if (friendCombinedShipData == null || (i <= 6 && i > friendCombinedShipData.size())) return -1;
+                if (enemyCombinedShipData == null || (i > 6 && i - 6 > enemyCombinedShipData.size())) return -1;
                 return 20 + i;
             }
         }

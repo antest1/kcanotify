@@ -49,6 +49,8 @@ public class KcaViewButtonService extends Service {
     public static final String REMOVE_FAIRY_ACTION = "remove_fairy_action";
     public static final String SHOW_BATTLE_INFO = "show_battle_info";
     public static final String SHOW_QUEST_INFO = "show_quest_info";
+    public static final String REFRESH_BATTLEVIEW_ACTION = "refresh_battleview";
+    public static final String SHOW_BATTLEVIEW_ACTION = "show_battleview";
     public static final String REFRESH_QUESTVIEW_ACTION = "refresh_questview";
     public static final String SHOW_QUESTVIEW_ACTION = "show_questview";
 
@@ -104,6 +106,7 @@ public class KcaViewButtonService extends Service {
             public void onReceive(Context context, Intent intent) {
                 String s = intent.getStringExtra(KCA_MSG_DATA);
                 currentApiData = new JsonParser().parse(s).getAsJsonObject();
+                KcaBattleViewService.setApiData(currentApiData);
                 Intent intent_send = new Intent(KCA_MSG_BATTLE_VIEW_REFRESH);
                 intent_send.putExtra(KCA_MSG_DATA, s);
                 broadcaster.sendBroadcast(intent_send);
@@ -115,6 +118,7 @@ public class KcaViewButtonService extends Service {
             public void onReceive(Context context, Intent intent) {
                 String s = intent.getStringExtra(KCA_MSG_DATA);
                 currentApiData = new JsonParser().parse(s).getAsJsonObject();
+                KcaBattleViewService.setApiData(currentApiData);
                 Intent intent_send = new Intent(KCA_MSG_BATTLE_VIEW_REFRESH);
                 intent_send.putExtra(KCA_MSG_DATA, s);
                 broadcaster.sendBroadcast(intent_send);
@@ -181,7 +185,9 @@ public class KcaViewButtonService extends Service {
             }
             if (intent.getAction().equals(SHOW_BATTLE_INFO)) {
                 status = BATTLE_MODE;
-                startService(new Intent(getBaseContext(), KcaBattleViewService.class));
+                Intent qintent = new Intent(getBaseContext(), KcaBattleViewService.class);
+                qintent.setAction(REFRESH_BATTLEVIEW_ACTION);
+                startService(qintent);
             }
             if (intent.getAction().equals(SHOW_QUEST_INFO)) {
                 status = QUEST_MODE;
@@ -243,7 +249,9 @@ public class KcaViewButtonService extends Service {
                     if (clickDuration < MAX_CLICK_DURATION) {
                         clickcount += 1;
                         if (status == BATTLE_MODE) {
-                            startService(new Intent(getBaseContext(), KcaBattleViewService.class));
+                            Intent qintent = new Intent(getBaseContext(), KcaBattleViewService.class);
+                            qintent.setAction(SHOW_BATTLEVIEW_ACTION);
+                            startService(qintent);
                         } else if (status == QUEST_MODE) {
                             Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
                             qintent.setAction(SHOW_QUESTVIEW_ACTION);
