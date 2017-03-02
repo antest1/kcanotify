@@ -27,6 +27,7 @@ Download
 - 색적/제공치/피로도/수송게이지 표시
 - 출격 중 현재 위치 표시
 - 전투 예보 (제공권, 드랍 등)
+- 임무 번역
 - OpenDB에 데이터 전송
 
 자세한 내용은 [이 글](http://gall.dcinside.com/board/view/?id=kancolle&no=5357703)을 참고하세요. (Korean)
