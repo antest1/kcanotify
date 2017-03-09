@@ -15,7 +15,6 @@ import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -102,6 +101,7 @@ public class KcaService extends Service {
     BigTextStyle viewNotificationText;
     KcaBattleToast battleToast;
     public static boolean noti_vibr_on = true;
+    Bitmap viewBitmap, expBitmap, dockBitmap = null;
 
     kcaServiceHandler handler;
     kcaNotificationHandler nHandler;
@@ -161,24 +161,6 @@ public class KcaService extends Service {
             Toast.makeText(this, "Error loading Map Edge Info", Toast.LENGTH_LONG).show();
         }
 
-        int loadShipTranslationDataResult = loadShipTranslationDataFromAssets(assetManager,
-                getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
-        if (loadShipTranslationDataResult != 1) {
-            Toast.makeText(this, "Error loading Translation Info", Toast.LENGTH_LONG).show();
-        }
-
-        int loadItemTranslationDataResult = loadItemTranslationDataFromAssets(assetManager,
-                getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
-        if (loadItemTranslationDataResult != 1) {
-            Toast.makeText(this, "Error loading Translation Info", Toast.LENGTH_LONG).show();
-        }
-
-        int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromAssets(assetManager,
-                getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
-        if (loadQuestInfoTranslationDataResult != 1) {
-            Toast.makeText(this, "Error loading Quest Info", Toast.LENGTH_LONG).show();
-        }
-
         loadSimpleExpeditionInfoFromAssets(assetManager);
         KcaExpedition.expeditionData = KcaApiData.kcSimpleExpeditionData;
 
@@ -197,6 +179,10 @@ public class KcaService extends Service {
         notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         battleToast = new KcaBattleToast(this);
+
+        viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.noti_icon3)).getBitmap();
+        expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
+        dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
 
         handler = new kcaServiceHandler(this);
         nHandler = new kcaNotificationHandler(this);
@@ -287,17 +273,14 @@ public class KcaService extends Service {
         return isExist;
     }
 
-
     private Notification createViewNotification(String title, String content1, String content2) {
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.noti_icon3);
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         viewNotificationText = new Notification.BigTextStyle();
         viewNotificationBuilder = new Notification.Builder(getApplicationContext())
                 .setSmallIcon(R.mipmap.noti_icon4)
-                .setLargeIcon(bitmap)
+                .setLargeIcon(viewBitmap)
                 .setContentTitle(title)
                 .setContentText(getStringWithLocale(R.string.kca_view_context_expand))
                 .setStyle(viewNotificationText.bigText(content1))
@@ -327,11 +310,9 @@ public class KcaService extends Service {
                 content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNo);
 
         }
-        Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon);
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         Notification.Builder builder = new Notification.Builder(getApplicationContext())
                 .setSmallIcon(R.mipmap.expedition_notify_icon)
-                .setLargeIcon(bitmap)
+                .setLargeIcon(expBitmap)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setTicker(title)
@@ -378,11 +359,9 @@ public class KcaService extends Service {
             content = String.format(getStringWithLocale(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
         }
 
-        Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.dockng_notify_bigicon);
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         Notification.Builder builder = new Notification.Builder(getApplicationContext())
                 .setSmallIcon(R.mipmap.docking_notify_icon)
-                .setLargeIcon(bitmap)
+                .setLargeIcon(dockBitmap)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setTicker(title)
@@ -482,7 +461,7 @@ public class KcaService extends Service {
                 JsonObject api_version = jsonDataObj.get("api").getAsJsonObject();
                 kca_version = api_version.get("api_start2").getAsString();
                 Log.e("KCA", kca_version);
-                if (!getStringPreferences(getApplicationContext(), "kca_version").equals(kca_version)) {
+                if (!getStringPreferences(getApplicationContext(), PREF_KCA_VERSION).equals(kca_version)) {
                     api_start2_down_mode = true;
                 } else {
                     api_start2_down_mode = false;
@@ -491,7 +470,7 @@ public class KcaService extends Service {
                     if (kcDataObj != null && kcDataObj.has("api_data")) {
                         //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
                         KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
-                        setPreferences(getApplicationContext(), "kca_version", kca_version);
+                        setPreferences(getApplicationContext(), PREF_KCA_VERSION, kca_version);
                     }
                 }
                 return;

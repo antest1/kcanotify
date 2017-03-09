@@ -269,4 +269,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_type_5">O</string>
 
     <string name="questview_page" formatted="false">Page %d/%d</string>
+    <string name="action_akashi">Improvement Arsenal Chart</string>
+    <string name="aa_btn_safe_state0">Normal</string>
+    <string name="aa_btn_safe_state1">GTD</string>
 </resources>

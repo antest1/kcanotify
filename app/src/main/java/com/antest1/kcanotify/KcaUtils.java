@@ -68,24 +68,24 @@ public class KcaUtils {
     }
 
     public static void writeCacheData(Context ctx, byte[] data, String filename) throws IOException {
-        FileOutputStream fos = ctx.openFileOutput(filename, ctx.MODE_PRIVATE);
+        FileOutputStream fos = ctx.openFileOutput(filename, Context.MODE_PRIVATE);
         fos.write(data);
         fos.close();
     }
 
     public static String getStringPreferences(Context ctx, String key) {
-        SharedPreferences pref = ctx.getSharedPreferences("pref", ctx.MODE_PRIVATE);
+        SharedPreferences pref = ctx.getSharedPreferences("pref", Context.MODE_PRIVATE);
         return pref.getString(key, "");
     }
 
     public static Boolean getBooleanPreferences(Context ctx, String key) {
-        SharedPreferences pref = ctx.getSharedPreferences("pref", ctx.MODE_PRIVATE);
+        SharedPreferences pref = ctx.getSharedPreferences("pref", Context.MODE_PRIVATE);
         return pref.getBoolean(key, false);
     }
 
     // 값 저장하기
     public static void setPreferences(Context ctx, String key, Object value) {
-        SharedPreferences pref = ctx.getSharedPreferences("pref", ctx.MODE_PRIVATE);
+        SharedPreferences pref = ctx.getSharedPreferences("pref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         if (value instanceof String) {
             editor.putString(key, (String) value);
@@ -160,7 +160,7 @@ public class KcaUtils {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         int read = -1;
-        while((read = cis.read(buffer)) != -1) {
+        while ((read = cis.read(buffer)) != -1) {
             bos.write(buffer, 0, read);
         }
         unchunkedData = bos.toByteArray();
@@ -256,7 +256,7 @@ public class KcaUtils {
 
     public static void playNotificationSound(MediaPlayer mediaPlayer, Context context, Uri uri) {
         try {
-            if(mediaPlayer.isPlaying()) {
+            if (mediaPlayer.isPlaying()) {
                 mediaPlayer.stop();
                 mediaPlayer.reset();
             }
@@ -285,5 +285,18 @@ public class KcaUtils {
         int green = Color.green(color);
         int blue = Color.blue(color);
         return Color.argb(alpha, red, green, blue);
+    }
+
+    // True: latest, False: need to update
+    public static boolean compareVersion(String version_current, String version_default) {
+        if (version_current.equals(version_default)) return true;
+        String[] current_split = version_current.split(".");
+        String[] default_split = version_default.split(".");
+        int min_length = Math.max(current_split.length, default_split.length);
+        for (int i = 0; i < min_length; i++) {
+            if (Integer.parseInt(current_split[i]) > Integer.parseInt(default_split[i])) return true;
+            else if (Integer.parseInt(current_split[i]) < Integer.parseInt(default_split[i])) return false;
+        }
+        return current_split.length > default_split.length;
     }
 }

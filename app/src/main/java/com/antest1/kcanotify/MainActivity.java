@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
@@ -27,15 +28,28 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.common.io.ByteStreams;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
+import static com.antest1.kcanotify.KcaApiData.loadItemTranslationDataFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadQuestInfoDataFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
@@ -49,6 +63,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_NS;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_QUESTVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
@@ -57,6 +72,10 @@ import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getLocaleInArray;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.readCacheData;
+import static com.antest1.kcanotify.KcaUtils.setPreferences;
+import static com.antest1.kcanotify.KcaUtils.writeCacheData;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "KCAV";
@@ -64,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_READEXT_PERMISSION = 3;
 
+    AssetManager assetManager;
     public static boolean isKcaServiceOn = false;
     Toolbar toolbar;
     private boolean running = false;
@@ -72,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
     Intent kcIntent;
     ToggleButton vpnbtn, svcbtn;
     Button kcbtn;
+    ImageButton kcakashibtn;
     TextView textDescription = null;
+    Gson gson = new Gson();
 
     Boolean is_kca_installed = false;
     private WindowManager windowManager;
@@ -86,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vpn_main);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        assetManager = getAssets();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -130,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
                     if (is_kca_installed) {
                         prefs.edit().putBoolean(PREF_SVC_ENABLED, true).apply();
                         setCheckBtn();
+                        loadTranslationData();
                         startService(intent);
                     } else {
                         Toast.makeText(getApplicationContext(), getString(R.string.ma_toast_kancolle_not_installed), Toast.LENGTH_LONG).show();
@@ -153,6 +177,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        kcakashibtn = (ImageButton) findViewById(R.id.kcakashibtn);
+        kcakashibtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AkashiActivity.class);
+                startActivity(intent);
+            }
+        });
+
         textDescription = (TextView) findViewById(R.id.textDescription);
         textDescription.setText(R.string.description);
         Linkify.addLinks(textDescription, Linkify.WEB_URLS);
@@ -160,6 +193,10 @@ public class MainActivity extends AppCompatActivity {
         ctx = getApplicationContext();
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
+        int setDefaultGameDataResult = setDefaultGameData();
+        if (setDefaultGameDataResult != 1) {
+            Toast.makeText(this, "error loading game data", Toast.LENGTH_LONG).show();
+        }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READEXT_PERMISSION);
@@ -180,11 +217,12 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         setVpnBtn();
         setCheckBtn();
+        loadTranslationData();
     }
 
     @Override
     protected void onResume() {
-        super.onStart();
+        super.onResume();
         setVpnBtn();
         setCheckBtn();
     }
@@ -266,6 +304,53 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    private int setDefaultGameData() {
+        String current_version = getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
+        String default_version = getString(R.string.default_gamedata_version);
+        if (current_version.length() > 0 && KcaUtils.compareVersion(current_version, default_version)) {
+            Log.e("KCA", "latest KCA data");
+            JsonObject kcDataObj = readCacheData(getApplicationContext(), KCANOTIFY_S2_CACHE_FILENAME);
+            KcaApiData.getKcGameData(kcDataObj);
+            return 1;
+        } else {
+            try {
+                AssetManager.AssetInputStream ais =
+                        (AssetManager.AssetInputStream) assetManager.open("api_start2");
+                byte[] bytes = KcaUtils.gzipdecompress(ByteStreams.toByteArray(ais));
+                JsonElement data = new JsonParser().parse(new String(bytes));
+                JsonObject api_data = gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data");
+                KcaApiData.getKcGameData(api_data);
+                writeCacheData(getApplicationContext(), api_data.toString().getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
+                setPreferences(getApplicationContext(), PREF_KCA_VERSION, default_version);
+            } catch (IOException e) {
+                return 0;
+            }
+            return 1;
+        }
+    }
+
+    private void loadTranslationData() {
+        if (assetManager == null) return;
+
+        int loadShipTranslationDataResult = loadShipTranslationDataFromAssets(assetManager,
+                getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
+        if (loadShipTranslationDataResult != 1) {
+            Toast.makeText(this, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+        }
+
+        int loadItemTranslationDataResult = loadItemTranslationDataFromAssets(assetManager,
+                getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
+        if (loadItemTranslationDataResult != 1) {
+            Toast.makeText(this, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+        }
+
+        int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromAssets(assetManager,
+                getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
+        if (loadQuestInfoTranslationDataResult != 1) {
+            Toast.makeText(this, "Error loading Quest Info", Toast.LENGTH_LONG).show();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -282,9 +367,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode) {
+        switch (requestCode) {
             case REQUEST_READEXT_PERMISSION: {
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, getString(R.string.ma_permission_readext_confirmed), Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, getString(R.string.ma_permission_readext_denied), Toast.LENGTH_LONG).show();

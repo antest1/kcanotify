@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#1d2935</color>
     <color name="colorAccent">#16a085</color>
     <color name="colorBtn">#d6d6d6</color>
+    <color name="black">#000000</color>
     <color name="white">#ffffff</color>
 
     <color name="colorBattle">#ff0000</color>
@@ -72,4 +73,6 @@
     <color name="colorQuestState2">#f98c27</color>
     <color name="colorQuestState3">#6ebbf6</color>
 
+    <color name="colorAkashiNormalScrew">#aaaaaa</color>
+    <color name="colorAkashiGtdScrew">#ff5252</color>
 </resources>

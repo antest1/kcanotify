@@ -354,8 +354,8 @@ public class KcaBattleViewService extends Service {
 
             if (api_data.has("api_deck_port")) { // common sortie, practice
                 setViewLayout(fc_flag, ec_flag);
-
-                if (is_practice) {
+                boolean midnight_flag = api_data.get("api_url").getAsString().contains("midnight");
+                if (is_practice && !midnight_flag) {
                     ((TextView) battleview.findViewById(R.id.battle_node)).setText(getStringWithLocale(R.string.node_info_practice));
                     ((TextView) battleview.findViewById(R.id.battle_result)).setText("");
                     ((TextView) battleview.findViewById(R.id.friend_fleet_formation)).setText("");

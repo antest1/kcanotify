@@ -261,4 +261,7 @@
     <string name="quest_type_5">타</string>
 
     <string name="questview_page" formatted="false">페이지 %d/%d</string>
+    <string name="action_akashi">개수공창표</string>
+    <string name="aa_btn_safe_state0">일반</string>
+    <string name="aa_btn_safe_state1">확정</string>
 </resources>
