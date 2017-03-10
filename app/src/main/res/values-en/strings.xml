@@ -272,4 +272,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_akashi">Improvement Arsenal Chart</string>
     <string name="aa_btn_safe_state0">Normal</string>
     <string name="aa_btn_safe_state1">GTD</string>
+    <string name="aa_btn_filter">Filter</string>
+    <string name="recon_failed">Recon Failed</string>
 </resources>

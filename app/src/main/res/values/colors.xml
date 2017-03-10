@@ -11,6 +11,7 @@
     <color name="colorBossBattle">#d50000</color>
     <color name="colorItem">#6bc613</color>
     <color name="colorItemSpecial">#388e3c</color>
+    <color name="colorReconFailed">#d50000</color>
     <color name="colorNone">#60c1d4</color>
     <color name="colorVortex">#af85e8</color>
     <color name="colorSelectable">#4e7bff</color>

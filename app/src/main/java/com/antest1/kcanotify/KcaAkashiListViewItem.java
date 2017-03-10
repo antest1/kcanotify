@@ -15,13 +15,17 @@ import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaUtils.getId;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaAkashiListViewItem {
+    private int equipId;
     private int equipIconMipmap;
     private String equipName;
     private String equipSupport;
     private String equipScrews;
+
+    public int getEquipId() { return equipId; }
 
     public int getEquipIconMipmap() {
         return equipIconMipmap;
@@ -51,6 +55,7 @@ public class KcaAkashiListViewItem {
             typeres = R.mipmap.item_0;
         }
 
+        equipId = id;
         equipIconMipmap = typeres;
         equipName = kcItemName;
     }
@@ -161,4 +166,5 @@ public class KcaAkashiListViewItem {
         }
         return result;
     }
+
 }

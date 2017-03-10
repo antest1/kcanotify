@@ -52,6 +52,8 @@ import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
@@ -274,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
                         editor.putString(prefKey, String.valueOf(SEEK_33CN1));
                         break;
                     case PREF_OPENDB_API_USE:
+                    case PREF_AKASHI_STAR_CHECKED:
                         editor.putBoolean(prefKey, false);
                         break;
                     case PREF_KCA_EXP_VIEW:
@@ -294,6 +297,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case PREF_KCA_NOTI_RINGTONE:
                         editor.putString(prefKey, DEFAULT_NOTIFICATION_URI.toString());
+                        break;
+                    case PREF_AKASHI_STARLIST:
+                        editor.putString(prefKey, "|");
                         break;
                     default:
                         editor.putString(prefKey, "");

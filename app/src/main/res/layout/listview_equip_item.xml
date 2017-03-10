@@ -64,8 +64,8 @@
                     android:layout_weight="0.2"
                     android:textColor="@color/colorAkashiNormalScrew"
                     android:paddingLeft="4dp"
-                    android:textSize="12dp"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    android:textSize="12dp" />
             </LinearLayout>
 
         </LinearLayout>

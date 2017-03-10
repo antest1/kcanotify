@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
-                android:text="검색"
+                android:text="@string/aa_btn_filter"
                 android:textColor="@android:color/black"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"

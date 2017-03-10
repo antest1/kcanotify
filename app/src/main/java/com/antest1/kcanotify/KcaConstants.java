@@ -262,6 +262,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_NOTI_DOCK = "notify_docking";
     public static final String PREF_KCA_NOTI_V_HD = "notify_vibrate_heavydamaged";
     public static final String PREF_KCA_NOTI_V_NS = "notify_vibrate_notsupplied";
+    public static final String PREF_AKASHI_STAR_CHECKED = "akashi_star_checked";
     public static final String PREF_AKASHI_STARLIST = "akashi_starlist";
 
     public static final String[] PREF_ARRAY = {
@@ -282,6 +283,7 @@ public final class KcaConstants {
             PREF_KCA_NOTI_DOCK,
             PREF_KCA_NOTI_V_HD,
             PREF_KCA_NOTI_V_NS,
+            PREF_AKASHI_STAR_CHECKED,
             PREF_AKASHI_STARLIST
     };
 

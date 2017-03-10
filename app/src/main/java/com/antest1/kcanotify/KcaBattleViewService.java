@@ -290,13 +290,21 @@ public class KcaBattleViewService extends Service {
                     ((TextView) battleview.findViewById(R.id.battle_result)).setText(KcaUtils.joinStr(itemTextList, " / "));
                     ((TextView) battleview.findViewById(R.id.battle_result))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItem));
-                } else if (api_event_id == API_NODE_EVENT_ID_AIR) {
-                    JsonObject itemdata = api_data.getAsJsonObject("api_itemget");
-                    String itemname = getItemString(contextWithLocale, itemdata.get("api_id").getAsInt());
-                    int itemgetcount = itemdata.get("api_getcount").getAsInt();
-                    ((TextView) battleview.findViewById(R.id.battle_result)).setText(String.format("%s +%d", itemname, itemgetcount));
-                    ((TextView) battleview.findViewById(R.id.battle_result))
-                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItemSpecial));
+                } else if (api_event_id == API_NODE_EVENT_ID_AIR && api_event_kind == API_NODE_EVENT_KIND_AIRSEARCH) {
+                    JsonObject api_airsearch = api_data.getAsJsonObject("api_airsearch");
+                    int airsearch_result = api_airsearch.get("api_result").getAsInt();
+                    if (airsearch_result == 0) {
+                        ((TextView) battleview.findViewById(R.id.battle_result)).setText(getStringWithLocale(R.string.recon_failed));
+                        ((TextView) battleview.findViewById(R.id.battle_result))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorReconFailed));
+                    } else {
+                        JsonObject itemdata = api_data.getAsJsonObject("api_itemget");
+                        String itemname = getItemString(contextWithLocale, itemdata.get("api_id").getAsInt());
+                        int itemgetcount = itemdata.get("api_getcount").getAsInt();
+                        ((TextView) battleview.findViewById(R.id.battle_result)).setText(String.format("%s +%d", itemname, itemgetcount));
+                        ((TextView) battleview.findViewById(R.id.battle_result))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItemSpecial));
+                    }
                 } else if (api_event_id == API_NODE_EVENT_ID_LOSS) {
                     JsonObject api_happening = api_data.getAsJsonObject("api_happening");
                     String itemname = getItemString(contextWithLocale, api_happening.get("api_mst_id").getAsInt());
