@@ -1315,6 +1315,10 @@ public class KcaBattleViewService extends Service {
             }
         };
         JsonObject sendData = new JsonObject();
+        if(api_data == null) {
+            api_data = new JsonObject();
+            api_data .addProperty("api_data", "api_data is null");
+        }
         if (type == ERORR_ITEMVIEW) {
             api_data.add("api_deckport", deckportdata);
             api_data.add("api_fs_data", friendShipData);
