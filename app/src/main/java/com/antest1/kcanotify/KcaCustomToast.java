@@ -17,10 +17,10 @@ import android.widget.Toast;
 import static com.antest1.kcanotify.KcaUtils.adjustAlpha;
 
 
-public class KcaBattleToast extends Toast {
+public class KcaCustomToast extends Toast {
     Context mContext;
 
-    public KcaBattleToast(Context context) {
+    public KcaCustomToast(Context context) {
         super(context);
         mContext = context;
     }
