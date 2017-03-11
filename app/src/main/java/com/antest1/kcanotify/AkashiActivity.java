@@ -33,6 +33,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
@@ -75,7 +76,7 @@ public class AkashiActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getResources().getString(R.string.action_akashi));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(Locale.JAPAN);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0(Sun) ~ 6(Sat)
         currentClicked = dayOfWeek;
         listViewItemList = new ArrayList<>();
