@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
@@ -50,7 +52,7 @@ public class AkashiActivity extends AppCompatActivity {
     ListView listview;
     int currentClicked = 0;
 
-    Button starButton, safeButton;
+    Button starButton, safeButton, filterButton;
     boolean isStarChecked, isSafeChecked = false;
     ArrayList<KcaAkashiListViewItem> listViewItemList;
     KcaAkashiListViewAdpater adapter;
@@ -79,12 +81,14 @@ public class AkashiActivity extends AppCompatActivity {
         listViewItemList = new ArrayList<>();
         starButton = (Button) findViewById(R.id.akashi_btn_star);
         safeButton = (Button) findViewById(R.id.akashi_btn_safe);
+        filterButton = (Button) findViewById(R.id.akashi_btn_filter);
         isStarChecked = getBooleanPreferences(getApplicationContext(), PREF_AKASHI_STAR_CHECKED);
         setStarButton();
 
         handler = new UpdateHandler(this);
         adapter = new KcaAkashiListViewAdpater();
         adapter.setHandler(handler);
+        AkashiFilterActivity.setHandler(handler);
 
         akashiDataLoadingFlag = getAkashiDataFromAssets();
         if (akashiDataLoadingFlag != 1) {
@@ -99,7 +103,7 @@ public class AkashiActivity extends AppCompatActivity {
 
         for (int i = 0; i < 7; i++) {
             final int week = i;
-            TextView tv = (TextView) findViewById(KcaUtils.getId(String.format("akashi_week_%d", i), R.id.class));
+            TextView tv = (TextView) findViewById(KcaUtils.getId(String.format("akashi_day_%d", i), R.id.class));
             if (week == currentClicked) {
                 tv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
                 tv.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
@@ -108,7 +112,7 @@ public class AkashiActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (currentClicked != week) {
-                        TextView tv_prev = (TextView) findViewById(KcaUtils.getId(String.format("akashi_week_%d", currentClicked), R.id.class));
+                        TextView tv_prev = (TextView) findViewById(KcaUtils.getId(String.format("akashi_day_%d", currentClicked), R.id.class));
                         tv_prev.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
                         tv_prev.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
                         v.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
@@ -139,6 +143,14 @@ public class AkashiActivity extends AppCompatActivity {
                 setStarButton();
                 loadAkashiList(currentClicked, isSafeChecked);
                 resetListView(true);
+            }
+        });
+
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AkashiFilterActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -190,7 +202,7 @@ public class AkashiActivity extends AppCompatActivity {
     }
 
     private void setStarButton() {
-        if(isStarChecked) {
+        if (isStarChecked) {
             starButton.setText("★");
             starButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
             starButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
@@ -222,6 +234,17 @@ public class AkashiActivity extends AppCompatActivity {
 
     private void loadAkashiList(int day, boolean checked) {
         final int TYPE_MUL = 1000;
+        String starlist = getStringPreferences(getApplicationContext(), PREF_AKASHI_STARLIST);
+        String filterlist = getStringPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST);
+
+        if (!filterlist.equals("|")) {
+            filterButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+            filterButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+        } else {
+            filterButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
+            filterButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
+        }
+
         listViewItemList.clear();
         List<Integer> keylist = new ArrayList<Integer>();
         JsonArray equipList = akashiDay.getAsJsonArray(String.valueOf(day));
@@ -229,24 +252,30 @@ public class AkashiActivity extends AppCompatActivity {
             int equipid = equipList.get(i).getAsInt();
             JsonObject kcItemData = KcaApiData.getKcItemStatusById(equipid, "type");
             int type2 = kcItemData.getAsJsonArray("type").get(2).getAsInt();
-            keylist.add(type2 * TYPE_MUL + equipid);
+            int type3 = kcItemData.getAsJsonArray("type").get(3).getAsInt();
+            if (!checkFiltered(filterlist, type3)) {
+                keylist.add(type2 * TYPE_MUL + equipid);
+            }
         }
         Collections.sort(keylist);
 
         for (int equipid : keylist) {
             equipid = equipid % TYPE_MUL;
-            if(isStarChecked && !checkStarred(getStringPreferences(
-                    getApplicationContext(), PREF_AKASHI_STARLIST), equipid)) continue;
+            if (isStarChecked && !checkStarred(starlist, equipid)) continue;
             KcaAkashiListViewItem item = new KcaAkashiListViewItem();
             item.setEquipDataById(equipid);
-            JsonArray improvmentData = akashiData.getAsJsonObject(String.valueOf(equipid)).getAsJsonArray("improvment");
-            item.setEquipImprovementData(improvmentData, day, checked);
+            item.setEquipImprovmentData(akashiData.getAsJsonObject(String.valueOf(equipid)));
+            item.setEquipImprovementElement(day, checked);
             listViewItemList.add(item);
         }
     }
 
     private boolean checkStarred(String data, int id) {
-        return data.contains(String.format("|%d|",id));
+        return data.contains(String.format("|%d|", id));
+    }
+
+    private boolean checkFiltered(String data, int id) {
+        return data.contains(String.format("|%d|", id));
     }
 
     private static class UpdateHandler extends Handler {

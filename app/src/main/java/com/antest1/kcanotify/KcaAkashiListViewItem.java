@@ -14,18 +14,22 @@ import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
+import static com.antest1.kcanotify.KcaApiData.removeKai;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaAkashiListViewItem {
     private int equipId;
+    private JsonObject equipImprovmentData;
     private int equipIconMipmap;
     private String equipName;
     private String equipSupport;
     private String equipScrews;
 
     public int getEquipId() { return equipId; }
+
+    public JsonObject getEquipImprovmentData() { return equipImprovmentData; }
 
     public int getEquipIconMipmap() {
         return equipIconMipmap;
@@ -60,8 +64,14 @@ public class KcaAkashiListViewItem {
         equipName = kcItemName;
     }
 
+    public void setEquipImprovmentData(JsonObject data) {
+        equipImprovmentData = data;
+    }
+
     // 0: sun ~ 6: sat
-    public void setEquipImprovementData(JsonArray data, int day, boolean checked) {
+    public void setEquipImprovementElement(int day, boolean checked) {
+        JsonArray data = equipImprovmentData.getAsJsonArray("improvment");
+
         String[] screw1 = new String[2];
         String[] screw2 = new String[2];
         String[] screw3 = new String[2];
@@ -126,45 +136,6 @@ public class KcaAkashiListViewItem {
         if (Integer.parseInt(s) == -1) return "?";
         else if (Integer.parseInt(s) == 0) return "-";
         else return s;
-    }
-
-    private int findAfterShipId(int startid, int level) {
-        int sid = startid;
-        for (int i = 0; i < level; i++) {
-            if (sid == 0) return 0;
-            else {
-                JsonObject kcShipData = getKcShipDataById(sid, "aftershipid");
-                sid = kcShipData.get("aftershipid").getAsInt();
-            }
-        }
-        return sid;
-    }
-
-    private int[] removeKai(JsonArray slist) {
-        List<Integer> afterShipList = new ArrayList<Integer>();
-        List filteredShipList = new ArrayList<>();
-        for (int i = 0; i < slist.size(); i++) {
-            int sid = slist.get(i).getAsInt();
-            for (int lv = 1; lv <= 3; lv++) {
-                int after = findAfterShipId(sid, lv);
-                if (after == 0 || after != sid) {
-                    afterShipList.add(after);
-                } else {
-                    break;
-                }
-            }
-        }
-        for (int i = 0; i < slist.size(); i++) {
-            int sid = slist.get(i).getAsInt();
-            if (afterShipList.indexOf(sid) == -1) {
-                filteredShipList.add(sid);
-            }
-        }
-        int[] result = new int[filteredShipList.size()];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = (int) filteredShipList.get(i);
-        }
-        return result;
     }
 
 }

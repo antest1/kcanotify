@@ -40,6 +40,20 @@
                 android:value="com.antest1.kcanotify.MainActivity" />
         </activity>
         <activity
+            android:name="com.antest1.kcanotify.AkashiDetailActivity"
+            android:configChanges="locale|layoutDirection">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.antest1.kcanotify.AkashiActivity" />
+        </activity>
+        <activity
+            android:name="com.antest1.kcanotify.AkashiFilterActivity"
+            android:configChanges="locale|layoutDirection">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.antest1.kcanotify.AkashiActivity" />
+        </activity>
+        <activity
             android:name="com.antest1.kcanotify.KcaInfoActivity"
             android:configChanges="locale|layoutDirection">
             <meta-data

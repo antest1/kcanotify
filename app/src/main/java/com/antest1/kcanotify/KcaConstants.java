@@ -264,6 +264,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_NOTI_V_NS = "notify_vibrate_notsupplied";
     public static final String PREF_AKASHI_STAR_CHECKED = "akashi_star_checked";
     public static final String PREF_AKASHI_STARLIST = "akashi_starlist";
+    public static final String PREF_AKASHI_FILTERLIST = "akashi_filterlist";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -284,7 +285,8 @@ public final class KcaConstants {
             PREF_KCA_NOTI_V_HD,
             PREF_KCA_NOTI_V_NS,
             PREF_AKASHI_STAR_CHECKED,
-            PREF_AKASHI_STARLIST
+            PREF_AKASHI_STARLIST,
+            PREF_AKASHI_FILTERLIST
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

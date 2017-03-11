@@ -36,7 +36,7 @@
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
                 android:text="☆"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginStart="4dp"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginStart="4dp"
@@ -62,13 +62,13 @@
                 android:text="@string/aa_btn_safe_state0" />
 
             <Button
-                android:id="@+id/akashi_btn_search"
+                android:id="@+id/akashi_btn_filter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
                 android:text="@string/aa_btn_filter"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginStart="4dp"
@@ -90,85 +90,85 @@
             android:layout_marginStart="4dp">
 
             <TextView
-                android:id="@+id/akashi_week_0"
+                android:id="@+id/akashi_day_0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="2dp"
-                android:text="일"
+                android:text="@string/akashi_term_day_0"
                 android:textAlignment="center"
                 android:textSize="18dp"
                 android:textColor="@color/black"
                 android:background="@color/colorBtn" />
 
             <TextView
-                android:id="@+id/akashi_week_1"
+                android:id="@+id/akashi_day_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
                 android:padding="2dp"
-                android:text="월"
+                android:text="@string/akashi_term_day_1"
                 android:textAlignment="center"
                 android:textSize="18dp"
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/akashi_week_2"
+                android:id="@+id/akashi_day_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
                 android:padding="2dp"
-                android:text="화"
+                android:text="@string/akashi_term_day_2"
                 android:textAlignment="center"
                 android:textSize="18dp"
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/akashi_week_3"
+                android:id="@+id/akashi_day_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
                 android:padding="2dp"
-                android:text="수"
+                android:text="@string/akashi_term_day_3"
                 android:textAlignment="center"
                 android:textSize="18dp"
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/akashi_week_4"
+                android:id="@+id/akashi_day_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
                 android:padding="2dp"
-                android:text="목"
+                android:text="@string/akashi_term_day_4"
                 android:textAlignment="center"
                 android:textSize="18dp"
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/akashi_week_5"
+                android:id="@+id/akashi_day_5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
                 android:padding="2dp"
-                android:text="금"
+                android:text="@string/akashi_term_day_5"
                 android:textAlignment="center"
                 android:textSize="18dp"
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/akashi_week_6"
+                android:id="@+id/akashi_day_6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
                 android:padding="2dp"
-                android:text="토"
+                android:text="@string/akashi_term_day_6"
                 android:textAlignment="center"
                 android:textSize="18dp"
                 android:textColor="@color/black" />
@@ -182,7 +182,8 @@
             android:layout_marginEnd="4dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:layout_marginStart="4dp" />
+            android:layout_marginStart="4dp"
+            android:listSelector="@android:color/transparent" />
 
 
     </LinearLayout>

@@ -266,4 +266,21 @@
     <string name="aa_btn_safe_state1">확정</string>
     <string name="aa_btn_filter">필터</string>
     <string name="recon_failed">정찰 실패</string>
+    <string name="action_akashi_detail">장비 개수 상세</string>
+    <string name="akashi_term_detail1">개수 상세 정보 (1)</string>
+    <string name="akashi_term_detail2">개수 상세 정보 (2)</string>
+    <string name="akashi_term_equip">소모장비</string>
+    <string name="akashi_term_resource">소모자원</string>
+    <string name="akashi_term_support">2번함</string>
+    <string name="akashi_term_default">초기 장비 함선</string>
+    <string name="akashi_term_day_6">토</string>
+    <string name="akashi_term_day_5">금</string>
+    <string name="akashi_term_day_0">일</string>
+    <string name="akashi_term_day_1">월</string>
+    <string name="akashi_term_day_2">화</string>
+    <string name="akashi_term_day_3">수</string>
+    <string name="akashi_term_day_4">목</string>
+    <string name="akashi_filter_equip_title">장비별 필터 설정</string>
+    <string name="action_akashi_filter">필터 설정</string>
+
 </resources>

@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="#fff"></android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:layout_margin="5dp">
+
+
+        <TextView
+            android:text="@string/akashi_filter_equip_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/akashi_filter_equiptype"
+            android:textColor="@color/colorAccent"
+            android:layout_marginBottom="4dp"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="5dp"
+            android:background="@color/colorAkashiEquipFilterPanel">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+                <ImageView
+                    android:src="@mipmap/item_1"
+                    android:id="@+id/akashi_filter_equip_btn_1"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_2"
+                    android:id="@+id/akashi_filter_equip_btn_2"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:padding="5dp"
+                    android:layout_height="30dp" />
+                <ImageView
+                    android:src="@mipmap/item_3"
+                    android:id="@+id/akashi_filter_equip_btn_3"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_4"
+                    android:id="@+id/akashi_filter_equip_btn_4"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_5"
+                    android:id="@+id/akashi_filter_equip_btn_5"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_6"
+                    android:id="@+id/akashi_filter_equip_btn_6"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_7"
+                    android:id="@+id/akashi_filter_equip_btn_7"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_9"
+                    android:id="@+id/akashi_filter_equip_btn_9"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+                <ImageView
+                    android:src="@mipmap/item_10"
+                    android:id="@+id/akashi_filter_equip_btn_10"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_11"
+                    android:id="@+id/akashi_filter_equip_btn_11"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_13"
+                    android:id="@+id/akashi_filter_equip_btn_13"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_15"
+                    android:id="@+id/akashi_filter_equip_btn_15"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_off"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_16"
+                    android:id="@+id/akashi_filter_equip_btn_16"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_off"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_17"
+                    android:id="@+id/akashi_filter_equip_btn_17"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+
+                <ImageView
+                    android:src="@mipmap/item_18"
+                    android:id="@+id/akashi_filter_equip_btn_18"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+
+                <ImageView
+                    android:src="@mipmap/item_19"
+                    android:id="@+id/akashi_filter_equip_btn_19"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_off"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:src="@mipmap/item_20"
+                    android:id="@+id/akashi_filter_equip_btn_20"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_23"
+                    android:id="@+id/akashi_filter_equip_btn_23"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_24"
+                    android:id="@+id/akashi_filter_equip_btn_24"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_30"
+                    android:id="@+id/akashi_filter_equip_btn_30"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_off"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_36"
+                    android:id="@+id/akashi_filter_equip_btn_36"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_off"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_42"
+                    android:id="@+id/akashi_filter_equip_btn_42"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:id="@+id/akashi_filter_equip_btn_temp1"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:visibility="invisible"
+                    android:padding="5dp" />
+                <ImageView
+                    android:id="@+id/akashi_filter_equip_btn_temp2"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/akashi_filter_btn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:visibility="invisible"
+                    android:padding="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:text="전체선택"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/akashi_filter_btn_all"
+                    android:layout_weight="1"
+                    android:background="@color/colorBtn"
+                    android:padding="3dp"
+                    android:stateListAnimator="@null"
+                    android:textSize="14dp"
+                    android:layout_margin="5dp"
+                    style="@android:style/Widget.Button.Small" />
+
+                <Button
+                    android:text="전체해제"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/akashi_filter_btn_none"
+                    android:layout_weight="1"
+                    android:background="@color/colorBtn"
+                    android:padding="3dp"
+                    android:stateListAnimator="@null"
+                    android:textSize="14dp"
+                    android:layout_margin="5dp"
+                    style="@android:style/Widget.Button.Small" />
+
+                <Button
+                    android:text="선택반전"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/akashi_filter_btn_reverse"
+                    android:layout_weight="1"
+                    android:background="@color/colorBtn"
+                    android:padding="3dp"
+                    android:stateListAnimator="@null"
+                    android:textSize="14dp"
+                    android:layout_margin="5dp"
+                    style="@android:style/Widget.Button.Small" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

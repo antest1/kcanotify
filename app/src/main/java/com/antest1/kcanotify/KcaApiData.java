@@ -16,6 +16,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -158,6 +159,8 @@ public class KcaApiData {
 
     public static final int[] T2LIST_FIGHT_AIRCRAFTS = {T2_FIGHTER, T2_BOMBER, T2_TORPEDO_BOMBER, T2_SEA_BOMBER,
             T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER};
+
+    public static final int[] T3LIST_IMPROVABLE = {1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 13, 15, 16, 17, 18, 19, 20, 23, 24, 30, 36, 42};
 
     public static final int[] BASIC_MASTERY_MIN_BONUS = {0, 10, 25, 40, 55, 70, 85, 100};
     public static final int[] BASIC_MASTERY_MAX_BONUS = {9, 24, 39, 54, 69, 84, 99, 120};
@@ -1006,5 +1009,67 @@ public class KcaApiData {
             default:
                 return "";
         }
+    }
+
+    public static JsonObject findRemodelLv(String idlist) {
+        JsonObject result = new JsonObject();
+        String[] target = idlist.split(",");
+        for (String id : target) {
+            result.addProperty(id, 1);
+        }
+        for (Map.Entry<Integer, JsonObject> entry : kcShipData.entrySet()) {
+            JsonObject data = entry.getValue();
+            if (data.has("api_aftershipid")) {
+                String[] targetiter = target;
+                for (String id : targetiter) {
+                    if (id.equals(data.get("api_aftershipid").getAsString())) {
+                        result.addProperty(id, data.get("api_afterlv").getAsString());
+                        target = ArrayUtils.removeElement(target, id);
+                        break;
+                    }
+                }
+            }
+            if (target.length == 0) break;
+        }
+        return result;
+    }
+
+    public static int findAfterShipId(int startid, int level) {
+        int sid = startid;
+        for (int i = 0; i < level; i++) {
+            if (sid == 0) return 0;
+            else {
+                JsonObject kcShipData = getKcShipDataById(sid, "aftershipid");
+                sid = kcShipData.get("aftershipid").getAsInt();
+            }
+        }
+        return sid;
+    }
+
+    public static int[] removeKai(JsonArray slist) {
+        List<Integer> afterShipList = new ArrayList<Integer>();
+        List filteredShipList = new ArrayList<>();
+        for (int i = 0; i < slist.size(); i++) {
+            int sid = slist.get(i).getAsInt();
+            for (int lv = 1; lv <= 3; lv++) {
+                int after = findAfterShipId(sid, lv);
+                if (after == 0 || after != sid) {
+                    afterShipList.add(after);
+                } else {
+                    break;
+                }
+            }
+        }
+        for (int i = 0; i < slist.size(); i++) {
+            int sid = slist.get(i).getAsInt();
+            if (afterShipList.indexOf(sid) == -1) {
+                filteredShipList.add(sid);
+            }
+        }
+        int[] result = new int[filteredShipList.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = (int) filteredShipList.get(i);
+        }
+        return result;
     }
 }

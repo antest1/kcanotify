@@ -52,6 +52,7 @@ import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
@@ -299,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
                         editor.putString(prefKey, DEFAULT_NOTIFICATION_URI.toString());
                         break;
                     case PREF_AKASHI_STARLIST:
+                    case PREF_AKASHI_FILTERLIST:
                         editor.putString(prefKey, "|");
                         break;
                     default:

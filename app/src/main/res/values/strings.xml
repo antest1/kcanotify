@@ -307,10 +307,28 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="questview_page" formatted="false">Page %d/%d</string>
     <string name="action_akashi">Improvement Arsenal Chart</string>
+    <string name="action_akashi_detail">Equipment Improvement Detail</string>
+    <string name="action_akashi_filter">Filter Settings</string>
     <string name="aa_btn_safe_state1">GTD</string>
     <string name="aa_btn_safe_state0">Normal</string>
     <string name="aa_btn_filter">Filter</string>
     <string name="aa_btn_star0" translatable="false">☆</string>
     <string name="aa_btn_star1" translatable="false">★</string>
     <string name="recon_failed">Recon Failed</string>
+    <string name="akashi_term_equip">Equipment</string>
+    <string name="akashi_term_resource">F/A/S/B</string>
+    <string name="akashi_term_support">Support</string>
+    <string name="akashi_term_detail1">Improvement Detail (1)</string>
+    <string name="akashi_term_detail2">Improvement Detail (2)</string>
+    <string name="akashi_term_default">Who have as stock equipment</string>
+    <string name="akashi_term_day_0">Sun</string>
+    <string name="akashi_term_day_1">Mon</string>
+    <string name="akashi_term_day_2">Tue</string>
+    <string name="akashi_term_day_3">Wed</string>
+    <string name="akashi_term_day_4">Thu</string>
+    <string name="akashi_term_day_5">Fri</string>
+    <string name="akashi_term_day_6">Sat</string>
+
+    <string name="akashi_filter_equip_title">Filter by Equipment Type</string>
+
 </resources>

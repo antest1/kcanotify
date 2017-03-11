@@ -26,6 +26,7 @@
     <color name="colorHeavyDmgStateWarn">#ff5252</color>
 
     <color name="colorHeavyDmgStatePanel">#7e2424</color>
+    <color name="colorWarningPanel">#ae6000</color>
 
     <color name="colorElite">#d50000</color>
     <color name="colorFlagship">#fbc02d</color>
@@ -72,8 +73,13 @@
 
     <color name="colorQuestState1">#ffffff</color>
     <color name="colorQuestState2">#f98c27</color>
-    <color name="colorQuestState3">#6ebbf6</color>
+    <color name="colorQuestState3">#e1f5fe</color>
 
     <color name="colorAkashiNormalScrew">#aaaaaa</color>
     <color name="colorAkashiGtdScrew">#ff5252</color>
+    <color name="colorAkashiTableBack">#f5f5f5</color>
+    <color name="colorAkashiUpgradeEquip">#4e7bff</color>
+
+    <color name="colorAkashiEquipFilterPanel">#f5f5f5</color>
+
 </resources>

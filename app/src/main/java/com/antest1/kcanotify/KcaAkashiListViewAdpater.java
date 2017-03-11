@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -57,6 +59,7 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.listview_equip_item, parent, false);
 
+            LinearLayout itemView = (LinearLayout) convertView.findViewById(R.id.akashi_improv_item_area);
             ImageView iconView = (ImageView) convertView.findViewById(R.id.akashi_improv_icon);
             TextView nameView = (TextView) convertView.findViewById(R.id.akashi_improv_name);
             TextView screwView = (TextView) convertView.findViewById(R.id.akashi_improv_screws);
@@ -65,6 +68,7 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
 
             KcaAkashiListViewItem item = listViewItemList.get(position);
             final int itemId = item.getEquipId();
+            final String itemImprovmentData = item.getEquipImprovmentData().toString();
 
             iconView.setImageResource(item.getEquipIconMipmap());
             nameView.setText(item.getEquipName());
@@ -77,24 +81,32 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
                 starView.setText(context.getString(R.string.aa_btn_star0));
             }
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, AkashiDetailActivity.class);
+                    intent.putExtra("item_id", itemId);
+                    intent.putExtra("item_info", itemImprovmentData);
+                    context.startActivity(intent);
+                }
+            });
+
             starView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String starred = getStringPreferences(context, PREF_AKASHI_STARLIST);
                     TextView tv = (TextView) v;
                     if(tv.getText().equals(context.getString(R.string.aa_btn_star0))) {
                         setPreferences(context, PREF_AKASHI_STARLIST,
-                                addStarred(getStringPreferences(context, PREF_AKASHI_STARLIST), itemId));
+                                addStarred(starred, itemId));
                         tv.setText(context.getString(R.string.aa_btn_star1));
                     } else {
                         setPreferences(context, PREF_AKASHI_STARLIST,
-                                deleteStarred(getStringPreferences(context, PREF_AKASHI_STARLIST), itemId));
+                                deleteStarred(starred, itemId));
                         tv.setText(context.getString(R.string.aa_btn_star0));
                     }
-                    Log.e("KCA", getStringPreferences(context, PREF_AKASHI_STARLIST));
-                    Bundle bundle = new Bundle();
-                    Message sMsg = sHandler.obtainMessage();
-                    sMsg.setData(bundle);
-                    sHandler.sendMessage(sMsg);
+                    Log.e("KCA", starred);
+                    sHandler.sendEmptyMessage(0);
                 }
             });
 
