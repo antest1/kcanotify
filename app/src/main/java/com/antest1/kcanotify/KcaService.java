@@ -98,6 +98,7 @@ public class KcaService extends Service {
     BigTextStyle viewNotificationText;
     KcaCustomToast customToast;
     public static boolean noti_vibr_on = true;
+    int viewBitmapId, viewBitmapSmallId;
     Bitmap viewBitmap, expBitmap, dockBitmap = null;
 
     kcaServiceHandler handler;
@@ -177,7 +178,10 @@ public class KcaService extends Service {
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         customToast = new KcaCustomToast(this);
 
-        viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.noti_icon3)).getBitmap();
+        String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
+        viewBitmapId = getId(fairyId, R.mipmap.class);
+        viewBitmapSmallId = getId(fairyId.concat("_small"), R.mipmap.class);
+        viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
         expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
         dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
 
@@ -205,6 +209,7 @@ public class KcaService extends Service {
         KcaApiData.setHandler(nHandler);
         KcaOpendbAPI.setHandler(nHandler);
         SettingActivity.setHandler(nHandler);
+        KcaFairySelectActivity.setHandler(nHandler);
 
         return START_STICKY;
     }
@@ -276,7 +281,7 @@ public class KcaService extends Service {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         viewNotificationText = new Notification.BigTextStyle();
         viewNotificationBuilder = new Notification.Builder(getApplicationContext())
-                .setSmallIcon(R.mipmap.noti_icon4)
+                .setSmallIcon(viewBitmapSmallId)
                 .setLargeIcon(viewBitmap)
                 .setContentTitle(title)
                 .setContentText(getStringWithLocale(R.string.kca_view_context_expand))
@@ -1299,6 +1304,16 @@ public class KcaService extends Service {
                 api_start2_loading_flag = false;
                 if (isUserItemDataLoaded()) {
                     processFirstDeckInfo(currentPortDeckData);
+                }
+            }
+
+            if (url.startsWith(KCA_API_PREF_FAIRY_CHANGED)) {
+                if(jsonDataObj.has("id")) {
+                    String fairyId = "noti_icon_".concat(jsonDataObj.get("id").getAsString());
+                    viewBitmapId = getId(fairyId, R.mipmap.class);
+                    viewBitmapSmallId = getId(fairyId.concat("_small"), R.mipmap.class);
+                    viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
+                    setFrontViewNotifier(FRONT_NONE, 0, null);
                 }
             }
 

@@ -11,9 +11,8 @@ public final class KcaConstants {
     public static final String KCANOTIFY_S2_CACHE_FILENAME = "kca_api_start2";
     public static final String KCANOTIFY_USERITEM_CACHE_FILENAME = "kca_userslotitem";
 
-    public static final int KC_REFERER_APP = 1;
-    public static final int KC_REFERER_BROWSER = 2;
-
+    public static final int FAIRY_TOTAL_COUNT = 6;
+    public static final int[] FAIRY_REVERSE_LIST = {0, 1, 2};
 
     public static final String API_PORT = "/api_port/port";
     public static final String API_WORLD_GET_ID = "/api_world/get_id";
@@ -25,7 +24,7 @@ public final class KcaConstants {
     public static final String API_GET_MEMBER_SHIP_DECK = "/api_get_member/ship_deck";
     public static final String API_GET_MEMBER_SLOT_ITEM = "/api_get_member/slot_item";
     public static final String API_REQ_MISSION_RETURN = "/api_req_mission/return_instruction";
-    public static final String API_REQ_MISSION_RESULT= "/api_req_mission/result";
+    public static final String API_REQ_MISSION_RESULT = "/api_req_mission/result";
 
 
     public static final String API_REQ_HENSEI_CHANGE = "/api_req_hensei/change";
@@ -150,7 +149,9 @@ public final class KcaConstants {
     public static final String KCA_API_NOTI_DOCK_FIN = "/kca_api/noti_dock_fin";
     public static final String KCA_API_PREF_CN_CHANGED = "/kca_api/pref_cn_changed";
     public static final String KCA_API_PREF_EXPVIEW_CHANGED = "/kca_api/pref_expview_changed";
+    public static final String KCA_API_PREF_FAIRY_CHANGED = "/kca_api/pref_fairy_changed";
 
+    public static final String KCA_MSG_FAIRY_CHANGED = "com.antest1.kcanotify.KcaFairySelectActivity.KCA_MSG_FAIRY_CHANGED";
     public static final String KCA_MSG_BATTLE_NODE = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_NODE";
     public static final String KCA_MSG_BATTLE_INFO = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_INFO";
     public static final String KCA_MSG_BATTLE_HDMG = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_HDMG";
@@ -265,6 +266,7 @@ public final class KcaConstants {
     public static final String PREF_AKASHI_STAR_CHECKED = "akashi_star_checked";
     public static final String PREF_AKASHI_STARLIST = "akashi_starlist";
     public static final String PREF_AKASHI_FILTERLIST = "akashi_filterlist";
+    public static final String PREF_FAIRY_ICON = "fairy_icon";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -286,7 +288,8 @@ public final class KcaConstants {
             PREF_KCA_NOTI_V_NS,
             PREF_AKASHI_STAR_CHECKED,
             PREF_AKASHI_STARLIST,
-            PREF_AKASHI_FILTERLIST
+            PREF_AKASHI_FILTERLIST,
+            PREF_FAIRY_ICON
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

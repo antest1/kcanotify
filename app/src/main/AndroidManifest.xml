@@ -54,6 +54,13 @@
                 android:value="com.antest1.kcanotify.AkashiActivity" />
         </activity>
         <activity
+            android:name="com.antest1.kcanotify.KcaFairySelectActivity"
+            android:configChanges="locale|layoutDirection">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.antest1.kcanotify.SettingActivity" />
+        </activity>
+        <activity
             android:name="com.antest1.kcanotify.KcaInfoActivity"
             android:configChanges="locale|layoutDirection">
             <meta-data
@@ -63,8 +70,7 @@
 
         <service
             android:name=".KcaService"
-            android:configChanges="locale|layoutDirection"
-            android:icon="@mipmap/noti_icon3" />
+            android:configChanges="locale|layoutDirection" />
 
         <service
             android:name=".KcaViewButtonService"
@@ -75,7 +81,6 @@
             android:name=".KcaQuestViewService" />
         <service
             android:name=".KcaVpnService"
-            android:icon="@mipmap/noti_icon3"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>

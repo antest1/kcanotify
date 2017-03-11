@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="#fff"></android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:layout_margin="5dp">
+
+
+        <TextView
+            android:text="@string/setting_menu_kand_desc_fairy_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/setting_fairy_select_title"
+            android:textColor="@color/colorAccent"
+            android:layout_marginBottom="4dp"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="5dp"
+            android:background="@color/colorAkashiEquipFilterPanel">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:src="@mipmap/noti_icon_0"
+                    android:id="@+id/setting_fairy_0"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/imagebtn_on"
+                    android:adjustViewBounds="true"
+                    android:padding="10dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp" />
+
+                <ImageView
+                    android:src="@mipmap/noti_icon_1"
+                    android:id="@+id/setting_fairy_1"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/imagebtn_on"
+                    android:adjustViewBounds="true"
+                    android:padding="10dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp" />
+
+                <ImageView
+                    android:src="@mipmap/noti_icon_2"
+                    android:id="@+id/setting_fairy_2"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/imagebtn_on"
+                    android:adjustViewBounds="true"
+                    android:padding="10dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:src="@mipmap/noti_icon_3"
+                    android:id="@+id/setting_fairy_3"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/imagebtn_on"
+                    android:adjustViewBounds="true"
+                    android:padding="10dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp" />
+                <ImageView
+                    android:src="@mipmap/noti_icon_4"
+                    android:id="@+id/setting_fairy_4"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/imagebtn_on"
+                    android:adjustViewBounds="true"
+                    android:padding="10dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp" />
+                <ImageView
+                    android:src="@mipmap/noti_icon_5"
+                    android:id="@+id/setting_fairy_5"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/imagebtn_on"
+                    android:adjustViewBounds="true"
+                    android:padding="10dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:text="@string/current_fairy_changed_in_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:textSize="12dp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

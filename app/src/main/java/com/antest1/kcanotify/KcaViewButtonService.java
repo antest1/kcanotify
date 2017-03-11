@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -32,8 +33,10 @@ import android.widget.Toast;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
+import static com.antest1.kcanotify.KcaConstants.FAIRY_REVERSE_LIST;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_HDMG;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_INFO;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_NODE;
@@ -42,6 +45,9 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_LIST;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_VIEW_LIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
+import static com.antest1.kcanotify.KcaUtils.getId;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 public class KcaViewButtonService extends Service {
     public static final int FAIRY_NOTIFICATION_ID = 10118;
@@ -69,6 +75,8 @@ public class KcaViewButtonService extends Service {
     private Handler mHandler;
     private Vibrator vibrator;
     private ImageView viewbutton;
+    public int viewBitmapId = 0;
+    public int viewBitmapSmallId = 0;
     WindowManager.LayoutParams mParams;
     NotificationManagerCompat notificationManager;
     public static JsonObject currentApiData;
@@ -149,8 +157,18 @@ public class KcaViewButtonService extends Service {
         notificationManager = NotificationManagerCompat.from(getApplicationContext());
         mView = mInflater.inflate(R.layout.view_button, null);
         viewbutton = (ImageView) mView.findViewById(R.id.viewbutton);
+        String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
+        viewBitmapId = getId(fairyId, R.mipmap.class);
+        viewBitmapSmallId = getId(fairyId.concat("_small"), R.mipmap.class);
+        viewbutton.setImageResource(viewBitmapId);
         viewbutton.getDrawable().clearColorFilter();
         viewbutton.setOnTouchListener(mViewTouchListener);
+
+        int fairyIdValue = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
+        int index = Arrays.binarySearch(FAIRY_REVERSE_LIST, fairyIdValue);
+        if (index >= 0) viewbutton.setScaleX(-1.0f);
+        else viewbutton.setScaleX(1.0f);
+
         mParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -312,8 +330,8 @@ public class KcaViewButtonService extends Service {
                 removeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.mipmap.noti_icon4)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.noti_icon3))
+                        .setSmallIcon(viewBitmapSmallId)
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), viewBitmapId))
                         .setContentTitle(getStringWithLocale(R.string.fairy_hidden_notification_title))
                         .setContentText(getStringWithLocale(R.string.fairy_hidden_notification_text))
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(getStringWithLocale(R.string.fairy_hidden_notification_bigtext)))

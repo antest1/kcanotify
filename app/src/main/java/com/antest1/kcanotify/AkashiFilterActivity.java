@@ -2,7 +2,6 @@ package com.antest1.kcanotify;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,26 +10,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.antest1.kcanotify.KcaApiData.T3LIST_IMPROVABLE;
-import static com.antest1.kcanotify.KcaApiData.findRemodelLv;
-import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
-import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
-import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
-import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
-import static com.antest1.kcanotify.KcaApiData.removeKai;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
-import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
@@ -76,10 +64,10 @@ public class AkashiFilterActivity extends AppCompatActivity {
                     String filter = getStringPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST);
                     if(checkFiltered(filter, type)) {
                         setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST, deleteFiltered(filter, type));
-                        btnView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.akashi_filter_btn_on));
+                        btnView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.imagebtn_on));
                     } else {
                         setPreferences(getApplicationContext(), PREF_AKASHI_FILTERLIST, addFiltered(filter, type));
-                        btnView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.akashi_filter_btn_off));
+                        btnView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.imagebtn_off));
                     }
                     sHandler.sendEmptyMessage(0);
                 }
@@ -168,9 +156,9 @@ public class AkashiFilterActivity extends AppCompatActivity {
             int btnId = getId("akashi_filter_equip_btn_".concat(String.valueOf(type)), R.id.class);
             ImageView btnView = (ImageView) findViewById(btnId);
             if(checkFiltered(filter, type)) {
-                btnView.setBackground(ContextCompat.getDrawable(this, R.drawable.akashi_filter_btn_off));
+                btnView.setBackground(ContextCompat.getDrawable(this, R.drawable.imagebtn_off));
             } else {
-                btnView.setBackground(ContextCompat.getDrawable(this, R.drawable.akashi_filter_btn_on));
+                btnView.setBackground(ContextCompat.getDrawable(this, R.drawable.imagebtn_on));
             }
         }
     }

@@ -285,5 +285,8 @@
     <string name="akashi_filter_equip_rev">선택반전</string>
     <string name="akashi_filter_equip_none">전체해제</string>
     <string name="akashi_filter_equip_all">전체선택</string>
+    <string name="setting_menu_kand_desc_fairy_select">함께 할 요정님을 선택</string>
+    <string name="setting_menu_kand_title_fairy_select">요정 선택</string>
+    <string name="current_fairy_changed_in_next">※ 현재 전투예보/임무번역이 끝난 후 변경됩니다.</string>
 
 </resources>

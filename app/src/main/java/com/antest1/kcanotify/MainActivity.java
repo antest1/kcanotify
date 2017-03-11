@@ -55,6 +55,7 @@ import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
@@ -302,6 +303,9 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_AKASHI_STARLIST:
                     case PREF_AKASHI_FILTERLIST:
                         editor.putString(prefKey, "|");
+                        break;
+                    case PREF_FAIRY_ICON:
+                        editor.putString(prefKey, "0");
                         break;
                     default:
                         editor.putString(prefKey, "");
