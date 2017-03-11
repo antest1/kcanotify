@@ -57,6 +57,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaService.kca_version;
+import static com.antest1.kcanotify.KcaUtils.compareVersion;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -79,7 +80,7 @@ public class SettingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.action_settings));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        silentText = getString(R.string.settings_string_silent);;
+        silentText = getString(R.string.settings_string_silent);
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.fragment_container, new PrefsFragment()).commit();
@@ -306,7 +307,7 @@ public class SettingActivity extends AppCompatActivity {
                 JsonObject jsonDataObj = new JsonParser().parse(result).getAsJsonObject();
                 if (jsonDataObj.has("version")) {
                     String recentVersion = jsonDataObj.get("version").getAsString();
-                    if (recentVersion.equals(currentVersion)) {
+                    if (compareVersion(currentVersion, recentVersion)) { // True if latest
                         if(toastflag) {
                             Toast.makeText(context.getApplicationContext(),
                                     String.format(context.getString(R.string.sa_checkupdate_latest), currentVersion),

@@ -290,9 +290,9 @@ public class KcaUtils {
     // True: latest, False: need to update
     public static boolean compareVersion(String version_current, String version_default) {
         if (version_current.equals(version_default)) return true;
-        String[] current_split = version_current.split(".");
-        String[] default_split = version_default.split(".");
-        int min_length = Math.max(current_split.length, default_split.length);
+        String[] current_split = version_current.replace("r",".").split("\\.");
+        String[] default_split = version_default.replace("r",".").split("\\.");
+        int min_length = Math.min(current_split.length, default_split.length);
         for (int i = 0; i < min_length; i++) {
             if (Integer.parseInt(current_split[i]) > Integer.parseInt(default_split[i])) return true;
             else if (Integer.parseInt(current_split[i]) < Integer.parseInt(default_split[i])) return false;
