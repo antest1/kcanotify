@@ -180,7 +180,7 @@ public class KcaViewButtonService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getAction() != null) {
-            if (intent.getAction().equals(RETURN_FAIRY_ACTION)) {
+            if (intent.getAction().equals(REMOVE_FAIRY_ACTION)) {
                 notificationManager.cancel(FAIRY_NOTIFICATION_ID);
             }
             if (intent.getAction().equals(RETURN_FAIRY_ACTION)) {
