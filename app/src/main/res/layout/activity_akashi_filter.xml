@@ -289,7 +289,7 @@
                 android:layout_height="match_parent">
 
                 <Button
-                    android:text="전체선택"
+                    android:text="@string/akashi_filter_equip_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/akashi_filter_btn_all"
@@ -297,12 +297,12 @@
                     android:background="@color/colorBtn"
                     android:padding="3dp"
                     android:stateListAnimator="@null"
-                    android:textSize="14dp"
                     android:layout_margin="5dp"
-                    style="@android:style/Widget.Button.Small" />
+                    style="@android:style/Widget.Button"
+                    android:textSize="14dp" />
 
                 <Button
-                    android:text="전체해제"
+                    android:text="@string/akashi_filter_equip_none"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/akashi_filter_btn_none"
@@ -310,12 +310,12 @@
                     android:background="@color/colorBtn"
                     android:padding="3dp"
                     android:stateListAnimator="@null"
-                    android:textSize="14dp"
                     android:layout_margin="5dp"
-                    style="@android:style/Widget.Button.Small" />
+                    style="@android:style/Widget.Button"
+                    android:textSize="14dp" />
 
                 <Button
-                    android:text="선택반전"
+                    android:text="@string/akashi_filter_equip_rev"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/akashi_filter_btn_reverse"
@@ -323,9 +323,9 @@
                     android:background="@color/colorBtn"
                     android:padding="3dp"
                     android:stateListAnimator="@null"
-                    android:textSize="14dp"
                     android:layout_margin="5dp"
-                    style="@android:style/Widget.Button.Small" />
+                    style="@android:style/Widget.Button"
+                    android:textSize="14dp" />
             </LinearLayout>
 
         </LinearLayout>

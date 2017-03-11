@@ -85,7 +85,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- MainActivity Strings -->
     <string name="ma_toast_kancolle_not_installed">Kancolle For Android is not installed.</string>
     <string name="ma_toast_overay_diabled">Screen Overlay Permission is required for BattleView.\nEnable Screen Overlay at Settings > Screen Overlay Settings.</string>
-    <string name="description"><b>Help</b>\nTurn on VPN and SVC then run Kancolle\n\n※ VPN is required for detecting game data. \n※ You cannot receive notifications if SVC is disabled (for now)\n\n<b>Main Features</b>\n - Expedition/Docking notifications \n - Heavy Damage Alert (prior to/during combat)\n - LoS/FP/Fatigue indicators\n - Node tracking during sorties\n - BattleView (Beta)\n - Send statistics to OpenDB (optional)</string>
+    <string name="description"><b>Help</b>\nTurn on VPN and SVC then run Kancolle\n\n※ VPN is required for detecting game data. \n※ You cannot receive notifications if SVC is disabled (for now)\n\n<b>Main Features</b>\n - Expedition/Docking notifications \n - Heavy Damage Alert (prior to/during combat)\n - LoS/FP/Fatigue indicators\n - Node tracking during sorties\n - BattleView / QuestView\n - Improvement Arsenal Chart\n - Send statistics to OpenDB (optional)\n \nVisit http://swaytwig.com/kcanotify for detail. (Korean)</string>
 
     <!-- SettingActivity Strings -->
     <string name="sa_checkupdate_latest" formatted="false">You have the latest version. (%s)</string>
@@ -330,5 +330,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_term_day_6">Sat</string>
 
     <string name="akashi_filter_equip_title">Filter by Equipment Type</string>
+    <string name="akashi_filter_equip_all">ALL</string>
+    <string name="akashi_filter_equip_none">CLEAR</string>
+    <string name="akashi_filter_equip_rev">REVERSE</string>
 
 </resources>
