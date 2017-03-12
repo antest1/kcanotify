@@ -243,6 +243,7 @@ public final class KcaConstants {
     public static final int ITEM_BOXM = 11;
     public static final int ITEM_BOXL = 12;
 
+    public static final String PREF_COUNT = "app_count";
     public static final String PREF_VPN_ENABLED = "enabled";
     public static final String PREF_SVC_ENABLED = "svcenabled";
 

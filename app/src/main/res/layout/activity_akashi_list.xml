@@ -96,10 +96,11 @@
                 android:layout_weight="1"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_0"
-                android:textAlignment="center"
+                android:textAlignment="gravity"
                 android:textSize="18dp"
                 android:textColor="@color/black"
-                android:background="@color/colorBtn" />
+                android:background="@color/colorBtn"
+                android:gravity="center_vertical|center_horizontal" />
 
             <TextView
                 android:id="@+id/akashi_day_1"
@@ -109,9 +110,10 @@
                 android:background="@color/colorBtn"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_1"
-                android:textAlignment="center"
+                android:textAlignment="gravity"
                 android:textSize="18dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:gravity="center_vertical|center_horizontal" />
 
             <TextView
                 android:id="@+id/akashi_day_2"
@@ -121,9 +123,10 @@
                 android:background="@color/colorBtn"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_2"
-                android:textAlignment="center"
+                android:textAlignment="gravity"
                 android:textSize="18dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:gravity="center_vertical|center_horizontal" />
 
             <TextView
                 android:id="@+id/akashi_day_3"
@@ -133,9 +136,10 @@
                 android:background="@color/colorBtn"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_3"
-                android:textAlignment="center"
+                android:textAlignment="gravity"
                 android:textSize="18dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:gravity="center_vertical|center_horizontal" />
 
             <TextView
                 android:id="@+id/akashi_day_4"
@@ -145,9 +149,10 @@
                 android:background="@color/colorBtn"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_4"
-                android:textAlignment="center"
+                android:textAlignment="gravity"
                 android:textSize="18dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:gravity="center_vertical|center_horizontal" />
 
             <TextView
                 android:id="@+id/akashi_day_5"
@@ -157,9 +162,10 @@
                 android:background="@color/colorBtn"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_5"
-                android:textAlignment="center"
+                android:textAlignment="gravity"
                 android:textSize="18dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:gravity="center_vertical|center_horizontal" />
 
             <TextView
                 android:id="@+id/akashi_day_6"
@@ -169,9 +175,10 @@
                 android:background="@color/colorBtn"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_6"
-                android:textAlignment="center"
+                android:textAlignment="gravity"
                 android:textSize="18dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:gravity="center_vertical|center_horizontal" />
         </LinearLayout>
 
 
@@ -183,7 +190,8 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:layout_marginStart="4dp"
-            android:listSelector="@android:color/transparent" />
+            android:listSelector="@android:color/transparent"
+            android:layout_weight="1" />
 
 
     </LinearLayout>

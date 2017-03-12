@@ -55,6 +55,7 @@ import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
+import static com.antest1.kcanotify.KcaConstants.PREF_COUNT;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
@@ -73,6 +74,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
+import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getLocaleInArray;
@@ -100,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textDescription = null;
     Gson gson = new Gson();
 
+    SharedPreferences prefs;
     Boolean is_kca_installed = false;
     private WindowManager windowManager;
 
@@ -111,8 +114,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vpn_main);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         assetManager = getAssets();
+
+        if (!prefs.contains(PREF_COUNT)) {
+            prefs.edit().putInt(PREF_COUNT, 0).apply();
+        } else {
+            prefs.edit().putInt(PREF_COUNT, prefs.getInt(PREF_COUNT, 0) + 1).apply();
+        }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -126,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
         vpnbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 if (isChecked) {
                     try {
                         final Intent prepare = VpnService.prepare(MainActivity.this);
@@ -151,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
         svcbtn.setOnClickListener(new CompoundButton.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 Intent intent = new Intent(MainActivity.this, KcaService.class);
                 if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
                     if (is_kca_installed) {
@@ -316,12 +323,19 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    private boolean _2_3_fix_func() {
+        if (compareVersion(BuildConfig.VERSION_NAME, "2.3r4")) {
+            return prefs.getInt(PREF_COUNT, 0) > 0;
+        }
+        else return true;
+    }
+
     private int setDefaultGameData() {
         String current_version = getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
         String default_version = getString(R.string.default_gamedata_version);
         JsonObject cachedData = readCacheData(getApplicationContext(), KCANOTIFY_S2_CACHE_FILENAME);
         boolean isValidCachedData = cachedData != null && !cachedData.isJsonNull() && cachedData.has("api_data");
-        if (current_version.length() > 0 && isValidCachedData && KcaUtils.compareVersion(current_version, default_version)) {
+        if (_2_3_fix_func() || (current_version.length() > 0 && isValidCachedData && KcaUtils.compareVersion(current_version, default_version))) {
             Log.e("KCA", "latest KCA data");
             KcaApiData.getKcGameData(cachedData);
             return 1;
