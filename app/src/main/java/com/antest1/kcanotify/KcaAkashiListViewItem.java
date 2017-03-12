@@ -1,13 +1,10 @@
 package com.antest1.kcanotify;
 
-import android.util.Log;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
@@ -16,7 +13,6 @@ import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.removeKai;
 import static com.antest1.kcanotify.KcaUtils.getId;
-import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaAkashiListViewItem {
