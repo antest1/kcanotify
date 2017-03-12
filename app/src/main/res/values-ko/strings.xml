@@ -103,6 +103,7 @@
 
     <string name="kca_toast_restart_at_kcanotify">깡들리티에서 게임을 다시 시작해주세요</string>
     <string name="kca_toast_get_data_at_settings">게임 데이터가 완전히 로딩되지 않았습니다. 만약 긴 시간이 지나도 완료되지 않는 경우 깡들리티 설정에서 게임 데이터를 수동으로 받아주세요</string>
+    <string name="kca_toast_get_data_at_settings_2">게임 데이터에 이상이 있습니다. 깡들리티 설정에서 게임 데이터를 수동으로 받아주세요.</string>
     <string name="kca_toast_loading_data">게임 데이터 로딩 중</string>
     <string name="kca_toast_inconsistent_data">현재 버전의 데이터가 원격 서버에 업로드하지 않았습니다.\n잠시 후(10~20분 뒤) 다시 시도해주세요.</string>
     <string name="kca_toast_ioexceptionerror">데이터 캐시에 쓰는 중 오류 발생</string>
