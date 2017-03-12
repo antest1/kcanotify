@@ -198,7 +198,8 @@ public class KcaService extends Service {
         String initContent = getStringWithLocale(R.string.kca_init_content);
         String initSubContent = String.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
         kcaFirstDeckInfo = getStringWithLocale(R.string.kca_init_content);
-        startForeground(getNotificationId(NOTI_FRONT, 1), createViewNotification(initTitle, initContent, initSubContent));
+
+        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), createViewNotification(initTitle, initContent, initSubContent));
         isServiceOn = true;
 
         KcaExpedition.setContext(getApplicationContext());
