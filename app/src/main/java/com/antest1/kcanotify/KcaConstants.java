@@ -11,8 +11,8 @@ public final class KcaConstants {
     public static final String KCANOTIFY_S2_CACHE_FILENAME = "kca_api_start2";
     public static final String KCANOTIFY_USERITEM_CACHE_FILENAME = "kca_userslotitem";
 
-    public static final int FAIRY_TOTAL_COUNT = 6;
-    public static final int[] FAIRY_REVERSE_LIST = {0, 1, 2};
+    public static final int FAIRY_TOTAL_COUNT = 20;
+    public static final int[] FAIRY_REVERSE_LIST = {0, 1, 2, 8, 9, 11, 12, 15, 19};
 
     public static final String API_PORT = "/api_port/port";
     public static final String API_WORLD_GET_ID = "/api_world/get_id";
