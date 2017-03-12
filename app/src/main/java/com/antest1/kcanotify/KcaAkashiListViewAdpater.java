@@ -52,36 +52,39 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
         final int pos = position;
         final Context context = parent.getContext();
 
+        View v = convertView;
         // format: |1|23|55|260|
         String starlistData = getStringPreferences(context, PREF_AKASHI_STARLIST);
-        if (convertView == null) {
+        if (v == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.listview_equip_item, parent, false);
+            v = inflater.inflate(R.layout.listview_equip_item, parent, false);
+            ViewHolder holder = new ViewHolder();
+            holder.itemView = (LinearLayout) v.findViewById(R.id.akashi_improv_item_area);
+            holder.iconView = (ImageView) v.findViewById(R.id.akashi_improv_icon);
+            holder.nameView = (TextView) v.findViewById(R.id.akashi_improv_name);
+            holder.screwView = (TextView) v.findViewById(R.id.akashi_improv_screws);
+            holder.supportView = (TextView) v.findViewById(R.id.akashi_improv_support);
+            holder.starView = (TextView) v.findViewById(R.id.akashi_improv_star);
+            v.setTag(holder);
         }
-
-        LinearLayout itemView = (LinearLayout) convertView.findViewById(R.id.akashi_improv_item_area);
-        ImageView iconView = (ImageView) convertView.findViewById(R.id.akashi_improv_icon);
-        TextView nameView = (TextView) convertView.findViewById(R.id.akashi_improv_name);
-        TextView screwView = (TextView) convertView.findViewById(R.id.akashi_improv_screws);
-        TextView supportView = (TextView) convertView.findViewById(R.id.akashi_improv_support);
-        TextView starView = (TextView) convertView.findViewById(R.id.akashi_improv_star);
 
         KcaAkashiListViewItem item = listViewItemList.get(position);
         final int itemId = item.getEquipId();
         final String itemImprovmentData = item.getEquipImprovmentData().toString();
 
-        iconView.setImageResource(item.getEquipIconMipmap());
-        nameView.setText(item.getEquipName());
-        screwView.setText(item.getEquipScrews());
-        supportView.setText(item.getEquipSupport());
-        screwView.setTextColor(ContextCompat.getColor(context, getScrewTextColor(isSafeChecked)));
+        ViewHolder holder = (ViewHolder) v.getTag();
+        holder.iconView.setImageResource(item.getEquipIconMipmap());
+        holder.nameView.setText(item.getEquipName());
+        holder.screwView.setText(item.getEquipScrews());
+        holder.supportView.setText(item.getEquipSupport());
+        holder.screwView.setTextColor(ContextCompat.getColor(context, getScrewTextColor(isSafeChecked)));
         if (checkStarred(starlistData, itemId)) {
-            starView.setText(context.getString(R.string.aa_btn_star1));
+            holder.starView.setText(context.getString(R.string.aa_btn_star1));
         } else {
-            starView.setText(context.getString(R.string.aa_btn_star0));
+            holder.starView.setText(context.getString(R.string.aa_btn_star0));
         }
 
-        itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, AkashiDetailActivity.class);
@@ -91,7 +94,7 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
             }
         });
 
-        starView.setOnClickListener(new View.OnClickListener() {
+        holder.starView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String starred = getStringPreferences(context, PREF_AKASHI_STARLIST);
@@ -110,7 +113,16 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
             }
         });
 
-        return convertView;
+        return v;
+    }
+
+    static class ViewHolder {
+        LinearLayout itemView;
+        ImageView iconView;
+        TextView nameView;
+        TextView screwView;
+        TextView supportView;
+        TextView starView;
     }
 
     public void setListViewItemList(ArrayList<KcaAkashiListViewItem> list) {

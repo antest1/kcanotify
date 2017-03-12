@@ -75,10 +75,11 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_col_label0_1"
                         android:layout_weight="0.16"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="12dp"
-                        android:background="@color/colorAccent" />
+                        android:background="@color/colorAccent"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="@string/item_mmat"
@@ -86,10 +87,11 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_col_label1_1"
                         android:layout_weight="0.2"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="12dp"
-                        android:background="@color/colorAccent" />
+                        android:background="@color/colorAccent"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="@string/item_kmat"
@@ -97,10 +99,11 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_col_label2_1"
                         android:layout_weight="0.2"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="12dp"
-                        android:background="@color/colorAccent" />
+                        android:background="@color/colorAccent"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="@string/akashi_term_equip"
@@ -108,16 +111,18 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_col_label3_1"
                         android:layout_weight="0.44"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="12dp"
-                        android:background="@color/colorAccent" />
+                        android:background="@color/colorAccent"
+                        android:gravity="center_vertical|center_horizontal" />
                 </LinearLayout>
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     app:srcCompat="@android:color/darker_gray"
-                    android:id="@+id/akashi_improv_detail_border1_1" />
+                    android:id="@+id/akashi_improv_detail_border1_1"
+                    android:textAlignment="gravity" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
@@ -128,9 +133,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_row_label1_1"
                         android:layout_weight="0.16"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="3 / 5"
@@ -138,9 +144,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_m1_1"
                         android:layout_weight="0.2"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="3 / 5"
@@ -148,9 +155,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_s1_1"
                         android:layout_weight="0.2"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="영식함전 21형 x 2"
@@ -158,9 +166,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_e1_1"
                         android:layout_weight="0.44"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="10dp" />
+                        android:textSize="10dp"
+                        android:gravity="center_vertical|center_horizontal" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -173,9 +182,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_row_label2_1"
                         android:layout_weight="0.16"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="3 / 5"
@@ -183,9 +193,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_m2_1"
                         android:layout_weight="0.2"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="3 / 5"
@@ -193,9 +204,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_s2_1"
                         android:layout_weight="0.2"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="영식함전 21형 x 2"
@@ -203,9 +215,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_e2_1"
                         android:layout_weight="0.44"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="10dp" />
+                        android:textSize="10dp"
+                        android:gravity="center_vertical|center_horizontal" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -242,9 +255,10 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/akashi_improv_detail_m3_1"
                                 android:layout_weight="0.2"
-                                android:textAlignment="center"
+                                android:textAlignment="gravity"
                                 android:textColor="@color/black"
-                                android:textSize="12dp" />
+                                android:textSize="12dp"
+                                android:gravity="center_vertical|center_horizontal" />
 
                             <TextView
                                 android:text="3 / 5"
@@ -252,9 +266,10 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/akashi_improv_detail_s3_1"
                                 android:layout_weight="0.2"
-                                android:textAlignment="center"
+                                android:textAlignment="gravity"
                                 android:textColor="@color/black"
-                                android:textSize="12dp" />
+                                android:textSize="12dp"
+                                android:gravity="center_vertical|center_horizontal" />
 
                             <TextView
                                 android:text="영식함전 21형 x 2"
@@ -262,9 +277,10 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/akashi_improv_detail_e3_1"
                                 android:layout_weight="0.44"
-                                android:textAlignment="center"
+                                android:textAlignment="gravity"
                                 android:textColor="@color/black"
-                                android:textSize="10dp" />
+                                android:textSize="10dp"
+                                android:gravity="center_vertical|center_horizontal" />
                         </LinearLayout>
 
                         <TextView
@@ -272,9 +288,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/akashi_improv_detail_upgrade_1"
-                            android:textAlignment="center"
+                            android:textAlignment="gravity"
                             android:textColor="@color/colorAkashiUpgradeEquip"
-                            android:textSize="12dp" />
+                            android:textSize="12dp"
+                            android:gravity="center_vertical|center_horizontal" />
 
                     </LinearLayout>
 
@@ -307,9 +324,10 @@
                     android:id="@+id/akashi_improv_consume_1"
                     android:layout_weight="0.84"
                     android:textColor="@color/black"
-                    android:textAlignment="center"
+                    android:textAlignment="gravity"
                     android:textSize="11dp"
-                    android:background="@color/colorAkashiTableBack" />
+                    android:background="@color/colorAkashiTableBack"
+                    android:gravity="center_vertical|center_horizontal" />
             </LinearLayout>
 
 
@@ -338,9 +356,10 @@
                     android:id="@+id/akashi_improv_support_1"
                     android:layout_weight="0.84"
                     android:textColor="@color/black"
-                    android:textAlignment="center"
+                    android:textAlignment="gravity"
                     android:textSize="11dp"
-                    android:background="@color/colorAkashiTableBack" />
+                    android:background="@color/colorAkashiTableBack"
+                    android:gravity="center_vertical|center_horizontal" />
             </LinearLayout>
 
         </LinearLayout>
@@ -378,10 +397,11 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_col_label0_2"
                         android:layout_weight="0.16"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="12dp"
-                        android:background="@color/colorAccent" />
+                        android:background="@color/colorAccent"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="@string/item_mmat"
@@ -389,10 +409,11 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_col_label1_2"
                         android:layout_weight="0.2"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="12dp"
-                        android:background="@color/colorAccent" />
+                        android:background="@color/colorAccent"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="@string/item_kmat"
@@ -400,10 +421,11 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_col_label2_2"
                         android:layout_weight="0.2"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="12dp"
-                        android:background="@color/colorAccent" />
+                        android:background="@color/colorAccent"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="@string/akashi_term_equip"
@@ -411,16 +433,18 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_col_label3_2"
                         android:layout_weight="0.44"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="12dp"
-                        android:background="@color/colorAccent" />
+                        android:background="@color/colorAccent"
+                        android:gravity="center_vertical|center_horizontal" />
                 </LinearLayout>
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     app:srcCompat="@android:color/darker_gray"
-                    android:id="@+id/akashi_improv_detail_border1_2" />
+                    android:id="@+id/akashi_improv_detail_border1_2"
+                    android:textAlignment="gravity" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -432,9 +456,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_row_label1_2"
                         android:layout_weight="0.16"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="3 / 5"
@@ -442,9 +467,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_m1_2"
                         android:layout_weight="0.2"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="3 / 5"
@@ -452,9 +478,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_s1_2"
                         android:layout_weight="0.2"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="영식함전 21형 x 2"
@@ -462,9 +489,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_e1_2"
                         android:layout_weight="0.44"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="10dp" />
+                        android:textSize="10dp"
+                        android:gravity="center_vertical|center_horizontal" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -477,9 +505,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_row_label2_2"
                         android:layout_weight="0.16"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="3 / 5"
@@ -487,9 +516,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_m2_2"
                         android:layout_weight="0.2"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="3 / 5"
@@ -497,9 +527,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_s2_2"
                         android:layout_weight="0.2"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
                     <TextView
                         android:text="영식함전 21형 x 2"
@@ -507,9 +538,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/akashi_improv_detail_e2_2"
                         android:layout_weight="0.44"
-                        android:textAlignment="center"
+                        android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="10dp" />
+                        android:textSize="10dp"
+                        android:gravity="center_vertical|center_horizontal" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -558,7 +590,8 @@
                                 android:layout_weight="0.2"
                                 android:textAlignment="center"
                                 android:textColor="@color/black"
-                                android:textSize="12dp" />
+                                android:textSize="12dp"
+                                android:gravity="center_vertical|center_horizontal" />
 
                             <TextView
                                 android:text="영식함전 21형 x 2"
@@ -568,7 +601,8 @@
                                 android:layout_weight="0.44"
                                 android:textAlignment="center"
                                 android:textColor="@color/black"
-                                android:textSize="10dp" />
+                                android:textSize="10dp"
+                                android:gravity="center_vertical|center_horizontal" />
                         </LinearLayout>
 
                         <TextView
@@ -578,7 +612,8 @@
                             android:id="@+id/akashi_improv_detail_upgrade_2"
                             android:textAlignment="center"
                             android:textColor="@color/colorAkashiUpgradeEquip"
-                            android:textSize="12dp" />
+                            android:textSize="12dp"
+                            android:gravity="center_vertical|center_horizontal" />
 
                     </LinearLayout>
 
@@ -613,7 +648,8 @@
                     android:textColor="@color/black"
                     android:textAlignment="center"
                     android:textSize="11dp"
-                    android:background="@color/colorAkashiTableBack" />
+                    android:background="@color/colorAkashiTableBack"
+                    android:gravity="center_vertical|center_horizontal" />
             </LinearLayout>
 
             <LinearLayout
@@ -643,7 +679,8 @@
                     android:textColor="@color/black"
                     android:textAlignment="center"
                     android:textSize="11dp"
-                    android:background="@color/colorAkashiTableBack" />
+                    android:background="@color/colorAkashiTableBack"
+                    android:gravity="center_vertical|center_horizontal" />
             </LinearLayout>
 
         </LinearLayout>
