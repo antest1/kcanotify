@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
         if (current_version.length() > 0 && cachedData != null && KcaUtils.compareVersion(current_version, default_version)) {
             Log.e("KCA", "latest KCA data");
             JsonObject kcDataObj = cachedData;
-            KcaApiData.getKcGameData(kcDataObj);
+            KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
             return 1;
         } else {
             try {
