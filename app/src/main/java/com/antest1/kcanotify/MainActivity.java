@@ -320,10 +320,10 @@ public class MainActivity extends AppCompatActivity {
         String current_version = getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
         String default_version = getString(R.string.default_gamedata_version);
         JsonObject cachedData = readCacheData(getApplicationContext(), KCANOTIFY_S2_CACHE_FILENAME);
-        if (current_version.length() > 0 && cachedData != null && KcaUtils.compareVersion(current_version, default_version)) {
+        boolean isValidCachedData = cachedData != null && !cachedData.isJsonNull() && cachedData.has("api_data");
+        if (current_version.length() > 0 && isValidCachedData && KcaUtils.compareVersion(current_version, default_version)) {
             Log.e("KCA", "latest KCA data");
-            JsonObject kcDataObj = cachedData;
-            KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
+            KcaApiData.getKcGameData(cachedData);
             return 1;
         } else {
             try {
