@@ -28,6 +28,7 @@ Download
 - 출격 중 현재 위치 표시
 - 전투 예보 (제공권, 드랍 등)
 - 임무 번역
+- 개수공창표
 - OpenDB에 데이터 전송
 
 자세한 내용은 [이 글](http://gall.dcinside.com/board/view/?id=kancolle&no=5357703)을 참고하세요. (Korean)
@@ -40,6 +41,7 @@ Attribution
 - 해역 노드 정보는 [KC3Kai](https://github.com/KC3Kai/KC3Kai)의 데이터를 사용하고 있습니다. 
   - License for KC3Kai: The MIT License [Text](https://github.com/KC3Kai/KC3Kai/blob/master/LICENSE)
 - 색적 및 제공치 계산식은 [艦隊シミュレーター＆デッキビルダー](http://kancolle-calc.net/deckbuilder.html)의 코드를 일부 차용 및 수정하여 작성되었습니다.
+- 개수공창 정보는 [KC3Kai](https://github.com/KC3Kai/KC3Kai) 및 [明石の改修工廠早見表](http://akashi-list.me)의 데이터를 참고하고 있습니다.
 
 문의
 -------
