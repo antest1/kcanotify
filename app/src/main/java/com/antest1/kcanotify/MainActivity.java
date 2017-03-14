@@ -121,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.app_name);
         prefs.edit().putBoolean(PREF_SVC_ENABLED, KcaService.getServiceStatus()).apply();
 
+        PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
+        setDefaultPreferences();
+
         kcIntent = getKcIntent(getApplicationContext());
         is_kca_installed = (kcIntent != null);
 
@@ -195,8 +198,7 @@ public class MainActivity extends AppCompatActivity {
         Linkify.addLinks(textDescription, Linkify.WEB_URLS);
 
         ctx = getApplicationContext();
-        PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
-        setDefaultPreferences();
+
         int setDefaultGameDataResult = setDefaultGameData();
         if (setDefaultGameDataResult != 1) {
             Toast.makeText(this, "error loading game data", Toast.LENGTH_LONG).show();
@@ -292,7 +294,10 @@ public class MainActivity extends AppCompatActivity {
                         editor.putBoolean(prefKey, true);
                         break;
                     case PREF_KCA_LANGUAGE:
-                        editor.putString(prefKey, getLocaleInArray(this, Locale.getDefault().getLanguage()));
+                        String language = Locale.getDefault().getLanguage();
+                        String country = Locale.getDefault().getCountry();
+                        String localecode = language.concat("-").concat(country);
+                        editor.putString(prefKey, getLocaleInArray(this, localecode));
                         break;
                     case PREF_KCA_NOTI_SOUND_KIND:
                         editor.putString(prefKey, getString(R.string.sound_kind_value_vibrate));

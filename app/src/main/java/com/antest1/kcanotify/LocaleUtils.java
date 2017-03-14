@@ -36,4 +36,21 @@ public class LocaleUtils {
             res.updateConfiguration(config, res.getDisplayMetrics());
         }
     }
+
+    public static String getLocaleCode(String pref) {
+        switch(pref) {
+            case "ko-KR":
+                return "ko";
+            case "en-US":
+                return "en";
+            case "zh-CN":
+                return "scn";
+            case "zh-TW":
+                return "tcn";
+            case "ja-JP":
+                return "jp";
+            default:
+                return "en";
+        }
+    }
 }

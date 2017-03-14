@@ -15,6 +15,8 @@ import java.util.Map;
 import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
 import static com.antest1.kcanotify.KcaApiData.kcMissionData;
 import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
 
 public class KcaExpedition implements Runnable {
     public static Context ctx;
@@ -57,10 +59,11 @@ public class KcaExpedition implements Runnable {
 
     public KcaExpedition(int no, int kidx, String name, long time, Handler h) {
         if(KcaApiData.kcSimpleExpeditionData == null) return;
+        String locale = getLocaleCode(getStringPreferences(ctx, PREF_KCA_LANGUAGE));
 
         mission_no = no;
         mission_krname = KcaApiData.kcSimpleExpeditionData.getAsJsonObject(String.valueOf(mission_no))
-                .get(String.format("name-".concat(KcaUtils.getStringPreferences(ctx, PREF_KCA_LANGUAGE)))).getAsString();
+                .get(String.format("name-".concat(locale))).getAsString();
         kantai_idx = kidx;
         kantai_name = name;
 

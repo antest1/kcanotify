@@ -33,6 +33,7 @@ import java.util.Set;
 
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
+import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
 
 public class KcaApiData {
     public static JsonObject kcGameData = null;
@@ -312,13 +313,13 @@ public class KcaApiData {
         return !(mission_no == 33 || mission_no == 34 || mission_no > 100);
     }
 
-    public static boolean checkKrTranslation() {
-        return kcShipTranslationData != null;
-    }
-
-    public static String getShipTranslation(String jp_name, boolean abbr) {
+   public static String getShipTranslation(String jp_name, boolean abbr) {
         String name = jp_name;
         String name_suffix = "";
+        if (!kcShipTranslationData.has("suffixes")) {
+            return jp_name;
+        }
+
         JsonObject suffixes = kcShipTranslationData.getAsJsonObject("suffixes");
         for (Map.Entry<String, JsonElement> entry : suffixes.entrySet()) {
             if (jp_name.endsWith(entry.getKey())) {
@@ -374,9 +375,7 @@ public class KcaApiData {
 
     public static int loadShipTranslationDataFromAssets(AssetManager am, String locale) {
         try {
-            if (!locale.equals("ko") && !locale.equals("en")) {
-                locale = "en";
-            }
+            locale = getLocaleCode(locale);
             AssetManager.AssetInputStream ais =
                     (AssetManager.AssetInputStream) am.open(String.format("ships-%s.json", locale));
             byte[] bytes = ByteStreams.toByteArray(ais);
@@ -401,9 +400,7 @@ public class KcaApiData {
 
     public static int loadItemTranslationDataFromAssets(AssetManager am, String locale) {
         try {
-            if (!locale.equals("ko") && !locale.equals("en")) {
-                locale = "en";
-            }
+            locale = getLocaleCode(locale);
             AssetManager.AssetInputStream ais =
                     (AssetManager.AssetInputStream) am.open(String.format("items-%s.json", locale));
             byte[] bytes = ByteStreams.toByteArray(ais);
@@ -422,9 +419,7 @@ public class KcaApiData {
 
     public static int loadQuestInfoDataFromAssets(AssetManager am, String locale) {
         try {
-            if (!locale.equals("ko") && !locale.equals("en")) {
-                locale = "en";
-            }
+            locale = getLocaleCode(locale);
             AssetManager.AssetInputStream ais =
                     (AssetManager.AssetInputStream) am.open(String.format("quests-%s.json", locale));
             byte[] bytes = ByteStreams.toByteArray(ais);

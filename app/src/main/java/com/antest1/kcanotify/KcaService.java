@@ -198,8 +198,7 @@ public class KcaService extends Service {
         String initContent = getStringWithLocale(R.string.kca_init_content);
         String initSubContent = String.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
         kcaFirstDeckInfo = getStringWithLocale(R.string.kca_init_content);
-
-        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), createViewNotification(initTitle, initContent, initSubContent));
+        startForeground(getNotificationId(NOTI_FRONT, 1), createViewNotification(initTitle, initContent, initSubContent));
         isServiceOn = true;
 
         KcaExpedition.setContext(getApplicationContext());
@@ -1971,9 +1970,9 @@ public class KcaService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage());
+            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
         } else {
-            Log.e("KCA", "lang: " + newConfig.locale.getLanguage());
+            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
         }
         // Force Locale Setting
         Locale locale = new Locale(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
@@ -1983,9 +1982,9 @@ public class KcaService extends Service {
             newConfig.locale = locale;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage());
+            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
         } else {
-            Log.e("KCA", "lang: " + newConfig.locale.getLanguage());
+            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
         }
         super.onConfigurationChanged(newConfig);
         //setFrontViewNotifier(FRONT_NONE, 0, null);

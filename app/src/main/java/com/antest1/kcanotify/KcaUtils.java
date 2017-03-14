@@ -222,12 +222,13 @@ public class KcaUtils {
         if (localeList.contains(locale)) {
             return locale;
         } else {
-            return "en";
+            return "en-US";
         }
     }
 
     public static Context getContextWithLocale(Context ac, Context bc) {
-        Locale locale = new Locale(getStringPreferences(ac, PREF_KCA_LANGUAGE));
+        String[] pref_locale = getStringPreferences(ac, PREF_KCA_LANGUAGE).split("-");
+        Locale locale = new Locale(pref_locale[0], pref_locale[1]);
         Configuration configuration = new Configuration(ac.getResources().getConfiguration());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             configuration.setLocale(locale);
@@ -241,7 +242,8 @@ public class KcaUtils {
     }
 
     public static String getStringWithLocale(Context ac, Context bc, int id) {
-        Locale locale = new Locale(getStringPreferences(ac, PREF_KCA_LANGUAGE));
+        String[] pref_locale = getStringPreferences(ac, PREF_KCA_LANGUAGE).split("-");
+        Locale locale = new Locale(pref_locale[0], pref_locale[1]);
         Configuration configuration = new Configuration(ac.getResources().getConfiguration());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             configuration.setLocale(locale);

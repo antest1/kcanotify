@@ -148,7 +148,8 @@ public class SettingActivity extends AppCompatActivity {
                     pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                         @Override
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            LocaleUtils.setLocale(new Locale((String) newValue));
+                            String[] locale = ((String) newValue).split("-");
+                            LocaleUtils.setLocale(new Locale(locale[0], locale[1]));
                             Toast.makeText(context, getString(R.string.sa_language_changed), Toast.LENGTH_LONG).show();
                             return true;
                         }
