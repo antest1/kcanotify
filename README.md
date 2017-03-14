@@ -45,11 +45,11 @@ Attribution
 
 문의
 -------
-건의나 오류 등이 문의사항은 아래의 이메일을 통해 보내주세요. 
-For suggestion or error report, please mail to me.
+건의나 오류 등이 문의사항은 아래의 이메일을 통해 보내주세요.   
+For suggestion or error report, please mail to me.  
 
-Translations to other languages are welcomed. (please contact to developer to email)
-I can speak Korean and English, and I can understand Japanese (but not good at writing).
+Translations to other languages are welcomed. (please contact to developer to email)  
+I can speak Korean and English, and I can understand Japanese (but not good at writing).  
 
 **※ From 2.0.1, English is default language for non-korean locale.**
 
