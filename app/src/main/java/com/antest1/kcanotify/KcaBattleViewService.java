@@ -1297,7 +1297,7 @@ public class KcaBattleViewService extends Service {
 
     private void sendReport(Exception e, int type) {
         error_flag = true;
-        mView.setVisibility(View.GONE);
+        if(mView != null) mView.setVisibility(View.GONE);
         String app_version = BuildConfig.VERSION_NAME;
         String token = "df1629d6820907e7a09ea1e98d3041c2";
         String kca_url = "";
