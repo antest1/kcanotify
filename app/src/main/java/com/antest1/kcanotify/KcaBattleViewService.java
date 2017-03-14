@@ -1279,16 +1279,22 @@ public class KcaBattleViewService extends Service {
         for (int i = 1; i < shipNameAreaViewList.length; i++) {
             if (rid == shipNameAreaViewList[i] || rid == shipLevelViewList[i]) {
                 api_data.addProperty("api_touched_idx", i);
-                if (friendShipData == null || (i <= 6 && i > friendShipData.size())) return -1;
-                if (enemyShipData == null || (i > 6 && i - 6 > enemyShipData.size())) return -1;
+                if (i <= 6) {
+                    if (friendShipData == null || i > friendShipData.size()) return -1;
+                } else {
+                    if (enemyShipData == null || i - 6 > enemyShipData.size()) return -1;
+                }
                 return i;
             }
         }
         for (int i = 1; i < shipNameAreaCombinedViewList.length; i++) {
             if (rid == shipNameAreaCombinedViewList[i] || rid == shipLevelCombinedViewList[i]) {
                 api_data.addProperty("api_touched_idx", 20 + i);
-                if (friendCombinedShipData == null || (i <= 6 && i > friendCombinedShipData.size())) return -1;
-                if (enemyCombinedShipData == null || (i > 6 && i - 6 > enemyCombinedShipData.size())) return -1;
+                if (i <= 6) {
+                    if (friendCombinedShipData == null || i > friendCombinedShipData.size()) return -1;
+                } else {
+                    if (enemyCombinedShipData == null || i - 6 > enemyCombinedShipData.size()) return -1;
+                }
                 return 20 + i;
             }
         }
