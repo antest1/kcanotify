@@ -37,6 +37,7 @@ public class KcaApplication extends Application {
             language = pref_locale[0];
             country = pref_locale[1];
         } else {
+            pref.edit().remove(PREF_KCA_LANGUAGE).apply();
             language = Locale.getDefault().getLanguage();
             country = Locale.getDefault().getCountry();
         }
