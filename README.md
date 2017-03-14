@@ -16,7 +16,7 @@ About Project
 
 Download
 -------
-- [Google Drive](http://bit.ly/2hNln5o)
+- [Box](http://bit.ly/kcanotify)
 - 이전 버전의 경우 다음 [Link](https://drive.google.com/drive/folders/0B8-RpEfBvSAlRzhDZ0taR1pKMFk)에서 설치
 
 주요 기능
