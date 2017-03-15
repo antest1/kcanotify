@@ -99,7 +99,7 @@
     <string name="kca_toast_airpower" formatted="false">제공: %d-%d</string>
     <string name="kca_toast_seekvalue_d" formatted="false">색적(%s): %d</string>
     <string name="kca_toast_seekvalue_f" formatted="false">색적(%s): %.2f</string>
-    <string name="kca_toast_tpvalue" formatted="false">TP: %d/%d</string>
+    <string name="kca_toast_tpvalue" formatted="false">TP: S%d/A%d</string>
 
     <string name="kca_toast_restart_at_kcanotify">깡들리티에서 게임을 다시 시작해주세요</string>
     <string name="kca_toast_get_data_at_settings">게임 데이터가 완전히 로딩되지 않았습니다. 만약 긴 시간이 지나도 완료되지 않는 경우 깡들리티 설정에서 게임 데이터를 수동으로 받아주세요</string>
@@ -229,7 +229,7 @@
     <string name="getship_label">드롭</string>
     <string name="getship_none">(없음)</string>
     <string name="getship_max">(슬롯 여유 없음)</string>
-    <string name="kca_view_tpvalue" formatted="false" >TP: %d/%d</string>
+    <string name="kca_view_tpvalue" formatted="false" >TP: S%d/A%d</string>
     <string name="ship_name_class">급</string>
     <string name="slot_empty">(장비 없음)</string>
     <string name="kca_view_condition_1" formatted="false">피로도 #1: %s</string>

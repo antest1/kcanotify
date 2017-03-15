@@ -107,7 +107,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_toast_airpower" formatted="false">FP: %d-%d</string>
     <string name="kca_toast_seekvalue_d" formatted="false">LoS(%s): %d</string>
     <string name="kca_toast_seekvalue_f" formatted="false">LoS(%s): %.2f</string>
-    <string name="kca_toast_tpvalue" formatted="false">TP: %d/%d</string>
+    <string name="kca_toast_tpvalue" formatted="false">TP: S%d/A%d</string>
 
     <string name="kca_toast_restart_at_kcanotify">Please restart the game using kcanotify.</string>
     <string name="kca_toast_get_data_at_settings">Game data is not loaded completely.\\nIf the data is not loaded for long time, download game data using kcanotify Settings manually.</string>
@@ -118,8 +118,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="kca_view_activate_vpn">Please Activate VPN Service.</string>
     <string name="kca_view_condition" formatted="false">Morale: %s</string>
-    <string name="kca_view_hdmg_damecon_format" formatted="false">[Provisions/Damecon available!] %s Ready %s</string>
-    <string name="kca_view_hdmg_format" formatted="false">[Provisions available!] %s Ready %s</string>
+    <string name="kca_view_hdmg_damecon_format" formatted="false">[Heavily Damaged!! (with Damecon)] %s Ready %s</string>
+    <string name="kca_view_hdmg_format" formatted="false">[Heavliy Damaged!!] %s Ready %s</string>
     <string name="kca_view_normal_format" formatted="false">%s Ready %s</string>
 
     <string name="kca_view_noexpedition">No expeditions are running.</string>
@@ -237,7 +237,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="getship_label">Drop</string>
     <string name="getship_none">(None)</string>
     <string name="getship_max">(Slot is Full)</string>
-    <string name="kca_view_tpvalue" formatted="false">TP: %d/%d</string>
+    <string name="kca_view_tpvalue" formatted="false">TP: S%d/A%d</string>
     <string name="ship_name_class">Class</string>
     <string name="slot_empty">(No Equipment)</string>
     <string name="kca_view_condition_1" formatted="false">Morale #1: %s</string>
