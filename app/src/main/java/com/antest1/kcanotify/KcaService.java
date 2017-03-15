@@ -83,7 +83,6 @@ public class KcaService extends Service {
     public static int heavyDamagedMode = 0;
     public static int checkKdockId = -1;
     public static boolean kaisouProcessFlag = false;
-    public static String currentNode = "";
     public static String currentNodeInfo = "";
     public static boolean isInBattle;
     public static boolean isCombined;
@@ -607,7 +606,7 @@ public class KcaService extends Service {
             } else {
                 if (url.startsWith(API_PORT)) {
                     heavyDamagedMode = HD_NONE;
-                    currentNode = "";
+                    currentNodeInfo = "";
                     Log.e("KCA", "Port Handler Called");
                     if (jsonDataObj.has("api_data")) {
                         JsonObject reqPortApiData = jsonDataObj.getAsJsonObject("api_data");
@@ -1835,7 +1834,7 @@ public class KcaService extends Service {
             notifiString = getStringWithLocale(R.string.kca_view_activate_vpn);
         } else {
             String nodeString = "";
-            if (currentNode.length() > 0) {
+            if (currentNodeInfo.length() > 0) {
                 nodeString = String.format("[%s]", currentNodeInfo.replaceAll("[()]", "").replaceAll("\\s", "/"));
             }
             switch (heavyDamagedMode) {

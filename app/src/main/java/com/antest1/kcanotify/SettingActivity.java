@@ -125,7 +125,7 @@ public class SettingActivity extends AppCompatActivity {
                     pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            new getKcaStart2Data(context).execute();
+                            new getKcaStart2Data(getActivity()).execute();
                             return false;
                         }
                     });
@@ -237,8 +237,7 @@ public class SettingActivity extends AppCompatActivity {
                     Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
                     String name = ringtone.getTitle(context);
                     if(RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION) == null) {
-                        String defaultSilentUnknown = RingtoneManager.getRingtone(context, null).getTitle(context);
-                        pref.setSummary(name.replace(defaultSilentUnknown, silentText));
+                        pref.setSummary(silentText);
                     } else {
                         pref.setSummary(name);
                     }
@@ -262,6 +261,10 @@ public class SettingActivity extends AppCompatActivity {
             activity = a;
             context = a.getApplicationContext();
             toastflag = tf;
+        }
+
+        public String getStringWithLocale(int id) {
+            return KcaUtils.getStringWithLocale(activity.getApplicationContext(), activity.getBaseContext(), id);
         }
 
         @Override
@@ -302,7 +305,7 @@ public class SettingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             if (result == null) {
-                Toast.makeText(context.getApplicationContext(), context.getString(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, getStringWithLocale(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
             } else if (result.length() > 0) {
                 Log.e("KCA", "Received: " + result);
                 JsonObject jsonDataObj = new JsonParser().parse(result).getAsJsonObject();
@@ -310,14 +313,14 @@ public class SettingActivity extends AppCompatActivity {
                     String recentVersion = jsonDataObj.get("version").getAsString();
                     if (compareVersion(currentVersion, recentVersion)) { // True if latest
                         if(toastflag) {
-                            Toast.makeText(context.getApplicationContext(),
-                                    String.format(context.getString(R.string.sa_checkupdate_latest), currentVersion),
+                            Toast.makeText(context,
+                                    String.format(getStringWithLocale(R.string.sa_checkupdate_latest), currentVersion),
                                     Toast.LENGTH_LONG).show();
                         }
                     } else {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
-                        alertDialog.setMessage(String.format(context.getString(R.string.sa_checkupdate_hasupdate), recentVersion));
-                        alertDialog.setPositiveButton(context.getString(R.string.dialog_ok),
+                        alertDialog.setMessage(String.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
+                        alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -327,7 +330,7 @@ public class SettingActivity extends AppCompatActivity {
                                         context.startActivity(i);
                                     }
                                 });
-                        alertDialog.setNegativeButton(context.getString(R.string.dialog_cancel),
+                        alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -336,12 +339,12 @@ public class SettingActivity extends AppCompatActivity {
                                 });
                         AlertDialog alert = alertDialog.create();
                         alert.setIcon(R.mipmap.ic_launcher);
-                        alert.setTitle(context.getString(R.string.sa_checkupdate_dialogtitle));
+                        alert.setTitle(getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
                         alert.show();
                     }
                 } else {
-                    Toast.makeText(context.getApplicationContext(),
-                            context.getString(R.string.sa_checkupdate_servererror),
+                    Toast.makeText(context,
+                            getStringWithLocale(R.string.sa_checkupdate_servererror),
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -349,11 +352,17 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private static class getKcaStart2Data extends AsyncTask<Context, String, String> {
+        Activity activity;
         Context context;
         String result = null;
 
-        public getKcaStart2Data(Context ctx) {
-            context = ctx;
+        public getKcaStart2Data(Activity a) {
+            activity = a;
+            context = a.getApplicationContext();
+        }
+
+        public String getStringWithLocale(int id) {
+            return KcaUtils.getStringWithLocale(activity.getApplicationContext(), activity.getBaseContext(), id);
         }
 
         @Override
@@ -392,17 +401,17 @@ public class SettingActivity extends AppCompatActivity {
                             }
                             KcaUtils.setPreferences(context, "kca_version", kca_version);
                             KcaApiData.setDataLoadTriggered();
-                            Toast.makeText(context.getApplicationContext(),
-                                    context.getString(R.string.sa_getupdate_finished),
+                            Toast.makeText(context,
+                                    getStringWithLocale(R.string.sa_getupdate_finished),
                                     Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(context.getApplicationContext(),
-                                    String.format(context.getString(R.string.sa_getupdate_servererror), String.valueOf(status.getCode())),
+                            Toast.makeText(context,
+                                    String.format(getStringWithLocale(R.string.sa_getupdate_servererror), String.valueOf(status.getCode())),
                                     Toast.LENGTH_LONG).show();
                         }
                     } catch (IOException e1) {
-                        Toast.makeText(context.getApplicationContext(),
-                                context.getString(R.string.sa_getupdate_ioexceptionerror),
+                        Toast.makeText(context,
+                                getStringWithLocale(R.string.sa_getupdate_ioexceptionerror),
                                 Toast.LENGTH_LONG).show();
                         //Log.e(TAG, "I/O Error");
                     }
