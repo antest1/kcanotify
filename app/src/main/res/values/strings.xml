@@ -62,9 +62,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_fastplus">Fast+</string>
     <string name="speed_fast">Fast</string>
     <string name="speed_slow">Slow</string>
-    <string name="speed_mixed_normal">Mixed(Slow)</string>
-    <string name="speed_mixed_fast">Mixed(Fast)</string>
-    <string name="speed_mixed_fastplus">Mixed(Fast+)</string>
+    <string name="speed_mixed_normal">Mixed(S)</string>
+    <string name="speed_mixed_fast">Mixed(F)</string>
+    <string name="speed_mixed_fastplus">Mixed(F+)</string>
     <string name="speed_none">\?\?</string>
     <string name="speed_postfix">&#160;Fleet</string>
 
@@ -163,6 +163,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_exp_realtime_show">Display remaining time for Expeditions on the navbar</string>
     <string name="setting_menu_kand_title_game_data_down">Download Game Data</string>
     <string name="setting_menu_kand_desc_game_data_down">Use if game data was not loaded automatically.</string>
+    <string name="setting_menu_kand_desc_fairy_select">Select Fairy to bring with</string>
+    <string name="setting_menu_kand_title_fairy_select">Select Fairy</string>
+    <string name="current_fairy_changed_in_next">※ Fairy will be changed after current BattleView/QuestView ends.</string>
 
     <string name="setting_menu_view_head">Kcanotify Settings</string>
     <string name="setting_menu_view_title_overlay_setting">Screen Overlay Settings</string>
@@ -173,7 +176,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_view_desc_drop_visible">Show dropped ship name in BattleView</string>
     <string name="setting_menu_view_title_questview_use">Use QuestView</string>
     <string name="setting_menu_view_desc_questview_use">Display quest translation and information.</string>
-
 
     <string name="setting_menu_noti_head">Notification Settings</string>
     <string name="setting_menu_noti_title_exp">Expedition</string>
@@ -188,6 +190,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_app_head">Application Information</string>
     <string name="setting_menu_app_title_current">Current Version</string>
     <string name="setting_menu_app_title_updatecheck">Check For Updates</string>
+    <string name="setting_menu_app_title_down">APK Download Site</string>
     <string name="setting_menu_app_title_contact">Submit a Suggestion or Error Report</string>
     <string name="setting_menu_app_desc_updatecheck" translatable="false">https://github.com/antest1/kcanotify/releases</string>
     <string name="setting_menu_app_desc_contact">Send an E-mail to the developer</string>
@@ -343,9 +346,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_filter_equip_all">ALL</string>
     <string name="akashi_filter_equip_none">CLEAR</string>
     <string name="akashi_filter_equip_rev">REVERSE</string>
-    <string name="setting_menu_kand_desc_fairy_select">Select Fairy to bring with</string>
-    <string name="setting_menu_kand_title_fairy_select">Select Fairy</string>
-    <string name="current_fairy_changed_in_next">※ Fairy will be changed after current BattleView/QuestView ends.</string>
-    <string name="setting_menu_app_title_down">APK Download Site</string>
 
 </resources>
