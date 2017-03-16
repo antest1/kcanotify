@@ -50,6 +50,7 @@ import okhttp3.Response;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
@@ -58,6 +59,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaService.kca_version;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -324,7 +326,7 @@ public class SettingActivity extends AppCompatActivity {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        String downloadUrl = context.getString(R.string.app_download_link);
+                                        String downloadUrl = getStringPreferences(context, PREF_APK_DOWNLOAD_SITE);
                                         Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
                                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         context.startActivity(i);

@@ -47,6 +47,7 @@ import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
+import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
@@ -292,6 +293,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case PREF_KCA_NOTI_RINGTONE:
                         editor.putString(prefKey, DEFAULT_NOTIFICATION_URI.toString());
+                        break;
+                    case PREF_APK_DOWNLOAD_SITE:
+                        editor.putString(prefKey, getString(R.string.app_download_link_googledrive));
                         break;
                     case PREF_AKASHI_STARLIST:
                     case PREF_AKASHI_FILTERLIST:

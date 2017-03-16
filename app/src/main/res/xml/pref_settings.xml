@@ -133,6 +133,14 @@
             android:key="check_update"
             android:summary="@string/setting_menu_app_desc_updatecheck"
             android:title="@string/setting_menu_app_title_updatecheck" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/downloadSiteOption"
+            android:entryValues="@array/downloadSiteOptionValue"
+            android:key="apk_download_site"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/setting_menu_app_title_down" />
         <Preference
             android:summary="@string/setting_menu_app_desc_contact"
             android:title="@string/setting_menu_app_title_contact">

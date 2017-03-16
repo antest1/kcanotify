@@ -299,4 +299,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_fairy_select">选择悬浮的妖精</string>
     <string name="setting_menu_kand_title_fairy_select">选择妖精</string>
     <string name="current_fairy_changed_in_next">※ 当前战斗剧透/任务浏览结束后会改变妖精形象。</string>
+    <string name="setting_menu_app_title_down">选择APK下载网站</string>
 </resources>

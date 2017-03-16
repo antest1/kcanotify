@@ -267,6 +267,7 @@ public final class KcaConstants {
     public static final String PREF_AKASHI_STARLIST = "akashi_starlist";
     public static final String PREF_AKASHI_FILTERLIST = "akashi_filterlist";
     public static final String PREF_FAIRY_ICON = "fairy_icon";
+    public static final String PREF_APK_DOWNLOAD_SITE = "apk_download_site";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -289,7 +290,8 @@ public final class KcaConstants {
             PREF_AKASHI_STAR_CHECKED,
             PREF_AKASHI_STARLIST,
             PREF_AKASHI_FILTERLIST,
-            PREF_FAIRY_ICON
+            PREF_FAIRY_ICON,
+            PREF_APK_DOWNLOAD_SITE
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

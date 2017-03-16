@@ -299,4 +299,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_fairy_select">Select a fairy to bring with</string>
     <string name="setting_menu_kand_title_fairy_select">Select Fairy</string>
     <string name="current_fairy_changed_in_next">※ Fairy will be changed after current BattleView/QuestView ends.</string>
+    <string name="setting_menu_app_title_down">APK Download Site</string>
 </resources>
