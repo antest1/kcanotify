@@ -217,15 +217,6 @@ public class KcaUtils {
         }
     }
 
-    public static String getLocaleInArray(Context context, String locale) {
-        List<String> localeList = Arrays.asList(context.getResources().getStringArray(R.array.languageOptionValue));
-        if (localeList.contains(locale)) {
-            return locale;
-        } else {
-            return "en-US";
-        }
-    }
-
     public static Context getContextWithLocale(Context ac, Context bc) {
         String[] pref_locale = getStringPreferences(ac, PREF_KCA_LANGUAGE).split("-");
         Locale locale = new Locale(pref_locale[0], pref_locale[1]);
