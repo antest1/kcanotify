@@ -105,7 +105,7 @@ public class KcaQuestViewService extends Service {
                     int api_progress = item.get("api_progress_flag").getAsInt();
                     int api_state = item.get("api_state").getAsInt();
 
-                    String api_title = item.get("api_title").getAsString();
+                    String api_title = String.format("[%s] %s", api_no, item.get("api_title").getAsString());
                     String api_detail = item.get("api_detail").getAsString();
                     if (kcQuestInfoData.has(api_no)) {
                         String code = kcQuestInfoData.getAsJsonObject(api_no).get("code").getAsString();
