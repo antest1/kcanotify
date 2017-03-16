@@ -1,14 +1,17 @@
 package com.antest1.kcanotify;
 
+import com.google.common.io.ByteStreams;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
-import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,24 +36,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.google.common.io.ByteStreams;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
 import static com.antest1.kcanotify.KcaApiData.loadItemTranslationDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadQuestInfoDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
-import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
@@ -70,13 +62,11 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
-import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
+import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
-import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
-import static com.antest1.kcanotify.KcaUtils.getLocaleInArray;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.readCacheData;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
@@ -294,10 +284,8 @@ public class MainActivity extends AppCompatActivity {
                         editor.putBoolean(prefKey, true);
                         break;
                     case PREF_KCA_LANGUAGE:
-                        String language = Locale.getDefault().getLanguage();
-                        String country = Locale.getDefault().getCountry();
-                        String localecode = language.concat("-").concat(country);
-                        editor.putString(prefKey, getLocaleInArray(this, localecode));
+                        String localecode = getString(R.string.locale_code);
+                        editor.putString(prefKey, localecode);
                         break;
                     case PREF_KCA_NOTI_SOUND_KIND:
                         editor.putString(prefKey, getString(R.string.sound_kind_value_vibrate));

@@ -7,6 +7,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 -->
 
 <resources>
+    <string name="locale_code">en-US</string>
+
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <!-- Do not translate here -->
