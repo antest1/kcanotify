@@ -16,7 +16,9 @@ About Project
 
 Download
 -------
+- [Google Drive](http://bit.ly/kcanotifydown)
 - [Box](http://bit.ly/kcanotify)
+- [MEGA](https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw)
 - 이전 버전의 경우 다음 [Link](https://drive.google.com/drive/folders/0B8-RpEfBvSAlRzhDZ0taR1pKMFk)에서 설치
 
 주요 기능
