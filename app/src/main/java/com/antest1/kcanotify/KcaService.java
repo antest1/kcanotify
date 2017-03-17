@@ -751,17 +751,6 @@ public class KcaService extends Service {
                                 }
                             }
 
-                            if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)) {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                                        && !Settings.canDrawOverlays(getApplicationContext())) {
-                                    // Can not draw overlays: pass
-                                } else {
-                                    Intent intent = new Intent(this, KcaViewButtonService.class)
-                                            .setAction(KcaViewButtonService.SHOW_BATTLE_INFO);
-                                    startService(intent);
-                                }
-                            }
-
                             JsonObject api_data = new JsonObject();
                             JsonArray api_deck_data = new JsonArray();
                             JsonArray api_ship_data = new JsonArray();
@@ -807,6 +796,17 @@ public class KcaService extends Service {
                             api_data.add("api_ship_data", api_ship_data);
                             KcaBattle.setDeckPortData(api_data);
                             KcaBattle.setStartHeavyDamageExist(checkvalue);
+
+                            if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                                        && !Settings.canDrawOverlays(getApplicationContext())) {
+                                    // Can not draw overlays: pass
+                                } else {
+                                    Intent intent = new Intent(this, KcaViewButtonService.class)
+                                            .setAction(KcaViewButtonService.SHOW_BATTLE_INFO);
+                                    startService(intent);
+                                }
+                            }
                         }
                         KcaBattle.processData(url, battleApiData);
                     } else if (url.equals(API_REQ_COMBINED_GOBACKPORT)) {
