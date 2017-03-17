@@ -1082,7 +1082,6 @@ public class KcaBattleViewService extends Service {
     public int setView() {
         try {
             error_flag = false;
-            api_data = KcaViewButtonService.getCurrentApiData();
             setBattleview();
             return 0;
         } catch (Exception e) {
@@ -1120,36 +1119,23 @@ public class KcaBattleViewService extends Service {
             display.getSize(size);
             displayWidth = size.x;
 
-            hdmgreceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    Log.e("KCA", "=> Received Intent");
-                    //mViewBackup = mView;
-                    //mManager.removeView(mView);
-                    String value = intent.getExtras().getString(KCA_MSG_DATA, "0");
-                    if (value.contains("1")) {
-                        mView.findViewById(R.id.battleviewpanel)
-                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHeavyDmgStatePanel));
-                    } else {
-                        mView.findViewById(R.id.battleviewpanel)
-                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-                    }
-
-                    //mManager.addView(mView, mParams);
-                    if (KcaViewButtonService.getClickCount() == 0) {
-                        mView.setVisibility(View.GONE);
-                    }
-                    mView.invalidate();
-                    mManager.updateViewLayout(mView, mParams);
-                }
-            };
             refreshreceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     Log.e("KCA", "=> Received Intent");
                     //mViewBackup = mView;
                     //mManager.removeView(mView);
-
+                    api_data = KcaBattle.getCurrentApiData();
+                    if(api_data != null && api_data.has("api_heavy_damaged")) {
+                        int value = api_data.get("api_heavy_damaged").getAsInt();
+                        if (value == HD_DANGER) {
+                            mView.findViewById(R.id.battleviewpanel)
+                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHeavyDmgStatePanel));
+                        } else {
+                            mView.findViewById(R.id.battleviewpanel)
+                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                        }
+                    }
                     int setViewResult = setView();
                     if (setViewResult == 0) {
                         if (KcaViewButtonService.getClickCount() == 0) {
@@ -1161,7 +1147,6 @@ public class KcaBattleViewService extends Service {
                     }
                 }
             };
-            LocalBroadcastManager.getInstance(this).registerReceiver((hdmgreceiver), new IntentFilter(KCA_MSG_BATTLE_VIEW_HDMG));
             LocalBroadcastManager.getInstance(this).registerReceiver((refreshreceiver), new IntentFilter(KCA_MSG_BATTLE_VIEW_REFRESH));
         } catch (Exception e) {
             active = false;
@@ -1170,7 +1155,6 @@ public class KcaBattleViewService extends Service {
             stopSelf();
         }
     }
-
 
     @Override
     public void onDestroy() {

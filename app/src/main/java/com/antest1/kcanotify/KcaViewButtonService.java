@@ -113,11 +113,7 @@ public class KcaViewButtonService extends Service {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String s = intent.getStringExtra(KCA_MSG_DATA);
-                currentApiData = new JsonParser().parse(s).getAsJsonObject();
-                KcaBattleViewService.setApiData(currentApiData);
-                Intent intent_send = new Intent(KCA_MSG_BATTLE_VIEW_REFRESH);
-                intent_send.putExtra(KCA_MSG_DATA, s);
-                broadcaster.sendBroadcast(intent_send);
+                broadcaster.sendBroadcast(new Intent(KCA_MSG_BATTLE_VIEW_REFRESH));
                 Log.e("KCA", "KCA_MSG_BATTLE_INFO Received: \n".concat(s));
             }
         };
@@ -125,11 +121,7 @@ public class KcaViewButtonService extends Service {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String s = intent.getStringExtra(KCA_MSG_DATA);
-                currentApiData = new JsonParser().parse(s).getAsJsonObject();
-                KcaBattleViewService.setApiData(currentApiData);
-                Intent intent_send = new Intent(KCA_MSG_BATTLE_VIEW_REFRESH);
-                intent_send.putExtra(KCA_MSG_DATA, s);
-                broadcaster.sendBroadcast(intent_send);
+                broadcaster.sendBroadcast(new Intent(KCA_MSG_BATTLE_VIEW_REFRESH));
                 Log.e("KCA", "KCA_MSG_BATTLE_NODE Received: \n".concat(s));
             }
         };
@@ -137,15 +129,12 @@ public class KcaViewButtonService extends Service {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String s = intent.getStringExtra(KCA_MSG_DATA);
-                Intent intent_send = new Intent(KCA_MSG_BATTLE_VIEW_HDMG);
-                intent_send.putExtra(KCA_MSG_DATA, s);
                 if (s.contains("1")) {
                     ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(),
                             R.color.colorHeavyDmgStateWarn), PorterDuff.Mode.MULTIPLY);
                 } else {
                     ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().clearColorFilter();
                 }
-                broadcaster.sendBroadcast(intent_send);
                 Log.e("KCA", "KCA_MSG_BATTLE_HDMG Received");
             }
         };
