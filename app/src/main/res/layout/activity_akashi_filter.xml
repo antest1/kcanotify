@@ -264,13 +264,13 @@
                     android:layout_height="30dp"
                     android:padding="5dp" />
                 <ImageView
-                    android:id="@+id/akashi_filter_equip_btn_temp1"
+                    android:src="@mipmap/item_43"
+                    android:id="@+id/akashi_filter_equip_btn_43"
                     android:layout_margin="5dp"
                     android:background="@drawable/imagebtn_on"
                     android:adjustViewBounds="true"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:visibility="invisible"
                     android:padding="5dp" />
                 <ImageView
                     android:id="@+id/akashi_filter_equip_btn_temp2"
