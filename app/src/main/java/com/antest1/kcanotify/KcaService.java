@@ -95,7 +95,6 @@ public class KcaService extends Service {
     NotificationManager notifiManager;
     Builder viewNotificationBuilder;
     BigTextStyle viewNotificationText;
-    KcaCustomToast customToast;
     public static boolean noti_vibr_on = true;
     int viewBitmapId, viewBitmapSmallId;
     Bitmap viewBitmap, expBitmap, dockBitmap = null;
@@ -175,7 +174,6 @@ public class KcaService extends Service {
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        customToast = new KcaCustomToast(this);
 
         String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
         viewBitmapId = getId(fairyId, R.mipmap.class);
@@ -414,6 +412,7 @@ public class KcaService extends Service {
         if (tp[0] > 0) {
             toastList.add(tpValue);
         }
+        KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
         customToast.showToast(joinStr(toastList, " / "), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
     }
 
@@ -440,6 +439,7 @@ public class KcaService extends Service {
         byte[] raw = msg.getData().getByteArray("data");
         Reader data = new InputStreamReader(new ByteArrayInputStream(raw));
         String request = msg.getData().getString("request");
+        KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
 
         if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.length() == 0 || viewNotificationBuilder == null) {
             return;
@@ -1285,6 +1285,7 @@ public class KcaService extends Service {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String url = msg.getData().getString("url");
         String data = msg.getData().getString("data");
+        KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
 
         if (!prefs.getBoolean(PREF_SVC_ENABLED, false) || url.length() == 0 || viewNotificationBuilder == null) {
             Log.e("KCA", "url: " + url);
@@ -1572,6 +1573,7 @@ public class KcaService extends Service {
     }
 
     private void processFirstDeckInfo(JsonArray data) {
+        KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String delimeter = " | ";
         if (!isGameDataLoaded()) {
@@ -1927,6 +1929,7 @@ public class KcaService extends Service {
 
         public String executeClient(String token, String method, String data) {
             if (KcaApiData.isGameDataLoaded()) return null;
+            final KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
             kcaFirstDeckInfo = getStringWithLocale(R.string.kca_toast_loading_data);
             String dataUrl;
             if (kca_version == null) {
