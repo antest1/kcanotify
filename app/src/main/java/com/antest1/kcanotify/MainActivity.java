@@ -39,6 +39,7 @@ import android.widget.ToggleButton;
 import java.io.IOException;
 
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
+import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadItemTranslationDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadQuestInfoDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets;
@@ -320,8 +321,7 @@ public class MainActivity extends AppCompatActivity {
         JsonObject cachedData = readCacheData(getApplicationContext(), KCANOTIFY_S2_CACHE_FILENAME);
         boolean isValidCachedData = cachedData != null && !cachedData.isJsonNull() && cachedData.has("api_data");
         if (current_version.length() > 0 && isValidCachedData && KcaUtils.compareVersion(current_version, default_version)) {
-            Log.e("KCA", "latest KCA data");
-            KcaApiData.getKcGameData(cachedData);
+            KcaApiData.getKcGameData(cachedData.getAsJsonObject("api_data"));
             return 1;
         } else {
             try {
@@ -331,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
                 JsonElement data = new JsonParser().parse(new String(bytes));
                 JsonObject api_data = gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data");
                 KcaApiData.getKcGameData(api_data);
-                writeCacheData(getApplicationContext(), api_data.toString().getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
+                writeCacheData(getApplicationContext(), bytes, KCANOTIFY_S2_CACHE_FILENAME);
                 setPreferences(getApplicationContext(), PREF_KCA_VERSION, default_version);
             } catch (IOException e) {
                 return 0;
