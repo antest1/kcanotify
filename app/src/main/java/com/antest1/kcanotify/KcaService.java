@@ -1985,6 +1985,7 @@ public class KcaService extends Service {
         } else {
             Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
         }
+        contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
         super.onConfigurationChanged(newConfig);
         //setFrontViewNotifier(FRONT_NONE, 0, null);
     }
