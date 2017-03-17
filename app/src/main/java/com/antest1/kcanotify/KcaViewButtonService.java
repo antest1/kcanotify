@@ -337,7 +337,7 @@ public class KcaViewButtonService extends Service {
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(getStringWithLocale(R.string.fairy_hidden_notification_bigtext)))
                         .setPriority(Notification.PRIORITY_MAX)
                         .setOngoing(true)
-                        .addAction(new NotificationCompat.Action(R.mipmap.noti_icon4,
+                        .addAction(new NotificationCompat.Action(viewBitmapSmallId,
                                 getStringWithLocale(R.string.fairy_hidden_notification_action_return), returnPendingIntent))
                         .addAction(new NotificationCompat.Action(R.mipmap.ic_cancel,
                                 getStringWithLocale(R.string.fairy_hidden_notification_action_remove), removePendingIntent));
