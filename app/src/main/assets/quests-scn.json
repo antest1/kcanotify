@@ -929,6 +929,16 @@
 		"name": "重装甲巡洋舰，突入铁底海峡！",
 		"desc": "编成以“Zara due”为旗舰的第一舰队，突入萨部岛近海海域（5-3）！突破海域中的敌舰队群，击破部署于铁底海峡的敌战力！（Boss战A胜）"
 	},
+    "849": {
+      "code": "B93",
+      "name": "南西諸島方面の敵艦隊を撃破せよ！",
+      "desc": "轻巡为旗舰 / 出击南西诸岛防卫线（1-4）, 巴士岛近海（2-2）, 东部奥廖尔海（2-3） / Boss战S胜"
+    },
+    "850": {
+      "code": "B94",
+      "name": "Expand the Offshore Aviation Forces!",
+      "desc": "空母或水上机母舰为旗舰 / 北方AL海域（3-5）, 加斯加达马近海（4-4）, 马绍尔群岛近海（6-2） / Boss战S胜"
+    },
 
 	"201": {
 		"code": "Bd1",
@@ -1516,7 +1526,7 @@
 	},
 
 	"656": {
-		"code": "F50",
+		"code": "F49",
 		"name": "编成六三一“晴岚”航空队",
 		"desc": "将“伊401”或“伊14”或“伊13”配置为秘书舰，在其第一格搭载“试制晴岚”，第二格搭载“瑞云(六三一空)”，以编成“晴岚(六三一空)”！(请确保任务涉及的相关装备已解锁) ※任务完成后瑞云将被消耗。"
 	},
@@ -1525,13 +1535,25 @@
 		"name": "春季准备任务：桃之节句的准备！",
 		"desc": "春季准备任务：废弃两枚“14cm单装炮”，并准备5000家具币及“九九式舰爆”和“61cm三连装鱼雷”各两枚！※在任务达成后，准备的家具币和装备将被消耗（改修值低的装备将优先被消耗）。"
 	},
-	"658": {
-		"code": "F49",
-		"name": "潜艇武器的强化",
-		"desc": "废弃4枚“61cm三连装鱼雷”，并准备开发资材x120及“61cm四连装(酸素)鱼雷”和“九三式水中听音机”各三枚！ ※在任务达成后，准备的开发资材和装备将被消耗（改修值低的装备将优先被消耗）。"
-	},
+    "658": {
+        "code": "F50",
+        "name": "潜艇武器的强化",
+        "desc": "废弃4枚“61cm三连装鱼雷”，并准备开发资材x120及“61cm四连装(酸素)鱼雷”和“九三式水中听音机”各三枚！ ※在任务达成后，准备的开发资材和装备将被消耗（改修值低的装备将优先被消耗）。"
+    },
+    "659": {
+        "code": "F51",
+        "name": "Elite Seaplane Forces Setup",
+        "desc": "Have a Skilled Crew Member. Set Houshou as secretary. Equip her with a >> Type 0 Fighter Model 21. Scrap two Type 0 Fighter Model 21s and two Zuiuns.",
+        "memo": "Make sure the equipped plane is unlocked! \u27a3Rewards a Type 2 Seaplane Fighter Kai (Skilled)"
+    },
+    "660": {
+        "code": "F52",
+        "name": "Increase of the Elite Seaplane Forces",
+        "desc": "Have a Skilled Crew Member. Set Houshou as secretary. Equip her with a >> Type 0 Fighter Model 21. Scrap two Type 0 Fighter Model 21s and two Zuiuns.",
+        "memo": "Make sure the equipped plane is unlocked! \u27a3Rewards a Type 2 Seaplane Fighter Kai (Skilled)"
+    },
 
-	"701": {
+  "701": {
 		"code": "G1",
 		"name": "初次近代化改修！",
 		"desc": "进行 1 次近代化改修（合成）"

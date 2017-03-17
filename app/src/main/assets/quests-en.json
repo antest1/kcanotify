@@ -1087,6 +1087,18 @@
         "desc": "Use a Fleet consisting of Zara Due as the flagship and go to [W5-3] and score an A rank at the boss node.",
         "memo": "\u27a3Rewards a New Design Anti-Torpedo Bulge (Medium)"
     },
+    "849": {
+        "code": "B93",
+        "name": "Destroy the enemies by the Nansei Islands!",
+        "desc": "Sortie an CL as flagship to [W1-4], [W2-2], and [W2-3]. S-Rank the boss node.",
+        "memo": "\u27a3Rewards 1 Mamiya and 1 Irako"
+    },
+    "850": {
+        "code": "B94",
+        "name": "Expand the Offshore Aviation Forces!",
+        "desc": "Sortie an CV(B/L) or AV as flagship to [W3-5], [W4-4], and [W6-2]. S-Rank the boss node.",
+        "memo": "\u27a3Rewards a Skilled Crew Member"
+    },
 	
     
     "201": {
@@ -1883,7 +1895,7 @@
         "memo": "\u2623Changing difficulties after the completion of this quest will cause the Saiun (Disassembled for Transport) to disappear!!! \u2718Consumes the items and equipment. Make sure the equipment is unlocked! \u27a3 Rewards Saiun (Disassembled for Transport)"
     }, 
 	"656": {
-        "code": "F50?",
+        "code": "F49",
         "name": "Organize the Seiran 631 Air Group!",
         "desc": "Have I-401 or I-13 or I-14 as your secretary and arm them with a Prototype Seiran in the first slot and a Zuiun (631 Air Group) in the second slot.",
         "memo": "\u2718Consumes the items. Make sure the equipment is unlocked!\n\u27a3Rewards an Seiran (631 Air Group)"
@@ -1895,10 +1907,22 @@
         "memo": "\u2718Consumes the items. Make sure the equipment is unlocked! \n\u27a3Rewards 1 Furniture Fairy and 1 Hishimochi"
     },
     "658": {
-        "code": "F49?",
+        "code": "F50",
         "name": "Enhance Submarine Armaments",
         "desc": "Have 120 development materials, three 61cm Quad (Oxygen) Torpedo Mounts and three Type 93 SONARs in your inventory. Scrap four 61cm Triple Torpedo Mounts.",
         "memo": "\u2718Consumes the items. Make sure the equipment is unlocked!\n\u27a3Rewards an Late Model Bow Torpedo Mount (6 Tubes)"
+    },
+    "659": {
+        "code": "F51",
+        "name": "Elite Seaplane Forces Setup",
+        "desc": "Have a Skilled Crew Member. Set Houshou as secretary. Equip her with a >> Type 0 Fighter Model 21. Scrap two Type 0 Fighter Model 21s and two Zuiuns.",
+        "memo": "Make sure the equipped plane is unlocked! \u27a3Rewards a Type 2 Seaplane Fighter Kai (Skilled)"
+    },
+    "660": {
+        "code": "F52",
+        "name": "Increase of the Elite Seaplane Forces",
+        "desc": "Have a Skilled Crew Member. Set Houshou as secretary. Equip her with a >> Type 0 Fighter Model 21. Scrap two Type 0 Fighter Model 21s and two Zuiuns.",
+        "memo": "Make sure the equipped plane is unlocked! \u27a3Rewards a Type 2 Seaplane Fighter Kai (Skilled)"
     },
     
     "701": {
