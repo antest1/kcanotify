@@ -1980,7 +1980,6 @@ public class KcaService extends Service {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        Locale locale;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
             KcaApplication.defaultLocale = newConfig.getLocales().get(0);
