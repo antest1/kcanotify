@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
                         editor.putBoolean(prefKey, true);
                         break;
                     case PREF_KCA_LANGUAGE:
-                        String localecode = getString(R.string.locale_code);
+                        String localecode = getString(R.string.default_locale);
                         editor.putString(prefKey, localecode);
                         break;
                     case PREF_KCA_NOTI_SOUND_KIND:
