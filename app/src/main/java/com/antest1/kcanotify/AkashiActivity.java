@@ -2,12 +2,15 @@ package com.antest1.kcanotify;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,9 +33,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
@@ -293,5 +298,24 @@ public class AkashiActivity extends AppCompatActivity {
     public void handleUpdateMessage() {
         loadAkashiList(currentClicked, isSafeChecked);
         resetListView(false);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
+            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
+        } else {
+            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
+            KcaApplication.defaultLocale = newConfig.locale;
+        }
+        if(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
+            LocaleUtils.setLocale(KcaApplication.defaultLocale);
+        } else {
+            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
+            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
+        }
+        loadTranslationData(getAssets(), getApplicationContext());
+        super.onConfigurationChanged(newConfig);
     }
 }

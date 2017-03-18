@@ -69,6 +69,7 @@ import static com.antest1.kcanotify.KcaApiData.isUserItemDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaConstants.*;
 
@@ -77,6 +78,7 @@ import static com.antest1.kcanotify.KcaUtils.*;
 
 public class KcaService extends Service {
     public static String currentLocale;
+    public static boolean isInitState;
 
     public static boolean isServiceOn = false;
     public static boolean isPortAccessed = false;
@@ -139,6 +141,7 @@ public class KcaService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        isInitState = true;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Log.e("KCA", String.valueOf(prefs.contains(PREF_SVC_ENABLED)));
         if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
@@ -275,7 +278,7 @@ public class KcaService extends Service {
     private Notification createViewNotification(String title, String content1, String content2) {
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_CANCEL_CURRENT);
         viewNotificationText = new Notification.BigTextStyle();
         viewNotificationBuilder = new Notification.Builder(getApplicationContext())
                 .setSmallIcon(viewBitmapSmallId)
@@ -454,6 +457,7 @@ public class KcaService extends Service {
             jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
 
             if (url.startsWith(KCA_VERSION)) {
+                isInitState = false;
                 isPortAccessed = false;
                 api_start2_init = false;
                 api_start2_loading_flag = true;
@@ -1308,13 +1312,18 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_PREF_FAIRY_CHANGED)) {
-                if(jsonDataObj.has("id")) {
+                if (jsonDataObj.has("id")) {
                     String fairyId = "noti_icon_".concat(jsonDataObj.get("id").getAsString());
                     viewBitmapId = getId(fairyId, R.mipmap.class);
                     viewBitmapSmallId = getId(fairyId.concat("_small"), R.mipmap.class);
                     viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
                     setFrontViewNotifier(FRONT_NONE, 0, null);
                 }
+            }
+
+            if (url.startsWith(KCA_API_PREF_LANGUAGE_CHANGED)) {
+                if (currentPortDeckData != null) processFirstDeckInfo(currentPortDeckData);
+                setFrontViewNotifier(FRONT_NONE, 0, null);
             }
 
             if (url.startsWith(KCA_API_NOTI_EXP_LEFT)) {
@@ -1872,7 +1881,7 @@ public class KcaService extends Service {
                     }
                     notifiString = notifiString.concat(joinStr(deckInfoStringList, " / "));
                 } catch (Exception e) {
-                    notifiString = kcaFirstDeckInfo;
+                    notifiString = getStringWithLocale(R.string.kca_init_content);
                 }
             }
         }
@@ -1971,25 +1980,27 @@ public class KcaService extends Service {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        Locale locale;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
+            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
         } else {
             Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
+            KcaApplication.defaultLocale = newConfig.locale;
         }
-        // Force Locale Setting
-        Locale locale = new Locale(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            newConfig.setLocale(locale);
+        if (getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
+            LocaleUtils.setLocale(KcaApplication.defaultLocale);
         } else {
-            newConfig.locale = locale;
+            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
+            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
-        } else {
-            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
-        }
+
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+        loadTranslationData(getAssets(), getApplicationContext());
+
+        if (currentPortDeckData != null) processFirstDeckInfo(currentPortDeckData);
+        setFrontViewNotifier(FRONT_NONE, 0, null);
+
         super.onConfigurationChanged(newConfig);
-        //setFrontViewNotifier(FRONT_NONE, 0, null);
     }
 }

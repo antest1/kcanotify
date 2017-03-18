@@ -15,12 +15,14 @@
     </string-array>
 
     <string-array name="languageOption">
+        <item>@string/language_system</item>
         <item>@string/language_ko</item>
         <item>@string/language_en</item>
         <item>@string/language_scn</item>
     </string-array>
 
     <string-array name="languageOptionValue" translatable="false">
+        <item>default-LOCALE</item>
         <item>ko-KR</item>
         <item>en-US</item>
         <item>zh-CN</item>

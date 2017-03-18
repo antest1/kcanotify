@@ -25,25 +25,29 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 )
 
 public class KcaApplication extends Application {
+    public static Locale defaultLocale;
+
     @Override
     public void onCreate() {
         super.onCreate();
         String language, country;
-
+        defaultLocale = Locale.getDefault();
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         String[] pref_locale = pref.getString(PREF_KCA_LANGUAGE, "").split("-");
 
         if (pref_locale.length == 2) {
-            language = pref_locale[0];
-            country = pref_locale[1];
+            if (pref_locale[0].equals("default")) {
+                LocaleUtils.setLocale(defaultLocale);
+            } else {
+                language = pref_locale[0];
+                country = pref_locale[1];
+                LocaleUtils.setLocale(new Locale(language, country));
+            }
         } else {
             pref.edit().remove(PREF_KCA_LANGUAGE).apply();
-            language = Locale.getDefault().getLanguage();
-            country = Locale.getDefault().getCountry();
+            LocaleUtils.setLocale(defaultLocale);
         }
 
-        Log.e("KCA", "Locale: " + language + "-" + country);
-        LocaleUtils.setLocale(new Locale(language, country));
         LocaleUtils.updateConfig(this, getBaseContext().getResources().getConfiguration());
         ACRA.init(this);
     }

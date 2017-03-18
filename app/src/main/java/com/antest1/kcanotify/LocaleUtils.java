@@ -38,19 +38,27 @@ public class LocaleUtils {
     }
 
     public static String getLocaleCode(String pref) {
-        switch(pref) {
-            case "ko-KR":
-                return "ko";
-            case "en-US":
-                return "en";
-            case "zh-CN":
+        if (pref.startsWith("default")) {
+            Locale locale = KcaApplication.defaultLocale;
+            String language = locale.getLanguage();
+            String country = locale.getCountry();
+            pref = language.concat("-").concat(country);
+        }
+
+        if (pref.startsWith("ko")) {
+            return "ko";
+        } else if (pref.startsWith("en")) {
+            return "en";
+        } else if (pref.startsWith("zh")) {
+            if (pref.equals("zh-CN") || pref.equals("zh-SG")) {
                 return "scn";
-            case "zh-TW":
-                return "tcn";
-            case "ja-JP":
-                return "jp";
-            default:
-                return "en";
+            } else {
+                return "en"; // return "tcn";
+            }
+        } else if (pref.startsWith("ja")) {
+            return "en"; // return "jp";
+        } else {
+            return "en";
         }
     }
 }

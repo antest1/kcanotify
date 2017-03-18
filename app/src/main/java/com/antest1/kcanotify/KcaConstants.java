@@ -150,6 +150,7 @@ public final class KcaConstants {
     public static final String KCA_API_PREF_CN_CHANGED = "/kca_api/pref_cn_changed";
     public static final String KCA_API_PREF_EXPVIEW_CHANGED = "/kca_api/pref_expview_changed";
     public static final String KCA_API_PREF_FAIRY_CHANGED = "/kca_api/pref_fairy_changed";
+    public static final String KCA_API_PREF_LANGUAGE_CHANGED = "/kca_api/pref_language_changed";
 
     public static final String KCA_MSG_FAIRY_CHANGED = "com.antest1.kcanotify.KcaFairySelectActivity.KCA_MSG_FAIRY_CHANGED";
     public static final String KCA_MSG_BATTLE_NODE = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_NODE";

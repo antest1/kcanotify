@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonElement;
@@ -46,6 +48,10 @@ import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import static com.antest1.kcanotify.KcaApiData.kcShipTranslationData;
+import static com.antest1.kcanotify.KcaApiData.loadItemTranslationDataFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadQuestInfoDataFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 
@@ -218,8 +224,13 @@ public class KcaUtils {
     }
 
     public static Context getContextWithLocale(Context ac, Context bc) {
+        Locale locale;
         String[] pref_locale = getStringPreferences(ac, PREF_KCA_LANGUAGE).split("-");
-        Locale locale = new Locale(pref_locale[0], pref_locale[1]);
+        if (pref_locale[0].equals("default")) {
+            locale = KcaApplication.defaultLocale;
+        } else {
+            locale = new Locale(pref_locale[0], pref_locale[1]);
+        }
         Configuration configuration = new Configuration(ac.getResources().getConfiguration());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             configuration.setLocale(locale);
@@ -233,18 +244,7 @@ public class KcaUtils {
     }
 
     public static String getStringWithLocale(Context ac, Context bc, int id) {
-        String[] pref_locale = getStringPreferences(ac, PREF_KCA_LANGUAGE).split("-");
-        Locale locale = new Locale(pref_locale[0], pref_locale[1]);
-        Configuration configuration = new Configuration(ac.getResources().getConfiguration());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            configuration.setLocale(locale);
-            return bc.createConfigurationContext(configuration).getResources().getString(id);
-        } else {
-            configuration.locale = locale;
-            DisplayMetrics metrics = new DisplayMetrics();
-            bc.getResources().updateConfiguration(configuration, bc.getResources().getDisplayMetrics());
-            return bc.getResources().getString(id);
-        }
+        return getContextWithLocale(ac, bc).getString(id);
     }
 
     public static void playNotificationSound(MediaPlayer mediaPlayer, Context context, Uri uri) {

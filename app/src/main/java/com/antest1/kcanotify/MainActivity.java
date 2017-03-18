@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,12 +38,14 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadItemTranslationDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadQuestInfoDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
@@ -152,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                     if (is_kca_installed) {
                         prefs.edit().putBoolean(PREF_SVC_ENABLED, true).apply();
                         setCheckBtn();
-                        loadTranslationData();
+                        loadTranslationData(assetManager, getApplicationContext());
                         startService(intent);
                     } else {
                         Toast.makeText(getApplicationContext(), getString(R.string.ma_toast_kancolle_not_installed), Toast.LENGTH_LONG).show();
@@ -198,13 +201,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READEXT_PERMISSION);
-        }
-
-        if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                    && !Settings.canDrawOverlays(getApplicationContext())) {
-                Toast.makeText(this, getString(R.string.ma_toast_overay_diabled), Toast.LENGTH_LONG).show();
-            }
+        } else {
+            checkOverlayPermission();
         }
 
         new SettingActivity.getRecentVersion(MainActivity.this, false).execute();
@@ -215,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         setVpnBtn();
         setCheckBtn();
-        loadTranslationData();
+        loadTranslationData(assetManager, getApplicationContext());
     }
 
     @Override
@@ -314,6 +312,15 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    private void checkOverlayPermission() {
+        if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                    && !Settings.canDrawOverlays(getApplicationContext())) {
+                Toast.makeText(this, getString(R.string.ma_toast_overay_diabled), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     private int setDefaultGameData() {
         if (KcaApiData.isGameDataLoaded()) return 1;
         String current_version = getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
@@ -340,28 +347,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadTranslationData() {
-        if (assetManager == null) return;
-
-        int loadShipTranslationDataResult = loadShipTranslationDataFromAssets(assetManager,
-                getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
-        if (loadShipTranslationDataResult != 1) {
-            Toast.makeText(this, "Error loading Translation Info", Toast.LENGTH_LONG).show();
-        }
-
-        int loadItemTranslationDataResult = loadItemTranslationDataFromAssets(assetManager,
-                getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
-        if (loadItemTranslationDataResult != 1) {
-            Toast.makeText(this, "Error loading Translation Info", Toast.LENGTH_LONG).show();
-        }
-
-        int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromAssets(assetManager,
-                getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
-        if (loadQuestInfoTranslationDataResult != 1) {
-            Toast.makeText(this, "Error loading Quest Info", Toast.LENGTH_LONG).show();
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -385,8 +370,28 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(this, getString(R.string.ma_permission_readext_denied), Toast.LENGTH_LONG).show();
                 }
+                checkOverlayPermission();
             }
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
+            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
+        } else {
+            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
+            KcaApplication.defaultLocale = newConfig.locale;
+        }
+        if(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
+            LocaleUtils.setLocale(KcaApplication.defaultLocale);
+        } else {
+            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
+            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
+        }
+        loadTranslationData(assetManager, getApplicationContext());
+        super.onConfigurationChanged(newConfig);
     }
 }
 

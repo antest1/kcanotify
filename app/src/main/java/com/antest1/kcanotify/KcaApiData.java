@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
 
@@ -433,6 +434,28 @@ public class KcaApiData {
             }
         } catch (IOException e) {
             return 0;
+        }
+    }
+
+    public static void loadTranslationData(AssetManager assetManager, Context context) {
+        if (assetManager == null) return;
+
+        int loadShipTranslationDataResult = loadShipTranslationDataFromAssets(assetManager,
+                getStringPreferences(context, PREF_KCA_LANGUAGE));
+        if (loadShipTranslationDataResult != 1) {
+            Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+        }
+
+        int loadItemTranslationDataResult = loadItemTranslationDataFromAssets(assetManager,
+                getStringPreferences(context, PREF_KCA_LANGUAGE));
+        if (loadItemTranslationDataResult != 1) {
+            Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+        }
+
+        int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromAssets(assetManager,
+                getStringPreferences(context, PREF_KCA_LANGUAGE));
+        if (loadQuestInfoTranslationDataResult != 1) {
+            Toast.makeText(context, "Error loading Quest Info", Toast.LENGTH_LONG).show();
         }
     }
 

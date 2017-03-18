@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -50,6 +51,7 @@ import okhttp3.Response;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_LANGUAGE_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
@@ -59,6 +61,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaService.kca_version;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
+import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
@@ -70,8 +73,13 @@ public class SettingActivity extends AppCompatActivity {
     public static final String TAG = "KCA";
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static String silentText;
+
     public SettingActivity() {
         LocaleUtils.updateConfig(this);
+    }
+
+    public String getStringWithLocale(int id) {
+        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
     @Override
@@ -80,7 +88,7 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.action_settings));
+        getSupportActionBar().setTitle(getString(R.string.action_settings));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         silentText = getString(R.string.settings_string_silent);
         FragmentManager fm = getFragmentManager();
@@ -139,7 +147,7 @@ public class SettingActivity extends AppCompatActivity {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 showObtainingPermissionOverlayWindow();
                             } else {
-                                Toast.makeText(context, getString(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, context.getString(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT).show();
                             }
                             return false;
                         }
@@ -150,9 +158,23 @@ public class SettingActivity extends AppCompatActivity {
                     pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                         @Override
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            String[] locale = ((String) newValue).split("-");
-                            LocaleUtils.setLocale(new Locale(locale[0], locale[1]));
-                            Toast.makeText(context, getString(R.string.sa_language_changed), Toast.LENGTH_LONG).show();
+                            String pref = (String) newValue;
+                            if (pref.startsWith("default")) {
+                                LocaleUtils.setLocale(KcaApplication.defaultLocale);
+                            } else {
+                                String[] locale = ((String) newValue).split("-");
+                                LocaleUtils.setLocale(new Locale(locale[0], locale[1]));
+                            }
+                            if (sHandler != null) {
+                                JsonObject data = new JsonObject();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("url", KCA_API_PREF_LANGUAGE_CHANGED);
+                                bundle.putString("data", data.toString());
+                                Message sMsg = sHandler.obtainMessage();
+                                sMsg.setData(bundle);
+                                sHandler.sendMessage(sMsg);
+                            }
+                            Toast.makeText(context, context.getString(R.string.sa_language_changed), Toast.LENGTH_LONG).show();
                             return true;
                         }
                     });
@@ -160,13 +182,13 @@ public class SettingActivity extends AppCompatActivity {
 
                 if (pref instanceof RingtonePreference) {
                     String ringtone_uri = pref.getSharedPreferences().getString(key, "DEFAULT_NOTIFICATION_URI");
-                    if(ringtone_uri.length() == 0) {
+                    if (ringtone_uri.length() == 0) {
                         pref.setSummary(silentText);
                     } else {
                         Uri ringtoneUri = Uri.parse(ringtone_uri);
                         Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
                         String name = ringtone.getTitle(context);
-                        if(RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION) == null) {
+                        if (RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION) == null) {
                             String defaultSilentUnknown = RingtoneManager.getRingtone(context, null).getTitle(context);
                             pref.setSummary(name.replace(defaultSilentUnknown, silentText));
                         } else {
@@ -198,9 +220,9 @@ public class SettingActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == REQUEST_OVERLAY_PERMISSION) {
                 if (Settings.canDrawOverlays(getActivity())) {
-                    Toast.makeText(getActivity(), getString(R.string.sa_overlay_ok), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), context.getString(R.string.sa_overlay_ok), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), getString(R.string.sa_overlay_no), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), context.getString(R.string.sa_overlay_no), Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -232,13 +254,13 @@ public class SettingActivity extends AppCompatActivity {
 
             if (pref instanceof RingtonePreference) {
                 String ringtone_uri = pref.getSharedPreferences().getString(key, "DEFAULT_NOTIFICATION_URI");
-                if(ringtone_uri.length() == 0) {
+                if (ringtone_uri.length() == 0) {
                     pref.setSummary(silentText);
                 } else {
                     Uri ringtoneUri = Uri.parse(ringtone_uri);
                     Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
                     String name = ringtone.getTitle(context);
-                    if(RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION) == null) {
+                    if (RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION) == null) {
                         pref.setSummary(silentText);
                     } else {
                         pref.setSummary(name);
@@ -259,6 +281,7 @@ public class SettingActivity extends AppCompatActivity {
         Activity activity;
         Context context;
         boolean toastflag;
+
         public getRecentVersion(Activity a, boolean tf) {
             activity = a;
             context = a.getApplicationContext();
@@ -314,7 +337,7 @@ public class SettingActivity extends AppCompatActivity {
                 if (jsonDataObj.has("version")) {
                     String recentVersion = jsonDataObj.get("version").getAsString();
                     if (compareVersion(currentVersion, recentVersion)) { // True if latest
-                        if(toastflag) {
+                        if (toastflag) {
                             Toast.makeText(context,
                                     String.format(getStringWithLocale(R.string.sa_checkupdate_latest), currentVersion),
                                     Toast.LENGTH_LONG).show();
@@ -428,5 +451,23 @@ public class SettingActivity extends AppCompatActivity {
             return null;
         }
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
+            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
+        } else {
+            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
+            KcaApplication.defaultLocale = newConfig.locale;
+        }
+        if (getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
+            LocaleUtils.setLocale(KcaApplication.defaultLocale);
+        } else {
+            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
+            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
+        }
+        super.onConfigurationChanged(newConfig);
     }
 }
