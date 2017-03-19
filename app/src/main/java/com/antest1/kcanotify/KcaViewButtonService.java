@@ -216,7 +216,6 @@ public class KcaViewButtonService extends Service {
 
     @Override
     public void onDestroy() {
-        mManager.removeView(mView);
         notificationManager.cancel(FAIRY_NOTIFICATION_ID);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battleinfo_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlenode_receiver);
@@ -228,6 +227,7 @@ public class KcaViewButtonService extends Service {
             stopService(new Intent(getBaseContext(), KcaQuestViewService.class));
         }
         status = -1;
+        mManager.removeView(mView);
         super.onDestroy();
     }
 
@@ -242,6 +242,7 @@ public class KcaViewButtonService extends Service {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            if (status == -1) return true;
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     mTouchX = event.getRawX();
