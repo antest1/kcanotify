@@ -115,6 +115,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="sa_language_changed">Please restart kcanotify to apply new language setting.</string>
 
+    <string name="sa_bypass_list_invalid">The bypass address list is invalid. Please double-check your input.</string>
+
     <!-- InfoActivity Strings -->
     <string name="ia_license" formatted="false" translatable="false">Copyright &#169; 2016-2017 by antest1(IE10)</string>
     <string name="ia_gpl" formatted="false" translatable="false">By using %s, you agree to the &lt;a href="http://www.gnu.org/licenses/gpl.txt"&gt;GNU General Public License 3.0&lt;/a&gt;. The whole source code is available on &lt;a href="https://github.com/antest1/kcanotify/"&gt;github repository&lt;/a&gt;.</string>
@@ -167,6 +169,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_fairy_select">Select Fairy to bring with</string>
     <string name="setting_menu_kand_title_fairy_select">Select Fairy</string>
     <string name="current_fairy_changed_in_next">※ Fairy will be changed after current BattleView/QuestView ends.</string>
+    <string name="setting_menu_kand_title_adv_network">Advanced Network Settings</string>
+    <string name="setting_menu_kand_warn_adv_network">Warning: Setting these incorrectly may make VPN Service unusable. Don\'t change these options unless you know what you are doing! You need to restart VPN Service to make these options effective.</string>
+    <string name="setting_menu_kand_title_socks5_address">SOCKS5 Proxy Address</string>
+    <string name="setting_menu_kand_title_socks5_port">SOCKS5 Proxy Port</string>
+    <string name="settings_menu_kand_title_bypass_address">Bypass Addresses</string>
+    <string name="setting_menu_kand_desc_bypass_address">Use CIDR to describe bypass addresses, separate each CIDR by a comma.</string>
 
     <string name="setting_menu_view_head">Kcanotify Settings</string>
     <string name="setting_menu_view_title_overlay_setting">Screen Overlay Settings</string>

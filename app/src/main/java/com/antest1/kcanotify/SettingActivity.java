@@ -42,6 +42,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -59,6 +60,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
+import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
 import static com.antest1.kcanotify.KcaService.kca_version;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
@@ -175,6 +177,25 @@ public class SettingActivity extends AppCompatActivity {
                                 sHandler.sendMessage(sMsg);
                             }
                             Toast.makeText(context, context.getString(R.string.sa_language_changed), Toast.LENGTH_LONG).show();
+                            return true;
+                        }
+                    });
+                }
+
+                if (key.equals(PREF_VPN_BYPASS_ADDRESS)) {
+                    pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            if (newValue.equals(""))
+                                return true;
+                            Pattern cidrPattern = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])/(\\d|[1-2]\\d|3[0-2])$");
+                            String[] cidrs = ((String) newValue).split(",");
+                            for (String cidr : cidrs) {
+                                if (!cidrPattern.matcher(cidr.trim()).find()) {
+                                    Toast.makeText(context, getString(R.string.sa_bypass_list_invalid), Toast.LENGTH_LONG).show();
+                                    return false;
+                                }
+                            }
                             return true;
                         }
                     });

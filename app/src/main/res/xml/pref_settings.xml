@@ -49,6 +49,28 @@
         android:key="download_data"
         android:summary="@string/setting_menu_kand_desc_game_data_down"
         android:title="@string/setting_menu_kand_title_game_data_down" />
+
+        <PreferenceScreen
+            android:title="@string/setting_menu_kand_title_adv_network">
+            <Preference
+                android:selectable="false"
+                android:persistent="false"
+                android:title=""
+                android:summary="@string/setting_menu_kand_warn_adv_network" />
+            <EditTextPreference
+                android:key="socks5_address"
+                android:title="@string/setting_menu_kand_title_socks5_address" />
+            <EditTextPreference
+                android:key="socks5_port"
+                android:inputType="numberDecimal"
+                android:title="@string/setting_menu_kand_title_socks5_port" />
+            <EditTextPreference
+                android:key="bypass_address"
+                android:title="@string/settings_menu_kand_title_bypass_address"
+                android:summary="@string/setting_menu_kand_desc_bypass_address" />
+        </PreferenceScreen>
+
+
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_menu_view_head">
         <Preference

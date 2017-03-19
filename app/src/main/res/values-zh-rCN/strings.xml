@@ -90,6 +90,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_overlay_ok">允许悬浮：开</string>
     <string name="sa_overlay_no">允许悬浮：关（战斗剧透会被禁用）</string>
 
+    <string name="sa_bypass_list_invalid">输入的绕行地址列表有错，请检查后重试。</string>
+
     <!-- InfoActivity Strings -->
 
     <!-- KcaService Strings -->
@@ -135,6 +137,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_exp_realtime_show">在通知栏显示剩余时间</string>
     <string name="setting_menu_kand_title_game_data_down">下载游戏缓存</string>
     <string name="setting_menu_kand_desc_game_data_down">在缓存数据没有自动加载时使用</string>
+    <string name="setting_menu_kand_title_adv_network">高级网络设置</string>
+    <string name="setting_menu_kand_warn_adv_network">警告：错误的设置以下项目可能会让VPN失效。请仅在你确定每个设置项作用时更改这些设置。在更改设置之后需要重启VPN服务以使设置生效。</string>
+    <string name="setting_menu_kand_title_socks5_address">SOCKS5代理地址</string>
+    <string name="setting_menu_kand_title_socks5_port">SOCKS5代理端口</string>
+    <string name="settings_menu_kand_title_bypass_address">绕行地址</string>
+    <string name="setting_menu_kand_desc_bypass_address">使用CIDR描述不经过代理的地址，使用逗号分隔每个CIDR。</string>
 
     <string name="setting_menu_view_head">战斗剧透/任务浏览设置</string>
     <string name="setting_menu_view_title_overlay_setting">悬浮窗设置</string>

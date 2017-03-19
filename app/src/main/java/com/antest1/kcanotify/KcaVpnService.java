@@ -381,7 +381,7 @@ public class KcaVpnService extends VpnService {
     }
 
     private Builder getBuilder(List<Rule> listAllowed, List<Rule> listRule) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
         boolean subnet = prefs.getBoolean("subnet", false);
         boolean tethering = prefs.getBoolean("tethering", false);
         boolean lan = prefs.getBoolean("lan", false);
@@ -477,7 +477,40 @@ public class KcaVpnService extends VpnService {
                 Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
             }
         } else {
-            builder.addRoute("0.0.0.0", 0);
+            String addresses = prefs.getString("bypass_address", "");
+            if (!addresses.equals("")) {
+                List<IPUtil.CIDR> listExclude = new ArrayList<>();
+                for (String cidr : addresses.split(",")) {
+                    String[] cidr_split = cidr.trim().split("/");
+                    listExclude.add(new IPUtil.CIDR(cidr_split[0], Integer.parseInt(cidr_split[1])));
+                }
+
+                Collections.sort(listExclude);
+
+                try {
+                    InetAddress start = InetAddress.getByName("0.0.0.0");
+
+                    for (IPUtil.CIDR exclude : listExclude) {
+                        for (IPUtil.CIDR include : IPUtil.toCIDR(start, IPUtil.minus1(exclude.getStart())))
+                            try {
+                                builder.addRoute(include.address, include.prefix);
+                            } catch (Throwable ex) {
+                                Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+                            }
+                        start = IPUtil.plus1(exclude.getEnd());
+                    }
+
+                    for (IPUtil.CIDR include : IPUtil.toCIDR(start.getHostAddress(), "255.255.255.255"))
+                        try {
+                            builder.addRoute(include.address, include.prefix);
+                        } catch (Throwable ex) {
+                            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+                        }
+                } catch (UnknownHostException ex) {
+                    Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+                }
+            }
+            else builder.addRoute("0.0.0.0", 0);
         }
 
         Log.i(TAG, "IPv6=" + ip6);
@@ -572,7 +605,16 @@ public class KcaVpnService extends VpnService {
     private void startNative(ParcelFileDescriptor vpn) {
         // Prepare rules
         int prio = Log.ERROR;
-        jni_socks5("", 0, "", "");
+        SharedPreferences prefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        String addr = prefs.getString("socks5_address", "");
+        String portNum = prefs.getString("socks5_port", "0");
+        int port = 0;
+        if (!portNum.equals(""))
+            port = Integer.parseInt(portNum);
+        if (addr.equals("") || port == 0)
+            jni_socks5("", 0, "", "");
+        else
+            jni_socks5(addr, port, "", "");
         jni_start(vpn.getFd(), true, prio);
     }
 
