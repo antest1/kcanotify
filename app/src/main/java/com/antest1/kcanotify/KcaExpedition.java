@@ -133,12 +133,7 @@ public class KcaExpedition implements Runnable {
 
                         if(getReturnFlag(mission_no)) {
                             JsonObject endExpInfo = new JsonObject();
-
                             endExpInfo.addProperty("kantai_idx", kantai_idx);
-                            endExpInfo.addProperty("kantai_name", kantai_name);
-                            endExpInfo.addProperty("mission_no", mission_no);
-                            endExpInfo.addProperty("mission_krname", mission_krname);
-                            endExpInfo.addProperty("mission_canceled", canceled_flag[kantai_idx]);
 
                             Bundle bundle = new Bundle();
                             bundle.putString("url", KCA_API_NOTI_EXP_FIN);
@@ -179,16 +174,6 @@ public class KcaExpedition implements Runnable {
 
         complete_time_check[kantai_idx] = arrive_time;
         canceled_flag[kantai_idx] = true;
-
-        if (sHandler != null) {
-            Bundle bundle = new Bundle();
-            bundle.putString("url", KCA_API_NOTI_EXP_CANCELED);
-            bundle.putString("data", gson.toJson(endExpInfo));
-            Message sMsg = sHandler.obtainMessage();
-            sMsg.setData(bundle);
-
-            sHandler.sendMessage(sMsg);
-        }
         return endExpInfo;
     }
 

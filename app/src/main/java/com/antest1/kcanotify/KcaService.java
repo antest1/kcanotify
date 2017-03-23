@@ -65,6 +65,7 @@ import okhttp3.OkHttpClient;
 
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
+import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.isUserItemDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
@@ -101,7 +102,7 @@ public class KcaService extends Service {
     BigTextStyle viewNotificationText;
     public static boolean noti_vibr_on = true;
     int viewBitmapId, viewBitmapSmallId;
-    Bitmap viewBitmap, expBitmap, dockBitmap = null;
+    Bitmap viewBitmap = null;
 
     kcaServiceHandler handler;
     kcaNotificationHandler nHandler;
@@ -110,9 +111,6 @@ public class KcaService extends Service {
     Thread[] kcaExpeditionList = new Thread[3];
     KcaExpedition[] kcaExpeditionRunnableList = new KcaExpedition[3];
     String[] kcaExpeditionInfoList = new String[3];
-
-    Thread[] kcaDockingList = new Thread[4];
-    KcaDocking[] kcaDockingRunnableList = new KcaDocking[4];
 
     String kcaFirstDeckInfo;
     static String kca_version;
@@ -175,6 +173,7 @@ public class KcaService extends Service {
                 mp.reset();
             }
         });
+
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -184,16 +183,12 @@ public class KcaService extends Service {
         viewBitmapId = getId(fairyId, R.mipmap.class);
         viewBitmapSmallId = getId(fairyId.concat("_small"), R.mipmap.class);
         viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
-        expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
-        dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
 
         handler = new kcaServiceHandler(this);
         nHandler = new kcaNotificationHandler(this);
         broadcaster = LocalBroadcastManager.getInstance(this);
 
         kcaExpeditionRunnableList = new KcaExpedition[3];
-        kcaDockingRunnableList = new KcaDocking[4];
-
         AbstractAjaxCallback.setGZip(true);
 
         String initTitle = String.format(getStringWithLocale(R.string.kca_init_title), getStringWithLocale(R.string.app_name));
@@ -206,9 +201,9 @@ public class KcaService extends Service {
         KcaExpedition.setContext(getApplicationContext());
 
         KcaVpnData.setHandler(handler);
-
         KcaBattle.setHandler(nHandler);
         KcaApiData.setHandler(nHandler);
+        KcaAlarmService.setHandler(nHandler);
         KcaOpendbAPI.setHandler(nHandler);
         SettingActivity.setHandler(nHandler);
         KcaFairySelectActivity.setHandler(nHandler);
@@ -226,13 +221,6 @@ public class KcaService extends Service {
                 kcaExpeditionRunnableList[i].stopHandler();
                 kcaExpeditionList[i].interrupt();
                 kcaExpeditionList[i] = null;
-            }
-        }
-        for (int i = 0; i < 4; i++) {
-            if (kcaDockingRunnableList[i] != null) {
-                kcaDockingRunnableList[i].stopHandler();
-                kcaDockingList[i].interrupt();
-                kcaDockingList[i] = null;
             }
         }
 
@@ -298,109 +286,9 @@ public class KcaService extends Service {
         return viewNotificationBuilder.build();
     }
 
-    private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag, boolean caFlag) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, getKcIntent(getApplicationContext()),
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        String title = "";
-        String content = "";
-        if (cancelFlag) {
-            title = String.format(getStringWithLocale(R.string.kca_noti_title_exp_canceled), missionNo, missionName);
-            content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_canceled), kantaiName, missionNo);
-        } else {
-            title = String.format(getStringWithLocale(R.string.kca_noti_title_exp_finished), missionNo, missionName);
-            if (caFlag)
-                content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_canceled), kantaiName, missionNo);
-            else
-                content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNo);
-
-        }
-        Notification.Builder builder = new Notification.Builder(getApplicationContext())
-                .setSmallIcon(R.mipmap.expedition_notify_icon)
-                .setLargeIcon(expBitmap)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setTicker(title)
-                .setContentIntent(pendingIntent);
-
-        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-        if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
-            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                if (soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
-                    builder.setDefaults(Notification.DEFAULT_VIBRATE);
-                }
-                builder.setSound(Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
-            } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
-                builder.setDefaults(Notification.DEFAULT_VIBRATE);
-            } else {
-                builder.setDefaults(0);
-            }
-        }
-        if (soundKind.equals(getString(R.string.sound_kind_value_vibrate))) {
-            if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-                builder.setDefaults(Notification.DEFAULT_VIBRATE);
-            } else {
-                builder.setDefaults(0);
-            }
-        }
-        if (soundKind.equals(getString(R.string.sound_kind_value_mute))) {
-            builder.setDefaults(0);
-        }
-
-        Notification Notifi = builder.build();
-        Notifi.flags = Notification.FLAG_AUTO_CANCEL;
-        setFrontViewNotifier(FRONT_NONE, 0, null);
-        return Notifi;
-    }
-
-    private Notification createDockingNotification(int dockId, String shipName) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, getKcIntent(getApplicationContext()),
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        String title = String.format(getStringWithLocale(R.string.kca_noti_title_dock_finished), dockId + 1);
-        String content = "";
-        if (shipName.length() > 0) {
-            content = String.format(getStringWithLocale(R.string.kca_noti_content_dock_finished), dockId + 1, shipName);
-        } else {
-            content = String.format(getStringWithLocale(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
-        }
-
-        Notification.Builder builder = new Notification.Builder(getApplicationContext())
-                .setSmallIcon(R.mipmap.docking_notify_icon)
-                .setLargeIcon(dockBitmap)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setTicker(title)
-                .setContentIntent(pendingIntent);
-        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-        if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
-            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                if (soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
-                    builder.setDefaults(Notification.DEFAULT_VIBRATE);
-                }
-                builder.setSound(Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
-            } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
-                builder.setDefaults(Notification.DEFAULT_VIBRATE);
-            } else {
-                builder.setDefaults(0);
-            }
-        }
-        if (soundKind.equals(getString(R.string.sound_kind_value_vibrate))) {
-            if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-                builder.setDefaults(Notification.DEFAULT_VIBRATE);
-            } else {
-                builder.setDefaults(0);
-            }
-        }
-        if (soundKind.equals(getString(R.string.sound_kind_value_mute))) {
-            builder.setDefaults(0);
-        }
-
-        Notification Notifi = builder.build();
-        Notifi.flags = Notification.FLAG_AUTO_CANCEL;
-        setFrontViewNotifier(FRONT_NONE, 0, null);
-        return Notifi;
-    }
-
     private void setExpeditionAlarm(int idx, int mission_no, String deck_name, long arrive_time, boolean cancel_flag, boolean ca_flag, Intent aIntent) {
+        if (!getReturnFlag(mission_no) && !cancel_flag) return;
+
         JsonObject expeditionAlarmData = new JsonObject();
         expeditionAlarmData.addProperty("type", KcaAlarmService.TYPE_EXPEDITION);
         expeditionAlarmData.addProperty("idx", idx);
@@ -418,6 +306,29 @@ public class KcaService extends Service {
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
         setAlarm(arrive_time, pendingIntent);
+    }
+
+    private void setDockingAlarm(int dockId, int shipId, long complete_time, Intent aIntent) {
+        String shipName = "";
+        if (isGameDataLoaded()) {
+            JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id");
+            JsonObject kcShipData = KcaApiData.getKcShipDataById(shipData.get("ship_id").getAsInt(), "name");
+            shipName = getShipTranslation(kcShipData.get("name").getAsString(), false);
+        }
+
+        JsonObject expeditionAlarmData = new JsonObject();
+        expeditionAlarmData.addProperty("type", KcaAlarmService.TYPE_DOCKING);
+        expeditionAlarmData.addProperty("dock_id", dockId);
+        expeditionAlarmData.addProperty("ship_name", shipName);
+
+        aIntent.putExtra("data", expeditionAlarmData.toString());
+        PendingIntent pendingIntent = PendingIntent.getService(
+                getApplicationContext(),
+                getNotificationId(NOTI_DOCK, dockId),
+                aIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        setAlarm(complete_time, pendingIntent);
     }
 
     private void toastInfo() {
@@ -440,7 +351,6 @@ public class KcaService extends Service {
         KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
         customToast.showToast(joinStr(toastList, " / "), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
     }
-
 
     private static class kcaServiceHandler extends Handler {
         private final WeakReference<KcaService> mService;
@@ -1356,51 +1266,18 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_NOTI_EXP_LEFT)) {
-                // //Log.e("KCA", "Expedition Notification Handler Called");
-                //int kantaiIndex = ((Long) jsonDataObj.get("idx")).intValue();
-                //String str_data = (String) jsonDataObj.get("str");
                 if (isExpViewEnabled()) {
                     setFrontViewNotifier(FRONT_NONE, 0, null);
                 }
             }
 
-            if (url.startsWith(KCA_API_NOTI_EXP_CANCELED)) {
-                // //Log.e("KCA", "Expedition Notification Handler Called");
-                int kantaiIndex = jsonDataObj.get("kantai_idx").getAsInt();
-                String kantaiName = jsonDataObj.get("kantai_name").getAsString();
-                int missionNo = jsonDataObj.get("mission_no").getAsInt();
-                String missionName = jsonDataObj.get("mission_krname").getAsString();
-                //Intent intent = new Intent(KcaService.this, MainActivity.class);
-
-                //if (isExpNotifyEnabled()) {
-                //    notifiManager.notify(getNotificationId(NOTI_EXP, kantaiIndex), createExpeditionNotification(missionNo, missionName, kantaiName, true, false));
-                //}
-            }
-
             if (url.startsWith(KCA_API_NOTI_EXP_FIN)) {
-                // //Log.e("KCA", "Expedition Notification Handler Called");
                 int kantaiIndex = jsonDataObj.get("kantai_idx").getAsInt();
-                String kantaiName = jsonDataObj.get("kantai_name").getAsString();
-                int missionNo = jsonDataObj.get("mission_no").getAsInt();
-                String missionName = jsonDataObj.get("mission_krname").getAsString();
-                boolean missionCanceled = jsonDataObj.get("mission_canceled").getAsBoolean();
-                //Intent intent = new Intent(KcaService.this, MainActivity.class);
-
                 kcaExpeditionInfoList[kantaiIndex] = "";
-                //if (isExpNotifyEnabled()) {
-                //    Log.e("KCA", "fin " + String.valueOf(kantaiIndex));
-                //    notifiManager.notify(getNotificationId(NOTI_EXP, kantaiIndex), createExpeditionNotification(missionNo, missionName, kantaiName, false, missionCanceled));
-                //}
             }
 
             if (url.startsWith(KCA_API_NOTI_DOCK_FIN)) {
-                int dockId = jsonDataObj.get("dock_no").getAsInt();
-                String shipName = getShipTranslation(jsonDataObj.get("ship_name").getAsString(), false);
-                //if (isDockNotifyEnabled()) {
-                //    notifiManager.notify(getNotificationId(NOTI_DOCK, dockId), createDockingNotification(dockId, shipName));
-                //}
-                kcaDockingRunnableList[dockId] = null;
-                kcaDockingList[dockId] = null;
+                // Currently Nothing
             }
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_INFO)) {
@@ -1844,12 +1721,9 @@ public class KcaService extends Service {
                 dockId = ndockData.get("api_id").getAsInt() - 1;
                 shipId = ndockData.get("api_ship_id").getAsInt();
                 completeTime = ndockData.get("api_complete_time").getAsLong();
-
                 Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
-                if (kcaDockingRunnableList[dockId] != null) { // Overwrite Data?
-                    if (kcaDockingRunnableList[dockId].ship_id != shipId) {
-                        kcaDockingList[dockId].interrupt();
-                        kcaDockingRunnableList[dockId] = null;
+                if (KcaDocking.getCompleteTime(dockId) != -1) {
+                    if (KcaDocking.getShipId(dockId) != shipId) {
                         PendingIntent pendingIntent = PendingIntent.getService(
                                 getApplicationContext(),
                                 getNotificationId(NOTI_DOCK, dockId),
@@ -1858,56 +1732,24 @@ public class KcaService extends Service {
                         );
                         pendingIntent.cancel();
                         alarmManager.cancel(pendingIntent);
-
-                        if (shipId != 0) {
-                            kcaDockingRunnableList[dockId] = new KcaDocking(dockId, shipId, completeTime, nHandler);
-                            kcaDockingList[dockId] = new Thread(kcaDockingRunnableList[dockId]);
-                            kcaDockingList[dockId].start();
-                            setDockingAlarm(dockId, shipId, completeTime, aIntent);
-                        }
-                    } else {
-                        kcaDockingRunnableList[dockId].setCompleteTime(dockId, completeTime);
+                        if (shipId != 0) setDockingAlarm(dockId, shipId, completeTime, aIntent);
+                        KcaDocking.setShipId(dockId, shipId);
                     }
+                    KcaDocking.setCompleteTime(dockId, completeTime);
                 } else {
                     if (state == 1) {
-                        kcaDockingRunnableList[dockId] = new KcaDocking(dockId, shipId, completeTime, nHandler);
-                        kcaDockingList[dockId] = new Thread(kcaDockingRunnableList[dockId]);
-                        kcaDockingList[dockId].start();
                         setDockingAlarm(dockId, shipId, completeTime, aIntent);
+                        KcaDocking.setShipId(dockId, shipId);
+                        KcaDocking.setCompleteTime(dockId, completeTime);
                     }
                 }
             }
         }
     }
 
-    private void setDockingAlarm(int dockId, int shipId, long complete_time, Intent aIntent) {
-        String shipName = "";
-        if(isGameDataLoaded()) {
-            JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id");
-            JsonObject kcShipData = KcaApiData.getKcShipDataById(shipData.get("ship_id").getAsInt(), "name");
-            shipName = getShipTranslation(kcShipData.get("name").getAsString(), false);
-        }
-
-        JsonObject expeditionAlarmData = new JsonObject();
-        expeditionAlarmData.addProperty("type", KcaAlarmService.TYPE_DOCKING);
-        expeditionAlarmData.addProperty("dock_id", dockId);
-        expeditionAlarmData.addProperty("ship_name", shipName);
-
-        aIntent.putExtra("data", expeditionAlarmData.toString());
-        PendingIntent pendingIntent = PendingIntent.getService(
-                getApplicationContext(),
-                getNotificationId(NOTI_DOCK, dockId),
-                aIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        );
-        setAlarm(complete_time, pendingIntent);
-    }
-
     private void processDockingSpeedup(int dockId) {
-        kcaDockingRunnableList[dockId].sendDockingFinished(true);
-        kcaDockingRunnableList[dockId] = null;
-        kcaDockingList[dockId] = null;
-
+        KcaDocking.setShipId(dockId, 0);
+        KcaDocking.setCompleteTime(dockId, -1);
         PendingIntent pendingIntent = PendingIntent.getService(
                 getApplicationContext(),
                 getNotificationId(NOTI_DOCK, dockId),
@@ -2020,7 +1862,7 @@ public class KcaService extends Service {
         } else {
             alarmManager.set(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
         }
-        Log.e("KCA", "Alarm set to: "+String.valueOf(time) + " " + alarmIntent.toString());
+        Log.e("KCA", "Alarm set to: " + String.valueOf(time) + " " + alarmIntent.toString());
     }
 
     private class retrieveApiStartData extends AsyncTask<String, Void, String> {

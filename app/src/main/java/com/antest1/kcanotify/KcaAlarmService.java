@@ -62,6 +62,10 @@ public class KcaAlarmService extends Service {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
+    public static void setHandler(Handler h) {
+        sHandler = h;
+    }
+
     @Override
     public void onCreate() {
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
