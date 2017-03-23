@@ -71,7 +71,8 @@
         <service
             android:name=".KcaService"
             android:configChanges="locale|layoutDirection" />
-
+        <service
+            android:name=".KcaAlarmService" />
         <service
             android:name=".KcaViewButtonService"
             android:configChanges="locale|layoutDirection" />

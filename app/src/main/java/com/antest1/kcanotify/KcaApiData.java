@@ -510,6 +510,11 @@ public class KcaApiData {
         }
     }
 
+    public static String getExpeditionName(int mission_no, String locale) {
+        return kcSimpleExpeditionData.getAsJsonObject(String.valueOf(mission_no))
+                .get(String.format("name-".concat(locale))).getAsString();
+    }
+
     public static int getPortData(JsonObject api_data) {
         Set<Integer> prevItemIds;
         if (userShipData == null) {

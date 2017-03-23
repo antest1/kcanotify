@@ -168,10 +168,9 @@ public class SettingActivity extends AppCompatActivity {
                                 LocaleUtils.setLocale(new Locale(locale[0], locale[1]));
                             }
                             if (sHandler != null) {
-                                JsonObject data = new JsonObject();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("url", KCA_API_PREF_LANGUAGE_CHANGED);
-                                bundle.putString("data", data.toString());
+                                bundle.putString("data", "");
                                 Message sMsg = sHandler.obtainMessage();
                                 sMsg.setData(bundle);
                                 sHandler.sendMessage(sMsg);

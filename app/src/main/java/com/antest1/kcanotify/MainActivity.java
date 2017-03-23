@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (is_kca_installed) {
                     startActivity(kcIntent);
-                    //finish();
+                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(), getString(R.string.ma_toast_kancolle_not_installed), Toast.LENGTH_LONG).show();
                 }

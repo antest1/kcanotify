@@ -227,6 +227,7 @@ public class KcaViewButtonService extends Service {
             stopService(new Intent(getBaseContext(), KcaQuestViewService.class));
         }
         status = -1;
+        ((BitmapDrawable) viewbutton.getDrawable()).getBitmap().recycle();
         mManager.removeView(mView);
         super.onDestroy();
     }

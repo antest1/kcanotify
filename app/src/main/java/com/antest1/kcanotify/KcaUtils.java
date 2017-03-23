@@ -262,6 +262,10 @@ public class KcaUtils {
         }
     }
 
+    public static int getNotificationId(int type, int n) {
+        return n + 1000 * type;
+    }
+
     public static int getId(String resourceName, Class<?> c) {
         try {
             Field idField = c.getDeclaredField(resourceName);
