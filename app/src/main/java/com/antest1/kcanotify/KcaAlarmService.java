@@ -21,8 +21,6 @@ import android.util.Log;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import static com.antest1.kcanotify.KcaConstants.FRONT_NONE;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_EXP_LEFT;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
 import static com.antest1.kcanotify.KcaConstants.NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
@@ -97,6 +95,8 @@ public class KcaAlarmService extends Service {
             } else if (type == TYPE_DOCKING && isDockAlarmEnabled()) {
                 int dockId = data.get("dock_id").getAsInt();
                 String shipName = data.get("ship_name").getAsString();
+                KcaDocking.setCompleteTime(dockId, -1);
+                KcaDocking.setShipId(dockId, 0);
                 notificationManager.notify(getNotificationId(NOTI_DOCK, dockId), createDockingNotification(dockId, shipName));
             }
         }
