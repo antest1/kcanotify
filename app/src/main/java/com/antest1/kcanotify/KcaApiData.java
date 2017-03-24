@@ -39,6 +39,7 @@ import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
 public class KcaApiData {
     public static JsonObject kcGameData = null;
     public static boolean dataLoadTriggered = false;
+    public static String currentLocaleCode = "";
 
     public static Map<Integer, JsonObject> kcShipData = new HashMap<Integer, JsonObject>();
     public static Map<Integer, JsonObject> kcItemData = new HashMap<Integer, JsonObject>();
@@ -439,23 +440,24 @@ public class KcaApiData {
 
     public static void loadTranslationData(AssetManager assetManager, Context context) {
         if (assetManager == null) return;
-
-        int loadShipTranslationDataResult = loadShipTranslationDataFromAssets(assetManager,
-                getStringPreferences(context, PREF_KCA_LANGUAGE));
-        if (loadShipTranslationDataResult != 1) {
-            Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
-        }
-
-        int loadItemTranslationDataResult = loadItemTranslationDataFromAssets(assetManager,
-                getStringPreferences(context, PREF_KCA_LANGUAGE));
-        if (loadItemTranslationDataResult != 1) {
-            Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
-        }
-
-        int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromAssets(assetManager,
-                getStringPreferences(context, PREF_KCA_LANGUAGE));
-        if (loadQuestInfoTranslationDataResult != 1) {
-            Toast.makeText(context, "Error loading Quest Info", Toast.LENGTH_LONG).show();
+        boolean isDataLoaded = (kcShipTranslationData.entrySet().size() != 0) &&
+                (kcItemTranslationData.entrySet().size() != 0) &&
+                (kcQuestInfoData.entrySet().size() != 0);
+        String locale = getStringPreferences(context, PREF_KCA_LANGUAGE);
+        if (!isDataLoaded || !currentLocaleCode.equals(getLocaleCode(locale))) {
+            currentLocaleCode = getLocaleCode(locale);
+            int loadShipTranslationDataResult = loadShipTranslationDataFromAssets(assetManager, locale);
+            if (loadShipTranslationDataResult != 1) {
+                Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+            }
+            int loadItemTranslationDataResult = loadItemTranslationDataFromAssets(assetManager, locale);
+            if (loadItemTranslationDataResult != 1) {
+                Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+            }
+            int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromAssets(assetManager, locale);
+            if (loadQuestInfoTranslationDataResult != 1) {
+                Toast.makeText(context, "Error loading Quest Info", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -508,6 +510,10 @@ public class KcaApiData {
         } else {
             return String.valueOf(no);
         }
+    }
+
+    public static boolean isExpeditionDataLoaded() {
+        return kcSimpleExpeditionData != null;
     }
 
     public static String getExpeditionName(int mission_no, String locale) {
