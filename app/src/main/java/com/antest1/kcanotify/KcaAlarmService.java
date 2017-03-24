@@ -21,6 +21,12 @@ import android.util.Log;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
+import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
+import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
+import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
 import static com.antest1.kcanotify.KcaConstants.NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
@@ -33,6 +39,7 @@ import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.readCacheData;
 
 public class KcaAlarmService extends Service {
     public static final int TYPE_EXPEDITION = 1;
@@ -76,25 +83,34 @@ public class KcaAlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("KCA", "KcaAlarmService Called: " + String.valueOf(startId));
+        loadTranslationData(getAssets(), getApplicationContext());
         if (intent != null) {
             JsonObject data = new JsonParser().parse(intent.getStringExtra("data")).getAsJsonObject();
             int type = data.get("type").getAsInt();
-            Notification noti = null;
             String locale = LocaleUtils.getLocaleCode(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
             if (type == TYPE_EXPEDITION && isExpAlarmEnabled()) {
-                if(KcaApiData.kcSimpleExpeditionData != null) {
-                    int idx = data.get("idx").getAsInt();
-                    int mission_no = data.get("mission_no").getAsInt();
-                    String mission_name = KcaApiData.getExpeditionName(mission_no, locale);
-                    String kantai_name = data.get("kantai_name").getAsString();
-                    boolean cancelFlag = data.get("cancel_flag").getAsBoolean();
-                    boolean caFlag = data.get("ca_flag").getAsBoolean();
-                    if (caFlag) idx = idx | EXP_CANCEL_FLAG;
-                    notificationManager.notify(getNotificationId(NOTI_EXP, idx), createExpeditionNotification(mission_no, mission_name, kantai_name, cancelFlag, caFlag));
-                }
+                if (!isExpeditionDataLoaded()) loadSimpleExpeditionInfoFromAssets(getAssets());
+                int idx = data.get("idx").getAsInt();
+                int mission_no = data.get("mission_no").getAsInt();
+                String mission_name = KcaApiData.getExpeditionName(mission_no, locale);
+                String kantai_name = data.get("kantai_name").getAsString();
+                boolean cancelFlag = data.get("cancel_flag").getAsBoolean();
+                boolean caFlag = data.get("ca_flag").getAsBoolean();
+                if (caFlag) idx = idx | EXP_CANCEL_FLAG;
+                notificationManager.notify(getNotificationId(NOTI_EXP, idx), createExpeditionNotification(mission_no, mission_name, kantai_name, cancelFlag, caFlag));
+
             } else if (type == TYPE_DOCKING && isDockAlarmEnabled()) {
                 int dockId = data.get("dock_id").getAsInt();
-                String shipName = data.get("ship_name").getAsString();
+                int shipId = data.get("ship_id").getAsInt();
+                String shipName = "";
+                if (shipId != -1) {
+                    if (!isGameDataLoaded()) {
+                        JsonObject cachedData = readCacheData(getApplicationContext(), KCANOTIFY_S2_CACHE_FILENAME);
+                        KcaApiData.getKcGameData(cachedData.getAsJsonObject("api_data"));
+                    }
+                    JsonObject kcShipData = KcaApiData.getKcShipDataById(shipId, "name");
+                    shipName = getShipTranslation(kcShipData.get("name").getAsString(), false);
+                }
                 KcaDocking.setCompleteTime(dockId, -1);
                 KcaDocking.setShipId(dockId, 0);
                 notificationManager.notify(getNotificationId(NOTI_DOCK, dockId), createDockingNotification(dockId, shipName));

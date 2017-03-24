@@ -67,6 +67,7 @@ import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
+import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isUserItemDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
@@ -162,7 +163,6 @@ public class KcaService extends Service {
 
         loadSimpleExpeditionInfoFromAssets(assetManager);
         KcaExpedition.expeditionData = KcaApiData.kcSimpleExpeditionData;
-
         loadShipInitEquipCountFromAssets(assetManager);
 
         mediaPlayer = new MediaPlayer();
@@ -274,7 +274,7 @@ public class KcaService extends Service {
                 .setSmallIcon(viewBitmapSmallId)
                 .setLargeIcon(viewBitmap)
                 .setContentTitle(title)
-                .setContentText(getStringWithLocale(R.string.kca_view_context_expand))
+                .setContentText(content1)
                 .setStyle(viewNotificationText.bigText(content1))
                 .setTicker(title)
                 .setContentIntent(pendingIntent)
@@ -310,18 +310,17 @@ public class KcaService extends Service {
 
     private void setDockingAlarm(int dockId, int shipId, long complete_time, Intent aIntent) {
         String shipName = "";
+        int shipKcId = -1;
         if (isGameDataLoaded()) {
             JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id");
-            JsonObject kcShipData = KcaApiData.getKcShipDataById(shipData.get("ship_id").getAsInt(), "name");
-            shipName = getShipTranslation(kcShipData.get("name").getAsString(), false);
+            shipKcId = shipData.get("ship_id").getAsInt();
         }
+        JsonObject dockingAlarmData = new JsonObject();
+        dockingAlarmData.addProperty("type", KcaAlarmService.TYPE_DOCKING);
+        dockingAlarmData.addProperty("dock_id", dockId);
+        dockingAlarmData.addProperty("ship_id", shipKcId);
 
-        JsonObject expeditionAlarmData = new JsonObject();
-        expeditionAlarmData.addProperty("type", KcaAlarmService.TYPE_DOCKING);
-        expeditionAlarmData.addProperty("dock_id", dockId);
-        expeditionAlarmData.addProperty("ship_name", shipName);
-
-        aIntent.putExtra("data", expeditionAlarmData.toString());
+        aIntent.putExtra("data", dockingAlarmData.toString());
         PendingIntent pendingIntent = PendingIntent.getService(
                 getApplicationContext(),
                 getNotificationId(NOTI_DOCK, dockId),
