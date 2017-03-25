@@ -2,8 +2,8 @@ package com.antest1.kcanotify;
 
 import android.app.AlarmManager;
 import android.app.Notification;
-import android.app.Notification.Builder;
 import android.app.Notification.BigTextStyle;
+import android.app.Notification.Builder;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -59,24 +59,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 
-import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
-import static com.antest1.kcanotify.KcaApiData.getNodeColor;
-import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
-import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
-import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
-import static com.antest1.kcanotify.KcaApiData.isUserItemDataLoaded;
-import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaApiData.updateUserShip;
+import static com.antest1.kcanotify.KcaApiData.*;
 import static com.antest1.kcanotify.KcaConstants.*;
-
-import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaUtils.*;
 
 public class KcaService extends Service {
@@ -104,14 +95,12 @@ public class KcaService extends Service {
     public static boolean noti_vibr_on = true;
     int viewBitmapId, viewBitmapSmallId;
     Bitmap viewBitmap = null;
+    Runnable missionTimer;
 
     kcaServiceHandler handler;
     kcaNotificationHandler nHandler;
     LocalBroadcastManager broadcaster;
-
-    Thread[] kcaExpeditionList = new Thread[3];
-    KcaExpedition[] kcaExpeditionRunnableList = new KcaExpedition[3];
-    String[] kcaExpeditionInfoList = new String[3];
+    ScheduledExecutorService missionTimeScheduler = null;
 
     String kcaFirstDeckInfo;
     static String kca_version;
@@ -150,11 +139,6 @@ public class KcaService extends Service {
         }
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
 
-        for (int i = 0; i < 3; i++) {
-            kcaExpeditionList[i] = null;
-            kcaExpeditionInfoList[i] = "";
-        }
-
         AssetManager assetManager = getResources().getAssets();
         int loadMapEdgeInfoResult = loadMapEdgeInfoFromAssets(assetManager);
         if (loadMapEdgeInfoResult != 1) {
@@ -162,7 +146,6 @@ public class KcaService extends Service {
         }
 
         loadSimpleExpeditionInfoFromAssets(assetManager);
-        KcaExpedition.expeditionData = KcaApiData.kcSimpleExpeditionData;
         loadShipInitEquipCountFromAssets(assetManager);
 
         mediaPlayer = new MediaPlayer();
@@ -188,7 +171,6 @@ public class KcaService extends Service {
         nHandler = new kcaNotificationHandler(this);
         broadcaster = LocalBroadcastManager.getInstance(this);
 
-        kcaExpeditionRunnableList = new KcaExpedition[3];
         AbstractAjaxCallback.setGZip(true);
 
         String initTitle = String.format(getStringWithLocale(R.string.kca_init_title), getStringWithLocale(R.string.app_name));
@@ -198,8 +180,6 @@ public class KcaService extends Service {
         startForeground(getNotificationId(NOTI_FRONT, 1), createViewNotification(initTitle, initContent, initSubContent));
         isServiceOn = true;
 
-        KcaExpedition.setContext(getApplicationContext());
-
         KcaVpnData.setHandler(handler);
         KcaBattle.setHandler(nHandler);
         KcaApiData.setHandler(nHandler);
@@ -208,6 +188,22 @@ public class KcaService extends Service {
         SettingActivity.setHandler(nHandler);
         KcaFairySelectActivity.setHandler(nHandler);
 
+        missionTimer = new Runnable() {
+            @Override
+            public void run() {
+                if (viewNotificationBuilder != null && isMissionTimerViewEnabled() && isPortAccessed) {
+                    updateExpViewNotification();
+                }
+            }
+        };
+
+        if (isMissionTimerViewEnabled()) {
+            missionTimeScheduler = Executors.newSingleThreadScheduledExecutor();
+            missionTimeScheduler.scheduleAtFixedRate(missionTimer, 0, 1, TimeUnit.SECONDS);
+        } else {
+            missionTimeScheduler = null;
+        }
+
         return START_STICKY;
     }
 
@@ -215,13 +211,10 @@ public class KcaService extends Service {
 
     public void setServiceDown() {
         MainActivity.isKcaServiceOn = false;
+        isPortAccessed = false;
         KcaApiData.userItemData = null;
-        for (int i = 0; i < 3; i++) {
-            if (kcaExpeditionList[i] != null) {
-                kcaExpeditionRunnableList[i].stopHandler();
-                kcaExpeditionList[i].interrupt();
-                kcaExpeditionList[i] = null;
-            }
+        if (missionTimeScheduler != null) {
+            missionTimeScheduler.shutdown();
         }
 
         handler = null;
@@ -232,6 +225,7 @@ public class KcaService extends Service {
 
         stopForeground(true);
         notifiManager.cancelAll();
+        currentPortDeckData = null;
         viewNotificationBuilder = null;
         isServiceOn = false;
     }
@@ -269,21 +263,56 @@ public class KcaService extends Service {
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
-        viewNotificationText = new Notification.BigTextStyle();
-        viewNotificationBuilder = new Notification.Builder(getApplicationContext())
-                .setSmallIcon(viewBitmapSmallId)
-                .setLargeIcon(viewBitmap)
-                .setContentTitle(title)
-                .setContentText(getStringWithLocale(R.string.kca_view_context_expand))
-                .setStyle(viewNotificationText.bigText(content1))
-                .setTicker(title)
-                .setContentIntent(pendingIntent)
-                .setPriority(Notification.PRIORITY_MAX)
-                .setOngoing(true).setAutoCancel(false);
-        if (isExpViewEnabled()) {
+        if (viewNotificationBuilder == null) {
+            viewNotificationText = new Notification.BigTextStyle();
+            viewNotificationBuilder = new Notification.Builder(getApplicationContext())
+                    .setSmallIcon(viewBitmapSmallId)
+                    .setLargeIcon(viewBitmap)
+                    .setContentTitle(title)
+                    .setContentText(content1)
+                    .setStyle(viewNotificationText.bigText(content1))
+                    .setTicker(title)
+                    .setContentIntent(pendingIntent)
+                    .setPriority(Notification.PRIORITY_MAX)
+                    .setOngoing(true).setAutoCancel(false);
+        } else {
+            viewNotificationBuilder
+                    .setContentTitle(title)
+                    .setContentText(content1)
+                    .setStyle(viewNotificationText.bigText(content1))
+                    .setTicker(title);
+        }
+        if (isMissionTimerViewEnabled() && content2 != null) {
             viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(content2));
         }
         return viewNotificationBuilder.build();
+    }
+
+    private void updateExpViewNotification() {
+        boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        String expeditionString = "";
+        if (isPortAccessed && isMissionTimerViewEnabled()) {
+            if (!KcaExpedition2.isMissionExist()) {
+                expeditionString = expeditionString.concat(getStringWithLocale(R.string.kca_view_noexpedition));
+            } else {
+                List<String> kcaExpStrList = new ArrayList<String>();
+                for (int i = 1; i < 4; i++) {
+                    String str = KcaExpedition2.getLeftTimeStr(i);
+                    if (str.length() > 0) {
+                        kcaExpStrList.add(str);
+                    }
+                }
+                if (is_landscape) {
+                    expeditionString = expeditionString.concat(getStringWithLocale(R.string.kca_view_expedition_header)).concat(" ");
+                    //expeditionString = expeditionString.concat("\n");
+                }
+                expeditionString = expeditionString.concat(joinStr(kcaExpStrList, " / "));
+            }
+        } else {
+            expeditionString = String.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
+        }
+        viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(expeditionString));
+        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.build());
     }
 
     private void setExpeditionAlarm(int idx, int mission_no, String deck_name, long arrive_time, boolean cancel_flag, boolean ca_flag, Intent aIntent) {
@@ -305,7 +334,7 @@ public class KcaService extends Service {
                 aIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
-        setAlarm(arrive_time, pendingIntent);
+        setAlarm(arrive_time, pendingIntent, getNotificationId(NOTI_EXP, idx));
     }
 
     private void setDockingAlarm(int dockId, int shipId, long complete_time, Intent aIntent) {
@@ -327,7 +356,7 @@ public class KcaService extends Service {
                 aIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
-        setAlarm(complete_time, pendingIntent);
+        setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_DOCK, dockId));
     }
 
     private void toastInfo() {
@@ -476,7 +505,7 @@ public class KcaService extends Service {
                         break;
                     }
                 }
-                notifiManager.cancel(getNotificationId(NOTI_EXP, deck_id - 1));
+                notifiManager.cancel(getNotificationId(NOTI_EXP, deck_id));
             }
 
             if (url.startsWith(API_GET_MEMBER_NDOCK)) {
@@ -1264,15 +1293,8 @@ public class KcaService extends Service {
                 setFrontViewNotifier(FRONT_NONE, 0, null);
             }
 
-            if (url.startsWith(KCA_API_NOTI_EXP_LEFT)) {
-                if (isExpViewEnabled()) {
-                    setFrontViewNotifier(FRONT_NONE, 0, null);
-                }
-            }
-
             if (url.startsWith(KCA_API_NOTI_EXP_FIN)) {
-                int kantaiIndex = jsonDataObj.get("kantai_idx").getAsInt();
-                kcaExpeditionInfoList[kantaiIndex] = "";
+                // Currently Nothing
             }
 
             if (url.startsWith(KCA_API_NOTI_DOCK_FIN)) {
@@ -1357,7 +1379,13 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_PREF_EXPVIEW_CHANGED)) {
-                setFrontViewNotifier(FRONT_NONE, 0, null);
+                if (isMissionTimerViewEnabled()) {
+                    missionTimeScheduler = Executors.newSingleThreadScheduledExecutor();
+                    missionTimeScheduler.scheduleAtFixedRate(missionTimer, 0, 1, TimeUnit.SECONDS);
+                } else {
+                    if (missionTimeScheduler != null) missionTimeScheduler.shutdown();
+                    missionTimeScheduler = null;
+                }
             }
 
             if (url.startsWith(KCA_API_OPENDB_FAILED)) {
@@ -1441,7 +1469,7 @@ public class KcaService extends Service {
         return getBooleanPreferences(getApplicationContext(), PREF_OPENDB_API_USE);
     }
 
-    private boolean isExpViewEnabled() {
+    private boolean isMissionTimerViewEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_EXP_VIEW);
     }
 
@@ -1646,39 +1674,26 @@ public class KcaService extends Service {
             }
 
             Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
-            if (kcaExpeditionRunnableList[idx] != null) {
-                if (mission_no == -1) {
-                    kcaExpeditionRunnableList[idx].kill();
-                    kcaExpeditionList[idx].interrupt();
-                    kcaExpeditionList[idx] = null;
-                    kcaExpeditionRunnableList[idx] = null;
+            if (KcaExpedition2.isInMission(i)) {
+                boolean isNotIdenticalMission = (arrive_time != KcaExpedition2.getArriveTime(i));
+                if (mission_no == -1 || isNotIdenticalMission) {
                     PendingIntent pendingIntent = PendingIntent.getService(
                             getApplicationContext(),
-                            getNotificationId(NOTI_EXP, idx),
+                            getNotificationId(NOTI_EXP, i),
                             new Intent(getApplicationContext(), KcaAlarmService.class),
                             PendingIntent.FLAG_UPDATE_CURRENT
                     );
                     pendingIntent.cancel();
                     alarmManager.cancel(pendingIntent);
-                } else if (arrive_time != kcaExpeditionRunnableList[idx].getArriveTime()
-                        && !kcaExpeditionRunnableList[idx].getCanceledStatus()) {
-                    notifiManager.cancel(getNotificationId(NOTI_EXP, idx));
-                    kcaExpeditionRunnableList[idx].kill();
-                    kcaExpeditionList[idx].interrupt();
-                    kcaExpeditionRunnableList[idx] = new KcaExpedition(mission_no, idx, deck_name, arrive_time, nHandler);
-                    kcaExpeditionList[idx] = new Thread(kcaExpeditionRunnableList[idx]);
-                    kcaExpeditionList[idx].start();
-                    setExpeditionAlarm(idx, mission_no, deck_name, arrive_time, false, false, aIntent);
+                    KcaExpedition2.clearMissionData(i);
                 }
-            } else {
-                if (mission_no != -1 && (KcaExpedition.complete_time_check[idx] != arrive_time ||
-                        kcaExpeditionRunnableList[idx] == null)) {
-                    //Log.e("KCA", "Fleet " + String.valueOf(idx) + " went exp");
-                    kcaExpeditionRunnableList[idx] = new KcaExpedition(mission_no, idx, deck_name, arrive_time, nHandler);
-                    kcaExpeditionList[idx] = new Thread(kcaExpeditionRunnableList[idx]);
-                    kcaExpeditionList[idx].start();
-                    setExpeditionAlarm(idx, mission_no, deck_name, arrive_time, false, false, aIntent);
+                if (arrive_time != KcaExpedition2.getArriveTime(i)) {
+                    KcaExpedition2.setMissionData(i, deck_name, mission_no, arrive_time);
+                    setExpeditionAlarm(i, mission_no, deck_name, arrive_time, false, false, aIntent);
                 }
+            } else if (mission_no != -1) {
+                KcaExpedition2.setMissionData(i, deck_name, mission_no, arrive_time);
+                setExpeditionAlarm(i, mission_no, deck_name, arrive_time, false, false, aIntent);
             }
         }
         setFrontViewNotifier(FRONT_NONE, 0, null);
@@ -1688,24 +1703,15 @@ public class KcaService extends Service {
         JsonArray canceled_info = (JsonArray) data.get("api_mission");
         int canceled_mission_no = canceled_info.get(1).getAsInt();
         long arrive_time = canceled_info.get(2).getAsLong();
-        int idx = -1;
-        for (int i = 0; i < 3; i++) {
-            if (kcaExpeditionRunnableList[i] != null) {
-                if (kcaExpeditionRunnableList[i].mission_no == canceled_mission_no) {
-                    idx = i;
-                    break;
-                }
-            }
-        }
+        int idx = KcaExpedition2.getIdxByMissionNo(canceled_mission_no);
         if (idx == -1) return;
-        Log.e("KCA", "Arrive time: " + String.valueOf(arrive_time));
-
-        Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
-        JsonObject info = kcaExpeditionRunnableList[idx].canceled(arrive_time);
-        int mission_no = info.get("mission_no").getAsInt();
-        String kantai_name = info.get("kantai_name").getAsString();
-        setExpeditionAlarm(idx, mission_no, kantai_name, -1, true, false, aIntent);
-        setExpeditionAlarm(idx, mission_no, kantai_name, arrive_time, false, true, aIntent);
+        else {
+            KcaExpedition2.cancel(idx, arrive_time);
+            Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
+            String kantai_name = KcaExpedition2.getDeckName(idx);
+            setExpeditionAlarm(idx, canceled_mission_no, kantai_name, -1, true, false, aIntent);
+            setExpeditionAlarm(idx, canceled_mission_no, kantai_name, arrive_time, false, true, aIntent);
+        }
     }
 
     private void processDockingInfo(JsonArray data) {
@@ -1763,11 +1769,9 @@ public class KcaService extends Service {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         boolean is_portrait = !is_landscape;
-        boolean no_exp_flag = true;
 
         String notifiTitle = "";
         String notifiString = "";
-        String expeditionString = "";
 
         if (!prefs.getBoolean(PREF_VPN_ENABLED, false)) {
             notifiTitle = String.format(getStringWithLocale(R.string.kca_view_normal_format), getStringWithLocale(R.string.app_name), "");
@@ -1815,27 +1819,7 @@ public class KcaService extends Service {
             }
         }
 
-
-        List<String> kcaExpStrList = new ArrayList<String>();
-        for (int i = 0; i < 3; i++) {
-            if (KcaExpedition.left_time_str[i] != null) {
-                no_exp_flag = false;
-                kcaExpStrList.add(KcaExpedition.left_time_str[i]);
-            }
-        }
-
-        if (isExpViewEnabled()) {
-            if (no_exp_flag) {
-                expeditionString = expeditionString.concat(getStringWithLocale(R.string.kca_view_noexpedition));
-            } else {
-                if (is_landscape) {
-                    expeditionString = expeditionString.concat(getStringWithLocale(R.string.kca_view_expedition_header)).concat(" ");
-                    //expeditionString = expeditionString.concat("\n");
-                }
-                expeditionString = expeditionString.concat(joinStr(kcaExpStrList, " / "));
-            }
-        }
-        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), createViewNotification(notifiTitle, notifiString, expeditionString));
+        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), createViewNotification(notifiTitle, notifiString, null));
     }
 
     public static boolean isJSONValid(String jsonInString) {
@@ -1848,7 +1832,7 @@ public class KcaService extends Service {
         }
     }
 
-    private void setAlarm(long time, PendingIntent alarmIntent) {
+    private void setAlarm(long time, PendingIntent alarmIntent, int code) {
         if (time == -1) {
             time = System.currentTimeMillis();
         } else {
@@ -1861,7 +1845,7 @@ public class KcaService extends Service {
         } else {
             alarmManager.set(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
         }
-        Log.e("KCA", "Alarm set to: " + String.valueOf(time) + " " + alarmIntent.toString());
+        Log.e("KCA", "Alarm set to: " + String.valueOf(time) + " " + String.valueOf(code));
     }
 
     private class retrieveApiStartData extends AsyncTask<String, Void, String> {
@@ -1937,7 +1921,7 @@ public class KcaService extends Service {
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
         loadTranslationData(getAssets(), getApplicationContext());
 
-        if (currentPortDeckData != null) processFirstDeckInfo(currentPortDeckData);
+        if (isPortAccessed) processFirstDeckInfo(currentPortDeckData);
         setFrontViewNotifier(FRONT_NONE, 0, null);
 
         super.onConfigurationChanged(newConfig);

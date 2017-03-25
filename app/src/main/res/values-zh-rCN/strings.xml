@@ -309,4 +309,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="current_fairy_changed_in_next">※ 当前战斗剧透/任务浏览结束后会改变妖精形象。</string>
     <string name="setting_menu_app_title_down">选择APK下载地址</string>
     <string name="language_system">使用系统设置</string>
+    <string name="item_engine">NE式轴流喷气发动机</string>
 </resources>

@@ -680,7 +680,7 @@ public class KcaApiData {
     }
 
     public static JsonObject getUserItemStatusById(int id, String list, String kclist) {
-        if (kcGameData == null) return null;
+        if (kcGameData == null || userItemData == null) return null;
         if (userItemData.containsKey(id)) {
             int kc_item_id = userItemData.get(id).get("api_slotitem_id").getAsInt();
             JsonObject kcData = getKcItemStatusById(kc_item_id, kclist);

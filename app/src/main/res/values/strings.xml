@@ -53,7 +53,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="seek_type_3_detail">Formula 33/Cn=3 (6&#45;2,6&#45;3)</string>
     <string name="seek_type_4_detail">Formula 33/Cn=4 (3&#45;5,6&#45;1)</string>
 
-    <string name="default_locale">default-LOCALE</string>
+    <string name="default_locale" translatable="false">default-LOCALE</string>
     <string name="language_system">Follow System Setting</string>
     <string name="language_ko" translatable="false">한국어</string>
     <string name="language_en" translatable="false">English</string>
@@ -355,5 +355,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_filter_equip_all">ALL</string>
     <string name="akashi_filter_equip_none">CLEAR</string>
     <string name="akashi_filter_equip_rev">REVERSE</string>
+    <string name="item_engine">Ne Type Engine</string>
 
 </resources>

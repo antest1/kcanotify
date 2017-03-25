@@ -354,7 +354,7 @@ public class SettingActivity extends AppCompatActivity {
 
             try {
                 Response response = client.newCall(request).execute();
-                return response.body().string();
+                return response.body().string().trim();
             } catch (IOException e1) {
                 e1.printStackTrace();
                 return "";
