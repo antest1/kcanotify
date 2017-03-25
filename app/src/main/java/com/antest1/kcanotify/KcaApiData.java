@@ -513,7 +513,7 @@ public class KcaApiData {
     }
 
     public static boolean isExpeditionDataLoaded() {
-        return kcSimpleExpeditionData != null;
+        return kcSimpleExpeditionData.entrySet().size() > 0;
     }
 
     public static String getExpeditionName(int mission_no, String locale) {
