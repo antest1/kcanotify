@@ -35,9 +35,9 @@ public class AkashiFilterActivity extends AppCompatActivity {
     Toolbar toolbar;
     private static Handler sHandler;
     static Gson gson = new Gson();
-    TextView itemNameTextView, itemImprovDefaultShipTextView;
+    TextView itemNameTextView, itemImproveDefaultShipTextView;
     Button selectAllButton, selectNoneButton, selectReverseButton;
-    JsonObject itemImprovmentData;
+    JsonObject itemImprovementData;
 
     public static void setHandler(Handler h) {
         sHandler = h;

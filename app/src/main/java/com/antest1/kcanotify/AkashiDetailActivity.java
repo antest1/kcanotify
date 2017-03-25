@@ -39,7 +39,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
     Toolbar toolbar;
     static Gson gson = new Gson();
     TextView itemNameTextView, itemImprovDefaultShipTextView;
-    JsonObject itemImprovmentData;
+    JsonObject itemImprovementData;
 
     public AkashiDetailActivity() {
         LocaleUtils.updateConfig(this);
@@ -73,14 +73,14 @@ public class AkashiDetailActivity extends AppCompatActivity {
         }
 
         if (itemImprovmetInfo.length() > 0) {
-            itemImprovmentData = new JsonParser().parse(itemImprovmetInfo).getAsJsonObject();
-            JsonArray itemImprovmentDetail = itemImprovmentData.getAsJsonArray("improvment");
-            JsonArray itemDefaultEquippedOn = itemImprovmentData.getAsJsonArray("default_equipped_on");
-            if (itemImprovmentDetail.size() < 2) {
+            itemImprovementData = new JsonParser().parse(itemImprovmetInfo).getAsJsonObject();
+            JsonArray itemImprovementDetail = itemImprovementData.getAsJsonArray("improvement");
+            JsonArray itemDefaultEquippedOn = itemImprovementData.getAsJsonArray("default_equipped_on");
+            if (itemImprovementDetail.size() < 2) {
                 findViewById(R.id.akashi_improv_detail_2).setVisibility(View.GONE);
             }
-            for (int i = 0; i < itemImprovmentDetail.size(); i++) {
-                JsonObject data = itemImprovmentDetail.get(i).getAsJsonObject();
+            for (int i = 0; i < itemImprovementDetail.size(); i++) {
+                JsonObject data = itemImprovementDetail.get(i).getAsJsonObject();
                 JsonArray resources = data.getAsJsonArray("resource");
 
                 for (int j = 1; j <= 3; j++) {
@@ -91,10 +91,22 @@ public class AkashiDetailActivity extends AppCompatActivity {
                     ((TextView) findViewById(getId("akashi_improv_detail_s".concat(String.valueOf(j))
                             .concat("_").concat(String.valueOf(i + 1)), R.id.class)))
                             .setText(mse_string[1]);
-                    ((TextView) findViewById(getId("akashi_improv_detail_e".concat(String.valueOf(j))
-                            .concat("_").concat(String.valueOf(i + 1)), R.id.class)))
-                            .setText(mse_string[2]);
+                    if (j == 3 && data.has("require_engine")) {
+                        String e3 = mse_string[2];
+                        if (resources.get(3).getAsJsonArray().get(4).getAsInt() == 0) {
+                            e3 = getStringWithLocale(R.string.item_engine).concat(" x 1 / ").concat(e3);
+                        }
+                        ((TextView) findViewById(getId("akashi_improv_detail_e".concat(String.valueOf(j))
+                                .concat("_").concat(String.valueOf(i + 1)), R.id.class)))
+                                .setText(e3);
+                    } else {
+                        ((TextView) findViewById(getId("akashi_improv_detail_e".concat(String.valueOf(j))
+                                .concat("_").concat(String.valueOf(i + 1)), R.id.class)))
+                                .setText(mse_string[2]);
+                    }
+
                 }
+
 
 
                 ((TextView) findViewById(getId("akashi_improv_consume_".concat(String.valueOf(i + 1)), R.id.class)))

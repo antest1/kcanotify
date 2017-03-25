@@ -70,7 +70,7 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
 
         KcaAkashiListViewItem item = listViewItemList.get(position);
         final int itemId = item.getEquipId();
-        final String itemImprovmentData = item.getEquipImprovmentData().toString();
+        final String itemImprovementData = item.getEquipImprovementData().toString();
 
         ViewHolder holder = (ViewHolder) v.getTag();
         holder.iconView.setImageResource(item.getEquipIconMipmap());
@@ -89,7 +89,7 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
             public void onClick(View v) {
                 Intent intent = new Intent(context, AkashiDetailActivity.class);
                 intent.putExtra("item_id", itemId);
-                intent.putExtra("item_info", itemImprovmentData);
+                intent.putExtra("item_info", itemImprovementData);
                 context.startActivity(intent);
             }
         });

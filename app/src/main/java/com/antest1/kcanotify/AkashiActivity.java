@@ -265,7 +265,8 @@ public class AkashiActivity extends AppCompatActivity {
             if (isStarChecked && !checkStarred(starlist, equipid)) continue;
             KcaAkashiListViewItem item = new KcaAkashiListViewItem();
             item.setEquipDataById(equipid);
-            item.setEquipImprovmentData(akashiData.getAsJsonObject(String.valueOf(equipid)));
+            Log.e("KCA", String.valueOf(equipid));
+            item.setEquipImprovementData(akashiData.getAsJsonObject(String.valueOf(equipid)));
             item.setEquipImprovementElement(day, checked);
             listViewItemList.add(item);
         }

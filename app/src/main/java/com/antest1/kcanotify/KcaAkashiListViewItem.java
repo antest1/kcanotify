@@ -1,5 +1,7 @@
 package com.antest1.kcanotify;
 
+import android.util.Log;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,7 +19,7 @@ import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaAkashiListViewItem {
     private int equipId;
-    private JsonObject equipImprovmentData;
+    private JsonObject equipImprovementData;
     private int equipIconMipmap;
     private String equipName;
     private String equipSupport;
@@ -25,7 +27,7 @@ public class KcaAkashiListViewItem {
 
     public int getEquipId() { return equipId; }
 
-    public JsonObject getEquipImprovmentData() { return equipImprovmentData; }
+    public JsonObject getEquipImprovementData() { return equipImprovementData; }
 
     public int getEquipIconMipmap() {
         return equipIconMipmap;
@@ -60,14 +62,13 @@ public class KcaAkashiListViewItem {
         equipName = kcItemName;
     }
 
-    public void setEquipImprovmentData(JsonObject data) {
-        equipImprovmentData = data;
+    public void setEquipImprovementData(JsonObject data) {
+        equipImprovementData = data;
     }
 
     // 0: sun ~ 6: sat
     public void setEquipImprovementElement(int day, boolean checked) {
-        JsonArray data = equipImprovmentData.getAsJsonArray("improvment");
-
+        JsonArray data = equipImprovementData.getAsJsonArray("improvement");
         String[] screw1 = new String[2];
         String[] screw2 = new String[2];
         String[] screw3 = new String[2];
