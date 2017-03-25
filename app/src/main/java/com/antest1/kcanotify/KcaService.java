@@ -279,6 +279,7 @@ public class KcaService extends Service {
             viewNotificationBuilder
                     .setContentTitle(title)
                     .setContentText(content1)
+                    .setContentIntent(pendingIntent)
                     .setStyle(viewNotificationText.bigText(content1))
                     .setTicker(title);
         }
@@ -311,8 +312,21 @@ public class KcaService extends Service {
         } else {
             expeditionString = String.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
         }
+        Intent aIntent = new Intent(KcaService.this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
         viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(expeditionString));
-        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.build());
+        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.setContentIntent(pendingIntent).build());
+    }
+
+    private void updateNotificationFairy() {
+        if (viewNotificationBuilder != null) {
+            viewNotificationBuilder.setSmallIcon(viewBitmapSmallId).setLargeIcon(viewBitmap);
+            Intent aIntent = new Intent(KcaService.this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+            notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.setContentIntent(pendingIntent).build());
+        }
     }
 
     private void setExpeditionAlarm(int idx, int mission_no, String deck_name, long arrive_time, boolean cancel_flag, boolean ca_flag, Intent aIntent) {
@@ -1280,6 +1294,7 @@ public class KcaService extends Service {
                     viewBitmapId = getId(fairyId, R.mipmap.class);
                     viewBitmapSmallId = getId(fairyId.concat("_small"), R.mipmap.class);
                     viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
+                    updateNotificationFairy();
                     setFrontViewNotifier(FRONT_NONE, 0, null);
                 }
             }
