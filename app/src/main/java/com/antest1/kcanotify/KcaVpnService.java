@@ -338,9 +338,11 @@ public class KcaVpnService extends VpnService {
         }
 
         Command cmd = (Command) intent.getSerializableExtra(EXTRA_COMMAND);
-        Log.e("KCA", cmd.toString());
-        if (cmd == null)
+        if (cmd == null) {
             intent.putExtra(EXTRA_COMMAND, enabled ? Command.start : Command.stop);
+            cmd = (Command) intent.getSerializableExtra(EXTRA_COMMAND);
+        }
+        Log.e("KCA", cmd.toString());
         String reason = intent.getStringExtra(EXTRA_REASON);
         Log.i(TAG, "Start intent=" + intent + " command=" + cmd + " reason=" + reason +
                 " vpn=" + (vpn != null) + " user=" + (Process.myUid() / 100000));
