@@ -274,7 +274,7 @@ public class KcaService extends Service {
                 .setSmallIcon(viewBitmapSmallId)
                 .setLargeIcon(viewBitmap)
                 .setContentTitle(title)
-                .setContentText(content1)
+                .setContentText(getStringWithLocale(R.string.kca_view_context_expand))
                 .setStyle(viewNotificationText.bigText(content1))
                 .setTicker(title)
                 .setContentIntent(pendingIntent)
