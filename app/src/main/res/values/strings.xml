@@ -12,7 +12,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="app_brand" traslatable="false" translatable="false">시제 깡들리티</string> <!-- Do not translate here -->
-    <string name="app_version" translatable="false">2.3 rev7.1</string>
+    <string name="app_version" translatable="false">2.3.1</string>
     <string name="action_settings">Settings</string>
     <string name="developer_email" translatable="false">kcanotify@gmail.com</string>
     <string name="default_gamedata_version" translatable="false">3.1.2</string>
@@ -95,7 +95,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- MainActivity Strings -->
     <string name="ma_toast_kancolle_not_installed">Kancolle For Android is not installed.</string>
     <string name="ma_toast_overay_diabled">Screen Overlay Permission is required for BattleView.\nEnable Screen Overlay at Settings > Screen Overlay Settings.</string>
-    <string name="description"><b>Help</b>\nTurn on VPN and SVC then run Kancolle\n\n※ VPN is required for detecting game data. \n※ You cannot receive notifications if SVC is disabled (for now)\n\n<b>Main Features</b>\n - Expedition/Docking notifications \n - Heavy Damage Alert (prior to/during combat)\n - LoS/FP/Fatigue indicators\n - Node tracking during sorties\n - BattleView / QuestView\n - Improvement Arsenal Chart\n - Send statistics to OpenDB (optional)\n \nVisit http://swaytwig.com/kcanotify for detail. (Korean)</string>
+    <string name="description"><b>Help</b>\nTurn on VPN and SVC then run Kancolle\n\n※ VPN is required for detecting game data. \n\n<b>Main Features</b>\n - Expedition/Docking notifications \n - Heavy Damage Alert (prior to/during combat)\n - LoS/FP/Fatigue indicators\n - Node tracking during sorties\n - BattleView / QuestView\n - Improvement Arsenal Chart\n - Send statistics to OpenDB (optional)\n \nVisit http://swaytwig.com/kcanotify for detail. (Korean)</string>
 
     <!-- SettingActivity Strings -->
     <string name="sa_checkupdate_latest" formatted="false">You have the latest version. (%s)</string>
