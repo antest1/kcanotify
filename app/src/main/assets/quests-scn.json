@@ -931,13 +931,13 @@
 	},
     "849": {
       "code": "B93",
-      "name": "南西諸島方面の敵艦隊を撃破せよ！",
-      "desc": "轻巡为旗舰 / 出击南西诸岛防卫线（1-4）, 巴士岛近海（2-2）, 东部奥廖尔海（2-3） / Boss战S胜"
+      "name": "击破南西群岛方面的敌舰队！",
+      "desc": "编成以轻巡为旗舰的舰队，出击南西诸岛防卫线（1-4）、巴士岛近海（2-2）和东部奥廖尔海（2-3），击破在同海域巡逻的敌舰队！（Boss战A胜）"
     },
     "850": {
       "code": "B94",
-      "name": "Expand the Offshore Aviation Forces!",
-      "desc": "空母或水上机母舰为旗舰 / 北方AL海域（3-5）, 加斯加达马近海（4-4）, 马绍尔群岛近海（6-2） / Boss战S胜"
+      "name": "扩充洋上航空战力！",
+      "desc": "编成以航空母舰或水上机母舰为旗舰的强力舰队，出击北方阿留申海域（3-5）、西方加斯加达马近海（4-4），中部马绍尔群岛近海（6-2），摧毁各海域的敌舰队！（Boss战S胜）"
     },
 
 	"201": {
@@ -1542,15 +1542,13 @@
     },
     "659": {
         "code": "F51",
-        "name": "Elite Seaplane Forces Setup",
-        "desc": "Have a Skilled Crew Member. Set Houshou as secretary. Equip her with a >> Type 0 Fighter Model 21. Scrap two Type 0 Fighter Model 21s and two Zuiuns.",
-        "memo": "Make sure the equipped plane is unlocked! \u27a3Rewards a Type 2 Seaplane Fighter Kai (Skilled)"
+        "name": "精锐“水战”队的新编成",
+        "desc": "精锐飞行队的新编成：在秘书舰第一格装备练度max且改修max的二式水战改，并废弃零式舰战21型x2与瑞云x2！　※新飞行队编成中需要熟练搭乘员。"
     },
     "660": {
         "code": "F52",
-        "name": "Increase of the Elite Seaplane Forces",
-        "desc": "Have a Skilled Crew Member. Set Houshou as secretary. Equip her with a >> Type 0 Fighter Model 21. Scrap two Type 0 Fighter Model 21s and two Zuiuns.",
-        "memo": "Make sure the equipped plane is unlocked! \u27a3Rewards a Type 2 Seaplane Fighter Kai (Skilled)"
+        "name": "精锐“水战”队的扩充",
+        "desc": "精锐“水战”队的扩充：在秘书舰第一格装备练度max且改修max的二式水战改，并废弃零式舰战21型x2与瑞云x2！　※新飞行队编成中需要熟练搭乘员。"
     },
 
   "701": {
