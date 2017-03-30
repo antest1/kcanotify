@@ -232,6 +232,7 @@ public class KcaService extends Service {
 
     public void onDestroy() {
         setServiceDown();
+        stopService(new Intent(this, KcaBattleViewService.class));
         stopService(new Intent(this, KcaViewButtonService.class));
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putBoolean("svcenabled", false).apply();
@@ -435,6 +436,7 @@ public class KcaService extends Service {
                 isPortAccessed = false;
                 api_start2_init = false;
                 api_start2_loading_flag = true;
+                stopService(new Intent(this, KcaBattleViewService.class));
                 stopService(new Intent(this, KcaViewButtonService.class));
                 //Toast.makeText(contextWithLocale, "KCA_VERSION", Toast.LENGTH_LONG).show();
                 JsonObject api_version = jsonDataObj.get("api").getAsJsonObject();
@@ -547,6 +549,7 @@ public class KcaService extends Service {
             if (url.startsWith(API_PORT)) {
                 isPortAccessed = true;
                 stopService(new Intent(this, KcaViewButtonService.class));
+                stopService(new Intent(this, KcaBattleViewService.class));
                 if (jsonDataObj.has("api_data")) {
                     JsonObject reqPortApiData = jsonDataObj.getAsJsonObject("api_data");
                     KcaApiData.getPortData(reqPortApiData);
@@ -709,8 +712,12 @@ public class KcaService extends Service {
                         else toastColor = R.color.colorWarningPanel;
                         customToast.showToast(message.trim(), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), toastColor));
                     }
-
                     setFrontViewNotifier(FRONT_NONE, 0, null);
+                }
+
+                if (url.startsWith(API_GET_MEMBER_MAPINFO) || url.startsWith(API_GET_MEMBER_PRACTICE)) {
+                    Intent qintent = new Intent(this, KcaBattleViewService.class);
+                    startService(qintent);
                 }
 
                 if (API_BATTLE_REQS.contains(url)) {

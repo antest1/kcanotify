@@ -1101,6 +1101,7 @@ public class KcaBattleViewService extends Service {
             //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mInflater = LayoutInflater.from(contextWithLocale);
             mView = mInflater.inflate(R.layout.view_sortie_battle, null);
+            mView.setVisibility(View.GONE);
             battleview = (ScrollView) mView.findViewById(R.id.battleview);
             itemView = mInflater.inflate(R.layout.view_battleview_items, null);
             mParams = new WindowManager.LayoutParams(
@@ -1147,7 +1148,7 @@ public class KcaBattleViewService extends Service {
                     }
                 }
             };
-            LocalBroadcastManager.getInstance(this).registerReceiver((refreshreceiver), new IntentFilter(KCA_MSG_BATTLE_VIEW_REFRESH));
+            LocalBroadcastManager.getInstance(this).registerReceiver(refreshreceiver, new IntentFilter(KCA_MSG_BATTLE_VIEW_REFRESH));
         } catch (Exception e) {
             active = false;
             error_flag = true;
@@ -1169,22 +1170,20 @@ public class KcaBattleViewService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null) {
+        if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(SHOW_BATTLEVIEW_ACTION)) {
+                if (!error_flag) {
+                    battleview.setOnTouchListener(mViewTouchListener);
+                    for (int i = 1; i < shipViewList.length; i++) {
+                        battleview.findViewById(shipNameAreaViewList[i]).setOnTouchListener(shipViewTouchListener);
+                        battleview.findViewById(shipLevelViewList[i]).setOnTouchListener(shipViewTouchListener);
+                    }
+                    for (int i = 1; i < shipCombinedViewList.length; i++) {
+                        battleview.findViewById(shipNameAreaCombinedViewList[i]).setOnTouchListener(shipViewTouchListener);
+                        battleview.findViewById(shipLevelCombinedViewList[i]).setOnTouchListener(shipViewTouchListener);
+                    }
+                }
                 mView.setVisibility(View.VISIBLE);
-            }
-        }
-
-        if (!error_flag) {
-            mView.setVisibility(View.VISIBLE);
-            battleview.setOnTouchListener(mViewTouchListener);
-            for (int i = 1; i < shipViewList.length; i++) {
-                battleview.findViewById(shipNameAreaViewList[i]).setOnTouchListener(shipViewTouchListener);
-                battleview.findViewById(shipLevelViewList[i]).setOnTouchListener(shipViewTouchListener);
-            }
-            for (int i = 1; i < shipCombinedViewList.length; i++) {
-                battleview.findViewById(shipNameAreaCombinedViewList[i]).setOnTouchListener(shipViewTouchListener);
-                battleview.findViewById(shipLevelCombinedViewList[i]).setOnTouchListener(shipViewTouchListener);
             }
         }
         return super.onStartCommand(intent, flags, startId);

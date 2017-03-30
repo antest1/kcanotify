@@ -55,6 +55,7 @@ public final class KcaConstants {
     public static final String API_GET_MEMBER_QUESTLIST = "/api_get_member/questlist";
 
     public static final String API_GET_MEMBER_MAPINFO = "/api_get_member/mapinfo";
+    public static final String API_GET_MEMBER_PRACTICE = "/api_get_member/practice";
     public static final String API_GET_MEMBER_MISSION = "/api_get_member/mission";
     public static final String API_REQ_MAP_START = "/api_req_map/start";
     public static final String API_REQ_MAP_NEXT = "/api_req_map/next";
@@ -163,19 +164,17 @@ public final class KcaConstants {
     public static final String KCA_MSG_QUEST_VIEW_LIST = "com.antest1.kcanotify.KcaService.KCA_MSG_QUEST_VIEW_LIST";
     public static final String KCA_MSG_DATA = "com.antest1.kcanotify.KcaService.KCA_MSG_DATA";
 
-    public static final String KCA_MSG_BUTTON_TOP = "com.antest1.kcanotify.KcaBattleViewService.KCA_MSG_BUTTON_TOP";
-    public static final String KCA_MSG_VIEW_HIDE = "com.antest1.kcanotify.KcaViewButtonService.KCA_MSG_VIEW_HIDE";
-
     public static final String KCA_API_PROCESS_BATTLE_FAILED = "/kca_api/process_battle_failed";
     public static final String KCA_API_OPENDB_FAILED = "/kca_api/opendb_failed";
 
     public static final String KCA_API_VPN_DATA_ERROR = "/kca_api/vpn_data_error";
 
+
+
     public static final int SEEK_PURE = 0;
     public static final int SEEK_33CN1 = 1;
     public static final int SEEK_33CN3 = 3;
     public static final int SEEK_33CN4 = 4;
-
 
     public static final int NOTI_FRONT = 0;
     public static final int NOTI_EXP = 1;
@@ -190,6 +189,8 @@ public final class KcaConstants {
     public static final int HD_NONE = 0;
     public static final int HD_DAMECON = 1;
     public static final int HD_DANGER = 2;
+
+    public static final String START_BATTLEVIEW_ACTION = "start_battleview_action";
 
     public static final List<String> API_BATTLE_REQS = Arrays.asList(API_BATTLE_REQ_LIST);
 
