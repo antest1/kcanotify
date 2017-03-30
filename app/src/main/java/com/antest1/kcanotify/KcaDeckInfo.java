@@ -198,6 +198,7 @@ public class KcaDeckInfo {
                     int slot = shipSlotCount.get(j).getAsInt();
                     if (item_id != -1) {
                         JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "name,type,tyku");
+                        if (itemData == null) continue; // TODO: will be removed after item null issue resolved
                         String itemName = itemData.get("name").getAsString();
                         int itemLevel = itemData.get("level").getAsInt();
                         int itemMastery = 0;
