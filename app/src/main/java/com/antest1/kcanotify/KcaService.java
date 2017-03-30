@@ -1877,7 +1877,6 @@ public class KcaService extends Service {
 
         public String executeClient(String token, String method, String data) {
             if (KcaApiData.isGameDataLoaded()) return null;
-            final KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
             kcaFirstDeckInfo = getStringWithLocale(R.string.kca_toast_loading_data);
             String dataUrl;
             if (kca_version == null) {
@@ -1889,6 +1888,7 @@ public class KcaService extends Service {
             AjaxCallback<String> cb = new AjaxCallback<String>() {
                 @Override
                 public void callback(String url, String data, AjaxStatus status) {
+                    KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
                     try {
                         String remote_kca_version = status.getHeader("X-Api-Version");
                         if (kca_version != null && !kca_version.equals(remote_kca_version)) {

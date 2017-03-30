@@ -36,10 +36,13 @@ import com.androidquery.callback.AjaxStatus;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.MalformedJsonException;
 
 import org.apache.commons.httpclient.HttpStatus;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -367,7 +370,15 @@ public class SettingActivity extends AppCompatActivity {
                 Toast.makeText(context, getStringWithLocale(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
             } else if (result.length() > 0) {
                 Log.e("KCA", "Received: " + result);
-                JsonObject jsonDataObj = new JsonParser().parse(result).getAsJsonObject();
+                JsonObject jsonDataObj = new JsonObject();
+                try {
+                    StringReader reader = new StringReader(result.trim());
+                    JsonReader jsonReader = new JsonReader(reader);
+                    jsonReader.setLenient(true);
+                    jsonDataObj = new JsonParser().parse(jsonReader).getAsJsonObject();
+                } catch (Exception e) {
+                    // data from server is broken?
+                }
                 if (jsonDataObj.has("version")) {
                     String recentVersion = jsonDataObj.get("version").getAsString();
                     if (compareVersion(currentVersion, recentVersion)) { // True if latest
