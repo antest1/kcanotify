@@ -376,7 +376,7 @@ public class SettingActivity extends AppCompatActivity {
                                     String.format(getStringWithLocale(R.string.sa_checkupdate_latest), currentVersion),
                                     Toast.LENGTH_LONG).show();
                         }
-                    } else {
+                    } else if (!activity.isFinishing()) {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
                         alertDialog.setMessage(String.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
                         alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
