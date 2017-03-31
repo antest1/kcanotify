@@ -704,7 +704,7 @@ public class KcaService extends Service {
                                     KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
                                 }
                             }
-                            vibrator.vibrate(1500);
+                            vibrator.vibrate(1000);
                         }
 
                         int toastColor;
