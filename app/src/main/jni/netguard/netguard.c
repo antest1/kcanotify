@@ -872,8 +872,8 @@ void test(char* data, int size, int type, char* saddr, char* taddr, int sport, i
     } else {
         jbyteArray s = cstr2jbyteArray(env, saddr, -1);
         jbyteArray t = cstr2jbyteArray(env, taddr, -1);
-        method_callback = (*env)->GetStaticMethodID(env, clsData, "containsKcaServer", "([B[B)I");
-        int result = (*env)->CallStaticIntMethod(env, clsData, method_callback, s, t);
+        method_callback = (*env)->GetStaticMethodID(env, clsData, "containsKcaServer", "(I[B[B)I");
+        int result = (*env)->CallStaticIntMethod(env, clsData, method_callback, type, s, t);
         if (result == 1) {
             jbyteArray a = cstr2jbyteArray(env, data, size);
             method_callback = (*env)->GetStaticMethodID(env, clsData, "getDataFromNative", "([BII[B[BII)V");
