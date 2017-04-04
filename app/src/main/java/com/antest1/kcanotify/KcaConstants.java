@@ -260,6 +260,7 @@ public final class KcaConstants {
     public static final String PREF_SHOWDROP_SETTING = "showdrop_setting";
     public static final String PREF_KCA_DOWNLOAD_DATA = "download_data";
     public static final String PREF_CHECK_UPDATE = "check_update";
+    public static final String PREF_KCA_NOTI_NOTIFYATSVCOFF = "notify_at_svc_off";
     public static final String PREF_KCA_NOTI_SOUND_KIND = "notify_sound_kind";
     public static final String PREF_KCA_NOTI_RINGTONE = "notify_ringtone";
     public static final String PREF_KCA_NOTI_EXP = "notify_expedition";
@@ -285,6 +286,7 @@ public final class KcaConstants {
             PREF_OVERLAY_SETTING,
             PREF_SHOWDROP_SETTING,
             PREF_KCA_DOWNLOAD_DATA,
+            PREF_KCA_NOTI_NOTIFYATSVCOFF,
             PREF_KCA_NOTI_SOUND_KIND,
             PREF_KCA_NOTI_RINGTONE,
             PREF_KCA_NOTI_EXP,

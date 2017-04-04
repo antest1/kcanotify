@@ -33,6 +33,7 @@ import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_NOTIFYATSVCOFF;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
@@ -83,40 +84,42 @@ public class KcaAlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("KCA", "KcaAlarmService Called: " + String.valueOf(startId));
-        loadTranslationData(getAssets(), getApplicationContext());
-        if (intent != null) {
-            JsonObject data = new JsonParser().parse(intent.getStringExtra("data")).getAsJsonObject();
-            int type = data.get("type").getAsInt();
-            String locale = LocaleUtils.getLocaleCode(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
-            if (type == TYPE_EXPEDITION && isExpAlarmEnabled()) {
-                int idx = data.get("idx").getAsInt();
-                KcaExpedition2.clearMissionData(idx);
-                if (isExpAlarmEnabled()) {
-                    if (!isExpeditionDataLoaded()) loadSimpleExpeditionInfoFromAssets(getAssets());
-                    int mission_no = data.get("mission_no").getAsInt();
-                    String mission_name = KcaApiData.getExpeditionName(mission_no, locale);
-                    String kantai_name = data.get("kantai_name").getAsString();
-                    boolean cancelFlag = data.get("cancel_flag").getAsBoolean();
-                    boolean caFlag = data.get("ca_flag").getAsBoolean();
-                    if (caFlag) idx = idx | EXP_CANCEL_FLAG;
-                    notificationManager.notify(getNotificationId(NOTI_EXP, idx), createExpeditionNotification(mission_no, mission_name, kantai_name, cancelFlag, caFlag));
-                }
-            } else if (type == TYPE_DOCKING) {
-                int dockId = data.get("dock_id").getAsInt();
-                KcaDocking.setCompleteTime(dockId, -1);
-                KcaDocking.setShipId(dockId, 0);
-                if(isDockAlarmEnabled()) {
-                    int shipId = data.get("ship_id").getAsInt();
-                    String shipName = "";
-                    if (shipId != -1) {
-                        if (!isGameDataLoaded()) {
-                            JsonObject cachedData = readCacheData(getApplicationContext(), KCANOTIFY_S2_CACHE_FILENAME);
-                            KcaApiData.getKcGameData(cachedData.getAsJsonObject("api_data"));
-                        }
-                        JsonObject kcShipData = KcaApiData.getKcShipDataById(shipId, "name");
-                        shipName = getShipTranslation(kcShipData.get("name").getAsString(), false);
+        if (getBooleanPreferences(getApplication(), PREF_KCA_NOTI_NOTIFYATSVCOFF) || KcaService.getServiceStatus()) {
+            loadTranslationData(getAssets(), getApplicationContext());
+            if (intent != null) {
+                JsonObject data = new JsonParser().parse(intent.getStringExtra("data")).getAsJsonObject();
+                int type = data.get("type").getAsInt();
+                String locale = LocaleUtils.getLocaleCode(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
+                if (type == TYPE_EXPEDITION && isExpAlarmEnabled()) {
+                    int idx = data.get("idx").getAsInt();
+                    KcaExpedition2.clearMissionData(idx);
+                    if (isExpAlarmEnabled()) {
+                        if (!isExpeditionDataLoaded()) loadSimpleExpeditionInfoFromAssets(getAssets());
+                        int mission_no = data.get("mission_no").getAsInt();
+                        String mission_name = KcaApiData.getExpeditionName(mission_no, locale);
+                        String kantai_name = data.get("kantai_name").getAsString();
+                        boolean cancelFlag = data.get("cancel_flag").getAsBoolean();
+                        boolean caFlag = data.get("ca_flag").getAsBoolean();
+                        if (caFlag) idx = idx | EXP_CANCEL_FLAG;
+                        notificationManager.notify(getNotificationId(NOTI_EXP, idx), createExpeditionNotification(mission_no, mission_name, kantai_name, cancelFlag, caFlag));
                     }
-                    notificationManager.notify(getNotificationId(NOTI_DOCK, dockId), createDockingNotification(dockId, shipName));
+                } else if (type == TYPE_DOCKING) {
+                    int dockId = data.get("dock_id").getAsInt();
+                    KcaDocking.setCompleteTime(dockId, -1);
+                    KcaDocking.setShipId(dockId, 0);
+                    if(isDockAlarmEnabled()) {
+                        int shipId = data.get("ship_id").getAsInt();
+                        String shipName = "";
+                        if (shipId != -1) {
+                            if (!isGameDataLoaded()) {
+                                JsonObject cachedData = readCacheData(getApplicationContext(), KCANOTIFY_S2_CACHE_FILENAME);
+                                KcaApiData.getKcGameData(cachedData.getAsJsonObject("api_data"));
+                            }
+                            JsonObject kcShipData = KcaApiData.getKcShipDataById(shipId, "name");
+                            shipName = getShipTranslation(kcShipData.get("name").getAsString(), false);
+                        }
+                        notificationManager.notify(getNotificationId(NOTI_DOCK, dockId), createDockingNotification(dockId, shipName));
+                    }
                 }
             }
         }

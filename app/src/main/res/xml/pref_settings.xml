@@ -120,6 +120,12 @@
 
         <CheckBoxPreference
             android:defaultValue="true"
+            android:key="notify_at_svc_off"
+            android:summary="@string/setting_menu_noti_desc_notiatsvcoff"
+            android:title="@string/setting_menu_noti_title_notiatsvcoff" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
             android:key="notify_expedition"
             android:summary="@string/setting_menu_noti_desc_exp"
             android:title="@string/setting_menu_noti_title_exp" />
