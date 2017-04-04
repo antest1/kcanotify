@@ -1943,9 +1943,7 @@ public class KcaService extends Service {
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
         loadTranslationData(getAssets(), getApplicationContext());
 
-        if (isPortAccessed) processFirstDeckInfo(currentPortDeckData);
         setFrontViewNotifier(FRONT_NONE, 0, null);
-
         super.onConfigurationChanged(newConfig);
     }
 }
