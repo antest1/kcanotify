@@ -53,6 +53,7 @@ public class KcaDeckInfo {
                         int item_id = shipItem.get(j).getAsInt();
                         if (item_id != -1) {
                             JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "name,type,saku");
+                            if (itemData == null) continue; // TODO: will be removed after item null issue resolved
                             String itemName = itemData.get("name").getAsString();
                             int itemLevel = itemData.get("level").getAsInt();
                             int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
@@ -348,6 +349,7 @@ public class KcaDeckInfo {
                         int item_id = shipItem.get(j).getAsInt();
                         if (item_id != -1) {
                             JsonObject itemData = getUserItemStatusById(item_id, "level", "type");
+                            if (itemData == null) continue; // TODO: will be removed after item null issue resolved
                             int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
 
                             switch (itemType) {
