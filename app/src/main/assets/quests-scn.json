@@ -939,6 +939,24 @@
       "name": "扩充洋上航空战力！",
       "desc": "编成以航空母舰或水上机母舰为旗舰的强力舰队，出击北方阿留申海域（3-5）、西方加斯加达马近海（4-4），中部马绍尔群岛近海（6-2），摧毁各海域的敌舰队！（Boss战S胜）"
     },
+    "851": {
+      "code": "B95",
+      "name": "改装航空巡洋艦、出撃！",
+      "desc": "Use a Fleet consisting of Suzuya Kai Ni(NOT CVL version) as the flagship and go to [W5-1], [W5-3]. A-rank+ at the boss node.",
+      "memo": "\u27a3Rewards either an Kyoufuu Kai OR an New Kanhon Design Anti-torpedo Bulge (Medium)"
+    },
+    "852": {
+      "code": "B96",
+      "name": "改装攻撃型軽空母、前線展開せよ！",
+      "desc": "Use a Fleet consisting of Suzuya Kou Kai Ni(NOT CAV version) as the flagship and go to [W6-2], [W6-5]. S-rank(?) at the boss node.",
+      "memo": "\u27a3Rewards a Type 0 Fighter Model 63 (Fighter-bomber) and 8cm High-angle Gun Kai + Extra Machine Gun."
+    },
+    "853": {
+      "code": "B97",
+      "name": "鎮守府海域警戒を厳とせよ！",
+      "desc": "Sortie an cruiser as flagship, 2 or more DD to [W1-2], [W1-3], [W1-4], and [W1-5]. A-Rank+ the boss nodes of both maps.",
+      "memo": "\u27a3Rewards 2 Irako and a Furniture Fairy."
+    },
 
 	"201": {
 		"code": "Bd1",
@@ -1073,6 +1091,11 @@
 		"name": "[季常] 冲之岛海域迎击战！",
 		"desc": "以有力的舰队反复投入冲之岛海域（2-4），迎击侵攻的敌机动部队，消灭他们！（取得Boss战及道中空母机动部队S胜各两次）"
 	},
+    "854": {
+        "code": "Bq2",
+        "name": "[季常] 戦果拡張任務！「Z作戦」前段作戦",
+        "desc": "Sortie to [W2-4], [W6-1], [W6-3], and [W6-4]. S-Rank the [W6-4] boss node, A-Rank+ the other boss node."
+    },
 
 	"301": {
 		"code": "C1",
@@ -1128,6 +1151,11 @@
 		"code": "C11",
 		"name": "冬季大演习",
 		"desc": "在冬季的一天之内取得8次以上“演习”的胜利，进一步提高舰队的水平！"
+	},
+	"315": {
+		"code": "C12",
+		"name": "春季大演习",
+		"desc": "在春季的一天之内取得8次以上“演习”的胜利，进一步提高舰队的水平！"
 	},
 
 	"401": {

@@ -1099,6 +1099,24 @@
         "desc": "Send a Fleet consisting of an AV, CVL, CV, or CVB as Flagship and 5 other ships of choice to 3-5, 4-4, and 6-2 and score an S-rank at the Boss nodes.",
         "memo": "\u27a3Rewards a Skilled Crew Member"
     },
+    "851": {
+        "code": "B95",
+        "name": "改装航空巡洋艦、出撃！",
+        "desc": "Use a Fleet consisting of Suzuya Kai Ni(NOT CVL version) as the flagship and go to [W5-1], [W5-3]. A-rank+ at the boss node.",
+        "memo": "\u27a3Rewards either an Kyoufuu Kai OR an New Kanhon Design Anti-torpedo Bulge (Medium)"
+    },
+    "852": {
+        "code": "B96",
+        "name": "改装攻撃型軽空母、前線展開せよ！",
+        "desc": "Use a Fleet consisting of Suzuya Kou Kai Ni(NOT CAV version) as the flagship and go to [W6-2], [W6-5]. S-rank(?) at the boss node.",
+        "memo": "\u27a3Rewards a Type 0 Fighter Model 63 (Fighter-bomber) and 8cm High-angle Gun Kai + Extra Machine Gun."
+    },
+    "853": {
+        "code": "B97",
+        "name": "鎮守府海域警戒を厳とせよ！",
+        "desc": "Sortie an cruiser as flagship, 2 or more DD to [W1-2], [W1-3], [W1-4], and [W1-5]. A-Rank+ the boss nodes of both maps.",
+        "memo": "\u27a3Rewards 2 Irako and a Furniture Fairy."
+    },
     
     "201": {
         "code": "Bd1",
@@ -1302,6 +1320,11 @@
         "memo": "\u203bOkinoshima Region Counterattack Op \u27a3Rewards 5 Screws",
         "tracking": [ [0,2] ]
     },
+    "854": {
+        "code": "Bq2",
+        "name": "戦果拡張任務！「Z作戦」前段作戦",
+        "desc": "Sortie to [W2-4], [W6-1], [W6-3], and [W6-4]. S-Rank the [W6-4] boss node, A-Rank+ the other boss node."
+    },
     
     
     "301": {
@@ -1382,7 +1405,11 @@
         "name": "Mass Exercises for Winter",
         "desc": "Secure 8 victories in Exercises within the same day."
     },
-    
+    "315": {
+        "code": "C12",
+        "name": "Mass Exercises for Spring",
+        "desc": "Secure 8 victories in Exercises within the same day."
+    },
     
     "401": {
         "code": "D1",
