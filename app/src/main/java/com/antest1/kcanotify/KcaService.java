@@ -716,8 +716,13 @@ public class KcaService extends Service {
                 }
 
                 if (url.startsWith(API_GET_MEMBER_MAPINFO) || url.startsWith(API_GET_MEMBER_PRACTICE)) {
-                    Intent qintent = new Intent(this, KcaBattleViewService.class);
-                    startService(qintent);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                            && !Settings.canDrawOverlays(getApplicationContext())) {
+                        // Can not draw overlays: pass
+                    } else {
+                        Intent qintent = new Intent(this, KcaBattleViewService.class);
+                        startService(qintent);
+                    }
                 }
 
                 if (API_BATTLE_REQS.contains(url)) {
