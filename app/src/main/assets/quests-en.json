@@ -1101,21 +1101,22 @@
     },
     "851": {
         "code": "B95",
-        "name": "改装航空巡洋艦、出撃！",
-        "desc": "Use a Fleet consisting of Suzuya Kai Ni(NOT CVL version) as the flagship and go to [W5-1], [W5-3]. A-rank+ at the boss node.",
-        "memo": "\u27a3Rewards either an Kyoufuu Kai OR an New Kanhon Design Anti-torpedo Bulge (Medium)"
+        "name": "Remodeled aviation cruiser, head out!",
+        "desc": "Sortie Suzuya Kai Ni as the flagship and score an A rank at the boss nodes of [W5-1] and [W5-3]. You will be prompted to select one of two rewards, so be careful. Press F10 to clear the overlay.",
+        "memo": "\u2623NOTICE!: The CVL remodel cannot complete the quest. Must be CAV.\u2623 \u27a3Rewards 4 Screws and either a New Kanhon Design Anti-torpedo Bulge (Medium) OR a Kyoufuu Kai",
+        "unlock": [ 852 ]
     },
     "852": {
         "code": "B96",
-        "name": "改装攻撃型軽空母、前線展開せよ！",
-        "desc": "Use a Fleet consisting of Suzuya Kou Kai Ni(NOT CAV version) as the flagship and go to [W6-2], [W6-5]. S-rank(?) at the boss node.",
-        "memo": "\u27a3Rewards a Type 0 Fighter Model 63 (Fighter-bomber) and 8cm High-angle Gun Kai + Extra Machine Gun."
+        "name": "Deploy the remodeled light attack carrier to the front!",
+        "desc": "Sortie Suzuya-Kou Kai Ni and score an S rank the boss nodes at [W6-2] and [W6-5].",
+        "memo": "\u2623NOTICE!: The CAV remodel cannot complete the quest. Must be CVL.\u2623 \u27a3Rewards a Type 0 Fighter Model 63 (Fighter-bomber) and a 8cm High-angle Gun Kai + Extra Machine Guns"
     },
     "853": {
         "code": "B97",
-        "name": "鎮守府海域警戒を厳とせよ！",
-        "desc": "Sortie an cruiser as flagship, 2 or more DD to [W1-2], [W1-3], [W1-4], and [W1-5]. A-Rank+ the boss nodes of both maps.",
-        "memo": "\u27a3Rewards 2 Irako and a Furniture Fairy."
+        "name": "Vigilantly patrol the sea area near the naval base!",
+        "desc": "Sortie an CL(T)/CA(V)/CT as Flagship with at least 2 Destroyers and score an A rank on the boss nodes of [W1-2],[W1-3],[W1-4] and [W1-5].",
+        "memo": "\u27a3Rewards 2 Irako, 4 Screws and a Furniture Fairy"
     },
     
     "201": {
