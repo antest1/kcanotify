@@ -53,7 +53,7 @@ public class LocaleUtils {
             if (pref.equals("zh-CN") || pref.equals("zh-SG")) {
                 return "scn";
             } else {
-                return "en"; // return "tcn";
+                return "tcn";
             }
         } else if (pref.startsWith("ja")) {
             return "en"; // return "jp";

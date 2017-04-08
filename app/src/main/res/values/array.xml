@@ -19,6 +19,7 @@
         <item>@string/language_ko</item>
         <item>@string/language_en</item>
         <item>@string/language_scn</item>
+        <item>@string/language_tcn</item>
     </string-array>
 
     <string-array name="languageOptionValue" translatable="false">
@@ -26,6 +27,7 @@
         <item>ko-KR</item>
         <item>en-US</item>
         <item>zh-CN</item>
+        <item>zh-TW</item>
     </string-array>
 
     <string-array name="soundOption">
