@@ -1322,11 +1322,11 @@
     },
     "854": {
         "code": "Bq2",
-        "name": "戦果拡張任務！「Z作戦」前段作戦",
-        "desc": "Sortie to [W2-4], [W6-1], [W6-3], and [W6-4]. S-Rank the [W6-4] boss node, A-Rank+ the other boss node."
+        "name": "Ranking Points Boost Mission! \"Operation Z\", First Part",
+        "desc": "Organize a fleet and score an A rank at the boss nodes of [W2-4], [W6-1], [W6-3], and S rank the boss node at [W6-4].",
+        "memo": "\u27a3Rewards 3 Mamiya, 4 Screws and 350 Ranking Points"
     },
-    
-    
+
     "301": {
         "code": "C1",
         "name": "The First Exercise!",
