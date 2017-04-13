@@ -250,6 +250,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_view_tpvalue" formatted="false" >運輸： S%d/A%d</string>
     <string name="ship_name_class">船型</string>
 
+    <string name="kca_view_condition_1" formatted="false">士氣 #1: %s</string>
+    <string name="kca_view_condition_2" formatted="false">士氣 #2: %s</string>
+    <string name="not_supplied" formatted="false">艦隊 %d 未補給!</string>
     <string name="slot_empty">(沒有裝備)</string>
     <string name="sound_kind_mixed">響鈴+震動</string>
     <string name="viewbutton_hide">妖精：再見！</string>
@@ -302,6 +305,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_filter_equip_all">全部</string>
     <string name="akashi_filter_equip_none">清空</string>
     <string name="akashi_filter_equip_rev">反序</string>
+    <string name="language_system">使用系統設置</string>
     <string name="item_engine">Ne式噴射發動機</string>
     <string name="setting_menu_noti_title_notiatsvcoff">當SVC服務關閉時啟用通知</string>
     <string name="setting_menu_noti_desc_notiatsvcoff">當SVC服務關閉時啟用遠征/入渠通知</string>
