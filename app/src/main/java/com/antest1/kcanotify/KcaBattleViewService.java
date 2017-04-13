@@ -74,8 +74,7 @@ import static com.antest1.kcanotify.KcaViewButtonService.SHOW_QUESTVIEW_ACTION;
 public class KcaBattleViewService extends Service {
     Context contextWithLocale;
     LayoutInflater mInflater;
-    private LocalBroadcastManager broadcaster;
-    private BroadcastReceiver refreshreceiver, hdmgreceiver;
+    private BroadcastReceiver refreshreceiver;
     public static boolean active;
     public static JsonObject api_data;
     public static String currentNodeInfo = "";
@@ -1097,7 +1096,6 @@ public class KcaBattleViewService extends Service {
         try {
             active = true;
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-            broadcaster = LocalBroadcastManager.getInstance(this);
             //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mInflater = LayoutInflater.from(contextWithLocale);
             mView = mInflater.inflate(R.layout.view_sortie_battle, null);
@@ -1161,9 +1159,8 @@ public class KcaBattleViewService extends Service {
     public void onDestroy() {
         active = false;
         deckportdata = null;
-        mView.setVisibility(View.GONE);
-        itemView.setVisibility(View.GONE);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(hdmgreceiver);
+        if(mView != null) mView.setVisibility(View.GONE);
+        if(itemView != null) itemView.setVisibility(View.GONE);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
         super.onDestroy();
     }
