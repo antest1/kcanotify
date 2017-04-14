@@ -273,6 +273,123 @@
 
             </LinearLayout>
 
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/setting_fairy_20"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/imagebtn_on"
+                    android:padding="7dp"
+                    android:src="@mipmap/noti_icon_20"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+                <ImageView
+                    android:id="@+id/setting_fairy_21"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/imagebtn_on"
+                    android:padding="7dp"
+                    android:src="@mipmap/noti_icon_21"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+                <ImageView
+                    android:id="@+id/setting_fairy_22"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/imagebtn_on"
+                    android:padding="7dp"
+                    android:src="@mipmap/noti_icon_22"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+                <ImageView
+                    android:id="@+id/setting_fairy_23"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/imagebtn_on"
+                    android:padding="7dp"
+                    android:src="@mipmap/noti_icon_23"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+                <ImageView
+                    android:id="@+id/setting_fairy_24"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/imagebtn_on"
+                    android:padding="7dp"
+                    android:src="@mipmap/noti_icon_24"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/setting_fairy_25"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/imagebtn_on"
+                    android:padding="7dp"
+                    android:src="@mipmap/noti_icon_25"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+                <ImageView
+                    android:id="@+id/setting_fairy_26"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/imagebtn_on"
+                    android:padding="7dp"
+                    android:src="@mipmap/noti_icon_26"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+                <ImageView
+                    android:id="@+id/setting_fairy_27"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/imagebtn_on"
+                    android:padding="7dp"
+                    android:src="@mipmap/noti_icon_27"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+                <ImageView
+                    android:id="@+id/setting_fairy_28"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/imagebtn_on"
+                    android:padding="7dp"
+                    android:src="@mipmap/noti_icon_28"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+                <ImageView
+                    android:id="@+id/setting_fairy_29"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/imagebtn_on"
+                    android:padding="7dp"
+                    android:src="@mipmap/noti_icon_29"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <TextView
