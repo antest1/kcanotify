@@ -320,7 +320,7 @@
 },
 {
   "no": "133",
-  "name-ko": "[E]전방지원함대",
+  "name-ko": "[E] 전방지원함대",
   "name-en": "[E] Vanguard Support Missions (1)",
   "name-scn": "[E] 前线部队支援任务",
   "name-tcn": "[E] 前線部隊支援任務",
@@ -328,22 +328,6 @@
 },
 {
   "no": "134",
-  "name-ko": "[E] 함대결전지원임무",
-  "name-en": "[E] Vangard Support Missions (2)",
-  "name-scn": "[E] 舰队决战支援任务",
-  "name-tcn": "[E] 艦隊決戰支援任務",
-  "time": "30"
-},
-{
-  "no": "205",
-  "name-ko": "[E]전방지원함대",
-  "name-en": "[E] Vanguard Support Missions (1)",
-  "name-scn": "[E] 前线部队支援任务",
-  "name-tcn": "[E] 前線部隊支援任務",
-  "time": "15"
-},
-{
-  "no": "206",
   "name-ko": "[E] 함대결전지원임무",
   "name-en": "[E] Vangard Support Missions (2)",
   "name-scn": "[E] 舰队决战支援任务",

@@ -315,7 +315,7 @@ public class KcaApiData {
         return !(mission_no == 33 || mission_no == 34 || mission_no > 100);
     }
 
-   public static String getShipTranslation(String jp_name, boolean abbr) {
+    public static String getShipTranslation(String jp_name, boolean abbr) {
         String name = jp_name;
         String name_suffix = "";
         if (!kcShipTranslationData.has("suffixes")) {
@@ -517,8 +517,18 @@ public class KcaApiData {
     }
 
     public static String getExpeditionName(int mission_no, String locale) {
-        return kcSimpleExpeditionData.getAsJsonObject(String.valueOf(mission_no))
-                .get(String.format("name-".concat(locale))).getAsString();
+        int mission_key = mission_no;
+        if (mission_no >= 100) {
+            if (mission_no % 2 == 1) mission_key = 133;
+            else mission_key = 134;
+        }
+        JsonObject data = kcSimpleExpeditionData.getAsJsonObject(String.valueOf(mission_key));
+        String localeKey = String.format("name-".concat(locale));
+        if (data.has(localeKey)) {
+            return data.get(String.format("name-".concat(locale))).getAsString();
+        } else {
+            return data.get("name-en").getAsString();
+        }
     }
 
     public static int getPortData(JsonObject api_data) {
