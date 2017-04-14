@@ -20,7 +20,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="error_text">發生錯誤，請聯繫開發人員。</string>
 
     <string name="heavy_damaged">有艦娘大破！</string>
-    <string name="heavy_damaged_damecon">有艦娘大破！（損管可用）</string>
+    <string name="heavy_damaged_damecon">有艦娘大破！（緊急修理可用）</string>
     <string name="goback_left">點選左邊按鈕撤退</string>
 
     <string name="seek_type_0">加總</string>
@@ -43,7 +43,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_none">\?\?</string>
     <string name="speed_postfix">&#160;艦隊</string>
 
-    <string name="opendb_failed_msg">向OpenDB傳送資料時出現錯誤。</string>
+    <string name="opendb_failed_msg">向OpenDB網站傳送資料時出現錯誤。</string>
     <string name="process_battle_failed_msg">處理戰鬥數據出現錯誤。錯誤報告將會傳送給開發人員。</string>
     <string name="service_failed_msg">處理戰鬥數據出現錯誤。錯誤報告將會傳送給開發人員。\n建議重新啟動Kcanotify</string>
 
@@ -56,7 +56,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="node_info_boss_nightbattle" formatted="false">%s (Boss/夜戰)</string>
     <string name="node_info_boss_nightdaybattle" formatted="false">%s (Boss/夜轉日)</string>
     <string name="node_info_boss_ecbattle" formatted="false">%s (Boss/深海聯合艦隊)</string>
-    <string name="node_info_airbattle" formatted="false">%s (空戰)</string>
+    <string name="node_info_airbattle" formatted="false">%s (航空戰)</string>
     <string name="node_info_airsearch" formatted="false">%s (偵查)</string>
     <string name="node_info_ldairbattle" formatted="false">%s (敵襲)</string>
     <string name="node_info_nightbattle" formatted="false">%s (夜戰)</string>
@@ -67,9 +67,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="node_info_ecbattle" formatted="false">%s (深海聯合艦隊)</string>
     <string name="node_info_practice" formatted="false">演習</string>
     <!-- MainActivity Strings -->
-    <string name="ma_toast_kancolle_not_installed">Android版本艦これ尚未安裝</string>
+    <string name="ma_toast_kancolle_not_installed">Android版本的艦これ尚未安裝</string>
     <string name="ma_toast_overay_diabled">戰鬥劇透需要取得懸浮視窗權限\n請至設定 > 懸浮視窗設定來允許懸浮視窗</string>
-    <string name="description"><b>Help</b>\n啟用VPN與SVC服務後再開啟艦これ\n\n※ VPN是為了監測遊戲數據 \n\n<b>主要功能</b>\n - 遠征/入渠通知 \n - 大破警告\n - 索敵/制空/士氣值顯示\n - 羅盤預測\n - 戰鬥劇透 / 任務翻譯\n - 裝備改修表\n - 傳送數據至OpenDB（可選）\n \n可至 http://swaytwig.com/kcanotify 了解詳細資料（韓文）</string>
+    <string name="description"><b>Help</b>\n請啟用VPN與SVC服務後再開啟艦これ\n\n※ VPN是為了監測遊戲數據 \n\n<b>主要功能</b>\n - 遠征/入渠通知 \n - 大破警告\n - 索敵/制空/士氣值顯示\n - 羅盤預測\n - 戰鬥劇透 / 任務翻譯\n - 裝備改修表\n - 傳送數據至OpenDB（可選）\n \n可至官網 http://swaytwig.com/kcanotify 了解詳細資料（韓文）</string>
 
     <!-- SettingActivity Strings -->
     <string name="sa_checkupdate_latest" formatted="false">目前已是最新版本。 (%s)</string>
@@ -83,17 +83,17 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_getupdate_servererror" formatted="false">伺服器出錯: %s</string>
     <string name="sa_getupdate_ioexceptionerror">保存數據時出現錯誤</string>
 
-    <string name="sa_overlay_under_m">Android 6.0以下可跳過該設定</string>
+    <string name="sa_overlay_under_m">Android 6.0以下版本可以跳過該設定</string>
     <string name="sa_overlay_ok">懸浮視窗權限：已取得</string>
     <string name="sa_overlay_no">懸浮視窗權限：未取得（將會關閉戰鬥劇透功能）</string>
 
-    <string name="sa_language_changed">請重新啟動Kcanotify來應用新語言設定。</string>
+    <string name="sa_language_changed">請重新啟動Kcanotify來套用新語言設定。</string>
 
     <string name="sa_bypass_list_invalid">繞行地址列表有誤，請檢查後重試。</string>
 
     <!-- KcaService Strings -->
-    <string name="kca_init_title" formatted="false">%s 請稍後</string>
-    <string name="kca_init_content">請於Kcanotify內開啟遊戲</string>
+    <string name="kca_init_title" formatted="false">%s 等待中</string>
+    <string name="kca_init_content">請從Kcanotify內開啟遊戲</string>
 
     <string name="kca_noti_title_exp_canceled" formatted="false">遠征 %d (%s) 中止。</string>
     <string name="kca_noti_content_exp_canceled" formatted="false"> &lt;%s&gt; 從遠征%d召回。</string>
@@ -119,7 +119,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="kca_view_activate_vpn">請啟用VPN服務。</string>
     <string name="kca_view_condition" formatted="false">士氣： %s</string>
-    <string name="kca_view_hdmg_damecon_format" formatted="false">[有艦娘大破！（損管可用）] %s 準備完畢 %s</string>
+    <string name="kca_view_hdmg_damecon_format" formatted="false">[有艦娘大破！（緊急修理可用）] %s 準備完畢 %s</string>
     <string name="kca_view_hdmg_format" formatted="false">[有艦娘大破！] %s 準備完畢 %s</string>
     <string name="kca_view_normal_format" formatted="false">%s 準備完畢 %s</string>
     <string name="kca_view_context_expand">請向下滑動以顯示資料</string>
@@ -132,18 +132,18 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_saku_cal">選擇索敵公式</string>
     <string name="setting_menu_kand_title_opendb">向OpenDB傳送遊戲數據</string>
     <string name="setting_menu_kand_title_exp_realtime_show">追蹤遠征時間</string>
-    <string name="setting_menu_kand_desc_exp_realtime_show">於導航欄顯示遠征剩餘時間</string>
+    <string name="setting_menu_kand_desc_exp_realtime_show">於裝置的通知欄顯示遠征的剩餘時間</string>
     <string name="setting_menu_kand_title_game_data_down">下載遊戲資料</string>
     <string name="setting_menu_kand_desc_game_data_down">請於遊戲資料未載入時使用</string>
-    <string name="setting_menu_kand_desc_fairy_select">選擇要攜帶的妖精</string>
-    <string name="setting_menu_kand_title_fairy_select">選擇妖精</string>
+    <string name="setting_menu_kand_desc_fairy_select">選擇懸浮視窗的妖精影像</string>
+    <string name="setting_menu_kand_title_fairy_select">選擇要攜帶的妖精</string>
     <string name="current_fairy_changed_in_next">※妖精會於戰鬥劇透/任務瀏覽結束後更換</string>
     <string name="setting_menu_kand_title_adv_network">進階網路設定</string>
     <string name="setting_menu_kand_warn_adv_network">警告：錯誤的設定可能會讓VPN失效。請在你確定每個選項作用時更改設定！更改設定後你需要重新啟用VPN來使設定生效</string>
-    <string name="setting_menu_kand_title_socks5_address">SOCKS5代理地址</string>
-    <string name="setting_menu_kand_title_socks5_port">SOCKS5代理端口</string>
-    <string name="settings_menu_kand_title_bypass_address">繞行地址</string>
-    <string name="setting_menu_kand_desc_bypass_address">使用CIDR描述不進行代理的地址，使用逗號來分隔各CIDR。</string>
+    <string name="setting_menu_kand_title_socks5_address">SOCKS5代理伺服器位址</string>
+    <string name="setting_menu_kand_title_socks5_port">SOCKS5代理伺服器Port</string>
+    <string name="settings_menu_kand_title_bypass_address">繞行位址</string>
+    <string name="setting_menu_kand_desc_bypass_address">使用CIDR描述不進行代理的位址，使用逗號來分隔各CIDR。</string>
 
     <string name="setting_menu_view_head">功能設定</string>
     <string name="setting_menu_view_title_overlay_setting">懸浮視窗設定</string>
@@ -168,7 +168,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_app_head">應用程式資訊</string>
     <string name="setting_menu_app_title_current">目前版本</string>
     <string name="setting_menu_app_title_updatecheck">檢查更新</string>
-    <string name="setting_menu_app_title_down">APK下載網站</string>
+    <string name="setting_menu_app_title_down">APK下載來源</string>
     <string name="setting_menu_app_title_contact">提交建議/回報錯誤</string>
     <string name="setting_menu_app_desc_contact">傳送郵件給開發人員</string>
     <string name="setting_menu_app_info">關於Kcanotify</string>
@@ -196,7 +196,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="engagement_headon">反航戰</string>
     <string name="engagement_t_disadvantage">T字不利</string>
 
-    <string name="air_label">空戰結果</string>
+    <string name="air_label">航空戰結果</string>
     <string name="air_supermacy">制空確保</string>
     <string name="air_superiority">制空優勢</string>
     <string name="air_parity">制空均衡</string>
@@ -224,10 +224,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="item_ammo">彈藥</string>
     <string name="item_stel">鋼材</string>
     <string name="item_baux">鋁土</string>
-    <string name="item_brnr">噴槍</string>
-    <string name="item_bgtz">水桶</string>
+    <string name="item_brnr">高速建造材料</string>
+    <string name="item_bgtz">高速修復材料</string>
     <string name="item_mmat">開發資材</string>
-    <string name="item_kmat">螺絲</string>
+    <string name="item_kmat">改修資材</string>
     <string name="item_boxs">家具箱(小)</string>
     <string name="item_boxm">家具箱(中)</string>
     <string name="item_boxl">家具箱(大)</string>
