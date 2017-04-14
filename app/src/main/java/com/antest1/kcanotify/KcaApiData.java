@@ -525,7 +525,7 @@ public class KcaApiData {
         JsonObject data = kcSimpleExpeditionData.getAsJsonObject(String.valueOf(mission_key));
         String localeKey = String.format("name-".concat(locale));
         if (data.has(localeKey)) {
-            return data.get(String.format("name-".concat(locale))).getAsString();
+            return data.get(localeKey).getAsString();
         } else {
             return data.get("name-en").getAsString();
         }
