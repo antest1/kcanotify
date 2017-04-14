@@ -101,6 +101,7 @@ public class KcaVpnService extends VpnService {
     public static boolean checkOn() {
         return is_on;
     }
+
     /*
     synchronized private static PowerManager.WakeLock getLock(Context context) {
         if (wlInstance == null) {
@@ -376,7 +377,7 @@ public class KcaVpnService extends VpnService {
     public void onRevoke() {
         Log.i(TAG, "Revoke");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if(!prefs.getBoolean("svcenabled", false)) {
+        if (!prefs.getBoolean("svcenabled", false)) {
             prefs.edit().putBoolean("enabled", false).apply();
             super.onRevoke();
         }
@@ -421,9 +422,11 @@ public class KcaVpnService extends VpnService {
             listExclude.add(new IPUtil.CIDR("127.0.0.0", 8)); // localhost
 
             if (tethering) {
-                // USB Tethering 192.168.42.x
-                // Wi-Fi Tethering 192.168.43.x
+                // USB tethering 192.168.42.x
+                // Wi-Fi tethering 192.168.43.x
                 listExclude.add(new IPUtil.CIDR("192.168.42.0", 23));
+                // Wi-Fi direct 192.168.49.x
+                listExclude.add(new IPUtil.CIDR("192.168.49.0", 24));
             }
 
             if (lan) {
@@ -511,8 +514,7 @@ public class KcaVpnService extends VpnService {
                 } catch (UnknownHostException ex) {
                     Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
                 }
-            }
-            else builder.addRoute("0.0.0.0", 0);
+            } else builder.addRoute("0.0.0.0", 0);
         }
 
         Log.i(TAG, "IPv6=" + ip6);
