@@ -1107,13 +1107,13 @@
         "unlock": [ 852 ]
     },
     "852": {
-        "code": "B96",
+        "code": "B97",
         "name": "Deploy the remodeled light attack carrier to the front!",
         "desc": "Sortie Suzuya-Kou Kai Ni and score an S rank the boss nodes at [W6-2] and [W6-5].",
         "memo": "\u2623NOTICE!: The CAV remodel cannot complete the quest. Must be CVL.\u2623 \u27a3Rewards a Type 0 Fighter Model 63 (Fighter-bomber) and a 8cm High-angle Gun Kai + Extra Machine Guns"
     },
     "853": {
-        "code": "B97",
+        "code": "B96",
         "name": "Vigilantly patrol the sea area near the naval base!",
         "desc": "Sortie an CL(T)/CA(V)/CT as Flagship with at least 2 Destroyers and score an A rank on the boss nodes of [W1-2],[W1-3],[W1-4] and [W1-5].",
         "memo": "\u27a3Rewards 2 Irako, 4 Screws and a Furniture Fairy"

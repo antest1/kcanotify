@@ -941,21 +941,18 @@
     },
     "851": {
       "code": "B95",
-      "name": "改装航空巡洋艦、出撃！",
-      "desc": "Use a Fleet consisting of Suzuya Kai Ni(NOT CVL version) as the flagship and go to [W5-1], [W5-3]. A-rank+ at the boss node.",
-      "memo": "\u27a3Rewards either an Kyoufuu Kai OR an New Kanhon Design Anti-torpedo Bulge (Medium)"
+      "name": "改装航空巡洋舰，出击！",
+      "desc": "以改装航空巡洋舰铃谷改二为旗舰编成强力舰队，向南方海域展开，捕捉游弋于南方海域前方(5-1)和萨部岛近海海域(5-3)的敌方舰队群，并将其击破！（铃谷改二旗舰，僚舰任意，在5-1和5-3的Boss点分别取得一次A胜利）"
     },
     "852": {
-      "code": "B96",
-      "name": "改装攻撃型軽空母、前線展開せよ！",
-      "desc": "Use a Fleet consisting of Suzuya Kou Kai Ni(NOT CAV version) as the flagship and go to [W6-2], [W6-5]. S-rank(?) at the boss node.",
-      "memo": "\u27a3Rewards a Type 0 Fighter Model 63 (Fighter-bomber) and 8cm High-angle Gun Kai + Extra Machine Gun."
+      "code": "B97",
+      "name": "改装攻击型轻空母，前线展开！",
+      "desc": "以改装航空母舰铃谷航改二为旗舰编成强力机动部队，进出于中部海域。该舰队于马绍尔群岛近海(6-2)、KW环礁沿海海域(6-5)展开，捕捉该海域敌方机动部队，并将其歼灭！（铃谷航改二旗舰，僚舰任意，在6-2与6-5的Boss点分别取得一次S胜利）"
     },
     "853": {
-      "code": "B97",
-      "name": "鎮守府海域警戒を厳とせよ！",
-      "desc": "Sortie an cruiser as flagship, 2 or more DD to [W1-2], [W1-3], [W1-4], and [W1-5]. A-Rank+ the boss nodes of both maps.",
-      "memo": "\u27a3Rewards 2 Irako and a Furniture Fairy."
+      "code": "B96",
+      "name": "强化镇守府海域警戒",
+      "desc": "以巡洋舰级为旗舰，两只以上驱逐舰为僚舰编成警戒舰队。以该警戒舰队执行镇守府海域（南西群岛近海(1-2)、制油所沿岸地带(1-3)、南西群岛防卫线(1-4)、镇守府近海(1-5)）警戒任务！（巡洋舰(重巡、轻巡、航巡、雷巡、练巡)为旗舰，僚舰至少两艘驱逐舰，在1-2、1-3、1-4、1-5的Boss点分别取得一次A胜利）"
     },
 
 	"201": {
@@ -1093,9 +1090,8 @@
 	},
     "854": {
         "code": "Bq2",
-        "name": "[季常] 戦果拡張任務！「Z作戦」前段作戦",
-		"desc": "Organize a fleet and score an A rank at the boss nodes of [W2-4], [W6-1], [W6-3], and S rank the boss node at [W6-4].",
-		"memo": "\u27a3Rewards 3 Mamiya, 4 Screws and 350 Ranking Points"
+        "name": "[季常] 战果扩张任务！「Z作战」前段作战",
+		"desc": "于我军第一舰队集中配置精锐舰队，以此精锐舰队，摧毁南西群岛海域(2-4)、中部海域警戒线(6-1)、古阿诺环礁海域(6-3)、中部北海域孔雀岛近海(6-4)的敌军战力！（以任意舰队，在2-4、6-1、6-3Boss点取得A胜利以上，在6-4Boss点取得S胜利）"
     },
 
 	"301": {
@@ -1151,12 +1147,12 @@
 	"314": {
 		"code": "C11",
 		"name": "冬季大演习",
-		"desc": "在冬季的一天之内取得8次以上“演习”的胜利，进一步提高舰队的水平！"
+		"desc": "在冬季的一天之内取得8次以上「演习」的胜利，进一步提高舰队的水平！"
 	},
 	"315": {
 		"code": "C12",
 		"name": "春季大演习",
-		"desc": "在春季的一天之内取得8次以上“演习”的胜利，进一步提高舰队的水平！"
+		"desc": "在春季的一天之内取得8次以上「演习」的胜利，进一步提高舰队的练度！"
 	},
 
 	"401": {
