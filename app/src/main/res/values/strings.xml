@@ -142,6 +142,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_toast_tpvalue" formatted="false">TP: S%d/A%d</string>
 
     <string name="kca_toast_restart_at_kcanotify">Please restart the game using kcanotify.</string>
+    <string name="kca_toast_renew_currentportdeck">Go to the main port(母港) in game and renew port data.</string>
     <string name="kca_toast_get_data_at_settings">Game data is not loaded completely.\\nIf the data is not loaded for long time, download game data using kcanotify Settings manually.</string>
     <string name="kca_toast_get_data_at_settings_2">A problem in game data was detected.\\\\nPlease download game data using kcanotify Settings manually.</string>
     <string name="kca_toast_loading_data">Loading game data</string>

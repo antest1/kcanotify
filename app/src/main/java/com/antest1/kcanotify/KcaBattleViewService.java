@@ -1125,7 +1125,7 @@ public class KcaBattleViewService extends Service {
                     //mViewBackup = mView;
                     //mManager.removeView(mView);
                     api_data = KcaBattle.getCurrentApiData();
-                    if(api_data != null && api_data.has("api_heavy_damaged")) {
+                    if (api_data != null && api_data.has("api_heavy_damaged")) {
                         int value = api_data.get("api_heavy_damaged").getAsInt();
                         if (value == HD_DANGER) {
                             mView.findViewById(R.id.battleviewpanel)
@@ -1159,8 +1159,8 @@ public class KcaBattleViewService extends Service {
     public void onDestroy() {
         active = false;
         deckportdata = null;
-        if(mView != null) mView.setVisibility(View.GONE);
-        if(itemView != null) itemView.setVisibility(View.GONE);
+        if (mView != null) mView.setVisibility(View.GONE);
+        if (itemView != null) itemView.setVisibility(View.GONE);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
         super.onDestroy();
     }
@@ -1218,7 +1218,7 @@ public class KcaBattleViewService extends Service {
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    if (!isTouchDown) {
+                    if (!isTouchDown && api_data != null) {
                         isTouchDown = true;
                         try {
                             int selected = getshipidx(v.getId());
@@ -1271,9 +1271,11 @@ public class KcaBattleViewService extends Service {
             if (rid == shipNameAreaCombinedViewList[i] || rid == shipLevelCombinedViewList[i]) {
                 api_data.addProperty("api_touched_idx", 20 + i);
                 if (i <= 6) {
-                    if (friendCombinedShipData == null || i > friendCombinedShipData.size()) return -1;
+                    if (friendCombinedShipData == null || i > friendCombinedShipData.size())
+                        return -1;
                 } else {
-                    if (enemyCombinedShipData == null || i - 6 > enemyCombinedShipData.size()) return -1;
+                    if (enemyCombinedShipData == null || i - 6 > enemyCombinedShipData.size())
+                        return -1;
                 }
                 return 20 + i;
             }
@@ -1283,7 +1285,7 @@ public class KcaBattleViewService extends Service {
 
     private void sendReport(Exception e, int type) {
         error_flag = true;
-        if(mView != null) mView.setVisibility(View.GONE);
+        if (mView != null) mView.setVisibility(View.GONE);
         String app_version = BuildConfig.VERSION_NAME;
         String token = "df1629d6820907e7a09ea1e98d3041c2";
         String kca_url = "";
@@ -1301,9 +1303,9 @@ public class KcaBattleViewService extends Service {
             }
         };
         JsonObject sendData = new JsonObject();
-        if(api_data == null) {
+        if (api_data == null) {
             api_data = new JsonObject();
-            api_data .addProperty("api_data", "api_data is null");
+            api_data.addProperty("api_data", "api_data is null");
         }
         if (type == ERORR_ITEMVIEW) {
             api_data.add("api_deckport", deckportdata);

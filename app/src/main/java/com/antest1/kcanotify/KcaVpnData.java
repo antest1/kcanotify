@@ -254,8 +254,9 @@ public class KcaVpnData {
         boolean isKcsSwf = uri.contains("/kc") && uri.contains(".swf");
         boolean isKcaRes = uri.contains("/kcs/resources");
         boolean isKcsSound = uri.contains("/kcs/sound");
+        boolean isKcsWorld = uri.contains("/api_world/get_id/");
         //Log.e("KCA", uri + " " + String.valueOf(isKcaVer || isKcsApi));
-        return (isKcsSwf || isKcaRes || isKcsSound);
+        return (isKcsSwf || isKcaRes || isKcsSound || isKcsWorld);
     }
 
     private static byte[] unchunkAllData(byte[] data, boolean gzipped) throws IOException {
