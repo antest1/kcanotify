@@ -7,8 +7,8 @@ model {
             applicationId "com.antest1.kcanotify"
             minSdkVersion.apiLevel 16
             targetSdkVersion.apiLevel 25
-            versionCode 2315
-            versionName "2.3.1r5"
+            versionCode 2316
+            versionName "2.3.1r6"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
 
@@ -45,7 +45,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
     compile group: 'com.google.code.gson', name: 'gson', version: '2.4'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
