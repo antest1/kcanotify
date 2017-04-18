@@ -1179,8 +1179,8 @@ public class KcaBattleViewService extends Service {
                         battleview.findViewById(shipNameAreaCombinedViewList[i]).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(shipLevelCombinedViewList[i]).setOnTouchListener(shipViewTouchListener);
                     }
+                    if(mView != null) mView.setVisibility(View.VISIBLE);
                 }
-                mView.setVisibility(View.VISIBLE);
             }
         }
         return super.onStartCommand(intent, flags, startId);
