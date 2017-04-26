@@ -84,6 +84,7 @@ public class KcaService extends Service {
     public static boolean isCombined;
 
     Context contextWithLocale;
+    KcaDBHelper dbHelper;
 
     AlarmManager alarmManager;
     AudioManager mAudioManager;
@@ -138,6 +139,8 @@ public class KcaService extends Service {
             stopSelf();
         }
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        KcaDeckInfo.setDBHelper(dbHelper);
 
         AssetManager assetManager = getResources().getAssets();
         int loadMapEdgeInfoResult = loadMapEdgeInfoFromAssets(assetManager);
@@ -203,7 +206,6 @@ public class KcaService extends Service {
         } else {
             missionTimeScheduler = null;
         }
-
         return START_STICKY;
     }
 
@@ -490,10 +492,12 @@ public class KcaService extends Service {
                 //Log.e("KCA", "Load Item Data");
 
                 if (jsonDataObj.has("api_data")) {
+                    //dbHelper.putValue(DB_KEY_USEREQUIP, jsonDataObj.getAsJsonObject("api_data").getAsJsonArray("api_slot_item").toString());
                     JsonObject requiredInfoApiData = jsonDataObj.getAsJsonObject("api_data");
                     int size = KcaApiData.getSlotItemData(requiredInfoApiData);
+                    int size2 = KcaApiData.putSlotItemDataToDB(dbHelper, requiredInfoApiData.getAsJsonArray("api_slot_item"));
                     int userId = KcaApiData.getUserId(requiredInfoApiData);
-                    //Log.e("KCA", "Total Items: " + String.valueOf(size));
+                    Log.e("KCA", "Total Items: " + String.valueOf(size2));
                     //Toast.makeText(contextWithLocale, String.valueOf(userId), Toast.LENGTH_LONG).show();
 
                     if (api_start2_data == null && api_start2_down_mode) {
@@ -558,6 +562,8 @@ public class KcaService extends Service {
                     KcaApiData.getPortData(reqPortApiData);
                     if (reqPortApiData.has("api_deck_port")) {
                         currentPortDeckData = reqPortApiData.getAsJsonArray("api_deck_port");
+                        dbHelper.putValue(DB_KEY_DECKPORT, reqPortApiData.getAsJsonArray("api_deck_port").toString());
+                        dbHelper.test2();
                     }
                 }
             }
@@ -843,7 +849,9 @@ public class KcaService extends Service {
 
                 if (url.startsWith(API_GET_MEMBER_SLOT_ITEM)) {
                     if (jsonDataObj.has("api_data")) {
+                        //dbHelper.putValue(DB_KEY_USEREQUIP, jsonDataObj.getAsJsonArray("api_data").toString());
                         JsonArray api_data = jsonDataObj.get("api_data").getAsJsonArray();
+                        KcaApiData.putSlotItemDataToDB(dbHelper, api_data);
                         KcaApiData.updateSlotItemData(api_data);
                     }
                 }
@@ -873,6 +881,7 @@ public class KcaService extends Service {
                         if (jsonDataObj.has("api_data")) {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                             int itemKcId = KcaApiData.addUserItem(api_data);
+                            KcaApiData.updateSlotItemData(dbHelper, api_data);
                             if (isOpendbEnabled()) {
                                 KcaOpendbAPI.sendEquipDevData(flagship, materials[0], materials[1], materials[2], materials[3], itemKcId);
                             }
@@ -886,6 +895,7 @@ public class KcaService extends Service {
                             if (decodedData.startsWith("api_slotitem_ids")) {
                                 String itemlist = decodedData.replace("api_slotitem_ids=", "");
                                 KcaApiData.deleteUserItem(itemlist);
+                                KcaApiData.removeSlotItemData(dbHelper, itemlist);
                                 break;
                             }
                         }
@@ -905,7 +915,7 @@ public class KcaService extends Service {
                     if (url.startsWith(API_REQ_KOUSYOU_GETSHIP)) {
                         if (jsonDataObj.has("api_data")) {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
-                            KcaApiData.addUserShip(api_data);
+                            KcaApiData.addUserShip(dbHelper, api_data);
                         }
                     }
 
@@ -1071,6 +1081,8 @@ public class KcaService extends Service {
                             if (jsonDataObj.has("api_data")) {
                                 JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                                 currentPortDeckData = api_data.get("api_deck_data").getAsJsonArray();
+                                dbHelper.putValue(DB_KEY_DECKPORT, api_data.get("api_deck_data").getAsJsonArray().toString());
+                                dbHelper.test();
                                 KcaApiData.updateUserShip(api_data.get("api_ship_data").getAsJsonArray().get(0).getAsJsonObject());
                             }
                         }
@@ -1126,6 +1138,8 @@ public class KcaService extends Service {
                         if (jsonDataObj.has("api_data")) {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                             currentPortDeckData = api_data.getAsJsonArray("api_deck");
+                            dbHelper.putValue(DB_KEY_DECKPORT, api_data.getAsJsonArray("api_deck").toString());
+                            dbHelper.test();
                             updateUserShip(api_data.getAsJsonObject("api_ship"));
                             KcaApiData.deleteUserShip(itemIds);
                         }
@@ -1150,7 +1164,7 @@ public class KcaService extends Service {
                             }
                         }
 
-                        JsonObject itemData = KcaApiData.getUserItemStatusById(itemId, "slotitem_id,level", "");
+                        JsonObject itemData = KcaApiData.getUserItemStatusById(dbHelper, itemId, "slotitem_id,level", "");
                         int itemKcId = itemData.get("slotitem_id").getAsInt();
                         int level = itemData.get("level").getAsInt();
                         int api_remodel_flag = 0;
@@ -1161,6 +1175,10 @@ public class KcaService extends Service {
                                 JsonObject api_after_slot = api_data.get("api_after_slot").getAsJsonObject();
                                 JsonArray api_slot_item = new JsonArray();
                                 api_slot_item.add(api_after_slot);
+                                for (int i=0; i<api_slot_item.size(); i++) {
+                                    JsonObject item = api_slot_item.get(i).getAsJsonObject();
+                                    dbHelper.putItemValue(item.get("api_id").getAsInt(), item.toString());
+                                }
                                 KcaApiData.updateSlotItemData(api_slot_item);
                             }
                             JsonElement use_slot_id = api_data.get("api_use_slot_id");
@@ -1169,6 +1187,7 @@ public class KcaService extends Service {
                                 for (JsonElement id : use_slot_id.getAsJsonArray()) {
                                     use_slot_id_list.add(id.getAsString());
                                 }
+                                KcaApiData.removeSlotItemData(dbHelper, joinStr(use_slot_id_list, ","));
                                 KcaApiData.deleteUserItem(joinStr(use_slot_id_list, ","));
                             }
                         }

@@ -10,6 +10,10 @@ public final class KcaConstants {
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
     public static final String KCANOTIFY_S2_CACHE_FILENAME = "kca_api_start2";
     public static final String KCANOTIFY_USERITEM_CACHE_FILENAME = "kca_userslotitem";
+    public static final int KCANOTIFY_DB_VERSION = 1;
+
+    public static final String DB_KEY_DECKPORT = "key_deckport";
+    public static final String DB_KEY_USEREQUIP = "key_userequip";
 
     public static final int FAIRY_TOTAL_COUNT = 30;
     public static final int[] FAIRY_REVERSE_LIST = {0, 1, 2, 8, 9, 11, 12, 15, 19, 23, 24, 25, 27, 28};

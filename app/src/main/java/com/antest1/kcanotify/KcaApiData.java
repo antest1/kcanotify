@@ -279,6 +279,9 @@ public class KcaApiData {
                 item_count = kcShipInitEquipCount.get(ship_id_str).getAsInt();
             }
             getItemCountInBattle += item_count;
+            Log.e("KCA", "addItemCountInBattle: +" + String.valueOf(item_count));
+        } else {
+            Log.e("KCA", "addItemCountInBattle: init data is null");
         }
     }
 
@@ -295,7 +298,7 @@ public class KcaApiData {
     }
 
     public static boolean checkUserItemMax() {
-        Log.e("KCA", String.format("Item: %d - %d", maxItemSize, userItemData.size()));
+        Log.e("KCA", String.format("Item: %d - %d", maxItemSize, userItemData.size() + getItemCountInBattle));
         return maxItemSize <= (userItemData.size() + getItemCountInBattle);
     }
 
@@ -605,6 +608,60 @@ public class KcaApiData {
         return -1;
     }
 
+    // DB-based functions
+    public static int putSlotItemDataToDB(KcaDBHelper helper, JsonArray api_data) {
+        JsonElement temp;
+        HashSet<Integer> prevData = helper.getItemKeyList();
+        for (Iterator<JsonElement> itr = api_data.iterator(); itr.hasNext(); ) {
+            temp = itr.next();
+            JsonObject item_data = temp.getAsJsonObject();
+            Integer api_id = item_data.get("api_id").getAsInt();
+            helper.putItemValue(api_id, item_data.toString());
+            prevData.remove(api_id);
+        }
+
+        if (prevData.size() > 0) {
+            int i = 0;
+            String[] removeList = new String[prevData.size()];
+            Log.e("KCA", "prevData size: " + String.valueOf(removeList.length));
+            for (Integer id : prevData) {
+                removeList[i] = String.valueOf(id);
+                i += 1;
+            }
+            helper.removeItemValue(removeList);
+        }
+        return api_data.size();
+    }
+
+    public static void removeSlotItemData(KcaDBHelper helper, String list) {
+        String[] requestList = list.split(",");
+        helper.removeItemValue(requestList);
+    }
+
+    public static int updateSlotItemData(KcaDBHelper helper, JsonObject api_data) {
+        JsonObject item = null;
+        if (api_data.has("api_create_flag") && api_data.get("api_create_flag").getAsInt() == 1) {
+            item = (JsonObject) api_data.get("api_slot_item");
+        } else if (api_data.has("api_slotitem_id")) {
+            item = api_data;
+        }
+        if (item != null) {
+            int item_id = item.get("api_id").getAsInt();
+            int kc_item_id = item.get("api_slotitem_id").getAsInt();
+            int itemType = getKcItemStatusById(kc_item_id, "type").get("type").getAsJsonArray().get(2).getAsInt();
+            item.addProperty("api_locked", 0);
+            item.addProperty("api_level", 0);
+            if (isItemAircraft(itemType)) {
+                item.addProperty("api_alv", 0);
+            }
+            helper.putItemValue(item_id, item.toString());
+            Log.e("KCA", String.format("add item %d", item_id));
+            return kc_item_id;
+        }
+        return 0;
+    }
+    // ================================================================================
+
     public static int getSlotItemData(JsonObject api_data) {
         Set<Integer> prevItemIds;
         if (userItemData == null) {
@@ -719,6 +776,37 @@ public class KcaApiData {
         }
     }
 
+    public static JsonObject getUserItemStatusById(KcaDBHelper helper, int id, String list, String kclist) {
+        if (kcGameData == null) return null;
+        String data = helper.getItemValue(id);
+        if (data != null) {
+            JsonObject userData = new JsonParser().parse(data).getAsJsonObject();
+            int kc_item_id = userData.get("api_slotitem_id").getAsInt();
+            JsonObject kcData = getKcItemStatusById(kc_item_id, kclist);
+
+            if (list.equals("all")) {
+                for (Map.Entry<String, JsonElement> k : userData.entrySet()) {
+                    kcData.add(k.getKey(), userData.get(k.getKey()));
+                }
+            } else {
+                String[] requestList = list.split(",");
+                for (int i = 0; i < requestList.length; i++) {
+                    String orig_api_item = requestList[i];
+                    String api_item = orig_api_item;
+                    if (!api_item.startsWith("api_")) {
+                        api_item = "api_" + api_item;
+                    }
+                    if (userData.has(api_item)) {
+                        kcData.add(orig_api_item, userData.get(api_item));
+                    }
+                }
+            }
+            return kcData;
+        } else {
+            return null;
+        }
+    }
+
     public static JsonObject getKcItemStatusById(int id, String list) {
         if (kcGameData == null) return null;
         JsonObject temp = new JsonObject();
@@ -748,7 +836,7 @@ public class KcaApiData {
         return result > -1;
     }
 
-    public static void addUserShip(JsonObject api_data) {
+    public static void addUserShip(KcaDBHelper dbHelper, JsonObject api_data) {
         if (kcGameData == null) return;
         if (api_data.has("api_id")) {
             int shipId = api_data.get("api_id").getAsInt();
@@ -759,6 +847,10 @@ public class KcaApiData {
             Log.e("KCA", String.format("add ship %d (%s)", shipId, shipName));
             if (api_data.has("api_slotitem") && !api_data.get("api_slotitem").isJsonNull()) {
                 JsonArray shipSlotItemData = (JsonArray) api_data.get("api_slotitem");
+                for (int i = 0; i < shipSlotItemData.size(); i++) {
+                    JsonObject item = shipSlotItemData.get(i).getAsJsonObject();
+                    updateSlotItemData(dbHelper, item);
+                }
                 for (int i = 0; i < shipSlotItemData.size(); i++) {
                     addUserItem((JsonObject) shipSlotItemData.get(i));
                 }
