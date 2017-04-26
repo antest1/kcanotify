@@ -5,15 +5,20 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.net.VpnService;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -38,14 +43,18 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.util.Arrays;
 import java.util.Locale;
 
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
-import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
-import static com.antest1.kcanotify.KcaApiData.loadItemTranslationDataFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadQuestInfoDataFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
@@ -71,6 +80,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
+import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -80,6 +90,7 @@ import static com.antest1.kcanotify.KcaUtils.writeCacheData;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "KCAV";
+    public static boolean[] warnType = new boolean[5];
     private static final int REQUEST_VPN = 1;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_READEXT_PERMISSION = 3;
@@ -95,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
     Button kcbtn;
     ImageButton kcakashibtn;
     TextView textDescription = null;
+    TextView textWarn, textUpdate;
     Gson gson = new Gson();
 
     SharedPreferences prefs;
@@ -189,32 +201,50 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        textWarn = (TextView) findViewById(R.id.textMainWarn);
+        textUpdate = (TextView) findViewById(R.id.textMainUpdate);
+        textWarn.setVisibility(View.INVISIBLE);
+        textUpdate.setVisibility(View.INVISIBLE);
+        textUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String downloadUrl = getStringPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE);
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            }
+        });
+
         textDescription = (TextView) findViewById(R.id.textDescription);
         textDescription.setText(R.string.description);
         Linkify.addLinks(textDescription, Linkify.WEB_URLS);
 
         ctx = getApplicationContext();
-
         int setDefaultGameDataResult = setDefaultGameData();
         if (setDefaultGameDataResult != 1) {
             Toast.makeText(this, "error loading game data", Toast.LENGTH_LONG).show();
         }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READEXT_PERMISSION);
-        } else {
-            checkOverlayPermission();
-        }
-
-        new SettingActivity.getRecentVersion(MainActivity.this, false).execute();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        new getRecentVersion().execute();
+
         setVpnBtn();
         setCheckBtn();
         loadTranslationData(assetManager, getApplicationContext());
+
+        Arrays.fill(warnType, false);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READEXT_PERMISSION);
+        }
+
+        if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)
+                || getBooleanPreferences(getApplicationContext(), PREF_KCA_QUESTVIEW_USE)) {
+            warnType[REQUEST_OVERLAY_PERMISSION] = !checkOverlayPermission();
+        }
+        setWarning();
     }
 
     @Override
@@ -228,6 +258,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
+    }
+
+    public void setWarning() {
+        String warnText = "";
+        if (warnType[REQUEST_OVERLAY_PERMISSION]) {
+            warnText = warnText.concat("\n").concat(getString(R.string.ma_toast_overay_diabled));
+        }
+        if (warnType[REQUEST_READEXT_PERMISSION]) {
+            warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_readext_denied));
+        }
+
+        if (warnText.length() > 0) {
+            textWarn.setVisibility(View.VISIBLE);
+            textWarn.setText(warnText.trim());
+        } else {
+            textWarn.setVisibility(View.GONE);
+            textWarn.setText("");
+        }
     }
 
     public void setVpnBtn() {
@@ -314,13 +362,9 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    private void checkOverlayPermission() {
-        if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                    && !Settings.canDrawOverlays(getApplicationContext())) {
-                Toast.makeText(this, getString(R.string.ma_toast_overay_diabled), Toast.LENGTH_LONG).show();
-            }
-        }
+    private boolean checkOverlayPermission() {
+        return !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(getApplicationContext()));
     }
 
     private int setDefaultGameData() {
@@ -349,6 +393,77 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public class getRecentVersion extends AsyncTask<Context, String, String> {
+        public String currentVersion = BuildConfig.VERSION_NAME;
+
+        public String getStringWithLocale(int id) {
+            return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Context... params) {
+            String content = null;
+            try {
+                content = executeClient();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return content;
+        }
+
+        public String executeClient() {
+            final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
+            OkHttpClient client = new OkHttpClient.Builder().build();
+
+            String checkUrl = String.format(getString(R.string.kcanotify_checkversion_link));
+            Request.Builder builder = new Request.Builder().url(checkUrl).get();
+            builder.addHeader("Referer", "app:/KCA/");
+            builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
+            Request request = builder.build();
+
+            try {
+                Response response = client.newCall(request).execute();
+                return response.body().string().trim();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                return "";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (result == null) {
+                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
+            } else if (result.length() > 0) {
+                Log.e("KCA", "Received: " + result);
+                JsonObject jsonDataObj = new JsonObject();
+                try {
+                    StringReader reader = new StringReader(result.trim());
+                    JsonReader jsonReader = new JsonReader(reader);
+                    jsonReader.setLenient(true);
+                    jsonDataObj = new JsonParser().parse(jsonReader).getAsJsonObject();
+
+                    if (jsonDataObj.has("version")) {
+                        String recentVersion = jsonDataObj.get("version").getAsString();
+                        if (!compareVersion(currentVersion, recentVersion)) { // True if latest
+                            textUpdate.setVisibility(View.VISIBLE);
+                            textUpdate.setText(String.format(getStringWithLocale(R.string.ma_hasupdate), recentVersion));
+                        }
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(),
+                            getStringWithLocale(R.string.sa_checkupdate_servererror),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -367,12 +482,8 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_READEXT_PERMISSION: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, getString(R.string.ma_permission_readext_confirmed), Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, getString(R.string.ma_permission_readext_denied), Toast.LENGTH_LONG).show();
-                }
-                checkOverlayPermission();
+                warnType[REQUEST_READEXT_PERMISSION] = !(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                setWarning();
             }
         }
     }

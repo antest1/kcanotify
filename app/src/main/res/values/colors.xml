@@ -4,6 +4,10 @@
     <color name="colorPrimaryDark">#1d2935</color>
     <color name="colorAccent">#16a085</color>
     <color name="colorBtn">#d6d6d6</color>
+    <color name="colorUpdate">#e8f5e9</color>
+    <color name="colorUpdateText">#1b5e20</color>
+    <color name="colorWarn">#ffcdd2</color>
+    <color name="colorWarnText">#68000a</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
 

@@ -95,7 +95,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="node_info_practice" formatted="false">PVP</string>
     <!-- MainActivity Strings -->
     <string name="ma_toast_kancolle_not_installed">Kancolle For Android is not installed.</string>
-    <string name="ma_toast_overay_diabled">Screen Overlay Permission is required for BattleView.\nEnable Screen Overlay at Settings > Screen Overlay Settings.</string>
+    <string name="ma_toast_overay_diabled">Screen Overlay Permission is required for BattleView. Enable Screen Overlay at Settings > Screen Overlay Settings.</string>
+    <string name="ma_hasupdate" formatted="false">An update is available. (%s)</string>
     <string name="description"><b>Help</b>\nTurn on VPN and SVC then run Kancolle\n\n※ VPN is required for detecting game data. \n\n<b>Main Features</b>\n - Expedition/Docking notifications \n - Heavy Damage Alert (prior to/during combat)\n - LoS/FP/Fatigue indicators\n - Node tracking during sorties\n - BattleView / QuestView\n - Improvement Arsenal Chart\n - Send statistics to OpenDB (optional)\n \nVisit http://swaytwig.com/kcanotify for detail. (Korean)</string>
 
     <!-- SettingActivity Strings -->

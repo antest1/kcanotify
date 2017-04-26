@@ -71,7 +71,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="node_info_practice" formatted="false">演习</string>
     <!-- MainActivity Strings -->
     <string name="ma_toast_kancolle_not_installed">没有安装艦これ安卓版。</string>
-    <string name="ma_toast_overay_diabled">战斗剧透需要悬浮窗权限。\n到设置 > 悬浮窗设置允许悬浮.</string>
+    <string name="ma_toast_overay_diabled">战斗剧透需要悬浮窗权限。到设置 > 悬浮窗设置允许悬浮.</string>
+    <string name="ma_hasupdate" formatted="false">有可用的更新。 (%s)</string>
     <string name="description"><b>帮助</b>\n启用VPN和SVC服务后打开艦これ\n\n※ VPN是为了监测游戏数据。 \n\n<b>主要特点</b>\n - 远征/入渠 通知 \n - 大破警告 (战斗前/中)\n - 显示索敌/制空/士气值 \n - 罗盘剧透\n - 战斗剧透 / 任务翻译\n - 装备改修查询\n - 向OpenDB汇报数据 (可选)\n \n访问[http://swaytwig.com/kcanotify], 了解详情 (韩文)</string>
 
     <!-- SettingActivity Strings -->

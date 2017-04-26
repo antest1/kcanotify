@@ -68,7 +68,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="node_info_practice" formatted="false">演習</string>
     <!-- MainActivity Strings -->
     <string name="ma_toast_kancolle_not_installed">Android版本的艦これ尚未安裝</string>
-    <string name="ma_toast_overay_diabled">戰鬥劇透需要取得懸浮視窗權限\n請至設定 > 懸浮視窗設定來允許懸浮視窗</string>
+    <string name="ma_toast_overay_diabled">戰鬥劇透需要取得懸浮視窗權限  請至設定 > 懸浮視窗設定來允許懸浮視窗</string>
+    <string name="ma_hasupdate" formatted="false">有可用的更新。 (%s)</string>
     <string name="description"><b>Help</b>\n請啟用VPN與SVC服務後再開啟艦これ\n\n※ VPN是為了監測遊戲數據 \n\n<b>主要功能</b>\n - 遠征/入渠通知 \n - 大破警告\n - 索敵/制空/士氣值顯示\n - 羅盤預測\n - 戰鬥劇透 / 任務翻譯\n - 裝備改修表\n - 傳送數據至OpenDB（可選）\n \n可至官網 http://swaytwig.com/kcanotify 了解詳細資料（韓文）</string>
 
     <!-- SettingActivity Strings -->
