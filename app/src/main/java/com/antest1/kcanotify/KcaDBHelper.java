@@ -92,8 +92,9 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public String getItemValue(int key) {
+        Log.e("KCA", "getItemValue " + String.valueOf(key));
         db = this.getReadableDatabase();
-        Cursor c = db.query(table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
+        Cursor c = db.query(slotitem_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
         if (c.moveToFirst()) {
             return c.getString(c.getColumnIndex("VALUE"));
         } else {
