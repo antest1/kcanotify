@@ -68,6 +68,7 @@ import okhttp3.OkHttpClient;
 
 import static com.antest1.kcanotify.KcaApiData.*;
 import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaQuestViewService.REFRESH_QUESTVIEW_ACTION;
 import static com.antest1.kcanotify.KcaUtils.*;
 
 public class KcaService extends Service {
@@ -76,6 +77,7 @@ public class KcaService extends Service {
 
     public static boolean isServiceOn = false;
     public static boolean isPortAccessed = false;
+    public static boolean isUserItemDataLoaded = false;
     public static int heavyDamagedMode = 0;
     public static int checkKdockId = -1;
     public static boolean kaisouProcessFlag = false;
@@ -133,6 +135,7 @@ public class KcaService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         isInitState = true;
+        isUserItemDataLoaded = false;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Log.e("KCA", String.valueOf(prefs.contains(PREF_SVC_ENABLED)));
         if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
@@ -141,6 +144,7 @@ public class KcaService extends Service {
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         KcaDeckInfo.setDBHelper(dbHelper);
+        KcaApiData.setDBHelper(dbHelper);
 
         AssetManager assetManager = getResources().getAssets();
         int loadMapEdgeInfoResult = loadMapEdgeInfoFromAssets(assetManager);
@@ -206,6 +210,7 @@ public class KcaService extends Service {
         } else {
             missionTimeScheduler = null;
         }
+
         return START_STICKY;
     }
 
@@ -214,7 +219,6 @@ public class KcaService extends Service {
     public void setServiceDown() {
         MainActivity.isKcaServiceOn = false;
         isPortAccessed = false;
-        KcaApiData.userItemData = null;
         if (missionTimeScheduler != null) {
             missionTimeScheduler.shutdown();
         }
@@ -234,6 +238,7 @@ public class KcaService extends Service {
 
     public void onDestroy() {
         setServiceDown();
+        stopService(new Intent(this, KcaQuestViewService.class));
         stopService(new Intent(this, KcaBattleViewService.class));
         stopService(new Intent(this, KcaViewButtonService.class));
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -441,8 +446,6 @@ public class KcaService extends Service {
                 isPortAccessed = false;
                 api_start2_init = false;
                 api_start2_loading_flag = true;
-                stopService(new Intent(this, KcaBattleViewService.class));
-                stopService(new Intent(this, KcaViewButtonService.class));
                 //Toast.makeText(contextWithLocale, "KCA_VERSION", Toast.LENGTH_LONG).show();
                 JsonObject api_version = jsonDataObj.get("api").getAsJsonObject();
                 kca_version = api_version.get("api_start2").getAsString();
@@ -458,6 +461,14 @@ public class KcaService extends Service {
                         KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
                         setPreferences(getApplicationContext(), PREF_KCA_VERSION, kca_version);
                     }
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                        && !Settings.canDrawOverlays(getApplicationContext())) {
+                    // Can not draw overlays: pass
+                } else {
+                    startService(new Intent(this, KcaViewButtonService.class));
+                    startService(new Intent(this, KcaBattleViewService.class));
+                    startService(new Intent(this, KcaQuestViewService.class));
                 }
                 return;
                 //Toast.makeText(contextWithLocale, getPreferences("kca_version") + " " + String.valueOf(api_start2_down_mode), Toast.LENGTH_LONG).show();
@@ -494,10 +505,10 @@ public class KcaService extends Service {
                 if (jsonDataObj.has("api_data")) {
                     //dbHelper.putValue(DB_KEY_USEREQUIP, jsonDataObj.getAsJsonObject("api_data").getAsJsonArray("api_slot_item").toString());
                     JsonObject requiredInfoApiData = jsonDataObj.getAsJsonObject("api_data");
-                    int size = KcaApiData.getSlotItemData(requiredInfoApiData);
-                    int size2 = KcaApiData.putSlotItemDataToDB(dbHelper, requiredInfoApiData.getAsJsonArray("api_slot_item"));
+                    int size2 = KcaApiData.putSlotItemDataToDB(requiredInfoApiData.getAsJsonArray("api_slot_item"));
                     int userId = KcaApiData.getUserId(requiredInfoApiData);
                     Log.e("KCA", "Total Items: " + String.valueOf(size2));
+                    if (size2 > 0) isUserItemDataLoaded = true;
                     //Toast.makeText(contextWithLocale, String.valueOf(userId), Toast.LENGTH_LONG).show();
 
                     if (api_start2_data == null && api_start2_down_mode) {
@@ -555,36 +566,60 @@ public class KcaService extends Service {
 
             if (url.startsWith(API_PORT)) {
                 isPortAccessed = true;
-                stopService(new Intent(this, KcaViewButtonService.class));
-                stopService(new Intent(this, KcaBattleViewService.class));
+                startService(new Intent(this, KcaBattleViewService.class)
+                        .setAction(KcaBattleViewService.HIDE_BATTLEVIEW_ACTION));
+                startService(new Intent(this, KcaViewButtonService.class)
+                        .setAction(KcaViewButtonService.DEACTIVATE_BATTLEVIEW_ACTION));
                 if (jsonDataObj.has("api_data")) {
                     JsonObject reqPortApiData = jsonDataObj.getAsJsonObject("api_data");
                     KcaApiData.getPortData(reqPortApiData);
                     if (reqPortApiData.has("api_deck_port")) {
                         currentPortDeckData = reqPortApiData.getAsJsonArray("api_deck_port");
                         dbHelper.putValue(DB_KEY_DECKPORT, reqPortApiData.getAsJsonArray("api_deck_port").toString());
-                        dbHelper.test2();
                     }
                 }
             }
 
+            if (url.startsWith(API_GET_MEMBER_SLOT_ITEM)) {
+                if (jsonDataObj.has("api_data")) {
+                    JsonArray api_data = jsonDataObj.get("api_data").getAsJsonArray();
+                    KcaApiData.putSlotItemDataToDB(api_data);
+                    isUserItemDataLoaded = true;
+                }
+            }
+
+            if (!API_QUEST_REQS.contains(url) && KcaQuestViewService.getQuestMode()) {
+                KcaQuestViewService.setQuestMode(false);
+                startService(new Intent(getBaseContext(), KcaQuestViewService.class)
+                        .setAction(REFRESH_QUESTVIEW_ACTION));
+            }
+
             if (url.startsWith(API_GET_MEMBER_QUESTLIST)) {
-                if (getBooleanPreferences(getApplicationContext(), PREF_KCA_QUESTVIEW_USE)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                            && !Settings.canDrawOverlays(getApplicationContext())) {
-                        // Can not draw overlays: pass
-                    } else if (jsonDataObj.has("api_data")) {
-                        JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
-                        KcaQuestViewService.setApiData(api_data);
-                        Intent intent = new Intent(this, KcaViewButtonService.class)
-                                .setAction(KcaViewButtonService.SHOW_QUEST_INFO);
-                        startService(intent);
+                KcaQuestViewService.setQuestMode(true);
+                int api_tab_id = -1;
+                String[] requestData = request.split("&");
+                for (int i = 0; i < requestData.length; i++) {
+                    String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                    if (decodedData.startsWith("api_tab_id")) {
+                        api_tab_id = Integer.valueOf(decodedData.replace("api_tab_id=", ""));
+                        break;
                     }
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                        && !Settings.canDrawOverlays(getApplicationContext())) {
+                    // Can not draw overlays: pass
+                } else if (jsonDataObj.has("api_data")) {
+                    JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                    KcaQuestViewService.setApiData(api_data);
+                    startService(new Intent(this, KcaViewButtonService.class)
+                            .setAction(KcaViewButtonService.FAIRY_VISIBLE));
+                    startService(new Intent(getBaseContext(), KcaQuestViewService.class)
+                            .setAction(REFRESH_QUESTVIEW_ACTION).putExtra("tab_id", api_tab_id));
                 }
             }
 
             // Game Data Dependent Tasks
-            if (!isUserItemDataLoaded()) {
+            if (!isUserItemDataLoaded) {
                 customToast.showToast(getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
             } else if (!checkDataLoadTriggered()) {
                 if (!api_start2_loading_flag) {
@@ -663,7 +698,7 @@ public class KcaService extends Service {
                     String message = "";
                     boolean isHeavyDamagedFlag = false;
                     boolean isNotSuppliedFlag = false;
-                    if(isCurrentPortDeckDataReady()) {
+                    if (isCurrentPortDeckDataReady()) {
                         for (int i = 0; i < currentPortDeckData.size(); i++) {
                             if (url.startsWith(API_GET_MEMBER_MISSION) && i == 0) continue;
                             if (KcaDeckInfo.checkNotSuppliedExist(currentPortDeckData, i)) {
@@ -802,9 +837,10 @@ public class KcaService extends Service {
                                         && !Settings.canDrawOverlays(getApplicationContext())) {
                                     // Can not draw overlays: pass
                                 } else {
-                                    Intent intent = new Intent(this, KcaViewButtonService.class)
-                                            .setAction(KcaViewButtonService.SHOW_BATTLE_INFO);
-                                    startService(intent);
+                                    startService(new Intent(this, KcaViewButtonService.class)
+                                            .setAction(KcaViewButtonService.ACTIVATE_BATTLEVIEW_ACTION));
+                                    startService(new Intent(this, KcaViewButtonService.class)
+                                            .setAction(KcaViewButtonService.FAIRY_VISIBLE));
                                 }
                             }
                         }
@@ -847,16 +883,7 @@ public class KcaService extends Service {
                     }
                 }
 
-                if (url.startsWith(API_GET_MEMBER_SLOT_ITEM)) {
-                    if (jsonDataObj.has("api_data")) {
-                        //dbHelper.putValue(DB_KEY_USEREQUIP, jsonDataObj.getAsJsonArray("api_data").toString());
-                        JsonArray api_data = jsonDataObj.get("api_data").getAsJsonArray();
-                        KcaApiData.putSlotItemDataToDB(dbHelper, api_data);
-                        KcaApiData.updateSlotItemData(api_data);
-                    }
-                }
-
-                if(isCurrentPortDeckDataReady()) {
+                if (isCurrentPortDeckDataReady()) {
                     if (url.startsWith(API_REQ_KOUSYOU_CREATETIEM)) {
                         String[] requestData = request.split("&");
                         int[] materials = {0, 0, 0, 0};
@@ -880,8 +907,7 @@ public class KcaService extends Service {
 
                         if (jsonDataObj.has("api_data")) {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
-                            int itemKcId = KcaApiData.addUserItem(api_data);
-                            KcaApiData.updateSlotItemData(dbHelper, api_data);
+                            int itemKcId = KcaApiData.updateSlotItemData(api_data);
                             if (isOpendbEnabled()) {
                                 KcaOpendbAPI.sendEquipDevData(flagship, materials[0], materials[1], materials[2], materials[3], itemKcId);
                             }
@@ -894,8 +920,7 @@ public class KcaService extends Service {
                             String decodedData = URLDecoder.decode(requestData[i], "utf-8");
                             if (decodedData.startsWith("api_slotitem_ids")) {
                                 String itemlist = decodedData.replace("api_slotitem_ids=", "");
-                                KcaApiData.deleteUserItem(itemlist);
-                                KcaApiData.removeSlotItemData(dbHelper, itemlist);
+                                KcaApiData.removeSlotItemData(itemlist);
                                 break;
                             }
                         }
@@ -915,7 +940,7 @@ public class KcaService extends Service {
                     if (url.startsWith(API_REQ_KOUSYOU_GETSHIP)) {
                         if (jsonDataObj.has("api_data")) {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
-                            KcaApiData.addUserShip(dbHelper, api_data);
+                            KcaApiData.addUserShip(api_data);
                         }
                     }
 
@@ -1164,7 +1189,7 @@ public class KcaService extends Service {
                             }
                         }
 
-                        JsonObject itemData = KcaApiData.getUserItemStatusById(dbHelper, itemId, "slotitem_id,level", "");
+                        JsonObject itemData = KcaApiData.getUserItemStatusById(itemId, "slotitem_id,level", "");
                         int itemKcId = itemData.get("slotitem_id").getAsInt();
                         int level = itemData.get("level").getAsInt();
                         int api_remodel_flag = 0;
@@ -1175,11 +1200,10 @@ public class KcaService extends Service {
                                 JsonObject api_after_slot = api_data.get("api_after_slot").getAsJsonObject();
                                 JsonArray api_slot_item = new JsonArray();
                                 api_slot_item.add(api_after_slot);
-                                for (int i=0; i<api_slot_item.size(); i++) {
+                                for (int i = 0; i < api_slot_item.size(); i++) {
                                     JsonObject item = api_slot_item.get(i).getAsJsonObject();
                                     dbHelper.putItemValue(item.get("api_id").getAsInt(), item.toString());
                                 }
-                                KcaApiData.updateSlotItemData(api_slot_item);
                             }
                             JsonElement use_slot_id = api_data.get("api_use_slot_id");
                             List<String> use_slot_id_list = new ArrayList<String>();
@@ -1187,8 +1211,7 @@ public class KcaService extends Service {
                                 for (JsonElement id : use_slot_id.getAsJsonArray()) {
                                     use_slot_id_list.add(id.getAsString());
                                 }
-                                KcaApiData.removeSlotItemData(dbHelper, joinStr(use_slot_id_list, ","));
-                                KcaApiData.deleteUserItem(joinStr(use_slot_id_list, ","));
+                                KcaApiData.removeSlotItemData(joinStr(use_slot_id_list, ","));
                             }
                         }
                         if (certainFlag != 1 && isOpendbEnabled()) {
@@ -1320,7 +1343,7 @@ public class KcaService extends Service {
                     Log.e("KCA", String.format("Item: %d", jsonDataObj.get("item").getAsInt()));
                 }
                 api_start2_loading_flag = false;
-                if (isUserItemDataLoaded()) {
+                if (isUserItemDataLoaded) {
                     processFirstDeckInfo(currentPortDeckData);
                 }
             }
@@ -1333,6 +1356,8 @@ public class KcaService extends Service {
                     viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
                     updateNotificationFairy();
                     setFrontViewNotifier(FRONT_NONE, 0, null);
+                    startService(new Intent(this, KcaViewButtonService.class)
+                        .setAction(KcaViewButtonService.FAIRY_CHANGE));
                 }
             }
 
@@ -1573,10 +1598,6 @@ public class KcaService extends Service {
         if (!isGameDataLoaded()) {
             Log.e("KCA", "processFirstDeckInfo: Game Data is Null");
             new retrieveApiStartData().execute("", "down", "");
-            return;
-        } else if (!isUserItemDataLoaded() && isPortAccessed) {
-            customToast.showToast(getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorPrimaryDark));
-            Log.e("KCA", String.format("processFirstDeckInfo: useritem data is null"));
             return;
         } else {
             Log.e("KCA", String.format("processFirstDeckInfo: data loaded"));

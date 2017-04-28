@@ -13,6 +13,7 @@ public final class KcaConstants {
     public static final int KCANOTIFY_DB_VERSION = 1;
 
     public static final String DB_KEY_DECKPORT = "key_deckport";
+    public static final String DB_KEY_MAPEDGES = "key_mapedges";
     public static final String DB_KEY_USEREQUIP = "key_userequip";
 
     public static final int FAIRY_TOTAL_COUNT = 50;
@@ -29,7 +30,6 @@ public final class KcaConstants {
     public static final String API_GET_MEMBER_SLOT_ITEM = "/api_get_member/slot_item";
     public static final String API_REQ_MISSION_RETURN = "/api_req_mission/return_instruction";
     public static final String API_REQ_MISSION_RESULT = "/api_req_mission/result";
-
 
     public static final String API_REQ_HENSEI_CHANGE = "/api_req_hensei/change";
     public static final String API_REQ_HENSEI_PRESET = "/api_req_hensei/preset_select";
@@ -57,6 +57,16 @@ public final class KcaConstants {
     public static final String API_GET_MEMBER_KDOCK = "/api_get_member/kdock";
 
     public static final String API_GET_MEMBER_QUESTLIST = "/api_get_member/questlist";
+    public static final String API_REQ_QUEST_START = "/api_req_quest/start";
+    public static final String API_REQ_QUEST_STOP = "api_req_quest/stop";
+    public static final String API_REQ_QUEST_CLEARITEMGET = "api_req_quest/clearitemget";
+
+    public static final String[] API_QUEST_REQ_LIST = new String[]{
+            API_GET_MEMBER_QUESTLIST,
+            API_REQ_QUEST_START,
+            API_REQ_QUEST_STOP,
+            API_REQ_QUEST_CLEARITEMGET
+    };
 
     public static final String API_GET_MEMBER_MAPINFO = "/api_get_member/mapinfo";
     public static final String API_GET_MEMBER_PRACTICE = "/api_get_member/practice";
@@ -197,6 +207,7 @@ public final class KcaConstants {
     public static final String START_BATTLEVIEW_ACTION = "start_battleview_action";
 
     public static final List<String> API_BATTLE_REQS = Arrays.asList(API_BATTLE_REQ_LIST);
+    public static final List<String> API_QUEST_REQS = Arrays.asList(API_QUEST_REQ_LIST);
 
     public static final int VIEW_HP_MAX = 100;
     public static final int STATE_NORMAL = 0;

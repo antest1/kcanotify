@@ -65,13 +65,14 @@ import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
-import static com.antest1.kcanotify.KcaViewButtonService.REFRESH_BATTLEVIEW_ACTION;
-import static com.antest1.kcanotify.KcaViewButtonService.REFRESH_QUESTVIEW_ACTION;
-import static com.antest1.kcanotify.KcaViewButtonService.SHOW_BATTLEVIEW_ACTION;
-import static com.antest1.kcanotify.KcaViewButtonService.SHOW_QUESTVIEW_ACTION;
+
 
 
 public class KcaBattleViewService extends Service {
+    public static final String REFRESH_BATTLEVIEW_ACTION = "refresh_battleview";
+    public static final String SHOW_BATTLEVIEW_ACTION = "show_battleview";
+    public static final String HIDE_BATTLEVIEW_ACTION = "hide_battleview";
+
     Context contextWithLocale;
     LayoutInflater mInflater;
     private BroadcastReceiver refreshreceiver;
@@ -613,6 +614,7 @@ public class KcaBattleViewService extends Service {
                         ((TextView) battleview.findViewById(shipNameViewList[getEnemyIdx(i)])).setText(kcname);
                         ((TextView) battleview.findViewById(shipLevelViewList[getEnemyIdx(i)])).setText(makeLvString(level));
 
+                        ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText("");
                         if (!is_practice) {
                             if (kcname.contains(getStringWithLocale(R.string.ship_name_class))) {
                                 if (kcyomi.equals(getStringWithLocale(R.string.yomi_elite))) {
@@ -631,11 +633,7 @@ public class KcaBattleViewService extends Service {
                                     }
                                     ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)]))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFlagship));
-                                } else {
-                                    ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText("");
                                 }
-                            } else {
-                                ((TextView) battleview.findViewById(shipYomiViewList[getEnemyIdx(i)])).setText("");
                             }
                         }
                         battleview.findViewById(shipViewList[getEnemyIdx(i)]).setVisibility(View.VISIBLE);
@@ -1181,6 +1179,10 @@ public class KcaBattleViewService extends Service {
                     }
                     if(mView != null) mView.setVisibility(View.VISIBLE);
                 }
+            }
+            if (intent.getAction().equals(HIDE_BATTLEVIEW_ACTION)) {
+                if (mView != null) mView.setVisibility(View.GONE);
+                if (itemView != null) itemView.setVisibility(View.GONE);
             }
         }
         return super.onStartCommand(intent, flags, startId);

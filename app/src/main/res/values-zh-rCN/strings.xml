@@ -314,4 +314,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_title_notiatsvcoff">当SVC服务关闭时启用通知</string>
     <string name="setting_menu_noti_desc_notiatsvcoff">当SVC服务关闭时启用远征/入渠通知</string>
     <string name="kca_toast_renew_currentportdeck">Go to the main port(母港) in game and renew port data.</string>
+    <string name="questview_nopage">没有任务</string>
+    <string name="viewmenu_battle">战斗</string>
+    <string name="viewmenu_quest">任务</string>
 </resources>

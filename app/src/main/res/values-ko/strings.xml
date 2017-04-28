@@ -305,5 +305,8 @@
     <string name="setting_menu_noti_title_notiatsvcoff">SVC가 꺼진 상태에서 알람 활성 여부</string>
     <string name="setting_menu_noti_desc_notiatsvcoff">SVC를 끈 상태에서도 원정/입거 완료 알림이 오도록 함</string>
     <string name="kca_toast_renew_currentportdeck">모항으로 돌아가 게임 데이터를 업데이트하세요.</string>
+    <string name="questview_nopage">임무 없음</string>
+    <string name="viewmenu_battle">전투</string>
+    <string name="viewmenu_quest">임무</string>
 
 </resources>
