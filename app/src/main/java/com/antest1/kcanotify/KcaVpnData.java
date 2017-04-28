@@ -252,7 +252,7 @@ public class KcaVpnData {
 
     private static boolean checkKcRes(String uri) {
         boolean isKcsSwf = uri.contains("/kc") && uri.contains(".swf");
-        boolean isKcaRes = uri.contains("/kcs/resources");
+        boolean isKcaRes = uri.contains("/kc") && uri.contains("/resources");
         boolean isKcsSound = uri.contains("/kcs/sound");
         boolean isKcsWorld = uri.contains("/api_world/get_id/");
         //Log.e("KCA", uri + " " + String.valueOf(isKcaVer || isKcsApi));
