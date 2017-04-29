@@ -317,4 +317,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="questview_nopage">没有任务</string>
     <string name="viewmenu_battle">战斗</string>
     <string name="viewmenu_quest">任务</string>
+    <string name="viewmenu_akashi">改修</string>
 </resources>

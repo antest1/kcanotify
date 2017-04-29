@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 
+import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.FAIRY_REVERSE_LIST;
 import static com.antest1.kcanotify.KcaConstants.FRONT_NONE;
@@ -178,6 +179,7 @@ public class KcaViewButtonService extends Service {
         menulistbutton.setVisibility(View.GONE);
         menulistbutton.findViewById(R.id.viewbutton_battle).setOnTouchListener(mViewTouchListener);
         menulistbutton.findViewById(R.id.viewbutton_quest).setOnTouchListener(mViewTouchListener);
+        menulistbutton.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
 
         mParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -278,6 +280,11 @@ public class KcaViewButtonService extends Service {
                 Log.e("KCA", "viewbutton_quest");
                 Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
                 qintent.setAction(SHOW_QUESTVIEW_ACTION);
+                startService(qintent);
+            } else if (id == menulistbutton.findViewById(R.id.viewbutton_akashi).getId()) {
+                Log.e("KCA", "viewbutton_akashi");
+                Intent qintent = new Intent(getBaseContext(), KcaAkashiViewService.class);
+                qintent.setAction(SHOW_AKASHIVIEW_ACTION);
                 startService(qintent);
             } else if (id == viewbutton.getId()) {
                 switch (event.getAction()) {

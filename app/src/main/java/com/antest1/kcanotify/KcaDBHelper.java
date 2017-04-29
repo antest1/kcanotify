@@ -84,6 +84,16 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public JsonObject getJsonObjectValue(String key) {
+        JsonObject data = new JsonParser().parse(getValue(key)).getAsJsonObject();
+        return data;
+    }
+
+    public JsonArray getJsonArrayValue(String key) {
+        JsonArray data = new JsonParser().parse(getValue(key)).getAsJsonArray();
+        return data;
+    }
+
     public void putValue(String key, String value) {
         db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

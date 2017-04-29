@@ -308,5 +308,6 @@
     <string name="questview_nopage">임무 없음</string>
     <string name="viewmenu_battle">전투</string>
     <string name="viewmenu_quest">임무</string>
+    <string name="viewmenu_akashi">개수</string>
 
 </resources>

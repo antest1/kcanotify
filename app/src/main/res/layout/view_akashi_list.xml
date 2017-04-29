@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/akashiviewlayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:orientation="vertical"
+    android:padding="4dp"
+    android:visibility="visible">
+
+    <LinearLayout
+        android:id="@+id/akashiviewpanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alpha="0.8"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/akashiview_head">
+
+            <TextView
+                android:id="@+id/akashiview_day"
+                android:layout_height="wrap_content"
+                android:text="Mon"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="@string/aa_btn_safe_state1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/akashiview_gtd"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="1dp" />
+
+            <TextView
+                android:text="@string/aa_btn_star0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/akashiview_star"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="1dp" />
+
+            <ImageView
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_cancel"
+                android:id="@+id/akashi_exit"
+                android:layout_width="20dp"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/ic_cancel"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:background="@android:color/darker_gray"
+            android:paddingBottom="1dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="0dp"
+            android:scaleType="fitXY"
+            android:src="@android:drawable/divider_horizontal_bright" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:id="@+id/akashiview_list"
+            android:layout_margin="5dp"
+            android:layout_height="275dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
