@@ -57,10 +57,11 @@
                     android:paddingLeft="4dp"
                     android:gravity="center_vertical"
                     android:layout_width="0dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:textSize="15dp" />
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="right">
@@ -77,8 +78,9 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorAkashiNormalScrew"
                             android:paddingLeft="4dp"
-                            android:textAlignment="textEnd"
-                            android:gravity="right" />
+                            android:textAlignment="gravity"
+                            android:gravity="right"
+                            android:textSize="13dp" />
 
                         <TextView
                             android:text="TextView"
@@ -87,14 +89,17 @@
                             android:id="@+id/akashi_improv2_materials"
                             android:textColor="@color/colorAkashiNormalScrew"
                             android:paddingLeft="4dp"
-                            android:textAlignment="textEnd" />
+                            android:textAlignment="gravity"
+                            android:textSize="13dp"
+                            android:gravity="right" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:gravity="right">
 
                         <TextView
                             android:text="@string/item_kmat"
@@ -102,9 +107,10 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorAkashiNormalScrew"
                             android:paddingLeft="4dp"
-                            android:textAlignment="textEnd"
+                            android:textAlignment="gravity"
                             android:id="@+id/textView3"
-                            android:gravity="right" />
+                            android:gravity="right"
+                            android:textSize="13dp" />
 
                         <TextView
                             android:text="TextView"
@@ -113,7 +119,9 @@
                             android:id="@+id/akashi_improv2_screws"
                             android:textColor="@color/colorAkashiNormalScrew"
                             android:paddingLeft="4dp"
-                            android:textAlignment="textEnd" />
+                            android:textAlignment="gravity"
+                            android:textSize="13dp"
+                            android:gravity="right" />
                     </LinearLayout>
 
                 </LinearLayout>
