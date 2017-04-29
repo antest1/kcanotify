@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -115,102 +116,113 @@ public class KcaViewButtonService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        clickcount = 0;
-        mHandler = new Handler();
-        broadcaster = LocalBroadcastManager.getInstance(this);
-        battleinfo_receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String s = intent.getStringExtra(KCA_MSG_DATA);
-                broadcaster.sendBroadcast(new Intent(KCA_MSG_BATTLE_VIEW_REFRESH));
-                Log.e("KCA", "KCA_MSG_BATTLE_INFO Received: \n".concat(s));
-            }
-        };
-        battlenode_receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String s = intent.getStringExtra(KCA_MSG_DATA);
-                broadcaster.sendBroadcast(new Intent(KCA_MSG_BATTLE_VIEW_REFRESH));
-                Log.e("KCA", "KCA_MSG_BATTLE_NODE Received: \n".concat(s));
-            }
-        };
-        battlehdmg_receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String s = intent.getStringExtra(KCA_MSG_DATA);
-                if (s.contains("1")) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(getApplicationContext())) {
+            // Can not draw overlays: pass
+        } else {
+            clickcount = 0;
+            mHandler = new Handler();
+            broadcaster = LocalBroadcastManager.getInstance(this);
+            battleinfo_receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String s = intent.getStringExtra(KCA_MSG_DATA);
+                    broadcaster.sendBroadcast(new Intent(KCA_MSG_BATTLE_VIEW_REFRESH));
+                    Log.e("KCA", "KCA_MSG_BATTLE_INFO Received: \n".concat(s));
+                }
+            };
+            battlenode_receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String s = intent.getStringExtra(KCA_MSG_DATA);
+                    broadcaster.sendBroadcast(new Intent(KCA_MSG_BATTLE_VIEW_REFRESH));
+                    Log.e("KCA", "KCA_MSG_BATTLE_NODE Received: \n".concat(s));
+                }
+            };
+            battlehdmg_receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String s = intent.getStringExtra(KCA_MSG_DATA);
+                    if (s.contains("1")) {
                         ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(),
                                 R.color.colorHeavyDmgStateWarn), PorterDuff.Mode.MULTIPLY);
-                } else {
-                    ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().clearColorFilter();
+                    } else {
+                        ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().clearColorFilter();
+                    }
+                    Log.e("KCA", "KCA_MSG_BATTLE_HDMG Received");
                 }
-                Log.e("KCA", "KCA_MSG_BATTLE_HDMG Received");
-            }
-        };
+            };
 
-        LocalBroadcastManager.getInstance(this).registerReceiver((battleinfo_receiver), new IntentFilter(KCA_MSG_BATTLE_INFO));
-        LocalBroadcastManager.getInstance(this).registerReceiver((battlenode_receiver), new IntentFilter(KCA_MSG_BATTLE_NODE));
-        LocalBroadcastManager.getInstance(this).registerReceiver((battlehdmg_receiver), new IntentFilter(KCA_MSG_BATTLE_HDMG));
-        LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        notificationManager = NotificationManagerCompat.from(getApplicationContext());
-        mView = mInflater.inflate(R.layout.view_button, null);
+            LocalBroadcastManager.getInstance(this).registerReceiver((battleinfo_receiver), new IntentFilter(KCA_MSG_BATTLE_INFO));
+            LocalBroadcastManager.getInstance(this).registerReceiver((battlenode_receiver), new IntentFilter(KCA_MSG_BATTLE_NODE));
+            LocalBroadcastManager.getInstance(this).registerReceiver((battlehdmg_receiver), new IntentFilter(KCA_MSG_BATTLE_HDMG));
+            LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            notificationManager = NotificationManagerCompat.from(getApplicationContext());
+            mView = mInflater.inflate(R.layout.view_button, null);
 
-        // Button (Fairy) Settings
-        viewbutton = (ImageView) mView.findViewById(R.id.viewbutton);
-        String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
-        String fairyPath = "noti_icon_".concat(fairyIdValue);
-        viewBitmapId = getId(fairyPath, R.mipmap.class);
-        viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
-        viewbutton.setImageResource(viewBitmapId);
-        int index = Arrays.binarySearch(FAIRY_REVERSE_LIST, Integer.parseInt(fairyIdValue));
-        if (index >= 0) viewbutton.setScaleX(-1.0f);
-        else viewbutton.setScaleX(1.0f);
+            // Button (Fairy) Settings
+            viewbutton = (ImageView) mView.findViewById(R.id.viewbutton);
+            String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
+            String fairyPath = "noti_icon_".concat(fairyIdValue);
+            viewBitmapId = getId(fairyPath, R.mipmap.class);
+            viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
+            viewbutton.setImageResource(viewBitmapId);
+            int index = Arrays.binarySearch(FAIRY_REVERSE_LIST, Integer.parseInt(fairyIdValue));
+            if (index >= 0) viewbutton.setScaleX(-1.0f);
+            else viewbutton.setScaleX(1.0f);
 
-        viewbutton.setOnTouchListener(mViewTouchListener);
-        viewbutton.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        buttonWidth = viewbutton.getMeasuredWidth();
-        buttonHeight = viewbutton.getMeasuredHeight();
+            viewbutton.setOnTouchListener(mViewTouchListener);
+            viewbutton.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            buttonWidth = viewbutton.getMeasuredWidth();
+            buttonHeight = viewbutton.getMeasuredHeight();
 
-        // Menu List Settings
-        menulistbutton = mView.findViewById(R.id.viewbutton_menu);
-        menulistbutton.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        menuWidth = menulistbutton.getMeasuredWidth();
-        menuHeight = menulistbutton.getMeasuredHeight();
-        menulistbutton.setVisibility(View.GONE);
-        menulistbutton.findViewById(R.id.viewbutton_battle).setOnTouchListener(mViewTouchListener);
-        menulistbutton.findViewById(R.id.viewbutton_quest).setOnTouchListener(mViewTouchListener);
-        menulistbutton.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
-        ((TextView) menulistbutton.findViewById(R.id.viewbutton_battle)).setText(getStringWithLocale(R.string.viewmenu_battle));
-        ((TextView) menulistbutton.findViewById(R.id.viewbutton_quest)).setText(getStringWithLocale(R.string.viewmenu_quest));
-        ((TextView) menulistbutton.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
+            // Menu List Settings
+            menulistbutton = mView.findViewById(R.id.viewbutton_menu);
+            menulistbutton.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            menuWidth = menulistbutton.getMeasuredWidth();
+            menuHeight = menulistbutton.getMeasuredHeight();
+            menulistbutton.setVisibility(View.GONE);
+            menulistbutton.findViewById(R.id.viewbutton_battle).setOnTouchListener(mViewTouchListener);
+            menulistbutton.findViewById(R.id.viewbutton_quest).setOnTouchListener(mViewTouchListener);
+            menulistbutton.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
+            ((TextView) menulistbutton.findViewById(R.id.viewbutton_battle)).setText(getStringWithLocale(R.string.viewmenu_battle));
+            ((TextView) menulistbutton.findViewById(R.id.viewbutton_quest)).setText(getStringWithLocale(R.string.viewmenu_quest));
+            ((TextView) menulistbutton.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
 
-        mParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT);
+            mParams = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.TYPE_PHONE,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    PixelFormat.TRANSLUCENT);
 
-        mParams.gravity = Gravity.TOP | Gravity.START;
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
-        Log.e("KCA", "w/h: "+String.valueOf(screenWidth) + " "  +String.valueOf(screenHeight));
+            mParams.gravity = Gravity.TOP | Gravity.START;
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            screenWidth = size.x;
+            screenHeight = size.y;
+            Log.e("KCA", "w/h: "+String.valueOf(screenWidth) + " "  +String.valueOf(screenHeight));
 
-        mParams.y = screenHeight - buttonHeight;
-        mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        mManager.addView(mView, mParams);
+            mParams.y = screenHeight - buttonHeight;
+            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+            mManager.addView(mView, mParams);
 
-        startService(new Intent(this, KcaViewButtonService.class)
-                .setAction(KcaViewButtonService.DEACTIVATE_BATTLEVIEW_ACTION));
+            battleviewEnabled = false;
+            TextView battleButton = (TextView) menulistbutton.findViewById(R.id.viewbutton_battle);
+            battleButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+        }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getAction() != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(getApplicationContext())) {
+            // Can not draw overlays: pass
+            stopSelf();
+        } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(FAIRY_VISIBLE)) {
                 mView.setVisibility(View.VISIBLE);
             }
@@ -251,12 +263,11 @@ public class KcaViewButtonService extends Service {
 
     @Override
     public void onDestroy() {
-        notificationManager.cancel(FAIRY_NOTIFICATION_ID);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battleinfo_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlenode_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlehdmg_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(questlist_receiver);
-        mManager.removeView(mView);
+        if(mManager != null) mManager.removeView(mView);
         super.onDestroy();
     }
 

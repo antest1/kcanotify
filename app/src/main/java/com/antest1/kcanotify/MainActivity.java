@@ -216,7 +216,10 @@ public class MainActivity extends AppCompatActivity {
         kcafairybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(KcaService.getServiceStatus()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                        && !Settings.canDrawOverlays(getApplicationContext())) {
+                    // Can not draw overlays: pass
+                } else if(KcaService.getServiceStatus()) {
                     startService(new Intent(getApplicationContext(), KcaViewButtonService.class)
                             .setAction(KcaViewButtonService.RETURN_FAIRY_ACTION));
                 }

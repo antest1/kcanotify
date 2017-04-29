@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -236,55 +238,61 @@ public class KcaQuestViewService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        try {
-            active = true;
-            helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-            contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-            broadcaster = LocalBroadcastManager.getInstance(this);
-            //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mInflater = LayoutInflater.from(contextWithLocale);
-            mView = mInflater.inflate(R.layout.view_quest_list, null);
-            mView.setVisibility(View.GONE);
-
-            questview = (ScrollView) mView.findViewById(R.id.questview);
-            questview.findViewById(R.id.quest_head).setOnTouchListener(mViewTouchListener);
-
-            questprev = (TextView) questview.findViewById(R.id.quest_prev);
-            questprev.setOnTouchListener(mViewTouchListener);
-            questprev.setVisibility(View.GONE);
-
-            questnext = (TextView) questview.findViewById(R.id.quest_next);
-            questnext.setOnTouchListener(mViewTouchListener);
-            questnext.setVisibility(View.GONE);
-
-            mParams = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.TYPE_PHONE,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSLUCENT);
-            mParams.gravity = Gravity.CENTER;
-
-            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            mManager.addView(mView, mParams);
-
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            displayWidth = size.x;
-
-        } catch (Exception e) {
-            active = false;
-            error_flag = true;
-            //sendReport(e, 1);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(getApplicationContext())) {
+            // Can not draw overlays: pass
             stopSelf();
+        } else {
+            try {
+                active = true;
+                helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+                contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+                broadcaster = LocalBroadcastManager.getInstance(this);
+                //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                mInflater = LayoutInflater.from(contextWithLocale);
+                mView = mInflater.inflate(R.layout.view_quest_list, null);
+                mView.setVisibility(View.GONE);
+
+                questview = (ScrollView) mView.findViewById(R.id.questview);
+                questview.findViewById(R.id.quest_head).setOnTouchListener(mViewTouchListener);
+
+                questprev = (TextView) questview.findViewById(R.id.quest_prev);
+                questprev.setOnTouchListener(mViewTouchListener);
+                questprev.setVisibility(View.GONE);
+
+                questnext = (TextView) questview.findViewById(R.id.quest_next);
+                questnext.setOnTouchListener(mViewTouchListener);
+                questnext.setVisibility(View.GONE);
+
+                mParams = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.TYPE_PHONE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                        PixelFormat.TRANSLUCENT);
+                mParams.gravity = Gravity.CENTER;
+
+                mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+                mManager.addView(mView, mParams);
+
+                Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                displayWidth = size.x;
+
+            } catch (Exception e) {
+                active = false;
+                error_flag = true;
+                //sendReport(e, 1);
+                stopSelf();
+            }
         }
     }
 
     @Override
     public void onDestroy() {
         active = false;
-        mView.setVisibility(View.GONE);
+        if(mView != null) mView.setVisibility(View.GONE);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
         super.onDestroy();
     }

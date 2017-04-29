@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -115,6 +117,11 @@ public class KcaAkashiViewService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(getApplicationContext())) {
+            // Can not draw overlays: pass
+            stopSelf();
+        }
         try {
             active = true;
             helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);

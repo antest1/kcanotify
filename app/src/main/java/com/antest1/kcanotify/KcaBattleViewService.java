@@ -8,7 +8,9 @@ import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -65,7 +67,6 @@ import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
-
 
 
 public class KcaBattleViewService extends Service {
@@ -1091,65 +1092,71 @@ public class KcaBattleViewService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        try {
-            active = true;
-            contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-            //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mInflater = LayoutInflater.from(contextWithLocale);
-            mView = mInflater.inflate(R.layout.view_sortie_battle, null);
-            mView.setVisibility(View.GONE);
-            battleview = (ScrollView) mView.findViewById(R.id.battleview);
-            itemView = mInflater.inflate(R.layout.view_battleview_items, null);
-            mParams = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.TYPE_PHONE,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSLUCENT);
-            mParams.gravity = Gravity.CENTER;
-
-            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            mManager.addView(mView, mParams);
-
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            displayWidth = size.x;
-
-            refreshreceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    Log.e("KCA", "=> Received Intent");
-                    //mViewBackup = mView;
-                    //mManager.removeView(mView);
-                    api_data = KcaBattle.getCurrentApiData();
-                    if (api_data != null && api_data.has("api_heavy_damaged")) {
-                        int value = api_data.get("api_heavy_damaged").getAsInt();
-                        if (value == HD_DANGER) {
-                            mView.findViewById(R.id.battleviewpanel)
-                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHeavyDmgStatePanel));
-                        } else {
-                            mView.findViewById(R.id.battleviewpanel)
-                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-                        }
-                    }
-                    int setViewResult = setView();
-                    if (setViewResult == 0) {
-                        if (KcaViewButtonService.getClickCount() == 0) {
-                            mView.setVisibility(View.GONE);
-                        }
-                        //mManager.addView(mView, mParams);
-                        mView.invalidate();
-                        mManager.updateViewLayout(mView, mParams);
-                    }
-                }
-            };
-            LocalBroadcastManager.getInstance(this).registerReceiver(refreshreceiver, new IntentFilter(KCA_MSG_BATTLE_VIEW_REFRESH));
-        } catch (Exception e) {
-            active = false;
-            error_flag = true;
-            sendReport(e, ERORR_INIT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(getApplicationContext())) {
+            // Can not draw overlays: pass
             stopSelf();
+        } else {
+            try {
+                active = true;
+                contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+                //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                mInflater = LayoutInflater.from(contextWithLocale);
+                mView = mInflater.inflate(R.layout.view_sortie_battle, null);
+                mView.setVisibility(View.GONE);
+                battleview = (ScrollView) mView.findViewById(R.id.battleview);
+                itemView = mInflater.inflate(R.layout.view_battleview_items, null);
+                mParams = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.TYPE_PHONE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                        PixelFormat.TRANSLUCENT);
+                mParams.gravity = Gravity.CENTER;
+
+                mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+                mManager.addView(mView, mParams);
+
+                Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                displayWidth = size.x;
+
+                refreshreceiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        Log.e("KCA", "=> Received Intent");
+                        //mViewBackup = mView;
+                        //mManager.removeView(mView);
+                        api_data = KcaBattle.getCurrentApiData();
+                        if (api_data != null && api_data.has("api_heavy_damaged")) {
+                            int value = api_data.get("api_heavy_damaged").getAsInt();
+                            if (value == HD_DANGER) {
+                                mView.findViewById(R.id.battleviewpanel)
+                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHeavyDmgStatePanel));
+                            } else {
+                                mView.findViewById(R.id.battleviewpanel)
+                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                            }
+                        }
+                        int setViewResult = setView();
+                        if (setViewResult == 0) {
+                            if (KcaViewButtonService.getClickCount() == 0) {
+                                mView.setVisibility(View.GONE);
+                            }
+                            //mManager.addView(mView, mParams);
+                            mView.invalidate();
+                            mManager.updateViewLayout(mView, mParams);
+                        }
+                    }
+                };
+                LocalBroadcastManager.getInstance(this).registerReceiver(refreshreceiver, new IntentFilter(KCA_MSG_BATTLE_VIEW_REFRESH));
+            } catch (Exception e) {
+                active = false;
+                error_flag = true;
+                sendReport(e, ERORR_INIT);
+                stopSelf();
+            }
         }
     }
 
@@ -1177,7 +1184,7 @@ public class KcaBattleViewService extends Service {
                         battleview.findViewById(shipNameAreaCombinedViewList[i]).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(shipLevelCombinedViewList[i]).setOnTouchListener(shipViewTouchListener);
                     }
-                    if(mView != null) mView.setVisibility(View.VISIBLE);
+                    if (mView != null) mView.setVisibility(View.VISIBLE);
                 }
             }
             if (intent.getAction().equals(HIDE_BATTLEVIEW_ACTION)) {
