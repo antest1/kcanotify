@@ -180,6 +180,9 @@ public class KcaViewButtonService extends Service {
         menulistbutton.findViewById(R.id.viewbutton_battle).setOnTouchListener(mViewTouchListener);
         menulistbutton.findViewById(R.id.viewbutton_quest).setOnTouchListener(mViewTouchListener);
         menulistbutton.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
+        ((TextView) menulistbutton.findViewById(R.id.viewbutton_battle)).setText(getStringWithLocale(R.string.viewmenu_battle));
+        ((TextView) menulistbutton.findViewById(R.id.viewbutton_quest)).setText(getStringWithLocale(R.string.viewmenu_quest));
+        ((TextView) menulistbutton.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
 
         mParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -378,6 +381,9 @@ public class KcaViewButtonService extends Service {
         if (mParams.y < 0) mParams.y = 0;
         else if (mParams.y > screenHeight - totalHeight) mParams.y = screenHeight - totalHeight;
 
+        ((TextView) menulistbutton.findViewById(R.id.viewbutton_battle)).setText(getStringWithLocale(R.string.viewmenu_battle));
+        ((TextView) menulistbutton.findViewById(R.id.viewbutton_quest)).setText(getStringWithLocale(R.string.viewmenu_quest));
+        ((TextView) menulistbutton.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
         super.onConfigurationChanged(newConfig);
     }
 }
