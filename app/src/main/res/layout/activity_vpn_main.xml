@@ -83,8 +83,26 @@
                 android:id="@+id/kcbtn"
                 android:layout_margin="2dp"
                 android:layout_width="0dp"
-                android:layout_weight="0.85"
+                android:layout_weight="0.7"
                 android:stateListAnimator="@null" />
+
+                <ImageButton
+                    android:layout_height="wrap_content"
+
+                    android:id="@+id/kcafairybtn"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.15"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:src="@mipmap/noti_icon_0_small"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:gravity="center"
+                    android:minHeight="48dip"
+                    android:stateListAnimator="@null">
+
+
+                </ImageButton>
 
                 <ImageButton
                     android:layout_height="wrap_content"

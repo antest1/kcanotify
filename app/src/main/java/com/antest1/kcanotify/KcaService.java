@@ -217,7 +217,6 @@ public class KcaService extends Service {
     // 서비스가 종료될 때 할 작업
 
     public void setServiceDown() {
-        MainActivity.isKcaServiceOn = false;
         isPortAccessed = false;
         if (missionTimeScheduler != null) {
             missionTimeScheduler.shutdown();

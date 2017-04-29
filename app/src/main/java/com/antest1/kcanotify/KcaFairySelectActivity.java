@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -61,6 +62,14 @@ public class KcaFairySelectActivity extends AppCompatActivity {
                         Message sMsg = sHandler.obtainMessage();
                         sMsg.setData(bundle);
                         sHandler.sendMessage(sMsg);
+                    }
+
+                    if(MainActivity.kcafairybtn != null) {
+                        String fairyPath = "noti_icon_".concat(value);
+                        int viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
+                        MainActivity.kcafairybtn.setImageResource(viewBitmapSmallId);
+                        MainActivity.kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                                R.color.black), PorterDuff.Mode.MULTIPLY);
                     }
                 }
             });

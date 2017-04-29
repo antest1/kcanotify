@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.AsyncTask;
@@ -29,6 +30,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Menu;
@@ -38,6 +40,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -82,6 +85,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
+import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.readCacheData;
@@ -96,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_READEXT_PERMISSION = 3;
 
     AssetManager assetManager;
-    public static boolean isKcaServiceOn = false;
     Toolbar toolbar;
     private boolean running = false;
     private AlertDialog dialogVpn = null;
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
     ToggleButton vpnbtn, svcbtn;
     Button kcbtn;
     ImageButton kcakashibtn;
+    public static ImageButton kcafairybtn;
     TextView textDescription = null;
     TextView textWarn, textUpdate;
     Gson gson = new Gson();
@@ -199,6 +203,23 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AkashiActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        kcafairybtn = (ImageButton) findViewById(R.id.kcafairybtn);
+        String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
+        String fairyPath = "noti_icon_".concat(fairyIdValue);
+        int viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
+        kcafairybtn.setImageResource(viewBitmapSmallId);
+        kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                        R.color.black), PorterDuff.Mode.MULTIPLY);
+        kcafairybtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(KcaService.getServiceStatus()) {
+                    startService(new Intent(getApplicationContext(), KcaViewButtonService.class)
+                            .setAction(KcaViewButtonService.RETURN_FAIRY_ACTION));
+                }
             }
         });
 

@@ -7,11 +7,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -36,8 +38,11 @@ import com.google.gson.JsonParser;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Locale;
 
+import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.FAIRY_REVERSE_LIST;
+import static com.antest1.kcanotify.KcaConstants.FRONT_NONE;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_HDMG;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_INFO;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_NODE;
@@ -47,7 +52,9 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_LIST;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_VIEW_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION;
+import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
@@ -63,11 +70,6 @@ public class KcaViewButtonService extends Service {
     public static final String ACTIVATE_BATTLEVIEW_ACTION = "activate_battleview";
     public static final String DEACTIVATE_BATTLEVIEW_ACTION = "deactivate_battleview";
 
-
-    public static final int BATTLE_MODE = 1;
-    public static final int QUEST_MODE = 2;
-
-    private boolean hidden = false;
     private LocalBroadcastManager broadcaster;
     private BroadcastReceiver battleinfo_receiver;
     private BroadcastReceiver battlehdmg_receiver;
@@ -113,7 +115,6 @@ public class KcaViewButtonService extends Service {
     public void onCreate() {
         super.onCreate();
         clickcount = 0;
-        hidden = false;
         mHandler = new Handler();
         broadcaster = LocalBroadcastManager.getInstance(this);
         battleinfo_receiver = new BroadcastReceiver() {
@@ -137,8 +138,8 @@ public class KcaViewButtonService extends Service {
             public void onReceive(Context context, Intent intent) {
                 String s = intent.getStringExtra(KCA_MSG_DATA);
                 if (s.contains("1")) {
-                    ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                            R.color.colorHeavyDmgStateWarn), PorterDuff.Mode.MULTIPLY);
+                        ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                                R.color.colorHeavyDmgStateWarn), PorterDuff.Mode.MULTIPLY);
                 } else {
                     ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().clearColorFilter();
                 }
@@ -188,7 +189,6 @@ public class KcaViewButtonService extends Service {
         mParams.gravity = Gravity.TOP | Gravity.START;
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int width, height;
         Point size = new Point();
         display.getSize(size);
         screenWidth = size.x;
@@ -222,12 +222,7 @@ public class KcaViewButtonService extends Service {
                 if (index >= 0) viewbutton.setScaleX(-1.0f);
                 else viewbutton.setScaleX(1.0f);
             }
-            if (intent.getAction().equals(REMOVE_FAIRY_ACTION)) {
-                notificationManager.cancel(FAIRY_NOTIFICATION_ID);
-            }
             if (intent.getAction().equals(RETURN_FAIRY_ACTION)) {
-                notificationManager.cancel(FAIRY_NOTIFICATION_ID);
-                hidden = false;
                 mView.setVisibility(View.VISIBLE);
             }
             if (intent.getAction().equals(ACTIVATE_BATTLEVIEW_ACTION)) {
@@ -349,41 +344,33 @@ public class KcaViewButtonService extends Service {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            hidden = true;
             vibrator.vibrate(100);
             Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
             mView.setVisibility(View.GONE);
-            displayNotification(getApplicationContext());
+            //displayNotification(getApplicationContext());
         }
     };
+    
 
-    public void displayNotification(Context context) {
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
+        Log.e("KCA", "w/h: "+String.valueOf(screenWidth) + " "  +String.valueOf(screenHeight));
 
-        Intent returnIntent = new Intent(this, KcaViewButtonService.class)
-                .setAction(RETURN_FAIRY_ACTION);
+        int totalWidth = buttonWidth;
+        int totalHeight = buttonHeight;
+        if (menulistbutton.getVisibility() == View.VISIBLE) {
+            totalWidth += menuWidth;
+        }
+        if (mParams.x < 0) mParams.x = 0;
+        else if (mParams.x > screenWidth - totalWidth) mParams.x = screenWidth - totalWidth;
+        if (mParams.y < 0) mParams.y = 0;
+        else if (mParams.y > screenHeight - totalHeight) mParams.y = screenHeight - totalHeight;
 
-        Intent removeIntent = new Intent(this, KcaViewButtonService.class)
-                .setAction(REMOVE_FAIRY_ACTION);
-
-        PendingIntent returnPendingIntent = PendingIntent.getService(context, 0,
-                returnIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        PendingIntent removePendingIntent = PendingIntent.getService(context, 0,
-                removeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(context)
-                        .setSmallIcon(viewBitmapSmallId)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), viewBitmapId))
-                        .setContentTitle(getStringWithLocale(R.string.fairy_hidden_notification_title))
-                        .setContentText(getStringWithLocale(R.string.fairy_hidden_notification_text))
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText(getStringWithLocale(R.string.fairy_hidden_notification_bigtext)))
-                        .setPriority(Notification.PRIORITY_MAX)
-                        .setOngoing(true)
-                        .addAction(new NotificationCompat.Action(viewBitmapSmallId,
-                                getStringWithLocale(R.string.fairy_hidden_notification_action_return), returnPendingIntent))
-                        .addAction(new NotificationCompat.Action(R.mipmap.ic_cancel,
-                                getStringWithLocale(R.string.fairy_hidden_notification_action_remove), removePendingIntent));
-
-        notificationManager.notify(FAIRY_NOTIFICATION_ID, notificationBuilder.build());
+        super.onConfigurationChanged(newConfig);
     }
 }
