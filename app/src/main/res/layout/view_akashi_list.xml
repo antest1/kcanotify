@@ -36,21 +36,23 @@
                 android:layout_height="wrap_content"
                 android:text="Mon"
                 android:textColor="@color/white"
-                android:textSize="16dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:layout_width="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textSize="20dp" />
 
             <TextView
-                android:text="@string/aa_btn_safe_state1"
+                android:text="@string/aa_btn_safe_state0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/akashiview_gtd"
                 android:paddingLeft="10dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:paddingRight="1dp" />
+                android:paddingRight="1dp"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
 
             <TextView
                 android:text="@string/aa_btn_star0"
@@ -60,7 +62,9 @@
                 android:paddingLeft="10dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:paddingRight="1dp" />
+                android:paddingRight="1dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="20dp" />
 
             <ImageView
                 android:layout_height="wrap_content"

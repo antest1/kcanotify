@@ -129,9 +129,15 @@ public class KcaAkashiViewService extends Service {
 
             akashiview_gtd = (TextView) akashiview.findViewById(R.id.akashiview_gtd);
             akashiview_gtd.setOnTouchListener(mViewTouchListener);
+            akashiview_gtd.setText(getStringWithLocale(R.string.aa_btn_safe_state0));
+            akashiview_gtd.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+
             akashiview_star = (TextView) akashiview.findViewById(R.id.akashiview_star);
+            akashiview_star.setText(getString(R.string.aa_btn_star0));
             akashiview_star.setOnTouchListener(mViewTouchListener);
+
             akashiview_list = (ListView) akashiview.findViewById(R.id.akashiview_list);
+
             adapter = new KcaAkashiListViewAdpater2();
             mParams = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,

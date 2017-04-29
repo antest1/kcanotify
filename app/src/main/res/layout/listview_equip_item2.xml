@@ -40,7 +40,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginLeft="4dp"
                     android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:textSize="20dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -55,7 +55,6 @@
                     android:id="@+id/akashi_improv2_support"
                     android:textColor="@android:color/darker_gray"
                     android:paddingLeft="4dp"
-                    android:textSize="12dp"
                     android:gravity="center_vertical"
                     android:layout_width="0dp"
                     android:layout_weight="1" />
@@ -79,7 +78,6 @@
                             android:textColor="@color/colorAkashiNormalScrew"
                             android:paddingLeft="4dp"
                             android:textAlignment="textEnd"
-                            android:textSize="12dp"
                             android:gravity="right" />
 
                         <TextView
@@ -89,8 +87,7 @@
                             android:id="@+id/akashi_improv2_materials"
                             android:textColor="@color/colorAkashiNormalScrew"
                             android:paddingLeft="4dp"
-                            android:textAlignment="textEnd"
-                            android:textSize="12dp" />
+                            android:textAlignment="textEnd" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -106,7 +103,6 @@
                             android:textColor="@color/colorAkashiNormalScrew"
                             android:paddingLeft="4dp"
                             android:textAlignment="textEnd"
-                            android:textSize="12dp"
                             android:id="@+id/textView3"
                             android:gravity="right" />
 
@@ -117,8 +113,7 @@
                             android:id="@+id/akashi_improv2_screws"
                             android:textColor="@color/colorAkashiNormalScrew"
                             android:paddingLeft="4dp"
-                            android:textAlignment="textEnd"
-                            android:textSize="12dp" />
+                            android:textAlignment="textEnd" />
                     </LinearLayout>
 
                 </LinearLayout>
