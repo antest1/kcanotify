@@ -10,6 +10,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Display;
@@ -203,8 +204,14 @@ public class KcaAkashiViewService extends Service {
                             loadTodayAkashiList(isSafeChecked);
                             resetListView(true);
                         } else if (id == akashiview.findViewById(R.id.akashiview_gtd).getId()) {
-                            if (isSafeChecked) akashiview_gtd.setText(getStringWithLocale(R.string.aa_btn_safe_state0));
-                            else akashiview_gtd.setText(getStringWithLocale(R.string.aa_btn_safe_state1));
+                            if (isSafeChecked) {
+                                akashiview_gtd.setText(getStringWithLocale(R.string.aa_btn_safe_state0));
+                                akashiview_gtd.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                            }
+                            else {
+                                akashiview_gtd.setText(getStringWithLocale(R.string.aa_btn_safe_state1));
+                                akashiview_gtd.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAkashiGtdScrew));
+                            }
                             isSafeChecked = !isSafeChecked;
                             loadTodayAkashiList(isSafeChecked);
                             resetListView(false);
