@@ -1105,6 +1105,8 @@ public class KcaBattleViewService extends Service {
                 mView = mInflater.inflate(R.layout.view_sortie_battle, null);
                 mView.setVisibility(View.GONE);
                 battleview = (ScrollView) mView.findViewById(R.id.battleview);
+                battleview.setOnTouchListener(mViewTouchListener);
+
                 itemView = mInflater.inflate(R.layout.view_battleview_items, null);
                 mParams = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.MATCH_PARENT,
@@ -1175,7 +1177,6 @@ public class KcaBattleViewService extends Service {
         if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(SHOW_BATTLEVIEW_ACTION)) {
                 if (!error_flag) {
-                    battleview.setOnTouchListener(mViewTouchListener);
                     for (int i = 1; i < shipViewList.length; i++) {
                         battleview.findViewById(shipNameAreaViewList[i]).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(shipLevelViewList[i]).setOnTouchListener(shipViewTouchListener);
@@ -1209,8 +1210,8 @@ public class KcaBattleViewService extends Service {
                 case MotionEvent.ACTION_UP:
                     clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                     if (clickDuration < MAX_CLICK_DURATION) {
-                        mView.setVisibility(View.GONE);
-                        itemView.setVisibility(View.GONE);
+                        if(mView != null) mView.setVisibility(View.GONE);
+                        if (itemView != null) itemView.setVisibility(View.GONE);
                     }
                     break;
             }
