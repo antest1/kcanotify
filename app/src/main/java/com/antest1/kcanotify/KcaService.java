@@ -524,7 +524,7 @@ public class KcaService extends Service {
             if (url.startsWith(API_GET_MEMBER_DECK)) {
                 //Log.e("KCA", "Expedition Handler Called");
                 if (jsonDataObj.has("api_data")) {
-                    JsonArray reqGetMemberDeckApiData = jsonDataObj.get("api_data").getAsJsonArray();
+                    dbHelper.putValue(DB_KEY_DECKPORT, jsonDataObj.getAsJsonArray("api_data").toString());
                     processExpeditionInfo();
                 }
                 return;
@@ -571,6 +571,8 @@ public class KcaService extends Service {
                         .setAction(KcaBattleViewService.HIDE_BATTLEVIEW_ACTION));
                 startService(new Intent(this, KcaViewButtonService.class)
                         .setAction(KcaViewButtonService.DEACTIVATE_BATTLEVIEW_ACTION));
+                startService(new Intent(this, KcaViewButtonService.class)
+                        .setAction(KcaViewButtonService.RESET_FAIRY_STATUS_ACTION));
                 if (jsonDataObj.has("api_data")) {
                     JsonObject reqPortApiData = jsonDataObj.getAsJsonObject("api_data");
                     KcaApiData.getPortData(reqPortApiData);

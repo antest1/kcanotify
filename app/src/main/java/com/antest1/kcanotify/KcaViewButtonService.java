@@ -66,6 +66,7 @@ public class KcaViewButtonService extends Service {
     public static final String FAIRY_INVISIBLE = "fairy_invisible";
     public static final String FAIRY_CHANGE = "fairy_change";
     public static final String RETURN_FAIRY_ACTION = "return_fairy_action";
+    public static final String RESET_FAIRY_STATUS_ACTION = "reset_fairy_status_action";
     public static final String REMOVE_FAIRY_ACTION = "remove_fairy_action";
     public static final String SHOW_BATTLE_INFO = "show_battle_info";
     public static final String SHOW_QUEST_INFO = "show_quest_info";
@@ -241,6 +242,9 @@ public class KcaViewButtonService extends Service {
             }
             if (intent.getAction().equals(RETURN_FAIRY_ACTION)) {
                 mView.setVisibility(View.VISIBLE);
+            }
+            if (intent.getAction().equals(RESET_FAIRY_STATUS_ACTION)) {
+                ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().clearColorFilter();
             }
             if (intent.getAction().equals(ACTIVATE_BATTLEVIEW_ACTION)) {
                 battleviewEnabled = true;
