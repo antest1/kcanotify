@@ -89,12 +89,11 @@
                     android:layout_height="wrap_content"
                     app:srcCompat="@mipmap/ic_cancel"
                     android:id="@+id/quest_exit"
-                    android:layout_width="20dp"
                     android:layout_gravity="center_vertical"
                     android:src="@mipmap/ic_cancel"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
-                    android:visibility="gone" />
+                    android:layout_width="16dp" />
             </LinearLayout>
 
             <ImageView
