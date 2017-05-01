@@ -10,15 +10,17 @@ About Project
 
 동작 환경
 -------
-- Jellybean (Android 4.1) 이상
-- 칸코레가 설치되어 있는 기기
+- Jellybean (Android 4.1) 이상, 칸코레가 설치되어 있는 기기
+  - 주의: 사양이 낮거나 특정 기기에서는 정상적으로 작동하지 않을 수도 있습니다.
+
 
 
 Download
 -------
-- [Google Drive](http://bit.ly/kcanotifydown)
-- [MEGA](https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw)
-- 이전 버전의 경우 다음 [Link](https://drive.google.com/drive/folders/0B8-RpEfBvSAlRzhDZ0taR1pKMFk)에서 설치
+- [Google Drive](http://bit.ly/kcanotifydown) (최신 버전)
+- [MEGA](https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw) (이전 버전 포함)
+- 곧 구글 플레이 스토어에서 만나실 수 있습니다!
+
 
 주요 기능
 -------
@@ -28,11 +30,19 @@ Download
 - 색적/제공치/피로도/수송게이지 표시
 - 출격 중 현재 위치 표시
 - 전투 예보 (제공권, 드랍 등)
-- 임무 번역
+- 임무 번역 및 현재 진행중인 임무 목록 표시
 - 개수공창표
 - OpenDB에 데이터 전송
 
 자세한 내용은 [이 글](http://gall.dcinside.com/board/view/?id=kancolle&no=5357703)을 참고하세요. (Korean)
+
+지원 언어
+-------
+- 한국어 (Korean)
+- 영어 (English)
+- 중국어 (Simplified/Traditional Chinese)
+
+Translations to other languages are welcomed. (please contact to developer to email)  
 
 Attribution
 -------
@@ -49,10 +59,9 @@ Attribution
 건의나 오류 등이 문의사항은 아래의 이메일을 통해 보내주세요.   
 For suggestion or error report, please mail to me.  
 
-Translations to other languages are welcomed. (please contact to developer to email)  
 I can speak Korean and English, and I can understand Japanese (but not good at writing).  
 
-**※ From 2.0.1, English is default language for non-korean locale.**
+**※ For non-supported locale, English is the default language.**
 
 E-mail: kcanotify@gmail.com
 
