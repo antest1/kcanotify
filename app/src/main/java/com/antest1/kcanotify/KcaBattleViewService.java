@@ -272,6 +272,7 @@ public class KcaBattleViewService extends Service {
                 if (!getBooleanPreferences(contextWithLocale, PREF_SHOWDROP_SETTING)) {
                     battleview.findViewById(R.id.battle_getship_row).setVisibility(View.GONE);
                 } else {
+                    battleview.findViewById(R.id.battle_getship_row).setVisibility(View.VISIBLE);
                     if (checkUserPortEnough()) {
                         ((TextView) battleview.findViewById(R.id.battle_getship)).setText("");
                     } else {
