@@ -4,7 +4,8 @@
 		"改二甲"  : " Kai Ni A",
 		"改二乙"  : " Kai Ni B",
 		"改二丁"  : " Kai Ni D",
-		"改"    : " Kai"
+		"改"      : " Kai",
+		"два"  : "dva"
 	},
 	"金剛":"Kongou",
 	"比叡":"Hiei",
@@ -282,7 +283,16 @@
 	"瑞穂":"Mizuho",
 	"速吸":"Hayasui",
 	
+	"神威": "Kamoi",
+	"占守": "Shimushu",
+	"国後": "Kunashiri",
+	"春日丸": "Kasuga Maru",
+	"択捉": "Iturup",
+	
 	"Верный":"Verniy",
+	"Гангут": "Gangut",
+	"Октябрьская революция": "October Revolution",
+
 	"Bismarck":"Bismarck",
 	"Z1":"Z1",
 	"Z3":"Z3",
@@ -378,6 +388,11 @@
 	"深海海月姫":"Abyssal Jellyfish Princess",
 	"深海双子棲姫":"Abyssal Twin Princesses",
 	"深海双子棲姫-壊":"Abyssal Twin Princesses - Damaged",
+	"護衛棲姫": "Escort Princess",
+	"北端上陸姫": "Far North Princess",
+	"北方水姫": "Northern Water Princess",
+	"北方水姫-壊": "Northern Water Princess - Damaged",
+	"軽母ヌ級改": "Light Carrier Nu-Class Kai",
 	"elite":" elite",
 	"flagship":" flagship"
 
