@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainviewlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:orientation="vertical"
+    android:padding="4dp"
+    android:visibility="visible">
+
+    <ScrollView
+        android:id="@+id/mainview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true">
+
+        <LinearLayout
+            android:id="@+id/mainviewpanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal"
+            android:paddingBottom="8dp"
+            android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/mainfleetview"
+                android:layout_weight="0.6">
+
+                <LinearLayout
+                    android:id="@+id/fleetview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:orientation="horizontal"
+                    android:transitionGroup="false"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:id="@+id/friend_main_fleet"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:layout_weight="0.5">
+
+                        <LinearLayout
+                            android:id="@+id/fm_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/fm_1_name"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0.6"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:minHeight="14dp"
+                                    android:textColor="@android:color/white"
+                                    android:text="새러토가改"
+                                    android:textSize="14dp" />
+
+                                <LinearLayout
+                                    android:orientation="vertical"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_weight="0.4">
+
+                                    <TextView
+                                        android:id="@+id/fm_1_hp_txt"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="0.4"
+                                        android:minHeight="10dp"
+                                        android:textColor="@android:color/white"
+                                        android:text="10/45"
+                                        android:layout_marginBottom="5dp"
+                                        android:textSize="10dp" />
+
+                                    <ProgressBar
+                                        android:id="@+id/fm_1_hp_bar"
+                                        style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="4dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="0.4"
+                                        android:max="100"
+                                        android:maxHeight="11dp"
+                                        android:minHeight="9dp"
+                                        android:mirrorForRtl="false" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/fm_1_lv"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0.6"
+                                    android:minHeight="9dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:id="@+id/mainfuncview"></LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
+
