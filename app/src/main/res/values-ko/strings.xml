@@ -3,8 +3,9 @@
 
     <!-- Application Information -->
     <string name="app_name">시제 깡들리티</string>
-    <!-- Do Not Translate Here -->
     <string name="action_settings">깡들리티 설정</string>
+
+    <string name="accessibility_service_description">깡들리티가 칸코레가 실행 중인지를 감지하기 위해서는 해당 권한이 설정되어 있어야 합니다.\n칸코레가 실행되고 있는지를 검사하는 목적 외에 다른 목적으로는 사용되지 않습니다.\n해당 권한을 설정하지 않을 수도 있으며, 이 경우 요정님을 숨기기 위해서는 길게 눌러서 비활성화하여야 합니다.</string>
 
     <!-- Link Information, Do Not Translate Here -->
 
@@ -130,6 +131,8 @@
     <string name="setting_menu_kand_desc_game_data_down">게임 데이터가 로딩되지 않을 때 사용</string>
 
     <string name="setting_menu_view_head">전투예보/임무번역 설정</string>
+    <string name="setting_menu_view_title_accessibility_setting">접근성 설정</string>
+    <string name="setting_menu_view_desc_accessibility_setting">서비스에서 시제 깡들리티 선택 (칸코레 감지를 위해 필요)</string>
     <string name="setting_menu_view_title_overlay_setting">화면 오버레이 설정</string>
     <string name="setting_menu_view_desc_overlay_setting">다른 앱 위에 그리기 권한 설정 (전투예보 기능에 필요)</string>
     <string name="setting_menu_view_title_battleview_use">전투예보 사용</string>

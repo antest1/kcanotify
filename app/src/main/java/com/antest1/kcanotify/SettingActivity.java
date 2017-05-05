@@ -58,6 +58,7 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_LANGUAGE_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.PREF_ACCESSIBILITY_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
@@ -143,6 +144,16 @@ public class SettingActivity extends AppCompatActivity {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
                             new getKcaStart2Data(getActivity()).execute();
+                            return false;
+                        }
+                    });
+                }
+                if (key.equals(PREF_ACCESSIBILITY_SETTING)) {
+                    pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            Log.e("KCA", PREF_ACCESSIBILITY_SETTING);
+                            showObtainingPermissionAccessibility();
                             return false;
                         }
                     });
@@ -242,6 +253,11 @@ public class SettingActivity extends AppCompatActivity {
         public void showObtainingPermissionOverlayWindow() {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
             startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION);
+        }
+
+        public void showObtainingPermissionAccessibility() {
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            startActivity(intent);
         }
 
         @Override

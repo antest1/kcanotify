@@ -75,29 +75,35 @@
     <PreferenceCategory android:title="@string/setting_menu_view_head">
         <Preference
             android:defaultValue=""
+            android:key="accessibility_setting"
+            android:summary="@string/setting_menu_view_desc_accessibility_setting"
+            android:title="@string/setting_menu_view_title_accessibility_setting" />
+
+        <Preference
+            android:defaultValue=""
             android:key="overlay_setting"
             android:summary="@string/setting_menu_view_desc_overlay_setting"
             android:title="@string/setting_menu_view_title_overlay_setting" />
 
+        <!--
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="battleview_use"
             android:summary="@string/setting_menu_view_desc_battleview_use"
             android:title="@string/setting_menu_view_title_battleview_use" />
-
+        -->
         <CheckBoxPreference
             android:defaultValue="true"
-            android:dependency="battleview_use"
             android:key="showdrop_setting"
             android:summary="@string/setting_menu_view_desc_drop_visible"
             android:title="@string/setting_menu_view_title_drop_visible" />
-
+        <!--
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="questview_use"
             android:summary="@string/setting_menu_view_desc_questview_use"
             android:title="@string/setting_menu_view_title_questview_use" />
-
+        -->
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_menu_noti_head">
         <ListPreference

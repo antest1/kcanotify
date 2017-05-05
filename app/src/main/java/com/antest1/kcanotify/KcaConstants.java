@@ -204,8 +204,6 @@ public final class KcaConstants {
     public static final int HD_DAMECON = 1;
     public static final int HD_DANGER = 2;
 
-    public static final String START_BATTLEVIEW_ACTION = "start_battleview_action";
-
     public static final List<String> API_BATTLE_REQS = Arrays.asList(API_BATTLE_REQ_LIST);
     public static final List<String> API_QUEST_REQS = Arrays.asList(API_QUEST_REQ_LIST);
 
@@ -271,6 +269,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_EXP_VIEW = "expedition_view";
     public static final String PREF_KCA_BATTLEVIEW_USE = "battleview_use";
     public static final String PREF_KCA_QUESTVIEW_USE = "questview_use";
+    public static final String PREF_ACCESSIBILITY_SETTING = "accessibility_setting";
     public static final String PREF_OVERLAY_SETTING = "overlay_setting";
     public static final String PREF_SHOWDROP_SETTING = "showdrop_setting";
     public static final String PREF_KCA_DOWNLOAD_DATA = "download_data";
@@ -298,6 +297,7 @@ public final class KcaConstants {
             PREF_KCA_EXP_VIEW,
             PREF_KCA_BATTLEVIEW_USE,
             PREF_KCA_QUESTVIEW_USE,
+            PREF_ACCESSIBILITY_SETTING,
             PREF_OVERLAY_SETTING,
             PREF_SHOWDROP_SETTING,
             PREF_KCA_DOWNLOAD_DATA,

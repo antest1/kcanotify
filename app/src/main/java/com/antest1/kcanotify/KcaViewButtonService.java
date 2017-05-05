@@ -59,9 +59,12 @@ import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.WindowChangeDetectingService.isAccessibilitySettingsOn;
 
 public class KcaViewButtonService extends Service {
     public static final int FAIRY_NOTIFICATION_ID = 10118;
+    public static final String KCA_STATUS_ON = "kca_status_on";
+    public static final String KCA_STATUS_OFF = "kca_status_off";
     public static final String FAIRY_VISIBLE = "fairy_visible";
     public static final String FAIRY_INVISIBLE = "fairy_invisible";
     public static final String FAIRY_CHANGE = "fairy_change";
@@ -77,7 +80,6 @@ public class KcaViewButtonService extends Service {
     private BroadcastReceiver battleinfo_receiver;
     private BroadcastReceiver battlehdmg_receiver;
     private BroadcastReceiver battlenode_receiver;
-    private BroadcastReceiver questlist_receiver;
     private View mView;
     private WindowManager mManager;
     private Handler mHandler;
@@ -93,6 +95,7 @@ public class KcaViewButtonService extends Service {
     WindowManager.LayoutParams mParams;
     NotificationManagerCompat notificationManager;
     public static JsonObject currentApiData;
+    public static int recentVisibility = View.VISIBLE;
     public static int type;
     public static int clickcount;
 
@@ -121,6 +124,7 @@ public class KcaViewButtonService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && !Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
+            stopSelf();
         } else {
             clickcount = 0;
             mHandler = new Handler();
@@ -224,11 +228,25 @@ public class KcaViewButtonService extends Service {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
-            if (intent.getAction().equals(FAIRY_VISIBLE)) {
-                mView.setVisibility(View.VISIBLE);
+            if (intent.getAction().equals(KCA_STATUS_ON)) {
+                Log.e("KCA", KCA_STATUS_ON);
+                if (mView != null) mView.setVisibility(recentVisibility);
+            }
+            if (intent.getAction().equals(KCA_STATUS_OFF)) {
+                Log.e("KCA", KCA_STATUS_OFF);
+                if (mView != null) mView.setVisibility(View.GONE);
+            }
+            if (intent.getAction().equals(FAIRY_VISIBLE) || intent.getAction().equals(RETURN_FAIRY_ACTION)) {
+                if(mView != null) {
+                    mView.setVisibility(View.VISIBLE);
+                    recentVisibility = View.VISIBLE;
+                }
             }
             if (intent.getAction().equals(FAIRY_INVISIBLE)) {
-                mView.setVisibility(View.GONE);
+                if(mView != null) {
+                    mView.setVisibility(View.GONE);
+                    recentVisibility = View.GONE;
+                }
             }
             if (intent.getAction().equals(FAIRY_CHANGE)) {
                 String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
@@ -239,9 +257,6 @@ public class KcaViewButtonService extends Service {
                 int index = Arrays.binarySearch(FAIRY_REVERSE_LIST, Integer.parseInt(fairyIdValue));
                 if (index >= 0) viewbutton.setScaleX(-1.0f);
                 else viewbutton.setScaleX(1.0f);
-            }
-            if (intent.getAction().equals(RETURN_FAIRY_ACTION)) {
-                mView.setVisibility(View.VISIBLE);
             }
             if (intent.getAction().equals(RESET_FAIRY_STATUS_ACTION)) {
                 ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().clearColorFilter();
@@ -270,7 +285,6 @@ public class KcaViewButtonService extends Service {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battleinfo_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlenode_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlehdmg_receiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(questlist_receiver);
         if(mManager != null) mManager.removeView(mView);
         super.onDestroy();
     }
@@ -372,6 +386,7 @@ public class KcaViewButtonService extends Service {
             vibrator.vibrate(100);
             Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
             mView.setVisibility(View.GONE);
+            recentVisibility = View.GONE;
             //displayNotification(getApplicationContext());
         }
     };

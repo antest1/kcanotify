@@ -13,6 +13,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_name">Kcanotify</string>
     <string name="action_settings">設定</string>
 
+    <string name="accessibility_service_description">This permission allows kcanotify to detect whether kancolle is on the screen.\nIt only check whether kancolle is on the screen or not.\nYou can disallow this permission and hide the fairy manually by touching it long time.</string>
+
     <!-- Common Text -->
     <string name="dialog_ok">是</string>
     <string name="dialog_cancel">否</string>
@@ -147,6 +149,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_bypass_address">使用CIDR描述不進行代理的位址，使用逗號來分隔各CIDR。</string>
 
     <string name="setting_menu_view_head">功能設定</string>
+    <string name="setting_menu_view_title_accessibility_setting">Accessibility Settings</string>
+    <string name="setting_menu_view_desc_accessibility_setting">Select Kcanotify from Services. (required for detect kancolle app)</string>
     <string name="setting_menu_view_title_overlay_setting">懸浮視窗設定</string>
     <string name="setting_menu_view_desc_overlay_setting">取得懸浮視窗權限（以開啟戰鬥劇透功能）</string>
     <string name="setting_menu_view_title_battleview_use">戰鬥劇透</string>
