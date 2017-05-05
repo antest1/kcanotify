@@ -1370,7 +1370,6 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_PREF_LANGUAGE_CHANGED)) {
-                if (isCurrentPortDeckDataReady()) processFirstDeckInfo();
                 setFrontViewNotifier(FRONT_NONE, 0, null);
             }
 
