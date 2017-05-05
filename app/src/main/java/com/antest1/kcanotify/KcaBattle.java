@@ -435,6 +435,43 @@ public class KcaBattle {
         Log.e("KCA", Arrays.toString(aftercbhps));
     }
 
+    public static void calculateAirBattle(JsonObject data) {
+        if (isKeyExist(data, "api_stage3")) {
+            JsonObject api_stage3 = data.getAsJsonObject("api_stage3");
+            if (isKeyExist(api_stage3, "api_fdam")) {
+                JsonArray api_fdam = api_stage3.getAsJsonArray("api_fdam");
+                for (int i = 1; i < api_fdam.size(); i++) {
+                    int f_idx = getFriendIdx(i);
+                    afterhps[f_idx] -= cnv(api_fdam.get(i));
+                }
+            }
+            if (isKeyExist(api_stage3, "api_edam")) {
+                JsonArray api_edam = api_stage3.getAsJsonArray("api_edam");
+                for (int i = 1; i < api_edam.size(); i++) {
+                    int e_idx = getEnemyIdx(i);
+                    afterhps[e_idx] -= cnv(api_edam.get(i));
+                }
+            }
+        }
+        if (isKeyExist(data, "api_stage3_combined")) {
+            JsonObject api_stage3_combined = data.getAsJsonObject("api_stage3_combined");
+            if (isKeyExist(api_stage3_combined, "api_fdam")) {
+                JsonArray api_fdam = api_stage3_combined.getAsJsonArray("api_fdam");
+                for (int i = 1; i < api_fdam.size(); i++) {
+                    int f_idx = getFriendIdx(i);
+                    aftercbhps[f_idx] -= cnv(api_fdam.get(i));
+                }
+            }
+            if (isKeyExist(api_stage3_combined, "api_edam")) {
+                JsonArray api_edam = api_stage3_combined.getAsJsonArray("api_edam");
+                for (int i = 1; i < api_edam.size(); i++) {
+                    int e_idx = getEnemyIdx(i);
+                    aftercbhps[e_idx] -= cnv(api_edam.get(i));
+                }
+            }
+        }
+    }
+
     public static void processData(String url, JsonObject api_data) {
         //
         try {
@@ -544,51 +581,26 @@ public class KcaBattle {
                     afterhps[i] = nowhpsData.get(i).getAsInt();
                 }
 
+                // 기항대분식항공전 Stage 3
+                if (isKeyExist(api_data, "api_air_base_injection")) {
+                    calculateAirBattle(api_data.getAsJsonObject("api_air_base_injection"));
+                }
+
                 // 분식항공전 Stage 3
                 if (isKeyExist(api_data, "api_injection_kouku")) { // Check Null for old data
-                    JsonObject inj_kouku = api_data.getAsJsonObject("api_injection_kouku");
-                    if (isKeyExist(inj_kouku, "api_stage3")) {
-                        JsonObject inj_kouku_stage3 = inj_kouku.getAsJsonObject("api_stage3");
-                        JsonArray inj_kouku_fdam = inj_kouku_stage3.getAsJsonArray("api_fdam");
-                        JsonArray inj_kouku_edam = inj_kouku_stage3.getAsJsonArray("api_edam");
-                        for (int i = 1; i < inj_kouku_fdam.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            int e_idx = getEnemyIdx(i);
-                            afterhps[f_idx] -= cnv(inj_kouku_fdam.get(i));
-                            afterhps[e_idx] -= cnv(inj_kouku_edam.get(i));
-                        }
-                    }
+                    calculateAirBattle(api_data.getAsJsonObject("api_injection_kouku"));
                 }
 
                 if (isKeyExist(api_data, "api_air_base_attack")) {
                     JsonArray airbase_attack = api_data.getAsJsonArray("api_air_base_attack");
                     for (int i = 0; i < airbase_attack.size(); i++) {
-                        JsonObject airbase_attack_info = airbase_attack.get(i).getAsJsonObject();
-                        if (isKeyExist(airbase_attack_info, "api_stage3")) {
-                            JsonObject airbase_attack_stage3 = airbase_attack_info.getAsJsonObject("api_stage3");
-                            JsonArray airbase_attack_edam = airbase_attack_stage3.getAsJsonArray("api_edam");
-                            for (int j = 1; j < airbase_attack_edam.size(); j++) {
-                                int e_idx = getEnemyIdx(j);
-                                afterhps[e_idx] -= cnv(airbase_attack_edam.get(j));
-                            }
-                        }
+                        calculateAirBattle(airbase_attack.get(i).getAsJsonObject());
                     }
                 }
 
                 // 항공전 Stage 3
                 if (isKeyExist(api_data, "api_kouku")) {
-                    JsonObject kouku = api_data.getAsJsonObject("api_kouku");
-                    if (isKeyExist(kouku, "api_stage3")) {
-                        JsonObject kouku_stage3 = kouku.getAsJsonObject("api_stage3");
-                        JsonArray kouku_fdam = kouku_stage3.getAsJsonArray("api_fdam");
-                        JsonArray kouku_edam = kouku_stage3.getAsJsonArray("api_edam");
-                        for (int i = 1; i < kouku_fdam.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            int e_idx = getEnemyIdx(i);
-                            afterhps[f_idx] -= cnv(kouku_fdam.get(i));
-                            afterhps[e_idx] -= cnv(kouku_edam.get(i));
-                        }
-                    }
+                    calculateAirBattle(api_data.getAsJsonObject("api_kouku"));
                 }
 
                 // Log.e("KCA", "hpInfo (kouku): " + Arrays.toString(afterhps));
@@ -759,36 +771,13 @@ public class KcaBattle {
 
                 // 항공전 Stage 3
                 if (isKeyExist(api_data, "api_kouku")) {
-                    JsonObject kouku = api_data.getAsJsonObject("api_kouku");
-                    if (isKeyExist(kouku, "api_stage3")) {
-                        JsonObject kouku_stage3 = kouku.getAsJsonObject("api_stage3");
-                        JsonArray kouku_fdam = kouku_stage3.getAsJsonArray("api_fdam");
-                        JsonArray kouku_edam = kouku_stage3.getAsJsonArray("api_edam");
-                        for (int i = 1; i < kouku_fdam.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            int e_idx = getEnemyIdx(i);
-                            afterhps[f_idx] -= cnv(kouku_fdam.get(i));
-                            afterhps[e_idx] -= cnv(kouku_edam.get(i));
-                        }
-                    }
+                    calculateAirBattle(api_data.getAsJsonObject("api_kouku"));
                 }
 
                 if (url.equals(API_REQ_SORTIE_AIRBATTLE)) {
-                    // 제2항공전 Stage 3
-                    JsonObject kouku2 = api_data.getAsJsonObject("api_kouku2");
-                    if (isKeyExist(kouku2, "api_stage3")) {
-                        JsonObject kouku2_stage3 = kouku2.getAsJsonObject("api_stage3");
-                        JsonArray kouku2_fdam = kouku2_stage3.getAsJsonArray("api_fdam");
-                        JsonArray kouku2_edam = kouku2_stage3.getAsJsonArray("api_edam");
-                        for (int i = 1; i < kouku2_fdam.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            int e_idx = getEnemyIdx(i);
-                            afterhps[f_idx] -= cnv(kouku2_fdam.get(i));
-                            afterhps[e_idx] -= cnv(kouku2_edam.get(i));
-                        }
-                    }
-
+                    calculateAirBattle(api_data.getAsJsonObject("api_kouku2"));
                 }
+
                 String hpInfo = Arrays.toString(afterhps);
                 Log.e("KCA", "hpInfo: " + hpInfo);
 
@@ -900,78 +889,27 @@ public class KcaBattle {
                     aftercbhps[i] = nowcbhpsData.get(i).getAsInt();
                 }
 
+                // 기항대분식항공전 Stage 3
+                if (isKeyExist(api_data, "api_air_base_injection")) {
+                    calculateAirBattle(api_data.getAsJsonObject("api_air_base_injection"));
+                }
+
                 // 분식항공전 Stage 3
                 if (isKeyExist(api_data, "api_injection_kouku")) { // Check Null for old data
-                    JsonObject inj_kouku = api_data.getAsJsonObject("api_injection_kouku").getAsJsonObject();
-                    if (isKeyExist(inj_kouku, "api_stage3")) {
-                        JsonObject inj_kouku_stage3 = inj_kouku.getAsJsonObject("api_stage3");
-                        JsonArray inj_kouku_fdam = inj_kouku_stage3.getAsJsonArray("api_fdam");
-                        JsonArray inj_kouku_edam = inj_kouku_stage3.getAsJsonArray("api_edam");
-                        for (int i = 1; i < inj_kouku_fdam.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            int e_idx = getEnemyIdx(i);
-                            afterhps[f_idx] -= cnv(inj_kouku_fdam.get(i));
-                            afterhps[e_idx] -= cnv(inj_kouku_edam.get(i));
-                        }
-
-                    }
-                    if (isKeyExist(inj_kouku, "api_stage3_combined")) {
-                        JsonObject inj_kouku_stage3_combined = inj_kouku.get("api_stage3_combined").getAsJsonObject();
-                        if(isKeyExist(inj_kouku_stage3_combined, "api_fdam")) {
-                            JsonArray inj_kouku_fdam_combined = inj_kouku_stage3_combined.getAsJsonArray("api_fdam");
-                            for (int i = 1; i < inj_kouku_fdam_combined.size(); i++) {
-                                int f_idx = getFriendIdx(i);
-                                aftercbhps[f_idx] -= cnv(inj_kouku_fdam_combined.get(i));
-                            }
-                        }
-                        if(isKeyExist(inj_kouku_stage3_combined, "api_edam")) {
-                            JsonArray inj_kouku_edam_combined = inj_kouku_stage3_combined.getAsJsonArray("api_edam");
-                            for (int i = 1; i < inj_kouku_edam_combined.size(); i++) {
-                                int e_idx = getEnemyIdx(i);
-                                aftercbhps[e_idx] -= cnv(inj_kouku_edam_combined.get(i));
-                            }
-                        }
-                    }
+                    calculateAirBattle(api_data.getAsJsonObject("api_injection_kouku"));
                 }
 
                 // 기지항공대 Stage 3
                 if (isKeyExist(api_data, "api_air_base_attack")) {
                     JsonArray airbase_attack = api_data.getAsJsonArray("api_air_base_attack");
                     for (int i = 0; i < airbase_attack.size(); i++) {
-                        JsonObject airbase_attack_info = airbase_attack.get(i).getAsJsonObject();
-                        if (isKeyExist(airbase_attack_info, "api_stage3")) {
-                            JsonObject airbase_attack_stage3 = airbase_attack_info.getAsJsonObject("api_stage3");
-                            JsonArray airbase_attack_edam = airbase_attack_stage3.getAsJsonArray("api_edam");
-                            for (int j = 1; j < airbase_attack_edam.size(); j++) {
-                                int e_idx = getEnemyIdx(j);
-                                afterhps[e_idx] -= cnv(airbase_attack_edam.get(j));
-                            }
-                        }
+                        calculateAirBattle(airbase_attack.get(i).getAsJsonObject());
                     }
                 }
 
                 // 항공전 Stage 3
                 if (isKeyExist(api_data, "api_kouku")) {
-                    JsonObject kouku = api_data.getAsJsonObject("api_kouku");
-                    if (isKeyExist(kouku, "api_stage3")) {
-                        JsonObject kouku_stage3 = kouku.getAsJsonObject("api_stage3");
-                        JsonArray kouku_fdam = kouku_stage3.getAsJsonArray("api_fdam");
-                        JsonArray kouku_edam = kouku_stage3.getAsJsonArray("api_edam");
-                        for (int i = 1; i < kouku_fdam.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            int e_idx = getEnemyIdx(i);
-                            afterhps[f_idx] -= cnv(kouku_fdam.get(i));
-                            afterhps[e_idx] -= cnv(kouku_edam.get(i));
-                        }
-                    }
-                    if (isKeyExist(kouku, "api_stage3_combined")) {
-                        JsonObject kouku_stage3_combined = kouku.get("api_stage3_combined").getAsJsonObject();
-                        JsonArray kouku_fdam_combined = kouku_stage3_combined.getAsJsonArray("api_fdam");
-                        for (int i = 1; i < kouku_fdam_combined.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            aftercbhps[f_idx] -= cnv(kouku_fdam_combined.get(i));
-                        }
-                    }
+                    calculateAirBattle(api_data.getAsJsonObject("api_kouku"));
                 }
 
                 // 지원함대
@@ -1127,89 +1065,27 @@ public class KcaBattle {
                     aftercbhps[i] = nowcbhpsData.get(i).getAsInt();
                 }
 
+                // 기항대분식항공전 Stage 3
+                if (isKeyExist(api_data, "api_air_base_injection")) {
+                    calculateAirBattle(api_data.getAsJsonObject("api_air_base_injection"));
+                }
+
                 // 분식항공전 Stage 3
                 if (isKeyExist(api_data, "api_injection_kouku")) { // Check Null for old data
-                    JsonObject inj_kouku = api_data.getAsJsonObject("api_injection_kouku");
-                    if (isKeyExist(inj_kouku, "api_stage3")) {
-                        JsonObject inj_kouku_stage3 = inj_kouku.getAsJsonObject("api_stage3");
-                        JsonArray inj_kouku_fdam = inj_kouku_stage3.getAsJsonArray("api_fdam");
-                        JsonArray inj_kouku_edam = inj_kouku_stage3.getAsJsonArray("api_edam");
-                        for (int i = 1; i < inj_kouku_fdam.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            int e_idx = getEnemyIdx(i);
-                            afterhps[f_idx] -= cnv(inj_kouku_fdam.get(i));
-                            afterhps[e_idx] -= cnv(inj_kouku_edam.get(i));
-                        }
-                    }
-
-                    if (isKeyExist(inj_kouku, "api_stage3_combined")) {
-                        JsonObject inj_kouku_stage3_combined = inj_kouku.get("api_stage3_combined").getAsJsonObject();
-                        if(isKeyExist(inj_kouku_stage3_combined, "api_fdam")) {
-                            JsonArray inj_kouku_fdam_combined = inj_kouku_stage3_combined.getAsJsonArray("api_fdam");
-                            for (int i = 1; i < inj_kouku_fdam_combined.size(); i++) {
-                                int f_idx = getFriendIdx(i);
-                                aftercbhps[f_idx] -= cnv(inj_kouku_fdam_combined.get(i));
-                            }
-                        }
-                        if(isKeyExist(inj_kouku_stage3_combined, "api_edam")) {
-                            JsonArray inj_kouku_edam_combined = inj_kouku_stage3_combined.getAsJsonArray("api_edam");
-                            for (int i = 1; i < inj_kouku_edam_combined.size(); i++) {
-                                int e_idx = getEnemyIdx(i);
-                                aftercbhps[e_idx] -= cnv(inj_kouku_edam_combined.get(i));
-                            }
-                        }
-                    }
+                    calculateAirBattle(api_data.getAsJsonObject("api_injection_kouku"));
                 }
 
                 // 기지항공대 Stage 3
                 if (isKeyExist(api_data, "api_air_base_attack")) {
                     JsonArray airbase_attack = api_data.getAsJsonArray("api_air_base_attack");
                     for (int i = 0; i < airbase_attack.size(); i++) {
-                        JsonObject airbase_attack_info = airbase_attack.get(i).getAsJsonObject();
-                        if (isKeyExist(airbase_attack_info, "api_stage3")) {
-                            JsonObject airbase_attack_stage3 = airbase_attack_info.getAsJsonObject("api_stage3");
-                            JsonArray airbase_attack_edam = airbase_attack_stage3.getAsJsonArray("api_edam");
-                            for (int j = 1; j < airbase_attack_edam.size(); j++) {
-                                int e_idx = getEnemyIdx(j);
-                                afterhps[e_idx] -= cnv(airbase_attack_edam.get(j));
-                            }
-                        }
-                        if (isKeyExist(airbase_attack_info, "api_stage3_combined")) {
-                            JsonObject airbase_attack_stage3_combined = airbase_attack_info.getAsJsonObject("api_stage3_combined");
-                            JsonArray airbase_attack_edam_combined = airbase_attack_stage3_combined.getAsJsonArray("api_edam");
-                            for (int j = 1; j < airbase_attack_edam_combined.size(); j++) {
-                                int e_idx = getEnemyIdx(j);
-                                aftercbhps[e_idx] -= cnv(airbase_attack_edam_combined.get(j));
-                            }
-                        }
+                        calculateAirBattle(airbase_attack.get(i).getAsJsonObject());
                     }
                 }
                 Log.e("KCA", "hpInfo: " + Arrays.toString(afterhps) + " / " + Arrays.toString(aftercbhps));
                 // 항공전 Stage 3
                 if (isKeyExist(api_data, "api_kouku")) {
-                    JsonObject kouku = api_data.getAsJsonObject("api_kouku");
-                    if (isKeyExist(kouku, "api_stage3")) {
-                        JsonObject kouku_stage3 = kouku.getAsJsonObject("api_stage3");
-                        JsonArray kouku_fdam = kouku_stage3.getAsJsonArray("api_fdam");
-                        JsonArray kouku_edam = kouku_stage3.getAsJsonArray("api_edam");
-                        for (int i = 1; i < kouku_fdam.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            int e_idx = getEnemyIdx(i);
-                            afterhps[f_idx] -= cnv(kouku_fdam.get(i));
-                            afterhps[e_idx] -= cnv(kouku_edam.get(i));
-                        }
-                    }
-                    if (isKeyExist(kouku, "api_stage3_combined")) {
-                        JsonObject kouku_stage3_combined = kouku.getAsJsonObject("api_stage3_combined");
-                        JsonArray kouku_fdam_combined = kouku_stage3_combined.getAsJsonArray("api_fdam");
-                        JsonArray kouku_edam_combined = kouku_stage3_combined.getAsJsonArray("api_edam");
-                        for (int i = 1; i < kouku_fdam_combined.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            int e_idx = getEnemyIdx(i);
-                            aftercbhps[f_idx] -= cnv(kouku_fdam_combined.get(i));
-                            aftercbhps[e_idx] -= cnv(kouku_edam_combined.get(i));
-                        }
-                    }
+                    calculateAirBattle(api_data.getAsJsonObject("api_kouku"));
                 }
                 Log.e("KCA", "hpInfo: " + Arrays.toString(afterhps) + " / " + Arrays.toString(aftercbhps));
 
@@ -1417,51 +1293,9 @@ public class KcaBattle {
                 }
 
                 // 제1항공전 Stage 3
-                JsonObject kouku = api_data.getAsJsonObject("api_kouku");
-                if (isKeyExist(kouku, "api_stage3")) {
-                    JsonObject kouku_stage3 = kouku.getAsJsonObject("api_stage3");
-                    JsonArray kouku_fdam = kouku_stage3.getAsJsonArray("api_fdam");
-                    JsonArray kouku_edam = kouku_stage3.getAsJsonArray("api_edam");
-                    for (int i = 1; i < kouku_fdam.size(); i++) {
-                        int f_idx = getFriendIdx(i);
-                        int e_idx = getEnemyIdx(i);
-                        afterhps[f_idx] -= cnv(kouku_fdam.get(i));
-                        afterhps[e_idx] -= cnv(kouku_edam.get(i));
-                    }
-                }
-                if (isKeyExist(kouku, "api_stage3_combined")) {
-                    JsonObject kouku_stage3_combined = kouku.getAsJsonObject("api_stage3_combined");
-                    JsonArray kouku_fdam = kouku_stage3_combined.getAsJsonArray("api_fdam");
-                    for (int i = 1; i < kouku_fdam.size(); i++) {
-                        int f_idx = getFriendIdx(i);
-                        aftercbhps[f_idx] -= cnv(kouku_fdam.get(i));
-                    }
-                }
-
+                calculateAirBattle(api_data.getAsJsonObject("api_kouku"));
                 if (url.equals(API_REQ_COMBINED_AIRBATTLE)) {
-                    // 제2항공전 Stage 3
-                    JsonObject kouku2 = api_data.getAsJsonObject("api_kouku2");
-
-                    if (isKeyExist(kouku2, "api_stage3")) {
-                        JsonObject kouku2_stage3 = kouku2.getAsJsonObject("api_stage3");
-                        JsonArray kouku2_fdam = kouku2_stage3.getAsJsonArray("api_fdam");
-                        JsonArray kouku2_edam = kouku2_stage3.getAsJsonArray("api_edam");
-                        for (int i = 1; i < kouku2_fdam.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            int e_idx = getEnemyIdx(i);
-                            afterhps[f_idx] -= cnv(kouku2_fdam.get(i));
-                            afterhps[e_idx] -= cnv(kouku2_edam.get(i));
-                        }
-                    }
-
-                    if (isKeyExist(kouku2, "api_stage3_combined")) {
-                        JsonObject kouku2_stage3_combined = kouku2.getAsJsonObject("api_stage3_combined");
-                        JsonArray kouku_fdam = kouku2_stage3_combined.getAsJsonArray("api_fdam");
-                        for (int i = 1; i < kouku_fdam.size(); i++) {
-                            int f_idx = getFriendIdx(i);
-                            aftercbhps[f_idx] -= cnv(kouku_fdam.get(i));
-                        }
-                    }
+                    calculateAirBattle(api_data.getAsJsonObject("api_kouku2"));
                 }
                 String hpInfo1 = Arrays.toString(afterhps);
                 String hpInfo2 = Arrays.toString(aftercbhps);
