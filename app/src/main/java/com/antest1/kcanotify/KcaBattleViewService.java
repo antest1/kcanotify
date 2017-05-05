@@ -262,6 +262,11 @@ public class KcaBattleViewService extends Service {
                 ((TextView) battleview.findViewById(R.id.battle_node)).setText(currentNodeInfo);
                 ((TextView) battleview.findViewById(R.id.battle_result)).setText("");
                 ((TextView) battleview.findViewById(R.id.enemy_fleet_name)).setText("");
+                ((TextView) battleview.findViewById(R.id.enemy_combined_fleet_name)).setText("");
+                ((TextView) battleview.findViewById(R.id.enemy_fleet_name))
+                        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                ((TextView) battleview.findViewById(R.id.enemy_combined_fleet_name))
+                        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                 ((TextView) battleview.findViewById(R.id.friend_fleet_formation)).setText("");
                 ((TextView) battleview.findViewById(R.id.enemy_fleet_formation)).setText("");
                 ((TextView) battleview.findViewById(R.id.friend_fleet_damage)).setText("");
