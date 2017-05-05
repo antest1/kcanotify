@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -155,7 +156,7 @@ public class KcaAlarmService extends Service {
                 content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNo);
 
         }
-        Notification.Builder builder = new Notification.Builder(getApplicationContext())
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
                 .setSmallIcon(R.mipmap.expedition_notify_icon)
                 .setLargeIcon(expBitmap)
                 .setContentTitle(title)
@@ -212,7 +213,7 @@ public class KcaAlarmService extends Service {
             content = String.format(getStringWithLocale(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
         }
 
-        Notification.Builder builder = new Notification.Builder(getApplicationContext())
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
                 .setSmallIcon(R.mipmap.docking_notify_icon)
                 .setLargeIcon(dockBitmap)
                 .setContentTitle(title)

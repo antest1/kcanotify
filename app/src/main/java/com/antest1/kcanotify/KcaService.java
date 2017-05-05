@@ -2,8 +2,6 @@ package com.antest1.kcanotify;
 
 import android.app.AlarmManager;
 import android.app.Notification;
-import android.app.Notification.BigTextStyle;
-import android.app.Notification.Builder;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -27,6 +25,7 @@ import android.os.Message;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -93,8 +92,8 @@ public class KcaService extends Service {
     Vibrator vibrator = null;
     MediaPlayer mediaPlayer;
     NotificationManager notifiManager;
-    Builder viewNotificationBuilder;
-    BigTextStyle viewNotificationText;
+    NotificationCompat.Builder viewNotificationBuilder;
+    NotificationCompat.BigTextStyle viewNotificationText;
     public static boolean noti_vibr_on = true;
     int viewBitmapId, viewBitmapSmallId;
     Bitmap viewBitmap = null;
@@ -269,28 +268,18 @@ public class KcaService extends Service {
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
-        if (viewNotificationBuilder == null) {
-            viewNotificationText = new Notification.BigTextStyle();
-            viewNotificationBuilder = new Notification.Builder(getApplicationContext())
-                    .setContentTitle(title)
-                    .setContentText(content1)
-                    .setSmallIcon(viewBitmapSmallId)
-                    .setLargeIcon(viewBitmap)
-                    .setStyle(viewNotificationText.bigText(content1))
-                    .setTicker(title)
-                    .setContentIntent(pendingIntent)
-                    .setPriority(Notification.PRIORITY_MAX)
-                    .setOngoing(true).setAutoCancel(false);
-        } else {
-            viewNotificationBuilder
-                    .setContentTitle(title)
-                    .setContentText(content1)
-                    .setSmallIcon(viewBitmapSmallId)
-                    .setLargeIcon(viewBitmap)
-                    .setStyle(viewNotificationText.bigText(content1))
-                    .setTicker(title)
-                    .setContentIntent(pendingIntent);
-        }
+
+        viewNotificationText = new NotificationCompat.BigTextStyle();
+        viewNotificationBuilder = new NotificationCompat.Builder(getApplicationContext())
+                .setContentTitle(title)
+                .setContentText(content1)
+                .setSmallIcon(viewBitmapSmallId)
+                .setLargeIcon(viewBitmap)
+                .setStyle(viewNotificationText.bigText(content1))
+                .setTicker(title)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setOngoing(true).setAutoCancel(false);
         if (isMissionTimerViewEnabled() && content2 != null) {
             viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(content2));
         }
@@ -320,11 +309,11 @@ public class KcaService extends Service {
         } else {
             expeditionString = String.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
         }
-        Intent aIntent = new Intent(KcaService.this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
-        viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(expeditionString));
-        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.setContentIntent(pendingIntent).build());
+
+        if (viewNotificationBuilder != null) {
+            viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(expeditionString));
+            notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.build());
+        }
     }
 
     private void updateNotificationFairy() {
@@ -1372,7 +1361,7 @@ public class KcaService extends Service {
                     updateNotificationFairy();
                     setFrontViewNotifier(FRONT_NONE, 0, null);
                     startService(new Intent(this, KcaViewButtonService.class)
-                        .setAction(KcaViewButtonService.FAIRY_CHANGE));
+                            .setAction(KcaViewButtonService.FAIRY_CHANGE));
                 }
             }
 
