@@ -509,9 +509,11 @@ public class KcaApiData {
         if (helper != null) {
             JsonObject mapEdgeInfo = new JsonParser().parse(helper.getValue(DB_KEY_MAPEDGES)).getAsJsonObject();
             if (mapEdgeInfo.has(currentMapString)) {
-                JsonArray nodeInfo = mapEdgeInfo.getAsJsonObject(currentMapString)
-                        .getAsJsonArray(String.valueOf(no));
-                no_str = nodeInfo.get(1).getAsString();
+                JsonObject currentMapInfo = mapEdgeInfo.getAsJsonObject(currentMapString);
+                if (currentMapInfo.has(no_str)) {
+                    JsonArray nodeInfo = currentMapInfo.getAsJsonArray(no_str);
+                    no_str = nodeInfo.get(1).getAsString();
+                }
             }
         }
         return no_str;
