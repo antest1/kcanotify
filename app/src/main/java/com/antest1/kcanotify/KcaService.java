@@ -502,9 +502,9 @@ public class KcaService extends Service {
                     //Toast.makeText(contextWithLocale, String.valueOf(userId), Toast.LENGTH_LONG).show();
 
                     if (api_start2_data == null && api_start2_down_mode) {
-                        customToast.showToast("Downloading Data", Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-                        new retrieveApiStartData().execute("", "down", "");
-                        setFrontViewNotifier(FRONT_NONE, 0, getStringWithLocale(R.string.kca_toast_loading_data));
+                        customToast.showToast(getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                        // new retrieveApiStartData().execute("", "down", "");
+                        // setFrontViewNotifier(FRONT_NONE, 0, getStringWithLocale(R.string.kca_toast_loading_data));
                     }
                 }
                 return;
@@ -616,7 +616,7 @@ public class KcaService extends Service {
             } else if (!checkDataLoadTriggered()) {
                 if (!api_start2_loading_flag) {
                     customToast.showToast(getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-                    new retrieveApiStartData().execute("", "down", "");
+                    //new retrieveApiStartData().execute("", "down", "");
                 }
             } else if (api_start2_loading_flag) {
                 setFrontViewNotifier(FRONT_NONE, 0, getStringWithLocale(R.string.kca_toast_loading_data));
@@ -1600,7 +1600,8 @@ public class KcaService extends Service {
         String delimeter = " | ";
         if (!isGameDataLoaded()) {
             Log.e("KCA", "processFirstDeckInfo: Game Data is Null");
-            new retrieveApiStartData().execute("", "down", "");
+            customToast.showToast(getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+            // new retrieveApiStartData().execute("", "down", "");
             return;
         } else {
             Log.e("KCA", String.format("processFirstDeckInfo: data loaded"));
@@ -1931,6 +1932,7 @@ public class KcaService extends Service {
         Log.e("KCA", "Alarm set to: " + String.valueOf(time) + " " + String.valueOf(code));
     }
 
+    /*
     private class retrieveApiStartData extends AsyncTask<String, Void, String> {
         public final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
         OkHttpClient client = new OkHttpClient.Builder().build();
@@ -1984,6 +1986,7 @@ public class KcaService extends Service {
             return null;
         }
     }
+    */
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
