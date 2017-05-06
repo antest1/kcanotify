@@ -57,15 +57,17 @@ public class WindowChangeDetectingService extends AccessibilityService {
 
                 // Check Kancolle is on the screen
                 if (isActivity) {
-                    Intent intent = new Intent(this, KcaViewButtonService.class);
-                    if(componentName.flattenToShortString().contains(KC_PACKAGE_NAME)) {
-                        Log.e("KCA", "kancolle detected: " + componentName.flattenToShortString());
-                        intent.setAction(KcaViewButtonService.KCA_STATUS_ON);
-                    } else {
-                        Log.e("KCA", "kancolle not detected: " + componentName.flattenToShortString());
-                        intent.setAction(KcaViewButtonService.KCA_STATUS_OFF);
+                    if (KcaService.getServiceStatus()) {
+                        Intent intent = new Intent(this, KcaViewButtonService.class);
+                        if(componentName.flattenToShortString().contains(KC_PACKAGE_NAME)) {
+                            Log.e("KCA", "kancolle detected: " + componentName.flattenToShortString());
+                            intent.setAction(KcaViewButtonService.KCA_STATUS_ON);
+                        } else {
+                            Log.e("KCA", "kancolle not detected: " + componentName.flattenToShortString());
+                            intent.setAction(KcaViewButtonService.KCA_STATUS_OFF);
+                        }
+                        startService(intent);
                     }
-                    startService(intent);
                 }
             }
         }
