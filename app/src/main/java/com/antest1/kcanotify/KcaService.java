@@ -85,6 +85,7 @@ public class KcaService extends Service {
     public static boolean isInBattle;
     public static boolean isCombined;
 
+    AQuery aq;
     Context contextWithLocale;
     KcaDBHelper dbHelper;
 
@@ -163,6 +164,7 @@ public class KcaService extends Service {
             }
         });
 
+        aq = new AQuery(KcaService.this);
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -1237,7 +1239,7 @@ public class KcaService extends Service {
                         // do nothing
                     }
                 };
-                AQuery aq = new AQuery(KcaService.this);
+                if (aq == null) aq = new AQuery(KcaService.this);
                 cb.header("Referer", "app:/KCA/");
                 cb.header("Content-Type", "application/x-www-form-urlencoded");
                 HttpEntity entity = null;
@@ -1288,7 +1290,7 @@ public class KcaService extends Service {
                     // do nothing
                 }
             };
-            AQuery aq = new AQuery(KcaService.this);
+            if (aq == null) aq = new AQuery(KcaService.this);
             cb.header("Referer", "app:/KCA/");
             cb.header("Content-Type", "application/x-www-form-urlencoded");
             HttpEntity entity = null;
@@ -1492,7 +1494,7 @@ public class KcaService extends Service {
                 sendData.addProperty("error", api_error);
                 String sendDataString = sendData.toString();
 
-                AQuery aq = new AQuery(KcaService.this);
+                if (aq == null) aq = new AQuery(KcaService.this);
                 cb.header("Referer", "app:/KCA/");
                 cb.header("Content-Type", "application/x-www-form-urlencoded");
                 HttpEntity entity = new ByteArrayEntity(sendDataString.getBytes());
@@ -1529,7 +1531,7 @@ public class KcaService extends Service {
             sendData.addProperty("error", getStringFromException(e));
             String sendDataString = sendData.toString();
 
-            AQuery aq = new AQuery(KcaService.this);
+            if (aq == null) aq = new AQuery(KcaService.this);
             cb.header("Referer", "app:/KCA/");
             cb.header("Content-Type", "application/x-www-form-urlencoded");
             HttpEntity entity = new ByteArrayEntity(sendDataString.getBytes());
