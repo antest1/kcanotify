@@ -104,6 +104,12 @@
             android:summary="@string/setting_menu_view_desc_questview_use"
             android:title="@string/setting_menu_view_title_questview_use" />
         -->
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="fullmorale_setting"
+            android:summary="@string/setting_menu_view_desc_fullmorale_setting"
+            android:title="@string/setting_menu_view_title_fullmorale_setting" />
+
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_menu_noti_head">
         <ListPreference

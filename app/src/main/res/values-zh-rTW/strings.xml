@@ -122,6 +122,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="kca_view_activate_vpn">請啟用VPN服務。</string>
     <string name="kca_view_condition" formatted="false">士氣： %s</string>
+    <string name="kca_view_condition_nformat" formatted="false">士氣 #%d: %s</string>
     <string name="kca_view_hdmg_damecon_format" formatted="false">[有艦娘大破！（緊急修理可用）] %s 準備完畢 %s</string>
     <string name="kca_view_hdmg_format" formatted="false">[有艦娘大破！] %s 準備完畢 %s</string>
     <string name="kca_view_normal_format" formatted="false">%s 準備完畢 %s</string>
@@ -319,5 +320,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_battle">戰鬥</string>
     <string name="viewmenu_quest">任務</string>
     <string name="viewmenu_akashi">改修</string>
-
+    <string name="setting_menu_view_title_fullmorale_setting">Show Full Morale Infomation</string>
+    <string name="setting_menu_view_desc_fullmorale_setting">Show full morale info on notification bar</string>
 </resources>

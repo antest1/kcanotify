@@ -156,6 +156,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="kca_view_activate_vpn">Please Activate VPN Service.</string>
     <string name="kca_view_condition" formatted="false">Morale: %s</string>
+    <string name="kca_view_condition_nformat" formatted="false">Morale #%d: %s</string>
     <string name="kca_view_hdmg_damecon_format" formatted="false">[Heavily Damaged!! (with Damecon)] %s Ready %s</string>
     <string name="kca_view_hdmg_format" formatted="false">[Heavliy Damaged!!] %s Ready %s</string>
     <string name="kca_view_normal_format" formatted="false">%s Ready %s</string>
@@ -373,5 +374,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_battle">Battle</string>
     <string name="viewmenu_quest">Quest</string>
     <string name="viewmenu_akashi">Akashi</string>
+    <string name="setting_menu_view_desc_fullmorale_setting">Show full morale info on notification bar</string>
+    <string name="setting_menu_view_title_fullmorale_setting">Show Full Morale Infomation</string>
 
 </resources>

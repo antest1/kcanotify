@@ -65,6 +65,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
+import static com.antest1.kcanotify.KcaConstants.PREF_FULLMORALE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
@@ -357,6 +358,9 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_KCA_NOTI_V_NS:
                     case PREF_SHOWDROP_SETTING:
                         editor.putBoolean(prefKey, true);
+                        break;
+                    case PREF_FULLMORALE_SETTING:
+                        editor.putBoolean(prefKey, false);
                         break;
                     case PREF_KCA_LANGUAGE:
                         String localecode = getString(R.string.default_locale);

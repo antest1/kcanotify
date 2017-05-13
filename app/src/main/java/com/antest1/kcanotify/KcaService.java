@@ -96,6 +96,8 @@ public class KcaService extends Service {
     NotificationManager notifiManager;
     NotificationCompat.Builder viewNotificationBuilder;
     NotificationCompat.BigTextStyle viewNotificationText;
+    private boolean viewNotificationFirstTime = true;
+
     public static boolean noti_vibr_on = true;
     int viewBitmapId, viewBitmapSmallId;
     Bitmap viewBitmap = null;
@@ -174,6 +176,7 @@ public class KcaService extends Service {
         viewBitmapId = getId(fairyId, R.mipmap.class);
         viewBitmapSmallId = getId(fairyId.concat("_small"), R.mipmap.class);
         viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
+        viewNotificationBuilder = new NotificationCompat.Builder(this);
 
         handler = new kcaServiceHandler(this);
         nHandler = new kcaNotificationHandler(this);
@@ -273,19 +276,26 @@ public class KcaService extends Service {
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
         viewNotificationText = new NotificationCompat.BigTextStyle();
-        viewNotificationBuilder = new NotificationCompat.Builder(getApplicationContext())
-                .setContentTitle(title)
+        if (viewNotificationFirstTime) {
+            viewNotificationBuilder.setContentTitle(title)
+                    .setSmallIcon(viewBitmapSmallId)
+                    .setLargeIcon(viewBitmap)
+                    .setTicker(title)
+                    .setContentIntent(pendingIntent)
+                    .setOnlyAlertOnce(true)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setOngoing(true).setAutoCancel(false);
+            viewNotificationFirstTime = false;
+        }
+
+        viewNotificationBuilder
                 .setContentText(content1)
-                .setSmallIcon(viewBitmapSmallId)
-                .setLargeIcon(viewBitmap)
-                .setStyle(viewNotificationText.bigText(content1))
-                .setTicker(title)
-                .setContentIntent(pendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setOngoing(true).setAutoCancel(false);
+                .setStyle(viewNotificationText.bigText(content1));
+
         if (isMissionTimerViewEnabled() && content2 != null) {
             viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(content2));
         }
+
         return viewNotificationBuilder.build();
     }
 
@@ -314,8 +324,11 @@ public class KcaService extends Service {
         }
 
         if (viewNotificationBuilder != null) {
+            Intent aIntent = new Intent(KcaService.this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
             viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(expeditionString));
-            notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.build());
+            notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.setContentIntent(pendingIntent).build());
         }
     }
 
@@ -1698,26 +1711,30 @@ public class KcaService extends Service {
         infoData.addProperty("landscape_value", tpValue);
         deckInfoData.add(infoData);
 
-        if (isCombined) {
-            String firstConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition_1), KcaDeckInfo.getConditionStatus(data, 0));
-            infoData = new JsonObject();
-            infoData.addProperty("is_newline", 1);
-            infoData.addProperty("portrait_value", firstConditionValue);
-            infoData.addProperty("landscape_value", firstConditionValue);
-            deckInfoData.add(infoData);
-
-            String secondConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition_2), KcaDeckInfo.getConditionStatus(data, 1));
-            infoData = new JsonObject();
-            infoData.addProperty("is_newline", 0);
-            infoData.addProperty("portrait_value", secondConditionValue);
-            infoData.addProperty("landscape_value", secondConditionValue);
-            deckInfoData.add(infoData);
+        int count = 0;
+        if (getBooleanPreferences(getApplicationContext(), PREF_FULLMORALE_SETTING)) {
+            count = data.size();
+        } else if (isCombined) {
+            count = 2;
         } else {
-            String firstConditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, 0));
+            count = 1;
+        }
+
+        for (int i = 0; i < count; i++) {
+            String conditionValue;
+            if (count == 1) {
+                conditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, i));
+            } else {
+                conditionValue = String.format(getStringWithLocale(R.string.kca_view_condition_nformat), i + 1, KcaDeckInfo.getConditionStatus(data, i));
+            }
             infoData = new JsonObject();
-            infoData.addProperty("is_newline", 0);
-            infoData.addProperty("portrait_value", firstConditionValue);
-            infoData.addProperty("landscape_value", firstConditionValue);
+            if (i < count - 1) {
+                infoData.addProperty("is_newline", 1);
+            } else {
+                infoData.addProperty("is_newline", 0);
+            }
+            infoData.addProperty("portrait_value", conditionValue);
+            infoData.addProperty("landscape_value", conditionValue);
             deckInfoData.add(infoData);
         }
 

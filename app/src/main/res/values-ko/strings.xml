@@ -114,6 +114,7 @@
 
     <string name="kca_view_activate_vpn">VPN 서비스를 활성화해주세요</string>
     <string name="kca_view_condition" formatted="false">피로도: %s</string>
+    <string name="kca_view_condition_nformat" formatted="false">피로도 #%d: %s</string>
     <string name="kca_view_hdmg_damecon_format" formatted="false">[대파/다메콘 있음!] %s 동작중 %s</string>
     <string name="kca_view_hdmg_format" formatted="false">[대파 있음!] %s 동작중 %s</string>
     <string name="kca_view_normal_format" formatted="false">%s 동작중 %s</string>
@@ -312,5 +313,6 @@
     <string name="viewmenu_battle">전투</string>
     <string name="viewmenu_quest">임무</string>
     <string name="viewmenu_akashi">개수</string>
-
+    <string name="setting_menu_view_desc_fullmorale_setting">상태 바에 전 함대의 피로도를 표시</string>
+    <string name="setting_menu_view_title_fullmorale_setting">전 함대 피로도 표시</string>
 </resources>
