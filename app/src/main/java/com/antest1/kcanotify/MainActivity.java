@@ -454,15 +454,18 @@ public class MainActivity extends AppCompatActivity {
             try {
                 Response response = client.newCall(request).execute();
                 return response.body().string().trim();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "";
+            } catch (AssertionError e) {
+                e.printStackTrace();
                 return "";
             }
         }
 
         @Override
         protected void onPostExecute(String result) {
-            if (result == null) {
+            if (result == null || result.length() == 0) {
                 Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
             } else if (result.length() > 0) {
                 Log.e("KCA", "Received: " + result);
