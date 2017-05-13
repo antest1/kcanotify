@@ -111,6 +111,10 @@ public class KcaViewButtonService extends Service {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
+    public static int getRecentVisibility() {
+        return recentVisibility;
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {

@@ -1439,7 +1439,7 @@ public class KcaBattle {
                         for (int t = 0; t < target.size(); t++) {
                             int target_idx = target.get(t).getAsInt();
                             if (target_idx != -1) {
-                                if (activedeck[1] == 1) {
+                                if (activedeck[1] == 1 && target_idx > 6) {
                                     afterhps[target_idx] -= cnv(target_dmg.get(t));
                                 } else {
                                     aftercbhps[target_idx] -= cnv(target_dmg.get(t));

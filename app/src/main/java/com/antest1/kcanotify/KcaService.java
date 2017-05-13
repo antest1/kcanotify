@@ -29,6 +29,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
@@ -456,7 +457,6 @@ public class KcaService extends Service {
                     // Can not draw overlays: pass
                 } else {
                     startService(new Intent(this, KcaViewButtonService.class));
-                    startService(new Intent(this, KcaBattleViewService.class));
                     startService(new Intent(this, KcaQuestViewService.class));
                     startService(new Intent(this, KcaAkashiViewService.class));
                 }
@@ -556,8 +556,7 @@ public class KcaService extends Service {
 
             if (url.startsWith(API_PORT)) {
                 isPortAccessed = true;
-                startService(new Intent(this, KcaBattleViewService.class)
-                        .setAction(KcaBattleViewService.HIDE_BATTLEVIEW_ACTION));
+                stopService(new Intent(this, KcaBattleViewService.class));
                 startService(new Intent(this, KcaViewButtonService.class)
                         .setAction(KcaViewButtonService.DEACTIVATE_BATTLEVIEW_ACTION));
                 startService(new Intent(this, KcaViewButtonService.class)
@@ -834,11 +833,10 @@ public class KcaService extends Service {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                                         && !Settings.canDrawOverlays(getApplicationContext())) {
                                     // Can not draw overlays: pass
-                                } else {
+                                } else if (KcaViewButtonService.getRecentVisibility() == View.VISIBLE) {
                                     startService(new Intent(this, KcaViewButtonService.class)
                                             .setAction(KcaViewButtonService.ACTIVATE_BATTLEVIEW_ACTION));
-                                    startService(new Intent(this, KcaViewButtonService.class)
-                                            .setAction(KcaViewButtonService.FAIRY_VISIBLE));
+                                    startService(new Intent(this, KcaBattleViewService.class));
                                 }
                             }
                         }
