@@ -87,7 +87,7 @@ public class KcaAlarmService extends Service {
         Log.e("KCA", "KcaAlarmService Called: " + String.valueOf(startId));
         if (getBooleanPreferences(getApplication(), PREF_KCA_NOTI_NOTIFYATSVCOFF) || KcaService.getServiceStatus()) {
             loadTranslationData(getAssets(), getApplicationContext());
-            if (intent != null) {
+            if (intent != null && intent.getStringExtra("data") != null) {
                 JsonObject data = new JsonParser().parse(intent.getStringExtra("data")).getAsJsonObject();
                 int type = data.get("type").getAsInt();
                 String locale = LocaleUtils.getLocaleCode(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
