@@ -67,6 +67,8 @@ public class KcaExpedition2 {
         if (complete_time_check[idx] == -1) return "";
         else {
             int left_time = (int) (complete_time_check[idx] - System.currentTimeMillis() - ALARM_DELAY) / 1000;
+            if (left_time < 0) return "";
+
             int sec, min, hour;
             sec = left_time;
             min = sec / 60;
