@@ -229,7 +229,7 @@ public class KcaBattle {
                 if (enemySunk[i]) {
                     enemyCbSunkCount += 1;
                 } else {
-                    if (enemyAfterHps[i] * 4 > enemyNowHps[i]) {
+                    if (enemyAfterHps[i] * 2 > enemyNowHps[i]) {
                         enemyCbGoodHealth += 1;
                     }
                 }
