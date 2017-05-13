@@ -54,7 +54,6 @@ public class KcaQuestViewService extends Service {
     public static final String SHOW_QUESTVIEW_ACTION = "show_questview";
     public static final String SHOW_QUESTVIEW_ACTION_CURRENT = "show_questview_current";
 
-
     Context contextWithLocale;
     LayoutInflater mInflater;
     private LocalBroadcastManager broadcaster;
@@ -63,6 +62,7 @@ public class KcaQuestViewService extends Service {
     public static JsonObject api_data;
     private static boolean isquestlist = false;
     private static int currentPage = 1;
+    private static int prevpagelastno = -1;
     private static final int maxPage = 2; // Max 6 quest at parallel
     public KcaDBHelper helper;
 
@@ -91,6 +91,10 @@ public class KcaQuestViewService extends Service {
     public static boolean getQuestMode() {
         return isquestlist;
     }
+
+    public static void setPrevPageLastNo(int no) { prevpagelastno = no; }
+
+    public static int getPrevPageLastNo() { return prevpagelastno; }
 
     public static void setQuestMode(boolean v) {
         isquestlist = v;

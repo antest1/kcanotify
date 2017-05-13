@@ -24,6 +24,9 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import static com.antest1.kcanotify.KcaQuestViewService.getPrevPageLastNo;
+import static com.antest1.kcanotify.KcaQuestViewService.setPrevPageLastNo;
+
 /**
  * Created by Gyeong Bok Lee on 2017-04-26.
  */
@@ -167,11 +170,73 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public JsonArray getCurrentQuestList() {
+        Date currentTime = Calendar.getInstance(Locale.JAPAN).getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH");
+        String[] current_time = df.format(currentTime).split("-");
+
         db = this.getReadableDatabase();
         JsonArray data = new JsonArray();
-        Cursor c = db.rawQuery("SELECT VALUE FROM ".concat(questlist_table_name), null);
+        Cursor c = db.rawQuery("SELECT KEY, VALUE FROM ".concat(questlist_table_name), null);
+        Log.e("KCA", "getCurrentQuestList: " + String.valueOf(c.getCount()));
         while (c.moveToNext()) {
-            data.add(new JsonParser().parse(c.getString(c.getColumnIndex("VALUE"))).getAsJsonObject());
+            boolean valid_flag = true;
+            int quest_id = c.getInt(c.getColumnIndex("KEY"));
+            String quest_str = c.getString(c.getColumnIndex("VALUE"));
+
+            if (quest_str != null) {
+                JsonObject quest_data = new JsonParser().parse(quest_str).getAsJsonObject();
+                int quest_type = quest_data.get("api_type").getAsInt();
+
+                String[] quest_time = getQuestDate(quest_id).split("-");
+                boolean reset_passed = Integer.parseInt(current_time[3]) >= 5;
+                switch (quest_type) {
+                    case 1: // Daily
+                        if (!quest_time[1].equals(current_time[1]) || !quest_time[2].equals(current_time[2])) {
+                            valid_flag = false;
+                        }
+                        break;
+                    case 2: // Weekly
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd");
+                        try {
+                            Date date1 = dateFormat.parse(String.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
+                            Date date2 = dateFormat.parse(String.format("%s %s %s", current_time[0], current_time[1], current_time[2]));
+                            long diff = date2.getTime() - date1.getTime();
+                            long datediff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                            if (datediff >= 7 && reset_passed) {
+                                valid_flag = false;
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 3: // Monthly
+                        if (!quest_time[1].equals(current_time[1]) && reset_passed) {
+                            valid_flag = false;
+                        }
+                        break;
+                    case 5: // Quarterly, Else
+                        if (quest_id == 822 || quest_id == 854 || quest_id == 637 || quest_id == 643) { // Bq1, Bq2, F35, F39 (Quarterly)
+                            int quest_month = Integer.parseInt(quest_time[1]);
+                            int quest_quarter = quest_month - quest_month % 3;
+                            int current_month = Integer.parseInt(current_time[1]);
+                            int current_quarter = current_month - current_month % 3;
+                            if (quest_quarter != current_quarter && reset_passed) {
+                                valid_flag = false;
+                            }
+                        } else if (!quest_time[1].equals(current_time[1]) || !quest_time[2].equals(current_time[2])) {
+                            valid_flag = false;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            Log.e("KCA", String.format("%d: %b", quest_id, valid_flag));
+            if (valid_flag) {
+                data.add(new JsonParser().parse(quest_str).getAsJsonObject());
+            } else {
+                db.delete(questlist_table_name, "KEY = ?", new String[]{String.valueOf(quest_id)});
+            }
         }
         return data;
     }
@@ -181,6 +246,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         Date currentTime = Calendar.getInstance(Locale.JAPAN).getTime();
         SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH");
         String[] current_time = df.format(currentTime).split("-");
+        int last_no = -1;
 
         List<Integer> questIdList = new ArrayList<>();
         db = this.getWritableDatabase();
@@ -192,70 +258,31 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                 JsonElement api_list_item = api_list.get(i);
                 if (api_list_item.isJsonObject()) {
                     JsonObject item = api_list_item.getAsJsonObject();
-                    questIdList.add(item.get("api_no").getAsInt());
+                    int api_no = item.get("api_no").getAsInt();
+                    questIdList.add(api_no);
+                    last_no = api_no;
                 }
             }
 
             // remove invalid quest
             if (page == 1) {
+                setPrevPageLastNo(-1);
                 db.delete(questlist_table_name, "KEY < ?", new String[]{String.valueOf(questIdList.get(0))});
+                Log.e("KCA", String.format("delete KEV < %d", questIdList.get(0)));
             } else if (page == lastpage) {
-                db.delete(questlist_table_name, "KEY > ?", new String[]{String.valueOf(questIdList.get(questIdList.size() - 1))});
+                db.delete(questlist_table_name, "KEY > ?", new String[]{String.valueOf(last_no)});
+                Log.e("KCA", String.format("delete KEV > %d", last_no));
             }
+            if (getPrevPageLastNo() != -1) {
+                db.delete(questlist_table_name, "KEY > ? AND KEY < ?",
+                        new String[]{String.valueOf(getPrevPageLastNo()), String.valueOf(questIdList.get(0))});
+                Log.e("KCA", String.format("delete KEV > %d AND KEY < %d", getPrevPageLastNo(), questIdList.get(0)));
+            }
+
             for (int i = 0; i < questIdList.size() - 1; i++) {
                 db.delete(questlist_table_name, "KEY > ? AND KEY < ?",
                         new String[]{String.valueOf(questIdList.get(i)), String.valueOf(questIdList.get(i + 1))});
-
-                int quest_id = questIdList.get(i);
-                String quest_str = getQuest(quest_id);
-                if (quest_str != null) {
-                    JsonObject quest_data = new JsonParser().parse(getQuest(quest_id)).getAsJsonObject();
-                    int quest_type = quest_data.get("api_type").getAsInt();
-
-                    String[] quest_time = getQuestDate(quest_id).split("-");
-                    boolean reset_passed = Integer.parseInt(current_time[3]) >= 5;
-                    switch(quest_type) {
-                        case 1: // Daily
-                            if (!quest_time[1].equals(current_time[1]) || !quest_time[2].equals(current_time[2])) {
-                                db.delete(questlist_table_name, "KEY = ?", new String[]{String.valueOf(quest_id)});
-                            }
-                            break;
-                        case 2: // Weekly
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd");
-                            try {
-                                Date date1 = dateFormat.parse(String.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
-                                Date date2 = dateFormat.parse(String.format("%s %s %s", current_time[0], current_time[1], current_time[2]));
-                                long diff = date2.getTime() - date1.getTime();
-                                long datediff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                                if (datediff >= 7 && reset_passed) {
-                                    db.delete(questlist_table_name, "KEY = ?", new String[]{String.valueOf(quest_id)});
-                                }
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            break;
-                        case 3: // Monthly
-                            if (!quest_time[1].equals(quest_time[2]) && reset_passed) {
-                                db.delete(questlist_table_name, "KEY = ?", new String[]{String.valueOf(quest_id)});
-                            }
-                            break;
-                        case 5: // Quarterly, Else
-                            if (quest_id == 822 || quest_id == 854 || quest_id == 637 || quest_id == 643) { // Bq1, Bq2, F35, F39 (Quarterly)
-                                int quest_month = Integer.parseInt(quest_time[1]);
-                                int quest_quarter = quest_month - quest_month % 3;
-                                int current_month = Integer.parseInt(current_time[1]);
-                                int current_quarter = current_month - current_month % 3;
-                                if (quest_quarter != current_quarter && reset_passed) {
-                                    db.delete(questlist_table_name, "KEY = ?", new String[]{String.valueOf(quest_id)});
-                                }
-                            } else if (!quest_time[1].equals(current_time[1]) || !quest_time[2].equals(current_time[2])) {
-                                db.delete(questlist_table_name, "KEY = ?", new String[]{String.valueOf(quest_id)});
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                Log.e("KCA", String.format("delete KEV > %d AND KEY < %d", questIdList.get(i), questIdList.get(i + 1)));
             }
 
             for (int i = 0; i < api_list.size(); i++) {
@@ -271,6 +298,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                     }
                 }
             }
+
+            setPrevPageLastNo(last_no);
         }
         test3();
     }
