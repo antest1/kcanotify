@@ -320,6 +320,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_battle">戰鬥</string>
     <string name="viewmenu_quest">任務</string>
     <string name="viewmenu_akashi">改修</string>
-    <string name="setting_menu_view_title_fullmorale_setting">Show Full Morale Infomation</string>
+    <string name="setting_menu_view_title_fullmorale_setting">Show Full Morale Information</string>
     <string name="setting_menu_view_desc_fullmorale_setting">Show full morale info on notification bar</string>
 </resources>

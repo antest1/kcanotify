@@ -375,6 +375,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_quest">Quest</string>
     <string name="viewmenu_akashi">Akashi</string>
     <string name="setting_menu_view_desc_fullmorale_setting">Show full morale info on notification bar</string>
-    <string name="setting_menu_view_title_fullmorale_setting">Show Full Morale Infomation</string>
+    <string name="setting_menu_view_title_fullmorale_setting">Show Full Morale Information</string>
 
 </resources>
