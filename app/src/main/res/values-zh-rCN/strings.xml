@@ -95,7 +95,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- InfoActivity Strings -->
 
     <!-- KcaService Strings -->
-    <string name="kca_init_title" formatted="false">%s 等</string>
+    <string name="kca_init_title" formatted="false">%s 工作中</string>
     <string name="kca_init_content">请在kcanotify内打开游戏。</string>
 
     <string name="kca_noti_title_exp_canceled" formatted="false">远征 %d (%s) 中止。</string>

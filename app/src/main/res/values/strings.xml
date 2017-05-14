@@ -128,7 +128,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ia_gpl" formatted="false" translatable="false">By using %s, you agree to the &lt;a href="http://www.gnu.org/licenses/gpl.txt"&gt;GNU General Public License 3.0&lt;/a&gt;. The whole source code is available on &lt;a href="https://github.com/antest1/kcanotify/"&gt;github repository&lt;/a&gt;.</string>
 
     <!-- KcaService Strings -->
-    <string name="kca_init_title" formatted="false">%s Waiting</string>
+    <string name="kca_init_title" formatted="false">%s Working</string>
     <string name="kca_init_content">Please open the game from within kcanotify.</string>
 
     <string name="kca_noti_title_exp_canceled" formatted="false">Expedition %d (%s) has been canceled.</string>
