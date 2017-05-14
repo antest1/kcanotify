@@ -19,6 +19,7 @@
 -dontwarn okhttp3.**
 -dontwarn okio.**
 -dontwarn org.slf4j.**
+-dontwarn com.google.**
 
 -dontwarn javax.annotation.**
 -dontwarn javax.inject.**
