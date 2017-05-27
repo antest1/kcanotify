@@ -474,6 +474,12 @@
         "memo": "\u27a3Rewards a Repair Team",
         "unlock": [ 836 ]
     },
+	"180": {
+        "code": "A75",
+        "name": "新編「第一戦隊」を編成せよ！",
+        "desc": "編成任務：第一艦隊に新改装された長門型戦艦一番艦「長門改二」及び同二番艦「陸奥改」からなる新編第一戦隊を配備せよ！",
+        "memo": "給糧艦「伊良湖」x1"
+    },
     
     "202": {
         "code": "B1",
@@ -760,7 +766,7 @@
     "277": {
         "code": "B45",
         "name": "DesDiv 6's Thorough Anti-Submarine Patrol, Nanodesu!",
-        "desc": "Sortie Akatsuki Kai Ni, Hibiki/Verniy, Ikazuchi and Inazuma to [W1-5]. B-Rank+ the boss node.",
+        "desc": "Sortie Akatsuki Kai Ni, Hibiki/Verniy, Ikazuchi and Inazuma to [W1-5]. A-Rank+ the boss node.",
         "memo": "\u27a3Rewards 2 Screws and a Type 93 Passive SONAR"
     },
     "278": {
@@ -1107,16 +1113,29 @@
         "unlock": [ 852 ]
     },
     "852": {
-        "code": "B97",
-        "name": "Deploy the remodeled light attack carrier to the front!",
-        "desc": "Sortie Suzuya-Kou Kai Ni and score an S rank the boss nodes at [W6-2] and [W6-5].",
-        "memo": "\u2623NOTICE!: The CAV remodel cannot complete the quest. Must be CVL.\u2623 \u27a3Rewards a Type 0 Fighter Model 63 (Fighter-bomber) and a 8cm High-angle Gun Kai + Extra Machine Guns"
+        "code": "B96",
+        "name": "Remodeled Light Attack Carrier, Deploy to the Front Lines!",
+        "desc": "Sortie Suzuya-Kou Kai Ni (not CAV) as flagship to [W6-2] and [W6-5]. S-Rank the boss nodes of each.",
+        "memo": "\u2623NOTICE\u2623 The CAV remodel cannot complete this quest. Suzuya must be a CVL.\n\u27a3Rewards a Type 0 Fighter Model 63 (Fighter-bomber) and a 8cm High-angle Gun Kai + Extra Machine Guns"
     },
     "853": {
-        "code": "B96",
-        "name": "Vigilantly patrol the sea area near the naval base!",
-        "desc": "Sortie an CL(T)/CA(V)/CT as Flagship with at least 2 Destroyers and score an A rank on the boss nodes of [W1-2],[W1-3],[W1-4] and [W1-5].",
+        "code": "B97",
+        "name": "Vigilantly Patrol the Waters of the Naval Base!",
+        "desc": "Sortie a CL/CA(V) as flagship and at least 2 DD in any suitable fleet composition to [W1-2], [W1-3], [W1-4] and [W1-5]. A-Rank+ the boss nodes of each.",
         "memo": "\u27a3Rewards 2 Irako, 4 Screws and a Furniture Fairy"
+    },
+    "855": {
+        "code": "B98",
+        "name": "Strive to Reinforce the Coast Guard's Logistics!",
+        "desc": "Sortie at least 3 DD/DE to [W1-3], [W1-4], [W1-5] and [W1-6]. S-Rank the boss nodes of each where applicable. Reach node N of [W1-6] once.",
+        "memo": "\u27a3Rewards a Furniture Fairy",
+        "unlock": [ 856 ]
+    },
+    "856": {
+        "code": "B99",
+        "name": "1st Battleship Division, Set Sail!",
+        "desc": "Sortie Nagato Kai Ni as flagship with Mutsu Kai in the second slot to [W4-5] and [W5-5]. S-Rank the boss nodes of each.",
+        "memo": "\u27a3Rewards a New Design Anti-Torpedo Bulge (Large)"
     },
     
     "201": {
@@ -1551,8 +1570,12 @@
         "desc": "Have 5000 steel and 1500 bauxite. Complete Expeditions 30 and 31.",
         "memo": "\u2718Consumes the resources. \u27a3Rewards a Ne-Type Engine"
     },    
-    
-    
+	"424": {
+        "code": "D22",
+        "name": "輸送船団護衛を強化せよ！",
+        "desc": "(Monthly) Complete Expedition 5 four times."
+    },
+        
     "501": {
         "code": "E1",
         "name": "Resupply for the First Time!",
