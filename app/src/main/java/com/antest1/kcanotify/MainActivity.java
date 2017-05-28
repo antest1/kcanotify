@@ -8,9 +8,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -30,7 +28,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Menu;
@@ -40,7 +37,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -57,8 +53,8 @@ import okhttp3.Response;
 
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
@@ -89,18 +85,17 @@ import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
-import static com.antest1.kcanotify.KcaUtils.readCacheData;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
-import static com.antest1.kcanotify.KcaUtils.writeCacheData;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "KCAV";
     public static boolean[] warnType = new boolean[5];
     private static final int REQUEST_VPN = 1;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
-    public static final int REQUEST_READEXT_PERMISSION = 3;
+    public static final int REQUEST_EXTERNAL_PERMISSION = 3;
 
     AssetManager assetManager;
+    KcaDBHelper dbHelper;
     Toolbar toolbar;
     private boolean running = false;
     private AlertDialog dialogVpn = null;
@@ -128,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vpn_main);
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         assetManager = getAssets();
+        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -213,14 +209,14 @@ public class MainActivity extends AppCompatActivity {
         int viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
         kcafairybtn.setImageResource(viewBitmapSmallId);
         kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                        R.color.black), PorterDuff.Mode.MULTIPLY);
+                R.color.black), PorterDuff.Mode.MULTIPLY);
         kcafairybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                         && !Settings.canDrawOverlays(getApplicationContext())) {
                     // Can not draw overlays: pass
-                } else if(KcaService.getServiceStatus()) {
+                } else if (KcaService.getServiceStatus()) {
                     startService(new Intent(getApplicationContext(), KcaViewButtonService.class)
                             .setAction(KcaViewButtonService.RETURN_FAIRY_ACTION));
                 }
@@ -262,8 +258,9 @@ public class MainActivity extends AppCompatActivity {
         loadTranslationData(assetManager, getApplicationContext());
 
         Arrays.fill(warnType, false);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READEXT_PERMISSION);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_PERMISSION);
         }
 
         if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)
@@ -291,8 +288,8 @@ public class MainActivity extends AppCompatActivity {
         if (warnType[REQUEST_OVERLAY_PERMISSION]) {
             warnText = warnText.concat("\n").concat(getString(R.string.ma_toast_overay_diabled));
         }
-        if (warnType[REQUEST_READEXT_PERMISSION]) {
-            warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_readext_denied));
+        if (warnType[REQUEST_EXTERNAL_PERMISSION]) {
+            warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_external_denied));
         }
 
         if (warnText.length() > 0) {
@@ -329,6 +326,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingActivity.class));
+            return true;
+        }
+        if (id == R.id.action_errorlog) {
+            startActivity(new Intent(this, ErrorlogActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -400,20 +401,19 @@ public class MainActivity extends AppCompatActivity {
         if (KcaApiData.isGameDataLoaded()) return 1;
         String current_version = getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
         String default_version = getString(R.string.default_gamedata_version);
-        JsonObject cachedData = readCacheData(getApplicationContext(), KCANOTIFY_S2_CACHE_FILENAME);
-        boolean isValidCachedData = cachedData != null && !cachedData.isJsonNull() && cachedData.has("api_data");
-        if (current_version.length() > 0 && isValidCachedData && KcaUtils.compareVersion(current_version, default_version)) {
-            KcaApiData.getKcGameData(cachedData.getAsJsonObject("api_data"));
+        if (dbHelper.getValue(DB_KEY_STARTDATA) != null && KcaUtils.compareVersion(current_version, default_version)) {
+            JsonObject api_data = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA).getAsJsonObject("api_data");
+            KcaApiData.getKcGameData(api_data);
             return 1;
         } else {
             try {
                 AssetManager.AssetInputStream ais =
                         (AssetManager.AssetInputStream) assetManager.open("api_start2");
                 byte[] bytes = KcaUtils.gzipdecompress(ByteStreams.toByteArray(ais));
+                dbHelper.putValue(DB_KEY_STARTDATA, new String(bytes));
                 JsonElement data = new JsonParser().parse(new String(bytes));
                 JsonObject api_data = gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data");
                 KcaApiData.getKcGameData(api_data);
-                writeCacheData(getApplicationContext(), bytes, KCANOTIFY_S2_CACHE_FILENAME);
                 setPreferences(getApplicationContext(), PREF_KCA_VERSION, default_version);
             } catch (IOException e) {
                 return 0;
@@ -513,8 +513,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_READEXT_PERMISSION: {
-                warnType[REQUEST_READEXT_PERMISSION] = !(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
+            case REQUEST_EXTERNAL_PERMISSION: {
+                warnType[REQUEST_EXTERNAL_PERMISSION] = !(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
                 setWarning();
             }
         }
@@ -529,7 +529,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
             KcaApplication.defaultLocale = newConfig.locale;
         }
-        if(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
+        if (getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
             LocaleUtils.setLocale(KcaApplication.defaultLocale);
         } else {
             String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");

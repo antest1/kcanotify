@@ -241,8 +241,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sound_kind_mute">静音</string>
     <string name="sound_kind_normal">响铃</string>
     <string name="sound_kind_vibrate">振动</string>
-    <string name="ma_permission_readext_confirmed">允许访问外置存储：开</string>
-    <string name="ma_permission_readext_denied">允许访问外置存储：关 （只能使用系统铃声）</string>
+    <string name="ma_permission_external_confirmed">允许访问外置存储：开</string>
+    <string name="ma_permission_external_denied">允许访问外置存储：关 （只能使用系统铃声/Cannot export error log）</string>
     <string name="raid_type1">资源损失</string>
     <string name="raid_type4">防空完全胜利</string>
     <string name="raid_type3">基地航空队损害</string>
@@ -322,4 +322,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_akashi">改修</string>
     <string name="setting_menu_view_title_fullmorale_setting">Show Full Morale Information</string>
     <string name="setting_menu_view_desc_fullmorale_setting">Show full morale info on notification bar</string>
+    <string name="action_errorlog">错误日志</string>
+    <string name="errlog_dialog_message">Do you want to clear the whole error log?</string>
+    <string name="errlog_cpy_to_clipboard">Text has been copied to clipboard.</string>
 </resources>

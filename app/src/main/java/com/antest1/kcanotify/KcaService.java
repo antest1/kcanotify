@@ -17,7 +17,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -32,10 +31,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.androidquery.AQuery;
 import com.androidquery.callback.AbstractAjaxCallback;
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -44,17 +40,12 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.ByteArrayEntity;
-
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -63,13 +54,118 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-
-import static com.antest1.kcanotify.KcaApiData.*;
-import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
+import static com.antest1.kcanotify.KcaApiData.getNodeColor;
+import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
+import static com.antest1.kcanotify.KcaApiData.helper;
+import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
+import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
+import static com.antest1.kcanotify.KcaApiData.updateUserShip;
+import static com.antest1.kcanotify.KcaConstants.API_BATTLE_REQS;
+import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_DECK;
+import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_KDOCK;
+import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_MAPINFO;
+import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_MISSION;
+import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_NDOCK;
+import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_PRACTICE;
+import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_QUESTLIST;
+import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_REQUIRED_INFO;
+import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_SHIP3;
+import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_SHIP_DECK;
+import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_SLOT_ITEM;
+import static com.antest1.kcanotify.KcaConstants.API_PORT;
+import static com.antest1.kcanotify.KcaConstants.API_QUEST_REQS;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_COMBINED_GOBACKPORT;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_HENSEI_CHANGE;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_HENSEI_COMBINED;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_HENSEI_PRESET;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_KAISOU_POWERUP;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_KAISOU_SLOTSET;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_KAISOU_SLOTSET_EX;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_KAISOU_SLOT_DEPRIVE;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_KAISOU_SLOT_EXCHANGE;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_KAISOU_UNSLOTSET_ALL;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_KOUSYOU_CREATESHIP;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_KOUSYOU_CREATETIEM;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_KOUSYOU_DESTROYITEM;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_KOUSYOU_DESTROYSHIP;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_KOUSYOU_GETSHIP;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_KOUSYOU_REMOEL_SLOT;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_MAP_SELECT_EVENTMAP_RANK;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_MAP_START;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_MEMBER_GET_INCENTIVE;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_MEMBER_GET_PRACTICE_ENEMYINFO;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_MISSION_RESULT;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_MISSION_RETURN;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_NYUKYO_SPEEDCHAGNE;
+import static com.antest1.kcanotify.KcaConstants.API_REQ_PRACTICE_BATTLE;
+import static com.antest1.kcanotify.KcaConstants.API_START2;
+import static com.antest1.kcanotify.KcaConstants.API_WORLD_GET_ID;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLENODE;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_BATTLE;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_NOTI;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_OPENDB;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SERVICE;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_VPN;
+import static com.antest1.kcanotify.KcaConstants.FRONT_NONE;
+import static com.antest1.kcanotify.KcaConstants.HD_DAMECON;
+import static com.antest1.kcanotify.KcaConstants.HD_DANGER;
+import static com.antest1.kcanotify.KcaConstants.HD_NONE;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_DATA_LOADED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_BATTLE_DROPINFO;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_BATTLE_INFO;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_BATTLE_NODE;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_DOCK_FIN;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_EXP_FIN;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_HEAVY_DMG;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_OPENDB_FAILED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_FAIRY_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_LANGUAGE_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_PROCESS_BATTLE_FAILED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_VPN_DATA_ERROR;
+import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_HDMG;
+import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_INFO;
+import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_NODE;
+import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
+import static com.antest1.kcanotify.KcaConstants.KCA_VERSION;
+import static com.antest1.kcanotify.KcaConstants.NOTI_DOCK;
+import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
+import static com.antest1.kcanotify.KcaConstants.NOTI_FRONT;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
+import static com.antest1.kcanotify.KcaConstants.PREF_FULLMORALE_SETTING;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_NS;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
+import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
+import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
+import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
 import static com.antest1.kcanotify.KcaQuestViewService.REFRESH_QUESTVIEW_ACTION;
-import static com.antest1.kcanotify.KcaUtils.*;
+import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
+import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
+import static com.antest1.kcanotify.KcaUtils.getId;
+import static com.antest1.kcanotify.KcaUtils.getNotificationId;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.joinStr;
+import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class KcaService extends Service {
     public static String currentLocale;
@@ -85,7 +181,6 @@ public class KcaService extends Service {
     public static boolean isInBattle;
     public static boolean isCombined;
 
-    AQuery aq;
     Context contextWithLocale;
     KcaDBHelper dbHelper;
 
@@ -166,7 +261,6 @@ public class KcaService extends Service {
             }
         });
 
-        aq = new AQuery(KcaService.this);
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -459,7 +553,7 @@ public class KcaService extends Service {
                     api_start2_down_mode = true;
                 } else {
                     api_start2_down_mode = false;
-                    JsonObject kcDataObj = readCacheData(getApplicationContext(), KCANOTIFY_S2_CACHE_FILENAME);
+                    JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
                     //Log.e("KCA", kcDataObj.toJSONString());
                     if (kcDataObj != null && kcDataObj.has("api_data")) {
                         //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
@@ -492,7 +586,7 @@ public class KcaService extends Service {
                 //Toast.makeText(contextWithLocale, "API_START2", Toast.LENGTH_LONG).show();
 
                 api_start2_data = jsonDataObj.toString();
-                writeCacheData(getApplicationContext(), api_start2_data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
+                dbHelper.putValue(DB_KEY_STARTDATA, api_start2_data);
 
                 if (jsonDataObj.has("api_data")) {
                     //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
@@ -1239,32 +1333,27 @@ public class KcaService extends Service {
             }
 
             if (url.equals(KCA_API_VPN_DATA_ERROR)) { // VPN Data Dump Send
-                String app_version = BuildConfig.VERSION_NAME;
-                String token = "a49467944c34d567fa7f2b051a59c808";
                 String api_url = jsonDataObj.get("uri").getAsString();
-                String api_request = "see_data";
+                String api_request = jsonDataObj.get("request").getAsString();
+                String api_response = jsonDataObj.get("response").getAsString();
+                String api_error = jsonDataObj.get("error").getAsString();
+
+                List<String> filtered_resquest_list = new ArrayList<String>();
+                try {
+                    String[] requestData = api_request.split("&");
+                    for (int i = 0; i < requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if (!decodedData.startsWith("api_token")) {
+                            filtered_resquest_list.add(requestData[i]);
+                        }
+                    }
+                    api_request = joinStr(filtered_resquest_list, "&");
+                } catch (UnsupportedEncodingException e1) {
+                    e1.printStackTrace();
+                }
 
                 customToast.showToast(getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-                String dataSendUrl = String.format(getStringWithLocale(R.string.errorlog_service_link), token, api_url, api_request, app_version);
-                AjaxCallback<String> cb = new AjaxCallback<String>() {
-                    @Override
-                    public void callback(String url, String data, AjaxStatus status) {
-                        // do nothing
-                    }
-                };
-                if (aq == null) aq = new AQuery(KcaService.this);
-                cb.header("Referer", "app:/KCA/");
-                cb.header("Content-Type", "application/x-www-form-urlencoded");
-                HttpEntity entity = null;
-
-                JsonObject sendData = new JsonObject();
-                //sendData.addProperty("data", data);
-                sendData.addProperty("error", jsonDataObj.toString());
-                String sendDataString = sendData.toString();
-
-                entity = new ByteArrayEntity(sendDataString.getBytes());
-                cb.param(AQuery.POST_ENTITY, entity);
-                aq.ajax(dataSendUrl, String.class, cb);
+                dbHelper.recordErrorLog(ERROR_TYPE_VPN, api_url, api_request, api_response, api_error);
             }
 
         } catch (JsonSyntaxException e) {
@@ -1272,18 +1361,11 @@ public class KcaService extends Service {
             //Log.e("KCA", data);
             e.printStackTrace();
 
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-
-            String app_version = BuildConfig.VERSION_NAME;
-            String token = "a49467944c34d567fa7f2b051a59c808";
-            String api_url = "";
             String api_request = "";
             List<String> filtered_resquest_list = new ArrayList<String>();
             try {
-                api_url = URLEncoder.encode(url, "utf-8");
                 String[] requestData = request.split("&");
                 for (int i = 0; i < requestData.length; i++) {
                     String decodedData = URLDecoder.decode(requestData[i], "utf-8");
@@ -1291,31 +1373,16 @@ public class KcaService extends Service {
                         filtered_resquest_list.add(requestData[i]);
                     }
                 }
-                api_request = URLEncoder.encode(joinStr(filtered_resquest_list, "&"), "utf-8");
+                api_request = joinStr(filtered_resquest_list, "&");
             } catch (UnsupportedEncodingException e1) {
                 e1.printStackTrace();
             }
-            customToast.showToast(getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-            String dataSendUrl = String.format(getStringWithLocale(R.string.errorlog_service_link), token, api_url, api_request, app_version);
-            AjaxCallback<String> cb = new AjaxCallback<String>() {
-                @Override
-                public void callback(String url, String data, AjaxStatus status) {
-                    // do nothing
-                }
-            };
-            if (aq == null) aq = new AQuery(KcaService.this);
-            cb.header("Referer", "app:/KCA/");
-            cb.header("Content-Type", "application/x-www-form-urlencoded");
-            HttpEntity entity = null;
 
-            JsonObject sendData = new JsonObject();
-            //sendData.addProperty("data", data);
-            sendData.addProperty("error", getStringFromException(e));
-            String sendDataString = sendData.toString();
-
-            entity = new ByteArrayEntity(sendDataString.getBytes());
-            cb.param(AQuery.POST_ENTITY, entity);
-            aq.ajax(dataSendUrl, String.class, cb);
+            String process_data = raw.toString();
+            if (url.contains(API_PORT)) {
+                process_data = "PORT DATA OMITTED";
+            }
+            dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, url, api_request, process_data, getStringFromException(e));
         }
     }
 
@@ -1483,73 +1550,24 @@ public class KcaService extends Service {
 
             if (url.startsWith(KCA_API_OPENDB_FAILED)) {
                 customToast.showToast(getStringWithLocale(R.string.opendb_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+                dbHelper.recordErrorLog(ERROR_TYPE_OPENDB, url, "opendb", data, "failed");
             }
 
             if (url.startsWith(KCA_API_PROCESS_BATTLE_FAILED)) {
-                String app_version = BuildConfig.VERSION_NAME;
                 String api_data = jsonDataObj.get("api_data").getAsString();
                 String api_url = jsonDataObj.get("api_url").getAsString();
                 String api_node = jsonDataObj.get("api_node").getAsString();
                 String api_error = jsonDataObj.get("api_error").getAsString();
-                String token = "df1629d6820907e7a09ea1e98d3041c2";
-
                 customToast.showToast(getStringWithLocale(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
-                String dataSendUrl = String.format(getStringWithLocale(R.string.errorlog_battle_link), token, api_url, api_node, app_version);
-                AjaxCallback<String> cb = new AjaxCallback<String>() {
-                    @Override
-                    public void callback(String url, String data, AjaxStatus status) {
-                        // do nothing
-                    }
-                };
-
-                JsonObject sendData = new JsonObject();
-                sendData.addProperty("data", api_data);
-                sendData.addProperty("error", api_error);
-                String sendDataString = sendData.toString();
-
-                if (aq == null) aq = new AQuery(KcaService.this);
-                cb.header("Referer", "app:/KCA/");
-                cb.header("Content-Type", "application/x-www-form-urlencoded");
-                HttpEntity entity = new ByteArrayEntity(sendDataString.getBytes());
-                cb.param(AQuery.POST_ENTITY, entity);
-                aq.ajax(dataSendUrl, String.class, cb);
+                dbHelper.recordErrorLog(ERROR_TYPE_BATTLE, api_url, api_node, api_data, api_error);
             }
-
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
-
-            String app_version = BuildConfig.VERSION_NAME;
-            String token = "8988e900c3ea9bb1c9df330c4833c144";
-            String kca_url = "";
-            try {
-                kca_url = URLEncoder.encode(url, "utf-8");
-            } catch (UnsupportedEncodingException e1) {
-                e1.printStackTrace();
-            }
-
             customToast.showToast(getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
-            String dataSendUrl = String.format(getStringWithLocale(R.string.errorlog_notify_link), token, kca_url, app_version);
-            AjaxCallback<String> cb = new AjaxCallback<String>() {
-                @Override
-                public void callback(String url, String data, AjaxStatus status) {
-                    // do nothing
-                }
-            };
-
-            JsonObject sendData = new JsonObject();
-            sendData.addProperty("data", data);
-            sendData.addProperty("error", getStringFromException(e));
-            String sendDataString = sendData.toString();
-
-            if (aq == null) aq = new AQuery(KcaService.this);
-            cb.header("Referer", "app:/KCA/");
-            cb.header("Content-Type", "application/x-www-form-urlencoded");
-            HttpEntity entity = new ByteArrayEntity(sendDataString.getBytes());
-            cb.param(AQuery.POST_ENTITY, entity);
-            aq.ajax(dataSendUrl, String.class, cb);
+            dbHelper.recordErrorLog(ERROR_TYPE_NOTI, url, "notification", data, getStringFromException(e));
         }
     }
 
@@ -1948,62 +1966,6 @@ public class KcaService extends Service {
         }
         Log.e("KCA", "Alarm set to: " + String.valueOf(time) + " " + String.valueOf(code));
     }
-
-    /*
-    private class retrieveApiStartData extends AsyncTask<String, Void, String> {
-        public final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
-        OkHttpClient client = new OkHttpClient.Builder().build();
-
-        @Override
-        protected String doInBackground(String... params) {
-            String content = null;
-            content = executeClient(params[0], params[1], params[2]);
-
-            return content;
-        }
-
-        public String executeClient(String token, String method, String data) {
-            if (KcaApiData.isGameDataLoaded()) return null;
-            kcaFirstDeckInfo = getStringWithLocale(R.string.kca_toast_loading_data);
-            String dataUrl;
-            if (kca_version == null) {
-                dataUrl = String.format(getStringWithLocale(R.string.api_start2_recent_version_link));
-            } else {
-                dataUrl = String.format(getStringWithLocale(R.string.api_start2_version_link), kca_version);
-            }
-
-            AjaxCallback<String> cb = new AjaxCallback<String>() {
-                @Override
-                public void callback(String url, String data, AjaxStatus status) {
-                    KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
-                    try {
-                        String remote_kca_version = status.getHeader("X-Api-Version");
-                        if (kca_version != null && !kca_version.equals(remote_kca_version)) {
-                            customToast.showToast(getStringWithLocale(R.string.kca_toast_inconsistent_data), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-                        } else {
-                            if (kca_version == null) kca_version = remote_kca_version;
-                            writeCacheData(getApplicationContext(), data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
-                            KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
-                            setPreferences(getApplicationContext(), "kca_version", kca_version);
-                        }
-                        Log.e("KCA", "Data Load Finished");
-                    } catch (IOException e1) {
-                        customToast.showToast(getStringWithLocale(R.string.kca_toast_ioexceptionerror), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-                        Log.e("KCA", "I/O Error");
-                    }
-                    api_start2_loading_flag = false;
-                }
-            };
-            AQuery aq = new AQuery(KcaService.this);
-            cb.header("Referer", "app:/KCA/");
-            cb.header("Content-Type", "application/x-www-form-urlencoded");
-            Log.e("KCA", dataUrl);
-            aq.ajax(dataUrl, String.class, cb);
-
-            return null;
-        }
-    }
-    */
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

@@ -230,7 +230,7 @@ public class KcaVpnData {
             JsonObject error_data = new JsonObject();
             error_data.addProperty("error", getStringFromException(e));
             error_data.addProperty("uri", requestUri);
-            error_data.addProperty("request", byteArrayToHex(requestData));
+            error_data.addProperty("request", requestData.toString());
             String responseDataStr = byteArrayToHex(responseData);
             if (responseDataStr.length() > 240) {
                 error_data.addProperty("response", responseDataStr.substring(0, 240));

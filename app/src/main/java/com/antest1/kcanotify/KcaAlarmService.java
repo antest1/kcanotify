@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -27,7 +26,9 @@ import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
 import static com.antest1.kcanotify.KcaConstants.NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
@@ -41,7 +42,6 @@ import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
-import static com.antest1.kcanotify.KcaUtils.readCacheData;
 
 public class KcaAlarmService extends Service {
     public static final int TYPE_EXPEDITION = 1;
@@ -51,6 +51,7 @@ public class KcaAlarmService extends Service {
     public static final long ALARM_DELAY = 61000;
 
     AudioManager mAudioManager;
+    KcaDBHelper dbHelper;
     NotificationManager notificationManager;
     Bitmap expBitmap, dockBitmap = null;
     public static Handler sHandler = null;
@@ -76,6 +77,7 @@ public class KcaAlarmService extends Service {
     @Override
     public void onCreate() {
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
         dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -113,7 +115,7 @@ public class KcaAlarmService extends Service {
                         String shipName = "";
                         if (shipId != -1) {
                             if (!isGameDataLoaded()) {
-                                JsonObject cachedData = readCacheData(getApplicationContext(), KCANOTIFY_S2_CACHE_FILENAME);
+                                JsonObject cachedData = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
                                 KcaApiData.getKcGameData(cachedData.getAsJsonObject("api_data"));
                             }
                             JsonObject kcShipData = KcaApiData.getKcShipDataById(shipId, "name");

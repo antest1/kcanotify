@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -21,7 +20,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import static com.antest1.kcanotify.KcaQuestViewService.getPrevPageLastNo;
@@ -35,8 +33,10 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     private Context context;
     private static final String db_name = "kcanotify_db";
     private static final String table_name = "kca_userdata";
+    private static final String error_table_name = "kca_errorlog";
     private static final String slotitem_table_name = "kca_slotitem";
     private static final String questlist_table_name = "kca_questlist";
+
     SQLiteDatabase db;
 
     public KcaDBHelper(Context context, SQLiteDatabase.CursorFactory factory, int version) {
@@ -66,14 +66,73 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         sb.append(" TIME TEXT ) "); // YY-MM-DD-HH
         db.execSQL(sb.toString());
         Log.e("KCA", "table generated");
+
+        sb = new StringBuffer();
+        sb.append(" CREATE TABLE ".concat(error_table_name).concat(" ( "));
+        sb.append(" type TEXT, ");
+        sb.append(" version TEXT, ");
+        sb.append(" url TEXT, ");
+        sb.append(" request TEXT, ");
+        sb.append(" data TEXT, ");
+        sb.append(" error TEXT, ");
+        sb.append(" timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ) "); // YY-MM-DD-HH
+        db.execSQL(sb.toString());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists " + table_name);
+        db.execSQL("drop table if exists " + error_table_name);
         db.execSQL("drop table if exists " + slotitem_table_name);
         db.execSQL("drop table if exists " + questlist_table_name);
         onCreate(db);
+    }
+
+    public void recordErrorLog(String type, String url, String request, String data, String error) {
+        db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("type", type);
+        values.put("version", BuildConfig.VERSION_NAME);
+        values.put("url", url);
+        values.put("request", request);
+        values.put("data", data);
+        values.put("error", error);
+        db.insert(error_table_name, null, values);
+    }
+
+    public List<String> getErrorLog(int limit, boolean full) {
+        List<String> log_list = new ArrayList<>();
+        db = this.getReadableDatabase();
+        String col, sql;
+        String type, version, url, request, data, error, timestamp;
+        if (full) col = "type, version, url, request, data, error, datetime(timestamp, 'localtime') AS ts";
+        else col = "type, url, error";
+
+        if (limit > 0) sql = String.format("SELECT %s FROM %s ORDER BY timestamp DESC LIMIT %d", col, error_table_name, limit);
+        else sql = String.format("SELECT %s FROM %s ORDER BY timestamp DESC", col, error_table_name);
+
+        Cursor c = db.rawQuery(sql, null);
+        while (c.moveToNext()) {
+            type = c.getString(c.getColumnIndex("type"));
+            url = c.getString(c.getColumnIndex("url"));
+            error = c.getString(c.getColumnIndex("error"));
+            if (full) {
+                version = c.getString(c.getColumnIndex("version"));
+                request = c.getString(c.getColumnIndex("request"));
+                data = c.getString(c.getColumnIndex("data"));
+                timestamp = c.getString(c.getColumnIndex("ts"));
+                log_list.add(String.format("[%s]\t%s\t%s\t%s\t%s\t%s\t%s", type, version, url, error, request, data, timestamp));
+            } else {
+                log_list.add(String.format("[%s]\t%s\t%s", type, url, error));
+            }
+        }
+        c.close();
+        return log_list;
+    }
+
+    public void clearErrorLog() {
+        db = this.getWritableDatabase();
+        db.delete(error_table_name, null, null);
     }
 
     // for kca_userdata

@@ -73,12 +73,6 @@ public class KcaUtils {
         return resultStr;
     }
 
-    public static void writeCacheData(Context ctx, byte[] data, String filename) throws IOException {
-        FileOutputStream fos = ctx.openFileOutput(filename, Context.MODE_PRIVATE);
-        fos.write(data);
-        fos.close();
-    }
-
     public static String getStringPreferences(Context ctx, String key) {
         SharedPreferences pref = ctx.getSharedPreferences("pref", Context.MODE_PRIVATE);
         return pref.getString(key, "");

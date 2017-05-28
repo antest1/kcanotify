@@ -63,7 +63,9 @@ public class KcaBattle {
         sHandler = h;
     }
 
-    public static JsonObject getCurrentApiData() { return currentApiData; }
+    public static JsonObject getCurrentApiData() {
+        return currentApiData;
+    }
 
     public static void setCurrentApiData(JsonObject obj) {
         currentApiData = obj;
@@ -1544,8 +1546,6 @@ public class KcaBattle {
                 sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
-
-
             }
 
             if (url.equals(API_REQ_COMBINED_GOBACKPORT)) {
@@ -1578,21 +1578,17 @@ public class KcaBattle {
         } catch (Exception e) {
             JsonObject errorInfo = new JsonObject();
             String currentNodeAlphabet = KcaApiData.getCurrentNodeAlphabet(currentMapArea, currentMapNo, currentNode);
-            try {
-                errorInfo.addProperty("api_data", api_data.toString());
-                errorInfo.addProperty("api_url", URLEncoder.encode(url, "utf-8"));
-                errorInfo.addProperty("api_node", URLEncoder.encode(String.format("%d-%d-%s", currentMapArea, currentMapNo, currentNodeAlphabet), "utf-8"));
-                errorInfo.addProperty("api_error", getStringFromException(e));
-            } catch (UnsupportedEncodingException e1) {
-                e1.printStackTrace();
-            }
+            errorInfo.addProperty("api_data", api_data.toString());
+            errorInfo.addProperty("api_url", url);
+            errorInfo.addProperty("api_node", String.format("%d-%d-%s", currentMapArea, currentMapNo, currentNodeAlphabet));
+            errorInfo.addProperty("api_error", getStringFromException(e));
+
             Bundle bundle = new Bundle();
             bundle.putString("url", KCA_API_PROCESS_BATTLE_FAILED);
             bundle.putString("data", gson.toJson(errorInfo));
             Message sMsg = sHandler.obtainMessage();
             sMsg.setData(bundle);
             sHandler.sendMessage(sMsg);
-
         }
     }
 }
