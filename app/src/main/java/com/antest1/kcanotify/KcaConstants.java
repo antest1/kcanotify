@@ -10,13 +10,16 @@ public final class KcaConstants {
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
     public static final String KCANOTIFY_USERITEM_CACHE_FILENAME = "kca_userslotitem";
     public static final int KCANOTIFY_DB_VERSION = 2;
+    public static final int KCANOTIFY_QTDB_VERSION = 1;
 
     public static final String DB_KEY_STARTDATA = "key_startdata";
     public static final String DB_KEY_DECKPORT = "key_deckport";
     public static final String DB_KEY_MAPEDGES = "key_mapedges";
     public static final String DB_KEY_USEREQUIP = "key_userequip";
+    public static final String DB_KEY_QUESTTRACK = "key_questtrack";
     public static final String DB_KEY_BATTLEINFO = "key_battleinfo";
     public static final String DB_KEY_BATTLENODE = "key_battlenode";
+    public static final String DB_KEY_QTRACKINFO = "key_qtrackinfo";
 
     public static final String ERROR_TYPE_SERVICE = "S";
     public static final String ERROR_TYPE_BATTLE = "B";
@@ -66,8 +69,8 @@ public final class KcaConstants {
 
     public static final String API_GET_MEMBER_QUESTLIST = "/api_get_member/questlist";
     public static final String API_REQ_QUEST_START = "/api_req_quest/start";
-    public static final String API_REQ_QUEST_STOP = "api_req_quest/stop";
-    public static final String API_REQ_QUEST_CLEARITEMGET = "api_req_quest/clearitemget";
+    public static final String API_REQ_QUEST_STOP = "/api_req_quest/stop";
+    public static final String API_REQ_QUEST_CLEARITEMGET = "/api_req_quest/clearitemget";
 
     public static final String[] API_QUEST_REQ_LIST = new String[]{
             API_GET_MEMBER_QUESTLIST,

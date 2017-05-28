@@ -2,7 +2,6 @@ package com.antest1.kcanotify;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,8 +16,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +24,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,6 +43,7 @@ public class KcaApiData {
 
     public static Map<Integer, JsonObject> kcMissionData = new HashMap<Integer, JsonObject>();
     //public static Map<String, String> kcShipTranslationData = null;
+    public static JsonObject kcQuestTrackData = new JsonObject();
 
     public static int level = 0;
     public static Integer experience = 0;
@@ -500,6 +497,33 @@ public class KcaApiData {
             }
         } catch (IOException e) {
             return 0;
+        }
+    }
+
+    public static int loadQuestTrackDataFromAssets(KcaDBHelper helper, AssetManager am) {
+        if (helper.getValue(DB_KEY_QUESTTRACK) == null) {
+            try {
+                AssetManager.AssetInputStream ais =
+                        (AssetManager.AssetInputStream) am.open("quest_track.json");
+                byte[] bytes = ByteStreams.toByteArray(ais);
+                helper.putValue(DB_KEY_QUESTTRACK, new String(bytes));
+                JsonElement data = new JsonParser().parse(new String(bytes));
+                kcQuestTrackData = data.getAsJsonObject();
+                return 1;
+            } catch (IOException e) {
+                return 0;
+            }
+        } else {
+            kcQuestTrackData = helper.getJsonObjectValue(DB_KEY_QUESTTRACK);
+            return 1;
+        }
+    }
+
+    public static JsonObject getQuestTrackInfo(String id) {
+        if (kcQuestTrackData.has(id)) {
+            return kcQuestTrackData.getAsJsonObject(id);
+        } else {
+            return null;
         }
     }
 

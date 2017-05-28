@@ -32,6 +32,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.androidquery.callback.AbstractAjaxCallback;
+import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -41,6 +42,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -60,103 +62,12 @@ import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
 import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadQuestTrackDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
-import static com.antest1.kcanotify.KcaConstants.API_BATTLE_REQS;
-import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_DECK;
-import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_KDOCK;
-import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_MAPINFO;
-import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_MISSION;
-import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_NDOCK;
-import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_PRACTICE;
-import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_QUESTLIST;
-import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_REQUIRED_INFO;
-import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_SHIP3;
-import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_SHIP_DECK;
-import static com.antest1.kcanotify.KcaConstants.API_GET_MEMBER_SLOT_ITEM;
-import static com.antest1.kcanotify.KcaConstants.API_PORT;
-import static com.antest1.kcanotify.KcaConstants.API_QUEST_REQS;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_COMBINED_GOBACKPORT;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_HENSEI_CHANGE;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_HENSEI_COMBINED;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_HENSEI_PRESET;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_KAISOU_POWERUP;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_KAISOU_SLOTSET;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_KAISOU_SLOTSET_EX;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_KAISOU_SLOT_DEPRIVE;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_KAISOU_SLOT_EXCHANGE;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_KAISOU_UNSLOTSET_ALL;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_KOUSYOU_CREATESHIP;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_KOUSYOU_CREATETIEM;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_KOUSYOU_DESTROYITEM;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_KOUSYOU_DESTROYSHIP;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_KOUSYOU_GETSHIP;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_KOUSYOU_REMOEL_SLOT;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_MAP_SELECT_EVENTMAP_RANK;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_MAP_START;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_MEMBER_GET_INCENTIVE;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_MEMBER_GET_PRACTICE_ENEMYINFO;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_MISSION_RESULT;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_MISSION_RETURN;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_NYUKYO_SPEEDCHAGNE;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_PRACTICE_BATTLE;
-import static com.antest1.kcanotify.KcaConstants.API_START2;
-import static com.antest1.kcanotify.KcaConstants.API_WORLD_GET_ID;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLENODE;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_BATTLE;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_NOTI;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_OPENDB;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SERVICE;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_VPN;
-import static com.antest1.kcanotify.KcaConstants.FRONT_NONE;
-import static com.antest1.kcanotify.KcaConstants.HD_DAMECON;
-import static com.antest1.kcanotify.KcaConstants.HD_DANGER;
-import static com.antest1.kcanotify.KcaConstants.HD_NONE;
-import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_DATA_LOADED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_BATTLE_DROPINFO;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_BATTLE_INFO;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_BATTLE_NODE;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_DOCK_FIN;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_EXP_FIN;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_HEAVY_DMG;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_OPENDB_FAILED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_FAIRY_CHANGED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_LANGUAGE_CHANGED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_PROCESS_BATTLE_FAILED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_VPN_DATA_ERROR;
-import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_HDMG;
-import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_INFO;
-import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_NODE;
-import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
-import static com.antest1.kcanotify.KcaConstants.KCA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.NOTI_DOCK;
-import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
-import static com.antest1.kcanotify.KcaConstants.NOTI_FRONT;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
-import static com.antest1.kcanotify.KcaConstants.PREF_FULLMORALE_SETTING;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_NS;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
-import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
-import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
+import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaQuestViewService.REFRESH_QUESTVIEW_ACTION;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
@@ -183,6 +94,7 @@ public class KcaService extends Service {
 
     Context contextWithLocale;
     KcaDBHelper dbHelper;
+    KcaQuestTracker questTracker;
 
     AlarmManager alarmManager;
     AudioManager mAudioManager;
@@ -240,6 +152,7 @@ public class KcaService extends Service {
         }
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
         KcaDeckInfo.setDBHelper(dbHelper);
         KcaApiData.setDBHelper(dbHelper);
 
@@ -251,6 +164,7 @@ public class KcaService extends Service {
 
         loadSimpleExpeditionInfoFromAssets(assetManager);
         loadShipInitEquipCountFromAssets(assetManager);
+        loadQuestTrackDataFromAssets(dbHelper, assetManager);
 
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -716,6 +630,21 @@ public class KcaService extends Service {
                     startService(new Intent(getBaseContext(), KcaQuestViewService.class)
                             .setAction(REFRESH_QUESTVIEW_ACTION).putExtra("tab_id", api_tab_id));
                 }
+            }
+
+            if (url.startsWith(API_REQ_QUEST_CLEARITEMGET)) {
+                int quest_id = 0;
+                String[] requestData = request.split("&");
+                for (int i = 0; i < requestData.length; i++) {
+                    String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                    if (decodedData.startsWith("api_quest_id")) {
+                        quest_id = Integer.valueOf(decodedData.replace("api_quest_id=", ""));
+                        break;
+                    }
+                }
+                Log.e("KCA", "clear " + String.valueOf(quest_id));
+                dbHelper.removeQuest(quest_id);
+                questTracker.removeQuestTrack(quest_id, true);
             }
 
             // Game Data Dependent Tasks
@@ -1462,6 +1391,13 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_INFO)) {
+                jsonDataObj = dbHelper.getJsonObjectValue(DB_KEY_BATTLEINFO);
+                String api_url = jsonDataObj.get("api_url").getAsString();
+                if (api_url.startsWith(API_REQ_SORTIE_BATTLE_RESULT) || url.startsWith(API_REQ_COMBINED_BATTLERESULT)) {
+                    JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
+                    JsonObject result = questTracker.updateTracker(questTrackData);
+                    Toast.makeText(getApplicationContext(), result.toString(), Toast.LENGTH_LONG).show();
+                }
                 Intent intent = new Intent(KCA_MSG_BATTLE_INFO);
                 // intent.putExtra(KCA_MSG_DATA, data);
                 broadcaster.sendBroadcast(intent);
@@ -1483,6 +1419,12 @@ public class KcaService extends Service {
                             getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
                     //Toast.makeText(getApplicationContext(), currentNodeInfo, Toast.LENGTH_LONG).show();
                 }
+
+                if (jsonDataObj.get("api_url").getAsString().equals(API_REQ_MAP_START)) {
+                    JsonObject result = questTracker.updateTracker(jsonDataObj);
+                    Toast.makeText(getApplicationContext(), result.toString(), Toast.LENGTH_LONG).show();
+                }
+
                 Intent intent = new Intent(KCA_MSG_BATTLE_NODE);
                 //intent.putExtra(KCA_MSG_DATA, data);
                 broadcaster.sendBroadcast(intent);

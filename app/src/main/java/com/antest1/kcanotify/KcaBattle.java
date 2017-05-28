@@ -31,6 +31,9 @@ public class KcaBattle {
     public static JsonObject deckportdata = null;
     public static JsonObject currentApiData = null;
 
+    public static JsonArray ship_ke = null;
+    public static JsonArray ship_ke_combined = null;
+
     public static int[] maxhps = new int[13];
     public static int[] nowhps = new int[13];
     public static int[] afterhps = new int[13];
@@ -482,6 +485,9 @@ public class KcaBattle {
                 Bundle bundle;
                 Message sMsg;
 
+                ship_ke = null;
+                ship_ke_combined = null;
+
                 KcaApiData.resetShipCountInBattle();
                 KcaApiData.resetItemCountInBattle();
                 cleanEscapeList();
@@ -533,6 +539,9 @@ public class KcaBattle {
                 Bundle bundle;
                 Message sMsg;
 
+                ship_ke = null;
+                ship_ke_combined = null;
+
                 int checkcbresult = checkCombinedHeavyDamagedExist();
                 Log.e("KCA", "hd: " + String.valueOf(checkcbresult));
 
@@ -578,6 +587,7 @@ public class KcaBattle {
 
             if (url.equals(API_REQ_SORTIE_BATTLE) || url.equals(API_REQ_PRACTICE_BATTLE)) {
                 cleanData();
+                ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
 
@@ -766,6 +776,7 @@ public class KcaBattle {
             // 아웃레인지, 공습
             if (url.equals(API_REQ_SORTIE_AIRBATTLE) || url.equals(API_REQ_SORTIE_LDAIRBATTLE)) {
                 cleanData();
+                ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
 
@@ -808,12 +819,24 @@ public class KcaBattle {
 
                 nowhps = afterhps;
                 int checkresult = HD_NONE;
-                if (!isEndReached && url.equals(API_REQ_SORTIE_BATTLE_RESULT)) {
-                    checkresult = checkHeavyDamagedExist();
-                    Log.e("KCA", "CheckHeavyDamaged " + String.valueOf(checkresult));
+                if (url.equals(API_REQ_SORTIE_BATTLE_RESULT)) {
+                    if(!isEndReached) {
+                        checkresult = checkHeavyDamagedExist();
+                        Log.e("KCA", "CheckHeavyDamaged " + String.valueOf(checkresult));
+                        Log.e("KCA", String.valueOf(KcaApiData.checkUserItemMax()) + String.valueOf(KcaApiData.checkUserShipMax()));
+                        Log.e("KCA", String.valueOf(KcaApiData.checkUserPortEnough()));
 
-                    Log.e("KCA", String.valueOf(KcaApiData.checkUserItemMax()) + String.valueOf(KcaApiData.checkUserShipMax()));
-                    Log.e("KCA", String.valueOf(KcaApiData.checkUserPortEnough()));
+                        JsonObject heavyDamagedInfo = new JsonObject();
+                        if (checkresult != HD_NONE) {
+                            heavyDamagedInfo.addProperty("data", checkresult);
+                            bundle = new Bundle();
+                            bundle.putString("url", KCA_API_NOTI_HEAVY_DMG);
+                            bundle.putString("data", gson.toJson(heavyDamagedInfo));
+                            sMsg = sHandler.obtainMessage();
+                            sMsg.setData(bundle);
+                            sHandler.sendMessage(sMsg);
+                        }
+                    }
 
                     if (KcaApiData.checkUserPortEnough()) {
                         JsonObject dropInfo = new JsonObject();
@@ -830,6 +853,7 @@ public class KcaBattle {
                         } else {
                             dropInfo.addProperty("result", 0);
                         }
+
                         bundle = new Bundle();
                         bundle.putString("url", KCA_API_NOTI_BATTLE_DROPINFO);
                         bundle.putString("data", gson.toJson(dropInfo));
@@ -838,18 +862,27 @@ public class KcaBattle {
                         sHandler.sendMessage(sMsg);
                     }
 
-                    JsonObject heavyDamagedInfo = new JsonObject();
-
-                    if (checkresult != HD_NONE) {
-                        heavyDamagedInfo.addProperty("data", checkresult);
-                        bundle = new Bundle();
-                        bundle.putString("url", KCA_API_NOTI_HEAVY_DMG);
-                        bundle.putString("data", gson.toJson(heavyDamagedInfo));
-                        sMsg = sHandler.obtainMessage();
-                        sMsg.setData(bundle);
-                        sHandler.sendMessage(sMsg);
+                    JsonObject qtrackData = new JsonObject();
+                    qtrackData.addProperty("world", currentMapArea);
+                    qtrackData.addProperty("map", currentMapNo);
+                    qtrackData.addProperty("isboss", isBossReached);
+                    qtrackData.add("ship_ke", ship_ke);
+                    qtrackData.add("deck_port", deckportdata);
+                    qtrackData.add("afterhp", new JsonArray());
+                    for (int v: afterhps) qtrackData.getAsJsonArray("afterhp").add(v);
+                    if (ship_ke_combined != null) {
+                        qtrackData.addProperty("combined_flag", true);
+                        qtrackData.add("ship_ke_combined", ship_ke_combined);
+                        qtrackData.add("aftercbhp", new JsonArray());
+                        for (int v: aftercbhps) qtrackData.getAsJsonArray("aftercbhp").add(v);
+                    } else {
+                        qtrackData.addProperty("combined_flag", false);
                     }
+                    qtrackData.addProperty("result", api_data.get("api_win_rank").getAsString());
+                    helper.putValue(DB_KEY_QTRACKINFO, qtrackData.toString());
                 }
+
+                // ship_ke, afterhp, battle_result
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
@@ -871,6 +904,7 @@ public class KcaBattle {
             if (url.equals(API_REQ_COMBINED_BATTLE) || url.equals(API_REQ_COMBINED_BATTLE_WATER)) {
                 cleanData();
                 cleanCbData();
+                ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 int combined_type = 0;
                 if (url.equals(API_REQ_COMBINED_BATTLE)) combined_type = COMBINED_A;
                 else if (url.equals(API_REQ_COMBINED_BATTLE_WATER)) combined_type = COMBINED_W;
@@ -1046,6 +1080,9 @@ public class KcaBattle {
 
             if (url.equals(API_REQ_COMBINED_BATTLE_EC) || url.equals(API_REQ_COMBINED_BATTLE_EACH) || url.equals(API_REQ_COMBINED_BATTLE_EACH_WATER)) {
                 int combined_type = 0;
+                ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                ship_ke_combined = api_data.getAsJsonArray("api_ship_ke_combined");
+
                 if (url.equals(API_REQ_COMBINED_BATTLE_EACH)) combined_type = COMBINED_A;
                 else if (url.equals(API_REQ_COMBINED_BATTLE_EACH_WATER)) combined_type = COMBINED_W;
                 //else if(url.equals(API_REQ_COMBINED_BATTLE	))	combined_type = COMBINED_D;
@@ -1279,7 +1316,7 @@ public class KcaBattle {
             if (url.equals(API_REQ_COMBINED_AIRBATTLE) || url.equals(API_REQ_COMBINED_LDAIRBATTLE)) {
                 cleanData();
                 cleanCbData();
-
+                ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
 
@@ -1334,7 +1371,7 @@ public class KcaBattle {
 
                 cleanData();
                 cleanCbData();
-
+                ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
 
@@ -1410,6 +1447,8 @@ public class KcaBattle {
 
                 cleanData();
                 cleanCbData();
+                ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                ship_ke_combined = api_data.getAsJsonArray("api_ship_ke_combined");
 
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
@@ -1531,11 +1570,27 @@ public class KcaBattle {
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
 
+                JsonObject qtrackData = new JsonObject();
+                qtrackData.addProperty("world", currentMapArea);
+                qtrackData.addProperty("map", currentMapNo);
+                qtrackData.addProperty("isboss", isBossReached);
+                qtrackData.add("ship_ke", ship_ke);
+                qtrackData.add("deck_port", deckportdata);
+                qtrackData.add("afterhp", new JsonArray());
+                for (int v: afterhps) qtrackData.getAsJsonArray("afterhp").add(v);
+                if (ship_ke_combined != null) {
+                    qtrackData.addProperty("combined_flag", true);
+                    qtrackData.add("ship_ke_combined", ship_ke_combined);
+                    qtrackData.add("aftercbhp", new JsonArray());
+                    for (int v: aftercbhps) qtrackData.getAsJsonArray("aftercbhp").add(v);
+                } else {
+                    qtrackData.addProperty("combined_flag", false);
+                }
+                qtrackData.addProperty("result", api_data.get("api_win_rank").getAsString());
+                helper.putValue(DB_KEY_QTRACKINFO, qtrackData.toString());
+
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
-                if (url.equals(API_REQ_PRACTICE_BATTLE_RESULT)) {
-                    battleResultInfo.addProperty("api_practice_flag", true);
-                }
                 battleResultInfo.addProperty("api_heavy_damaged", checkresult);
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
