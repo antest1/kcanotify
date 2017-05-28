@@ -30,16 +30,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.MalformedJsonException;
-
-import org.apache.commons.httpclient.HttpStatus;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -52,9 +46,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static android.R.attr.name;
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
-import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_S2_CACHE_FILENAME;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_LANGUAGE_CHANGED;
@@ -69,7 +63,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
 import static com.antest1.kcanotify.KcaService.kca_version;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
-import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
@@ -99,6 +93,8 @@ public class SettingActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.action_settings));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         silentText = getString(R.string.settings_string_silent);
+
+
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.fragment_container, new PrefsFragment()).commit();
@@ -228,7 +224,7 @@ public class SettingActivity extends AppCompatActivity {
                             Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
                             if (ringtone == null) {
                                 Toast.makeText(context,
-                                        context.getString(R.string.ma_permission_readext_denied),
+                                        context.getString(R.string.ma_permission_external_denied),
                                         Toast.LENGTH_LONG).show();
                                 pref.setSummary(silentText);
                             }
@@ -310,8 +306,8 @@ public class SettingActivity extends AppCompatActivity {
                         Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
                         if (ringtone == null) {
                             Toast.makeText(context,
-                                    context.getString(R.string.ma_permission_readext_denied),
-                            Toast.LENGTH_LONG).show();
+                                    context.getString(R.string.ma_permission_external_denied),
+                                    Toast.LENGTH_LONG).show();
                             pref.setSummary(silentText);
                         } else {
                             String name = ringtone.getTitle(context);
@@ -438,13 +434,19 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private static class getKcaStart2Data extends AsyncTask<Context, String, String> {
+        final String SUCCESS = "S";
+        final String FAILURE = "F";
+        final String ERROR = "E";
+        String error_msg = "";
+
         Activity activity;
         Context context;
-        String result = null;
+        KcaDBHelper dbHelper;
 
         public getKcaStart2Data(Activity a) {
             activity = a;
             context = a.getApplicationContext();
+            dbHelper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
         }
 
         public String getStringWithLocale(int id) {
@@ -475,43 +477,59 @@ public class SettingActivity extends AppCompatActivity {
                 dataUrl = String.format(context.getString(R.string.api_start2_version_link), kca_version);
             }
 
-            AjaxCallback<String> cb = new AjaxCallback<String>() {
-                @Override
-                public void callback(String url, String data, AjaxStatus status) {
-                    try {
-                        if (status.getCode() == HttpStatus.SC_OK) {
-                            KcaUtils.writeCacheData(context, data.getBytes(), KCANOTIFY_S2_CACHE_FILENAME);
-                            KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
-                            if (kca_version == null) {
-                                kca_version = status.getHeader("X-Api-Version");
-                            }
-                            KcaUtils.setPreferences(context, "kca_version", kca_version);
-                            KcaApiData.setDataLoadTriggered();
-                            Toast.makeText(context,
-                                    getStringWithLocale(R.string.sa_getupdate_finished),
-                                    Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(context,
-                                    String.format(getStringWithLocale(R.string.sa_getupdate_servererror), String.valueOf(status.getCode())),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    } catch (IOException e1) {
-                        Toast.makeText(context,
-                                getStringWithLocale(R.string.sa_getupdate_ioexceptionerror),
-                                Toast.LENGTH_LONG).show();
-                        //Log.e(TAG, "I/O Error");
-                    }
+            OkHttpClient client = new OkHttpClient.Builder().build();
 
+            String checkUrl = String.format(dataUrl);
+            Request.Builder builder = new Request.Builder().url(checkUrl).get();
+            builder.addHeader("Referer", "app:/KCA/");
+            builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
+            error_msg = "";
+            Request request = builder.build();
+            String result;
+            try {
+                Response response = client.newCall(request).execute();
+                if (response.code() == org.apache.http.HttpStatus.SC_OK) {
+                    String data = response.body().string().trim();
+                    dbHelper.putValue(DB_KEY_STARTDATA, data);
+                    KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
+                    if (kca_version == null) {
+                        kca_version = response.header("X-Api-Version");
+                    }
+                    KcaUtils.setPreferences(context, "kca_version", kca_version);
+                    KcaApiData.setDataLoadTriggered();
+                    result = SUCCESS;
+                } else {
+                    error_msg = response.message();
+                    result = FAILURE;
                 }
-            };
-            AQuery aq = new AQuery(context);
-            cb.header("Referer", "app:/KCA/");
-            cb.header("Content-Type", "application/x-www-form-urlencoded");
-            //Log.e(TAG, dataUrl);
-            aq.ajax(dataUrl, String.class, cb);
-            return null;
+            } catch (IOException e) {
+                error_msg = getStringFromException(e);
+                result = ERROR;
+            }
+            return result;
         }
 
+        @Override
+        protected void onPostExecute(String s) {
+            switch (s) {
+                case SUCCESS:
+                    Toast.makeText(context,
+                            getStringWithLocale(R.string.sa_getupdate_finished),
+                            Toast.LENGTH_LONG).show();
+                    break;
+                case FAILURE:
+                    if (error_msg == null) error_msg = "null";
+                    Toast.makeText(context,
+                            String.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
+                            Toast.LENGTH_LONG).show();
+                    break;
+                case ERROR:
+                    Toast.makeText(context,
+                            "Error: ".concat(error_msg),
+                            Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
     }
 
     @Override
