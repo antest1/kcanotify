@@ -43,8 +43,11 @@ import java.util.Locale;
 
 import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLEINFO;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLENODE;
 import static com.antest1.kcanotify.KcaConstants.FAIRY_REVERSE_LIST;
 import static com.antest1.kcanotify.KcaConstants.FRONT_NONE;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_HDMG;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_INFO;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_NODE;
@@ -89,6 +92,7 @@ public class KcaViewButtonService extends Service {
     private int screenWidth, screenHeight;
     private int buttonWidth, buttonHeight;
     private int menuWidth, menuHeight;
+    private KcaDBHelper dbHelper;
     private boolean battleviewEnabled = false;
     public int viewBitmapId = 0;
     public int viewBitmapSmallId = 0;
@@ -133,10 +137,12 @@ public class KcaViewButtonService extends Service {
             clickcount = 0;
             mHandler = new Handler();
             broadcaster = LocalBroadcastManager.getInstance(this);
+            dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             battleinfo_receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    String s = intent.getStringExtra(KCA_MSG_DATA);
+                    //String s = intent.getStringExtra(KCA_MSG_DATA);
+                    String s = dbHelper.getValue(DB_KEY_BATTLEINFO);
                     broadcaster.sendBroadcast(new Intent(KCA_MSG_BATTLE_VIEW_REFRESH));
                     Log.e("KCA", "KCA_MSG_BATTLE_INFO Received: \n".concat(s));
                 }
@@ -144,7 +150,8 @@ public class KcaViewButtonService extends Service {
             battlenode_receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    String s = intent.getStringExtra(KCA_MSG_DATA);
+                    //String s = intent.getStringExtra(KCA_MSG_DATA);
+                    String s = dbHelper.getValue(DB_KEY_BATTLENODE);
                     broadcaster.sendBroadcast(new Intent(KCA_MSG_BATTLE_VIEW_REFRESH));
                     Log.e("KCA", "KCA_MSG_BATTLE_NODE Received: \n".concat(s));
                 }

@@ -855,9 +855,9 @@ public class KcaService extends Service {
                                 }
                             }
                         }
-                        KcaBattle.processData(url, battleApiData);
+                        KcaBattle.processData(dbHelper, url, battleApiData);
                     } else if (url.equals(API_REQ_COMBINED_GOBACKPORT)) {
-                        KcaBattle.processData(url, null);
+                        KcaBattle.processData(dbHelper, url, null);
                     }
                 }
 
@@ -1396,12 +1396,13 @@ public class KcaService extends Service {
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_INFO)) {
                 Intent intent = new Intent(KCA_MSG_BATTLE_INFO);
-                intent.putExtra(KCA_MSG_DATA, data);
+                // intent.putExtra(KCA_MSG_DATA, data);
                 broadcaster.sendBroadcast(intent);
             }
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_NODE)) {
                 // Reference: https://github.com/andanteyk/ElectronicObserver/blob/1052a7b177a62a5838b23387ff35283618f688dd/ElectronicObserver/Other/Information/apilist.txt
+                jsonDataObj = dbHelper.getJsonObjectValue(DB_KEY_BATTLENODE);
                 if (jsonDataObj.has("api_maparea_id")) {
                     int currentMapArea = jsonDataObj.get("api_maparea_id").getAsInt();
                     int currentMapNo = jsonDataObj.get("api_mapinfo_no").getAsInt();
@@ -1411,13 +1412,12 @@ public class KcaService extends Service {
                     int api_event_id = jsonDataObj.get("api_event_id").getAsInt();
                     int api_color_no = jsonDataObj.get("api_color_no").getAsInt();
                     currentNodeInfo = KcaApiData.getNodeFullInfo(contextWithLocale, currentNodeAlphabet, api_event_id, api_event_kind, false);
-
                     customToast.showToast(currentNodeInfo, Toast.LENGTH_LONG,
                             getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
                     //Toast.makeText(getApplicationContext(), currentNodeInfo, Toast.LENGTH_LONG).show();
                 }
                 Intent intent = new Intent(KCA_MSG_BATTLE_NODE);
-                intent.putExtra(KCA_MSG_DATA, data);
+                //intent.putExtra(KCA_MSG_DATA, data);
                 broadcaster.sendBroadcast(intent);
                 setFrontViewNotifier(FRONT_NONE, 0, null);
             }

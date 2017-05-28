@@ -15,6 +15,8 @@ public final class KcaConstants {
     public static final String DB_KEY_DECKPORT = "key_deckport";
     public static final String DB_KEY_MAPEDGES = "key_mapedges";
     public static final String DB_KEY_USEREQUIP = "key_userequip";
+    public static final String DB_KEY_BATTLEINFO = "key_battleinfo";
+    public static final String DB_KEY_BATTLENODE = "key_battlenode";
 
     public static final int FAIRY_TOTAL_COUNT = 55;
     public static final int[] FAIRY_REVERSE_LIST = {0, 1, 2, 8, 9, 11, 12, 15, 19, 23, 24, 25, 27, 28, 30, 32, 33, 34, 35, 36, 40, 42, 44, 45, 47, 49, 50, 51};
