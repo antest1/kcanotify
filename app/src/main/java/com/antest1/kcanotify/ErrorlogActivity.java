@@ -86,6 +86,7 @@ public class ErrorlogActivity extends AppCompatActivity{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dbHelper.clearErrorLog();
+                        text.setText("No Error Log");
                         Toast.makeText(getApplicationContext(), "Cleared", Toast.LENGTH_LONG).show();
                         dialog.dismiss();
                     }
