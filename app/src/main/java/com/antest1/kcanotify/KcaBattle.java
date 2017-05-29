@@ -725,6 +725,11 @@ public class KcaBattle {
             if (url.equals(API_REQ_SORTIE_BATTLE_MIDNIGHT)
                     || url.equals(API_REQ_SORTIE_BATTLE_MIDNIGHT_SP)
                     || url.equals(API_REQ_PRACTICE_MIDNIGHT_BATTLE)) {
+
+                if (url.equals(API_REQ_SORTIE_BATTLE_MIDNIGHT_SP)) {
+                    ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                }
+
                 cleanData();
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
@@ -1369,12 +1374,15 @@ public class KcaBattle {
                     }
                 }
 
+                if (url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT_SP)) {
+                    ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                }
+
                 cleanData();
                 cleanCbData();
-                ship_ke = api_data.getAsJsonArray("api_ship_ke");
+
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
-
                 JsonArray maxcbhpsData = api_data.getAsJsonArray("api_maxhps_combined");
                 JsonArray nowcbhpsData = api_data.getAsJsonArray("api_nowhps_combined");
 

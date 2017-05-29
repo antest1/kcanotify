@@ -33,6 +33,7 @@ import static com.antest1.kcanotify.KcaApiData.STYPE_SS;
 import static com.antest1.kcanotify.KcaApiData.STYPE_SSV;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
+import static com.antest1.kcanotify.KcaApiData.kcShipData;
 import static com.antest1.kcanotify.KcaConstants.API_REQ_MAP_START;
 
 public class KcaQuestTracker extends SQLiteOpenHelper {
@@ -216,6 +217,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         int sscount = 0; // submarine
 
         for (int i = 1; i < ship_ke.size(); i++) {
+            int ship_id = ship_ke.get(i).getAsInt();
+            if (ship_id == -1) break;
             JsonObject kcShipData = KcaApiData.getKcShipDataById(ship_ke.get(i).getAsInt(), "stype");
             int stype = kcShipData.get("stype").getAsInt();
             boolean isSunk = afterhp.get(i + 6).getAsInt() <= 0;
