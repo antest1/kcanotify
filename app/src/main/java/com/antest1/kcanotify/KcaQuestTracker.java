@@ -10,6 +10,7 @@ import android.util.Log;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -256,7 +257,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             int cond1 = c.getInt(c.getColumnIndex("CND1"));
             int cond2 = c.getInt(c.getColumnIndex("CND2"));
             int cond3 = c.getInt(c.getColumnIndex("CND3"));
-
+            JsonArray targetData;
             switch (key) {
                 case "201":
                 case "216":
@@ -280,7 +281,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     updateTarget.addProperty(key, cond0 + sscount);
                     break;
                 case "214":
-                    JsonArray targetData = new JsonArray();
+                    targetData = new JsonArray();
                     targetData.add(cond0);
                     if (isboss) targetData.add(cond1 + 1);
                     else targetData.add(cond1);
@@ -325,7 +326,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     }
                     break;
                 case "256": // 잠수함대
-                    wflag = world == 6 && map == 1 && rank.equals("S");
+                    wflag = world == 6 && map == 1 && isboss && rank.equals("S");
                     break;
                 case "257": // 수뢰전대
                     requiredShip = 0;
@@ -338,7 +339,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         }
                         if (kcShipType == STYPE_CL) requiredShip += 1;
                     }
-                    wflag = world == 1 && map == 4 && rank.equals("S") && fleetflag && requiredShip <= 3;
+                    wflag = world == 1 && map == 4 && isboss && rank.equals("S") && fleetflag && requiredShip <= 3;
                     break;
                 case "259": // 수상타격
                     requiredShip = 0;
@@ -349,7 +350,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         if (kcShipType == STYPE_BB || kcShipType == STYPE_BBV) requiredShip += 10;
                         if (kcShipType == STYPE_CL) requiredShip += 1;
                     }
-                    wflag = world == 5 && map == 1 && rank.equals("S") && requiredShip == 31;
+                    wflag = world == 5 && map == 1 && isboss && rank.equals("S") && requiredShip == 31;
                 case "264": // 공모기동
                     requiredShip = 0;
                     for (int i = 0; i < deck_data.size(); i++) {
@@ -360,7 +361,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                             requiredShip += 10;
                         if (kcShipType == STYPE_DD) requiredShip += 1;
                     }
-                    wflag = world == 4 && map == 2 && rank.equals("S") && requiredShip == 22;
+                    wflag = world == 4 && map == 2 && isboss && rank.equals("S") && requiredShip == 22;
                     break;
                 case "266": // 수상반격
                     requiredShip = 0;
@@ -376,7 +377,22 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         if (kcShipType == STYPE_CV) requiredShip += 10;
                         if (kcShipType == STYPE_DD) requiredShip += 1;
                     }
-                    wflag = world == 2 && map == 5 && rank.equals("S") && fleetflag && requiredShip == 114;
+                    wflag = world == 2 && map == 5 && isboss && rank.equals("S") && fleetflag && requiredShip == 114;
+                    break;
+                case "822": // 오키노시마
+                    wflag = world == 2 && map == 4 && isboss && rank.equals("S");
+                    break;
+                case "854": // Z전단
+                    targetData = new JsonArray();
+                    targetData.add(cond0);
+                    targetData.add(cond1);
+                    targetData.add(cond2);
+                    targetData.add(cond3);
+                    if(world == 2 && map == 4 && isboss && isGoodRank(rank)) targetData.set(0, new JsonPrimitive(1));
+                    if(world == 6 && map == 1 && isboss && isGoodRank(rank)) targetData.set(1, new JsonPrimitive(1));
+                    if(world == 6 && map == 3 && isboss && isGoodRank(rank)) targetData.set(2, new JsonPrimitive(1));
+                    if(world == 6 && map == 4 && isboss && rank.equals("S")) targetData.set(3, new JsonPrimitive(1));
+                    updateTarget.add(key, targetData);
                     break;
                 default:
                     break;
