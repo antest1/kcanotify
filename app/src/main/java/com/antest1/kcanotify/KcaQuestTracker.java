@@ -189,12 +189,13 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             Cursor c = db.rawQuery("SELECT KEY, CND0 from "
                     .concat(qt_table_name)
                     .concat(" WHERE KEY=214 AND ACTIVE=1"), null);
-            if (c.getCount() > 0) {
+            if (c.moveToFirst()) {
                 ContentValues values = new ContentValues();
                 cond0 = 1 + c.getInt(c.getColumnIndex("CND0"));
                 values.put("CND0", cond0);
                 db.update(qt_table_name, values, "KEY=214 AND ACTIVE=1", null);
             }
+            c.close();
             JsonObject targetData = new JsonObject();
             targetData.addProperty("214", cond0);
             return targetData;
@@ -277,8 +278,6 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "214":
                     JsonArray targetData = new JsonArray();
-                    updateTarget.add(key, new JsonArray());
-
                     targetData.add(cond0);
                     if (isboss) targetData.add(cond1 + 1);
                     else targetData.add(cond1);
@@ -291,6 +290,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     } else {
                         targetData.add(cond3);
                     }
+                    updateTarget.add(key, targetData);
                     break;
                 case "226":
                     wflag = world == 2 && isboss && isWinRank(rank);
