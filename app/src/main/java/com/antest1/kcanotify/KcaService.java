@@ -869,7 +869,7 @@ public class KcaService extends Service {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                                         && !Settings.canDrawOverlays(getApplicationContext())) {
                                     // Can not draw overlays: pass
-                                } else if (KcaViewButtonService.getRecentVisibility() == View.VISIBLE) {
+                                } else {
                                     startService(new Intent(this, KcaViewButtonService.class)
                                             .setAction(KcaViewButtonService.ACTIVATE_BATTLEVIEW_ACTION));
                                     startService(new Intent(this, KcaBattleViewService.class));
