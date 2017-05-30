@@ -291,9 +291,11 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             int cond3 = c.getInt(c.getColumnIndex("CND3"));
             JsonArray targetData;
             switch (key) {
+                case "210":
+                    updateTarget.addProperty(key, cond0 + 1);
+                    break;
                 case "201":
                 case "216":
-                case "210":
                     if (isWinRank(rank)) {
                         updateTarget.addProperty(key, cond0 + 1);
                     }
