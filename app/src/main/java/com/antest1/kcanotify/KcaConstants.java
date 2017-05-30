@@ -23,6 +23,8 @@ public final class KcaConstants {
 
     public static final String ERROR_TYPE_SERVICE = "S";
     public static final String ERROR_TYPE_BATTLE = "B";
+    public static final String ERROR_TYPE_BATTLEVIEW = "BV";
+    public static final String ERROR_TYPE_QUESTVIEW = "Q";
     public static final String ERROR_TYPE_NOTI = "N";
     public static final String ERROR_TYPE_VPN = "V";
     public static final String ERROR_TYPE_OPENDB = "O";
@@ -190,6 +192,8 @@ public final class KcaConstants {
     public static final String KCA_MSG_DATA = "com.antest1.kcanotify.KcaService.KCA_MSG_DATA";
 
     public static final String KCA_API_PROCESS_BATTLE_FAILED = "/kca_api/process_battle_failed";
+    public static final String KCA_API_PROCESS_BATTLEVIEW_FAILED = "/kca_api/process_battleview_failed";
+    public static final String KCA_API_PROCESS_QUESTVIEW_FAILED = "/kca_api/process_questview_failed";
     public static final String KCA_API_OPENDB_FAILED = "/kca_api/opendb_failed";
 
     public static final String KCA_API_VPN_DATA_ERROR = "/kca_api/vpn_data_error";

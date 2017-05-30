@@ -75,6 +75,7 @@ public class KcaBattleViewService extends Service {
     public static final String HIDE_BATTLEVIEW_ACTION = "hide_battleview";
 
     Context contextWithLocale;
+    KcaDBHelper dbHelper;
     LayoutInflater mInflater;
     private BroadcastReceiver refreshreceiver;
     public static boolean active;
@@ -1106,6 +1107,7 @@ public class KcaBattleViewService extends Service {
             try {
                 active = true;
                 contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+                dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
                 //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 mInflater = LayoutInflater.from(contextWithLocale);
                 mView = mInflater.inflate(R.layout.view_sortie_battle, null);
@@ -1302,28 +1304,17 @@ public class KcaBattleViewService extends Service {
     private void sendReport(Exception e, int type) {
         error_flag = true;
         if (mView != null) mView.setVisibility(View.GONE);
-        String app_version = BuildConfig.VERSION_NAME;
-        String token = "df1629d6820907e7a09ea1e98d3041c2";
-        String kca_url = "";
-        try {
-            kca_url = URLEncoder.encode(KCA_MSG_BATTLE_VIEW_REFRESH, "utf-8");
-        } catch (UnsupportedEncodingException e1) {
-            e1.printStackTrace();
-        }
+
         Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.battleview_error), Toast.LENGTH_SHORT).show();
-        String dataSendUrl = String.format(getStringWithLocale(R.string.errorlog_battle_link), token, kca_url, "BV", app_version);
-        AjaxCallback<String> cb = new AjaxCallback<String>() {
-            @Override
-            public void callback(String url, String data, AjaxStatus status) {
-                // do nothing
-            }
-        };
+
+        String api_url = "url";
         JsonObject sendData = new JsonObject();
         if (api_data == null) {
             api_data = new JsonObject();
             api_data.addProperty("api_data", "api_data is null");
         }
         if (type == ERORR_ITEMVIEW) {
+            api_url = api_data.get("api_url").getAsString();
             api_data.add("api_deckport", deckportdata);
             api_data.add("api_fs_data", friendShipData);
             api_data.add("api_fsc_data", friendCombinedShipData);
@@ -1332,14 +1323,7 @@ public class KcaBattleViewService extends Service {
         }
         sendData.addProperty("data", api_data.toString());
         sendData.addProperty("error", getStringFromException(e));
-        String sendDataString = sendData.toString();
 
-        AQuery aq = new AQuery(KcaBattleViewService.this);
-        cb.header("Referer", "app:/KCA/");
-        cb.header("Content-Type", "application/x-www-form-urlencoded");
-        HttpEntity entity = new ByteArrayEntity(sendDataString.getBytes());
-        cb.param(AQuery.POST_ENTITY, entity);
-        aq.ajax(dataSendUrl, String.class, cb);
+        dbHelper.recordErrorLog(ERROR_TYPE_BATTLEVIEW, api_url, "BV", api_data.toString(), getStringFromException(e));
     }
-
 }

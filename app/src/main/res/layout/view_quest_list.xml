@@ -193,6 +193,24 @@
                             android:paddingStart="3dp"
                             android:paddingTop="1dp" />
 
+                        <TextView
+                            android:id="@+id/quest1_progress_track"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/colorQuestTrackProgress"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            android:paddingEnd="3dp"
+                            android:textAlignment="center"
+                            android:paddingBottom="1dp"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:paddingStart="3dp"
+                            android:paddingTop="1dp" />
+
                     </LinearLayout>
 
                     <TextView
@@ -291,6 +309,23 @@
                             android:paddingStart="3dp"
                             android:paddingTop="1dp" />
 
+                        <TextView
+                            android:id="@+id/quest2_progress_track"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/colorQuestTrackProgress"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            android:paddingEnd="3dp"
+                            android:textAlignment="center"
+                            android:paddingBottom="1dp"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:paddingStart="3dp"
+                            android:paddingTop="1dp" />
                     </LinearLayout>
 
                     <TextView
@@ -389,6 +424,23 @@
                             android:paddingStart="3dp"
                             android:paddingTop="1dp" />
 
+                        <TextView
+                            android:id="@+id/quest3_progress_track"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/colorQuestTrackProgress"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            android:paddingEnd="3dp"
+                            android:textAlignment="center"
+                            android:paddingBottom="1dp"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:paddingStart="3dp"
+                            android:paddingTop="1dp" />
                     </LinearLayout>
 
                     <TextView
@@ -487,6 +539,23 @@
                             android:paddingStart="3dp"
                             android:paddingTop="1dp" />
 
+                        <TextView
+                            android:id="@+id/quest4_progress_track"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/colorQuestTrackProgress"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            android:paddingEnd="3dp"
+                            android:textAlignment="center"
+                            android:paddingBottom="1dp"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:paddingStart="3dp"
+                            android:paddingTop="1dp" />
                     </LinearLayout>
 
                     <TextView
@@ -585,6 +654,23 @@
                             android:paddingStart="3dp"
                             android:paddingTop="1dp" />
 
+                        <TextView
+                            android:id="@+id/quest5_progress_track"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/colorQuestTrackProgress"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            android:paddingEnd="3dp"
+                            android:textAlignment="center"
+                            android:paddingBottom="1dp"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:paddingStart="3dp"
+                            android:paddingTop="1dp" />
                     </LinearLayout>
 
                     <TextView

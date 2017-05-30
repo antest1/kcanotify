@@ -12,15 +12,20 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import org.json.JSONArray;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
 import static android.R.attr.id;
+import static android.R.attr.key;
+import static android.R.attr.value;
 import static com.antest1.kcanotify.KcaApiData.STYPE_AP;
 import static com.antest1.kcanotify.KcaApiData.STYPE_BB;
 import static com.antest1.kcanotify.KcaApiData.STYPE_BBV;
@@ -124,6 +129,15 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         }
     }
 
+    public void updateQuestTrackValueWithId(String id, JsonArray updatevalue) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        for (int i = 0; i < updatevalue.size(); i++) {
+            values.put("CND".concat(String.valueOf(i)), updatevalue.get(i).getAsString());
+        }
+        db.update(qt_table_name, values, "KEY=?", new String[]{id});
+    }
+
     public boolean checkQuestValid(int type, int id, String time) {
         boolean valid_flag = true;
         Date currentTime = Calendar.getInstance(Locale.JAPAN).getTime();
@@ -183,7 +197,25 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         return (rank.equals("S") || rank.equals("A"));
     }
 
-    public JsonObject updateTracker(JsonObject data) {
+    public JsonArray getQuestTrackInfo(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        JsonArray info = new JsonArray();
+        Cursor c = db.rawQuery("SELECT KEY, CND0, CND1, CND2, CND3 from "
+                .concat(qt_table_name)
+                .concat(" WHERE KEY=?"), new String[]{id});
+        if (c.moveToFirst()) {
+            info.add(c.getInt(c.getColumnIndex("CND0")));
+            if (id.equals("214") || id.equals("854")) {
+                for (int i = 1; i < 4; i++) {
+                    info.add(c.getInt(c.getColumnIndex("CND".concat(String.valueOf(i)))));
+                }
+            }
+        }
+        c.close();
+        return info;
+    }
+
+    public JsonObject updateBattleTracker(JsonObject data) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         if (data.has("api_url") && data.get("api_url").getAsString().equals(API_REQ_MAP_START)) { // Sortie Count
@@ -388,32 +420,43 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     targetData.add(cond1);
                     targetData.add(cond2);
                     targetData.add(cond3);
-                    if(world == 2 && map == 4 && isboss && isGoodRank(rank)) targetData.set(0, new JsonPrimitive(1));
-                    if(world == 6 && map == 1 && isboss && isGoodRank(rank)) targetData.set(1, new JsonPrimitive(1));
-                    if(world == 6 && map == 3 && isboss && isGoodRank(rank)) targetData.set(2, new JsonPrimitive(1));
-                    if(world == 6 && map == 4 && isboss && rank.equals("S")) targetData.set(3, new JsonPrimitive(1));
+                    if (world == 2 && map == 4 && isboss && isGoodRank(rank))
+                        targetData.set(0, new JsonPrimitive(1));
+                    if (world == 6 && map == 1 && isboss && isGoodRank(rank))
+                        targetData.set(1, new JsonPrimitive(1));
+                    if (world == 6 && map == 3 && isboss && isGoodRank(rank))
+                        targetData.set(2, new JsonPrimitive(1));
+                    if (world == 6 && map == 4 && isboss && rank.equals("S"))
+                        targetData.set(3, new JsonPrimitive(1));
                     updateTarget.add(key, targetData);
                     break;
                 default:
                     break;
             }
+
+            if (dupflag == 2) {
+                updateTarget.addProperty("213", updateTarget.get("213").getAsInt() + apcount);
+                updateTarget.addProperty("218", updateTarget.get("218").getAsInt() + apcount);
+            }
+
             if (wflag) updateTarget.addProperty(key, cond0 + 1);
-            for (Map.Entry<String, JsonElement> entry : updateTarget.entrySet()) {
-                String entryKey = entry.getKey();
-                JsonElement entryValue = entry.getValue();
-                if (entryValue.isJsonArray()) {
-                    JsonArray entryValueArray = entryValue.getAsJsonArray();
-                    ContentValues values = new ContentValues();
-                    for (int i = 0; i < 4; i++) {
-                        values.put("CND".concat(String.valueOf(i)), String.valueOf(entryValueArray.get(i)));
-                    }
-                    db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{key});
-                } else {
-                    int entryValueData = entryValue.getAsInt();
-                    ContentValues values = new ContentValues();
-                    values.put("CND0", entryValueData);
-                    db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{key});
+        }
+
+        for (Map.Entry<String, JsonElement> entry : updateTarget.entrySet()) {
+            String entryKey = entry.getKey();
+            JsonElement entryValue = entry.getValue();
+            if (entryValue.isJsonArray()) {
+                JsonArray entryValueArray = entryValue.getAsJsonArray();
+                ContentValues values = new ContentValues();
+                for (int i = 0; i < 4; i++) {
+                    values.put("CND".concat(String.valueOf(i)), String.valueOf(entryValueArray.get(i)));
                 }
+                db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{entryKey});
+            } else {
+                int entryValueData = entryValue.getAsInt();
+                ContentValues values = new ContentValues();
+                values.put("CND0", entryValueData);
+                db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{entryKey});
             }
         }
 
@@ -428,8 +471,9 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         while (c.moveToNext()) {
             String key = c.getString(c.getColumnIndex("KEY"));
             String active = c.getString(c.getColumnIndex("ACTIVE"));
+            String cond0 = c.getString(c.getColumnIndex("CND0"));
             String time = c.getString(c.getColumnIndex("TIME"));
-            Log.e("KCA-QT", String.format("%s -> %s %s", key, active, time));
+            Log.e("KCA-QT", String.format("%s -> %s %s %s", key, active, cond0, time));
             count += 1;
         }
         Log.e("KCA-QT", "Total: " + String.valueOf(count));

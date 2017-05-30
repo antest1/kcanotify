@@ -120,7 +120,11 @@ public class KcaDeckInfo {
                 conditionList.add(String.valueOf(shipCondition));
             }
         }
-        getConditionInfo = joinStr(conditionList, "/");
+        if(conditionList.size() == 0) {
+            getConditionInfo = "";
+        } else {
+            getConditionInfo = joinStr(conditionList, "/");
+        }
         return getConditionInfo;
 
     }

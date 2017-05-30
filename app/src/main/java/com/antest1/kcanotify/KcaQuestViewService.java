@@ -39,20 +39,33 @@ import org.apache.http.entity.ByteArrayEntity;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
+import static android.R.attr.id;
+import static com.antest1.kcanotify.KcaApiData.getQuestTrackInfo;
+import static com.antest1.kcanotify.KcaApiData.isQuestTrackable;
 import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_BATTLEVIEW;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_VIEW_LIST;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
+import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 
 public class KcaQuestViewService extends Service {
     public static final String REFRESH_QUESTVIEW_ACTION = "refresh_questview";
     public static final String SHOW_QUESTVIEW_ACTION = "show_questview";
     public static final String SHOW_QUESTVIEW_ACTION_CURRENT = "show_questview_current";
+
+    public static final float PROGRESS_1 = 0.5f;
+    public static final float PROGRESS_2 = 0.8f;
 
     Context contextWithLocale;
     LayoutInflater mInflater;
@@ -65,6 +78,7 @@ public class KcaQuestViewService extends Service {
     private static int prevpagelastno = -1;
     private static final int maxPage = 2; // Max 6 quest at parallel
     public KcaDBHelper helper;
+    private KcaQuestTracker questTracker;
 
     static boolean error_flag = false;
 
@@ -92,9 +106,13 @@ public class KcaQuestViewService extends Service {
         return isquestlist;
     }
 
-    public static void setPrevPageLastNo(int no) { prevpagelastno = no; }
+    public static void setPrevPageLastNo(int no) {
+        prevpagelastno = no;
+    }
 
-    public static int getPrevPageLastNo() { return prevpagelastno; }
+    public static int getPrevPageLastNo() {
+        return prevpagelastno;
+    }
 
     public static void setQuestMode(boolean v) {
         isquestlist = v;
@@ -166,6 +184,54 @@ public class KcaQuestViewService extends Service {
                         questview.findViewById(getId(String.format("quest%d_progress", index), R.id.class)).setVisibility(View.GONE);
                     }
 
+                    if (isQuestTrackable(api_no)) {
+                        boolean noshowflag = false;
+                        questTracker.test();
+                        List<String> trackinfo_list = new ArrayList<>();
+                        String trackinfo_text = "";
+                        JsonObject questTrackInfo = getQuestTrackInfo(api_no);
+                        if (questTrackInfo != null) {
+                            JsonArray trackCond = questTrackInfo.getAsJsonArray("cond");
+                            JsonArray trackData = questTracker.getQuestTrackInfo(api_no);
+
+                            if (trackData.size() == 1) {
+                                JsonArray updatevalue = new JsonArray();
+                                if (api_progress == 1 && trackData.get(0).getAsFloat() < trackCond.get(0).getAsFloat() * PROGRESS_1) {
+                                    updatevalue.add((int) (Math.ceil(trackCond.get(0).getAsFloat() * PROGRESS_1)));
+                                } else if (api_progress == 1 && trackData.get(0).getAsFloat() < trackCond.get(0).getAsFloat() * PROGRESS_1) {
+                                    updatevalue.add((int) (Math.ceil(trackCond.get(0).getAsFloat() * PROGRESS_2)));
+                                } else if (api_state == 3) {
+                                    updatevalue.add(trackCond.get(0).getAsInt());
+                                }
+                                if (updatevalue.size() > 0) {
+                                    questTracker.updateQuestTrackValueWithId(api_no, updatevalue);
+                                    trackData = questTracker.getQuestTrackInfo(api_no);
+                                }
+                            }
+
+                            for (int n = 0; n < trackData.size(); n++) {
+                                int cond = trackCond.get(n).getAsInt();
+                                int val = trackData.get(n).getAsInt();
+                                Log.e("KCA-QV", api_no + " " + String.valueOf(val) + " " + String.valueOf(cond));
+                                trackinfo_list.add(String.format("%d/%d", Math.min(val, cond), cond));
+                            }
+                            if (trackinfo_list.size() > 0) {
+                                trackinfo_text = joinStr(trackinfo_list, ", ");
+                            } else {
+                                noshowflag = true;
+                            }
+
+                            ((TextView) questview.findViewById(getId(String.format("quest%d_progress_track", index), R.id.class))).setText(trackinfo_text);
+                            questview.findViewById(getId(String.format("quest%d_progress_track", index), R.id.class)).setVisibility(View.VISIBLE);
+                        }
+                        if (noshowflag) {
+                            questview.findViewById(getId(String.format("quest%d_progress_track", index), R.id.class)).setVisibility(View.GONE);
+                        }
+                    } else {
+                        questview.findViewById(getId(String.format("quest%d_progress_track", index), R.id.class)).setVisibility(View.GONE);
+                    }
+
+
                     ((TextView) questview.findViewById(getId(String.format("quest%d_name", index), R.id.class)))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(),
                                     getId(String.format("colorQuestState%d", api_state), R.color.class)));
@@ -226,15 +292,14 @@ public class KcaQuestViewService extends Service {
                     }
                 }
                 questprev.setVisibility(api_disp_page == 1 ? View.GONE : View.VISIBLE);
-                questnext.setVisibility(api_page_count == 0 || api_disp_page == api_page_count  ? View.GONE : View.VISIBLE);
-
+                questnext.setVisibility(api_page_count == 0 || api_disp_page == api_page_count ? View.GONE : View.VISIBLE);
             }
             Log.e("KCA", api_list.toString());
             setQuestView(api_disp_page, api_page_count, api_list, checkValid);
             return 0;
         } catch (Exception e) {
             e.printStackTrace();
-            //sendReport(e, 0);
+            sendReport(e, 0);
             return 1;
         }
     }
@@ -250,6 +315,7 @@ public class KcaQuestViewService extends Service {
             try {
                 active = true;
                 helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+                questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
                 contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
                 broadcaster = LocalBroadcastManager.getInstance(this);
                 //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -287,7 +353,7 @@ public class KcaQuestViewService extends Service {
             } catch (Exception e) {
                 active = false;
                 error_flag = true;
-                //sendReport(e, 1);
+                sendReport(e, 1);
                 stopSelf();
             }
         }
@@ -296,7 +362,7 @@ public class KcaQuestViewService extends Service {
     @Override
     public void onDestroy() {
         active = false;
-        if(mView != null) mView.setVisibility(View.GONE);
+        if (mView != null) mView.setVisibility(View.GONE);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
         super.onDestroy();
     }
@@ -365,37 +431,13 @@ public class KcaQuestViewService extends Service {
     };
 
 
-    /*
     private void sendReport(Exception e, int type) {
         error_flag = true;
         mView.setVisibility(View.GONE);
-        String app_version = BuildConfig.VERSION_NAME;
-        String token = "not_used_now";
-        String kca_url = "";
-        try {
-            kca_url = URLEncoder.encode(KCA_MSG_BATTLE_VIEW_REFRESH, "utf-8");
-        } catch (UnsupportedEncodingException e1) {
-            e1.printStackTrace();
-        }
-        Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.battleview_error), Toast.LENGTH_SHORT).show();
-        String dataSendUrl = String.format(getStringWithLocale(R.string.errorlog_battle_link), token, kca_url, "BV", app_version);
-        AjaxCallback<String> cb = new AjaxCallback<String>() {
-            @Override
-            public void callback(String url, String data, AjaxStatus status) {
-                // do nothing
-            }
-        };
         JsonObject sendData = new JsonObject();
         sendData.addProperty("data", api_data.toString());
         sendData.addProperty("error", getStringFromException(e));
         String sendDataString = sendData.toString();
-
-        AQuery aq = new AQuery(KcaQuestViewService.this);
-        cb.header("Referer", "app:/KCA/");
-        cb.header("Content-Type", "application/x-www-form-urlencoded");
-        HttpEntity entity = new ByteArrayEntity(sendDataString.getBytes());
-        cb.param(AQuery.POST_ENTITY, entity);
-        aq.ajax(dataSendUrl, String.class, cb);
+        helper.recordErrorLog(ERROR_TYPE_QUESTVIEW, "questview", "QV", api_data.toString(), getStringFromException(e));
     }
-    */
 }

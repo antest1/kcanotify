@@ -32,7 +32,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.androidquery.callback.AbstractAjaxCallback;
-import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -42,7 +41,6 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -1395,8 +1393,9 @@ public class KcaService extends Service {
                 String api_url = jsonDataObj.get("api_url").getAsString();
                 if (api_url.startsWith(API_REQ_SORTIE_BATTLE_RESULT) || url.startsWith(API_REQ_COMBINED_BATTLERESULT)) {
                     JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
-                    JsonObject result = questTracker.updateTracker(questTrackData);
-                    Toast.makeText(getApplicationContext(), result.toString(), Toast.LENGTH_LONG).show();
+                    questTracker.updateBattleTracker(questTrackData);
+                    startService(new Intent(getBaseContext(), KcaQuestViewService.class)
+                            .setAction(REFRESH_QUESTVIEW_ACTION));
                 }
                 Intent intent = new Intent(KCA_MSG_BATTLE_INFO);
                 // intent.putExtra(KCA_MSG_DATA, data);
@@ -1421,8 +1420,9 @@ public class KcaService extends Service {
                 }
 
                 if (jsonDataObj.get("api_url").getAsString().equals(API_REQ_MAP_START)) {
-                    JsonObject result = questTracker.updateTracker(jsonDataObj);
-                    Toast.makeText(getApplicationContext(), result.toString(), Toast.LENGTH_LONG).show();
+                    questTracker.updateBattleTracker(jsonDataObj);
+                    startService(new Intent(getBaseContext(), KcaQuestViewService.class)
+                            .setAction(REFRESH_QUESTVIEW_ACTION));
                 }
 
                 Intent intent = new Intent(KCA_MSG_BATTLE_NODE);
@@ -1687,6 +1687,8 @@ public class KcaService extends Service {
             } else {
                 conditionValue = String.format(getStringWithLocale(R.string.kca_view_condition_nformat), i + 1, KcaDeckInfo.getConditionStatus(data, i));
             }
+            if (conditionValue.length() == 0) continue;
+
             infoData = new JsonObject();
             if (i < count - 1) {
                 infoData.addProperty("is_newline", 1);
