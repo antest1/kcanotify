@@ -19,7 +19,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="dialog_ok">是</string>
     <string name="dialog_cancel">否</string>
 
-    <string name="error_text">发生错误，请联系开发者。</string>
+    <string name="error_text">发生错误，请联系开发者</string>
 
     <string name="heavy_damaged">有舰娘大破！</string>
     <string name="heavy_damaged_damecon">有舰娘大破！(损管/女神可用)</string>
@@ -45,9 +45,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_none">\?\?</string>
     <string name="speed_postfix">&#160;舰队</string>
 
-    <string name="opendb_failed_msg">向OpenDB汇报数据时出错。</string>
-    <string name="process_battle_failed_msg">处理战斗数据出错。错误日志将发给开发者。</string>
-    <string name="service_failed_msg">处理战斗数据出错。错误日志将发给开发者。\n建议重启Kcanotify。</string>
+    <string name="opendb_failed_msg">向OpenDB汇报数据时出错</string>
+    <string name="process_battle_failed_msg">处理战斗数据出错。错误日志将发给开发者</string>
+    <string name="service_failed_msg">处理战斗数据出错。错误日志将发给开发者\n建议重启Kcanotify</string>
 
     <string name="node_info_noevent" formatted="false">%s (战斗回避)</string>
     <string name="node_info_obtain" formatted="false">%s (资源点)</string>
@@ -69,10 +69,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="node_info_ecbattle" formatted="false">%s (深海联合舰队)</string>
     <string name="node_info_practice" formatted="false">演习</string>
     <!-- MainActivity Strings -->
-    <string name="ma_toast_kancolle_not_installed">没有安装艦これ安卓版。</string>
-    <string name="ma_toast_overay_diabled">战斗剧透需要悬浮窗权限。到设置 > 悬浮窗设置允许悬浮.</string>
+    <string name="ma_toast_kancolle_not_installed">没有安装艦これ安卓版</string>
+    <string name="ma_toast_overay_diabled">战斗剧透需要悬浮窗权限。请到设置 > 悬浮窗设置允许悬浮</string>
     <string name="ma_hasupdate" formatted="false">有可用的更新。 (%s)</string>
-    <string name="description"><b>帮助</b>\n启用VPN和SVC服务后打开艦これ\n\n※ VPN是为了监测游戏数据。 \n\n<b>主要特点</b>\n - 远征/入渠 通知 \n - 大破警告 (战斗前/中)\n - 显示索敌/制空/士气值 \n - 罗盘剧透\n - 战斗剧透 / 任务翻译\n - 装备改修查询\n - 向OpenDB汇报数据 (可选)\n \n访问[http://swaytwig.com/kcanotify], 了解详情 (韩文)</string>
+    <string name="description"><b>帮助</b>\n启用VPN和SVC服务后打开艦これ\n\n※ VPN是为了监测游戏数据\n\n<b>主要特点</b>\n - 远征/入渠 通知 \n - 大破警告\n - 显示索敌/制空/士气值 \n - 罗盘剧透\n - 战斗剧透 / 任务翻译\n - 装备改修查询\n - 向OpenDB汇报数据 (可选)\n \n访问主页http://swaytwig.com/kcanotify, 了解详情 (韩文)</string>
 
     <!-- SettingActivity Strings -->
     <string name="sa_checkupdate_latest" formatted="false">已经是最新版本。 (%s)</string>
@@ -81,50 +81,50 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_checkupdate_nodataerror">检查更新出现问题</string>
     <string name="sa_checkupdate_servererror">更新服务器出错</string>
 
-    <string name="sa_getupdate_finished">游戏缓存全部下载完成</string>
+    <string name="sa_getupdate_finished">游戏数据下载完成</string>
     <string name="sa_getupdate_started">下载游戏数据&#8230;</string>
     <string name="sa_getupdate_servererror" formatted="false">服务器出错: %s</string>
     <string name="sa_getupdate_ioexceptionerror">保存数据时出错</string>
 
     <string name="sa_overlay_under_m">安卓6.0以下可跳过该设置</string>
-    <string name="sa_overlay_ok">允许悬浮：开</string>
-    <string name="sa_overlay_no">允许悬浮：关（战斗剧透会被禁用）</string>
+    <string name="sa_overlay_ok">允许悬浮：是</string>
+    <string name="sa_overlay_no">允许悬浮：否（战斗剧透会被禁用）</string>
 
-    <string name="sa_bypass_list_invalid">输入的绕行地址列表有错，请检查后重试。</string>
+    <string name="sa_bypass_list_invalid">输入的绕行地址列表有错，请检查后重试</string>
 
     <!-- InfoActivity Strings -->
 
     <!-- KcaService Strings -->
     <string name="kca_init_title" formatted="false">%s 工作中</string>
-    <string name="kca_init_content">请在kcanotify内打开游戏。</string>
+    <string name="kca_init_content">请从kcanotify打开游戏</string>
 
-    <string name="kca_noti_title_exp_canceled" formatted="false">远征 %d (%s) 中止。</string>
-    <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt; 从远征%d召回。</string>
-    <string name="kca_noti_title_exp_finished" formatted="false">远征 %d (%s) 结束。</string>
-    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; 从远征%d回港。</string>
-    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; 从远征%d回港(中止)。</string>
+    <string name="kca_noti_title_exp_canceled" formatted="false">远征 %d (%s) 中止</string>
+    <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt; 从远征%d召回</string>
+    <string name="kca_noti_title_exp_finished" formatted="false">远征 %d (%s) 结束</string>
+    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; 从远征%d回港</string>
+    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; 从远征%d回港(中止)</string>
 
-    <string name="kca_noti_title_dock_finished" formatted="false">澡堂 %d: 修复完成。</string>
-    <string name="kca_noti_content_dock_finished" formatted="false">澡堂 %d: %s 已修复。</string>
-    <string name="kca_noti_content_dock_finished_nodata" formatted="false">澡堂 %d: 船只修理完成。</string>
+    <string name="kca_noti_title_dock_finished" formatted="false">澡堂 %d: 修复完成</string>
+    <string name="kca_noti_content_dock_finished" formatted="false">澡堂 %d: %s 已修复</string>
+    <string name="kca_noti_content_dock_finished_nodata" formatted="false">澡堂 %d: 船只修理完成</string>
 
     <string name="kca_toast_airpower" formatted="false">制空: %d-%d</string>
     <string name="kca_toast_seekvalue_d" formatted="false">索敌(%s): %d</string>
     <string name="kca_toast_seekvalue_f" formatted="false">索敌(%s): %.2f</string>
     <string name="kca_toast_tpvalue" formatted="false">运输: S%d/A%d</string>
 
-    <string name="kca_toast_restart_at_kcanotify">用kcanotify重新启动游戏。</string>
-    <string name="kca_toast_get_data_at_settings">游戏数据没有完全加载。\\n如果数据一直没有加载, 在kcanotify设置里手动下载缓存。</string>
-    <string name="kca_toast_get_data_at_settings_2">检测到一个游戏数据错误。\\\\n请在kcanotify设置里手动下载缓存。</string>
-    <string name="kca_toast_loading_data">加载缓存数据</string>
-    <string name="kca_toast_inconsistent_data">kcanotify服务器中没有当前api版本的数据。\n过一段时间（约10~20分钟）重启kcanotify。</string>
-    <string name="kca_toast_ioexceptionerror">写入缓存数据出错</string>
+    <string name="kca_toast_restart_at_kcanotify">用kcanotify重新启动游戏</string>
+    <string name="kca_toast_get_data_at_settings">游戏数据未完全加载\\n如果数据一直未加载完全, 请在kcanotify设置里手动下载</string>
+    <string name="kca_toast_get_data_at_settings_2">检测到游戏错误\\\\n请在kcanotify设置里手动下载游戏数据</string>
+    <string name="kca_toast_loading_data">加载游戏数据</string>
+    <string name="kca_toast_inconsistent_data">kcanotify服务器中没有当前api版本的数据\n请10~20分钟后重启kcanotify</string>
+    <string name="kca_toast_ioexceptionerror">写入数据时出错</string>
 
-    <string name="kca_view_activate_vpn">请启用VPN服务。</string>
+    <string name="kca_view_activate_vpn">请启用VPN服务</string>
     <string name="kca_view_condition" formatted="false">士气：%s</string>
     <string name="kca_view_condition_nformat" formatted="false" >士气 #%d: %s</string>
-    <string name="kca_view_hdmg_damecon_format" formatted="false">[有舰娘大破，但它有损管/女神！] %s 准备完毕 %s</string>
-    <string name="kca_view_hdmg_format" formatted="false">[有舰娘大破，可能会沉船！] %s 准备完毕 %s</string>
+    <string name="kca_view_hdmg_damecon_format" formatted="false">[有舰娘大破，损管/女神可用！] %s 准备完毕 %s</string>
+    <string name="kca_view_hdmg_format" formatted="false">[有舰娘大破！] %s 准备完毕 %s</string>
     <string name="kca_view_normal_format" formatted="false">%s 准备完毕 %s</string>
 
     <string name="kca_view_noexpedition">没有进行中的远征</string>
@@ -136,42 +136,42 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_opendb">向OpenDB汇报数据</string>
     <string name="setting_menu_kand_title_exp_realtime_show">跟踪远征时间</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">在通知栏显示剩余时间</string>
-    <string name="setting_menu_kand_title_game_data_down">下载游戏缓存</string>
-    <string name="setting_menu_kand_desc_game_data_down">在缓存数据没有自动加载时使用</string>
+    <string name="setting_menu_kand_title_game_data_down">下载游戏数据</string>
+    <string name="setting_menu_kand_desc_game_data_down">在数据没有自动加载时使用</string>
     <string name="setting_menu_kand_title_adv_network">高级网络设置</string>
-    <string name="setting_menu_kand_warn_adv_network">警告：错误的设置以下项目可能会让VPN失效。请仅在你确定每个设置项作用时更改这些设置。在更改设置之后需要重启VPN服务以使设置生效。</string>
+    <string name="setting_menu_kand_warn_adv_network">警告：错误的设置以下项目可能会让VPN失效。请仅在你确定每个设置项作用时更改这些设置。在更改设置之后需要重启VPN服务以使设置生效</string>
     <string name="setting_menu_kand_title_socks5_address">SOCKS5代理地址</string>
     <string name="setting_menu_kand_title_socks5_port">SOCKS5代理端口</string>
     <string name="settings_menu_kand_title_bypass_address">绕行地址</string>
     <string name="setting_menu_kand_desc_bypass_address">使用CIDR描述不经过代理的地址，使用逗号分隔每个CIDR。</string>
 
-    <string name="setting_menu_view_head">战斗剧透/任务浏览设置</string>
-    <string name="setting_menu_view_title_accessibility_setting">Accessibility Settings</string>
-    <string name="setting_menu_view_desc_accessibility_setting">Select Kcanotify from Services. (required for detect kancolle app)</string>
+    <string name="setting_menu_view_head">功能设置</string>
+    <string name="setting_menu_view_title_accessibility_setting">辅助功能设置</string>
+    <string name="setting_menu_view_desc_accessibility_setting">选择并开启Kcanotify服务（以检测艦これ客户端）</string>
     <string name="setting_menu_view_title_overlay_setting">悬浮窗设置</string>
-    <string name="setting_menu_view_desc_overlay_setting">允许悬浮 (战斗剧透需要)</string>
+    <string name="setting_menu_view_desc_overlay_setting">允许悬浮 (以开启战斗剧透功能)</string>
     <string name="setting_menu_view_title_battleview_use">战斗剧透</string>
-    <string name="setting_menu_view_desc_battleview_use">出击中显示战斗结果</string>
+    <string name="setting_menu_view_desc_battleview_use">出击时显示战斗结果</string>
     <string name="setting_menu_view_title_drop_visible">显示掉落</string>
-    <string name="setting_menu_view_desc_drop_visible">在战斗剧透中显示掉落船名</string>
+    <string name="setting_menu_view_desc_drop_visible">在战斗剧透中显示掉落舰娘名称</string>
     <string name="setting_menu_view_title_questview_use">任务浏览</string>
     <string name="setting_menu_view_desc_questview_use">显示任务内容和翻译</string>
 
     <string name="setting_menu_noti_head">通知设置</string>
     <string name="setting_menu_noti_title_exp">远征</string>
-    <string name="setting_menu_noti_desc_exp">远征结束时通知栏提示。</string>
+    <string name="setting_menu_noti_desc_exp">远征结束时通知栏提示</string>
     <string name="setting_menu_noti_title_dock">入渠</string>
-    <string name="setting_menu_noti_desc_dock">入渠完成时通知栏提示。</string>
+    <string name="setting_menu_noti_desc_dock">入渠完成时通知栏提示</string>
     <string name="setting_menu_noti_title_hdmg_vib">大破警告</string>
-    <string name="setting_menu_noti_desc_hdmg_vib">有舰娘大破时响铃/振动（都会弹出通知）</string>
+    <string name="setting_menu_noti_desc_hdmg_vib">有舰娘大破时响铃/振动（弹出通知）</string>
     <string name="setting_menu_noti_title_nspl_vib">未补给警告</string>
-    <string name="setting_menu_noti_desc_nspl_vib">存在未补给船只时响铃/振动（都会弹出通知）</string>
+    <string name="setting_menu_noti_desc_nspl_vib">舰娘未补给时响铃/振动（弹出通知）</string>
 
     <string name="setting_menu_app_head">应用信息</string>
     <string name="setting_menu_app_title_current">当前版本</string>
     <string name="setting_menu_app_title_updatecheck">检查更新</string>
-    <string name="setting_menu_app_title_contact">提交建议或者报告错误</string>
-    <string name="setting_menu_app_desc_contact">给开发者发邮件</string>
+    <string name="setting_menu_app_title_contact">提交建议/报告错误</string>
+    <string name="setting_menu_app_desc_contact">给开发者发送邮件</string>
     <string name="setting_menu_app_info">关于kcanotify</string>
 
     <!-- BattleView Strings -->
@@ -197,16 +197,16 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="engagement_headon">反航战</string>
     <string name="engagement_t_disadvantage">T不利</string>
 
-    <string name="air_label">空战结果</string>
+    <string name="air_label">航空战结果</string>
     <string name="air_supermacy">制空确保</string>
     <string name="air_superiority">航空优势</string>
     <string name="air_parity">航空均衡</string>
     <string name="air_denial">航空劣势</string>
     <string name="air_incapability">制空权丧失</string>
 
-    <string name="enemy_fleet_name">敌舰队</string>
-    <string name="enemy_main_fleet_name">敌主要舰队</string>
-    <string name="enemy_combined_fleet_name">敌护卫队</string>
+    <string name="enemy_fleet_name">敌方舰队</string>
+    <string name="enemy_main_fleet_name">敌方主力舰队</string>
+    <string name="enemy_combined_fleet_name">敌方护卫舰队</string>
 
     <string name="yomi_flagship">flagship</string>
     <string name="yomi_elite">elite</string>
@@ -241,8 +241,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sound_kind_mute">静音</string>
     <string name="sound_kind_normal">响铃</string>
     <string name="sound_kind_vibrate">振动</string>
-    <string name="ma_permission_external_confirmed">允许访问外置存储：开</string>
-    <string name="ma_permission_external_denied">允许访问外置存储：关 （只能使用系统铃声/Cannot export error log）</string>
+    <string name="ma_permission_external_confirmed">访问外置存储：允许</string>
+    <string name="ma_permission_external_denied">访问外置存储：不允许 （只能使用系统铃声/不能导出错误日志）</string>
     <string name="raid_type1">资源损失</string>
     <string name="raid_type4">防空完全胜利</string>
     <string name="raid_type3">基地航空队损害</string>
@@ -309,20 +309,20 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_filter_equip_rev">反选</string>
     <string name="setting_menu_kand_desc_fairy_select">选择悬浮的妖精</string>
     <string name="setting_menu_kand_title_fairy_select">选择妖精</string>
-    <string name="current_fairy_changed_in_next">※ 当前战斗剧透/任务浏览结束后会改变妖精形象。</string>
-    <string name="setting_menu_app_title_down">选择APK下载地址</string>
+    <string name="current_fairy_changed_in_next">※ 妖精形象将于战斗剧透/任务浏览结束后改变</string>
+    <string name="setting_menu_app_title_down">APK下载地址</string>
     <string name="language_system">使用系统设置</string>
     <string name="item_engine">NE式轴流喷气发动机</string>
     <string name="setting_menu_noti_title_notiatsvcoff">当SVC服务关闭时启用通知</string>
     <string name="setting_menu_noti_desc_notiatsvcoff">当SVC服务关闭时启用远征/入渠通知</string>
-    <string name="kca_toast_renew_currentportdeck">Go to the main port(母港) in game and renew port data.</string>
+    <string name="kca_toast_renew_currentportdeck">游戏内返回母港并更新相关数据</string>
     <string name="questview_nopage">没有任务</string>
     <string name="viewmenu_battle">战斗</string>
     <string name="viewmenu_quest">任务</string>
     <string name="viewmenu_akashi">改修</string>
-    <string name="setting_menu_view_title_fullmorale_setting">Show Full Morale Information</string>
-    <string name="setting_menu_view_desc_fullmorale_setting">Show full morale info on notification bar</string>
+    <string name="setting_menu_view_title_fullmorale_setting">完整显示士气值</string>
+    <string name="setting_menu_view_desc_fullmorale_setting">通知栏完整显示士气值</string>
     <string name="action_errorlog">错误日志</string>
-    <string name="errlog_dialog_message">Do you want to clear the whole error log?</string>
-    <string name="errlog_cpy_to_clipboard">Text has been copied to clipboard.</string>
+    <string name="errlog_dialog_message">你想清空所有错误日志吗？</string>
+    <string name="errlog_cpy_to_clipboard">已复制文本到剪贴板</string>
 </resources>

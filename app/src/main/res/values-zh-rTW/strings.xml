@@ -150,8 +150,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_bypass_address">使用CIDR描述不進行代理的位址，使用逗號來分隔各CIDR。</string>
 
     <string name="setting_menu_view_head">功能設定</string>
-    <string name="setting_menu_view_title_accessibility_setting">Accessibility Settings</string>
-    <string name="setting_menu_view_desc_accessibility_setting">Select Kcanotify from Services. (required for detect kancolle app)</string>
+    <string name="setting_menu_view_title_accessibility_setting">輔助功能設置</string>
+    <string name="setting_menu_view_desc_accessibility_setting">選擇並開啟Kcanotify服務（以檢測艦これ客戶端）</string>
     <string name="setting_menu_view_title_overlay_setting">懸浮視窗設定</string>
     <string name="setting_menu_view_desc_overlay_setting">取得懸浮視窗權限（以開啟戰鬥劇透功能）</string>
     <string name="setting_menu_view_title_battleview_use">戰鬥劇透</string>
@@ -315,14 +315,14 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="item_engine">Ne式噴射發動機</string>
     <string name="setting_menu_noti_title_notiatsvcoff">當SVC服務關閉時啟用通知</string>
     <string name="setting_menu_noti_desc_notiatsvcoff">當SVC服務關閉時啟用遠征/入渠通知</string>
-    <string name="kca_toast_renew_currentportdeck">Go to the main port(母港) in game and renew port data.</string>
+    <string name="kca_toast_renew_currentportdeck">遊戲內返回母港並更新相關數據</string>
     <string name="questview_nopage">沒有任務</string>
     <string name="viewmenu_battle">戰鬥</string>
     <string name="viewmenu_quest">任務</string>
     <string name="viewmenu_akashi">改修</string>
-    <string name="setting_menu_view_title_fullmorale_setting">Show Full Morale Information</string>
-    <string name="setting_menu_view_desc_fullmorale_setting">Show full morale info on notification bar</string>
+    <string name="setting_menu_view_title_fullmorale_setting">完整顯示士氣值</string>
+    <string name="setting_menu_view_desc_fullmorale_setting">通知欄完整顯示士氣值</string>
     <string name="action_errorlog">錯誤日誌</string>
-    <string name="errlog_dialog_message">Do you want to clear the whole error log?</string>
-    <string name="errlog_cpy_to_clipboard">Text has been copied to clipboard.</string>
+    <string name="errlog_dialog_message">你想清空所有錯誤日誌嗎？</string>
+    <string name="errlog_cpy_to_clipboard">已複製文本到剪貼板</string>
 </resources>
