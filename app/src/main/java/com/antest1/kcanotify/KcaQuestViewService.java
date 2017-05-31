@@ -435,9 +435,9 @@ public class KcaQuestViewService extends Service {
         error_flag = true;
         if (mView != null) mView.setVisibility(View.GONE);
         JsonObject sendData = new JsonObject();
-        sendData.addProperty("data", api_data.toString());
+        if (api_data == null) sendData.addProperty("data", "[api data is null]");
+        else sendData.addProperty("data", api_data.toString());
         sendData.addProperty("error", getStringFromException(e));
-        String sendDataString = sendData.toString();
         helper.recordErrorLog(ERROR_TYPE_QUESTVIEW, "questview", "QV", api_data.toString(), getStringFromException(e));
     }
 }
