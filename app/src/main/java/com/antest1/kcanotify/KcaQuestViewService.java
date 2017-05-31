@@ -198,7 +198,7 @@ public class KcaQuestViewService extends Service {
                                 JsonArray updatevalue = new JsonArray();
                                 if (api_progress == 1 && trackData.get(0).getAsFloat() < trackCond.get(0).getAsFloat() * PROGRESS_1) {
                                     updatevalue.add((int) (Math.ceil(trackCond.get(0).getAsFloat() * PROGRESS_1)));
-                                } else if (api_progress == 1 && trackData.get(0).getAsFloat() < trackCond.get(0).getAsFloat() * PROGRESS_2) {
+                                } else if (api_progress == 2 && trackData.get(0).getAsFloat() < trackCond.get(0).getAsFloat() * PROGRESS_2) {
                                     updatevalue.add((int) (Math.ceil(trackCond.get(0).getAsFloat() * PROGRESS_2)));
                                 } else if (api_state == 3) {
                                     updatevalue.add(trackCond.get(0).getAsInt());
@@ -433,7 +433,7 @@ public class KcaQuestViewService extends Service {
 
     private void sendReport(Exception e, int type) {
         error_flag = true;
-        mView.setVisibility(View.GONE);
+        if (mView != null) mView.setVisibility(View.GONE);
         JsonObject sendData = new JsonObject();
         sendData.addProperty("data", api_data.toString());
         sendData.addProperty("error", getStringFromException(e));

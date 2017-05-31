@@ -344,9 +344,11 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "243":
                     wflag = world == 5 && map == 2 && isboss && rank.equals("S");
+                    break;
                 case "261":
                 case "265":
                     wflag = world == 1 && map == 5 && isboss && isGoodRank(rank);
+                    break;
                 case "249": // 5전대
                     requiredShip = 3;
                     for (int i = 0; i < deck_data.size(); i++) {
@@ -385,6 +387,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         if (kcShipType == STYPE_CL) requiredShip += 1;
                     }
                     wflag = world == 5 && map == 1 && isboss && rank.equals("S") && requiredShip == 31;
+                    break;
                 case "264": // 공모기동
                     requiredShip = 0;
                     for (int i = 0; i < deck_data.size(); i++) {
@@ -436,12 +439,12 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
             }
 
+            if (wflag) updateTarget.addProperty(key, cond0 + 1);
+
             if (dupflag == 2) {
                 updateTarget.addProperty("213", updateTarget.get("213").getAsInt() + apcount);
                 updateTarget.addProperty("218", updateTarget.get("218").getAsInt() + apcount);
             }
-
-            if (wflag) updateTarget.addProperty(key, cond0 + 1);
         }
 
         for (Map.Entry<String, JsonElement> entry : updateTarget.entrySet()) {
