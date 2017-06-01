@@ -304,11 +304,12 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 case "220":
                     updateTarget.addProperty(key, cond0 + cvcount);
                     break;
-                case "218":
-                case "213":
-                case "221":
+                case "218": // 보급3회
+                case "212": // 보급5회
+                case "213": // 통상파괴
+                case "221": // 로호
                     updateTarget.addProperty(key, cond0 + apcount);
-                    if (!key.equals("221")) dupflag += 1;
+                    if (key.equals("218") || key.equals("212")) dupflag += 1;
                     break;
                 case "230":
                 case "228":
@@ -442,7 +443,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             if (wflag) updateTarget.addProperty(key, cond0 + 1);
 
             if (dupflag == 2) {
-                updateTarget.addProperty("213", updateTarget.get("213").getAsInt() + apcount);
+                updateTarget.addProperty("212", updateTarget.get("212").getAsInt() + apcount);
                 updateTarget.addProperty("218", updateTarget.get("218").getAsInt() + apcount);
             }
         }
