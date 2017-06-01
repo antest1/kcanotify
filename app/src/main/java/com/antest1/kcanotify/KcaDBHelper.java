@@ -144,6 +144,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         db = this.getReadableDatabase();
         Cursor c = db.query(table_name, null, "KEY=?", new String[]{key}, null, null, null, null);
         if (c.moveToFirst()) value = c.getString(c.getColumnIndex("VALUE"));
+        c.close();
         return value;
     }
 

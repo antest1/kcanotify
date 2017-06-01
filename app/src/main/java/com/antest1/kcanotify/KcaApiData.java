@@ -43,7 +43,6 @@ public class KcaApiData {
 
     public static Map<Integer, JsonObject> kcMissionData = new HashMap<Integer, JsonObject>();
     //public static Map<String, String> kcShipTranslationData = null;
-    public static JsonObject kcQuestTrackData = new JsonObject();
 
     public static int level = 0;
     public static Integer experience = 0;
@@ -508,19 +507,18 @@ public class KcaApiData {
                 byte[] bytes = ByteStreams.toByteArray(ais);
                 helper.putValue(DB_KEY_QUESTTRACK, new String(bytes));
                 JsonElement data = new JsonParser().parse(new String(bytes));
-                kcQuestTrackData = data.getAsJsonObject();
                 return 1;
             } catch (IOException e) {
                 return 0;
             }
         } else {
-            kcQuestTrackData = helper.getJsonObjectValue(DB_KEY_QUESTTRACK);
             return 1;
         }
     }
 
     public static boolean isQuestTrackable(String id) {
         // TODO: Remove condition when other quest track implemented
+        JsonObject kcQuestTrackData = helper.getJsonObjectValue(DB_KEY_QUESTTRACK);
         int id_int = Integer.parseInt(id);
         Log.e("KCA-A", id + " " + String.valueOf(id_int / 100 != 2 && id_int / 100 != 8) + " " + String.valueOf(kcQuestTrackData.has(id)));
         if (id_int / 100 != 2 && id_int / 100 != 8) return false;
@@ -528,6 +526,7 @@ public class KcaApiData {
     }
 
     public static JsonObject getQuestTrackInfo(String id) {
+        JsonObject kcQuestTrackData = helper.getJsonObjectValue(DB_KEY_QUESTTRACK);
         if (kcQuestTrackData.has(id)) {
             return kcQuestTrackData.getAsJsonObject(id);
         } else {
