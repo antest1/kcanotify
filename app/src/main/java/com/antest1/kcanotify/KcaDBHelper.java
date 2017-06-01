@@ -140,13 +140,11 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     // for kca_userdata
     public String getValue(String key) {
+        String value = null;
         db = this.getReadableDatabase();
         Cursor c = db.query(table_name, null, "KEY=?", new String[]{key}, null, null, null, null);
-        if (c.moveToFirst()) {
-            return c.getString(c.getColumnIndex("VALUE"));
-        } else {
-            return null;
-        }
+        if (c.moveToFirst()) value = c.getString(c.getColumnIndex("VALUE"));
+        return value;
     }
 
     public JsonObject getJsonObjectValue(String key) {
@@ -195,13 +193,12 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public String getItemValue(int key) {
+        String value = null;
         db = this.getReadableDatabase();
         Cursor c = db.query(slotitem_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
-        if (c.moveToFirst()) {
-            return c.getString(c.getColumnIndex("VALUE"));
-        } else {
-            return null;
-        }
+        if (c.moveToFirst()) value = c.getString(c.getColumnIndex("VALUE"));
+        c.close();
+        return value;
     }
 
     public void putItemValue(int key, String value) {
