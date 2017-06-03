@@ -41,22 +41,35 @@
                 android:paddingBottom="4dp"
                 android:paddingTop="4dp">
 
-                <TextView
-                    android:id="@+id/battle_node"
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginBottom="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_weight="1"
-                    android:minWidth="72dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/white"
-                    android:textSize="14dp" />
+                    android:layout_centerVertical="true"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
+                    android:id="@+id/battle_node_area">
+
+                    <TextView
+                        android:id="@+id/battle_node"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_weight="1"
+                        android:minWidth="72dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/battle_result"

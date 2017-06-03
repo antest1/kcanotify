@@ -24,6 +24,7 @@
     <color name="colorSelectable">#4e7bff</color>
     <color name="colorNightBattle">#200a40</color>
     <color name="colorAirBattle">#4e342e</color>
+    <color name="colorPlaneWipedText">#ff5252</color>
 
     <color name="colorProgressBack">#d6d6d6</color>
     <color name="colorNormalState">#64dd17</color>

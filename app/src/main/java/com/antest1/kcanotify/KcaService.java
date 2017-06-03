@@ -291,7 +291,7 @@ public class KcaService extends Service {
                     .setTicker(title)
                     .setContentIntent(pendingIntent)
                     .setOnlyAlertOnce(true)
-                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    // .setPriority(NotificationCompat.PRIORITY_MAX)
                     .setOngoing(true).setAutoCancel(false);
             viewNotificationFirstTime = false;
         }

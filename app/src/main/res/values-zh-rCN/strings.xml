@@ -178,8 +178,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- BattleView Strings -->
     <string name="battleview_error">处理战斗数据时出错</string>
     <string name="battleview_menu_head">选单</string>
-    <string name="battleview_menu0">Aerial Combat Info</string>
-    <string name="battleview_menu1">Current Quest List</string>
+    <string name="battleview_menu0">航空战信息</string>
+    <string name="battleview_menu1">任务浏览</string>
 
     <string name="formation_lineahead">单纵</string>
     <string name="formation_doubleline">复纵</string>
@@ -247,6 +247,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sound_kind_vibrate">振动</string>
     <string name="ma_permission_external_confirmed">访问外置存储：允许</string>
     <string name="ma_permission_external_denied">访问外置存储：不允许 （只能使用系统铃声/不能导出错误日志）</string>
+    <string name="airbase_term">基地航空队</string>
+    <string name="phase_term" formatted="false">阶段%d</string>
+    <string name="injection_term">喷气式强袭</string>
     <string name="raid_type1">资源损失</string>
     <string name="raid_type4">防空完全胜利</string>
     <string name="raid_type3">基地航空队损害</string>

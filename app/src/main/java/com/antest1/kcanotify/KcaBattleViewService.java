@@ -56,6 +56,7 @@ import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaBattle.deckportdata;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION;
+import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION_NEW;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
@@ -88,7 +89,7 @@ public class KcaBattleViewService extends Service {
     JsonArray api_formation;
     JsonObject api_kouku;
 
-    private View mView, itemView, menuView;
+    private View mView, itemView, acView, menuView;
     private WindowManager mManager;
 
     int displayWidth = 0;
@@ -1081,6 +1082,7 @@ public class KcaBattleViewService extends Service {
         try {
             error_flag = false;
             setBattleview();
+            setAirCombatView();
             return 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -1110,6 +1112,9 @@ public class KcaBattleViewService extends Service {
                 setBattleViewMenu();
 
                 itemView = mInflater.inflate(R.layout.view_battleview_items, null);
+                acView = mInflater.inflate(R.layout.view_battleview_aircombat, null);
+                acView.findViewById(R.id.view_ac_head).setOnTouchListener(acViewTouchListener);
+
                 mParams = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.MATCH_PARENT,
                         WindowManager.LayoutParams.MATCH_PARENT,
@@ -1170,7 +1175,140 @@ public class KcaBattleViewService extends Service {
         menuView.findViewById(R.id.view_head).setOnClickListener(battleViewMenuListener);
         menuView.findViewById(R.id.view_item0).setOnClickListener(battleViewMenuListener);
         menuView.findViewById(R.id.view_item1).setOnClickListener(battleViewMenuListener);
-        battleview.findViewById(R.id.battle_node).setOnTouchListener(infoListViewTouchListener);
+        battleview.findViewById(R.id.battle_node_area).setOnTouchListener(infoListViewTouchListener);
+    }
+
+    private void setAirCombatTextView(String prefix, JsonObject data) {
+        String countformat = "%d/%d (-%d)";
+        for (int n = 1; n <= 2; n++) {
+            String n_str = String.valueOf(n);
+            TextView friendView = (TextView) acView.findViewById(getId(prefix.concat(n_str).concat("_f"), R.id.class));
+            TextView enemyView = (TextView) acView.findViewById(getId(prefix.concat(n_str).concat("_e"), R.id.class));
+            TextView msgView = (TextView) acView.findViewById(getId(prefix.concat(n_str).concat("_msg"), R.id.class));
+            if (!data.get("api_stage".concat(n_str)).isJsonNull()) {
+                JsonObject stage_data = data.getAsJsonObject("api_stage".concat(String.valueOf(n)));
+                int f_count = stage_data.get("api_f_count").getAsInt();
+                int f_lostcount = stage_data.get("api_f_lostcount").getAsInt();
+                int e_count = stage_data.get("api_e_count").getAsInt();
+                int e_lostcount = stage_data.get("api_e_lostcount").getAsInt();
+
+                friendView.setText(String.format(countformat, f_count - f_lostcount, f_count, f_lostcount));
+                if (f_count > 0 && f_count - f_lostcount <= 0) {
+                    friendView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPlaneWipedText));
+                } else {
+                    friendView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                }
+
+                enemyView.setText(String.format(countformat, e_count - e_lostcount, e_count, e_lostcount));
+                if (e_count > 0 && e_count - e_lostcount <= 0) {
+                    enemyView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPlaneWipedText));
+                } else {
+                    enemyView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                }
+
+                if (n == 1) {
+                    if (stage_data.has("api_disp_seiku")) {
+                        msgView.setText(getAirForceResultString(contextWithLocale,
+                                stage_data.get("api_disp_seiku").getAsInt()));
+                    } else {
+                        msgView.setText("-");
+                    }
+                } else if (n == 2) {
+                    if (stage_data.has("api_air_fire")) {
+                        String airfireformat = "#%d";
+                        msgView.setText(String.format(airfireformat,
+                                stage_data.getAsJsonObject("api_air_fire").get("api_idx").getAsInt() + 1));
+                    } else {
+                        msgView.setText("-");
+                    }
+                }
+            } else {
+                friendView.setText("");
+                enemyView.setText("");
+                msgView.setText("");
+            }
+        }
+    }
+
+    private void setAirCombatView() {
+        if (api_data != null && !api_data.has("api_enemy_info") && !api_data.has("api_flare_pos")) {
+            if (api_data.has("api_kouku")) {
+                JsonObject kdata = api_data.getAsJsonObject("api_kouku");
+                ((TextView) acView.findViewById(R.id.view_ac_phase1_title))
+                        .setText(String.format(getStringWithLocale(R.string.phase_term), 1));
+                setAirCombatTextView("view_ac_phase1_", kdata);
+                acView.findViewById(R.id.view_ac_phase1).setVisibility(View.VISIBLE);
+            } else {
+                acView.findViewById(R.id.view_ac_phase1).setVisibility(View.GONE);
+            }
+
+            if (api_data.has("api_kouku2")) {
+                JsonObject kdata = api_data.getAsJsonObject("api_kouku2");
+                ((TextView) acView.findViewById(R.id.view_ac_phase2_title))
+                        .setText(String.format(getStringWithLocale(R.string.phase_term), 2));
+                setAirCombatTextView("view_ac_phase2_", kdata);
+                acView.findViewById(R.id.view_ac_phase2).setVisibility(View.VISIBLE);
+            } else {
+                acView.findViewById(R.id.view_ac_phase2).setVisibility(View.GONE);
+            }
+
+            if (api_data.has("api_air_base_injection")) {
+                JsonObject kdata = api_data.getAsJsonObject("api_air_base_injection");
+                ((TextView) acView.findViewById(R.id.view_ac_abinj_title))
+                        .setText(getStringWithLocale(R.string.injection_term)
+                                .concat("/").concat(getStringWithLocale(R.string.airbase_term)));
+                setAirCombatTextView("view_ac_abinj_", kdata);
+                acView.findViewById(R.id.view_ac_abinj).setVisibility(View.VISIBLE);
+            } else {
+                acView.findViewById(R.id.view_ac_abinj).setVisibility(View.GONE);
+            }
+
+            if (api_data.has("api_injection_kouku")) {
+                JsonObject kdata = api_data.getAsJsonObject("api_injection_kouku");
+                ((TextView) acView.findViewById(R.id.view_ac_inj_title))
+                        .setText(getStringWithLocale(R.string.injection_term));
+                setAirCombatTextView("view_ac_inj_", kdata);
+                acView.findViewById(R.id.view_ac_inj).setVisibility(View.VISIBLE);
+            } else {
+                acView.findViewById(R.id.view_ac_inj).setVisibility(View.GONE);
+            }
+
+            if (api_data.has("api_destruction_battle")) {
+                String viewidformat = "view_ac_aba_%d_";
+                JsonObject kdata = api_data.getAsJsonObject("api_destruction_battle").getAsJsonObject("api_air_base_attack");
+                ((TextView) acView.findViewById(R.id.view_ac_aba_0_title))
+                        .setText(getStringWithLocale(R.string.airbase_term).concat(" ")
+                                .concat(String.format(getStringWithLocale(R.string.phase_term), 1)));
+                setAirCombatTextView("view_ac_aba_0_", kdata);
+                acView.findViewById(R.id.view_ac_aba_0).setVisibility(View.VISIBLE);
+                for (int i = 1; i < 6; i++) {
+                    String viewid = String.format(viewidformat, i);
+                    acView.findViewById(getId(viewid, R.id.class)).setVisibility(View.GONE);
+                }
+                acView.findViewById(R.id.view_ac_aba).setVisibility(View.VISIBLE);
+            } else if (api_data.has("api_air_base_attack")) {
+                JsonArray kdata_list = api_data.getAsJsonArray("api_air_base_attack");
+                String viewidformat = "view_ac_aba_%d";
+                for (int i = 0; i < 6; i++) {
+                    String viewid = String.format(viewidformat, i);
+                    if (i >= kdata_list.size()) {
+                        acView.findViewById(getId(viewid, R.id.class)).setVisibility(View.GONE);
+                        Log.e("KCA-BV", viewid + " not available");
+                    } else {
+                        JsonObject kdata = kdata_list.get(i).getAsJsonObject();
+                        ((TextView) acView.findViewById(getId(viewid.concat("_title"), R.id.class)))
+                                .setText(getStringWithLocale(R.string.airbase_term).concat(" ")
+                                        .concat(String.format(getStringWithLocale(R.string.phase_term), i+1)));
+                        setAirCombatTextView(viewid.concat("_"), kdata);
+                        acView.findViewById(getId(viewid, R.id.class)).setVisibility(View.VISIBLE);
+                        Log.e("KCA-BV", viewid + " " + kdata.toString());
+                    }
+                }
+                acView.findViewById(R.id.view_ac_aba).setVisibility(View.VISIBLE);
+            } else {
+                acView.findViewById(R.id.view_ac_aba).setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -1230,6 +1368,24 @@ public class KcaBattleViewService extends Service {
         }
     };
 
+    private View.OnTouchListener acViewTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    Log.e("KCA", "ACTION_DOWN");
+                    return true;
+                case MotionEvent.ACTION_UP:
+                    acView.setVisibility(View.GONE);
+                    mManager.removeViewImmediate(acView);
+                    Log.e("KCA", "ACTION_UP");
+                    return false;
+                default:
+                    return false;
+            }
+        }
+    };
+
     private View.OnTouchListener shipViewTouchListener = new View.OnTouchListener() {
         WindowManager.LayoutParams itemViewParams;
         int xMargin = 200;
@@ -1279,8 +1435,10 @@ public class KcaBattleViewService extends Service {
     private View.OnTouchListener infoListViewTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            WindowManager.LayoutParams itemViewParams;
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    if (acView.getParent() != null) return true;
                     WindowManager.LayoutParams infoViewParams;
                     infoViewParams = new WindowManager.LayoutParams(
                             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -1304,16 +1462,30 @@ public class KcaBattleViewService extends Service {
     private View.OnClickListener battleViewMenuListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            WindowManager.LayoutParams acViewParams;
             switch (v.getId()) {
                 case R.id.view_item0:
-                    Toast.makeText(getApplicationContext(), "Not Implemented", Toast.LENGTH_SHORT).show();
+                    acViewParams = new WindowManager.LayoutParams(
+                            WindowManager.LayoutParams.WRAP_CONTENT,
+                            WindowManager.LayoutParams.WRAP_CONTENT,
+                            WindowManager.LayoutParams.TYPE_PHONE,
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                            PixelFormat.TRANSLUCENT);
+
+                    acView.setVisibility(View.VISIBLE);
+                    if (acView.getParent() != null) {
+                        mManager.updateViewLayout(acView, acViewParams);
+                    } else {
+                        mManager.addView(acView, acViewParams);
+                    }
                     break;
                 case R.id.view_item1:
                     Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
-                    qintent.setAction(SHOW_QUESTVIEW_ACTION);
+                    qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
                     startService(qintent);
                     break;
                 case R.id.view_head:
+                    break;
                 default:
                     break;
             }

@@ -183,8 +183,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- BattleView Strings -->
     <string name="battleview_error">處理戰鬥資料時出現錯誤</string>
     <string name="battleview_menu_head">選單</string>
-    <string name="battleview_menu0">Aerial Combat Info</string>
-    <string name="battleview_menu1">Current Quest List</string>
+    <string name="battleview_menu0">航空戰信息</string>
+    <string name="battleview_menu1">任務瀏覽</string>
 
     <string name="formation_lineahead">單縱</string>
     <string name="formation_doubleline">複縱</string>
@@ -250,6 +250,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sound_kind_mute">靜音</string>
     <string name="ma_permission_external_confirmed">讀取外接儲存空間：允許</string>
     <string name="ma_permission_external_denied">讀取外接儲存空間：不允許（只能使用系統鈴聲/Cannot export error log）</string>
+    <string name="airbase_term">基地航空隊</string>
+    <string name="phase_term" formatted="false">階段%d</string>
+    <string name="injection_term">噴氣式強襲</string>
     <string name="raid_type1">資源損失</string>
     <string name="raid_type2">資源損失/基地航空隊損害</string>
     <string name="raid_type3">基地航空隊損害</string>
