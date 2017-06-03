@@ -306,8 +306,10 @@ public class KcaDeckInfo {
             int deckid = Integer.parseInt(decklist[n]);
             JsonArray deckShipIdList = ((JsonObject) deckPortData.get(deckid)).getAsJsonArray("api_ship");
             for (int i = 0; i < deckShipIdList.size(); i++) {
-                int excludeflagid = deckid * 6 + i + 1; // 1 ~ 13
-                if (excludeflagexist && exclude_flag[excludeflagid]) continue;
+                if (deckid < 2) {
+                    int excludeflagid = deckid * 6 + i + 1; // 1 ~ 13
+                    if (excludeflagexist && exclude_flag[excludeflagid]) continue;
+                }
                 int shipId = deckShipIdList.get(i).getAsInt();
                 if (shipId != -1) {
                     JsonObject shipData = getUserShipDataById(shipId, "slot,ship_id");
@@ -431,6 +433,23 @@ public class KcaDeckInfo {
                 }
             }
         }
+    }
+
+    public static JsonArray getDeckListInfo(JsonArray deckPortData, int deckid) {
+        JsonArray deckListInfo = new JsonArray();
+        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
+        for (int i = 0; i < deckShipIdList.size(); i++) {
+            JsonObject data = new JsonObject();
+            int shipId = deckShipIdList.get(i).getAsInt();
+            if (shipId != -1) {
+                JsonObject shipData = getUserShipDataById(shipId, "ship_id,lv,slot,slot_ex,onslot,cond,maxhp,nowhp");
+                data.add("user", shipData);
+                int shipKcId = shipData.get("ship_id").getAsInt();
+                data.add("kc", getKcShipDataById(shipKcId, "name,maxeq"));
+                deckListInfo.add(data);
+            }
+        }
+        return deckListInfo;
     }
 
     public static int checkHeavyDamageExist(JsonArray deckPortData, int deckid) {

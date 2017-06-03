@@ -180,6 +180,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="battleview_menu_head">选单</string>
     <string name="battleview_menu0">航空战信息</string>
     <string name="battleview_menu1">任务浏览</string>
+    <string name="battleview_menu2">舰队信息</string>
 
     <string name="formation_lineahead">单纵</string>
     <string name="formation_doubleline">复纵</string>
@@ -257,7 +258,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="getship_label">掉落</string>
     <string name="getship_none">(无)</string>
     <string name="getship_max">(船位已满)</string>
-    <string name="kca_view_tpvalue" formatted="false">运输: S%d/A%d</string>
+    <string name="kca_view_tpvalue" formatted="false">运输：%d~%d</string>
     <string name="ship_name_class">舰种分类</string>
     <string name="slot_empty">(没有装备)</string>
     <string name="kca_view_condition_1" formatted="false">士气 #1: %s</string>
@@ -324,6 +325,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_notiatsvcoff">当SVC服务关闭时启用远征/入渠通知</string>
     <string name="kca_toast_renew_currentportdeck">游戏内返回母港并更新相关数据</string>
     <string name="questview_nopage">没有任务</string>
+    <string name="fleetview_title">舰队信息</string>
+    <string name="fleetview_combined">联合</string>
     <string name="viewmenu_battle">战斗</string>
     <string name="viewmenu_quest">任务</string>
     <string name="viewmenu_akashi">改修</string>

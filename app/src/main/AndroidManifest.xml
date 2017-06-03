@@ -88,6 +88,8 @@
         <service
             android:name=".KcaBattleViewService" />
         <service
+            android:name=".KcaFleetViewService" />
+        <service
             android:name=".KcaQuestViewService" />
         <service
             android:name=".KcaAkashiViewService" />

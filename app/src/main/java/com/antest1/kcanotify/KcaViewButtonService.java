@@ -78,6 +78,8 @@ public class KcaViewButtonService extends Service {
     public static final String SHOW_QUEST_INFO = "show_quest_info";
     public static final String ACTIVATE_BATTLEVIEW_ACTION = "activate_battleview";
     public static final String DEACTIVATE_BATTLEVIEW_ACTION = "deactivate_battleview";
+    public static final String ACTIVATE_QUESTVIEW_ACTION = "activate_questview";
+    public static final String DEACTIVATE_QUESTVIEW_ACTION = "deactivate_questview";
 
     private LocalBroadcastManager broadcaster;
     private BroadcastReceiver battleinfo_receiver;
@@ -88,12 +90,11 @@ public class KcaViewButtonService extends Service {
     private Handler mHandler;
     private Vibrator vibrator;
     private ImageView viewbutton;
-    private View menulistbutton;
     private int screenWidth, screenHeight;
     private int buttonWidth, buttonHeight;
-    private int menuWidth, menuHeight;
     private KcaDBHelper dbHelper;
     private boolean battleviewEnabled = false;
+    private boolean questviewEnabled = false;
     public int viewBitmapId = 0;
     public int viewBitmapSmallId = 0;
     WindowManager.LayoutParams mParams;
@@ -193,19 +194,6 @@ public class KcaViewButtonService extends Service {
             buttonWidth = viewbutton.getMeasuredWidth();
             buttonHeight = viewbutton.getMeasuredHeight();
 
-            // Menu List Settings
-            menulistbutton = mView.findViewById(R.id.viewbutton_menu);
-            menulistbutton.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            menuWidth = menulistbutton.getMeasuredWidth();
-            menuHeight = menulistbutton.getMeasuredHeight();
-            menulistbutton.setVisibility(View.GONE);
-            //menulistbutton.findViewById(R.id.viewbutton_battle).setOnTouchListener(mViewTouchListener);
-            menulistbutton.findViewById(R.id.viewbutton_quest).setOnTouchListener(mViewTouchListener);
-            menulistbutton.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
-            //((TextView) menulistbutton.findViewById(R.id.viewbutton_battle)).setText(getStringWithLocale(R.string.viewmenu_battle));
-            ((TextView) menulistbutton.findViewById(R.id.viewbutton_quest)).setText(getStringWithLocale(R.string.viewmenu_quest));
-            ((TextView) menulistbutton.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
-
             mParams = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
@@ -227,8 +215,7 @@ public class KcaViewButtonService extends Service {
             mManager.addView(mView, mParams);
 
             battleviewEnabled = false;
-            //TextView battleButton = (TextView) menulistbutton.findViewById(R.id.viewbutton_battle);
-            //battleButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+            questviewEnabled = false;
         }
     }
 
@@ -273,21 +260,24 @@ public class KcaViewButtonService extends Service {
                 ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().clearColorFilter();
             }
             if (intent.getAction().equals(ACTIVATE_BATTLEVIEW_ACTION)) {
-                menulistbutton.setVisibility(View.GONE);
+                Intent qintent = new Intent(getBaseContext(), KcaFleetViewService.class);
+                qintent.setAction(KcaFleetViewService.CLOSE_FLEETVIEW_ACTION);
+                startService(qintent);
                 battleviewEnabled = true;
-                //if(menulistbutton != null) {
-                //    TextView battleButton = (TextView) menulistbutton.findViewById(R.id.viewbutton_battle);
-                //    battleButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-                //}
             }
             if (intent.getAction().equals(DEACTIVATE_BATTLEVIEW_ACTION)) {
-                Log.e("KCA", "Called " + DEACTIVATE_BATTLEVIEW_ACTION);
                 battleviewEnabled = false;
-                //if(menulistbutton != null) {
-                //    TextView battleButton = (TextView) menulistbutton.findViewById(R.id.viewbutton_battle);
-                //    battleButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
-                //}
             }
+            if (intent.getAction().equals(ACTIVATE_QUESTVIEW_ACTION)) {
+                Intent qintent = new Intent(getBaseContext(), KcaFleetViewService.class);
+                qintent.setAction(KcaFleetViewService.CLOSE_FLEETVIEW_ACTION);
+                startService(qintent);
+                questviewEnabled = true;
+            }
+            if (intent.getAction().equals(DEACTIVATE_QUESTVIEW_ACTION)) {
+                questviewEnabled = false;
+            }
+
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -313,17 +303,7 @@ public class KcaViewButtonService extends Service {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             int id = v.getId();
-            if (id == menulistbutton.findViewById(R.id.viewbutton_quest).getId()) {
-                Log.e("KCA", "viewbutton_quest");
-                Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
-                qintent.setAction(SHOW_QUESTVIEW_ACTION);
-                startService(qintent);
-            } else if (id == menulistbutton.findViewById(R.id.viewbutton_akashi).getId()) {
-                Log.e("KCA", "viewbutton_akashi");
-                Intent qintent = new Intent(getBaseContext(), KcaAkashiViewService.class);
-                qintent.setAction(SHOW_AKASHIVIEW_ACTION);
-                startService(qintent);
-            } else if (id == viewbutton.getId()) {
+            if (id == viewbutton.getId()) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         mTouchX = event.getRawX();
@@ -342,27 +322,19 @@ public class KcaViewButtonService extends Service {
                         if (clickDuration < MAX_CLICK_DURATION) {
                             clickcount += 1;
                             if (battleviewEnabled) {
-                                menulistbutton.setVisibility(View.GONE);
                                 Intent qintent = new Intent(getBaseContext(), KcaBattleViewService.class);
                                 qintent.setAction(KcaBattleViewService.SHOW_BATTLEVIEW_ACTION);
                                 startService(qintent);
-                            } else if (menulistbutton.getVisibility() == View.GONE) {
-                                menulistbutton.setVisibility(View.VISIBLE);
+                            } else if (questviewEnabled) {
+                                Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
+                                qintent.setAction(KcaQuestViewService.SHOW_QUESTVIEW_ACTION_NEW);
+                                startService(qintent);
                             } else {
-                                menulistbutton.setVisibility(View.GONE);
+                                Intent qintent = new Intent(getBaseContext(), KcaFleetViewService.class);
+                                qintent.setAction(KcaFleetViewService.SHOW_FLEETVIEW_ACTION);
+                                startService(qintent);
                             }
                         }
-
-                        int totalWidth = buttonWidth;
-                        int totalHeight = buttonHeight;
-                        if (menulistbutton.getVisibility() == View.VISIBLE) {
-                            totalWidth += menuWidth;
-                        }
-
-                        if (mParams.x < 0) mParams.x = 0;
-                        else if (mParams.x > screenWidth - totalWidth) mParams.x = screenWidth - totalWidth;
-                        if (mParams.y < 0) mParams.y = 0;
-                        else if (mParams.y > screenHeight - totalHeight) mParams.y = screenHeight - totalHeight;
 
                         int[] locations = new int[2];
                         mView.getLocationOnScreen(locations);
@@ -397,7 +369,6 @@ public class KcaViewButtonService extends Service {
             Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
             mView.setVisibility(View.GONE);
             recentVisibility = View.GONE;
-            //displayNotification(getApplicationContext());
         }
     };
     
@@ -410,20 +381,6 @@ public class KcaViewButtonService extends Service {
         screenWidth = size.x;
         screenHeight = size.y;
         Log.e("KCA", "w/h: "+String.valueOf(screenWidth) + " "  +String.valueOf(screenHeight));
-
-        int totalWidth = buttonWidth;
-        int totalHeight = buttonHeight;
-        if (menulistbutton.getVisibility() == View.VISIBLE) {
-            totalWidth += menuWidth;
-        }
-        if (mParams.x < 0) mParams.x = 0;
-        else if (mParams.x > screenWidth - totalWidth) mParams.x = screenWidth - totalWidth;
-        if (mParams.y < 0) mParams.y = 0;
-        else if (mParams.y > screenHeight - totalHeight) mParams.y = screenHeight - totalHeight;
-
-        //((TextView) menulistbutton.findViewById(R.id.viewbutton_battle)).setText(getStringWithLocale(R.string.viewmenu_battle));
-        ((TextView) menulistbutton.findViewById(R.id.viewbutton_quest)).setText(getStringWithLocale(R.string.viewmenu_quest));
-        ((TextView) menulistbutton.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
         super.onConfigurationChanged(newConfig);
     }
 }

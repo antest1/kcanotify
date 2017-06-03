@@ -155,7 +155,6 @@ public class KcaAkashiViewService extends Service {
             mParams.gravity = Gravity.CENTER;
 
             mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            mManager.addView(mView, mParams);
 
             Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
             Point size = new Point();
@@ -183,8 +182,10 @@ public class KcaAkashiViewService extends Service {
             if (intent.getAction().equals(SHOW_AKASHIVIEW_ACTION)) {
                 int setViewResult = setView();
                 if (setViewResult == 0) {
-                    mView.invalidate();
-                    mManager.updateViewLayout(mView, mParams);
+                    if (mView.getParent() != null) {
+                        mManager.removeViewImmediate(mView);
+                    }
+                    mManager.addView(mView, mParams);
                 }
                 Log.e("KCA", "show_akashiview_action " + String.valueOf(setViewResult));
                 mView.setVisibility(View.VISIBLE);

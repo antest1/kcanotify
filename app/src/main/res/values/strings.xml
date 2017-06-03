@@ -223,6 +223,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="battleview_menu_head">Menu</string>
     <string name="battleview_menu0">Aerial Combat Info</string>
     <string name="battleview_menu1">Current Quest List</string>
+    <string name="battleview_menu2">Open FleetView</string>
 
     <string name="formation_lineahead">Line Ahead</string>
     <string name="formation_doubleline">Double Line</string>
@@ -301,7 +302,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="getship_label">Drop</string>
     <string name="getship_none">(None)</string>
     <string name="getship_max">(Slot is Full)</string>
-    <string name="kca_view_tpvalue" formatted="false" >TP: S%d/A%d</string>
+    <string name="kca_view_tpvalue" formatted="false" >TP: %d(S),%d(A)</string>
     <string name="ship_name_class">Class</string>
 
     <string name="lv_star" translatable="false">&#9733;</string>
@@ -380,6 +381,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_notiatsvcoff">Make expedition/docking notification available even if SVC is off</string>
     <string name="questview_nopage">No Quest</string>
 
+    <string name="fleetview_title">FleetView</string>
+    <string name="fleetview_combined">CF</string>
     <string name="viewmenu_battle">Battle</string>
     <string name="viewmenu_quest">Quest</string>
     <string name="viewmenu_akashi">Akashi</string>

@@ -166,6 +166,7 @@
     <string name="battleview_menu_head">메뉴</string>
     <string name="battleview_menu0">항공전 정보</string>
     <string name="battleview_menu1">현재 임무 목록</string>
+    <string name="battleview_menu2">함대 정보 보기</string>
 
     <string name="formation_lineahead">단종진</string>
     <string name="formation_doubleline">복종진</string>
@@ -243,7 +244,7 @@
     <string name="getship_label">드롭</string>
     <string name="getship_none">(없음)</string>
     <string name="getship_max">(슬롯 여유 없음)</string>
-    <string name="kca_view_tpvalue" formatted="false" >TP: S%d/A%d</string>
+    <string name="kca_view_tpvalue" formatted="false" >TP: %d~%d</string>
     <string name="ship_name_class">급</string>
     <string name="slot_empty">(장비 없음)</string>
     <string name="kca_view_condition_1" formatted="false">피로도 #1: %s</string>
@@ -317,6 +318,9 @@
     <string name="setting_menu_noti_desc_notiatsvcoff">SVC를 끈 상태에서도 원정/입거 완료 알림이 오도록 함</string>
     <string name="kca_toast_renew_currentportdeck">모항으로 돌아가 게임 데이터를 업데이트하세요.</string>
     <string name="questview_nopage">임무 없음</string>
+
+    <string name="fleetview_title">함대정보</string>
+    <string name="fleetview_combined">연합</string>
     <string name="viewmenu_battle">전투</string>
     <string name="viewmenu_quest">임무</string>
     <string name="viewmenu_akashi">개수</string>

@@ -88,6 +88,16 @@
                         android:textColor="@color/white"
                         android:padding="8dp"
                         android:textSize="20dp" />
+
+                    <TextView
+                        android:text="@string/battleview_menu2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/view_item2"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"
+                        android:padding="8dp"
+                        android:textSize="20dp" />
                 </LinearLayout>
             </ScrollView>
 

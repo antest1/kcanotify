@@ -55,6 +55,7 @@ import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaBattle.deckportdata;
 import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaFleetViewService.SHOW_FLEETVIEW_ACTION;
 import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION;
 import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION_NEW;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
@@ -1175,6 +1176,7 @@ public class KcaBattleViewService extends Service {
         menuView.findViewById(R.id.view_head).setOnClickListener(battleViewMenuListener);
         menuView.findViewById(R.id.view_item0).setOnClickListener(battleViewMenuListener);
         menuView.findViewById(R.id.view_item1).setOnClickListener(battleViewMenuListener);
+        menuView.findViewById(R.id.view_item2).setOnClickListener(battleViewMenuListener);
         battleview.findViewById(R.id.battle_node_area).setOnTouchListener(infoListViewTouchListener);
     }
 
@@ -1317,6 +1319,7 @@ public class KcaBattleViewService extends Service {
         deckportdata = null;
         if (mView != null) mView.setVisibility(View.GONE);
         if (itemView != null) itemView.setVisibility(View.GONE);
+        if (mView.getParent() != null) mManager.removeViewImmediate(mView);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
         super.onDestroy();
     }
@@ -1462,6 +1465,7 @@ public class KcaBattleViewService extends Service {
     private View.OnClickListener battleViewMenuListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            Intent qintent;
             WindowManager.LayoutParams acViewParams;
             switch (v.getId()) {
                 case R.id.view_item0:
@@ -1480,8 +1484,13 @@ public class KcaBattleViewService extends Service {
                     }
                     break;
                 case R.id.view_item1:
-                    Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
+                    qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
                     qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
+                    startService(qintent);
+                    break;
+                case R.id.view_item2:
+                    qintent = new Intent(getBaseContext(), KcaFleetViewService.class);
+                    qintent.setAction(SHOW_FLEETVIEW_ACTION);
                     startService(qintent);
                     break;
                 case R.id.view_head:

@@ -49,6 +49,7 @@ public class KcaQuestViewService extends Service {
     public static final String REFRESH_QUESTVIEW_ACTION = "refresh_questview";
     public static final String SHOW_QUESTVIEW_ACTION = "show_questview";
     public static final String SHOW_QUESTVIEW_ACTION_NEW = "show_questview_new";
+    public static final String CLOSE_QUESTVIEW_ACTION = "close_questview";
 
     public static final float PROGRESS_1 = 0.5f;
     public static final float PROGRESS_2 = 0.8f;
@@ -331,7 +332,6 @@ public class KcaQuestViewService extends Service {
                 mParams.gravity = Gravity.CENTER;
 
                 mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-                mManager.addView(mView, mParams);
 
                 Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
                 Point size = new Point();
@@ -351,7 +351,7 @@ public class KcaQuestViewService extends Service {
     public void onDestroy() {
         active = false;
         if (mView != null) mView.setVisibility(View.GONE);
-        mManager.removeView(mView);
+        if (mView.getParent() != null) mManager.removeView(mView);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
         super.onDestroy();
     }
@@ -376,10 +376,13 @@ public class KcaQuestViewService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(REFRESH_QUESTVIEW_ACTION)) {
-                boolean checkValid = intent.getIntExtra("tab_id", -1) % 9 == 0;
-                updateView(setView(isquestlist, checkValid), false);
-                Log.e("KCA", String.valueOf(intent.getIntExtra("tab_id", -2)));
-
+                int extra = intent.getIntExtra("tab_id", -1);
+                if (extra != -1) {
+                    boolean checkValid = extra % 9 == 0;
+                    updateView(setView(isquestlist, checkValid), false);
+                } else {
+                    setView(isquestlist, false);
+                }
             } else if (intent.getAction().equals(SHOW_QUESTVIEW_ACTION)) {
                 currentPage = 1;
                 updateView(setView(isquestlist, false), false);
@@ -388,6 +391,11 @@ public class KcaQuestViewService extends Service {
                 currentPage = 1;
                 updateView(setView(isquestlist, false), true);
                 mView.setVisibility(View.VISIBLE);
+            } else if (intent.getAction().equals(CLOSE_QUESTVIEW_ACTION)) {
+                if (mView.getParent() != null) {
+                    mView.setVisibility(View.GONE);
+                    mManager.removeViewImmediate(mView);
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId);

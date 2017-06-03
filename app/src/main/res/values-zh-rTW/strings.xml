@@ -185,6 +185,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="battleview_menu_head">選單</string>
     <string name="battleview_menu0">航空戰信息</string>
     <string name="battleview_menu1">任務瀏覽</string>
+    <string name="battleview_menu2">艦隊信息</string>
 
     <string name="formation_lineahead">單縱</string>
     <string name="formation_doubleline">複縱</string>
@@ -260,7 +261,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="getship_label">掉落</string>
     <string name="getship_none">(無)</string>
     <string name="getship_max">(船位已滿)</string>
-    <string name="kca_view_tpvalue" formatted="false" >運輸： S%d/A%d</string>
+    <string name="kca_view_tpvalue" formatted="false" >運輸：%d~%d</string>
     <string name="ship_name_class">船型</string>
 
     <string name="kca_view_condition_1" formatted="false">士氣 #1: %s</string>
@@ -324,6 +325,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_notiatsvcoff">當SVC服務關閉時啟用遠征/入渠通知</string>
     <string name="kca_toast_renew_currentportdeck">遊戲內返回母港並更新相關數據</string>
     <string name="questview_nopage">沒有任務</string>
+    <string name="fleetview_title">艦隊信息</string>
+    <string name="fleetview_combined">聯合</string>
     <string name="viewmenu_battle">戰鬥</string>
     <string name="viewmenu_quest">任務</string>
     <string name="viewmenu_akashi">改修</string>

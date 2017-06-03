@@ -91,4 +91,13 @@
     <color name="colorAkashiEquipFilterPanel">#f5f5f5</color>
 
     <color name="colorQuestTrackProgress">#4e7bff</color>
+
+
+    <color name="colorFleetInfoNormal">#16a085</color>
+    <color name="colorFleetInfoNoShip">#aaaaaa</color>
+    <color name="colorFleetShipKira">#ffea00</color>
+    <color name="colorFleetShipFatigue1">#f9a825</color>
+    <color name="colorFleetShipFatigue2">#ff5252</color>
+    <color name="colorFleetWarning">#7e2424</color>
+    <color name="colorFullState">#4fc3f7</color>
 </resources>
