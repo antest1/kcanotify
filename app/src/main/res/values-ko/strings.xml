@@ -66,6 +66,7 @@
     <string name="ma_toast_kancolle_not_installed">칸코레가 설치되어 있지 않습니다.</string>
     <string name="ma_toast_overay_diabled">전투예보에 필요한 화면 오버레이 권한이 설정되지 않았습니다. 설정 > 화면 오버레이 설정에서 권한을 설정하세요.</string>
     <string name="ma_hasupdate" formatted="false">업데이트가 있습니다. (%s)</string>
+    <string name="ma_hasdataupdate" formatted="false">새 게임 데이터가 있습니다. (%s)</string>
     <string name="description"><b>Help</b>\n상단 2개 버튼(VPN, SVC) 활성화 이후 게임 실행\n\n※ VPN을 끄면 칸코레에서 데이터를 받아오지 않음\n\n<b>주요 기능</b>\n - 원정 및 입거 알림\n - 대파 알림 (출격 중 및 출격 전)\n - 색적/제공치/피로도 표시\n - 출격 중 현재 위치 표시\n - 전투 예보 / 임무 번역\n - 개수공창표\n - OpenDB에 데이터 전송\n \n자세한 내용은 http://swaytwig.com/kcanotify 참고</string>
 
     <!-- SettingActivity Strings -->
@@ -162,6 +163,9 @@
 
     <!-- BattleView Strings -->
     <string name="battleview_error">처리 중 오류가 발생하였습니다.</string>
+    <string name="battleview_menu_head">메뉴</string>
+    <string name="battleview_menu0">항공전 정보</string>
+    <string name="battleview_menu1">현재 임무 목록</string>
 
     <string name="formation_lineahead">단종진</string>
     <string name="formation_doubleline">복종진</string>

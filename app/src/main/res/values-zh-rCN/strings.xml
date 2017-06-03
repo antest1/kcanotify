@@ -72,6 +72,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_toast_kancolle_not_installed">没有安装艦これ安卓版</string>
     <string name="ma_toast_overay_diabled">战斗剧透需要悬浮窗权限。请到设置 > 悬浮窗设置允许悬浮</string>
     <string name="ma_hasupdate" formatted="false">有可用的更新。 (%s)</string>
+    <string name="ma_hasdataupdate" formatted="false">有可用的游戏数据更新。 (%s)</string>
     <string name="description"><b>帮助</b>\n启用VPN和SVC服务后打开艦これ\n\n※ VPN是为了监测游戏数据\n\n<b>主要特点</b>\n - 远征/入渠 通知 \n - 大破警告\n - 显示索敌/制空/士气值 \n - 罗盘剧透\n - 战斗剧透 / 任务翻译\n - 装备改修查询\n - 向OpenDB汇报数据 (可选)\n \n访问主页http://swaytwig.com/kcanotify, 了解详情 (韩文)</string>
 
     <!-- SettingActivity Strings -->
@@ -176,6 +177,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <!-- BattleView Strings -->
     <string name="battleview_error">处理战斗数据时出错</string>
+    <string name="battleview_menu_head">选单</string>
+    <string name="battleview_menu0">Aerial Combat Info</string>
+    <string name="battleview_menu1">Current Quest List</string>
 
     <string name="formation_lineahead">单纵</string>
     <string name="formation_doubleline">复纵</string>

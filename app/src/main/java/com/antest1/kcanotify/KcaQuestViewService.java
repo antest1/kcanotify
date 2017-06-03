@@ -5,7 +5,6 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Build;
@@ -25,34 +24,21 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.ByteArrayEntity;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static android.R.attr.id;
 import static com.antest1.kcanotify.KcaApiData.getQuestTrackInfo;
 import static com.antest1.kcanotify.KcaApiData.isQuestTrackable;
 import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_BATTLEVIEW;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
-import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_VIEW_LIST;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -369,27 +355,28 @@ public class KcaQuestViewService extends Service {
         super.onDestroy();
     }
 
+    private void updateView(int setViewResult) {
+        if (setViewResult == 0) {
+            if(mView.getParent() != null) {
+                mView.invalidate();
+                mManager.updateViewLayout(mView, mParams);
+            } else {
+                mManager.addView(mView, mParams);
+            }
+        }
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(REFRESH_QUESTVIEW_ACTION)) {
                 boolean checkValid = intent.getIntExtra("tab_id", -1) % 9 == 0;
-                int setViewResult = setView(isquestlist, checkValid);
-                if (setViewResult == 0) {
-                    mView.invalidate();
-                    mManager.updateViewLayout(mView, mParams);
-                }
+                updateView(setView(isquestlist, checkValid));
                 Log.e("KCA", String.valueOf(intent.getIntExtra("tab_id", -2)));
 
             } else if (intent.getAction().equals(SHOW_QUESTVIEW_ACTION)) {
                 currentPage = 1;
-                if (!isquestlist) {
-                    int setViewResult = setView(isquestlist, false);
-                    if (setViewResult == 0) {
-                        mView.invalidate();
-                        mManager.updateViewLayout(mView, mParams);
-                    }
-                }
+                updateView(setView(isquestlist, false));
                 mView.setVisibility(View.VISIBLE);
             }
         }
@@ -413,6 +400,7 @@ public class KcaQuestViewService extends Service {
                         int id = v.getId();
                         if (id == questview.findViewById(R.id.quest_head).getId()) {
                             mView.setVisibility(View.GONE);
+                            mManager.removeViewImmediate(mView);
                         } else if (id == questprev.getId() || id == questnext.getId()) {
                             if (id == questprev.getId() && currentPage > 1) {
                                 currentPage -= 1;
@@ -435,11 +423,10 @@ public class KcaQuestViewService extends Service {
 
     private void sendReport(Exception e, int type) {
         error_flag = true;
+        String data = "";
         if (mView != null) mView.setVisibility(View.GONE);
-        JsonObject sendData = new JsonObject();
-        if (api_data == null) sendData.addProperty("data", "[api data is null]");
-        else sendData.addProperty("data", api_data.toString());
-        sendData.addProperty("error", getStringFromException(e));
-        helper.recordErrorLog(ERROR_TYPE_QUESTVIEW, "questview", "QV", api_data.toString(), getStringFromException(e));
+        if (api_data == null) data = "[api data is null]";
+        else data = api_data.toString();
+        helper.recordErrorLog(ERROR_TYPE_QUESTVIEW, "questview", "QV", data, getStringFromException(e));
     }
 }

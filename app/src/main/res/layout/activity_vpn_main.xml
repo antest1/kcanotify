@@ -176,6 +176,27 @@
                     android:layout_alignParentBottom="false"
                     android:layout_alignWithParentIfMissing="true" />
 
+                <TextView
+                    android:text="데이터 업데이트 가능"
+                    android:layout_width="match_parent"
+                    android:id="@+id/textMainDataUpdate"
+                    android:minLines="4"
+                    android:textSize="14dp"
+                    android:background="@color/colorDataUpdate"
+                    android:padding="4dp"
+                    android:textColor="@color/colorDataUpdateText"
+                    android:textAlignment="center"
+                    android:layout_above="@+id/textMainUpdate"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_alignParentBottom="false"
+                    android:layout_alignWithParentIfMissing="true" />
+
             </RelativeLayout>
 
         </LinearLayout>

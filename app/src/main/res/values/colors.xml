@@ -6,6 +6,8 @@
     <color name="colorBtn">#d6d6d6</color>
     <color name="colorUpdate">#e8f5e9</color>
     <color name="colorUpdateText">#1b5e20</color>
+    <color name="colorDataUpdate">#e8e9f5</color>
+    <color name="colorDataUpdateText">#1b1d5e</color>
     <color name="colorWarn">#ffcdd2</color>
     <color name="colorWarnText">#68000a</color>
     <color name="black">#000000</color>

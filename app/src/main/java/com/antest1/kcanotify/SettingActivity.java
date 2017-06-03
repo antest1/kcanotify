@@ -59,6 +59,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
 import static com.antest1.kcanotify.KcaService.kca_version;
@@ -495,7 +496,7 @@ public class SettingActivity extends AppCompatActivity {
                     if (kca_version == null) {
                         kca_version = response.header("X-Api-Version");
                     }
-                    KcaUtils.setPreferences(context, "kca_version", kca_version);
+                    KcaUtils.setPreferences(context, PREF_KCA_VERSION, kca_version);
                     KcaApiData.setDataLoadTriggered();
                     result = SUCCESS;
                 } else {

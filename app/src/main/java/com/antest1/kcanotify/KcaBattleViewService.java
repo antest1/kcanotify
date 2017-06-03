@@ -3,6 +3,7 @@ package com.antest1.kcanotify;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.PixelFormat;
@@ -14,6 +15,7 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -29,19 +31,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
-import com.google.common.io.Resources;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.ByteArrayEntity;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -63,6 +55,7 @@ import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaBattle.deckportdata;
 import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
@@ -95,7 +88,7 @@ public class KcaBattleViewService extends Service {
     JsonArray api_formation;
     JsonObject api_kouku;
 
-    private View mView, itemView;
+    private View mView, itemView, menuView;
     private WindowManager mManager;
 
     int displayWidth = 0;
@@ -1114,6 +1107,7 @@ public class KcaBattleViewService extends Service {
                 mView.setVisibility(View.GONE);
                 battleview = (ScrollView) mView.findViewById(R.id.battleview);
                 battleview.setOnTouchListener(mViewTouchListener);
+                setBattleViewMenu();
 
                 itemView = mInflater.inflate(R.layout.view_battleview_items, null);
                 mParams = new WindowManager.LayoutParams(
@@ -1170,6 +1164,15 @@ public class KcaBattleViewService extends Service {
         }
     }
 
+    private void setBattleViewMenu() {
+        menuView = mInflater.inflate(R.layout.view_battleview_menu, null);
+        menuView.setVisibility(View.GONE);
+        menuView.findViewById(R.id.view_head).setOnClickListener(battleViewMenuListener);
+        menuView.findViewById(R.id.view_item0).setOnClickListener(battleViewMenuListener);
+        menuView.findViewById(R.id.view_item1).setOnClickListener(battleViewMenuListener);
+        battleview.findViewById(R.id.battle_node).setOnTouchListener(infoListViewTouchListener);
+    }
+
     @Override
     public void onDestroy() {
         active = false;
@@ -1218,7 +1221,7 @@ public class KcaBattleViewService extends Service {
                 case MotionEvent.ACTION_UP:
                     clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                     if (clickDuration < MAX_CLICK_DURATION) {
-                        if(mView != null) mView.setVisibility(View.GONE);
+                        if (mView != null) mView.setVisibility(View.GONE);
                         if (itemView != null) itemView.setVisibility(View.GONE);
                     }
                     break;
@@ -1270,6 +1273,51 @@ public class KcaBattleViewService extends Service {
                 default:
                     return false;
             }
+        }
+    };
+
+    private View.OnTouchListener infoListViewTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    WindowManager.LayoutParams infoViewParams;
+                    infoViewParams = new WindowManager.LayoutParams(
+                            WindowManager.LayoutParams.WRAP_CONTENT,
+                            WindowManager.LayoutParams.WRAP_CONTENT,
+                            WindowManager.LayoutParams.TYPE_PHONE,
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                            PixelFormat.TRANSLUCENT);
+                    menuView.setVisibility(View.VISIBLE);
+                    if (menuView.getParent() != null) {
+                        mManager.updateViewLayout(menuView, infoViewParams);
+                    } else {
+                        mManager.addView(menuView, infoViewParams);
+                    }
+                    return true;
+                default:
+                    return false;
+            }
+        }
+    };
+
+    private View.OnClickListener battleViewMenuListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.view_item0:
+                    Toast.makeText(getApplicationContext(), "Not Implemented", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.view_item1:
+                    Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
+                    qintent.setAction(SHOW_QUESTVIEW_ACTION);
+                    startService(qintent);
+                    break;
+                case R.id.view_head:
+                default:
+                    break;
+            }
+            menuView.setVisibility(View.GONE);
         }
     };
 

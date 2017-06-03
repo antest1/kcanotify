@@ -199,10 +199,10 @@ public class KcaViewButtonService extends Service {
             menuWidth = menulistbutton.getMeasuredWidth();
             menuHeight = menulistbutton.getMeasuredHeight();
             menulistbutton.setVisibility(View.GONE);
-            menulistbutton.findViewById(R.id.viewbutton_battle).setOnTouchListener(mViewTouchListener);
+            //menulistbutton.findViewById(R.id.viewbutton_battle).setOnTouchListener(mViewTouchListener);
             menulistbutton.findViewById(R.id.viewbutton_quest).setOnTouchListener(mViewTouchListener);
             menulistbutton.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
-            ((TextView) menulistbutton.findViewById(R.id.viewbutton_battle)).setText(getStringWithLocale(R.string.viewmenu_battle));
+            //((TextView) menulistbutton.findViewById(R.id.viewbutton_battle)).setText(getStringWithLocale(R.string.viewmenu_battle));
             ((TextView) menulistbutton.findViewById(R.id.viewbutton_quest)).setText(getStringWithLocale(R.string.viewmenu_quest));
             ((TextView) menulistbutton.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
 
@@ -227,8 +227,8 @@ public class KcaViewButtonService extends Service {
             mManager.addView(mView, mParams);
 
             battleviewEnabled = false;
-            TextView battleButton = (TextView) menulistbutton.findViewById(R.id.viewbutton_battle);
-            battleButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+            //TextView battleButton = (TextView) menulistbutton.findViewById(R.id.viewbutton_battle);
+            //battleButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
         }
     }
 
@@ -273,19 +273,20 @@ public class KcaViewButtonService extends Service {
                 ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().clearColorFilter();
             }
             if (intent.getAction().equals(ACTIVATE_BATTLEVIEW_ACTION)) {
+                menulistbutton.setVisibility(View.GONE);
                 battleviewEnabled = true;
-                if(menulistbutton != null) {
-                    TextView battleButton = (TextView) menulistbutton.findViewById(R.id.viewbutton_battle);
-                    battleButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-                }
+                //if(menulistbutton != null) {
+                //    TextView battleButton = (TextView) menulistbutton.findViewById(R.id.viewbutton_battle);
+                //    battleButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                //}
             }
             if (intent.getAction().equals(DEACTIVATE_BATTLEVIEW_ACTION)) {
                 Log.e("KCA", "Called " + DEACTIVATE_BATTLEVIEW_ACTION);
                 battleviewEnabled = false;
-                if(menulistbutton != null) {
-                    TextView battleButton = (TextView) menulistbutton.findViewById(R.id.viewbutton_battle);
-                    battleButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
-                }
+                //if(menulistbutton != null) {
+                //    TextView battleButton = (TextView) menulistbutton.findViewById(R.id.viewbutton_battle);
+                //    battleButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+                //}
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -312,14 +313,7 @@ public class KcaViewButtonService extends Service {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             int id = v.getId();
-            if (id == menulistbutton.findViewById(R.id.viewbutton_battle).getId()) {
-                Log.e("KCA", "viewbutton_battle");
-                if (battleviewEnabled) {
-                    Intent qintent = new Intent(getBaseContext(), KcaBattleViewService.class);
-                    qintent.setAction(KcaBattleViewService.SHOW_BATTLEVIEW_ACTION);
-                    startService(qintent);
-                }
-            } else if (id == menulistbutton.findViewById(R.id.viewbutton_quest).getId()) {
+            if (id == menulistbutton.findViewById(R.id.viewbutton_quest).getId()) {
                 Log.e("KCA", "viewbutton_quest");
                 Intent qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
                 qintent.setAction(SHOW_QUESTVIEW_ACTION);
@@ -347,7 +341,12 @@ public class KcaViewButtonService extends Service {
                         long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                         if (clickDuration < MAX_CLICK_DURATION) {
                             clickcount += 1;
-                            if (menulistbutton.getVisibility() == View.GONE) {
+                            if (battleviewEnabled) {
+                                menulistbutton.setVisibility(View.GONE);
+                                Intent qintent = new Intent(getBaseContext(), KcaBattleViewService.class);
+                                qintent.setAction(KcaBattleViewService.SHOW_BATTLEVIEW_ACTION);
+                                startService(qintent);
+                            } else if (menulistbutton.getVisibility() == View.GONE) {
                                 menulistbutton.setVisibility(View.VISIBLE);
                             } else {
                                 menulistbutton.setVisibility(View.GONE);
@@ -422,7 +421,7 @@ public class KcaViewButtonService extends Service {
         if (mParams.y < 0) mParams.y = 0;
         else if (mParams.y > screenHeight - totalHeight) mParams.y = screenHeight - totalHeight;
 
-        ((TextView) menulistbutton.findViewById(R.id.viewbutton_battle)).setText(getStringWithLocale(R.string.viewmenu_battle));
+        //((TextView) menulistbutton.findViewById(R.id.viewbutton_battle)).setText(getStringWithLocale(R.string.viewmenu_battle));
         ((TextView) menulistbutton.findViewById(R.id.viewbutton_quest)).setText(getStringWithLocale(R.string.viewmenu_quest));
         ((TextView) menulistbutton.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
         super.onConfigurationChanged(newConfig);

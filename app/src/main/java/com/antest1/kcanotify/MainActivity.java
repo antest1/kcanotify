@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -85,6 +86,7 @@ import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton kcakashibtn;
     public static ImageButton kcafairybtn;
     TextView textDescription = null;
-    TextView textWarn, textUpdate;
+    TextView textWarn, textUpdate, textDataUpdate;
     Gson gson = new Gson();
 
     SharedPreferences prefs;
@@ -226,8 +228,10 @@ public class MainActivity extends AppCompatActivity {
 
         textWarn = (TextView) findViewById(R.id.textMainWarn);
         textUpdate = (TextView) findViewById(R.id.textMainUpdate);
-        textWarn.setVisibility(View.INVISIBLE);
-        textUpdate.setVisibility(View.INVISIBLE);
+        textDataUpdate = (TextView) findViewById(R.id.textMainDataUpdate);
+
+        textWarn.setVisibility(View.GONE);
+        textUpdate.setVisibility(View.GONE);
         textUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -235,6 +239,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
+            }
+        });
+        textDataUpdate.setVisibility(View.GONE);
+        textDataUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new getKcaStart2Data().execute();
             }
         });
 
@@ -423,8 +434,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Log.i(TAG, "onActivityResult request=" + requestCode + " result=" + resultCode + " ok=" + (resultCode == RESULT_OK));
+        if (requestCode == REQUEST_VPN) {
+            prefs.edit().putBoolean(PREF_VPN_ENABLED, resultCode == RESULT_OK).apply();
+            if (resultCode == RESULT_OK) {
+                KcaVpnService.start("prepared", this);
+            } else if (resultCode == RESULT_CANCELED) {
+                // Canceled
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_EXTERNAL_PERMISSION: {
+                warnType[REQUEST_EXTERNAL_PERMISSION] = !(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                setWarning();
+            }
+        }
+    }
+
     public class getRecentVersion extends AsyncTask<Context, String, String> {
         public String currentVersion = BuildConfig.VERSION_NAME;
+        public String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
 
         public String getStringWithLocale(int id) {
             return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
@@ -488,6 +524,14 @@ public class MainActivity extends AppCompatActivity {
                             textUpdate.setText(String.format(getStringWithLocale(R.string.ma_hasupdate), recentVersion));
                         }
                     }
+
+                    if (jsonDataObj.has("data_version")) {
+                        String recentVersion = jsonDataObj.get("data_version").getAsString();
+                        if (!compareVersion(currentDataVersion, recentVersion)) { // True if latest
+                            textDataUpdate.setVisibility(View.VISIBLE);
+                            textDataUpdate.setText(String.format(getStringWithLocale(R.string.ma_hasdataupdate), recentVersion));
+                        }
+                    }
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(),
                             getStringWithLocale(R.string.sa_checkupdate_servererror),
@@ -497,26 +541,84 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Log.i(TAG, "onActivityResult request=" + requestCode + " result=" + resultCode + " ok=" + (resultCode == RESULT_OK));
-        if (requestCode == REQUEST_VPN) {
-            prefs.edit().putBoolean(PREF_VPN_ENABLED, resultCode == RESULT_OK).apply();
-            if (resultCode == RESULT_OK) {
-                KcaVpnService.start("prepared", this);
-            } else if (resultCode == RESULT_CANCELED) {
-                // Canceled
-            }
-        }
-    }
+    private class getKcaStart2Data extends AsyncTask<Context, String, String> {
+        final String SUCCESS = "S";
+        final String FAILURE = "F";
+        final String ERROR = "E";
+        String error_msg = "";
+        KcaDBHelper dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_EXTERNAL_PERMISSION: {
-                warnType[REQUEST_EXTERNAL_PERMISSION] = !(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
-                setWarning();
+        public String getStringWithLocale(int id) {
+            return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Context... params) {
+            String content = null;
+            try {
+                content = executeClient();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return content;
+        }
+
+        public String executeClient() {
+            String dataUrl = String.format(getString(R.string.api_start2_recent_version_link));
+            OkHttpClient client = new OkHttpClient.Builder().build();
+
+            String checkUrl = String.format(dataUrl);
+            Request.Builder builder = new Request.Builder().url(checkUrl).get();
+            builder.addHeader("Referer", "app:/KCA/");
+            builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
+            error_msg = "";
+            Request request = builder.build();
+            String result;
+            try {
+                Response response = client.newCall(request).execute();
+                if (response.code() == org.apache.http.HttpStatus.SC_OK) {
+                    String data = response.body().string().trim();
+                    dbHelper.putValue(DB_KEY_STARTDATA, data);
+                    KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
+                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_VERSION, response.header("X-Api-Version"));
+                    KcaApiData.setDataLoadTriggered();
+                    result = SUCCESS;
+                } else {
+                    error_msg = response.message();
+                    result = FAILURE;
+                }
+            } catch (IOException e) {
+                error_msg = getStringFromException(e);
+                result = ERROR;
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            switch (s) {
+                case SUCCESS:
+                    Toast.makeText(getApplicationContext(),
+                            getStringWithLocale(R.string.sa_getupdate_finished),
+                            Toast.LENGTH_LONG).show();
+                    textDataUpdate.setVisibility(View.GONE);
+                    break;
+                case FAILURE:
+                    if (error_msg == null) error_msg = "null";
+                    Toast.makeText(getApplicationContext(),
+                            String.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
+                            Toast.LENGTH_LONG).show();
+                    break;
+                case ERROR:
+                    Toast.makeText(getApplicationContext(),
+                            "Error: ".concat(error_msg),
+                            Toast.LENGTH_LONG).show();
+                    break;
             }
         }
     }
