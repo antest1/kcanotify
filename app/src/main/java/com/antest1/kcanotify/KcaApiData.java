@@ -517,12 +517,9 @@ public class KcaApiData {
     }
 
     public static boolean isQuestTrackable(String id) {
-        // TODO: Remove condition when other quest track implemented
         JsonObject kcQuestTrackData = helper.getJsonObjectValue(DB_KEY_QUESTTRACK);
         int id_int = Integer.parseInt(id);
-        Log.e("KCA-A", id + " " + String.valueOf(id_int / 100 != 2 && id_int / 100 != 8) + " " + String.valueOf(kcQuestTrackData.has(id)));
-        if (id_int / 100 != 2 && id_int / 100 != 8) return false;
-        else return kcQuestTrackData.has(id);
+        return kcQuestTrackData.has(id);
     }
 
     public static JsonObject getQuestTrackInfo(String id) {

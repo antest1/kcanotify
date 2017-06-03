@@ -54,9 +54,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
+import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
@@ -551,6 +553,24 @@ public class KcaService extends Service {
                     }
                 }
                 notifiManager.cancel(getNotificationId(NOTI_EXP, deck_id));
+                if (jsonDataObj.has("api_data")) {
+                    JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                    if (api_data.has("api_clear_result") && api_data.get("api_clear_result").getAsInt() > 0) {
+                        questTracker.updateIdCountTracker("402");
+                        questTracker.updateIdCountTracker("403");
+                        questTracker.updateIdCountTracker("404");
+
+                        String api_name = jsonDataObj.get("api_quest_name").getAsString();
+                        if (api_name.contains("\\u6771\\u4eac\\u6025\\u884c")) { // 도쿄급행
+                            questTracker.updateIdCountTracker("410");
+                            questTracker.updateIdCountTracker("411");
+                        }
+                        else if (api_name.equals("\\u6d77\\u4e0a\\u8b77\\u885b\\u4efb\\u52d9")) { // 해상호위
+                            questTracker.updateIdCountTracker("424");
+                        }
+                        updateQuestView();
+                    }
+                }
             }
 
             if (url.startsWith(API_GET_MEMBER_NDOCK)) {
@@ -558,6 +578,12 @@ public class KcaService extends Service {
                     JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
                     processDockingInfo(api_data);
                 }
+                return;
+            }
+
+            if (url.startsWith(API_REQ_NYUKYO_START)) {
+                questTracker.updateIdCountTracker("503");
+                updateQuestView();
                 return;
             }
 
@@ -572,6 +598,12 @@ public class KcaService extends Service {
                     }
                 }
                 if (ndock_id != -1) processDockingSpeedup(ndock_id);
+                return;
+            }
+
+            if (url.startsWith(API_REQ_HOKYU_CHARGE)) {
+                questTracker.updateIdCountTracker("504");
+                updateQuestView();
                 return;
             }
 
@@ -602,8 +634,7 @@ public class KcaService extends Service {
 
             if (!API_QUEST_REQS.contains(url) && KcaQuestViewService.getQuestMode()) {
                 KcaQuestViewService.setQuestMode(false);
-                startService(new Intent(getBaseContext(), KcaQuestViewService.class)
-                        .setAction(REFRESH_QUESTVIEW_ACTION));
+                updateQuestView();
             }
 
             if (url.startsWith(API_GET_MEMBER_QUESTLIST)) {
@@ -943,6 +974,9 @@ public class KcaService extends Service {
                             if (isOpendbEnabled()) {
                                 KcaOpendbAPI.sendEquipDevData(flagship, materials[0], materials[1], materials[2], materials[3], itemKcId);
                             }
+                            questTracker.updateIdCountTracker("605");
+                            questTracker.updateIdCountTracker("607");
+                            updateQuestView();
                         }
                     }
 
@@ -952,10 +986,21 @@ public class KcaService extends Service {
                             String decodedData = URLDecoder.decode(requestData[i], "utf-8");
                             if (decodedData.startsWith("api_slotitem_ids")) {
                                 String itemlist = decodedData.replace("api_slotitem_ids=", "");
+                                String[] itemlist_array = itemlist.split(",");
+                                for (String item: itemlist_array) {
+                                    JsonObject status = getUserItemStatusById(Integer.parseInt(item), "alv", "type");
+                                    if (status.has("type")) {
+                                        if (status.getAsJsonArray("type").get(2).getAsInt() == T2_MACHINE_GUN) {
+                                            questTracker.updateIdCountTracker("638");
+                                        }
+                                    }
+                                }
                                 KcaApiData.removeSlotItemData(itemlist);
                                 break;
                             }
                         }
+                        questTracker.updateIdCountTracker("613");
+                        updateQuestView();
                     }
 
                     if (url.startsWith(API_REQ_KOUSYOU_CREATESHIP)) {
@@ -967,6 +1012,9 @@ public class KcaService extends Service {
                                 break;
                             }
                         }
+                        questTracker.updateIdCountTracker("606");
+                        questTracker.updateIdCountTracker("608");
+                        updateQuestView();
                     }
 
                     if (url.startsWith(API_REQ_KOUSYOU_GETSHIP)) {
@@ -1032,6 +1080,8 @@ public class KcaService extends Service {
                                 }
                             }
                         }
+                        questTracker.updateIdCountTracker("609");
+                        updateQuestView();
                         processFirstDeckInfo();
                     }
 
@@ -1204,6 +1254,11 @@ public class KcaService extends Service {
                             dbHelper.test();
                             updateUserShip(api_data.getAsJsonObject("api_ship"));
                             KcaApiData.deleteUserShip(itemIds);
+                            if(api_data.has("api_powerup_flag") && api_data.get("api_powerup_flag").getAsInt() == 1) {
+                                questTracker.updateIdCountTracker("702");
+                                questTracker.updateIdCountTracker("703");
+                                updateQuestView();
+                            }
                         }
                         processFirstDeckInfo();
                     }
@@ -1255,6 +1310,8 @@ public class KcaService extends Service {
                         if (certainFlag != 1 && isOpendbEnabled()) {
                             KcaOpendbAPI.sendRemodelData(flagship, assistant, itemKcId, level, api_remodel_flag);
                         }
+                        questTracker.updateIdCountTracker("619");
+                        updateQuestView();
                     }
                 }
             }
@@ -1394,8 +1451,17 @@ public class KcaService extends Service {
                 if (api_url.startsWith(API_REQ_SORTIE_BATTLE_RESULT) || url.startsWith(API_REQ_COMBINED_BATTLERESULT)) {
                     JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
                     questTracker.updateBattleTracker(questTrackData);
-                    startService(new Intent(getBaseContext(), KcaQuestViewService.class)
-                            .setAction(REFRESH_QUESTVIEW_ACTION));
+                    updateQuestView();
+                } else if (api_url.startsWith(API_REQ_PRACTICE_BATTLE_RESULT)) {
+                    JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
+                    String rank = questTrackData.get("result").getAsString();
+                    questTracker.updateIdCountTracker("303");
+                    if (rank.equals("S") || rank.equals("A") || rank.equals("B")) {
+                        questTracker.updateIdCountTracker("304");
+                        questTracker.updateIdCountTracker("302");
+                        questTracker.updateIdCountTracker("311");
+                    }
+                    updateQuestView();
                 }
                 Intent intent = new Intent(KCA_MSG_BATTLE_INFO);
                 // intent.putExtra(KCA_MSG_DATA, data);
@@ -1421,8 +1487,7 @@ public class KcaService extends Service {
 
                 if (jsonDataObj.get("api_url").getAsString().equals(API_REQ_MAP_START)) {
                     questTracker.updateBattleTracker(jsonDataObj);
-                    startService(new Intent(getBaseContext(), KcaQuestViewService.class)
-                            .setAction(REFRESH_QUESTVIEW_ACTION));
+                    updateQuestView();
                 }
 
                 Intent intent = new Intent(KCA_MSG_BATTLE_NODE);
@@ -1909,6 +1974,11 @@ public class KcaService extends Service {
             alarmManager.set(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
         }
         Log.e("KCA", "Alarm set to: " + String.valueOf(time) + " " + String.valueOf(code));
+    }
+
+    public void updateQuestView() {
+        startService(new Intent(getBaseContext(), KcaQuestViewService.class)
+                .setAction(REFRESH_QUESTVIEW_ACTION));
     }
 
     @Override

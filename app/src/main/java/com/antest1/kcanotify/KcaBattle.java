@@ -821,9 +821,11 @@ public class KcaBattle {
             if (url.equals(API_REQ_SORTIE_BATTLE_RESULT) || url.equals(API_REQ_PRACTICE_BATTLE_RESULT)) {
                 Bundle bundle;
                 Message sMsg;
-
                 nowhps = afterhps;
                 int checkresult = HD_NONE;
+
+                JsonObject qtrackData = new JsonObject();
+                qtrackData.addProperty("result", api_data.get("api_win_rank").getAsString());
                 if (url.equals(API_REQ_SORTIE_BATTLE_RESULT)) {
                     if(!isEndReached) {
                         checkresult = checkHeavyDamagedExist();
@@ -867,7 +869,6 @@ public class KcaBattle {
                         sHandler.sendMessage(sMsg);
                     }
 
-                    JsonObject qtrackData = new JsonObject();
                     qtrackData.addProperty("world", currentMapArea);
                     qtrackData.addProperty("map", currentMapNo);
                     qtrackData.addProperty("isboss", isBossReached);
@@ -883,9 +884,8 @@ public class KcaBattle {
                     } else {
                         qtrackData.addProperty("combined_flag", false);
                     }
-                    qtrackData.addProperty("result", api_data.get("api_win_rank").getAsString());
-                    helper.putValue(DB_KEY_QTRACKINFO, qtrackData.toString());
                 }
+                helper.putValue(DB_KEY_QTRACKINFO, qtrackData.toString());
 
                 // ship_ke, afterhp, battle_result
 

@@ -58,7 +58,9 @@ public final class KcaConstants {
     public static final String API_REQ_KAISOU_POWERUP = "/api_req_kaisou/powerup";
 
     public static final String API_GET_MEMBER_NDOCK = "/api_get_member/ndock";
+    public static final String API_REQ_NYUKYO_START = "/api_req_nyukyo/start";
     public static final String API_REQ_NYUKYO_SPEEDCHAGNE = "/api_req_nyukyo/speedchange";
+    public static final String API_REQ_HOKYU_CHARGE = "/api_req_hokyu/charge";
 
     public static final String API_REQ_KOUSYOU_CREATETIEM = "/api_req_kousyou/createitem";
     public static final String API_REQ_KOUSYOU_DESTROYITEM = "/api_req_kousyou/destroyitem2";

@@ -198,6 +198,8 @@ public class KcaQuestViewService extends Service {
                                 JsonArray updatevalue = new JsonArray();
                                 if (api_progress == 1 && trackData.get(0).getAsFloat() < trackCond.get(0).getAsFloat() * PROGRESS_1) {
                                     updatevalue.add((int) (Math.ceil(trackCond.get(0).getAsFloat() * PROGRESS_1)));
+                                } else if (api_progress == 2 && api_no.equals("211")) { // 보급3회퀘 80%인 경우
+                                    updatevalue.add(2);
                                 } else if (api_progress == 2 && trackData.get(0).getAsFloat() < trackCond.get(0).getAsFloat() * PROGRESS_2) {
                                     updatevalue.add((int) (Math.ceil(trackCond.get(0).getAsFloat() * PROGRESS_2)));
                                 } else if (api_state == 3) {

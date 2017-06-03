@@ -145,46 +145,52 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         String[] current_time = df.format(currentTime).split("-");
         String[] quest_time = time.split("-");
         boolean reset_passed = Integer.parseInt(current_time[3]) >= 5;
-        switch (type) {
-            case 1: // Daily
-                if (!quest_time[1].equals(current_time[1]) || !quest_time[2].equals(current_time[2])) {
-                    valid_flag = false;
-                }
-                break;
-            case 2: // Weekly
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd");
-                try {
-                    Date date1 = dateFormat.parse(String.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
-                    Date date2 = dateFormat.parse(String.format("%s %s %s", current_time[0], current_time[1], current_time[2]));
-                    long diff = date2.getTime() - date1.getTime();
-                    long datediff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                    if (datediff >= 7 && reset_passed) {
+        if (id == 311) { // Monthly Practice Quest
+            if (!quest_time[1].equals(current_time[1]) || !quest_time[2].equals(current_time[2])) {
+                valid_flag = false;
+            }
+        } else {
+            switch (type) {
+                case 1: // Daily
+                    if (!quest_time[1].equals(current_time[1]) || !quest_time[2].equals(current_time[2])) {
                         valid_flag = false;
                     }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case 3: // Monthly
-                if (!quest_time[1].equals(current_time[1]) && reset_passed) {
-                    valid_flag = false;
-                }
-                break;
-            case 5: // Quarterly, Else
-                if (id == 822 || id == 854 || id == 637 || id == 643) { // Bq1, Bq2, F35, F39 (Quarterly)
-                    int quest_month = Integer.parseInt(quest_time[1]);
-                    int quest_quarter = quest_month - quest_month % 3;
-                    int current_month = Integer.parseInt(current_time[1]);
-                    int current_quarter = current_month - current_month % 3;
-                    if (quest_quarter != current_quarter && reset_passed) {
+                    break;
+                case 2: // Weekly
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd");
+                    try {
+                        Date date1 = dateFormat.parse(String.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
+                        Date date2 = dateFormat.parse(String.format("%s %s %s", current_time[0], current_time[1], current_time[2]));
+                        long diff = date2.getTime() - date1.getTime();
+                        long datediff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                        if (datediff >= 7 && reset_passed) {
+                            valid_flag = false;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 3: // Monthly
+                    if (!quest_time[1].equals(current_time[1]) && reset_passed) {
                         valid_flag = false;
                     }
-                } else if (!quest_time[1].equals(current_time[1]) || !quest_time[2].equals(current_time[2])) {
-                    valid_flag = false;
-                }
-                break;
-            default:
-                break;
+                    break;
+                case 5: // Quarterly, Else
+                    if (id == 822 || id == 854 || id == 637 || id == 643) { // Bq1, Bq2, F35, F39 (Quarterly)
+                        int quest_month = Integer.parseInt(quest_time[1]);
+                        int quest_quarter = quest_month - quest_month % 3;
+                        int current_month = Integer.parseInt(current_time[1]);
+                        int current_quarter = current_month - current_month % 3;
+                        if (quest_quarter != current_quarter && reset_passed) {
+                            valid_flag = false;
+                        }
+                    } else if (!quest_time[1].equals(current_time[1]) || !quest_time[2].equals(current_time[2])) {
+                        valid_flag = false;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
         return valid_flag;
     }
@@ -213,6 +219,19 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         }
         c.close();
         return info;
+    }
+
+    public void updateIdCountTracker(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = db.rawQuery("SELECT KEY, CND0 from "
+                .concat(qt_table_name)
+                .concat(" WHERE KEY=? AND ACTIVE=1"), new String[]{id});
+        if (c.moveToFirst()) {
+            ContentValues values = new ContentValues();
+            values.put("CND0", c.getInt(c.getColumnIndex("CND0")) + 1);
+            db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{id});
+        }
+        c.close();
     }
 
     public JsonObject updateBattleTracker(JsonObject data) {
@@ -308,10 +327,12 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "218": // 보급3회
                 case "212": // 보급5회
+                    updateTarget.addProperty(key, cond0);
+                    dupflag += 1;
+                    break;
                 case "213": // 통상파괴
                 case "221": // 로호
                     updateTarget.addProperty(key, cond0 + apcount);
-                    if (key.equals("218") || key.equals("212")) dupflag += 1;
                     break;
                 case "230": // 잠수일퀘
                 case "228": // 해상호위
@@ -438,11 +459,14 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             }
 
             if (wflag) updateTarget.addProperty(key, cond0 + 1);
+        }
 
-            if (dupflag == 2) { // 보급3회, 보급5회 중복 카운트
-                updateTarget.addProperty("212", updateTarget.get("212").getAsInt() + apcount);
-                updateTarget.addProperty("218", updateTarget.get("218").getAsInt() + apcount);
-            }
+        if (dupflag == 1) {
+            if(updateTarget.has("212")) updateTarget.addProperty("212", updateTarget.get("212").getAsInt() + apcount);
+            if(updateTarget.has("218")) updateTarget.addProperty("218", updateTarget.get("218").getAsInt() + apcount);
+        } else if (dupflag == 2) { // 보급3회, 보급5회 중복 카운트
+            if(updateTarget.has("212")) updateTarget.addProperty("212", updateTarget.get("212").getAsInt() + apcount * 2);
+            if(updateTarget.has("218")) updateTarget.addProperty("218", updateTarget.get("218").getAsInt() + apcount * 2);
         }
 
         for (Map.Entry<String, JsonElement> entry : updateTarget.entrySet()) {
