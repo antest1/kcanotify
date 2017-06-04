@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -63,7 +64,7 @@ public class KcaFleetViewService extends Service {
     static boolean error_flag = false;
     boolean active;
     private View mView, itemView;
-    private TextView fleetInfoLine, fleetExpView;
+    private TextView fleetInfoTitle, fleetInfoLine, fleetExpView;
     private WindowManager mManager;
     private static boolean isReady;
 
@@ -91,6 +92,10 @@ public class KcaFleetViewService extends Service {
         return String.format("Lv %d", level);
     }
 
+    private static String makeSimpleExpString(float e1, float e2) {
+        return String.format("%.2f/%.2f", e1, e2);
+    }
+
     private static String makeHpString(int currenthp, int maxhp) {
         return String.format("HP %d/%d", currenthp, maxhp);
     }
@@ -100,10 +105,19 @@ public class KcaFleetViewService extends Service {
     public int setView() {
         try {
             Log.e("KCA-FV", String.valueOf(selected));
+            boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
             float[] exp_score = helper.getExpScore();
-            fleetExpView.setText(String.format(
-                    getStringWithLocale(R.string.fleetview_expview),
-                    exp_score[0], exp_score[1]));
+
+            if (is_landscape) {
+                fleetExpView.setText(String.format(
+                        getStringWithLocale(R.string.fleetview_expview),
+                        exp_score[0], exp_score[1]));
+                fleetInfoTitle.setVisibility(View.VISIBLE);
+            } else {
+                fleetExpView.setText(makeSimpleExpString(exp_score[0], exp_score[1]));
+                fleetInfoTitle.setVisibility(View.GONE);
+            }
+
             updateSelectedView(selected);
             processDeckInfo(selected, isCombinedFlag(selected));
             return 0;
@@ -146,6 +160,7 @@ public class KcaFleetViewService extends Service {
             fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
             fleetInfoLine.setOnTouchListener(mViewTouchListener);
 
+            fleetInfoTitle = (TextView) mView.findViewById(R.id.fleetview_title);
             fleetExpView = (TextView) mView.findViewById(R.id.fleetview_exp);
 
             itemView = mInflater.inflate(R.layout.view_battleview_items, null);
@@ -441,16 +456,16 @@ public class KcaFleetViewService extends Service {
                                 .setText(userData.get("cond").getAsString());
                         int condition = userData.get("cond").getAsInt();
                         if (condition > 49) {
-                            ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_name", v), R.id.class)))
+                            ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_condmark", v), R.id.class)))
                                     .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipKira));
                         } else if (condition / 10 >= 3) {
-                            ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_name", v), R.id.class)))
-                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                            ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_condmark", v), R.id.class)))
+                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
                         } else if (condition / 10 == 2) {
-                            ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_name", v), R.id.class)))
+                            ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_condmark", v), R.id.class)))
                                     .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue1));
                         } else {
-                            ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_name", v), R.id.class)))
+                            ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_condmark", v), R.id.class)))
                                     .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2));
                         }
 
@@ -508,16 +523,16 @@ public class KcaFleetViewService extends Service {
                             .setText(userData.get("cond").getAsString());
                     int condition = userData.get("cond").getAsInt();
                     if (condition > 49) {
-                        ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_name", v), R.id.class)))
+                        ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_condmark", v), R.id.class)))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipKira));
                     } else if (condition / 10 >= 3) {
-                        ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_name", v), R.id.class)))
-                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                        ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_condmark", v), R.id.class)))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
                     } else if (condition / 10 == 2) {
-                        ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_name", v), R.id.class)))
+                        ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_condmark", v), R.id.class)))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue1));
                     } else {
-                        ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_name", v), R.id.class)))
+                        ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_condmark", v), R.id.class)))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2));
                     }
 
@@ -733,5 +748,22 @@ public class KcaFleetViewService extends Service {
         String data = helper.getJsonArrayValue(DB_KEY_DECKPORT).toString();
         if (mView != null) mView.setVisibility(View.GONE);
         helper.recordErrorLog(ERROR_TYPE_FLEETVIEW, "fleetview", "FV_".concat(String.valueOf(type)), data, getStringFromException(e));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        boolean is_landscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+        float[] exp_score = helper.getExpScore();
+
+        if (is_landscape) {
+            fleetExpView.setText(String.format(
+                    getStringWithLocale(R.string.fleetview_expview),
+                    exp_score[0], exp_score[1]));
+            fleetInfoTitle.setVisibility(View.VISIBLE);
+        } else {
+            fleetExpView.setText(makeSimpleExpString(exp_score[0], exp_score[1]));
+            fleetInfoTitle.setVisibility(View.GONE);
+        }
+        super.onConfigurationChanged(newConfig);
     }
 }

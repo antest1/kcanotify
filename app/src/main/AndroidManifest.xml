@@ -88,7 +88,8 @@
         <service
             android:name=".KcaBattleViewService" />
         <service
-            android:name=".KcaFleetViewService" />
+            android:name=".KcaFleetViewService"
+            android:configChanges="locale|layoutDirection" />
         <service
             android:name=".KcaQuestViewService" />
         <service

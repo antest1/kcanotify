@@ -13,6 +13,7 @@
     <color name="black">#000000</color>
     <color name="grey">#888888</color>
     <color name="white">#ffffff</color>
+    <color name="transparent">#00ffffff</color>
 
     <color name="colorBattle">#ff0000</color>
     <color name="colorBossBattle">#d50000</color>
@@ -95,8 +96,8 @@
 
     <color name="colorFleetInfoNormal">#16a085</color>
     <color name="colorFleetInfoNoShip">#aaaaaa</color>
-    <color name="colorFleetShipKira">#ffea00</color>
-    <color name="colorFleetShipFatigue1">#f9a825</color>
+    <color name="colorFleetShipKira">#ffff8d</color>
+    <color name="colorFleetShipFatigue1">#f98b25</color>
     <color name="colorFleetShipFatigue2">#ff5252</color>
     <color name="colorFleetWarning">#7e2424</color>
     <color name="colorFullState">#4fc3f7</color>

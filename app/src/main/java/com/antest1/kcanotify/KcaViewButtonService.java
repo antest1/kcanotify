@@ -381,6 +381,15 @@ public class KcaViewButtonService extends Service {
         screenWidth = size.x;
         screenHeight = size.y;
         Log.e("KCA", "w/h: "+String.valueOf(screenWidth) + " "  +String.valueOf(screenHeight));
+
+        int totalWidth = buttonWidth;
+        int totalHeight = buttonHeight;
+
+        if (mParams.x < 0) mParams.x = 0;
+        else if (mParams.x > screenWidth - totalWidth) mParams.x = screenWidth - totalWidth;
+        if (mParams.y < 0) mParams.y = 0;
+        else if (mParams.y > screenHeight - totalHeight) mParams.y = screenHeight - totalHeight;
+
         super.onConfigurationChanged(newConfig);
     }
 }
