@@ -148,7 +148,7 @@ public class KcaAkashiViewService extends Service {
             adapter = new KcaAkashiListViewAdpater2();
             mParams = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.TYPE_PHONE,
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
