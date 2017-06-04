@@ -1276,7 +1276,7 @@ public class KcaBattleViewService extends Service {
             }
 
             if (api_data.has("api_destruction_battle")) {
-                String viewidformat = "view_ac_aba_%d_";
+                String viewidformat = "view_ac_aba_%d";
                 JsonObject kdata = api_data.getAsJsonObject("api_destruction_battle").getAsJsonObject("api_air_base_attack");
                 ((TextView) acView.findViewById(R.id.view_ac_aba_0_title))
                         .setText(getStringWithLocale(R.string.airbase_term).concat(" ")

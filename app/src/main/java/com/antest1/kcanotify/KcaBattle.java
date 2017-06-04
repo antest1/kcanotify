@@ -886,7 +886,7 @@ public class KcaBattle {
                     }
                 }
                 helper.putValue(DB_KEY_QTRACKINFO, qtrackData.toString());
-
+                helper.updateExpScore(api_data.get("api_get_exp").getAsInt());
                 // ship_ke, afterhp, battle_result
 
                 JsonObject battleResultInfo = api_data;
@@ -1596,6 +1596,7 @@ public class KcaBattle {
                 }
                 qtrackData.addProperty("result", api_data.get("api_win_rank").getAsString());
                 helper.putValue(DB_KEY_QTRACKINFO, qtrackData.toString());
+                helper.updateExpScore(api_data.get("api_get_exp").getAsInt());
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);

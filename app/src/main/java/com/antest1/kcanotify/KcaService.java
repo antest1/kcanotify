@@ -31,7 +31,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.androidquery.callback.AbstractAjaxCallback;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -191,8 +190,6 @@ public class KcaService extends Service {
         nHandler = new kcaNotificationHandler(this);
         broadcaster = LocalBroadcastManager.getInstance(this);
 
-        AbstractAjaxCallback.setGZip(true);
-
         String initTitle = String.format(getStringWithLocale(R.string.kca_init_title), getStringWithLocale(R.string.app_name));
         String initContent = getStringWithLocale(R.string.kca_init_content);
         String initSubContent = String.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
@@ -224,6 +221,7 @@ public class KcaService extends Service {
             missionTimeScheduler = null;
         }
 
+        dbHelper.initExpScore();
         return START_STICKY;
     }
 
@@ -567,6 +565,9 @@ public class KcaService extends Service {
                             questTracker.updateIdCountTracker("424");
                         }
                         updateQuestView();
+                    }
+                    if (api_data.has("api_get_exp")) {
+                        dbHelper.updateExpScore(api_data.get("api_get_exp").getAsInt());
                     }
                 }
             }

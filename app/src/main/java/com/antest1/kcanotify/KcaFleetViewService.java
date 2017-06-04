@@ -60,7 +60,7 @@ public class KcaFleetViewService extends Service {
     static boolean error_flag = false;
     boolean active;
     private View mView, itemView;
-    private TextView fleetInfoLine, fleetInfoList;
+    private TextView fleetInfoLine, fleetExpView;
     private WindowManager mManager;
     private static boolean isReady;
 
@@ -97,6 +97,10 @@ public class KcaFleetViewService extends Service {
     public int setView() {
         try {
             Log.e("KCA-FV", String.valueOf(selected));
+            float[] exp_score = helper.getExpScore();
+            fleetExpView.setText(String.format(
+                    getStringWithLocale(R.string.fleetview_expview),
+                    exp_score[0], exp_score[1]));
             updateSelectedView(selected);
             processDeckInfo(selected, isCombinedFlag(selected));
             return 0;
@@ -137,6 +141,8 @@ public class KcaFleetViewService extends Service {
             fleetInfoLine = (TextView) mView.findViewById(R.id.fleetview_infoline);
             fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
             fleetInfoLine.setOnTouchListener(mViewTouchListener);
+
+            fleetExpView = (TextView) mView.findViewById(R.id.fleetview_exp);
 
             itemView = mInflater.inflate(R.layout.view_battleview_items, null);
 
@@ -227,8 +233,10 @@ public class KcaFleetViewService extends Service {
                         if (id == mView.findViewById(getId(item_id, R.id.class)).getId()) {
                             JsonArray data;
                             if (isCombinedFlag(selected)) {
-                                if(i < 6) data = KcaDeckInfo.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), 0);
-                                else data = KcaDeckInfo.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), 1);
+                                if (i < 6)
+                                    data = KcaDeckInfo.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), 0);
+                                else
+                                    data = KcaDeckInfo.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), 1);
                             } else {
                                 data = KcaDeckInfo.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), selected);
                             }

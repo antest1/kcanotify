@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -22,6 +23,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPCRNT;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTDAY;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTIME;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaQuestViewService.getPrevPageLastNo;
 import static com.antest1.kcanotify.KcaQuestViewService.setPrevPageLastNo;
@@ -108,11 +112,14 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         db = this.getReadableDatabase();
         String col, sql;
         String type, version, url, request, data, error, timestamp;
-        if (full) col = "type, version, url, request, data, error, datetime(timestamp, 'localtime') AS ts";
+        if (full)
+            col = "type, version, url, request, data, error, datetime(timestamp, 'localtime') AS ts";
         else col = "type, url, error";
 
-        if (limit > 0) sql = String.format("SELECT %s FROM %s ORDER BY timestamp DESC LIMIT %d", col, error_table_name, limit);
-        else sql = String.format("SELECT %s FROM %s ORDER BY timestamp DESC", col, error_table_name);
+        if (limit > 0)
+            sql = String.format("SELECT %s FROM %s ORDER BY timestamp DESC LIMIT %d", col, error_table_name, limit);
+        else
+            sql = String.format("SELECT %s FROM %s ORDER BY timestamp DESC", col, error_table_name);
 
         Cursor c = db.rawQuery(sql, null);
         while (c.moveToNext()) {
@@ -369,23 +376,25 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public String getQuest(int key) {
+        String value = null;
         db = this.getReadableDatabase();
         Cursor c = db.query(questlist_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
         if (c.moveToFirst()) {
-            return c.getString(c.getColumnIndex("VALUE"));
-        } else {
-            return null;
+            value = c.getString(c.getColumnIndex("VALUE"));
         }
+        c.close();
+        return value;
     }
 
     public String getQuestDate(int key) {
+        String value = null;
         db = this.getReadableDatabase();
         Cursor c = db.query(questlist_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
         if (c.moveToFirst()) {
-            return c.getString(c.getColumnIndex("TIME"));
-        } else {
-            return null;
+            value = c.getString(c.getColumnIndex("TIME"));
         }
+        c.close();
+        return value;
     }
 
     public void putQuest(int key, String value) {
@@ -413,6 +422,76 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         db = this.getWritableDatabase();
         db.delete(questlist_table_name, "KEY=?", new String[]{String.valueOf(key)});
         qt.removeQuestTrack(key, false);
+    }
+
+    public void initExpScore() {
+        Date currentTime = Calendar.getInstance(Locale.JAPAN).getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH");
+        String time = df.format(currentTime);
+
+        String prevTime = getValue(DB_KEY_EXPTIME);
+        if (prevTime == null) {
+            putValue(DB_KEY_EXPTIME, time);
+            putValue(DB_KEY_EXPCRNT, "0");
+            putValue(DB_KEY_EXPTDAY, "0");
+        }
+    }
+
+    public float[] getExpScore() {
+        float[] exp = new float[2];
+        db = this.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        int currentExp = Integer.parseInt(getValue(DB_KEY_EXPCRNT));
+        int todayExp = Integer.parseInt(getValue(DB_KEY_EXPCRNT));
+        exp[0] = currentExp * 7.0f / 10000;
+        exp[1] = todayExp * 7.0f / 10000;
+        return exp;
+    }
+
+    public void updateExpScore(int exp) {
+        Date currentTime = Calendar.getInstance(Locale.JAPAN).getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH");
+        String time = df.format(currentTime);
+        db = this.getWritableDatabase();
+
+        String prevTime = getValue(DB_KEY_EXPTIME);
+        if (prevTime == null) {
+            putValue(DB_KEY_EXPTIME, time);
+            putValue(DB_KEY_EXPCRNT, String.valueOf(exp));
+            putValue(DB_KEY_EXPTDAY, String.valueOf(exp));
+        } else {
+            int prevCrnt = Integer.parseInt(getValue(DB_KEY_EXPCRNT));
+            int prevTday = Integer.parseInt(getValue(DB_KEY_EXPTDAY));
+            String[] pt = prevTime.split("-");
+            String[] ct = time.split("-");
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd");
+            long datediff = 0;
+            try {
+                Date date1 = df.parse(prevTime);
+                Date date2 = df.parse(time);
+                long diff = date2.getTime() - date1.getTime();
+                datediff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            boolean isReset = datediff >= 1;
+            boolean isSameDate = pt[1].equals(ct[1]) && pt[2].equals(ct[2]);
+            boolean is2amPassed = (isSameDate && Integer.parseInt(pt[3]) < 2 && Integer.parseInt(ct[3]) >= 2)
+                    || (!isSameDate && Integer.parseInt(pt[3]) >= 2 && Integer.parseInt(ct[3]) >= 2);
+            boolean is2pmPassed = (isSameDate && Integer.parseInt(pt[3]) < 14 && Integer.parseInt(ct[3]) >= 14);
+
+            if (is2pmPassed) prevCrnt = 0;
+            if (isReset || is2amPassed) {
+                prevTday = 0;
+                prevCrnt = 0;
+            }
+
+            putValue(DB_KEY_EXPCRNT, String.valueOf(prevCrnt + exp));
+            putValue(DB_KEY_EXPTDAY, String.valueOf(prevTday + exp));
+            putValue(DB_KEY_EXPTIME, time);
+        }
     }
 
     // test code

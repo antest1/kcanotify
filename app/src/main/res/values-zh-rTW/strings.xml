@@ -327,6 +327,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="questview_nopage">沒有任務</string>
     <string name="fleetview_title">艦隊信息</string>
     <string name="fleetview_combined">聯合</string>
+    <string name="fleetview_expview" formatted="false">［這回］%.2f・［今天］%.2f</string>
     <string name="viewmenu_battle">戰鬥</string>
     <string name="viewmenu_quest">任務</string>
     <string name="viewmenu_akashi">改修</string>
