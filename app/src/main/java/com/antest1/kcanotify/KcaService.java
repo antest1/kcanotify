@@ -192,9 +192,9 @@ public class KcaService extends Service {
 
         String initTitle = String.format(getStringWithLocale(R.string.kca_init_title), getStringWithLocale(R.string.app_name));
         String initContent = getStringWithLocale(R.string.kca_init_content);
-        String initSubContent = String.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
+        // String initSubContent = String.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
         kcaFirstDeckInfo = getStringWithLocale(R.string.kca_init_content);
-        startForeground(getNotificationId(NOTI_FRONT, 1), createViewNotification(initTitle, initContent, initSubContent));
+        startForeground(getNotificationId(NOTI_FRONT, 1), createViewNotification(initTitle, initContent));
         isServiceOn = true;
 
         KcaVpnData.setHandler(handler);
@@ -249,6 +249,7 @@ public class KcaService extends Service {
         setServiceDown();
         stopService(new Intent(this, KcaBattleViewService.class));
         stopService(new Intent(this, KcaQuestViewService.class));
+        stopService(new Intent(this, KcaFleetViewService.class));
         stopService(new Intent(this, KcaAkashiViewService.class));
         stopService(new Intent(this, KcaViewButtonService.class));
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -277,7 +278,7 @@ public class KcaService extends Service {
         return isExist;
     }
 
-    private Notification createViewNotification(String title, String content1, String content2) {
+    private Notification createViewNotification(String title, String content2) {
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
@@ -289,6 +290,7 @@ public class KcaService extends Service {
                     .setTicker(title)
                     .setContentIntent(pendingIntent)
                     .setOnlyAlertOnce(true)
+                    .setContentText(content2)
                     .setPriority(NotificationCompat.PRIORITY_MAX)
                     .setOngoing(true).setAutoCancel(false);
             viewNotificationFirstTime = false;
@@ -1947,7 +1949,7 @@ public class KcaService extends Service {
             }
         }
 
-        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), createViewNotification(notifiTitle, notifiString, null));
+        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), createViewNotification(notifiTitle, notifiString));
     }
 
     public static boolean isJSONValid(String jsonInString) {
