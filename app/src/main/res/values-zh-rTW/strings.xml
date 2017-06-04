@@ -12,6 +12,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="action_settings">設定</string>
+    <string name="backpress_msg">再按一次後退鍵退出應用程序</string>
 
     <string name="accessibility_service_description">This permission allows kcanotify to detect whether kancolle is on the screen.\nIt only check whether kancolle is on the screen or not.\nYou can disallow this permission and hide the fairy manually by touching it long time.</string>
 

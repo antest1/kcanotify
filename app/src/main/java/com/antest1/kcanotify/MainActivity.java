@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences prefs;
     Boolean is_kca_installed = false;
     private WindowManager windowManager;
+    private BackPressCloseHandler backPressCloseHandler;
 
     public MainActivity() {
         LocaleUtils.updateConfig(this);
@@ -252,6 +253,8 @@ public class MainActivity extends AppCompatActivity {
         textDescription = (TextView) findViewById(R.id.textDescription);
         textDescription.setText(R.string.description);
         Linkify.addLinks(textDescription, Linkify.WEB_URLS);
+
+        backPressCloseHandler = new BackPressCloseHandler(this);
 
         ctx = getApplicationContext();
         int setDefaultGameDataResult = setDefaultGameData();
@@ -456,6 +459,11 @@ public class MainActivity extends AppCompatActivity {
                 setWarning();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        backPressCloseHandler.onBackPressed();
     }
 
     public class getRecentVersion extends AsyncTask<Context, String, String> {
