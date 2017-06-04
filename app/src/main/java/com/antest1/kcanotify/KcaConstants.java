@@ -28,6 +28,7 @@ public final class KcaConstants {
     public static final String ERROR_TYPE_BATTLE = "B";
     public static final String ERROR_TYPE_BATTLEVIEW = "BV";
     public static final String ERROR_TYPE_QUESTVIEW = "Q";
+    public static final String ERROR_TYPE_FLEETVIEW = "F";
     public static final String ERROR_TYPE_NOTI = "N";
     public static final String ERROR_TYPE_VPN = "V";
     public static final String ERROR_TYPE_OPENDB = "O";

@@ -37,6 +37,8 @@ import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_FLEETVIEW;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
@@ -44,6 +46,7 @@ import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION;
 import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION_NEW;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
@@ -106,6 +109,7 @@ public class KcaFleetViewService extends Service {
             return 0;
         } catch (Exception e) {
             e.printStackTrace();
+            sendReport(e, 0);
             return 1;
         }
     }
@@ -164,7 +168,7 @@ public class KcaFleetViewService extends Service {
         } catch (Exception e) {
             active = false;
             error_flag = true;
-            //sendReport(e, 1);
+            sendReport(e, 1);
             stopSelf();
         }
     }
@@ -722,5 +726,12 @@ public class KcaFleetViewService extends Service {
                         ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
             }
         }
+    }
+
+    private void sendReport(Exception e, int type) {
+        error_flag = true;
+        String data = helper.getJsonArrayValue(DB_KEY_DECKPORT).toString();
+        if (mView != null) mView.setVisibility(View.GONE);
+        helper.recordErrorLog(ERROR_TYPE_FLEETVIEW, "fleetview", "FV_".concat(String.valueOf(type)), data, getStringFromException(e));
     }
 }
