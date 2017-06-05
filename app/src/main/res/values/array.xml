@@ -45,12 +45,14 @@
     </string-array>
 
     <string-array name="downloadSiteOption" translatable="false">
+        <item>@string/app_download_link_playstore_label</item>
         <item>@string/app_download_link_googledrive_label</item>
         <item>@string/app_download_link_box_label</item>
         <item>@string/app_download_link_mega_label</item>
     </string-array>
 
     <string-array name="downloadSiteOptionValue" translatable="false">
+        <item>@string/app_download_link_playstore</item>
         <item>@string/app_download_link_googledrive</item>
         <item>@string/app_download_link_box</item>
         <item>@string/app_download_link_mega</item>
