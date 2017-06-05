@@ -36,6 +36,7 @@ import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
+import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_FLEETVIEW;
@@ -139,6 +140,8 @@ public class KcaFleetViewService extends Service {
         try {
             active = true;
             helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+            helper.updateExpScore(0);
+
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
             //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mInflater = LayoutInflater.from(contextWithLocale);

@@ -442,7 +442,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         db = this.getReadableDatabase();
         ContentValues values = new ContentValues();
         int currentExp = Integer.parseInt(getValue(DB_KEY_EXPCRNT));
-        int todayExp = Integer.parseInt(getValue(DB_KEY_EXPCRNT));
+        int todayExp = Integer.parseInt(getValue(DB_KEY_EXPTDAY));
         exp[0] = currentExp * 7.0f / 10000;
         exp[1] = todayExp * 7.0f / 10000;
         return exp;
@@ -465,7 +465,6 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             String[] pt = prevTime.split("-");
             String[] ct = time.split("-");
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd");
             long datediff = 0;
             try {
                 Date date1 = df.parse(prevTime);

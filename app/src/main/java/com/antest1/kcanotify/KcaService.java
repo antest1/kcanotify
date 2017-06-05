@@ -559,7 +559,7 @@ public class KcaService extends Service {
                         questTracker.updateIdCountTracker("403");
                         questTracker.updateIdCountTracker("404");
 
-                        String api_name = jsonDataObj.get("api_quest_name").getAsString();
+                        String api_name = api_data.get("api_quest_name").getAsString();
                         if (api_name.contains("\\u6771\\u4eac\\u6025\\u884c")) { // 도쿄급행
                             questTracker.updateIdCountTracker("410");
                             questTracker.updateIdCountTracker("411");
