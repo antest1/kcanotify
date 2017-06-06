@@ -12,7 +12,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="app_brand" traslatable="false" translatable="false">시제 깡들리티</string> <!-- Do not translate here -->
-    <string name="app_version" translatable="false">2.3.3 rev2</string>
+    <string name="app_version" translatable="false">2.4</string>
     <string name="action_settings">Settings</string>
     <string name="action_errorlog">Error Log</string>
     <string name="backpress_msg">Press back one more time to exit</string>
@@ -80,8 +80,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_postfix">&#160;Fleet</string>
 
     <string name="opendb_failed_msg">An error occured while sending data to OpenDB.</string>
-    <string name="process_battle_failed_msg">An error occured while processing battle data. The error log will be sent to the developer.</string>
-    <string name="service_failed_msg">An error occured while processing battle data. The error log will be sent to the developer.\nIt is recommended that you restart kcanotify.</string>
+    <string name="process_battle_failed_msg">An error occured while processing battle data.</string>
+    <string name="service_failed_msg">An error occured while processing data. \nIt is recommended that you restart kcanotify.</string>
 
     <string name="node_info_noevent" formatted="false">%s (Battle Avoided)</string>
     <string name="node_info_obtain" formatted="false">%s (Resources Found)</string>

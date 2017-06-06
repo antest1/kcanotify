@@ -47,8 +47,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_postfix">&#160;舰队</string>
 
     <string name="opendb_failed_msg">向OpenDB汇报数据时出错</string>
-    <string name="process_battle_failed_msg">处理战斗数据出错。错误日志将发给开发者</string>
-    <string name="service_failed_msg">处理战斗数据出错。错误日志将发给开发者\n建议重启Kcanotify</string>
+    <string name="process_battle_failed_msg">处理战斗数据出错。</string>
+    <string name="service_failed_msg">处理数据出错。\n建议重启Kcanotify</string>
 
     <string name="node_info_noevent" formatted="false">%s (战斗回避)</string>
     <string name="node_info_obtain" formatted="false">%s (资源点)</string>

@@ -47,8 +47,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_postfix">&#160;艦隊</string>
 
     <string name="opendb_failed_msg">向OpenDB網站傳送資料時出現錯誤。</string>
-    <string name="process_battle_failed_msg">處理戰鬥數據出現錯誤。錯誤報告將會傳送給開發人員。</string>
-    <string name="service_failed_msg">處理戰鬥數據出現錯誤。錯誤報告將會傳送給開發人員。\n建議重新啟動Kcanotify</string>
+    <string name="process_battle_failed_msg">處理戰鬥數據出現錯誤。</string>
+    <string name="service_failed_msg">處理數據出現錯誤。\n建議重新啟動Kcanotify</string>
 
     <string name="node_info_noevent" formatted="false">%s (戰鬥迴避)</string>
     <string name="node_info_obtain" formatted="false">%s (發現資源)</string>
