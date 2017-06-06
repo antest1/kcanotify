@@ -14,9 +14,9 @@ About Project
 
 Download
 -------
+<a href='https://play.google.com/store/apps/details?id=com.antest1.kcanotify&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200px"/></a>
 - [Google Drive](http://bit.ly/kcanotifydown) (최신 버전)
 - [MEGA](https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw) (이전 버전 포함)
-- 곧 구글 플레이 스토어에서 만나실 수 있습니다!
 
 주요 기능
 -------
