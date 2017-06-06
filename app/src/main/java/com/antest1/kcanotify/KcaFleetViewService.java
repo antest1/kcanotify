@@ -141,6 +141,9 @@ public class KcaFleetViewService extends Service {
             active = true;
             helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             helper.updateExpScore(0);
+            if (helper.getJsonArrayValue(DB_KEY_DECKPORT) == null) {
+                stopSelf();
+            }
 
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
             //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -184,6 +187,7 @@ public class KcaFleetViewService extends Service {
             display.getSize(size);
             displayWidth = size.x;
         } catch (Exception e) {
+            e.printStackTrace();
             active = false;
             error_flag = true;
             sendReport(e, 1);
@@ -748,9 +752,15 @@ public class KcaFleetViewService extends Service {
 
     private void sendReport(Exception e, int type) {
         error_flag = true;
-        String data = helper.getJsonArrayValue(DB_KEY_DECKPORT).toString();
+        String data_str;
+        JsonArray data = helper.getJsonArrayValue(DB_KEY_DECKPORT);
+        if (data == null) {
+            data_str = "data is null";
+        } else {
+            data_str = data.toString();
+        }
         if (mView != null) mView.setVisibility(View.GONE);
-        helper.recordErrorLog(ERROR_TYPE_FLEETVIEW, "fleetview", "FV_".concat(String.valueOf(type)), data, getStringFromException(e));
+        helper.recordErrorLog(ERROR_TYPE_FLEETVIEW, "fleetview", "FV_".concat(String.valueOf(type)), data_str, getStringFromException(e));
     }
 
     @Override

@@ -81,15 +81,17 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         Cursor c = db.query(qt_table_name, null, "KEY=?", new String[]{String.valueOf(id)}, null, null, null, null);
         if (c.moveToFirst()) {
             JsonObject questInfo = KcaApiData.getQuestTrackInfo(String.valueOf(id));
-            int questType = questInfo.get("type").getAsInt();
-            String questTime = c.getString(c.getColumnIndex("TIME"));
-            if (checkQuestValid(questType, id, questTime)) {
-                db.update(qt_table_name, values, "KEY=?", new String[]{String.valueOf(id)});
-            } else {
-                db.delete(qt_table_name, "KEY=?", new String[]{String.valueOf(id)});
-                c.close();
-                addQuestTrack(id);
-                return;
+            if (questInfo != null) {
+                int questType = questInfo.get("type").getAsInt();
+                String questTime = c.getString(c.getColumnIndex("TIME"));
+                if (checkQuestValid(questType, id, questTime)) {
+                    db.update(qt_table_name, values, "KEY=?", new String[]{String.valueOf(id)});
+                } else {
+                    db.delete(qt_table_name, "KEY=?", new String[]{String.valueOf(id)});
+                    c.close();
+                    addQuestTrack(id);
+                    return;
+                }
             }
         } else {
             values.put("KEY", id);

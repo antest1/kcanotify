@@ -156,13 +156,21 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public JsonObject getJsonObjectValue(String key) {
-        JsonObject data = new JsonParser().parse(getValue(key)).getAsJsonObject();
-        return data;
+        String value = getValue(key);
+        if (value == null) return null;
+        else {
+            JsonObject data = new JsonParser().parse(value).getAsJsonObject();
+            return data;
+        }
     }
 
     public JsonArray getJsonArrayValue(String key) {
-        JsonArray data = new JsonParser().parse(getValue(key)).getAsJsonArray();
-        return data;
+        String value = getValue(key);
+        if (value == null) return null;
+        else {
+            JsonArray data = new JsonParser().parse(getValue(key)).getAsJsonArray();
+            return data;
+        }
     }
 
     public void putValue(String key, String value) {
