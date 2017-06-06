@@ -125,9 +125,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_view_activate_vpn">請啟用VPN服務。</string>
     <string name="kca_view_condition" formatted="false">士氣： %s</string>
     <string name="kca_view_condition_nformat" formatted="false">士氣 #%d: %s</string>
-    <string name="kca_view_hdmg_damecon_format" formatted="false">[有艦娘大破！（緊急修理可用）] %s 準備完畢 %s</string>
-    <string name="kca_view_hdmg_format" formatted="false">[有艦娘大破！] %s 準備完畢 %s</string>
-    <string name="kca_view_normal_format" formatted="false">%s 準備完畢 %s</string>
+    <string name="kca_view_hdmg_damecon_format" formatted="false">[有艦娘大破！（緊急修理可用）] %s 工作中 %s</string>
+    <string name="kca_view_hdmg_format" formatted="false">[有艦娘大破！] %s 工作中 %s</string>
+    <string name="kca_view_normal_format" formatted="false">%s 工作中 %s</string>
     <string name="kca_view_context_expand">請向下滑動以顯示資料</string>
     <string name="kca_view_noexpedition">沒有進行中的遠征。</string>
     <string name="kca_view_expedition_header">剩餘時間：</string>

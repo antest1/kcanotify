@@ -163,8 +163,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_view_activate_vpn">Please Activate VPN Service.</string>
     <string name="kca_view_condition" formatted="false">Morale: %s</string>
     <string name="kca_view_condition_nformat" formatted="false">Morale #%d: %s</string>
-    <string name="kca_view_hdmg_damecon_format" formatted="false">[Heavily Damaged!! (with Damecon)] %s Ready %s</string>
-    <string name="kca_view_hdmg_format" formatted="false">[Heavliy Damaged!!] %s Ready %s</string>
+    <string name="kca_view_hdmg_damecon_format" formatted="false">[Heavily Damaged!! (with Damecon)] %s Working %s</string>
+    <string name="kca_view_hdmg_format" formatted="false">[Heavliy Damaged!!] %s Working %s</string>
     <string name="kca_view_normal_format" formatted="false">%s Ready %s</string>
     <string name="kca_view_context_expand">Swipe down to show content</string>
     <string name="kca_view_noexpedition">No expeditions are running.</string>

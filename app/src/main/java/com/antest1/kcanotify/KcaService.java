@@ -328,12 +328,30 @@ public class KcaService extends Service {
             expeditionString = String.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
         }
 
+        String notifiTitle = "";
+        String nodeString = "";
+        if (currentNodeInfo.length() > 0) {
+            nodeString = String.format("[%s]", currentNodeInfo.replaceAll("[()]", "").replaceAll("\\s", "/"));
+        }
+
+        switch (heavyDamagedMode) {
+            case HD_DAMECON:
+                notifiTitle = String.format(getStringWithLocale(R.string.kca_view_hdmg_damecon_format), getStringWithLocale(R.string.app_name), nodeString);
+                break;
+            case HD_DANGER:
+                notifiTitle = String.format(getStringWithLocale(R.string.kca_view_hdmg_format), getStringWithLocale(R.string.app_name), nodeString);
+                break;
+            default:
+                notifiTitle = String.format(getStringWithLocale(R.string.kca_view_normal_format), getStringWithLocale(R.string.app_name), nodeString);
+                break;
+        }
+
         if (viewNotificationBuilder != null) {
             Intent aIntent = new Intent(KcaService.this, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT);
+            viewNotificationBuilder.setContentTitle(notifiTitle.trim());
             viewNotificationBuilder.setContentText(expeditionString);
-            //viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(expeditionString));
             notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.setContentIntent(pendingIntent).build());
         }
     }
@@ -526,7 +544,6 @@ public class KcaService extends Service {
                     if (api_start2_data == null && api_start2_down_mode) {
                         customToast.showToast(getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                         // new retrieveApiStartData().execute("", "down", "");
-                        // setFrontViewNotifier(FRONT_NONE, 0, getStringWithLocale(R.string.kca_toast_loading_data));
                     }
                 }
                 return;
@@ -692,7 +709,7 @@ public class KcaService extends Service {
                     //new retrieveApiStartData().execute("", "down", "");
                 }
             } else if (api_start2_loading_flag) {
-                setFrontViewNotifier(FRONT_NONE, 0, getStringWithLocale(R.string.kca_toast_loading_data));
+                customToast.showToast(getStringWithLocale(R.string.kca_toast_loading_data), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
             } else {
                 if (url.startsWith(API_PORT)) {
                     KcaFleetViewService.setReadyFlag(true);
@@ -723,7 +740,6 @@ public class KcaService extends Service {
                             processDockingInfo(nDockData);
                         }
                     }
-                    setFrontViewNotifier(FRONT_NONE, 0, null);
                     updateFleetView();
                     isInBattle = false;
                 }
@@ -824,7 +840,6 @@ public class KcaService extends Service {
                             else toastColor = R.color.colorWarningPanel;
                             customToast.showToast(message.trim(), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), toastColor));
                         }
-                        setFrontViewNotifier(FRONT_NONE, 0, null);
                     }
                 }
 
@@ -1437,18 +1452,14 @@ public class KcaService extends Service {
                     viewBitmapSmallId = getId(fairyId.concat("_small"), R.mipmap.class);
                     viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
                     updateNotificationFairy();
-                    setFrontViewNotifier(FRONT_NONE, 0, null);
+                    
                     startService(new Intent(this, KcaViewButtonService.class)
                             .setAction(KcaViewButtonService.FAIRY_CHANGE));
                 }
             }
 
-            if (url.startsWith(KCA_API_UPDATE_FRONTVIEW)) {
-                setFrontViewNotifier(FRONT_NONE, 0, null);
-            }
-
             if (url.startsWith(KCA_API_PREF_LANGUAGE_CHANGED)) {
-                setFrontViewNotifier(FRONT_NONE, 0, null);
+                updateExpViewNotification();
             }
 
             if (url.startsWith(KCA_API_NOTI_EXP_FIN)) {
@@ -1507,7 +1518,6 @@ public class KcaService extends Service {
                 Intent intent = new Intent(KCA_MSG_BATTLE_NODE);
                 //intent.putExtra(KCA_MSG_DATA, data);
                 broadcaster.sendBroadcast(intent);
-                setFrontViewNotifier(FRONT_NONE, 0, null);
             }
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_DROPINFO)) {
@@ -1552,11 +1562,9 @@ public class KcaService extends Service {
                     intent.putExtra(KCA_MSG_DATA, "0");
                     broadcaster.sendBroadcast(intent);
                 }
-                setFrontViewNotifier(FRONT_NONE, 0, null);
             }
 
             if (url.startsWith(KCA_API_PREF_CN_CHANGED)) {
-                
                 updateFleetView();
             }
 
@@ -1781,7 +1789,7 @@ public class KcaService extends Service {
         }
 
         kcaFirstDeckInfo = gson.toJson(deckInfoData);
-        setFrontViewNotifier(FRONT_NONE, 0, null);
+        
     }*/
 
     private void processExpeditionInfo() {
@@ -1827,7 +1835,7 @@ public class KcaService extends Service {
                 setExpeditionAlarm(i, mission_no, deck_name, arrive_time, false, false, aIntent);
             }
         }
-        setFrontViewNotifier(FRONT_NONE, 0, null);
+        
     }
 
     private void cancelExpeditionInfo(JsonObject data) {
@@ -1894,62 +1902,6 @@ public class KcaService extends Service {
         );
         pendingIntent.cancel();
         alarmManager.cancel(pendingIntent);
-    }
-
-    public void setFrontViewNotifier(int type, int id, String content) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        boolean is_portrait = !is_landscape;
-
-        String notifiTitle = "";
-        String notifiString = "";
-
-        if (!prefs.getBoolean(PREF_VPN_ENABLED, false)) {
-            notifiTitle = String.format(getStringWithLocale(R.string.kca_view_normal_format), getStringWithLocale(R.string.app_name), "");
-            notifiString = getStringWithLocale(R.string.kca_view_activate_vpn);
-        } else {
-            String nodeString = "";
-            if (currentNodeInfo.length() > 0) {
-                nodeString = String.format("[%s]", currentNodeInfo.replaceAll("[()]", "").replaceAll("\\s", "/"));
-            }
-            switch (heavyDamagedMode) {
-                case HD_DAMECON:
-                    notifiTitle = String.format(getStringWithLocale(R.string.kca_view_hdmg_damecon_format), getStringWithLocale(R.string.app_name), nodeString);
-                    break;
-                case HD_DANGER:
-                    notifiTitle = String.format(getStringWithLocale(R.string.kca_view_hdmg_format), getStringWithLocale(R.string.app_name), nodeString);
-                    break;
-                default:
-                    notifiTitle = String.format(getStringWithLocale(R.string.kca_view_normal_format), getStringWithLocale(R.string.app_name), nodeString);
-                    break;
-            }
-
-            if (content != null) {
-                notifiString = content;
-            } else {
-                try {
-                    JsonArray deckInfo = new JsonParser().parse(kcaFirstDeckInfo).getAsJsonArray();
-                    List<String> deckInfoStringList = new ArrayList<String>();
-                    for (Object item : deckInfo) {
-                        JsonObject data = (JsonObject) item;
-                        if (is_portrait) {
-                            deckInfoStringList.add(data.get("portrait_value").getAsString());
-                        } else {
-                            deckInfoStringList.add(data.get("landscape_value").getAsString());
-                        }
-                        if (data.get("is_newline").getAsInt() == 1 || (data.has("is_portrait_newline") && is_portrait)) {
-                            notifiString = notifiString.concat(joinStr(deckInfoStringList, " / ")).concat("\n");
-                            deckInfoStringList.clear();
-                        }
-                    }
-                    notifiString = notifiString.concat(joinStr(deckInfoStringList, " / "));
-                } catch (Exception e) {
-                    notifiString = getStringWithLocale(R.string.kca_init_content);
-                }
-            }
-        }
-
-        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), createViewNotification(notifiTitle, notifiString));
     }
 
     public static boolean isJSONValid(String jsonInString) {
@@ -2019,7 +1971,7 @@ public class KcaService extends Service {
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
         loadTranslationData(getAssets(), getApplicationContext());
 
-        setFrontViewNotifier(FRONT_NONE, 0, null);
+        
         super.onConfigurationChanged(newConfig);
     }
 }
