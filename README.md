@@ -18,6 +18,12 @@ Download
 - [Google Drive](http://bit.ly/kcanotifydown) (최신 버전)
 - [MEGA](https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw) (이전 버전 포함)
 
+Demo
+-------
+[![Youtube](https://img.youtube.com/vi/ZEAor_9jsaM/0.jpg)](https://www.youtube.com/watch?v=ZEAor_9jsaM)
+
+[칸코레 6-5 with 시제 깡들리티](https://www.youtube.com/watch?v=ZEAor_9jsaM)
+
 주요 기능
 -------
 - 원정 및 입거 알림
