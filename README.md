@@ -22,7 +22,7 @@ Demo
 -------
 [![Youtube](https://img.youtube.com/vi/ZEAor_9jsaM/0.jpg)](https://www.youtube.com/watch?v=ZEAor_9jsaM)
 
-[칸코레 6-5 with 시제 깡들리티](https://www.youtube.com/watch?v=ZEAor_9jsaM) [5-5](https://www.youtube.com/watch?v=QHg9exh9zQ8)
+[칸코레 6-5 with 시제 깡들리티](https://www.youtube.com/watch?v=ZEAor_9jsaM) / [5-5](https://www.youtube.com/watch?v=QHg9exh9zQ8)
 
 주요 기능
 -------
