@@ -1553,6 +1553,7 @@ public class KcaBattleViewService extends Service {
         sendData.addProperty("data", api_data.toString());
         sendData.addProperty("error", getStringFromException(e));
 
-        dbHelper.recordErrorLog(ERROR_TYPE_BATTLEVIEW, api_url, "BV", api_data.toString(), getStringFromException(e));
+        KcaDBHelper helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        helper.recordErrorLog(ERROR_TYPE_BATTLEVIEW, api_url, "BV", api_data.toString(), getStringFromException(e));
     }
 }

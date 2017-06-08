@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -289,5 +290,15 @@ public class KcaUtils {
             else if (Integer.parseInt(current_split[i]) < Integer.parseInt(default_split[i])) return false;
         }
         return current_split.length > default_split.length;
+    }
+
+    public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

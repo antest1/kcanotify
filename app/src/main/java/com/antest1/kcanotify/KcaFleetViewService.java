@@ -760,6 +760,8 @@ public class KcaFleetViewService extends Service {
             data_str = data.toString();
         }
         if (mView != null) mView.setVisibility(View.GONE);
+
+        KcaDBHelper helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         helper.recordErrorLog(ERROR_TYPE_FLEETVIEW, "fleetview", "FV_".concat(String.valueOf(type)), data_str, getStringFromException(e));
     }
 

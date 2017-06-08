@@ -353,11 +353,13 @@ public class KcaQuestViewService extends Service {
         if (mView != null) mView.setVisibility(View.GONE);
         if (mView.getParent() != null) mManager.removeView(mView);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
+        mView = null;
+        mManager = null;
         super.onDestroy();
     }
 
     private void updateView(int setViewResult, boolean isreset) {
-        if (setViewResult == 0) {
+        if (mManager != null && setViewResult == 0) {
             if(mView.getParent() != null) {
                 if (isreset) {
                     mManager.removeViewImmediate(mView);
@@ -445,6 +447,7 @@ public class KcaQuestViewService extends Service {
         if (mView != null) mView.setVisibility(View.GONE);
         if (api_data == null) data = "[api data is null]";
         else data = api_data.toString();
+        KcaDBHelper helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         helper.recordErrorLog(ERROR_TYPE_QUESTVIEW, "questview", "QV", data, getStringFromException(e));
     }
 }
