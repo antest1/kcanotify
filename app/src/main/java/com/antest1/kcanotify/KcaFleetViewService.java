@@ -309,7 +309,8 @@ public class KcaFleetViewService extends Service {
 
                     if (clickDuration < MAX_CLICK_DURATION) {
                         if (id == mView.findViewById(R.id.fleetview_head).getId()) {
-                            mView.setVisibility(View.GONE);
+                            if(mView != null) mView.setVisibility(View.GONE);
+                            if(itemView != null) itemView.setVisibility(View.GONE);
                         } else if (id == mView.findViewById(R.id.viewbutton_quest).getId()) {
                             qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
                             qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
