@@ -70,6 +70,14 @@ I can speak Korean and English, and I can understand Japanese (but not good at w
 
 E-mail: kcanotify@gmail.com
 
+Donate
+-------
+시제 깡들리티의 모든 기능은 무료로 제공되며, 광고 역시 포함하지 않습니다.
+
+만약 기부를 원하는 경우에는 아래 페이팔 버튼을 이용해주세요. 
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HU7EZHKLNEW4C)
+
 
 License
 -------
