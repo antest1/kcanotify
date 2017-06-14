@@ -500,19 +500,14 @@ public class KcaApiData {
     }
 
     public static int loadQuestTrackDataFromAssets(KcaDBHelper helper, AssetManager am) {
-        if (helper.getValue(DB_KEY_QUESTTRACK) == null) {
-            try {
-                AssetManager.AssetInputStream ais =
-                        (AssetManager.AssetInputStream) am.open("quest_track.json");
-                byte[] bytes = ByteStreams.toByteArray(ais);
-                helper.putValue(DB_KEY_QUESTTRACK, new String(bytes));
-                JsonElement data = new JsonParser().parse(new String(bytes));
-                return 1;
-            } catch (IOException e) {
-                return 0;
-            }
-        } else {
+        try {
+            AssetManager.AssetInputStream ais =
+                    (AssetManager.AssetInputStream) am.open("quest_track.json");
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            helper.putValue(DB_KEY_QUESTTRACK, new String(bytes));
             return 1;
+        } catch (IOException e) {
+            return 0;
         }
     }
 
