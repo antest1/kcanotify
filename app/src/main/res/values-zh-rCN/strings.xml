@@ -322,6 +322,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_app_title_down">APK下载地址</string>
     <string name="language_system">使用系统设置</string>
     <string name="item_engine">NE式轴流喷气发动机</string>
+    <string name="item_gmi_material">新型火炮兵装资材</string>
     <string name="setting_menu_noti_title_notiatsvcoff">当SVC服务关闭时启用通知</string>
     <string name="setting_menu_noti_desc_notiatsvcoff">当SVC服务关闭时启用远征/入渠通知</string>
     <string name="kca_toast_renew_currentportdeck">游戏内返回母港并更新相关数据</string>

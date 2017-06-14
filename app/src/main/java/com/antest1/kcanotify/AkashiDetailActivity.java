@@ -91,11 +91,24 @@ public class AkashiDetailActivity extends AppCompatActivity {
                     ((TextView) findViewById(getId("akashi_improv_detail_s".concat(String.valueOf(j))
                             .concat("_").concat(String.valueOf(i + 1)), R.id.class)))
                             .setText(mse_string[1]);
-                    if (j == 3 && data.has("require_engine")) {
+                    if (j == 3 && data.has("require_item")) {
                         String e3 = mse_string[2];
-                        if (resources.get(3).getAsJsonArray().get(4).getAsInt() == 0) {
-                            e3 = getStringWithLocale(R.string.item_engine).concat(" x 1 / ").concat(e3);
+                        JsonArray require_item = data.getAsJsonArray("require_item");
+                        String require_item_name;
+                        int require_item_count = require_item.get(1).getAsInt();
+                        switch(require_item.get(0).getAsInt()) {
+                            case 1:
+                                require_item_name = getStringWithLocale(R.string.item_engine);
+                                break;
+                            case 2:
+                                require_item_name = getStringWithLocale(R.string.item_gmi_material);
+                                break;
+                            default:
+                                require_item_name = "";
+                                break;
                         }
+
+                        e3 = String.format("%s\n%s x %d", e3, require_item_name, require_item_count);
                         ((TextView) findViewById(getId("akashi_improv_detail_e".concat(String.valueOf(j))
                                 .concat("_").concat(String.valueOf(i + 1)), R.id.class)))
                                 .setText(e3);

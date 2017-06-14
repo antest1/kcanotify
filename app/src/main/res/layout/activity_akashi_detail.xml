@@ -147,7 +147,7 @@
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
                         android:textSize="12dp"
-                        android:gravity="center_vertical|center_horizontal" />
+                        android:gravity="center_vertical|center" />
 
                     <TextView
                         android:text="3 / 5"
@@ -158,7 +158,7 @@
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
                         android:textSize="12dp"
-                        android:gravity="center_vertical|center_horizontal" />
+                        android:gravity="center_vertical|center" />
 
                     <TextView
                         android:text="영식함전 21형 x 2"
@@ -196,7 +196,7 @@
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
                         android:textSize="12dp"
-                        android:gravity="center_vertical|center_horizontal" />
+                        android:gravity="center_vertical|center" />
 
                     <TextView
                         android:text="3 / 5"
@@ -207,7 +207,7 @@
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
                         android:textSize="12dp"
-                        android:gravity="center_vertical|center_horizontal" />
+                        android:gravity="center_vertical|center" />
 
                     <TextView
                         android:text="영식함전 21형 x 2"
@@ -258,7 +258,8 @@
                                 android:textAlignment="gravity"
                                 android:textColor="@color/black"
                                 android:textSize="12dp"
-                                android:gravity="center_vertical|center_horizontal" />
+                                android:gravity="center_vertical|center"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:text="3 / 5"
@@ -269,7 +270,8 @@
                                 android:textAlignment="gravity"
                                 android:textColor="@color/black"
                                 android:textSize="12dp"
-                                android:gravity="center_vertical|center_horizontal" />
+                                android:gravity="center_vertical|center"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:text="영식함전 21형 x 2"
@@ -470,7 +472,7 @@
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
                         android:textSize="12dp"
-                        android:gravity="center_vertical|center_horizontal" />
+                        android:gravity="center_vertical|center" />
 
                     <TextView
                         android:text="3 / 5"
@@ -481,7 +483,7 @@
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
                         android:textSize="12dp"
-                        android:gravity="center_vertical|center_horizontal" />
+                        android:gravity="center_vertical|center" />
 
                     <TextView
                         android:text="영식함전 21형 x 2"
@@ -519,7 +521,7 @@
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
                         android:textSize="12dp"
-                        android:gravity="center_vertical|center_horizontal" />
+                        android:gravity="center_vertical|center" />
 
                     <TextView
                         android:text="3 / 5"
@@ -530,7 +532,7 @@
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
                         android:textSize="12dp"
-                        android:gravity="center_vertical|center_horizontal" />
+                        android:gravity="center_vertical|center" />
 
                     <TextView
                         android:text="영식함전 21형 x 2"
@@ -580,7 +582,9 @@
                                 android:layout_weight="0.2"
                                 android:textAlignment="center"
                                 android:textColor="@color/black"
-                                android:textSize="12dp" />
+                                android:textSize="12dp"
+                                android:gravity="center_vertical|center"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:text="3 / 5"
@@ -591,7 +595,8 @@
                                 android:textAlignment="center"
                                 android:textColor="@color/black"
                                 android:textSize="12dp"
-                                android:gravity="center_vertical|center_horizontal" />
+                                android:gravity="center_vertical|center"
+                                android:layout_gravity="center_vertical" />
 
                             <TextView
                                 android:text="영식함전 21형 x 2"
