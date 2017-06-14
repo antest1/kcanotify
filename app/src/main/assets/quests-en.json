@@ -474,11 +474,19 @@
         "memo": "\u27a3Rewards a Repair Team",
         "unlock": [ 836 ]
     },
-	"180": {
+    "180": {
         "code": "A75",
-        "name": "新編「第一戦隊」を編成せよ！",
-        "desc": "編成任務：第一艦隊に新改装された長門型戦艦一番艦「長門改二」及び同二番艦「陸奥改」からなる新編第一戦隊を配備せよ！",
-        "memo": "給糧艦「伊良湖」x1"
+        "name": "Form the New 1st Battleship Division!",
+        "desc": "Have Nagato Kai Ni as flagship and Mutsu Kai in Fleet 1.",
+        "memo": "\u27a3Rewards 1 Irako",
+        "unlock": [ 856 ]
+    },
+	"181": {
+        "code": "A76",
+        "name": "Organize the new \"Seventh Squadron\"!",
+		"desc": "Have Kumano Kai Ni (or CVL remodel) as flagship with Suzuya Kai Ni (or CVL remodel) as 2nd ship, Mogami Kai and Mikuma Kai in Fleet 1.",
+        "memo": "\u27a3Rewards 1 Irako",
+        "unlock": [ 858 ]
     },
     
     "202": {
@@ -1137,6 +1145,18 @@
         "desc": "Sortie Nagato Kai Ni as flagship with Mutsu Kai in the second slot to [W4-5] and [W5-5]. S-Rank the boss nodes of each.",
         "memo": "\u27a3Rewards a New Design Anti-Torpedo Bulge (Large)"
     },
+    "857": {
+        "code": "B100",
+        "name": "Enhanced Maritime Escort Fleet, Sortie!",
+		"desc": "Sortie a fleet with 1 CL, 2 DD/DE, 1 CAV/CVL, up to 2 additional ships to [W2-2], [W2-3], [W2-4] and [W2-5]. A-Rank+ the boss nodes of each.",
+		"memo": "\u27a3Rewards either a Medal OR a New Type Artillery Armament Materials"
+    },
+    "858": {
+        "code": "B101",
+        "name": "New Seventh Squadron, Sortie!",
+        "desc": "Sortie a fleet with Kumano Kai Ni as flagship with Suzuya Kai Ni as 2nd ship, Mogami Kai, Mikuma Kai, up to 2 additional ships to [W4-5] and [W6-2]. S-Rank the boss nodes of each.",
+		"memo": "\u2623NOTICE\u2623 The CVL remodel of Kumano and Suzuya can complete this quest\n\u27a3Rewards either a Medal OR a New Type Artillery Armament Materials OR a Type 0 Fighter Model 63 (Fighter-bomber)"
+    },
     
     "201": {
         "code": "Bd1",
@@ -1198,10 +1218,6 @@
         "memo": "\u203bEnemy Submarine Suppression!",
         "tracking": [ [0,6] ]
     },
-    
-    
-    
-    
     
     "214": {
         "code": "Bw1",
@@ -1570,10 +1586,18 @@
         "desc": "Have 5000 steel and 1500 bauxite. Complete Expeditions 30 and 31.",
         "memo": "\u2718Consumes the resources. \u27a3Rewards a Ne-Type Engine"
     },    
-	"424": {
+    "424": {
         "code": "D22",
-        "name": "輸送船団護衛を強化せよ！",
-        "desc": "(Monthly) Complete Expedition 5 four times."
+        "name": "Intensify the Transport Fleet Escort! (Monthly Expedition 5)",
+        "desc": "Complete Expedition 5 four times.",
+        "unlock": [ 425 ],
+        "tracking": [ [0,4] ]
+    },
+    "425": {
+        "code": "D23",
+        "name": "Maritime Escort Squadron, Expedition Start!",
+        "desc": "Complete Expedition 4, 5 and 9.",
+        "unlock": [ 663 ]
     },
         
     "501": {
@@ -1973,6 +1997,26 @@
         "name": "Expand the New Elite Seaplane Group",
         "desc": "Have a secretary ship equipped with a Maxed Expertise and Max Star Type 2 Seaplane Fighter Kai and then Scrap 2 Type 21 Zero Fighter and 2 Zuiun in your inventory while the quest is activated.",
         "memo": "\u2718Consumes the items and a Skilled Crew Member. Make sure the equipment is unlocked!\n\u27a3Rewards a Type 2 Seaplane Fighter Kai (Skilled)"
+    },
+    "661": {
+        "code": "F53",
+        "name": "Reinforcement of New Model Cannon Improvement, Start!",
+		"desc": "Prepare 6000 steel. Scrap 10 Secondary Guns.",
+        "memo": "\u2718Consumes the resources.\n\u27a3Rewards a New Type Artillery Armament Materials",
+        "unlock": [ 662 ]
+    },
+    "662": {
+        "code": "F54",
+        "name": "Development of New Type Equipment Fitting Research",
+        "desc": "Prepare 12000 steel. Scrap 10 Medium Caliber Main Guns.",
+        "memo": "\u2718Consumes the resources.\n\u27a3Rewards a Medal OR a New Type Artillery Armament Materials",
+        "unlock": [ 425 ]
+    },
+    "663": {
+        "code": "F55",
+        "name": "Quarterly Research of New Rigging Types",
+        "desc": "Prepare 18000 steel. Scrap 10 Large Caliber Main Guns.",
+        "memo": "\u2718Consumes the resources.\n\u27a3Rewards a Medal OR a New Type Artillery Armament Materials"
     },
     
     "701": {
