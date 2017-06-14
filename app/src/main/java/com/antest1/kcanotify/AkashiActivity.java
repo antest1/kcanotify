@@ -311,7 +311,7 @@ public class AkashiActivity extends AppCompatActivity {
             KcaApplication.defaultLocale = newConfig.locale;
         }
         if(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
-            LocaleUtils.setLocale(KcaApplication.defaultLocale);
+            LocaleUtils.setLocale(Locale.getDefault());
         } else {
             String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
             LocaleUtils.setLocale(new Locale(pref[0], pref[1]));

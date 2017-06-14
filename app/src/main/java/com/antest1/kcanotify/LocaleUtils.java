@@ -39,7 +39,7 @@ public class LocaleUtils {
 
     public static String getLocaleCode(String pref) {
         if (pref.startsWith("default")) {
-            Locale locale = KcaApplication.defaultLocale;
+            Locale locale = Locale.getDefault();
             String language = locale.getLanguage();
             String country = locale.getCountry();
             pref = language.concat("-").concat(country);

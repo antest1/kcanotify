@@ -222,7 +222,7 @@ public class KcaUtils {
         Locale locale;
         String[] pref_locale = getStringPreferences(ac, PREF_KCA_LANGUAGE).split("-");
         if (pref_locale[0].equals("default")) {
-            locale = KcaApplication.defaultLocale;
+            locale = Locale.getDefault();
         } else {
             locale = new Locale(pref_locale[0], pref_locale[1]);
         }
