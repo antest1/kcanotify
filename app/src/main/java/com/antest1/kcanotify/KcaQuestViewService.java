@@ -115,7 +115,7 @@ public class KcaQuestViewService extends Service {
 
     @SuppressLint("DefaultLocale")
     public void setQuestView(int api_disp_page, int api_page_count, JsonArray api_list, boolean checkValid) {
-        if (api_page_count > 0) {
+        if (api_page_count > 0 && api_list.size() > 0) {
             ((TextView) questview.findViewById(R.id.quest_page))
                     .setText(String.format(getStringWithLocale(R.string.questview_page), api_disp_page, api_page_count));
             if (checkValid) helper.checkValidQuest(api_disp_page, api_page_count, api_list);
@@ -264,9 +264,12 @@ public class KcaQuestViewService extends Service {
             int api_page_count, api_disp_page;
             JsonArray api_list = new JsonArray();
             if (isquestlist && api_data != null) {
+                Log.e("KCA-Q", api_data.toString());
                 api_page_count = api_data.get("api_page_count").getAsInt();
                 api_disp_page = api_data.get("api_disp_page").getAsInt();
-                api_list = api_data.getAsJsonArray("api_list");
+                if(!api_data.get("api_list").isJsonNull()) {
+                    api_list = api_data.getAsJsonArray("api_list");
+                }
             } else {
                 JsonArray raw_api_list = helper.getCurrentQuestList();
                 api_disp_page = currentPage;

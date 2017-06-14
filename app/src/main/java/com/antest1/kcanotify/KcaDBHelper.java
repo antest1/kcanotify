@@ -345,7 +345,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                 db.delete(questlist_table_name, "KEY < ?", new String[]{String.valueOf(questIdList.get(0))});
                 qt.deleteQuestTrackWithRange(-1, questIdList.get(0));
                 Log.e("KCA", String.format("delete KEV < %d", questIdList.get(0)));
-            } else if (page == lastpage) {
+            }
+            if (page == lastpage) {
                 db.delete(questlist_table_name, "KEY > ?", new String[]{String.valueOf(last_no)});
                 qt.deleteQuestTrackWithRange(last_no, -1);
                 Log.e("KCA", String.format("delete KEV > %d", last_no));
