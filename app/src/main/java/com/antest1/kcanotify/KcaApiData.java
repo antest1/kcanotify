@@ -505,6 +505,7 @@ public class KcaApiData {
                     (AssetManager.AssetInputStream) am.open("quest_track.json");
             byte[] bytes = ByteStreams.toByteArray(ais);
             helper.putValue(DB_KEY_QUESTTRACK, new String(bytes));
+            JsonElement data = new JsonParser().parse(new String(bytes));
             return 1;
         } catch (IOException e) {
             return 0;
@@ -620,27 +621,7 @@ public class KcaApiData {
     // DB-based functions
     public static int putSlotItemDataToDB(JsonArray api_data) {
         if (helper == null) return -1;
-
-        JsonElement temp;
-        HashSet<Integer> prevData = helper.getItemKeyList();
-        for (Iterator<JsonElement> itr = api_data.iterator(); itr.hasNext(); ) {
-            temp = itr.next();
-            JsonObject item_data = temp.getAsJsonObject();
-            Integer api_id = item_data.get("api_id").getAsInt();
-            helper.putItemValue(api_id, item_data.toString());
-            prevData.remove(api_id);
-        }
-
-        if (prevData.size() > 0) {
-            int i = 0;
-            String[] removeList = new String[prevData.size()];
-            Log.e("KCA", "prevData size: " + String.valueOf(removeList.length));
-            for (Integer id : prevData) {
-                removeList[i] = String.valueOf(id);
-                i += 1;
-            }
-            helper.removeItemValue(removeList);
-        }
+        helper.putBulkItemValue(api_data);
         return api_data.size();
     }
 

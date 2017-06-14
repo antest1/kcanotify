@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -229,6 +231,36 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             db.insert(slotitem_table_name, null, values);
         }
         c.close();
+    }
+
+    public void putBulkItemValue(JsonArray api_data) {
+        SQLiteDatabase db = null;
+        SQLiteStatement statement;
+        try {
+            if (api_data.size() > 0) {
+                db = getWritableDatabase();
+                db.delete(slotitem_table_name, null, null);
+                db.beginTransaction();
+                statement = db.compileStatement("INSERT INTO ".concat(slotitem_table_name).concat(" (KEY, VALUE) values (?, ?)"));
+
+                for (JsonElement item: api_data) {
+                    int column = 1;
+                    JsonObject item_data = item.getAsJsonObject();
+                    String api_id = item_data.get("api_id").getAsString();
+                    statement.bindString(column++, api_id);
+                    statement.bindString(column++, item_data.toString());
+                    statement.execute();
+                }
+                statement.close();
+                db.setTransactionSuccessful();
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if (db != null) {
+                db.endTransaction();
+            }
+        }
     }
 
     public void removeItemValue(String[] keys) {
