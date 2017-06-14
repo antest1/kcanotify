@@ -33,8 +33,9 @@ public final class KcaConstants {
     public static final String ERROR_TYPE_VPN = "V";
     public static final String ERROR_TYPE_OPENDB = "O";
 
-    public static final int FAIRY_TOTAL_COUNT = 55;
-    public static final int[] FAIRY_REVERSE_LIST = {0, 1, 2, 8, 9, 11, 12, 15, 19, 23, 24, 25, 27, 28, 30, 32, 33, 34, 35, 36, 40, 42, 44, 45, 47, 49, 50, 51};
+    public static final int FAIRY_TOTAL_COUNT = 84;
+    public static final int[] FAIRY_REVERSE_LIST = {0, 1, 2, 8, 9, 11, 12, 15, 19, 23, 24, 25, 27, 28, 30,
+            32, 33, 34, 35, 36, 40, 42, 44, 45, 47, 49, 50, 51, 59, 60, 62, 63, 64, 73, 78, 79, 80, 81, 82};
 
     public static final String API_PORT = "/api_port/port";
     public static final String API_WORLD_GET_ID = "/api_world/get_id";
