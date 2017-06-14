@@ -866,7 +866,7 @@ jbyteArray cstr2jbyteArray( JNIEnv *env, const char *nativeStr, int size)
     return javaBytes;
 }
 
-void test(char* data, int size, int type, char* saddr, char* taddr, int sport, int tport) {
+void get_packet_data(char* data, int size, int type, char* saddr, char* taddr, int sport, int tport) {
     jclass target_class = NULL;
     jmethodID method_callback = NULL;
     JNIEnv *env;
