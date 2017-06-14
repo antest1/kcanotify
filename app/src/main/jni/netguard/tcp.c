@@ -61,7 +61,8 @@ int check_tcp_session(const struct arguments *args, struct ng_session *s,
     if (s->tcp.version == 4) {
         inet_ntop(AF_INET, &s->tcp.saddr.ip4, source, sizeof(source));
         inet_ntop(AF_INET, &s->tcp.daddr.ip4, dest, sizeof(dest));
-    } else {
+    }
+    else {
         inet_ntop(AF_INET6, &s->tcp.saddr.ip6, source, sizeof(source));
         inet_ntop(AF_INET6, &s->tcp.daddr.ip6, dest, sizeof(dest));
     }
@@ -102,8 +103,8 @@ int check_tcp_session(const struct arguments *args, struct ng_session *s,
 
     if ((s->tcp.state == TCP_CLOSING || s->tcp.state == TCP_CLOSE) &&
         (s->tcp.sent || s->tcp.received)) {
-        //account_usage(args, s->tcp.version, IPPROTO_TCP,
-        //              dest, ntohs(s->tcp.dest), s->tcp.uid, s->tcp.sent, s->tcp.received);
+        account_usage(args, s->tcp.version, IPPROTO_TCP,
+                      dest, ntohs(s->tcp.dest), s->tcp.uid, s->tcp.sent, s->tcp.received);
         s->tcp.sent = 0;
         s->tcp.received = 0;
     }
@@ -234,7 +235,8 @@ void check_tcp_socket(const struct arguments *args,
     if (s->tcp.version == 4) {
         inet_ntop(AF_INET, &s->tcp.saddr.ip4, source, sizeof(source));
         inet_ntop(AF_INET, &s->tcp.daddr.ip4, dest, sizeof(dest));
-    } else {
+    }
+    else {
         inet_ntop(AF_INET6, &s->tcp.saddr.ip6, source, sizeof(source));
         inet_ntop(AF_INET6, &s->tcp.daddr.ip6, dest, sizeof(dest));
     }
@@ -260,6 +262,34 @@ void check_tcp_socket(const struct arguments *args,
                         session, serr, strerror(serr));
 
         write_rst(args, &s->tcp);
+
+        // Connection refused
+        if (0)
+            if (err >= 0 && (serr == ECONNREFUSED || serr == EHOSTUNREACH)) {
+                struct icmp icmp;
+                memset(&icmp, 0, sizeof(struct icmp));
+                icmp.icmp_type = ICMP_UNREACH;
+                if (serr == ECONNREFUSED)
+                    icmp.icmp_code = ICMP_UNREACH_PORT;
+                else
+                    icmp.icmp_code = ICMP_UNREACH_HOST;
+                icmp.icmp_cksum = 0;
+                icmp.icmp_cksum = ~calc_checksum(0, &icmp, 4);
+
+                struct icmp_session sicmp;
+                memset(&sicmp, 0, sizeof(struct icmp_session));
+                sicmp.version = s->tcp.version;
+                if (s->tcp.version == 4) {
+                    sicmp.saddr.ip4 = (__be32) s->tcp.saddr.ip4;
+                    sicmp.daddr.ip4 = (__be32) s->tcp.daddr.ip4;
+                }
+                else {
+                    memcpy(&sicmp.saddr.ip6, &s->tcp.saddr.ip6, 16);
+                    memcpy(&sicmp.daddr.ip6, &s->tcp.daddr.ip6, 16);
+                }
+
+                write_icmp(args, &sicmp, &icmp, 8);
+            }
     }
     else {
         // Assume socket okay
@@ -277,7 +307,8 @@ void check_tcp_socket(const struct arguments *args,
                     else
                         s->tcp.socks5 = SOCKS5_CONNECTED;
                 }
-            } else {
+            }
+            else {
                 if (ev->events & EPOLLIN) {
                     uint8_t buffer[32];
                     ssize_t bytes = recv(s->socket, buffer, sizeof(buffer), 0);
@@ -304,26 +335,30 @@ void check_tcp_socket(const struct arguments *args,
                                 write_rst(args, &s->tcp);
                             }
 
-                        } else if (s->tcp.socks5 == SOCKS5_AUTH &&
-                                   bytes == 2 &&
-                                   (buffer[0] == 1 || buffer[0] == 5)) {
+                        }
+                        else if (s->tcp.socks5 == SOCKS5_AUTH &&
+                                 bytes == 2 &&
+                                 (buffer[0] == 1 || buffer[0] == 5)) {
                             if (buffer[1] == 0) {
                                 s->tcp.socks5 = SOCKS5_CONNECT;
                                 log_android(ANDROID_LOG_WARN, "%s SOCKS5 auth OK", session);
-                            } else {
+                            }
+                            else {
                                 s->tcp.socks5 = 0;
                                 log_android(ANDROID_LOG_ERROR, "%s SOCKS5 auth error %d",
                                             session, buffer[1]);
                                 write_rst(args, &s->tcp);
                             }
 
-                        } else if (s->tcp.socks5 == SOCKS5_CONNECT &&
-                                   bytes == 6 + (s->tcp.version == 4 ? 4 : 16) &&
-                                   buffer[0] == 5) {
+                        }
+                        else if (s->tcp.socks5 == SOCKS5_CONNECT &&
+                                 bytes == 6 + (s->tcp.version == 4 ? 4 : 16) &&
+                                 buffer[0] == 5) {
                             if (buffer[1] == 0) {
                                 s->tcp.socks5 = SOCKS5_CONNECTED;
                                 log_android(ANDROID_LOG_WARN, "%s SOCKS5 connected", session);
-                            } else {
+                            }
+                            else {
                                 s->tcp.socks5 = 0;
                                 log_android(ANDROID_LOG_ERROR, "%s SOCKS5 connect error %d",
                                             session, buffer[1]);
@@ -341,7 +376,8 @@ void check_tcp_socket(const struct arguments *args,
                                  */
                             }
 
-                        } else {
+                        }
+                        else {
                             s->tcp.socks5 = 0;
                             log_android(ANDROID_LOG_ERROR, "%s recv SOCKS5 state %d",
                                         session, s->tcp.socks5);
@@ -364,7 +400,8 @@ void check_tcp_socket(const struct arguments *args,
                     write_rst(args, &s->tcp);
                 }
 
-            } else if (s->tcp.socks5 == SOCKS5_AUTH) {
+            }
+            else if (s->tcp.socks5 == SOCKS5_AUTH) {
                 uint8_t ulen = strlen(socks5_username);
                 uint8_t plen = strlen(socks5_password);
                 uint8_t buffer[512];
@@ -388,7 +425,8 @@ void check_tcp_socket(const struct arguments *args,
                     write_rst(args, &s->tcp);
                 }
 
-            } else if (s->tcp.socks5 == SOCKS5_CONNECT) {
+            }
+            else if (s->tcp.socks5 == SOCKS5_CONNECT) {
                 uint8_t buffer[22];
                 *(buffer + 0) = 5; // version
                 *(buffer + 1) = 1; // TCP/IP stream connection
@@ -397,7 +435,8 @@ void check_tcp_socket(const struct arguments *args,
                 if (s->tcp.version == 4) {
                     memcpy(buffer + 4, &s->tcp.daddr.ip4, 4);
                     *((__be16 *) (buffer + 4 + 4)) = s->tcp.dest;
-                } else {
+                }
+                else {
                     memcpy(buffer + 4, &s->tcp.daddr.ip6, 16);
                     *((__be16 *) (buffer + 4 + 16)) = s->tcp.dest;
                 }
@@ -416,7 +455,8 @@ void check_tcp_socket(const struct arguments *args,
                     write_rst(args, &s->tcp);
                 }
 
-            } else if (s->tcp.socks5 == SOCKS5_CONNECTED) {
+            }
+            else if (s->tcp.socks5 == SOCKS5_CONNECTED) {
                 s->tcp.remote_seq++; // remote SYN
                 if (write_syn_ack(args, &s->tcp) >= 0) {
                     s->tcp.time = time(NULL);
@@ -424,17 +464,19 @@ void check_tcp_socket(const struct arguments *args,
                     s->tcp.state = TCP_SYN_RECV;
                 }
             }
-        } else {
+        }
+        else {
 
             // Always forward data
             int fwd = 0;
             if (ev->events & EPOLLOUT) {
                 // Forward data
                 uint32_t buffer_size = (uint32_t) get_receive_buffer(s);
-                log_android(ANDROID_LOG_WARN, "KCAV: %d", s->tcp.forward->data[0]);
+				log_android(ANDROID_LOG_WARN, "KCAV: %d", s->tcp.forward->data[0]);
                 log_android(ANDROID_LOG_WARN, "saddr: %s", source);
                 log_android(ANDROID_LOG_WARN, "taddr: %s", dest);
 
+				
                 while (s->tcp.forward != NULL &&
                        s->tcp.forward->seq + s->tcp.forward->sent == s->tcp.remote_seq &&
                        s->tcp.forward->len - s->tcp.forward->sent < buffer_size) {
@@ -443,7 +485,7 @@ void check_tcp_socket(const struct arguments *args,
                                 s->tcp.forward->seq - s->tcp.remote_start,
                                 s->tcp.forward->seq + s->tcp.forward->len - s->tcp.remote_start,
                                 s->tcp.forward->sent);
-                    test(s->tcp.forward->data, s->tcp.forward->len, KCA_REQUEST, source, dest, ntohs(s->tcp.source), ntohs(s->tcp.dest));
+                    get_packet_data(s->tcp.forward->data, s->tcp.forward->len, KCA_REQUEST, source, dest, ntohs(s->tcp.source), ntohs(s->tcp.dest));
                     ssize_t sent = send(s->socket,
                                         s->tcp.forward->data + s->tcp.forward->sent,
                                         s->tcp.forward->len - s->tcp.forward->sent,
@@ -456,11 +498,13 @@ void check_tcp_socket(const struct arguments *args,
                         if (errno == EINTR || errno == EAGAIN) {
                             // Retry later
                             break;
-                        } else {
+                        }
+                        else {
                             write_rst(args, &s->tcp);
                             break;
                         }
-                    } else {
+                    }
+                    else {
                         fwd = 1;
                         buffer_size -= sent;
                         s->tcp.sent += sent;
@@ -472,7 +516,8 @@ void check_tcp_socket(const struct arguments *args,
                             s->tcp.forward = s->tcp.forward->next;
                             free(p->data);
                             free(p);
-                        } else {
+                        }
+                        else {
                             log_android(ANDROID_LOG_WARN,
                                         "%s partial send %u/%u",
                                         session, s->tcp.forward->sent, s->tcp.forward->len);
@@ -522,7 +567,6 @@ void check_tcp_socket(const struct arguments *args,
                     uint32_t buffer_size = (send_window > s->tcp.mss
                                             ? s->tcp.mss : send_window);
                     uint8_t *buffer = malloc(buffer_size);
-                    memset(buffer, 0, sizeof(uint8_t) * buffer_size);
                     ssize_t bytes = recv(s->socket, buffer, (size_t) buffer_size, 0);
                     if (bytes < 0) {
                         // Socket error
@@ -559,13 +603,14 @@ void check_tcp_socket(const struct arguments *args,
                                         session, errno, strerror(errno));
                         s->socket = -1;
 
-                    } else {
+                    }
+                    else {
                         // Socket read data
                         log_android(ANDROID_LOG_DEBUG, "%s recv bytes %d", session, bytes);
                         s->tcp.received += bytes;
-                        log_android(ANDROID_LOG_WARN, "saddr: %s", source);
+						log_android(ANDROID_LOG_WARN, "saddr: %s", source);
                         log_android(ANDROID_LOG_WARN, "taddr: %s", dest);
-                        test(buffer, (size_t) bytes, KCA_RESPONSE, dest, source, ntohs(s->tcp.dest), ntohs(s->tcp.source));
+                        get_packet_data(buffer, (size_t) bytes, KCA_RESPONSE, dest, source, ntohs(s->tcp.dest), ntohs(s->tcp.source));
 
                         // Forward to tun
                         if (write_data(args, &s->tcp, buffer, (size_t) bytes) >= 0)
@@ -585,7 +630,7 @@ void check_tcp_socket(const struct arguments *args,
 jboolean handle_tcp(const struct arguments *args,
                     const uint8_t *pkt, size_t length,
                     const uint8_t *payload,
-                    int uid, struct allowed *redirect,
+                    int uid, int allowed, struct allowed *redirect,
                     const int epoll_fd) {
     // Get headers
     const uint8_t version = (*pkt) >> 4;
@@ -615,7 +660,8 @@ jboolean handle_tcp(const struct arguments *args,
     if (version == 4) {
         inet_ntop(AF_INET, &ip4->saddr, source, sizeof(source));
         inet_ntop(AF_INET, &ip4->daddr, dest, sizeof(dest));
-    } else {
+    }
+    else {
         inet_ntop(AF_INET6, &ip6->ip6_src, source, sizeof(source));
         inet_ntop(AF_INET6, &ip6->ip6_dst, dest, sizeof(dest));
     }
@@ -708,7 +754,8 @@ jboolean handle_tcp(const struct arguments *args,
             if (version == 4) {
                 s->tcp.saddr.ip4 = (__be32) ip4->saddr;
                 s->tcp.daddr.ip4 = (__be32) ip4->daddr;
-            } else {
+            }
+            else {
                 memcpy(&s->tcp.saddr.ip6, &ip6->ip6_src, 16);
                 memcpy(&s->tcp.daddr.ip6, &ip6->ip6_dst, 16);
             }
@@ -755,6 +802,11 @@ jboolean handle_tcp(const struct arguments *args,
 
             s->next = ng_session;
             ng_session = s;
+
+            if (!allowed) {
+                log_android(ANDROID_LOG_WARN, "%s resetting blocked session", packet);
+                write_rst(args, &s->tcp);
+            }
         }
         else {
             log_android(ANDROID_LOG_WARN, "%s unknown session", packet);
@@ -763,12 +815,13 @@ jboolean handle_tcp(const struct arguments *args,
             memset(&rst, 0, sizeof(struct tcp_session));
             rst.version = 4;
             rst.local_seq = ntohl(tcphdr->ack_seq);
-            rst.remote_seq = ntohl(tcphdr->seq) + datalen + (tcphdr->fin ? 1 : 0);
+            rst.remote_seq = ntohl(tcphdr->seq) + datalen + (tcphdr->syn || tcphdr->fin ? 1 : 0);
 
             if (version == 4) {
                 rst.saddr.ip4 = (__be32) ip4->saddr;
                 rst.daddr.ip4 = (__be32) ip4->daddr;
-            } else {
+            }
+            else {
                 memcpy(&rst.saddr.ip6, &ip6->ip6_src, 16);
                 memcpy(&rst.daddr.ip6, &ip6->ip6_dst, 16);
             }
@@ -836,7 +889,8 @@ jboolean handle_tcp(const struct arguments *args,
                         log_android(ANDROID_LOG_WARN, "%s repeated SYN", session);
                         // The socket is probably not opened yet
 
-                    } else if (tcphdr->fin /* +ACK */) {
+                    }
+                    else if (tcphdr->fin /* +ACK */) {
                         if (cur->tcp.state == TCP_ESTABLISHED) {
                             log_android(ANDROID_LOG_WARN, "%s FIN received", session);
                             if (cur->tcp.forward == NULL) {
@@ -865,7 +919,8 @@ jboolean handle_tcp(const struct arguments *args,
                             return 0;
                         }
 
-                    } else if (tcphdr->ack) {
+                    }
+                    else if (tcphdr->ack) {
                         cur->tcp.acked = ntohl(tcphdr->ack_seq);
 
                         if (cur->tcp.state == TCP_SYN_RECV)
@@ -913,7 +968,8 @@ jboolean handle_tcp(const struct arguments *args,
                         else
                             log_android(ANDROID_LOG_WARN, "%s keep alive", session);
 
-                    } else if (compare_u32(ack, cur->tcp.local_seq) < 0) {
+                    }
+                    else if (compare_u32(ack, cur->tcp.local_seq) < 0) {
                         if (compare_u32(ack, cur->tcp.acked) <= 0)
                             log_android(
                                     ack == cur->tcp.acked ? ANDROID_LOG_WARN : ANDROID_LOG_ERROR,
@@ -1017,7 +1073,8 @@ int open_tcp_socket(const struct arguments *args,
             version = (strstr(socks5_addr, ":") == NULL ? 4 : 6);
         else
             version = cur->version;
-    } else
+    }
+    else
         version = (strstr(redirect->raddr, ":") == NULL ? 4 : 6);
 
     // Get TCP socket
@@ -1041,7 +1098,6 @@ int open_tcp_socket(const struct arguments *args,
     // Build target address
     struct sockaddr_in addr4;
     struct sockaddr_in6 addr6;
-
     if (redirect == NULL) {
         if (*socks5_addr && socks5_port) {
             log_android(ANDROID_LOG_WARN, "TCP%d SOCKS5 to %s/%u",
@@ -1057,18 +1113,21 @@ int open_tcp_socket(const struct arguments *args,
                 inet_pton(AF_INET6, socks5_addr, &addr6.sin6_addr);
                 addr6.sin6_port = htons(socks5_port);
             }
-        } else {
+        }
+        else {
             if (version == 4) {
                 addr4.sin_family = AF_INET;
                 addr4.sin_addr.s_addr = (__be32) cur->daddr.ip4;
                 addr4.sin_port = cur->dest;
-            } else {
+            }
+            else {
                 addr6.sin6_family = AF_INET6;
                 memcpy(&addr6.sin6_addr, &cur->daddr.ip6, 16);
                 addr6.sin6_port = cur->dest;
             }
         }
-    } else {
+    }
+    else {
         log_android(ANDROID_LOG_WARN, "TCP%d redirect to %s/%u",
                     version, redirect->raddr, redirect->rport);
 
@@ -1132,7 +1191,13 @@ int write_fin_ack(const struct arguments *args, struct tcp_session *cur) {
 }
 
 void write_rst(const struct arguments *args, struct tcp_session *cur) {
-    write_tcp(args, cur, NULL, 0, 0, 0, 0, 1);
+    // https://www.snellman.net/blog/archive/2016-02-01-tcp-rst/
+    int ack = 0;
+    if (cur->state == TCP_LISTEN) {
+        ack = 1;
+        cur->remote_seq++; // SYN
+    }
+    write_tcp(args, cur, NULL, 0, 0, ack, 0, 1);
     if (cur->state != TCP_CLOSE)
         cur->state = TCP_CLOSING;
 }
@@ -1270,7 +1335,8 @@ ssize_t write_tcp(const struct arguments *args, const struct tcp_session *cur,
     if (res >= 0) {
         if (pcap_file != NULL)
             write_pcap_rec(buffer, (size_t) res);
-    } else
+    }
+    else
         log_android(ANDROID_LOG_ERROR, "TCP write%s%s%s%s data %d error %d: %s",
                     (tcp->syn ? " SYN" : ""),
                     (tcp->ack ? " ACK" : ""),
@@ -1288,4 +1354,3 @@ ssize_t write_tcp(const struct arguments *args, const struct tcp_session *cur,
 
     return res;
 }
-

@@ -121,7 +121,8 @@ void check_udp_socket(const struct arguments *args, const struct epoll_event *ev
                 log_android(ANDROID_LOG_WARN, "UDP recv eof");
                 s->udp.state = UDP_FINISHING;
 
-            } else {
+            }
+            else {
                 // Socket read data
                 char dest[INET6_ADDRSTRLEN + 1];
                 if (s->udp.version == 4)
@@ -135,7 +136,7 @@ void check_udp_socket(const struct arguments *args, const struct epoll_event *ev
 
                 // Process DNS response
                 if (ntohs(s->udp.dest) == 53)
-                    parse_dns_response(args, buffer, (size_t) bytes);
+                    parse_dns_response(args, &s->udp, buffer, (size_t *) &bytes);
 
                 // Forward to tun
                 if (write_udp(args, &s->udp, buffer, (size_t) bytes) < 0)
@@ -191,7 +192,8 @@ void block_udp(const struct arguments *args,
     if (version == 4) {
         inet_ntop(AF_INET, &ip4->saddr, source, sizeof(source));
         inet_ntop(AF_INET, &ip4->daddr, dest, sizeof(dest));
-    } else {
+    }
+    else {
         inet_ntop(AF_INET6, &ip6->ip6_src, source, sizeof(source));
         inet_ntop(AF_INET6, &ip6->ip6_dst, dest, sizeof(dest));
     }
@@ -210,7 +212,8 @@ void block_udp(const struct arguments *args,
     if (version == 4) {
         s->udp.saddr.ip4 = (__be32) ip4->saddr;
         s->udp.daddr.ip4 = (__be32) ip4->daddr;
-    } else {
+    }
+    else {
         memcpy(&s->udp.saddr.ip6, &ip6->ip6_src, 16);
         memcpy(&s->udp.daddr.ip6, &ip6->ip6_dst, 16);
     }
@@ -254,7 +257,8 @@ jboolean handle_udp(const struct arguments *args,
     if (version == 4) {
         inet_ntop(AF_INET, &ip4->saddr, source, sizeof(source));
         inet_ntop(AF_INET, &ip4->daddr, dest, sizeof(dest));
-    } else {
+    }
+    else {
         inet_ntop(AF_INET6, &ip6->ip6_src, source, sizeof(source));
         inet_ntop(AF_INET6, &ip6->ip6_dst, dest, sizeof(dest));
     }
@@ -291,7 +295,8 @@ jboolean handle_udp(const struct arguments *args,
         if (version == 4) {
             s->udp.saddr.ip4 = (__be32) ip4->saddr;
             s->udp.daddr.ip4 = (__be32) ip4->daddr;
-        } else {
+        }
+        else {
             memcpy(&s->udp.saddr.ip6, &ip6->ip6_src, 16);
             memcpy(&s->udp.daddr.ip6, &ip6->ip6_dst, 16);
         }
@@ -333,20 +338,21 @@ jboolean handle_udp(const struct arguments *args,
                         "DNS query qtype %d qclass %d name %s",
                         qtype, qclass, qname);
 
-            if (check_domain(args, &cur->udp, data, datalen, qclass, qtype, qname)) {
-                // Log qname
-                char name[DNS_QNAME_MAX + 40 + 1];
-                sprintf(name, "qtype %d qname %s", qtype, qname);
-                jobject objPacket = create_packet(
-                        args, version, IPPROTO_UDP, "",
-                        source, ntohs(cur->udp.source), dest, ntohs(cur->udp.dest),
-                        name, 0, 0);
-                log_packet(args, objPacket);
+            if (0)
+                if (check_domain(args, &cur->udp, data, datalen, qclass, qtype, qname)) {
+                    // Log qname
+                    char name[DNS_QNAME_MAX + 40 + 1];
+                    sprintf(name, "qtype %d qname %s", qtype, qname);
+                    jobject objPacket = create_packet(
+                            args, version, IPPROTO_UDP, "",
+                            source, ntohs(cur->udp.source), dest, ntohs(cur->udp.dest),
+                            name, 0, 0);
+                    log_packet(args, objPacket);
 
-                // Session done
-                cur->udp.state = UDP_FINISHING;
-                return 0;
-            }
+                    // Session done
+                    cur->udp.state = UDP_FINISHING;
+                    return 0;
+                }
         }
     }
 
@@ -370,12 +376,14 @@ jboolean handle_udp(const struct arguments *args,
             addr4.sin_family = AF_INET;
             addr4.sin_addr.s_addr = (__be32) cur->udp.daddr.ip4;
             addr4.sin_port = cur->udp.dest;
-        } else {
+        }
+        else {
             addr6.sin6_family = AF_INET6;
             memcpy(&addr6.sin6_addr, &cur->udp.daddr.ip6, 16);
             addr6.sin6_port = cur->udp.dest;
         }
-    } else {
+    }
+    else {
         rversion = (strstr(redirect->raddr, ":") == NULL ? 4 : 6);
         log_android(ANDROID_LOG_WARN, "UDP%d redirect to %s/%u",
                     rversion, redirect->raddr, redirect->rport);
@@ -437,7 +445,8 @@ int open_udp_socket(const struct arguments *args,
                 log_android(ANDROID_LOG_ERROR, "UDP setsockopt SO_BROADCAST error %d: %s",
                             errno, strerror(errno));
         }
-    } else {
+    }
+    else {
         // http://man7.org/linux/man-pages/man7/ipv6.7.html
         if (*((uint8_t *) &cur->daddr.ip6) == 0xFF) {
             log_android(ANDROID_LOG_WARN, "UDP6 broadcast");

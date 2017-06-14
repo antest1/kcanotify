@@ -68,7 +68,7 @@ public class KcaVpnService extends VpnService {
 
     private native void jni_init();
 
-    private native void jni_start(int tun, boolean fwd53, int loglevel);
+    private native void jni_start(int tun, boolean fwd53, int rcode, int loglevel);
 
     private native void jni_stop(int tun, boolean clr);
 
@@ -609,6 +609,7 @@ public class KcaVpnService extends VpnService {
     private void startNative(ParcelFileDescriptor vpn) {
         // Prepare rules
         int prio = Log.ERROR;
+        int rcode = 3;
         SharedPreferences prefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
         String addr = prefs.getString("socks5_address", "");
         String portNum = prefs.getString("socks5_port", "0");
@@ -619,7 +620,7 @@ public class KcaVpnService extends VpnService {
             jni_socks5("", 0, "", "");
         else
             jni_socks5(addr, port, "", "");
-        jni_start(vpn.getFd(), true, prio);
+        jni_start(vpn.getFd(), true, rcode, prio);
     }
 
     private void stopVPN(ParcelFileDescriptor pfd) {

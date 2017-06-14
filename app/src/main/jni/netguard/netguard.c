@@ -39,6 +39,7 @@ extern struct ng_session *ng_session;
 extern FILE *pcap_file;
 extern size_t pcap_record_size;
 extern long pcap_file_size;
+
 // JNI
 
 jclass clsPacket;
@@ -133,7 +134,7 @@ Java_com_antest1_kcanotify_KcaVpnService_jni_1init(JNIEnv *env, jobject instance
 
 JNIEXPORT void JNICALL
 Java_com_antest1_kcanotify_KcaVpnService_jni_1start(
-        JNIEnv *env, jobject instance, jint tun, jboolean fwd53, jint loglevel_) {
+        JNIEnv *env, jobject instance, jint tun, jboolean fwd53, jint rcode, jint loglevel_) {
 
     loglevel = loglevel_;
     max_tun_msg = 0;
@@ -160,6 +161,7 @@ Java_com_antest1_kcanotify_KcaVpnService_jni_1start(
         args->instance = (*env)->NewGlobalRef(env, instance);
         args->tun = tun;
         args->fwd53 = fwd53;
+        args->rcode = rcode;
 
         // Start native thread
         int err = pthread_create(&thread_id, NULL, handle_events, (void *) args);
@@ -185,11 +187,13 @@ Java_com_antest1_kcanotify_KcaVpnService_jni_1stop(
             if (err != 0)
                 log_android(ANDROID_LOG_WARN, "pthread_join error %d: %s", err, strerror(err));
         }
+
         if (clr)
             clear();
 
         log_android(ANDROID_LOG_WARN, "Stopped thread %x", t);
-    } else
+    }
+    else
         log_android(ANDROID_LOG_WARN, "Not running thread %x", t);
 }
 
@@ -883,5 +887,4 @@ void test(char* data, int size, int type, char* saddr, char* taddr, int sport, i
         (*env)->DeleteLocalRef(env, s);
         (*env)->DeleteLocalRef(env, t);
     }
-
 }

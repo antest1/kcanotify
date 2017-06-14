@@ -55,9 +55,7 @@
 #define TCP_KEEP_TIMEOUT 300 // seconds
 // https://en.wikipedia.org/wiki/Maximum_segment_lifetime
 
-#define UID_DELAY 1 // milliseconds
-#define UID_DELAYTRY 10 // milliseconds
-#define UID_MAXTRY 3
+#define SESSION_LIMIT 45 // percent
 
 #define SOCKS5_NONE 1
 #define SOCKS5_HELLO 2
@@ -70,6 +68,7 @@ struct arguments {
     jobject instance;
     int tun;
     jboolean fwd53;
+    jint rcode;
 };
 
 struct allowed {
@@ -354,7 +353,8 @@ void check_udp_socket(const struct arguments *args, const struct epoll_event *ev
 
 int32_t get_qname(const uint8_t *data, const size_t datalen, uint16_t off, char *qname);
 
-void parse_dns_response(const struct arguments *args, const uint8_t *data, const size_t datalen);
+void parse_dns_response(const struct arguments *args, const struct udp_session *u,
+                        const uint8_t *data, size_t *datalen);
 
 uint32_t get_send_window(const struct tcp_session *cur);
 
@@ -410,7 +410,7 @@ void clear_tcp_data(struct tcp_session *cur);
 jboolean handle_tcp(const struct arguments *args,
                     const uint8_t *pkt, size_t length,
                     const uint8_t *payload,
-                    int uid, struct allowed *redirect,
+                    int uid, int allowed, struct allowed *redirect,
                     const int epoll_fd);
 
 void queue_tcp(const struct arguments *args,
@@ -439,6 +439,8 @@ int write_fin_ack(const struct arguments *args, struct tcp_session *cur);
 
 void write_rst(const struct arguments *args, struct tcp_session *cur);
 
+void write_rst_ack(const struct arguments *args, struct tcp_session *cur);
+
 ssize_t write_icmp(const struct arguments *args, const struct icmp_session *cur,
                    uint8_t *data, size_t datalen);
 
@@ -453,12 +455,13 @@ uint8_t char2nible(const char c);
 
 void hex2bytes(const char *hex, uint8_t *buffer);
 
-jint get_uid_retry(const int version, const int protocol,
-                   const void *saddr, const uint16_t sport);
-
 jint get_uid(const int version, const int protocol,
              const void *saddr, const uint16_t sport,
-             int dump);
+             const void *daddr, const uint16_t dport);
+
+jint get_uid_sub(const int version, const int protocol,
+                 const void *saddr, const uint16_t sport,
+                 const void *daddr, const uint16_t dport);
 
 int protect_socket(const struct arguments *args, int socket);
 
@@ -522,4 +525,4 @@ int is_writable(int fd);
 
 long long get_ms();
 
-void test(char* data, int size, int type, char* saddr, char* taddr, int sport, int tport);
+void get_packet_data(char* data, int size, int type, char* saddr, char* taddr, int sport, int tport);
