@@ -53,6 +53,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
+import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
 import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
@@ -1016,8 +1018,16 @@ public class KcaService extends Service {
                                 for (String item : itemlist_array) {
                                     JsonObject status = getUserItemStatusById(Integer.parseInt(item), "alv", "type");
                                     if (status.has("type")) {
-                                        if (status.getAsJsonArray("type").get(2).getAsInt() == T2_MACHINE_GUN) {
-                                            questTracker.updateIdCountTracker("638");
+                                        switch(status.getAsJsonArray("type").get(2).getAsInt()) {
+                                            case T2_MACHINE_GUN:
+                                                questTracker.updateIdCountTracker("638");
+                                                break;
+                                            case T2_GUN_LARGE:
+                                            case T2_GUN_LARGE_II:
+                                                questTracker.updateIdCountTracker("663");
+                                                break;
+                                            default:
+                                                break;
                                         }
                                     }
                                 }
