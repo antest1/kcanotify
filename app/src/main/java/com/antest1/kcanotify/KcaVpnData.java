@@ -6,6 +6,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.IntegerRes;
 import android.util.Log;
+import android.util.SparseArray;
+import android.util.SparseBooleanArray;
+import android.util.SparseIntArray;
 
 import com.google.common.collect.EvictingQueue;
 import com.google.common.io.ByteStreams;
@@ -70,6 +73,7 @@ public class KcaVpnData {
     public static byte[] requestData = {};
     public static byte[] responseData = {};
 
+    static boolean isRequestUriReady = false;
     static String requestUri = "";
     static boolean gzipflag = false;
     static boolean chunkflag = false;
@@ -77,13 +81,13 @@ public class KcaVpnData {
 
     static int responseBodyLength = -1;
 
-    private static Map<Integer, String> portToUri = new HashMap<Integer, String>();
-    private static Map<Integer, Byte[]> portToRequestData = new HashMap<Integer, Byte[]>();
-    private static Map<Integer, Byte[]> portToResponseData = new HashMap<Integer, Byte[]>();
-    private static Map<Integer, Integer> portToResponseHeaderLength = new HashMap<Integer, Integer>();
-    private static Map<Integer, Integer> portToLength = new HashMap<Integer, Integer>();
-    private static Map<Integer, Boolean> portToGzipped = new HashMap<Integer, Boolean>();
-    private static Map<Integer, String> portToResponseHeaderPart = new HashMap<Integer, String>();
+    private static SparseArray<String> portToUri = new SparseArray<>();
+    private static SparseArray<StringBuilder> portToRequestData = new SparseArray<>();
+    private static SparseArray<Byte[]> portToResponseData = new SparseArray<>();
+    private static SparseIntArray portToResponseHeaderLength = new SparseIntArray();
+    private static SparseIntArray portToLength = new SparseIntArray();
+    private static SparseBooleanArray portToGzipped = new SparseBooleanArray();
+    private static SparseArray<String> portToResponseHeaderPart = new SparseArray<>();
 
     private static Queue<Integer> ignoreResponseList = EvictingQueue.create(8);
 
@@ -112,20 +116,20 @@ public class KcaVpnData {
             String taddrstr = new String(target);
             //Log.e("KCAV", String.format("getDataFromNative[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
 
-            String[] head_body = s.split("\r\n\r\n", 2);
-            String head = head_body[0];
-
-            //head = head.substring(0, Math.min(60, head.length()));
             if (type == REQUEST) {
-                if (head.startsWith("GET") || head.startsWith("POST")) {
+                if (s.startsWith("GET") || s.startsWith("POST")) {
+                    isRequestUriReady = false;
                     state = REQUEST;
-                    isreadyflag = false;
-                    String[] header = head.split("\r\n");
-                    requestUri = header[0].split(" ")[1];
+                    portToRequestData.put(sport, new StringBuilder());
+                }
+                portToRequestData.get(sport).append(s);
+                if(!isRequestUriReady && portToRequestData.get(sport).toString().contains("HTTP/1.1")) {
+                    isRequestUriReady = true;
+                    String[] head_line = portToRequestData.get(sport).toString().split("\r\n");
+                    requestUri = head_line[0].split(" ")[1];
                     portToUri.put(sport, requestUri);
                     Log.e("KCAV", requestUri);
                     if (!checkKcRes(requestUri)) {
-                        portToRequestData.put(sport, new Byte[]{});
                         portToResponseData.put(sport, new Byte[]{});
                         portToResponseHeaderPart.put(sport, "");
                         portToGzipped.put(sport, false);
@@ -139,10 +143,6 @@ public class KcaVpnData {
                         }
                         Log.e("KCAV", ignoreResponseList.toString());
                     }
-                }
-                if (!ignoreResponseList.contains(sport)) {
-                    Byte[] requestData = portToRequestData.get(sport);
-                    portToRequestData.put(sport, ArrayUtils.toObject(Bytes.concat(ArrayUtils.toPrimitive(requestData), data)));
                 }
             } else if (type == RESPONSE) {
                 state = RESPONSE;
@@ -188,7 +188,7 @@ public class KcaVpnData {
                 }
 
                 if (isreadyflag) {
-                    String requestStr = new String(ArrayUtils.toPrimitive(portToRequestData.get(tport)));
+                    String requestStr = portToRequestData.get(tport).toString();
                     String[] requestHeadBody = requestStr.split("\r\n\r\n", 2);
                     byte[] requestBody = new byte[]{};
                     if (requestHeadBody[1].length() > 0) {
@@ -214,12 +214,12 @@ public class KcaVpnData {
                         KcaHandler k = new KcaHandler(handler, requestUri, requestBody, responseBody);
                         executorService.execute(k);
                     }
-                    portToUri.remove(tport);
-                    portToRequestData.remove(tport);
-                    portToResponseData.remove(tport);
-                    portToResponseHeaderLength.remove(tport);
-                    portToLength.remove(tport);
-                    portToGzipped.remove(tport);
+                    portToUri.delete(tport);
+                    portToRequestData.delete(tport);
+                    portToResponseData.delete(tport);
+                    portToResponseHeaderLength.delete(tport);
+                    portToLength.delete(tport);
+                    portToGzipped.delete(tport);
                     isreadyflag = false;
                 }
             }
