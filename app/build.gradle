@@ -7,8 +7,8 @@ model {
             applicationId "com.antest1.kcanotify"
             minSdkVersion.apiLevel 16
             targetSdkVersion.apiLevel 25
-            versionCode 2402
-            versionName "2.4r2"
+            versionCode 2403
+            versionName "2.4r3"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
 
@@ -35,6 +35,7 @@ model {
         buildTypes {
             release {
                 minifyEnabled true
+                zipAlignEnabled true
                 proguardFiles.add(file('proguard-rules.pro'))
             }
         }
