@@ -353,8 +353,10 @@ public class KcaQuestViewService extends Service {
     @Override
     public void onDestroy() {
         active = false;
-        if (mView != null) mView.setVisibility(View.GONE);
-        if (mView.getParent() != null) mManager.removeView(mView);
+        if (mView != null) {
+            mView.setVisibility(View.GONE);
+            if (mView.getParent() != null) mManager.removeView(mView);
+        }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
         mView = null;
         mManager = null;
