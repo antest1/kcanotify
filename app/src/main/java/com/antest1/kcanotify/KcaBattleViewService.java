@@ -1317,9 +1317,14 @@ public class KcaBattleViewService extends Service {
     public void onDestroy() {
         active = false;
         deckportdata = null;
-        if (mView != null) mView.setVisibility(View.GONE);
-        if (itemView != null) itemView.setVisibility(View.GONE);
-        if (mView.getParent() != null) mManager.removeViewImmediate(mView);
+        if (mView != null) {
+            if (mView.getParent() != null) mManager.removeViewImmediate(mView);
+            mView.setVisibility(View.GONE);
+        }
+        if (itemView != null) {
+            if (itemView.getParent() != null) mManager.removeViewImmediate(itemView);
+            itemView.setVisibility(View.GONE);
+        }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
         super.onDestroy();
     }
