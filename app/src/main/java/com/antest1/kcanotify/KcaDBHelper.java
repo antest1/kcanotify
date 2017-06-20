@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import static android.R.attr.value;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPCRNT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTDAY;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTIME;
@@ -152,7 +153,10 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         String value = null;
         db = this.getReadableDatabase();
         Cursor c = db.query(table_name, null, "KEY=?", new String[]{key}, null, null, null, null);
-        if (c.moveToFirst()) value = c.getString(c.getColumnIndex("VALUE"));
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            value = c.getString(c.getColumnIndex("VALUE"));
+        }
         c.close();
         return value;
     }
@@ -181,7 +185,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         values.put("KEY", key);
         values.put("VALUE", value);
         Cursor c = db.query(table_name, null, "KEY=?", new String[]{key}, null, null, null, null);
-        if (c.moveToFirst()) {
+        if (c.getCount() > 0) {
             db.update(table_name, values, "KEY=?", new String[]{key});
         } else {
             db.insert(table_name, null, values);
@@ -214,7 +218,10 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         String value = null;
         db = this.getReadableDatabase();
         Cursor c = db.query(slotitem_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
-        if (c.moveToFirst()) value = c.getString(c.getColumnIndex("VALUE"));
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            value = c.getString(c.getColumnIndex("VALUE"));
+        }
         c.close();
         return value;
     }
@@ -225,7 +232,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         values.put("KEY", key);
         values.put("VALUE", value);
         Cursor c = db.query(slotitem_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
-        if (c.moveToFirst()) {
+        if (c.getCount() > 0) {
             db.update(slotitem_table_name, values, "KEY=?", new String[]{String.valueOf(key)});
         } else {
             db.insert(slotitem_table_name, null, values);
@@ -431,7 +438,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         String value = null;
         db = this.getReadableDatabase();
         Cursor c = db.query(questlist_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
-        if (c.moveToFirst()) {
+        if (c.getCount() > 0) {
+            c.moveToFirst();
             value = c.getString(c.getColumnIndex("TIME"));
         }
         c.close();
@@ -450,7 +458,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         values.put("TIME", time);
 
         Cursor c = db.query(questlist_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
-        if (c.moveToFirst()) {
+        if (c.getCount() > 0) {
             db.update(questlist_table_name, values, "KEY=?", new String[]{String.valueOf(key)});
         } else {
             db.insert(questlist_table_name, null, values);
