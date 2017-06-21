@@ -288,7 +288,9 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             ship_ke_combined = data.getAsJsonArray("ship_ke_combined");
             aftercbhp = data.getAsJsonArray("aftercbhp");
             for (int i = 1; i < ship_ke_combined.size(); i++) {
-                JsonObject kcShipData = KcaApiData.getKcShipDataById(ship_ke_combined.get(i).getAsInt(), "stype");
+                int ship_id = ship_ke_combined.get(i).getAsInt();
+                if (ship_id == -1) break;
+                JsonObject kcShipData = KcaApiData.getKcShipDataById(ship_id, "stype");
                 int stype = kcShipData.get("stype").getAsInt();
                 boolean isSunk = aftercbhp.get(i + 6).getAsInt() <= 0;
                 if ((stype == STYPE_CV || stype == STYPE_CVL || stype == STYPE_CVB) && isSunk)
@@ -378,7 +380,9 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 case "249": // 5전대
                     requiredShip = 3;
                     for (int i = 0; i < fleet_data.size(); i++) {
-                        int shipId = getUserShipDataById(fleet_data.get(i).getAsInt(), "ship_id").get("ship_id").getAsInt();
+                        int item = fleet_data.get(i).getAsInt();
+                        if (item == -1) break;
+                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
                         int kcShipId = getKcShipDataById(shipId, "id").get("id").getAsInt();
                         if (kcShipId == 62 || kcShipId == 265 || kcShipId == 319) requiredShip -= 1;
                         if (kcShipId == 63 || kcShipId == 192 || kcShipId == 266) requiredShip -= 1;
@@ -392,7 +396,9 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 case "257": // 수뢰전대
                     requiredShip = 0;
                     for (int i = 0; i < fleet_data.size(); i++) {
-                        int shipId = getUserShipDataById(fleet_data.get(i).getAsInt(), "ship_id").get("ship_id").getAsInt();
+                        int item = fleet_data.get(i).getAsInt();
+                        if (item == -1) break;
+                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
                         int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
                         if ((i == 0 && kcShipType != STYPE_CL) || (kcShipType != STYPE_DD && kcShipType != STYPE_CL)) {
                             fleetflag = false;
@@ -404,7 +410,9 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 case "259": // 수상타격
                     requiredShip = 0;
                     for (int i = 0; i < fleet_data.size(); i++) {
-                        int shipId = getUserShipDataById(fleet_data.get(i).getAsInt(), "ship_id").get("ship_id").getAsInt();
+                        int item = fleet_data.get(i).getAsInt();
+                        if (item == -1) break;
+                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
                         int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
                         if (kcShipType == STYPE_BB || kcShipType == STYPE_BBV) requiredShip += 10;
                         if (kcShipType == STYPE_CL) requiredShip += 1;
@@ -414,7 +422,9 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 case "264": // 공모기동
                     requiredShip = 0;
                     for (int i = 0; i < fleet_data.size(); i++) {
-                        int shipId = getUserShipDataById(fleet_data.get(i).getAsInt(), "ship_id").get("ship_id").getAsInt();
+                        int item = fleet_data.get(i).getAsInt();
+                        if (item == -1) break;
+                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
                         int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
                         if (kcShipType == STYPE_CV || kcShipType == STYPE_CVL || kcShipType == STYPE_CVB)
                             requiredShip += 10;
@@ -425,7 +435,9 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 case "266": // 수상반격
                     requiredShip = 0;
                     for (int i = 0; i < fleet_data.size(); i++) {
-                        int shipId = getUserShipDataById(fleet_data.get(i).getAsInt(), "ship_id").get("ship_id").getAsInt();
+                        int item = fleet_data.get(i).getAsInt();
+                        if (item == -1) break;
+                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
                         int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
                         if ((i == 0 && kcShipType != STYPE_DD) || (kcShipType != STYPE_DD || kcShipType != STYPE_CL || kcShipType != STYPE_CA)) {
                             fleetflag = false;
