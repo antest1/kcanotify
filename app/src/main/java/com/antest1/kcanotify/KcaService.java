@@ -186,7 +186,7 @@ public class KcaService extends Service {
 
         String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
         viewBitmapId = getId(fairyId, R.mipmap.class);
-        viewBitmapSmallId = R.mipmap.ic_stat_notify_1;
+        viewBitmapSmallId = R.mipmap.ic_stat_notify_0;
         viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
         viewNotificationBuilder = new NotificationCompat.Builder(this);
 
@@ -358,6 +358,17 @@ public class KcaService extends Service {
     private void updateNotificationFairy() {
         if (viewNotificationBuilder != null) {
             viewNotificationBuilder.setLargeIcon(viewBitmap);
+            Intent aIntent = new Intent(KcaService.this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+            notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.setContentIntent(pendingIntent).build());
+        }
+    }
+
+    private void updateNotificationIcon(int type) {
+        if (viewNotificationBuilder != null) {
+            int id = getId("ic_stat_notify_".concat(String.valueOf(type)), R.mipmap.class);
+            viewNotificationBuilder.setSmallIcon(id);
             Intent aIntent = new Intent(KcaService.this, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT);
@@ -1463,6 +1474,15 @@ public class KcaService extends Service {
                     
                     startService(new Intent(this, KcaViewButtonService.class)
                             .setAction(KcaViewButtonService.FAIRY_CHANGE));
+                }
+            }
+
+            if (url.startsWith(KCA_API_PREF_NOTICOUNT_CHANGED)) {
+                int count = KcaAlarmService.getAlarmCount();
+                if (count > 0) {
+                    updateNotificationIcon(1);
+                } else {
+                    updateNotificationIcon(0);
                 }
             }
 
