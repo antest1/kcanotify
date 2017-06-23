@@ -93,7 +93,7 @@ public class KcaAlarmService extends Service {
                 JsonObject data = new JsonParser().parse(intent.getStringExtra("data")).getAsJsonObject();
                 int type = data.get("type").getAsInt();
                 String locale = LocaleUtils.getLocaleCode(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
-                if (type == TYPE_EXPEDITION && isExpAlarmEnabled()) {
+                if (type == TYPE_EXPEDITION) {
                     int idx = data.get("idx").getAsInt();
                     KcaExpedition2.clearMissionData(idx);
                     if (isExpAlarmEnabled()) {

@@ -83,6 +83,7 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 public class KcaService extends Service {
     public static String currentLocale;
     public static boolean isInitState;
+    public static boolean isFirstState;
 
     public static boolean isServiceOn = false;
     public static boolean isPortAccessed = false;
@@ -146,6 +147,7 @@ public class KcaService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         isInitState = true;
+        isFirstState = true;
         isUserItemDataLoaded = false;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Log.e("KCA", String.valueOf(prefs.contains(PREF_SVC_ENABLED)));
@@ -307,9 +309,8 @@ public class KcaService extends Service {
     }
 
     private void updateExpViewNotification() {
-        boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         String expeditionString = "";
-        if (isPortAccessed && isMissionTimerViewEnabled()) {
+        if (!isFirstState && isMissionTimerViewEnabled()) {
             if (!KcaExpedition2.isMissionExist()) {
                 expeditionString = expeditionString.concat(getStringWithLocale(R.string.kca_view_noexpedition));
             } else {
@@ -319,10 +320,6 @@ public class KcaService extends Service {
                     if (str.length() > 0) {
                         kcaExpStrList.add(str);
                     }
-                }
-                if (is_landscape) {
-                    expeditionString = expeditionString.concat(getStringWithLocale(R.string.kca_view_expedition_header)).concat(" ");
-                    //expeditionString = expeditionString.concat("\n");
                 }
                 expeditionString = expeditionString.concat(joinStr(kcaExpStrList, " / "));
             }
@@ -629,6 +626,7 @@ public class KcaService extends Service {
 
             if (url.startsWith(API_PORT)) {
                 isPortAccessed = true;
+                isFirstState = false;
                 stopService(new Intent(this, KcaBattleViewService.class));
                 startService(new Intent(this, KcaViewButtonService.class)
                         .setAction(KcaViewButtonService.DEACTIVATE_BATTLEVIEW_ACTION));
