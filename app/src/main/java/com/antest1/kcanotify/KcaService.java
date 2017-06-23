@@ -186,7 +186,7 @@ public class KcaService extends Service {
 
         String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
         viewBitmapId = getId(fairyId, R.mipmap.class);
-        viewBitmapSmallId = getId(fairyId.concat("_small"), R.mipmap.class);
+        viewBitmapSmallId = R.mipmap.ic_stat_notify_1;
         viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
         viewNotificationBuilder = new NotificationCompat.Builder(this);
 
@@ -357,7 +357,7 @@ public class KcaService extends Service {
 
     private void updateNotificationFairy() {
         if (viewNotificationBuilder != null) {
-            viewNotificationBuilder.setSmallIcon(viewBitmapSmallId).setLargeIcon(viewBitmap);
+            viewNotificationBuilder.setLargeIcon(viewBitmap);
             Intent aIntent = new Intent(KcaService.this, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT);
