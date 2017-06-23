@@ -488,6 +488,16 @@
         "memo": "\u27a3Rewards 1 Irako",
         "unlock": [ 858 ]
     },
+	"182": {
+		"code": "A77",
+		"name": "Organize the New 4th Carrier Division!",
+		"desc": "Have Ise and Hyuuga both above level 50 as flagship and 2nd ship with 1CL + 2 DD and 1 additional ship in your main fleet"
+	},
+	"183": {
+		"code": "A78",
+		"name": "Organize the New 4th Torpedo Squadron!",
+		"desc": "Have Yura Kai Ni as flagship, Murasame, Yuudachi, Harusame, Samidare and 1 DD in your main fleet."
+	},
     
     "202": {
         "code": "B1",
@@ -1156,6 +1166,16 @@
         "name": "New Seventh Squadron, Sortie!",
         "desc": "Sortie a fleet with Kumano Kai Ni as flagship with Suzuya Kai Ni as 2nd ship, Mogami Kai, Mikuma Kai, up to 2 additional ships to [W4-5] and [W6-2]. S-Rank the boss nodes of each.",
 		"memo": "\u2623NOTICE\u2623 The CVL remodel of Kumano and Suzuya can complete this quest\n\u27a3Rewards either a Medal OR a New Type Artillery Armament Materials OR a Type 0 Fighter Model 63 (Fighter-bomber)"
+    },
+	"859": {
+        "code": "B102",
+        "name": "Elite 4th Carrier Division, Sortie out!",
+        "desc": "Sortie Ise and Hyuuga both above level 50 as flagship and 2nd ship with 1CL + 2 DD and 1 additional ship to [W2-5], [W3-5] and obatain A+ rank victories at the boss nodes."
+    },
+	"860": {
+        "code": "B103",
+        "name": "Flagship Yura, Sortie!",
+        "desc": "Sortie Yura Kai Ni as flagship, with at least 2 of the following ships: Murasame, Yuudachi, Harusame, Samidare,Akizuki, up to 3 additional ships to [W2-3], [W5-1] and obtain S rank victories at the boss nodes."
     },
     
     "201": {
@@ -2018,6 +2038,22 @@
         "desc": "Prepare 18000 steel. Scrap 10 Large Caliber Main Guns.",
         "memo": "\u2718Consumes the resources.\n\u27a3Rewards a Medal OR a New Type Artillery Armament Materials"
     },
+	"664": {
+		"code": "F56",
+		"name": "電探技術の射撃装置への活用",
+		"desc": "Prepare 8000 Ammo and Steel, scrap 10 radars"
+	},
+	"665": {
+		"code": "F57",
+		"name": "民生産業への協力",
+		"desc": "Prepare 12000 fuel, scrap 16 small guns."
+	},
+	"666": {
+		"code": "F58",
+		"name": "Organize the Elite Zuiun Group",
+		"desc": "Have Hyuuga Kai as your secretary and arm them with a Zuiun (634 Air Group) in the 4th slot. Scrap two Drum Canisters. two Type 99 Dive Bombers and two Zuiuns in your inventory.",
+		"memo": "\u2718Consumes the items and a Skilled Crew Member. Make sure the equipment is unlocked!\n\u27a3Rewards a Zuiun (634 Air Group/Skilled)"
+	},
     
     "701": {
         "code": "G1",

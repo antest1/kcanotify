@@ -385,6 +385,16 @@
 	"name": "編成新編「第七戰隊」！",
 	"desc": "編成任務：配備第一艦隊旗艦為新改裝的改鈴谷型「熊野改二」、二號艦為「鈴谷改二」，僚艦為「最上改」和「三隈改」的新編第七戰隊！（熊野航改二和鈴谷航改二也能完成本任務。）"
   },
+  "182": {
+    "code": "A77",
+    "name": "Organize the New 4th Carrier Division!",
+    "desc": "Have Ise and Hyuuga both above level 50 as flagship and 2nd ship with 1CL + 2 DD and 1 additional ship in your main fleet"
+  },
+  "183": {
+    "code": "A78",
+    "name": "Organize the New 4th Torpedo Squadron!",
+    "desc": "Have Yura Kai Ni as flagship, Murasame, Yuudachi, Harusame, Samidare and 1 DD in your main fleet."
+  },
   
   "202": {
     "code": "B1",
@@ -979,6 +989,16 @@
     "code": "B101",
     "name": "新編「第七戰隊」，出擊！",
     "desc": "出擊任務：新編「第七戰隊」出擊！前往咖喱洋里蘭卡島海域（4-5）深海東洋艦隊削弱作戰、馬紹爾群島近海（6-2）馬紹爾群島防衛戰，捕捉敵方艦隊主力，消滅她們！（4-5和6-2boss戰各取得一次S勝。隊伍構成為旗艦熊野改二+二號艦鈴谷改二+最上改+三隈改+2自由艦種。鈴谷航改二和熊野航改二也能完成本任務。）"
+  },
+  "859": {
+    "code": "B102",
+    "name": "Elite 4th Carrier Division, Sortie out!",
+    "desc": "Sortie Ise and Hyuuga both above level 50 as flagship and 2nd ship with 1CL + 2 DD and 1 additional ship to [W2-5], [W3-5] and obatain A+ rank victories at the boss nodes."
+  },
+  "860": {
+    "code": "B103",
+    "name": "Flagship Yura, Sortie!",
+    "desc": "Sortie Yura Kai Ni as flagship, with at least 2 of the following ships: Murasame, Yuudachi, Harusame, Samidare,Akizuki, up to 3 additional ships to [W2-3], [W5-1] and obtain S rank victories at the boss nodes."
   },
   
   "201": {
@@ -1753,6 +1773,22 @@
     "code": "F55",
     "name": "繼續研究新型舾裝",
     "desc": "工廠任務：繼續進行新型舾裝的開發。廢棄10個「大口徑主炮」系裝備，準備18000鋼材！（任務完成後，準備好的資源會消耗掉。能夠選擇性獲得「勳章」或「新型火炮兵裝資材」。）"
+  },
+  "664": {
+    "code": "F56",
+    "name": "電探技術の射撃装置への活用",
+    "desc": "Prepare 8000 Ammo and Steel, scrap 10 radars"
+  },
+  "665": {
+    "code": "F57",
+    "name": "民生産業への協力",
+    "desc": "Prepare 12000 fuel, scrap 16 small guns."
+  },
+  "666": {
+    "code": "F58",
+    "name": "Organize the Elite Zuiun Group",
+    "desc": "Have Hyuuga Kai as your secretary and arm them with a Zuiun (634 Air Group) in the 4th slot. Scrap two Drum Canisters. two Type 99 Dive Bombers and two Zuiuns in your inventory. ",
+    "memo": "\u2718Consumes the items and a Skilled Crew Member. Make sure the equipment is unlocked!\n\u27a3Rewards a Zuiun (634 Air Group/Skilled)"
   },
   
   "701": {
