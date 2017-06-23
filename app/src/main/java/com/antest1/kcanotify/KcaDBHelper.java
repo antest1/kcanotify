@@ -9,11 +9,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 
+import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -165,17 +168,25 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         String value = getValue(key);
         if (value == null) return null;
         else {
-            JsonObject data = new JsonParser().parse(value).getAsJsonObject();
-            return data;
+            try {
+                JsonReader reader = new JsonReader(new StringReader(value));
+                reader.setLenient(true);
+                return new Gson().fromJson(reader, JsonObject.class);
+            } catch (Exception e) {
+                return null;
+            }
         }
     }
 
     public JsonArray getJsonArrayValue(String key) {
         String value = getValue(key);
         if (value == null) return null;
-        else {
-            JsonArray data = new JsonParser().parse(getValue(key)).getAsJsonArray();
-            return data;
+        try {
+            JsonReader reader = new JsonReader(new StringReader(value));
+            reader.setLenient(true);
+            return new Gson().fromJson(reader, JsonArray.class);
+        } catch (Exception e) {
+            return null;
         }
     }
 
