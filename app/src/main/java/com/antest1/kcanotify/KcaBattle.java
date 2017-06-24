@@ -57,6 +57,7 @@ public class KcaBattle {
     public static int currentNode = -1;
     public static int currentEventMapRank = 0;
 
+    public static int currentFleet = -1;
     public static boolean isCombined = false;
     public static boolean isEndReached = false;
     public static boolean isBossReached = false;

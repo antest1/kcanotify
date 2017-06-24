@@ -62,6 +62,8 @@ import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 
 public class KcaBattleViewService extends Service {
@@ -71,6 +73,7 @@ public class KcaBattleViewService extends Service {
 
     Context contextWithLocale;
     KcaDBHelper dbHelper;
+    KcaDeckInfo deckInfoCalc;
     LayoutInflater mInflater;
     private BroadcastReceiver refreshreceiver;
     public static boolean active;
@@ -1104,14 +1107,14 @@ public class KcaBattleViewService extends Service {
                 active = true;
                 contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
                 dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+                deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
                 //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 mInflater = LayoutInflater.from(contextWithLocale);
                 mView = mInflater.inflate(R.layout.view_sortie_battle, null);
                 mView.setVisibility(View.GONE);
                 battleview = (ScrollView) mView.findViewById(R.id.battleview);
                 battleview.setOnTouchListener(mViewTouchListener);
-                setBattleViewMenu();
-
+                battleview.findViewById(R.id.battle_node_area).setOnTouchListener(infoListViewTouchListener);
                 itemView = mInflater.inflate(R.layout.view_battleview_items, null);
                 acView = mInflater.inflate(R.layout.view_battleview_aircombat, null);
                 acView.findViewById(R.id.view_ac_head).setOnTouchListener(acViewTouchListener);
@@ -1177,7 +1180,54 @@ public class KcaBattleViewService extends Service {
         menuView.findViewById(R.id.view_item0).setOnClickListener(battleViewMenuListener);
         menuView.findViewById(R.id.view_item1).setOnClickListener(battleViewMenuListener);
         menuView.findViewById(R.id.view_item2).setOnClickListener(battleViewMenuListener);
-        battleview.findViewById(R.id.battle_node_area).setOnTouchListener(infoListViewTouchListener);
+
+        JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+        List<String> infoList = new ArrayList<>();
+
+        int cn = getSeekCn();
+        int idx = KcaBattle.currentFleet;
+        boolean isCombined = KcaBattle.isCombined;
+        String airPowerValue = "";
+        if (isCombined) {
+            airPowerValue = deckInfoCalc.getAirPowerRangeString(data, 0, KcaBattle.getEscapeFlag());
+        } else {
+            airPowerValue = deckInfoCalc.getAirPowerRangeString(data, idx, null);
+        }
+        if (airPowerValue.length() > 0) {
+            infoList.add(airPowerValue);
+        }
+
+        double seekValue = 0;
+        String seekStringValue = "";
+        if (isCombined) {
+            seekValue += deckInfoCalc.getSeekValue(data, 0, cn, KcaBattle.getEscapeFlag());
+            seekValue += deckInfoCalc.getSeekValue(data, 1, cn, KcaBattle.getEscapeFlag());
+        } else {
+            seekValue = deckInfoCalc.getSeekValue(data, idx, cn, null);
+        }
+        if (cn == SEEK_PURE) {
+            seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), deckInfoCalc.getSeekType(cn), (int) seekValue);
+        } else {
+            seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), deckInfoCalc.getSeekType(cn), seekValue);
+        }
+        infoList.add(seekStringValue);
+
+        String speedStringValue = "";
+        if (isCombined) {
+            speedStringValue = deckInfoCalc.getSpeedString(data, "0,1", KcaBattle.getEscapeFlag());
+        } else {
+            speedStringValue = deckInfoCalc.getSpeedString(data, "0", null);
+        }
+        infoList.add(speedStringValue.concat(getStringWithLocale(R.string.speed_postfix)));
+
+        String tpValue = "";
+        if (isCombined) {
+            tpValue = deckInfoCalc.getTPString(data, "0,1", KcaBattle.getEscapeFlag());
+        } else {
+            tpValue = deckInfoCalc.getTPString(data, String.valueOf(idx), null);
+        }
+        infoList.add(tpValue);
+        ((TextView) menuView.findViewById(R.id.view_menu_fleetinfo)).setText(joinStr(infoList, "\n"));
     }
 
     private void setAirCombatTextView(String prefix, JsonObject data) {
@@ -1454,6 +1504,7 @@ public class KcaBattleViewService extends Service {
                             WindowManager.LayoutParams.TYPE_PHONE,
                             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                             PixelFormat.TRANSLUCENT);
+                    setBattleViewMenu();
                     menuView.setVisibility(View.VISIBLE);
                     if (menuView.getParent() != null) {
                         mManager.updateViewLayout(menuView, infoViewParams);
@@ -1560,5 +1611,9 @@ public class KcaBattleViewService extends Service {
 
         KcaDBHelper helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         helper.recordErrorLog(ERROR_TYPE_BATTLEVIEW, api_url, "BV", api_data.toString(), getStringFromException(e));
+    }
+
+    private int getSeekCn() {
+        return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
     }
 }

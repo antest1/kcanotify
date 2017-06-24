@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -11,25 +12,35 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.antest1.kcanotify.KcaApiData.*;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 
 public class KcaDeckInfo {
-    public static final int SPEEDFLAG_SLOW = 1 << 3;
-    public static final int SPEEDFLAG_FAST = 1 << 2;
-    public static final int SPEEDFLAG_FASTPLUS = 1 << 1;
-    public static final int SPEEDFLAG_SUPERFAST = 1 << 0;
-    public static KcaDBHelper helper;
+    private static final int SPEEDFLAG_SLOW = 1 << 3;
+    private static final int SPEEDFLAG_FAST = 1 << 2;
+    private static final int SPEEDFLAG_FASTPLUS = 1 << 1;
+    private static final int SPEEDFLAG_SUPERFAST = 1 << 0;
+    private KcaDBHelper helper;
+    private Context ac, bc;
 
-    public static void setDBHelper(KcaDBHelper hp) {
-        helper = hp;
+    public KcaDeckInfo(Context a, Context b) {
+        this.ac = a;
+        this.bc = b;
+        helper = new KcaDBHelper(ac, null, KCANOTIFY_DB_VERSION);
+    }
+
+    public String getStringWithLocale(int id) {
+        return KcaUtils.getStringWithLocale(ac, bc, id);
     }
 
     // Formula 33 (2016.12.26)
     // Reference: http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
     //            http://kancolle-calc.net/deckbuilder.html
-    public static double getSeekValue(JsonArray deckPortData, int deckid, int Cn, boolean[] exclude_flag) {
+    public double getSeekValue(JsonArray deckPortData, int deckid, int Cn, boolean[] exclude_flag) {
         double pureTotalSeek = 0.0;
         double totalSeek = 0.0;
 
@@ -108,7 +119,26 @@ public class KcaDeckInfo {
         }
     }
 
-    public static String getConditionStatus(JsonArray deckPortData, int deckid) {
+    public String getSeekType(int cn) {
+        String seekType = "";
+        switch (cn) {
+            case 1:
+                seekType = getStringWithLocale(R.string.seek_type_1);
+                break;
+            case 3:
+                seekType = getStringWithLocale(R.string.seek_type_3);
+                break;
+            case 4:
+                seekType = getStringWithLocale(R.string.seek_type_4);
+                break;
+            default:
+                seekType = getStringWithLocale(R.string.seek_type_0);
+                break;
+        }
+        return seekType;
+    }
+
+    public String getConditionStatus(JsonArray deckPortData, int deckid) {
         String getConditionInfo = "";
         List<String> conditionList = new ArrayList<String>();
         JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
@@ -132,7 +162,7 @@ public class KcaDeckInfo {
     // Air Power Calculation (2016.12.27)
     // Reference: http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
     //            http://kancolle-calc.net/aircrafts.html
-    private static double calcBasicAAC(int type, double aac, int carry) {
+    private double calcBasicAAC(int type, double aac, int carry) {
         if (Arrays.binarySearch(T2LIST_FIGHT_AIRCRAFTS, type) < 0) {
             return 0;
         } else {
@@ -140,7 +170,7 @@ public class KcaDeckInfo {
         }
     }
 
-    private static double calcReinforcedAAC(int type, int aac, int reinforce) {
+    private double calcReinforcedAAC(int type, int aac, int reinforce) {
         switch (type) {
             case T2_FIGHTER:
                 return aac + 0.2 * reinforce;
@@ -155,7 +185,7 @@ public class KcaDeckInfo {
         return aac;
     }
 
-    private static double[] calcSlotAACFromMastery(int type, int mastery, int mode) {
+    private double[] calcSlotAACFromMastery(int type, int mastery, int mode) {
         int minMastery = mastery;
         if (mode == 1) {
             minMastery = 0;
@@ -189,7 +219,7 @@ public class KcaDeckInfo {
         return rangeAAC;
     }
 
-    public static int[] getAirPowerRange(JsonArray deckPortData, int deckid, boolean[] exclude_flag) {
+    public int[] getAirPowerRange(JsonArray deckPortData, int deckid, boolean[] exclude_flag) {
         int[] totalRangeAAC = {0, 0};
         boolean excludeflagexist = (exclude_flag != null);
         JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
@@ -229,7 +259,16 @@ public class KcaDeckInfo {
         return totalRangeAAC;
     }
 
-    public static int getSpeedFlagValue(boolean s, boolean f, boolean fp, boolean sf) {
+    public String getAirPowerRangeString(JsonArray deckPortData, int deckid, boolean[] exclude_flag) {
+        String airPowerValue = "";
+        int[] airPowerRange = getAirPowerRange(deckPortData, deckid, exclude_flag);
+        if (airPowerRange[1] > 0) {
+            airPowerValue = String.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
+        }
+        return airPowerValue;
+    }
+
+    public int getSpeedFlagValue(boolean s, boolean f, boolean fp, boolean sf) {
         int value = 0;
         if (s) value += SPEEDFLAG_SLOW;
         if (f) value += SPEEDFLAG_FAST;
@@ -238,8 +277,7 @@ public class KcaDeckInfo {
         return value;
     }
 
-
-    public static int getSpeed(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
+    public int getSpeed(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
         boolean is_slow_flag = false;
         boolean is_fast_flag = false;
         boolean is_fastplus_flag = false;
@@ -295,7 +333,39 @@ public class KcaDeckInfo {
         }
     }
 
-    public static int[] getTPValue(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
+    public String getSpeedString(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
+        int speedValue = getSpeed(deckPortData, deckid_list, exclude_flag);
+        String speedStringValue = "";
+        switch (speedValue) {
+            case KcaApiData.SPEED_SUPERFAST:
+                speedStringValue = getStringWithLocale(R.string.speed_superfast);
+                break;
+            case KcaApiData.SPEED_FASTPLUS:
+                speedStringValue = getStringWithLocale(R.string.speed_fastplus);
+                break;
+            case KcaApiData.SPEED_FAST:
+                speedStringValue = getStringWithLocale(R.string.speed_fast);
+                break;
+            case KcaApiData.SPEED_SLOW:
+                speedStringValue = getStringWithLocale(R.string.speed_slow);
+                break;
+            case KcaApiData.SPEED_MIXED_FASTPLUS:
+                speedStringValue = getStringWithLocale(R.string.speed_mixed_fastplus);
+                break;
+            case KcaApiData.SPEED_MIXED_FAST:
+                speedStringValue = getStringWithLocale(R.string.speed_mixed_fast);
+                break;
+            case KcaApiData.SPEED_MIXED_NORMAL:
+                speedStringValue = getStringWithLocale(R.string.speed_mixed_normal);
+                break;
+            default:
+                speedStringValue = getStringWithLocale(R.string.speed_none);
+                break;
+        }
+        return speedStringValue;
+    }
+
+    public int[] getTPValue(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
         double totalTP = 0.0;
 
         boolean excludeflagexist = (exclude_flag != null);
@@ -390,7 +460,12 @@ public class KcaDeckInfo {
         return estimatedTP;
     }
 
-    public static int[] getKcShipList(JsonArray deckPortData, int deckid) {
+    public String getTPString(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
+        int[] tp = getTPValue(deckPortData, deckid_list, exclude_flag);
+        return String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
+    }
+
+    public int[] getKcShipList(JsonArray deckPortData, int deckid) {
         int[] kcShipList = new int[6];
         JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
@@ -403,7 +478,7 @@ public class KcaDeckInfo {
         return kcShipList;
     }
 
-    public static void debugPortInfo(JsonArray deckPortData, int deckid) {
+    public void debugPortInfo(JsonArray deckPortData, int deckid) {
         JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
             int shipId = deckShipIdList.get(i).getAsInt();
@@ -435,7 +510,7 @@ public class KcaDeckInfo {
         }
     }
 
-    public static JsonArray getDeckListInfo(JsonArray deckPortData, int deckid) {
+    public JsonArray getDeckListInfo(JsonArray deckPortData, int deckid) {
         JsonArray deckListInfo = new JsonArray();
         JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
@@ -452,7 +527,7 @@ public class KcaDeckInfo {
         return deckListInfo;
     }
 
-    public static int checkHeavyDamageExist(JsonArray deckPortData, int deckid) {
+    public int checkHeavyDamageExist(JsonArray deckPortData, int deckid) {
         int[] status = {0, 0, 0, 0, 0, 0};
         JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
@@ -495,7 +570,7 @@ public class KcaDeckInfo {
         return heavyExist;
     }
 
-    public static boolean[] getDameconStatus(JsonArray deckPortData, int deckid) {
+    public boolean[] getDameconStatus(JsonArray deckPortData, int deckid) {
         boolean[] dameconStatus = {false, false, false, false, false, false, false};
         JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
@@ -527,7 +602,7 @@ public class KcaDeckInfo {
         return dameconStatus;
     }
 
-    public static boolean checkNotSuppliedExist(JsonArray deckPortData, int deckid) {
+    public boolean checkNotSuppliedExist(JsonArray deckPortData, int deckid) {
         JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
             int shipId = deckShipIdList.get(i).getAsInt();

@@ -99,6 +99,7 @@ public class KcaService extends Service {
     Context contextWithLocale;
     KcaDBHelper dbHelper;
     KcaQuestTracker questTracker;
+    KcaDeckInfo deckInfoCalc;
 
     AlarmManager alarmManager;
     AudioManager mAudioManager;
@@ -158,7 +159,7 @@ public class KcaService extends Service {
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
-        KcaDeckInfo.setDBHelper(dbHelper);
+        deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
         KcaApiData.setDBHelper(dbHelper);
 
         AssetManager assetManager = getResources().getAssets();
@@ -429,10 +430,10 @@ public class KcaService extends Service {
         String seekType = getSeekType();
         JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
 
-        int[] airPowerRange = KcaDeckInfo.getAirPowerRange(portdeckdata, 0, KcaBattle.getEscapeFlag());
+        int[] airPowerRange = deckInfoCalc.getAirPowerRange(portdeckdata, 0, KcaBattle.getEscapeFlag());
         String airPowerValue = String.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
-        String seekValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, KcaDeckInfo.getSeekValue(portdeckdata, 0, cn, KcaBattle.getEscapeFlag()));
-        int[] tp = KcaDeckInfo.getTPValue(portdeckdata, "0", KcaBattle.getEscapeFlag());
+        String seekValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, deckInfoCalc.getSeekValue(portdeckdata, 0, cn, KcaBattle.getEscapeFlag()));
+        int[] tp = deckInfoCalc.getTPValue(portdeckdata, "0", KcaBattle.getEscapeFlag());
         String tpValue = String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
         List<String> toastList = new ArrayList<String>();
         if (airPowerRange[1] > 0) {
@@ -802,17 +803,17 @@ public class KcaService extends Service {
                     if (isCurrentPortDeckDataReady()) {
                         for (int i = 0; i < portdeckdata.size(); i++) {
                             if (url.startsWith(API_GET_MEMBER_MISSION) && i == 0) continue;
-                            if (KcaDeckInfo.checkNotSuppliedExist(portdeckdata, i)) {
+                            if (deckInfoCalc.checkNotSuppliedExist(portdeckdata, i)) {
                                 isNotSuppliedFlag = true;
                                 message = message.concat(String.format(getStringWithLocale(R.string.not_supplied), i + 1)).concat("\n");
                             }
                         }
 
                         if (url.startsWith(API_GET_MEMBER_MAPINFO)) {
-                            int firstHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(portdeckdata, 0);
+                            int firstHeavyDamaged = deckInfoCalc.checkHeavyDamageExist(portdeckdata, 0);
                             int secondHeavyDamaged = 0;
                             if (portdeckdata.size() >= 2) {
-                                secondHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(portdeckdata, 1);
+                                secondHeavyDamaged = deckInfoCalc.checkHeavyDamageExist(portdeckdata, 1);
                             }
 
                             int checkvalue = 0;
@@ -887,6 +888,8 @@ public class KcaService extends Service {
                                 }
                             }
 
+                            KcaBattle.currentFleet = deck_id;
+
                             JsonObject api_data = new JsonObject();
                             JsonArray api_deck_data = new JsonArray();
                             JsonArray api_ship_data = new JsonArray();
@@ -910,18 +913,18 @@ public class KcaService extends Service {
                                     if (ship_id != -1)
                                         api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
                                 }
-                                KcaBattle.dameconflag = KcaDeckInfo.getDameconStatus(api_deck_data, 0);
-                                KcaBattle.dameconcbflag = KcaDeckInfo.getDameconStatus(api_deck_data, 1);
+                                KcaBattle.dameconflag = deckInfoCalc.getDameconStatus(api_deck_data, 0);
+                                KcaBattle.dameconcbflag = deckInfoCalc.getDameconStatus(api_deck_data, 1);
 
-                                int firstHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(portdeckdata, 0);
+                                int firstHeavyDamaged = deckInfoCalc.checkHeavyDamageExist(portdeckdata, 0);
                                 int secondHeavyDamaged = 0;
                                 if (portdeckdata.size() >= 2) {
-                                    secondHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(portdeckdata, 1);
+                                    secondHeavyDamaged = deckInfoCalc.checkHeavyDamageExist(portdeckdata, 1);
                                 }
                                 checkvalue = Math.max(firstHeavyDamaged, secondHeavyDamaged);
                             } else {
                                 JsonObject fleet = portdeckdata.get(deck_id).getAsJsonObject();
-                                int fleetHeavyDamaged = KcaDeckInfo.checkHeavyDamageExist(portdeckdata, deck_id);
+                                int fleetHeavyDamaged = deckInfoCalc.checkHeavyDamageExist(portdeckdata, deck_id);
                                 checkvalue = fleetHeavyDamaged;
                                 api_deck_data.add(fleet);
                                 JsonArray firstShipInfo = fleet.getAsJsonArray("api_ship");
@@ -930,7 +933,7 @@ public class KcaService extends Service {
                                     if (ship_id != -1)
                                         api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
                                 }
-                                KcaBattle.dameconflag = KcaDeckInfo.getDameconStatus(api_deck_data, 0);
+                                KcaBattle.dameconflag = deckInfoCalc.getDameconStatus(api_deck_data, 0);
                             }
                             api_data.add("api_deck_data", api_deck_data);
                             api_data.add("api_ship_data", api_ship_data);
@@ -962,9 +965,9 @@ public class KcaService extends Service {
                         KcaApiData.updatePortDataOnBattle(api_data);
                         for (int i = 0; i < api_deck_data.size(); i++) {
                             if (i == 0) {
-                                KcaBattle.dameconflag = KcaDeckInfo.getDameconStatus(api_deck_data, 0);
+                                KcaBattle.dameconflag = deckInfoCalc.getDameconStatus(api_deck_data, 0);
                             } else if (i == 1) {
-                                KcaBattle.dameconcbflag = KcaDeckInfo.getDameconStatus(api_deck_data, 1);
+                                KcaBattle.dameconcbflag = deckInfoCalc.getDameconStatus(api_deck_data, 1);
                             }
                         }
                         KcaBattle.setDeckPortData(api_data);
@@ -994,7 +997,7 @@ public class KcaService extends Service {
                         String[] requestData = request.split("&");
                         int[] materials = {0, 0, 0, 0};
                         JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-                        int flagship = KcaDeckInfo.getKcShipList(portdeckdata, 0)[0];
+                        int flagship = deckInfoCalc.getKcShipList(portdeckdata, 0)[0];
                         for (int i = 0; i < requestData.length; i++) {
                             String decodedData = URLDecoder.decode(requestData[i], "utf-8");
                             if (decodedData.startsWith("api_item1")) {
@@ -1093,7 +1096,7 @@ public class KcaService extends Service {
                             JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
                             JsonObject api_kdock = api_data.get(checkKdockId).getAsJsonObject();
                             JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-                            int flagship = KcaDeckInfo.getKcShipList(portdeckdata, 0)[0];
+                            int flagship = deckInfoCalc.getKcShipList(portdeckdata, 0)[0];
                             int[] materials = {0, 0, 0, 0, 0};
                             for (int i = 0; i < materials.length; i++) {
                                 materials[i] = api_kdock.get(String.format("api_item%d", i + 1)).getAsInt();
@@ -1318,7 +1321,7 @@ public class KcaService extends Service {
 
                     if (url.equals(API_REQ_KOUSYOU_REMOEL_SLOT)) {
                         JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-                        int[] kcShipData = KcaDeckInfo.getKcShipList(portdeckdata, 0);
+                        int[] kcShipData = deckInfoCalc.getKcShipList(portdeckdata, 0);
                         int flagship = kcShipData[0];
                         int assistant = kcShipData[1];
 

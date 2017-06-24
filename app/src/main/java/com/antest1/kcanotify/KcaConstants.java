@@ -32,6 +32,7 @@ public final class KcaConstants {
     public static final String ERROR_TYPE_NOTI = "N";
     public static final String ERROR_TYPE_VPN = "V";
     public static final String ERROR_TYPE_OPENDB = "O";
+    public static final String ERROR_TYPE_DB = "D";
 
     public static final int FAIRY_TOTAL_COUNT = 96;
     public static final int[] FAIRY_REVERSE_LIST = {0, 1, 2, 8, 9, 11, 12, 15, 19, 23, 24, 25, 27, 28, 30, 32, 33, 34,

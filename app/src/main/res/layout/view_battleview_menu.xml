@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark"
         android:padding="12dp"
-        android:layout_width="350dp">
+        android:layout_width="450dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -69,35 +69,60 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
 
-                    <TextView
-                        android:text="@string/battleview_menu0"
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/view_item0"
-                        android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:padding="8dp"
-                        android:textSize="20dp" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
 
-                    <TextView
-                        android:text="@string/battleview_menu1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/view_item1"
-                        android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:padding="8dp"
-                        android:textSize="20dp" />
+                        <TextView
+                            android:text="TextView"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/view_menu_fleetinfo"
+                            android:layout_weight="1"
+                            android:textColor="@color/white"
+                            android:textSize="14dp"
+                            android:padding="8dp"
+                            android:layout_width="120dp" />
 
-                    <TextView
-                        android:text="@string/battleview_menu2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/view_item2"
-                        android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:padding="8dp"
-                        android:textSize="20dp" />
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_height="wrap_content"
+                            android:layout_width="200dp"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:text="@string/battleview_menu0"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/view_item0"
+                                android:layout_weight="1"
+                                android:textColor="@color/white"
+                                android:padding="8dp"
+                                android:textSize="20dp" />
+
+                            <TextView
+                                android:text="@string/battleview_menu1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/view_item1"
+                                android:layout_weight="1"
+                                android:textColor="@color/white"
+                                android:padding="8dp"
+                                android:textSize="20dp" />
+
+                            <TextView
+                                android:text="@string/battleview_menu2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/view_item2"
+                                android:layout_weight="1"
+                                android:textColor="@color/white"
+                                android:padding="8dp"
+                                android:textSize="20dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </ScrollView>
 

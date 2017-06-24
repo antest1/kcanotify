@@ -32,9 +32,12 @@ import static android.R.attr.value;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPCRNT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTDAY;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTIME;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DB;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_VPN;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaQuestViewService.getPrevPageLastNo;
 import static com.antest1.kcanotify.KcaQuestViewService.setPrevPageLastNo;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 
 /**
  * Created by Gyeong Bok Lee on 2017-04-26.
@@ -154,13 +157,17 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     // for kca_userdata
     public String getValue(String key) {
         String value = null;
-        db = this.getReadableDatabase();
-        Cursor c = db.query(table_name, null, "KEY=?", new String[]{key}, null, null, null, null);
-        if (c.getCount() > 0) {
-            c.moveToFirst();
-            value = c.getString(c.getColumnIndex("VALUE"));
+        try {
+            db = this.getReadableDatabase();
+            Cursor c = db.query(table_name, null, "KEY=?", new String[]{key}, null, null, null, null);
+            if (c != null && c.getCount() > 0) {
+                c.moveToFirst();
+                value = c.getString(c.getColumnIndex("VALUE"));
+            }
+            c.close();
+        } catch (Exception e) {
+            recordErrorLog(ERROR_TYPE_DB, "getValue", key, "", getStringFromException(e));
         }
-        c.close();
         return value;
     }
 

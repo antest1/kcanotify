@@ -61,6 +61,8 @@ public class KcaFleetViewService extends Service {
     Context contextWithLocale;
     LayoutInflater mInflater;
     public KcaDBHelper helper;
+    public KcaDeckInfo deckInfoCalc;
+    KcaDeckInfo deckInfoObject;
 
     static boolean error_flag = false;
     boolean active;
@@ -139,6 +141,7 @@ public class KcaFleetViewService extends Service {
         }
         try {
             active = true;
+            deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
             helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             helper.updateExpScore(0);
             if (helper.getJsonArrayValue(DB_KEY_DECKPORT) == null) {
@@ -260,11 +263,11 @@ public class KcaFleetViewService extends Service {
                             JsonArray data;
                             if (isCombinedFlag(selected)) {
                                 if (i < 6)
-                                    data = KcaDeckInfo.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), 0);
+                                    data = deckInfoCalc.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), 0);
                                 else
-                                    data = KcaDeckInfo.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), 1);
+                                    data = deckInfoCalc.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), 1);
                             } else {
-                                data = KcaDeckInfo.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), selected);
+                                data = deckInfoCalc.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), selected);
                             }
 
                             JsonObject udata = data.get(i % 6).getAsJsonObject().getAsJsonObject("user");
@@ -365,30 +368,25 @@ public class KcaFleetViewService extends Service {
         int cn = getSeekCn();
         String seekType = getSeekType();
 
-        JsonArray deckInfoData = new JsonArray();
-        JsonObject infoData = null;
-
         List<String> infoList = new ArrayList<>();
 
         String airPowerValue = "";
-        int[] airPowerRange;
         if (isCombined) {
-            airPowerRange = KcaDeckInfo.getAirPowerRange(data, 0, null);
+            airPowerValue = deckInfoCalc.getAirPowerRangeString(data, 0, KcaBattle.getEscapeFlag());
         } else {
-            airPowerRange = KcaDeckInfo.getAirPowerRange(data, idx, null);
+            airPowerValue = deckInfoCalc.getAirPowerRangeString(data, idx, null);
         }
-        if (airPowerRange[1] > 0) {
-            airPowerValue = String.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
+        if (airPowerValue.length() > 0) {
             infoList.add(airPowerValue);
         }
 
         double seekValue = 0;
         String seekStringValue = "";
         if (isCombined) {
-            seekValue += KcaDeckInfo.getSeekValue(data, 0, cn, KcaBattle.getEscapeFlag());
-            seekValue += KcaDeckInfo.getSeekValue(data, 1, cn, KcaBattle.getEscapeFlag());
+            seekValue += deckInfoCalc.getSeekValue(data, 0, cn, KcaBattle.getEscapeFlag());
+            seekValue += deckInfoCalc.getSeekValue(data, 1, cn, KcaBattle.getEscapeFlag());
         } else {
-            seekValue = KcaDeckInfo.getSeekValue(data, idx, cn, KcaBattle.getEscapeFlag());
+            seekValue = deckInfoCalc.getSeekValue(data, idx, cn, null);
         }
         if (cn == SEEK_PURE) {
             seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), seekType, (int) seekValue);
@@ -397,56 +395,26 @@ public class KcaFleetViewService extends Service {
         }
         infoList.add(seekStringValue);
 
-        int speedValue = 0;
-        if (isCombined) {
-            speedValue = KcaDeckInfo.getSpeed(data, "0,1", KcaBattle.getEscapeFlag());
-        } else {
-            speedValue = KcaDeckInfo.getSpeed(data, "0", KcaBattle.getEscapeFlag());
-        }
-
         String speedStringValue = "";
-        switch (speedValue) {
-            case KcaApiData.SPEED_SUPERFAST:
-                speedStringValue = getStringWithLocale(R.string.speed_superfast);
-                break;
-            case KcaApiData.SPEED_FASTPLUS:
-                speedStringValue = getStringWithLocale(R.string.speed_fastplus);
-                break;
-            case KcaApiData.SPEED_FAST:
-                speedStringValue = getStringWithLocale(R.string.speed_fast);
-                break;
-            case KcaApiData.SPEED_SLOW:
-                speedStringValue = getStringWithLocale(R.string.speed_slow);
-                break;
-            case KcaApiData.SPEED_MIXED_FASTPLUS:
-                speedStringValue = getStringWithLocale(R.string.speed_mixed_fastplus);
-                break;
-            case KcaApiData.SPEED_MIXED_FAST:
-                speedStringValue = getStringWithLocale(R.string.speed_mixed_fast);
-                break;
-            case KcaApiData.SPEED_MIXED_NORMAL:
-                speedStringValue = getStringWithLocale(R.string.speed_mixed_normal);
-                break;
-            default:
-                speedStringValue = getStringWithLocale(R.string.speed_none);
-                break;
+        if (isCombined) {
+            speedStringValue = deckInfoCalc.getSpeedString(data, "0,1", KcaBattle.getEscapeFlag());
+        } else {
+            speedStringValue = deckInfoCalc.getSpeedString(data, "0", null);
         }
-
         infoList.add(speedStringValue);
 
-        int[] tp;
+        String tpValue = "";
         if (isCombined) {
-            tp = KcaDeckInfo.getTPValue(data, "0,1", KcaBattle.getEscapeFlag());
+            tpValue = deckInfoCalc.getTPString(data, "0,1", KcaBattle.getEscapeFlag());
         } else {
-            tp = KcaDeckInfo.getTPValue(data, String.valueOf(idx), KcaBattle.getEscapeFlag());
+            tpValue = deckInfoCalc.getTPString(data, String.valueOf(idx), null);
         }
-        String tpValue = String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
         infoList.add(tpValue);
 
         int sum_level = 0;
         if (isCombined) {
             for (int n = 0; n < 2; n++) {
-                JsonArray maindata = KcaDeckInfo.getDeckListInfo(data, n);
+                JsonArray maindata = deckInfoCalc.getDeckListInfo(data, n);
                 for (int i = 0; i < 6; i++) {
                     int v = n * 6 + i + 1;
                     if (i >= maindata.size()) {
@@ -513,7 +481,7 @@ public class KcaFleetViewService extends Service {
             }
 
         } else {
-            JsonArray maindata = KcaDeckInfo.getDeckListInfo(data, idx);
+            JsonArray maindata = deckInfoCalc.getDeckListInfo(data, idx);
             for (int i = 0; i < 6; i++) {
                 int v = i + 1;
                 if (i >= maindata.size()) {
