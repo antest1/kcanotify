@@ -53,6 +53,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static com.antest1.kcanotify.KcaAlarmService.REDUCE_COUNT;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
 import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
@@ -258,6 +259,7 @@ public class KcaService extends Service {
         stopService(new Intent(this, KcaViewButtonService.class));
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putBoolean("svcenabled", false).apply();
+        KcaAlarmService.clearAlarmCount();
     }
 
     public boolean isPackageExist(String name) {
@@ -578,7 +580,11 @@ public class KcaService extends Service {
                         break;
                     }
                 }
-                notifiManager.cancel(getNotificationId(NOTI_EXP, deck_id));
+                int nid = getNotificationId(NOTI_EXP, deck_id);
+                Intent deleteIntent = new Intent(this, KcaAlarmService.class).setAction(REDUCE_COUNT);
+                deleteIntent.putExtra("nid", nid);
+                startService(deleteIntent);
+                notifiManager.cancel(nid);
                 if (jsonDataObj.has("api_data")) {
                     JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                     if (api_data.has("api_clear_result") && api_data.get("api_clear_result").getAsInt() > 0) {
@@ -1888,7 +1894,12 @@ public class KcaService extends Service {
         for (int i = 0; i < data.size(); i++) {
             JsonObject ndockData = data.get(i).getAsJsonObject();
             state = ndockData.get("api_state").getAsInt();
-            notifiManager.cancel(getNotificationId(NOTI_DOCK, i));
+            int nid = getNotificationId(NOTI_DOCK, i);
+            notifiManager.cancel(nid);
+            Intent deleteIntent = new Intent(this, KcaAlarmService.class).setAction(REDUCE_COUNT);
+            deleteIntent.putExtra("nid", nid);
+            startService(deleteIntent);
+
             if (state != -1) {
                 dockId = ndockData.get("api_id").getAsInt() - 1;
                 shipId = ndockData.get("api_ship_id").getAsInt();

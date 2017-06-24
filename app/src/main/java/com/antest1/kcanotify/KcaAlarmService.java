@@ -21,6 +21,10 @@ import android.util.Log;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
@@ -50,9 +54,11 @@ public class KcaAlarmService extends Service {
 
     public static final int EXP_CANCEL_FLAG = 8;
     public static final long ALARM_DELAY = 61000;
-    public static int alarm_count = 0;
+    public static Set<Integer> alarm_set = new HashSet<>();
 
-    public static final String REDUCE_COUNT = "reduce_count";
+    public static final String ACTION_PREFIX = "action_";
+    public static final String CLICK_ACTION = "action_click";
+    public static final String REDUCE_COUNT = "action_reduce_count";
 
     AudioManager mAudioManager;
     KcaDBHelper dbHelper;
@@ -74,7 +80,9 @@ public class KcaAlarmService extends Service {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
-    public static int getAlarmCount() { return alarm_count; }
+    public static int getAlarmCount() { return alarm_set.size(); }
+
+    public static void clearAlarmCount() { alarm_set.clear(); }
 
     public static void setHandler(Handler h) {
         sHandler = h;
@@ -94,9 +102,14 @@ public class KcaAlarmService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("KCA", "KcaAlarmService Called: " + String.valueOf(startId));
         if (intent != null && intent.getAction() != null) {
-            if (intent.getAction().equals(REDUCE_COUNT)) {
-                alarm_count -= 1;
-                if (alarm_count < 0) alarm_count = 0;
+            if (intent.getAction().startsWith(ACTION_PREFIX)) {
+                if (intent.getAction().equals(CLICK_ACTION)) {
+                    Intent kcintent = getKcIntent(getApplicationContext());
+                    if (kcintent != null) startActivity(kcintent);
+                }
+                int nid = intent.getIntExtra("nid", -1);
+                alarm_set.remove(nid);
+                notificationManager.cancel(nid);
             }
         } else if (getBooleanPreferences(getApplication(), PREF_KCA_NOTI_NOTIFYATSVCOFF) || KcaService.getServiceStatus()) {
             loadTranslationData(getAssets(), getApplicationContext());
@@ -115,8 +128,9 @@ public class KcaAlarmService extends Service {
                         boolean cancelFlag = data.get("cancel_flag").getAsBoolean();
                         boolean caFlag = data.get("ca_flag").getAsBoolean();
                         if (caFlag) idx = idx | EXP_CANCEL_FLAG;
-                        notificationManager.notify(getNotificationId(NOTI_EXP, idx), createExpeditionNotification(mission_no, mission_name, kantai_name, cancelFlag, caFlag));
-                        alarm_count += 1;
+                        int nid = getNotificationId(NOTI_EXP, idx);
+                        notificationManager.notify(nid, createExpeditionNotification(mission_no, mission_name, kantai_name, cancelFlag, caFlag, nid));
+                        alarm_set.add(nid);
                     }
                 } else if (type == TYPE_DOCKING) {
                     int dockId = data.get("dock_id").getAsInt();
@@ -133,13 +147,14 @@ public class KcaAlarmService extends Service {
                             JsonObject kcShipData = KcaApiData.getKcShipDataById(shipId, "name");
                             shipName = getShipTranslation(kcShipData.get("name").getAsString(), false);
                         }
-                        notificationManager.notify(getNotificationId(NOTI_DOCK, dockId), createDockingNotification(dockId, shipName));
-                        alarm_count += 1;
+                        int nid = getNotificationId(NOTI_DOCK, dockId);
+                        notificationManager.notify(nid, createDockingNotification(dockId, shipName, nid));
+                        alarm_set.add(nid);
                     }
                 }
             }
         }
-        Log.e("KCA", "Noti Count: " + String.valueOf(alarm_count));
+        Log.e("KCA", "Noti Count: " + String.valueOf(alarm_set.size()));
         if (sHandler != null) {
             bundle = new Bundle();
             bundle.putString("url", KCA_API_PREF_NOTICOUNT_CHANGED);
@@ -164,11 +179,11 @@ public class KcaAlarmService extends Service {
         super.onDestroy();
     }
 
-    private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag, boolean caFlag) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, getKcIntent(getApplicationContext()),
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent deleteIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(REDUCE_COUNT), PendingIntent.FLAG_UPDATE_CURRENT);
+    private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag, boolean caFlag, int nid) {
+        PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
+                new Intent(this, KcaAlarmService.class).setAction(REDUCE_COUNT).putExtra("nid", nid), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
+                new Intent(this, KcaAlarmService.class).setAction(REDUCE_COUNT).putExtra("nid", nid), PendingIntent.FLAG_UPDATE_CURRENT);
         String title = "";
         String content = "";
         if (cancelFlag) {
@@ -187,9 +202,10 @@ public class KcaAlarmService extends Service {
                 .setLargeIcon(expBitmap)
                 .setContentTitle(title)
                 .setContentText(content)
+                .setAutoCancel(false)
                 .setTicker(title)
-                .setDeleteIntent(deleteIntent)
-                .setContentIntent(pendingIntent);
+                .setDeleteIntent(deletePendingIntent)
+                .setContentIntent(contentPendingIntent);
 
         String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
         if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
@@ -229,11 +245,11 @@ public class KcaAlarmService extends Service {
         return Notifi;
     }
 
-    private Notification createDockingNotification(int dockId, String shipName) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, getKcIntent(getApplicationContext()),
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent deleteIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(REDUCE_COUNT), PendingIntent.FLAG_UPDATE_CURRENT);
+    private Notification createDockingNotification(int dockId, String shipName, int nid) {
+        PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
+                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION).putExtra("nid", nid), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
+                new Intent(this, KcaAlarmService.class).setAction(REDUCE_COUNT).putExtra("nid", nid), PendingIntent.FLAG_UPDATE_CURRENT);
         String title = String.format(getStringWithLocale(R.string.kca_noti_title_dock_finished), dockId + 1);
         String content = "";
         if (shipName.length() > 0) {
@@ -247,9 +263,10 @@ public class KcaAlarmService extends Service {
                 .setLargeIcon(dockBitmap)
                 .setContentTitle(title)
                 .setContentText(content)
+                .setAutoCancel(false)
                 .setTicker(title)
-                .setDeleteIntent(deleteIntent)
-                .setContentIntent(pendingIntent);
+                .setDeleteIntent(deletePendingIntent)
+                .setContentIntent(contentPendingIntent);
         String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
         if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
             if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
