@@ -381,7 +381,7 @@ public class KcaQuestViewService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getAction() != null) {
+        if (intent != null && intent.getAction() != null && mView != null) {
             if (intent.getAction().equals(REFRESH_QUESTVIEW_ACTION)) {
                 int extra = intent.getIntExtra("tab_id", -1);
                 if (extra != -1) {
