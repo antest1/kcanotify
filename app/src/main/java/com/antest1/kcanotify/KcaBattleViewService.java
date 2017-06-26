@@ -52,6 +52,7 @@ import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getNodeFullInfo;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
+import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaBattle.deckportdata;
 import static com.antest1.kcanotify.KcaConstants.*;
@@ -1181,9 +1182,15 @@ public class KcaBattleViewService extends Service {
         menuView.findViewById(R.id.view_item1).setOnClickListener(battleViewMenuListener);
         menuView.findViewById(R.id.view_item2).setOnClickListener(battleViewMenuListener);
 
-        JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         List<String> infoList = new ArrayList<>();
 
+        float[] exp_score = dbHelper.getExpScore();
+        String exp_str = String.format(getStringWithLocale(R.string.battleview_expview),
+                exp_score[0], exp_score[1]);
+
+        infoList.add(exp_str);
+
+        JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         int cn = getSeekCn();
         int idx = KcaBattle.currentFleet;
         boolean isCombined = KcaBattle.isCombined;

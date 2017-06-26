@@ -168,6 +168,7 @@
     <string name="battleview_menu0">항공전 정보</string>
     <string name="battleview_menu1">현재 임무 목록</string>
     <string name="battleview_menu2">함대 정보 보기</string>
+    <string name="battleview_expview" formatted="false">전과: %.2f/%.2f</string>
 
     <string name="formation_lineahead">단종진</string>
     <string name="formation_doubleline">복종진</string>

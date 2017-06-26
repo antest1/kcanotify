@@ -187,6 +187,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="battleview_menu0">航空戰信息</string>
     <string name="battleview_menu1">任務瀏覽</string>
     <string name="battleview_menu2">艦隊信息</string>
+    <string name="battleview_expview" formatted="false">戰果: %.2f/%.2f</string>
 
     <string name="formation_lineahead">單縱</string>
     <string name="formation_doubleline">複縱</string>
