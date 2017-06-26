@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.annotation.IntegerRes;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -22,7 +23,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
@@ -30,7 +30,6 @@ import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_NOTICOUNT_CHANGED;
@@ -57,8 +56,8 @@ public class KcaAlarmService extends Service {
     public static Set<Integer> alarm_set = new HashSet<>();
 
     public static final String ACTION_PREFIX = "action_";
-    public static final String CLICK_ACTION = "action_click";
-    public static final String REDUCE_COUNT = "action_reduce_count";
+    public static final String CLICK_ACTION = "action_click_";
+    public static final String DELETE_ACTION = "action_delete_";
 
     AudioManager mAudioManager;
     KcaDBHelper dbHelper;
@@ -102,14 +101,19 @@ public class KcaAlarmService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("KCA", "KcaAlarmService Called: " + String.valueOf(startId));
         if (intent != null && intent.getAction() != null) {
-            if (intent.getAction().startsWith(ACTION_PREFIX)) {
-                if (intent.getAction().equals(CLICK_ACTION)) {
+            String action = intent.getAction();
+            Log.e("KCA-N", "Action: ".concat(action));
+            if (action.startsWith(ACTION_PREFIX)) {
+                if (action.startsWith(CLICK_ACTION)) {
                     Intent kcintent = getKcIntent(getApplicationContext());
                     if (kcintent != null) startActivity(kcintent);
                 }
-                int nid = intent.getIntExtra("nid", -1);
-                alarm_set.remove(nid);
-                notificationManager.cancel(nid);
+                String[] action_list = action.split("_");
+                if (action_list.length == 3) {
+                    int nid = Integer.parseInt(action_list[2]);
+                    alarm_set.remove(nid);
+                    notificationManager.cancel(nid);
+                }
             }
         } else if (getBooleanPreferences(getApplication(), PREF_KCA_NOTI_NOTIFYATSVCOFF) || KcaService.getServiceStatus()) {
             loadTranslationData(getAssets(), getApplicationContext());
@@ -181,9 +185,9 @@ public class KcaAlarmService extends Service {
 
     private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag, boolean caFlag, int nid) {
         PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(REDUCE_COUNT).putExtra("nid", nid), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(REDUCE_COUNT).putExtra("nid", nid), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
         String title = "";
         String content = "";
         if (cancelFlag) {
@@ -247,9 +251,9 @@ public class KcaAlarmService extends Service {
 
     private Notification createDockingNotification(int dockId, String shipName, int nid) {
         PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION).putExtra("nid", nid), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(REDUCE_COUNT).putExtra("nid", nid), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
         String title = String.format(getStringWithLocale(R.string.kca_noti_title_dock_finished), dockId + 1);
         String content = "";
         if (shipName.length() > 0) {
