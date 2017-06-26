@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static com.antest1.kcanotify.KcaApiData.*;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
@@ -90,7 +91,7 @@ public class KcaDeckInfo {
                                     totalEquipSeek += 1.2 * (itemSeek + 1.2 * Math.sqrt(itemLevel));
                                     break;
                                 case T2_SEA_BOMBER:
-                                    totalEquipSeek += 1.1 * itemSeek;
+                                    totalEquipSeek += 1.1 * (itemSeek + 1.15 * Math.sqrt(itemLevel));
                                     break;
                                 case T2_RADAR_LARGE:
                                     totalEquipSeek += 0.6 * (itemSeek + 1.4 * Math.sqrt(itemLevel));
@@ -173,6 +174,7 @@ public class KcaDeckInfo {
     private double calcReinforcedAAC(int type, int aac, int reinforce) {
         switch (type) {
             case T2_FIGHTER:
+            case T2_SEA_FIGHTER:
                 return aac + 0.2 * reinforce;
             case T2_BOMBER:
             case T2_JET_BOMBER:
