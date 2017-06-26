@@ -29,6 +29,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Menu;
@@ -42,7 +43,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Locale;
@@ -53,6 +57,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
+import static android.text.TextUtils.concat;
+import static com.antest1.kcanotify.KcaApiData.kcShipInitEquipCount;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_QUESTTRACK;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
@@ -89,6 +95,7 @@ import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
+import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "KCAV";
@@ -96,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_VPN = 1;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_EXTERNAL_PERMISSION = 3;
+
+    public String getStringWithLocale(int id) {
+        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
+    }
 
     AssetManager assetManager;
     KcaDBHelper dbHelper;
@@ -108,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     Button kcbtn;
     ImageButton kcakashibtn;
     public static ImageButton kcafairybtn;
-    TextView textDescription = null;
+    HtmlTextView textDescription = null;
     TextView textWarn, textUpdate, textDataUpdate;
     Gson gson = new Gson();
 
@@ -250,9 +261,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        textDescription = (TextView) findViewById(R.id.textDescription);
-        textDescription.setText(R.string.description);
-        Linkify.addLinks(textDescription, Linkify.WEB_URLS);
+        String main_html = "";
+        try {
+            String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
+            InputStream ais = assetManager.open("main-".concat(getLocaleCode(locale)).concat(".html"));
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            main_html = new String(bytes);
+        } catch (IOException e) {
+            main_html = "Error loading html file.";
+        }
+
+        textDescription = (HtmlTextView) findViewById(R.id.textDescription);
+        textDescription.setHtml(main_html);
+        //Linkify.addLinks(textDescription, Linkify.WEB_URLS);
 
         backPressCloseHandler = new BackPressCloseHandler(this);
 
