@@ -88,6 +88,16 @@ public class KcaAlarmService extends Service {
     }
 
     @Override
+    public void onCreate() {
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
+        dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        super.onCreate();
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("KCA", "KcaAlarmService Called: " + String.valueOf(startId));
         if (intent != null && intent.getAction() != null) {
