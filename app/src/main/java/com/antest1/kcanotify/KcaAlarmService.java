@@ -25,6 +25,7 @@ import com.google.gson.JsonParser;
 import java.util.HashSet;
 import java.util.Set;
 
+import static android.os.Build.VERSION_CODES.M;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
@@ -36,6 +37,8 @@ import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_NOTICOUNT_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
 import static com.antest1.kcanotify.KcaConstants.NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
+import static com.antest1.kcanotify.KcaConstants.NOTI_UPDATE;
+import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
@@ -43,6 +46,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_NOTIFYATSVCOFF;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
+import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -50,6 +54,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 public class KcaAlarmService extends Service {
     public static final int TYPE_EXPEDITION = 1;
     public static final int TYPE_DOCKING = 2;
+    public static final int TYPE_UPDATE = 3;
 
     public static final int EXP_CANCEL_FLAG = 8;
     public static final long ALARM_DELAY = 61000;
@@ -58,6 +63,7 @@ public class KcaAlarmService extends Service {
     public static final String ACTION_PREFIX = "action_";
     public static final String CLICK_ACTION = "action_click_";
     public static final String DELETE_ACTION = "action_delete_";
+    public static final String UPDATE_ACTION = "action_update_";
 
     AudioManager mAudioManager;
     KcaDBHelper dbHelper;
@@ -79,9 +85,13 @@ public class KcaAlarmService extends Service {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
-    public static int getAlarmCount() { return alarm_set.size(); }
+    public static int getAlarmCount() {
+        return alarm_set.size();
+    }
 
-    public static void clearAlarmCount() { alarm_set.clear(); }
+    public static void clearAlarmCount() {
+        alarm_set.clear();
+    }
 
     public static void setHandler(Handler h) {
         sHandler = h;
@@ -103,10 +113,16 @@ public class KcaAlarmService extends Service {
         if (intent != null && intent.getAction() != null) {
             String action = intent.getAction();
             Log.e("KCA-N", "Action: ".concat(action));
+            Log.e("KCA-N", "B> " + alarm_set.toString());
             if (action.startsWith(ACTION_PREFIX)) {
                 if (action.startsWith(CLICK_ACTION)) {
                     Intent kcintent = getKcIntent(getApplicationContext());
                     if (kcintent != null) startActivity(kcintent);
+                }
+                if (action.startsWith(UPDATE_ACTION)) {
+                    Intent i = new Intent(this, MainActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
                 }
                 String[] action_list = action.split("_");
                 if (action_list.length == 3) {
@@ -115,45 +131,55 @@ public class KcaAlarmService extends Service {
                     notificationManager.cancel(nid);
                 }
             }
-        } else if (getBooleanPreferences(getApplication(), PREF_KCA_NOTI_NOTIFYATSVCOFF) || KcaService.getServiceStatus()) {
-            loadTranslationData(getAssets(), getApplicationContext());
-            if (intent != null && intent.getStringExtra("data") != null) {
-                JsonObject data = new JsonParser().parse(intent.getStringExtra("data")).getAsJsonObject();
-                int type = data.get("type").getAsInt();
-                String locale = LocaleUtils.getLocaleCode(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
-                if (type == TYPE_EXPEDITION) {
-                    int idx = data.get("idx").getAsInt();
-                    KcaExpedition2.clearMissionData(idx);
-                    if (isExpAlarmEnabled()) {
-                        if (!isExpeditionDataLoaded()) loadSimpleExpeditionInfoFromAssets(getAssets());
-                        int mission_no = data.get("mission_no").getAsInt();
-                        String mission_name = KcaApiData.getExpeditionName(mission_no, locale);
-                        String kantai_name = data.get("kantai_name").getAsString();
-                        boolean cancelFlag = data.get("cancel_flag").getAsBoolean();
-                        boolean caFlag = data.get("ca_flag").getAsBoolean();
-                        if (caFlag) idx = idx | EXP_CANCEL_FLAG;
-                        int nid = getNotificationId(NOTI_EXP, idx);
-                        notificationManager.notify(nid, createExpeditionNotification(mission_no, mission_name, kantai_name, cancelFlag, caFlag, nid));
-                        alarm_set.add(nid);
-                    }
-                } else if (type == TYPE_DOCKING) {
-                    int dockId = data.get("dock_id").getAsInt();
-                    KcaDocking.setCompleteTime(dockId, -1);
-                    KcaDocking.setShipId(dockId, 0);
-                    if(isDockAlarmEnabled()) {
-                        int shipId = data.get("ship_id").getAsInt();
-                        String shipName = "";
-                        if (shipId != -1) {
-                            if (!isGameDataLoaded()) {
-                                JsonObject cachedData = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
-                                KcaApiData.getKcGameData(cachedData.getAsJsonObject("api_data"));
-                            }
-                            JsonObject kcShipData = KcaApiData.getKcShipDataById(shipId, "name");
-                            shipName = getShipTranslation(kcShipData.get("name").getAsString(), false);
+            Log.e("KCA-N", "A> " + alarm_set.toString());
+        } else if (intent != null && intent.getStringExtra("data") != null) {
+            JsonObject data = new JsonParser().parse(intent.getStringExtra("data")).getAsJsonObject();
+            int type = data.get("type").getAsInt();
+            if (type == TYPE_UPDATE) {
+                int utype = data.get("utype").getAsInt();
+                String version = data.get("version").getAsString();
+                int nid = getNotificationId(NOTI_UPDATE, utype);
+                notificationManager.notify(nid, createUpdateNotification(utype, version, nid));
+                alarm_set.add(nid);
+            } else if (getBooleanPreferences(getApplication(), PREF_KCA_NOTI_NOTIFYATSVCOFF) || KcaService.getServiceStatus()) {
+                loadTranslationData(getAssets(), getApplicationContext());
+                if (intent.getStringExtra("data") != null) {
+                    String locale = LocaleUtils.getLocaleCode(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
+                    if (type == TYPE_EXPEDITION) {
+                        int idx = data.get("idx").getAsInt();
+                        KcaExpedition2.clearMissionData(idx);
+                        if (isExpAlarmEnabled()) {
+                            if (!isExpeditionDataLoaded())
+                                loadSimpleExpeditionInfoFromAssets(getAssets());
+                            int mission_no = data.get("mission_no").getAsInt();
+                            String mission_name = KcaApiData.getExpeditionName(mission_no, locale);
+                            String kantai_name = data.get("kantai_name").getAsString();
+                            boolean cancelFlag = data.get("cancel_flag").getAsBoolean();
+                            boolean caFlag = data.get("ca_flag").getAsBoolean();
+                            if (caFlag) idx = idx | EXP_CANCEL_FLAG;
+                            int nid = getNotificationId(NOTI_EXP, idx);
+                            notificationManager.notify(nid, createExpeditionNotification(mission_no, mission_name, kantai_name, cancelFlag, caFlag, nid));
+                            alarm_set.add(nid);
                         }
-                        int nid = getNotificationId(NOTI_DOCK, dockId);
-                        notificationManager.notify(nid, createDockingNotification(dockId, shipName, nid));
-                        alarm_set.add(nid);
+                    } else if (type == TYPE_DOCKING) {
+                        int dockId = data.get("dock_id").getAsInt();
+                        KcaDocking.setCompleteTime(dockId, -1);
+                        KcaDocking.setShipId(dockId, 0);
+                        if (isDockAlarmEnabled()) {
+                            int shipId = data.get("ship_id").getAsInt();
+                            String shipName = "";
+                            if (shipId != -1) {
+                                if (!isGameDataLoaded()) {
+                                    JsonObject cachedData = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
+                                    KcaApiData.getKcGameData(cachedData.getAsJsonObject("api_data"));
+                                }
+                                JsonObject kcShipData = KcaApiData.getKcShipDataById(shipId, "name");
+                                shipName = getShipTranslation(kcShipData.get("name").getAsString(), false);
+                            }
+                            int nid = getNotificationId(NOTI_DOCK, dockId);
+                            notificationManager.notify(nid, createDockingNotification(dockId, shipName, nid));
+                            alarm_set.add(nid);
+                        }
                     }
                 }
             }
@@ -307,6 +333,64 @@ public class KcaAlarmService extends Service {
             sHandler.sendMessage(sMsg);
             // send Handler to setFrontView
         }
+        return Notifi;
+    }
+
+    private Notification createUpdateNotification(int type, String version, int nid) {
+        PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
+                new Intent(this, KcaAlarmService.class).setAction(UPDATE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
+                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+
+        int title_text_id;
+        switch(type) {
+            case 1:
+                title_text_id = R.string.ma_hasdataupdate;
+                break;
+            default:
+                title_text_id = R.string.ma_hasupdate;
+                break;
+        }
+        String title = getStringWithLocale(title_text_id).replace("(%s)", "").trim();
+        String content = version;
+
+        Bitmap updateBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, getId("ic_update_" + String.valueOf(type), R.mipmap.class))).getBitmap();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
+                .setSmallIcon(R.mipmap.ic_stat_notify_1)
+                .setLargeIcon(updateBitmap)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setAutoCancel(false)
+                .setTicker(title)
+                .setDeleteIntent(deletePendingIntent)
+                .setContentIntent(contentPendingIntent);
+
+        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
+        if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
+            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                if (soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
+                    builder.setDefaults(Notification.DEFAULT_VIBRATE);
+                }
+                builder.setSound(Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
+            } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+                builder.setDefaults(Notification.DEFAULT_VIBRATE);
+            } else {
+                builder.setDefaults(0);
+            }
+        }
+        if (soundKind.equals(getString(R.string.sound_kind_value_vibrate))) {
+            if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
+                builder.setDefaults(Notification.DEFAULT_VIBRATE);
+            } else {
+                builder.setDefaults(0);
+            }
+        }
+        if (soundKind.equals(getString(R.string.sound_kind_value_mute))) {
+            builder.setDefaults(0);
+        }
+
+        Notification Notifi = builder.build();
+        Notifi.flags = Notification.FLAG_AUTO_CANCEL;
         return Notifi;
     }
 

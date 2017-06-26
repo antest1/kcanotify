@@ -21,6 +21,7 @@ import android.net.VpnService;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -58,6 +59,7 @@ import okhttp3.Response;
 
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
 import static android.text.TextUtils.concat;
+import static com.antest1.kcanotify.KcaAlarmService.TYPE_UPDATE;
 import static com.antest1.kcanotify.KcaApiData.kcShipInitEquipCount;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_QUESTTRACK;
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
     AssetManager assetManager;
     KcaDBHelper dbHelper;
     Toolbar toolbar;
+    Vibrator vibrator;
     private boolean running = false;
     private AlertDialog dialogVpn = null;
     Context ctx;
@@ -139,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         assetManager = getAssets();
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
@@ -552,6 +554,13 @@ public class MainActivity extends AppCompatActivity {
                         if (!compareVersion(currentVersion, recentVersion)) { // True if latest
                             textUpdate.setVisibility(View.VISIBLE);
                             textUpdate.setText(String.format(getStringWithLocale(R.string.ma_hasupdate), recentVersion));
+                            Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
+                            JsonObject data = new JsonObject();
+                            data.addProperty("type", TYPE_UPDATE);
+                            data.addProperty("utype", 0);
+                            data.addProperty("version", recentVersion);
+                            aIntent.putExtra("data", data.toString());
+                            startService(aIntent);
                         }
                     }
 
@@ -560,6 +569,13 @@ public class MainActivity extends AppCompatActivity {
                         if (!compareVersion(currentDataVersion, recentVersion)) { // True if latest
                             textDataUpdate.setVisibility(View.VISIBLE);
                             textDataUpdate.setText(String.format(getStringWithLocale(R.string.ma_hasdataupdate), recentVersion));
+                            Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
+                            JsonObject data = new JsonObject();
+                            data.addProperty("type", TYPE_UPDATE);
+                            data.addProperty("utype", 1);
+                            data.addProperty("version", recentVersion);
+                            aIntent.putExtra("data", data.toString());
+                            startService(aIntent);
                         }
                     }
                 } catch (Exception e) {

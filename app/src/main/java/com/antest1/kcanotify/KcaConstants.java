@@ -218,6 +218,7 @@ public final class KcaConstants {
     public static final int NOTI_FRONT = 0;
     public static final int NOTI_EXP = 1;
     public static final int NOTI_DOCK = 2;
+    public static final int NOTI_UPDATE = 3;
 
     public static final int FRONT_NONE = 0;
     public static final int FRONT_EXP_SET = 2;
