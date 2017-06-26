@@ -1174,14 +1174,14 @@
 	"859": {
 		"code": "B102",
 		"name": "Elite 4th Carrier Division, Sortie!",
-		"desc": "Sortie a fleet with Ise as flagship with Hyuuga as 2nd ship, 1 CL, 2 DD and 1 additional ship to [W2-5] and [W3-5]. A-Rank+? the boss nodes of each.",
-		"memo": "\u27a3Rewards either a Medal OR a Skilled Crew Member. Press F10 to clear the overlay."
+		"desc": "Sortie a fleet with Ise as flagship with Hyuuga as 2nd ship, 1 CL, 2 DD and 1 additional ship to [W2-5] and [W3-5]. A-Rank+ the boss nodes of each.",
+		"memo": "\u27a3Rewards either a Medal OR a Skilled Crew Member."
 	},
 	"860": {
 		"code": "B103",
 		"name": "Flagship Yura, Sortie!",
-		"desc": "Sortie a fleet with Yura Kai Ni as flagship, any 2 of Yuudachi, Murasame, Harusame, Samidare, Akizuki and 3 additional ships to [W2-3] and [W5-1]. S-Rank? the boss nodes of each.",
-		"memo": "\u27a3Rewards either a Daihatsu Landing Craft OR a Reinforcement Expansion. Press F10 to clear the overlay."
+		"desc": "Sortie a fleet with Yura Kai Ni as flagship, any 2 of Yuudachi, Murasame, Harusame, Samidare, Akizuki and 3 additional ships to [W2-3] and [W5-1]. S-Rank the boss nodes of each.",
+		"memo": "\u27a3Rewards either a Daihatsu Landing Craft OR a Reinforcement Expansion."
 	},
 
 	"201": {
@@ -2040,14 +2040,14 @@
 		"code": "F56",
 		"name": "Utilizing Radar Technology for Shooting Equipment",
 		"desc": "Prepare 8000 ammo and steel. Scrap 10 Radars.",
-		"memo": "\u2718Consumes the resources.\n\u27a3Rewards a Medal OR a New Type Artillery Armament Materials. Press F10 to clear the overlay.",
+		"memo": "\u2718Consumes the resources.\n\u27a3Rewards a Medal OR a New Type Artillery Armament Materials.",
 		"unlock": [ 665 ]
 	},
 	"665": {
 		"code": "F57",
 		"name": "Cooperation of the Consumer Industry",
 		"desc": "Prepare 12000 fuel. Scrap 16 Small Caliber Main Guns.",
-		"memo": "\u2718Consumes the resources.\n\u27a3Rewards a Medal OR a New Type Artillery Armament Materials. Press F10 to clear the overlay."
+		"memo": "\u2718Consumes the resources.\n\u27a3Rewards a Medal OR a New Type Artillery Armament Materials."
 	},
 	"666": {
 		"code": "F58",
