@@ -28,7 +28,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -53,7 +52,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static com.antest1.kcanotify.KcaAlarmService.REDUCE_COUNT;
+import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
 import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
@@ -582,8 +581,7 @@ public class KcaService extends Service {
                     }
                 }
                 int nid = getNotificationId(NOTI_EXP, deck_id);
-                Intent deleteIntent = new Intent(this, KcaAlarmService.class).setAction(REDUCE_COUNT);
-                deleteIntent.putExtra("nid", nid);
+                Intent deleteIntent = new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid)));
                 startService(deleteIntent);
                 notifiManager.cancel(nid);
                 if (jsonDataObj.has("api_data")) {
@@ -1899,8 +1897,7 @@ public class KcaService extends Service {
             state = ndockData.get("api_state").getAsInt();
             int nid = getNotificationId(NOTI_DOCK, i);
             notifiManager.cancel(nid);
-            Intent deleteIntent = new Intent(this, KcaAlarmService.class).setAction(REDUCE_COUNT);
-            deleteIntent.putExtra("nid", nid);
+            Intent deleteIntent = new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid)));
             startService(deleteIntent);
 
             if (state != -1) {
