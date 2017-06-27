@@ -18,6 +18,14 @@ Download
 - [Google Drive](http://bit.ly/kcanotifydown) (최신 버전)
 - [MEGA](https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw) (이전 버전 포함)
 
+**※ 2.4 rev4 이전 사용자들을 위한 안내**
+
+2.4 rev4 버전부터 구글 플레이 스토어에 업로드하는 어플리케이션과의 호환성을 위해 업로드하는 앱에 사용되는 서명이 변경되어, 이전 버전(2.4 rev3까지)에서 업데이트할 때 서명 충돌로 인한 문제가 발생할 수 있습니다. 이 경우 기존 어플리케이션을 지운 이후 다시 설치해주시면 감사하겠습니다.
+
+**※ For users using before version 2.4 rev4**
+
+For 2.4 rev4, App signing key for kcanotify was changed to make compatible with google play store app.  For this reason, update may fail when trying to update from version below 2.4 rev3. In this case, please delete existing application and re-install the newest version.
+
 Demo
 -------
 [![Youtube](https://img.youtube.com/vi/ZEAor_9jsaM/0.jpg)](https://www.youtube.com/watch?v=ZEAor_9jsaM)
