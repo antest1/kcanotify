@@ -399,7 +399,7 @@ public class KcaFleetViewService extends Service {
         if (isCombined) {
             speedStringValue = deckInfoCalc.getSpeedString(data, "0,1", KcaBattle.getEscapeFlag());
         } else {
-            speedStringValue = deckInfoCalc.getSpeedString(data, "0", null);
+            speedStringValue = deckInfoCalc.getSpeedString(data, String.valueOf(idx), null);
         }
         infoList.add(speedStringValue);
 
