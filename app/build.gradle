@@ -7,8 +7,8 @@ model {
             applicationId "com.antest1.kcanotify"
             minSdkVersion.apiLevel 16
             targetSdkVersion.apiLevel 25
-            versionCode 2405
-            versionName "2.4r5"
+            versionCode 2406
+            versionName "2.4r6"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
 
