@@ -694,8 +694,6 @@ public class KcaService extends Service {
                 } else if (jsonDataObj.has("api_data")) {
                     JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                     KcaQuestViewService.setApiData(api_data);
-                    startService(new Intent(this, KcaViewButtonService.class)
-                            .setAction(KcaViewButtonService.FAIRY_VISIBLE));
                     startService(new Intent(getBaseContext(), KcaQuestViewService.class)
                             .setAction(REFRESH_QUESTVIEW_ACTION).putExtra("tab_id", api_tab_id));
                 }
