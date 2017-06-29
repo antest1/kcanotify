@@ -103,6 +103,9 @@ public class AkashiDetailActivity extends AppCompatActivity {
                             case 2:
                                 require_item_name = getStringWithLocale(R.string.item_gmi_material);
                                 break;
+                            case 3:
+                                require_item_name = getStringWithLocale(R.string.item_skilled_crew);
+                                break;
                             default:
                                 require_item_name = "";
                                 break;

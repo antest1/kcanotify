@@ -324,6 +324,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="language_system">使用系統設置</string>
     <string name="item_engine">Ne式噴射發動機</string>
     <string name="item_gmi_material">新型火炮兵裝資材</string>
+    <string name="item_skilled_crew">熟練搭乘員</string>
     <string name="setting_menu_noti_title_notiatsvcoff">當SVC服務關閉時啟用通知</string>
     <string name="setting_menu_noti_desc_notiatsvcoff">當SVC服務關閉時啟用遠征/入渠通知</string>
     <string name="kca_toast_renew_currentportdeck">遊戲內返回母港並更新相關數據</string>
