@@ -1376,11 +1376,12 @@ public class KcaBattleViewService extends Service {
         deckportdata = null;
         if (mView != null) {
             if (mView.getParent() != null) mManager.removeViewImmediate(mView);
-            mView.setVisibility(View.GONE);
         }
         if (itemView != null) {
             if (itemView.getParent() != null) mManager.removeViewImmediate(itemView);
-            itemView.setVisibility(View.GONE);
+        }
+        if(menuView != null) {
+            if (menuView.getParent() != null) mManager.removeViewImmediate(menuView);
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
         super.onDestroy();
@@ -1473,7 +1474,7 @@ public class KcaBattleViewService extends Service {
                                     PixelFormat.TRANSLUCENT);
                             itemViewParams.x = (int) (event.getRawX() + xMargin);
                             itemViewParams.y = (int) event.getRawY();
-                            itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
+                            itemViewParams.gravity = Gravity.TOP | Gravity.START;
                             if (itemView.getParent() != null) {
                                 mManager.updateViewLayout(itemView, itemViewParams);
                             } else {
