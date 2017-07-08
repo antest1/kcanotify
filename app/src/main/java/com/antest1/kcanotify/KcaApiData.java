@@ -655,6 +655,10 @@ public class KcaApiData {
         return 0;
     }
 
+    public static int getItemCountByKcId(int id) {
+        return helper.getItemCountByKcId(id);
+    }
+
     public static JsonObject getKcShipDataById(int id, String list) {
         if (kcGameData == null) return null;
         JsonObject temp = new JsonObject();

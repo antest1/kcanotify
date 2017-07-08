@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:alpha="0.8">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:padding="6dp"
+        android:layout_width="250dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/view_menu">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingBottom="2dp"
+                android:id="@+id/view_ed_head">
+
+                <TextView
+                    android:text="@string/viewmenu_construction_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView2"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:layout_height="wrap_content"
+                    android:id="@+id/view_cancel"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/ic_cancel"
+                    android:layout_width="16dp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@android:color/darker_gray"
+                android:paddingBottom="0.5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="0dp"
+                android:scaleType="fitXY"
+                android:src="@android:drawable/divider_horizontal_bright"
+                android:layout_gravity="left|clip_vertical"
+                android:layout_weight="1"
+                android:layout_marginBottom="1dp" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="5dp">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/sc_list_1">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:id="@+id/sc1_name"
+                        android:layout_weight="5"
+                        android:textSize="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/white"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sc1_time"
+                        android:layout_weight="3"
+                        android:textSize="16dp"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/sc_list_2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:id="@+id/sc2_name"
+                        android:layout_weight="5"
+                        android:textSize="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/white"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sc2_time"
+                        android:layout_weight="3"
+                        android:textSize="16dp"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/sc_list_3">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:id="@+id/sc3_name"
+                        android:layout_weight="5"
+                        android:textSize="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/white"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sc3_time"
+                        android:layout_weight="3"
+                        android:textSize="16dp"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/sc_list_4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:id="@+id/sc4_name"
+                        android:layout_weight="5"
+                        android:textSize="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/white"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sc4_time"
+                        android:layout_weight="3"
+                        android:textSize="16dp"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

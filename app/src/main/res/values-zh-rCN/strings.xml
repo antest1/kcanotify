@@ -335,6 +335,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_battle">战斗</string>
     <string name="viewmenu_quest">任务</string>
     <string name="viewmenu_akashi">改修</string>
+    <string name="viewmenu_develop">开发</string>
+    <string name="viewmenu_construction">建造</string>
+    <string name="viewmenu_develop_title">开发信息</string>
+    <string name="viewmenu_construction_title">建造信息</string>
+    <string name="develop_failed_text">企鹅玩偶</string>
     <string name="setting_menu_view_title_fullmorale_setting">完整显示士气值</string>
     <string name="setting_menu_view_desc_fullmorale_setting">通知栏完整显示士气值</string>
     <string name="action_errorlog">错误日志</string>

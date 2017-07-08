@@ -329,6 +329,11 @@
     <string name="viewmenu_battle">전투</string>
     <string name="viewmenu_quest">임무</string>
     <string name="viewmenu_akashi">개수</string>
+    <string name="viewmenu_develop">개발</string>
+    <string name="viewmenu_construction">건조</string>
+    <string name="viewmenu_develop_title">개발 정보</string>
+    <string name="viewmenu_construction_title">건조 정보</string>
+    <string name="develop_failed_text">펭귄 인형 ㅠㅠ</string>
     <string name="setting_menu_view_desc_fullmorale_setting">상태 바에 전 함대의 피로도를 표시</string>
     <string name="setting_menu_view_title_fullmorale_setting">전 함대 피로도 표시</string>
     <string name="action_errorlog">오류 로그</string>

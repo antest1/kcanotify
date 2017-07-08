@@ -44,8 +44,10 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
@@ -547,6 +549,7 @@ public class KcaService extends Service {
                 if (jsonDataObj.has("api_data")) {
                     //dbHelper.putValue(DB_KEY_USEREQUIP, jsonDataObj.getAsJsonObject("api_data").getAsJsonArray("api_slot_item").toString());
                     JsonObject requiredInfoApiData = jsonDataObj.getAsJsonObject("api_data");
+                    dbHelper.putValue(DB_KEY_KDOCKDATA, requiredInfoApiData.getAsJsonArray("api_kdock").toString());
                     int size2 = KcaApiData.putSlotItemDataToDB(requiredInfoApiData.getAsJsonArray("api_slot_item"));
                     int userId = KcaApiData.getUserId(requiredInfoApiData);
                     Log.e("KCA", "Total Items: " + String.valueOf(size2));
@@ -989,7 +992,7 @@ public class KcaService extends Service {
                 }
 
                 if (isCurrentPortDeckDataReady()) {
-                    if (url.startsWith(API_REQ_KOUSYOU_CREATETIEM)) {
+                    if (url.startsWith(API_REQ_KOUSYOU_CREATEITEM)) {
                         String[] requestData = request.split("&");
                         int[] materials = {0, 0, 0, 0};
                         JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
@@ -1019,6 +1022,40 @@ public class KcaService extends Service {
                             questTracker.updateIdCountTracker("605");
                             questTracker.updateIdCountTracker("607");
                             updateQuestView();
+
+                            if (KcaDevelopPopupService.isActive()) {
+                                String itemname = "";
+                                int itemtype = 0;
+                                String itemcount = "";
+
+                                if (itemKcId > 0) {
+                                    JsonObject itemData = KcaApiData.getKcItemStatusById(itemKcId, "name,type");
+                                    itemname = KcaApiData.getItemTranslation(itemData.get("name").getAsString());
+                                    itemtype = itemData.get("type").getAsJsonArray().get(3).getAsInt();
+                                    itemcount = String.format("(%d)", KcaApiData.getItemCountByKcId(itemKcId));
+                                } else {
+                                    itemname = getStringWithLocale(R.string.develop_failed_text);
+                                    itemtype = 999;
+                                }
+
+                                JsonObject shipData = KcaApiData.getKcShipDataById(flagship, "name");
+                                String shipname = KcaApiData.getShipTranslation(shipData.get("name").getAsString(), false);
+
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                String timetext  = dateFormat.format(new Date());
+
+                                JsonObject equipdevdata = new JsonObject();
+                                equipdevdata.addProperty("flagship", shipname);
+                                equipdevdata.addProperty("name", itemname);
+                                equipdevdata.addProperty("type", itemtype);
+                                equipdevdata.addProperty("count", itemcount);
+                                equipdevdata.addProperty("time", timetext);
+
+                                Intent qintent = new Intent(getBaseContext(), KcaDevelopPopupService.class);
+                                qintent.setAction(KcaDevelopPopupService.DEV_DATA_ACTION);
+                                qintent.putExtra("data", equipdevdata.toString());
+                                startService(qintent);
+                            }
                         }
                     }
 
@@ -1053,7 +1090,7 @@ public class KcaService extends Service {
                         updateQuestView();
                     }
 
-                    if (url.startsWith(API_REQ_KOUSYOU_CREATESHIP)) {
+                    if (url.equals(API_REQ_KOUSYOU_CREATESHIP)) {
                         String[] requestData = request.split("&");
                         for (int i = 0; i < requestData.length; i++) {
                             String decodedData = URLDecoder.decode(requestData[i], "utf-8");
@@ -1067,10 +1104,34 @@ public class KcaService extends Service {
                         updateQuestView();
                     }
 
+                    if (url.equals(API_REQ_KOUSYOU_CREATESHIP_SPEEDCHANGE)) {
+                        int kdockid = -1;
+                        String[] requestData = request.split("&");
+                        for (int i = 0; i < requestData.length; i++) {
+                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                            if (decodedData.startsWith("api_kdock_id=")) {
+                                kdockid = Integer.valueOf(decodedData.replace("api_kdock_id=", "")) - 1;
+                                break;
+                            }
+                        }
+                        Log.e("KCA-S", ""+kdockid);
+                        if (kdockid > -1) {
+                            JsonArray kdata = dbHelper.getJsonArrayValue(DB_KEY_KDOCKDATA);
+                            if (kdata != null) {
+                                JsonObject item = kdata.get(kdockid).getAsJsonObject();
+                                item.addProperty("api_complete_time", 0);
+                                kdata.set(kdockid, item);
+                            }
+                            dbHelper.putValue(DB_KEY_KDOCKDATA, kdata.toString());
+                        }
+                    }
+
                     if (url.startsWith(API_REQ_KOUSYOU_GETSHIP)) {
                         if (jsonDataObj.has("api_data")) {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                             KcaApiData.addUserShip(api_data);
+                            JsonArray api_kdock = api_data.getAsJsonArray("api_kdock");
+                            dbHelper.putValue(DB_KEY_KDOCKDATA, api_kdock.toString());
                         }
                     }
 
@@ -1088,20 +1149,23 @@ public class KcaService extends Service {
 
                     if (url.startsWith(API_GET_MEMBER_KDOCK)) {
                         Log.e("KCA", String.valueOf(checkKdockId));
-                        if (checkKdockId != -1 && jsonDataObj.has("api_data")) {
+                        if (jsonDataObj.has("api_data")) {
                             JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
-                            JsonObject api_kdock = api_data.get(checkKdockId).getAsJsonObject();
-                            JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-                            int flagship = deckInfoCalc.getKcShipList(portdeckdata, 0)[0];
-                            int[] materials = {0, 0, 0, 0, 0};
-                            for (int i = 0; i < materials.length; i++) {
-                                materials[i] = api_kdock.get(String.format("api_item%d", i + 1)).getAsInt();
+                            dbHelper.putValue(DB_KEY_KDOCKDATA, api_data.toString());
+                            if(checkKdockId != -1) {
+                                JsonObject api_kdock_item = api_data.get(checkKdockId).getAsJsonObject();
+                                JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+                                int flagship = deckInfoCalc.getKcShipList(portdeckdata, 0)[0];
+                                int[] materials = {0, 0, 0, 0, 0};
+                                for (int i = 0; i < materials.length; i++) {
+                                    materials[i] = api_kdock_item.get(String.format("api_item%d", i + 1)).getAsInt();
+                                }
+                                int created_ship_id = api_kdock_item.get("api_created_ship_id").getAsInt();
+                                if (isOpendbEnabled()) {
+                                    KcaOpendbAPI.sendShipDevData(flagship, materials[0], materials[1], materials[2], materials[3], materials[4], created_ship_id);
+                                }
+                                checkKdockId = -1;
                             }
-                            int created_ship_id = api_kdock.get("api_created_ship_id").getAsInt();
-                            if (isOpendbEnabled()) {
-                                KcaOpendbAPI.sendShipDevData(flagship, materials[0], materials[1], materials[2], materials[3], materials[4], created_ship_id);
-                            }
-                            checkKdockId = -1;
                         }
                     }
 

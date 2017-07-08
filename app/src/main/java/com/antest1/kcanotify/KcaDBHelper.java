@@ -71,6 +71,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         sb = new StringBuffer();
         sb.append(" CREATE TABLE ".concat(slotitem_table_name).concat(" ( "));
         sb.append(" KEY INTEGER PRIMARY KEY, ");
+        sb.append(" KCID INTEGER, ");
         sb.append(" VALUE TEXT ) ");
         db.execSQL(sb.toString());
         Log.e("KCA", "table generated");
@@ -157,16 +158,19 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     // for kca_userdata
     public String getValue(String key) {
         String value = null;
+        db = this.getReadableDatabase();
+        Cursor c = db.query(table_name, null, "KEY=?", new String[]{key}, null, null, null, null);
         try {
-            db = this.getReadableDatabase();
-            Cursor c = db.query(table_name, null, "KEY=?", new String[]{key}, null, null, null, null);
             if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
                 value = c.getString(c.getColumnIndex("VALUE"));
             }
-            c.close();
         } catch (Exception e) {
             recordErrorLog(ERROR_TYPE_DB, "getValue", key, "", getStringFromException(e));
+        } finally {
+            if(c != null) {
+                c.close();
+            }
         }
         return value;
     }
@@ -193,6 +197,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             reader.setLenient(true);
             return new Gson().fromJson(reader, JsonArray.class);
         } catch (Exception e) {
+            Log.e("KCA-DB", getStringFromException(e));
             return null;
         }
     }
@@ -216,6 +221,16 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         int result = 0;
         db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT KEY from ".concat(slotitem_table_name), null);
+        result = c.getCount();
+        c.close();
+        return result;
+    }
+
+
+    public int getItemCountByKcId(int id) {
+        int result = 0;
+        db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT KEY from ".concat(slotitem_table_name).concat(" WHERE KCID=".concat(String.valueOf(id))), null);
         result = c.getCount();
         c.close();
         return result;
@@ -246,8 +261,11 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     public void putItemValue(int key, String value) {
         db = this.getWritableDatabase();
+        JsonObject obj = new JsonParser().parse(value).getAsJsonObject();
+        int slotitem_id = obj.get("api_slotitem_id").getAsInt();
         ContentValues values = new ContentValues();
         values.put("KEY", key);
+        values.put("KCID", slotitem_id);
         values.put("VALUE", value);
         Cursor c = db.query(slotitem_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
         if (c.getCount() > 0) {
@@ -266,13 +284,15 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                 db = getWritableDatabase();
                 db.delete(slotitem_table_name, null, null);
                 db.beginTransaction();
-                statement = db.compileStatement("INSERT INTO ".concat(slotitem_table_name).concat(" (KEY, VALUE) values (?, ?)"));
+                statement = db.compileStatement("INSERT INTO ".concat(slotitem_table_name).concat(" (KEY, KCID, VALUE) values (?, ?, ?)"));
 
                 for (JsonElement item: api_data) {
                     int column = 1;
                     JsonObject item_data = item.getAsJsonObject();
                     String api_id = item_data.get("api_id").getAsString();
+                    String api_slotitem_id = item_data.get("api_slotitem_id").getAsString();
                     statement.bindString(column++, api_id);
+                    statement.bindString(column++, api_slotitem_id);
                     statement.bindString(column++, item_data.toString());
                     statement.execute();
                 }

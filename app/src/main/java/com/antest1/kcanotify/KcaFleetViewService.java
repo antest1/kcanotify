@@ -39,6 +39,7 @@ import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_KDOCKDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_FLEETVIEW;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -156,6 +157,8 @@ public class KcaFleetViewService extends Service {
             mView.findViewById(R.id.fleetview_head).setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.viewbutton_quest).setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
+            mView.findViewById(R.id.viewbutton_develop).setOnTouchListener(mViewTouchListener);
+            mView.findViewById(R.id.viewbutton_construction).setOnTouchListener(mViewTouchListener);
             for (int i = 0; i < 5; i++) {
                 mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
             }
@@ -322,6 +325,13 @@ public class KcaFleetViewService extends Service {
                             qintent = new Intent(getBaseContext(), KcaAkashiViewService.class);
                             qintent.setAction(SHOW_AKASHIVIEW_ACTION);
                             startService(qintent);
+                        } else if (id == mView.findViewById(R.id.viewbutton_develop).getId()) {
+                            qintent = new Intent(getBaseContext(), KcaDevelopPopupService.class);
+                            startService(qintent);
+                        } else if (id == mView.findViewById(R.id.viewbutton_construction).getId()) {
+                            qintent = new Intent(getBaseContext(), KcaConstructPopupService.class);
+                            qintent.setAction(KcaConstructPopupService.CONSTR_DATA_ACTION);
+                            startService(qintent);
                         } else {
                             for (int i = 0; i < 5; i++) {
                                 if (id == mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
@@ -335,6 +345,13 @@ public class KcaFleetViewService extends Service {
                     break;
             }
             return true;
+        }
+    };
+
+    private View.OnTouchListener mPopupTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return false;
         }
     };
 

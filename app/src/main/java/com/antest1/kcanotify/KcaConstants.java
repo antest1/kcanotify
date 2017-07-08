@@ -9,7 +9,7 @@ public final class KcaConstants {
     public static final String KCA_VERSION = "/kca/version.json";
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
     public static final String KCANOTIFY_USERITEM_CACHE_FILENAME = "kca_userslotitem";
-    public static final int KCANOTIFY_DB_VERSION = 2;
+    public static final int KCANOTIFY_DB_VERSION = 3;
     public static final int KCANOTIFY_QTDB_VERSION = 1;
 
     public static final String DB_KEY_STARTDATA = "key_startdata";
@@ -20,6 +20,7 @@ public final class KcaConstants {
     public static final String DB_KEY_BATTLEINFO = "key_battleinfo";
     public static final String DB_KEY_BATTLENODE = "key_battlenode";
     public static final String DB_KEY_QTRACKINFO = "key_qtrackinfo";
+    public static final String DB_KEY_KDOCKDATA = "key_kdockdata";
     public static final String DB_KEY_EXPTDAY = "key_exptday";
     public static final String DB_KEY_EXPCRNT = "key_expcrnt";
     public static final String DB_KEY_EXPTIME = "key_exptime";
@@ -69,7 +70,7 @@ public final class KcaConstants {
     public static final String API_REQ_NYUKYO_SPEEDCHAGNE = "/api_req_nyukyo/speedchange";
     public static final String API_REQ_HOKYU_CHARGE = "/api_req_hokyu/charge";
 
-    public static final String API_REQ_KOUSYOU_CREATETIEM = "/api_req_kousyou/createitem";
+    public static final String API_REQ_KOUSYOU_CREATEITEM = "/api_req_kousyou/createitem";
     public static final String API_REQ_KOUSYOU_DESTROYITEM = "/api_req_kousyou/destroyitem2";
     public static final String API_REQ_KOUSYOU_GETSHIP = "/api_req_kousyou/getship";
     public static final String API_REQ_KOUSYOU_DESTROYSHIP = "/api_req_kousyou/destroyship";
@@ -77,6 +78,7 @@ public final class KcaConstants {
 
     public static final String API_REQ_KOUSYOU_CREATESHIP = "/api_req_kousyou/createship";
     public static final String API_GET_MEMBER_KDOCK = "/api_get_member/kdock";
+    public static final String API_REQ_KOUSYOU_CREATESHIP_SPEEDCHANGE = "/api_req_kousyou/createship_speedchange";
 
     public static final String API_GET_MEMBER_QUESTLIST = "/api_get_member/questlist";
     public static final String API_REQ_QUEST_START = "/api_req_quest/start";
