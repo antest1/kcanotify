@@ -512,23 +512,25 @@ public class SettingActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            switch (s) {
-                case SUCCESS:
-                    Toast.makeText(context,
-                            getStringWithLocale(R.string.sa_getupdate_finished),
-                            Toast.LENGTH_LONG).show();
-                    break;
-                case FAILURE:
-                    if (error_msg == null) error_msg = "null";
-                    Toast.makeText(context,
-                            String.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
-                            Toast.LENGTH_LONG).show();
-                    break;
-                case ERROR:
-                    Toast.makeText(context,
-                            "Error: ".concat(error_msg),
-                            Toast.LENGTH_LONG).show();
-                    break;
+            if (s != null) {
+                switch (s) {
+                    case SUCCESS:
+                        Toast.makeText(context,
+                                getStringWithLocale(R.string.sa_getupdate_finished),
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case FAILURE:
+                        if (error_msg == null) error_msg = "null";
+                        Toast.makeText(context,
+                                String.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case ERROR:
+                        Toast.makeText(context,
+                                "Error: ".concat(error_msg),
+                                Toast.LENGTH_LONG).show();
+                        break;
+                }
             }
         }
     }

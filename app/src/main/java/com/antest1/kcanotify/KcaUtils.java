@@ -281,6 +281,7 @@ public class KcaUtils {
 
     // True: latest, False: need to update
     public static boolean compareVersion(String version_current, String version_default) {
+        if (version_current != null && version_current.length() == 0) return false;
         if (version_current.equals(version_default)) return true;
         String[] current_split = version_current.replace("r",".0.").split("\\.");
         String[] default_split = version_default.replace("r",".0.").split("\\.");

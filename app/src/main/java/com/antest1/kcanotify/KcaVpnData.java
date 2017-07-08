@@ -150,7 +150,7 @@ public class KcaVpnData {
                     Log.e("KCAV", portToUri.get(tport) + " ignored");
                     return;
                 }
-                if (portToResponseHeaderPart.get(tport).length() == 0) {
+                if (portToResponseHeaderPart.indexOfKey(tport) >= 0 && portToResponseHeaderPart.get(tport).length() == 0) {
                     portToResponseData.put(tport, new Byte[]{});
                     String prevResponseHeaderPart = portToResponseHeaderPart.get(tport);
                     String responseDataStr = new String(data);
