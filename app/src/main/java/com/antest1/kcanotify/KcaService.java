@@ -299,13 +299,16 @@ public class KcaService extends Service {
                     .setContentIntent(pendingIntent)
                     .setOnlyAlertOnce(true)
                     .setContentText(content2)
-                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(content2))
                     .setOngoing(true).setAutoCancel(false);
             viewNotificationFirstTime = false;
         }
 
         if (isMissionTimerViewEnabled() && content2 != null) {
             viewNotificationBuilder.setContentText(content2);
+            viewNotificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
+                    .bigText(content2));
             //viewNotificationBuilder.setStyle(viewNotificationText.setSummaryText(content2));
         }
 
@@ -355,6 +358,8 @@ public class KcaService extends Service {
                     PendingIntent.FLAG_CANCEL_CURRENT);
             viewNotificationBuilder.setContentTitle(notifiTitle.trim());
             viewNotificationBuilder.setContentText(expeditionString);
+            viewNotificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
+                    .bigText(expeditionString));
             notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.setContentIntent(pendingIntent).build());
         }
     }
