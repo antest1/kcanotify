@@ -387,16 +387,14 @@
 	},
 	"182": {
 		"code": "A77",
-		"name": "Reorganize the Elite 4th Carrier Division!",
-		"desc": "Have Ise (or Kai) as flagship with Hyuuga (or Kai) as 2nd ship, both are Level 50 higher, 1 CL, 2 DD and 1 additional ship in Fleet 1.",
-		"memo": "\u27a3Rewards a Skilled Crew Member",
+		"name": "精銳“第四航空戦隊”再次編成！",
+		"desc": "編成任務：配備第一艦隊旗艦和二號艦為Lv50以上並改造為航空戰艦的“伊勢改”“日向改”，伴隨輕巡洋艦1艘、驅逐艦2艘再編成精銳“第四航空戦隊”！（伊勢和日向的位置可以調換但必須為一二號位，任務前置待驗證。）",
 		"unlock": [ 859 ]
 	},
 	"183": {
 		"code": "A78",
-		"name": "Reorganize the New 4th Torpedo Squadron!",
-		"desc": "Have Yura Kai Ni as flagship, Yuudachi. Murasame, Harusame, Samidare and 1 DD in Fleet 1.",
-		"memo": "\u27a3Rewards a Furniture Fairy",
+		"name": "新編“第四水雷戦隊”編成！",
+		"desc": "編成任務：配備第一艦隊旗艦為“由良改二”，伴隨“村雨”“夕立”“春雨”“五月雨”和其他一艘驅逐艦配備，新編成「第四水雷戦隊」！",
 		"unlock": [ 860 ]
 	},
 
@@ -996,15 +994,13 @@
 	},
 	"859": {
 		"code": "B102",
-		"name": "Elite 4th Carrier Division, Sortie!",
-		"desc": "Sortie a fleet with Ise as flagship with Hyuuga as 2nd ship, 1 CL, 2 DD and 1 additional ship to [W2-5] and [W3-5]. A-Rank+? the boss nodes of each.",
-		"memo": "\u27a3Rewards either a Medal OR a Skilled Crew Member. Press F10 to clear the overlay."
+		"name": "精銳“第四航空戰隊”，拔錨！",
+		"desc": "精銳“第四航空戰隊”出擊任務：以精銳航空戰艦為主力再編成的“第四航空戰隊”，拔錨！前往沖之島海戰鬥警戒（2-5）北方阿留申海域（3-5）實施戰鬥巡邏，捕捉本海域的敵方艦隊主力，並殲滅她們！（以Lv50以上並改造為航戰的伊勢日向為一二號位，僚艦輕巡洋艦1艘，驅逐艦2艘，剩餘位置任意的艦隊在2-5和3-5的boss點分別取得一次A勝利，任務前置待驗證。）"
 	},
 	"860": {
 		"code": "B103",
-		"name": "Flagship Yura, Sortie!",
-		"desc": "Sortie a fleet with Yura Kai Ni as flagship, any 2 of Yuudachi, Murasame, Harusame, Samidare, Akizuki and 3 additional ships to [W2-3] and [W5-1]. S-Rank? the boss nodes of each.",
-		"memo": "\u27a3Rewards either a Daihatsu Landing Craft OR a Reinforcement Expansion. Press F10 to clear the overlay."
+		"name": "旗艦「由良」，拔錨！",
+		"desc": "出擊任務：以“由良改二”為旗艦，配備伴隨艦“村雨”“夕立”“春雨”“五月雨”以及“秋月”中的2艘配備的第一艦隊，殲滅東部奧廖爾海（2-3）南方海域前方（5-1）的敵人!（以由良改二為旗艦，僚艦村雨、夕立、春雨、五月雨、秋月中的2艘和3艘任意艦出擊2-3和5-1的boss點各S勝一次。任務前置待驗證。）"
 	},
 
 	"201": {
@@ -1782,22 +1778,18 @@
 	},
 	"664": {
 		"code": "F56",
-		"name": "Utilizing Radar Technology for Shooting Equipment",
-		"desc": "Prepare 8000 ammo and steel. Scrap 10 Radars.",
-		"memo": "\u2718Consumes the resources.\n\u27a3Rewards a Medal OR a New Type Artillery Armament Materials. Press F10 to clear the overlay.",
-		"unlock": [ 665 ]
+		"name": "活用電探技術的射擊裝置",
+		"desc": "工廠任務：研究並活用電探技術的射擊裝置。廢棄10個「電探」系的裝備，準備8000彈藥及鋼鐵！※任務完成後，準備好的資源會消耗掉。能夠選擇性獲得「勳章」或「新型火炮兵裝資材」。"
 	},
 	"665": {
 		"code": "F57",
-		"name": "Cooperation of the Consumer Industry",
-		"desc": "Prepare 12000 fuel. Scrap 16 Small Caliber Main Guns.",
-		"memo": "\u2718Consumes the resources.\n\u27a3Rewards a Medal OR a New Type Artillery Armament Materials. Press F10 to clear the overlay."
+		"name": "在民生產業合作",
+		"desc": "工廠任務：發放軍需物資，與民生產業合作。廢棄16個「小口徑主炮」系的裝備，準備12000燃料！※任務完成後，準備好的資源會消耗掉。能夠選擇性獲得「勳章」或「新型火炮兵裝資材」。"
 	},
 	"666": {
 		"code": "F58",
-		"name": "Organize the Elite Zuiun Group",
-		"desc": "Have a Skilled Crew Member, 2 Type 99 Dive Bombers and 2 Zuiun. Set Hyuuga Kai as secretary. Equip her with a \u2605max Zuiun (634 Air Group) in her 4th slot. Scrap 2 Drum Canisters.",
-		"memo": "\u2718Consumes the items and a Skilled Crew Member. Make sure the equipment is unlocked!\n\u27a3Rewards a Zuiun (634 Air Group / Skilled)"
+		"name": "精銳「瑞雲」隊編成",
+		"desc": "以日向改為秘書艦，將改修max的瑞雲(六三四空)裝備在第四個格子，廢棄2個桶(運輸用)，準備好2個九九式艦爆和2個瑞雲!※新飛行隊編成中需要熟練搭乘員。"
 	},
 
 	"701": {
