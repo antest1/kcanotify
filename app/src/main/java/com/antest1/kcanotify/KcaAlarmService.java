@@ -169,12 +169,10 @@ public class KcaAlarmService extends Service {
                             int shipId = data.get("ship_id").getAsInt();
                             String shipName = "";
                             if (shipId != -1) {
-                                if (!isGameDataLoaded()) {
-                                    JsonObject cachedData = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
-                                    KcaApiData.getKcGameData(cachedData.getAsJsonObject("api_data"));
-                                }
                                 JsonObject kcShipData = KcaApiData.getKcShipDataById(shipId, "name");
-                                shipName = getShipTranslation(kcShipData.get("name").getAsString(), false);
+                                if (kcShipData != null) {
+                                    shipName = getShipTranslation(kcShipData.get("name").getAsString(), false);
+                                }
                             }
                             int nid = getNotificationId(NOTI_DOCK, dockId);
                             notificationManager.notify(nid, createDockingNotification(dockId, shipName, nid));
