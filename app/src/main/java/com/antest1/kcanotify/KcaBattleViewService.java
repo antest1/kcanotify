@@ -1597,6 +1597,8 @@ public class KcaBattleViewService extends Service {
     private void sendReport(Exception e, int type) {
         error_flag = true;
         if (mView != null) mView.setVisibility(View.GONE);
+        if (itemView != null) itemView.setVisibility(View.GONE);
+        if (menuView != null) menuView.setVisibility(View.GONE);
 
         Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.battleview_error), Toast.LENGTH_SHORT).show();
 
