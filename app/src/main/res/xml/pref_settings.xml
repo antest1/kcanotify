@@ -103,13 +103,13 @@
             android:key="questview_use"
             android:summary="@string/setting_menu_view_desc_questview_use"
             android:title="@string/setting_menu_view_title_questview_use" />
-        -->
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="fullmorale_setting"
             android:summary="@string/setting_menu_view_desc_fullmorale_setting"
             android:title="@string/setting_menu_view_title_fullmorale_setting" />
-
+        -->
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_menu_noti_head">
         <ListPreference
@@ -174,7 +174,7 @@
             android:summary="@string/setting_menu_app_desc_updatecheck"
             android:title="@string/setting_menu_app_title_updatecheck" />
         <ListPreference
-            android:defaultValue="1"
+            android:defaultValue="0"
             android:entries="@array/downloadSiteOption"
             android:entryValues="@array/downloadSiteOptionValue"
             android:key="apk_download_site"
