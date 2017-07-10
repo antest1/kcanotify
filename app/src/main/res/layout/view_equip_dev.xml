@@ -30,7 +30,7 @@
                     android:text="@string/viewmenu_develop_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView2"
+                    android:id="@+id/view_ed_title"
                     android:layout_weight="1"
                     android:textColor="@color/white"
                     android:layout_gravity="center_vertical"

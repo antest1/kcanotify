@@ -98,6 +98,7 @@ public class KcaDevelopPopupService extends Service {
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
             mView = mInflater.inflate(R.layout.view_equip_dev, null);
             mView.setOnTouchListener(mViewTouchListener);
+            ((TextView) mView.findViewById(R.id.view_ed_title)).setText(getStringWithLocale(R.string.viewmenu_develop_title));
 
             mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             popupWidth = mView.getMeasuredWidth();

@@ -1119,6 +1119,7 @@ public class KcaBattleViewService extends Service {
                 itemView = mInflater.inflate(R.layout.view_battleview_items, null);
                 acView = mInflater.inflate(R.layout.view_battleview_aircombat, null);
                 acView.findViewById(R.id.view_ac_head).setOnTouchListener(acViewTouchListener);
+                ((TextView) acView.findViewById(R.id.view_ac_title)).setText(getStringWithLocale(R.string.battleview_menu0));
 
                 mParams = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.MATCH_PARENT,

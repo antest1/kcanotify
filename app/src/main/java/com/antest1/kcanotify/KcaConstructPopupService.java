@@ -90,6 +90,7 @@ public class KcaConstructPopupService extends Service {
             LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mView = mInflater.inflate(R.layout.view_ship_constr, null);
             mView.setOnTouchListener(mViewTouchListener);
+            ((TextView) mView.findViewById(R.id.view_sc_title)).setText(getStringWithLocale(R.string.viewmenu_construction_title));
 
             mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             popupWidth = mView.getMeasuredWidth();

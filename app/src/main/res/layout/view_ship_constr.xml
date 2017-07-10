@@ -24,13 +24,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:paddingBottom="2dp"
-                android:id="@+id/view_ed_head">
+                android:id="@+id/view_sc_head">
 
                 <TextView
                     android:text="@string/viewmenu_construction_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView2"
+                    android:id="@+id/view_sc_title"
                     android:layout_weight="1"
                     android:textColor="@color/white"
                     android:layout_gravity="center_vertical"
