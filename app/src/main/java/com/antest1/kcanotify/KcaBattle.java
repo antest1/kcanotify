@@ -872,6 +872,7 @@ public class KcaBattle {
 
                     qtrackData.addProperty("world", currentMapArea);
                     qtrackData.addProperty("map", currentMapNo);
+                    qtrackData.addProperty("node", currentNode);
                     qtrackData.addProperty("isboss", isBossReached);
                     qtrackData.add("ship_ke", ship_ke);
                     qtrackData.add("deck_port", deckportdata);

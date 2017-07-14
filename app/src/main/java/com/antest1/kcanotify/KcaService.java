@@ -600,11 +600,18 @@ public class KcaService extends Service {
                         questTracker.updateIdCountTracker("404");
 
                         String api_name = api_data.get("api_quest_name").getAsString();
-                        if (api_name.contains("\\u6771\\u4eac\\u6025\\u884c")) { // 도쿄급행
+                        if (api_name.equals("\\u8b66\\u5099\\u4efb\\u52d9")) { // 경계임무 (3)
+                            questTracker.updateIdCountTracker("426", 0);
+                        } else if (api_name.equals("\\u5bfe\\u6f5c\\u8b66\\u6212\\u4efb\\u52d9")) { // 대잠경계임무 (4)
+                            questTracker.updateIdCountTracker("426", 1);
+                        } else if (api_name.equals("\\u6d77\\u4e0a\\u8b77\\u885b\\u4efb\\u52d9")) { // 해상호위 (5)
+                            questTracker.updateIdCountTracker("424");
+                            questTracker.updateIdCountTracker("426", 2);
+                        } else if (api_name.equals("\\u5f37\\u884c\\u5075\\u5bdf\\u4efb\\u52d9")) { // 강행정찰임무 (10)
+                            questTracker.updateIdCountTracker("426", 3);
+                        } else if (api_name.contains("\\u6771\\u4eac\\u6025\\u884c")) { // 도쿄급행 (37, 38)
                             questTracker.updateIdCountTracker("410");
                             questTracker.updateIdCountTracker("411");
-                        } else if (api_name.equals("\\u6d77\\u4e0a\\u8b77\\u885b\\u4efb\\u52d9")) { // 해상호위
-                            questTracker.updateIdCountTracker("424");
                         }
                         updateQuestView();
                     }

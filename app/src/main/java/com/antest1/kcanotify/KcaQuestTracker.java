@@ -16,6 +16,7 @@ import org.json.JSONArray;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -26,7 +27,9 @@ import java.util.concurrent.TimeUnit;
 import static android.R.attr.id;
 import static android.R.attr.key;
 import static android.R.attr.value;
+import static com.antest1.kcanotify.KcaApiData.STYPE_AO;
 import static com.antest1.kcanotify.KcaApiData.STYPE_AP;
+import static com.antest1.kcanotify.KcaApiData.STYPE_AV;
 import static com.antest1.kcanotify.KcaApiData.STYPE_BB;
 import static com.antest1.kcanotify.KcaApiData.STYPE_BBV;
 import static com.antest1.kcanotify.KcaApiData.STYPE_CA;
@@ -45,6 +48,7 @@ import static com.antest1.kcanotify.KcaConstants.API_REQ_MAP_START;
 public class KcaQuestTracker extends SQLiteOpenHelper {
     private static final String qt_db_name = "quest_track_db";
     private static final String qt_table_name = "quest_track_table";
+    private final int[] quarterly_quest_id = {426, 637, 643, 822, 852, 861, 862};
 
     public KcaQuestTracker(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, qt_db_name, factory, version);
@@ -178,7 +182,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     }
                     break;
                 case 5: // Quarterly, Else
-                    if (id == 822 || id == 854 || id == 637 || id == 643) { // Bq1, Bq2, F35, F39 (Quarterly)
+                    if (Arrays.binarySearch(quarterly_quest_id, id) >= 0) { // Bq1 ~ Bq4, D24, F35, F39 (Quarterly)
                         int quest_month = Integer.parseInt(quest_time[1]);
                         int quest_quarter = quest_month - quest_month % 3;
                         int current_month = Integer.parseInt(current_time[1]);
@@ -213,7 +217,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 .concat(" WHERE KEY=?"), new String[]{id});
         if (c.moveToFirst()) {
             info.add(c.getInt(c.getColumnIndex("CND0")));
-            if (id.equals("214") || id.equals("854")) {
+            if (id.equals("214") || id.equals("426") || id.equals("854")) {
                 for (int i = 1; i < 4; i++) {
                     info.add(c.getInt(c.getColumnIndex("CND".concat(String.valueOf(i)))));
                 }
@@ -224,13 +228,17 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
     }
 
     public void updateIdCountTracker(String id) {
+        updateIdCountTracker(id, 0);
+    }
+
+    public void updateIdCountTracker(String id, int idx) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor c = db.rawQuery("SELECT KEY, CND0 from "
+        Cursor c = db.rawQuery("SELECT KEY, CND" + String.valueOf(idx) + " from "
                 .concat(qt_table_name)
                 .concat(" WHERE KEY=? AND ACTIVE=1"), new String[]{id});
         if (c.moveToFirst()) {
             ContentValues values = new ContentValues();
-            values.put("CND0", c.getInt(c.getColumnIndex("CND0")) + 1);
+            values.put("CND"+idx, c.getInt(c.getColumnIndex("CND"+idx)) + 1);
             db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{id});
         }
         c.close();
@@ -258,6 +266,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
 
         int world = data.get("world").getAsInt();
         int map = data.get("map").getAsInt();
+        int node = data.get("node").getAsInt();
         boolean isboss = data.get("isboss").getAsBoolean();
         String rank = data.get("result").getAsString();
         JsonArray ship_ke = data.getAsJsonArray("ship_ke");
@@ -468,10 +477,42 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         targetData.set(3, new JsonPrimitive(1));
                     updateTarget.add(key, targetData);
                     break;
+                case "861": // 1-6 분기퀘
+                    boolean isend = node == 17;
+                    requiredShip = 0;
+                    int requiredBBV = 0;
+                    int requiredAO = 0;
+                    for (int i = 0; i < fleet_data.size(); i++) {
+                        int item = fleet_data.get(i).getAsInt();
+                        if (item == -1) break;
+                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
+                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
+                        if (kcShipType == STYPE_BBV) requiredBBV += 1;
+                        if (kcShipType == STYPE_AO) requiredAO += 1;
+                    }
+                    if (requiredBBV >= 2) requiredShip += 1;
+                    if (requiredAO >= 2) requiredShip += 1;
+                    wflag = world == 1 && map == 6 && isend && isGoodRank(rank) && requiredShip > 0;
+                    break;
+                case "862": // 6-3 분기퀘
+                    requiredShip = 0;
+                    int requiredCL = 0;
+                    int requiredAV = 0;
+                    for (int i = 0; i < fleet_data.size(); i++) {
+                        int item = fleet_data.get(i).getAsInt();
+                        if (item == -1) break;
+                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
+                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
+                        if (kcShipType == STYPE_CL) requiredCL += 1;
+                        if (kcShipType == STYPE_AV) requiredAV += 1;
+                    }
+                    if (requiredCL >= 2) requiredShip += 1;
+                    if (requiredAV >= 1) requiredShip += 1;
+                    wflag = world == 6 && map == 3 && isboss && isGoodRank(rank) && requiredShip == 2;
+                    break;
                 default:
                     break;
             }
-
             if (wflag) updateTarget.addProperty(key, cond0 + 1);
         }
 
