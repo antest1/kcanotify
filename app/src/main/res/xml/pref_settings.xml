@@ -33,6 +33,12 @@
             android:summary="@string/setting_menu_kand_desc_exp_realtime_show"
             android:title="@string/setting_menu_kand_title_exp_realtime_show" />
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="set_priority"
+            android:summary="@string/setting_menu_kand_desc_set_noti_priority"
+            android:title="@string/setting_menu_kand_title_set_noti_priority" />
+
         <Preference
             android:defaultValue=""
             android:key="fairy_select"

@@ -138,6 +138,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_opendb">向OpenDB汇报数据</string>
     <string name="setting_menu_kand_title_exp_realtime_show">跟踪远征时间</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">在通知栏显示剩余时间</string>
+    <string name="setting_menu_kand_title_set_noti_priority">Set Notification Priority to HIGH</string>
+    <string name="setting_menu_kand_desc_set_noti_priority">When checked, the navbar will always be the top of notifications</string>
     <string name="setting_menu_kand_title_game_data_down">下载游戏数据</string>
     <string name="setting_menu_kand_desc_game_data_down">在数据没有自动加载时使用</string>
     <string name="setting_menu_kand_title_adv_network">高级网络设置</string>
@@ -340,8 +342,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_develop_title">开发信息</string>
     <string name="viewmenu_construction_title">建造信息</string>
     <string name="develop_failed_text">企鹅玩偶</string>
-    <string name="setting_menu_view_title_fullmorale_setting">完整显示士气值</string>
-    <string name="setting_menu_view_desc_fullmorale_setting">通知栏完整显示士气值</string>
     <string name="action_errorlog">错误日志</string>
     <string name="errlog_dialog_message">你想清空所有错误日志吗？</string>
     <string name="errlog_cpy_to_clipboard">已复制文本到剪贴板</string>

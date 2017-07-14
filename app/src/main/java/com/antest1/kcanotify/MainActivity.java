@@ -84,6 +84,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_NS;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_QUESTVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
@@ -398,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_SHOWDROP_SETTING:
                         editor.putBoolean(prefKey, true);
                         break;
-                    case PREF_FULLMORALE_SETTING:
+                    case PREF_KCA_SET_PRIORITY:
                         editor.putBoolean(prefKey, false);
                         break;
                     case PREF_KCA_LANGUAGE:

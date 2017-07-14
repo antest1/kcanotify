@@ -54,6 +54,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static android.R.attr.id;
+import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
+import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_HIGH;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
@@ -378,6 +381,20 @@ public class KcaService extends Service {
         if (viewNotificationBuilder != null) {
             int id = getId("ic_stat_notify_".concat(String.valueOf(type)), R.mipmap.class);
             viewNotificationBuilder.setSmallIcon(id);
+            Intent aIntent = new Intent(KcaService.this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+            notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.setContentIntent(pendingIntent).build());
+        }
+    }
+
+    private void updateNotificationPriority(boolean isprior) {
+        if (viewNotificationBuilder != null) {
+            if (isprior) {
+                viewNotificationBuilder.setPriority(IMPORTANCE_HIGH);
+            } else {
+                viewNotificationBuilder.setPriority(IMPORTANCE_DEFAULT);
+            }
             Intent aIntent = new Intent(KcaService.this, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT);
@@ -1571,6 +1588,10 @@ public class KcaService extends Service {
                 updateExpViewNotification();
             }
 
+            if (url.startsWith(KCA_API_PREF_PRIORITY_CHANGED)) {
+                updateNotificationPriority(getPriority());
+            }
+
             if (url.startsWith(KCA_API_NOTI_EXP_FIN)) {
                 // Currently Nothing
             }
@@ -1721,6 +1742,10 @@ public class KcaService extends Service {
 
     private boolean isMissionTimerViewEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_EXP_VIEW);
+    }
+
+    private boolean getPriority() {
+        return getBooleanPreferences(getApplicationContext(), PREF_KCA_SET_PRIORITY);
     }
 
     private boolean isExpNotifyEnabled() {

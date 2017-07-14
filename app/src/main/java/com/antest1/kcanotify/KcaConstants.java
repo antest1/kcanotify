@@ -190,6 +190,7 @@ public final class KcaConstants {
     public static final String KCA_API_PREF_CN_CHANGED = "/kca_api/pref_cn_changed";
     public static final String KCA_API_PREF_EXPVIEW_CHANGED = "/kca_api/pref_expview_changed";
     public static final String KCA_API_PREF_FAIRY_CHANGED = "/kca_api/pref_fairy_changed";
+    public static final String KCA_API_PREF_PRIORITY_CHANGED = "/kca_api/pref_priority_changed";
     public static final String KCA_API_PREF_NOTICOUNT_CHANGED = "/kca_api/pref_noticount_changed";
     public static final String KCA_API_PREF_LANGUAGE_CHANGED = "/kca_api/pref_language_changed";
 
@@ -295,6 +296,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
     public static final String PREF_OPENDB_API_USE = "opendb_api_use";
     public static final String PREF_KCA_EXP_VIEW = "expedition_view";
+    public static final String PREF_KCA_SET_PRIORITY = "set_priority";
     public static final String PREF_KCA_BATTLEVIEW_USE = "battleview_use";
     public static final String PREF_KCA_QUESTVIEW_USE = "questview_use";
     public static final String PREF_ACCESSIBILITY_SETTING = "accessibility_setting";
