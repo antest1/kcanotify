@@ -1138,7 +1138,7 @@
 		"code": "B96",
 		"name": "Remodeled Light Attack Carrier, Deploy to the Front Lines!",
 		"desc": "Sortie Suzuya-Kou Kai Ni (not CAV) as flagship to [W6-2] and [W6-5]. S-Rank the boss nodes of each.",
-		"memo": "\u2623NOTICE\u2623 The CAV remodel cannot complete this quest. Suzuya must be a CVL.\n\u27a3Rewards a Type 0 Fighter Model 63 (Fighter-bomber) and a 8cm High-angle Gun Kai + Extra Machine Guns"
+		"memo": "\u2623NOTICE\u2623 The CAV remodel cannot complete this quest. Suzuya must be a CVL. \u27a3Rewards a Type 0 Fighter Model 63 (Fighter-bomber) and a 8cm High-angle Gun Kai + Extra Machine Guns"
 	},
 	"853": {
 		"code": "B97",
@@ -1169,7 +1169,7 @@
 		"code": "B101",
 		"name": "New Seventh Squadron, Sortie!",
 		"desc": "Sortie a fleet with Kumano Kai Ni as flagship with Suzuya Kai Ni as 2nd ship, Mogami Kai, Mikuma Kai, up to 2 additional ships to [W4-5] and [W6-2]. S-Rank the boss nodes of each.",
-		"memo": "\u2623NOTICE\u2623 The CVL remodel of Kumano and Suzuya can complete this quest\n\u27a3Rewards either a Medal OR a New Type Artillery Armament Materials OR a Type 0 Fighter Model 63 (Fighter-bomber)"
+		"memo": "\u2623NOTICE\u2623 The CVL remodel of Kumano and Suzuya can complete this quest \u27a3Rewards either a Medal OR a New Type Artillery Armament Materials OR a Type 0 Fighter Model 63 (Fighter-bomber)"
 	},
     "859": {
         "code": "B102",
@@ -1384,6 +1384,16 @@
 		"name": "Ranking Points Boost Mission! \"Operation Z\", First Part",
 		"desc": "Organize a fleet and score an A rank at the boss nodes of [W2-4], [W6-1], [W6-3], and S rank the boss node at [W6-4].",
 		"memo": "\u27a3Rewards 3 Mamiya, 4 Screws and 350 Ranking Points"
+	},
+	"861": {
+		"code": "Bq3",
+		"name": "Quarterly [W1-6]",
+		"desc": "Sortie 2 BBV/AO and 4 additional ships to [W1-6]. Reach node N twice."	
+	},
+	"862": {
+		"code": "Bq4",
+		"name": "Quarterly [W6-3]",
+		"desc": "Sortie 1 AV, 2 CL and 3 additional ships to [W6-3]. A-Rank+ the boss node twice."
 	},
 
 	"301": {
@@ -1622,6 +1632,11 @@
 		"desc": "Complete Expedition 4, 5 and 9.",
 		"unlock": [663]
 	},
+	"426": {
+        "code": "D24",
+        "name": "Quarterly Expeditions",
+        "desc": "Complete Expeditions 3, 4, 5 and 10."
+    },
 
 	"501": {
 		"code": "E1",
@@ -1991,71 +2006,83 @@
 		"code": "F49",
 		"name": "Organize the Seiran 631 Air Group!",
 		"desc": "Have I-401 or I-13 or I-14 as your secretary and arm them with a Prototype Seiran in the first slot and a Zuiun (631 Air Group) in the second slot.",
-		"memo": "\u2718Consumes the items. Make sure the equipment is unlocked!\n\u27a3Rewards an Seiran (631 Air Group)"
+		"memo": "\u2718Consumes the items. Make sure the equipment is unlocked! \u27a3Rewards an Seiran (631 Air Group)"
 	},
 	"657": {
 		"code": "SF3",
 		"name": "Spring Preparation Mission: Hina Matsuri Preparations!",
 		"desc": "Have 5000 furniture coins, two Type 99 Dive Bombers and two 61cm Triple Torpedo Mounts in your inventory. Scrap two 14cm Single Gun Mounts.",
-		"memo": "\u2718Consumes the items. Make sure the equipment is unlocked! \n\u27a3Rewards 1 Furniture Fairy and 1 Hishimochi"
+		"memo": "\u2718Consumes the items. Make sure the equipment is unlocked!  \u27a3Rewards 1 Furniture Fairy and 1 Hishimochi"
 	},
 	"658": {
 		"code": "F50",
 		"name": "Enhance Submarine Armaments",
 		"desc": "Have 120 development materials, three 61cm Quad (Oxygen) Torpedo Mounts and three Type 93 SONARs in your inventory. Scrap four 61cm Triple Torpedo Mounts.",
-		"memo": "\u2718Consumes the items. Make sure the equipment is unlocked!\n\u27a3Rewards an Late Model Bow Torpedo Mount (6 Tubes)"
+		"memo": "\u2718Consumes the items. Make sure the equipment is unlocked! \u27a3Rewards an Late Model Bow Torpedo Mount (6 Tubes)"
 	},
 	"659": {
 		"code": "F51",
 		"name": "Organize the New Elite Seaplane Group",
 		"desc": "Have a secretary ship equipped with a Maxed Expertise and Max Star Type 2 Seaplane Fighter Kai and then Scrap 2 Type 21 Zero Fighter and 2 Zuiun in your inventory while the quest is activated.",
-		"memo": "\u2718Consumes the items and a Skilled Crew Member. Make sure the equipment is unlocked!\n\u27a3Rewards a Type 2 Seaplane Fighter Kai (Skilled)"
+		"memo": "\u2718Consumes the items and a Skilled Crew Member. Make sure the equipment is unlocked! \u27a3Rewards a Type 2 Seaplane Fighter Kai (Skilled)"
 	},
 	"660": {
 		"code": "F52",
 		"name": "Expand the New Elite Seaplane Group",
 		"desc": "Have a secretary ship equipped with a Maxed Expertise and Max Star Type 2 Seaplane Fighter Kai and then Scrap 2 Type 21 Zero Fighter and 2 Zuiun in your inventory while the quest is activated.",
-		"memo": "\u2718Consumes the items and a Skilled Crew Member. Make sure the equipment is unlocked!\n\u27a3Rewards a Type 2 Seaplane Fighter Kai (Skilled)"
+		"memo": "\u2718Consumes the items and a Skilled Crew Member. Make sure the equipment is unlocked! \u27a3Rewards a Type 2 Seaplane Fighter Kai (Skilled)"
 	},
 	"661": {
 		"code": "F53",
 		"name": "Reinforcement of New Model Cannon Improvement, Start!",
 		"desc": "Prepare 6000 steel. Scrap 10 Secondary Guns.",
-		"memo": "\u2718Consumes the resources.\n\u27a3Rewards a New Type Artillery Armament Materials",
+		"memo": "\u2718Consumes the resources. \u27a3Rewards a New Type Artillery Armament Materials",
 		"unlock": [662]
 	},
 	"662": {
 		"code": "F54",
 		"name": "Development of New Type Equipment Fitting Research",
 		"desc": "Prepare 12000 steel. Scrap 10 Medium Caliber Main Guns.",
-		"memo": "\u2718Consumes the resources.\n\u27a3Rewards a Medal OR a New Type Artillery Armament Materials",
+		"memo": "\u2718Consumes the resources. \u27a3Rewards a Medal OR a New Type Artillery Armament Materials",
 		"unlock": [425]
 	},
 	"663": {
 		"code": "F55",
 		"name": "Quarterly Research of New Rigging Types",
 		"desc": "Prepare 18000 steel. Scrap 10 Large Caliber Main Guns.",
-		"memo": "\u2718Consumes the resources.\n\u27a3Rewards a Medal OR a New Type Artillery Armament Materials"
+		"memo": "\u2718Consumes the resources. \u27a3Rewards a Medal OR a New Type Artillery Armament Materials"
 	},
     "664": {
         "code": "F56",
         "name": "Utilization of Radar Technology for Fire Direction",
         "desc": "Have 8000 ammo and steel. Scrap 10 Radars.",
-        "memo": "\u2718Consumes the resources.\n\u27a3Rewards a Medal OR a New Model Artillery Armament Materials.",
+        "memo": "\u2718Consumes the resources. \u27a3Rewards a Medal OR a New Model Artillery Armament Materials.",
         "unlock": [ 665 ]
     },
     "665": {
         "code": "F57",
         "name": "In Cooperation With the Consumer Industry",
         "desc": "Have 12000 fuel. Scrap 16 Small Caliber Main Guns.",
-        "memo": "\u2718Consumes the resources.\n\u27a3Rewards a Furniture Fairy and either a Medal OR a New Model Artillery Armament Materials."
+        "memo": "\u2718Consumes the resources. \u27a3Rewards a Furniture Fairy and either a Medal OR a New Model Artillery Armament Materials."
     },
-    "666": {
+	"666": {
         "code": "F58",
         "name": "Form the Elite Zuiun Squadron!",
         "desc": "Have a Skilled Crew Member, 2 Type 99 Dive Bombers and 2 Zuiun. Set Hyuuga Kai as secretary. Equip a \u2605max Zuiun (634 Air Group) in her 4th slot. Scrap 2 Drum Canisters.",
         "memo": "\u2718Consumes the equipment and a Skilled Crew Member. Make sure the equipment is unlocked! \u27a3Rewards a Zuiun (634 Air Group / Skilled)"
     },
+    "667": {
+        "code": "F59",
+        "name": "Continue the Joint Effort With the Consumer Industry!",
+        "desc": "Have 15000 steel. Scrap 10 anti-air guns. High-angle guns do not count.",
+        "memo": "\u2718Consumes the resources. \u27a3Rewards 2 Combat Rations and either a Furniture Fairy OR a Medal"
+    },
+	"668": {
+		"code": "F60",
+		"name": "An Experimental New Kind of Combat Ration",
+        "desc": "Have 2 Combat Rations, 800 fuel and 150 Bauxite.",
+        "memo": "\u2718Consumes the resources and equipment. Make sure the equipment is unlocked! \u27a3Rewards a new Combat Rations (Special Onigiri)"
+	},
 
 	"701": {
 		"code": "G1",

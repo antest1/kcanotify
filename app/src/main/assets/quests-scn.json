@@ -1144,6 +1144,16 @@
 		"name": "[季常] 战果扩张任务！「Z作战」前段作战",
 		"desc": "于我军第一舰队集中配置精锐舰队，以此精锐舰队，摧毁南西群岛海域(2-4)、中部海域警戒线(6-1)、古阿诺环礁海域(6-3)、中部北海域孔雀岛近海(6-4)的敌军战力！（以任意舰队，在2-4、6-1、6-3Boss点取得A胜利以上，在6-4Boss点取得S胜利）"
 	},
+	"861": {
+		"code": "Bq3",
+		"name": "Quarterly [W1-6]",
+		"desc": "Sortie 2 BBV/AO and 4 additional ships to [W1-6]. Reach node N twice."	
+	},
+	"862": {
+		"code": "Bq4",
+		"name": "Quarterly [W6-3]",
+		"desc": "Sortie 1 AV, 2 CL and 3 additional ships to [W6-3]. A-Rank+ the boss node twice."
+	},
 
 	"301": {
 		"code": "C1",
@@ -1321,6 +1331,11 @@
 		"name": "海上护卫总队，远征开始！",
 		"desc": "远征任务：进行远征任务「对潜警戒任务」、「海上护卫任务」和「油轮护卫任务」，用轻巡、驱逐舰、海防舰等编成的护卫舰队取得各远征的成功！（4号、5号和9号远征各成功完成1次。任务说明中的舰种无需全部编入，只需要编入可保证成功完成远征的舰种即可完成本任务。）"
 	},
+	"426": {
+        "code": "D24",
+        "name": "Quarterly Expeditions",
+        "desc": "Complete Expeditions 3, 4, 5 and 10."
+    },
 
 	"501": {
 		"code": "E1",
@@ -1663,6 +1678,18 @@
 		"code": "F58",
 		"name": "精锐「瑞云」队编成",
 		"desc": "以日向改为秘书舰，将改修max的瑞云(六三四空)装备在第四个格子，废弃2个桶(运输用)，准备好2个九九式舰爆和2个瑞云!※新飞行队编成中需要熟练搭乘员。"
+	},
+	"667": {
+        "code": "F59",
+        "name": "Continue the Joint Effort With the Consumer Industry!",
+        "desc": "Have 15000 steel. Scrap 10 anti-air guns. High-angle guns do not count.",
+        "memo": "\u2718Consumes the resources. \u27a3Rewards 2 Combat Rations and either a Furniture Fairy OR a Medal"
+    },
+	"668": {
+		"code": "F60",
+		"name": "An Experimental New Kind of Combat Ration",
+        "desc": "Have 2 Combat Rations, 800 fuel and 150 Bauxite.",
+        "memo": "\u2718Consumes the resources and equipment. Make sure the equipment is unlocked! \u27a3Rewards a new Combat Rations (Special Onigiri)"
 	},
 
 	"701": {
