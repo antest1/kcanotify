@@ -744,6 +744,7 @@ public class KcaService extends Service {
                 Log.e("KCA", "clear " + String.valueOf(quest_id));
                 dbHelper.removeQuest(quest_id);
                 questTracker.removeQuestTrack(quest_id, true);
+                if (quest_id == 212 || quest_id == 218) questTracker.clearApDupFlag();
             }
 
             // Game Data Dependent Tasks

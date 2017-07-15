@@ -49,6 +49,15 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
     private static final String qt_db_name = "quest_track_db";
     private static final String qt_table_name = "quest_track_table";
     private final int[] quarterly_quest_id = {426, 637, 643, 822, 852, 861, 862};
+    private static boolean ap_dup_flag = false;
+
+    public void setApDupFlag() {
+        ap_dup_flag = true;
+    }
+
+    public void clearApDupFlag() {
+        ap_dup_flag = false;
+    }
 
     public KcaQuestTracker(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, qt_db_name, factory, version);
@@ -312,7 +321,6 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("SELECT KEY, CND0, CND1, CND2, CND3 from "
                 .concat(qt_table_name).concat(" WHERE ACTIVE=1 ORDER BY KEY"), null);
 
-        int dupflag = 0;
         int requiredShip = 0;
         JsonObject updateTarget = new JsonObject();
         while (c.moveToNext()) {
@@ -340,8 +348,9 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "218": // 보급3회
                 case "212": // 보급5회
-                    updateTarget.addProperty(key, cond0);
-                    dupflag += 1;
+                    int mult = 1;
+                    if(ap_dup_flag) mult = 2;
+                    updateTarget.addProperty(key, cond0 + apcount*mult);
                     break;
                 case "213": // 통상파괴
                 case "221": // 로호
@@ -492,7 +501,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     }
                     if (requiredBBV >= 2) requiredShip += 1;
                     if (requiredAO >= 2) requiredShip += 1;
-                    wflag = world == 1 && map == 6 && isend && isGoodRank(rank) && requiredShip > 0;
+                    wflag = world == 1 && map == 6 && isend && requiredShip > 0;
                     break;
                 case "862": // 6-3 분기퀘
                     requiredShip = 0;
@@ -516,14 +525,6 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             if (wflag) updateTarget.addProperty(key, cond0 + 1);
         }
 
-        if (dupflag == 1) {
-            if(updateTarget.has("212")) updateTarget.addProperty("212", updateTarget.get("212").getAsInt() + apcount);
-            if(updateTarget.has("218")) updateTarget.addProperty("218", updateTarget.get("218").getAsInt() + apcount);
-        } else if (dupflag == 2) { // 보급3회, 보급5회 중복 카운트
-            if(updateTarget.has("212")) updateTarget.addProperty("212", updateTarget.get("212").getAsInt() + apcount * 2);
-            if(updateTarget.has("218")) updateTarget.addProperty("218", updateTarget.get("218").getAsInt() + apcount * 2);
-        }
-
         for (Map.Entry<String, JsonElement> entry : updateTarget.entrySet()) {
             String entryKey = entry.getKey();
             JsonElement entryValue = entry.getValue();
@@ -538,12 +539,27 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 int entryValueData = entryValue.getAsInt();
                 ContentValues values = new ContentValues();
                 values.put("CND0", entryValueData);
-                db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{entryKey});
+                if (ap_dup_flag && checkApQuestActive() && entryKey.equals("212") || entryKey.equals("218")) {
+                    db.update(qt_table_name, values, "KEY=?", new String[]{entryKey});
+                } else {
+                    db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{entryKey});
+                }
             }
         }
 
         c.close();
         return updateTarget;
+    }
+
+    public boolean checkApQuestActive() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        boolean result = false;
+        Cursor c = db.rawQuery("SELECT KEY from "
+                .concat(qt_table_name)
+                .concat(" WHERE ACTIVE=1 AND (KEY=212 OR KEY=218)"), null);
+        if (c.moveToFirst()) result = true;
+        c.close();
+        return result;
     }
 
     public void test() {

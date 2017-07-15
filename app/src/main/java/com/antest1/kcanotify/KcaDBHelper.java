@@ -448,6 +448,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                     JsonObject item = api_list_item.getAsJsonObject();
                     int api_no = item.get("api_no").getAsInt();
                     int api_state = item.get("api_state").getAsInt();
+                    if (api_no == 212) qt.setApDupFlag();
                     if (api_state == 2 || api_state == 3) {
                         putQuest(api_no, item.toString());
                     } else {
