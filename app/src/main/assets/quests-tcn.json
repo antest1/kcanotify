@@ -1216,13 +1216,13 @@
 	},
 	"861": {
 		"code": "Bq3",
-		"name": "Quarterly [W1-6]",
-		"desc": "Sortie 2 BBV/AO and 4 additional ships to [W1-6]. Reach node N twice."	
+		"name": "(季任) 強行運輸艦隊，拔錨！",
+		"desc": "航路護衛任務：以兩艘航空戰艦（或者補給艦）為核心編成艦隊，在鎮守府近海航路(1-6)實施運輸船隊護衛作戰。完成該運輸作戰兩次！ / 1-6通關兩次（到達目的地）, 陣容：（航空戰艦+補給艦）*2+任意船艦*4"	
 	},
 	"862": {
 		"code": "Bq4",
-		"name": "Quarterly [W6-3]",
-		"desc": "Sortie 1 AV, 2 CL and 3 additional ships to [W6-3]. A-Rank+ the boss node twice."
+		"name": "(季任) 實施前線航空偵察！",
+		"desc": "偵察任務：以一艘水上機母艦和兩艘輕巡洋艦為核心編成偵察艦隊，在中部海域古阿諾環礁海域(6-3)展開，反覆實施航空偵察作戰「K作戰」！進一步捕捉該海域敵軍艦隊，擊破敵軍戰力！ / 在6-3Boss點取得兩次A勝利, 陣容：水上機母艦*1+輕巡洋艦*2+任意船艦*3"
 	},
 
 	"301": {
@@ -1438,8 +1438,8 @@
 	},
 	"426": {
         "code": "D24",
-        "name": "Quarterly Expeditions",
-        "desc": "Complete Expeditions 3, 4, 5 and 10."
+        "name": "(季常) 強化海上通商航路警戒！",
+        "desc": "遠征任務：完成遠征任務「警備任務」(遠征3)「對潛警戒任務」(遠征4)「海上護衛任務」(遠征5)「強行偵察任務」(遠征10)，壓制敵軍通商破壞艦隊，確保還是通商航路的安全！（前述遠征各完成一次）"
     },
 
 	"501": {
@@ -1808,15 +1808,13 @@
 	},
 	"667": {
         "code": "F59",
-        "name": "Continue the Joint Effort With the Consumer Industry!",
-        "desc": "Have 15000 steel. Scrap 10 anti-air guns. High-angle guns do not count.",
-        "memo": "\u2718Consumes the resources. \u27a3Rewards 2 Combat Rations and either a Furniture Fairy OR a Medal"
+        "name": "繼續與民生產業合作！",
+        "desc": "工廠任務：發放軍需物資，繼續開展與民生產業的合作。廢棄十個「機槍」系裝備，並準備鋼材15000！"
     },
 	"668": {
 		"code": "F60",
-		"name": "An Experimental New Kind of Combat Ration",
-        "desc": "Have 2 Combat Rations, 800 fuel and 150 Bauxite.",
-        "memo": "\u2718Consumes the resources and equipment. Make sure the equipment is unlocked! \u27a3Rewards a new Combat Rations (Special Onigiri)"
+		"name": "新型戰鬥糧食的試作",
+        "desc": "料理任務：開發既便於食用，又美味同時能填飽肚子的新型戰鬥糧食。準備好兩個「戰鬥糧食」，燃料800以及鋁土150！倒油！開始做飯！"
 	},
 
 	"701": {
