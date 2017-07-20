@@ -110,19 +110,19 @@ public class KcaAkashiListViewItem {
                 JsonArray improv2 = resource.get(2).getAsJsonArray();
                 JsonArray improv3 = resource.get(3).getAsJsonArray();
                 if (checked) {
-                    material1[count] = setMaterialScrewString(improv1.get(1).getAsString());
-                    material2[count] = setMaterialScrewString(improv2.get(1).getAsString());
-                    material3[count] = setMaterialScrewString(improv3.get(1).getAsString());
-                    screw1[count] = setMaterialScrewString(improv1.get(3).getAsString());
-                    screw2[count] = setMaterialScrewString(improv2.get(3).getAsString());
-                    screw3[count] = setMaterialScrewString(improv3.get(3).getAsString());
+                    material1[count] = setMaterialScrewString(improv1.get(1).getAsString(), false);
+                    material2[count] = setMaterialScrewString(improv2.get(1).getAsString(), false);
+                    material3[count] = setMaterialScrewString(improv3.get(1).getAsString(), true);
+                    screw1[count] = setMaterialScrewString(improv1.get(3).getAsString(), false);
+                    screw2[count] = setMaterialScrewString(improv2.get(3).getAsString(), false);
+                    screw3[count] = setMaterialScrewString(improv3.get(3).getAsString(), true);
                 } else {
-                    material1[count] = setMaterialScrewString(improv1.get(0).getAsString());
-                    material2[count] = setMaterialScrewString(improv2.get(0).getAsString());
-                    material3[count] = setMaterialScrewString(improv3.get(0).getAsString());
-                    screw1[count] = setMaterialScrewString(improv1.get(2).getAsString());
-                    screw2[count] = setMaterialScrewString(improv2.get(2).getAsString());
-                    screw3[count] = setMaterialScrewString(improv3.get(2).getAsString());
+                    material1[count] = setMaterialScrewString(improv1.get(0).getAsString(), false);
+                    material2[count] = setMaterialScrewString(improv2.get(0).getAsString(), false);
+                    material3[count] = setMaterialScrewString(improv3.get(0).getAsString(), true);
+                    screw1[count] = setMaterialScrewString(improv1.get(2).getAsString(), false);
+                    screw2[count] = setMaterialScrewString(improv2.get(2).getAsString(), false);
+                    screw3[count] = setMaterialScrewString(improv3.get(2).getAsString(), true);
                 }
                 count += 1;
             }
@@ -153,9 +153,9 @@ public class KcaAkashiListViewItem {
         equipScrews = joinStr(screw, "/");
     }
 
-    private String setMaterialScrewString(String s) {
+    private String setMaterialScrewString(String s, boolean ignore) {
         if (Integer.parseInt(s) == -1) return "?";
-        else if (Integer.parseInt(s) == 0) return "-";
+        else if (ignore && Integer.parseInt(s) == 0) return "-";
         else return s;
     }
 

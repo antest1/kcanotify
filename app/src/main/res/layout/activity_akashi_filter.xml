@@ -240,7 +240,16 @@
                     android:src="@mipmap/item_30"
                     android:id="@+id/akashi_filter_equip_btn_30"
                     android:layout_margin="5dp"
-                    android:background="@drawable/imagebtn_off"
+                    android:background="@drawable/imagebtn_on"
+                    android:adjustViewBounds="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp" />
+                <ImageView
+                    android:src="@mipmap/item_34"
+                    android:id="@+id/akashi_filter_equip_btn_34"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/imagebtn_on"
                     android:adjustViewBounds="true"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -249,7 +258,7 @@
                     android:src="@mipmap/item_36"
                     android:id="@+id/akashi_filter_equip_btn_36"
                     android:layout_margin="5dp"
-                    android:background="@drawable/imagebtn_off"
+                    android:background="@drawable/imagebtn_on"
                     android:adjustViewBounds="true"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -271,15 +280,6 @@
                     android:adjustViewBounds="true"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:padding="5dp" />
-                <ImageView
-                    android:id="@+id/akashi_filter_equip_btn_temp2"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/imagebtn_on"
-                    android:adjustViewBounds="true"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:visibility="invisible"
                     android:padding="5dp" />
             </LinearLayout>
 

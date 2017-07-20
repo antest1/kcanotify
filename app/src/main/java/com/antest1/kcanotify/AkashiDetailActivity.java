@@ -207,7 +207,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
         String[] value_list = new String[6];
         for (int i = 0; i < array.size(); i++) {
             value_list[i] = array.get(i).getAsString();
-            if (value_list[i].equals("0")) {
+            if (i >= 4 && value_list[i].equals("0")) {
                 value_list[i] = "-";
             } else if (value_list[i].equals("-1")) {
                 value_list[i] = "?";
