@@ -305,6 +305,11 @@ public class KcaService extends Service {
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(content2))
                     .setOngoing(true).setAutoCancel(false);
+            if (getBooleanPreferences(getApplicationContext(), PREF_KCA_SET_PRIORITY)) {
+                viewNotificationBuilder.setPriority(IMPORTANCE_HIGH);
+            } else {
+                viewNotificationBuilder.setPriority(IMPORTANCE_DEFAULT);
+            }
             viewNotificationFirstTime = false;
         }
 
