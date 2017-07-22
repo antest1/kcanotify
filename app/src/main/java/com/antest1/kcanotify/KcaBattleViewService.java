@@ -1120,6 +1120,13 @@ public class KcaBattleViewService extends Service {
                 acView = mInflater.inflate(R.layout.view_battleview_aircombat, null);
                 acView.findViewById(R.id.view_ac_head).setOnTouchListener(acViewTouchListener);
                 ((TextView) acView.findViewById(R.id.view_ac_title)).setText(getStringWithLocale(R.string.battleview_menu0));
+                menuView = mInflater.inflate(R.layout.view_battleview_menu, null);
+                menuView.setVisibility(View.GONE);
+                menuView.findViewById(R.id.view_head).setOnClickListener(battleViewMenuListener);
+                menuView.findViewById(R.id.view_item0).setOnClickListener(battleViewMenuListener);
+                menuView.findViewById(R.id.view_item1).setOnClickListener(battleViewMenuListener);
+                menuView.findViewById(R.id.view_item2).setOnClickListener(battleViewMenuListener);
+                ((TextView) menuView.findViewById(R.id.view_bm_title)).setText(getStringWithLocale(R.string.battleview_menu_head));
 
                 mParams = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.MATCH_PARENT,
@@ -1176,19 +1183,12 @@ public class KcaBattleViewService extends Service {
     }
 
     private void setBattleViewMenu() {
-        menuView = mInflater.inflate(R.layout.view_battleview_menu, null);
-        menuView.setVisibility(View.GONE);
-        menuView.findViewById(R.id.view_head).setOnClickListener(battleViewMenuListener);
-        menuView.findViewById(R.id.view_item0).setOnClickListener(battleViewMenuListener);
-        menuView.findViewById(R.id.view_item1).setOnClickListener(battleViewMenuListener);
-        menuView.findViewById(R.id.view_item2).setOnClickListener(battleViewMenuListener);
+        if (menuView == null) return;
 
         List<String> infoList = new ArrayList<>();
-
         float[] exp_score = dbHelper.getExpScore();
         String exp_str = String.format(getStringWithLocale(R.string.battleview_expview),
                 exp_score[0], exp_score[1]);
-
         infoList.add(exp_str);
 
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
@@ -1459,6 +1459,9 @@ public class KcaBattleViewService extends Service {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            if (menuView.getParent() != null) {
+                return false;
+            }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (!isTouchDown && api_data != null) {
@@ -1513,11 +1516,11 @@ public class KcaBattleViewService extends Service {
                             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                             PixelFormat.TRANSLUCENT);
                     setBattleViewMenu();
-                    menuView.setVisibility(View.VISIBLE);
                     if (menuView.getParent() != null) {
                         mManager.updateViewLayout(menuView, infoViewParams);
                     } else {
                         mManager.addView(menuView, infoViewParams);
+                        menuView.setVisibility(View.VISIBLE);
                     }
                     return true;
                 default:
@@ -1531,6 +1534,7 @@ public class KcaBattleViewService extends Service {
         public void onClick(View v) {
             Intent qintent;
             WindowManager.LayoutParams acViewParams;
+            Log.e("KCA-BV", getResources().getResourceEntryName(v.getId()));
             switch (v.getId()) {
                 case R.id.view_item0:
                     acViewParams = new WindowManager.LayoutParams(
@@ -1563,6 +1567,9 @@ public class KcaBattleViewService extends Service {
                     break;
             }
             menuView.setVisibility(View.GONE);
+            if (menuView.getParent() != null) {
+                mManager.removeViewImmediate(menuView);
+            }
         }
     };
 
