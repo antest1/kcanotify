@@ -20,6 +20,7 @@ public final class KcaConstants {
     public static final String DB_KEY_BATTLEINFO = "key_battleinfo";
     public static final String DB_KEY_BATTLENODE = "key_battlenode";
     public static final String DB_KEY_QTRACKINFO = "key_qtrackinfo";
+    public static final String DB_KEY_APIMAPINFO = "key_apimapinfo";
     public static final String DB_KEY_KDOCKDATA = "key_kdockdata";
     public static final String DB_KEY_EXPTDAY = "key_exptday";
     public static final String DB_KEY_EXPCRNT = "key_expcrnt";

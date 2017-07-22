@@ -65,7 +65,6 @@ import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
-import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadQuestTrackDataFromAssets;
@@ -817,6 +816,12 @@ public class KcaService extends Service {
                     if (url.startsWith(API_GET_MEMBER_MAPINFO) && jsonDataObj.has("api_data")) {
                         JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                         JsonArray api_map_info = api_data.getAsJsonArray("api_map_info");
+                        dbHelper.putValue(DB_KEY_APIMAPINFO, api_map_info.toString());
+                        if (KcaMapHpPopupService.isActive()) {
+                            Intent qintent = new Intent(getBaseContext(), KcaMapHpPopupService.class);
+                            qintent.setAction(KcaMapHpPopupService.MAPHP_SHOW_ACTION);
+                            startService(qintent);
+                        }
                         int eventMapCount = 0;
                         for (JsonElement map : api_map_info) {
                             JsonObject mapData = map.getAsJsonObject();
@@ -1933,7 +1938,7 @@ public class KcaService extends Service {
     }*/
 
     private void processExpeditionInfo() {
-        JsonArray data = helper.getJsonArrayValue(DB_KEY_DECKPORT);
+        JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         //Log.e("KCA", "processExpeditionInfo Called");
         int deck_id, mission_no;
         long arrive_time;

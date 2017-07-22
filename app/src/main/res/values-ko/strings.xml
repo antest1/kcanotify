@@ -333,8 +333,10 @@
     <string name="viewmenu_akashi">개수</string>
     <string name="viewmenu_develop">개발</string>
     <string name="viewmenu_construction">건조</string>
+    <string name="viewmenu_maphp">해역</string>
     <string name="viewmenu_develop_title">개발 정보</string>
     <string name="viewmenu_construction_title">건조 정보</string>
+    <string name="viewmenu_maphp_title">해역 HP 정보</string>
     <string name="develop_failed_text">펭귄 인형 ㅠㅠ</string>
     <string name="action_errorlog">오류 로그</string>
     <string name="errlog_dialog_message">전체 오류 로그를 지우시겠습니까?</string>

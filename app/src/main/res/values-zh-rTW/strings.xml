@@ -339,8 +339,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_akashi">改修</string>
     <string name="viewmenu_develop">開發</string>
     <string name="viewmenu_construction">建造</string>
+    <string name="viewmenu_maphp">海域</string>
     <string name="viewmenu_develop_title">開發信息</string>
     <string name="viewmenu_construction_title">建造信息</string>
+    <string name="viewmenu_maphp_title">海域HP信息</string>
     <string name="develop_failed_text">企鵝玩偶</string>
     <string name="action_errorlog">錯誤日誌</string>
     <string name="errlog_dialog_message">你想清空所有錯誤日誌嗎？</string>

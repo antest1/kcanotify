@@ -160,6 +160,7 @@ public class KcaFleetViewService extends Service {
             mView.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.viewbutton_develop).setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.viewbutton_construction).setOnTouchListener(mViewTouchListener);
+            mView.findViewById(R.id.viewbutton_maphp).setOnTouchListener(mViewTouchListener);
             for (int i = 0; i < 5; i++) {
                 mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
             }
@@ -316,8 +317,8 @@ public class KcaFleetViewService extends Service {
 
                     if (clickDuration < MAX_CLICK_DURATION) {
                         if (id == mView.findViewById(R.id.fleetview_head).getId()) {
-                            if(mView != null) mView.setVisibility(View.GONE);
-                            if(itemView != null) itemView.setVisibility(View.GONE);
+                            if (mView != null) mView.setVisibility(View.GONE);
+                            if (itemView != null) itemView.setVisibility(View.GONE);
                         } else if (id == mView.findViewById(R.id.viewbutton_quest).getId()) {
                             qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
                             qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
@@ -337,6 +338,10 @@ public class KcaFleetViewService extends Service {
                                 qintent.setAction(KcaConstructPopupService.CONSTR_DATA_ACTION);
                                 startService(qintent);
                             }
+                        } else if (id == mView.findViewById(R.id.viewbutton_maphp).getId()) {
+                            qintent = new Intent(getBaseContext(), KcaMapHpPopupService.class);
+                            qintent.setAction(KcaMapHpPopupService.MAPHP_SHOW_ACTION);
+                            startService(qintent);
                         } else {
                             for (int i = 0; i < 5; i++) {
                                 if (id == mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
