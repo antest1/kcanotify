@@ -1208,10 +1208,9 @@ public class KcaBattleViewService extends Service {
         double seekValue = 0;
         String seekStringValue = "";
         if (isCombined) {
-            seekValue += deckInfoCalc.getSeekValue(data, 0, cn, KcaBattle.getEscapeFlag());
-            seekValue += deckInfoCalc.getSeekValue(data, 1, cn, KcaBattle.getEscapeFlag());
+            seekValue = deckInfoCalc.getSeekValue(data, "0,1", cn, KcaBattle.getEscapeFlag());
         } else {
-            seekValue = deckInfoCalc.getSeekValue(data, idx, cn, null);
+            seekValue = deckInfoCalc.getSeekValue(data, String.valueOf(idx), cn, null);
         }
         if (cn == SEEK_PURE) {
             seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), deckInfoCalc.getSeekType(cn), (int) seekValue);

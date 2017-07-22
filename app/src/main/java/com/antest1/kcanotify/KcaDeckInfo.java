@@ -7,6 +7,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,23 +43,15 @@ public class KcaDeckInfo {
     // Formula 33 (2016.12.26)
     // Reference: http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
     //            http://kancolle-calc.net/deckbuilder.html
-    public double getSeekValue(JsonArray deckPortData, int deckid, int Cn, boolean[] exclude_flag) {
+    public JsonObject getEachSeekValue(JsonArray deckShipIdList, int id, int Cn, boolean[] exclude_flag) {
+        JsonObject data = new JsonObject();
         double pureTotalSeek = 0.0;
-        double totalSeek = 0.0;
-
-        double totalShipSeek = 0.0;
         double totalEquipSeek = 0.0;
-        double hqPenalty = 0.0;
-        double noShipBonus = 0;
-
-        int userLevel = getLevel();
-        hqPenalty = Math.ceil(0.4 * userLevel);
-
+        double totalShipSeek = 0.0;
         int noShipCount = 6;
         boolean excludeflagexist = (exclude_flag != null);
-        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
-            if (excludeflagexist && exclude_flag[i]) continue;
+            if (excludeflagexist && exclude_flag[id * 6 + i + 1]) continue;
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 noShipCount -= 1;
@@ -70,7 +64,7 @@ public class KcaDeckInfo {
                         int item_id = shipItem.get(j).getAsInt();
                         if (item_id != -1) {
                             JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "name,type,saku");
-                            if (itemData == null) continue; // TODO: will be removed after item null issue resolved
+                            if (itemData == null) continue;
                             String itemName = itemData.get("name").getAsString();
                             int itemLevel = itemData.get("level").getAsInt();
                             int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
@@ -82,10 +76,10 @@ public class KcaDeckInfo {
                                     totalEquipSeek += 0.8 * itemSeek;
                                     break;
                                 case T2_SCOUT:
-                                    totalEquipSeek += 1 * itemSeek;
+                                    totalEquipSeek += itemSeek + 1.2 * Math.sqrt(itemLevel);
                                     break;
                                 case T2_SCOUT_II:
-                                    totalEquipSeek += 1 * itemSeek;
+                                    totalEquipSeek += itemSeek + 1.2 * Math.sqrt(itemLevel);
                                     break;
                                 case T2_SEA_SCOUT:
                                     totalEquipSeek += 1.2 * (itemSeek + 1.2 * Math.sqrt(itemLevel));
@@ -109,13 +103,42 @@ public class KcaDeckInfo {
                 }
             }
         }
+        data.addProperty("ship", totalShipSeek);
+        data.addProperty("equip", totalEquipSeek);
+        data.addProperty("pure", pureTotalSeek);
+        data.addProperty("nscount", noShipCount);
+        return data;
+    }
+
+    public double getSeekValue(JsonArray deckPortData, String deckid_list, int Cn, boolean[] exclude_flag) {
+        double pureTotalSeek = 0.0;
+        double totalSeek = 0.0;
+
+        double totalShipSeek = 0.0;
+        double totalEquipSeek = 0.0;
+        double hqPenalty = 0.0;
+        double noShipBonus = 0;
+        int noShipCount = 0;
+
+        int userLevel = getLevel();
+        hqPenalty = Math.ceil(0.4 * userLevel);
+
+        String[] decklist = deckid_list.split(",");
+        for (int n = 0; n < decklist.length; n++) {
+            int deckid = Integer.parseInt(decklist[n]);
+            JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
+            JsonObject seekData = getEachSeekValue(deckShipIdList, deckid, Cn, exclude_flag);
+            pureTotalSeek += seekData.get("pure").getAsDouble();
+            totalEquipSeek += seekData.get("equip").getAsDouble();
+            totalShipSeek += seekData.get("ship").getAsDouble();
+            noShipCount += seekData.get("nscount").getAsInt();
+        }
 
         if (Cn == SEEK_PURE) {
             return pureTotalSeek;
         } else {
             noShipBonus = 2 * noShipCount;
             totalSeek = totalShipSeek + Cn * totalEquipSeek - hqPenalty + noShipBonus;
-
             return Math.floor(totalSeek * 100) / 100;
         }
     }

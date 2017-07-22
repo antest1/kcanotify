@@ -459,7 +459,7 @@ public class KcaService extends Service {
 
         int[] airPowerRange = deckInfoCalc.getAirPowerRange(portdeckdata, 0, KcaBattle.getEscapeFlag());
         String airPowerValue = String.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
-        String seekValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, deckInfoCalc.getSeekValue(portdeckdata, 0, cn, KcaBattle.getEscapeFlag()));
+        String seekValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, deckInfoCalc.getSeekValue(portdeckdata, "0", cn, KcaBattle.getEscapeFlag()));
         int[] tp = deckInfoCalc.getTPValue(portdeckdata, "0", KcaBattle.getEscapeFlag());
         String tpValue = String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
         List<String> toastList = new ArrayList<String>();
