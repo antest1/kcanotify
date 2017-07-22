@@ -140,6 +140,8 @@
     <string name="setting_menu_view_desc_accessibility_setting">서비스에서 시제 깡들리티 선택 (칸코레 감지를 위해 필요)</string>
     <string name="setting_menu_view_title_overlay_setting">화면 오버레이 설정</string>
     <string name="setting_menu_view_desc_overlay_setting">다른 앱 위에 그리기 권한 설정 (전투예보 기능에 필요)</string>
+    <string name="setting_menu_view_title_battlenode_use">다음 마스 예보 사용</string>
+    <string name="setting_menu_view_desc_battlenode_use">출격 중 토스트로 다음 마스 정보 표시</string>
     <string name="setting_menu_view_title_battleview_use">전투예보 사용</string>
     <string name="setting_menu_view_desc_battleview_use">출격 및 연습전에서의 전투예보 사용 여부</string>
     <string name="setting_menu_view_title_drop_visible">함선 드랍 정보 표시</string>

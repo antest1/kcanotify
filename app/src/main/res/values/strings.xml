@@ -197,6 +197,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_view_desc_accessibility_setting">Select Kcanotify from Services. (required for detect kancolle app)</string>
     <string name="setting_menu_view_title_overlay_setting">Screen Overlay Settings</string>
     <string name="setting_menu_view_desc_overlay_setting">Set Screen Overlay Permission (required for BattleView).</string>
+    <string name="setting_menu_view_title_battlenode_use">Use Node Prediction</string>
+    <string name="setting_menu_view_desc_battlenode_use">Display next node info during sortie with toast.</string>
     <string name="setting_menu_view_title_battleview_use">Use BattleView</string>
     <string name="setting_menu_view_desc_battleview_use">Display battle results during sortie.</string>
     <string name="setting_menu_view_title_drop_visible">Show Drop Info</string>

@@ -158,6 +158,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_view_desc_accessibility_setting">選擇並開啟Kcanotify服務（以檢測艦これ客戶端）</string>
     <string name="setting_menu_view_title_overlay_setting">懸浮視窗設定</string>
     <string name="setting_menu_view_desc_overlay_setting">取得懸浮視窗權限（以開啟戰鬥劇透功能）</string>
+    <string name="setting_menu_view_title_battlenode_use">罗盘剧透</string>
+    <string name="setting_menu_view_desc_battlenode_use">出擊時顯示次路線</string>
     <string name="setting_menu_view_title_battleview_use">戰鬥劇透</string>
     <string name="setting_menu_view_desc_battleview_use">出擊時顯示戰鬥結果</string>
     <string name="setting_menu_view_title_drop_visible">顯示掉落艦娘</string>

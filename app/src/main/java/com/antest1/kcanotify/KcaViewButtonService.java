@@ -57,8 +57,10 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_LIST;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_VIEW_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION;
+import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -282,6 +284,10 @@ public class KcaViewButtonService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    private boolean isBattleViewEnabled() {
+        return getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE);
+    }
+
     @Override
     public void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battleinfo_receiver);
@@ -321,7 +327,7 @@ public class KcaViewButtonService extends Service {
                         long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                         if (clickDuration < MAX_CLICK_DURATION) {
                             clickcount += 1;
-                            if (battleviewEnabled) {
+                            if (battleviewEnabled && isBattleViewEnabled()) {
                                 Intent qintent = new Intent(getBaseContext(), KcaBattleViewService.class);
                                 qintent.setAction(KcaBattleViewService.SHOW_BATTLEVIEW_ACTION);
                                 startService(qintent);

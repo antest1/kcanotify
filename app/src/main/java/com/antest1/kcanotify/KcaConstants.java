@@ -298,6 +298,7 @@ public final class KcaConstants {
     public static final String PREF_OPENDB_API_USE = "opendb_api_use";
     public static final String PREF_KCA_EXP_VIEW = "expedition_view";
     public static final String PREF_KCA_SET_PRIORITY = "set_priority";
+    public static final String PREF_KCA_BATTLENODE_USE = "battlenode_use";
     public static final String PREF_KCA_BATTLEVIEW_USE = "battleview_use";
     public static final String PREF_KCA_QUESTVIEW_USE = "questview_use";
     public static final String PREF_ACCESSIBILITY_SETTING = "accessibility_setting";
