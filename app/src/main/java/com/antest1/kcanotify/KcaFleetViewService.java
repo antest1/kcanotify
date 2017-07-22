@@ -37,6 +37,7 @@ import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.helper;
+import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_KDOCKDATA;
@@ -326,12 +327,16 @@ public class KcaFleetViewService extends Service {
                             qintent.setAction(SHOW_AKASHIVIEW_ACTION);
                             startService(qintent);
                         } else if (id == mView.findViewById(R.id.viewbutton_develop).getId()) {
-                            qintent = new Intent(getBaseContext(), KcaDevelopPopupService.class);
-                            startService(qintent);
+                            if (isGameDataLoaded()) {
+                                qintent = new Intent(getBaseContext(), KcaDevelopPopupService.class);
+                                startService(qintent);
+                            }
                         } else if (id == mView.findViewById(R.id.viewbutton_construction).getId()) {
-                            qintent = new Intent(getBaseContext(), KcaConstructPopupService.class);
-                            qintent.setAction(KcaConstructPopupService.CONSTR_DATA_ACTION);
-                            startService(qintent);
+                            if (isGameDataLoaded()) {
+                                qintent = new Intent(getBaseContext(), KcaConstructPopupService.class);
+                                qintent.setAction(KcaConstructPopupService.CONSTR_DATA_ACTION);
+                                startService(qintent);
+                            }
                         } else {
                             for (int i = 0; i < 5; i++) {
                                 if (id == mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
