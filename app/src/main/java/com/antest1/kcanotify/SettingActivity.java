@@ -77,6 +77,7 @@ public class SettingActivity extends AppCompatActivity {
     public static String currentVersion = BuildConfig.VERSION_NAME;
     public static final String TAG = "KCA";
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
+    public static RingtoneManager ringtoneManager;
     public static String silentText;
 
     public SettingActivity() {
@@ -96,7 +97,6 @@ public class SettingActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.action_settings));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         silentText = getString(R.string.settings_string_silent);
-
 
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction()
@@ -216,21 +216,18 @@ public class SettingActivity extends AppCompatActivity {
                 }
 
                 if (pref instanceof RingtonePreference) {
-                    String ringtone_uri = pref.getSharedPreferences().getString(key, DEFAULT_NOTIFICATION_URI.toString());
-                    if (ringtone_uri.length() == 0) {
+                    String uri = pref.getSharedPreferences().getString(key, "");
+                    if (uri.length() == 0) {
                         pref.setSummary(silentText);
                     } else {
-                        Uri ringtoneUri = Uri.parse(ringtone_uri);
-                        if (RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION) == null) {
+                        Uri ringtoneUri = Uri.parse(uri);
+                        Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
+                        if (ringtone == null) {
+                            Toast.makeText(context,
+                                    context.getString(R.string.ma_permission_external_denied),
+                                    Toast.LENGTH_LONG).show();
                             pref.setSummary(silentText);
                         } else {
-                            Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
-                            if (ringtone == null) {
-                                Toast.makeText(context,
-                                        context.getString(R.string.ma_permission_external_denied),
-                                        Toast.LENGTH_LONG).show();
-                                pref.setSummary(silentText);
-                            }
                             String name = ringtone.getTitle(context);
                             pref.setSummary(name);
                         }
@@ -301,24 +298,20 @@ public class SettingActivity extends AppCompatActivity {
             Preference pref = findPreference(key);
 
             if (pref instanceof RingtonePreference) {
-                String ringtone_uri = pref.getSharedPreferences().getString(key, "DEFAULT_NOTIFICATION_URI");
-                if (ringtone_uri.length() == 0) {
+                String uri = sharedPreferences.getString(key, "null");
+                if (uri.length() == 0) {
                     pref.setSummary(silentText);
                 } else {
-                    Uri ringtoneUri = Uri.parse(ringtone_uri);
-                    if (RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION) == null) {
+                    Uri ringtoneUri = Uri.parse(uri);
+                    Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
+                    if (ringtone == null) {
+                        Toast.makeText(context,
+                                context.getString(R.string.ma_permission_external_denied),
+                                Toast.LENGTH_LONG).show();
                         pref.setSummary(silentText);
                     } else {
-                        Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
-                        if (ringtone == null) {
-                            Toast.makeText(context,
-                                    context.getString(R.string.ma_permission_external_denied),
-                                    Toast.LENGTH_LONG).show();
-                            pref.setSummary(silentText);
-                        } else {
-                            String name = ringtone.getTitle(context);
-                            pref.setSummary(name);
-                        }
+                        String name = ringtone.getTitle(context);
+                        pref.setSummary(name);
                     }
                 }
             } else if (pref instanceof ListPreference) {

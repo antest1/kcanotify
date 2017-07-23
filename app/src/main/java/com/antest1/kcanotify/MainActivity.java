@@ -16,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.AsyncTask;
@@ -412,10 +413,10 @@ public class MainActivity extends AppCompatActivity {
                         editor.putString(prefKey, getString(R.string.sound_kind_value_vibrate));
                         break;
                     case PREF_KCA_NOTI_RINGTONE:
-                        editor.putString(prefKey, DEFAULT_NOTIFICATION_URI.toString());
+                        editor.putString(prefKey, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
                         break;
                     case PREF_APK_DOWNLOAD_SITE:
-                        editor.putString(prefKey, getString(R.string.app_download_link_googledrive));
+                        editor.putString(prefKey, getString(R.string.app_download_link_playstore));
                         break;
                     case PREF_AKASHI_STARLIST:
                     case PREF_AKASHI_FILTERLIST:

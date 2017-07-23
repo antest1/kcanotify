@@ -248,10 +248,12 @@ public class KcaUtils {
                 mediaPlayer.stop();
                 mediaPlayer.reset();
             }
-            mediaPlayer.setDataSource(context, uri);
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
+            if (!uri.equals(Uri.EMPTY)) {
+                mediaPlayer.setDataSource(context, uri);
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            }
         } catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
             e.printStackTrace();
         }
