@@ -442,13 +442,16 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                 Log.e("KCA", String.format("delete KEV > %d AND KEY < %d", questIdList.get(i), questIdList.get(i + 1)));
             }
 
+            if (questIdList.contains(212) && questIdList.contains(218)) {
+                qt.setApDupFlag();
+            }
+
             for (int i = 0; i < api_list.size(); i++) {
                 JsonElement api_list_item = api_list.get(i);
                 if (api_list_item.isJsonObject()) {
                     JsonObject item = api_list_item.getAsJsonObject();
                     int api_no = item.get("api_no").getAsInt();
                     int api_state = item.get("api_state").getAsInt();
-                    if (api_no == 212) qt.setApDupFlag();
                     if (api_state == 2 || api_state == 3) {
                         putQuest(api_no, item.toString());
                     } else {
