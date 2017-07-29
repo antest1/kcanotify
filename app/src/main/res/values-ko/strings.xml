@@ -135,7 +135,7 @@
     <string name="setting_menu_kand_title_game_data_down">게임 데이터 다운로드</string>
     <string name="setting_menu_kand_desc_game_data_down">게임 데이터가 로딩되지 않을 때 사용</string>
 
-    <string name="setting_menu_view_head">전투예보/임무번역 설정</string>
+    <string name="setting_menu_view_head">권한 및 전투예보 설정</string>
     <string name="setting_menu_view_title_accessibility_setting">접근성 설정</string>
     <string name="setting_menu_view_desc_accessibility_setting">서비스에서 시제 깡들리티 선택 (칸코레 감지를 위해 필요)</string>
     <string name="setting_menu_view_title_overlay_setting">화면 오버레이 설정</string>

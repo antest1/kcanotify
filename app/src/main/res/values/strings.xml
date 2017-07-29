@@ -192,7 +192,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="settings_menu_kand_title_bypass_address">Bypass Addresses</string>
     <string name="setting_menu_kand_desc_bypass_address">Use CIDR to describe bypass addresses, separate each CIDR by a comma.</string>
 
-    <string name="setting_menu_view_head">Kcanotify Settings</string>
+    <string name="setting_menu_view_head">Permission/BattleView Settings</string>
     <string name="setting_menu_view_title_accessibility_setting">Accessibility Settings</string>
     <string name="setting_menu_view_desc_accessibility_setting">Select Kcanotify from Services. (required for detect kancolle app)</string>
     <string name="setting_menu_view_title_overlay_setting">Screen Overlay Settings</string>
