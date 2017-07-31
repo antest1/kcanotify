@@ -265,7 +265,6 @@ public class KcaDeckInfo {
                         JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "id,name,type,tyku");
                         if (itemData == null) continue; // TODO: will be removed after item null issue resolved
                         String itemName = itemData.get("name").getAsString();
-                        int itemKcId = itemData.get("id").getAsInt();
                         int itemLevel = itemData.get("level").getAsInt();
                         int itemMastery = 0;
                         if (itemData.has("alv")) {
@@ -273,12 +272,8 @@ public class KcaDeckInfo {
                         }
                         int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                         int itemAAC = itemData.get("tyku").getAsInt();
-                        double baseAAC;
-                        if (itemKcId == 219) {
-                            baseAAC = calcBasicAAC(itemType, calcReinforcedAAC(itemType, itemAAC, 0), slot);
-                        } else {
-                            baseAAC = calcBasicAAC(itemType, calcReinforcedAAC(itemType, itemAAC, itemLevel), slot);
-                        }
+                        double baseAAC = calcBasicAAC(itemType, calcReinforcedAAC(itemType, itemAAC, itemLevel), slot);
+
                         double[] masteryAAC = calcSlotAACFromMastery(itemType, itemMastery, 0);
 
                         totalRangeAAC[0] += (int) Math.floor(baseAAC + masteryAAC[0]);
