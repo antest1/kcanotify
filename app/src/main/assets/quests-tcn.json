@@ -376,7 +376,7 @@
 	},
 	"180": {
 		"code": "A75",
-		"name": "新編「第一戦隊」を編成せよ！",
+		"name": "編成新編「第一艦隊」！",
 		"desc": "編成任務：第一艦隊に新改装された長門型戦艦一番艦「長門改二」及び同二番艦「陸奥改」からなる新編第一戦隊を配備せよ！",
 		"memo": "給糧艦「伊良湖」x1"
 	},
@@ -396,6 +396,11 @@
 		"name": "新編“第四水雷戦隊”編成！",
 		"desc": "編成任務：配備第一艦隊旗艦為“由良改二”，伴隨“村雨”“夕立”“春雨”“五月雨”和其他一艘驅逐艦配備，新編成「第四水雷戦隊」！",
 		"unlock": [ 860 ]
+	},
+	"184": {
+		"code": "A79",
+		"name": "再度編成精銳“第二二驅逐隊”！",
+		"desc": "Have Fumizuki Kai Ni, Satsuki Kai Ni, Minazuki Kai and Nagatsuki Kai in your fleet."
 	},
 
 	"202": {
@@ -1001,6 +1006,12 @@
 		"code": "B103",
 		"name": "旗艦「由良」，拔錨！",
 		"desc": "出擊任務：以“由良改二”為旗艦，配備伴隨艦“村雨”“夕立”“春雨”“五月雨”以及“秋月”中的2艘配備的第一艦隊，殲滅東部奧廖爾海（2-3）南方海域前方（5-1）的敵人!（以由良改二為旗艦，僚艦村雨、夕立、春雨、五月雨、秋月中的2艘和3艘任意艦出擊2-3和5-1的boss點各S勝一次。任務前置待驗證。）"
+	},
+	"863": {
+		"code": "B104",
+		"name": "精銳“第二二驅逐隊”出擊！",
+		"desc": "Sortie Fumizuki Kai Ni, Satsuki Kai Ni, Minazuki Kai, Nagatsuki Kai and up to 2 additional ships to [W3-2]. S-Rank the boss node.",
+		"memo": "\u27a3Rewards either a Daihatsu Landing Craft, a New Model Artillery Armament Materials OR a Reinforcement Expansion."
 	},
 
 	"201": {

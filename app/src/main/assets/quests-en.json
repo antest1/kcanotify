@@ -502,7 +502,13 @@
 		"memo": "\u27a3Rewards a Furniture Fairy",
 		"unlock": [ 860 ]
 	},
-
+	"184": {
+		"code": "A79",
+		"name": "Reform the Elite 22nd Destroyer Division!",
+		"desc": "Have Fumizuki Kai Ni, Satsuki Kai Ni, Minazuki Kai and Nagatsuki Kai in your fleet.",
+		"memo": "\u27a3Rewards 2 Combat Rations"
+	},
+	
 	"202": {
 		"code": "B1",
 		"name": "Sortieing for the First Time!",
@@ -1184,6 +1190,12 @@
         "desc": "Sortie Yura Kai Ni as Fleet 1 flagship, at least 2 of Akizuki, Yuudachi, Murasame, Harusame or Samidare, and 3 others to [W2-3] and [W5-1]. S-Rank the boss nodes.",
         "memo": "\u27a3Rewards a Skilled Crew Member and either a Daihatsu Landing Craft OR a Reinforcement Expansion."
     },
+	"863": {
+		"code": "B104",
+		"name": "Sortie the Elite 22nd Destroyer Division!",
+		"desc": "Sortie Fumizuki Kai Ni, Satsuki Kai Ni, Minazuki Kai, Nagatsuki Kai and up to 2 additional ships to [W3-2]. S-Rank the boss node.",
+		"memo": "\u27a3Rewards either a Daihatsu Landing Craft, a New Model Artillery Armament Materials OR a Reinforcement Expansion."
+	},
 
 	"201": {
 		"code": "Bd1",

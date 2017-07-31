@@ -401,6 +401,11 @@
 		"desc": "編成任務：配备第一舰队旗舰为“由良改二”，伴随“村雨”“夕立”“春雨”“五月雨”和其他一艘驱逐舰配备，新编成「第四水雷戦隊」！",
 		"unlock": [ 860 ]
 	},
+	"184": {
+		"code": "A79",
+		"name": "精锐“第二二驱逐队”的再编成！",
+		"desc": "Have Fumizuki Kai Ni, Satsuki Kai Ni, Minazuki Kai and Nagatsuki Kai in your fleet."
+	},
 
 	"202": {
 		"code": "B1",
@@ -1004,6 +1009,12 @@
 		"code": "B103",
 		"name": "旗舰「由良」，拔锚！",
 		"desc": "出击任务：以“由良改二”为旗舰，配备伴随舰“村雨”“夕立”“春雨”“五月雨”以及“秋月”中的2艘配备的第一舰队，歼灭东部奥廖尔海（2-3）南方海域前方（5-1）的敌人!（以由良改二为旗舰，僚舰村雨、夕立、春雨、五月雨、秋月中的2艘和3艘任意舰出击2-3和5-1的boss点各S胜一次。任务前置待验证。）"
+	},
+	"863": {
+		"code": "B104",
+		"name": "精锐“第二二驱逐队”出击！",
+		"desc": "Sortie Fumizuki Kai Ni, Satsuki Kai Ni, Minazuki Kai, Nagatsuki Kai and up to 2 additional ships to [W3-2]. S-Rank the boss node.",
+		"memo": "\u27a3Rewards either a Daihatsu Landing Craft, a New Model Artillery Armament Materials OR a Reinforcement Expansion."
 	},
 
 	"201": {
