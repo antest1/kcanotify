@@ -22,7 +22,7 @@ antest1(IE10), E-mail: kcanotify@gmail.com
 
 **Updated: 2017.8.7**
 
-Kcanotify captures kancolle's traffics for Kcanotify features when you playing kancolle. Kcanotify works does not collect or use personal information(like device information, account information like password).
+Kcanotify captures kancolle's traffics for Kcanotify features when you playing kancolle, and DOES NOT collect or use personal information like device information, account information(like password).
 
 Kcanotify uses local VPN service to capture internet traffic for its functionality(like battle prediction and quest translation, etc.). Since unrooted android devices can not capture traffic for specific application, Kcanotify routes all internet traffics and filter it to use only kancolle gameplay data.
 
