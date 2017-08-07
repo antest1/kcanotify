@@ -100,5 +100,5 @@ All rights reserved
 
 Privacy Policy
 -------
-개인정보처리방침은 [이 문서](private_policy.md)를 참고하세요. (Updated: 2017.8.7)
+개인정보처리방침은 [이 문서](private_policy.md)를 참고하세요. (Updated: 2017.8.7)  
 You can check the privacy policy [HERE](private_policy.md).
