@@ -206,8 +206,12 @@ public class KcaFleetViewService extends Service {
     @Override
     public void onDestroy() {
         active = false;
-        mView.setVisibility(View.GONE);
-        if (mView.getParent() != null) mManager.removeViewImmediate(mView);
+        if (mView != null) {
+            if (mView.getParent() != null) mManager.removeViewImmediate(mView);
+        }
+        if (itemView != null) {
+            if (itemView.getParent() != null) mManager.removeViewImmediate(itemView);
+        }
         super.onDestroy();
     }
 
