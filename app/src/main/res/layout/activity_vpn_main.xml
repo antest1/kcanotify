@@ -41,8 +41,8 @@
                 android:weightSum="1.0" >
             <ToggleButton
                 android:text="VPN BTN"
-                android:textOff="VPN OFF"
-                android:textOn="VPN ON"
+                android:textOff="@string/ma_vpn_toggleoff"
+                android:textOn="@string/ma_vpn_toggleon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -57,8 +57,8 @@
 
             <ToggleButton
                 android:text="SERVICE BTN"
-                android:textOff="SVC OFF"
-                android:textOn="SVC ON"
+                android:textOff="@string/ma_svc_toggleoff"
+                android:textOn="@string/ma_svc_toggleon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"

@@ -70,6 +70,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="node_info_ecbattle" formatted="false">%s (深海聯合艦隊)</string>
     <string name="node_info_practice" formatted="false">演習</string>
     <!-- MainActivity Strings -->
+    <string name="ma_vpn_toggleon">嗅探ON</string>
+    <string name="ma_vpn_toggleoff">嗅探OFF</string>
+    <string name="ma_svc_toggleon">服務ON</string>
+    <string name="ma_svc_toggleoff">服務OFF</string>
     <string name="ma_toast_kancolle_not_installed">Android版本的艦これ尚未安裝</string>
     <string name="ma_toast_overay_diabled">戰鬥劇透需要取得懸浮視窗權限  請至設定 > 懸浮視窗設定來允許懸浮視窗</string>
     <string name="ma_hasupdate" formatted="false">有可用的更新。 (%s)</string>

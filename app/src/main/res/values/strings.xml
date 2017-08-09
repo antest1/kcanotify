@@ -103,6 +103,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="node_info_ecbattle" formatted="false">%s (Enemy Combined)</string>
     <string name="node_info_practice" formatted="false">PVP</string>
     <!-- MainActivity Strings -->
+    <string name="ma_vpn_toggleon">Sniffer On</string>
+    <string name="ma_vpn_toggleoff">Sniffer Off</string>
+    <string name="ma_svc_toggleon">Service On</string>
+    <string name="ma_svc_toggleoff">Service Off</string>
     <string name="ma_toast_kancolle_not_installed">Kancolle For Android is not installed.</string>
     <string name="ma_toast_overay_diabled">Screen Overlay Permission is required for BattleView. Enable Screen Overlay at Settings > Screen Overlay Settings.</string>
     <string name="ma_hasupdate" formatted="false">An update is available. (%s)</string>

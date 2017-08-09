@@ -8,7 +8,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,8 +30,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,12 +55,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
-import static android.text.TextUtils.concat;
 import static com.antest1.kcanotify.KcaAlarmService.TYPE_UPDATE;
-import static com.antest1.kcanotify.KcaApiData.kcShipInitEquipCount;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_QUESTTRACK;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
@@ -72,7 +65,6 @@ import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
-import static com.antest1.kcanotify.KcaConstants.PREF_FULLMORALE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLENODE_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
@@ -158,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
         is_kca_installed = (kcIntent != null);
 
         vpnbtn = (ToggleButton) findViewById(R.id.vpnbtn);
+        vpnbtn.setTextOff(getStringWithLocale(R.string.ma_vpn_toggleoff));
+        vpnbtn.setTextOn(getStringWithLocale(R.string.ma_vpn_toggleon));
         vpnbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -182,6 +176,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         svcbtn = (ToggleButton) findViewById(R.id.svcbtn);
+        svcbtn.setTextOff(getStringWithLocale(R.string.ma_svc_toggleoff));
+        svcbtn.setTextOn(getStringWithLocale(R.string.ma_svc_toggleon));
         svcbtn.setOnClickListener(new CompoundButton.OnClickListener() {
             @Override
             public void onClick(View v) {
