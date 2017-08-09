@@ -41,6 +41,8 @@ Demo
 - 출격 중 현재 위치 표시
 - 전투 예보 (제공권, 항공전 정보, 드랍 등)
 - 임무 목록 (번역, 반복퀘스트 추적)
+- 개발/건조 정보 확인
+- 해역 HP 확인
 - 개수공창표 (일반/확정 정보 표시)
 - OpenDB에 데이터 전송 (선택 가능)
 
@@ -94,3 +96,9 @@ License
 Copyright (c) 2016-2017 antest1(IE10)
 
 All rights reserved
+
+
+Privacy Policy
+-------
+개인정보처리방침은 [이 문서](private_policy.md)를 참고하세요. (Updated: 2017.8.7)  
+You can check the privacy policy [HERE](private_policy.md).
