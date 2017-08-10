@@ -41,6 +41,7 @@ import static com.antest1.kcanotify.KcaUtils.getId;
 
 public class KcaMapHpPopupService extends Service {
     public static final String MAPHP_SHOW_ACTION = "maphp_show_action";
+    public static final String MAPHP_RESET_ACTION = "maphp_reset_action";
 
     public static final String count_data_raw = "{\"15\":4,\"16\":7,\"25\":4,\"35\":4,\"44\":4,\"45\":5,\"52\":4,\"53\":5,\"54\":5,\"55\":5,\"62\":3,\"63\":4,\"64\":5,\"65\":6}";
     public static final JsonObject count_data = new JsonParser().parse(count_data_raw).getAsJsonObject();
@@ -141,6 +142,9 @@ public class KcaMapHpPopupService extends Service {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
+            if (intent.getAction().equals(MAPHP_RESET_ACTION)) {
+                hp_info.setText("data not loaded");
+            }
             if (intent.getAction().equals(MAPHP_SHOW_ACTION)) {
                 JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_APIMAPINFO);
                 if (data != null) {

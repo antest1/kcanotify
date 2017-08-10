@@ -810,6 +810,11 @@ public class KcaService extends Service {
                         }
                     }
                     KcaApiData.setEventMapDifficulty(mapno, rank);
+                    if (KcaMapHpPopupService.isActive()) {
+                        Intent qintent = new Intent(this, KcaMapHpPopupService.class);
+                        qintent.setAction(KcaMapHpPopupService.MAPHP_RESET_ACTION);
+                        startService(qintent);
+                    }
                 }
 
                 if (url.startsWith(API_GET_MEMBER_MAPINFO) || url.startsWith(API_GET_MEMBER_MISSION)) {
