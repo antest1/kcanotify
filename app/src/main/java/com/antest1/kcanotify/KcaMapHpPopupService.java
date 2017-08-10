@@ -152,7 +152,7 @@ public class KcaMapHpPopupService extends Service {
                         int id = item.get("api_id").getAsInt();
                         String map_id_str = getMapString(id);
                         if (item.has("api_eventmap")) {
-                            if (item.get("api_state").getAsInt() != 2) {
+                            if (item.has("api_state") && item.get("api_state").getAsInt() != 2) {
                                 int gauge_type = item.get("api_gauge_type").getAsInt();
                                 int now_maphp = item.get("api_now_maphp").getAsInt();
                                 int max_maphp = item.get("api_max_maphp").getAsInt();
