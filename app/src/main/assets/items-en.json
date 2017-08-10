@@ -237,6 +237,16 @@
   "戦闘糧食(特別なおにぎり)" : "Combat Ration (Special Onigiri)",
   "Swordfish" : "Swordfish",
   "Swordfish Mk.II(熟練)": "Swordfish Mk.II (Skilled)",
+  "Swordfish Mk.III(熟練)": "Swordfish Mk.III (Skilled)",
+  "38cm四連装砲": "38cm Quadruple Gun Mount",
+  "38cm四連装砲改": "38cm Quadruple Gun Mount Kai",
+  "15.2cm三連装砲": "15.2cm Triple Gun Mount",
+  "Skua": "Skua",
+  "Fulmar": "Fulmar",
+  "Spitfire Mk.I": "Spitfire Mk.I",
+  "Spitfire Mk.V": "Spitfire Mk.V",
+  "Seafire LF.Mk.III": "Seafire LF.Mk.III",
+  "Spitfire Mk.IX(熟練)": "Spitfire Mk.IX (Skilled)",
 
   "12.5inch連装副砲": "12.5inch Twin Secondary Gun Mount",
   "12.7mm機銃": "12.7mm Machine Gun",
@@ -311,5 +321,7 @@
   "深海潜水下駄履き": "Abyssal Submarine Floatplane",
   "深海攻撃哨戒鷹": "Abyssal Patrolling Attack Hawk",
   "深海攻撃哨戒鷹改": "Abyssal Patrolling Attack Hawk Kai",
-  "深海12inch三連装砲": "Abyssal 12inch Triple Gun Mount"
+  "深海12inch三連装砲": "Abyssal 12inch Triple Gun Mount",
+  "深海15inch四連装砲": "Abyssal 15inch Quadruple Gun Mount",
+  "深海15inch連装砲後期型": "Abyssal 15inch Twin Gun Mount Late Model"
 }
