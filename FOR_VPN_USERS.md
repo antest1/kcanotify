@@ -1,6 +1,6 @@
 ## How to use kcanotify when using other VPN
 
-VPN in kcanotify is for capturing data, so it can not be used for IP bypass. 
+Sniffer(VPN) in kcanotify is for capturing data, so it can not be used for IP bypass. 
 By the restriction of Android system, two or more VPNs cannot be used at once.
 You can see detail about VPN Service in android at [this official document](https://developer.android.com/reference/android/net/VpnService.html).
 
