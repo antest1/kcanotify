@@ -17,6 +17,7 @@ Download
 <a href='https://play.google.com/store/apps/details?id=com.antest1.kcanotify&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200px"/></a>
 - [Google Drive](http://bit.ly/kcanotifydown) (최신 버전)
 - [MEGA](https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw) (이전 버전 포함)
+- [百度云](http://pan.baidu.com/s/1i5f37Rv) (Password: c2in)
 
 **※ 2.4 rev4 이전 사용자들을 위한 안내**
 
