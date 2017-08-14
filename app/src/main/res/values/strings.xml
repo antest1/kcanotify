@@ -24,7 +24,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_download_link_googledrive_label" translatable="false">Google Drive</string>
     <string name="app_download_link_box_label" translatable="false">Box</string>
     <string name="app_download_link_mega_label" translatable="false">MEGA</string>
-    <string name="app_download_link_baidu_label" translatable="false">百度云(PW: c2in)</string>
+    <string name="app_download_link_baidu_label" translatable="false">百度云 (密码: c2in)</string>
     <string name="app_download_link_googledrive" translatable="false">http://bit.ly/kcanotifydown</string>
     <string name="app_download_link_box" translatable="false">http://bit.ly/kcanotify</string>
     <string name="app_download_link_mega" translatable="false">https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw</string>
