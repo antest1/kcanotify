@@ -160,7 +160,7 @@
 	"朝霜":"Asashimo",
 	"早霜":"Hayashimo",
 	"清霜":"Kiyoshimo",
-	
+
 	"信濃":"Shinano",
 	"鹿島":"Kashima",
 	"香椎":"Kashii",
@@ -205,7 +205,7 @@
 	"沖波":"Okinami",
 	"岸波":"Kishinami",
 	"秋霜":"Akishimo",
-	
+
 	"峯風":"Minekaze",
 	"澤風":"Sawakaze",
 	"沖風":"Okikaze",
@@ -220,7 +220,7 @@
 	"野風":"Nokaze",
 	"波風":"Namikaze",
 	"沼風":"Numakaze",
-	
+
 	"神風":"Kamikaze",
 	"朝風":"Asakaze",
 	"春風":"Harukaze",
@@ -230,7 +230,7 @@
 	"疾風":"Hayate",
 	"朝凪":"Asanagi",
 	"夕凪":"Yuunagi",
-	
+
 	"松":"Matsu",
 	"竹":"Take",
 	"梅":"Ume",
@@ -263,7 +263,7 @@
 	"榎":"Enoki",
 	"雄竹":"Odake",
 	"初梅":"Hatsuume",
-	
+
 	"秋月":"Akizuki",
 	"照月":"Teruzuki",
 	"涼月":"Suzutsuki",
@@ -277,20 +277,20 @@
 	"夏月":"Natsuzuki",
 	"満月":"Michitsuki",
 	"花月":"Hanazuki",
-	
+
 	"明石":"Akashi",
 	"あきつ丸":"Akitsumaru",
 	"秋津洲":"Akitsushima",
 	"瑞穂":"Mizuho",
 	"速吸":"Hayasui",
-	
+
 	"神威": "Kamoi",
 	"占守": "Shimushu",
 	"国後": "Kunashiri",
 	"春日丸": "Kasugamaru",
 	"択捉": "Etorofu",
 	"松輪":"Matsuwa",
-	
+
 	"Верный":"Verniy",
 	"Гангут": "Gangut",
 	"Октябрьская революция": "Oktyabrskaya Revolyutsiya",
@@ -319,7 +319,7 @@
 	"Commandant Teste":"Commandant Teste",
 	"Richelieu":"Richelieu",
 	"Ark Royal":"Ark Royal",
-	
+
 	"防空棲姫":"Air Defense Princess",
 	"空母棲鬼":"Aircraft Carrier Demon",
 	"空母棲姫":"Aircraft Carrier Princess",
@@ -349,8 +349,8 @@
 	"駆逐水鬼":"Destroyer Water Demon",
 	"護衛要塞":"Escort Fortress",
 	"浮遊要塞":"Floating Fortress",
-	"港湾棲姫":"Harbour Princess",
-	"港湾水鬼":"Harbour Water Demon",
+	"港湾棲姫":"Harbor Princess",
+	"港湾水鬼":"Harbor Water Demon",
 	"重巡ネ級":"Heavy Cruiser Ne-Class",
 	"重巡棲姫":"Heavy Cruiser Princess",
 	"重巡リ級":"Heavy Cruiser Ri-Class",
@@ -388,8 +388,8 @@
 	"中枢棲姫-壊":"Central Princess-Damaged",
 	"潜水夏姫":"Submarine Summer Princess",
 	"戦艦夏姫":"Battleship Summer Princess",
-	"港湾夏姫":"Harbour Summer Princess",
-	"港湾夏姫-壊":"Harbour Summer Princess-Damaged",
+	"港湾夏姫":"Harbor Summer Princess",
+	"港湾夏姫-壊":"Harbor Summer Princess-Damaged",
 	"重巡夏姫":"Heavy Cruiser Summer Princess",
 	"水母水姫":"Seaplane Tender Water Princess",
 	"深海海月姫":"Abyssal Jellyfish Princess",
@@ -400,6 +400,16 @@
 	"北方水姫": "Northern Water Princess",
 	"北方水姫-壊": "Northern Water Princess - Damaged",
 	"軽母ヌ級改": "Light Carrier Nu-Class Kai",
+	"戦艦仏棲姫":"French Battleship Princess",
+	"戦艦仏棲姫-壊":"French Battleship Princess - Damaged",
+	"駆逐ナ級":"Destroyer Na-Class",
+    "潜水新棲姫":"New Submarine Princess",
+	"空母夏鬼":"Aircraft Carrier Summer Demon",
+	"空母夏姫":"Aircraft Carrier Summer Princess",
+	"集積地夏姫":"Supply Depot Summer Princess",
+	"欧州棲姫":"European Princess",
+	"欧州棲姫":"European Princess - Damaged",
+
 	"elite":" elite",
 	"flagship":" flagship"
 
