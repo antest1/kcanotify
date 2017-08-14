@@ -939,7 +939,7 @@ public class KcaService extends Service {
                             JsonArray api_ship_data = new JsonArray();
                             int checkvalue = 0;
 
-                            if (isCombined) {
+                            if (deck_id == 0 && isCombined) {
                                 JsonObject first = portdeckdata.get(0).getAsJsonObject();
                                 JsonObject second = portdeckdata.get(1).getAsJsonObject();
 
