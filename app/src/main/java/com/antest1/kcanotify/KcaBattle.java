@@ -1157,7 +1157,7 @@ public class KcaBattle {
                             e_idx = getEnemyIdx(d);
                             afterhps[e_idx] -= cnv(damage.get(d));
                         } else {
-                            e_idx = getEnemyIdx(d - 6);
+                            e_idx = getEnemyCbIdx(d);
                             aftercbhps[e_idx] -= cnv(damage.get(d));
                         }
                     }
@@ -1166,14 +1166,34 @@ public class KcaBattle {
                 // 선제대잠
                 if (isKeyExist(api_data, "api_opening_taisen")) {
                     JsonObject opening_taisen = api_data.getAsJsonObject("api_opening_taisen");
+                    JsonArray at_eflag = opening_taisen.getAsJsonArray("api_at_eflag");
                     JsonArray df_list = opening_taisen.getAsJsonArray("api_df_list");
                     JsonArray df_damage = opening_taisen.getAsJsonArray("api_damage");
                     for (int i = 1; i < df_list.size(); i++) {
+                        int eflag = at_eflag.get(i).getAsInt();
                         JsonArray target = df_list.get(i).getAsJsonArray();
                         JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
                         for (int t = 0; t < target.size(); t++) {
                             int target_idx = target.get(t).getAsInt();
-                            aftercbhps[target_idx] -= cnv(target_dmg.get(t));
+                            if (eflag == 0) {
+                                int e_idx = -1;
+                                if (target_idx <= 6) {
+                                    e_idx = getEnemyIdx(target_idx);
+                                    afterhps[e_idx] -= cnv(target_dmg.get(t));
+                                } else {
+                                    e_idx = getEnemyCbIdx(target_idx);
+                                    aftercbhps[e_idx] -= cnv(target_dmg.get(t));
+                                }
+                            } else {
+                                int f_idx = -1;
+                                if (target_idx <= 6) {
+                                    f_idx = getFriendIdx(target_idx);
+                                    afterhps[f_idx] -= cnv(target_dmg.get(t));
+                                } else {
+                                    f_idx = getFriendCbIdx(target_idx);
+                                    aftercbhps[f_idx] -= cnv(target_dmg.get(t));
+                                }
+                            }
                         }
                     }
                 }
@@ -1493,11 +1513,14 @@ public class KcaBattle {
                         JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
                         for (int t = 0; t < target.size(); t++) {
                             int target_idx = target.get(t).getAsInt();
+                            int damage = cnv(target_dmg.get(t));
                             if (target_idx != -1) {
-                                if (activedeck[1] == 1 && target_idx > 6) {
-                                    afterhps[target_idx] -= cnv(target_dmg.get(t));
+                                if (target_idx <= 6) {
+                                    if (KcaBattle.isCombined) aftercbhps[target_idx] -= damage;
+                                    else afterhps[target_idx] -= damage;
                                 } else {
-                                    aftercbhps[target_idx] -= cnv(target_dmg.get(t));
+                                    if (activedeck[1] == 1) afterhps[target_idx] -= damage;
+                                    else aftercbhps[target_idx] -= damage;
                                 }
                             }
                         }
