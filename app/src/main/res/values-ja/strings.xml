@@ -17,7 +17,7 @@
     <string name="error_text">エラーが発生しました。開発者にエラーログを送信してください。</string>
 
     <string name="heavy_damaged">大破された艦娘があります！</string>
-    <string name="heavy_damaged_damecon">大破された艦娘があります！（ダメコンあり）</string>
+    <string name="heavy_damaged_damecon">大破された艦娘があります！ (ダメコンあり)</string>
     <string name="goback_left">退避は左側</string>
 
     <string name="seek_type_0">総合</string>
@@ -70,13 +70,13 @@
     <string name="ma_svc_toggleoff">Service Off</string>
     <string name="ma_toast_kancolle_not_installed">艦これがインストールされていません。</string>
     <string name="ma_toast_overay_diabled">戦闘予報などに必要な画面オーバーレイ権限が設定されていません。設定→画面オーバーレイ設定で権限を取得することができます。</string>
-    <string name="ma_hasupdate" formatted="false">アップデートがあります。（%s）</string>
-    <string name="ma_hasdataupdate" formatted="false">新しいゲームデータがあります。（%s）</string>
+    <string name="ma_hasupdate" formatted="false">アップデートがあります。 (%s)</string>
+    <string name="ma_hasdataupdate" formatted="false">新しいゲームデータがあります。 (%s)</string>
     <string name="description">See main_jp.html</string>
 
     <!-- SettingActivity Strings -->
-    <string name="sa_checkupdate_latest" formatted="false">最新バージョン（%s）</string>
-    <string name="sa_checkupdate_hasupdate" formatted="false">アップデートがあります。（%s）\n更新しますか？</string>
+    <string name="sa_checkupdate_latest" formatted="false">最新バージョン (%s)</string>
+    <string name="sa_checkupdate_hasupdate" formatted="false">アップデートがあります。 (%s)\n更新しますか？</string>
     <string name="sa_checkupdate_dialogtitle">最新バージョン確認</string>
     <string name="sa_checkupdate_nodataerror">アップデートの確認に問題が発生しました</string>
     <string name="sa_checkupdate_servererror">アップデートサーバーエラー</string>
@@ -84,11 +84,11 @@
     <string name="sa_getupdate_finished">ゲームデータ更新完了</string>
     <string name="sa_getupdate_started">ゲームデータリクエスト&#8230;</string>
     <string name="sa_getupdate_servererror" formatted="false">サーバーエラー: %s</string>
-    <string name="sa_getupdate_ioexceptionerror">エラー（IOException）</string>
+    <string name="sa_getupdate_ioexceptionerror">エラー (IOException)</string>
 
-    <string name="sa_overlay_under_m">Android 6.0（Marshmallow）未満の場合には設定する必要がありません。</string>
+    <string name="sa_overlay_under_m">Android 6.0 (Marshmallow)未満の場合には設定する必要がありません。</string>
     <string name="sa_overlay_ok">画面オーバーレイ権限が設定されました。</string>
-    <string name="sa_overlay_no">画面オーバーレイ権限が設定されていません。（戦闘予報利用不可）</string>
+    <string name="sa_overlay_no">画面オーバーレイ権限が設定されていません。 (戦闘予報利用不可)</string>
 
     <!-- InfoActivity Strings -->
 
@@ -133,25 +133,25 @@
     <string name="setting_menu_kand_title_saku_cal">索敵計算式</string>
     <string name="setting_menu_kand_title_opendb">OpenDBにゲームデータを送信</string>
     <string name="setting_menu_kand_title_exp_realtime_show">遠征の残り時間を表示</string>
-    <string name="setting_menu_kand_desc_exp_realtime_show">ノーティバーで遠征の残り時間をリアルタイムで表示</string>
+    <string name="setting_menu_kand_desc_exp_realtime_show">ノーティバーで遠征の残り時間を表示</string>
     <string name="setting_menu_kand_title_set_noti_priority">ノーティバーのプライオリティを高く設定</string>
-    <string name="setting_menu_kand_desc_set_noti_priority">チェック時ノーティバーが常に上に表示される</string>
+    <string name="setting_menu_kand_desc_set_noti_priority">ノーティバーを常に上に表示する</string>
     <string name="setting_menu_kand_title_game_data_down">ゲームデータをダウンロード</string>
     <string name="setting_menu_kand_desc_game_data_down">ゲームデータがロードされない場合に使用</string>
 
     <string name="setting_menu_view_head">権限/戦闘予報設定</string>
     <string name="setting_menu_view_title_accessibility_setting">アクセシビリティ(ユーザー補助)設定</string>
-    <string name="setting_menu_view_desc_accessibility_setting">サービスでKcanotifyを選択（艦これの動作を検出するために）</string>
+    <string name="setting_menu_view_desc_accessibility_setting">サービスでKcanotifyを選択 (艦これの動作を検出するために必要)</string>
     <string name="setting_menu_view_title_overlay_setting">画面オーバーレイ設定</string>
-    <string name="setting_menu_view_desc_overlay_setting">他のアプリの上に重ねて表示する（戦闘予報などに必要）</string>
+    <string name="setting_menu_view_desc_overlay_setting">他のアプリの上に重ねて表示する (戦闘予報などに必要)</string>
     <string name="setting_menu_view_title_battlenode_use">次のマスを予報する</string>
     <string name="setting_menu_view_desc_battlenode_use">出撃中トーストで次のマス情報を表示する</string>
     <string name="setting_menu_view_title_battleview_use">戦闘予報を使う</string>
     <string name="setting_menu_view_desc_battleview_use">出撃や練習での戦闘結果を見る</string>
-    <string name="setting_menu_view_title_drop_visible">艦娘ドロップをスポイラー</string>
+    <string name="setting_menu_view_title_drop_visible">艦娘ドロップをスポイラーする</string>
     <string name="setting_menu_view_desc_drop_visible">戦闘予報でドロップされた艦娘の名前を見る</string>
     <string name="setting_menu_view_desc_questview_use">任務画面で任務の翻訳や攻略情報を表示する</string>
-    <string name="setting_menu_view_title_questview_use">戦闘情報を使う</string>
+    <string name="setting_menu_view_title_questview_use">任務情報を使う</string>
 
     <string name="setting_menu_noti_head">通知設定</string>
     <string name="setting_menu_noti_title_exp">遠征通知</string>
@@ -159,9 +159,9 @@
     <string name="setting_menu_noti_title_dock">入渠通知</string>
     <string name="setting_menu_noti_desc_dock">入渠完了のときに上部に通知する</string>
     <string name="setting_menu_noti_title_hdmg_vib">大破通知</string>
-    <string name="setting_menu_noti_desc_hdmg_vib">大破した艦かある場合に音/バイブで通知する（トーストは常に発生）</string>
+    <string name="setting_menu_noti_desc_hdmg_vib">大破した艦かある場合に音/バイブで通知する (トーストは常に発生)</string>
     <string name="setting_menu_noti_title_nspl_vib">補給未完通知</string>
-    <string name="setting_menu_noti_desc_nspl_vib">補給していない艦隊がある場合に音/バイブで通知する（トーストは常に発生）</string>
+    <string name="setting_menu_noti_desc_nspl_vib">補給していない艦隊がある場合に音/バイブで通知する (トーストは常に発生)</string>
 
     <string name="setting_menu_app_head">アプリケーション情報</string>
     <string name="setting_menu_app_title_current">現在アプリバージョン</string>
@@ -243,7 +243,7 @@
     <string name="sound_kind_normal">音</string>
     <string name="sound_kind_mute">サイレント</string>
     <string name="ma_permission_external_confirmed">ストレージ権限が設定されました。</string>
-    <string name="ma_permission_external_denied">ストレージ権限が設定されていません。 (システム通知音のみ使用可能/エラーログのエクスポート不可)</string>
+    <string name="ma_permission_external_denied">ストレージ権限が設定されていません。(システム通知音のみ使用可能/エラーログのエクスポート不可)</string>
     <string name="airbase_term">基地航空隊</string>
     <string name="phase_term" formatted="false">フェイズ %d</string>
     <string name="injection_term">噴式強襲</string>
@@ -319,7 +319,7 @@
     <string name="item_engine">ネ式エンジン</string>
     <string name="item_gmi_material">新型砲熕兵装資材</string>
     <string name="item_skilled_crew">熟練搭乗員</string>
-    <string name="setting_menu_kand_desc_bypass_address">CIDR形式でプロキシを使用しないアドレスを設定（各CIDRはカンマで区切って）</string>
+    <string name="setting_menu_kand_desc_bypass_address">CIDR形式でプロキシを使用しないアドレスを設定 (各CIDRはカンマで区切って)</string>
     <string name="settings_menu_kand_title_bypass_address">例外リスト</string>
     <string name="setting_menu_kand_warn_adv_network">警告：これらの設定を正しくしていない場合は、Snifferが動作しないことがあります。この設定が何をするかわからない場合は設定しないでください。設定を適用するためには、Sniffer(VPN)を再起動してください。</string>
     <string name="setting_menu_kand_title_socks5_port">SOCKS5プロキシポートT</string>
