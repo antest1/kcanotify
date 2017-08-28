@@ -131,7 +131,7 @@
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">Kcanotify設定</string>
     <string name="setting_menu_kand_title_saku_cal">索敵計算式</string>
-    <string name="setting_menu_kand_title_opendb">OpenDBにゲームデータを送信</string>
+    <string name="setting_menu_kand_title_opendb">OpenDBに通計を送信</string>
     <string name="setting_menu_kand_title_exp_realtime_show">遠征の残り時間を表示</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">ノーティバーで遠征の残り時間を表示</string>
     <string name="setting_menu_kand_title_set_noti_priority">ノーティバーのプライオリティを高く設定</string>
