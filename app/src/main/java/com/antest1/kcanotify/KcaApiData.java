@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static android.R.attr.name;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
@@ -314,6 +315,10 @@ public class KcaApiData {
     }
 
     public static String getShipTranslation(String jp_name, boolean abbr) {
+        if (currentLocaleCode.equals("jp")) {
+            return jp_name;
+        }
+
         String name = jp_name;
         String name_suffix = "";
         if (!kcShipTranslationData.has("suffixes")) {
@@ -347,7 +352,9 @@ public class KcaApiData {
 
     public static String getItemTranslation(String jp_name) {
         String name = jp_name;
-        if (kcItemTranslationData.has(name)) {
+        if (currentLocaleCode.equals("jp")) {
+            return jp_name;
+        } else if (kcItemTranslationData.has(name)) {
             name = kcItemTranslationData.get(name).getAsString();
         }
         return name;
@@ -444,13 +451,15 @@ public class KcaApiData {
         String locale = getStringPreferences(context, PREF_KCA_LANGUAGE);
         if (!isDataLoaded || !currentLocaleCode.equals(getLocaleCode(locale))) {
             currentLocaleCode = getLocaleCode(locale);
-            int loadShipTranslationDataResult = loadShipTranslationDataFromAssets(assetManager, locale);
-            if (loadShipTranslationDataResult != 1) {
-                Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
-            }
-            int loadItemTranslationDataResult = loadItemTranslationDataFromAssets(assetManager, locale);
-            if (loadItemTranslationDataResult != 1) {
-                Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+            if (!currentLocaleCode.equals("jp")) {
+                int loadShipTranslationDataResult = loadShipTranslationDataFromAssets(assetManager, locale);
+                if (loadShipTranslationDataResult != 1) {
+                    Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+                }
+                int loadItemTranslationDataResult = loadItemTranslationDataFromAssets(assetManager, locale);
+                if (loadItemTranslationDataResult != 1) {
+                    Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+                }
             }
             int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromAssets(assetManager, locale);
             if (loadQuestInfoTranslationDataResult != 1) {

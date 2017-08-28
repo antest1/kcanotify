@@ -68,6 +68,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="language_system">Follow System Setting</string>
     <string name="language_ko" translatable="false">한국어</string>
     <string name="language_en" translatable="false">English</string>
+    <string name="language_jp" translatable="false">日本語</string>
     <string name="language_scn" translatable="false">中文 (简体)</string>
     <string name="language_tcn" translatable="false">中文 (繁體)</string>
 

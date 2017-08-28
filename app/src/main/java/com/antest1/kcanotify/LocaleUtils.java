@@ -56,7 +56,7 @@ public class LocaleUtils {
                 return "tcn";
             }
         } else if (pref.startsWith("ja")) {
-            return "en"; // return "jp";
+            return "jp";
         } else {
             return "en";
         }

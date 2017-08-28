@@ -2,6 +2,7 @@
   "no": "1",
   "name-ko": "연습해역",
   "name-en": "Practice Voyage",
+  "name-jp": "練習航海",
   "name-scn": "练习航海",
   "name-tcn": "練習航海",
   "time": "15"
@@ -10,6 +11,7 @@
   "no": "2",
   "name-ko": "장거리연습항해",
   "name-en": "Long Distance Training Voyage",
+  "name-jp": "長距離練習航海",
   "name-scn": "长距离练习航海",
   "name-tcn": "長距離練習航海",
   "time": "30"
@@ -18,6 +20,7 @@
   "no": "3",
   "name-ko": "경비임무",
   "name-en": "Security Tasks",
+  "name-jp": "警備任務",
   "name-scn": "警备任务",
   "name-tcn": "警備任務",
   "time": "20"
@@ -26,6 +29,7 @@
   "no": "4",
   "name-ko": "대잠경계임무",
   "name-en": "Anti-Submarine Alert",
+  "name-jp": "対潜警戒任務",
   "name-scn": "对潜警戒任务",
   "name-tcn": "對潛警戒任務",
   "time": "50"
@@ -34,6 +38,7 @@
   "no": "5",
   "name-ko": "해상호위임무",
   "name-en": "Maritime Security Missions",
+  "name-jp": "海上護衛任務",
   "name-scn": "海上护卫任务",
   "name-tcn": "海上護衛任務",
   "time": "90"
@@ -42,6 +47,7 @@
   "no": "6",
   "name-ko": "방공사격연습",
   "name-en": "Anti-Air Exercises",
+  "name-jp": "防空射撃演習",
   "name-scn": "防空射击演习",
   "name-tcn": "防空射擊演習",
   "time": "40"
@@ -50,6 +56,7 @@
   "no": "7",
   "name-ko": "관함식연습",
   "name-en": "Ceremonial Dress Rehearsal",
+  "name-jp": "観艦式予行",
   "name-scn": "观舰式排演",
   "name-tcn": "觀艦式排演",
   "time": "60"
@@ -58,6 +65,7 @@
   "no": "8",
   "name-ko": "관함식",
   "name-en": "Naval Review",
+  "name-jp": "観艦式",
   "name-scn": "观舰式",
   "name-tcn": "觀艦式",
   "time": "180"
@@ -66,6 +74,7 @@
   "no": "9",
   "name-ko": "유조선호위임무",
   "name-en": "Tanker Escort Duties",
+  "name-jp": "タンカー護衛任務",
   "name-scn": "油轮护卫任务",
   "name-tcn": "油輪護衛任務",
   "time": "240"
@@ -74,6 +83,7 @@
   "no": "10",
   "name-ko": "강행정찰임무",
   "name-en": "Attack Force Recon Missions",
+  "name-jp": "強行偵察任務",
   "name-scn": "强行侦察任务",
   "name-tcn": "強行偵察任務",
   "time": "90"
@@ -82,6 +92,7 @@
   "no": "11",
   "name-ko": "보크사이트수송임무",
   "name-en": "Bauxite Transport Missions",
+  "name-jp": "ボーキサイト輸送任務",
   "name-scn": "铝土运送任务",
   "name-tcn": "鋁土運送任務",
   "time": "300"
@@ -90,6 +101,7 @@
   "no": "12",
   "name-ko": "자원수송임무",
   "name-en": "Resource Transportation Missions",
+  "name-jp": "資源輸送任務",
   "name-scn": "资源运送任务",
   "name-tcn": "資源運送任務",
   "time": "480"
@@ -98,6 +110,7 @@
   "no": "13",
   "name-ko": "쥐수송작전",
   "name-en": "Rat Transportation Strategy",
+  "name-jp": "鼠輸送作戦",
   "name-scn": "鼠输送作战",
   "name-tcn": "鼠輸送作戰",
   "time": "240"
@@ -106,6 +119,7 @@
   "no": "14",
   "name-ko": "포위육전대철수작전",
   "name-en": "Siege-Corps Withdrawal Strategies",
+  "name-jp": "包囲陸戦隊撤収作戦",
   "name-scn": "围困陆战队撤退运送任务",
   "name-tcn": "圍困陸戰隊撤退運送任務",
   "time": "360"
@@ -114,6 +128,7 @@
   "no": "15",
   "name-ko": "미끼기동부대지원작전",
   "name-en": "Decoy Task Force Assistance Operations",
+  "name-jp": "囮機動部隊支援作戦",
   "name-scn": "诱饵机动部队支援作战",
   "name-tcn": "誘餌機動部隊支援作戰",
   "time": "720"
@@ -122,6 +137,7 @@
   "no": "16",
   "name-ko": "함대결전지원작전",
   "name-en": "Fleet Battle Support Strategy",
+  "name-jp": "艦隊決戦援護作戦",
   "name-scn": "舰队决战护卫作战",
   "name-tcn": "艦隊決戰護衛作戰",
   "time": "900"
@@ -130,6 +146,7 @@
   "no": "17",
   "name-ko": "적지정찰작전",
   "name-en": "Enemy Territory Reconnaissance Operations",
+  "name-jp": "敵地偵察作戦",
   "name-scn": "敌基地侦察作战",
   "name-tcn": "敵基地偵察作戰",
   "time": "45"
@@ -138,6 +155,7 @@
   "no": "18",
   "name-ko": "항공기수송작전",
   "name-en": "Aircraft Transport Strategy",
+  "name-jp": "航空機輸送作戦",
   "name-scn": "舰载机运送作战",
   "name-tcn": "艦載機運送作戰",
   "time": "300"
@@ -146,6 +164,7 @@
   "no": "19",
   "name-ko": "북호작전",
   "name-en": "Northern Offensive Operations",
+  "name-jp": "北号作戦",
   "name-scn": "北号作战",
   "name-tcn": "北號作戰",
   "time": "360"
@@ -154,6 +173,7 @@
   "no": "20",
   "name-ko": "잠수함초계작전",
   "name-en": "Submarine Patrol",
+  "name-jp": "潜水艦哨戒任務",
   "name-scn": "潜水艇戒备任务",
   "name-tcn": "潛水艇戒備任務",
   "time": "120"
@@ -162,6 +182,7 @@
   "no": "21",
   "name-ko": "북방쥐수송작전",
   "name-en": "Northern Rat Transportation Strategy",
+  "name-jp": "北方鼠輸送作戦",
   "name-scn": "北方鼠输送作战",
   "name-tcn": "北方鼠輸送作戰",
   "time": "140"
@@ -170,6 +191,7 @@
   "no": "22",
   "name-ko": "함대연습",
   "name-en": "Fleet Exercises",
+  "name-jp": "艦隊演習",
   "name-scn": "舰队演习",
   "name-tcn": "艦隊演習",
   "time": "180"
@@ -178,6 +200,7 @@
   "no": "23",
   "name-ko": "항공전함운용연습",
   "name-en": "Aviation Battleship Exercises",
+  "name-jp": "航空戦艦運用演習",
   "name-scn": "航空战舰运用演习",
   "name-tcn": "航空戰艦運用演習",
   "time": "240"
@@ -186,6 +209,7 @@
   "no": "24",
   "name-ko": "북방항로해상호위",
   "name-en": "Guard the North Sea Route",
+  "name-jp": "北方航路海上護衛",
   "name-scn": "北方航路海上护卫",
   "name-tcn": "北方航路海上護衛",
   "time": "500"
@@ -194,6 +218,7 @@
   "no": "25",
   "name-ko": "통상파괴작전",
   "name-en": "Trade-Route Destruction Strategy",
+  "name-jp": "通商破壊作戦",
   "name-scn": "通商破坏作战",
   "name-tcn": "通商破壞作戰",
   "time": "2400"
@@ -202,6 +227,7 @@
   "no": "26",
   "name-ko": "적모항공습작전",
   "name-en": "Bombing Campaign on the Enemy Home-Port",
+  "name-jp": "敵母港空襲作戦",
   "name-scn": "敌母港空袭作战",
   "name-tcn": "敵母港空襲作戰",
   "time": "4800"
@@ -210,6 +236,7 @@
   "no": "27",
   "name-ko": "잠수함통상파괴작전",
   "name-en": "Submarine Commerce Destruction Strategy",
+  "name-jp": "潜水艦通商破壊作戦",
   "name-scn": "潜水艇通商破坏作战",
   "name-tcn": "潛水艇通商破壞作戰",
   "time": "1200"
@@ -218,6 +245,7 @@
   "no": "28",
   "name-ko": "서방해역봉쇄작전",
   "name-en": "Western Sea Blockade Operation",
+  "name-jp": "西方海域封鎖作戦",
   "name-scn": "西方海域封锁作战",
   "name-tcn": "西方海域封鎖作戰",
   "time": "1500"
@@ -226,6 +254,7 @@
   "no": "29",
   "name-ko": "잠수함파견연습",
   "name-en": "Submarine Dispatch Exercises",
+  "name-jp": "潜水艦派遣演習",
   "name-scn": "潜水艇派遣演习",
   "name-tcn": "潛水艇派遣演習",
   "time": "1440"
@@ -234,6 +263,7 @@
   "no": "30",
   "name-ko": "잠수함파견작전",
   "name-en": "Submarine Dispatch Operations",
+  "name-jp": "潜水艦派遣作戦",
   "name-scn": "潜水艇派遣作战",
   "name-tcn": "潛水艇派遣作戰",
   "time": "2880"
@@ -242,6 +272,7 @@
   "no": "31",
   "name-ko": "해외함과의접촉",
   "name-en": "Contacting Foreign Vessels",
+  "name-jp": "海外艦との接触",
   "name-scn": "和海外舰的接触",
   "name-tcn": "和海外艦的接觸",
   "time": "120"
@@ -250,6 +281,7 @@
   "no": "32",
   "name-ko": "원양연습항해",
   "name-en": "Seafaring Training",
+  "name-jp": "遠洋練習航海",
   "name-scn": "远洋练习航海",
   "name-tcn": "遠洋練習航海",
   "time": "1440"
@@ -258,6 +290,7 @@
   "no": "33",
   "name-ko": "전방지원함대",
   "name-en": "Vanguard Support Missions (1)",
+  "name-jp": "前衛支援任務",
   "name-scn": "前线部队支援任务",
   "name-tcn": "前線部隊支援任務",
   "time": "15"
@@ -266,6 +299,7 @@
   "no": "34",
   "name-ko": "함대결전지원임무",
   "name-en": "Vangard Support Missions (2)",
+  "name-jp": "艦隊決戦支援任務",
   "name-scn": "舰队决战支援任务",
   "name-tcn": "艦隊決戰支援任務",
   "time": "30"
@@ -274,6 +308,7 @@
   "no": "35",
   "name-ko": "MO작전",
   "name-en": "MO Operations",
+  "name-jp": "MO作戦",
   "name-scn": "MO作战",
   "name-tcn": "MO作戰",
   "time": "420"
@@ -282,6 +317,7 @@
   "no": "36",
   "name-ko": "수상기지건설",
   "name-en": "Water Base Construction",
+  "name-jp": "水上機基地建設",
   "name-scn": "水上飞机基地建设",
   "name-tcn": "水上飛機基地建設",
   "time": "540"
@@ -290,6 +326,7 @@
   "no": "37",
   "name-ko": "도쿄급행1",
   "name-en": "Tokyo Express (1)",
+  "name-jp": "東京急行",
   "name-scn": "东京急行",
   "name-tcn": "東京急行",
   "time": "165"
@@ -298,6 +335,7 @@
   "no": "38",
   "name-ko": "도쿄급행2",
   "name-en": "Tokyo Express (2)",
+  "name-jp": "東京急行(弐)",
   "name-scn": "东京急行(二)",
   "name-tcn": "東京急行(二)",
   "time": "175"
@@ -306,6 +344,7 @@
   "no": "39",
   "name-ko": "원양잠수함작전",
   "name-en": "Deep-Sea Submarine Warfare",
+  "name-jp": "遠洋潜水艦作戦",
   "name-scn": "远洋潜水艇作战",
   "name-tcn": "遠洋潛水艇作戰",
   "time": "1800"
@@ -314,6 +353,7 @@
   "no": "40",
   "name-ko": "수상기전선운송",
   "name-en": "Seaplane Delivery on the Front Lines",
+  "name-jp": "水上機前線輸送",
   "name-scn": "水上机前线运输",
   "name-tcn": "水上機前線運輸",
   "time": "410"
@@ -322,6 +362,7 @@
   "no": "133",
   "name-ko": "[E] 전방지원함대",
   "name-en": "[E] Vanguard Support Missions (1)",
+  "name-jp": "[E] 前衛支援任務",
   "name-scn": "[E] 前线部队支援任务",
   "name-tcn": "[E] 前線部隊支援任務",
   "time": "15"
@@ -330,6 +371,7 @@
   "no": "134",
   "name-ko": "[E] 함대결전지원임무",
   "name-en": "[E] Vangard Support Missions (2)",
+  "name-jp": "[E] 艦隊決戦支援任務",
   "name-scn": "[E] 舰队决战支援任务",
   "name-tcn": "[E] 艦隊決戰支援任務",
   "time": "30"

@@ -1,0 +1,350 @@
+<resources>
+    <string name="locale_code">ja-JP</string>
+
+    <!-- Application Information -->
+    <string name="app_name">Kcanotify</string>
+    <string name="action_settings">設定</string>
+    <string name="backpress_msg">もう一度押すとアプリが終了します</string>
+
+    <string name="accessibility_service_description">Kcanotifyが艦これの動作を検出するためには、この権限が設定されている。\n艦これが実行されているかどうかを検査する目的のほか、他の目的には使用されません。\nこの権限を設定しなくても大丈夫ですが、この場合妖精さんをゲーム画面外で非表示するためには長く押して隠してください。</string>
+
+    <!-- Link Information, Do Not Translate Here -->
+
+    <!-- Common Text -->
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">キャンセル</string>
+
+    <string name="error_text">エラーが発生しました。開発者にエラーログを送信してください。</string>
+
+    <string name="heavy_damaged">大破された艦娘があります！</string>
+    <string name="heavy_damaged_damecon">大破された艦娘があります！（ダメコンあり）</string>
+    <string name="goback_left">退避は左側</string>
+
+    <string name="seek_type_0">総合</string>
+    <string name="seek_type_1">33式/1</string>
+    <string name="seek_type_3">33式/3</string>
+    <string name="seek_type_4">33式/4</string>
+
+    <string name="seek_type_0_detail">単純合算</string>
+    <string name="seek_type_1_detail">33式/Cn=1 (2&#45;5)</string>
+    <string name="seek_type_3_detail">33式/Cn=3 (6&#45;2,6&#45;3)</string>
+    <string name="seek_type_4_detail">33式/Cn=4 (3&#45;5,6&#45;1)</string>
+
+    <string name="speed_superfast">最速</string>
+    <string name="speed_fastplus">高速＋</string>
+    <string name="speed_fast">高速</string>
+    <string name="speed_slow">低速</string>
+    <string name="speed_mixed_normal">低速混成</string>
+    <string name="speed_mixed_fast">高速混成</string>
+    <string name="speed_mixed_fastplus">高速＋混成</string>
+    <string name="speed_none">\?\?</string>
+    <string name="speed_postfix">艦隊</string>
+
+    <string name="opendb_failed_msg">OpenDBデータ処理エラー</string>
+    <string name="process_battle_failed_msg">戦闘データ処理エラー</string>
+    <string name="service_failed_msg">データ処理エラー\nKcanotifyを再起動してください</string>
+
+    <string name="node_info_noevent" formatted="false">%s (気のせい)</string>
+    <string name="node_info_obtain" formatted="false">%s (資源)</string>
+    <string name="node_info_loss" formatted="false">%s (渦潮)</string>
+    <string name="node_info_normal" formatted="false">%s</string>
+    <string name="node_info_normal_battle" formatted="false">%s (通常)</string>
+    <string name="node_info_boss" formatted="false">%s (ボス)</string>
+    <string name="node_info_boss_nightbattle" formatted="false">%s (ボス/夜戦)</string>
+    <string name="node_info_boss_nightdaybattle" formatted="false">%s (ボス/夜->昼)</string>
+    <string name="node_info_boss_ecbattle" formatted="false">%s (ボス/敵連合)</string>
+    <string name="node_info_airbattle" formatted="false">%s (航空戦)</string>
+    <string name="node_info_airsearch" formatted="false">%s (航空偵察)</string>
+    <string name="node_info_ldairbattle" formatted="false">%s (空襲戦)</string>
+    <string name="node_info_nightbattle" formatted="false">%s (夜戦)</string>
+    <string name="node_info_nightdaybattle" formatted="false">%s (夜->昼)</string>
+    <string name="node_info_tpoint" formatted="false">%s (揚陸地点)</string>
+    <string name="node_info_selectable" formatted="false">%s (能動分岐)</string>
+    <string name="node_info_sendan" formatted="false">%s (船団護衛成功)</string>
+    <string name="node_info_ecbattle" formatted="false">%s (敵連合艦隊)</string>
+    <string name="node_info_practice" formatted="false">練習</string>
+    <!-- MainActivity Strings -->
+    <string name="ma_vpn_toggleon">Sniffer On</string>
+    <string name="ma_vpn_toggleoff">Sniffer Off</string>
+    <string name="ma_svc_toggleon">Service On</string>
+    <string name="ma_svc_toggleoff">Service Off</string>
+    <string name="ma_toast_kancolle_not_installed">艦これがインストールされていません。</string>
+    <string name="ma_toast_overay_diabled">戦闘予報などに必要な画面オーバーレイ権限が設定されていません。設定→画面オーバーレイ設定で権限を取得することができます。</string>
+    <string name="ma_hasupdate" formatted="false">アップデートがあります。（%s）</string>
+    <string name="ma_hasdataupdate" formatted="false">新しいゲームデータがあります。（%s）</string>
+    <string name="description">See main_jp.html</string>
+
+    <!-- SettingActivity Strings -->
+    <string name="sa_checkupdate_latest" formatted="false">最新バージョン（%s）</string>
+    <string name="sa_checkupdate_hasupdate" formatted="false">アップデートがあります。（%s）\n更新しますか？</string>
+    <string name="sa_checkupdate_dialogtitle">最新バージョン確認</string>
+    <string name="sa_checkupdate_nodataerror">アップデートの確認に問題が発生しました</string>
+    <string name="sa_checkupdate_servererror">アップデートサーバーエラー</string>
+
+    <string name="sa_getupdate_finished">ゲームデータ更新完了</string>
+    <string name="sa_getupdate_started">ゲームデータリクエスト&#8230;</string>
+    <string name="sa_getupdate_servererror" formatted="false">サーバーエラー: %s</string>
+    <string name="sa_getupdate_ioexceptionerror">エラー（IOException）</string>
+
+    <string name="sa_overlay_under_m">Android 6.0（Marshmallow）未満の場合には設定する必要がありません。</string>
+    <string name="sa_overlay_ok">画面オーバーレイ権限が設定されました。</string>
+    <string name="sa_overlay_no">画面オーバーレイ権限が設定されていません。（戦闘予報利用不可）</string>
+
+    <!-- InfoActivity Strings -->
+
+    <!-- KcaService Strings -->
+    <string name="kca_init_title" formatted="false">%s 動作中</string>
+    <string name="kca_init_content">Kcanotifyでゲームを実行してください</string>
+
+    <string name="kca_noti_title_exp_canceled" formatted="false">遠征 #%d (%s) キャンセル</string>
+    <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt;が遠征#%dから帰還します。</string>
+    <string name="kca_noti_title_exp_finished" formatted="false">遠征 #%d (%s) 完了</string>
+    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt;が遠征から復帰しました。</string>
+    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt;が遠征で指令によって帰還しました。</string>
+
+    <string name="kca_noti_title_dock_finished" formatted="false">第%dドーク整備完了</string>
+    <string name="kca_noti_content_dock_finished" formatted="false">第%dドーク：%sの整備が完了しました。</string>
+    <string name="kca_noti_content_dock_finished_nodata" formatted="false">第%dドークにいる艦娘の整備が完了しました。</string>
+
+    <string name="kca_toast_airpower" formatted="false">制空：%d&#45;%d</string>
+    <string name="kca_toast_seekvalue_d" formatted="false">索敵(%s)：%d</string>
+    <string name="kca_toast_seekvalue_f" formatted="false">索敵(%s)：%.2f</string>
+    <string name="kca_toast_tpvalue" formatted="false">TP: S%d/A%d</string>
+
+    <string name="kca_toast_restart_at_kcanotify">Kcanotifyで艦これを再起動してください</string>
+    <string name="kca_toast_get_data_at_settings">ゲームデータが完全にロードされていません。設定でデータをダウンロードしてください。</string>
+    <string name="kca_toast_get_data_at_settings_2">ゲームデータに異常があります。設定でデータをダウンロードしてください。</string>
+    <string name="kca_toast_loading_data">ゲームデータを読み込み中</string>
+    <string name="kca_toast_inconsistent_data">最新バージョンのデータがサーバーに存在しません。\n時間を置いてやり直してください。</string>
+    <string name="kca_toast_ioexceptionerror">データキャッシュへの書き込み中にエラーが発生しました。</string>
+
+    <string name="kca_view_activate_vpn">Snifferを有効にしてください</string>
+    <string name="kca_view_condition" formatted="false">疲労度：%s</string>
+    <string name="kca_view_condition_nformat" formatted="false">疲労度#%d：%s</string>
+    <string name="kca_view_hdmg_damecon_format" formatted="false">[大破/ダメコンあり！] %s 動作中 %s</string>
+    <string name="kca_view_hdmg_format" formatted="false">[大破あり!] %s 動作中 %s</string>
+    <string name="kca_view_normal_format" formatted="false">%s 動作中 %s</string>
+
+    <string name="kca_view_noexpedition">遠征に出た艦隊がありません。</string>
+    <string name="kca_view_expedition_header">遠征残り時間:</string>
+
+    <!-- Setting Strings -->
+    <string name="setting_menu_kand_head">Kcanotify設定</string>
+    <string name="setting_menu_kand_title_saku_cal">索敵計算式</string>
+    <string name="setting_menu_kand_title_opendb">OpenDBにゲームデータを送信</string>
+    <string name="setting_menu_kand_title_exp_realtime_show">遠征の残り時間を表示</string>
+    <string name="setting_menu_kand_desc_exp_realtime_show">ノーティバーで遠征の残り時間をリアルタイムで表示</string>
+    <string name="setting_menu_kand_title_set_noti_priority">ノーティバーのプライオリティを高く設定</string>
+    <string name="setting_menu_kand_desc_set_noti_priority">チェック時ノーティバーが常に上に表示される</string>
+    <string name="setting_menu_kand_title_game_data_down">ゲームデータをダウンロード</string>
+    <string name="setting_menu_kand_desc_game_data_down">ゲームデータがロードされない場合に使用</string>
+
+    <string name="setting_menu_view_head">権限/戦闘予報設定</string>
+    <string name="setting_menu_view_title_accessibility_setting">アクセシビリティ(ユーザー補助)設定</string>
+    <string name="setting_menu_view_desc_accessibility_setting">サービスでKcanotifyを選択（艦これの動作を検出するために）</string>
+    <string name="setting_menu_view_title_overlay_setting">画面オーバーレイ設定</string>
+    <string name="setting_menu_view_desc_overlay_setting">他のアプリの上に重ねて表示する（戦闘予報などに必要）</string>
+    <string name="setting_menu_view_title_battlenode_use">次のマスを予報する</string>
+    <string name="setting_menu_view_desc_battlenode_use">出撃中トーストで次のマス情報を表示する</string>
+    <string name="setting_menu_view_title_battleview_use">戦闘予報を使う</string>
+    <string name="setting_menu_view_desc_battleview_use">出撃や練習での戦闘結果を見る</string>
+    <string name="setting_menu_view_title_drop_visible">艦娘ドロップをスポイラー</string>
+    <string name="setting_menu_view_desc_drop_visible">戦闘予報でドロップされた艦娘の名前を見る</string>
+    <string name="setting_menu_view_desc_questview_use">任務画面で任務の翻訳や攻略情報を表示する</string>
+    <string name="setting_menu_view_title_questview_use">戦闘情報を使う</string>
+
+    <string name="setting_menu_noti_head">通知設定</string>
+    <string name="setting_menu_noti_title_exp">遠征通知</string>
+    <string name="setting_menu_noti_desc_exp">遠征完了のときに上部に通知する</string>
+    <string name="setting_menu_noti_title_dock">入渠通知</string>
+    <string name="setting_menu_noti_desc_dock">入渠完了のときに上部に通知する</string>
+    <string name="setting_menu_noti_title_hdmg_vib">大破通知</string>
+    <string name="setting_menu_noti_desc_hdmg_vib">大破した艦かある場合に音/バイブで通知する（トーストは常に発生）</string>
+    <string name="setting_menu_noti_title_nspl_vib">補給未完通知</string>
+    <string name="setting_menu_noti_desc_nspl_vib">補給していない艦隊がある場合に音/バイブで通知する（トーストは常に発生）</string>
+
+    <string name="setting_menu_app_head">アプリケーション情報</string>
+    <string name="setting_menu_app_title_current">現在アプリバージョン</string>
+    <string name="setting_menu_app_title_updatecheck">更新の確認</string>
+    <string name="setting_menu_app_title_contact">提案/エラーレポート</string>
+    <string name="setting_menu_app_desc_contact">開発者にメールを送信</string>
+    <string name="setting_menu_app_info">About Kcanotify</string>
+
+    <!-- BattleView Strings -->
+    <string name="battleview_error">処理中エラーが発生しました。</string>
+    <string name="battleview_menu_head">メニュー</string>
+    <string name="battleview_menu0">航空戦情報</string>
+    <string name="battleview_menu1">現在任務</string>
+    <string name="battleview_menu2">艦隊情報</string>
+    <string name="battleview_expview" formatted="false">戦果：%.2f/%.2f</string>
+
+    <string name="formation_lineahead">単縦陣</string>
+    <string name="formation_doubleline">複縦陣</string>
+    <string name="formation_diamond">輪形陣</string>
+    <string name="formation_echelon">梯形陣</string>
+    <string name="formation_lineabreast">単横陣</string>
+    <string name="formation_c1">第一警戒航行序列(対潜警戒)</string>
+    <string name="formation_c2">第二警戒航行序列(前方警戒)</string>
+    <string name="formation_c3">第三警戒航行序列(輪形陣)</string>
+    <string name="formation_c4">第四警戒航行序列(戦闘隊形)</string>
+    <string name="formation_c1_short">対潜警戒</string>
+    <string name="formation_c2_short">前方警戒</string>
+    <string name="formation_c3_short">輪形陣</string>
+    <string name="formation_c4_short">戦闘隊形</string>
+
+    <string name="engagement_label">各交戦形</string>
+    <string name="engagement_t_advantage">T字有利</string>
+    <string name="engagement_parallel">同航戦</string>
+    <string name="engagement_headon">反航戦</string>
+    <string name="engagement_t_disadvantage">T字不利</string>
+
+    <string name="air_label">制空状態</string>
+    <string name="air_supermacy">制空権確保</string>
+    <string name="air_superiority">航空優勢</string>
+    <string name="air_parity">航空均衡</string>
+    <string name="air_denial">航空劣勢</string>
+    <string name="air_incapability">制空権喪失</string>
+
+    <string name="enemy_fleet_name">敵艦隊</string>
+    <string name="enemy_main_fleet_name">敵本艦隊</string>
+    <string name="enemy_combined_fleet_name">敵護衛艦隊</string>
+
+    <string name="yomi_flagship">flagship</string>
+    <string name="yomi_elite">elite</string>
+    <string name="yomi_flagship_short">F</string>
+    <string name="yomi_elite_short">E</string>
+
+    <string name="rank_ss">完全勝利S</string>
+    <string name="rank_s">勝利S</string>
+    <string name="rank_a">勝利A</string>
+    <string name="rank_b">勝利B</string>
+    <string name="rank_c">敗北C</string>
+    <string name="rank_d">敗北D</string>
+    <string name="rank_e">敗北E</string>
+
+    <string name="item_fuel">燃料</string>
+    <string name="item_ammo">弾薬</string>
+    <string name="item_stel">鋼材</string>
+    <string name="item_baux">ボーキサイト</string>
+    <string name="item_brnr">高速建造材</string>
+    <string name="item_bgtz">高速修復材</string>
+    <string name="item_mmat">開発資材</string>
+    <string name="item_kmat">改修資材</string>
+    <string name="item_boxs">家具箱(小)</string>
+    <string name="item_boxm">家具箱(中)</string>
+    <string name="item_boxl">家具箱(大)</string>
+    <string name="sa_language_changed">変更された言語の設定を適用するには、Kcanotifyを再起動します。(Please restart kcanotify)</string>
+    <string name="setting_menu_kand_title_language">言語設定</string>
+    <string name="setting_menu_noti_title_ringtone">通知音</string>
+    <string name="setting_menu_noti_desc_ringtone">通知音選択</string>
+    <string name="settings_string_silent">サイレント</string>
+    <string name="setting_menu_noti_title_kind">通知モード</string>
+    <string name="sound_kind_vibrate">バイブ</string>
+    <string name="sound_kind_normal">音</string>
+    <string name="sound_kind_mute">サイレント</string>
+    <string name="ma_permission_external_confirmed">ストレージ権限が設定されました。</string>
+    <string name="ma_permission_external_denied">ストレージ権限が設定されていません。 (システム通知音のみ使用可能/エラーログのエクスポート不可)</string>
+    <string name="airbase_term">基地航空隊</string>
+    <string name="phase_term" formatted="false">フェイズ %d</string>
+    <string name="injection_term">噴式強襲</string>
+    <string name="raid_type1">資源損害</string>
+    <string name="raid_type2">資源/基地損害</string>
+    <string name="raid_type3">基地損害</string>
+    <string name="raid_type4">基地被害なし</string>
+    <string name="getship_label">ドロップ</string>
+    <string name="getship_none">(なし)</string>
+    <string name="getship_max">(スロット余裕なし)</string>
+    <string name="kca_view_tpvalue" formatted="false" >TP: %d~%d</string>
+    <string name="ship_name_class">級</string>
+    <string name="slot_empty">(装備なし)</string>
+    <string name="kca_view_condition_1" formatted="false">疲労度 #1: %s</string>
+    <string name="kca_view_condition_2" formatted="false">疲労度 #2: %s</string>
+    <string name="not_supplied" formatted="false">第%d艦隊が補給されていません！</string>
+    <string name="sound_kind_mixed">音+バイブ</string>
+    <string name="viewbutton_hide">妖精さん: じゃね！</string>
+    <string name="fairy_hidden_notification_action_remove">隠す</string>
+    <string name="fairy_hidden_notification_action_return">表示する</string>
+    <string name="fairy_hidden_notification_title">妖精さんが隠されている</string>
+    <string name="fairy_hidden_notification_text">下に広げて動作を選択してください</string>
+    <string name="fairy_hidden_notification_bigtext">動作を選択してください</string>
+    <string name="kca_view_context_expand">下に広げて内容を表示する</string>
+    <string name="battleview_text_retreated">退避完了</string>
+
+    <string name="quest_category_1">編</string>
+    <string name="quest_category_2">出</string>
+    <string name="quest_category_3">練</string>
+    <string name="quest_category_4">遠</string>
+    <string name="quest_category_5">補</string>
+    <string name="quest_category_6">工</string>
+    <string name="quest_category_7">改</string>
+    <string name="quest_category_8">出</string>
+    <string name="quest_category_9">他</string>
+
+    <string name="quest_type_1">日</string>
+    <string name="quest_type_2">週</string>
+    <string name="quest_type_3">月</string>
+    <string name="quest_type_4">単</string>
+    <string name="quest_type_5">他</string>
+
+    <string name="questview_page" formatted="false">ページ %d/%d</string>
+    <string name="action_akashi">改修工廠表</string>
+    <string name="aa_btn_safe_state0">一般</string>
+    <string name="aa_btn_safe_state1">確定</string>
+    <string name="aa_btn_filter">フィルタ</string>
+    <string name="recon_failed">偵察失敗</string>
+    <string name="action_akashi_detail">装備改修詳細</string>
+    <string name="akashi_term_detail1">改修詳細情報(1)</string>
+    <string name="akashi_term_detail2">改修詳細情報(2)</string>
+    <string name="akashi_term_equip">消費装備</string>
+    <string name="akashi_term_resource">消費資源</string>
+    <string name="akashi_term_support">秘書艦</string>
+    <string name="akashi_term_default">初期装備艦</string>
+    <string name="akashi_term_day_6">土</string>
+    <string name="akashi_term_day_5">金</string>
+    <string name="akashi_term_day_0">日</string>
+    <string name="akashi_term_day_1">月</string>
+    <string name="akashi_term_day_2">火</string>
+    <string name="akashi_term_day_3">水</string>
+    <string name="akashi_term_day_4">木</string>
+    <string name="akashi_filter_equip_title">装備別フィルタ設定</string>
+    <string name="action_akashi_filter">フィルタ設定</string>
+    <string name="akashi_filter_equip_rev">反転</string>
+    <string name="akashi_filter_equip_none">クリア</string>
+    <string name="akashi_filter_equip_all">全選択</string>
+    <string name="setting_menu_kand_desc_fairy_select">共にする妖精さんを選択</string>
+    <string name="setting_menu_kand_title_fairy_select">妖精選択</string>
+    <string name="current_fairy_changed_in_next">※現在戦闘予報/任務情報が終わった後に変更されます。</string>
+    <string name="setting_menu_app_title_down">APKダウンロードサイトの設定</string>
+    <string name="language_system">システム設定を使用</string>
+    <string name="item_engine">ネ式エンジン</string>
+    <string name="item_gmi_material">新型砲熕兵装資材</string>
+    <string name="item_skilled_crew">熟練搭乗員</string>
+    <string name="setting_menu_kand_desc_bypass_address">CIDR形式でプロキシを使用しないアドレスを設定（各CIDRはカンマで区切って）</string>
+    <string name="settings_menu_kand_title_bypass_address">例外リスト</string>
+    <string name="setting_menu_kand_warn_adv_network">警告：これらの設定を正しくしていない場合は、Snifferが動作しないことがあります。この設定が何をするかわからない場合は設定しないでください。設定を適用するためには、Sniffer(VPN)を再起動してください。</string>
+    <string name="setting_menu_kand_title_socks5_port">SOCKS5プロキシポートT</string>
+    <string name="setting_menu_kand_title_socks5_address">SOCKS5プロキシアドレス</string>
+    <string name="setting_menu_kand_title_adv_network">高級ネットワーク設定</string>
+    <string name="sa_bypass_list_invalid">設定された例外リストが正しい形式ではありません。入力を再確認してください。</string>
+    <string name="setting_menu_noti_title_notiatsvcoff">通知を常に可能にする</string>
+    <string name="setting_menu_noti_desc_notiatsvcoff">Serviceが消えている状態にも遠征/入渠完了を通知する</string>
+    <string name="kca_toast_renew_currentportdeck">母港に戻ってゲームデータを更新してください。</string>
+    <string name="questview_nopage">任務なし</string>
+
+    <string name="fleetview_title">艦隊情報</string>
+    <string name="fleetview_combined">連合</string>
+    <string name="fleetview_expview" formatted="false">[今回] %.2f / [今日] %.2f</string>
+    <string name="viewmenu_battle">戦闘</string>
+    <string name="viewmenu_quest">任務</string>
+    <string name="viewmenu_akashi">改修</string>
+    <string name="viewmenu_develop">開発</string>
+    <string name="viewmenu_construction">建造</string>
+    <string name="viewmenu_maphp">海域</string>
+    <string name="viewmenu_develop_title">開発情報</string>
+    <string name="viewmenu_construction_title">建造情報</string>
+    <string name="viewmenu_maphp_title">海域HP情報</string>
+    <string name="develop_failed_text">ペンギン (´;ω;｀)</string>
+    <string name="action_errorlog">エラーログ</string>
+    <string name="errlog_dialog_message">全体エラーログを削除しますか？</string>
+    <string name="errlog_cpy_to_clipboard">クリップボードにコピーされました。</string>
+</resources>
