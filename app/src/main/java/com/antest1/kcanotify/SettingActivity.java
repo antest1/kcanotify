@@ -524,8 +524,10 @@ public class SettingActivity extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
                         break;
                     case ERROR:
+                        // temoporal message: this situation occured in case of no file in server.
+                        // this will be reverted after server issue fixed.
                         Toast.makeText(context,
-                                "Error: ".concat(error_msg),
+                                getStringWithLocale(R.string.kca_toast_inconsistent_data),
                                 Toast.LENGTH_LONG).show();
                         break;
                 }
