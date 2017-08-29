@@ -523,7 +523,7 @@ public class KcaService extends Service {
                 Log.e("KCA", kca_version);
 
                 if (!getStringPreferences(getApplicationContext(), PREF_KCA_VERSION).equals(kca_version)) {
-                    customToast.showToast("new game data found: " + String.valueOf(kca_version), Toast.LENGTH_LONG,
+                    customToast.showToast("new game data detected: " + String.valueOf(kca_version), Toast.LENGTH_LONG,
                             ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 }
                 JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
