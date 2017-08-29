@@ -57,6 +57,7 @@ import java.util.concurrent.TimeUnit;
 import static android.R.attr.id;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_HIGH;
+import static android.widget.Toast.makeText;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
@@ -168,7 +169,7 @@ public class KcaService extends Service {
         AssetManager assetManager = getResources().getAssets();
         int loadMapEdgeInfoResult = loadMapEdgeInfoFromAssets(assetManager);
         if (loadMapEdgeInfoResult != 1) {
-            Toast.makeText(this, "Error loading Map Edge Info", Toast.LENGTH_LONG).show();
+            makeText(this, "Error loading Map Edge Info", Toast.LENGTH_LONG).show();
         }
 
         loadSimpleExpeditionInfoFromAssets(assetManager);
@@ -520,18 +521,19 @@ public class KcaService extends Service {
                 JsonObject api_version = jsonDataObj.get("api").getAsJsonObject();
                 kca_version = api_version.get("api_start2").getAsString();
                 Log.e("KCA", kca_version);
+
                 if (!getStringPreferences(getApplicationContext(), PREF_KCA_VERSION).equals(kca_version)) {
-                    api_start2_down_mode = true;
-                } else {
-                    api_start2_down_mode = false;
-                    JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
-                    //Log.e("KCA", kcDataObj.toJSONString());
-                    if (kcDataObj != null && kcDataObj.has("api_data")) {
-                        //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
-                        KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
-                        setPreferences(getApplicationContext(), PREF_KCA_VERSION, kca_version);
-                    }
+                    customToast.showToast("new game data found: " + String.valueOf(kca_version), Toast.LENGTH_LONG,
+                            ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 }
+                JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
+                //Log.e("KCA", kcDataObj.toJSONString());
+                if (kcDataObj != null && kcDataObj.has("api_data")) {
+                    //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
+                    KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
+                    //setPreferences(getApplicationContext(), PREF_KCA_VERSION, kca_version);
+                }
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                         && !Settings.canDrawOverlays(getApplicationContext())) {
                     // Can not draw overlays: pass
@@ -582,10 +584,13 @@ public class KcaService extends Service {
                     if (size2 > 0) isUserItemDataLoaded = true;
                     //Toast.makeText(contextWithLocale, String.valueOf(userId), Toast.LENGTH_LONG).show();
 
+                    /*
+                    // Deactivate this code, force to download manually
                     if (api_start2_data == null && api_start2_down_mode) {
                         customToast.showToast(getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                         // new retrieveApiStartData().execute("", "down", "");
                     }
+                    */
                 }
                 return;
             }
@@ -1738,7 +1743,7 @@ public class KcaService extends Service {
             }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
-            Toast.makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
+            makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
             customToast.showToast(getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
