@@ -522,7 +522,7 @@ public class KcaService extends Service {
                 kca_version = api_version.get("api_start2").getAsString();
                 Log.e("KCA", kca_version);
 
-                if (!getStringPreferences(getApplicationContext(), PREF_KCA_VERSION).equals(kca_version)) {
+                if (!getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION).equals(kca_version)) {
                     customToast.showToast("new game data detected: " + String.valueOf(kca_version), Toast.LENGTH_LONG,
                             ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 }
@@ -531,7 +531,7 @@ public class KcaService extends Service {
                 if (kcDataObj != null && kcDataObj.has("api_data")) {
                     //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
                     KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
-                    //setPreferences(getApplicationContext(), PREF_KCA_VERSION, kca_version);
+                    setPreferences(getApplicationContext(), PREF_KCA_VERSION, kca_version);
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

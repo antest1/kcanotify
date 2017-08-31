@@ -67,6 +67,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLENODE_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
@@ -421,6 +422,9 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_FAIRY_ICON:
                         editor.putString(prefKey, "0");
                         break;
+                    case PREF_KCA_DATA_VERSION:
+                        String defaultversion = getString(R.string.default_gamedata_version);
+                        editor.putString(prefKey, defaultversion);
                     default:
                         editor.putString(prefKey, "");
                         break;
@@ -492,7 +496,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class getRecentVersion extends AsyncTask<Context, String, String> {
         public String currentVersion = BuildConfig.VERSION_NAME;
-        public String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
+        public String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
 
         public String getStringWithLocale(int id) {
             return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
@@ -591,6 +595,7 @@ public class MainActivity extends AppCompatActivity {
         final String SUCCESS = "S";
         final String FAILURE = "F";
         final String ERROR = "E";
+        final String NODATA = "N";
         String error_msg = "";
         KcaDBHelper dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
 
@@ -628,12 +633,18 @@ public class MainActivity extends AppCompatActivity {
             try {
                 Response response = client.newCall(request).execute();
                 if (response.code() == org.apache.http.HttpStatus.SC_OK) {
-                    String data = response.body().string().trim();
-                    dbHelper.putValue(DB_KEY_STARTDATA, data);
-                    KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
-                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_VERSION, response.header("X-Api-Version"));
-                    KcaApiData.setDataLoadTriggered();
-                    result = SUCCESS;
+                    String kca_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
+                    String server_kca_version = response.header("X-Api-Version");
+                    if (kca_version == null || compareVersion(server_kca_version, kca_version)) {
+                        String data = response.body().string().trim();
+                        dbHelper.putValue(DB_KEY_STARTDATA, data);
+                        KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
+                        KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, response.header("X-Api-Version"));
+                        KcaApiData.setDataLoadTriggered();
+                        result = SUCCESS;
+                    } else {
+                        result = NODATA;
+                    }
                 } else {
                     error_msg = response.message();
                     result = FAILURE;
@@ -661,8 +672,11 @@ public class MainActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     break;
                 case ERROR:
+                case NODATA:
+                    // temoporal message: this situation occured in case of no file in server.
+                    // this will be reverted after server issue fixed.
                     Toast.makeText(getApplicationContext(),
-                            "Error: ".concat(error_msg),
+                            getStringWithLocale(R.string.kca_toast_inconsistent_data),
                             Toast.LENGTH_LONG).show();
                     break;
             }

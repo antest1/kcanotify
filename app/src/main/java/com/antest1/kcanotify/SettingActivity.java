@@ -56,6 +56,7 @@ import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_PRIORITY_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.PREF_ACCESSIBILITY_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
@@ -64,7 +65,6 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
-import static com.antest1.kcanotify.KcaService.kca_version;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -436,6 +436,7 @@ public class SettingActivity extends AppCompatActivity {
         final String SUCCESS = "S";
         final String FAILURE = "F";
         final String ERROR = "E";
+        final String NODATA = "N";
         String error_msg = "";
 
         Activity activity;
@@ -469,17 +470,10 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         public String executeClient() {
-            String dataUrl;
-            if (kca_version == null) {
-                dataUrl = String.format(context.getString(R.string.api_start2_recent_version_link));
-            } else {
-                dataUrl = String.format(context.getString(R.string.api_start2_version_link), kca_version);
-            }
+            String dataUrl = String.format(context.getString(R.string.api_start2_recent_version_link));
 
             OkHttpClient client = new OkHttpClient.Builder().build();
-
-            String checkUrl = String.format(dataUrl);
-            Request.Builder builder = new Request.Builder().url(checkUrl).get();
+            Request.Builder builder = new Request.Builder().url(dataUrl).get();
             builder.addHeader("Referer", "app:/KCA/");
             builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
             error_msg = "";
@@ -488,15 +482,18 @@ public class SettingActivity extends AppCompatActivity {
             try {
                 Response response = client.newCall(request).execute();
                 if (response.code() == org.apache.http.HttpStatus.SC_OK) {
-                    String data = response.body().string().trim();
-                    dbHelper.putValue(DB_KEY_STARTDATA, data);
-                    KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
-                    if (kca_version == null) {
-                        kca_version = response.header("X-Api-Version");
+                    String kca_version = KcaUtils.getStringPreferences(context, PREF_KCA_VERSION);
+                    String server_kca_version = response.header("X-Api-Version");
+                    if (kca_version == null || compareVersion(server_kca_version, kca_version)) {
+                        String data = response.body().string().trim();
+                        dbHelper.putValue(DB_KEY_STARTDATA, data);
+                        KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
+                        KcaUtils.setPreferences(context, PREF_KCA_DATA_VERSION, server_kca_version);
+                        KcaApiData.setDataLoadTriggered();
+                        result = SUCCESS;
+                    } else {
+                        result = NODATA;
                     }
-                    KcaUtils.setPreferences(context, PREF_KCA_VERSION, kca_version);
-                    KcaApiData.setDataLoadTriggered();
-                    result = SUCCESS;
                 } else {
                     error_msg = response.message();
                     result = FAILURE;
@@ -524,6 +521,7 @@ public class SettingActivity extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
                         break;
                     case ERROR:
+                    case NODATA:
                         // temoporal message: this situation occured in case of no file in server.
                         // this will be reverted after server issue fixed.
                         Toast.makeText(context,
