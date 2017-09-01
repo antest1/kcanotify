@@ -425,6 +425,7 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_KCA_DATA_VERSION:
                         String defaultversion = getString(R.string.default_gamedata_version);
                         editor.putString(prefKey, defaultversion);
+                        break;
                     default:
                         editor.putString(prefKey, "");
                         break;
@@ -552,7 +553,6 @@ public class MainActivity extends AppCompatActivity {
                     JsonReader jsonReader = new JsonReader(reader);
                     jsonReader.setLenient(true);
                     jsonDataObj = new JsonParser().parse(jsonReader).getAsJsonObject();
-
                     if (jsonDataObj.has("version")) {
                         String recentVersion = jsonDataObj.get("version").getAsString();
                         if (!compareVersion(currentVersion, recentVersion)) { // True if latest
