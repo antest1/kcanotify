@@ -253,26 +253,93 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         c.close();
     }
 
-    public JsonObject updateBattleTracker(JsonObject data) {
+    public JsonObject updateNodeTracker(JsonObject data) {
         SQLiteDatabase db = this.getWritableDatabase();
+        int world = data.get("world").getAsInt();
+        int map = data.get("map").getAsInt();
+        int node = data.get("node").getAsInt();
+        boolean is_start = data.get("isstart").getAsBoolean();
+        JsonArray deck_data = data.getAsJsonObject("deck_port").getAsJsonArray("api_deck_data");
+        JsonArray fleet_data = deck_data.get(0).getAsJsonObject().getAsJsonArray("api_ship");
 
-        if (data.has("api_url") && data.get("api_url").getAsString().equals(API_REQ_MAP_START)) { // Sortie Count
-            int cond0 = 0;
-            Cursor c = db.rawQuery("SELECT KEY, CND0 from "
-                    .concat(qt_table_name)
-                    .concat(" WHERE KEY=214 AND ACTIVE=1"), null);
-            if (c.moveToFirst()) {
-                ContentValues values = new ContentValues();
-                cond0 = 1 + c.getInt(c.getColumnIndex("CND0"));
-                values.put("CND0", cond0);
-                db.update(qt_table_name, values, "KEY=214 AND ACTIVE=1", null);
+        Cursor c = db.rawQuery("SELECT KEY, CND0, CND1, CND2, CND3 from "
+                .concat(qt_table_name).concat(" WHERE ACTIVE=1 ORDER BY KEY"), null);
+
+        int requiredShip = 0;
+        JsonObject updateTarget = new JsonObject();
+        while (c.moveToNext()) {
+            boolean wflag = false;
+            boolean fleetflag = true;
+            String key = c.getString(c.getColumnIndex("KEY"));
+            int cond0 = c.getInt(c.getColumnIndex("CND0"));
+            int cond1 = c.getInt(c.getColumnIndex("CND1"));
+            int cond2 = c.getInt(c.getColumnIndex("CND2"));
+            int cond3 = c.getInt(c.getColumnIndex("CND3"));
+            JsonArray targetData;
+            switch (key) {
+                case "214": // 아호
+                    targetData = new JsonArray();
+                    if (is_start) {
+                        targetData.add(cond0 + 1);
+                    } else {
+                        targetData.add(cond0);
+                    }
+                    targetData.add(cond1);
+                    targetData.add(cond2);
+                    targetData.add(cond3);
+                    updateTarget.add(key, targetData);
+                    break;
+                case "861": // 1-6 분기퀘
+                    boolean isend = (node == 14 || node == 17);
+                    requiredShip = 0;
+                    int requiredBBV = 0;
+                    int requiredAO = 0;
+                    for (int i = 0; i < fleet_data.size(); i++) {
+                        int item = fleet_data.get(i).getAsInt();
+                        if (item == -1) break;
+                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
+                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
+                        if (kcShipType == STYPE_BBV) requiredBBV += 1;
+                        if (kcShipType == STYPE_AO) requiredAO += 1;
+                    }
+                    if (requiredBBV >= 2) requiredShip += 1;
+                    if (requiredAO >= 2) requiredShip += 1;
+                    wflag = world == 1 && map == 6 && isend && requiredShip > 0;
+                    break;
+                default:
+                    break;
             }
-            c.close();
-            JsonObject targetData = new JsonObject();
-            targetData.addProperty("214", cond0);
-            return targetData;
+            if (wflag) updateTarget.addProperty(key, cond0 + 1);
         }
 
+        for (Map.Entry<String, JsonElement> entry : updateTarget.entrySet()) {
+            String entryKey = entry.getKey();
+            JsonElement entryValue = entry.getValue();
+            if (entryValue.isJsonArray()) {
+                JsonArray entryValueArray = entryValue.getAsJsonArray();
+                ContentValues values = new ContentValues();
+                for (int i = 0; i < 4; i++) {
+                    values.put("CND".concat(String.valueOf(i)), String.valueOf(entryValueArray.get(i)));
+                }
+                db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{entryKey});
+            } else {
+                int entryValueData = entryValue.getAsInt();
+                ContentValues values = new ContentValues();
+                values.put("CND0", entryValueData);
+                if (ap_dup_flag && checkApQuestActive() && entryKey.equals("212") || entryKey.equals("218")) {
+                    db.update(qt_table_name, values, "KEY=?", new String[]{entryKey});
+                } else {
+                    db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{entryKey});
+                }
+            }
+        }
+
+        c.close();
+        return updateTarget;
+    }
+
+    public JsonObject updateBattleTracker(JsonObject data) {
+        SQLiteDatabase db = this.getWritableDatabase();
         int world = data.get("world").getAsInt();
         int map = data.get("map").getAsInt();
         int node = data.get("node").getAsInt();
@@ -485,23 +552,6 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     if (world == 6 && map == 4 && isboss && rank.equals("S"))
                         targetData.set(3, new JsonPrimitive(1));
                     updateTarget.add(key, targetData);
-                    break;
-                case "861": // 1-6 분기퀘
-                    boolean isend = node == 17;
-                    requiredShip = 0;
-                    int requiredBBV = 0;
-                    int requiredAO = 0;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
-                        if (kcShipType == STYPE_BBV) requiredBBV += 1;
-                        if (kcShipType == STYPE_AO) requiredAO += 1;
-                    }
-                    if (requiredBBV >= 2) requiredShip += 1;
-                    if (requiredAO >= 2) requiredShip += 1;
-                    wflag = world == 1 && map == 6 && isend && requiredShip > 0;
                     break;
                 case "862": // 6-3 분기퀘
                     requiredShip = 0;

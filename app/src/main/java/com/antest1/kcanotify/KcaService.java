@@ -1658,11 +1658,8 @@ public class KcaService extends Service {
                     currentNodeInfo = KcaApiData.getNodeFullInfo(contextWithLocale, currentNodeAlphabet, api_event_id, api_event_kind, false);
                     customToast.showToast(currentNodeInfo, Toast.LENGTH_LONG,
                             getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
-                }
-
-                if (jsonDataObj.get("api_url").getAsString().equals(API_REQ_MAP_START)) {
-                    questTracker.updateBattleTracker(jsonDataObj);
-                    updateQuestView();
+                    JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
+                    questTracker.updateNodeTracker(questTrackData);
                 }
 
                 Intent intent = new Intent(KCA_MSG_BATTLE_NODE);

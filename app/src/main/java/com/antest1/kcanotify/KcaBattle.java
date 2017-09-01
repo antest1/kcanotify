@@ -528,6 +528,15 @@ public class KcaBattle {
                 setCurrentApiData(nodeInfo);
                 helper.putValue(DB_KEY_BATTLENODE, nodeInfo.toString());
 
+                JsonObject qtrackData = new JsonObject();
+                qtrackData.addProperty("world", currentMapArea);
+                qtrackData.addProperty("map", currentMapNo);
+                qtrackData.addProperty("node", currentNode);
+                qtrackData.addProperty("isboss", isBossReached);
+                qtrackData.addProperty("isstart", true);
+                qtrackData.add("deck_port", deckportdata);
+                helper.putValue(DB_KEY_QTRACKINFO, qtrackData.toString());
+
                 bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_NODE);
                 bundle.putString("data", "");
@@ -577,6 +586,15 @@ public class KcaBattle {
                 nodeInfo.addProperty("api_heavy_damaged", checkcbresult);
                 setCurrentApiData(nodeInfo);
                 helper.putValue(DB_KEY_BATTLENODE, nodeInfo.toString());
+
+                JsonObject qtrackData = new JsonObject();
+                qtrackData.addProperty("world", currentMapArea);
+                qtrackData.addProperty("map", currentMapNo);
+                qtrackData.addProperty("node", currentNode);
+                qtrackData.addProperty("isboss", isBossReached);
+                qtrackData.addProperty("isstart", false);
+                qtrackData.add("deck_port", deckportdata);
+                helper.putValue(DB_KEY_QTRACKINFO, qtrackData.toString());
 
                 bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_NODE);
