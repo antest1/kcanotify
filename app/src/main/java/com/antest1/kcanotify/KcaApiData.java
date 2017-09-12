@@ -56,6 +56,7 @@ public class KcaApiData {
 
     public static JsonObject kcShipTranslationData = new JsonObject();
     public static JsonObject kcItemTranslationData = new JsonObject();
+    public static JsonObject kcStypeData = new JsonObject();
     public static JsonObject kcQuestInfoData = new JsonObject();
 
     public static JsonObject kcShipAbbrData = new JsonObject(); // For English
@@ -423,6 +424,25 @@ public class KcaApiData {
         }
     }
 
+    public static int loadStypeTranslationDataFromAssets(AssetManager am, String locale) {
+        try {
+            locale = getLocaleCode(locale);
+            AssetManager.AssetInputStream ais =
+                    (AssetManager.AssetInputStream) am.open(String.format("stype-%s.json", locale));
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            JsonElement data = new JsonParser().parse(new String(bytes));
+
+            if (data.isJsonObject()) {
+                kcStypeData = data.getAsJsonObject();
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
     public static int loadQuestInfoDataFromAssets(AssetManager am, String locale) {
         try {
             locale = getLocaleCode(locale);
@@ -459,6 +479,10 @@ public class KcaApiData {
                 if (loadItemTranslationDataResult != 1) {
                     Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
                 }
+            }
+            int loadStypeTranslationDataResult = loadStypeTranslationDataFromAssets(assetManager, locale);
+            if (loadStypeTranslationDataResult != 1) {
+                Toast.makeText(context, "Error loading Stype Info", Toast.LENGTH_LONG).show();
             }
             int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromAssets(assetManager, locale);
             if (loadQuestInfoTranslationDataResult != 1) {
