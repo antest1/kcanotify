@@ -26,7 +26,6 @@ import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
-import static com.antest1.kcanotify.KcaApiData.kcShipTranslationData;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaApiData.removeKai;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;

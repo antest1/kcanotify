@@ -2,9 +2,7 @@ package com.antest1.kcanotify;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import static com.antest1.kcanotify.KcaConstants.KCA_API_NOTI_HEAVY_DMG;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;

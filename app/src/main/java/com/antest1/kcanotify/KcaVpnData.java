@@ -1,17 +1,13 @@
 package com.antest1.kcanotify;
 
 
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.IntegerRes;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 
 import com.google.common.collect.EvictingQueue;
-import com.google.common.io.ByteStreams;
 import com.google.common.primitives.Bytes;
 import com.google.gson.JsonObject;
 
@@ -20,11 +16,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

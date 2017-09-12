@@ -1,25 +1,20 @@
 package com.antest1.kcanotify;
 
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -31,40 +26,27 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Locale;
 
-import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
-import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLEINFO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLENODE;
 import static com.antest1.kcanotify.KcaConstants.FAIRY_REVERSE_LIST;
-import static com.antest1.kcanotify.KcaConstants.FRONT_NONE;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_HDMG;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_INFO;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_NODE;
-import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_HDMG;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
-import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_LIST;
-import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_VIEW_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
-import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
-import static com.antest1.kcanotify.WindowChangeDetectingService.isAccessibilitySettingsOn;
 
 public class KcaViewButtonService extends Service {
     public static final int FAIRY_NOTIFICATION_ID = 10118;

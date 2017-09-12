@@ -1,58 +1,41 @@
 package com.antest1.kcanotify;
 
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.AssetManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
-
 
 import org.apache.commons.httpclient.ChunkedInputStream;
-import org.apache.commons.httpclient.ChunkedOutputStream;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import static com.antest1.kcanotify.KcaApiData.kcShipTranslationData;
-import static com.antest1.kcanotify.KcaApiData.loadItemTranslationDataFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadQuestInfoDataFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadShipTranslationDataFromAssets;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 
