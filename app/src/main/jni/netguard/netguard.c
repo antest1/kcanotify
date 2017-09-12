@@ -883,6 +883,5 @@ void get_packet_data(char* data, int size, int type, char* saddr, char* taddr, i
         }
         (*env)->DeleteLocalRef(env, s);
         (*env)->DeleteLocalRef(env, t);
-        (*jvm)->DetachCurrentThread(jvm);
     }
 }
