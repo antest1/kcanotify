@@ -870,10 +870,7 @@ void get_packet_data(char* data, int size, int type, char* saddr, char* taddr, i
     jclass target_class = NULL;
     jmethodID method_callback = NULL;
     JNIEnv *env;
-    jint rs = (*jvm)->AttachCurrentThread(jvm, &env, NULL);
-
-    if(rs != JNI_OK) {
-    } else {
+    if ((*jvm)->AttachCurrentThread(jvm, &env, NULL) == JNI_OK) {
         jbyteArray s = cstr2jbyteArray(env, saddr, -1);
         jbyteArray t = cstr2jbyteArray(env, taddr, -1);
         method_callback = (*env)->GetStaticMethodID(env, clsData, "containsKcaServer", "(I[B[B)I");
@@ -886,5 +883,6 @@ void get_packet_data(char* data, int size, int type, char* saddr, char* taddr, i
         }
         (*env)->DeleteLocalRef(env, s);
         (*env)->DeleteLocalRef(env, t);
+        (*jvm)->DetachCurrentThread(jvm);
     }
 }
