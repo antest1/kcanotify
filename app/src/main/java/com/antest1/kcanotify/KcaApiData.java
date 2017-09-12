@@ -56,8 +56,8 @@ public class KcaApiData {
 
     public static JsonObject kcShipTranslationData = new JsonObject();
     public static JsonObject kcItemTranslationData = new JsonObject();
-    public static JsonObject kcStypeData = new JsonObject();
     public static JsonObject kcQuestInfoData = new JsonObject();
+    public static JsonArray kcStypeData = new JsonArray();
 
     public static JsonObject kcShipAbbrData = new JsonObject(); // For English
     public static JsonObject kcSimpleExpeditionData = new JsonObject();
@@ -432,8 +432,8 @@ public class KcaApiData {
             byte[] bytes = ByteStreams.toByteArray(ais);
             JsonElement data = new JsonParser().parse(new String(bytes));
 
-            if (data.isJsonObject()) {
-                kcStypeData = data.getAsJsonObject();
+            if (data.isJsonArray()) {
+                kcStypeData = data.getAsJsonArray();
                 return 1;
             } else {
                 return -1;
