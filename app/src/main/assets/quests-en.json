@@ -508,6 +508,13 @@
 		"desc": "Have Fumizuki Kai Ni, Satsuki Kai Ni, Minazuki Kai and Nagatsuki Kai in your fleet.",
 		"memo": "\u27a3Rewards 2 Combat Rations"
 	},
+	"185": {
+		"code": "A80",
+		"name": "Form the Powerful Task Force!",
+		"desc": "Have Saratoga Mk.II or Mod.2 as flagship, 1 CL and 2 DD in Fleet 1. ",
+		"memo": "\u27a3Rewards: \u27a3First choice: Either a F6F-3 OR a F4U-1D \u27a3Second choice: Either a TBF OR a New Model Aviation Armament Materials",
+		"unlock": [ 864 ]
+	},
 	
 	"202": {
 		"code": "B1",
@@ -1196,6 +1203,19 @@
 		"desc": "Sortie Fumizuki Kai Ni, Satsuki Kai Ni, Minazuki Kai, Nagatsuki Kai and up to 2 additional ships to [W3-2]. S-Rank the boss node.",
 		"memo": "\u27a3Rewards either a Daihatsu Landing Craft, a New Model Artillery Armament Materials OR a Reinforcement Expansion."
 	},
+	"864": {
+		"code": "B105",
+		"name": "Powerful Large-Scale Aircraft Carrier, Setting Sail!",
+		"desc": "Sortie Saratoga Mk.II or Mod.2 as Fleet 1 flagship, 1 CL, 2 DD and up to 2 additional ships to [W5-5] and [W6-2]. S-Rank the boss nodes. ",
+		"memo": "\u2623Be wary of rewards potentially being listed in the wrong order. \u27a3Rewards: \u27a3First choice: Either a F6F-3 OR a Skilled Crew Member OR a New Model Aviation Armament Materials \u27a3Second choice: Either a TBF OR a Night Operations Aviation Personnel",
+		"unlock": [ 865 ]
+	},
+	"865": {
+		"code": "B106",
+		"name": "Night Operations Carrier, Sortie to the Frontlines!",
+		"desc": "Sortie Saratoga Mk.II (NOT Mod.2) as Fleet 1 flagship to [W6-5]. S-Rank? the boss node. ",
+		"memo": "\u2623Be wary of rewards potentially being listed in the wrong order. \u27a3Rewards: \u27a3First choice: Either a TBF OR a New Model Aviation Armament Materials OR a Night Operations Aviation Personnel \u27a3Second choice: Either a Reinforcement Expansion OR a New Model Aviation Armament Materials OR a Skilled Crew Member"
+	},
 
 	"201": {
 		"code": "Bd1",
@@ -1490,6 +1510,12 @@
 		"code": "C12",
 		"name": "Mass Exercises for Spring",
 		"desc": "Secure 8 victories in Exercises within the same day."
+	},
+	"316": {
+		"code": "C13",
+		"name": "Strive to Improve the Transport Force's Level of Training!",
+		"desc": "Secure 4 victories in Exercises within the same day. ",
+		"memo": "\u27a3Rewards 2 Screws and either a Furniture Fairy OR a Daihatsu Landing Craft."
 	},
 
 	"401": {
@@ -2094,6 +2120,25 @@
 		"name": "An Experimental New Kind of Combat Ration",
         "desc": "Have 2 Combat Rations, 800 fuel and 150 Bauxite.",
         "memo": "\u2718Consumes the resources and equipment. Make sure the equipment is unlocked! \u27a3Rewards a new Combat Rations (Special Onigiri)"
+	},
+	"669": {
+		"code": "F61",
+		"name": "Development of a Night Warfare-class Ship-Based Fighter Aircraft",
+		"desc": "Have a New Model Aviation Armament Materials, 6 Screws, 5000 Bauxite and 30 Development Materials. Set a CV as secretary and equip a >> \u2605max F6F-3 in her first slot. Scrap two Type 13 Air Radars and two Type 22 Surface Radars.",
+		"memo": " \u2718Consumes the resources, items and equipment. Make sure the equipment is unlocked! \u27a3Rewards a F6F-3N",
+		"unlock": [ 670, 671 ]
+	},
+	"670": {
+		"code": "F62",
+		"name": "Development of a Night Operations-class Ship-Based Bomber Aircraft",
+		"desc": "Have a New Model Aviation Armament Materials, a Skilled Crew Member, 10 Screws, 5000 Ammo, 8000 Bauxite and 40 Development Materials. Set a CV as secretary and equip a TBF in her first slot. Scrap two Type 13 Air Radars and two Type 22 Surface Radars.",
+		"memo": "\u2718Consumes the resources, items and equipment. Make sure the equipment is unlocked! \u27a3Rewards a TBM-3D"
+	},
+	"671": {
+		"code": "F63",
+		"name": "Performance Enhancement of a Night Warfare-class Fighter Aircraft",
+		"desc": "Have a New Model Aviation Armament Materials, 8 Screws, 6000 Bauxite and 40 Development Materials. Set a CV as secretary and equip a >> \u2605max F6F-5 in her first slot. Scrap two Type 13 Air Radars and two Type 22 Surface Radars.",
+		"memo": "\u2718Consumes the resources, items and equipment. Make sure the equipment is unlocked! \u27a3Rewards a F6F-5N"
 	},
 
 	"701": {
