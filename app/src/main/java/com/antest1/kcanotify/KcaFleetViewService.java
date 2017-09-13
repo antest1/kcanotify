@@ -35,6 +35,7 @@ import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
+import static com.antest1.kcanotify.KcaApiData.getShipTypeAddr;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
@@ -454,6 +455,8 @@ public class KcaFleetViewService extends Service {
                         JsonObject kcData = maindata.get(i).getAsJsonObject().getAsJsonObject("kc");
                         ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_name", v), R.id.class)))
                                 .setText(getShipTranslation(kcData.get("name").getAsString(), false));
+                        ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_stype", v), R.id.class)))
+                                .setText(getShipTypeAddr(kcData.get("stype").getAsInt()));
                         ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_lv", v), R.id.class)))
                                 .setText(makeLvString(userData.get("lv").getAsInt()));
                         ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_hp", v), R.id.class)))
@@ -521,6 +524,8 @@ public class KcaFleetViewService extends Service {
                     JsonObject kcData = maindata.get(i).getAsJsonObject().getAsJsonObject("kc");
                     ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_name", v), R.id.class)))
                             .setText(getShipTranslation(kcData.get("name").getAsString(), false));
+                    ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_stype", v), R.id.class)))
+                            .setText(getShipTypeAddr(kcData.get("stype").getAsInt()));
                     ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_lv", v), R.id.class)))
                             .setText(makeLvString(userData.get("lv").getAsInt()));
                     ((TextView) mView.findViewById(getId(String.format("fleetview_item_%d_hp", v), R.id.class)))

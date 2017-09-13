@@ -294,17 +294,35 @@
                                             android:textColor="@android:color/transparent" />
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/fleetview_item_1_lv"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="top"
-                                        android:paddingLeft="6dp"
-                                        android:paddingStart="6dp"
-                                        android:maxLines="1"
-                                        android:text=""
-                                        android:textSize="12dp"
-                                        android:textColor="@color/white" />
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_1_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="12dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_1_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/white"
+                                            android:textSize="12dp" />
+                                    </LinearLayout>
+
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -395,17 +413,34 @@
                                             android:textColor="@android:color/transparent" />
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/fleetview_item_2_lv"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="top"
-                                        android:paddingLeft="6dp"
-                                        android:paddingStart="6dp"
-                                        android:maxLines="1"
-                                        android:text=""
-                                        android:textSize="12dp"
-                                        android:textColor="@color/white" />
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_2_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="12dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_2_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/white"
+                                            android:textSize="12dp" />
+                                    </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -496,17 +531,34 @@
                                             android:textColor="@android:color/transparent" />
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/fleetview_item_3_lv"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="top"
-                                        android:paddingLeft="6dp"
-                                        android:paddingStart="6dp"
-                                        android:maxLines="1"
-                                        android:text=""
-                                        android:textSize="12dp"
-                                        android:textColor="@color/white" />
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_3_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="12dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_3_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/white"
+                                            android:textSize="12dp" />
+                                    </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -597,17 +649,34 @@
                                             android:textColor="@android:color/transparent" />
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/fleetview_item_4_lv"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="top"
-                                        android:paddingLeft="6dp"
-                                        android:paddingStart="6dp"
-                                        android:maxLines="1"
-                                        android:text=""
-                                        android:textSize="12dp"
-                                        android:textColor="@color/white" />
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_4_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="12dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_4_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/white"
+                                            android:textSize="12dp" />
+                                    </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -698,17 +767,34 @@
                                             android:textColor="@android:color/transparent" />
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/fleetview_item_5_lv"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="top"
-                                        android:paddingLeft="6dp"
-                                        android:paddingStart="6dp"
-                                        android:maxLines="1"
-                                        android:text=""
-                                        android:textSize="12dp"
-                                        android:textColor="@color/white" />
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_5_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="12dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_5_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/white"
+                                            android:textSize="12dp" />
+                                    </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -799,17 +885,34 @@
                                             android:textColor="@android:color/transparent" />
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/fleetview_item_6_lv"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="top"
-                                        android:paddingLeft="6dp"
-                                        android:paddingStart="6dp"
-                                        android:maxLines="1"
-                                        android:text=""
-                                        android:textSize="12dp"
-                                        android:textColor="@color/white" />
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_6_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="12dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_6_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/white"
+                                            android:textSize="12dp" />
+                                    </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -911,17 +1014,34 @@
                                             android:textColor="@android:color/transparent" />
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/fleetview_item_7_lv"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="top"
-                                        android:paddingLeft="6dp"
-                                        android:paddingStart="6dp"
-                                        android:maxLines="1"
-                                        android:text=""
-                                        android:textSize="12dp"
-                                        android:textColor="@color/white" />
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_7_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="12dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_7_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/white"
+                                            android:textSize="12dp" />
+                                    </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -1011,17 +1131,34 @@
                                             android:textColor="@android:color/transparent" />
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/fleetview_item_8_lv"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="top"
-                                        android:paddingLeft="6dp"
-                                        android:paddingStart="6dp"
-                                        android:maxLines="1"
-                                        android:text=""
-                                        android:textSize="12dp"
-                                        android:textColor="@color/white" />
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_8_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="12dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_8_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/white"
+                                            android:textSize="12dp" />
+                                    </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -1111,17 +1248,34 @@
                                             android:textColor="@android:color/transparent" />
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/fleetview_item_9_lv"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="top"
-                                        android:paddingLeft="6dp"
-                                        android:paddingStart="6dp"
-                                        android:maxLines="1"
-                                        android:text=""
-                                        android:textSize="12dp"
-                                        android:textColor="@color/white" />
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_9_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="12dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_9_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/white"
+                                            android:textSize="12dp" />
+                                    </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -1211,17 +1365,34 @@
                                             android:textColor="@android:color/transparent" />
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/fleetview_item_10_lv"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="top"
-                                        android:paddingLeft="6dp"
-                                        android:paddingStart="6dp"
-                                        android:maxLines="1"
-                                        android:text=""
-                                        android:textSize="12dp"
-                                        android:textColor="@color/white" />
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_10_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="12dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_10_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/white"
+                                            android:textSize="12dp" />
+                                    </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -1311,17 +1482,34 @@
                                             android:textColor="@android:color/transparent" />
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/fleetview_item_11_lv"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="top"
-                                        android:paddingLeft="6dp"
-                                        android:paddingStart="6dp"
-                                        android:maxLines="1"
-                                        android:text=""
-                                        android:textSize="12dp"
-                                        android:textColor="@color/white" />
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_11_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="12dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_11_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/white"
+                                            android:textSize="12dp" />
+                                    </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -1411,17 +1599,34 @@
                                             android:textColor="@android:color/transparent" />
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:id="@+id/fleetview_item_12_lv"
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="top"
-                                        android:paddingLeft="6dp"
-                                        android:paddingStart="6dp"
-                                        android:maxLines="1"
-                                        android:text=""
-                                        android:textSize="12dp"
-                                        android:textColor="@color/white" />
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_12_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="12dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_12_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:paddingStart="6dp"
+                                            android:textColor="@color/white"
+                                            android:textSize="12dp" />
+                                    </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout

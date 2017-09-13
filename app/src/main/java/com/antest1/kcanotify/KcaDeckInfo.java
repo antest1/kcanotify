@@ -546,7 +546,7 @@ public class KcaDeckInfo {
                 JsonObject shipData = getUserShipDataById(shipId, "ship_id,lv,slot,slot_ex,onslot,cond,maxhp,nowhp");
                 data.add("user", shipData);
                 int shipKcId = shipData.get("ship_id").getAsInt();
-                data.add("kc", getKcShipDataById(shipKcId, "name,maxeq"));
+                data.add("kc", getKcShipDataById(shipKcId, "name,maxeq,stype"));
                 deckListInfo.add(data);
             }
         }
