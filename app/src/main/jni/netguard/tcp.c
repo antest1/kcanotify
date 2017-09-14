@@ -472,10 +472,9 @@ void check_tcp_socket(const struct arguments *args,
             if (ev->events & EPOLLOUT) {
                 // Forward data
                 uint32_t buffer_size = (uint32_t) get_receive_buffer(s);
-				log_android(ANDROID_LOG_WARN, "KCAV: %d", s->tcp.forward->data[0]);
-                log_android(ANDROID_LOG_WARN, "saddr: %s", source);
-                log_android(ANDROID_LOG_WARN, "taddr: %s", dest);
-
+				//log_android(ANDROID_LOG_WARN, "KCAV: %d", s->tcp.forward->data[0]);
+                //log_android(ANDROID_LOG_WARN, "saddr: %s", source);
+                //log_android(ANDROID_LOG_WARN, "taddr: %s", dest);
 				
                 while (s->tcp.forward != NULL &&
                        s->tcp.forward->seq + s->tcp.forward->sent == s->tcp.remote_seq &&
@@ -608,8 +607,8 @@ void check_tcp_socket(const struct arguments *args,
                         // Socket read data
                         log_android(ANDROID_LOG_DEBUG, "%s recv bytes %d", session, bytes);
                         s->tcp.received += bytes;
-						log_android(ANDROID_LOG_WARN, "saddr: %s", source);
-                        log_android(ANDROID_LOG_WARN, "taddr: %s", dest);
+						//log_android(ANDROID_LOG_WARN, "saddr: %s", source);
+                        //log_android(ANDROID_LOG_WARN, "taddr: %s", dest);
                         get_packet_data(args, buffer, (size_t) bytes, KCA_RESPONSE, dest, source, ntohs(s->tcp.dest), ntohs(s->tcp.source));
 
                         // Forward to tun
