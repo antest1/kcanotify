@@ -54,6 +54,7 @@ Demo
 - 한국어 (Korean)
 - 영어 (English)
 - 중국어 (Simplified/Traditional Chinese)
+- 일본어 (Japanese)
 
 Translations to other languages are welcomed. (please contact to developer to email)  
 
