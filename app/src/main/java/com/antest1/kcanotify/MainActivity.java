@@ -57,35 +57,7 @@ import okhttp3.Response;
 
 import static com.antest1.kcanotify.KcaAlarmService.TYPE_UPDATE;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
-import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
-import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
-import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
-import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
-import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLENODE_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_NOTIFYATSVCOFF;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_NS;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_QUESTVIEW_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
-import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
-import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
-import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
+import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
@@ -397,6 +369,7 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_KCA_NOTI_V_HD:
                     case PREF_KCA_NOTI_V_NS:
                     case PREF_SHOWDROP_SETTING:
+                    case PREF_FAIRY_NOTI_LONGCLICK:
                         editor.putBoolean(prefKey, true);
                         break;
                     case PREF_KCA_SET_PRIORITY:

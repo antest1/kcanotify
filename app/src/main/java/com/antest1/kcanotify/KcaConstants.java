@@ -322,6 +322,7 @@ public final class KcaConstants {
     public static final String PREF_VPN_BYPASS_ADDRESS = "bypass_address";
     public static final String PREF_FULLMORALE_SETTING = "fullmorale_setting";
     public static final String PREF_KCA_DATA_VERSION = "kca_data_version";
+    public static final String PREF_FAIRY_NOTI_LONGCLICK = "notify_fairy_longclick";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -350,7 +351,8 @@ public final class KcaConstants {
             PREF_APK_DOWNLOAD_SITE,
             PREF_VPN_BYPASS_ADDRESS,
             PREF_FULLMORALE_SETTING,
-            PREF_KCA_DATA_VERSION
+            PREF_KCA_DATA_VERSION,
+            PREF_FAIRY_NOTI_LONGCLICK
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

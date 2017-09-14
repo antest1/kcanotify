@@ -161,7 +161,9 @@
     <string name="setting_menu_noti_title_hdmg_vib">大破通知</string>
     <string name="setting_menu_noti_desc_hdmg_vib">大破した艦かある場合に音/バイブで通知する (トーストは常に発生)</string>
     <string name="setting_menu_noti_title_nspl_vib">補給未完通知</string>
-    <string name="setting_menu_noti_desc_nspl_vib">補給していない艦隊がある場合に音/バイブで通知する (トーストは常に発生)</string>
+    <string name="setting_menu_noti_desc_nspl_vib">補給していない艦隊がある場合に音/ㅊ (トーストは常に発生)</string>
+    <string name="setting_menu_noti_title_fairy_vib">妖精非表示通知</string>
+    <string name="setting_menu_noti_desc_fairy_vib">妖精を長押し隠すときにバイブで通知する</string>
 
     <string name="setting_menu_app_head">アプリケーション情報</string>
     <string name="setting_menu_app_title_current">現在アプリバージョン</string>

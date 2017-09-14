@@ -143,8 +143,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_opendb">向OpenDB傳送遊戲數據</string>
     <string name="setting_menu_kand_title_exp_realtime_show">追蹤遠征時間</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">於裝置的通知欄顯示遠征的剩餘時間</string>
-    <string name="setting_menu_kand_title_set_noti_priority">Set Notification Priority to HIGH</string>
-    <string name="setting_menu_kand_desc_set_noti_priority">When checked, the navbar will always be the top of notifications</string>
+    <string name="setting_menu_kand_title_set_noti_priority">設置通知優先級高</string>
+    <string name="setting_menu_kand_desc_set_noti_priority">選中時通知將始終是頂部</string>
     <string name="setting_menu_kand_title_game_data_down">下載遊戲資料</string>
     <string name="setting_menu_kand_desc_game_data_down">請於遊戲資料未載入時使用</string>
     <string name="setting_menu_kand_desc_fairy_select">選擇懸浮視窗的妖精影像</string>
@@ -180,6 +180,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_hdmg_vib">於艦娘大破時響鈴/震動（會彈出通知）</string>
     <string name="setting_menu_noti_title_nspl_vib">未補給警告</string>
     <string name="setting_menu_noti_desc_nspl_vib">於艦娘未補給時響鈴/震動（會彈出通知）</string>
+    <string name="setting_menu_noti_title_fairy_vib">隐藏妖精时振动</string>
+    <string name="setting_menu_noti_desc_fairy_vib">设置长按精灵隐藏时的振动</string>
 
     <string name="setting_menu_app_head">應用程式資訊</string>
     <string name="setting_menu_app_title_current">目前版本</string>

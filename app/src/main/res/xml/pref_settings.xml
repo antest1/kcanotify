@@ -172,6 +172,12 @@
             android:summary="@string/setting_menu_noti_desc_nspl_vib"
             android:title="@string/setting_menu_noti_title_nspl_vib" />
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="notify_fairy_longclick"
+            android:summary="@string/setting_menu_noti_desc_fairy_vib"
+            android:title="@string/setting_menu_noti_title_fairy_vib" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/setting_menu_app_head">

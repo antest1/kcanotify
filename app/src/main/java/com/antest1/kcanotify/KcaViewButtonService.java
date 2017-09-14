@@ -43,6 +43,7 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_NODE;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
@@ -353,7 +354,9 @@ public class KcaViewButtonService extends Service {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            vibrator.vibrate(100);
+            if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_NOTI_LONGCLICK)) {
+                vibrator.vibrate(100);
+            }
             Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
             mView.setVisibility(View.GONE);
             recentVisibility = View.GONE;
