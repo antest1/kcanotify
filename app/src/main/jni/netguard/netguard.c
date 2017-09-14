@@ -866,22 +866,20 @@ jbyteArray cstr2jbyteArray( JNIEnv *env, const char *nativeStr, int size)
     return javaBytes;
 }
 
-void get_packet_data(char* data, int size, int type, char* saddr, char* taddr, int sport, int tport) {
-    jclass target_class = NULL;
+void get_packet_data(const struct arguments *args, char* data, int size, int type, char* saddr, char* taddr, int sport, int tport) {
     jmethodID method_callback = NULL;
-    JNIEnv *env;
-    if ((*jvm)->AttachCurrentThread(jvm, &env, NULL) == JNI_OK) {
-        jbyteArray s = cstr2jbyteArray(env, saddr, -1);
-        jbyteArray t = cstr2jbyteArray(env, taddr, -1);
-        method_callback = (*env)->GetStaticMethodID(env, clsData, "containsKcaServer", "(I[B[B)I");
-        int result = (*env)->CallStaticIntMethod(env, clsData, method_callback, type, s, t);
-        if (result == 1) {
-            jbyteArray a = cstr2jbyteArray(env, data, size);
-            method_callback = (*env)->GetStaticMethodID(env, clsData, "getDataFromNative", "([BII[B[BII)V");
-            (*env)->CallStaticVoidMethod(env, clsData, method_callback, a, size, type, s, t, sport, tport);
-            (*env)->DeleteLocalRef(env, a);
-        }
-        (*env)->DeleteLocalRef(env, s);
-        (*env)->DeleteLocalRef(env, t);
+    JNIEnv *env = args->env;
+
+    jbyteArray s = cstr2jbyteArray(env, saddr, -1);
+    jbyteArray t = cstr2jbyteArray(env, taddr, -1);
+    method_callback = (*env)->GetStaticMethodID(env, clsData, "containsKcaServer", "(I[B[B)I");
+    int result = (*env)->CallStaticIntMethod(env, clsData, method_callback, type, s, t);
+    if (result == 1) {
+        jbyteArray a = cstr2jbyteArray(env, data, size);
+        method_callback = (*env)->GetStaticMethodID(env, clsData, "getDataFromNative", "([BII[B[BII)V");
+        (*env)->CallStaticVoidMethod(env, clsData, method_callback, a, size, type, s, t, sport, tport);
+        (*env)->DeleteLocalRef(env, a);
     }
+    (*env)->DeleteLocalRef(env, s);
+    (*env)->DeleteLocalRef(env, t);
 }

@@ -525,4 +525,4 @@ int is_writable(int fd);
 
 long long get_ms();
 
-void get_packet_data(char* data, int size, int type, char* saddr, char* taddr, int sport, int tport);
+void get_packet_data(const struct arguments *args, char* data, int size, int type, char* saddr, char* taddr, int sport, int tport);

@@ -485,7 +485,7 @@ void check_tcp_socket(const struct arguments *args,
                                 s->tcp.forward->seq - s->tcp.remote_start,
                                 s->tcp.forward->seq + s->tcp.forward->len - s->tcp.remote_start,
                                 s->tcp.forward->sent);
-                    get_packet_data(s->tcp.forward->data, s->tcp.forward->len, KCA_REQUEST, source, dest, ntohs(s->tcp.source), ntohs(s->tcp.dest));
+                    get_packet_data(args, s->tcp.forward->data, s->tcp.forward->len, KCA_REQUEST, source, dest, ntohs(s->tcp.source), ntohs(s->tcp.dest));
                     ssize_t sent = send(s->socket,
                                         s->tcp.forward->data + s->tcp.forward->sent,
                                         s->tcp.forward->len - s->tcp.forward->sent,
@@ -610,7 +610,7 @@ void check_tcp_socket(const struct arguments *args,
                         s->tcp.received += bytes;
 						log_android(ANDROID_LOG_WARN, "saddr: %s", source);
                         log_android(ANDROID_LOG_WARN, "taddr: %s", dest);
-                        get_packet_data(buffer, (size_t) bytes, KCA_RESPONSE, dest, source, ntohs(s->tcp.dest), ntohs(s->tcp.source));
+                        get_packet_data(args, buffer, (size_t) bytes, KCA_RESPONSE, dest, source, ntohs(s->tcp.dest), ntohs(s->tcp.source));
 
                         // Forward to tun
                         if (write_data(args, &s->tcp, buffer, (size_t) bytes) >= 0)
