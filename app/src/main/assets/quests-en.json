@@ -2129,16 +2129,16 @@
 		"unlock": [ 670, 671 ]
 	},
 	"670": {
-		"code": "F62",
-		"name": "Development of a Night Operations-class Ship-Based Bomber Aircraft",
-		"desc": "Have a New Model Aviation Armament Materials, a Skilled Crew Member, 10 Screws, 5000 Ammo, 8000 Bauxite and 40 Development Materials. Set a CV as secretary and equip a TBF in her first slot. Scrap two Type 13 Air Radars and two Type 22 Surface Radars.",
-		"memo": "\u2718Consumes the resources, items and equipment. Make sure the equipment is unlocked! \u27a3Rewards a TBM-3D"
-	},
-	"671": {
 		"code": "F63",
 		"name": "Performance Enhancement of a Night Warfare-class Fighter Aircraft",
 		"desc": "Have a New Model Aviation Armament Materials, 8 Screws, 6000 Bauxite and 40 Development Materials. Set a CV as secretary and equip a >> \u2605max F6F-5 in her first slot. Scrap two Type 13 Air Radars and two Type 22 Surface Radars.",
 		"memo": "\u2718Consumes the resources, items and equipment. Make sure the equipment is unlocked! \u27a3Rewards a F6F-5N"
+	},
+	"671": {
+		"code": "F62",
+		"name": "Development of a Night Operations-class Ship-Based Bomber Aircraft",
+		"desc": "Have a New Model Aviation Armament Materials, a Skilled Crew Member, 10 Screws, 5000 Ammo, 8000 Bauxite and 40 Development Materials. Set a CV as secretary and equip a TBF in her first slot. Scrap two Type 13 Air Radars and two Type 22 Surface Radars.",
+		"memo": "\u2718Consumes the resources, items and equipment. Make sure the equipment is unlocked! \u27a3Rewards a TBM-3D"
 	},
 
 	"701": {
