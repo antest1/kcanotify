@@ -12,6 +12,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
 
 import com.google.common.io.ByteStreams;
@@ -24,6 +26,7 @@ import org.apache.commons.httpclient.ChunkedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -223,6 +226,18 @@ public class KcaUtils {
 
     public static String getStringWithLocale(Context ac, Context bc, int id) {
         return getContextWithLocale(ac, bc).getString(id);
+    }
+
+    public static Uri getContentUri(@NonNull Context context, @NonNull Uri uri) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (uri.toString().startsWith("file")) {
+                File file = new File(uri.getPath());
+                return FileProvider.getUriForFile(context, "com.antest1.kcanotify.provider", file);
+            } else {
+                return uri;
+            }
+        }
+        return uri;
     }
 
     public static void playNotificationSound(MediaPlayer mediaPlayer, Context context, Uri uri) {

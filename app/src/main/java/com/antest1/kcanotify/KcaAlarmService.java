@@ -46,6 +46,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_NOTIFYATSVCOFF;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
+import static com.antest1.kcanotify.KcaUtils.getContentUri;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
@@ -241,7 +242,9 @@ public class KcaAlarmService extends Service {
                 if (soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
                     builder.setDefaults(Notification.DEFAULT_VIBRATE);
                 }
-                builder.setSound(Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
+                Uri content_uri = getContentUri(getApplicationContext(),
+                        Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
+                builder.setSound(content_uri);
             } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                 builder.setDefaults(Notification.DEFAULT_VIBRATE);
             } else {
@@ -301,7 +304,9 @@ public class KcaAlarmService extends Service {
                 if (soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
                     builder.setDefaults(Notification.DEFAULT_VIBRATE);
                 }
-                builder.setSound(Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
+                Uri content_uri = getContentUri(getApplicationContext(),
+                        Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
+                builder.setSound(content_uri);
             } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                 builder.setDefaults(Notification.DEFAULT_VIBRATE);
             } else {
@@ -369,7 +374,9 @@ public class KcaAlarmService extends Service {
                 if (soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
                     builder.setDefaults(Notification.DEFAULT_VIBRATE);
                 }
-                builder.setSound(Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
+                Uri content_uri = getContentUri(getApplicationContext(),
+                        Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
+                builder.setSound(content_uri);
             } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                 builder.setDefaults(Notification.DEFAULT_VIBRATE);
             } else {
