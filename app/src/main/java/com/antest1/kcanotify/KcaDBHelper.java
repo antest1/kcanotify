@@ -175,6 +175,12 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         return value;
     }
 
+    public int getLength(String key) {
+        String value = getValue(key);
+        if (value == null) return -1;
+        else return value.length();
+    }
+
     public JsonObject getJsonObjectValue(String key) {
         String value = getValue(key);
         if (value == null) return null;

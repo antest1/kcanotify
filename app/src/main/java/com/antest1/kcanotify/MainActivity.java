@@ -418,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
         String current_version = getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
         String default_version = getString(R.string.default_gamedata_version);
 
-        if (dbHelper.getJsonObjectValue(DB_KEY_STARTDATA) != null && KcaUtils.compareVersion(current_version, default_version)) {
+        if (dbHelper.getLength(DB_KEY_STARTDATA) > 0 && KcaUtils.compareVersion(current_version, default_version)) {
             JsonObject api_data = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA).getAsJsonObject("api_data");
             KcaApiData.getKcGameData(api_data);
             return 1;
