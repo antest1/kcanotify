@@ -75,6 +75,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
             itemImprovementData = new JsonParser().parse(itemImprovmetInfo).getAsJsonObject();
             JsonArray itemImprovementDetail = itemImprovementData.getAsJsonArray("improvement");
             JsonArray itemDefaultEquippedOn = itemImprovementData.getAsJsonArray("default_equipped_on");
+            boolean itemConvertException = itemImprovementData.has("convert_exception");
             if (itemImprovementDetail.size() < 2) {
                 findViewById(R.id.akashi_improv_detail_2).setVisibility(View.GONE);
             }
@@ -145,7 +146,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
 
                 JsonArray req = data.get("req").getAsJsonArray();
                 ((TextView) findViewById(getId("akashi_improv_support_".concat(String.valueOf(i + 1)), R.id.class)))
-                        .setText(getSupportString(req));
+                        .setText(getSupportString(req, itemConvertException));
             }
             List<String> shipList = new ArrayList<>();
             List<String> shipNameList = new ArrayList<>();
@@ -232,7 +233,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
     }
 
 
-    private String getSupportString(JsonArray array) {
+    private String getSupportString(JsonArray array, boolean exception) {
         String supportString = "";
         for (int i = 0; i < array.size(); i++) {
             List<String> daylist = new ArrayList<>();
@@ -246,7 +247,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
                 }
                 String daytext = joinStr(daylist, ",");
 
-                int[] shiplist = removeKai(item.get(1).getAsJsonArray());
+                int[] shiplist = removeKai(item.get(1).getAsJsonArray(), exception);
                 for (int j = 0; j < shiplist.length; j++) {
                     JsonObject kcShipData = getKcShipDataById(shiplist[j], "name");
                     String shipname = getShipTranslation(kcShipData.get("name").getAsString(), false);

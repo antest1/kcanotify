@@ -1,5 +1,7 @@
 package com.antest1.kcanotify;
 
+import android.widget.Toast;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -72,6 +74,7 @@ public class KcaAkashiListViewItem {
     // 0: sun ~ 6: sat
     public void setEquipImprovementElement(int day, boolean checked) {
         JsonArray data = equipImprovementData.getAsJsonArray("improvement");
+        boolean convert_exception = equipImprovementData.has("convert_exception");
         String[] material1 = new String[2];
         String[] material2 = new String[2];
         String[] material3 = new String[2];
@@ -92,7 +95,7 @@ public class KcaAkashiListViewItem {
                 if (reqitem.size() == 2 && reqitem.get(0).getAsJsonArray().get(day).getAsBoolean()) {
                     JsonElement supportInfo = reqitem.get(1);
                     if (supportInfo.isJsonArray()) {
-                        int[] filtered = removeKai(supportInfo.getAsJsonArray());
+                        int[] filtered = removeKai(supportInfo.getAsJsonArray(), convert_exception);
                         for(int k = 0; k < filtered.length; k++) {
                             JsonObject kcShipData = getKcShipDataById(filtered[k], "name");
                             shiplist.add(getShipTranslation(kcShipData.get("name").getAsString(), false));

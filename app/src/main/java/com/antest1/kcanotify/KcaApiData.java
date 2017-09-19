@@ -1102,7 +1102,7 @@ public class KcaApiData {
         return sid;
     }
 
-    public static int[] removeKai(JsonArray slist) {
+    public static int[] removeKai(JsonArray slist, boolean exception) {
         List<Integer> afterShipList = new ArrayList<Integer>();
         List filteredShipList = new ArrayList<>();
         for (int i = 0; i < slist.size(); i++) {
@@ -1118,7 +1118,7 @@ public class KcaApiData {
         }
         for (int i = 0; i < slist.size(); i++) {
             int sid = slist.get(i).getAsInt();
-            if (afterShipList.indexOf(sid) == -1) {
+            if (exception || afterShipList.indexOf(sid) == -1) {
                 filteredShipList.add(sid);
             }
         }
