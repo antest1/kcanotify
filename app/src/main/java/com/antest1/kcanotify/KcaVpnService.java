@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
@@ -22,15 +21,10 @@ import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.telephony.PhoneStateListener;
-import android.telephony.ServiceState;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.os.Process;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -38,9 +32,7 @@ import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
@@ -51,7 +43,6 @@ import eu.faircode.netguard.IPUtil;
 import eu.faircode.netguard.Packet;
 import eu.faircode.netguard.ResourceRecord;
 import eu.faircode.netguard.Rule;
-import eu.faircode.netguard.Usage;
 import eu.faircode.netguard.Util;
 
 public class KcaVpnService extends VpnService {
@@ -711,16 +702,6 @@ public class KcaVpnService extends VpnService {
 
         Allowed allowed = new Allowed();
         return allowed;
-    }
-
-    // Called from native code
-    private void accountUsage(Usage usage) {
-        /*
-        Message msg = logHandler.obtainMessage();
-        msg.obj = usage;
-        msg.what = MSG_USAGE;
-        logHandler.sendMessage(msg);
-        */
     }
 
     private BroadcastReceiver interactiveStateReceiver = new BroadcastReceiver() {

@@ -504,9 +504,6 @@ jobject create_packet(const struct arguments *args,
                       jint uid,
                       jboolean allowed);
 
-void account_usage(const struct arguments *args, jint version, jint protocol,
-                   const char *daddr, jint dport, jint uid, jlong sent, jlong received);
-
 void write_pcap_hdr();
 
 void write_pcap_rec(const uint8_t *buffer, size_t len);

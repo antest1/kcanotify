@@ -70,8 +70,6 @@ int check_udp_session(const struct arguments *args, struct ng_session *s,
     }
 
     if (s->udp.state == UDP_CLOSED && (s->udp.sent || s->udp.received)) {
-        account_usage(args, s->udp.version, IPPROTO_UDP,
-                      dest, ntohs(s->udp.dest), s->udp.uid, s->udp.sent, s->udp.received);
         s->udp.sent = 0;
         s->udp.received = 0;
     }

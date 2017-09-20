@@ -103,8 +103,6 @@ int check_tcp_session(const struct arguments *args, struct ng_session *s,
 
     if ((s->tcp.state == TCP_CLOSING || s->tcp.state == TCP_CLOSE) &&
         (s->tcp.sent || s->tcp.received)) {
-        account_usage(args, s->tcp.version, IPPROTO_TCP,
-                      dest, ntohs(s->tcp.dest), s->tcp.uid, s->tcp.sent, s->tcp.received);
         s->tcp.sent = 0;
         s->tcp.received = 0;
     }

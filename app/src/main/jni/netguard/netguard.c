@@ -66,9 +66,6 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     const char *rr = "eu/faircode/netguard/ResourceRecord";
     clsRR = jniGlobalRef(env, jniFindClass(env, rr));
 
-    const char *usage = "eu/faircode/netguard/Usage";
-    clsUsage = jniGlobalRef(env, jniFindClass(env, usage));
-
     const char *vpndata = "com/antest1/kcanotify/KcaVpnData";
     clsData = jniGlobalRef(env, jniFindClass(env, vpndata));
 
@@ -780,77 +777,6 @@ jobject create_packet(const struct arguments *args,
 #endif
 
     return jpacket;
-}
-
-jmethodID midAccountUsage = NULL;
-jmethodID midInitUsage = NULL;
-jfieldID fidUsageTime = NULL;
-jfieldID fidUsageVersion = NULL;
-jfieldID fidUsageProtocol = NULL;
-jfieldID fidUsageDAddr = NULL;
-jfieldID fidUsageDPort = NULL;
-jfieldID fidUsageUid = NULL;
-jfieldID fidUsageSent = NULL;
-jfieldID fidUsageReceived = NULL;
-
-void account_usage(const struct arguments *args, jint version, jint protocol,
-                   const char *daddr, jint dport, jint uid, jlong sent, jlong received) {
-#ifdef PROFILE_JNI
-    float mselapsed;
-    struct timeval start, end;
-    gettimeofday(&start, NULL);
-#endif
-
-    jclass clsService = (*args->env)->GetObjectClass(args->env, args->instance);
-
-    const char *signature = "(Leu/faircode/netguard/Usage;)V";
-    if (midAccountUsage == NULL)
-        midAccountUsage = jniGetMethodID(args->env, clsService, "accountUsage", signature);
-
-    const char *usage = "eu/faircode/netguard/Usage";
-    if (midInitUsage == NULL)
-        midInitUsage = jniGetMethodID(args->env, clsUsage, "<init>", "()V");
-
-    jobject jusage = jniNewObject(args->env, clsUsage, midInitUsage, usage);
-
-    if (fidUsageTime == NULL) {
-        const char *string = "Ljava/lang/String;";
-        fidUsageTime = jniGetFieldID(args->env, clsUsage, "Time", "J");
-        fidUsageVersion = jniGetFieldID(args->env, clsUsage, "Version", "I");
-        fidUsageProtocol = jniGetFieldID(args->env, clsUsage, "Protocol", "I");
-        fidUsageDAddr = jniGetFieldID(args->env, clsUsage, "DAddr", string);
-        fidUsageDPort = jniGetFieldID(args->env, clsUsage, "DPort", "I");
-        fidUsageUid = jniGetFieldID(args->env, clsUsage, "Uid", "I");
-        fidUsageSent = jniGetFieldID(args->env, clsUsage, "Sent", "J");
-        fidUsageReceived = jniGetFieldID(args->env, clsUsage, "Received", "J");
-    }
-
-    jlong jtime = time(NULL) * 1000LL;
-    jstring jdaddr = (*args->env)->NewStringUTF(args->env, daddr);
-
-    (*args->env)->SetLongField(args->env, jusage, fidUsageTime, jtime);
-    (*args->env)->SetIntField(args->env, jusage, fidUsageVersion, version);
-    (*args->env)->SetIntField(args->env, jusage, fidUsageProtocol, protocol);
-    (*args->env)->SetObjectField(args->env, jusage, fidUsageDAddr, jdaddr);
-    (*args->env)->SetIntField(args->env, jusage, fidUsageDPort, dport);
-    (*args->env)->SetIntField(args->env, jusage, fidUsageUid, uid);
-    (*args->env)->SetLongField(args->env, jusage, fidUsageSent, sent);
-    (*args->env)->SetLongField(args->env, jusage, fidUsageReceived, received);
-
-    (*args->env)->CallVoidMethod(args->env, args->instance, midAccountUsage, jusage);
-    jniCheckException(args->env);
-
-    (*args->env)->DeleteLocalRef(args->env, jdaddr);
-    (*args->env)->DeleteLocalRef(args->env, jusage);
-    (*args->env)->DeleteLocalRef(args->env, clsService);
-
-#ifdef PROFILE_JNI
-    gettimeofday(&end, NULL);
-    mselapsed = (end.tv_sec - start.tv_sec) * 1000.0 +
-                (end.tv_usec - start.tv_usec) / 1000.0;
-    if (mselapsed > PROFILE_JNI)
-        log_android(ANDROID_LOG_WARN, "log_packet %f", mselapsed);
-#endif
 }
 
 jbyteArray cstr2jbyteArray( JNIEnv *env, const char *nativeStr, int size)
