@@ -177,7 +177,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_language">Language Settings</string>
     <string name="setting_menu_kand_title_saku_cal">Select LoS formula</string>
     <string name="setting_menu_kand_title_opendb">Send game statistics to OpenDB</string>
-    <string name="setting_menu_kand_desc_opendb" translatable="false">http://165.132.106.219/opendb/</string>
+    <string name="setting_menu_kand_desc_opendb" translatable="false">http://swaytwig.com/opendb/</string>
     <string name="setting_menu_kand_title_exp_realtime_show">Track Expedition Time</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">Display remaining time for Expeditions on the navbar</string>
     <string name="setting_menu_kand_title_set_noti_priority">Set Notification Priority to HIGH</string>
