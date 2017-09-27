@@ -538,16 +538,19 @@ public class KcaDeckInfo {
 
     public JsonArray getDeckListInfo(JsonArray deckPortData, int deckid) {
         JsonArray deckListInfo = new JsonArray();
-        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
-        for (int i = 0; i < deckShipIdList.size(); i++) {
-            JsonObject data = new JsonObject();
-            int shipId = deckShipIdList.get(i).getAsInt();
-            if (shipId != -1) {
-                JsonObject shipData = getUserShipDataById(shipId, "ship_id,lv,slot,slot_ex,onslot,cond,maxhp,nowhp");
-                data.add("user", shipData);
-                int shipKcId = shipData.get("ship_id").getAsInt();
-                data.add("kc", getKcShipDataById(shipKcId, "name,maxeq,stype"));
-                deckListInfo.add(data);
+        int deckSize = deckPortData.size();
+        if (deckid < deckSize) {
+            JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
+            for (int i = 0; i < deckShipIdList.size(); i++) {
+                JsonObject data = new JsonObject();
+                int shipId = deckShipIdList.get(i).getAsInt();
+                if (shipId != -1) {
+                    JsonObject shipData = getUserShipDataById(shipId, "ship_id,lv,slot,slot_ex,onslot,cond,maxhp,nowhp");
+                    data.add("user", shipData);
+                    int shipKcId = shipData.get("ship_id").getAsInt();
+                    data.add("kc", getKcShipDataById(shipKcId, "name,maxeq,stype"));
+                    deckListInfo.add(data);
+                }
             }
         }
         return deckListInfo;
