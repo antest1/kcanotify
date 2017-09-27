@@ -34,12 +34,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="accessibility_service_description">This permission allows kcanotify to detect whether kancolle is on the screen.\nIt only check whether kancolle is on the screen or not.\nYou can disallow this permission and hide the fairy manually by touching it long time.</string>
 
     <!-- Link Information -->
-    <string name="kcanotify_checkversion_link" translatable="false">http://swaytwig.com/kcanotify/v.php</string>
-    <string name="api_start2_recent_version_link" translatable="false">http://swaytwig.com/kcanotify/kca_api_start2.php?v=recent</string>
-    <string name="api_start2_upload_link" formatted="false" translatable="false">http://swaytwig.com/kcanotify/kca_api_start2.php?token=%s&amp;dtoken=%s&amp;method=%s&amp;v=%s</string>
-    <string name="errorlog_service_link" formatted="false" translatable="false">http://swaytwig.com/kcanotify/errorlog_main.php?token=%s&amp;url=%s&amp;request=%s&amp;v=%s</string>
-    <string name="errorlog_battle_link" formatted="false" translatable="false">http://swaytwig.com/kcanotify/errorlog_battle.php?token=%s&amp;url=%s&amp;node=%s&amp;v=%s</string>
-    <string name="errorlog_notify_link" formatted="false" translatable="false">http://swaytwig.com/kcanotify/errorlog_notify.php?token=%s&amp;url=%s&amp;v=%s</string>
+    <string name="kcanotify_checkversion_link" translatable="false">http://165.132.106.219/kcanotify/v.php</string>
+    <string name="api_start2_recent_version_link" translatable="false">http://165.132.106.219/kcanotify/kca_api_start2.php?v=recent</string>
 
     <!-- Common Text -->
     <string name="dialog_ok">OK</string>
@@ -113,7 +109,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_toast_overay_diabled">Screen Overlay Permission is required for BattleView. Enable Screen Overlay at Settings > Screen Overlay Settings.</string>
     <string name="ma_hasupdate" formatted="false">An update is available. (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">New game data is avaliable. (%s)</string>
-    <string name="description"><b>Help</b>\nTurn on VPN and SVC then run Kancolle\n\n※ VPN is required for detecting game data. \n\n<b>Main Features</b>\n - Expedition/Docking notifications \n - Heavy Damage Alert (prior to/during combat)\n - LoS/FP/Fatigue indicators\n - Node tracking during sorties\n - BattleView / QuestView\n - Improvement Arsenal Chart\n - Send statistics to OpenDB (optional)\n \nVisit http://swaytwig.com/kcanotify for detail. (Korean)</string>
+    <string name="description"><b>Help</b>\nTurn on VPN and SVC then run Kancolle\n\n※ VPN is required for detecting game data. \n\n<b>Main Features</b>\n - Expedition/Docking notifications \n - Heavy Damage Alert (prior to/during combat)\n - LoS/FP/Fatigue indicators\n - Node tracking during sorties\n - BattleView / QuestView\n - Improvement Arsenal Chart\n - Send statistics to OpenDB (optional)\n \nVisit http://165.132.106.219/kcanotify for detail. (Korean)</string>
 
     <!-- SettingActivity Strings -->
     <string name="sa_checkupdate_latest" formatted="false">You have the latest version. (%s)</string>
@@ -181,7 +177,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_language">Language Settings</string>
     <string name="setting_menu_kand_title_saku_cal">Select LoS formula</string>
     <string name="setting_menu_kand_title_opendb">Send game statistics to OpenDB</string>
-    <string name="setting_menu_kand_desc_opendb" translatable="false">http://swaytwig.com/opendb/</string>
+    <string name="setting_menu_kand_desc_opendb" translatable="false">http://165.132.106.219/opendb/</string>
     <string name="setting_menu_kand_title_exp_realtime_show">Track Expedition Time</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">Display remaining time for Expeditions on the navbar</string>
     <string name="setting_menu_kand_title_set_noti_priority">Set Notification Priority to HIGH</string>
