@@ -158,7 +158,6 @@ public class AkashiActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        akashiData = null;
         super.onDestroy();
     }
 
