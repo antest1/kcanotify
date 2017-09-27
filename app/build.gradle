@@ -13,11 +13,10 @@ model {
         }
 
         ndk {
-            platformVersion = "21"
+            platformVersion = "16"
             moduleName = "netguard"
             toolchain = "clang"
             ldLibs.add("log")
-            abiFilters.addAll(['x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'arm64-v8a'])
         }
 
         sources {
@@ -36,8 +35,11 @@ model {
         buildTypes {
             release {
                 minifyEnabled true
-                zipAlignEnabled true
+                useProguard = true
                 proguardFiles.add(file('proguard-rules.pro'))
+                ndk.with {
+                    debuggable = false
+                }
             }
         }
     }
