@@ -38,6 +38,7 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_INFO;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaUtils.getId;
+import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
 public class KcaMapHpPopupService extends Service {
     public static final String MAPHP_SHOW_ACTION = "maphp_show_action";
@@ -111,11 +112,10 @@ public class KcaMapHpPopupService extends Service {
 
             hp_info = (TextView) mView.findViewById(R.id.hp_info);
 
-            // Button (Fairy) Settings
             mParams = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.TYPE_PHONE,
+                    getWindowLayoutType(),
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
 

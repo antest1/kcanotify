@@ -15,6 +15,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonElement;
@@ -301,5 +302,15 @@ public class KcaUtils {
             }
         }
         return false;
+    }
+
+    public static int getWindowLayoutType() {
+        int windowLayoutType = -1;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            windowLayoutType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            windowLayoutType = WindowManager.LayoutParams.TYPE_PHONE;
+        }
+        return windowLayoutType;
     }
 }
