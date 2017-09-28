@@ -12,13 +12,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="app_brand" traslatable="false" translatable="false">시제 깡들리티</string> <!-- Do not translate here -->
-    <string name="app_version" translatable="false">2.4.3 rev5</string>
+    <string name="app_version" translatable="false">2.4.3 rev6</string>
     <string name="action_settings">Settings</string>
     <string name="action_errorlog">Error Log</string>
     <string name="backpress_msg">Press back one more time to exit</string>
 
     <string name="developer_email" translatable="false">kcanotify@gmail.com</string>
-    <string name="default_gamedata_version" translatable="false">3.3.2.3</string>
+    <string name="default_gamedata_version" translatable="false">3.3.2.4</string>
 
     <string name="app_download_link_playstore_label" translatable="false">Google Play Store</string>
     <string name="app_download_link_googledrive_label" translatable="false">Google Drive</string>
