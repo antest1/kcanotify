@@ -300,9 +300,10 @@ public class KcaFleetViewService extends Service {
                             itemViewParams.y = (int) event.getRawY();
                             itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
                             if (itemView.getParent() != null) {
-                                mManager.removeViewImmediate(itemView);
+                                mManager.updateViewLayout(itemView, itemViewParams);
+                            } else {
+                                mManager.addView(itemView, itemViewParams);
                             }
-                            mManager.addView(itemView, itemViewParams);
                         }
                     }
                     break;
