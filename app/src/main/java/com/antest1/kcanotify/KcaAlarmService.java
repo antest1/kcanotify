@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -10,11 +11,11 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.annotation.IntegerRes;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -25,26 +26,23 @@ import com.google.gson.JsonParser;
 import java.util.HashSet;
 import java.util.Set;
 
-import static android.os.Build.VERSION_CODES.M;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
-import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_NOTICOUNT_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
 import static com.antest1.kcanotify.KcaConstants.NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.NOTI_UPDATE;
-import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_NOTIFYATSVCOFF;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
+import static com.antest1.kcanotify.KcaUtils.createBuilder;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContentUri;
 import static com.antest1.kcanotify.KcaUtils.getId;
@@ -56,6 +54,9 @@ public class KcaAlarmService extends Service {
     public static final int TYPE_EXPEDITION = 1;
     public static final int TYPE_DOCKING = 2;
     public static final int TYPE_UPDATE = 3;
+
+    public static final String ALARM_CHANNEL_ID = "noti_alarm_channel";
+    public static final String ALARM_CHANNEL_NAME = "Notification";
 
     public static final int EXP_CANCEL_FLAG = 8;
     public static final long ALARM_DELAY = 61000;
@@ -105,6 +106,7 @@ public class KcaAlarmService extends Service {
         expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
         dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        createAlarmChannel();
         super.onCreate();
     }
 
@@ -208,6 +210,16 @@ public class KcaAlarmService extends Service {
         super.onDestroy();
     }
 
+    private void createAlarmChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(ALARM_CHANNEL_ID,
+                    ALARM_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.enableVibration(true);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
     private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag, boolean caFlag, int nid) {
         PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
                 new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
@@ -226,7 +238,9 @@ public class KcaAlarmService extends Service {
                 content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNo);
 
         }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
+
+
+        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.expedition_notify_icon)
                 .setLargeIcon(expBitmap)
                 .setContentTitle(title)
@@ -289,7 +303,7 @@ public class KcaAlarmService extends Service {
             content = String.format(getStringWithLocale(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
+        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.docking_notify_icon)
                 .setLargeIcon(dockBitmap)
                 .setContentTitle(title)

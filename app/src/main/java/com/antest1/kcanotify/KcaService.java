@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -76,6 +77,7 @@ import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaFleetViewService.REFRESH_FLEETVIEW_ACTION;
 import static com.antest1.kcanotify.KcaQuestViewService.REFRESH_QUESTVIEW_ACTION;
+import static com.antest1.kcanotify.KcaUtils.createBuilder;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContentUri;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
@@ -87,6 +89,9 @@ import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class KcaService extends Service {
+    public static final String SERVICE_CHANNEL_ID = "noti_service_channel";
+    public static final String SERVICE_CHANNEL_NAME = "Kcanotify Service";
+
     public static String currentLocale;
     public static boolean isInitState;
     public static boolean isFirstState;
@@ -142,6 +147,20 @@ public class KcaService extends Service {
         return pref.contains(key);
     }
 
+    private void createServiceChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int priority = IMPORTANCE_DEFAULT;
+            if (getBooleanPreferences(getApplicationContext(), PREF_KCA_SET_PRIORITY)) {
+                priority = IMPORTANCE_HIGH;
+            }
+            NotificationChannel channel = new NotificationChannel(SERVICE_CHANNEL_ID,
+                    SERVICE_CHANNEL_NAME, priority);
+            channel.enableVibration(true);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            notifiManager.createNotificationChannel(channel);
+        }
+    }
+
     public String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
@@ -185,17 +204,18 @@ public class KcaService extends Service {
                 mp.reset();
             }
         });
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        createServiceChannel();
 
         String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
         viewBitmapId = getId(fairyId, R.mipmap.class);
         viewBitmapSmallId = R.mipmap.ic_stat_notify_0;
         viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
-        viewNotificationBuilder = new NotificationCompat.Builder(this);
+        viewNotificationBuilder = createBuilder(this, SERVICE_CHANNEL_ID);
 
         handler = new kcaServiceHandler(this);
         nHandler = new kcaNotificationHandler(this);

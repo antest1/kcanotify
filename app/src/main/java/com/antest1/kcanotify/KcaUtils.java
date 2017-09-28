@@ -13,6 +13,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
@@ -40,6 +41,7 @@ import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import static com.antest1.kcanotify.KcaAlarmService.ALARM_CHANNEL_ID;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 
@@ -312,5 +314,13 @@ public class KcaUtils {
             windowLayoutType = WindowManager.LayoutParams.TYPE_PHONE;
         }
         return windowLayoutType;
+    }
+
+    public static NotificationCompat.Builder createBuilder(Context context, String channel) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return new NotificationCompat.Builder(context, channel);
+        } else {
+            return new NotificationCompat.Builder(context);
+        }
     }
 }
