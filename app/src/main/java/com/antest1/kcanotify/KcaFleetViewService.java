@@ -244,6 +244,10 @@ public class KcaFleetViewService extends Service {
                 if (mView.getParent() != null) {
                     mManager.removeViewImmediate(mView);
                 }
+                itemView.setVisibility(View.GONE);
+                if (itemView.getParent() != null) {
+                    mManager.removeViewImmediate(itemView);
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -300,10 +304,9 @@ public class KcaFleetViewService extends Service {
                             itemViewParams.y = (int) event.getRawY();
                             itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
                             if (itemView.getParent() != null) {
-                                mManager.updateViewLayout(itemView, itemViewParams);
-                            } else {
-                                mManager.addView(itemView, itemViewParams);
+                                mManager.removeViewImmediate(itemView);
                             }
+                            mManager.addView(itemView, itemViewParams);
                         }
                     }
                     break;
