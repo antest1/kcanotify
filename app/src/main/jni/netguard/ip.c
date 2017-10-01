@@ -296,40 +296,16 @@ void handle_ip(const struct arguments *args,
                 "Packet v%d %s/%u > %s/%u proto %d flags %s uid %d",
                 version, source, sport, dest, dport, protocol, flags, uid);
 
-    // Check if allowed
-    int allowed = 0;
+    // Allow all packets
+    int allowed = 1;
     struct allowed *redirect = NULL;
-    if (protocol == IPPROTO_UDP && has_udp_session(args, pkt, payload))
-        allowed = 1; // could be a lingering/blocked session
-    else if (protocol == IPPROTO_TCP && !syn)
-        allowed = 1; // assume existing session
-    else {
-        jobject objPacket = create_packet(
-                args, version, protocol, flags, source, sport, dest, dport, "", uid, 0);
-        redirect = is_address_allowed(args, objPacket);
-        allowed = (redirect != NULL);
-        if (redirect != NULL && (*redirect->raddr == 0 || redirect->rport == 0))
-            redirect = NULL;
-    }
 
-    // Handle allowed traffic
-    if (allowed) {
-        if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6)
-            handle_icmp(args, pkt, length, payload, uid, epoll_fd);
-        else if (protocol == IPPROTO_UDP)
-            handle_udp(args, pkt, length, payload, uid, redirect, epoll_fd);
-        else if (protocol == IPPROTO_TCP)
-            handle_tcp(args, pkt, length, payload, uid, allowed, redirect, epoll_fd);
-    }
-    else {
-        if (protocol == IPPROTO_UDP)
-            block_udp(args, pkt, length, payload, uid);
-        if (protocol == IPPROTO_TCP)
-            handle_tcp(args, pkt, length, payload, uid, allowed, redirect, epoll_fd);
-
-        log_android(ANDROID_LOG_WARN, "Address v%d p%d %s/%u syn %d not allowed",
-                    version, protocol, dest, dport, syn);
-    }
+    if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6)
+        handle_icmp(args, pkt, length, payload, uid, epoll_fd);
+    else if (protocol == IPPROTO_UDP)
+        handle_udp(args, pkt, length, payload, uid, redirect, epoll_fd);
+    else if (protocol == IPPROTO_TCP)
+        handle_tcp(args, pkt, length, payload, uid, allowed, redirect, epoll_fd);
 }
 
 jint get_uid(const int version, const int protocol,
