@@ -282,6 +282,7 @@ public class KcaService extends Service {
         stopService(new Intent(this, KcaQuestViewService.class));
         stopService(new Intent(this, KcaFleetViewService.class));
         stopService(new Intent(this, KcaAkashiViewService.class));
+        stopService(new Intent(this, KcaExpeditionCheckViewService.class));
         stopService(new Intent(this, KcaViewButtonService.class));
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putBoolean("svcenabled", false).apply();

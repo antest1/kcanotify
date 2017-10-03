@@ -163,6 +163,7 @@ public class KcaFleetViewService extends Service {
             mView.findViewById(R.id.viewbutton_develop).setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.viewbutton_construction).setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.viewbutton_maphp).setOnTouchListener(mViewTouchListener);
+            mView.findViewById(R.id.viewbutton_excheck).setOnTouchListener(mViewTouchListener);
             for (int i = 0; i < 5; i++) {
                 mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
             }
@@ -172,12 +173,12 @@ public class KcaFleetViewService extends Service {
 
             ((TextView) mView.findViewById(R.id.viewbutton_quest)).setText(getStringWithLocale(R.string.viewmenu_quest));
             ((TextView) mView.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
-            fleetInfoLine = (TextView) mView.findViewById(R.id.fleetview_infoline);
+            fleetInfoLine = mView.findViewById(R.id.fleetview_infoline);
             fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
             fleetInfoLine.setOnTouchListener(mViewTouchListener);
 
-            fleetInfoTitle = (TextView) mView.findViewById(R.id.fleetview_title);
-            fleetExpView = (TextView) mView.findViewById(R.id.fleetview_exp);
+            fleetInfoTitle = mView.findViewById(R.id.fleetview_title);
+            fleetExpView = mView.findViewById(R.id.fleetview_exp);
 
             itemView = mInflater.inflate(R.layout.view_battleview_items, null);
 
@@ -351,6 +352,10 @@ public class KcaFleetViewService extends Service {
                         } else if (id == mView.findViewById(R.id.viewbutton_maphp).getId()) {
                             qintent = new Intent(getBaseContext(), KcaMapHpPopupService.class);
                             qintent.setAction(KcaMapHpPopupService.MAPHP_SHOW_ACTION);
+                            startService(qintent);
+                        } else if (id == mView.findViewById(R.id.viewbutton_excheck).getId()) {
+                            qintent = new Intent(getBaseContext(), KcaExpeditionCheckViewService.class);
+                            qintent.setAction(KcaExpeditionCheckViewService.SHOW_EXCHECKVIEW_ACTION.concat("/").concat(String.valueOf(selected)));
                             startService(qintent);
                         } else {
                             for (int i = 0; i < 5; i++) {
