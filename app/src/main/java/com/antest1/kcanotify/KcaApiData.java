@@ -60,7 +60,7 @@ public class KcaApiData {
     public static JsonArray kcStypeData = new JsonArray();
 
     public static JsonObject kcShipAbbrData = new JsonObject(); // For English
-    public static JsonObject kcSimpleExpeditionData = new JsonObject();
+    public static JsonObject kcExpeditionData = new JsonObject();
     public static JsonObject kcShipInitEquipCount = new JsonObject();
 
     public static Handler sHandler = null;
@@ -502,7 +502,7 @@ public class KcaApiData {
     public static int loadSimpleExpeditionInfoFromAssets(AssetManager am) {
         try {
             AssetManager.AssetInputStream ais =
-                    (AssetManager.AssetInputStream) am.open("simple_expedition.json");
+                    (AssetManager.AssetInputStream) am.open("expedition.json");
             byte[] bytes = ByteStreams.toByteArray(ais);
             //Log.e("KCA", new String(bytes));
             JsonElement data = new JsonParser().parse(new String(bytes));
@@ -510,7 +510,7 @@ public class KcaApiData {
                 JsonArray array = data.getAsJsonArray();
                 for (JsonElement item : array) {
                     JsonObject expdata = item.getAsJsonObject();
-                    kcSimpleExpeditionData.add(expdata.get("no").getAsString(), expdata);
+                    kcExpeditionData.add(expdata.get("no").getAsString(), expdata);
                 }
                 return 1;
             } else {
@@ -584,7 +584,24 @@ public class KcaApiData {
     }
 
     public static boolean isExpeditionDataLoaded() {
-        return kcSimpleExpeditionData.entrySet().size() > 0;
+        return kcExpeditionData.entrySet().size() > 0;
+    }
+
+    public static JsonObject getExpeditionInfo(int mission_no, String locale) {
+        int mission_key = mission_no;
+        if (mission_no >= 100) {
+            if (mission_no % 2 == 1) mission_key = 133;
+            else mission_key = 134;
+        }
+        JsonObject rawdata = kcExpeditionData.getAsJsonObject(String.valueOf(mission_key));
+        JsonObject data = new JsonParser().parse(rawdata.toString()).getAsJsonObject();
+        JsonObject name = data.getAsJsonObject("name");
+        if (name.has(locale)) {
+            data.addProperty("name", name.get(locale).getAsString());
+        } else {
+            data.addProperty("name", name.get("en").getAsString());
+        }
+        return data;
     }
 
     public static String getExpeditionName(int mission_no, String locale) {
@@ -593,12 +610,12 @@ public class KcaApiData {
             if (mission_no % 2 == 1) mission_key = 133;
             else mission_key = 134;
         }
-        JsonObject data = kcSimpleExpeditionData.getAsJsonObject(String.valueOf(mission_key));
-        String localeKey = String.format("name-".concat(locale));
-        if (data.has(localeKey)) {
-            return data.get(localeKey).getAsString();
+        JsonObject data = kcExpeditionData.getAsJsonObject(String.valueOf(mission_key));
+        JsonObject name = data.getAsJsonObject("name");
+        if (name.has(locale)) {
+            return name.get(locale).getAsString();
         } else {
-            return data.get("name-en").getAsString();
+            return name.get("en").getAsString();
         }
     }
 

@@ -349,4 +349,6 @@
     <string name="action_errorlog">エラーログ</string>
     <string name="errlog_dialog_message">全体エラーログを削除しますか？</string>
     <string name="errlog_cpy_to_clipboard">クリップボードにコピーされました。</string>
+    <string name="excheckview_title">遠征情報</string>
+    <string name="viewmenu_excheck">遠征</string>
 </resources>

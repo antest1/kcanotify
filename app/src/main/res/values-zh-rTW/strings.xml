@@ -344,6 +344,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_expview" formatted="false">［這回］%.2f・［今天］%.2f</string>
     <string name="viewmenu_battle">戰鬥</string>
     <string name="viewmenu_quest">任務</string>
+    <string name="viewmenu_excheck">遠征</string>
     <string name="viewmenu_akashi">改修</string>
     <string name="viewmenu_develop">開發</string>
     <string name="viewmenu_construction">建造</string>
@@ -352,6 +353,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_construction_title">建造信息</string>
     <string name="viewmenu_maphp_title">海域HP信息</string>
     <string name="develop_failed_text">企鵝玩偶</string>
+    <string name="excheckview_title">遠征信息</string>
     <string name="action_errorlog">錯誤日誌</string>
     <string name="errlog_dialog_message">你想清空所有錯誤日誌嗎？</string>
     <string name="errlog_cpy_to_clipboard">已複製文本到剪貼板</string>

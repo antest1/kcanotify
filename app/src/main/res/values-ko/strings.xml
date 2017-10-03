@@ -338,6 +338,7 @@
     <string name="fleetview_expview" formatted="false">[이번] %.2f / [오늘] %.2f</string>
     <string name="viewmenu_battle">전투</string>
     <string name="viewmenu_quest">임무</string>
+    <string name="viewmenu_excheck">원정</string>
     <string name="viewmenu_akashi">개수</string>
     <string name="viewmenu_develop">개발</string>
     <string name="viewmenu_construction">건조</string>
@@ -346,7 +347,9 @@
     <string name="viewmenu_construction_title">건조 정보</string>
     <string name="viewmenu_maphp_title">해역 HP 정보</string>
     <string name="develop_failed_text">펭귄 인형 ㅠㅠ</string>
+    <string name="excheckview_title">원정정보</string>
     <string name="action_errorlog">오류 로그</string>
     <string name="errlog_dialog_message">전체 오류 로그를 지우시겠습니까?</string>
     <string name="errlog_cpy_to_clipboard">내용이 클립보드에 복사되었습니다.</string>
+
 </resources>
