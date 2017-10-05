@@ -1216,6 +1216,26 @@
 		"desc": "Sortie Saratoga Mk.II (NOT Mod.2) as Fleet 1 flagship to [W6-5]. S-Rank? the boss node. ",
 		"memo": "\u2623Be wary of rewards potentially being listed in the wrong order. \u27a3Rewards: \u27a3First choice: Either a TBF OR a New Model Aviation Armament Materials OR a Night Operations Aviation Personnel \u27a3Second choice: Either a Reinforcement Expansion OR a New Model Aviation Armament Materials OR a Skilled Crew Member"
 	},
+	"866": {
+		"code": "SB23",
+		"name": "Saury Fishing: I'm Going to Secure the Saury Harvest!",
+		"desc": "Have 4 Sauries in your inventory.",
+		"memo": "\u27a3Rewards:\n\u00B6First choice: Either a Furniture Fairy OR 4 Screws\n\u00B6Second choice: Either a Type 3 Active Sonar OR a Searchlight OR 4 Combat Rations",
+		"unlock": [ 867 ]
+	},
+	"867": {
+		"code": "SB24",
+		"name": "Saury Fishing: I'm Ready to Go All-Out Supporting the Fishing!",
+		"desc": "Have 12 Sauries in your inventory.",
+		"memo": "\u27a3Rewards:\n\u00B6First choice: Either a Daihatsu Landing Craft OR a WG42 (Wurfgerät 42) OR a New Model Aviation Armament Materials\n\u00B6Second choice: Either 2 Swordfish OR 2 Shiden Kai Ni OR a Skilled Crew Member",
+		"unlock": [ 868 ]
+	},
+	"868": {
+		"code": "SB25",
+		"name": "Saury Fishing: Boooom! I'm Fired Up for the Big Catch!",
+		"desc": "Have 30 Sauries in your inventory.",
+		"memo": "\u27a3Rewards furniture and either a Type124 ASDIC OR a TBF OR an Agano-class fishing banner"
+	},
 
 	"201": {
 		"code": "Bd1",
