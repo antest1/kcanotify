@@ -38,6 +38,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -54,12 +55,14 @@ public class KcaUtils {
 
     public static String joinStr(List<String> list, String delim) {
         String resultStr = "";
-        int i;
-        for (i = 0; i < list.size() - 1; i++) {
+        if (list.size() > 0) {
+            int i;
+            for (i = 0; i < list.size() - 1; i++) {
+                resultStr = resultStr.concat(list.get(i));
+                resultStr = resultStr.concat(delim);
+            }
             resultStr = resultStr.concat(list.get(i));
-            resultStr = resultStr.concat(delim);
         }
-        resultStr = resultStr.concat(list.get(i));
         return resultStr;
     }
 
