@@ -152,7 +152,6 @@
                         android:paddingRight="8.0dip"
                         android:paddingTop="2.0dip"
                         android:singleLine="true"
-                        android:text="드럼: 8개 / 대발: 4개 (Bonus: 25%)"
                         android:textColor="@color/white"
                         android:textSize="14.0dip" />
 
@@ -173,11 +172,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="1"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -188,11 +187,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="2"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -203,11 +202,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="3"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -218,11 +217,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="4"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -233,11 +232,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="5"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -248,11 +247,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="6"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -263,11 +262,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="7"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -278,11 +277,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="8"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
                     </LinearLayout>
 
@@ -303,11 +302,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="9"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -318,11 +317,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="10"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -333,11 +332,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="11"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -348,11 +347,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="12"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -363,11 +362,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="13"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -378,11 +377,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="14"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -393,11 +392,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="15"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -408,11 +407,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="16"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
                     </LinearLayout>
 
@@ -433,11 +432,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="17"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -448,11 +447,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="18"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -463,11 +462,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="19"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -478,11 +477,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="20"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -493,11 +492,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="21"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -508,11 +507,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="22"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -523,11 +522,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="23"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -538,11 +537,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="24"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
                     </LinearLayout>
 
@@ -563,11 +562,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="25"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -578,11 +577,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="26"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -593,11 +592,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="27"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -608,11 +607,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="28"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -623,11 +622,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="29"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -638,11 +637,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="30"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -653,11 +652,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="31"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -668,11 +667,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="32"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
                     </LinearLayout>
 
@@ -693,11 +692,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="33"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -708,11 +707,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="34"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -723,11 +722,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="35"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -738,11 +737,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="36"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -753,11 +752,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="37"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -768,11 +767,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="38"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -783,11 +782,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="39"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -798,11 +797,11 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:text="40"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
                     </LinearLayout>
 
@@ -824,10 +823,10 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView
@@ -838,10 +837,10 @@
                             android:layout_marginRight="4.0dip"
                             android:layout_marginTop="4.0dip"
                             android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnFailBack"
+                            android:background="@color/colorFleetInfoNoShip"
                             android:padding="6.0dip"
                             android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnFailText"
+                            android:textColor="@color/white"
                             android:textSize="18.0dip" />
 
                         <TextView

@@ -1851,7 +1851,7 @@ public class KcaService extends Service {
             Log.e("KCA", String.format("processFirstDeckInfo: data loaded"));
         }
 
-        JsonArray data = helper.getJsonArrayValue(DB_KEY_DECKPORT);
+        JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
 
         int cn = getSeekCn();
         String seekType = getSeekType();

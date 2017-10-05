@@ -104,8 +104,8 @@
     <color name="colorFleetWarning">#7e2424</color>
     <color name="colorFullState">#4fc3f7</color>
 
-    <color name="colorExpeditionBtnFailBack">#ff68000a</color>
-    <color name="colorExpeditionBtnFailText">#ffffcdd2</color>
-    <color name="colorExpeditionBtnGoodBack">#ff1b5e20</color>
-    <color name="colorExpeditionBtnGoodText">#ffe8f5e9</color>
+    <color name="colorExpeditionBtnFailBack">#E91E63</color>
+    <color name="colorExpeditionBtnFailText">#f8bbd0</color>
+    <color name="colorExpeditionBtnGoodBack">#009688</color>
+    <color name="colorExpeditionBtnGoodText">#B2DFDB</color>
 </resources>

@@ -354,6 +354,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_maphp_title">海域HP信息</string>
     <string name="develop_failed_text">企鹅玩偶</string>
     <string name="excheckview_title">远征信息</string>
+    <string name="excheckview_flag_info">旗舰</string>
+    <string name="excheckview_total_info">编成</string>
+    <string name="excheckview_drum_info">运输桶</string>
     <string name="action_errorlog">错误日志</string>
     <string name="errlog_dialog_message">你想清空所有错误日志吗？</string>
     <string name="errlog_cpy_to_clipboard">已复制文本到剪贴板</string>

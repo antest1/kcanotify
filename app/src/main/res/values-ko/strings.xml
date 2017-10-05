@@ -348,6 +348,9 @@
     <string name="viewmenu_maphp_title">해역 HP 정보</string>
     <string name="develop_failed_text">펭귄 인형 ㅠㅠ</string>
     <string name="excheckview_title">원정정보</string>
+    <string name="excheckview_flag_info">기함</string>
+    <string name="excheckview_total_info">편성</string>
+    <string name="excheckview_drum_info">드럼통</string>
     <string name="action_errorlog">오류 로그</string>
     <string name="errlog_dialog_message">전체 오류 로그를 지우시겠습니까?</string>
     <string name="errlog_cpy_to_clipboard">내용이 클립보드에 복사되었습니다.</string>

@@ -189,6 +189,8 @@ public class KcaApiData {
         return dataLoadTriggered;
     }
 
+    public static boolean checkUserShipDataLoaded() { return userShipData != null && userShipData.size() > 0; }
+
     public static void setDataLoadTriggered() {
         dataLoadTriggered = true;
     }
@@ -741,6 +743,7 @@ public class KcaApiData {
     }
 
     public static JsonObject getUserShipDataById(int id, String list) {
+        if (userShipData == null || userShipData.size() == 0) return null;
         JsonObject temp = new JsonObject();
         if (userShipData.containsKey(id)) {
             if (list.equals("all")) {
@@ -787,6 +790,7 @@ public class KcaApiData {
                     }
                 }
             }
+            kcData.remove("");
             return kcData;
         } else {
             return null;

@@ -350,5 +350,8 @@
     <string name="errlog_dialog_message">全体エラーログを削除しますか？</string>
     <string name="errlog_cpy_to_clipboard">クリップボードにコピーされました。</string>
     <string name="excheckview_title">遠征情報</string>
+    <string name="excheckview_flag_info">旗艦</string>
+    <string name="excheckview_total_info">編成</string>
+    <string name="excheckview_drum_info">ドラム缶</string>
     <string name="viewmenu_excheck">遠征</string>
 </resources>

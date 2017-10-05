@@ -410,7 +410,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_construction_title">Construction Info</string>
     <string name="viewmenu_maphp_title">Map HP Info</string>
     <string name="develop_failed_text">Penguin-in-a-box</string>
-    <string name="excheckview_title">원정정보</string>
+    <string name="excheckview_title">Expedition Check</string>
+    <string name="excheckview_flag_info">Flagship</string>
+    <string name="excheckview_total_info">Fleet</string>
+    <string name="excheckview_drum_info">Drum</string>
     <string name="errlog_dialog_message">Do you want to clear the whole error log?</string>
     <string name="errlog_cpy_to_clipboard">Text has been copied to clipboard.</string>
 
