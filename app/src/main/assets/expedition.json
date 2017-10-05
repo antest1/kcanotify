@@ -479,7 +479,9 @@
 	"flag-lv": 50,
 	"total-lv": 200,
 	"total-num": 6,
-	"total-cond": "3-1|2-5"
+	"total-cond": "3-1|2-5",
+	"drum-ship": 3,
+	"drum-num": 4
 }, {
 	"no": "38",
 	"name": {
