@@ -360,7 +360,7 @@ public class KcaApiData {
         return name;
     }
 
-    public static String getShipTypeAddr(int idx) {
+    public static String getShipTypeAbbr(int idx) {
         if(kcStypeData != null && idx < kcStypeData.size() ) {
             return kcStypeData.get(idx).getAsString();
         } else {
