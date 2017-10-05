@@ -266,8 +266,7 @@
 	"total-num": 5,
 	"total-lv": 30,
 	"total-cond": "3-1|2-4",
-	"drum-ship": 3,
-	"drum-num": 3
+	"drum-ship": 3
 }, {
 	"no": "22",
 	"name": {
@@ -524,7 +523,7 @@
 	"flag-lv": 25,
 	"flag-cond": "3",
 	"total-lv": 150,
-	"total-sum": 6,
+	"total-num": 6,
 	"total-cond": "3-1|16-2|2-2",
 	"drum-num-optional": 4
 }, {
@@ -536,7 +535,9 @@
 		"scn": "[E] 前线部队支援任务",
 		"tcn": "[E] 前線部隊支援任務"
 	},
-	"time": 15
+	"time": 15,
+	"total-num": 2,
+	"total-cond": "2-2"
 }, {
 	"no": "134",
 	"name": {
@@ -546,5 +547,7 @@
 		"scn": "[E] 舰队决战支援任务",
 		"tcn": "[E] 艦隊決戰支援任務"
 	},
-	"time": 30
+	"time": 30,
+	"total-num": 2,
+	"total-cond": "2-2"
 }]
