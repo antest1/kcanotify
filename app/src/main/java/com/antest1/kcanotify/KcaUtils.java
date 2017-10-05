@@ -286,12 +286,14 @@ public class KcaUtils {
     public static boolean compareVersion(String version_current, String version_default) {
         if (version_current != null && version_current.length() == 0) return false;
         if (version_current.equals(version_default)) return true;
-        String[] current_split = version_current.replace("r",".0.").split("\\.");
-        String[] default_split = version_default.replace("r",".0.").split("\\.");
+        String[] current_split = version_current.replace("r", ".0.").split("\\.");
+        String[] default_split = version_default.replace("r", ".0.").split("\\.");
         int min_length = Math.min(current_split.length, default_split.length);
         for (int i = 0; i < min_length; i++) {
-            if (Integer.parseInt(current_split[i]) > Integer.parseInt(default_split[i])) return true;
-            else if (Integer.parseInt(current_split[i]) < Integer.parseInt(default_split[i])) return false;
+            if (Integer.parseInt(current_split[i]) > Integer.parseInt(default_split[i]))
+                return true;
+            else if (Integer.parseInt(current_split[i]) < Integer.parseInt(default_split[i]))
+                return false;
         }
         return current_split.length > default_split.length;
     }
@@ -322,5 +324,15 @@ public class KcaUtils {
         } else {
             return new NotificationCompat.Builder(context);
         }
+    }
+
+    public static String getTimeStr(int left_time) {
+        int sec, min, hour;
+        sec = left_time;
+        min = sec / 60;
+        hour = min / 60;
+        sec = sec % 60;
+        min = min % 60;
+        return String.format("%02d:%02d:%02d", hour, min, sec);
     }
 }

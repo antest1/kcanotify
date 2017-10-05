@@ -3,6 +3,7 @@ package com.antest1.kcanotify;
 import java.util.Locale;
 
 import static com.antest1.kcanotify.KcaAlarmService.ALARM_DELAY;
+import static com.antest1.kcanotify.KcaUtils.getTimeStr;
 
 public class KcaExpedition2 {
     public static int[] mission_no = {-1, -1, -1, -1};
@@ -68,15 +69,7 @@ public class KcaExpedition2 {
         else {
             int left_time = (int) (complete_time_check[idx] - System.currentTimeMillis() - ALARM_DELAY) / 1000;
             if (left_time < 0) return "";
-
-            int sec, min, hour;
-            sec = left_time;
-            min = sec / 60;
-            hour = min / 60;
-            sec = sec % 60;
-            min = min % 60;
-
-            return String.format("[%02d] %02d:%02d:%02d", mission_no[idx], hour, min, sec);
+            return String.format("[%02d] %s", mission_no[idx], getTimeStr(left_time));
         }
     }
 }
