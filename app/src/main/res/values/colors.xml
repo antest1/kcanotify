@@ -95,14 +95,15 @@
     <color name="colorQuestTrackProgress">#4e7bff</color>
 
     <color name="colorFleetInfoNormal">#16a085</color>
+    <color name="colorFleetInfoHeavyDamaged">#ff0000</color>
     <color name="colorFleetInfoNotSupplied">#f98d29</color>
     <color name="colorFleetInfoExpedition">#4f7cff</color>
     <color name="colorFleetInfoNoShip">#aaaaaa</color>
 
     <color name="colorFleetInfoBtn">#2c3e50</color>
-    <color name="colorFleetInfoExpeditionBtn">#5c6bc0</color>
     <color name="colorFleetInfoHeavyDamagedBtn">#d50000</color>
     <color name="colorFleetInfoNotSuppliedBtn">#ae7a00</color>
+    <color name="colorFleetInfoExpeditionBtn">#5c6bc0</color>
 
     <color name="colorFleetSeekCnBtn">#673ab7</color>
     <color name="colorFleetShipKira">#ffff8d</color>

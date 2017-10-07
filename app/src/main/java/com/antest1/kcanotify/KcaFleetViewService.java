@@ -594,7 +594,12 @@ public class KcaFleetViewService extends Service {
 
         infoList.add("LV ".concat(String.valueOf(sum_level)));
         fleetInfoLine.setText(joinStr(infoList, " / "));
-        fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNormal));
+        if (selected < 4 && KcaExpedition2.isInExpedition(selected)) {
+            fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpedition));
+        } else {
+            fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNormal));
+        }
+
     }
 
     public void setItemViewLayout(JsonObject data) {
@@ -779,7 +784,7 @@ public class KcaFleetViewService extends Service {
                 mView.findViewById(view_id).setBackgroundColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
             } else {
-                if (i > 0 && i < 4 && KcaExpedition2.isInExpedition(i)) {
+                if (i < 4 && KcaExpedition2.isInExpedition(i)) {
                     mView.findViewById(view_id).setBackgroundColor(
                             ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpeditionBtn));
                 } else {
