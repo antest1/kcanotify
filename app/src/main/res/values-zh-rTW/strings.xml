@@ -353,10 +353,22 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_construction_title">建造信息</string>
     <string name="viewmenu_maphp_title">海域HP信息</string>
     <string name="develop_failed_text">企鵝玩偶</string>
-    <string name="excheckview_title">遠征信息</string>
+    <string name="excheckview_title">遠征檢查</string>
     <string name="excheckview_flag_info">旗艦</string>
     <string name="excheckview_total_info">編成</string>
     <string name="excheckview_drum_info">運輸桶</string>
+    <string name="excheckview_flag_lv_format" formatted="false">等級：%d+</string>
+    <string name="excheckview_total_num_format" formatted="false">最低數：%d</string>
+    <string name="excheckview_total_lv_format" formatted="false">總等級：%d+</string>
+    <string name="excheckview_drum_ship_format" formatted="false">至少%d個艦娘</string>
+    <string name="excheckview_drum_num_format" formatted="false">%d個以上</string>
+    <string name="excheckview_bonus_kinu">鬼怒改二</string>
+    <string name="excheckview_bonus_drum" formatted="false">運輸桶：%d</string>
+    <string name="excheckview_bonus_dlc" formatted="false">大發：%d</string>
+    <string name="excheckview_bonus_tank" formatted="false">中戰車：%d</string>
+    <string name="excheckview_bonus_amp" formatted="false">內火艇：%d</string>
+    <string name="excheckview_bonus_toku" formatted="false">特大發：%d</string>
+    <string name="excheckview_bonus_result" formatted="false">（收益：%.1f%%）</string>
     <string name="action_errorlog">錯誤日誌</string>
     <string name="errlog_dialog_message">你想清空所有錯誤日誌嗎？</string>
     <string name="errlog_cpy_to_clipboard">已複製文本到剪貼板</string>

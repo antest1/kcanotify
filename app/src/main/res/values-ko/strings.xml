@@ -347,10 +347,22 @@
     <string name="viewmenu_construction_title">건조 정보</string>
     <string name="viewmenu_maphp_title">해역 HP 정보</string>
     <string name="develop_failed_text">펭귄 인형 ㅠㅠ</string>
-    <string name="excheckview_title">원정정보</string>
+    <string name="excheckview_title">원정체크</string>
     <string name="excheckview_flag_info">기함</string>
     <string name="excheckview_total_info">편성</string>
     <string name="excheckview_drum_info">드럼통</string>
+    <string name="excheckview_flag_lv_format" formatted="false">레벨 %d+</string>
+    <string name="excheckview_total_num_format" formatted="false">최저 %d척</string>
+    <string name="excheckview_total_lv_format" formatted="false">레벨 합계 %d+</string>
+    <string name="excheckview_drum_ship_format" formatted="false">%d척 이상</string>
+    <string name="excheckview_drum_num_format" formatted="false">합계 %d＋</string>
+    <string name="excheckview_bonus_kinu">키누改2</string>
+    <string name="excheckview_bonus_drum" formatted="false">드럼통: %d</string>
+    <string name="excheckview_bonus_dlc" formatted="false">대발: %d</string>
+    <string name="excheckview_bonus_tank" formatted="false">중전차: %d</string>
+    <string name="excheckview_bonus_amp" formatted="false">내화정: %d</string>
+    <string name="excheckview_bonus_toku" formatted="false">특대발: %d</string>
+    <string name="excheckview_bonus_result" formatted="false">（보너스: %.1f%%）</string>
     <string name="action_errorlog">오류 로그</string>
     <string name="errlog_dialog_message">전체 오류 로그를 지우시겠습니까?</string>
     <string name="errlog_cpy_to_clipboard">내용이 클립보드에 복사되었습니다.</string>

@@ -349,9 +349,21 @@
     <string name="action_errorlog">エラーログ</string>
     <string name="errlog_dialog_message">全体エラーログを削除しますか？</string>
     <string name="errlog_cpy_to_clipboard">クリップボードにコピーされました。</string>
-    <string name="excheckview_title">遠征情報</string>
+    <string name="excheckview_title">遠征チェック</string>
     <string name="excheckview_flag_info">旗艦</string>
     <string name="excheckview_total_info">編成</string>
     <string name="excheckview_drum_info">ドラム缶</string>
+    <string name="excheckview_flag_lv_format" formatted="false">Lv%d+</string>
+    <string name="excheckview_total_num_format" formatted="false">最低%d隻</string>
+    <string name="excheckview_total_lv_format" formatted="false">Lv合計%d+</string>
+    <string name="excheckview_drum_ship_format" formatted="false">%d隻以上</string>
+    <string name="excheckview_drum_num_format" formatted="false">合計%d＋</string>
+    <string name="excheckview_bonus_kinu">鬼怒改二</string>
+    <string name="excheckview_bonus_drum" formatted="false">ドラム缶：%d</string>
+    <string name="excheckview_bonus_dlc" formatted="false">大発：%d</string>
+    <string name="excheckview_bonus_tank" formatted="false">中戦車：%d</string>
+    <string name="excheckview_bonus_amp" formatted="false">内火艇：%d</string>
+    <string name="excheckview_bonus_toku" formatted="false">特大発：%d</string>
+    <string name="excheckview_bonus_result" formatted="false">（ボーナス：%.1f%%）</string>
     <string name="viewmenu_excheck">遠征</string>
 </resources>

@@ -11,7 +11,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
-    <string name="app_brand" traslatable="false" translatable="false">시제 깡들리티</string> <!-- Do not translate here -->
+    <string name="app_brand" translatable="false" traslatable="false">시제 깡들리티</string> <!-- Do not translate here -->
     <string name="app_version" translatable="false">2.4.3 rev6</string>
     <string name="action_settings">Settings</string>
     <string name="action_errorlog">Error Log</string>
@@ -314,18 +314,18 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="getship_label">Drop</string>
     <string name="getship_none">(None)</string>
     <string name="getship_max">(Slot is Full)</string>
-    <string name="kca_view_tpvalue" formatted="false" >TP: %d~%d</string>
+    <string name="kca_view_tpvalue" formatted="false">TP: %d~%d</string>
     <string name="ship_name_class">Class</string>
 
     <string name="lv_star" translatable="false">&#9733;</string>
 
-    <string name="alv_1" formatted="false" translatable="false" >&#124; 1</string>
-    <string name="alv_2" formatted="false" translatable="false" >&#124;&#124; 2</string>
-    <string name="alv_3" formatted="false" translatable="false" >&#124;&#124;&#124; 3</string>
-    <string name="alv_4" formatted="false" translatable="false" >&#47; 4</string>
-    <string name="alv_5" formatted="false" translatable="false" >&#47;&#47; 5</string>
-    <string name="alv_6" formatted="false" translatable="false" >&#47;&#47;&#47; 6</string>
-    <string name="alv_7" formatted="false" translatable="false" >&#62;&#62; 7</string>
+    <string name="alv_1" formatted="false" translatable="false">&#124; 1</string>
+    <string name="alv_2" formatted="false" translatable="false">&#124;&#124; 2</string>
+    <string name="alv_3" formatted="false" translatable="false">&#124;&#124;&#124; 3</string>
+    <string name="alv_4" formatted="false" translatable="false">&#47; 4</string>
+    <string name="alv_5" formatted="false" translatable="false">&#47;&#47; 5</string>
+    <string name="alv_6" formatted="false" translatable="false">&#47;&#47;&#47; 6</string>
+    <string name="alv_7" formatted="false" translatable="false">&#62;&#62; 7</string>
     <string name="slot_empty">(No Equipment)</string>
     <string name="kca_view_condition_1" formatted="false">Morale #1: %s</string>
     <string name="kca_view_condition_2" formatted="false">Morale #2: %s</string>
@@ -414,6 +414,18 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_flag_info">Flagship</string>
     <string name="excheckview_total_info">Fleet</string>
     <string name="excheckview_drum_info">Drum</string>
+    <string name="excheckview_flag_lv_format" formatted="false">Lv %d+</string>
+    <string name="excheckview_total_num_format" formatted="false">Total %d+</string>
+    <string name="excheckview_total_lv_format" formatted="false">Lv Sum %d+</string>
+    <string name="excheckview_drum_ship_format" formatted="false">%d+ Ships</string>
+    <string name="excheckview_drum_num_format" formatted="false">%d+ Drums</string>
+    <string name="excheckview_bonus_kinu">Kinu Kai Ni</string>
+    <string name="excheckview_bonus_drum" formatted="false">Drum: %d</string>
+    <string name="excheckview_bonus_dlc" formatted="false">DLC: %d</string>
+    <string name="excheckview_bonus_tank" formatted="false">DLC(89Tank): %d</string>
+    <string name="excheckview_bonus_amp" formatted="false">ALC: %d</string>
+    <string name="excheckview_bonus_toku" formatted="false">TokuDLC: %d</string>
+    <string name="excheckview_bonus_result" formatted="false">（Bonus: %.1f%%）</string>
     <string name="errlog_dialog_message">Do you want to clear the whole error log?</string>
     <string name="errlog_cpy_to_clipboard">Text has been copied to clipboard.</string>
 
