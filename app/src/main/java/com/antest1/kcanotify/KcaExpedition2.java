@@ -20,6 +20,10 @@ public class KcaExpedition2 {
         return false;
     }
 
+    public static boolean isInExpedition(int idx) {
+        return mission_no[idx] != -1;
+    }
+
     public static void setMissionData(int idx, String deck, int mission, long arrive_time) {
         mission_no[idx] = mission;
         deck_name[idx] = deck;

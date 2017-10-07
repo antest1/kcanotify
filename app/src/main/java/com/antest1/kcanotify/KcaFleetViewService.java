@@ -779,8 +779,13 @@ public class KcaFleetViewService extends Service {
                 mView.findViewById(view_id).setBackgroundColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
             } else {
-                mView.findViewById(view_id).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                if (i > 0 && i < 4 && KcaExpedition2.isInExpedition(i)) {
+                    mView.findViewById(view_id).setBackgroundColor(
+                            ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpeditionBtn));
+                } else {
+                    mView.findViewById(view_id).setBackgroundColor(
+                            ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+                }
             }
         }
     }
