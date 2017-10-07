@@ -62,11 +62,12 @@ public class KcaFleetViewService extends Service {
     public KcaDBHelper helper;
     public KcaDeckInfo deckInfoCalc;
     KcaDeckInfo deckInfoObject;
+    int seekcn_internal = -1;
 
     static boolean error_flag = false;
     boolean active;
     private View mView, itemView;
-    private TextView fleetInfoTitle, fleetInfoLine, fleetExpView;
+    private TextView fleetInfoTitle, fleetInfoLine, fleetExpView, fleetCnChangeBtn;
     private WindowManager mManager;
     private static boolean isReady;
 
@@ -119,8 +120,9 @@ public class KcaFleetViewService extends Service {
                 fleetExpView.setText(makeSimpleExpString(exp_score[0], exp_score[1]));
                 fleetInfoTitle.setVisibility(View.GONE);
             }
-
             updateSelectedView(selected);
+
+            if (seekcn_internal == -1) seekcn_internal = getSeekCn();
             processDeckInfo(selected, isCombinedFlag(selected));
             return 0;
         } catch (Exception e) {
@@ -153,6 +155,7 @@ public class KcaFleetViewService extends Service {
             mView = mInflater.inflate(R.layout.view_fleet_list, null);
             mView.setVisibility(View.GONE);
             mView.findViewById(R.id.fleetview_head).setOnTouchListener(mViewTouchListener);
+            mView.findViewById(R.id.fleetview_cn_change).setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.viewbutton_quest).setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.viewbutton_develop).setOnTouchListener(mViewTouchListener);
@@ -174,6 +177,7 @@ public class KcaFleetViewService extends Service {
 
             fleetInfoTitle = mView.findViewById(R.id.fleetview_title);
             fleetExpView = mView.findViewById(R.id.fleetview_exp);
+            fleetCnChangeBtn = mView.findViewById(R.id.fleetview_cn_change);
 
             itemView = mInflater.inflate(R.layout.view_battleview_items, null);
 
@@ -325,6 +329,10 @@ public class KcaFleetViewService extends Service {
                         if (id == mView.findViewById(R.id.fleetview_head).getId()) {
                             if (mView != null) mView.setVisibility(View.GONE);
                             if (itemView != null) itemView.setVisibility(View.GONE);
+                        } else if (id == mView.findViewById(R.id.fleetview_cn_change).getId()) {
+                            changeInternalSeekCn();
+                            fleetCnChangeBtn.setText(getSeekType());
+                            processDeckInfo(selected, isCombinedFlag(selected));
                         } else if (id == mView.findViewById(R.id.viewbutton_quest).getId()) {
                             qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
                             qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
@@ -402,9 +410,7 @@ public class KcaFleetViewService extends Service {
             mView.findViewById(R.id.fleet_list_combined).setVisibility(View.INVISIBLE);
         }
 
-        int cn = getSeekCn();
-        String seekType = getSeekType();
-
+        int cn = seekcn_internal;
         List<String> infoList = new ArrayList<>();
 
         String airPowerValue = "";
@@ -425,9 +431,9 @@ public class KcaFleetViewService extends Service {
             seekValue = deckInfoCalc.getSeekValue(data, String.valueOf(idx), cn, null);
         }
         if (cn == SEEK_PURE) {
-            seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), seekType, (int) seekValue);
+            seekStringValue = String.format(getStringWithLocale(R.string.fleetview_seekvalue_d), (int) seekValue);
         } else {
-            seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, seekValue);
+            seekStringValue = String.format(getStringWithLocale(R.string.fleetview_seekvalue_f), seekValue);
         }
         infoList.add(seekStringValue);
 
@@ -727,9 +733,8 @@ public class KcaFleetViewService extends Service {
     }
 
     private String getSeekType() {
-        int cn = Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
         String seekType = "";
-        switch (cn) {
+        switch (seekcn_internal) {
             case 1:
                 seekType = getStringWithLocale(R.string.seek_type_1);
                 break;
@@ -744,6 +749,27 @@ public class KcaFleetViewService extends Service {
                 break;
         }
         return seekType;
+    }
+
+    private void changeInternalSeekCn() {
+        int new_value = seekcn_internal;
+        switch (seekcn_internal) {
+            case 0:
+                new_value = 1;
+                break;
+            case 1:
+                new_value = 3;
+                break;
+            case 3:
+                new_value = 4;
+                break;
+            case 4:
+                new_value = 0;
+                break;
+            default:
+                break;
+        }
+        seekcn_internal = new_value;
     }
 
     private void updateSelectedView(int idx) {

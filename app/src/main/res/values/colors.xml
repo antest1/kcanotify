@@ -98,14 +98,15 @@
     <color name="colorFleetInfoNotSupplied">#f98d29</color>
     <color name="colorFleetInfoExpedition">#4f7cff</color>
     <color name="colorFleetInfoNoShip">#aaaaaa</color>
+    <color name="colorFleetSeekCnBtn">#673ab7</color>
     <color name="colorFleetShipKira">#ffff8d</color>
     <color name="colorFleetShipFatigue1">#f98b25</color>
     <color name="colorFleetShipFatigue2">#ff5252</color>
     <color name="colorFleetWarning">#7e2424</color>
     <color name="colorFullState">#4fc3f7</color>
 
-    <color name="colorExpeditionBtnFailBack">#E91E63</color>
+    <color name="colorExpeditionBtnFailBack">#e91e63</color>
     <color name="colorExpeditionBtnFailText">#f8bbd0</color>
     <color name="colorExpeditionBtnGoodBack">#009688</color>
-    <color name="colorExpeditionBtnGoodText">#B2DFDB</color>
+    <color name="colorExpeditionBtnGoodText">#b2dfdb</color>
 </resources>

@@ -336,6 +336,8 @@
     <string name="fleetview_title">艦隊情報</string>
     <string name="fleetview_combined">連合</string>
     <string name="fleetview_expview" formatted="false">[今回] %.2f / [今日] %.2f</string>
+    <string name="fleetview_seekvalue_d" formatted="false">索敵：%d</string>
+    <string name="fleetview_seekvalue_f" formatted="false">索敵：%.2f</string>
     <string name="viewmenu_battle">戦闘</string>
     <string name="viewmenu_quest">任務</string>
     <string name="viewmenu_akashi">改修</string>

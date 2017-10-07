@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:clickable="false"
     android:orientation="vertical"
-    android:padding="4.0dip"
+    android:padding="4dp"
     android:visibility="visible">
 
     <LinearLayout
@@ -16,10 +16,10 @@
         android:alpha="0.8"
         android:background="@color/colorPrimaryDark"
         android:orientation="vertical"
-        android:paddingBottom="8.0dip"
-        android:paddingLeft="8.0dip"
-        android:paddingRight="8.0dip"
-        android:paddingTop="8.0dip">
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp">
 
         <LinearLayout
             android:id="@+id/fleetview_head"
@@ -32,17 +32,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="5.0dip"
+                android:layout_marginRight="5dp"
                 android:text="@string/fleetview_title"
                 android:textColor="@color/white"
-                android:textSize="20.0dip" />
+                android:textSize="20dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="8.0dip"
-                android:layout_marginRight="8.0dip"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:alwaysDrawnWithCache="true"
                 android:orientation="horizontal">
 
@@ -51,13 +51,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:layout_marginRight="8.0dip"
+                    android:layout_marginRight="8dp"
                     android:background="@color/colorAccent"
                     android:gravity="top"
-                    android:paddingBottom="4.0dip"
-                    android:paddingLeft="8.0dip"
-                    android:paddingRight="8.0dip"
-                    android:paddingTop="4.0dip"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
                     android:text="\#1"
                     android:textColor="@color/white" />
 
@@ -66,13 +66,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:layout_marginRight="8.0dip"
+                    android:layout_marginRight="8dp"
                     android:background="@color/colorPrimary"
                     android:gravity="top"
-                    android:paddingBottom="4.0dip"
-                    android:paddingLeft="8.0dip"
-                    android:paddingRight="8.0dip"
-                    android:paddingTop="4.0dip"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
                     android:text="\#2"
                     android:textColor="@color/white" />
 
@@ -81,13 +81,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:layout_marginRight="8.0dip"
+                    android:layout_marginRight="8dp"
                     android:background="@color/colorPrimary"
                     android:gravity="top"
-                    android:paddingBottom="4.0dip"
-                    android:paddingLeft="8.0dip"
-                    android:paddingRight="8.0dip"
-                    android:paddingTop="4.0dip"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
                     android:text="\#3"
                     android:textColor="@color/white" />
 
@@ -96,13 +96,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:layout_marginRight="8.0dip"
+                    android:layout_marginRight="8dp"
                     android:background="@color/colorPrimary"
                     android:gravity="top"
-                    android:paddingBottom="4.0dip"
-                    android:paddingLeft="8.0dip"
-                    android:paddingRight="8.0dip"
-                    android:paddingTop="4.0dip"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
                     android:text="\#4"
                     android:textColor="@color/white" />
 
@@ -111,13 +111,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:layout_marginRight="8.0dip"
+                    android:layout_marginRight="8dp"
                     android:background="@color/colorPrimary"
                     android:gravity="top"
-                    android:paddingBottom="4.0dip"
-                    android:paddingLeft="8.0dip"
-                    android:paddingRight="8.0dip"
-                    android:paddingTop="4.0dip"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
                     android:text="@string/fleetview_combined"
                     android:textColor="@color/white" />
             </LinearLayout>
@@ -134,20 +134,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="5.0dip"
+                android:layout_marginRight="5dp"
                 android:ellipsize="end"
                 android:gravity="right"
                 android:singleLine="true"
                 android:text="[이번] 12.42 / [오늘] 54.23"
                 android:textColor="@color/white"
-                android:textSize="15.0dip" />
+                android:textSize="15dp" />
 
             <ImageView
                 android:id="@+id/akashi_exit"
-                android:layout_width="20.0dip"
+                android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10.0dip"
+                android:layout_marginLeft="10dp"
                 android:src="@mipmap/ic_cancel"
                 app:srcCompat="@mipmap/ic_cancel" />
         </LinearLayout>
@@ -155,14 +155,14 @@
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4.0dip"
-            android:layout_marginTop="2.0dip"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="2dp"
             android:layout_weight="1.0"
             android:background="@android:color/darker_gray"
-            android:paddingBottom="1.0dip"
-            android:paddingLeft="5.0dip"
-            android:paddingRight="5.0dip"
-            android:paddingTop="0.0dip"
+            android:paddingBottom="1dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="0dp"
             android:scaleType="fitXY"
             android:src="@android:drawable/divider_horizontal_bright" />
 
@@ -182,34 +182,61 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/fleetview_infoline"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorQuestTrackProgress"
-                        android:ellipsize="marquee"
-                        android:maxLines="1"
-                        android:paddingBottom="2.0dip"
-                        android:paddingLeft="8.0dip"
-                        android:paddingRight="8.0dip"
-                        android:paddingTop="2.0dip"
-                        android:singleLine="true"
-                        android:text=""
-                        android:textColor="@color/white"
-                        android:textSize="14.0dip" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginRight="2dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/fleetview_infoline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@color/colorQuestTrackProgress"
+                            android:ellipsize="marquee"
+                            android:maxLines="1"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:text=""
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/fleetview_cn_change"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginStart="5dp"
+                            android:background="@color/colorFleetSeekCnBtn"
+                            android:ellipsize="marquee"
+                            android:maxLines="1"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:text="@string/seek_type_1"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="2.0dip"
-                        android:layout_marginTop="2.0dip"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
                         android:orientation="horizontal">
 
                         <LinearLayout
                             android:id="@+id/fleet_list_main"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
-                            android:layout_marginRight="6.0dip"
+                            android:layout_marginRight="6dp"
                             android:layout_weight="1.0"
                             android:orientation="vertical">
 
@@ -220,13 +247,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
-                                android:paddingBottom="2.0dip"
-                                android:paddingLeft="2.0dip"
-                                android:paddingRight="2.0dip"
-                                android:paddingTop="2.0dip">
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingTop="2dp">
 
                                 <LinearLayout
-                                    android:layout_width="0.0dip"
+                                    android:layout_width="0dp"
                                     android:layout_height="fill_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
@@ -245,21 +272,21 @@
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
-                                            android:paddingRight="6.0dip"
+                                            android:paddingLeft="6dp"
+                                            android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_1_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="2.0dip"
+                                            android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -274,9 +301,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_1_lv"
@@ -284,9 +311,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -294,7 +321,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="6.0dip"
+                                    android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -306,7 +333,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_1_cond"
@@ -316,7 +343,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -327,13 +354,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
-                                android:paddingBottom="2.0dip"
-                                android:paddingLeft="2.0dip"
-                                android:paddingRight="2.0dip"
-                                android:paddingTop="2.0dip">
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingTop="2dp">
 
                                 <LinearLayout
-                                    android:layout_width="0.0dip"
+                                    android:layout_width="0dp"
                                     android:layout_height="fill_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
@@ -352,21 +379,21 @@
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
-                                            android:paddingRight="6.0dip"
+                                            android:paddingLeft="6dp"
+                                            android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_2_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="2.0dip"
+                                            android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -381,9 +408,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_2_lv"
@@ -391,9 +418,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -401,7 +428,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="6.0dip"
+                                    android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -413,7 +440,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_2_cond"
@@ -423,7 +450,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -434,13 +461,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
-                                android:paddingBottom="2.0dip"
-                                android:paddingLeft="2.0dip"
-                                android:paddingRight="2.0dip"
-                                android:paddingTop="2.0dip">
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingTop="2dp">
 
                                 <LinearLayout
-                                    android:layout_width="0.0dip"
+                                    android:layout_width="0dp"
                                     android:layout_height="fill_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
@@ -459,21 +486,21 @@
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
-                                            android:paddingRight="6.0dip"
+                                            android:paddingLeft="6dp"
+                                            android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_3_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="2.0dip"
+                                            android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -488,9 +515,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_3_lv"
@@ -498,9 +525,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -508,7 +535,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="6.0dip"
+                                    android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -520,7 +547,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_3_cond"
@@ -530,7 +557,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -541,13 +568,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
-                                android:paddingBottom="2.0dip"
-                                android:paddingLeft="2.0dip"
-                                android:paddingRight="2.0dip"
-                                android:paddingTop="2.0dip">
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingTop="2dp">
 
                                 <LinearLayout
-                                    android:layout_width="0.0dip"
+                                    android:layout_width="0dp"
                                     android:layout_height="fill_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
@@ -566,21 +593,21 @@
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
-                                            android:paddingRight="6.0dip"
+                                            android:paddingLeft="6dp"
+                                            android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_4_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="2.0dip"
+                                            android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -595,9 +622,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_4_lv"
@@ -605,9 +632,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -615,7 +642,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="6.0dip"
+                                    android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -627,7 +654,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_4_cond"
@@ -637,7 +664,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -648,13 +675,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
-                                android:paddingBottom="2.0dip"
-                                android:paddingLeft="2.0dip"
-                                android:paddingRight="2.0dip"
-                                android:paddingTop="2.0dip">
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingTop="2dp">
 
                                 <LinearLayout
-                                    android:layout_width="0.0dip"
+                                    android:layout_width="0dp"
                                     android:layout_height="fill_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
@@ -673,21 +700,21 @@
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
-                                            android:paddingRight="6.0dip"
+                                            android:paddingLeft="6dp"
+                                            android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_5_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="2.0dip"
+                                            android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -702,9 +729,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_5_lv"
@@ -712,9 +739,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -722,7 +749,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="6.0dip"
+                                    android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -734,7 +761,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_5_cond"
@@ -744,7 +771,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -755,13 +782,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
-                                android:paddingBottom="2.0dip"
-                                android:paddingLeft="2.0dip"
-                                android:paddingRight="2.0dip"
-                                android:paddingTop="2.0dip">
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingTop="2dp">
 
                                 <LinearLayout
-                                    android:layout_width="0.0dip"
+                                    android:layout_width="0dp"
                                     android:layout_height="fill_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
@@ -780,21 +807,21 @@
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
-                                            android:paddingRight="6.0dip"
+                                            android:paddingLeft="6dp"
+                                            android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_6_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="2.0dip"
+                                            android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -809,9 +836,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_6_lv"
@@ -819,9 +846,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -829,7 +856,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="6.0dip"
+                                    android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -841,7 +868,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_6_cond"
@@ -851,7 +878,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -860,7 +887,7 @@
                             android:id="@+id/fleet_list_combined"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
-                            android:layout_marginRight="6.0dip"
+                            android:layout_marginRight="6dp"
                             android:layout_weight="1.0"
                             android:orientation="vertical">
 
@@ -871,13 +898,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
-                                android:paddingBottom="2.0dip"
-                                android:paddingLeft="2.0dip"
-                                android:paddingRight="2.0dip"
-                                android:paddingTop="2.0dip">
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingTop="2dp">
 
                                 <LinearLayout
-                                    android:layout_width="0.0dip"
+                                    android:layout_width="0dp"
                                     android:layout_height="fill_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
@@ -896,21 +923,21 @@
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
-                                            android:paddingRight="6.0dip"
+                                            android:paddingLeft="6dp"
+                                            android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_7_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="2.0dip"
+                                            android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -925,9 +952,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_7_lv"
@@ -935,9 +962,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -945,7 +972,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="6.0dip"
+                                    android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -957,7 +984,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_7_cond"
@@ -967,7 +994,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -978,13 +1005,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
-                                android:paddingBottom="2.0dip"
-                                android:paddingLeft="2.0dip"
-                                android:paddingRight="2.0dip"
-                                android:paddingTop="2.0dip">
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingTop="2dp">
 
                                 <LinearLayout
-                                    android:layout_width="0.0dip"
+                                    android:layout_width="0dp"
                                     android:layout_height="fill_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
@@ -1003,21 +1030,21 @@
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
-                                            android:paddingRight="6.0dip"
+                                            android:paddingLeft="6dp"
+                                            android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_8_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="2.0dip"
+                                            android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1032,9 +1059,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_8_lv"
@@ -1042,9 +1069,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1052,7 +1079,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="6.0dip"
+                                    android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -1064,7 +1091,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_8_cond"
@@ -1074,7 +1101,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -1085,13 +1112,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
-                                android:paddingBottom="2.0dip"
-                                android:paddingLeft="2.0dip"
-                                android:paddingRight="2.0dip"
-                                android:paddingTop="2.0dip">
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingTop="2dp">
 
                                 <LinearLayout
-                                    android:layout_width="0.0dip"
+                                    android:layout_width="0dp"
                                     android:layout_height="fill_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
@@ -1110,21 +1137,21 @@
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
-                                            android:paddingRight="6.0dip"
+                                            android:paddingLeft="6dp"
+                                            android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_9_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="2.0dip"
+                                            android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1139,9 +1166,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_9_lv"
@@ -1149,9 +1176,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1159,7 +1186,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="6.0dip"
+                                    android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -1171,7 +1198,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_9_cond"
@@ -1181,7 +1208,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -1192,13 +1219,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
-                                android:paddingBottom="2.0dip"
-                                android:paddingLeft="2.0dip"
-                                android:paddingRight="2.0dip"
-                                android:paddingTop="2.0dip">
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingTop="2dp">
 
                                 <LinearLayout
-                                    android:layout_width="0.0dip"
+                                    android:layout_width="0dp"
                                     android:layout_height="fill_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
@@ -1217,21 +1244,21 @@
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
-                                            android:paddingRight="6.0dip"
+                                            android:paddingLeft="6dp"
+                                            android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_10_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="2.0dip"
+                                            android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1246,9 +1273,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_10_lv"
@@ -1256,9 +1283,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1266,7 +1293,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="6.0dip"
+                                    android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -1278,7 +1305,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_10_cond"
@@ -1288,7 +1315,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -1299,13 +1326,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
-                                android:paddingBottom="2.0dip"
-                                android:paddingLeft="2.0dip"
-                                android:paddingRight="2.0dip"
-                                android:paddingTop="2.0dip">
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingTop="2dp">
 
                                 <LinearLayout
-                                    android:layout_width="0.0dip"
+                                    android:layout_width="0dp"
                                     android:layout_height="fill_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
@@ -1324,21 +1351,21 @@
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
-                                            android:paddingRight="6.0dip"
+                                            android:paddingLeft="6dp"
+                                            android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_11_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="2.0dip"
+                                            android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1353,9 +1380,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_11_lv"
@@ -1363,9 +1390,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1373,7 +1400,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="6.0dip"
+                                    android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -1385,7 +1412,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_11_cond"
@@ -1395,7 +1422,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -1406,13 +1433,13 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
                                 android:orientation="horizontal"
-                                android:paddingBottom="2.0dip"
-                                android:paddingLeft="2.0dip"
-                                android:paddingRight="2.0dip"
-                                android:paddingTop="2.0dip">
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingTop="2dp">
 
                                 <LinearLayout
-                                    android:layout_width="0.0dip"
+                                    android:layout_width="0dp"
                                     android:layout_height="fill_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
@@ -1431,21 +1458,21 @@
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
-                                            android:paddingRight="6.0dip"
+                                            android:paddingLeft="6dp"
+                                            android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_12_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="2.0dip"
+                                            android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="14.0dip" />
+                                            android:textSize="14dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1460,9 +1487,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_12_lv"
@@ -1470,9 +1497,9 @@
                                             android:layout_height="wrap_content"
                                             android:gravity="top"
                                             android:maxLines="1"
-                                            android:paddingLeft="6.0dip"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="12.0dip" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1480,7 +1507,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="6.0dip"
+                                    android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
                                     android:orientation="vertical">
 
@@ -1492,7 +1519,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_12_cond"
@@ -1502,7 +1529,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="12.0dip" />
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -1514,9 +1541,9 @@
                 android:id="@+id/fleetview_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_marginLeft="8.0dip"
-                android:layout_marginTop="4.0dip"
-                android:padding="4.0dip">
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:padding="4dp">
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -1528,96 +1555,96 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8.0dip"
+                        android:layout_marginBottom="8dp"
                         android:background="@color/colorPrimary"
                         android:gravity="center"
-                        android:paddingBottom="8.0dip"
-                        android:paddingLeft="14.0dip"
-                        android:paddingRight="14.0dip"
-                        android:paddingTop="8.0dip"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="14dp"
+                        android:paddingRight="14dp"
+                        android:paddingTop="8dp"
                         android:text="@string/viewmenu_quest"
                         android:textColor="@color/white"
-                        android:textSize="20.0dip" />
+                        android:textSize="20dp" />
 
                     <TextView
                         android:id="@+id/viewbutton_excheck"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8.0dip"
+                        android:layout_marginBottom="8dp"
                         android:background="@color/colorPrimary"
                         android:gravity="center"
-                        android:paddingBottom="8.0dip"
-                        android:paddingLeft="14.0dip"
-                        android:paddingRight="14.0dip"
-                        android:paddingTop="8.0dip"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="14dp"
+                        android:paddingRight="14dp"
+                        android:paddingTop="8dp"
                         android:text="@string/viewmenu_excheck"
                         android:textColor="@color/white"
-                        android:textSize="20.0dip" />
+                        android:textSize="20dp" />
 
                     <TextView
                         android:id="@+id/viewbutton_develop"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8.0dip"
+                        android:layout_marginBottom="8dp"
                         android:background="@color/colorPrimary"
                         android:gravity="center"
-                        android:paddingBottom="8.0dip"
-                        android:paddingLeft="14.0dip"
-                        android:paddingRight="14.0dip"
-                        android:paddingTop="8.0dip"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="14dp"
+                        android:paddingRight="14dp"
+                        android:paddingTop="8dp"
                         android:text="@string/viewmenu_develop"
                         android:textColor="@color/white"
-                        android:textSize="20.0dip" />
+                        android:textSize="20dp" />
 
                     <TextView
                         android:id="@+id/viewbutton_construction"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8.0dip"
+                        android:layout_marginBottom="8dp"
                         android:background="@color/colorPrimary"
                         android:gravity="center"
-                        android:paddingBottom="8.0dip"
-                        android:paddingLeft="14.0dip"
-                        android:paddingRight="14.0dip"
-                        android:paddingTop="8.0dip"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="14dp"
+                        android:paddingRight="14dp"
+                        android:paddingTop="8dp"
                         android:text="@string/viewmenu_construction"
                         android:textColor="@color/white"
-                        android:textSize="20.0dip" />
+                        android:textSize="20dp" />
 
                     <TextView
                         android:id="@+id/viewbutton_maphp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8.0dip"
+                        android:layout_marginBottom="8dp"
                         android:background="@color/colorPrimary"
                         android:gravity="center"
-                        android:paddingBottom="8.0dip"
-                        android:paddingLeft="14.0dip"
-                        android:paddingRight="14.0dip"
-                        android:paddingTop="8.0dip"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="14dp"
+                        android:paddingRight="14dp"
+                        android:paddingTop="8dp"
                         android:text="@string/viewmenu_maphp"
                         android:textColor="@color/white"
-                        android:textSize="20.0dip" />
+                        android:textSize="20dp" />
 
                     <TextView
                         android:id="@+id/viewbutton_akashi"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8.0dip"
+                        android:layout_marginBottom="8dp"
                         android:background="@color/colorPrimary"
                         android:gravity="center"
-                        android:paddingBottom="8.0dip"
-                        android:paddingLeft="14.0dip"
-                        android:paddingRight="14.0dip"
-                        android:paddingTop="8.0dip"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="14dp"
+                        android:paddingRight="14dp"
+                        android:paddingTop="8dp"
                         android:text="@string/viewmenu_akashi"
                         android:textColor="@color/white"
-                        android:textSize="20.0dip" />
+                        android:textSize="20dp" />
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
