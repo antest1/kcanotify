@@ -372,6 +372,7 @@ public class MainActivity extends AppCompatActivity {
                         editor.putBoolean(prefKey, true);
                         break;
                     case PREF_KCA_SET_PRIORITY:
+                    case PREF_DISABLE_CUSTOMTOAST:
                         editor.putBoolean(prefKey, false);
                         break;
                     case PREF_KCA_LANGUAGE:

@@ -323,6 +323,7 @@ public final class KcaConstants {
     public static final String PREF_FULLMORALE_SETTING = "fullmorale_setting";
     public static final String PREF_KCA_DATA_VERSION = "kca_data_version";
     public static final String PREF_FAIRY_NOTI_LONGCLICK = "notify_fairy_longclick";
+    public static final String PREF_DISABLE_CUSTOMTOAST = "disable_customtoast";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,

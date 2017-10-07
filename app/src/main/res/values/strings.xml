@@ -219,6 +219,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_nspl_vib">Sound/Vibrate when incompletely supplied fleet exist (Toast will always appear).</string>
     <string name="setting_menu_noti_title_fairy_vib">Vibrate when hide the fairy</string>
     <string name="setting_menu_noti_desc_fairy_vib">Vibrate when hide the fairy by long-touch.</string>
+    <string name="setting_menu_noti_title_disable_customtoast">Disable Custom Toast</string>
+    <string name="setting_menu_noti_desc_disale_customtoast">Try to enable this when node prediction/heavy damage alert does not appear.</string>
 
     <string name="setting_menu_app_head">Application Information</string>
     <string name="setting_menu_app_title_current">Current Version</string>
