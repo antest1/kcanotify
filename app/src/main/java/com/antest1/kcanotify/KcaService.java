@@ -78,6 +78,7 @@ import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaFleetViewService.REFRESH_FLEETVIEW_ACTION;
 import static com.antest1.kcanotify.KcaQuestViewService.REFRESH_QUESTVIEW_ACTION;
 import static com.antest1.kcanotify.KcaUtils.createBuilder;
+import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContentUri;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
@@ -922,7 +923,7 @@ public class KcaService extends Service {
                                         KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
                                     }
                                 }
-                                vibrator.vibrate(1000);
+                                doVibrate(vibrator, 1000);
                             }
 
                             int toastColor;
@@ -1697,9 +1698,11 @@ public class KcaService extends Service {
                 int node = jsonDataObj.get("node").getAsInt();
                 String rank = jsonDataObj.get("rank").getAsString();
                 int maprank = jsonDataObj.get("maprank").getAsInt();
+                int inventory = jsonDataObj.get("inventory").getAsInt();
                 int result = jsonDataObj.get("result").getAsInt();
+                int result_item = jsonDataObj.get("result_item").getAsInt();
                 if (isOpendbEnabled()) {
-                    KcaOpendbAPI.sendShipDropData(world, map, node, rank, maprank, result);
+                    KcaOpendbAPI.sendShipDropData(world, map, node, rank, maprank, inventory, result, result_item);
                 }
             }
 
@@ -1716,7 +1719,7 @@ public class KcaService extends Service {
                                 KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
                             }
                         }
-                        vibrator.vibrate(1500);
+                        doVibrate(vibrator, 1500);
                     }
                 }
 

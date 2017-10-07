@@ -45,6 +45,7 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
+import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -165,7 +166,7 @@ public class KcaViewButtonService extends Service {
             mView = mInflater.inflate(R.layout.view_button, null);
 
             // Button (Fairy) Settings
-            viewbutton = (ImageView) mView.findViewById(R.id.viewbutton);
+            viewbutton = mView.findViewById(R.id.viewbutton);
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
             String fairyPath = "noti_icon_".concat(fairyIdValue);
             viewBitmapId = getId(fairyPath, R.mipmap.class);
@@ -356,7 +357,7 @@ public class KcaViewButtonService extends Service {
         @Override
         public void run() {
             if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_NOTI_LONGCLICK)) {
-                vibrator.vibrate(100);
+                doVibrate(vibrator, 100);
             }
             Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
             mView.setVisibility(View.GONE);

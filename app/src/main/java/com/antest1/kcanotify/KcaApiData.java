@@ -765,6 +765,15 @@ public class KcaApiData {
         }
     }
 
+    public static int countUserShipById(int ship_id) {
+        int count = 0;
+        if (userShipData == null || userShipData.size() == 0) return -1;
+        for (JsonObject ship: userShipData.values()) {
+            if(ship_id == ship.get("api_ship_id").getAsInt()) count += 1;
+        }
+        return count;
+    }
+
     public static JsonObject getUserItemStatusById(int id, String list, String kclist) {
         if (helper == null || kcGameData == null) return null;
         String data = helper.getItemValue(id);

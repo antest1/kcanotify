@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
     AssetManager assetManager;
     KcaDBHelper dbHelper;
     Toolbar toolbar;
-    Vibrator vibrator;
     private boolean running = false;
     private AlertDialog dialogVpn = null;
     Context ctx;
@@ -110,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         assetManager = getAssets();
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
         prefs.edit().putBoolean(PREF_SVC_ENABLED, KcaService.getServiceStatus()).apply();
@@ -122,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         kcIntent = getKcIntent(getApplicationContext());
         is_kca_installed = (kcIntent != null);
 
-        vpnbtn = (ToggleButton) findViewById(R.id.vpnbtn);
+        vpnbtn = findViewById(R.id.vpnbtn);
         vpnbtn.setTextOff(getStringWithLocale(R.string.ma_vpn_toggleoff));
         vpnbtn.setTextOn(getStringWithLocale(R.string.ma_vpn_toggleon));
         vpnbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -148,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        svcbtn = (ToggleButton) findViewById(R.id.svcbtn);
+        svcbtn = findViewById(R.id.svcbtn);
         svcbtn.setTextOff(getStringWithLocale(R.string.ma_svc_toggleoff));
         svcbtn.setTextOn(getStringWithLocale(R.string.ma_svc_toggleon));
         svcbtn.setOnClickListener(new CompoundButton.OnClickListener() {
@@ -170,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        kcbtn = (Button) findViewById(R.id.kcbtn);
+        kcbtn = findViewById(R.id.kcbtn);
         kcbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        kcakashibtn = (ImageButton) findViewById(R.id.kcakashibtn);
+        kcakashibtn = findViewById(R.id.kcakashibtn);
         kcakashibtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -192,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        kcafairybtn = (ImageButton) findViewById(R.id.kcafairybtn);
+        kcafairybtn = findViewById(R.id.kcafairybtn);
         String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
         String fairyPath = "noti_icon_".concat(fairyIdValue);
         int viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
@@ -212,9 +211,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        textWarn = (TextView) findViewById(R.id.textMainWarn);
-        textUpdate = (TextView) findViewById(R.id.textMainUpdate);
-        textDataUpdate = (TextView) findViewById(R.id.textMainDataUpdate);
+        textWarn = findViewById(R.id.textMainWarn);
+        textUpdate = findViewById(R.id.textMainUpdate);
+        textDataUpdate = findViewById(R.id.textMainDataUpdate);
 
         textWarn.setVisibility(View.GONE);
         textUpdate.setVisibility(View.GONE);
@@ -245,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
             main_html = "Error loading html file.";
         }
 
-        textDescription = (HtmlTextView) findViewById(R.id.textDescription);
+        textDescription = findViewById(R.id.textDescription);
         textDescription.setHtml(main_html);
         //Linkify.addLinks(textDescription, Linkify.WEB_URLS);
 

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class ErrorlogActivity extends AppCompatActivity{
@@ -42,7 +43,7 @@ public class ErrorlogActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_errorlog);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.action_errorlog);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -50,7 +51,7 @@ public class ErrorlogActivity extends AppCompatActivity{
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
 
-        text = (TextView) findViewById(R.id.errorlogview);
+        text = findViewById(R.id.errorlogview);
         text.setText("");
         text.setLongClickable(true);
         text.setOnLongClickListener(new View.OnLongClickListener() {
@@ -58,13 +59,13 @@ public class ErrorlogActivity extends AppCompatActivity{
             public boolean onLongClick(View v) {
                 ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 clip.setPrimaryClip(ClipData.newPlainText("text", ((TextView) v).getText()));
-                vibrator.vibrate(100);
+                doVibrate(vibrator, 100);
                 Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.errlog_cpy_to_clipboard), Toast.LENGTH_LONG).show();
                 return false;
             }
         });
 
-        loadbtn = (Button) findViewById(R.id.error_load);
+        loadbtn = findViewById(R.id.error_load);
         loadbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +78,7 @@ public class ErrorlogActivity extends AppCompatActivity{
             }
         });
 
-        clearbtn = (Button) findViewById(R.id.error_clear);
+        clearbtn = findViewById(R.id.error_clear);
         clearbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,10 +105,10 @@ public class ErrorlogActivity extends AppCompatActivity{
         File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(LOG_PATH));
         if (!savedir.exists()) savedir.mkdirs();
         exportPath = savedir.getPath();
-        exportPathView = (TextView) findViewById(R.id.error_path);
+        exportPathView = findViewById(R.id.error_path);
         exportPathView.setText(exportPath);
 
-        exportbtn = (Button) findViewById(R.id.error_export);
+        exportbtn = findViewById(R.id.error_export);
         exportbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

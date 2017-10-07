@@ -12,6 +12,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
@@ -337,5 +339,13 @@ public class KcaUtils {
         sec = sec % 60;
         min = min % 60;
         return String.format("%02d:%02d:%02d", hour, min, sec);
+    }
+
+    public static void doVibrate(Vibrator v, int time) {
+        if (Build.VERSION.SDK_INT >= 26) {
+            v.vibrate(VibrationEffect.createOneShot(time, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            v.vibrate(time);
+        }
     }
 }

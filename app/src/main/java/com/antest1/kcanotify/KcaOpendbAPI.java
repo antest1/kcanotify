@@ -52,9 +52,9 @@ public class KcaOpendbAPI {
         new opendbRequest().execute(REQ_SHIP_DEV, param);
     }
 
-    public static void sendShipDropData(int world, int map, int node, String rank, int maprank, int result) {
-        String param = String.format("apiver=3&world=%d&map=%d&node=%d&rank=%s&maprank=%d&result=%d",
-                world, map, node, rank, maprank, result);
+    public static void sendShipDropData(int world, int map, int node, String rank, int maprank, int inventory, int result, int result_item) {
+        String param = String.format("apiver=4&world=%d&map=%d&node=%d&rank=%s&maprank=%d&inventory=%d&result=%d&result_item=%d",
+                world, map, node, rank, maprank, inventory, result, result_item);
         new opendbRequest().execute(REQ_SHIP_DROP, param);
     }
 
