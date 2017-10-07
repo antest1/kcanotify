@@ -71,7 +71,7 @@ Attribution
 
 문의
 -------
-**먼저 [FAQ](FAQ.md)를 읽어주세요.**
+**먼저 [FAQ](FAQ)를 읽어주세요.**
 
 건의나 오류 등이 문의사항은 아래의 이메일을 통해 보내주세요.   
 For suggestion or error report, please mail to me.  
