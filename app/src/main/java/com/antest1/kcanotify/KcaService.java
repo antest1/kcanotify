@@ -1700,9 +1700,8 @@ public class KcaService extends Service {
                 int maprank = jsonDataObj.get("maprank").getAsInt();
                 int inventory = jsonDataObj.get("inventory").getAsInt();
                 int result = jsonDataObj.get("result").getAsInt();
-                int result_item = jsonDataObj.get("result_item").getAsInt();
                 if (isOpendbEnabled()) {
-                    KcaOpendbAPI.sendShipDropData(world, map, node, rank, maprank, inventory, result, result_item);
+                    KcaOpendbAPI.sendShipDropData(world, map, node, rank, maprank, inventory, result);
                 }
             }
 

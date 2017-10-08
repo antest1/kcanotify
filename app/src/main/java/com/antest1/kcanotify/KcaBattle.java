@@ -871,12 +871,6 @@ public class KcaBattle {
                         dropInfo.addProperty("node", currentNode);
                         dropInfo.addProperty("rank", api_data.get("api_win_rank").getAsString());
                         dropInfo.addProperty("maprank", currentEventMapRank);
-                        if (api_data.has("api_get_useitem")) {
-                            int item_id = api_data.getAsJsonObject("api_get_useitem").get("api_useitem_id").getAsInt();
-                            dropInfo.addProperty("result_item", item_id);
-                        } else {
-                            dropInfo.addProperty("result_item", 0);
-                        }
                         if (api_data.has("api_get_ship")) {
                             int api_ship_id = api_data.getAsJsonObject("api_get_ship").get("api_ship_id").getAsInt();
                             dropInfo.addProperty("result", api_ship_id);
