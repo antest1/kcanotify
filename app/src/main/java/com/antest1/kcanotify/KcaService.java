@@ -78,6 +78,7 @@ import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaFleetViewService.REFRESH_FLEETVIEW_ACTION;
 import static com.antest1.kcanotify.KcaQuestViewService.REFRESH_QUESTVIEW_ACTION;
 import static com.antest1.kcanotify.KcaUtils.createBuilder;
+import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContentUri;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
@@ -494,7 +495,7 @@ public class KcaService extends Service {
             toastList.add(tpValue);
         }
         KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
-        customToast.showToast(joinStr(toastList, " / "), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+        showCustomToast(customToast, joinStr(toastList, " / "), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
     }
 
     private static class kcaServiceHandler extends Handler {
@@ -545,7 +546,7 @@ public class KcaService extends Service {
                 Log.e("KCA", kca_version);
 
                 if (!getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION).equals(kca_version)) {
-                    customToast.showToast("new game data detected: " + String.valueOf(kca_version), Toast.LENGTH_LONG,
+                   showCustomToast(customToast, "new game data detected: " + String.valueOf(kca_version), Toast.LENGTH_LONG,
                             ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 }
                 JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
@@ -609,7 +610,7 @@ public class KcaService extends Service {
                     /*
                     // Deactivate this code, force to download manually
                     if (api_start2_data == null && api_start2_down_mode) {
-                        customToast.showToast(getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                       showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                         // new retrieveApiStartData().execute("", "down", "");
                     }
                     */
@@ -780,14 +781,14 @@ public class KcaService extends Service {
 
             // Game Data Dependent Tasks
             if (!isUserItemDataLoaded) {
-                customToast.showToast(getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+               showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
             } else if (!checkDataLoadTriggered()) {
                 if (!api_start2_loading_flag) {
-                    customToast.showToast(getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                   showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                     //new retrieveApiStartData().execute("", "down", "");
                 }
             } else if (api_start2_loading_flag) {
-                customToast.showToast(getStringWithLocale(R.string.kca_toast_loading_data), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+               showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_loading_data), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
             } else {
                 if (url.startsWith(API_PORT)) {
                     KcaFleetViewService.setReadyFlag(true);
@@ -922,13 +923,13 @@ public class KcaService extends Service {
                                         KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
                                     }
                                 }
-                                vibrator.vibrate(1000);
+                                doVibrate(vibrator, 1000);
                             }
 
                             int toastColor;
                             if (hcondition) toastColor = R.color.colorHeavyDmgStatePanel;
                             else toastColor = R.color.colorWarningPanel;
-                            customToast.showToast(message.trim(), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), toastColor));
+                           showCustomToast(customToast, message.trim(), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), toastColor));
                         }
                     }
                 }
@@ -1525,7 +1526,7 @@ public class KcaService extends Service {
                     e1.printStackTrace();
                 }
 
-                customToast.showToast(getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+               showCustomToast(customToast, getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_VPN, api_url, api_request, api_response, api_error);
             }
 
@@ -1679,7 +1680,7 @@ public class KcaService extends Service {
                     int api_event_id = jsonDataObj.get("api_event_id").getAsInt();
                     int api_color_no = jsonDataObj.get("api_color_no").getAsInt();
                     currentNodeInfo = KcaApiData.getNodeFullInfo(contextWithLocale, currentNodeAlphabet, api_event_id, api_event_kind, false);
-                    customToast.showToast(currentNodeInfo, Toast.LENGTH_LONG,
+                   showCustomToast(customToast, currentNodeInfo, Toast.LENGTH_LONG,
                             getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
                     JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
                     questTracker.updateNodeTracker(questTrackData);
@@ -1697,9 +1698,10 @@ public class KcaService extends Service {
                 int node = jsonDataObj.get("node").getAsInt();
                 String rank = jsonDataObj.get("rank").getAsString();
                 int maprank = jsonDataObj.get("maprank").getAsInt();
+                int inventory = jsonDataObj.get("inventory").getAsInt();
                 int result = jsonDataObj.get("result").getAsInt();
                 if (isOpendbEnabled()) {
-                    KcaOpendbAPI.sendShipDropData(world, map, node, rank, maprank, result);
+                    KcaOpendbAPI.sendShipDropData(world, map, node, rank, maprank, inventory, result);
                 }
             }
 
@@ -1716,18 +1718,18 @@ public class KcaService extends Service {
                                 KcaUtils.playNotificationSound(mediaPlayer, getApplicationContext(), notificationUri);
                             }
                         }
-                        vibrator.vibrate(1500);
+                        doVibrate(vibrator, 1500);
                     }
                 }
 
                 if (heavyDamagedMode == HD_DANGER) {
-                    customToast.showToast(getStringWithLocale(R.string.heavy_damaged), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                   showCustomToast(customToast, getStringWithLocale(R.string.heavy_damaged), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
                     Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
                     intent.putExtra(KCA_MSG_DATA, "1");
                     broadcaster.sendBroadcast(intent);
                 } else {
                     if (heavyDamagedMode == HD_DAMECON) {
-                        customToast.showToast(getStringWithLocale(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                       showCustomToast(customToast, getStringWithLocale(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
                     }
                     Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
                     intent.putExtra(KCA_MSG_DATA, "0");
@@ -1750,7 +1752,7 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_OPENDB_FAILED)) {
-                customToast.showToast(getStringWithLocale(R.string.opendb_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+               showCustomToast(customToast, getStringWithLocale(R.string.opendb_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_OPENDB, url, "opendb", data, "failed");
             }
 
@@ -1759,7 +1761,7 @@ public class KcaService extends Service {
                 String api_url = jsonDataObj.get("api_url").getAsString();
                 String api_node = jsonDataObj.get("api_node").getAsString();
                 String api_error = jsonDataObj.get("api_error").getAsString();
-                customToast.showToast(getStringWithLocale(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+               showCustomToast(customToast, getStringWithLocale(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_BATTLE, api_url, api_node, api_data, api_error);
             }
         } catch (JsonSyntaxException e) {
@@ -1767,7 +1769,7 @@ public class KcaService extends Service {
             makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
-            customToast.showToast(getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+           showCustomToast(customToast, getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
             dbHelper.recordErrorLog(ERROR_TYPE_NOTI, url, "notification", data, getStringFromException(e));
         }
     }
@@ -1844,7 +1846,7 @@ public class KcaService extends Service {
         String delimeter = " | ";
         if (!isGameDataLoaded()) {
             Log.e("KCA", "processFirstDeckInfo: Game Data is Null");
-            customToast.showToast(getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+           showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
             // new retrieveApiStartData().execute("", "down", "");
             return;
         } else {
@@ -2105,7 +2107,7 @@ public class KcaService extends Service {
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (data == null) {
             KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
-            customToast.showToast(getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+           showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorPrimaryDark));
             Log.e("KCA", String.format("currentPortDeckData is null"));
             return false;
         } else {
@@ -2137,6 +2139,15 @@ public class KcaService extends Service {
     public void updateFleetView() {
         startService(new Intent(getBaseContext(), KcaFleetViewService.class)
                 .setAction(REFRESH_FLEETVIEW_ACTION));
+    }
+
+    public void showCustomToast(KcaCustomToast toast, String body, int duration, int color) {
+        Context ctx = getApplicationContext();
+        if (getBooleanPreferences(ctx, PREF_DISABLE_CUSTOMTOAST)) {
+            Toast.makeText(ctx, body, duration).show();
+        } else {
+            toast.showToast(body, duration, color);
+        }
     }
 
     @Override

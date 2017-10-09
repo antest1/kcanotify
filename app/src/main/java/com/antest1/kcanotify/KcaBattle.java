@@ -870,16 +870,17 @@ public class KcaBattle {
                         dropInfo.addProperty("map", currentMapNo);
                         dropInfo.addProperty("node", currentNode);
                         dropInfo.addProperty("rank", api_data.get("api_win_rank").getAsString());
-                        dropInfo.addProperty("maprank", 0);
+                        dropInfo.addProperty("maprank", currentEventMapRank);
                         if (api_data.has("api_get_ship")) {
                             int api_ship_id = api_data.getAsJsonObject("api_get_ship").get("api_ship_id").getAsInt();
                             dropInfo.addProperty("result", api_ship_id);
+                            dropInfo.addProperty("inventory", KcaApiData.countUserShipById(api_ship_id));
                             KcaApiData.addShipCountInBattle();
                             KcaApiData.addItemCountInBattle(api_ship_id);
                         } else {
                             dropInfo.addProperty("result", 0);
+                            dropInfo.addProperty("inventory", 0);
                         }
-
                         bundle = new Bundle();
                         bundle.putString("url", KCA_API_NOTI_BATTLE_DROPINFO);
                         bundle.putString("data", gson.toJson(dropInfo));

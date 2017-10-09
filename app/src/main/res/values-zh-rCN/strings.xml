@@ -180,6 +180,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_nspl_vib">舰娘未补给时响铃/振动（弹出通知）</string>
     <string name="setting_menu_noti_title_fairy_vib">妖精按钮隐藏时振动</string>
     <string name="setting_menu_noti_desc_fairy_vib">设置长按妖精按钮时是否振动</string>
+    <string name="setting_menu_noti_title_disable_customtoast">禁用自定义吐司</string>
+    <string name="setting_menu_noti_desc_disale_customtoast">当罗盘剧透或大破警告不显示时设置</string>
 
     <string name="setting_menu_app_head">应用信息</string>
     <string name="setting_menu_app_title_current">当前版本</string>
