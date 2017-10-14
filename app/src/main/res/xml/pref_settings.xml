@@ -179,10 +179,10 @@
             android:title="@string/setting_menu_noti_title_fairy_vib" />
 
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="disable_customtoast"
-            android:summary="@string/setting_menu_noti_desc_fairy_vib"
-            android:title="@string/setting_menu_noti_title_fairy_vib" />
+            android:summary="@string/setting_menu_noti_desc_disable_customtoast"
+            android:title="@string/setting_menu_noti_title_disable_customtoast" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/setting_menu_app_head">
