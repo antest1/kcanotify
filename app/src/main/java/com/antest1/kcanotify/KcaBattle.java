@@ -910,6 +910,11 @@ public class KcaBattle {
                 helper.updateExpScore(api_data.get("api_get_exp").getAsInt());
                 // ship_ke, afterhp, battle_result
 
+                if (api_data.has("api_get_useitem")) {
+                    int useitem_id = api_data.getAsJsonObject("api_get_useitem").get("api_useitem_id").getAsInt();
+                    KcaApiData.addUseitemCount(useitem_id);
+                }
+
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
                 if (url.equals(API_REQ_PRACTICE_BATTLE_RESULT)) {

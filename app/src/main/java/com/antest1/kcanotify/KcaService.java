@@ -618,6 +618,12 @@ public class KcaService extends Service {
                 return;
             }
 
+            if (url.startsWith(API_GET_MEMBER_USEITEM)) {
+                if (jsonDataObj.has("api_data")) {
+                    dbHelper.putValue(DB_KEY_USEITEMS, jsonDataObj.getAsJsonArray("api_data").toString());
+                }
+            }
+
             if (url.startsWith(API_GET_MEMBER_DECK)) {
                 //Log.e("KCA", "Expedition Handler Called");
                 if (jsonDataObj.has("api_data")) {

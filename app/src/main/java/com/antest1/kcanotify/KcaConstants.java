@@ -14,6 +14,7 @@ public final class KcaConstants {
 
     public static final String DB_KEY_STARTDATA = "key_startdata";
     public static final String DB_KEY_DECKPORT = "key_deckport";
+    public static final String DB_KEY_USEITEMS = "key_useitems";
     public static final String DB_KEY_MAPEDGES = "key_mapedges";
     public static final String DB_KEY_USEREQUIP = "key_userequip";
     public static final String DB_KEY_QUESTTRACK = "key_questtrack";
@@ -46,6 +47,7 @@ public final class KcaConstants {
     public static final String API_START2 = "/api_start2";
     public static final String API_REQ_MEMBER_GET_INCENTIVE = "/api_req_member/get_incentive";
     public static final String API_GET_MEMBER_REQUIRED_INFO = "/api_get_member/require_info";
+    public static final String API_GET_MEMBER_USEITEM = "/api_get_member/useitem";
     public static final String API_REQ_MEMBER_PRESET_DECK = "/api_get_member/preset_deck";
     public static final String API_GET_MEMBER_DECK = "/api_get_member/deck";
     public static final String API_GET_MEMBER_SHIP_DECK = "/api_get_member/ship_deck";

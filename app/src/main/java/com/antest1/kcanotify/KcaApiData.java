@@ -42,6 +42,7 @@ public class KcaApiData {
     public static Map<Integer, JsonObject> userShipData = null;
 
     public static Map<Integer, JsonObject> kcMissionData = new HashMap<Integer, JsonObject>();
+    public static Map<Integer, JsonObject> kcUseitemData = new HashMap<Integer, JsonObject>();
     //public static Map<String, String> kcShipTranslationData = null;
 
     public static int level = 0;
@@ -227,7 +228,13 @@ public class KcaApiData {
                 }
             }
         }
-
+        if (kcGameData.has("api_mst_useitem")) {
+            JsonArray useitemData = kcGameData.getAsJsonArray("api_mst_useitem");
+            for (JsonElement e : useitemData) {
+                int api_id = e.getAsJsonObject().get("api_id").getAsInt();
+                kcUseitemData.put(api_id, e.getAsJsonObject());
+            }
+        }
         if (kcGameData.has("api_mst_mission")) {
             JsonArray missionData = kcGameData.getAsJsonArray("api_mst_mission");
             for (JsonElement e : missionData) {
@@ -360,6 +367,15 @@ public class KcaApiData {
             name = kcItemTranslationData.get(name).getAsString();
         }
         return name;
+    }
+
+    public static String getUseitemTranslation(int id) {
+        if(kcUseitemData.containsKey(id)) {
+            JsonObject data = kcUseitemData.get(id).getAsJsonObject();
+            return getItemTranslation(data.get("api_name").getAsString());
+        } else {
+            return "";
+        }
     }
 
     public static String getShipTypeAbbr(int idx) {
@@ -566,6 +582,34 @@ public class KcaApiData {
             return kcQuestTrackData.getAsJsonObject(id);
         } else {
             return null;
+        }
+    }
+
+    public static int getUseitemCount(int id) {
+        JsonArray kcUseitemData = helper.getJsonArrayValue(DB_KEY_USEITEMS);
+        if (kcUseitemData != null) {
+            for (int i = 0; i< kcUseitemData.size(); i++) {
+                JsonObject data = kcUseitemData.get(i).getAsJsonObject();
+                if (data.get("api_id").getAsInt() == id) {
+                    return data.get("api_count").getAsInt();
+                }
+            }
+        }
+        return -1;
+    }
+
+    public static void addUseitemCount(int id) {
+        JsonArray kcUseitemData = helper.getJsonArrayValue(DB_KEY_USEITEMS);
+        if (kcUseitemData != null) {
+            for (int i = 0; i< kcUseitemData.size(); i++) {
+                JsonObject data = kcUseitemData.get(i).getAsJsonObject();
+                if (data.get("api_id").getAsInt() == id) {
+                    int orig = data.get("api_count").getAsInt();
+                    data.addProperty("api_count", orig + 1);
+                    helper.putValue(DB_KEY_USEITEMS, kcUseitemData.toString());
+                    return;
+                }
+            }
         }
     }
 

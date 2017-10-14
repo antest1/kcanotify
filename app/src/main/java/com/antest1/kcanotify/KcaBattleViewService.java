@@ -51,6 +51,8 @@ import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getNodeFullInfo;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
+import static com.antest1.kcanotify.KcaApiData.getUseitemCount;
+import static com.antest1.kcanotify.KcaApiData.getUseitemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
@@ -274,7 +276,7 @@ public class KcaBattleViewService extends Service {
                 ((TextView) battleview.findViewById(R.id.enemy_fleet_damage)).setText("");
                 ((TextView) battleview.findViewById(R.id.battle_engagement)).setText("");
                 ((TextView) battleview.findViewById(R.id.battle_airpower)).setText("");
-
+                ((TextView) battleview.findViewById(R.id.battle_getitem)).setText("");
                 if (!getBooleanPreferences(contextWithLocale, PREF_SHOWDROP_SETTING)) {
                     battleview.findViewById(R.id.battle_getship_row).setVisibility(View.GONE);
                 } else {
@@ -888,6 +890,11 @@ public class KcaBattleViewService extends Service {
                     ((TextView) battleview.findViewById(R.id.battle_getship))
                             .setText(getStringWithLocale(R.string.getship_none));
                 }
+                if (api_data.has("api_get_useitem")) {
+                    int useitem_id = api_data.getAsJsonObject("api_get_useitem").get("api_useitem_id").getAsInt();
+                    ((TextView) battleview.findViewById(R.id.battle_getitem))
+                            .setText(String.format("%s (%d)", getUseitemTranslation(useitem_id), getUseitemCount(useitem_id)));
+                }
             } else {
                 Log.e("KCA", api_data.entrySet().toString());
             }
@@ -897,10 +904,10 @@ public class KcaBattleViewService extends Service {
     }
 
     public void setViewLayout(boolean fc_flag, boolean ec_flag) {
-        LinearLayout friend_main_fleet = (LinearLayout) battleview.findViewById(R.id.friend_main_fleet);
-        LinearLayout friend_combined_fleet = (LinearLayout) battleview.findViewById(R.id.friend_combined_fleet);
-        LinearLayout enemy_main_fleet = (LinearLayout) battleview.findViewById(R.id.enemy_main_fleet);
-        LinearLayout enemy_combined_fleet = (LinearLayout) battleview.findViewById(R.id.enemy_combined_fleet);
+        LinearLayout friend_main_fleet = battleview.findViewById(R.id.friend_main_fleet);
+        LinearLayout friend_combined_fleet = battleview.findViewById(R.id.friend_combined_fleet);
+        LinearLayout enemy_main_fleet = battleview.findViewById(R.id.enemy_main_fleet);
+        LinearLayout enemy_combined_fleet = battleview.findViewById(R.id.enemy_combined_fleet);
         Log.e("KCA", String.valueOf(fc_flag) + "-" + String.valueOf(ec_flag));
 
         friend_combined_fleet.setVisibility(fc_flag ? View.VISIBLE : View.GONE);
@@ -1114,7 +1121,7 @@ public class KcaBattleViewService extends Service {
                 mInflater = LayoutInflater.from(contextWithLocale);
                 mView = mInflater.inflate(R.layout.view_sortie_battle, null);
                 mView.setVisibility(View.GONE);
-                battleview = (ScrollView) mView.findViewById(R.id.battleview);
+                battleview = mView.findViewById(R.id.battleview);
                 battleview.setOnTouchListener(mViewTouchListener);
                 battleview.findViewById(R.id.battle_node_area).setOnTouchListener(infoListViewTouchListener);
                 itemView = mInflater.inflate(R.layout.view_battleview_items, null);
@@ -1242,9 +1249,9 @@ public class KcaBattleViewService extends Service {
         String countformat = "%d/%d (-%d)";
         for (int n = 1; n <= 2; n++) {
             String n_str = String.valueOf(n);
-            TextView friendView = (TextView) acView.findViewById(getId(prefix.concat(n_str).concat("_f"), R.id.class));
-            TextView enemyView = (TextView) acView.findViewById(getId(prefix.concat(n_str).concat("_e"), R.id.class));
-            TextView msgView = (TextView) acView.findViewById(getId(prefix.concat(n_str).concat("_msg"), R.id.class));
+            TextView friendView = acView.findViewById(getId(prefix.concat(n_str).concat("_f"), R.id.class));
+            TextView enemyView = acView.findViewById(getId(prefix.concat(n_str).concat("_e"), R.id.class));
+            TextView msgView = acView.findViewById(getId(prefix.concat(n_str).concat("_msg"), R.id.class));
             if (!data.get("api_stage".concat(n_str)).isJsonNull()) {
                 JsonObject stage_data = data.getAsJsonObject("api_stage".concat(String.valueOf(n)));
                 int f_count = stage_data.get("api_f_count").getAsInt();
