@@ -375,7 +375,8 @@ public class KcaService extends Service {
                 }
                 if (viewType == 1) {
                     int value = (notificationTimeCounter / 2) % (kcaExpStrList.size());
-                    expeditionString = kcaExpStrList.get(value);
+                    String countStr = String.format(" (%d/%d)", value+1, kcaExpStrList.size());
+                    expeditionString = kcaExpStrList.get(value).concat(countStr);
                 } else {
                     expeditionString = joinStr(kcaExpStrList, " / ");
                 }
