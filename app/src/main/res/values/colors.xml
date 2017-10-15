@@ -58,6 +58,7 @@
     <color name="itemalv2">#fbc02d</color>
 
     <color name="colorNightTargetFleet">#64b5f6</color>
+    <color name="colorItemDrop">#64b5f6</color>
     <color name="colorRetreated">#757575</color>
 
     <color name="colorQuestViewMemo">#64b5f6</color>
