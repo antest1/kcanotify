@@ -133,7 +133,8 @@
     <string name="setting_menu_kand_title_saku_cal">색적 계산방식 선택</string>
     <string name="setting_menu_kand_title_opendb">OpenDB에 데이터 전송</string>
     <string name="setting_menu_kand_title_exp_realtime_show">원정 남은 시간 실시간 표시</string>
-    <string name="setting_menu_kand_desc_exp_realtime_show">상단의 남은 원정 시간 실시간 표시 여부</string>
+    <string name="setting_menu_kand_desc_exp_realtime_show">상단의 원정 시간 표시 여부</string>
+    <string name="setting_menu_kand_title_exp_type">원정 시간 표시 타입</string>
     <string name="setting_menu_kand_title_set_noti_priority">상태 바의 우선 순위를 높게 설정</string>
     <string name="setting_menu_kand_desc_set_noti_priority">체크 시 상태 바가 항상 위에 표시됨</string>
     <string name="setting_menu_kand_title_game_data_down">게임 데이터 다운로드</string>
@@ -370,5 +371,6 @@
     <string name="action_errorlog">오류 로그</string>
     <string name="errlog_dialog_message">전체 오류 로그를 지우시겠습니까?</string>
     <string name="errlog_cpy_to_clipboard">내용이 클립보드에 복사되었습니다.</string>
-
+    <string name="expedition_type_value_0">남은 시간</string>
+    <string name="expedition_type_value_1">종료 시간</string>
 </resources>

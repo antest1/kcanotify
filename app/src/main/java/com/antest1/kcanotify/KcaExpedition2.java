@@ -1,5 +1,7 @@
 package com.antest1.kcanotify;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import static com.antest1.kcanotify.KcaAlarmService.ALARM_DELAY;
@@ -74,6 +76,23 @@ public class KcaExpedition2 {
             int left_time = (int) (complete_time_check[idx] - System.currentTimeMillis() - ALARM_DELAY) / 1000;
             if (left_time < 0) return "";
             return String.format("[%02d] %s", mission_no[idx], getTimeStr(left_time));
+        }
+    }
+
+    public static String getEndTimeStr(int idx) {
+        if (complete_time_check[idx] == -1) return "";
+        else {
+            long arrive_time = complete_time_check[idx] - ALARM_DELAY;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return String.format("[%02d] %s", mission_no[idx], sdf.format(new Date(arrive_time)));
+        }
+    }
+
+    public static String getTimeInfoStr(int idx, int type) {
+        if (type == 1) {
+            return getEndTimeStr(idx);
+        } else {
+            return getLeftTimeStr(idx);
         }
     }
 }

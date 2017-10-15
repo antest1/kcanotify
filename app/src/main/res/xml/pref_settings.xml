@@ -33,6 +33,16 @@
             android:summary="@string/setting_menu_kand_desc_exp_realtime_show"
             android:title="@string/setting_menu_kand_title_exp_realtime_show" />
 
+        <ListPreference
+            android:id="@+id/expedition_type_value"
+            android:defaultValue="0"
+            android:entries="@array/expeditionTypeOption"
+            android:entryValues="@array/expeditionTypeOptionValue"
+            android:key="expedition_type"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/setting_menu_kand_title_exp_type" />
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="set_priority"

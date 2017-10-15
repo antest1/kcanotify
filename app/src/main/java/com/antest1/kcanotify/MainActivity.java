@@ -393,6 +393,7 @@ public class MainActivity extends AppCompatActivity {
                         editor.putString(prefKey, "|");
                         break;
                     case PREF_FAIRY_ICON:
+                    case PREF_KCA_EXP_TYPE:
                         editor.putString(prefKey, "0");
                         break;
                     case PREF_KCA_DATA_VERSION:

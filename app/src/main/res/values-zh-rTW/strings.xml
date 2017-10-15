@@ -142,7 +142,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_saku_cal">選擇索敵公式</string>
     <string name="setting_menu_kand_title_opendb">向OpenDB傳送遊戲數據</string>
     <string name="setting_menu_kand_title_exp_realtime_show">追蹤遠征時間</string>
-    <string name="setting_menu_kand_desc_exp_realtime_show">於裝置的通知欄顯示遠征的剩餘時間</string>
+    <string name="setting_menu_kand_desc_exp_realtime_show">於裝置的通知欄顯示遠征的時間</string>
+    <string name="setting_menu_kand_title_exp_type">遠征時間顯示類型</string>
     <string name="setting_menu_kand_title_set_noti_priority">設置通知優先級高</string>
     <string name="setting_menu_kand_desc_set_noti_priority">選中時通知將始終是頂部</string>
     <string name="setting_menu_kand_title_game_data_down">下載遊戲資料</string>
@@ -376,4 +377,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_errorlog">錯誤日誌</string>
     <string name="errlog_dialog_message">你想清空所有錯誤日誌嗎？</string>
     <string name="errlog_cpy_to_clipboard">已複製文本到剪貼板</string>
+    <string name="expedition_type_value_0">剩下時間</string>
+    <string name="expedition_type_value_1">結束時間</string>
 </resources>

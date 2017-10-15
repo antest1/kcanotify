@@ -62,5 +62,14 @@
         <item>@string/app_download_link_baidu</item>
     </string-array>
 
+    <string-array name="expeditionTypeOption">
+        <item>@string/expedition_type_value_0</item>
+        <item>@string/expedition_type_value_1</item>
+    </string-array>
+
+    <string-array name="expeditionTypeOptionValue" translatable="false">
+        <item >0</item>
+        <item >1</item>
+    </string-array>
 
 </resources>

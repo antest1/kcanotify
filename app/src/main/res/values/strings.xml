@@ -179,7 +179,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_opendb">Send game statistics to OpenDB</string>
     <string name="setting_menu_kand_desc_opendb" translatable="false">http://swaytwig.com/opendb/</string>
     <string name="setting_menu_kand_title_exp_realtime_show">Track Expedition Time</string>
-    <string name="setting_menu_kand_desc_exp_realtime_show">Display remaining time for Expeditions on the navbar</string>
+    <string name="setting_menu_kand_desc_exp_realtime_show">Display remaining/left time for Expeditions on the navbar</string>
+    <string name="setting_menu_kand_title_exp_type">Expedition Time View Type</string>
     <string name="setting_menu_kand_title_set_noti_priority">Set Notification Priority to HIGH</string>
     <string name="setting_menu_kand_desc_set_noti_priority">When checked, the navbar will always be the top of notifications</string>
     <string name="setting_menu_kand_title_game_data_down">Download Game Data</string>
@@ -432,5 +433,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_bonus_result" formatted="false">（Bonus: %.1f%%）</string>
     <string name="errlog_dialog_message">Do you want to clear the whole error log?</string>
     <string name="errlog_cpy_to_clipboard">Text has been copied to clipboard.</string>
-
+    <string name="expedition_type_value_0">Left Time</string>
+    <string name="expedition_type_value_1">End Time</string>
 </resources>

@@ -133,7 +133,8 @@
     <string name="setting_menu_kand_title_saku_cal">索敵計算式</string>
     <string name="setting_menu_kand_title_opendb">OpenDBに通計を送信</string>
     <string name="setting_menu_kand_title_exp_realtime_show">遠征の残り時間を表示</string>
-    <string name="setting_menu_kand_desc_exp_realtime_show">ノーティバーで遠征の残り時間を表示</string>
+    <string name="setting_menu_kand_desc_exp_realtime_show">ノーティバーで遠征の時間情報を表示</string>
+    <string name="setting_menu_kand_title_exp_type">遠征時間の表示タイプ</string>
     <string name="setting_menu_kand_title_set_noti_priority">ノーティバーのプライオリティを高く設定</string>
     <string name="setting_menu_kand_desc_set_noti_priority">ノーティバーを常に上に表示する</string>
     <string name="setting_menu_kand_title_game_data_down">ゲームデータをダウンロード</string>
@@ -370,4 +371,6 @@
     <string name="excheckview_bonus_toku" formatted="false">特大発：%d</string>
     <string name="excheckview_bonus_result" formatted="false">（ボーナス：%.1f%%）</string>
     <string name="viewmenu_excheck">遠征</string>
+    <string name="expedition_type_value_0">残り時間</string>
+    <string name="expedition_type_value_1">終了時間</string>
 </resources>

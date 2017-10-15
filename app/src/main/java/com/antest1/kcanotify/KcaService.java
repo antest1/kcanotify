@@ -125,6 +125,7 @@ public class KcaService extends Service {
     int viewBitmapId, viewBitmapSmallId;
     Bitmap viewBitmap = null;
     Runnable missionTimer;
+    int notificationTimeCounter;
 
     kcaServiceHandler handler;
     kcaNotificationHandler nHandler;
@@ -166,6 +167,21 @@ public class KcaService extends Service {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
+    void runTimer() {
+        if (isMissionTimerViewEnabled()) {
+            missionTimeScheduler = Executors.newSingleThreadScheduledExecutor();
+            missionTimeScheduler.scheduleAtFixedRate(missionTimer, 0, 1, TimeUnit.SECONDS);
+        } else {
+            missionTimeScheduler = null;
+        }
+    }
+
+    void stopTimer() {
+        if (missionTimeScheduler != null) {
+            missionTimeScheduler.shutdown();
+        }
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -176,6 +192,7 @@ public class KcaService extends Service {
         isInitState = true;
         isFirstState = true;
         isUserItemDataLoaded = false;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Log.e("KCA", String.valueOf(prefs.contains(PREF_SVC_ENABLED)));
         if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
@@ -237,22 +254,20 @@ public class KcaService extends Service {
         SettingActivity.setHandler(nHandler);
         KcaFairySelectActivity.setHandler(nHandler);
 
+        notificationTimeCounter = -1;
         missionTimer = new Runnable() {
             @Override
             public void run() {
-                if (viewNotificationBuilder != null && isMissionTimerViewEnabled() && isPortAccessed) {
+                if (viewNotificationBuilder != null && isMissionTimerViewEnabled()) {
+                    notificationTimeCounter += 1;
+                    if (notificationTimeCounter == 120) {
+                        notificationTimeCounter = 0;
+                    }
                     updateExpViewNotification();
                 }
             }
         };
-
-        if (isMissionTimerViewEnabled()) {
-            missionTimeScheduler = Executors.newSingleThreadScheduledExecutor();
-            missionTimeScheduler.scheduleAtFixedRate(missionTimer, 0, 1, TimeUnit.SECONDS);
-        } else {
-            missionTimeScheduler = null;
-        }
-
+        runTimer();
         dbHelper.initExpScore();
         return START_STICKY;
     }
@@ -261,9 +276,7 @@ public class KcaService extends Service {
 
     public void setServiceDown() {
         isPortAccessed = false;
-        if (missionTimeScheduler != null) {
-            missionTimeScheduler.shutdown();
-        }
+        stopTimer();
 
         handler = null;
         nHandler = null;
@@ -347,6 +360,7 @@ public class KcaService extends Service {
     }
 
     private void updateExpViewNotification() {
+        int viewType = getExpeditionType();
         String expeditionString = "";
         if (!isFirstState && isMissionTimerViewEnabled()) {
             if (!KcaExpedition2.isMissionExist()) {
@@ -354,12 +368,17 @@ public class KcaService extends Service {
             } else {
                 List<String> kcaExpStrList = new ArrayList<String>();
                 for (int i = 1; i < 4; i++) {
-                    String str = KcaExpedition2.getLeftTimeStr(i);
+                    String str = KcaExpedition2.getTimeInfoStr(i, viewType);
                     if (str.length() > 0) {
                         kcaExpStrList.add(str);
                     }
                 }
-                expeditionString = expeditionString.concat(joinStr(kcaExpStrList, " / "));
+                if (viewType == 1) {
+                    int value = (notificationTimeCounter / 2) % (kcaExpStrList.size());
+                    expeditionString = kcaExpStrList.get(value);
+                } else {
+                    expeditionString = joinStr(kcaExpStrList, " / ");
+                }
             }
         } else {
             expeditionString = String.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
@@ -546,7 +565,7 @@ public class KcaService extends Service {
                 Log.e("KCA", kca_version);
 
                 if (!getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION).equals(kca_version)) {
-                   showCustomToast(customToast, "new game data detected: " + String.valueOf(kca_version), Toast.LENGTH_LONG,
+                    showCustomToast(customToast, "new game data detected: " + String.valueOf(kca_version), Toast.LENGTH_LONG,
                             ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 }
                 JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
@@ -787,14 +806,14 @@ public class KcaService extends Service {
 
             // Game Data Dependent Tasks
             if (!isUserItemDataLoaded) {
-               showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
             } else if (!checkDataLoadTriggered()) {
                 if (!api_start2_loading_flag) {
-                   showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                    showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                     //new retrieveApiStartData().execute("", "down", "");
                 }
             } else if (api_start2_loading_flag) {
-               showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_loading_data), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_loading_data), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
             } else {
                 if (url.startsWith(API_PORT)) {
                     KcaFleetViewService.setReadyFlag(true);
@@ -935,7 +954,7 @@ public class KcaService extends Service {
                             int toastColor;
                             if (hcondition) toastColor = R.color.colorHeavyDmgStatePanel;
                             else toastColor = R.color.colorWarningPanel;
-                           showCustomToast(customToast, message.trim(), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), toastColor));
+                            showCustomToast(customToast, message.trim(), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), toastColor));
                         }
                     }
                 }
@@ -1050,7 +1069,7 @@ public class KcaService extends Service {
                             }
                         }
                         KcaBattle.setDeckPortData(api_data);
-                        
+
                         updateFleetView();
                     }
                 }
@@ -1122,7 +1141,7 @@ public class KcaService extends Service {
                                 String shipname = KcaApiData.getShipTranslation(shipData.get("name").getAsString(), false);
 
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                String timetext  = dateFormat.format(new Date());
+                                String timetext = dateFormat.format(new Date());
 
                                 JsonObject equipdevdata = new JsonObject();
                                 equipdevdata.addProperty("flagship", shipname);
@@ -1149,7 +1168,7 @@ public class KcaService extends Service {
                                 for (String item : itemlist_array) {
                                     JsonObject status = getUserItemStatusById(Integer.parseInt(item), "alv", "type");
                                     if (status.has("type")) {
-                                        switch(status.getAsJsonArray("type").get(2).getAsInt()) {
+                                        switch (status.getAsJsonArray("type").get(2).getAsInt()) {
                                             case T2_MACHINE_GUN:
                                                 questTracker.updateIdCountTracker("638");
                                                 break;
@@ -1194,7 +1213,7 @@ public class KcaService extends Service {
                                 break;
                             }
                         }
-                        Log.e("KCA-S", ""+kdockid);
+                        Log.e("KCA-S", "" + kdockid);
                         if (kdockid > -1) {
                             JsonArray kdata = dbHelper.getJsonArrayValue(DB_KEY_KDOCKDATA);
                             if (kdata != null) {
@@ -1232,7 +1251,7 @@ public class KcaService extends Service {
                         if (jsonDataObj.has("api_data")) {
                             JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
                             dbHelper.putValue(DB_KEY_KDOCKDATA, api_data.toString());
-                            if(checkKdockId != -1) {
+                            if (checkKdockId != -1) {
                                 JsonObject api_kdock_item = api_data.get(checkKdockId).getAsJsonObject();
                                 JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
                                 int flagship = deckInfoCalc.getKcShipList(portdeckdata, 0)[0];
@@ -1362,7 +1381,7 @@ public class KcaService extends Service {
                             }
                         }
                         updateFleetView();
-                        
+
                     }
 
                     if (url.startsWith(API_REQ_HENSEI_COMBINED)) {
@@ -1455,7 +1474,7 @@ public class KcaService extends Service {
                                 updateQuestView();
                             }
                         }
-                        
+
                         updateFleetView();
                     }
 
@@ -1532,7 +1551,7 @@ public class KcaService extends Service {
                     e1.printStackTrace();
                 }
 
-               showCustomToast(customToast, getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                showCustomToast(customToast, getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_VPN, api_url, api_request, api_response, api_error);
             }
 
@@ -1608,7 +1627,7 @@ public class KcaService extends Service {
                 }
                 api_start2_loading_flag = false;
                 if (isUserItemDataLoaded) {
-                    
+
                     updateFleetView();
                 }
             }
@@ -1620,7 +1639,7 @@ public class KcaService extends Service {
                     viewBitmapSmallId = getId(fairyId.concat("_small"), R.mipmap.class);
                     viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
                     updateNotificationFairy();
-                    
+
                     startService(new Intent(this, KcaViewButtonService.class)
                             .setAction(KcaViewButtonService.FAIRY_CHANGE));
                 }
@@ -1686,7 +1705,7 @@ public class KcaService extends Service {
                     int api_event_id = jsonDataObj.get("api_event_id").getAsInt();
                     int api_color_no = jsonDataObj.get("api_color_no").getAsInt();
                     currentNodeInfo = KcaApiData.getNodeFullInfo(contextWithLocale, currentNodeAlphabet, api_event_id, api_event_kind, false);
-                   showCustomToast(customToast, currentNodeInfo, Toast.LENGTH_LONG,
+                    showCustomToast(customToast, currentNodeInfo, Toast.LENGTH_LONG,
                             getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
                     JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
                     questTracker.updateNodeTracker(questTrackData);
@@ -1729,13 +1748,13 @@ public class KcaService extends Service {
                 }
 
                 if (heavyDamagedMode == HD_DANGER) {
-                   showCustomToast(customToast, getStringWithLocale(R.string.heavy_damaged), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                    showCustomToast(customToast, getStringWithLocale(R.string.heavy_damaged), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
                     Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
                     intent.putExtra(KCA_MSG_DATA, "1");
                     broadcaster.sendBroadcast(intent);
                 } else {
                     if (heavyDamagedMode == HD_DAMECON) {
-                       showCustomToast(customToast, getStringWithLocale(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
+                        showCustomToast(customToast, getStringWithLocale(R.string.heavy_damaged_damecon), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorHeavyDmgStatePanel));
                     }
                     Intent intent = new Intent(KCA_MSG_BATTLE_HDMG);
                     intent.putExtra(KCA_MSG_DATA, "0");
@@ -1758,7 +1777,7 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_OPENDB_FAILED)) {
-               showCustomToast(customToast, getStringWithLocale(R.string.opendb_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+                showCustomToast(customToast, getStringWithLocale(R.string.opendb_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_OPENDB, url, "opendb", data, "failed");
             }
 
@@ -1767,7 +1786,7 @@ public class KcaService extends Service {
                 String api_url = jsonDataObj.get("api_url").getAsString();
                 String api_node = jsonDataObj.get("api_node").getAsString();
                 String api_error = jsonDataObj.get("api_error").getAsString();
-               showCustomToast(customToast, getStringWithLocale(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+                showCustomToast(customToast, getStringWithLocale(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_BATTLE, api_url, api_node, api_data, api_error);
             }
         } catch (JsonSyntaxException e) {
@@ -1775,7 +1794,7 @@ public class KcaService extends Service {
             makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
-           showCustomToast(customToast, getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            showCustomToast(customToast, getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
             dbHelper.recordErrorLog(ERROR_TYPE_NOTI, url, "notification", data, getStringFromException(e));
         }
     }
@@ -1783,6 +1802,10 @@ public class KcaService extends Service {
 
     private int getSeekCn() {
         return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
+    }
+
+    private int getExpeditionType() {
+        return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_EXP_TYPE));
     }
 
     private boolean isOpendbEnabled() {
@@ -2026,7 +2049,7 @@ public class KcaService extends Service {
                 setExpeditionAlarm(i, mission_no, deck_name, arrive_time, false, false, aIntent);
             }
         }
-        
+
     }
 
     private void cancelExpeditionInfo(JsonObject data) {
@@ -2113,7 +2136,7 @@ public class KcaService extends Service {
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (data == null) {
             KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
-           showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorPrimaryDark));
             Log.e("KCA", String.format("currentPortDeckData is null"));
             return false;
         } else {
@@ -2175,7 +2198,7 @@ public class KcaService extends Service {
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
         loadTranslationData(getAssets(), getApplicationContext());
 
-        
+
         super.onConfigurationChanged(newConfig);
     }
 }
