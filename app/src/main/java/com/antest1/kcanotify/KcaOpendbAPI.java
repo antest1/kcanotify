@@ -27,8 +27,8 @@ public class KcaOpendbAPI {
     public static final String TIMEOUT_CODE = "timeout";
     public static final String ERROR_CODE = "erroroccured";
 
-    public static final String REQ_EQUIP_DEV = "/opendb/report/equip_dev.php";
-    public static final String REQ_SHIP_DEV = "/opendb/report/ship_dev.php";
+    public static final String REQ_EQUIP_DEV = "/opendb/report/equip_build.php";
+    public static final String REQ_SHIP_DEV = "/opendb/report/ship_build.php";
     public static final String REQ_SHIP_DROP = "/opendb/report/ship_drop.php";
     public static final String REQ_EQUIP_REMODEL = "/opendb/report/equip_remodel.php";
 
