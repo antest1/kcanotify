@@ -336,6 +336,7 @@ public final class KcaConstants {
             PREF_KCA_SEEK_CN,
             PREF_OPENDB_API_USE,
             PREF_KCA_EXP_VIEW,
+            PREF_KCA_EXP_TYPE,
             PREF_KCA_BATTLEVIEW_USE,
             PREF_KCA_QUESTVIEW_USE,
             PREF_ACCESSIBILITY_SETTING,
