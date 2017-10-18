@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:clickable="false"
     android:orientation="vertical"
-    android:padding="4.0dip"
+    android:padding="4dp"
     android:visibility="visible">
 
     <LinearLayout
@@ -16,10 +16,10 @@
         android:alpha="0.9"
         android:background="@color/colorPrimaryDark"
         android:orientation="vertical"
-        android:paddingBottom="8.0dip"
-        android:paddingLeft="8.0dip"
-        android:paddingRight="8.0dip"
-        android:paddingTop="8.0dip">
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp">
 
         <LinearLayout
             android:id="@+id/excheckview_head"
@@ -32,17 +32,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="5.0dip"
+                android:layout_marginRight="5dp"
                 android:text="@string/excheckview_title"
                 android:textColor="@color/white"
-                android:textSize="20.0dip" />
+                android:textSize="20dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="8.0dip"
-                android:layout_marginRight="8.0dip"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:alwaysDrawnWithCache="true"
                 android:orientation="horizontal">
 
@@ -51,13 +51,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:layout_marginRight="8.0dip"
+                    android:layout_marginRight="8dp"
                     android:background="@color/colorPrimary"
                     android:gravity="top"
-                    android:paddingBottom="4.0dip"
-                    android:paddingLeft="8.0dip"
-                    android:paddingRight="8.0dip"
-                    android:paddingTop="4.0dip"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
                     android:text="\#2"
                     android:textColor="@color/white" />
 
@@ -66,13 +66,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:layout_marginRight="8.0dip"
+                    android:layout_marginRight="8dp"
                     android:background="@color/colorPrimary"
                     android:gravity="top"
-                    android:paddingBottom="4.0dip"
-                    android:paddingLeft="8.0dip"
-                    android:paddingRight="8.0dip"
-                    android:paddingTop="4.0dip"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
                     android:text="\#3"
                     android:textColor="@color/white" />
 
@@ -81,13 +81,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:layout_marginRight="8.0dip"
+                    android:layout_marginRight="8dp"
                     android:background="@color/colorPrimary"
                     android:gravity="top"
-                    android:paddingBottom="4.0dip"
-                    android:paddingLeft="8.0dip"
-                    android:paddingRight="8.0dip"
-                    android:paddingTop="4.0dip"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
                     android:text="\#4"
                     android:textColor="@color/white" />
             </LinearLayout>
@@ -101,10 +101,10 @@
 
             <ImageView
                 android:id="@+id/excheckview_exit"
-                android:layout_width="20.0dip"
+                android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10.0dip"
+                android:layout_marginLeft="10dp"
                 android:src="@mipmap/ic_cancel"
                 app:srcCompat="@mipmap/ic_cancel" />
         </LinearLayout>
@@ -112,14 +112,14 @@
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4.0dip"
-            android:layout_marginTop="2.0dip"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="2dp"
             android:layout_weight="1.0"
             android:background="@android:color/darker_gray"
-            android:paddingBottom="1.0dip"
-            android:paddingLeft="5.0dip"
-            android:paddingRight="5.0dip"
-            android:paddingTop="0.0dip"
+            android:paddingBottom="1dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="0dp"
             android:scaleType="fitXY"
             android:src="@android:drawable/divider_horizontal_bright" />
 
@@ -127,804 +127,814 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1.0"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <ScrollView
+            <TextView
+                android:id="@+id/excheck_info"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.0">
+                android:layout_marginBottom="2dp"
+                android:layout_weight="1.0"
+                android:background="@color/colorQuestTrackProgress"
+                android:ellipsize="marquee"
+                android:maxLines="1"
+                android:paddingBottom="2dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.0"
+                android:fadeScrollbars="false"
+                android:scrollbarAlwaysDrawHorizontalTrack="false"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarStyle="insideInset">
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/excheck_info"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2.0dip"
-                        android:background="@color/colorQuestTrackProgress"
-                        android:ellipsize="marquee"
-                        android:maxLines="1"
-                        android:paddingBottom="2.0dip"
-                        android:paddingLeft="8.0dip"
-                        android:paddingRight="8.0dip"
-                        android:paddingTop="2.0dip"
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textSize="14.0dip" />
-
                     <LinearLayout
                         android:id="@+id/excheck_row_1"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:layout_marginBottom="2.0dip"
-                        android:layout_marginTop="2.0dip"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
                         android:orientation="horizontal"
                         android:weightSum="8.0">
 
                         <TextView
                             android:id="@+id/expedition_btn_1"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="1"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_2"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="2"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_3"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="3"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_4"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="4"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_5"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="5"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_6"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="6"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_7"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="7"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_8"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="8"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/excheck_row_2"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:layout_marginBottom="2.0dip"
-                        android:layout_marginTop="2.0dip"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
                         android:orientation="horizontal"
                         android:weightSum="8.0">
 
                         <TextView
                             android:id="@+id/expedition_btn_9"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="9"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_10"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="10"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_11"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="11"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_12"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="12"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_13"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="13"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_14"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="14"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_15"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="15"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_16"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="16"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/excheck_row_3"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:layout_marginBottom="2.0dip"
-                        android:layout_marginTop="2.0dip"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
                         android:orientation="horizontal"
                         android:weightSum="8.0">
 
                         <TextView
                             android:id="@+id/expedition_btn_17"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="17"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_18"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="18"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_19"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="19"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_20"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="20"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_21"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="21"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_22"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="22"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_23"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="23"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_24"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="24"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/excheck_row_4"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:layout_marginBottom="2.0dip"
-                        android:layout_marginTop="2.0dip"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
                         android:orientation="horizontal"
                         android:weightSum="8.0">
 
                         <TextView
                             android:id="@+id/expedition_btn_25"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="25"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_26"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="26"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_27"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="27"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_28"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="28"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_29"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="29"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_30"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="30"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_31"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="31"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_32"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="32"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/excheck_row_5"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:layout_marginBottom="2.0dip"
-                        android:layout_marginTop="2.0dip"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
                         android:orientation="horizontal"
                         android:weightSum="8.0">
 
                         <TextView
                             android:id="@+id/expedition_btn_33"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="33"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_34"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="34"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_35"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="35"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_36"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="36"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_37"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="37"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_38"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="38"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_39"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="39"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_40"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:text="40"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/excheck_row_e"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:layout_marginBottom="2.0dip"
-                        android:layout_marginTop="2.0dip"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="2dp"
                         android:orientation="horizontal"
                         android:visibility="visible"
                         android:weightSum="8.0">
 
                         <TextView
-                            android:id="@+id/expedition_btn_133"
-                            android:layout_width="0.0dip"
+                            android:id="@+id/expedition_btn_100"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
+                            android:text="A1"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/expedition_btn_101"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_weight="1.0"
+                            android:background="@color/colorFleetInfoNoShip"
+                            android:padding="6dp"
+                            android:text="A2"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/expedition_btn_102"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_weight="1.0"
+                            android:background="@color/colorFleetInfoNoShip"
+                            android:padding="6dp"
+                            android:text="A3"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/expedition_btn_133"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_weight="1.0"
+                            android:background="@color/colorFleetInfoNoShip"
+                            android:padding="6dp"
+                            android:text="E1"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/expedition_btn_134"
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
+                            android:text="E2"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="18.0dip" />
+                            android:textSize="16dp" />
 
                         <TextView
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorExpeditionBtnGoodBack"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:textAlignment="center"
                             android:textColor="@color/colorExpeditionBtnGoodText"
-                            android:textSize="18.0dip"
+                            android:textSize="16dp"
                             android:visibility="invisible" />
 
                         <TextView
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorExpeditionBtnGoodBack"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:textAlignment="center"
                             android:textColor="@color/colorExpeditionBtnGoodText"
-                            android:textSize="18.0dip"
+                            android:textSize="16dp"
                             android:visibility="invisible" />
 
                         <TextView
-                            android:layout_width="0.0dip"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1.0"
                             android:background="@color/colorExpeditionBtnGoodBack"
-                            android:padding="6.0dip"
+                            android:padding="6dp"
                             android:textAlignment="center"
                             android:textColor="@color/colorExpeditionBtnGoodText"
-                            android:textSize="18.0dip"
-                            android:visibility="invisible" />
-
-                        <TextView
-                            android:layout_width="0.0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
-                            android:padding="6.0dip"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
-                            android:textSize="18.0dip"
-                            android:visibility="invisible" />
-
-                        <TextView
-                            android:layout_width="0.0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
-                            android:padding="6.0dip"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
-                            android:textSize="18.0dip"
-                            android:visibility="invisible" />
-
-                        <TextView
-                            android:layout_width="0.0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.0dip"
-                            android:layout_marginRight="4.0dip"
-                            android:layout_marginTop="4.0dip"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
-                            android:padding="6.0dip"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
-                            android:textSize="18.0dip"
+                            android:textSize="16dp"
                             android:visibility="invisible" />
                     </LinearLayout>
                 </LinearLayout>

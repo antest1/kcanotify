@@ -37,6 +37,7 @@ import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaExpedition2.getExpeditionHeader;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getTimeStr;
@@ -45,7 +46,9 @@ import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaExpeditionCheckViewService extends Service {
     public static final String SHOW_EXCHECKVIEW_ACTION = "show_excheckview";
-
+    final int[] expedition_list = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+            21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 35, 36, 37, 38, 39, 40,
+            100, 101, 102, 133, 134};
     public static final double[][] toku_bonus = {
             {2.0, 2.0, 2.0, 2.0, 2.0},
             {4.0, 4.0, 4.0, 4.0, 4.0},
@@ -86,9 +89,16 @@ public class KcaExpeditionCheckViewService extends Service {
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
-        localLayoutParams.x = ((int) (50.0F + paramMotionEvent.getRawX()));
-        if ((selected - 1) % 8 >= 4) localLayoutParams.x -= (100 + width);
+        localLayoutParams.x = ((int) (125.0F + paramMotionEvent.getRawX()));
         localLayoutParams.y = ((int) paramMotionEvent.getRawY());
+        if (selected >= 100) {
+            if (selected == 134) localLayoutParams.x -= (125 + width);
+            localLayoutParams.y -= (height + 25);
+        } else {
+            if ((selected - 1) % 8 >= 4) localLayoutParams.x -= (125 + width);
+            if (selected > 24) localLayoutParams.y -= (height + 25);
+        }
+
         localLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
         if (itemView.getParent() != null) {
             mManager.removeViewImmediate(itemView);
@@ -136,16 +146,8 @@ public class KcaExpeditionCheckViewService extends Service {
                 mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
             }
 
-            for (int i = 0; i < 40; i++) {
-                mView.findViewById(KcaUtils.getId("expedition_btn_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
-            }
-
-            if (KcaApiData.isEventTime) {
-                mView.findViewById(R.id.expedition_btn_133).setOnTouchListener(mViewTouchListener);
-                mView.findViewById(R.id.expedition_btn_134).setOnTouchListener(mViewTouchListener);
-                mView.findViewById(R.id.excheck_row_e).setVisibility(View.VISIBLE);
-            } else {
-                mView.findViewById(R.id.excheck_row_e).setVisibility(View.GONE);
+            for (int no: expedition_list) {
+                mView.findViewById(KcaUtils.getId("expedition_btn_".concat(String.valueOf(no)), R.id.class)).setOnTouchListener(mViewTouchListener);
             }
 
             itemView = mInflater.inflate(R.layout.view_excheck_detail, null);
@@ -496,7 +498,8 @@ public class KcaExpeditionCheckViewService extends Service {
     public void setItemViewLayout(JsonObject data) {
         String no = data.get("no").getAsString();
         String name = data.get("name").getAsString();
-        String title = String.format("[%s] %s", no, name);
+        int no_value = Integer.parseInt(no);
+        String title = getExpeditionHeader(no_value).concat(name);
         int time = data.get("time").getAsInt() * 60;
         int total_num = data.get("total-num").getAsInt();
 
@@ -618,7 +621,7 @@ public class KcaExpeditionCheckViewService extends Service {
                         ship_data.add(data);
                     }
                 }
-                for (int i = 1; i <= 40; i++) {
+                for (int i: expedition_list) {
                     String key = String.valueOf(i);
                     checkdata.put(key, checkCondition(i));
                     if (checkdata.get(key).get("pass").getAsBoolean()) {
@@ -633,18 +636,17 @@ public class KcaExpeditionCheckViewService extends Service {
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailText));
                     }
                 }
-                if (KcaApiData.isEventTime) {
-                    checkdata.put("133", checkCondition(133));
-                    checkdata.put("134", checkCondition(134));
-                }
                 updateSelectedView(selected);
 
                 JsonObject bonus_info = getBonus();
                 List<String> bonus_info_text = new ArrayList<>();
 
                 int drum_count = bonus_info.get("drum").getAsInt();
-                if (drum_count > 0)
+                if (drum_count > 0) {
                     bonus_info_text.add(String.format(getStringWithLocale(R.string.excheckview_bonus_drum), drum_count));
+                } else {
+                    bonus_info_text.add(String.format(getStringWithLocale(R.string.excheckview_bonus_drum), 0));
+                }
                 if (bonus_info.get("kinu").getAsBoolean())
                     bonus_info_text.add(getStringWithLocale(R.string.excheckview_bonus_kinu));
                 int daihatsu_count = bonus_info.get("daihatsu").getAsInt();
@@ -692,10 +694,10 @@ public class KcaExpeditionCheckViewService extends Service {
                     Log.e("KCA-FV", "ACTION_DOWN");
                     startClickTime = Calendar.getInstance().getTimeInMillis();
                     if (checkUserShipDataLoaded()) {
-                        for (int i = 0; i < 40; i++) {
-                            if (id == mView.findViewById(getId("expedition_btn_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
-                                setItemViewLayout(KcaApiData.getExpeditionInfo(i + 1, locale));
-                                showInfoView(event, i + 1);
+                        for (int no: expedition_list) {
+                            if (id == mView.findViewById(getId("expedition_btn_".concat(String.valueOf(no)), R.id.class)).getId()) {
+                                setItemViewLayout(KcaApiData.getExpeditionInfo(no, locale));
+                                showInfoView(event, no);
                                 break;
                             }
                         }

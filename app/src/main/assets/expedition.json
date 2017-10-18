@@ -530,6 +530,39 @@
 	"total-cond": "3-1|16-2|2-2",
 	"drum-num-optional": 4
 }, {
+	"no": "100",
+	"name": {
+		"ko": "병참강화임무",
+		"en": "Logistics Reinforcement Missions",
+		"jp": "兵站強化任務",
+		"scn": "后勤强化任务",
+		"tcn": "後勤強化任務"
+	},
+	"time": 25,
+	"total-num": 4
+}, {
+	"no": "101",
+	"name": {
+		"ko": "해협경비행동",
+		"en": "Strait Security Action",
+		"jp": "海峡警備行動",
+		"scn": "海峡警备行动",
+		"tcn": "海峽警備行動"
+	},
+	"time": 55,
+	"total-num": 4
+}, {
+	"no": "102",
+	"name": {
+		"ko": "장시간대잠경계",
+		"en": "Long Time Anti-Submarine Alert",
+		"jp": "長時間対潜警戒",
+		"scn": "长时间对潜警戒",
+		"tcn": "長時間對潛警戒"
+	},
+	"time": 135,
+	"total-num": 5
+}, {
 	"no": "133",
 	"name": {
 		"ko": "[E] 전방지원함대",
