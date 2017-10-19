@@ -34,31 +34,15 @@ public class KcaVpnData {
     private static final int REQUEST = 1;
     private static final int RESPONSE = 2;
 
-    private static String[] kcaServerList = {
-            "203.104.209.71",   // Yokosuka
-            "203.104.209.87",   // Kure
-            "125.6.184.16",     // Sasebo
-            "125.6.187.205",    // Maizuru
-            "125.6.187.229",    // Ominato
-            "125.6.187.253",    // Truk
-            "125.6.188.25",     // Ringga
-            "203.104.248.135",  // Rabaul
-            "125.6.189.7",      // Shortland
-            "125.6.189.39",     // Buin
-            "125.6.189.71",     // Tawi-Tawi
-            "125.6.189.103",    // Palau
-            "125.6.189.135",    // Brunei
-            "125.6.189.167",    // Hittokappuman
-            "125.6.189.215",    // Paramushir
-            "125.6.189.247",    // Sukumoman
-            "203.104.209.23",   // Kanoya
-            "203.104.209.39",   // Iwagawa
-            "203.104.209.55",   // Saikiman
-            "203.104.209.102",  // Hashirajima
-
-            "203.104.209.7"     // Kancolle Android Server
+    // Full Server List: http://kancolle.wikia.com/wiki/Servers
+    // 2017.10.18: Truk and Ringga Server was moved.
+    private static String[] kcaServerPrefixList = {
+            "203.104.209", // Yokosuka, Kure, Truk, Ringga, Kanoya, Iwagawa, Saikiman, Hashirajima, Android Server
+            "125.6.189", // Shortland, Buin, Tawi-Tawi, Palau, Brunel, Hittokappuman, Paramushir, Sukumoman
+            "125.6.187", // Maizuru, Ominato
+            "125.6.184", // Sasebo
+            "203.104.248"  // Rabaul
     };
-    private static List<String> kcaServers = new ArrayList<String>(Arrays.asList(kcaServerList));
     public static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public static int state = NONE;
@@ -91,13 +75,17 @@ public class KcaVpnData {
     private static int containsKcaServer(int type, byte[] source, byte[] target) {
         String saddrstr = new String(source);
         String taddrstr = new String(target);
-        if (type == REQUEST && !kcaServers.contains(taddrstr)) {
-            return 0;
-        } else if (type == RESPONSE && !kcaServers.contains(saddrstr)) {
-            return 0;
+        if (type == REQUEST) {
+            for (String prefix: kcaServerPrefixList) {
+                if (taddrstr.startsWith(prefix)) return 1;
+            }
+        } else if (type == RESPONSE) {
+            for (String prefix: kcaServerPrefixList) {
+                if (saddrstr.startsWith(prefix)) return 1;
+            }
         }
         //Log.e("KCAV", String.format("containsKcaServer[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
-        return 1;
+        return 0;
     }
 
     // Called from native code
