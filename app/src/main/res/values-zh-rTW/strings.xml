@@ -104,11 +104,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_init_title" formatted="false">%s 工作中</string>
     <string name="kca_init_content">請從Kcanotify內開啟遊戲</string>
 
-    <string name="kca_noti_title_exp_canceled" formatted="false">遠征 %d (%s) 中止。</string>
-    <string name="kca_noti_content_exp_canceled" formatted="false"> &lt;%s&gt; 從遠征%d召回。</string>
-    <string name="kca_noti_title_exp_finished" formatted="false">遠征 %d (%s) 完成。</string>
-    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; 從遠征%d歸還。</string>
-    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; 從遠征%d歸還（中止）。</string>
+    <string name="kca_noti_title_exp_canceled" formatted="false">遠征 %s (%s) 中止。</string>
+    <string name="kca_noti_content_exp_canceled" formatted="false"> &lt;%s&gt; 從遠征%s召回。</string>
+    <string name="kca_noti_title_exp_finished" formatted="false">遠征 %s (%s) 完成。</string>
+    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; 從遠征%s歸還。</string>
+    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; 從遠征%s歸還（中止）。</string>
 
     <string name="kca_noti_title_dock_finished" formatted="false">澡堂 %d: 入渠完成。</string>
     <string name="kca_noti_content_dock_finished" formatted="false">澡堂 %d: %s 已入渠。</string>

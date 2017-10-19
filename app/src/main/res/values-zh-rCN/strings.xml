@@ -104,11 +104,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_init_title" formatted="false">%s 工作中</string>
     <string name="kca_init_content">请从kcanotify打开游戏</string>
 
-    <string name="kca_noti_title_exp_canceled" formatted="false">远征 %d (%s) 中止</string>
-    <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt; 从远征%d召回</string>
-    <string name="kca_noti_title_exp_finished" formatted="false">远征 %d (%s) 结束</string>
-    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; 从远征%d回港</string>
-    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; 从远征%d回港(中止)</string>
+    <string name="kca_noti_title_exp_canceled" formatted="false">远征 %s (%s) 中止</string>
+    <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt; 从远征%s召回</string>
+    <string name="kca_noti_title_exp_finished" formatted="false">远征 %s (%s) 结束</string>
+    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; 从远征%s回港</string>
+    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; 从远征%s回港(中止)</string>
 
     <string name="kca_noti_title_dock_finished" formatted="false">澡堂 %d: 修复完成</string>
     <string name="kca_noti_content_dock_finished" formatted="false">澡堂 %d: %s 已修复</string>

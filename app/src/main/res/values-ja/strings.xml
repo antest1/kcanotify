@@ -96,11 +96,11 @@
     <string name="kca_init_title" formatted="false">%s 動作中</string>
     <string name="kca_init_content">Kcanotifyでゲームを実行してください</string>
 
-    <string name="kca_noti_title_exp_canceled" formatted="false">遠征 #%d (%s) キャンセル</string>
-    <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt;が遠征#%dから帰還します。</string>
-    <string name="kca_noti_title_exp_finished" formatted="false">遠征 #%d (%s) 完了</string>
-    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt;が遠征から復帰しました。</string>
-    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt;が遠征で指令によって帰還しました。</string>
+    <string name="kca_noti_title_exp_canceled" formatted="false">遠征#%s (%s) キャンセル</string>
+    <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt;が遠征#%sから帰還します。</string>
+    <string name="kca_noti_title_exp_finished" formatted="false">遠征#%s (%s) 完了</string>
+    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt;が遠征%sから復帰しました。</string>
+    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt;が遠征%sから復帰しました。(中止)</string>
 
     <string name="kca_noti_title_dock_finished" formatted="false">第%dドック整備完了</string>
     <string name="kca_noti_content_dock_finished" formatted="false">第%dドック：%sの整備が完了しました。</string>

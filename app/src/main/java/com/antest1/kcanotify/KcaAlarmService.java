@@ -159,7 +159,7 @@ public class KcaAlarmService extends Service {
                             String kantai_name = data.get("kantai_name").getAsString();
                             boolean cancelFlag = data.get("cancel_flag").getAsBoolean();
                             boolean caFlag = data.get("ca_flag").getAsBoolean();
-                            if (caFlag) idx = idx | EXP_CANCEL_FLAG;
+                            // if (caFlag) idx = idx | EXP_CANCEL_FLAG;
                             int nid = getNotificationId(NOTI_EXP, idx);
                             notificationManager.notify(nid, createExpeditionNotification(mission_no, mission_name, kantai_name, cancelFlag, caFlag, nid));
                             alarm_set.add(nid);
@@ -227,15 +227,16 @@ public class KcaAlarmService extends Service {
                 new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
         String title = "";
         String content = "";
+        String missionNoStr = KcaExpedition2.getExpeditionStr(missionNo);
         if (cancelFlag) {
-            title = String.format(getStringWithLocale(R.string.kca_noti_title_exp_canceled), missionNo, missionName);
-            content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_canceled), kantaiName, missionNo);
+            title = String.format(getStringWithLocale(R.string.kca_noti_title_exp_canceled), missionNoStr, missionName);
+            content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_canceled), kantaiName, missionNoStr);
         } else {
-            title = String.format(getStringWithLocale(R.string.kca_noti_title_exp_finished), missionNo, missionName);
+            title = String.format(getStringWithLocale(R.string.kca_noti_title_exp_finished), missionNoStr, missionName);
             if (caFlag)
-                content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_canceled), kantaiName, missionNo);
+                content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_canceled), kantaiName, missionNoStr);
             else
-                content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNo);
+                content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNoStr);
 
         }
 

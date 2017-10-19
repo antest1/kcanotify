@@ -96,11 +96,11 @@
     <string name="kca_init_title" formatted="false">%s 동작중</string>
     <string name="kca_init_content">깡들리티에서 게임을 실행해주세요</string>
 
-    <string name="kca_noti_title_exp_canceled" formatted="false">%d번 원정(%s) 취소</string>
-    <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt; 가 %d번 원정으로부터 귀환합니다.</string>
-    <string name="kca_noti_title_exp_finished" formatted="false">%d번 원정(%s) 도착</string>
-    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; 가 %d번 원정에서 복귀했습니다.</string>
-    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; 가 %d번 원정에서 명령에 의해 귀환하였습니다.</string>
+    <string name="kca_noti_title_exp_canceled" formatted="false">%s번 원정(%s) 취소</string>
+    <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt; 가 %s번 원정으로부터 귀환합니다.</string>
+    <string name="kca_noti_title_exp_finished" formatted="false">%s번 원정(%s) 도착</string>
+    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; 가 %s번 원정에서 복귀했습니다.</string>
+    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; 가 %s번 원정에서 복귀했습니다. (취소됨)</string>
 
     <string name="kca_noti_title_dock_finished" formatted="false">제%d도크 정비 완료</string>
     <string name="kca_noti_content_dock_finished" formatted="false">제%d도크: %s의 정비가 완료되었습니다.</string>
