@@ -50,7 +50,6 @@
         </activity>
         <activity
             android:name="com.antest1.kcanotify.AkashiDetailActivity"
-            android:noHistory="true"
             android:configChanges="locale|layoutDirection">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
