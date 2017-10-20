@@ -44,10 +44,9 @@ Demo
 - 임무 목록 (번역, 반복퀘스트 추적)
 - 개발/건조 정보 확인
 - 해역 HP 확인
+- 원정 조건 확인
 - 개수공창표 (일반/확정 정보 표시)
 - OpenDB에 데이터 전송 (선택 가능)
-
-자세한 내용은 [이 글](http://gall.dcinside.com/board/view/?id=kancolle&no=5357703)을 참고하세요. (Korean)
 
 지원 언어
 -------
@@ -61,6 +60,7 @@ Translations to other languages are welcomed. (please contact to developer to em
 Attribution
 -------
 - 이 프로젝트는 칸코레 어플리케이션의 데이터를 캡쳐하기 위해 [NetGuard](https://github.com/M66B/NetGuard/)의 소스를 일부 차용 및 수정하여 사용하고 있습니다. NetGuard의 라이선스는 [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt)이며 이에 따라서 시제 깡들리티 역시 해당 라이선스를 가집니다.
+- 아이콘, 요정 이미지 및 장비 이미지는 칸코레 내 게임 이미지를 사용하고 있으며, 저작권리자로부터의 정정 요청이 있을 시 즉시 조치하겠습니다.
 - 칸무스명 및 장비명, 퀘스트 번역 데이터는 [kc3-translations](https://github.com/KC3Kai/kc3-translations)의 데이터를 변형하여 사용하고 있습니다.
   - License for kc3-translations: The MIT License [Text](https://github.com/KC3Kai/kc3-translations/blob/master/LICENSE)
 - 해역 노드 정보는 [KC3Kai](https://github.com/KC3Kai/KC3Kai)의 데이터를 사용하고 있습니다. 
