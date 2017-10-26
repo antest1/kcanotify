@@ -320,7 +320,7 @@ public class KcaApiData {
     }
 
     public static boolean getReturnFlag(int mission_no) {
-        return !(mission_no == 33 || mission_no == 34 || mission_no > 130);
+        return !(mission_no == 33 || mission_no == 34 || (mission_no > 130));
     }
 
     public static String getShipTranslation(String jp_name, boolean abbr) {

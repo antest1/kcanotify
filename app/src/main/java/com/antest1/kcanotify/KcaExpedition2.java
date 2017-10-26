@@ -103,7 +103,8 @@ public class KcaExpedition2 {
     public static String getExpeditionStr(int mission_no_value) {
         String mission_no_str = "";
         if (mission_no_value >= 100) {
-            if ( mission_no_value < 110) mission_no_str = String.format("A%d", (mission_no_value + 1) % 100);
+            if ( mission_no_value < 110) mission_no_str = String.format("A%d", (mission_no_value + 1) - 100);
+            else if ( mission_no_value < 120) mission_no_str = String.format("B%d", (mission_no_value + 1) - 110);
             else if (mission_no_value % 2 == 1) mission_no_str = "E1";
             else mission_no_str = "E2";
         } else {
@@ -115,7 +116,7 @@ public class KcaExpedition2 {
     public static String getExpeditionHeader(int mission_no) {
         String mission_no_head = "";
         String mission_no_value = getExpeditionStr(mission_no);
-        if (mission_no_value.contains("A") || mission_no_value.contains("E")) {
+        if (mission_no_value.contains("A") || mission_no_value.contains("B") || mission_no_value.contains("E")) {
             mission_no_head = "[".concat(mission_no_value).concat("] ");
         } else {
             mission_no_head = String.format("[%02d] ", mission_no);
