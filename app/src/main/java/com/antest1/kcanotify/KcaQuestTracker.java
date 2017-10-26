@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -247,7 +248,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 .concat(" WHERE KEY=? AND ACTIVE=1"), new String[]{id});
         if (c.moveToFirst()) {
             ContentValues values = new ContentValues();
-            values.put("CND"+idx, c.getInt(c.getColumnIndex("CND"+idx)) + 1);
+            values.put("CND" + idx, c.getInt(c.getColumnIndex("CND" + idx)) + 1);
             db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{id});
         }
         c.close();
@@ -416,8 +417,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 case "218": // 보급3회
                 case "212": // 보급5회
                     int mult = 1;
-                    if(ap_dup_flag) mult = 2;
-                    updateTarget.addProperty(key, cond0 + apcount*mult);
+                    if (ap_dup_flag) mult = 2;
+                    updateTarget.addProperty(key, cond0 + apcount * mult);
                     break;
                 case "213": // 통상파괴
                 case "221": // 로호
@@ -608,6 +609,44 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 .concat(qt_table_name)
                 .concat(" WHERE ACTIVE=1 AND (KEY=212 OR KEY=218)"), null);
         if (c.moveToFirst()) result = true;
+        c.close();
+        return result;
+    }
+
+    public boolean check_quest_completed() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int count = 0;
+        boolean result = false;
+        Cursor c = db.rawQuery("SELECT * from "
+                .concat(qt_table_name)
+                .concat(" WHERE ACTIVE=1"), null);
+        while (c.moveToNext()) {
+            String key = c.getString(c.getColumnIndex("KEY"));
+            String cond0 = c.getString(c.getColumnIndex("CND0"));
+            String cond1 = c.getString(c.getColumnIndex("CND1"));
+            String cond2 = c.getString(c.getColumnIndex("CND2"));
+            String cond3 = c.getString(c.getColumnIndex("CND3"));
+            String time = c.getString(c.getColumnIndex("TIME"));
+            String[] cond_value = {cond0, cond1, cond2, cond3};
+            JsonObject questTrackInfo = KcaApiData.getQuestTrackInfo(key);
+            if (questTrackInfo != null) {
+                int counter = 0;
+                JsonArray cond = questTrackInfo.getAsJsonArray("cond");
+                int type = questTrackInfo.get("type").getAsInt();
+                for (int i = 0; i < cond.size(); i++) {
+                    if(cond_value[i].equals(cond.get(i).getAsString())) {
+                        if (!checkQuestValid(type, Integer.parseInt(key), time)) {
+                            db.delete(qt_table_name, "KEY=?", new String[]{String.valueOf(id)});
+                        } else {
+                            counter += 1;
+                        }
+                    }
+                }
+                if (counter == cond.size()) {
+                    result = true;
+                }
+            }
+        }
         c.close();
         return result;
     }

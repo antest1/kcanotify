@@ -48,7 +48,7 @@ public class KcaExpeditionCheckViewService extends Service {
     public static final String SHOW_EXCHECKVIEW_ACTION = "show_excheckview";
     final int[] expedition_list = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
             21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 35, 36, 37, 38, 39, 40,
-            100, 101, 102, 133, 134};
+            100, 101, 102, 110, 133, 134};
     public static final double[][] toku_bonus = {
             {2.0, 2.0, 2.0, 2.0, 2.0},
             {4.0, 4.0, 4.0, 4.0, 4.0},
@@ -265,6 +265,8 @@ public class KcaExpeditionCheckViewService extends Service {
         boolean has_drum_ship = data.has("drum-ship");
         boolean has_drum_num = data.has("drum-num");
         boolean has_drum_num_optional = data.has("drum-num-optional");
+        boolean has_total_asw = data.has("total-asw");
+        boolean has_total_los = data.has("total-los");
 
         int total_num = data.get("total-num").getAsInt();
         result.addProperty("total-num", ship_data.size() >= total_num);
@@ -350,12 +352,34 @@ public class KcaExpeditionCheckViewService extends Service {
             total_pass = total_pass && (drum_num_value >= drum_num);
         }
 
+        result.addProperty("total-asw", true);
+        if (has_total_asw) {
+            int total_asw_value = 0;
+            for (JsonObject obj : ship_data) {
+                total_asw_value += obj.get("taisen").getAsInt();
+            }
+            int total_asw = data.get("total-asw").getAsInt();
+            result.addProperty("total-asw", total_asw_value >= total_asw);
+            total_pass = total_pass && (total_asw_value >= total_asw);
+        }
+
+        result.addProperty("total-los", true);
+        if (has_total_los) {
+            int total_los_value = 0;
+            for (JsonObject obj : ship_data) {
+                total_los_value += obj.get("sakuteki").getAsInt();
+            }
+            int total_los = data.get("total-los").getAsInt();
+            result.addProperty("total-los", total_los_value >= total_los);
+            total_pass = total_pass && (total_los_value >= total_los);
+        }
+
         result.addProperty("pass", total_pass);
         return result;
     }
 
     // Drum: 75, Daihatsu: 68, 89Tank: 166, Amp: 167, Toku-Daihatsu: 193
-    private JsonObject getBonus() {
+    private JsonObject getBonusInfo() {
         double bonus = 0.0;
         boolean kinu_exist = false;
         int drum_count = 0;
@@ -365,6 +389,9 @@ public class KcaExpeditionCheckViewService extends Service {
         int amp_count = 0;
         int toku_count = 0;
         double bonus_level = 0.0;
+
+        int total_asw = 0;
+        int total_los = 0;
         JsonObject result = new JsonObject();
 
         for (JsonObject obj : ship_data) {
@@ -372,6 +399,8 @@ public class KcaExpeditionCheckViewService extends Service {
                 bonus += 5.0;
                 kinu_exist = true;
             }
+            total_asw += obj.get("taisen").getAsInt();
+            total_los += obj.get("sakuteki").getAsInt();
             for (JsonElement itemobj : obj.getAsJsonArray("item")) {
                 int slotitem_id = itemobj.getAsJsonObject().get("slotitem_id").getAsInt();
                 int level = itemobj.getAsJsonObject().get("level").getAsInt();
@@ -426,6 +455,8 @@ public class KcaExpeditionCheckViewService extends Service {
         result.addProperty("amp", amp_count);
         result.addProperty("toku", toku_count);
         result.addProperty("bonus", bonus);
+        result.addProperty("asw", total_asw);
+        result.addProperty("los", total_los);
         return result;
     }
 
@@ -514,6 +545,8 @@ public class KcaExpeditionCheckViewService extends Service {
         boolean has_drum_num = data.has("drum-num");
         boolean has_drum_num_optional = data.has("drum-num-optional");
         boolean has_drum_info = has_drum_ship || has_drum_num || has_drum_num_optional;
+        boolean has_total_asw = data.has("total-asw");
+        boolean has_total_los = data.has("total-los");
 
         ((LinearLayout) itemView.findViewById(R.id.view_excheck_fleet_condition)).removeAllViews();
 
@@ -589,6 +622,24 @@ public class KcaExpeditionCheckViewService extends Service {
                         check.get("drum-num").getAsBoolean(), true);
             }
         }
+
+        setItemViewVisibilityById(R.id.view_excheck_asw, has_total_asw);
+        if (has_total_asw) {
+            int total_asw = data.get("total-asw").getAsInt();
+            setItemTextViewById(R.id.view_excheck_total_asw,
+                    String.format(getStringWithLocale(R.string.excheckview_total_asw_format), total_asw));
+            setItemTextViewColorById(R.id.view_excheck_total_asw,
+                    check.get("total-asw").getAsBoolean(), true);
+        }
+
+        setItemViewVisibilityById(R.id.view_excheck_los, has_total_los);
+        if (has_total_los) {
+            int total_los = data.get("total-los").getAsInt();
+            setItemTextViewById(R.id.view_excheck_total_los,
+                    String.format(getStringWithLocale(R.string.excheckview_total_los_format), total_los));
+            setItemTextViewColorById(R.id.view_excheck_total_los,
+                    check.get("total-los").getAsBoolean(), true);
+        }
         itemView.setVisibility(View.VISIBLE);
     }
 
@@ -602,14 +653,15 @@ public class KcaExpeditionCheckViewService extends Service {
                     int id = api_ship.get(i).getAsInt();
                     if (id > 0) {
                         JsonObject data = new JsonObject();
-                        JsonObject usershipinfo = getUserShipDataById(id, "ship_id,lv,slot,cond");
+                        JsonObject usershipinfo = getUserShipDataById(id, "ship_id,lv,slot,cond,taisen,sakuteki");
                         JsonObject kcshipinfo = getKcShipDataById(usershipinfo.get("ship_id").getAsInt(), "stype");
                         data.addProperty("ship_id", usershipinfo.get("ship_id").getAsInt());
                         data.addProperty("lv", usershipinfo.get("lv").getAsInt());
                         data.addProperty("cond", usershipinfo.get("cond").getAsInt());
                         data.addProperty("stype", kcshipinfo.get("stype").getAsInt());
+                        data.addProperty("taisen", usershipinfo.getAsJsonArray("taisen").get(0).getAsInt());
+                        data.addProperty("sakuteki", usershipinfo.getAsJsonArray("sakuteki").get(0).getAsInt());
                         data.add("item", new JsonArray());
-
                         JsonArray shipslot = usershipinfo.getAsJsonArray("slot");
                         for (int j = 0; j < shipslot.size(); j++) {
                             int itemid = shipslot.get(j).getAsInt();
@@ -638,8 +690,14 @@ public class KcaExpeditionCheckViewService extends Service {
                 }
                 updateSelectedView(selected);
 
-                JsonObject bonus_info = getBonus();
+                JsonObject bonus_info = getBonusInfo();
                 List<String> bonus_info_text = new ArrayList<>();
+
+                int total_asw = bonus_info.get("asw").getAsInt();
+                bonus_info_text.add(String.format(getStringWithLocale(R.string.excheckview_bonus_asw), total_asw));
+
+                int total_los = bonus_info.get("los").getAsInt();
+                bonus_info_text.add(String.format(getStringWithLocale(R.string.excheckview_bonus_los), total_los));
 
                 int drum_count = bonus_info.get("drum").getAsInt();
                 if (drum_count > 0) {

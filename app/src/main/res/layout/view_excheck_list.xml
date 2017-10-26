@@ -866,6 +866,21 @@
                             android:textSize="16dp" />
 
                         <TextView
+                            android:id="@+id/expedition_btn_110"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_weight="1.0"
+                            android:background="@color/colorFleetInfoNoShip"
+                            android:padding="6dp"
+                            android:text="B1"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+
+                        <TextView
                             android:id="@+id/expedition_btn_133"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -894,20 +909,6 @@
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorExpeditionBtnGoodBack"
-                            android:padding="6dp"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorExpeditionBtnGoodText"
-                            android:textSize="16dp"
-                            android:visibility="invisible" />
 
                         <TextView
                             android:layout_width="0dp"

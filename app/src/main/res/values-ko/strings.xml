@@ -358,11 +358,17 @@
     <string name="excheckview_flag_info">기함</string>
     <string name="excheckview_total_info">편성</string>
     <string name="excheckview_drum_info">드럼통</string>
+    <string name="excheckview_asw_info">대잠</string>
+    <string name="excheckview_los_info">색적</string>
     <string name="excheckview_flag_lv_format" formatted="false">레벨 %d+</string>
     <string name="excheckview_total_num_format" formatted="false">최저 %d척</string>
     <string name="excheckview_total_lv_format" formatted="false">레벨 합계 %d+</string>
     <string name="excheckview_drum_ship_format" formatted="false">%d척 이상</string>
     <string name="excheckview_drum_num_format" formatted="false">합계 %d＋</string>
+    <string name="excheckview_total_asw_format" formatted="false">합계 %d＋</string>
+    <string name="excheckview_total_los_format" formatted="false">합계 %d＋</string>
+    <string name="excheckview_bonus_asw" formatted="false">대잠: %d</string>
+    <string name="excheckview_bonus_los" formatted="false">색적: %d</string>
     <string name="excheckview_bonus_kinu">키누改2</string>
     <string name="excheckview_bonus_drum" formatted="false">드럼통: %d</string>
     <string name="excheckview_bonus_dlc" formatted="false">대발: %d</string>

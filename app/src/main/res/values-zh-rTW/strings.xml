@@ -364,11 +364,17 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_flag_info">旗艦</string>
     <string name="excheckview_total_info">編成</string>
     <string name="excheckview_drum_info">運輸桶</string>
+    <string name="excheckview_asw_info">對潛</string>
+    <string name="excheckview_los_info">索敵</string>
     <string name="excheckview_flag_lv_format" formatted="false">等級：%d+</string>
     <string name="excheckview_total_num_format" formatted="false">最低數：%d</string>
     <string name="excheckview_total_lv_format" formatted="false">總等級：%d+</string>
     <string name="excheckview_drum_ship_format" formatted="false">至少%d個艦娘</string>
     <string name="excheckview_drum_num_format" formatted="false">%d個以上</string>
+    <string name="excheckview_total_asw_format" formatted="false">總合：%d＋</string>
+    <string name="excheckview_total_los_format" formatted="false">總合：%d＋</string>
+    <string name="excheckview_bonus_asw" formatted="false">對潛：%d</string>
+    <string name="excheckview_bonus_los" formatted="false">索敵：%d</string>
     <string name="excheckview_bonus_kinu">鬼怒改二</string>
     <string name="excheckview_bonus_drum" formatted="false">運輸桶：%d</string>
     <string name="excheckview_bonus_dlc" formatted="false">大發：%d</string>

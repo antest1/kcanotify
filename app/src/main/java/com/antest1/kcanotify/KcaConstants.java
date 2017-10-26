@@ -192,6 +192,7 @@ public final class KcaConstants {
     public static final String KCA_API_NOTI_GOBACKPORT = "/kca_api/noti_gobackport";
     public static final String KCA_API_NOTI_BATTLE_DROPINFO = "/kca_api/noti_battle_dropinfo";
     public static final String KCA_API_NOTI_DOCK_FIN = "/kca_api/noti_dock_fin";
+    public static final String KCA_API_NOTI_QUEST_STAT = "/kca_api/noti_quest_stat";
     public static final String KCA_API_PREF_CN_CHANGED = "/kca_api/pref_cn_changed";
     public static final String KCA_API_PREF_EXPVIEW_CHANGED = "/kca_api/pref_expview_changed";
     public static final String KCA_API_PREF_FAIRY_CHANGED = "/kca_api/pref_fairy_changed";
@@ -204,6 +205,8 @@ public final class KcaConstants {
     public static final String KCA_MSG_BATTLE_INFO = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_INFO";
     public static final String KCA_MSG_BATTLE_HDMG = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_HDMG";
     public static final String KCA_MSG_QUEST_LIST = "com.antest1.kcanotify.KcaService.KCA_MSG_QUEST_LIST";
+    public static final String KCA_MSG_QUEST_COMPLETE = "com.antest1.kcanotify.KcaViewButtonService.KCA_MSG_QUEST_COMPLETE";
+
     public static final String KCA_MSG_BATTLE_VIEW_REFRESH = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_VIEW_REFRESH";
     public static final String KCA_MSG_BATTLE_VIEW_HDMG = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_VIEW_HDMG";
     public static final String KCA_MSG_QUEST_VIEW_LIST = "com.antest1.kcanotify.KcaService.KCA_MSG_QUEST_VIEW_LIST";

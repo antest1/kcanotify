@@ -421,11 +421,17 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_flag_info">Flagship</string>
     <string name="excheckview_total_info">Fleet</string>
     <string name="excheckview_drum_info">Drum</string>
+    <string name="excheckview_asw_info">ASW</string>
+    <string name="excheckview_los_info">LoS</string>
     <string name="excheckview_flag_lv_format" formatted="false">Lv %d+</string>
     <string name="excheckview_total_num_format" formatted="false">Total %d+</string>
     <string name="excheckview_total_lv_format" formatted="false">Lv Sum %d+</string>
     <string name="excheckview_drum_ship_format" formatted="false">%d+ Ships</string>
     <string name="excheckview_drum_num_format" formatted="false">%d+ Drums</string>
+    <string name="excheckview_total_asw_format" formatted="false">Total %d+</string>
+    <string name="excheckview_total_los_format" formatted="false">Total %d+</string>
+    <string name="excheckview_bonus_asw" formatted="false">ASW: %d</string>
+    <string name="excheckview_bonus_los" formatted="false">LoS: %d</string>
     <string name="excheckview_bonus_kinu">Kinu Kai Ni</string>
     <string name="excheckview_bonus_drum" formatted="false">Drum: %d</string>
     <string name="excheckview_bonus_dlc" formatted="false">DLC: %d</string>

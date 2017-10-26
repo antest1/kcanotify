@@ -584,6 +584,7 @@ public class KcaService extends Service {
                     startService(new Intent(this, KcaViewButtonService.class));
                     startService(new Intent(this, KcaQuestViewService.class));
                     startService(new Intent(this, KcaAkashiViewService.class));
+                    sendQuestCompletionInfo();
                 }
                 return;
                 //Toast.makeText(contextWithLocale, getPreferences("kca_version") + " " + String.valueOf(api_start2_down_mode), Toast.LENGTH_LONG).show();
@@ -611,7 +612,6 @@ public class KcaService extends Service {
                         setPreferences(getApplicationContext(), "kca_version", kca_version);
                     }
                 }
-                return;
             }
 
             if (url.startsWith(API_GET_MEMBER_REQUIRED_INFO)) {
@@ -635,7 +635,6 @@ public class KcaService extends Service {
                     }
                     */
                 }
-                return;
             }
 
             if (url.startsWith(API_GET_MEMBER_USEITEM)) {
@@ -650,7 +649,6 @@ public class KcaService extends Service {
                     dbHelper.putValue(DB_KEY_DECKPORT, jsonDataObj.getAsJsonArray("api_data").toString());
                     processExpeditionInfo();
                 }
-                return;
             }
 
             if (url.startsWith(API_REQ_MISSION_RESULT)) {
@@ -701,13 +699,11 @@ public class KcaService extends Service {
                     JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
                     processDockingInfo(api_data);
                 }
-                return;
             }
 
             if (url.startsWith(API_REQ_NYUKYO_START)) {
                 questTracker.updateIdCountTracker("503");
                 updateQuestView();
-                return;
             }
 
             if (url.startsWith(API_REQ_NYUKYO_SPEEDCHAGNE)) {
@@ -721,13 +717,11 @@ public class KcaService extends Service {
                     }
                 }
                 if (ndock_id != -1) processDockingSpeedup(ndock_id);
-                return;
             }
 
             if (url.startsWith(API_REQ_HOKYU_CHARGE)) {
                 questTracker.updateIdCountTracker("504");
                 updateQuestView();
-                return;
             }
 
             if (url.startsWith(API_PORT)) {
@@ -1081,7 +1075,6 @@ public class KcaService extends Service {
                         JsonObject reqGetMemberDeckApiData = jsonDataObj.getAsJsonObject("api_data");
                         cancelExpeditionInfo(reqGetMemberDeckApiData);
                     }
-                    return;
                 }
 
                 if (url.startsWith(API_REQ_MEMBER_GET_PRACTICE_ENEMYINFO)) {
@@ -1531,7 +1524,7 @@ public class KcaService extends Service {
                     }
                 }
             }
-
+            sendQuestCompletionInfo();
             if (url.equals(KCA_API_VPN_DATA_ERROR)) { // VPN Data Dump Send
                 String api_url = jsonDataObj.get("uri").getAsString();
                 String api_request = jsonDataObj.get("request").getAsString();
@@ -1555,7 +1548,6 @@ public class KcaService extends Service {
                 showCustomToast(customToast, getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_VPN, api_url, api_request, api_response, api_error);
             }
-
         } catch (JsonSyntaxException e) {
             //Log.e("KCA", "ParseError");
             //Log.e("KCA", data);
@@ -1586,6 +1578,14 @@ public class KcaService extends Service {
         }
     }
 
+    private void sendQuestCompletionInfo() {
+        boolean quest_completed_exist = questTracker.check_quest_completed();
+        Intent intent = new Intent(KCA_MSG_QUEST_COMPLETE);
+        String response = "0";
+        if (quest_completed_exist) response = "1";
+        intent.putExtra(KCA_MSG_DATA, response);
+        broadcaster.sendBroadcast(intent);
+    }
 
     private static class kcaNotificationHandler extends Handler {
         private final WeakReference<KcaService> mService;
