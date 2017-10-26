@@ -56,7 +56,7 @@ public class KcaAlarmService extends Service {
     public static final int TYPE_UPDATE = 3;
 
     public static final String ALARM_CHANNEL_ID = "noti_alarm_channel";
-    public static final String ALARM_CHANNEL_NAME = "Notification";
+    public static final String ALARM_CHANNEL_NAME = "Kcanotify Notification";
 
     public static final int EXP_CANCEL_FLAG = 8;
     public static final long ALARM_DELAY = 61000;
@@ -106,12 +106,12 @@ public class KcaAlarmService extends Service {
         expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
         dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        createAlarmChannel();
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        createAlarmChannel();
         Log.e("KCA", "KcaAlarmService Called: " + String.valueOf(startId));
         if (intent != null && intent.getAction() != null) {
             String action = intent.getAction();
@@ -213,7 +213,7 @@ public class KcaAlarmService extends Service {
     private void createAlarmChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(ALARM_CHANNEL_ID,
-                    ALARM_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+                    getStringWithLocale(R.string.notification_appinfo_title), NotificationManager.IMPORTANCE_DEFAULT);
             channel.enableVibration(true);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
             notificationManager.createNotificationChannel(channel);
@@ -373,7 +373,7 @@ public class KcaAlarmService extends Service {
         String content = version;
 
         Bitmap updateBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, getId("ic_update_" + String.valueOf(type), R.mipmap.class))).getBitmap();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
+        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_stat_notify_1)
                 .setLargeIcon(updateBitmap)
                 .setContentTitle(title)

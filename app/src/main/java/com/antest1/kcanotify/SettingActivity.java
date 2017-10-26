@@ -19,7 +19,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
@@ -46,6 +48,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static android.R.attr.category;
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -60,6 +63,9 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_MOVETOAPPINFO;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
@@ -213,6 +219,28 @@ public class SettingActivity extends AppCompatActivity {
                             return true;
                         }
                     });
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (key.equals(PREF_KCA_NOTI_SOUND_KIND) || key.equals(PREF_KCA_NOTI_RINGTONE)) {
+                        PreferenceCategory category = (PreferenceCategory) findPreference("pref_noti_category");
+                        category.removePreference(findPreference(key));
+                    } else if (key.equals(PREF_KCA_NOTI_MOVETOAPPINFO)) {
+                        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                            @Override
+                            public boolean onPreferenceClick(Preference preference) {
+                                Intent i = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                i.setData(Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+                                startActivity(i);
+                                return false;
+                            }
+                        });
+                    }
+                } else {
+                    if (key.equals(PREF_KCA_NOTI_MOVETOAPPINFO)) {
+                        PreferenceCategory category = (PreferenceCategory) findPreference("pref_noti_category");
+                        category.removePreference(findPreference(key));
+                    }
                 }
 
                 if (pref instanceof RingtonePreference) {

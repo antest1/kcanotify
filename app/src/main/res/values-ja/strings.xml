@@ -5,7 +5,7 @@
     <string name="app_name">Kcanotify</string>
     <string name="action_settings">設定</string>
     <string name="backpress_msg">もう一度押すとアプリが終了します</string>
-
+    <string name="notification_appinfo_title">Kcanotify通知</string>
     <string name="accessibility_service_description">Kcanotifyが艦これの動作を検出するためには、この権限が設定されている。\n艦これが実行されているかどうかを検査する目的のほか、他の目的には使用されません。\nこの権限を設定しなくても大丈夫ですが、この場合妖精さんをゲーム画面外で非表示するためには長く押して隠してください。</string>
 
     <!-- Link Information, Do Not Translate Here -->
@@ -155,6 +155,8 @@
     <string name="setting_menu_view_title_questview_use">任務情報を使う</string>
 
     <string name="setting_menu_noti_head">通知設定</string>
+    <string name="setting_menu_noti_title_movetoappinfo">アプリ情報に移動</string>
+    <string name="setting_menu_noti_desc_movetoappinfo">Android 8.0+</string>
     <string name="setting_menu_noti_title_exp">遠征通知</string>
     <string name="setting_menu_noti_desc_exp">遠征完了のときに上部に通知する</string>
     <string name="setting_menu_noti_title_dock">入渠通知</string>

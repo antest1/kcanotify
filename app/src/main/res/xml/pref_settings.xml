@@ -3,7 +3,7 @@
     <PreferenceCategory android:title="@string/setting_menu_kand_head">
         <ListPreference
             android:id="@+id/language_value"
-            android:defaultValue="ko"
+            android:defaultValue="@string/default_locale"
             android:entries="@array/languageOption"
             android:entryValues="@array/languageOptionValue"
             android:key="kca_language"
@@ -133,7 +133,16 @@
             android:title="@string/setting_menu_view_title_fullmorale_setting" />
         -->
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/setting_menu_noti_head">
+    <PreferenceCategory
+        android:key="pref_noti_category"
+        android:title="@string/setting_menu_noti_head">
+        <Preference
+            android:defaultValue=""
+            android:key="noti_movetoappinfo"
+            android:summary="@string/setting_menu_noti_desc_movetoappinfo"
+            android:title="@string/setting_menu_noti_title_movetoappinfo">
+        </Preference>
+
         <ListPreference
             android:defaultValue="@string/sound_kind_value_vibrate"
             android:entries="@array/soundOption"

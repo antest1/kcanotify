@@ -5,7 +5,7 @@
     <string name="app_name">시제 깡들리티</string>
     <string name="action_settings">깡들리티 설정</string>
     <string name="backpress_msg">\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.</string>
-
+    <string name="notification_appinfo_title">깡들리티 알림</string>
     <string name="accessibility_service_description">깡들리티가 칸코레가 실행 중인지를 감지하기 위해서는 해당 권한이 설정되어 있어야 합니다.\n칸코레가 실행되고 있는지를 검사하는 목적 외에 다른 목적으로는 사용되지 않습니다.\n해당 권한을 설정하지 않을 수도 있으며, 이 경우 요정님을 숨기기 위해서는 길게 눌러서 비활성화하여야 합니다.</string>
 
     <!-- Link Information, Do Not Translate Here -->
@@ -155,6 +155,8 @@
     <string name="setting_menu_view_title_questview_use">임무번역 사용</string>
 
     <string name="setting_menu_noti_head">알림 설정</string>
+    <string name="setting_menu_noti_title_movetoappinfo">[어플리케이션 정보]로 이동</string>
+    <string name="setting_menu_noti_desc_movetoappinfo">Android 8.0 이상</string>
     <string name="setting_menu_noti_title_exp">원정 알림</string>
     <string name="setting_menu_noti_desc_exp">원정 도착 시 상단 알림 설정</string>
     <string name="setting_menu_noti_title_dock">입거 알림</string>

@@ -13,7 +13,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_name">Kcanotify</string>
     <string name="action_settings">设置</string>
     <string name="backpress_msg">再按一次后退键退出应用程序</string>
-
+    <string name="notification_appinfo_title">Kcanotify通知</string>
     <string name="accessibility_service_description">This permission allows kcanotify to detect whether kancolle is on the screen.\nIt only check whether kancolle is on the screen or not.\nYou can disallow this permission and hide the fairy manually by touching it long time.</string>
 
     <!-- Common Text -->
@@ -171,6 +171,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_view_desc_questview_use">显示任务内容和翻译</string>
 
     <string name="setting_menu_noti_head">通知设置</string>
+    <string name="setting_menu_noti_title_movetoappinfo">移动到应用程序信息</string>
+    <string name="setting_menu_noti_desc_movetoappinfo">Android 8.0+</string>
     <string name="setting_menu_noti_title_exp">远征</string>
     <string name="setting_menu_noti_desc_exp">远征结束时通知栏提示</string>
     <string name="setting_menu_noti_title_dock">入渠</string>

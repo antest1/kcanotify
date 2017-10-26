@@ -328,6 +328,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_DATA_VERSION = "kca_data_version";
     public static final String PREF_FAIRY_NOTI_LONGCLICK = "notify_fairy_longclick";
     public static final String PREF_DISABLE_CUSTOMTOAST = "disable_customtoast";
+    public static final String PREF_KCA_NOTI_MOVETOAPPINFO = "noti_movetoappinfo";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -358,7 +359,9 @@ public final class KcaConstants {
             PREF_VPN_BYPASS_ADDRESS,
             PREF_FULLMORALE_SETTING,
             PREF_KCA_DATA_VERSION,
-            PREF_FAIRY_NOTI_LONGCLICK
+            PREF_FAIRY_NOTI_LONGCLICK,
+            PREF_DISABLE_CUSTOMTOAST,
+            PREF_KCA_NOTI_MOVETOAPPINFO
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);
