@@ -594,6 +594,7 @@ public class KcaApiData {
                     return data.get("api_count").getAsInt();
                 }
             }
+            return 0;
         }
         return -1;
     }
@@ -610,6 +611,12 @@ public class KcaApiData {
                     return;
                 }
             }
+            // if not exist, add new item
+            JsonObject data = new JsonObject();
+            data.addProperty("api_id", id);
+            data.addProperty("api_count", 1);
+            kcUseitemData.add(data);
+            helper.putValue(DB_KEY_USEITEMS, kcUseitemData.toString());
         }
     }
 
