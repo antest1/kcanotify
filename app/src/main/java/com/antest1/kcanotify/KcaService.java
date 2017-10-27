@@ -64,6 +64,7 @@ import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
 import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
+import static com.antest1.kcanotify.KcaApiData.getExpeditionNoByName;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
@@ -673,18 +674,35 @@ public class KcaService extends Service {
                         questTracker.updateIdCountTracker("404");
 
                         String api_name = api_data.get("api_quest_name").getAsString();
-                        if (api_name.equals("\u8b66\u5099\u4efb\u52d9")) { // 경계임무 (3)
-                            questTracker.updateIdCountTracker("426", 0);
-                        } else if (api_name.equals("\u5bfe\u6f5c\u8b66\u6212\u4efb\u52d9")) { // 대잠경계임무 (4)
-                            questTracker.updateIdCountTracker("426", 1);
-                        } else if (api_name.equals("\u6d77\u4e0a\u8b77\u885b\u4efb\u52d9")) { // 해상호위 (5)
-                            questTracker.updateIdCountTracker("424");
-                            questTracker.updateIdCountTracker("426", 2);
-                        } else if (api_name.equals("\u5f37\u884c\u5075\u5bdf\u4efb\u52d9")) { // 강행정찰임무 (10)
-                            questTracker.updateIdCountTracker("426", 3);
-                        } else if (api_name.contains("\u6771\u4eac\u6025\u884c")) { // 도쿄급행 (37, 38)
-                            questTracker.updateIdCountTracker("410");
-                            questTracker.updateIdCountTracker("411");
+                        int api_no = KcaApiData.getExpeditionNoByName(api_name);
+                        switch (api_no) {
+                            case 3: // 경계임무 (3)
+                                questTracker.updateIdCountTracker("426", 0);
+                                break;
+                            case 4: // 대잠경계임무 (4)
+                                questTracker.updateIdCountTracker("426", 1);
+                                questTracker.updateIdCountTracker("428", 0);
+                                break;
+                            case 5: // 해상호위 (5)
+                                questTracker.updateIdCountTracker("424");
+                                questTracker.updateIdCountTracker("426", 2);
+                                break;
+                            case 10: // 강행정찰임무 (10)
+                                questTracker.updateIdCountTracker("426", 3);
+                                break;
+                            case 37: // 도쿄급행 (37, 38)
+                            case 38:
+                                questTracker.updateIdCountTracker("410");
+                                questTracker.updateIdCountTracker("411");
+                                break;
+                            case 101: // 해협경계 (A2)
+                                questTracker.updateIdCountTracker("428", 1);
+                                break;
+                            case 102: // 장시간대잠 (A3)
+                                questTracker.updateIdCountTracker("428", 2);
+                                break;
+                            default:
+                                break;
                         }
                         updateQuestView();
                     }

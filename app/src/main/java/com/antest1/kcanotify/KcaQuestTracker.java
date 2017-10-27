@@ -51,7 +51,7 @@ import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTTRACK;
 public class KcaQuestTracker extends SQLiteOpenHelper {
     private static final String qt_db_name = "quest_track_db";
     private static final String qt_table_name = "quest_track_table";
-    private final int[] quarterly_quest_id = {426, 637, 643, 822, 852, 861, 862};
+    private final int[] quarterly_quest_id = {426, 428, 637, 643, 822, 852, 861, 862};
     private static boolean ap_dup_flag = false;
 
     public void setApDupFlag() {
@@ -194,7 +194,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     }
                     break;
                 case 5: // Quarterly, Else
-                    if (Arrays.binarySearch(quarterly_quest_id, id) >= 0) { // Bq1 ~ Bq4, D24, F35, F39 (Quarterly)
+                    if (Arrays.binarySearch(quarterly_quest_id, id) >= 0) { // Bq1 ~ Bq4, D24, D26, F35, F39 (Quarterly)
                         int quest_month = Integer.parseInt(quest_time[1]);
                         int quest_quarter = quest_month - quest_month % 3;
                         int current_month = Integer.parseInt(current_time[1]);
@@ -231,6 +231,10 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             info.add(c.getInt(c.getColumnIndex("CND0")));
             if (id.equals("214") || id.equals("426") || id.equals("854")) {
                 for (int i = 1; i < 4; i++) {
+                    info.add(c.getInt(c.getColumnIndex("CND".concat(String.valueOf(i)))));
+                }
+            } else if (id.equals("428")) {
+                for (int i = 1; i < 3; i++) {
                     info.add(c.getInt(c.getColumnIndex("CND".concat(String.valueOf(i)))));
                 }
             }
@@ -321,7 +325,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             if (entryValue.isJsonArray()) {
                 JsonArray entryValueArray = entryValue.getAsJsonArray();
                 ContentValues values = new ContentValues();
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < entryValueArray.size(); i++) {
                     values.put("CND".concat(String.valueOf(i)), String.valueOf(entryValueArray.get(i)));
                 }
                 db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{entryKey});
@@ -584,7 +588,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             if (entryValue.isJsonArray()) {
                 JsonArray entryValueArray = entryValue.getAsJsonArray();
                 ContentValues values = new ContentValues();
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < entryValueArray.size(); i++) {
                     values.put("CND".concat(String.valueOf(i)), String.valueOf(entryValueArray.get(i)));
                 }
                 db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{entryKey});

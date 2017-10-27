@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.IntentCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -672,6 +673,18 @@ public class KcaApiData {
         } else {
             return name.get("en").getAsString();
         }
+    }
+
+    // warning: event support expedition will not work with this
+    public static int getExpeditionNoByName(String name) {
+        for(Map.Entry<String, JsonElement> v: kcExpeditionData.entrySet()) {
+            JsonObject data = v.getValue().getAsJsonObject();
+            String exp_name = data.getAsJsonObject("name").get("jp").getAsString();
+            if (exp_name.equals(name)) {
+                return Integer.parseInt(v.getKey());
+            }
+        }
+        return -1;
     }
 
     public static int getPortData(JsonObject api_data) {
