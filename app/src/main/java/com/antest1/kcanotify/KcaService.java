@@ -1084,6 +1084,13 @@ public class KcaService extends Service {
                     }
                 }
 
+                if (url.startsWith(API_REQ_HOKYU_CHARGE)) {
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                        KcaApiData.updateSuppliedUserShip(api_data.getAsJsonArray("api_ship"));
+                    }
+                }
+
                 if (isCurrentPortDeckDataReady()) {
                     if (url.startsWith(API_REQ_KOUSYOU_CREATEITEM)) {
                         String[] requestData = request.split("&");

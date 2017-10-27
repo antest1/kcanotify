@@ -166,7 +166,6 @@ public class KcaViewButtonService extends Service {
                         ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(),
                                 R.color.colorHeavyDmgStateWarn), PorterDuff.Mode.MULTIPLY);
                     } else {
-                        taiha_status = false;
                         ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().clearColorFilter();
                     }
                     Log.e("KCA", "KCA_MSG_BATTLE_HDMG Received");
@@ -290,6 +289,7 @@ public class KcaViewButtonService extends Service {
                 battleviewEnabled = true;
             }
             if (intent.getAction().equals(DEACTIVATE_BATTLEVIEW_ACTION)) {
+                taiha_status = false;
                 battleviewEnabled = false;
             }
             if (intent.getAction().equals(ACTIVATE_QUESTVIEW_ACTION)) {
