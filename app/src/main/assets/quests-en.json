@@ -515,6 +515,19 @@
 		"memo": "\u27a3Rewards: \u27a3First choice: Either a F6F-3 OR a F4U-1D \u27a3Second choice: Either a TBF OR a New Model Aviation Armament Materials",
 		"unlock": [ 864 ]
 	},
+	"186": {
+		"code": "A81",
+		"name": "Form the Supreme 8th Destroyer Division!",
+		"desc": "Have ONLY Arashio Kai Ni, Asashio Kai Ni (or D), Michishio Kai Ni, and Ooshio Kai Ni in your fleet.",
+		"memo": "\u27a3Rewards a Combat Ration and an Irako",
+		"unlock": [ 871 ]
+	},
+	"187": {
+		"code": "A82",
+		"name": "Nishimura Fleet, 2nd Division Escort Force, Assemble!",
+		"desc": "Have Mogami, Asagumo, Michishio, Shigure and Yamagumo in Fleet 3. Press F10 to clear the overlay.",
+		"memo": "\u27a3Rewards either 2 Irako OR a Furniture Fairy OR a New Model Artillery Armament Materials"
+	},
 	
 	"202": {
 		"code": "B1",
@@ -1220,14 +1233,14 @@
 		"code": "SB23",
 		"name": "Saury Fishing: I'm Going to Secure the Saury Harvest!",
 		"desc": "Have 4 Sauries in your inventory.",
-		"memo": "\u27a3Rewards:\n\u00B6First choice: Either a Furniture Fairy OR 4 Screws\n\u00B6Second choice: Either a Type 3 Active Sonar OR a Searchlight OR 4 Combat Rations",
+		"memo": "\u27a3Rewards: \u00B6First choice: Either a Furniture Fairy OR 4 Screws \u00B6Second choice: Either a Type 3 Active Sonar OR a Searchlight OR 4 Combat Rations",
 		"unlock": [ 867 ]
 	},
 	"867": {
 		"code": "SB24",
 		"name": "Saury Fishing: I'm Ready to Go All-Out Supporting the Fishing!",
 		"desc": "Have 12 Sauries in your inventory.",
-		"memo": "\u27a3Rewards:\n\u00B6First choice: Either a Daihatsu Landing Craft OR a WG42 (Wurfgerät 42) OR a New Model Aviation Armament Materials\n\u00B6Second choice: Either 2 Swordfish OR 2 Shiden Kai Ni OR a Skilled Crew Member",
+		"memo": "\u27a3Rewards: \u00B6First choice: Either a Daihatsu Landing Craft OR a WG42 (Wurfgerät 42) OR a New Model Aviation Armament Materials \u00B6Second choice: Either 2 Swordfish OR 2 Shiden Kai Ni OR a Skilled Crew Member",
 		"unlock": [ 868 ]
 	},
 	"868": {
@@ -1235,6 +1248,26 @@
 		"name": "Saury Fishing: Boooom! I'm Fired Up for the Big Catch!",
 		"desc": "Have 30 Sauries in your inventory.",
 		"memo": "\u27a3Rewards furniture and either a Type124 ASDIC OR a TBF OR an Agano-class fishing banner"
+	},
+	"869": {
+		"code": "B107",
+		"name": "Secure the Safety of the Supply Lines!",
+		"desc": "Sortie a CL as flagship, 2 DD/DE and up to 3 other ships to [W1-3], [W1-4] and [W1-5]. A-Rank+ the boss nodes of each.",
+		"memo": "\u27a3Rewards an Underway Replenishment and an Irako",
+		"unlock": [ 427 ]
+	},
+	"870": {
+		"code": "B108",
+		"name": "8th Destroyer Division, to the Southwest!",
+		"desc": "Sortie Arashio, Asashio, Ooshio, Michishio and up to 2 other ships to [W1-2] and [W2-2]. S-Rank the boss nodes of each.",
+		"memo": "\u27a3Rewards a Mamiya",
+		"unlock": [ 186, 429 ]
+	},
+	"871": {
+		"code": "B109",
+		"name": "Supreme 8th Destroyer Division, Sortie With All Your Might!",
+		"desc": "Sortie Arashio Kai Ni, Asashio Kai Ni (or D), Ooshio Kai Ni, Michishio Kai Ni and up to 2 other ships to [W3-2] and [W5-4]. S-Rank the boss nodes of each.",
+		"memo": "\u27a3Rewards 4 Screws and either a 12.7cm Twin Gun Mount Model C Kai Ni OR a Daihatsu Landing Craft OR a Type 22 Surface Radar"
 	},
 
 	"201": {
@@ -1695,6 +1728,27 @@
         "name": "Quarterly Expeditions",
         "desc": "Complete Expeditions 3, 4, 5 and 10."
     },
+	"427": {
+		"code": "D25",
+		"name": "Strengthen the Expeditionary Resupply Logistics!",
+		"desc": "Have 800 Steel. Complete Expedition A1.",
+		"memo": "\u27a3Unlocks Provisional Resupply for Expeditions. This enables resupplying expeditions from the expedition page. \u27a3Rewards 2 Combat Rations",
+		"unlock": [ 428 ]
+	},
+	"428": {
+		"code": "D26",
+		"name": "Suppress the Enemy Submarine Incursions into Coastal Waters!",
+		"desc": "Complete Expeditions 4, A2 and A3. Clear each of them twice.",
+		"memo": "\u27a3Rewards 3 Screws and a Type 95 Depth Charge",
+		"tracking": [ [0,2], [0,2], [0,2] ]
+	},
+	"429": {
+		"code": "D27",
+		"name": "Operation Sho-Go: Begin Preparations!",
+		"desc": "Complete Expeditions 3, A1 and B1.",
+		"memo": "\u27a3Rewards 2 Underway Replenishments",
+		"unlock": [ 187 ]
+	},
 
 	"501": {
 		"code": "E1",
