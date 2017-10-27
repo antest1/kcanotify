@@ -914,10 +914,11 @@ public class KcaApiData {
             if (item.has("api_id")) {
                 int shipId = item.get("api_id").getAsInt();
                 JsonObject data = userShipData.get(shipId);
-                data.addProperty("api_fuel", data.get("api_fuel").getAsInt());
-                data.addProperty("api_bull", data.get("api_bull").getAsInt());
-                data.add("api_onslot", data.get("api_onslot"));
+                data.addProperty("api_fuel", item.get("api_fuel").getAsInt());
+                data.addProperty("api_bull", item.get("api_bull").getAsInt());
+                data.add("api_onslot", item.get("api_onslot"));
                 userShipData.put(shipId, data);
+                helper.recordErrorLog(ERROR_TYPE_SERVICE, "updateSuppliedUserShip", "", "", userShipData.get(shipId).toString());
             }
         }
     }
