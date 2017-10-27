@@ -1578,15 +1578,6 @@ public class KcaService extends Service {
         }
     }
 
-    private void sendQuestCompletionInfo() {
-        boolean quest_completed_exist = questTracker.check_quest_completed();
-        Intent intent = new Intent(KCA_MSG_QUEST_COMPLETE);
-        String response = "0";
-        if (quest_completed_exist) response = "1";
-        intent.putExtra(KCA_MSG_DATA, response);
-        broadcaster.sendBroadcast(intent);
-    }
-
     private static class kcaNotificationHandler extends Handler {
         private final WeakReference<KcaService> mService;
 
@@ -1790,6 +1781,8 @@ public class KcaService extends Service {
                 showCustomToast(customToast, getStringWithLocale(R.string.process_battle_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_BATTLE, api_url, api_node, api_data, api_error);
             }
+
+            sendQuestCompletionInfo();
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
             makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
@@ -1800,6 +1793,14 @@ public class KcaService extends Service {
         }
     }
 
+    private void sendQuestCompletionInfo() {
+        boolean quest_completed_exist = questTracker.check_quest_completed(dbHelper);
+        Intent intent = new Intent(KCA_MSG_QUEST_COMPLETE);
+        String response = "0";
+        if (quest_completed_exist) response = "1";
+        intent.putExtra(KCA_MSG_DATA, response);
+        broadcaster.sendBroadcast(intent);
+    }
 
     private int getSeekCn() {
         return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));

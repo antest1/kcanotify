@@ -45,6 +45,8 @@ import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
 import static com.antest1.kcanotify.KcaApiData.kcShipData;
 import static com.antest1.kcanotify.KcaConstants.API_REQ_MAP_START;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTTRACK;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTTRACK;
 
 public class KcaQuestTracker extends SQLiteOpenHelper {
     private static final String qt_db_name = "quest_track_db";
@@ -613,7 +615,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         return result;
     }
 
-    public boolean check_quest_completed() {
+    public boolean check_quest_completed(KcaDBHelper helper) {
         SQLiteDatabase db = this.getReadableDatabase();
         int count = 0;
         boolean result = false;
@@ -634,7 +636,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 JsonArray cond = questTrackInfo.getAsJsonArray("cond");
                 int type = questTrackInfo.get("type").getAsInt();
                 for (int i = 0; i < cond.size(); i++) {
-                    if(cond_value[i].equals(cond.get(i).getAsString())) {
+                    if(Integer.parseInt(cond_value[i]) >= Integer.parseInt(cond.get(i).getAsString())) {
                         if (!checkQuestValid(type, Integer.parseInt(key), time)) {
                             db.delete(qt_table_name, "KEY=?", new String[]{String.valueOf(id)});
                         } else {
