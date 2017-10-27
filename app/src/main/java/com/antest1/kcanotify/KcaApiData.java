@@ -918,7 +918,6 @@ public class KcaApiData {
                 data.addProperty("api_bull", item.get("api_bull").getAsInt());
                 data.add("api_onslot", item.get("api_onslot"));
                 userShipData.put(shipId, data);
-                helper.recordErrorLog(ERROR_TYPE_SERVICE, "updateSuppliedUserShip", "", "", userShipData.get(shipId).toString());
             }
         }
     }
