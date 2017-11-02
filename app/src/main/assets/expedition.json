@@ -580,6 +580,7 @@
 		"tcn": "南西方面航空偵察作戰"
 	},
 	"time": 35,
+	"flag-lv": 40,
 	"total-num": 6,
 	"total-cond": "16-1|3-1|2-2",
 	"total-los": 140
