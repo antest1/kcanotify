@@ -40,8 +40,10 @@ import com.google.gson.JsonObject;
 import java.util.Arrays;
 import java.util.Calendar;
 
+import static android.R.attr.orientation;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLEINFO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLENODE;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_FAIRYLOC;
 import static com.antest1.kcanotify.KcaConstants.FAIRY_REVERSE_LIST;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_HDMG;
@@ -56,6 +58,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
+import static com.antest1.kcanotify.KcaUtils.getOrientationPrefix;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
@@ -231,7 +234,7 @@ public class KcaViewButtonService extends Service {
             display.getSize(size);
             screenWidth = size.x;
             screenHeight = size.y;
-            Log.e("KCA", "w/h: "+String.valueOf(screenWidth) + " "  +String.valueOf(screenHeight));
+            Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
 
             mParams.y = screenHeight - buttonHeight;
             mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -258,13 +261,13 @@ public class KcaViewButtonService extends Service {
                 if (mView != null) mView.setVisibility(View.GONE);
             }
             if (intent.getAction().equals(FAIRY_VISIBLE) || intent.getAction().equals(RETURN_FAIRY_ACTION)) {
-                if(mView != null) {
+                if (mView != null) {
                     mView.setVisibility(View.VISIBLE);
                     recentVisibility = View.VISIBLE;
                 }
             }
             if (intent.getAction().equals(FAIRY_INVISIBLE)) {
-                if(mView != null) {
+                if (mView != null) {
                     mView.setVisibility(View.GONE);
                     recentVisibility = View.GONE;
                 }
@@ -346,7 +349,7 @@ public class KcaViewButtonService extends Service {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlenode_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlehdmg_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(questcmpl_receiver);
-        if(mManager != null) mManager.removeView(mView);
+        if (mManager != null) mManager.removeView(mView);
         super.onDestroy();
     }
 
@@ -401,9 +404,21 @@ public class KcaViewButtonService extends Service {
                         int yy = locations[1];
                         Log.e("KCA", String.format("Coord: %d %d", xx, yy));
                         if (mParams.x < 0) mParams.x = 0;
-                        else if (mParams.x > screenWidth - buttonWidth) mParams.x = screenWidth - buttonWidth;
+                        else if (mParams.x > screenWidth - buttonWidth)
+                            mParams.x = screenWidth - buttonWidth;
                         if (mParams.y < 0) mParams.y = 0;
-                        else if (mParams.y > screenHeight - buttonHeight) mParams.y = screenHeight - buttonHeight;
+                        else if (mParams.y > screenHeight - buttonHeight)
+                            mParams.y = screenHeight - buttonHeight;
+
+                        JsonObject locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
+                        String ori_prefix = getOrientationPrefix(getResources().getConfiguration().orientation);
+                        if (locdata != null && locdata.toString().length() > 0) {
+                            locdata.addProperty(ori_prefix.concat("x"), mParams.x);
+                            locdata.addProperty(ori_prefix.concat("y"), mParams.y);
+                        } else {
+                            locdata = new JsonObject();
+                        }
+                        dbHelper.putValue(DB_KEY_FAIRYLOC, locdata.toString());
                         break;
 
                     case MotionEvent.ACTION_MOVE:
@@ -412,6 +427,10 @@ public class KcaViewButtonService extends Service {
 
                         mParams.x = mViewX + x;
                         mParams.y = mViewY + y;
+                        if (mParams.x < 0) mParams.x = 0;
+                        else if (mParams.x > screenWidth - buttonWidth) mParams.x = screenWidth - buttonWidth;
+                        if (mParams.y < 0) mParams.y = 0;
+                        else if (mParams.y > screenHeight - buttonWidth) mParams.y = screenHeight - buttonWidth;
                         mManager.updateViewLayout(mView, mParams);
                         if (Math.abs(x) > 20 || Math.abs(y) > 20) {
                             Log.e("KCA", "Callback Canceled");
@@ -461,22 +480,42 @@ public class KcaViewButtonService extends Service {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        String ori_prefix = getOrientationPrefix(newConfig.orientation);
         Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
-        Log.e("KCA", "w/h: "+String.valueOf(screenWidth) + " "  +String.valueOf(screenHeight));
+        Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
 
-        int totalWidth = buttonWidth;
-        int totalHeight = buttonHeight;
+        JsonObject locdata = null;
+        if (dbHelper != null) locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
 
-        if (mParams != null) {
-            if (mParams.x < 0) mParams.x = 0;
-            else if (mParams.x > screenWidth - totalWidth) mParams.x = screenWidth - totalWidth;
-            if (mParams.y < 0) mParams.y = 0;
-            else if (mParams.y > screenHeight - totalHeight) mParams.y = screenHeight - totalHeight;
+        if (locdata != null && locdata.toString().length() > 0) {
+            if (locdata.has(ori_prefix.concat("x"))) {
+                mParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
+            }
+            if (locdata.has(ori_prefix.concat("y"))) {
+                mParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
+            }
         }
+
+        if (mManager != null && mParams != null) {
+            if (mParams.x < 0) mParams.x = 0;
+            else if (mParams.x > screenWidth - buttonWidth) mParams.x = screenWidth - buttonWidth;
+            if (mParams.y < 0) mParams.y = 0;
+            else if (mParams.y > screenHeight - buttonHeight) mParams.y = screenHeight - buttonHeight;
+            mManager.updateViewLayout(mView, mParams);
+        }
+
+
+        if (locdata != null && locdata.toString().length() > 0) {
+            locdata.addProperty(ori_prefix.concat("x"), mParams.x);
+            locdata.addProperty(ori_prefix.concat("y"), mParams.y);
+        } else {
+            locdata = new JsonObject();
+        }
+        dbHelper.putValue(DB_KEY_FAIRYLOC, locdata.toString());
 
         super.onConfigurationChanged(newConfig);
     }

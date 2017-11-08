@@ -26,6 +26,7 @@ public final class KcaConstants {
     public static final String DB_KEY_EXPTDAY = "key_exptday";
     public static final String DB_KEY_EXPCRNT = "key_expcrnt";
     public static final String DB_KEY_EXPTIME = "key_exptime";
+    public static final String DB_KEY_FAIRYLOC = "key_fairyloc";
 
     public static final String ERROR_TYPE_SERVICE = "S";
     public static final String ERROR_TYPE_BATTLE = "B";

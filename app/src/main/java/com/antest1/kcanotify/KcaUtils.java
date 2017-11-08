@@ -44,6 +44,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import static android.R.attr.orientation;
 import static com.antest1.kcanotify.KcaAlarmService.ALARM_CHANNEL_ID;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
@@ -346,6 +347,14 @@ public class KcaUtils {
             v.vibrate(VibrationEffect.createOneShot(time, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
             v.vibrate(time);
+        }
+    }
+
+    public static String getOrientationPrefix(int value) {
+        if (value == Configuration.ORIENTATION_PORTRAIT) {
+            return "ori_v_";
+        } else {
+            return "ori_h_";
         }
     }
 }
