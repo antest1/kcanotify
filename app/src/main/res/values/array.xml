@@ -62,6 +62,21 @@
         <item>@string/app_download_link_baidu</item>
     </string-array>
 
+    <string-array name="downloadSiteOptionWithoutPlayStore" translatable="false">
+        <item>@string/app_download_link_googledrive_label</item>
+        <item>@string/app_download_link_box_label</item>
+        <item>@string/app_download_link_mega_label</item>
+        <item>@string/app_download_link_baidu_label</item>
+    </string-array>
+
+    <string-array name="downloadSiteOptionWithoutPlayStoreValue" translatable="false">
+        <item>@string/app_download_link_googledrive</item>
+        <item>@string/app_download_link_box</item>
+        <item>@string/app_download_link_mega</item>
+        <item>@string/app_download_link_baidu</item>
+    </string-array>
+
+
     <string-array name="expeditionTypeOption">
         <item>@string/expedition_type_value_0</item>
         <item>@string/expedition_type_value_1</item>

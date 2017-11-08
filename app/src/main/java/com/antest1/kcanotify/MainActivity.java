@@ -8,7 +8,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -44,6 +46,7 @@ import android.widget.ToggleButton;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -214,16 +217,34 @@ public class MainActivity extends AppCompatActivity {
         textWarn = findViewById(R.id.textMainWarn);
         textUpdate = findViewById(R.id.textMainUpdate);
         textDataUpdate = findViewById(R.id.textMainDataUpdate);
-
         textWarn.setVisibility(View.GONE);
         textUpdate.setVisibility(View.GONE);
         textUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String downloadUrl = getStringPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE);
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                } else if (downloadUrl.contains(getString(R.string.app_download_link_playstore))) {
+                    Toast.makeText(getApplicationContext(), "Google Play Store not found", Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder apkDownloadPathDialog = new AlertDialog.Builder(MainActivity.this);
+                    apkDownloadPathDialog.setIcon(R.mipmap.ic_launcher);
+                    apkDownloadPathDialog.setTitle(getStringWithLocale(R.string.setting_menu_app_title_down));
+                    apkDownloadPathDialog.setCancelable(true);
+                    apkDownloadPathDialog.setItems(R.array.downloadSiteOptionWithoutPlayStore, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String[] path_value = getResources().getStringArray(R.array.downloadSiteOptionWithoutPlayStoreValue);
+                            KcaUtils.setPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE, path_value[i]);
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(path_value[i]));
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                    });
+                    apkDownloadPathDialog.show();
+                }
             }
         });
         textDataUpdate.setVisibility(View.GONE);
