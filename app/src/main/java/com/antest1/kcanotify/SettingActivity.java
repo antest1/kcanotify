@@ -434,9 +434,28 @@ public class SettingActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         String downloadUrl = getStringPreferences(context, PREF_APK_DOWNLOAD_SITE);
-                                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
-                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        context.startActivity(i);
+                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        if (intent.resolveActivity(context.getPackageManager()) != null) {
+                                            context.startActivity(intent);
+                                        } else if (downloadUrl.contains(getStringWithLocale(R.string.app_download_link_playstore))) {
+                                            Toast.makeText(context, "Google Play Store not found", Toast.LENGTH_LONG).show();
+                                            AlertDialog.Builder apkDownloadPathDialog = new AlertDialog.Builder(activity);
+                                            apkDownloadPathDialog.setIcon(R.mipmap.ic_launcher);
+                                            apkDownloadPathDialog.setTitle(getStringWithLocale(R.string.setting_menu_app_title_down));
+                                            apkDownloadPathDialog.setCancelable(true);
+                                            apkDownloadPathDialog.setItems(R.array.downloadSiteOptionWithoutPlayStore, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    String[] path_value = context.getResources().getStringArray(R.array.downloadSiteOptionWithoutPlayStoreValue);
+                                                    KcaUtils.setPreferences(context, PREF_APK_DOWNLOAD_SITE, path_value[i]);
+                                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(path_value[i]));
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    context.startActivity(intent);
+                                                }
+                                            });
+                                            apkDownloadPathDialog.show();
+                                        }
                                     }
                                 });
                         alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
