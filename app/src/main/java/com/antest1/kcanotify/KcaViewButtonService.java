@@ -55,6 +55,7 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_COMPLETE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_QUEST_FAIRY_GLOW;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
@@ -321,12 +322,13 @@ public class KcaViewButtonService extends Service {
     private final int glowColor2 = Color.rgb(230, 249, 255);
 
     private void setFairyImage() {
+        boolean glow_available = fairy_glow_on && getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_QUEST_FAIRY_GLOW);
         Bitmap src = BitmapFactory.decodeResource(getResources(), viewBitmapId);
         Bitmap alpha = src.extractAlpha();
         Bitmap bmp = Bitmap.createBitmap(src.getWidth() + margin,
                 src.getHeight() + margin, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bmp);
-        if (fairy_glow_on) {
+        if (glow_available) {
             Paint glow_paint = new Paint();
             glow_paint.setColor(glowColor);
             glow_paint.setMaskFilter(new BlurMaskFilter(glowRadius, BlurMaskFilter.Blur.OUTER));
@@ -336,7 +338,7 @@ public class KcaViewButtonService extends Service {
         if (taiha_status) {
             color_paint.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(getApplicationContext(),
                     R.color.colorHeavyDmgStateWarn), PorterDuff.Mode.MULTIPLY));
-        } else if (fairy_glow_on) {
+        } else if (glow_available) {
             color_paint.setColorFilter(new PorterDuffColorFilter(glowColor2, PorterDuff.Mode.MULTIPLY));
         }
         canvas.drawBitmap(src, halfMargin, halfMargin, color_paint);

@@ -167,6 +167,8 @@
     <string name="setting_menu_noti_desc_nspl_vib">보급 미완료 함대가 있을 시 소리/진동 알림 여부 설정 (토스트는 항상 활성)</string>
     <string name="setting_menu_noti_title_fairy_vib">요정 숨김 시 진동</string>
     <string name="setting_menu_noti_desc_fairy_vib">요정을 길게 눌러 숨길 때 진동 여부 설정</string>
+    <string name="setting_menu_noti_title_fairy_glow">요정을 통한 임무 완료 알림</string>
+    <string name="setting_menu_noti_desc_fairy_glow">추적중인 퀘스트가 완료되었을 때 요정이 반짝반짝 빛남</string>
     <string name="setting_menu_noti_title_disable_customtoast">커스텀 토스트 비활성화</string>
     <string name="setting_menu_noti_desc_disable_customtoast">마스 정보나 대파알림이 표시되지 않을 때 설정</string>
 

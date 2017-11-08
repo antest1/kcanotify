@@ -167,6 +167,8 @@
     <string name="setting_menu_noti_desc_nspl_vib">補給していない艦隊がある場合に音/バイブで通知する (トーストは常に発生)</string>
     <string name="setting_menu_noti_title_fairy_vib">妖精非表示通知</string>
     <string name="setting_menu_noti_desc_fairy_vib">妖精を長押し隠すときにバイブで通知する</string>
+    <string name="setting_menu_noti_title_fairy_glow">妖精を通じた任務完了の通知</string>
+    <string name="setting_menu_noti_desc_fairy_glow">追跡中の任務を完了したときに妖精がキラキラ輝く</string>
     <string name="setting_menu_noti_title_disable_customtoast">カスタムトースト無効化</string>
     <string name="setting_menu_noti_desc_disable_customtoast">マス情報や大破通知が表示されないときに有効にしてください。</string>
 

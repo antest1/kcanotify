@@ -185,6 +185,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_nspl_vib">於艦娘未補給時響鈴/震動（會彈出通知）</string>
     <string name="setting_menu_noti_title_fairy_vib">妖精按鈕隱藏時振動</string>
     <string name="setting_menu_noti_desc_fairy_vib">設置長按妖精按鈕時是否振動</string>
+    <string name="setting_menu_noti_title_fairy_glow">任務完成時通過妖精通知</string>
+    <string name="setting_menu_noti_desc_fairy_glow">追蹤任務完成時妖精將閃耀光芒</string>
     <string name="setting_menu_noti_title_disable_customtoast">禁用自定義吐司</string>
     <string name="setting_menu_noti_desc_disable_customtoast">當羅盤劇透或大破警告不顯示時設置</string>
 

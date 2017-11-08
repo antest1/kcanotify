@@ -390,6 +390,7 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_KCA_NOTI_V_NS:
                     case PREF_SHOWDROP_SETTING:
                     case PREF_FAIRY_NOTI_LONGCLICK:
+                    case PREF_KCA_NOTI_QUEST_FAIRY_GLOW:
                         editor.putBoolean(prefKey, true);
                         break;
                     case PREF_KCA_SET_PRIORITY:
