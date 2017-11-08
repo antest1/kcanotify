@@ -15,6 +15,7 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -163,11 +164,10 @@ public class KcaViewButtonService extends Service {
                     String s = intent.getStringExtra(KCA_MSG_DATA);
                     if (s.contains("1")) {
                         taiha_status = true;
-                        ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                                R.color.colorHeavyDmgStateWarn), PorterDuff.Mode.MULTIPLY);
                     } else {
-                        ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().clearColorFilter();
+                        taiha_status = false;
                     }
+                    setFairyImage();
                     Log.e("KCA", "KCA_MSG_BATTLE_HDMG Received");
                 }
             };
@@ -206,7 +206,7 @@ public class KcaViewButtonService extends Service {
             String fairyPath = "noti_icon_".concat(fairyIdValue);
             viewBitmapId = getId(fairyPath, R.mipmap.class);
             viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
-            setFairyGlow();
+            setFairyImage();
 
             int index = Arrays.binarySearch(FAIRY_REVERSE_LIST, Integer.parseInt(fairyIdValue));
             if (index >= 0) viewbutton.setScaleX(-1.0f);
@@ -274,13 +274,14 @@ public class KcaViewButtonService extends Service {
                 String fairyPath = "noti_icon_".concat(fairyIdValue);
                 viewBitmapId = getId(fairyPath, R.mipmap.class);
                 viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
-                setFairyGlow();
+                setFairyImage();
                 int index = Arrays.binarySearch(FAIRY_REVERSE_LIST, Integer.parseInt(fairyIdValue));
                 if (index >= 0) viewbutton.setScaleX(-1.0f);
                 else viewbutton.setScaleX(1.0f);
             }
             if (intent.getAction().equals(RESET_FAIRY_STATUS_ACTION)) {
-                ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().clearColorFilter();
+                taiha_status = false;
+                setFairyImage();
             }
             if (intent.getAction().equals(ACTIVATE_BATTLEVIEW_ACTION)) {
                 Intent qintent = new Intent(getBaseContext(), KcaFleetViewService.class);
@@ -310,29 +311,33 @@ public class KcaViewButtonService extends Service {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE);
     }
 
-    private void setFairyGlow() {
-        int margin = 14;
-        int halfMargin = margin / 2;
-        int glowRadius = 20;
-        int glowColor = Color.rgb(0, 192, 255);
-        int glowColor2 = Color.rgb(230, 249, 255);
+    private final int margin = 14;
+    private final int halfMargin = margin / 2;
+    private final int glowRadius = 20;
+    private final int glowColor = Color.rgb(0, 192, 255);
+    private final int glowColor2 = Color.rgb(230, 249, 255);
 
+    private void setFairyImage() {
         Bitmap src = BitmapFactory.decodeResource(getResources(), viewBitmapId);
         Bitmap alpha = src.extractAlpha();
         Bitmap bmp = Bitmap.createBitmap(src.getWidth() + margin,
                 src.getHeight() + margin, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bmp);
         if (fairy_glow_on) {
-            Paint paint = new Paint();
-            paint.setColor(glowColor);
-            paint.setMaskFilter(new BlurMaskFilter(glowRadius, BlurMaskFilter.Blur.OUTER));
-            canvas.drawBitmap(alpha, halfMargin, halfMargin, paint);
+            Paint glow_paint = new Paint();
+            glow_paint.setColor(glowColor);
+            glow_paint.setMaskFilter(new BlurMaskFilter(glowRadius, BlurMaskFilter.Blur.OUTER));
+            canvas.drawBitmap(alpha, halfMargin, halfMargin, glow_paint);
         }
-        canvas.drawBitmap(src, halfMargin, halfMargin, null);
+        Paint color_paint = new Paint();
+        if (taiha_status) {
+            color_paint.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(getApplicationContext(),
+                    R.color.colorHeavyDmgStateWarn), PorterDuff.Mode.MULTIPLY));
+        } else if (fairy_glow_on) {
+            color_paint.setColorFilter(new PorterDuffColorFilter(glowColor2, PorterDuff.Mode.MULTIPLY));
+        }
+        canvas.drawBitmap(src, halfMargin, halfMargin, color_paint);
         viewbutton.setImageBitmap(bmp);
-        if(!taiha_status && fairy_glow_on) {
-            ((ImageView) mView.findViewById(R.id.viewbutton)).getDrawable().setColorFilter(glowColor2, PorterDuff.Mode.MULTIPLY);
-        }
     }
 
     @Override
@@ -437,7 +442,7 @@ public class KcaViewButtonService extends Service {
         public void run() {
             try {
                 fairy_glow_on = !fairy_glow_on;
-                setFairyGlow();
+                setFairyImage();
             } finally {
                 mHandler.postDelayed(mGlowRunner, FAIRY_GLOW_INTERVAL);
             }
@@ -450,7 +455,7 @@ public class KcaViewButtonService extends Service {
 
     void stopFairyKira() {
         fairy_glow_on = false;
-        setFairyGlow();
+        setFairyImage();
         mHandler.removeCallbacks(mGlowRunner);
     }
 
