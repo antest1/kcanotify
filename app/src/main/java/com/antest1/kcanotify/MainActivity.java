@@ -377,6 +377,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case PREF_OPENDB_API_USE:
                     case PREF_AKASHI_STAR_CHECKED:
+                    case PREF_KCA_SET_PRIORITY:
+                    case PREF_DISABLE_CUSTOMTOAST:
                         editor.putBoolean(prefKey, false);
                         break;
                     case PREF_KCA_EXP_VIEW:
@@ -392,10 +394,6 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_FAIRY_NOTI_LONGCLICK:
                     case PREF_KCA_NOTI_QUEST_FAIRY_GLOW:
                         editor.putBoolean(prefKey, true);
-                        break;
-                    case PREF_KCA_SET_PRIORITY:
-                    case PREF_DISABLE_CUSTOMTOAST:
-                        editor.putBoolean(prefKey, false);
                         break;
                     case PREF_KCA_LANGUAGE:
                         String localecode = getString(R.string.default_locale);
@@ -519,7 +517,7 @@ public class MainActivity extends AppCompatActivity {
             final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
             OkHttpClient client = new OkHttpClient.Builder().build();
 
-            String checkUrl = String.format(getString(R.string.kcanotify_checkversion_link));
+            String checkUrl = KcaUtils.format(getString(R.string.kcanotify_checkversion_link));
             Request.Builder builder = new Request.Builder().url(checkUrl).get();
             builder.addHeader("Referer", "app:/KCA/");
             builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -553,7 +551,7 @@ public class MainActivity extends AppCompatActivity {
                         String recentVersion = jsonDataObj.get("version").getAsString();
                         if (!compareVersion(currentVersion, recentVersion)) { // True if latest
                             textUpdate.setVisibility(View.VISIBLE);
-                            textUpdate.setText(String.format(getStringWithLocale(R.string.ma_hasupdate), recentVersion));
+                            textUpdate.setText(KcaUtils.format(getStringWithLocale(R.string.ma_hasupdate), recentVersion));
                             Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
                             JsonObject data = new JsonObject();
                             data.addProperty("type", TYPE_UPDATE);
@@ -568,7 +566,7 @@ public class MainActivity extends AppCompatActivity {
                         String recentVersion = jsonDataObj.get("data_version").getAsString();
                         if (!compareVersion(currentDataVersion, recentVersion)) { // True if latest
                             textDataUpdate.setVisibility(View.VISIBLE);
-                            textDataUpdate.setText(String.format(getStringWithLocale(R.string.ma_hasdataupdate), recentVersion));
+                            textDataUpdate.setText(KcaUtils.format(getStringWithLocale(R.string.ma_hasdataupdate), recentVersion));
                             Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
                             JsonObject data = new JsonObject();
                             data.addProperty("type", TYPE_UPDATE);
@@ -616,10 +614,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public String executeClient() {
-            String dataUrl = String.format(getString(R.string.api_start2_recent_version_link));
+            String dataUrl = KcaUtils.format(getString(R.string.api_start2_recent_version_link));
             OkHttpClient client = new OkHttpClient.Builder().build();
 
-            String checkUrl = String.format(dataUrl);
+            String checkUrl = KcaUtils.format(dataUrl);
             Request.Builder builder = new Request.Builder().url(checkUrl).get();
             builder.addHeader("Referer", "app:/KCA/");
             builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -664,7 +662,7 @@ public class MainActivity extends AppCompatActivity {
                 case FAILURE:
                     if (error_msg == null) error_msg = "null";
                     Toast.makeText(getApplicationContext(),
-                            String.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
+                            KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
                             Toast.LENGTH_LONG).show();
                     break;
                 case ERROR:

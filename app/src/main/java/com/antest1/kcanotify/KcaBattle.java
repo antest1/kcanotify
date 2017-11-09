@@ -689,7 +689,7 @@ public class KcaBattle {
 
                 // 포격전
                 for (int n = 1; n <= 3; n++) {
-                    String api_name = String.format("api_hougeki%d", n);
+                    String api_name = KcaUtils.format("api_hougeki%d", n);
                     if (isKeyExist(api_data, api_name)) {
                         JsonObject hougeki = api_data.getAsJsonObject(api_name);
                         JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
@@ -699,7 +699,7 @@ public class KcaBattle {
                             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
                             for (int t = 0; t < target.size(); t++) {
                                 afterhps[cnv(target.get(t))] -= cnv(target_dmg.get(t));
-                                //Log.e("KCA", String.format("hpInfo (hougeki to %d, %d): ",cnv(target.get(t)), cnv(target_dmg.get(t))) + Arrays.toString(afterhps));
+                                //Log.e("KCA", KcaUtils.format("hpInfo (hougeki to %d, %d): ",cnv(target.get(t)), cnv(target_dmg.get(t))) + Arrays.toString(afterhps));
                             }
                         }
                     }
@@ -1030,7 +1030,7 @@ public class KcaBattle {
 
                 // 포격전
                 for (int n = 1; n <= 3; n++) {
-                    String api_name = String.format("api_hougeki%d", n);
+                    String api_name = KcaUtils.format("api_hougeki%d", n);
                     if (isKeyExist(api_data, api_name)) {
                         JsonObject hougeki = api_data.getAsJsonObject(api_name);
                         JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
@@ -1262,9 +1262,9 @@ public class KcaBattle {
                 }
 
                 for (int n = 1; n <= 3; n++) {
-                    String api_name = String.format("api_hougeki%d", n);
+                    String api_name = KcaUtils.format("api_hougeki%d", n);
                     if (isKeyExist(api_data, api_name)) {
-                        JsonObject hougeki = api_data.getAsJsonObject(String.format("api_hougeki%d", n));
+                        JsonObject hougeki = api_data.getAsJsonObject(KcaUtils.format("api_hougeki%d", n));
                         JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
                         JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
                         JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
@@ -1685,7 +1685,7 @@ public class KcaBattle {
                         escapecblist.add(api_tow_target - 6);
                     }
 
-                    Log.e("KCA", String.format("Escape: %d with %d", api_escape_target, api_tow_target));
+                    Log.e("KCA", KcaUtils.format("Escape: %d with %d", api_escape_target, api_tow_target));
                 }
             }
         } catch (Exception e) {
@@ -1693,7 +1693,7 @@ public class KcaBattle {
             String currentNodeAlphabet = KcaApiData.getCurrentNodeAlphabet(currentMapArea, currentMapNo, currentNode);
             errorInfo.addProperty("api_data", api_data.toString());
             errorInfo.addProperty("api_url", url);
-            errorInfo.addProperty("api_node", String.format("%d-%d-%s", currentMapArea, currentMapNo, currentNodeAlphabet));
+            errorInfo.addProperty("api_node", KcaUtils.format("%d-%d-%s", currentMapArea, currentMapNo, currentNodeAlphabet));
             errorInfo.addProperty("api_error", getStringFromException(e));
 
             Bundle bundle = new Bundle();

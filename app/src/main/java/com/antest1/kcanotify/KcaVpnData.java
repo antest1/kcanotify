@@ -84,7 +84,7 @@ public class KcaVpnData {
                 if (saddrstr.startsWith(prefix)) return 1;
             }
         }
-        //Log.e("KCAV", String.format("containsKcaServer[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
+        //Log.e("KCAV", KcaUtils.format("containsKcaServer[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
         return 0;
     }
 
@@ -94,7 +94,7 @@ public class KcaVpnData {
             String s = new String(data);
             String saddrstr = new String(source);
             String taddrstr = new String(target);
-            //Log.e("KCAV", String.format("getDataFromNative[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
+            //Log.e("KCAV", KcaUtils.format("getDataFromNative[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
 
             if (type == REQUEST) {
                 if (s.startsWith("GET") || s.startsWith("POST")) {

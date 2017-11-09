@@ -127,9 +127,9 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         else col = "type, url, error";
 
         if (limit > 0)
-            sql = String.format("SELECT %s FROM %s ORDER BY timestamp DESC LIMIT %d", col, error_table_name, limit);
+            sql = KcaUtils.format("SELECT %s FROM %s ORDER BY timestamp DESC LIMIT %d", col, error_table_name, limit);
         else
-            sql = String.format("SELECT %s FROM %s ORDER BY timestamp DESC", col, error_table_name);
+            sql = KcaUtils.format("SELECT %s FROM %s ORDER BY timestamp DESC", col, error_table_name);
 
         Cursor c = db.rawQuery(sql, null);
         while (c.moveToNext()) {
@@ -141,9 +141,9 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                 request = c.getString(c.getColumnIndex("request"));
                 data = c.getString(c.getColumnIndex("data"));
                 timestamp = c.getString(c.getColumnIndex("ts"));
-                log_list.add(String.format("[%s]\t%s\t%s\t%s\t%s\t%s\t%s", type, version, url, error, request, data, timestamp));
+                log_list.add(KcaUtils.format("[%s]\t%s\t%s\t%s\t%s\t%s\t%s", type, version, url, error, request, data, timestamp));
             } else {
-                log_list.add(String.format("[%s]\t%s\t%s", type, url, error));
+                log_list.add(KcaUtils.format("[%s]\t%s\t%s", type, url, error));
             }
         }
         c.close();
@@ -356,8 +356,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                     case 2: // Weekly
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd");
                         try {
-                            Date date1 = dateFormat.parse(String.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
-                            Date date2 = dateFormat.parse(String.format("%s %s %s", current_time[0], current_time[1], current_time[2]));
+                            Date date1 = dateFormat.parse(KcaUtils.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
+                            Date date2 = dateFormat.parse(KcaUtils.format("%s %s %s", current_time[0], current_time[1], current_time[2]));
                             long diff = date2.getTime() - date1.getTime();
                             long datediff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
                             if (datediff >= 7 && reset_passed) {
@@ -389,7 +389,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                         break;
                 }
             }
-            Log.e("KCA", String.format("%d: %b", quest_id, valid_flag));
+            Log.e("KCA", KcaUtils.format("%d: %b", quest_id, valid_flag));
             if (valid_flag) {
                 data.add(new JsonParser().parse(quest_str).getAsJsonObject());
             } else {
@@ -427,25 +427,25 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                 setPrevPageLastNo(-1);
                 db.delete(questlist_table_name, "KEY < ?", new String[]{String.valueOf(questIdList.get(0))});
                 qt.deleteQuestTrackWithRange(-1, questIdList.get(0));
-                Log.e("KCA", String.format("delete KEV < %d", questIdList.get(0)));
+                Log.e("KCA", KcaUtils.format("delete KEV < %d", questIdList.get(0)));
             }
             if (page == lastpage) {
                 db.delete(questlist_table_name, "KEY > ?", new String[]{String.valueOf(last_no)});
                 qt.deleteQuestTrackWithRange(last_no, -1);
-                Log.e("KCA", String.format("delete KEV > %d", last_no));
+                Log.e("KCA", KcaUtils.format("delete KEV > %d", last_no));
             }
             if (getPrevPageLastNo() != -1) {
                 db.delete(questlist_table_name, "KEY > ? AND KEY < ?",
                         new String[]{String.valueOf(getPrevPageLastNo()), String.valueOf(questIdList.get(0))});
                 qt.deleteQuestTrackWithRange(getPrevPageLastNo(), questIdList.get(0));
-                Log.e("KCA", String.format("delete KEV > %d AND KEY < %d", getPrevPageLastNo(), questIdList.get(0)));
+                Log.e("KCA", KcaUtils.format("delete KEV > %d AND KEY < %d", getPrevPageLastNo(), questIdList.get(0)));
             }
 
             for (int i = 0; i < questIdList.size() - 1; i++) {
                 db.delete(questlist_table_name, "KEY > ? AND KEY < ?",
                         new String[]{String.valueOf(questIdList.get(i)), String.valueOf(questIdList.get(i + 1))});
                 qt.deleteQuestTrackWithRange(questIdList.get(i), questIdList.get(i + 1));
-                Log.e("KCA", String.format("delete KEV > %d AND KEY < %d", questIdList.get(i), questIdList.get(i + 1)));
+                Log.e("KCA", KcaUtils.format("delete KEV > %d AND KEY < %d", questIdList.get(i), questIdList.get(i + 1)));
             }
 
             if (questIdList.contains(212) && questIdList.contains(218)) {
@@ -597,14 +597,14 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         while (c.moveToNext()) {
             String key = c.getString(c.getColumnIndex("KEY"));
             String value = c.getString(c.getColumnIndex("VALUE"));
-            Log.e("KCA", String.format("%s -> %s (%d)", key, value.substring(0, Math.min(50, value.length())), value.length()));
+            Log.e("KCA", KcaUtils.format("%s -> %s (%d)", key, value.substring(0, Math.min(50, value.length())), value.length()));
         }
         /*
         c = db.query(slotitem_table_name, null, null, null, null, null, null);
         while(c.moveToNext()) {
             String key = c.getString(c.getColumnIndex("KEY"));
             String value = c.getString(c.getColumnIndex("VALUE"));
-            Log.e("KCA", String.format("%s -> %s (%d)", key, value.substring(0, Math.min(50, value.length())), value.length()));
+            Log.e("KCA", KcaUtils.format("%s -> %s (%d)", key, value.substring(0, Math.min(50, value.length())), value.length()));
         }
         */
         c.close();
@@ -617,7 +617,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         while (c.moveToNext()) {
             String key = c.getString(c.getColumnIndex("KEY"));
             String value = c.getString(c.getColumnIndex("VALUE"));
-            Log.e("KCA", String.format("%s -> %s (%d)", key, value.substring(0, Math.min(50, value.length())), value.length()));
+            Log.e("KCA", KcaUtils.format("%s -> %s (%d)", key, value.substring(0, Math.min(50, value.length())), value.length()));
             count += 1;
         }
         Log.e("KCA", "Total: " + String.valueOf(count));
@@ -632,7 +632,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             String key = c.getString(c.getColumnIndex("KEY"));
             String value = c.getString(c.getColumnIndex("VALUE"));
             String time = c.getString(c.getColumnIndex("TIME"));
-            Log.e("KCA", String.format("%s\t%s\t%s", key, value.substring(0, Math.min(50, value.length())), time));
+            Log.e("KCA", KcaUtils.format("%s\t%s\t%s", key, value.substring(0, Math.min(50, value.length())), time));
             count += 1;
         }
         Log.e("KCA", "Total: " + String.valueOf(count));

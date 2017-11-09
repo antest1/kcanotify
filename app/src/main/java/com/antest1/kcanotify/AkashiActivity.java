@@ -103,7 +103,7 @@ public class AkashiActivity extends AppCompatActivity {
 
             for (int i = 0; i < 7; i++) {
                 final int week = i;
-                TextView tv = (TextView) findViewById(KcaUtils.getId(String.format("akashi_day_%d", i), R.id.class));
+                TextView tv = (TextView) findViewById(KcaUtils.getId(KcaUtils.format("akashi_day_%d", i), R.id.class));
                 if (week == currentClicked) {
                     tv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
                     tv.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
@@ -112,7 +112,7 @@ public class AkashiActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (currentClicked != week) {
-                            TextView tv_prev = (TextView) findViewById(KcaUtils.getId(String.format("akashi_day_%d", currentClicked), R.id.class));
+                            TextView tv_prev = (TextView) findViewById(KcaUtils.getId(KcaUtils.format("akashi_day_%d", currentClicked), R.id.class));
                             tv_prev.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
                             tv_prev.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
                             v.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
@@ -272,11 +272,11 @@ public class AkashiActivity extends AppCompatActivity {
     }
 
     private boolean checkStarred(String data, int id) {
-        return data.contains(String.format("|%d|", id));
+        return data.contains(KcaUtils.format("|%d|", id));
     }
 
     private boolean checkFiltered(String data, int id) {
-        return data.contains(String.format("|%d|", id));
+        return data.contains(KcaUtils.format("|%d|", id));
     }
 
     private static class UpdateHandler extends Handler {

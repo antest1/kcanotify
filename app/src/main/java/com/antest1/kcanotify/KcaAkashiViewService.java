@@ -307,6 +307,6 @@ public class KcaAkashiViewService extends Service {
     }
 
     private boolean checkStarred(String data, int id) {
-        return data.contains(String.format("|%d|", id));
+        return data.contains(KcaUtils.format("|%d|", id));
     }
 }

@@ -135,7 +135,7 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
     }
 
     private boolean checkStarred(String data, int id) {
-        return data.contains(String.format("|%d|", id));
+        return data.contains(KcaUtils.format("|%d|", id));
     }
 
     private String addStarred(String data, int id) {
@@ -143,6 +143,6 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
     }
 
     private String deleteStarred(String data, int id) {
-        return data.replace(String.format("|%d|", id), "|");
+        return data.replace(KcaUtils.format("|%d|", id), "|");
     }
 }

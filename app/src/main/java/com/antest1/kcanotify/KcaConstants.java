@@ -16,7 +16,6 @@ public final class KcaConstants {
     public static final String DB_KEY_DECKPORT = "key_deckport";
     public static final String DB_KEY_USEITEMS = "key_useitems";
     public static final String DB_KEY_MAPEDGES = "key_mapedges";
-    public static final String DB_KEY_USEREQUIP = "key_userequip";
     public static final String DB_KEY_QUESTTRACK = "key_questtrack";
     public static final String DB_KEY_BATTLEINFO = "key_battleinfo";
     public static final String DB_KEY_BATTLENODE = "key_battlenode";
@@ -27,6 +26,23 @@ public final class KcaConstants {
     public static final String DB_KEY_EXPCRNT = "key_expcrnt";
     public static final String DB_KEY_EXPTIME = "key_exptime";
     public static final String DB_KEY_FAIRYLOC = "key_fairyloc";
+
+    public static final String[] DB_KEY_ARRAY = {
+            DB_KEY_STARTDATA,
+            DB_KEY_DECKPORT,
+            DB_KEY_USEITEMS,
+            DB_KEY_MAPEDGES,
+            DB_KEY_QUESTTRACK,
+            DB_KEY_BATTLEINFO,
+            DB_KEY_BATTLENODE,
+            DB_KEY_QTRACKINFO,
+            DB_KEY_APIMAPINFO,
+            DB_KEY_KDOCKDATA,
+            DB_KEY_EXPTDAY,
+            DB_KEY_EXPCRNT,
+            DB_KEY_EXPTIME,
+            DB_KEY_FAIRYLOC
+    };
 
     public static final String ERROR_TYPE_SERVICE = "S";
     public static final String ERROR_TYPE_BATTLE = "B";
@@ -371,6 +387,25 @@ public final class KcaConstants {
             PREF_KCA_NOTI_QUEST_FAIRY_GLOW
     };
 
-    public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);
+    public static final String[] PREF_BOOLEAN_ARRAY = {
+            PREF_OPENDB_API_USE,
+            PREF_AKASHI_STAR_CHECKED,
+            PREF_KCA_SET_PRIORITY,
+            PREF_DISABLE_CUSTOMTOAST,
+            PREF_KCA_EXP_VIEW,
+            PREF_KCA_NOTI_NOTIFYATSVCOFF,
+            PREF_KCA_NOTI_DOCK,
+            PREF_KCA_NOTI_EXP,
+            PREF_KCA_BATTLEVIEW_USE,
+            PREF_KCA_BATTLENODE_USE,
+            PREF_KCA_QUESTVIEW_USE,
+            PREF_KCA_NOTI_V_HD,
+            PREF_KCA_NOTI_V_NS,
+            PREF_SHOWDROP_SETTING,
+            PREF_FAIRY_NOTI_LONGCLICK,
+            PREF_KCA_NOTI_QUEST_FAIRY_GLOW
+    };
 
+    public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);
+    public static final List<String> PREFS_BOOLEAN_LIST = Arrays.asList(PREF_BOOLEAN_ARRAY);
 }

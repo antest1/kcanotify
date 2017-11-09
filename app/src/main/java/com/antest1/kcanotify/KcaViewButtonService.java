@@ -374,7 +374,7 @@ public class KcaViewButtonService extends Service {
                         mTouchY = event.getRawY();
                         mViewX = mParams.x;
                         mViewY = mParams.y;
-                        Log.e("KCA", String.format("mView: %d %d", mViewX, mViewY));
+                        Log.e("KCA", KcaUtils.format("mView: %d %d", mViewX, mViewY));
                         startClickTime = Calendar.getInstance().getTimeInMillis();
                         mHandler.postDelayed(mRunnable, LONG_CLICK_DURATION);
                         break;
@@ -404,7 +404,7 @@ public class KcaViewButtonService extends Service {
                         mView.getLocationOnScreen(locations);
                         int xx = locations[0];
                         int yy = locations[1];
-                        Log.e("KCA", String.format("Coord: %d %d", xx, yy));
+                        Log.e("KCA", KcaUtils.format("Coord: %d %d", xx, yy));
                         if (mParams.x < 0) mParams.x = 0;
                         else if (mParams.x > screenWidth - buttonWidth)
                             mParams.x = screenWidth - buttonWidth;

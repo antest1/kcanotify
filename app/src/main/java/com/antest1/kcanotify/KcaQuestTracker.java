@@ -177,8 +177,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 case 2: // Weekly
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd");
                     try {
-                        Date date1 = dateFormat.parse(String.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
-                        Date date2 = dateFormat.parse(String.format("%s %s %s", current_time[0], current_time[1], current_time[2]));
+                        Date date1 = dateFormat.parse(KcaUtils.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
+                        Date date2 = dateFormat.parse(KcaUtils.format("%s %s %s", current_time[0], current_time[1], current_time[2]));
                         long diff = date2.getTime() - date1.getTime();
                         long datediff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
                         if (datediff >= 7 && reset_passed) {
@@ -666,7 +666,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             String active = c.getString(c.getColumnIndex("ACTIVE"));
             String cond0 = c.getString(c.getColumnIndex("CND0"));
             String time = c.getString(c.getColumnIndex("TIME"));
-            Log.e("KCA-QT", String.format("%s -> %s %s %s", key, active, cond0, time));
+            Log.e("KCA-QT", KcaUtils.format("%s -> %s %s %s", key, active, cond0, time));
             count += 1;
         }
         Log.e("KCA-QT", "Total: " + String.valueOf(count));

@@ -306,7 +306,7 @@ public class KcaApiData {
     }
 
     public static boolean checkUserItemMax() {
-        Log.e("KCA", String.format("Item: %d - %d", maxItemSize, helper.getItemCount() + getItemCountInBattle));
+        Log.e("KCA", KcaUtils.format("Item: %d - %d", maxItemSize, helper.getItemCount() + getItemCountInBattle));
         return maxItemSize <= (helper.getItemCount() + getItemCountInBattle);
     }
 
@@ -399,7 +399,7 @@ public class KcaApiData {
             byte[] bytes = ByteStreams.toByteArray(ais);
             JsonElement edgesData = new JsonParser().parse(new String(bytes));
             if (edgesData.isJsonObject()) {
-                helper.putValue(DB_KEY_MAPEDGES, new String(bytes));
+                helper.putValue(DB_KEY_MAPEDGES, edgesData.toString());
                 return 1;
             } else {
                 return -1;
@@ -413,7 +413,7 @@ public class KcaApiData {
         try {
             locale = getLocaleCode(locale);
             AssetManager.AssetInputStream ais =
-                    (AssetManager.AssetInputStream) am.open(String.format("ships-%s.json", locale));
+                    (AssetManager.AssetInputStream) am.open(KcaUtils.format("ships-%s.json", locale));
             byte[] bytes = ByteStreams.toByteArray(ais);
             JsonElement data = new JsonParser().parse(new String(bytes));
 
@@ -438,7 +438,7 @@ public class KcaApiData {
         try {
             locale = getLocaleCode(locale);
             AssetManager.AssetInputStream ais =
-                    (AssetManager.AssetInputStream) am.open(String.format("items-%s.json", locale));
+                    (AssetManager.AssetInputStream) am.open(KcaUtils.format("items-%s.json", locale));
             byte[] bytes = ByteStreams.toByteArray(ais);
             JsonElement data = new JsonParser().parse(new String(bytes));
 
@@ -457,7 +457,7 @@ public class KcaApiData {
         try {
             locale = getLocaleCode(locale);
             AssetManager.AssetInputStream ais =
-                    (AssetManager.AssetInputStream) am.open(String.format("stype-%s.json", locale));
+                    (AssetManager.AssetInputStream) am.open(KcaUtils.format("stype-%s.json", locale));
             byte[] bytes = ByteStreams.toByteArray(ais);
             JsonElement data = new JsonParser().parse(new String(bytes));
 
@@ -476,7 +476,7 @@ public class KcaApiData {
         try {
             locale = getLocaleCode(locale);
             AssetManager.AssetInputStream ais =
-                    (AssetManager.AssetInputStream) am.open(String.format("quests-%s.json", locale));
+                    (AssetManager.AssetInputStream) am.open(KcaUtils.format("quests-%s.json", locale));
             byte[] bytes = ByteStreams.toByteArray(ais);
             JsonElement data = new JsonParser().parse(new String(bytes));
 
@@ -565,9 +565,13 @@ public class KcaApiData {
             AssetManager.AssetInputStream ais =
                     (AssetManager.AssetInputStream) am.open("quest_track.json");
             byte[] bytes = ByteStreams.toByteArray(ais);
-            helper.putValue(DB_KEY_QUESTTRACK, new String(bytes));
             JsonElement data = new JsonParser().parse(new String(bytes));
-            return 1;
+            if (data.isJsonObject()) {
+                helper.putValue(DB_KEY_QUESTTRACK, data.toString());
+                return 1;
+            } else {
+                return -1;
+            }
         } catch (IOException e) {
             return 0;
         }
@@ -624,7 +628,7 @@ public class KcaApiData {
     }
 
     public static String getCurrentNodeAlphabet(int maparea, int mapno, int no) {
-        String currentMapString = String.format("%d-%d", maparea, mapno);
+        String currentMapString = KcaUtils.format("%d-%d", maparea, mapno);
         String no_str = String.valueOf(no);
         if (helper != null) {
             JsonObject mapEdgeInfo = new JsonParser().parse(helper.getValue(DB_KEY_MAPEDGES)).getAsJsonObject();
@@ -774,7 +778,7 @@ public class KcaApiData {
                 item.addProperty("api_alv", 0);
             }
             helper.putItemValue(item_id, item.toString());
-            Log.e("KCA", String.format("add item %d", item_id));
+            Log.e("KCA", KcaUtils.format("add item %d", item_id));
             return kc_item_id;
         }
         return 0;
@@ -909,7 +913,7 @@ public class KcaApiData {
             userShipData.put(shipId, shipData);
             int shipKcId = api_data.get("api_ship_id").getAsInt();
             String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
-            Log.e("KCA", String.format("add ship %d (%s)", shipId, shipName));
+            Log.e("KCA", KcaUtils.format("add ship %d (%s)", shipId, shipName));
             if (api_data.has("api_slotitem") && !api_data.get("api_slotitem").isJsonNull()) {
                 JsonArray shipSlotItemData = (JsonArray) api_data.get("api_slotitem");
                 for (int i = 0; i < shipSlotItemData.size(); i++) {
@@ -943,7 +947,7 @@ public class KcaApiData {
             userShipData.put(shipId, api_data);
             int shipKcId = api_data.get("api_ship_id").getAsInt();
             String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
-            Log.e("KCA", String.format("update ship %d (%s)", shipId, shipName));
+            Log.e("KCA", KcaUtils.format("update ship %d (%s)", shipId, shipName));
         }
     }
 
@@ -979,9 +983,9 @@ public class KcaApiData {
                 userShipData.remove(shipId);
 
                 String shipName = getKcShipDataById(shipKcId, "name").get("name").getAsString();
-                Log.e("KCA", String.format("remove ship %d (%s)", shipId, shipName));
+                Log.e("KCA", KcaUtils.format("remove ship %d (%s)", shipId, shipName));
             } else {
-                Log.e("KCA", String.format("Not found info with %d", shipId));
+                Log.e("KCA", KcaUtils.format("Not found info with %d", shipId));
             }
         }
     }
@@ -991,66 +995,66 @@ public class KcaApiData {
         String currentNodeInfo = "";
         switch (id) {
             case API_NODE_EVENT_ID_OBTAIN:
-                currentNodeInfo = String.format(context.getString(R.string.node_info_obtain), currentNode);
+                currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_obtain), currentNode);
                 break;
             case API_NODE_EVENT_ID_LOSS:
-                currentNodeInfo = String.format(context.getString(R.string.node_info_loss), currentNode);
+                currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_loss), currentNode);
                 break;
             case API_NODE_EVENT_ID_NORMAL:
                 if (kind == API_NODE_EVENT_KIND_BATTLE) {
                     if (includeNormal) {
-                        currentNodeInfo = String.format(context.getString(R.string.node_info_normal_battle), currentNode);
+                        currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_normal_battle), currentNode);
                     } else {
-                        currentNodeInfo = String.format(context.getString(R.string.node_info_normal), currentNode);
+                        currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_normal), currentNode);
                     }
                 } else if (kind == API_NODE_EVENT_KIND_NIGHTBATTLE) {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_nightbattle), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_nightbattle), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE) {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_nightdaybattle), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_nightdaybattle), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_AIRBATTLE) {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_airbattle), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_airbattle), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_ECBATTLE) {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_ecbattle), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_ecbattle), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_LDAIRBATTLE) {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_ldairbattle), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_ldairbattle), currentNode);
                 }
                 break;
             case API_NODE_EVENT_ID_BOSS:
                 if (kind == API_NODE_EVENT_KIND_BATTLE) {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_boss), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_boss), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_NIGHTBATTLE) {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_boss_nightbattle), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_boss_nightbattle), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE) {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_boss_nightdaybattle), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_boss_nightdaybattle), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_ECBATTLE) {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_boss_ecbattle), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_boss_ecbattle), currentNode);
                 }
                 break;
             case API_NODE_EVENT_ID_NOEVENT:
                 if (kind == API_NODE_EVENT_KIND_SELECTABLE) {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_selectable), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_selectable), currentNode);
                 } else {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_noevent), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_noevent), currentNode);
                 }
                 break;
             case API_NODE_EVENT_ID_TPOINT:
-                currentNodeInfo = String.format(context.getString(R.string.node_info_tpoint), currentNode);
+                currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_tpoint), currentNode);
                 break;
             case API_NODE_EVENT_ID_AIR:
                 if (kind == API_NODE_EVENT_KIND_AIRSEARCH) {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_airsearch), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_airsearch), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_AIRBATTLE) {
-                    currentNodeInfo = String.format(context.getString(R.string.node_info_airbattle), currentNode);
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_airbattle), currentNode);
                 }
                 break;
             case API_NODE_EVENT_ID_SENDAN:
-                currentNodeInfo = String.format(context.getString(R.string.node_info_sendan), currentNode);
+                currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_sendan), currentNode);
                 break;
             case API_NODE_EVENT_ID_LDAIRBATTLE:
-                currentNodeInfo = String.format(context.getString(R.string.node_info_ldairbattle), currentNode);
+                currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_ldairbattle), currentNode);
                 break;
             default:
-                currentNodeInfo = String.format(context.getString(R.string.node_info_normal), currentNode);
+                currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_normal), currentNode);
                 break;
         }
         return currentNodeInfo;

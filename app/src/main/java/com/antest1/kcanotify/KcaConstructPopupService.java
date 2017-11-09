@@ -168,8 +168,8 @@ public class KcaConstructPopupService extends Service {
                 for (int i = 0; i<api_kdock.size(); i++) {
                     int index = i + 1;
                     JsonObject item = api_kdock.get(i).getAsJsonObject();
-                    TextView nameview = (TextView) mView.findViewById(getId(String.format("sc%d_name", index), R.id.class));
-                    TextView timeview = (TextView) mView.findViewById(getId(String.format("sc%d_time", index), R.id.class));
+                    TextView nameview = (TextView) mView.findViewById(getId(KcaUtils.format("sc%d_name", index), R.id.class));
+                    TextView timeview = (TextView) mView.findViewById(getId(KcaUtils.format("sc%d_time", index), R.id.class));
                     if (item.get("api_state").getAsInt() != -1) {
                         int ship_id = item.get("api_created_ship_id").getAsInt();
                         if (ship_id > 0) {
@@ -213,7 +213,7 @@ public class KcaConstructPopupService extends Service {
                     mTouchY = event.getRawY();
                     mViewX = mParams.x;
                     mViewY = mParams.y;
-                    Log.e("KCA", String.format("mView: %d %d", mViewX, mViewY));
+                    Log.e("KCA", KcaUtils.format("mView: %d %d", mViewX, mViewY));
                     startClickTime = Calendar.getInstance().getTimeInMillis();
                     break;
 
@@ -228,7 +228,7 @@ public class KcaConstructPopupService extends Service {
                     mView.getLocationOnScreen(locations);
                     int xx = locations[0];
                     int yy = locations[1];
-                    Log.e("KCA", String.format("Coord: %d %d", xx, yy));
+                    Log.e("KCA", KcaUtils.format("Coord: %d %d", xx, yy));
                     break;
 
                 case MotionEvent.ACTION_MOVE:
@@ -262,7 +262,7 @@ public class KcaConstructPopupService extends Service {
             sec = sec % 60;
             min = min % 60;
 
-            return String.format("%02d:%02d:%02d", hour, min, sec);
+            return KcaUtils.format("%02d:%02d:%02d", hour, min, sec);
         }
     }
 

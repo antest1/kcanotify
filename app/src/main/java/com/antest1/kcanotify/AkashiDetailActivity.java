@@ -114,7 +114,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
                                     break;
                             }
 
-                            e3 = String.format("%s\n%s x %d", e3, require_item_name, require_item_count);
+                            e3 = KcaUtils.format("%s\n%s x %d", e3, require_item_name, require_item_count);
                             ((TextView) findViewById(getId("akashi_improv_detail_e".concat(String.valueOf(j))
                                     .concat("_").concat(String.valueOf(i + 1)), R.id.class)))
                                     .setText(e3);
@@ -164,7 +164,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
                         JsonObject shipRemovelLv = findRemodelLv(joinStr(shipList, ","));
                         for (int i = 0; i < shipList.size(); i++) {
                             String id = shipList.get(i);
-                            shipNameList.add(String.format("%s(%d)", shipName.get(id).getAsString(), shipRemovelLv.get(id).getAsInt()));
+                            shipNameList.add(KcaUtils.format("%s(%d)", shipName.get(id).getAsString(), shipRemovelLv.get(id).getAsInt()));
                         }
                         itemImprovDefaultShipTextView.setText(joinStr(shipNameList, " / "));
                     } else {
@@ -258,7 +258,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
                 for (int j = 0; j < shiplist.length; j++) {
                     JsonObject kcShipData = getKcShipDataById(shiplist[j], "name");
                     String shipname = getShipTranslation(kcShipData.get("name").getAsString(), false);
-                    supportString = supportString.concat(String.format("%s(%s)", shipname, daytext)).concat("\n");
+                    supportString = supportString.concat(KcaUtils.format("%s(%s)", shipname, daytext)).concat("\n");
                 }
             } else {
                 supportString = "-";

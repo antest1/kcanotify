@@ -145,7 +145,7 @@ public class AkashiFilterActivity extends AppCompatActivity {
     }
 
     private boolean checkFiltered(String data, int id) {
-        return data.contains(String.format("|%d|",id));
+        return data.contains(KcaUtils.format("|%d|",id));
     }
 
     private String addFiltered(String data, int id) {
@@ -153,7 +153,7 @@ public class AkashiFilterActivity extends AppCompatActivity {
     }
 
     private String deleteFiltered(String data, int id) {
-        return data.replace(String.format("|%d|",id), "|");
+        return data.replace(KcaUtils.format("|%d|",id), "|");
     }
 
     private void setEquipButton() {

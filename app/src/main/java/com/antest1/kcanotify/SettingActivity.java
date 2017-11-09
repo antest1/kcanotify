@@ -388,7 +388,7 @@ public class SettingActivity extends AppCompatActivity {
             final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
             OkHttpClient client = new OkHttpClient.Builder().build();
 
-            String checkUrl = String.format(context.getString(R.string.kcanotify_checkversion_link));
+            String checkUrl = KcaUtils.format(context.getString(R.string.kcanotify_checkversion_link));
             Request.Builder builder = new Request.Builder().url(checkUrl).get();
             builder.addHeader("Referer", "app:/KCA/");
             builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -423,12 +423,12 @@ public class SettingActivity extends AppCompatActivity {
                     if (compareVersion(currentVersion, recentVersion)) { // True if latest
                         if (toastflag) {
                             Toast.makeText(context,
-                                    String.format(getStringWithLocale(R.string.sa_checkupdate_latest), currentVersion),
+                                    KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_latest), currentVersion),
                                     Toast.LENGTH_LONG).show();
                         }
                     } else if (!activity.isFinishing()) {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
-                        alertDialog.setMessage(String.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
+                        alertDialog.setMessage(KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
                         alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
                                 new DialogInterface.OnClickListener() {
                                     @Override
@@ -517,7 +517,7 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         public String executeClient() {
-            String dataUrl = String.format(context.getString(R.string.api_start2_recent_version_link));
+            String dataUrl = KcaUtils.format(context.getString(R.string.api_start2_recent_version_link));
 
             OkHttpClient client = new OkHttpClient.Builder().build();
             Request.Builder builder = new Request.Builder().url(dataUrl).get();
@@ -564,7 +564,7 @@ public class SettingActivity extends AppCompatActivity {
                     case FAILURE:
                         if (error_msg == null) error_msg = "null";
                         Toast.makeText(context,
-                                String.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
+                                KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
                                 Toast.LENGTH_LONG).show();
                         break;
                     case ERROR:

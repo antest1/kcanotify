@@ -289,7 +289,7 @@ public class KcaDeckInfo {
         String airPowerValue = "";
         int[] airPowerRange = getAirPowerRange(deckPortData, deckid, exclude_flag);
         if (airPowerRange[1] > 0) {
-            airPowerValue = String.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
+            airPowerValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
         }
         return airPowerValue;
     }
@@ -488,7 +488,7 @@ public class KcaDeckInfo {
 
     public String getTPString(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
         int[] tp = getTPValue(deckPortData, deckid_list, exclude_flag);
-        return String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
+        return KcaUtils.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
     }
 
     public int[] getKcShipList(JsonArray deckPortData, int deckid) {
@@ -514,7 +514,7 @@ public class KcaDeckInfo {
                 int shipLv = shipData.get("lv").getAsInt();
                 JsonObject shipKcData = getKcShipDataById(shipKcId, "name");
                 String shipName = shipKcData.get("name").getAsString();
-                Log.e("KCA", String.format("%s (%s)", shipName, shipLv));
+                Log.e("KCA", KcaUtils.format("%s (%s)", shipName, shipLv));
                 JsonArray shipItem = (JsonArray) shipData.get("slot");
                 JsonArray shipSlotCount = (JsonArray) shipData.get("onslot");
                 for (int j = 0; j < shipItem.size(); j++) {
@@ -529,7 +529,7 @@ public class KcaDeckInfo {
                             itemMastery = itemData.get("alv").getAsInt();
                         }
                         int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
-                        Log.e("KCA", String.format("- %s %d %d %d", itemName, itemLevel, itemMastery, slot));
+                        Log.e("KCA", KcaUtils.format("- %s %d %d %d", itemName, itemLevel, itemMastery, slot));
                     }
                 }
             }

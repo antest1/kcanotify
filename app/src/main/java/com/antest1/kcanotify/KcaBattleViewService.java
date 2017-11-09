@@ -190,7 +190,7 @@ public class KcaBattleViewService extends Service {
     }
 
     private static String makeHpString(int currenthp, int maxhp) {
-        return String.format("HP %d/%d", currenthp, maxhp);
+        return KcaUtils.format("HP %d/%d", currenthp, maxhp);
     }
 
     public String getStringWithLocale(int id) {
@@ -202,7 +202,7 @@ public class KcaBattleViewService extends Service {
     }
 
     private static String makeLvString(int level) {
-        return String.format("Lv %d", level);
+        return KcaUtils.format("Lv %d", level);
     }
 
     public static int getFriendIdx(int i) {
@@ -295,7 +295,7 @@ public class KcaBattleViewService extends Service {
                         JsonObject itemdata = api_itemget.get(i).getAsJsonObject();
                         String itemname = getItemString(contextWithLocale, itemdata.get("api_id").getAsInt());
                         int itemgetcount = itemdata.get("api_getcount").getAsInt();
-                        itemTextList.add(String.format("%s +%d", itemname, itemgetcount));
+                        itemTextList.add(KcaUtils.format("%s +%d", itemname, itemgetcount));
                     }
                     ((TextView) battleview.findViewById(R.id.battle_result)).setText(KcaUtils.joinStr(itemTextList, " / "));
                     ((TextView) battleview.findViewById(R.id.battle_result))
@@ -311,7 +311,7 @@ public class KcaBattleViewService extends Service {
                         JsonObject itemdata = api_data.getAsJsonObject("api_itemget");
                         String itemname = getItemString(contextWithLocale, itemdata.get("api_id").getAsInt());
                         int itemgetcount = itemdata.get("api_getcount").getAsInt();
-                        ((TextView) battleview.findViewById(R.id.battle_result)).setText(String.format("%s +%d", itemname, itemgetcount));
+                        ((TextView) battleview.findViewById(R.id.battle_result)).setText(KcaUtils.format("%s +%d", itemname, itemgetcount));
                         ((TextView) battleview.findViewById(R.id.battle_result))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItemSpecial));
                     }
@@ -319,7 +319,7 @@ public class KcaBattleViewService extends Service {
                     JsonObject api_happening = api_data.getAsJsonObject("api_happening");
                     String itemname = getItemString(contextWithLocale, api_happening.get("api_mst_id").getAsInt());
                     int itemgetcount = api_happening.get("api_count").getAsInt();
-                    ((TextView) battleview.findViewById(R.id.battle_result)).setText(String.format("%s -%d", itemname, itemgetcount));
+                    ((TextView) battleview.findViewById(R.id.battle_result)).setText(KcaUtils.format("%s -%d", itemname, itemgetcount));
                     ((TextView) battleview.findViewById(R.id.battle_result))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorVortex));
                 } else if (api_event_id == API_NODE_EVENT_ID_SENDAN) {
@@ -328,7 +328,7 @@ public class KcaBattleViewService extends Service {
                     JsonObject api_itemget_eo_comment = api_data.getAsJsonObject("api_itemget_eo_comment");
                     String itemname = getItemString(contextWithLocale, api_itemget_eo_comment.get("api_id").getAsInt());
                     int itemgetcount = api_itemget_eo_comment.get("api_getcount").getAsInt();
-                    ((TextView) battleview.findViewById(R.id.battle_result)).setText(String.format("%s +%d", itemname, itemgetcount));
+                    ((TextView) battleview.findViewById(R.id.battle_result)).setText(KcaUtils.format("%s +%d", itemname, itemgetcount));
                     ((TextView) battleview.findViewById(R.id.battle_result))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorNone));
                 }
@@ -443,10 +443,10 @@ public class KcaBattleViewService extends Service {
                                 }
 
                                 if (mainDeck.get(j).getAsInt() == -1) {
-                                    //Log.e("KCA", String.format("%d: invisible", j + 1));
+                                    //Log.e("KCA", KcaUtils.format("%d: invisible", j + 1));
                                     battleview.findViewById(shipViewList[j + 1]).setVisibility(View.INVISIBLE);
                                 } else {
-                                    //Log.e("KCA", String.format("%d: visible", j + 1));
+                                    //Log.e("KCA", KcaUtils.format("%d: visible", j + 1));
                                     JsonObject data = shipData.getAsJsonObject(String.valueOf(mainDeck.get(j)));
                                     JsonObject kcdata = getKcShipDataById(data.get("api_ship_id").getAsInt(), "maxeq");
                                     JsonObject itemdata = new JsonObject();
@@ -505,10 +505,10 @@ public class KcaBattleViewService extends Service {
                                 ((TextView) battleview.findViewById(shipHpTxtCombinedViewList[j + 1])).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
 
                                 if (combinedDeck.get(j).getAsInt() == -1) {
-                                    //Log.e("KCA", String.format("%d: invisible", j + 1));
+                                    //Log.e("KCA", KcaUtils.format("%d: invisible", j + 1));
                                     battleview.findViewById(shipCombinedViewList[j + 1]).setVisibility(View.INVISIBLE);
                                 } else {
-                                    //Log.e("KCA", String.format("%d: visible", j + 1));
+                                    //Log.e("KCA", KcaUtils.format("%d: visible", j + 1));
                                     JsonObject data = shipData.getAsJsonObject(String.valueOf(combinedDeck.get(j)));
                                     JsonObject kcdata = getKcShipDataById(data.get("api_ship_id").getAsInt(), "maxeq");
                                     JsonObject itemdata = new JsonObject();
@@ -806,7 +806,7 @@ public class KcaBattleViewService extends Service {
                     int friendNowSum = rankData.get("fnowhpsum").getAsInt();
                     int friendAfterSum = rankData.get("fafterhpsum").getAsInt();
                     int friendDamageRate = rankData.get("fdmgrate").getAsInt();
-                    String dmgshow = String.format("%d/%d (%d%%)", friendAfterSum, friendNowSum, friendDamageRate);
+                    String dmgshow = KcaUtils.format("%d/%d (%d%%)", friendAfterSum, friendNowSum, friendDamageRate);
                     ((TextView) battleview.findViewById(R.id.friend_fleet_damage)).setText(dmgshow);
                 } else {
                     ((TextView) battleview.findViewById(R.id.friend_fleet_damage)).setText("");
@@ -816,7 +816,7 @@ public class KcaBattleViewService extends Service {
                     int enemyNowSum = rankData.get("enowhpsum").getAsInt();
                     int enemyAfterSum = rankData.get("eafterhpsum").getAsInt();
                     int enemyDamageRate = rankData.get("edmgrate").getAsInt();
-                    String dmgshow = String.format("%d/%d (%d%%)", enemyAfterSum, enemyNowSum, enemyDamageRate);
+                    String dmgshow = KcaUtils.format("%d/%d (%d%%)", enemyAfterSum, enemyNowSum, enemyDamageRate);
                     ((TextView) battleview.findViewById(R.id.enemy_fleet_damage)).setText(dmgshow);
                 } else {
                     ((TextView) battleview.findViewById(R.id.enemy_fleet_damage)).setText("");
@@ -893,7 +893,7 @@ public class KcaBattleViewService extends Service {
                 if (api_data.has("api_get_useitem")) {
                     int useitem_id = api_data.getAsJsonObject("api_get_useitem").get("api_useitem_id").getAsInt();
                     ((TextView) battleview.findViewById(R.id.battle_getitem))
-                            .setText(String.format("%s (%d)", getUseitemTranslation(useitem_id), getUseitemCount(useitem_id)));
+                            .setText(KcaUtils.format("%s (%d)", getUseitemTranslation(useitem_id), getUseitemCount(useitem_id)));
                 }
             } else {
                 Log.e("KCA", api_data.entrySet().toString());
@@ -979,7 +979,7 @@ public class KcaBattleViewService extends Service {
             int item_id = slot.get(i).getAsInt();
             if (item_id == -1) {
                 itemView.findViewById(slotViewList[i]).setVisibility(View.GONE);
-                itemView.findViewById(getId(String.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.GONE);
+                itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.GONE);
             } else {
                 slot_count += 1;
                 JsonObject kcItemData;
@@ -995,22 +995,22 @@ public class KcaBattleViewService extends Service {
                     }
 
                     if (lv > 0) {
-                        ((TextView) itemView.findViewById(getId(String.format("item%d_level", i + 1), R.id.class)))
+                        ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)))
                                 .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
-                        itemView.findViewById(getId(String.format("item%d_level", i + 1), R.id.class)).setVisibility(View.VISIBLE);
+                        itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(View.VISIBLE);
                     } else {
-                        itemView.findViewById(getId(String.format("item%d_level", i + 1), R.id.class)).setVisibility(View.GONE);
+                        itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(View.GONE);
                     }
 
                     if (alv > 0) {
-                        ((TextView) itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class)))
-                                .setText(getStringWithLocale(getId(String.format("alv_%d", alv), R.string.class)));
+                        ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)))
+                                .setText(getStringWithLocale(getId(KcaUtils.format("alv_%d", alv), R.string.class)));
                         int alvColorId = (alv <= 3) ? 1 : 2;
-                        itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class))
-                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), getId(String.format("itemalv%d", alvColorId), R.color.class)));
-                        itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.VISIBLE);
+                        itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), getId(KcaUtils.format("itemalv%d", alvColorId), R.color.class)));
+                        itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.VISIBLE);
                     } else {
-                        itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.GONE);
+                        itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.GONE);
                     }
 
                     int itemtype = kcItemData.getAsJsonArray("type").get(2).getAsInt();
@@ -1019,17 +1019,17 @@ public class KcaBattleViewService extends Service {
                         Log.e("KCA", "ID: " + String.valueOf(itemtype));
                         int nowSlotValue = onslot.get(i).getAsInt();
                         int maxSlotValue = maxslot.get(i).getAsInt();
-                        ((TextView) itemView.findViewById(getId(String.format("item%d_slot", i + 1), R.id.class)))
-                                .setText(String.format("[%02d/%02d]", nowSlotValue, maxSlotValue));
-                        itemView.findViewById(getId(String.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.VISIBLE);
+                        ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)))
+                                .setText(KcaUtils.format("[%02d/%02d]", nowSlotValue, maxSlotValue));
+                        itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.VISIBLE);
                     } else {
-                        itemView.findViewById(getId(String.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.INVISIBLE);
+                        itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.INVISIBLE);
                     }
                 } else {
                     kcItemData = getKcItemStatusById(item_id, "type,name");
-                    itemView.findViewById(getId(String.format("item%d_level", i + 1), R.id.class)).setVisibility(View.GONE);
-                    itemView.findViewById(getId(String.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.GONE);
-                    itemView.findViewById(getId(String.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.GONE);
+                    itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(View.GONE);
+                    itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.GONE);
+                    itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.GONE);
                 }
 
                 String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
@@ -1037,19 +1037,19 @@ public class KcaBattleViewService extends Service {
 
                 int typeres = 0;
                 try {
-                    typeres = getId(String.format("item_%d", type), R.mipmap.class);
+                    typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
                 } catch (Exception e) {
                     typeres = R.mipmap.item_0;
                 }
-                ((TextView) itemView.findViewById(getId(String.format("item%d_name", i + 1), R.id.class))).setText(kcItemName);
-                ((ImageView) itemView.findViewById(getId(String.format("item%d_icon", i + 1), R.id.class))).setImageResource(typeres);
+                ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class))).setText(kcItemName);
+                ((ImageView) itemView.findViewById(getId(KcaUtils.format("item%d_icon", i + 1), R.id.class))).setImageResource(typeres);
                 itemView.findViewById(slotViewList[i]).setVisibility(View.VISIBLE);
             }
         }
 
         if (onslot_count == 0) {
             for (int i = 0; i < slot.size(); i++) {
-                itemView.findViewById(getId(String.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.GONE);
+                itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.GONE);
             }
         }
 
@@ -1062,7 +1062,7 @@ public class KcaBattleViewService extends Service {
             int lv = kcItemData.get("level").getAsInt();
             int typeres = 0;
             try {
-                typeres = getId(String.format("item_%d", type), R.mipmap.class);
+                typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
             } catch (Exception e) {
                 typeres = R.mipmap.item_0;
             }
@@ -1195,7 +1195,7 @@ public class KcaBattleViewService extends Service {
 
         List<String> infoList = new ArrayList<>();
         float[] exp_score = dbHelper.getExpScore();
-        String exp_str = String.format(getStringWithLocale(R.string.battleview_expview),
+        String exp_str = KcaUtils.format(getStringWithLocale(R.string.battleview_expview),
                 exp_score[0], exp_score[1]);
         infoList.add(exp_str);
 
@@ -1221,9 +1221,9 @@ public class KcaBattleViewService extends Service {
             seekValue = deckInfoCalc.getSeekValue(data, String.valueOf(idx), cn, null);
         }
         if (cn == SEEK_PURE) {
-            seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), deckInfoCalc.getSeekType(cn), (int) seekValue);
+            seekStringValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), deckInfoCalc.getSeekType(cn), (int) seekValue);
         } else {
-            seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), deckInfoCalc.getSeekType(cn), seekValue);
+            seekStringValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), deckInfoCalc.getSeekType(cn), seekValue);
         }
         infoList.add(seekStringValue);
 
@@ -1259,14 +1259,14 @@ public class KcaBattleViewService extends Service {
                 int e_count = stage_data.get("api_e_count").getAsInt();
                 int e_lostcount = stage_data.get("api_e_lostcount").getAsInt();
 
-                friendView.setText(String.format(countformat, f_count - f_lostcount, f_count, f_lostcount));
+                friendView.setText(KcaUtils.format(countformat, f_count - f_lostcount, f_count, f_lostcount));
                 if (f_count > 0 && f_count - f_lostcount <= 0) {
                     friendView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPlaneWipedText));
                 } else {
                     friendView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                 }
 
-                enemyView.setText(String.format(countformat, e_count - e_lostcount, e_count, e_lostcount));
+                enemyView.setText(KcaUtils.format(countformat, e_count - e_lostcount, e_count, e_lostcount));
                 if (e_count > 0 && e_count - e_lostcount <= 0) {
                     enemyView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPlaneWipedText));
                 } else {
@@ -1283,7 +1283,7 @@ public class KcaBattleViewService extends Service {
                 } else if (n == 2) {
                     if (stage_data.has("api_air_fire")) {
                         String airfireformat = "#%d";
-                        msgView.setText(String.format(airfireformat,
+                        msgView.setText(KcaUtils.format(airfireformat,
                                 stage_data.getAsJsonObject("api_air_fire").get("api_idx").getAsInt() + 1));
                     } else {
                         msgView.setText("-");
@@ -1302,7 +1302,7 @@ public class KcaBattleViewService extends Service {
             if (api_data.has("api_kouku")) {
                 JsonObject kdata = api_data.getAsJsonObject("api_kouku");
                 ((TextView) acView.findViewById(R.id.view_ac_phase1_title))
-                        .setText(String.format(getStringWithLocale(R.string.phase_term), 1));
+                        .setText(KcaUtils.format(getStringWithLocale(R.string.phase_term), 1));
                 setAirCombatTextView("view_ac_phase1_", kdata);
                 acView.findViewById(R.id.view_ac_phase1).setVisibility(View.VISIBLE);
             } else {
@@ -1312,7 +1312,7 @@ public class KcaBattleViewService extends Service {
             if (api_data.has("api_kouku2")) {
                 JsonObject kdata = api_data.getAsJsonObject("api_kouku2");
                 ((TextView) acView.findViewById(R.id.view_ac_phase2_title))
-                        .setText(String.format(getStringWithLocale(R.string.phase_term), 2));
+                        .setText(KcaUtils.format(getStringWithLocale(R.string.phase_term), 2));
                 setAirCombatTextView("view_ac_phase2_", kdata);
                 acView.findViewById(R.id.view_ac_phase2).setVisibility(View.VISIBLE);
             } else {
@@ -1345,11 +1345,11 @@ public class KcaBattleViewService extends Service {
                 JsonObject kdata = api_data.getAsJsonObject("api_destruction_battle").getAsJsonObject("api_air_base_attack");
                 ((TextView) acView.findViewById(R.id.view_ac_aba_0_title))
                         .setText(getStringWithLocale(R.string.airbase_term).concat(" ")
-                                .concat(String.format(getStringWithLocale(R.string.phase_term), 1)));
+                                .concat(KcaUtils.format(getStringWithLocale(R.string.phase_term), 1)));
                 setAirCombatTextView("view_ac_aba_0_", kdata);
                 acView.findViewById(R.id.view_ac_aba_0).setVisibility(View.VISIBLE);
                 for (int i = 1; i < 6; i++) {
-                    String viewid = String.format(viewidformat, i);
+                    String viewid = KcaUtils.format(viewidformat, i);
                     acView.findViewById(getId(viewid, R.id.class)).setVisibility(View.GONE);
                 }
                 acView.findViewById(R.id.view_ac_aba).setVisibility(View.VISIBLE);
@@ -1357,7 +1357,7 @@ public class KcaBattleViewService extends Service {
                 JsonArray kdata_list = api_data.getAsJsonArray("api_air_base_attack");
                 String viewidformat = "view_ac_aba_%d";
                 for (int i = 0; i < 6; i++) {
-                    String viewid = String.format(viewidformat, i);
+                    String viewid = KcaUtils.format(viewidformat, i);
                     if (i >= kdata_list.size()) {
                         acView.findViewById(getId(viewid, R.id.class)).setVisibility(View.GONE);
                         Log.e("KCA-BV", viewid + " not available");
@@ -1365,7 +1365,7 @@ public class KcaBattleViewService extends Service {
                         JsonObject kdata = kdata_list.get(i).getAsJsonObject();
                         ((TextView) acView.findViewById(getId(viewid.concat("_title"), R.id.class)))
                                 .setText(getStringWithLocale(R.string.airbase_term).concat(" ")
-                                        .concat(String.format(getStringWithLocale(R.string.phase_term), i+1)));
+                                        .concat(KcaUtils.format(getStringWithLocale(R.string.phase_term), i+1)));
                         setAirCombatTextView(viewid.concat("_"), kdata);
                         acView.findViewById(getId(viewid, R.id.class)).setVisibility(View.VISIBLE);
                         Log.e("KCA-BV", viewid + " " + kdata.toString());

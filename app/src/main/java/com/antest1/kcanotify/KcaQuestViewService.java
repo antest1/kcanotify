@@ -118,7 +118,7 @@ public class KcaQuestViewService extends Service {
     public void setQuestView(int api_disp_page, int api_page_count, JsonArray api_list, boolean checkValid) {
         if (api_page_count > 0 && api_list.size() > 0) {
             ((TextView) questview.findViewById(R.id.quest_page))
-                    .setText(String.format(getStringWithLocale(R.string.questview_page), api_disp_page, api_page_count));
+                    .setText(KcaUtils.format(getStringWithLocale(R.string.questview_page), api_disp_page, api_page_count));
             if (checkValid) helper.checkValidQuest(api_disp_page, api_page_count, api_list);
             for (int i = 0; i < api_list.size(); i++) {
                 int index = i + 1;
@@ -132,12 +132,12 @@ public class KcaQuestViewService extends Service {
                     int api_progress = item.get("api_progress_flag").getAsInt();
                     int api_state = item.get("api_state").getAsInt();
 
-                    String api_title = String.format("[%s] %s", api_no, item.get("api_title").getAsString());
+                    String api_title = KcaUtils.format("[%s] %s", api_no, item.get("api_title").getAsString());
                     String api_detail = item.get("api_detail").getAsString();
                     if (kcQuestInfoData.has(api_no)) {
                         String code = kcQuestInfoData.getAsJsonObject(api_no).get("code").getAsString();
                         String name = kcQuestInfoData.getAsJsonObject(api_no).get("name").getAsString();
-                        api_title = String.format("[%s] %s", code, name);
+                        api_title = KcaUtils.format("[%s] %s", code, name);
                         api_detail = kcQuestInfoData.getAsJsonObject(api_no).get("desc").getAsString();
                         if (kcQuestInfoData.getAsJsonObject(api_no).has("memo")) { // Temporary
                             String memo = kcQuestInfoData.getAsJsonObject(api_no).get("memo").getAsString();
@@ -145,31 +145,31 @@ public class KcaQuestViewService extends Service {
                         }
                     }
 
-                    ((TextView) questview.findViewById(getId(String.format("quest%d_category", index), R.id.class)))
-                            .setText(getStringWithLocale(getId(String.format("quest_category_%d", api_category), R.string.class)));
-                    questview.findViewById(getId(String.format("quest%d_category", index), R.id.class))
+                    ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_category", index), R.id.class)))
+                            .setText(getStringWithLocale(getId(KcaUtils.format("quest_category_%d", api_category), R.string.class)));
+                    questview.findViewById(getId(KcaUtils.format("quest%d_category", index), R.id.class))
                             .setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
-                                    getId(String.format("colorQuestCategory%d", api_category), R.color.class)));
+                                    getId(KcaUtils.format("colorQuestCategory%d", api_category), R.color.class)));
 
-                    ((TextView) questview.findViewById(getId(String.format("quest%d_type", index), R.id.class)))
-                            .setText(getStringWithLocale(getId(String.format("quest_type_%d", api_type), R.string.class)));
-                    questview.findViewById(getId(String.format("quest%d_type", index), R.id.class))
+                    ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_type", index), R.id.class)))
+                            .setText(getStringWithLocale(getId(KcaUtils.format("quest_type_%d", api_type), R.string.class)));
+                    questview.findViewById(getId(KcaUtils.format("quest%d_type", index), R.id.class))
                             .setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
-                                    getId(String.format("colorQuestType%d", api_type), R.color.class)));
+                                    getId(KcaUtils.format("colorQuestType%d", api_type), R.color.class)));
 
-                    ((TextView) questview.findViewById(getId(String.format("quest%d_name", index), R.id.class))).setText(api_title);
-                    ((TextView) questview.findViewById(getId(String.format("quest%d_desc", index), R.id.class))).setText(api_detail);
-                    ((TextView) questview.findViewById(getId(String.format("quest%d_desc", index), R.id.class))).setMovementMethod(new ScrollingMovementMethod());
+                    ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_name", index), R.id.class))).setText(api_title);
+                    ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_desc", index), R.id.class))).setText(api_detail);
+                    ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_desc", index), R.id.class))).setMovementMethod(new ScrollingMovementMethod());
 
                     if (api_progress != 0) {
-                        ((TextView) questview.findViewById(getId(String.format("quest%d_progress", index), R.id.class)))
-                                .setText(getStringWithLocale(getId(String.format("quest_progress_%d", api_progress), R.string.class)));
-                        questview.findViewById(getId(String.format("quest%d_progress", index), R.id.class))
+                        ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_progress", index), R.id.class)))
+                                .setText(getStringWithLocale(getId(KcaUtils.format("quest_progress_%d", api_progress), R.string.class)));
+                        questview.findViewById(getId(KcaUtils.format("quest%d_progress", index), R.id.class))
                                 .setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
-                                        getId(String.format("colorQuestProgress%d", api_progress), R.color.class)));
-                        questview.findViewById(getId(String.format("quest%d_progress", index), R.id.class)).setVisibility(View.VISIBLE);
+                                        getId(KcaUtils.format("colorQuestProgress%d", api_progress), R.color.class)));
+                        questview.findViewById(getId(KcaUtils.format("quest%d_progress", index), R.id.class)).setVisibility(View.VISIBLE);
                     } else {
-                        questview.findViewById(getId(String.format("quest%d_progress", index), R.id.class)).setVisibility(View.GONE);
+                        questview.findViewById(getId(KcaUtils.format("quest%d_progress", index), R.id.class)).setVisibility(View.GONE);
                     }
 
                     if (isQuestTrackable(api_no)) {
@@ -205,7 +205,7 @@ public class KcaQuestViewService extends Service {
                                 int cond = trackCond.get(n).getAsInt();
                                 int val = trackData.get(n).getAsInt();
                                 Log.e("KCA-QV", api_no + " " + String.valueOf(val) + " " + String.valueOf(cond));
-                                trackinfo_list.add(String.format("%d/%d", Math.min(val, cond), cond));
+                                trackinfo_list.add(KcaUtils.format("%d/%d", Math.min(val, cond), cond));
                             }
                             if (trackinfo_list.size() > 0) {
                                 trackinfo_text = joinStr(trackinfo_list, ", ");
@@ -213,30 +213,30 @@ public class KcaQuestViewService extends Service {
                                 noshowflag = true;
                             }
 
-                            ((TextView) questview.findViewById(getId(String.format("quest%d_progress_track", index), R.id.class))).setText(trackinfo_text);
-                            questview.findViewById(getId(String.format("quest%d_progress_track", index), R.id.class)).setVisibility(View.VISIBLE);
+                            ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_progress_track", index), R.id.class))).setText(trackinfo_text);
+                            questview.findViewById(getId(KcaUtils.format("quest%d_progress_track", index), R.id.class)).setVisibility(View.VISIBLE);
                         }
                         if (noshowflag) {
-                            questview.findViewById(getId(String.format("quest%d_progress_track", index), R.id.class)).setVisibility(View.GONE);
+                            questview.findViewById(getId(KcaUtils.format("quest%d_progress_track", index), R.id.class)).setVisibility(View.GONE);
                         }
                     } else {
-                        questview.findViewById(getId(String.format("quest%d_progress_track", index), R.id.class)).setVisibility(View.GONE);
+                        questview.findViewById(getId(KcaUtils.format("quest%d_progress_track", index), R.id.class)).setVisibility(View.GONE);
                     }
 
 
-                    ((TextView) questview.findViewById(getId(String.format("quest%d_name", index), R.id.class)))
+                    ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_name", index), R.id.class)))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(),
-                                    getId(String.format("colorQuestState%d", api_state), R.color.class)));
+                                    getId(KcaUtils.format("colorQuestState%d", api_state), R.color.class)));
 
-                    questview.findViewById(getId(String.format("quest%d", index), R.id.class)).setVisibility(View.VISIBLE);
+                    questview.findViewById(getId(KcaUtils.format("quest%d", index), R.id.class)).setVisibility(View.VISIBLE);
                 } else {
-                    ((TextView) questview.findViewById(getId(String.format("quest%d_category", index), R.id.class))).setText("");
-                    ((TextView) questview.findViewById(getId(String.format("quest%d_type", index), R.id.class))).setText("");
-                    ((TextView) questview.findViewById(getId(String.format("quest%d_name", index), R.id.class))).setText("");
-                    ((TextView) questview.findViewById(getId(String.format("quest%d_desc", index), R.id.class))).setText("");
-                    ((TextView) questview.findViewById(getId(String.format("quest%d_progress", index), R.id.class))).setText("");
-                    questview.findViewById(getId(String.format("quest%d_progress", index), R.id.class)).setVisibility(View.GONE);
-                    questview.findViewById(getId(String.format("quest%d", index), R.id.class)).setVisibility(View.INVISIBLE);
+                    ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_category", index), R.id.class))).setText("");
+                    ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_type", index), R.id.class))).setText("");
+                    ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_name", index), R.id.class))).setText("");
+                    ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_desc", index), R.id.class))).setText("");
+                    ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_progress", index), R.id.class))).setText("");
+                    questview.findViewById(getId(KcaUtils.format("quest%d_progress", index), R.id.class)).setVisibility(View.GONE);
+                    questview.findViewById(getId(KcaUtils.format("quest%d", index), R.id.class)).setVisibility(View.INVISIBLE);
                 }
             }
         } else {
@@ -244,13 +244,13 @@ public class KcaQuestViewService extends Service {
                     .setText(getStringWithLocale(R.string.questview_nopage));
             for (int i = 0; i < 5; i++) {
                 int index = i + 1;
-                ((TextView) questview.findViewById(getId(String.format("quest%d_category", index), R.id.class))).setText("");
-                ((TextView) questview.findViewById(getId(String.format("quest%d_type", index), R.id.class))).setText("");
-                ((TextView) questview.findViewById(getId(String.format("quest%d_name", index), R.id.class))).setText("");
-                ((TextView) questview.findViewById(getId(String.format("quest%d_desc", index), R.id.class))).setText("");
-                ((TextView) questview.findViewById(getId(String.format("quest%d_progress", index), R.id.class))).setText("");
-                questview.findViewById(getId(String.format("quest%d_progress", index), R.id.class)).setVisibility(View.GONE);
-                questview.findViewById(getId(String.format("quest%d", index), R.id.class)).setVisibility(View.INVISIBLE);
+                ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_category", index), R.id.class))).setText("");
+                ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_type", index), R.id.class))).setText("");
+                ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_name", index), R.id.class))).setText("");
+                ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_desc", index), R.id.class))).setText("");
+                ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_progress", index), R.id.class))).setText("");
+                questview.findViewById(getId(KcaUtils.format("quest%d_progress", index), R.id.class)).setVisibility(View.GONE);
+                questview.findViewById(getId(KcaUtils.format("quest%d", index), R.id.class)).setVisibility(View.INVISIBLE);
             }
         }
     }

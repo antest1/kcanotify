@@ -114,7 +114,7 @@ public class ErrorlogActivity extends AppCompatActivity{
             public void onClick(View v) {
                 List<String> loglist = dbHelper.getErrorLog(-1, true);
                 if (loglist.size() > 0) {
-                    String filename = String.format("/log_%s_%s.txt", BuildConfig.VERSION_NAME, String.valueOf(System.currentTimeMillis()));
+                    String filename = KcaUtils.format("/log_%s_%s.txt", BuildConfig.VERSION_NAME, String.valueOf(System.currentTimeMillis()));
                     File file = new File(exportPath.concat(filename));
                     try {
                         BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));

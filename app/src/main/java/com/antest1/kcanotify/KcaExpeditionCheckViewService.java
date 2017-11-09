@@ -556,7 +556,7 @@ public class KcaExpeditionCheckViewService extends Service {
                 .setText(getTimeStr(time));
 
         ((TextView) itemView.findViewById(R.id.view_excheck_fleet_total_num))
-                .setText(String.format(getStringWithLocale(R.string.excheckview_total_num_format), total_num));
+                .setText(KcaUtils.format(getStringWithLocale(R.string.excheckview_total_num_format), total_num));
         setItemTextViewColorById(R.id.view_excheck_fleet_total_num,
                 check.get("total-num").getAsBoolean(), false);
 
@@ -566,7 +566,7 @@ public class KcaExpeditionCheckViewService extends Service {
             if (has_flag_lv) {
                 int flag_lv = data.get("flag-lv").getAsInt();
                 setItemTextViewById(R.id.view_excheck_flagship_lv,
-                        String.format(getStringWithLocale(R.string.excheckview_flag_lv_format), flag_lv));
+                        KcaUtils.format(getStringWithLocale(R.string.excheckview_flag_lv_format), flag_lv));
                 setItemTextViewColorById(R.id.view_excheck_flagship_lv,
                         check.get("flag-lv").getAsBoolean(), false);
             }
@@ -584,7 +584,7 @@ public class KcaExpeditionCheckViewService extends Service {
         if (has_total_lv) {
             int total_lv = data.get("total-lv").getAsInt();
             setItemTextViewById(R.id.view_excheck_fleet_total_lv,
-                    String.format(getStringWithLocale(R.string.excheckview_total_lv_format), total_lv));
+                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_lv_format), total_lv));
             setItemTextViewColorById(R.id.view_excheck_fleet_total_lv,
                     check.get("total-lv").getAsBoolean(), false);
         }
@@ -603,7 +603,7 @@ public class KcaExpeditionCheckViewService extends Service {
             if (has_drum_ship) {
                 int drum_ship = data.get("drum-ship").getAsInt();
                 setItemTextViewById(R.id.view_excheck_drum_ship,
-                        String.format(getStringWithLocale(R.string.excheckview_drum_ship_format), drum_ship));
+                        KcaUtils.format(getStringWithLocale(R.string.excheckview_drum_ship_format), drum_ship));
                 setItemTextViewColorById(R.id.view_excheck_drum_ship,
                         check.get("drum-ship").getAsBoolean(), false);
             }
@@ -611,13 +611,13 @@ public class KcaExpeditionCheckViewService extends Service {
             if (has_drum_num) {
                 int drum_num = data.get("drum-num").getAsInt();
                 setItemTextViewById(R.id.view_excheck_drum_count,
-                        String.format(getStringWithLocale(R.string.excheckview_drum_num_format), drum_num));
+                        KcaUtils.format(getStringWithLocale(R.string.excheckview_drum_num_format), drum_num));
                 setItemTextViewColorById(R.id.view_excheck_drum_count,
                         check.get("drum-num").getAsBoolean(), false);
             } else if (has_drum_num_optional) {
                 int drum_num = data.get("drum-num-optional").getAsInt();
                 setItemTextViewById(R.id.view_excheck_drum_count,
-                        String.format(getStringWithLocale(R.string.excheckview_drum_num_format), drum_num));
+                        KcaUtils.format(getStringWithLocale(R.string.excheckview_drum_num_format), drum_num));
                 setItemTextViewColorById(R.id.view_excheck_drum_count,
                         check.get("drum-num").getAsBoolean(), true);
             }
@@ -627,7 +627,7 @@ public class KcaExpeditionCheckViewService extends Service {
         if (has_total_asw) {
             int total_asw = data.get("total-asw").getAsInt();
             setItemTextViewById(R.id.view_excheck_total_asw,
-                    String.format(getStringWithLocale(R.string.excheckview_total_asw_format), total_asw));
+                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_asw_format), total_asw));
             setItemTextViewColorById(R.id.view_excheck_total_asw,
                     check.get("total-asw").getAsBoolean(), true);
         }
@@ -636,7 +636,7 @@ public class KcaExpeditionCheckViewService extends Service {
         if (has_total_los) {
             int total_los = data.get("total-los").getAsInt();
             setItemTextViewById(R.id.view_excheck_total_los,
-                    String.format(getStringWithLocale(R.string.excheckview_total_los_format), total_los));
+                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_los_format), total_los));
             setItemTextViewColorById(R.id.view_excheck_total_los,
                     check.get("total-los").getAsBoolean(), true);
         }
@@ -694,35 +694,35 @@ public class KcaExpeditionCheckViewService extends Service {
                 List<String> bonus_info_text = new ArrayList<>();
 
                 int total_asw = bonus_info.get("asw").getAsInt();
-                bonus_info_text.add(String.format(getStringWithLocale(R.string.excheckview_bonus_asw), total_asw));
+                bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_asw), total_asw));
 
                 int total_los = bonus_info.get("los").getAsInt();
-                bonus_info_text.add(String.format(getStringWithLocale(R.string.excheckview_bonus_los), total_los));
+                bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_los), total_los));
 
                 int drum_count = bonus_info.get("drum").getAsInt();
                 if (drum_count > 0) {
-                    bonus_info_text.add(String.format(getStringWithLocale(R.string.excheckview_bonus_drum), drum_count));
+                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_drum), drum_count));
                 } else {
-                    bonus_info_text.add(String.format(getStringWithLocale(R.string.excheckview_bonus_drum), 0));
+                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_drum), 0));
                 }
                 if (bonus_info.get("kinu").getAsBoolean())
                     bonus_info_text.add(getStringWithLocale(R.string.excheckview_bonus_kinu));
                 int daihatsu_count = bonus_info.get("daihatsu").getAsInt();
                 if (daihatsu_count > 0)
-                    bonus_info_text.add(String.format(getStringWithLocale(R.string.excheckview_bonus_dlc), daihatsu_count));
+                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_dlc), daihatsu_count));
                 int tank_count = bonus_info.get("tank").getAsInt();
                 if (tank_count > 0)
-                    bonus_info_text.add(String.format(getStringWithLocale(R.string.excheckview_bonus_tank), tank_count));
+                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_tank), tank_count));
                 int amp_count = bonus_info.get("amp").getAsInt();
                 if (amp_count > 0)
-                    bonus_info_text.add(String.format(getStringWithLocale(R.string.excheckview_bonus_amp), amp_count));
+                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_amp), amp_count));
                 int toku_count = bonus_info.get("toku").getAsInt();
                 if (toku_count > 0)
-                    bonus_info_text.add(String.format(getStringWithLocale(R.string.excheckview_bonus_toku), toku_count));
+                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_toku), toku_count));
                 String bonus_info_content = joinStr(bonus_info_text, " / ");
                 double bonus_value = bonus_info.get("bonus").getAsDouble() - 100.0;
                 if (bonus_value > 0.0) {
-                    bonus_info_content = bonus_info_content.concat(String.format(getStringWithLocale(R.string.excheckview_bonus_result), bonus_value));
+                    bonus_info_content = bonus_info_content.concat(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_result), bonus_value));
                 }
                 ((TextView) mView.findViewById(R.id.excheck_info)).setText(bonus_info_content);
                 mView.findViewById(R.id.excheck_info).setBackgroundColor(

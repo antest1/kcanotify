@@ -56,6 +56,10 @@ public class KcaUtils {
         return errors.toString().replaceAll("\n", " / ").replaceAll("\t", "");
     }
 
+    public static String format(String format, Object... args) {
+        return String.format(Locale.ENGLISH, format, args);
+    }
+
     public static String joinStr(List<String> list, String delim) {
         String resultStr = "";
         if (list.size() > 0) {
@@ -168,7 +172,7 @@ public class KcaUtils {
     public static String byteArrayToHex(byte[] a) {
         StringBuilder sb = new StringBuilder();
         for (final byte b : a)
-            sb.append(String.format("%02x ", b & 0xff));
+            sb.append(KcaUtils.format("%02x ", b & 0xff));
         return sb.toString();
     }
 
@@ -339,7 +343,7 @@ public class KcaUtils {
         hour = min / 60;
         sec = sec % 60;
         min = min % 60;
-        return String.format("%02d:%02d:%02d", hour, min, sec);
+        return KcaUtils.format("%02d:%02d:%02d", hour, min, sec);
     }
 
     public static void doVibrate(Vibrator v, int time) {

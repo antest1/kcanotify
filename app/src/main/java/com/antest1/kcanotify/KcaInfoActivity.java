@@ -35,9 +35,9 @@ public class KcaInfoActivity extends AppCompatActivity {
         app_gpl = (TextView) findViewById(R.id.app_gpl);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            app_gpl.setText(Html.fromHtml(String.format(getString(R.string.ia_gpl), getString(R.string.app_brand)), Html.FROM_HTML_MODE_LEGACY));
+            app_gpl.setText(Html.fromHtml(KcaUtils.format(getString(R.string.ia_gpl), getString(R.string.app_brand)), Html.FROM_HTML_MODE_LEGACY));
         } else {
-            app_gpl.setText(Html.fromHtml((String.format(getString(R.string.ia_gpl), getString(R.string.app_brand)))));
+            app_gpl.setText(Html.fromHtml((KcaUtils.format(getString(R.string.ia_gpl), getString(R.string.app_brand)))));
         }
         app_gpl.setMovementMethod(LinkMovementMethod.getInstance());
     }

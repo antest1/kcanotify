@@ -238,6 +238,15 @@
         </Preference>
         <Preference
             android:defaultValue=""
+            android:key="app_inspector"
+            android:title="@string/action_inspector">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.antest1.kcanotify"
+                android:targetClass="com.antest1.kcanotify.KcaInspectorActivity" />
+        </Preference>
+        <Preference
+            android:defaultValue=""
             android:key="app_information"
             android:title="@string/setting_menu_app_info">
             <intent

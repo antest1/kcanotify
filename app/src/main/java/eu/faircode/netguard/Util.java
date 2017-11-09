@@ -56,6 +56,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.antest1.kcanotify.KcaUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -470,7 +472,7 @@ public class Util {
         byte[] bytes = MessageDigest.getInstance("MD5").digest((text + salt).getBytes("UTF-8"));
         StringBuilder sb = new StringBuilder();
         for (byte b : bytes)
-            sb.append(String.format("%02X", b));
+            sb.append(KcaUtils.format("%02X", b));
         return sb.toString();
     }
 
@@ -549,24 +551,24 @@ public class Util {
         StringBuilder sb = new StringBuilder();
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
-        sb.append(String.format("Interactive %B\r\n", isInteractive(context)));
-        sb.append(String.format("Connected %B\r\n", isConnected(context)));
-        sb.append(String.format("WiFi %B\r\n", isWifiActive(context)));
-        sb.append(String.format("Metered %B\r\n", isMeteredNetwork(context)));
-        sb.append(String.format("Roaming %B\r\n", isRoaming(context)));
+        sb.append(KcaUtils.format("Interactive %B\r\n", isInteractive(context)));
+        sb.append(KcaUtils.format("Connected %B\r\n", isConnected(context)));
+        sb.append(KcaUtils.format("WiFi %B\r\n", isWifiActive(context)));
+        sb.append(KcaUtils.format("Metered %B\r\n", isMeteredNetwork(context)));
+        sb.append(KcaUtils.format("Roaming %B\r\n", isRoaming(context)));
 
         if (tm.getSimState() == TelephonyManager.SIM_STATE_READY)
-            sb.append(String.format("SIM %s/%s/%s\r\n", tm.getSimCountryIso(), tm.getSimOperatorName(), tm.getSimOperator()));
+            sb.append(KcaUtils.format("SIM %s/%s/%s\r\n", tm.getSimCountryIso(), tm.getSimOperatorName(), tm.getSimOperator()));
         if (tm.getNetworkType() != TelephonyManager.NETWORK_TYPE_UNKNOWN)
-            sb.append(String.format("Network %s/%s/%s\r\n", tm.getNetworkCountryIso(), tm.getNetworkOperatorName(), tm.getNetworkOperator()));
+            sb.append(KcaUtils.format("Network %s/%s/%s\r\n", tm.getNetworkCountryIso(), tm.getNetworkOperatorName(), tm.getNetworkOperator()));
 
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            sb.append(String.format("Power saving %B\r\n", pm.isPowerSaveMode()));
+            sb.append(KcaUtils.format("Power saving %B\r\n", pm.isPowerSaveMode()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            sb.append(String.format("Battery optimizing %B\r\n", batteryOptimizing(context)));
+            sb.append(KcaUtils.format("Battery optimizing %B\r\n", batteryOptimizing(context)));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            sb.append(String.format("Data saving %B\r\n", dataSaving(context)));
+            sb.append(KcaUtils.format("Data saving %B\r\n", dataSaving(context)));
 
         if (sb.length() > 2)
             sb.setLength(sb.length() - 2);

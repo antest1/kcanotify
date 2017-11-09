@@ -70,6 +70,20 @@
                 android:value="com.antest1.kcanotify.SettingActivity" />
         </activity>
         <activity
+            android:name="com.antest1.kcanotify.KcaInspectorActivity"
+            android:configChanges="locale|layoutDirection">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.antest1.kcanotify.SettingActivity" />
+        </activity>
+        <activity
+            android:name="com.antest1.kcanotify.KcaInspectorDetailActivity"
+            android:configChanges="locale|layoutDirection">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.antest1.kcanotify.KcaInspectorActivity" />
+        </activity>
+        <activity
             android:name="com.antest1.kcanotify.KcaInfoActivity"
             android:configChanges="locale|layoutDirection">
             <meta-data

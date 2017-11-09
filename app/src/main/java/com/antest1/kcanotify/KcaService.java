@@ -240,9 +240,9 @@ public class KcaService extends Service {
         nHandler = new kcaNotificationHandler(this);
         broadcaster = LocalBroadcastManager.getInstance(this);
 
-        String initTitle = String.format(getStringWithLocale(R.string.kca_init_title), getStringWithLocale(R.string.app_name));
+        String initTitle = KcaUtils.format(getStringWithLocale(R.string.kca_init_title), getStringWithLocale(R.string.app_name));
         String initContent = getStringWithLocale(R.string.kca_init_content);
-        // String initSubContent = String.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
+        // String initSubContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
         kcaFirstDeckInfo = getStringWithLocale(R.string.kca_init_content);
         startForeground(getNotificationId(NOTI_FRONT, 1), createViewNotification(initTitle, initContent));
         isServiceOn = true;
@@ -376,31 +376,31 @@ public class KcaService extends Service {
                 }
                 if (viewType == 1) {
                     int value = (notificationTimeCounter / 2) % (kcaExpStrList.size());
-                    String countStr = String.format(" (%d/%d)", value+1, kcaExpStrList.size());
+                    String countStr = KcaUtils.format(" (%d/%d)", value+1, kcaExpStrList.size());
                     expeditionString = kcaExpStrList.get(value).concat(countStr);
                 } else {
                     expeditionString = joinStr(kcaExpStrList, " / ");
                 }
             }
         } else {
-            expeditionString = String.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
+            expeditionString = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
         }
 
         String notifiTitle = "";
         String nodeString = "";
         if (currentNodeInfo.length() > 0) {
-            nodeString = String.format("[%s]", currentNodeInfo.replaceAll("[()]", "").replaceAll("\\s", "/"));
+            nodeString = KcaUtils.format("[%s]", currentNodeInfo.replaceAll("[()]", "").replaceAll("\\s", "/"));
         }
 
         switch (heavyDamagedMode) {
             case HD_DAMECON:
-                notifiTitle = String.format(getStringWithLocale(R.string.kca_view_hdmg_damecon_format), getStringWithLocale(R.string.app_name), nodeString);
+                notifiTitle = KcaUtils.format(getStringWithLocale(R.string.kca_view_hdmg_damecon_format), getStringWithLocale(R.string.app_name), nodeString);
                 break;
             case HD_DANGER:
-                notifiTitle = String.format(getStringWithLocale(R.string.kca_view_hdmg_format), getStringWithLocale(R.string.app_name), nodeString);
+                notifiTitle = KcaUtils.format(getStringWithLocale(R.string.kca_view_hdmg_format), getStringWithLocale(R.string.app_name), nodeString);
                 break;
             default:
-                notifiTitle = String.format(getStringWithLocale(R.string.kca_view_normal_format), getStringWithLocale(R.string.app_name), nodeString);
+                notifiTitle = KcaUtils.format(getStringWithLocale(R.string.kca_view_normal_format), getStringWithLocale(R.string.app_name), nodeString);
                 break;
         }
 
@@ -503,10 +503,10 @@ public class KcaService extends Service {
         JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
 
         int[] airPowerRange = deckInfoCalc.getAirPowerRange(portdeckdata, 0, KcaBattle.getEscapeFlag());
-        String airPowerValue = String.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
-        String seekValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, deckInfoCalc.getSeekValue(portdeckdata, "0", cn, KcaBattle.getEscapeFlag()));
+        String airPowerValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
+        String seekValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, deckInfoCalc.getSeekValue(portdeckdata, "0", cn, KcaBattle.getEscapeFlag()));
         int[] tp = deckInfoCalc.getTPValue(portdeckdata, "0", KcaBattle.getEscapeFlag());
-        String tpValue = String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
+        String tpValue = KcaUtils.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
         List<String> toastList = new ArrayList<String>();
         if (airPowerRange[1] > 0) {
             toastList.add(airPowerValue);
@@ -915,7 +915,7 @@ public class KcaService extends Service {
                             if (url.startsWith(API_GET_MEMBER_MISSION) && i == 0) continue;
                             if (deckInfoCalc.checkNotSuppliedExist(portdeckdata, i)) {
                                 isNotSuppliedFlag = true;
-                                message = message.concat(String.format(getStringWithLocale(R.string.not_supplied), i + 1)).concat("\n");
+                                message = message.concat(KcaUtils.format(getStringWithLocale(R.string.not_supplied), i + 1)).concat("\n");
                             }
                         }
 
@@ -1150,7 +1150,7 @@ public class KcaService extends Service {
                                     JsonObject itemData = KcaApiData.getKcItemStatusById(itemKcId, "name,type");
                                     itemname = KcaApiData.getItemTranslation(itemData.get("name").getAsString());
                                     itemtype = itemData.get("type").getAsJsonArray().get(3).getAsInt();
-                                    itemcount = String.format("(%d)", KcaApiData.getItemCountByKcId(itemKcId));
+                                    itemcount = KcaUtils.format("(%d)", KcaApiData.getItemCountByKcId(itemKcId));
                                 } else {
                                     itemname = getStringWithLocale(R.string.develop_failed_text);
                                     itemtype = 999;
@@ -1276,7 +1276,7 @@ public class KcaService extends Service {
                                 int flagship = deckInfoCalc.getKcShipList(portdeckdata, 0)[0];
                                 int[] materials = {0, 0, 0, 0, 0};
                                 for (int i = 0; i < materials.length; i++) {
-                                    materials[i] = api_kdock_item.get(String.format("api_item%d", i + 1)).getAsInt();
+                                    materials[i] = api_kdock_item.get(KcaUtils.format("api_item%d", i + 1)).getAsInt();
                                 }
                                 int created_ship_id = api_kdock_item.get("api_created_ship_id").getAsInt();
                                 if (isOpendbEnabled()) {
@@ -1639,8 +1639,8 @@ public class KcaService extends Service {
 
             if (url.startsWith(KCA_API_DATA_LOADED)) {
                 if (jsonDataObj.has("ship")) {
-                    Log.e("KCA", String.format("Ship: %d", jsonDataObj.get("ship").getAsInt()));
-                    Log.e("KCA", String.format("Item: %d", jsonDataObj.get("item").getAsInt()));
+                    Log.e("KCA", KcaUtils.format("Ship: %d", jsonDataObj.get("ship").getAsInt()));
+                    Log.e("KCA", KcaUtils.format("Item: %d", jsonDataObj.get("item").getAsInt()));
                 }
                 api_start2_loading_flag = false;
                 if (isUserItemDataLoaded) {
@@ -1906,7 +1906,7 @@ public class KcaService extends Service {
             // new retrieveApiStartData().execute("", "down", "");
             return;
         } else {
-            Log.e("KCA", String.format("processFirstDeckInfo: data loaded"));
+            Log.e("KCA", KcaUtils.format("processFirstDeckInfo: data loaded"));
         }
 
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
@@ -1920,7 +1920,7 @@ public class KcaService extends Service {
         String airPowerValue = "";
         int[] airPowerRange = KcaDeckInfo.getAirPowerRange(data, 0, null);
         if (airPowerRange[0] > 0 && airPowerRange[1] > 0) {
-            airPowerValue = String.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
+            airPowerValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
             infoData = new JsonObject();
             infoData.addProperty("is_newline", 0);
             infoData.addProperty("portrait_value", airPowerValue);
@@ -1934,9 +1934,9 @@ public class KcaService extends Service {
         if (isCombined)
             seekValue += KcaDeckInfo.getSeekValue(data, 1, cn, KcaBattle.getEscapeFlag());
         if (cn == SEEK_PURE) {
-            seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), seekType, (int) seekValue);
+            seekStringValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), seekType, (int) seekValue);
         } else {
-            seekStringValue = String.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, seekValue);
+            seekStringValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, seekValue);
         }
         infoData = new JsonObject();
         infoData.addProperty("is_newline", 0);
@@ -1993,7 +1993,7 @@ public class KcaService extends Service {
         } else {
             tp = KcaDeckInfo.getTPValue(data, "0", KcaBattle.getEscapeFlag());
         }
-        String tpValue = String.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
+        String tpValue = KcaUtils.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
         infoData = new JsonObject();
         infoData.addProperty("is_newline", 1);
         infoData.addProperty("portrait_value", tpValue);
@@ -2012,9 +2012,9 @@ public class KcaService extends Service {
         for (int i = 0; i < count; i++) {
             String conditionValue;
             if (count == 1) {
-                conditionValue = String.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, i));
+                conditionValue = KcaUtils.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, i));
             } else {
-                conditionValue = String.format(getStringWithLocale(R.string.kca_view_condition_nformat), i + 1, KcaDeckInfo.getConditionStatus(data, i));
+                conditionValue = KcaUtils.format(getStringWithLocale(R.string.kca_view_condition_nformat), i + 1, KcaDeckInfo.getConditionStatus(data, i));
             }
             if (conditionValue.length() == 0) continue;
 
@@ -2164,7 +2164,7 @@ public class KcaService extends Service {
         if (data == null) {
             KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
             showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(this, R.color.colorPrimaryDark));
-            Log.e("KCA", String.format("currentPortDeckData is null"));
+            Log.e("KCA", KcaUtils.format("currentPortDeckData is null"));
             return false;
         } else {
             return true;

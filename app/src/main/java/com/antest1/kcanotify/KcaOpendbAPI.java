@@ -41,25 +41,25 @@ public class KcaOpendbAPI {
 
     public static void sendEquipDevData(int flagship, int fuel, int ammo, int steel, int bauxite, int result) {
 
-        String param = String.format("apiver=2&flagship=%d&fuel=%d&ammo=%d&steel=%d&bauxite=%d&result=%d",
+        String param = KcaUtils.format("apiver=2&flagship=%d&fuel=%d&ammo=%d&steel=%d&bauxite=%d&result=%d",
                 flagship, fuel, ammo, steel, bauxite, result);
         new opendbRequest().execute(REQ_EQUIP_DEV, param);
     }
 
     public static void sendShipDevData(int flagship, int fuel, int ammo, int steel, int bauxite, int material, int result) {
-        String param = String.format("apiver=2&flagship=%d&fuel=%d&ammo=%d&steel=%d&bauxite=%d&material=%d&result=%d",
+        String param = KcaUtils.format("apiver=2&flagship=%d&fuel=%d&ammo=%d&steel=%d&bauxite=%d&material=%d&result=%d",
                 flagship, fuel, ammo, steel, bauxite, material, result);
         new opendbRequest().execute(REQ_SHIP_DEV, param);
     }
 
     public static void sendShipDropData(int world, int map, int node, String rank, int maprank, int inventory, int result) {
-        String param = String.format("apiver=4&world=%d&map=%d&node=%d&rank=%s&maprank=%d&inventory=%d&result=%d",
+        String param = KcaUtils.format("apiver=4&world=%d&map=%d&node=%d&rank=%s&maprank=%d&inventory=%d&result=%d",
                 world, map, node, rank, maprank, inventory, result);
         new opendbRequest().execute(REQ_SHIP_DROP, param);
     }
 
     public static void sendRemodelData(int flagship, int assistant, int item, int level, int result) {
-        String param = String.format("apiver=2&flagship=%d&assistant=%d&item=%d&level=%d&result=%d",
+        String param = KcaUtils.format("apiver=2&flagship=%d&assistant=%d&item=%d&level=%d&result=%d",
                 flagship, assistant, item, level, result);
         new opendbRequest().execute(REQ_EQUIP_REMODEL, param);
     }
@@ -72,7 +72,7 @@ public class KcaOpendbAPI {
         protected String doInBackground(String... params) {
             String content = "";
             try {
-                Log.e("KCA", String.format("Opendb Request %s %s", params[0], params[1]));
+                Log.e("KCA", KcaUtils.format("Opendb Request %s %s", params[0], params[1]));
                 content = Request(params[0], params[1]);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -107,7 +107,7 @@ public class KcaOpendbAPI {
             try {
                 body = RequestBody.create(FORM_DATA, data);
                 Request.Builder builder = new Request.Builder().url(url).post(body);
-                builder.addHeader("User-Agent", String.format("Kca/%s ", BuildConfig.VERSION_NAME));
+                builder.addHeader("User-Agent", KcaUtils.format("Kca/%s ", BuildConfig.VERSION_NAME));
                 builder.addHeader("Referer", "app:/KCA/");
                 builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
                 Request request = builder.build();

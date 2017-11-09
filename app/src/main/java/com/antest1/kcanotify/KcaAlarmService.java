@@ -229,14 +229,14 @@ public class KcaAlarmService extends Service {
         String content = "";
         String missionNoStr = KcaExpedition2.getExpeditionStr(missionNo);
         if (cancelFlag) {
-            title = String.format(getStringWithLocale(R.string.kca_noti_title_exp_canceled), missionNoStr, missionName);
-            content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_canceled), kantaiName, missionNoStr);
+            title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_exp_canceled), missionNoStr, missionName);
+            content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_exp_canceled), kantaiName, missionNoStr);
         } else {
-            title = String.format(getStringWithLocale(R.string.kca_noti_title_exp_finished), missionNoStr, missionName);
+            title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_exp_finished), missionNoStr, missionName);
             if (caFlag)
-                content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_canceled), kantaiName, missionNoStr);
+                content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_canceled), kantaiName, missionNoStr);
             else
-                content = String.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNoStr);
+                content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_exp_finished_normal), kantaiName, missionNoStr);
 
         }
 
@@ -296,12 +296,12 @@ public class KcaAlarmService extends Service {
                 new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
                 new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
-        String title = String.format(getStringWithLocale(R.string.kca_noti_title_dock_finished), dockId + 1);
+        String title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_dock_finished), dockId + 1);
         String content = "";
         if (shipName.length() > 0) {
-            content = String.format(getStringWithLocale(R.string.kca_noti_content_dock_finished), dockId + 1, shipName);
+            content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_dock_finished), dockId + 1, shipName);
         } else {
-            content = String.format(getStringWithLocale(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
+            content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
         }
 
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)

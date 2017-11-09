@@ -57,7 +57,7 @@ public class KcaAkashiListViewItem {
         int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
         int typeres = 0;
         try {
-            typeres = getId(String.format("item_%d", type), R.mipmap.class);
+            typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
         } catch (Exception e) {
             typeres = R.mipmap.item_0;
         }
