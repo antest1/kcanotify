@@ -239,6 +239,7 @@
         <Preference
             android:defaultValue=""
             android:key="app_inspector"
+            android:summary="See database/preference values"
             android:title="@string/action_inspector">
             <intent
                 android:action="android.intent.action.VIEW"
