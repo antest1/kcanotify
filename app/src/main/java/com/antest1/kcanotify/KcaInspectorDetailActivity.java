@@ -4,8 +4,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,8 +19,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import java.util.Arrays;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static android.R.attr.key;
+import static android.R.attr.y;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_ARRAY;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_BOOLEAN_LIST;
@@ -32,7 +41,14 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
     boolean is_formatted = true;
     Toolbar toolbar;
     TextView view_key, view_value, view_format;
+    View view_holder;
+    ScrollView sv;
     KcaDBHelper dbHelper;
+
+    int scroll_h_total = 0;
+    int scroll_h_layout = 0;
+    int scroll_touch_count = 0;
+    ScheduledExecutorService autoScrollScheduler;
 
     public KcaInspectorDetailActivity() {
         LocaleUtils.updateConfig(this);
@@ -52,7 +68,10 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        sv = findViewById(R.id.inspect_data_scrollview);
+        sv.setSmoothScrollingEnabled(false);
 
+        view_holder = findViewById(R.id.inspect_data_view);
         view_key = findViewById(R.id.inspect_data_key);
         view_value = findViewById(R.id.inspect_data_value);
         view_format = findViewById(R.id.inspect_data_format);
@@ -83,6 +102,46 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
             }
         }
         setText();
+        sv.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                int s_y = sv.getScrollY();
+            }
+        });
+
+        sv.post(new Runnable() {
+            @Override
+            public void run() {
+                sv.measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                scroll_h_total = sv.getMeasuredHeight();
+                scroll_h_layout = sv.getHeight();
+
+                sv.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        switch (motionEvent.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                int y = (int) motionEvent.getY();
+                                int direction = 1;
+                                if (y < scroll_h_layout / 2) direction = -1;
+                                scroll_touch_count = 0;
+                                autoScrollScheduler = Executors.newSingleThreadScheduledExecutor();
+                                autoScrollScheduler.scheduleAtFixedRate(auto_scroll(direction), 800, 200, TimeUnit.MILLISECONDS);
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                autoScrollScheduler.shutdown();
+                                break;
+                        }
+                        return false;
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     public void setText() {
@@ -103,6 +162,24 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
             }
         }
     }
+
+    private Runnable auto_scroll(final int direction){
+        Runnable aRunnable = new Runnable(){
+            public void run(){
+                int modifier = 1;
+                scroll_touch_count += 1;
+                if (scroll_touch_count >= 10) {
+                    modifier = 4;
+                } else if (scroll_touch_count >= 15) {
+                    modifier = 32;
+                }
+                sv.scrollBy(0, scroll_h_layout * direction * modifier);
+            }
+        };
+        return aRunnable;
+    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
