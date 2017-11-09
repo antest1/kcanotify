@@ -1615,10 +1615,12 @@ public class KcaBattle {
                 if (api_data.has("api_get_ship")) {
                     int api_ship_id = api_data.getAsJsonObject("api_get_ship").get("api_ship_id").getAsInt();
                     dropInfo.addProperty("result", api_ship_id);
+                    dropInfo.addProperty("inventory", KcaApiData.countUserShipById(api_ship_id));
                     KcaApiData.addShipCountInBattle();
                     KcaApiData.addItemCountInBattle(api_ship_id);
                 } else {
                     dropInfo.addProperty("result", 0);
+                    dropInfo.addProperty("inventory", 0);
                 }
                 bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_DROPINFO);
