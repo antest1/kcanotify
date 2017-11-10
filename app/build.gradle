@@ -7,8 +7,8 @@ model {
             applicationId "com.antest1.kcanotify"
             minSdkVersion.apiLevel 16
             targetSdkVersion.apiLevel 26
-            versionCode 2450
-            versionName "2.4.5"
+            versionCode 2460
+            versionName "2.4.6"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
 
@@ -38,7 +38,7 @@ model {
                 useProguard = true
                 proguardFiles.add(file('proguard-rules.pro'))
                 ndk.with {
-                    debuggable = false
+                    debuggable = true
                 }
             }
         }
