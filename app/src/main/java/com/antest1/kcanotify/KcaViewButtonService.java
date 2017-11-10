@@ -105,9 +105,9 @@ public class KcaViewButtonService extends Service {
     public static int recentVisibility = View.VISIBLE;
     public static int type;
     public static int clickcount;
-    public static boolean taiha_status = false;
-    private static boolean fairy_glow_on = false;
-    private static boolean fairy_glow_mode = false;
+    public boolean taiha_status = false;
+    private boolean fairy_glow_on = false;
+    private boolean fairy_glow_mode = false;
 
     public static JsonObject getCurrentApiData() {
         return currentApiData;
@@ -134,7 +134,6 @@ public class KcaViewButtonService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && !Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
@@ -181,16 +180,12 @@ public class KcaViewButtonService extends Service {
                     String s = intent.getStringExtra(KCA_MSG_DATA);
                     if (s.contains("1")) {
                         if (!fairy_glow_mode) {
-                            fairy_glow_on = true;
                             startFairyKira();
                         }
-                        fairy_glow_mode = true;
                     } else {
                         if (fairy_glow_mode) {
-                            fairy_glow_on = false;
                             stopFairyKira();
                         }
-                        fairy_glow_mode = false;
                     }
                     Log.e("KCA", "KCA_MSG_QUEST_COMPLETE Received");
                 }
@@ -465,19 +460,23 @@ public class KcaViewButtonService extends Service {
                 fairy_glow_on = !fairy_glow_on;
                 setFairyImage();
             } finally {
-                mHandler.postDelayed(mGlowRunner, FAIRY_GLOW_INTERVAL);
+                if (fairy_glow_mode) {
+                    mHandler.postDelayed(mGlowRunner, FAIRY_GLOW_INTERVAL);
+                } else {
+                    fairy_glow_on = false;
+                }
             }
         }
     };
 
     void startFairyKira() {
+        fairy_glow_mode = true;
         mGlowRunner.run();
     }
 
     void stopFairyKira() {
-        fairy_glow_on = false;
+        fairy_glow_mode = false;
         setFairyImage();
-        mHandler.removeCallbacks(mGlowRunner);
     }
 
     @Override

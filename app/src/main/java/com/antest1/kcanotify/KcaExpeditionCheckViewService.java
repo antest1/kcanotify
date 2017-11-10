@@ -535,6 +535,7 @@ public class KcaExpeditionCheckViewService extends Service {
         int total_num = data.get("total-num").getAsInt();
 
         JsonObject check = checkdata.get(no);
+        if (check == null) return;
 
         boolean has_flag_lv = data.has("flag-lv");
         boolean has_flag_cond = data.has("flag-cond");
