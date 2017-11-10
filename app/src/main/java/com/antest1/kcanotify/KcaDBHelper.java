@@ -590,6 +590,20 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public String getQuestListData() {
+        db = this.getReadableDatabase();
+        StringBuilder sb = new StringBuilder();
+        Cursor c = db.query(questlist_table_name, null, null, null, null, null, null);
+        while (c.moveToNext()) {
+            String key = c.getString(c.getColumnIndex("KEY"));
+            String value = c.getString(c.getColumnIndex("VALUE"));
+            String time = c.getString(c.getColumnIndex("TIME"));
+            sb.append(KcaUtils.format("[%s] %s %s\n", key, value, time));
+        }
+        c.close();
+        return sb.toString().trim();
+    }
+
     // test code
     public void test() {
         db = this.getReadableDatabase();

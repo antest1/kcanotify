@@ -657,6 +657,24 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         return result;
     }
 
+    public String getQuestTrackerData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        StringBuilder sb = new StringBuilder();
+        Cursor c = db.query(qt_table_name, null, null, null, null, null, null);
+        while (c.moveToNext()) {
+            String key = c.getString(c.getColumnIndex("KEY"));
+            String active = c.getString(c.getColumnIndex("ACTIVE"));
+            int cond0 = c.getInt(c.getColumnIndex("CND0"));
+            int cond1 = c.getInt(c.getColumnIndex("CND1"));
+            int cond2 = c.getInt(c.getColumnIndex("CND2"));
+            int cond3 = c.getInt(c.getColumnIndex("CND3"));
+            String time = c.getString(c.getColumnIndex("TIME"));
+            sb.append(KcaUtils.format("[%s] A:%s C:%02d,%02d,%02d,%02d T:%s\n", key, active, cond0, cond1, cond2, cond3, time));
+        }
+        c.close();
+        return sb.toString().trim();
+    }
+
     public void test() {
         SQLiteDatabase db = this.getReadableDatabase();
         int count = 0;

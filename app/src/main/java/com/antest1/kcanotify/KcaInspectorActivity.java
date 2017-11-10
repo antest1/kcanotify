@@ -14,6 +14,7 @@ import java.util.Map;
 
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_ARRAY;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_BOOLEAN_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_ARRAY;
@@ -24,12 +25,14 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 public class KcaInspectorActivity extends AppCompatActivity {
     final String PREF_PREFIX = "PREF ";
     final String DB_PREFIX = "DB ";
+    final String DQ_PREFIX = "DQ ";
+    final String QT_PREFIX = "QT ";
 
     Toolbar toolbar;
     static Gson gson = new Gson();
     ListView listview;
     KcaDBHelper dbHelper;
-
+    KcaQuestTracker questTracker;
     ArrayList<Map.Entry<String, String>> listViewItemList;
     KcaInspectViewAdpater adapter;
 
@@ -53,7 +56,7 @@ public class KcaInspectorActivity extends AppCompatActivity {
         listViewItemList = new ArrayList<>();
         adapter = new KcaInspectViewAdpater();
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-
+        questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
         for (String db_key: DB_KEY_ARRAY) {
             String db_value = dbHelper.getValue(db_key);
             if (db_value == null) db_value = "<null>";
@@ -62,6 +65,16 @@ public class KcaInspectorActivity extends AppCompatActivity {
             }
             listViewItemList.add(new AbstractMap.SimpleEntry<> (DB_PREFIX.concat(db_key), db_value));
         }
+
+        String questlist_data = dbHelper.getQuestListData();
+        String questlist_view = questlist_data.replace("\n", ", ");
+        if (questlist_view.length() > 100) {
+            questlist_view = questlist_view.substring(0, 100).concat(KcaUtils.format("... (%d)", questlist_data.length()));
+        }
+        listViewItemList.add(new AbstractMap.SimpleEntry<> (DQ_PREFIX.concat("quest_data"), questlist_view));
+
+        String questtrack_data = questTracker.getQuestTrackerData();
+        listViewItemList.add(new AbstractMap.SimpleEntry<> (QT_PREFIX.concat("tracked_data"), questtrack_data));
 
         for (String pref_key: PREFS_LIST) {
             String pref_value = "";

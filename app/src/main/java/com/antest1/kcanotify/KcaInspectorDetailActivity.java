@@ -27,6 +27,7 @@ import static android.R.attr.key;
 import static android.R.attr.y;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_ARRAY;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_BOOLEAN_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_ARRAY;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
@@ -35,7 +36,8 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 public class KcaInspectorDetailActivity extends AppCompatActivity {
     final String PREF_PREFIX = "PREF ";
     final String DB_PREFIX = "DB ";
-    final String loading_message = "Loading value...";
+    final String DQ_PREFIX = "DQ ";
+    final String QT_PREFIX = "QT ";
 
     String key, value_text= "";
     boolean is_formatted = true;
@@ -44,6 +46,7 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
     View view_holder;
     ScrollView sv;
     KcaDBHelper dbHelper;
+    KcaQuestTracker questTracker;
 
     int scroll_h_total = 0;
     int scroll_h_layout = 0;
@@ -68,6 +71,8 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
+
         sv = findViewById(R.id.inspect_data_scrollview);
         sv.setSmoothScrollingEnabled(false);
 
@@ -89,7 +94,6 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
         String[] type_key_list = type_key.split(" ");
         key = type_key_list[1];
         view_key.setText(key);
-        view_value.setText(loading_message);
 
         if (type_key.startsWith(DB_PREFIX)) {
             value_text = dbHelper.getValue(key);
@@ -100,6 +104,10 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
             } else {
                 value_text = getStringPreferences(getApplicationContext(), key);
             }
+        } else if (type_key.startsWith(QT_PREFIX)) {
+            value_text = questTracker.getQuestTrackerData();
+        } else if (type_key.startsWith(DQ_PREFIX)) {
+            value_text = dbHelper.getQuestListData();
         }
         setText();
         sv.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
@@ -146,7 +154,7 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
 
     public void setText() {
         if (value_text == null || value_text.length() == 0) {
-            view_value.setText(loading_message);
+            view_value.setText("");
         } else {
             Gson gson;
             if (is_formatted) gson = new GsonBuilder().setPrettyPrinting().create();
