@@ -266,7 +266,20 @@ public class KcaViewButtonService extends Service {
             screenHeight = size.y;
             Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
 
-            mParams.y = screenHeight - buttonHeight;
+            JsonObject locdata = null;
+            String ori_prefix = getOrientationPrefix(getResources().getConfiguration().orientation);
+            if (dbHelper != null) locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
+            if (locdata != null && locdata.toString().length() > 0) {
+                if (locdata.has(ori_prefix.concat("x"))) {
+                    mParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
+                }
+                if (locdata.has(ori_prefix.concat("y"))) {
+                    mParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
+                }
+            } else {
+                mParams.y = screenHeight - buttonHeight;
+            }
+
             mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             mManager.addView(mView, mParams);
 
