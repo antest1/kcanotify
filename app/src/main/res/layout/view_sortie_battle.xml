@@ -696,6 +696,81 @@
                                 android:mirrorForRtl="false" />
                         </LinearLayout>
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/fm_7"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/fm_7_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:minHeight="10dp"
+                                android:text="Test"
+                                android:textColor="@android:color/white"
+                                android:textSize="10dp" />
+
+                            <TextView
+                                android:id="@+id/fm_7_hp_txt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.4"
+                                android:minHeight="10dp"
+                                android:text="HP 13/13"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/fm_7_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.6"
+                                android:minHeight="9dp"
+                                android:text="Lv 77"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp" />
+
+                            <ProgressBar
+                                android:id="@+id/fm_7_hp_bar"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="4dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="0.4"
+                                android:elevation="1dp"
+                                android:max="100"
+                                android:maxHeight="11dp"
+                                android:minHeight="9dp"
+                                android:mirrorForRtl="false"
+                                android:progress="85" />
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
