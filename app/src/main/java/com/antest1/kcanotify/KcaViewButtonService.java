@@ -272,6 +272,10 @@ public class KcaViewButtonService extends Service {
 
             battleviewEnabled = false;
             questviewEnabled = false;
+
+            if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
+                runForegroundCheck();
+            }
         }
     }
 
@@ -294,11 +298,6 @@ public class KcaViewButtonService extends Service {
                 if (mView != null) {
                     mView.setVisibility(View.VISIBLE);
                     recentVisibility = View.VISIBLE;
-                    if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_AUTOHIDE)) {
-                        runForegroundCheck();
-                    } else {
-                        stopForegroundCheck();
-                    }
                 }
             }
             if (intent.getAction().equals(FAIRY_INVISIBLE)) {

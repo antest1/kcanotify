@@ -123,6 +123,10 @@ public class SettingActivity extends AppCompatActivity {
     public static class PrefsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
         public Context context;
 
+        public String getStringWithLocale(int id) {
+            return KcaUtils.getStringWithLocale(getActivity().getApplicationContext(), getActivity().getBaseContext(), id);
+        }
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -174,15 +178,15 @@ public class SettingActivity extends AppCompatActivity {
                             if (new_value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
                                     !hasUsageStatPermission(getActivity().getApplicationContext())) {
                                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                                alertDialog.setTitle("UserStat Permission")
-                                        .setMessage("in Android 5.0+, you should set this permission to use this feature.")
-                                        .setPositiveButton(context.getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                                alertDialog.setTitle(getStringWithLocale(R.string.sa_usagestat_dialog_title))
+                                        .setMessage(getStringWithLocale(R.string.sa_usagestat_dialog_desc))
+                                        .setPositiveButton(getStringWithLocale(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 showObtainingUsageStatPermission();
                                             }
                                         })
-                                        .setNegativeButton(context.getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                                        .setNegativeButton(getStringWithLocale(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -212,7 +216,7 @@ public class SettingActivity extends AppCompatActivity {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 showObtainingPermissionOverlayWindow();
                             } else {
-                                Toast.makeText(context, context.getString(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, getStringWithLocale(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT).show();
                             }
                             return false;
                         }
@@ -238,7 +242,7 @@ public class SettingActivity extends AppCompatActivity {
                                 sMsg.setData(bundle);
                                 sHandler.sendMessage(sMsg);
                             }
-                            Toast.makeText(context, context.getString(R.string.sa_language_changed), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, getStringWithLocale(R.string.sa_language_changed), Toast.LENGTH_LONG).show();
                             return true;
                         }
                     });
@@ -294,7 +298,7 @@ public class SettingActivity extends AppCompatActivity {
                         Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
                         if (ringtone == null) {
                             Toast.makeText(context,
-                                    context.getString(R.string.ma_permission_external_denied),
+                                    getStringWithLocale(R.string.ma_permission_external_denied),
                                     Toast.LENGTH_LONG).show();
                             pref.setSummary(silentText);
                         } else {
@@ -338,15 +342,15 @@ public class SettingActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == REQUEST_OVERLAY_PERMISSION) {
                 if (Settings.canDrawOverlays(getActivity())) {
-                    Toast.makeText(getActivity(), context.getString(R.string.sa_overlay_ok), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_overlay_ok), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), context.getString(R.string.sa_overlay_no), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_overlay_no), Toast.LENGTH_SHORT).show();
                 }
             } else if (requestCode == REQUEST_USAGESTAT_PERMISSION) {
                 if(hasUsageStatPermission(getActivity().getApplicationContext())) {
-                    Toast.makeText(getActivity(), context.getString(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), context.getString(R.string.sa_usagestat_no), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_usagestat_no), Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -388,7 +392,7 @@ public class SettingActivity extends AppCompatActivity {
                     Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
                     if (ringtone == null) {
                         Toast.makeText(context,
-                                context.getString(R.string.ma_permission_external_denied),
+                                getStringWithLocale(R.string.ma_permission_external_denied),
                                 Toast.LENGTH_LONG).show();
                         pref.setSummary(silentText);
                     } else {
@@ -442,7 +446,7 @@ public class SettingActivity extends AppCompatActivity {
             final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
             OkHttpClient client = new OkHttpClient.Builder().build();
 
-            String checkUrl = KcaUtils.format(context.getString(R.string.kcanotify_checkversion_link));
+            String checkUrl = KcaUtils.format(getStringWithLocale(R.string.kcanotify_checkversion_link));
             Request.Builder builder = new Request.Builder().url(checkUrl).get();
             builder.addHeader("Referer", "app:/KCA/");
             builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -571,7 +575,7 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         public String executeClient() {
-            String dataUrl = KcaUtils.format(context.getString(R.string.api_start2_recent_version_link));
+            String dataUrl = KcaUtils.format(getStringWithLocale(R.string.api_start2_recent_version_link));
 
             OkHttpClient client = new OkHttpClient.Builder().build();
             Request.Builder builder = new Request.Builder().url(dataUrl).get();

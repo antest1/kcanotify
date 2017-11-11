@@ -91,6 +91,8 @@
     <string name="sa_overlay_no">画面オーバーレイ権限が設定されていません。 (戦闘予報利用不可)</string>
     <string name="sa_usagestat_ok">使用履歴へのアクセスを許可しました。</string>
     <string name="sa_usagestat_no">使用履歴へのアクセスを不許可しました。</string>
+    <string name="sa_usagestat_dialog_title">使用履歴へのアクセス設定</string>
+    <string name="sa_usagestat_dialog_desc">Android5.0以降では、この機能を使用するためにこの権限を有効にする必要があります。この権限は画面にあるアプリが艦これかを確認するために必要です。</string>
 
     <!-- InfoActivity Strings -->
 

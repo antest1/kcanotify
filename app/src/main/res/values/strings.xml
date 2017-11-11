@@ -130,6 +130,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_overlay_no">Allow Screen Overlay: Off (BattleView will be disabled)</string>
     <string name="sa_usagestat_ok">UsageStats Access Allowed</string>
     <string name="sa_usagestat_no">UsageStats Access Disallowed</string>
+    <string name="sa_usagestat_dialog_title">UsageStats Access Permission</string>
+    <string name="sa_usagestat_dialog_desc">In Android 5.0+, you should set this permission to use this feature. This permission is required for checking kancolle is on the screen.</string>
 
     <string name="sa_language_changed">Please restart kcanotify to apply new language setting.</string>
 

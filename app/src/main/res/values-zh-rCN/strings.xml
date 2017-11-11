@@ -97,6 +97,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_overlay_no">允许悬浮：否（战斗剧透会被禁用）</string>
     <string name="sa_usagestat_ok">允许访问使用信息</string>
     <string name="sa_usagestat_no">禁止访问使用信息</string>
+    <string name="sa_usagestat_dialog_title">UsageStats Access Permission</string>
+    <string name="sa_usagestat_dialog_desc">In Android 5.0+, you should set this permission to use this feature. This permission is required for checking kancolle is on the screen.</string>
 
     <string name="sa_bypass_list_invalid">输入的绕行地址列表有错，请检查后重试</string>
 

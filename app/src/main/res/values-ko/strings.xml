@@ -91,6 +91,8 @@
     <string name="sa_overlay_no">화면 오버레이 권한이 설정되지 않았습니다. (전투예보 이용 불가)</string>
     <string name="sa_usagestat_ok">사용정보 접근 허용</string>
     <string name="sa_usagestat_no">사용정보 접근 허용 안함</string>
+    <string name="sa_usagestat_dialog_title">사용정보 접근 허용 설정</string>
+    <string name="sa_usagestat_dialog_desc">안드로이드 5.0 이상에서 이 기능을 사용하기 위해서는 해당 권한을 활성화해야 합니다. 이 권한은 칸코레가 화면 위에 있는지 확인하기 위해 필요합니다.</string>
 
     <!-- InfoActivity Strings -->
 
