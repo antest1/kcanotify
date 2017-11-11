@@ -89,6 +89,8 @@
     <string name="sa_overlay_under_m">Android 6.0 (Marshmallow)未満の場合には設定する必要がありません。</string>
     <string name="sa_overlay_ok">画面オーバーレイ権限が設定されました。</string>
     <string name="sa_overlay_no">画面オーバーレイ権限が設定されていません。 (戦闘予報利用不可)</string>
+    <string name="sa_usagestat_ok">使用履歴へのアクセスを許可しました。</string>
+    <string name="sa_usagestat_no">使用履歴へのアクセスを不許可しました。</string>
 
     <!-- InfoActivity Strings -->
 
@@ -320,8 +322,10 @@
     <string name="akashi_filter_equip_rev">反転</string>
     <string name="akashi_filter_equip_none">クリア</string>
     <string name="akashi_filter_equip_all">全選択</string>
-    <string name="setting_menu_kand_desc_fairy_select">共にする妖精さんを選択</string>
     <string name="setting_menu_kand_title_fairy_select">妖精選択</string>
+    <string name="setting_menu_kand_desc_fairy_select">共にする妖精さんを選択</string>
+    <string name="setting_menu_kand_title_fairy_auto_hide">妖精を艦これ画面でのみ表示する</string>
+    <string name="setting_menu_kand_desc_fairy_auto_hide">妖精の表示/隠しに時間がかかります。</string>
     <string name="current_fairy_changed_in_next">※現在戦闘予報/任務情報が終わった後に変更されます。</string>
     <string name="setting_menu_app_title_down">APKダウンロードサイトの設定</string>
     <string name="language_system">システム設定を使用</string>

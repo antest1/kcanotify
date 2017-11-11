@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AppOpsManager;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,10 +22,8 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.provider.Settings;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -48,17 +47,15 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static android.R.attr.category;
-import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_LANGUAGE_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_PRIORITY_CHANGED;
-import static com.antest1.kcanotify.KcaConstants.PREF_ACCESSIBILITY_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
@@ -74,6 +71,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -83,6 +81,7 @@ public class SettingActivity extends AppCompatActivity {
     public static String currentVersion = BuildConfig.VERSION_NAME;
     public static final String TAG = "KCA";
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
+    public static final int REQUEST_USAGESTAT_PERMISSION = 3;
     public static RingtoneManager ringtoneManager;
     public static String silentText;
 
@@ -153,6 +152,8 @@ public class SettingActivity extends AppCompatActivity {
                         }
                     });
                 }
+
+                /*
                 if (key.equals(PREF_ACCESSIBILITY_SETTING)) {
                     pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
@@ -163,6 +164,47 @@ public class SettingActivity extends AppCompatActivity {
                         }
                     });
                 }
+                */
+
+                if (key.equals(PREF_FAIRY_AUTOHIDE)) {
+                    pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object o) {
+                            boolean new_value = (Boolean) o;
+                            if (new_value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+                                    !hasUsageStatPermission(getActivity().getApplicationContext())) {
+                                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                                alertDialog.setTitle("UserStat Permission")
+                                        .setMessage("in Android 5.0+, you should set this permission to use this feature.")
+                                        .setPositiveButton(context.getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                showObtainingUsageStatPermission();
+                                            }
+                                        })
+                                        .setNegativeButton(context.getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        })
+                                        .setIcon(R.mipmap.ic_launcher)
+                                        .show();
+                                return false;
+                            } else {
+                                Intent intent = new Intent(getActivity(), KcaViewButtonService.class);
+                                if (new_value) {
+                                    intent.setAction(KcaViewButtonService.FAIRY_FORECHECK_ON);
+                                } else {
+                                    intent.setAction(KcaViewButtonService.FAIRY_FORECHECK_OFF);
+                                }
+                                context.startService(intent);
+                                return true;
+                            }
+                        }
+                    });
+                }
+
                 if (key.equals(PREF_OVERLAY_SETTING)) {
                     pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
@@ -284,8 +326,14 @@ public class SettingActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        public void showObtainingUsageStatPermission() {
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            startActivityForResult(intent, REQUEST_USAGESTAT_PERMISSION);
+        }
+
         @Override
-        @RequiresApi(api = Build.VERSION_CODES.M)
+        @TargetApi(Build.VERSION_CODES.M)
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == REQUEST_OVERLAY_PERMISSION) {
@@ -293,6 +341,12 @@ public class SettingActivity extends AppCompatActivity {
                     Toast.makeText(getActivity(), context.getString(R.string.sa_overlay_ok), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), context.getString(R.string.sa_overlay_no), Toast.LENGTH_SHORT).show();
+                }
+            } else if (requestCode == REQUEST_USAGESTAT_PERMISSION) {
+                if(hasUsageStatPermission(getActivity().getApplicationContext())) {
+                    Toast.makeText(getActivity(), context.getString(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), context.getString(R.string.sa_usagestat_no), Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -448,7 +502,7 @@ public class SettingActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     String[] path_value = context.getResources().getStringArray(R.array.downloadSiteOptionWithoutPlayStoreValue);
-                                                    KcaUtils.setPreferences(context, PREF_APK_DOWNLOAD_SITE, path_value[i]);
+                                                    setPreferences(context, PREF_APK_DOWNLOAD_SITE, path_value[i]);
                                                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(path_value[i]));
                                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                     context.startActivity(intent);
@@ -535,7 +589,7 @@ public class SettingActivity extends AppCompatActivity {
                         String data = response.body().string().trim();
                         dbHelper.putValue(DB_KEY_STARTDATA, data);
                         KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
-                        KcaUtils.setPreferences(context, PREF_KCA_DATA_VERSION, server_kca_version);
+                        setPreferences(context, PREF_KCA_DATA_VERSION, server_kca_version);
                         KcaApiData.setDataLoadTriggered();
                         result = SUCCESS;
                     } else {
@@ -596,5 +650,14 @@ public class SettingActivity extends AppCompatActivity {
             LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
         }
         super.onConfigurationChanged(newConfig);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private static boolean hasUsageStatPermission(Context context) {
+        AppOpsManager appOps = (AppOpsManager)
+                context.getSystemService(Context.APP_OPS_SERVICE);
+        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+                android.os.Process.myUid(), context.getPackageName());
+        return mode == AppOpsManager.MODE_ALLOWED;
     }
 }

@@ -95,6 +95,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_overlay_under_m">Android 6.0以下版本可以跳過該設定</string>
     <string name="sa_overlay_ok">懸浮視窗權限：已取得</string>
     <string name="sa_overlay_no">懸浮視窗權限：未取得（將會關閉戰鬥劇透功能）</string>
+    <string name="sa_usagestat_ok">允許訪問使用信息</string>
+    <string name="sa_usagestat_no">禁止訪問使用信息</string>
 
     <string name="sa_language_changed">請重新啟動Kcanotify來套用新語言設定。</string>
 
@@ -152,6 +154,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_game_data_down">請於遊戲資料未載入時使用</string>
     <string name="setting_menu_kand_desc_fairy_select">選擇懸浮視窗的妖精影像</string>
     <string name="setting_menu_kand_title_fairy_select">選擇要攜帶的妖精</string>
+    <string name="setting_menu_kand_title_fairy_auto_hide">使妖精只顯示在艦これ屏幕上</string>
+    <string name="setting_menu_kand_desc_fairy_auto_hide">顯示/隱藏妖精有一個延遲</string>
     <string name="current_fairy_changed_in_next">※妖精會於戰鬥劇透/任務瀏覽結束後更換</string>
     <string name="setting_menu_kand_title_adv_network">進階網路設定</string>
     <string name="setting_menu_kand_warn_adv_network">警告：錯誤的設定可能會讓VPN失效。請在你確定每個選項作用時更改設定！更改設定後你需要重新啟用VPN來使設定生效</string>

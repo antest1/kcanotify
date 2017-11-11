@@ -128,6 +128,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_overlay_under_m">This setting is not required for Android versions below 6.0.</string>
     <string name="sa_overlay_ok">Allow Screen Overlay: On</string>
     <string name="sa_overlay_no">Allow Screen Overlay: Off (BattleView will be disabled)</string>
+    <string name="sa_usagestat_ok">UsageStats Access Allowed</string>
+    <string name="sa_usagestat_no">UsageStats Access Disallowed</string>
 
     <string name="sa_language_changed">Please restart kcanotify to apply new language setting.</string>
 
@@ -187,8 +189,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_set_noti_priority">When checked, the navbar will always be the top of notifications</string>
     <string name="setting_menu_kand_title_game_data_down">Download Game Data</string>
     <string name="setting_menu_kand_desc_game_data_down">Use if game data was not loaded automatically.</string>
-    <string name="setting_menu_kand_desc_fairy_select">Select Fairy to bring with</string>
     <string name="setting_menu_kand_title_fairy_select">Select Fairy</string>
+    <string name="setting_menu_kand_desc_fairy_select">Select Fairy to bring with</string>
+    <string name="setting_menu_kand_title_fairy_auto_hide">Show Fairy only in Kancolle Screen</string>
+    <string name="setting_menu_kand_desc_fairy_auto_hide">There is a delay in showing/hiding fairy.</string>
     <string name="current_fairy_changed_in_next">※ Fairy will be changed after current BattleView/QuestView ends.</string>
     <string name="setting_menu_kand_title_adv_network">Advanced Network Settings</string>
     <string name="setting_menu_kand_warn_adv_network">Warning: Setting these incorrectly may make VPN Service unusable. Don\'t change these options unless you know what you are doing! You need to restart VPN Service to make these options effective.</string>

@@ -379,6 +379,7 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_AKASHI_STAR_CHECKED:
                     case PREF_KCA_SET_PRIORITY:
                     case PREF_DISABLE_CUSTOMTOAST:
+                    case PREF_FAIRY_AUTOHIDE:
                         editor.putBoolean(prefKey, false);
                         break;
                     case PREF_KCA_EXP_VIEW:

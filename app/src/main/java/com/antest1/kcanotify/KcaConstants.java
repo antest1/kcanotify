@@ -5,6 +5,7 @@ import java.util.List;
 
 public final class KcaConstants {
     public final static String KC_PACKAGE_NAME = "com.dmm.dmmlabo.kancolle";
+    public final static String MAINACTIVITY_NAME = "com.antest1.kcanotify.MainActivity";
 
     public static final String KCA_VERSION = "/kca/version.json";
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
@@ -327,7 +328,6 @@ public final class KcaConstants {
     public static final String PREF_KCA_BATTLENODE_USE = "battlenode_use";
     public static final String PREF_KCA_BATTLEVIEW_USE = "battleview_use";
     public static final String PREF_KCA_QUESTVIEW_USE = "questview_use";
-    public static final String PREF_ACCESSIBILITY_SETTING = "accessibility_setting";
     public static final String PREF_OVERLAY_SETTING = "overlay_setting";
     public static final String PREF_SHOWDROP_SETTING = "showdrop_setting";
     public static final String PREF_KCA_DOWNLOAD_DATA = "download_data";
@@ -343,6 +343,7 @@ public final class KcaConstants {
     public static final String PREF_AKASHI_STARLIST = "akashi_starlist";
     public static final String PREF_AKASHI_FILTERLIST = "akashi_filterlist";
     public static final String PREF_FAIRY_ICON = "fairy_icon";
+    public static final String PREF_FAIRY_AUTOHIDE = "fairy_auto_hide";
     public static final String PREF_APK_DOWNLOAD_SITE = "apk_download_site";
     public static final String PREF_VPN_BYPASS_ADDRESS = "bypass_address";
     public static final String PREF_FULLMORALE_SETTING = "fullmorale_setting";
@@ -362,7 +363,6 @@ public final class KcaConstants {
             PREF_KCA_EXP_TYPE,
             PREF_KCA_BATTLEVIEW_USE,
             PREF_KCA_QUESTVIEW_USE,
-            PREF_ACCESSIBILITY_SETTING,
             PREF_OVERLAY_SETTING,
             PREF_SHOWDROP_SETTING,
             PREF_KCA_DOWNLOAD_DATA,
@@ -377,6 +377,7 @@ public final class KcaConstants {
             PREF_AKASHI_STARLIST,
             PREF_AKASHI_FILTERLIST,
             PREF_FAIRY_ICON,
+            PREF_FAIRY_AUTOHIDE,
             PREF_APK_DOWNLOAD_SITE,
             PREF_VPN_BYPASS_ADDRESS,
             PREF_FULLMORALE_SETTING,
@@ -403,6 +404,7 @@ public final class KcaConstants {
             PREF_KCA_NOTI_V_NS,
             PREF_SHOWDROP_SETTING,
             PREF_FAIRY_NOTI_LONGCLICK,
+            PREF_FAIRY_AUTOHIDE,
             PREF_KCA_NOTI_QUEST_FAIRY_GLOW
     };
 

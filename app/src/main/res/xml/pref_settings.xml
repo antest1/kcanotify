@@ -60,6 +60,12 @@
                 android:targetClass="com.antest1.kcanotify.KcaFairySelectActivity" />
         </Preference>
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="fairy_auto_hide"
+            android:summary="@string/setting_menu_kand_desc_fairy_auto_hide"
+            android:title="@string/setting_menu_kand_title_fairy_auto_hide" />
+
         <Preference
         android:defaultValue=""
         android:key="download_data"
@@ -89,12 +95,6 @@
 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_menu_view_head">
-        <Preference
-            android:defaultValue=""
-            android:key="accessibility_setting"
-            android:summary="@string/setting_menu_view_desc_accessibility_setting"
-            android:title="@string/setting_menu_view_title_accessibility_setting" />
-
         <Preference
             android:defaultValue=""
             android:key="overlay_setting"

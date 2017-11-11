@@ -584,7 +584,6 @@ public class KcaService extends Service {
                 } else {
                     startService(new Intent(this, KcaViewButtonService.class));
                     startService(new Intent(this, KcaQuestViewService.class));
-                    startService(new Intent(this, KcaAkashiViewService.class));
                     sendQuestCompletionInfo();
                 }
                 return;
