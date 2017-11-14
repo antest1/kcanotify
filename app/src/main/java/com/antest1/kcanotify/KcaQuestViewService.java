@@ -189,7 +189,7 @@ public class KcaQuestViewService extends Service {
                                 } else if (api_progress == 2) {
                                     if (trackData.get(0).getAsFloat() < trackCond.get(0).getAsFloat() * PROGRESS_2) {
                                         updatevalue.add((int) (Math.ceil(trackCond.get(0).getAsFloat() * PROGRESS_2)));
-                                    } else if (trackData.get(0).getAsFloat() >= trackCond.get(0).getAsFloat()) {
+                                    } else if (isquestlist && trackData.get(0).getAsFloat() >= trackCond.get(0).getAsFloat()) {
                                         updatevalue.add(Math.ceil(trackCond.get(0).getAsInt()) - 1);
                                     }
                                 } else if (api_state == 3) {
