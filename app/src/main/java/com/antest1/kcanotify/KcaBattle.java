@@ -56,6 +56,7 @@ public class KcaBattle {
     public static int currentMapNo = -1;
     public static int currentNode = -1;
     public static int currentEventMapRank = 0;
+    public static int currentEnemyFormation = -1;
 
     public static int currentFleet = -1;
     public static boolean isCombined = false;
@@ -499,6 +500,7 @@ public class KcaBattle {
                 isBossReached = false;
                 isEndReached = false;
                 currentEnemyDeckName = "";
+                currentEnemyFormation = -1;
 
                 int api_event_kind = api_data.get("api_event_kind").getAsInt();
                 int api_event_id = api_data.get("api_event_id").getAsInt();
@@ -565,6 +567,7 @@ public class KcaBattle {
                 }
                 isEndReached = (api_data.get("api_next").getAsInt() == 0);
                 String currentNodeAlphabet = KcaApiData.getCurrentNodeAlphabet(currentMapArea, currentMapNo, currentNode);
+                currentEnemyFormation = -1;
 
                 JsonObject battleResultInfo = new JsonObject();
                 battleResultInfo.addProperty("data", checkcbresult);
@@ -609,6 +612,7 @@ public class KcaBattle {
                 ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
+                currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
                 for (int i = 0; i < maxhpsData.size(); i++) {
                     maxhps[i] = maxhpsData.get(i).getAsInt();
@@ -747,6 +751,7 @@ public class KcaBattle {
 
                 if (url.equals(API_REQ_SORTIE_BATTLE_MIDNIGHT_SP)) {
                     ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                    currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
                 }
 
                 cleanData();
@@ -803,6 +808,7 @@ public class KcaBattle {
                 ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
+                currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
                 for (int i = 0; i < maxhpsData.size(); i++) {
                     maxhps[i] = maxhpsData.get(i).getAsInt();
@@ -881,6 +887,19 @@ public class KcaBattle {
                             dropInfo.addProperty("result", 0);
                             dropInfo.addProperty("inventory", 0);
                         }
+                        JsonObject enemyInfo = new JsonObject();
+                        enemyInfo.addProperty("formation", currentEnemyFormation);
+                        if (ship_ke != null) {
+                            JsonArray enemyinfo_ship = new JsonArray();
+                            for (int i = 1; i < ship_ke.size(); i++) {
+                                int ship_value = ship_ke.get(i).getAsInt();
+                                if (ship_value > -1) enemyinfo_ship.add(ship_value);
+                                else enemyinfo_ship.add(0);
+                            }
+                            enemyInfo.add("ships", enemyinfo_ship);
+                        }
+                        dropInfo.add("enemy", enemyInfo);
+
                         bundle = new Bundle();
                         bundle.putString("url", KCA_API_NOTI_BATTLE_DROPINFO);
                         bundle.putString("data", gson.toJson(dropInfo));
@@ -940,6 +959,8 @@ public class KcaBattle {
                 if (url.equals(API_REQ_COMBINED_BATTLE)) combined_type = COMBINED_A;
                 else if (url.equals(API_REQ_COMBINED_BATTLE_WATER)) combined_type = COMBINED_W;
                 //else if(url.equals(API_REQ_COMBINED_BATTLE	))	combined_type = COMBINED_D;
+
+                currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
@@ -1120,6 +1141,8 @@ public class KcaBattle {
 
                 cleanData();
                 cleanCbData();
+
+                currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
@@ -1368,6 +1391,8 @@ public class KcaBattle {
                 cleanData();
                 cleanCbData();
                 ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
+
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
 
@@ -1426,6 +1451,8 @@ public class KcaBattle {
 
                 cleanData();
                 cleanCbData();
+
+                currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
@@ -1503,6 +1530,7 @@ public class KcaBattle {
                 cleanCbData();
                 ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 ship_ke_combined = api_data.getAsJsonArray("api_ship_ke_combined");
+                currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
                 JsonArray maxhpsData = api_data.getAsJsonArray("api_maxhps");
                 JsonArray nowhpsData = api_data.getAsJsonArray("api_nowhps");
@@ -1622,6 +1650,28 @@ public class KcaBattle {
                     dropInfo.addProperty("result", 0);
                     dropInfo.addProperty("inventory", 0);
                 }
+                JsonObject enemyInfo = new JsonObject();
+                enemyInfo.addProperty("formation", currentEnemyFormation);
+                if (ship_ke != null) {
+                    JsonArray enemyinfo_ship = new JsonArray();
+                    for (int i = 1; i < ship_ke.size(); i++) {
+                        int ship_value = ship_ke.get(i).getAsInt();
+                        if (ship_value > -1) enemyinfo_ship.add(ship_value);
+                        else enemyinfo_ship.add(0);
+                    }
+                    enemyInfo.add("ships", enemyinfo_ship);
+                }
+                if (ship_ke_combined != null) {
+                    JsonArray enemyinfo_ship_cb = new JsonArray();
+                    for (int i = 1; i < ship_ke_combined.size(); i++) {
+                        int ship_value = ship_ke_combined.get(i).getAsInt();
+                        if (ship_value > -1) enemyinfo_ship_cb.add(ship_value);
+                        else enemyinfo_ship_cb.add(0);
+                    }
+                    enemyInfo.add("ships2", enemyinfo_ship_cb);
+                }
+                dropInfo.add("enemy", enemyInfo);
+
                 bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_DROPINFO);
                 bundle.putString("data", gson.toJson(dropInfo));
