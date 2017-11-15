@@ -547,13 +547,13 @@ public class KcaViewButtonService extends Service {
         public void run() {
             try {
                 fairy_glow_on = !fairy_glow_on;
-                setFairyImage();
             } finally {
                 if (fairy_glow_mode) {
                     mHandler.postDelayed(mGlowRunner, FAIRY_GLOW_INTERVAL);
                 } else {
                     fairy_glow_on = false;
                 }
+                setFairyImage();
             }
         }
     };
