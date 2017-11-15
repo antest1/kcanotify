@@ -1104,6 +1104,8 @@ public class KcaApiData {
                 return context.getString(R.string.formation_echelon);
             case FORMATION_LAB:
                 return context.getString(R.string.formation_lineabreast);
+            case FORMATION_DEF:
+                return context.getString(R.string.formation_defensive);
             case FORMATION_C1:
                 if (is_short) return context.getString(R.string.formation_c1_short);
                 else return context.getString(R.string.formation_c1);

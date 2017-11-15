@@ -274,6 +274,7 @@ public final class KcaConstants {
     public static final int FORMATION_DIA = 3;
     public static final int FORMATION_ECH = 4;
     public static final int FORMATION_LAB = 5;
+    public static final int FORMATION_DEF = 6; // Temporal: may change after api available
     public static final int FORMATION_C1 = 11;
     public static final int FORMATION_C2 = 12;
     public static final int FORMATION_C3 = 13;

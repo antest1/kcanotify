@@ -217,6 +217,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="formation_diamond">輪型</string>
     <string name="formation_echelon">梯形</string>
     <string name="formation_lineabreast">單橫</string>
+    <string name="formation_defensive">警戒</string>
     <string name="formation_c1">第一警戒航行序列(對潛警戒)</string>
     <string name="formation_c2">第一警戒航行序列(前方警戒)</string>
     <string name="formation_c3">第一警戒航行序列(輪型陣)</string>

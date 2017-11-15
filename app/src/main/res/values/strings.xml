@@ -257,6 +257,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="formation_diamond">Diamond</string>
     <string name="formation_echelon">Echelon</string>
     <string name="formation_lineabreast">Line Abreast</string>
+    <string name="formation_defensive">Defensive</string>
     <string name="formation_c1">CF1(Anti-Sub)</string>
     <string name="formation_c2">CF2(Forward)</string>
     <string name="formation_c3">CF3(Ring)</string>

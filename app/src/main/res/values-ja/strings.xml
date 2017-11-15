@@ -196,6 +196,7 @@
     <string name="formation_diamond">輪形陣</string>
     <string name="formation_echelon">梯形陣</string>
     <string name="formation_lineabreast">単横陣</string>
+    <string name="formation_defensive">警戒陣</string>
     <string name="formation_c1">第一警戒航行序列(対潜警戒)</string>
     <string name="formation_c2">第二警戒航行序列(前方警戒)</string>
     <string name="formation_c3">第三警戒航行序列(輪形陣)</string>

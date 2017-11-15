@@ -200,6 +200,7 @@
     <string name="formation_diamond">윤형진</string>
     <string name="formation_echelon">제형진</string>
     <string name="formation_lineabreast">단횡진</string>
+    <string name="formation_defensive">경계진</string>
     <string name="formation_c1">제1경계항행서열(대잠경계)</string>
     <string name="formation_c2">제2경계항행서열(전방경계)</string>
     <string name="formation_c3">제3경계항행서열(윤형진)</string>
