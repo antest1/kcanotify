@@ -423,9 +423,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_akashi">Akashi</string>
     <string name="viewmenu_develop">Develop</string>
     <string name="viewmenu_construction">Constr</string>
+    <string name="viewmenu_airbase">Airbase</string>
     <string name="viewmenu_maphp">MapHP</string>
     <string name="viewmenu_develop_title">Development Info</string>
     <string name="viewmenu_construction_title">Construction Info</string>
+    <string name="viewmenu_airbase_title">Land Air Base Info</string>
     <string name="viewmenu_maphp_title">Map HP Info</string>
     <string name="develop_failed_text">Penguin-in-a-box</string>
     <string name="excheckview_title">Expedition Check</string>
@@ -450,6 +452,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_bonus_amp" formatted="false">ALC: %d</string>
     <string name="excheckview_bonus_toku" formatted="false">TokuDLC: %d</string>
     <string name="excheckview_bonus_result" formatted="false">（Bonus: %.1f%%）</string>
+    <string name="labinfoview_status_standby">Standby</string>
+    <string name="labinfoview_status_sortie">Sortie</string>
+    <string name="labinfoview_status_defense">Defense</string>
+    <string name="labinfoview_status_retreat">Retreat</string>
+    <string name="labinfoview_status_rest">Rest</string>
+    <string name="labinfoview_fp_format" formatted="false">FP %d</string>
+    <string name="labinfoview_dist_format" formatted="false">RANGE %d</string>
     <string name="errlog_dialog_message">Do you want to clear the whole error log?</string>
     <string name="errlog_cpy_to_clipboard">Text has been copied to clipboard.</string>
     <string name="expedition_type_value_0">Left Time</string>

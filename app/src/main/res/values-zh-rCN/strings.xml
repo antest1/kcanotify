@@ -364,9 +364,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_akashi">改修</string>
     <string name="viewmenu_develop">开发</string>
     <string name="viewmenu_construction">建造</string>
+    <string name="viewmenu_airbase">基航</string>
     <string name="viewmenu_maphp">海域</string>
     <string name="viewmenu_develop_title">开发信息</string>
     <string name="viewmenu_construction_title">建造信息</string>
+    <string name="viewmenu_airbase_title">基地航空队</string>
     <string name="viewmenu_maphp_title">海域HP信息</string>
     <string name="develop_failed_text">企鹅玩偶</string>
     <string name="excheckview_title">远征检查</string>
@@ -391,6 +393,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_bonus_amp" formatted="false">内火艇：%d</string>
     <string name="excheckview_bonus_toku" formatted="false">特大发：%d</string>
     <string name="excheckview_bonus_result" formatted="false">（收益：%.1f%%）</string>
+    <string name="labinfoview_status_standby">待机</string>
+    <string name="labinfoview_status_sortie">出击</string>
+    <string name="labinfoview_status_defense">防空</string>
+    <string name="labinfoview_status_retreat">退避</string>
+    <string name="labinfoview_status_rest">休息</string>
+    <string name="labinfoview_fp_format" formatted="false">制空 %d</string>
+    <string name="labinfoview_dist_format" formatted="false">半径 %d</string>
     <string name="action_errorlog">错误日志</string>
     <string name="errlog_dialog_message">你想清空所有错误日志吗？</string>
     <string name="errlog_cpy_to_clipboard">已复制文本到剪贴板</string>

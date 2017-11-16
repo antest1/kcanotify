@@ -117,6 +117,8 @@
         <service
             android:name=".KcaConstructPopupService" />
         <service
+            android:name=".KcaLandAirBasePopupService" />
+        <service
             android:name=".KcaMapHpPopupService" />
         <service
             android:name=".KcaExpeditionCheckViewService" />

@@ -358,9 +358,11 @@
     <string name="viewmenu_akashi">개수</string>
     <string name="viewmenu_develop">개발</string>
     <string name="viewmenu_construction">건조</string>
+    <string name="viewmenu_airbase">기항</string>
     <string name="viewmenu_maphp">해역</string>
     <string name="viewmenu_develop_title">개발 정보</string>
     <string name="viewmenu_construction_title">건조 정보</string>
+    <string name="viewmenu_airbase_title">기지항공대</string>
     <string name="viewmenu_maphp_title">해역 HP 정보</string>
     <string name="develop_failed_text">펭귄 인형 ㅠㅠ</string>
     <string name="excheckview_title">원정체크</string>
@@ -385,6 +387,13 @@
     <string name="excheckview_bonus_amp" formatted="false">내화정: %d</string>
     <string name="excheckview_bonus_toku" formatted="false">특대발: %d</string>
     <string name="excheckview_bonus_result" formatted="false">（보너스: %.1f%%）</string>
+    <string name="labinfoview_status_standby">대기</string>
+    <string name="labinfoview_status_sortie">출격</string>
+    <string name="labinfoview_status_defense">방공</string>
+    <string name="labinfoview_status_retreat">퇴피</string>
+    <string name="labinfoview_status_rest">휴식</string>
+    <string name="labinfoview_fp_format" formatted="false">제공 %d</string>
+    <string name="labinfoview_dist_format" formatted="false">반경 %d</string>
     <string name="action_errorlog">오류 로그</string>
     <string name="errlog_dialog_message">전체 오류 로그를 지우시겠습니까?</string>
     <string name="errlog_cpy_to_clipboard">내용이 클립보드에 복사되었습니다.</string>

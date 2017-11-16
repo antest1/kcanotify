@@ -161,6 +161,7 @@ public class KcaFleetViewService extends Service {
             mView.findViewById(R.id.viewbutton_develop).setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.viewbutton_construction).setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.viewbutton_maphp).setOnTouchListener(mViewTouchListener);
+            mView.findViewById(R.id.viewbutton_labinfo).setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.viewbutton_excheck).setOnTouchListener(mViewTouchListener);
             for (int i = 0; i < 5; i++) {
                 mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
@@ -355,6 +356,10 @@ public class KcaFleetViewService extends Service {
                         } else if (id == mView.findViewById(R.id.viewbutton_maphp).getId()) {
                             qintent = new Intent(getBaseContext(), KcaMapHpPopupService.class);
                             qintent.setAction(KcaMapHpPopupService.MAPHP_SHOW_ACTION);
+                            startService(qintent);
+                        } else if (id == mView.findViewById(R.id.viewbutton_labinfo).getId()) {
+                            qintent = new Intent(getBaseContext(), KcaLandAirBasePopupService.class);
+                            qintent.setAction(KcaLandAirBasePopupService.LAB_DATA_ACTION);
                             startService(qintent);
                         } else if (id == mView.findViewById(R.id.viewbutton_excheck).getId()) {
                             qintent = new Intent(getBaseContext(), KcaExpeditionCheckViewService.class);

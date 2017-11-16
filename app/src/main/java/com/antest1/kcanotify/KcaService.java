@@ -89,6 +89,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
+import static com.antest1.kcanotify.KcaVpnData.requestData;
 
 public class KcaService extends Service {
     public static final String SERVICE_CHANNEL_ID = "noti_service_channel";
@@ -297,7 +298,10 @@ public class KcaService extends Service {
         stopService(new Intent(this, KcaQuestViewService.class));
         stopService(new Intent(this, KcaFleetViewService.class));
         stopService(new Intent(this, KcaAkashiViewService.class));
-        stopService(new Intent(this, KcaExpeditionCheckViewService.class));
+        stopService(new Intent(this, KcaMapHpPopupService.class));
+        stopService(new Intent(this, KcaConstructPopupService.class));
+        stopService(new Intent(this, KcaDevelopPopupService.class));
+        stopService(new Intent(this, KcaLandAirBasePopupService.class));
         stopService(new Intent(this, KcaViewButtonService.class));
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putBoolean("svcenabled", false).apply();
@@ -902,6 +906,9 @@ public class KcaService extends Service {
                                     KcaApiData.setEventMapDifficulty(eventMapCount, eventData.get("api_selected_rank").getAsInt());
                             }
                         }
+                        JsonArray api_airbase_info = api_data.getAsJsonArray("api_air_base");
+                        dbHelper.putValue(DB_KEY_LABSIFNO, api_airbase_info.toString());
+                        updateAirbasePopupInfo();
                     }
 
                     // Notification Part
@@ -1105,6 +1112,186 @@ public class KcaService extends Service {
                     if (jsonDataObj.has("api_data")) {
                         JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                         KcaApiData.updateSuppliedUserShip(api_data.getAsJsonArray("api_ship"));
+                    }
+                }
+
+                if (url.startsWith(API_REQ_AIR_CORPS_SETPLANE)) {
+                    int target_area_id = 0;
+                    int target_base_id = 0;
+                    String[] requestData = request.split("&");
+                    for (int i = 0; i < requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if (decodedData.startsWith("api_area_id")) {
+                            target_area_id = Integer.valueOf(decodedData.replace("api_area_id=", ""));
+                        } else if (decodedData.startsWith("api_base_id")) {
+                            target_base_id = Integer.valueOf(decodedData.replace("api_base_id=", ""));
+                        }
+                    }
+
+                    int new_distance = -1;
+                    JsonArray api_plane_info = new JsonArray();
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                        api_plane_info = api_data.getAsJsonArray("api_plane_info");
+                        new_distance = api_data.get("api_distance").getAsInt();
+                    }
+
+                    JsonArray airbase_data = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
+
+                    if (airbase_data != null) {
+                        for (int i = 0; i < airbase_data.size(); i++) {
+                            JsonObject airbase_item = airbase_data.get(i).getAsJsonObject();
+                            int area_id = airbase_item.get("api_area_id").getAsInt();
+                            int rid = airbase_item.get("api_rid").getAsInt();
+                            if (area_id == target_area_id && rid == target_base_id) {
+                                airbase_item.addProperty("api_distance", new_distance);
+                                JsonArray airbase_plane_info = airbase_item.getAsJsonArray("api_plane_info");
+                                for (int j = 0; j < api_plane_info.size(); j++) {
+                                    JsonObject plane_item = api_plane_info.get(j).getAsJsonObject();
+                                    int plane_item_id = plane_item.get("api_squadron_id").getAsInt();
+                                    for (int k = 0; k < airbase_plane_info.size(); k++) {
+                                        JsonObject target_plane_item = airbase_plane_info.get(k).getAsJsonObject();
+                                        if (target_plane_item.get("api_squadron_id").getAsInt() == plane_item_id) {
+                                            airbase_plane_info.set(k, plane_item);
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        dbHelper.putValue(DB_KEY_LABSIFNO, airbase_data.toString());
+                        updateAirbasePopupInfo();
+                    }
+                }
+
+                if (url.startsWith(API_REQ_AIR_CORPS_CHANGENAME)) {
+                    int target_area_id = 0;
+                    int target_base_id = 0;
+                    String new_name = "";
+                    String[] requestData = request.split("&");
+                    for (int i = 0; i < requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if (decodedData.startsWith("api_area_id")) {
+                            target_area_id = Integer.valueOf(decodedData.replace("api_area_id=", ""));
+                        } else if (decodedData.startsWith("api_base_id")) {
+                            target_base_id = Integer.valueOf(decodedData.replace("api_base_id=", ""));
+                        } else if (decodedData.startsWith("api_name")) {
+                            new_name = decodedData.replace("api_name=", "");
+                        }
+                    }
+
+                    JsonArray airbase_data = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
+                    if (airbase_data != null) {
+                        for (int i = 0; i < airbase_data.size(); i++) {
+                            JsonObject airbase_item = airbase_data.get(i).getAsJsonObject();
+                            int area_id = airbase_item.get("api_area_id").getAsInt();
+                            int rid = airbase_item.get("api_rid").getAsInt();
+                            if (area_id == target_area_id && rid == target_base_id) {
+                                airbase_item.addProperty("api_name", new_name);
+                                break;
+                            }
+                        }
+                        dbHelper.putValue(DB_KEY_LABSIFNO, airbase_data.toString());
+                        updateAirbasePopupInfo();
+                    }
+                }
+
+                if (url.startsWith(API_REQ_AIR_CORPS_SETACTION)) {
+                    int target_area_id = 0;
+                    String target_base_id = "";
+                    String new_action_kind = "";
+                    String[] requestData = request.split("&");
+                    for (int i = 0; i < requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if (decodedData.startsWith("api_area_id")) {
+                            target_area_id = Integer.valueOf(decodedData.replace("api_area_id=", ""));
+                        } else if (decodedData.startsWith("api_base_id")) {
+                            target_base_id = decodedData.replace("api_base_id=", "");
+                        } else if (decodedData.startsWith("api_action_kind")) {
+                            new_action_kind = decodedData.replace("api_action_kind=", "");
+                        }
+                    }
+                    String[] target_base_list = target_base_id.split(",");
+                    String[] new_action_list = new_action_kind.split(",");
+
+                    JsonArray airbase_data = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
+                    if (airbase_data != null) {
+                        for (int i = 0; i < airbase_data.size(); i++) {
+                            JsonObject airbase_item = airbase_data.get(i).getAsJsonObject();
+                            int area_id = airbase_item.get("api_area_id").getAsInt();
+                            int rid = airbase_item.get("api_rid").getAsInt();
+                            for (int j = 0; j < target_base_list.length; j++) {
+                                int target_base = Integer.parseInt(target_base_list[j]);
+                                if (area_id == target_area_id && rid == target_base) {
+                                    airbase_item.addProperty("api_action_kind", Integer.parseInt(new_action_list[j]));
+                                    break;
+                                }
+                            }
+                        }
+                        dbHelper.putValue(DB_KEY_LABSIFNO, airbase_data.toString());
+                        updateAirbasePopupInfo();
+                    }
+                }
+
+                if (url.startsWith(API_REQ_AIR_CORPS_SUPPLY)) {
+                    int target_area_id = 0;
+                    int target_base_id = 0;
+                    String[] requestData = request.split("&");
+                    for (int i = 0; i < requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if (decodedData.startsWith("api_area_id")) {
+                            target_area_id = Integer.valueOf(decodedData.replace("api_area_id=", ""));
+                        } else if (decodedData.startsWith("api_base_id")) {
+                            target_base_id = Integer.valueOf(decodedData.replace("api_base_id=", ""));
+                        }
+                    }
+
+                    JsonArray api_plane_info = new JsonArray();
+                    if (jsonDataObj.has("api_data")) {
+                        JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                        api_plane_info = api_data.getAsJsonArray("api_plane_info");
+                    }
+
+                    JsonArray airbase_data = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
+                    if (airbase_data != null) {
+                        for (int i = 0; i < airbase_data.size(); i++) {
+                            JsonObject airbase_item = airbase_data.get(i).getAsJsonObject();
+                            int area_id = airbase_item.get("api_area_id").getAsInt();
+                            int rid = airbase_item.get("api_rid").getAsInt();
+                            if (area_id == target_area_id && rid == target_base_id) {
+                                JsonArray airbase_plane_info = airbase_item.getAsJsonArray("api_plane_info");
+                                for (int j = 0; j < api_plane_info.size(); j++) {
+                                    JsonObject plane_item = api_plane_info.get(j).getAsJsonObject();
+                                    int plane_item_id = plane_item.get("api_squadron_id").getAsInt();
+                                    for (int k = 0; k < airbase_plane_info.size(); k++) {
+                                        JsonObject target_plane_item = airbase_plane_info.get(k).getAsJsonObject();
+                                        if (target_plane_item.get("api_squadron_id").getAsInt() == plane_item_id) {
+                                            airbase_plane_info.set(k, plane_item);
+                                            break;
+                                        }
+                                    }
+                                }
+                                airbase_item.add("api_plane_info", api_plane_info);
+                                break;
+                            }
+                        }
+                        dbHelper.putValue(DB_KEY_LABSIFNO, airbase_data.toString());
+                        updateAirbasePopupInfo();
+                    }
+                }
+
+                if (url.startsWith(API_REQ_AIR_CORPS_EXPANDBASE)) {
+                    JsonObject api_base_info = new JsonObject();
+                    if (jsonDataObj.has("api_data")) {
+                        api_base_info = jsonDataObj.getAsJsonObject("api_data");
+                    }
+
+                    JsonArray airbase_data = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
+                    if (airbase_data != null) {
+                        airbase_data.add(api_base_info);
+                        dbHelper.putValue(DB_KEY_LABSIFNO, airbase_data.toString());
+                        updateAirbasePopupInfo();
                     }
                 }
 
@@ -2195,6 +2382,14 @@ public class KcaService extends Service {
     public void updateFleetView() {
         startService(new Intent(getBaseContext(), KcaFleetViewService.class)
                 .setAction(REFRESH_FLEETVIEW_ACTION));
+    }
+
+    public void updateAirbasePopupInfo() {
+        if (KcaLandAirBasePopupService.isActive()) {
+            Intent qintent = new Intent(getBaseContext(), KcaLandAirBasePopupService.class);
+            qintent.setAction(KcaLandAirBasePopupService.LAB_DATA_ACTION);
+            startService(qintent);
+        }
     }
 
     public void showCustomToast(KcaCustomToast toast, String body, int duration, int color) {

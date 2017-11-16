@@ -27,6 +27,7 @@ public final class KcaConstants {
     public static final String DB_KEY_EXPCRNT = "key_expcrnt";
     public static final String DB_KEY_EXPTIME = "key_exptime";
     public static final String DB_KEY_FAIRYLOC = "key_fairyloc";
+    public static final String DB_KEY_LABSIFNO = "key_labsinfo";
 
     public static final String[] DB_KEY_ARRAY = {
             DB_KEY_STARTDATA,
@@ -42,7 +43,8 @@ public final class KcaConstants {
             DB_KEY_EXPTDAY,
             DB_KEY_EXPCRNT,
             DB_KEY_EXPTIME,
-            DB_KEY_FAIRYLOC
+            DB_KEY_FAIRYLOC,
+            DB_KEY_LABSIFNO
     };
 
     public static final String ERROR_TYPE_SERVICE = "S";
@@ -115,6 +117,13 @@ public final class KcaConstants {
             API_REQ_QUEST_STOP,
             API_REQ_QUEST_CLEARITEMGET
     };
+
+    public static final String API_GET_MEMBER_BASEAIRCORPS = "/api_get_member/base_air_corps";
+    public static final String API_REQ_AIR_CORPS_SETPLANE = "/api_req_air_corps/set_plane";
+    public static final String API_REQ_AIR_CORPS_CHANGENAME = "/api_req_air_corps/change_name";
+    public static final String API_REQ_AIR_CORPS_SETACTION = "/api_req_air_corps/set_action";
+    public static final String API_REQ_AIR_CORPS_SUPPLY = "/api_req_air_corps/supply";
+    public static final String API_REQ_AIR_CORPS_EXPANDBASE = "/api_req_air_corps/expand_base";
 
     public static final String API_GET_MEMBER_MAPINFO = "/api_get_member/mapinfo";
     public static final String API_GET_MEMBER_PRACTICE = "/api_get_member/practice";
@@ -290,6 +299,12 @@ public final class KcaConstants {
     public static final int AIR_SUPERIORITY = 2;
     public static final int AIR_DENIAL = 3;
     public static final int AIR_INCAPABILITY = 4;
+
+    public static final int LAB_STATUS_STANDBY = 0;
+    public static final int LAB_STATUS_SORTIE = 1;
+    public static final int LAB_STATUS_DEFENSE = 2;
+    public static final int LAB_STATUS_RETREAT = 3;
+    public static final int LAB_STATUS_REST = 4;
 
     public static final int RAID_LOST_TYPE_1 = 1;
     public static final int RAID_LOST_TYPE_2 = 2;
