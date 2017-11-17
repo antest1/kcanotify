@@ -499,6 +499,7 @@ public class KcaService extends Service {
         setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_DOCK, dockId));
     }
 
+    /*
     private void toastInfo() {
         if (!KcaApiData.isGameDataLoaded()) return;
         else if (!isCurrentPortDeckDataReady()) return;
@@ -521,7 +522,7 @@ public class KcaService extends Service {
         }
         KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
         showCustomToast(customToast, joinStr(toastList, " / "), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-    }
+    }*/
 
     private static class kcaServiceHandler extends Handler {
         private final WeakReference<KcaService> mService;
@@ -1619,7 +1620,7 @@ public class KcaService extends Service {
                             }
                         }
                         if (kaisouProcessFlag) {
-                            toastInfo();
+                            //toastInfo();
                             kaisouProcessFlag = false;
                             updateFleetView();
                         }
@@ -1640,7 +1641,7 @@ public class KcaService extends Service {
                             KcaApiData.updateUserShipSlot(userShipId, api_data);
                         }
                         updateFleetView();
-                        toastInfo();
+                        //toastInfo();
                     }
 
                     if (url.startsWith(API_REQ_KAISOU_SLOT_DEPRIVE)) {
@@ -1651,7 +1652,7 @@ public class KcaService extends Service {
                             KcaApiData.updateUserShip(api_ship_data.get("api_unset_ship").getAsJsonObject());
                         }
                         updateFleetView();
-                        toastInfo();
+                        //toastInfo();
                     }
 
                     if (url.startsWith(API_REQ_KAISOU_POWERUP)) {

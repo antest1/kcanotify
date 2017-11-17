@@ -366,6 +366,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_construction">建造</string>
     <string name="viewmenu_airbase">基航</string>
     <string name="viewmenu_maphp">海域</string>
+    <string name="viewmenu_fchk">状态</string>
     <string name="viewmenu_develop_title">开发信息</string>
     <string name="viewmenu_construction_title">建造信息</string>
     <string name="viewmenu_airbase_title">基地航空队</string>

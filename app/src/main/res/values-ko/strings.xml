@@ -360,6 +360,7 @@
     <string name="viewmenu_construction">건조</string>
     <string name="viewmenu_airbase">기항</string>
     <string name="viewmenu_maphp">해역</string>
+    <string name="viewmenu_fchk">상태</string>
     <string name="viewmenu_develop_title">개발 정보</string>
     <string name="viewmenu_construction_title">건조 정보</string>
     <string name="viewmenu_airbase_title">기지항공대</string>
