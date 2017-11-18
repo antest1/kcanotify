@@ -167,15 +167,19 @@ public class KcaFleetCheckPopupService extends Service {
 
     private void setText() {
         if (fchk_info != null) {
+            int target = recent_no - 1;
+            String target_str = String.valueOf(target);
+            if (recent_no == 5) target_str = "0,1";
+
             ((TextView) mView.findViewById(R.id.view_fchk_title)).setText(getFleetName());
             if (KcaApiData.isGameDataLoaded() && KcaApiData.checkUserShipDataLoaded() && portdeckdata != null) {
                 int cn = getSeekCn();
                 String seekType = getSeekType();
 
-                int[] airPowerRange = deckInfoCalc.getAirPowerRange(portdeckdata, 0, KcaBattle.getEscapeFlag());
+                int[] airPowerRange = deckInfoCalc.getAirPowerRange(portdeckdata, target, KcaBattle.getEscapeFlag());
                 String airPowerValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
-                String seekValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, deckInfoCalc.getSeekValue(portdeckdata, "0", cn, KcaBattle.getEscapeFlag()));
-                int[] tp = deckInfoCalc.getTPValue(portdeckdata, "0", KcaBattle.getEscapeFlag());
+                String seekValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, deckInfoCalc.getSeekValue(portdeckdata, target_str, cn, KcaBattle.getEscapeFlag()));
+                int[] tp = deckInfoCalc.getTPValue(portdeckdata, target_str, KcaBattle.getEscapeFlag());
                 String tpValue = KcaUtils.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
                 List<String> toastList = new ArrayList<String>();
                 if (airPowerRange[1] > 0) {
