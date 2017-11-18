@@ -468,11 +468,11 @@ public class KcaBattleViewService extends Service {
 
                             for (int j = 0; j < api_escape_combined.size(); j++) {
                                 int idx = api_escape_combined.get(j).getAsInt();
-                                ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", j + 1), R.id.class)))
+                                ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", idx), R.id.class)))
                                         .setText(getStringWithLocale(R.string.battleview_text_retreated));
-                                ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", j + 1), R.id.class)))
+                                ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", idx), R.id.class)))
                                         .setGravity(Gravity.CENTER_HORIZONTAL);
-                                battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", j + 1), R.id.class))
+                                battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", idx), R.id.class))
                                         .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRetreated));
                             }
 
