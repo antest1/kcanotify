@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
+import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 
@@ -161,10 +162,6 @@ public class KcaBattle {
         return (data.has(key) && !data.get(key).isJsonNull());
     }
 
-    public static JsonElement parseJson(String v) {
-        return new JsonParser().parse(v);
-    }
-
     public static boolean isMainFleetInNight(JsonObject fleetdata) {
         JsonArray api_e_nowhps = fleetdata.getAsJsonArray("e_start");
         JsonArray api_e_afterhps = fleetdata.getAsJsonArray("e_after");
@@ -241,8 +238,8 @@ public class KcaBattle {
             if (api_f_afterhps.get(i).getAsInt() <= 0) {
                 friendSunkCount += 1;
             }
-            friendNowSum += friendNowHps.get(i).getAsInt();
-            friendAfterSum += Math.max(0, friendAfterHps.get(i).getAsInt());
+            friendNowSum += api_f_nowhps.get(i).getAsInt();
+            friendAfterSum += Math.max(0, api_f_afterhps.get(i).getAsInt());
         }
 
         for (int i = 0; i < api_f_nowhps_combined.size(); i++) {
@@ -250,8 +247,8 @@ public class KcaBattle {
             if (api_f_afterhps_combined.get(i).getAsInt() <= 0) {
                 friendSunkCount += 1;
             }
-            friendNowSum += friendCbNowHps.get(i).getAsInt();
-            friendAfterSum += Math.max(0, friendCbAfterHps.get(i).getAsInt());
+            friendNowSum += api_f_nowhps_combined.get(i).getAsInt();
+            friendAfterSum += Math.max(0, api_f_afterhps_combined.get(i).getAsInt());
         }
 
         for (int i = 0; i < api_e_nowhps.size(); i++) {
@@ -260,8 +257,8 @@ public class KcaBattle {
                 enemySunkIdx.add(i);
                 enemySunkCount += 1;
             }
-            enemyNowSum += enemyNowHps.get(i).getAsInt();
-            enemyAfterSum += Math.max(0, enemyAfterHps.get(i).getAsInt());
+            enemyNowSum += api_e_nowhps.get(i).getAsInt();
+            enemyAfterSum += Math.max(0, api_e_afterhps.get(i).getAsInt());
         }
 
         for (int i = 0; i < api_e_nowhps_combined.size(); i++) {
@@ -269,8 +266,8 @@ public class KcaBattle {
             if (api_e_afterhps_combined.get(i).getAsInt() <= 0) {
                 enemySunkCount += 1;
             }
-            enemyNowSum += enemyCbNowHps.get(i).getAsInt();
-            enemyAfterSum += Math.max(0, enemyCbAfterHps.get(i).getAsInt());
+            enemyNowSum += api_e_nowhps_combined.get(i).getAsInt();
+            enemyAfterSum += Math.max(0, api_e_afterhps_combined.get(i).getAsInt());
         }
 
         int friendDamageRate = (friendNowSum - friendAfterSum) * 100 / friendNowSum;
@@ -580,13 +577,13 @@ public class KcaBattle {
 
                 currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
-                friendMaxHps = parseJson(friendMaxHpsData).getAsJsonArray();
-                friendNowHps = parseJson(friendNowHpsData).getAsJsonArray();
-                friendAfterHps = parseJson(friendNowHpsData).getAsJsonArray();
+                friendMaxHps = KcaUtils.parseJson(friendMaxHpsData).getAsJsonArray();
+                friendNowHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
+                friendAfterHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
 
-                enemyMaxHps = parseJson(enemyMaxHpsData).getAsJsonArray();
-                enemyNowHps = parseJson(enemyNowHpsData).getAsJsonArray();
-                enemyAfterHps = parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyMaxHps = KcaUtils.parseJson(enemyMaxHpsData).getAsJsonArray();
+                enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
                 // 기항대분식항공전 Stage 3
                 if (isKeyExist(api_data, "api_air_base_injection")) {
@@ -721,20 +718,21 @@ public class KcaBattle {
                 if (url.equals(API_REQ_SORTIE_BATTLE_MIDNIGHT_SP)) {
                     ship_ke = api_data.getAsJsonArray("api_ship_ke");
                     currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
+
+                    String friendMaxHpsData = api_data.getAsJsonArray("api_f_maxhps").toString();
+                    String enemyMaxHpsData = api_data.getAsJsonArray("api_e_maxhps").toString();
+                    friendMaxHps = KcaUtils.parseJson(friendMaxHpsData).getAsJsonArray();
+                    enemyMaxHps = KcaUtils.parseJson(enemyMaxHpsData).getAsJsonArray();
                 }
 
-                String friendMaxHpsData = api_data.getAsJsonArray("api_f_maxhps").toString();
                 String friendNowHpsData = api_data.getAsJsonArray("api_f_nowhps").toString();
-                String enemyMaxHpsData = api_data.getAsJsonArray("api_e_maxhps").toString();
                 String enemyNowHpsData = api_data.getAsJsonArray("api_e_nowhps").toString();
 
-                friendMaxHps = parseJson(friendMaxHpsData).getAsJsonArray();
-                friendNowHps = parseJson(friendNowHpsData).getAsJsonArray();
-                friendAfterHps = parseJson(friendNowHpsData).getAsJsonArray();
+                friendNowHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
+                friendAfterHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
 
-                enemyMaxHps = parseJson(enemyMaxHpsData).getAsJsonArray();
-                enemyNowHps = parseJson(enemyNowHpsData).getAsJsonArray();
-                enemyAfterHps = parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
                 // 야간지원함대
                 if (isKeyExist(api_data, "api_n_support_info")) {
@@ -798,13 +796,13 @@ public class KcaBattle {
                 String enemyMaxHpsData = api_data.getAsJsonArray("api_e_maxhps").toString();
                 String enemyNowHpsData = api_data.getAsJsonArray("api_e_nowhps").toString();
 
-                friendMaxHps = parseJson(friendMaxHpsData).getAsJsonArray();
-                friendNowHps = parseJson(friendNowHpsData).getAsJsonArray();
-                friendAfterHps = parseJson(friendNowHpsData).getAsJsonArray();
+                friendMaxHps = KcaUtils.parseJson(friendMaxHpsData).getAsJsonArray();
+                friendNowHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
+                friendAfterHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
 
-                enemyMaxHps = parseJson(enemyMaxHpsData).getAsJsonArray();
-                enemyNowHps = parseJson(enemyNowHpsData).getAsJsonArray();
-                enemyAfterHps = parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyMaxHps = KcaUtils.parseJson(enemyMaxHpsData).getAsJsonArray();
+                enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
                 // 항공전 Stage 3
                 if (isKeyExist(api_data, "api_kouku")) {
@@ -833,7 +831,7 @@ public class KcaBattle {
             if (url.equals(API_REQ_SORTIE_BATTLE_RESULT) || url.equals(API_REQ_PRACTICE_BATTLE_RESULT)) {
                 Bundle bundle;
                 Message sMsg;
-                friendNowHps = parseJson(friendAfterHps.toString()).getAsJsonArray();
+                friendNowHps = KcaUtils.parseJson(friendAfterHps.toString()).getAsJsonArray();
                 int checkresult = HD_NONE;
 
                 JsonObject qtrackData = new JsonObject();
@@ -956,20 +954,20 @@ public class KcaBattle {
                 String enemyMaxHpsData = api_data.getAsJsonArray("api_e_maxhps").toString();
                 String enemyNowHpsData = api_data.getAsJsonArray("api_e_nowhps").toString();
 
-                friendMaxHps = parseJson(friendMaxHpsData).getAsJsonArray();
-                friendNowHps = parseJson(friendNowHpsData).getAsJsonArray();
-                friendAfterHps = parseJson(friendNowHpsData).getAsJsonArray();
+                friendMaxHps = KcaUtils.parseJson(friendMaxHpsData).getAsJsonArray();
+                friendNowHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
+                friendAfterHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
 
-                enemyMaxHps = parseJson(enemyMaxHpsData).getAsJsonArray();
-                enemyNowHps = parseJson(enemyNowHpsData).getAsJsonArray();
-                enemyAfterHps = parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyMaxHps = KcaUtils.parseJson(enemyMaxHpsData).getAsJsonArray();
+                enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
                 String friendCbMaxHpsData = api_data.getAsJsonArray("api_f_maxhps_combined").toString();
                 String friendCbNowHpsData = api_data.getAsJsonArray("api_f_nowhps_combined").toString();
 
-                friendCbMaxHps = parseJson(friendCbMaxHpsData).getAsJsonArray();
-                friendCbNowHps = parseJson(friendCbNowHpsData).getAsJsonArray();
-                friendCbAfterHps = parseJson(friendCbNowHpsData).getAsJsonArray();
+                friendCbMaxHps = KcaUtils.parseJson(friendCbMaxHpsData).getAsJsonArray();
+                friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
+                friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
 
                 // 기항대분식항공전 Stage 3
                 if (isKeyExist(api_data, "api_air_base_injection")) {
@@ -1123,26 +1121,26 @@ public class KcaBattle {
                 String enemyMaxHpsData = api_data.getAsJsonArray("api_e_maxhps").toString();
                 String enemyNowHpsData = api_data.getAsJsonArray("api_e_nowhps").toString();
 
-                friendMaxHps = parseJson(friendMaxHpsData).getAsJsonArray();
-                friendNowHps = parseJson(friendNowHpsData).getAsJsonArray();
-                friendAfterHps = parseJson(friendNowHpsData).getAsJsonArray();
+                friendMaxHps = KcaUtils.parseJson(friendMaxHpsData).getAsJsonArray();
+                friendNowHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
+                friendAfterHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
 
-                enemyMaxHps = parseJson(enemyMaxHpsData).getAsJsonArray();
-                enemyNowHps = parseJson(enemyNowHpsData).getAsJsonArray();
-                enemyAfterHps = parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyMaxHps = KcaUtils.parseJson(enemyMaxHpsData).getAsJsonArray();
+                enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
                 String friendCbMaxHpsData = api_data.getAsJsonArray("api_f_maxhps_combined").toString();
                 String friendCbNowHpsData = api_data.getAsJsonArray("api_f_nowhps_combined").toString();
                 String enemyCbMaxHpsData = api_data.getAsJsonArray("api_e_maxhps_combined").toString();
                 String enemyCbNowHpsData = api_data.getAsJsonArray("api_e_nowhps_combined").toString();
 
-                friendCbMaxHps = parseJson(friendCbMaxHpsData).getAsJsonArray();
-                friendCbNowHps = parseJson(friendCbNowHpsData).getAsJsonArray();
-                friendCbAfterHps = parseJson(friendCbNowHpsData).getAsJsonArray();
+                friendCbMaxHps = KcaUtils.parseJson(friendCbMaxHpsData).getAsJsonArray();
+                friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
+                friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
 
-                enemyCbMaxHps = parseJson(enemyCbMaxHpsData).getAsJsonArray();
-                enemyCbNowHps = parseJson(enemyCbNowHpsData).getAsJsonArray();
-                enemyCbAfterHps = parseJson(enemyCbNowHpsData).getAsJsonArray();
+                enemyCbMaxHps = KcaUtils.parseJson(enemyCbMaxHpsData).getAsJsonArray();
+                enemyCbNowHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
+                enemyCbAfterHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
 
                 // 기항대분식항공전 Stage 3
                 if (isKeyExist(api_data, "api_air_base_injection")) {
@@ -1340,20 +1338,20 @@ public class KcaBattle {
                 String enemyMaxHpsData = api_data.getAsJsonArray("api_e_maxhps").toString();
                 String enemyNowHpsData = api_data.getAsJsonArray("api_e_nowhps").toString();
 
-                friendMaxHps = parseJson(friendMaxHpsData).getAsJsonArray();
-                friendNowHps = parseJson(friendNowHpsData).getAsJsonArray();
-                friendAfterHps = parseJson(friendNowHpsData).getAsJsonArray();
+                friendMaxHps = KcaUtils.parseJson(friendMaxHpsData).getAsJsonArray();
+                friendNowHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
+                friendAfterHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
 
-                enemyMaxHps = parseJson(enemyMaxHpsData).getAsJsonArray();
-                enemyNowHps = parseJson(enemyNowHpsData).getAsJsonArray();
-                enemyAfterHps = parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyMaxHps = KcaUtils.parseJson(enemyMaxHpsData).getAsJsonArray();
+                enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
                 String friendCbMaxHpsData = api_data.getAsJsonArray("api_f_maxhps_combined").toString();
                 String friendCbNowHpsData = api_data.getAsJsonArray("api_f_nowhps_combined").toString();
 
-                friendCbMaxHps = parseJson(friendCbMaxHpsData).getAsJsonArray();
-                friendCbNowHps = parseJson(friendCbNowHpsData).getAsJsonArray();
-                friendCbAfterHps = parseJson(friendCbNowHpsData).getAsJsonArray();
+                friendCbMaxHps = KcaUtils.parseJson(friendCbMaxHpsData).getAsJsonArray();
+                friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
+                friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
 
                 // 제1항공전 Stage 3
                 calculateAirBattle(api_data.getAsJsonObject("api_kouku"));
@@ -1381,29 +1379,31 @@ public class KcaBattle {
             if (url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT) || url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT_SP)) {
                 if (url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT_SP)) {
                     ship_ke = api_data.getAsJsonArray("api_ship_ke");
+
+                    String friendMaxHpsData = api_data.getAsJsonArray("api_f_maxhps").toString();
+                    String enemyMaxHpsData = api_data.getAsJsonArray("api_e_maxhps").toString();
+                    String friendCbMaxHpsData = api_data.getAsJsonArray("api_f_maxhps_combined").toString();
+
+                    friendMaxHps = KcaUtils.parseJson(friendMaxHpsData).getAsJsonArray();
+                    enemyMaxHps = KcaUtils.parseJson(enemyMaxHpsData).getAsJsonArray();
+                    friendCbMaxHps = KcaUtils.parseJson(friendCbMaxHpsData).getAsJsonArray();
                 }
 
                 currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
-                String friendMaxHpsData = api_data.getAsJsonArray("api_f_maxhps").toString();
                 String friendNowHpsData = api_data.getAsJsonArray("api_f_nowhps").toString();
-                String enemyMaxHpsData = api_data.getAsJsonArray("api_e_maxhps").toString();
                 String enemyNowHpsData = api_data.getAsJsonArray("api_e_nowhps").toString();
 
-                friendMaxHps = parseJson(friendMaxHpsData).getAsJsonArray();
-                friendNowHps = parseJson(friendNowHpsData).getAsJsonArray();
-                friendAfterHps = parseJson(friendNowHpsData).getAsJsonArray();
+                friendNowHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
+                friendAfterHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
 
-                enemyMaxHps = parseJson(enemyMaxHpsData).getAsJsonArray();
-                enemyNowHps = parseJson(enemyNowHpsData).getAsJsonArray();
-                enemyAfterHps = parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
-                String friendCbMaxHpsData = api_data.getAsJsonArray("api_f_maxhps_combined").toString();
                 String friendCbNowHpsData = api_data.getAsJsonArray("api_f_nowhps_combined").toString();
 
-                friendCbMaxHps = parseJson(friendCbMaxHpsData).getAsJsonArray();
-                friendCbNowHps = parseJson(friendCbNowHpsData).getAsJsonArray();
-                friendCbAfterHps = parseJson(friendCbNowHpsData).getAsJsonArray();
+                friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
+                friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
 
                 // 야간지원함대
                 if (isKeyExist(api_data, "api_n_support_info")) {
@@ -1466,31 +1466,23 @@ public class KcaBattle {
                     activedeck[i] = activeDeckData.get(i).getAsInt();
                 }
 
-                String friendMaxHpsData = api_data.getAsJsonArray("api_f_maxhps").toString();
                 String friendNowHpsData = api_data.getAsJsonArray("api_f_nowhps").toString();
-                String enemyMaxHpsData = api_data.getAsJsonArray("api_e_maxhps").toString();
                 String enemyNowHpsData = api_data.getAsJsonArray("api_e_nowhps").toString();
 
-                friendMaxHps = parseJson(friendMaxHpsData).getAsJsonArray();
-                friendNowHps = parseJson(friendNowHpsData).getAsJsonArray();
-                friendAfterHps = parseJson(friendNowHpsData).getAsJsonArray();
+                friendNowHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
+                friendAfterHps = KcaUtils.parseJson(friendNowHpsData).getAsJsonArray();
 
-                enemyMaxHps = parseJson(enemyMaxHpsData).getAsJsonArray();
-                enemyNowHps = parseJson(enemyNowHpsData).getAsJsonArray();
-                enemyAfterHps = parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
+                enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
-                String friendCbMaxHpsData = api_data.getAsJsonArray("api_f_maxhps_combined").toString();
                 String friendCbNowHpsData = api_data.getAsJsonArray("api_f_nowhps_combined").toString();
-                String enemyCbMaxHpsData = api_data.getAsJsonArray("api_e_maxhps_combined").toString();
                 String enemyCbNowHpsData = api_data.getAsJsonArray("api_e_nowhps_combined").toString();
 
-                friendCbMaxHps = parseJson(friendCbMaxHpsData).getAsJsonArray();
-                friendCbNowHps = parseJson(friendCbNowHpsData).getAsJsonArray();
-                friendCbAfterHps = parseJson(friendCbNowHpsData).getAsJsonArray();
+                friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
+                friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
 
-                enemyCbMaxHps = parseJson(enemyCbMaxHpsData).getAsJsonArray();
-                enemyCbNowHps = parseJson(enemyCbNowHpsData).getAsJsonArray();
-                enemyCbAfterHps = parseJson(enemyCbNowHpsData).getAsJsonArray();
+                enemyCbNowHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
+                enemyCbAfterHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
 
                 // 야간지원함대
                 if (isKeyExist(api_data, "api_n_support_info")) {
@@ -1550,8 +1542,8 @@ public class KcaBattle {
             }
 
             if (url.equals(API_REQ_COMBINED_BATTLERESULT)) {
-                friendNowHps = parseJson(friendAfterHps.toString()).getAsJsonArray();
-                friendCbNowHps = parseJson(friendCbAfterHps.toString()).getAsJsonArray();
+                friendNowHps = KcaUtils.parseJson(friendAfterHps.toString()).getAsJsonArray();
+                friendCbNowHps = KcaUtils.parseJson(friendCbAfterHps.toString()).getAsJsonArray();
 
                 Bundle bundle;
                 Message sMsg;

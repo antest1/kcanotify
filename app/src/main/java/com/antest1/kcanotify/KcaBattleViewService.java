@@ -537,7 +537,7 @@ public class KcaBattleViewService extends Service {
                     enemyShipData.add(itemdata);
                 }
                 Log.e("KCA", "ESD: " + String.valueOf(enemyShipData.size()));
-                boolean start_flag = api_data.has("api_formation");
+                boolean start_flag = checkStart(api_data.get("api_url").getAsString());
                 if (start_flag) { // day/sp_night Battle Process
                     api_formation = api_data.getAsJsonArray("api_formation");
                     // air power show
@@ -787,10 +787,10 @@ public class KcaBattleViewService extends Service {
 
                 // Rank Data
                 if (start_flag) {
-                    api_f_starthps = api_f_nowhps;
-                    api_e_starthps = api_e_nowhps;
-                    api_f_starthps_combined = api_f_nowhps_combined;
-                    api_e_starthps_combined = api_e_nowhps_combined;
+                    api_f_starthps = KcaUtils.parseJson(api_f_nowhps.toString()).getAsJsonArray();
+                    api_e_starthps = KcaUtils.parseJson(api_e_nowhps.toString()).getAsJsonArray();
+                    api_f_starthps_combined = KcaUtils.parseJson(api_f_nowhps_combined.toString()).getAsJsonArray();
+                    api_e_starthps_combined = KcaUtils.parseJson(api_e_nowhps_combined.toString()).getAsJsonArray();
 
                     JsonObject enemydata = new JsonObject();
                     enemydata.add("e_after", api_e_afterhps);
@@ -1681,5 +1681,13 @@ public class KcaBattleViewService extends Service {
 
     private int getSeekCn() {
         return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
+    }
+
+    private boolean checkStart(String url) {
+        if (url.equals(API_REQ_SORTIE_BATTLE_MIDNIGHT)) return false;
+        if (url.equals(API_REQ_PRACTICE_MIDNIGHT_BATTLE)) return false;
+        if (url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT)) return false;
+        if (url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT_EC)) return false;
+        return true;
     }
 }

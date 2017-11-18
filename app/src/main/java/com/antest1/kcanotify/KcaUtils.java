@@ -60,6 +60,10 @@ public class KcaUtils {
         return String.format(Locale.ENGLISH, format, args);
     }
 
+    public static JsonElement parseJson(String v) {
+        return new JsonParser().parse(v);
+    }
+
     public static String joinStr(List<String> list, String delim) {
         String resultStr = "";
         if (list.size() > 0) {
