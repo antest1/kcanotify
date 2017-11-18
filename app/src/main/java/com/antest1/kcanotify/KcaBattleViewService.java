@@ -965,7 +965,6 @@ public class KcaBattleViewService extends Service {
         if (api_data == null || id == -1) return;
         int realID = id - 1;
         JsonObject data;
-        Toast.makeText(getApplicationContext(), String.valueOf(id), Toast.LENGTH_LONG).show();
         Log.e("KCA", String.valueOf(realID));
         boolean friendflag = false;
         if (realID < 100) { // Main
@@ -1428,10 +1427,12 @@ public class KcaBattleViewService extends Service {
                     for (int i = 1; i <= 6; i++) {
                         battleview.findViewById(getId(KcaUtils.format("fm_%d_name", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("fm_%d_lv", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
+                        battleview.findViewById(getId(KcaUtils.format("em_%d_name", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("em_%d_name_area", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("em_%d_lv", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("fs_%d_name", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("fs_%d_lv", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
+                        battleview.findViewById(getId(KcaUtils.format("es_%d_name", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("es_%d_name_area", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("es_%d_lv", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                     }

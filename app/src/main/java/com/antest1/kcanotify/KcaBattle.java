@@ -151,9 +151,11 @@ public class KcaBattle {
     }
 
     public static void reduce_value(JsonArray target, int idx, int amount) {
-        int before_value = target.get(idx).getAsInt();
-        int after_value = before_value - amount;
-        target.set(idx, new JsonPrimitive(after_value));
+        if (idx < target.size()) {
+            int before_value = target.get(idx).getAsInt();
+            int after_value = before_value - amount;
+            target.set(idx, new JsonPrimitive(after_value));
+        }
     }
 
     public static void cleanEscapeList() {
@@ -754,6 +756,23 @@ public class KcaBattle {
                 enemyMaxHps = parseJson(enemyMaxHpsData).getAsJsonArray();
                 enemyNowHps = parseJson(enemyNowHpsData).getAsJsonArray();
                 enemyAfterHps = parseJson(enemyNowHpsData).getAsJsonArray();
+
+                // 야간지원함대
+                if (isKeyExist(api_data, "api_n_support_info")) {
+                    JsonObject support_info = api_data.getAsJsonObject("api_n_support_info");
+                    JsonArray damage = new JsonArray();
+                    if (!support_info.get("api_support_airatack").isJsonNull()) {
+                        // 항공지원
+                        JsonObject support_airattack = support_info.getAsJsonObject("api_support_airatack");
+                        damage = support_airattack.getAsJsonObject("api_stage3").getAsJsonArray("api_edam");
+                    } else if (!support_info.get("api_support_hourai").isJsonNull()) {
+                        JsonObject support_hourai = support_info.getAsJsonObject("api_support_hourai");
+                        damage = support_hourai.getAsJsonArray("api_damage");
+                    }
+                    for (int d = 0; d < damage.size(); d++) {
+                        reduce_value(enemyAfterHps, d, cnv(damage.get(d)));
+                    }
+                }
 
                 if (isKeyExist(api_data, "api_hougeki")) {
                     JsonObject hougeki = api_data.getAsJsonObject("api_hougeki");
@@ -1407,6 +1426,23 @@ public class KcaBattle {
                 friendCbNowHps = parseJson(friendCbNowHpsData).getAsJsonArray();
                 friendCbAfterHps = parseJson(friendCbNowHpsData).getAsJsonArray();
 
+                // 야간지원함대
+                if (isKeyExist(api_data, "api_n_support_info")) {
+                    JsonObject support_info = api_data.getAsJsonObject("api_n_support_info");
+                    JsonArray damage = new JsonArray();
+                    if (!support_info.get("api_support_airatack").isJsonNull()) {
+                        // 항공지원
+                        JsonObject support_airattack = support_info.getAsJsonObject("api_support_airatack");
+                        damage = support_airattack.getAsJsonObject("api_stage3").getAsJsonArray("api_edam");
+                    } else if (!support_info.get("api_support_hourai").isJsonNull()) {
+                        JsonObject support_hourai = support_info.getAsJsonObject("api_support_hourai");
+                        damage = support_hourai.getAsJsonArray("api_damage");
+                    }
+                    for (int d = 0; d < damage.size(); d++) {
+                        reduce_value(enemyAfterHps, d, cnv(damage.get(d)));
+                    }
+                }
+
                 if (isKeyExist(api_data, "api_hougeki")) {
                     JsonObject hougeki = api_data.getAsJsonObject("api_hougeki");
                     JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
@@ -1476,6 +1512,24 @@ public class KcaBattle {
                 enemyCbMaxHps = parseJson(enemyCbMaxHpsData).getAsJsonArray();
                 enemyCbNowHps = parseJson(enemyCbNowHpsData).getAsJsonArray();
                 enemyCbAfterHps = parseJson(enemyCbNowHpsData).getAsJsonArray();
+
+                // 야간지원함대
+                if (isKeyExist(api_data, "api_n_support_info")) {
+                    JsonObject support_info = api_data.getAsJsonObject("api_n_support_info");
+                    JsonArray damage = new JsonArray();
+                    if (!support_info.get("api_support_airatack").isJsonNull()) {
+                        // 항공지원
+                        JsonObject support_airattack = support_info.getAsJsonObject("api_support_airatack");
+                        damage = support_airattack.getAsJsonObject("api_stage3").getAsJsonArray("api_edam");
+                    } else if (!support_info.get("api_support_hourai").isJsonNull()) {
+                        JsonObject support_hourai = support_info.getAsJsonObject("api_support_hourai");
+                        damage = support_hourai.getAsJsonArray("api_damage");
+                    }
+                    for (int d = 0; d < damage.size(); d++) {
+                        if (activedeck[1] == 1) reduce_value(enemyAfterHps, d, cnv(damage.get(d)));
+                        else reduce_value(enemyCbAfterHps, d, cnv(damage.get(d)));
+                    }
+                }
 
                 if (isKeyExist(api_data, "api_hougeki")) {
                     JsonObject hougeki = api_data.getAsJsonObject("api_hougeki");
