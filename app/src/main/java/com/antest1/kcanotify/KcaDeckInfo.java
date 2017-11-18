@@ -589,7 +589,7 @@ public class KcaDeckInfo {
     }
 
     public int checkHeavyDamageExist(JsonArray deckPortData, int deckid) {
-        int[] status = {0, 0, 0, 0, 0, 0};
+        int[] status = {0, 0, 0, 0, 0, 0, 0};
         JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
             int shipId = deckShipIdList.get(i).getAsInt();
@@ -635,7 +635,6 @@ public class KcaDeckInfo {
         boolean[] dameconStatus = {false, false, false, false, false, false, false};
         JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
-            int idx = i + 1;
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 JsonObject shipData = getUserShipDataById(shipId, "slot,slot_ex");
@@ -646,7 +645,7 @@ public class KcaDeckInfo {
                         JsonObject itemData = getUserItemStatusById(item_id, "id", "type");
                         int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                         if (itemType == T2_DAMECON) {
-                            dameconStatus[idx] = true;
+                            dameconStatus[i] = true;
                         }
                     }
                 }
@@ -655,7 +654,7 @@ public class KcaDeckInfo {
                     JsonObject itemData = getUserItemStatusById(ex_item_id, "id", "type");
                     int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                     if (itemType == T2_DAMECON) {
-                        dameconStatus[idx] = true;
+                        dameconStatus[i] = true;
                     }
                 }
             }

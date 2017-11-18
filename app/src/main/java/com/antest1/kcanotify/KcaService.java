@@ -911,31 +911,21 @@ public class KcaService extends Service {
                         }
 
                         if (url.startsWith(API_GET_MEMBER_MAPINFO)) {
-                            int firstHeavyDamaged = deckInfoCalc.checkHeavyDamageExist(portdeckdata, 0);
-                            int secondHeavyDamaged = 0;
-                            if (portdeckdata.size() >= 2) {
-                                secondHeavyDamaged = deckInfoCalc.checkHeavyDamageExist(portdeckdata, 1);
-                            }
-
-                            int checkvalue = 0;
-                            if (isCombined) {
-                                checkvalue = Math.max(firstHeavyDamaged, secondHeavyDamaged);
-                            } else {
-                                checkvalue = firstHeavyDamaged;
-                            }
-
-                            switch (checkvalue) {
-                                case HD_DAMECON:
-                                case HD_DANGER:
-                                    isHeavyDamagedFlag = true;
-                                    if (checkvalue == HD_DANGER) {
-                                        message = message.concat(getStringWithLocale(R.string.heavy_damaged)).concat("\n");
-                                    } else if (checkvalue == HD_DAMECON) {
-                                        message = message.concat(getStringWithLocale(R.string.heavy_damaged_damecon)).concat("\n");
-                                    }
-                                    break;
-                                default:
-                                    break;
+                            for (int i = 0; i < 4; i++) {
+                                int checkvalue = deckInfoCalc.checkHeavyDamageExist(portdeckdata, i);
+                                switch (checkvalue) {
+                                    case HD_DAMECON:
+                                    case HD_DANGER:
+                                        isHeavyDamagedFlag = true;
+                                        if (checkvalue == HD_DANGER) {
+                                            message = message.concat(KcaUtils.format("[#%d] %s", i + 1, getStringWithLocale(R.string.heavy_damaged))).concat("\n");
+                                        } else if (checkvalue == HD_DAMECON) {
+                                            message = message.concat(KcaUtils.format("[#%d] %s", i + 1, getStringWithLocale(R.string.heavy_damaged_damecon))).concat("\n");
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         }
 
