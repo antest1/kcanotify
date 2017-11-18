@@ -447,7 +447,11 @@ public class KcaBattleViewService extends Service {
                             }
                             if (mainDeck.size() <= 6) {
                                 battleview.findViewById(R.id.fm_7).setVisibility(View.GONE);
+                            } else if (mainDeck.size() == 7 && mainDeck.get(6).getAsInt() == -1) {
+                                battleview.findViewById(R.id.fm_7).setVisibility(View.GONE);
                             }
+
+
                             Log.e("KCA", "FSD: " + String.valueOf(friendShipData.size()));
 
                         } else if (i == 1) {
