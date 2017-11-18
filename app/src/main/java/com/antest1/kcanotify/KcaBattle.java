@@ -25,7 +25,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
-import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 
@@ -138,7 +137,7 @@ public class KcaBattle {
     }
 
     public static void reduce_value(JsonArray target, int idx, int amount) {
-        if (idx < target.size()) {
+        if (idx >= 0 && idx < target.size()) {
             int before_value = target.get(idx).getAsInt();
             int after_value = before_value - amount;
             target.set(idx, new JsonPrimitive(after_value));
@@ -1052,21 +1051,23 @@ public class KcaBattle {
                             JsonArray target = df_list.get(i).getAsJsonArray();
                             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
                             for (int t = 0; t < target.size(); t++) {
+                                int target_idx = target.get(t).getAsInt();
+                                int damage_value = cnv(target_dmg.get(t));
                                 if (combined_type == COMBINED_A) {
                                     if (n == 1) {
-                                        if (eflag == 0) reduce_value(enemyAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
-                                        else reduce_value(friendCbAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                        if (eflag == 0) reduce_value(enemyAfterHps, target_idx, damage_value);
+                                        else reduce_value(friendCbAfterHps, target_idx - 6, damage_value);
                                     } else {
-                                        if (eflag == 0) reduce_value(enemyAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
-                                        else reduce_value(friendAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                        if (eflag == 0) reduce_value(enemyAfterHps, target_idx, damage_value);
+                                        else reduce_value(friendAfterHps, target_idx, damage_value);
                                     }
                                 } else if (combined_type == COMBINED_W) {
                                     if (n == 3) {
-                                        if (eflag == 0) reduce_value(enemyAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
-                                        else reduce_value(friendCbAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                        if (eflag == 0) reduce_value(enemyAfterHps, target_idx, damage_value);
+                                        else reduce_value(friendCbAfterHps, target_idx - 6, damage_value);
                                     } else {
-                                        if (eflag == 0) reduce_value(enemyAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
-                                        else reduce_value(friendAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                        if (eflag == 0) reduce_value(enemyAfterHps, target_idx, damage_value);
+                                        else reduce_value(friendAfterHps, target_idx, damage_value);
                                     }
                                 }
                             }
@@ -1263,32 +1264,32 @@ public class KcaBattle {
                             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
                             for (int t = 0; t < target.size(); t++) {
                                 int target_idx = target.get(t).getAsInt();
-                                int damage_value = target_dmg.get(t).getAsInt();
+                                int damage_value = cnv(target_dmg.get(t));
                                 if (n == first_phase) {
-                                    if (eflag == 0) reduce_value(enemyAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
-                                    else reduce_value(friendAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                    if (eflag == 0) reduce_value(enemyAfterHps, target_idx, damage_value);
+                                    else reduce_value(friendAfterHps, target_idx, damage_value);
                                 } else if (n == second_phase) {
                                     if (eflag == 0)
-                                        reduce_value(enemyCbAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                        reduce_value(enemyCbAfterHps, target_idx - 6, damage_value);
                                     else {
                                         if (combined_type == COMBINED_A || combined_type == COMBINED_W) {
-                                            reduce_value(friendCbAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                            reduce_value(friendCbAfterHps, target_idx - 6, damage_value);
                                         } else {
-                                            reduce_value(friendAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                            reduce_value(friendAfterHps, target_idx, damage_value);
                                         }
                                     }
                                 } else if (n == all_phase) {
                                     if (eflag == 0) {
                                         if (target_idx > 6) {
-                                            reduce_value(enemyCbAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                            reduce_value(enemyCbAfterHps, target_idx - 6, damage_value);
                                         } else if (target_idx != -1) {
-                                            reduce_value(enemyAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                            reduce_value(enemyAfterHps, target_idx, damage_value);
                                         }
                                     } else {
                                         if (target_idx > 6) {
-                                            reduce_value(friendCbAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                            reduce_value(friendCbAfterHps, target_idx - 6, damage_value);
                                         } else if (target_idx != -1) {
-                                            reduce_value(friendAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                            reduce_value(friendAfterHps, target_idx, damage_value);
                                         }
                                     }
                                 }
@@ -1513,13 +1514,15 @@ public class KcaBattle {
                         JsonArray target = df_list.get(i).getAsJsonArray();
                         JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
                         for (int t = 0; t < target.size(); t++) {
+                            int target_idx = target.get(t).getAsInt();
+                            int damage_value = cnv(target_dmg.get(t));
                             if (eflag == 0) {
-                                if (activedeck[1] == 1) reduce_value(enemyAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
-                                else reduce_value(enemyCbAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                if (activedeck[1] == 1) reduce_value(enemyAfterHps, target_idx, damage_value);
+                                else reduce_value(enemyCbAfterHps, target_idx - 6, damage_value);
                             }
                             else {
-                                if (KcaBattle.isCombined) reduce_value(friendCbAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
-                                else reduce_value(friendAfterHps, cnv(target.get(t)), cnv(target_dmg.get(t)));
+                                if (KcaBattle.isCombined) reduce_value(friendCbAfterHps, target_idx - 6, damage_value);
+                                else reduce_value(friendAfterHps, target_idx, damage_value);
                             }
                         }
                     }
