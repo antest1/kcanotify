@@ -169,7 +169,10 @@ public class KcaFleetCheckPopupService extends Service {
         if (fchk_info != null) {
             int target = recent_no - 1;
             String target_str = String.valueOf(target);
-            if (recent_no == 5) target_str = "0,1";
+            if (recent_no == 5) {
+                target = 0;
+                target_str = "0,1";
+            }
 
             ((TextView) mView.findViewById(R.id.view_fchk_title)).setText(getFleetName());
             if (KcaApiData.isGameDataLoaded() && KcaApiData.checkUserShipDataLoaded() && portdeckdata != null) {
