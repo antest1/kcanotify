@@ -907,7 +907,7 @@ public class KcaBattleViewService extends Service {
                 if (api_data.has("api_mvp_combined") && !api_data.get("api_mvp_combined").isJsonNull()) {
                     int mvp_idx_combined = api_data.get("api_mvp_combined").getAsInt();
                     if (mvp_idx_combined != -1) {
-                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_name", mvp_idx), R.id.class)))
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_name", mvp_idx_combined), R.id.class)))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorMVP));
                     }
                 }
