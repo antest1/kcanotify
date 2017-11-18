@@ -1257,7 +1257,6 @@ public class KcaService extends Service {
                                         }
                                     }
                                 }
-                                airbase_item.add("api_plane_info", api_plane_info);
                                 break;
                             }
                         }
