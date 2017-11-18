@@ -356,20 +356,20 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         JsonArray deck_data = data.getAsJsonObject("deck_port").getAsJsonArray("api_deck_data");
         JsonArray fleet_data = deck_data.get(0).getAsJsonObject().getAsJsonArray("api_ship");
 
-        JsonArray afterhp = data.getAsJsonArray("afterhp");
+        JsonArray afterhps_e = data.getAsJsonArray("afterhps_e");
         JsonArray ship_ke_combined = null;
-        JsonArray aftercbhp = null;
+        JsonArray aftercbhps_e = null;
 
         int cvcount = 0; // carrier
         int apcount = 0; // wa-class
         int sscount = 0; // submarine
 
-        for (int i = 1; i < ship_ke.size(); i++) {
+        for (int i = 0; i < ship_ke.size(); i++) {
             int ship_id = ship_ke.get(i).getAsInt();
             if (ship_id == -1) break;
             JsonObject kcShipData = KcaApiData.getKcShipDataById(ship_ke.get(i).getAsInt(), "stype");
             int stype = kcShipData.get("stype").getAsInt();
-            boolean isSunk = afterhp.get(i + 6).getAsInt() <= 0;
+            boolean isSunk = afterhps_e.get(i).getAsInt() <= 0;
             if ((stype == STYPE_CV || stype == STYPE_CVL || stype == STYPE_CVB) && isSunk)
                 cvcount += 1;
             if (stype == STYPE_AP && isSunk) apcount += 1;
@@ -378,13 +378,13 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
 
         if (data.has("ship_ke_combined")) {
             ship_ke_combined = data.getAsJsonArray("ship_ke_combined");
-            aftercbhp = data.getAsJsonArray("aftercbhp");
-            for (int i = 1; i < ship_ke_combined.size(); i++) {
+            aftercbhps_e = data.getAsJsonArray("aftercbhps_e");
+            for (int i = 0; i < ship_ke_combined.size(); i++) {
                 int ship_id = ship_ke_combined.get(i).getAsInt();
                 if (ship_id == -1) break;
                 JsonObject kcShipData = KcaApiData.getKcShipDataById(ship_id, "stype");
                 int stype = kcShipData.get("stype").getAsInt();
-                boolean isSunk = aftercbhp.get(i + 6).getAsInt() <= 0;
+                boolean isSunk = aftercbhps_e.get(i).getAsInt() <= 0;
                 if ((stype == STYPE_CV || stype == STYPE_CVL || stype == STYPE_CVB) && isSunk)
                     cvcount += 1;
                 if (stype == STYPE_AP && isSunk) apcount += 1;

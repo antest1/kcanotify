@@ -16,6 +16,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.common.primitives.Booleans;
 import com.google.common.primitives.Ints;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -161,7 +162,7 @@ public class KcaBattle {
         escapecblist.clear();
     }
 
-    public static boolean[] getEscapeFlag() {
+    public static boolean[] getEscapeFlag() { // TODO: FIX
         boolean[] flag = new boolean[13];
         for (int i = 0; i < escapelist.size(); i++) {
             flag[escapelist.get(i)] = true;
@@ -180,44 +181,36 @@ public class KcaBattle {
         return new JsonParser().parse(v);
     }
 
-    public static boolean isMainFleetInNight(int[] afterhps, int[] nowhps, int[] aftercbhps, int[] nowcbhps) {
-        int[] enemyAfterHps = Ints.concat(Arrays.copyOfRange(afterhps, 7, 13), Arrays.copyOfRange(aftercbhps, 7, 13));
-        int[] enemyNowHps = Ints.concat(Arrays.copyOfRange(nowhps, 7, 13), Arrays.copyOfRange(nowcbhps, 7, 13));
-        boolean[] enemySunk = new boolean[12];
+    public static boolean isMainFleetInNight(JsonObject fleetdata) {
+        JsonArray api_e_nowhps = fleetdata.getAsJsonArray("e_start");
+        JsonArray api_e_afterhps = fleetdata.getAsJsonArray("e_after");
 
-        int enemyMainCount = 6;
-        int enemyCbCount = 6;
+        JsonArray api_e_nowhps_combined = fleetdata.getAsJsonArray("e_start_cb");
+        JsonArray api_e_afterhps_combined = fleetdata.getAsJsonArray("e_after_cb");
+
+        List<Integer> enemySunkIdx = new ArrayList<>();
+        List<Integer> enemyCbSunkIdx = new ArrayList<>();
+
+        int enemyMainCount = 0;
+        int enemyCbCount = 0;
 
         int enemyMainSunkCount = 0;
         int enemyCbSunkCount = 0;
         int enemyCbGoodHealth = 0;
 
-        Log.e("KCA", "nb-enemyAfterHps " + Arrays.toString(enemyAfterHps));
-        Log.e("KCA", "nb-enemyNowHps " + Arrays.toString(enemyNowHps));
-
-        for (int i = 0; i < 6; i++) {
-            if (enemyNowHps[i] == -1) {
-                enemyMainCount -= 1;
-            } else {
-                enemySunk[i] = (enemyAfterHps[i] <= 0);
-                if (enemySunk[i]) {
-                    enemyMainSunkCount += 1;
-                }
+        for (int i = 0; i < api_e_nowhps.size(); i++) {
+            if (api_e_afterhps.get(i).getAsInt() <= 0) {
+                enemyMainSunkCount += 1;
+                enemySunkIdx.add(i);
             }
         }
 
-        for (int i = 6; i < 12; i++) {
-            if (enemyNowHps[i] == -1) {
-                enemyCbCount -= 1;
-            } else {
-                enemySunk[i] = (enemyAfterHps[i] <= 0);
-                if (enemySunk[i]) {
-                    enemyCbSunkCount += 1;
-                } else {
-                    if (enemyAfterHps[i] * 2 > enemyNowHps[i]) {
-                        enemyCbGoodHealth += 1;
-                    }
-                }
+        for (int i = 0; i < api_e_nowhps_combined.size(); i++) {
+            if (api_e_afterhps_combined.get(i).getAsInt() <= 0) {
+                enemyCbSunkCount += 1;
+                enemyCbSunkIdx.add(i);
+            } else if (api_e_afterhps_combined.get(i).getAsInt() * 2 > api_e_nowhps_combined.get(i).getAsInt()) {
+                enemyCbGoodHealth += 1;
             }
         }
 
@@ -225,7 +218,7 @@ public class KcaBattle {
         Log.e("KCA", "nb-enemyCbSunkCount " + String.valueOf(enemyCbSunkCount));
         Log.e("KCA", "nb-enemyCbGoodHealth " + String.valueOf(enemyCbGoodHealth));
 
-        if (!enemySunk[7] && enemyCbGoodHealth >= 2) {
+        if (!enemyCbSunkIdx.contains(0) && enemyCbGoodHealth >= 2) {
             return false;
         } else if (enemyCbGoodHealth >= 3) {
             return false;
@@ -233,19 +226,25 @@ public class KcaBattle {
 
     }
 
-    public static JsonObject calculateRank(int[] afterhps, int[] nowhps, int[] aftercbhps, int[] nowcbhps) {
+    public static JsonObject calculateRank(JsonObject fleetdata) {
         JsonObject result = new JsonObject();
 
-        int[] friendAfterHps = Ints.concat(Arrays.copyOfRange(afterhps, 1, 7), Arrays.copyOfRange(aftercbhps, 1, 7));
-        int[] friendNowHps = Ints.concat(Arrays.copyOfRange(nowhps, 1, 7), Arrays.copyOfRange(nowcbhps, 1, 7));
-        int[] enemyAfterHps = Ints.concat(Arrays.copyOfRange(afterhps, 7, 13), Arrays.copyOfRange(aftercbhps, 7, 13));
-        int[] enemyNowHps = Ints.concat(Arrays.copyOfRange(nowhps, 7, 13), Arrays.copyOfRange(nowcbhps, 7, 13));
+        JsonArray api_f_nowhps = fleetdata.getAsJsonArray("f_start");
+        JsonArray api_f_afterhps = fleetdata.getAsJsonArray("f_after");
 
-        boolean[] friendSunk = new boolean[12];
-        boolean[] enemySunk = new boolean[12];
+        JsonArray api_e_nowhps = fleetdata.getAsJsonArray("e_start");
+        JsonArray api_e_afterhps = fleetdata.getAsJsonArray("e_after");
 
-        int friendCount = 12;
-        int enemyCount = 12;
+        JsonArray api_f_nowhps_combined = fleetdata.getAsJsonArray("f_start_cb");
+        JsonArray api_f_afterhps_combined = fleetdata.getAsJsonArray("f_after_cb");
+
+        JsonArray api_e_nowhps_combined = fleetdata.getAsJsonArray("e_start_cb");
+        JsonArray api_e_afterhps_combined = fleetdata.getAsJsonArray("e_after_cb");
+
+        List<Integer> enemySunkIdx = new ArrayList<>();
+
+        int friendCount = 0;
+        int enemyCount = 0;
         int friendSunkCount = 0;
         int enemySunkCount = 0;
         int friendNowSum = 0;
@@ -253,42 +252,45 @@ public class KcaBattle {
         int friendAfterSum = 0;
         int enemyAfterSum = 0;
 
-        Log.e("KCA", "friendAfterHps " + Arrays.toString(friendAfterHps));
-        Log.e("KCA", "friendNowHps " + Arrays.toString(friendNowHps));
-        Log.e("KCA", "enemyAfterHps " + Arrays.toString(enemyAfterHps));
-        Log.e("KCA", "enemyNowHps " + Arrays.toString(enemyNowHps));
-
-        for (int i = 0; i < 12; i++) {
-            if (friendNowHps[i] == -1) {
-                friendCount -= 1;
-            } else {
-                friendSunk[i] = (friendAfterHps[i] <= 0);
-                if (friendSunk[i]) friendSunkCount += 1;
-                friendNowSum += friendNowHps[i];
-                friendAfterSum += Math.max(0, friendAfterHps[i]);
+        for (int i = 0; i < api_f_nowhps.size(); i++) {
+            friendCount += 1;
+            if (api_f_afterhps.get(i).getAsInt() <= 0) {
+                friendSunkCount += 1;
             }
+            friendNowSum += friendNowHps.get(i).getAsInt();
+            friendAfterSum += Math.max(0, friendAfterHps.get(i).getAsInt());
         }
-        for (int i = 0; i < 12; i++) {
-            if (enemyNowHps[i] == -1) {
-                enemyCount -= 1;
-            } else {
-                enemySunk[i] = (enemyAfterHps[i] <= 0);
-                if (enemySunk[i]) enemySunkCount += 1;
-                enemyNowSum += enemyNowHps[i];
-                enemyAfterSum += Math.max(0, enemyAfterHps[i]);
+
+        for (int i = 0; i < api_f_nowhps_combined.size(); i++) {
+            friendCount += 1;
+            if (api_f_afterhps_combined.get(i).getAsInt() <= 0) {
+                friendSunkCount += 1;
             }
+            friendNowSum += friendCbNowHps.get(i).getAsInt();
+            friendAfterSum += Math.max(0, friendCbAfterHps.get(i).getAsInt());
+        }
+
+        for (int i = 0; i < api_e_nowhps.size(); i++) {
+            enemyCount += 1;
+            if (api_e_afterhps.get(i).getAsInt() <= 0) {
+                enemySunkIdx.add(i);
+                enemySunkCount += 1;
+            }
+            enemyNowSum += enemyNowHps.get(i).getAsInt();
+            enemyAfterSum += Math.max(0, enemyAfterHps.get(i).getAsInt());
+        }
+
+        for (int i = 0; i < api_e_nowhps_combined.size(); i++) {
+            enemyCount += 1;
+            if (api_e_afterhps_combined.get(i).getAsInt() <= 0) {
+                enemySunkCount += 1;
+            }
+            enemyNowSum += enemyCbNowHps.get(i).getAsInt();
+            enemyAfterSum += Math.max(0, enemyCbAfterHps.get(i).getAsInt());
         }
 
         int friendDamageRate = (friendNowSum - friendAfterSum) * 100 / friendNowSum;
         int enemyDamageRate = (enemyNowSum - enemyAfterSum) * 100 / enemyNowSum;
-
-        Log.e("KCA", "friendCount " + String.valueOf(friendCount));
-        Log.e("KCA", "enemyCount " + String.valueOf(enemyCount));
-        Log.e("KCA", "friendSunkCount " + String.valueOf(friendSunkCount));
-        Log.e("KCA", "enemySunkCount " + String.valueOf(enemySunkCount));
-
-        Log.e("KCA", "friendDamageRate " + String.valueOf(friendDamageRate));
-        Log.e("KCA", "enemyDamageRate " + String.valueOf(enemyDamageRate));
 
         result.addProperty("fnowhpsum", friendNowSum);
         result.addProperty("fafterhpsum", friendAfterSum);
@@ -305,10 +307,10 @@ public class KcaBattle {
                 result.addProperty("rank", JUDGE_A);
             }
         }
-        if (!result.has("rank") && enemySunk[0] && friendSunkCount < enemySunkCount) {
+        if (!result.has("rank") && enemySunkIdx.contains(0) && friendSunkCount < enemySunkCount) {
             result.addProperty("rank", JUDGE_B);
         }
-        if (!result.has("rank") && (friendCount == 1) && (friendAfterHps[0] * 4 <= friendNowHps[0])) {
+        if (!result.has("rank") && (friendCount == 1) && (api_f_afterhps.get(0).getAsInt() * 4 <= api_f_nowhps.get(0).getAsInt())) {
             result.addProperty("rank", JUDGE_D);
         }
         if (!result.has("rank") && enemyDamageRate * 2 > friendDamageRate * 5) {
@@ -327,11 +329,15 @@ public class KcaBattle {
         return result;
     }
 
-    public static JsonObject calculateLdaRank(int[] afterhps, int[] nowhps, int[] aftercbhps, int[] nowcbhps) {
+    public static JsonObject calculateLdaRank(JsonObject fleetdata) {
         JsonObject result = new JsonObject();
 
-        int[] friendAfterHps = Ints.concat(Arrays.copyOfRange(afterhps, 1, 7), Arrays.copyOfRange(aftercbhps, 1, 7));
-        int[] friendNowHps = Ints.concat(Arrays.copyOfRange(nowhps, 1, 7), Arrays.copyOfRange(nowcbhps, 1, 7));
+        JsonArray api_f_nowhps = fleetdata.getAsJsonArray("f_start");
+        JsonArray api_f_afterhps = fleetdata.getAsJsonArray("f_after");
+
+        JsonArray api_f_nowhps_combined = fleetdata.getAsJsonArray("f_start_cb");
+        JsonArray api_f_afterhps_combined = fleetdata.getAsJsonArray("f_after_cb");
+
 
         boolean[] friendSunk = new boolean[12];
         int friendCount = 12;
@@ -339,15 +345,22 @@ public class KcaBattle {
         int friendNowSum = 0;
         int friendAfterSum = 0;
 
-        for (int i = 0; i < 12; i++) {
-            if (friendNowHps[i] == -1) {
-                friendCount -= 1;
-            } else {
-                friendSunk[i] = (friendAfterHps[i] <= 0);
-                if (friendSunk[i]) friendSunkCount += 1;
-                friendNowSum += friendNowHps[i];
-                friendAfterSum += Math.max(0, friendAfterHps[i]);
+        for (int i = 0; i < api_f_nowhps.size(); i++) {
+            friendCount += 1;
+            if (api_f_afterhps.get(i).getAsInt() <= 0) {
+                friendSunkCount += 1;
             }
+            friendNowSum += friendNowHps.get(i).getAsInt();
+            friendAfterSum += Math.max(0, friendAfterHps.get(i).getAsInt());
+        }
+
+        for (int i = 0; i < api_f_nowhps_combined.size(); i++) {
+            friendCount += 1;
+            if (api_f_afterhps_combined.get(i).getAsInt() <= 0) {
+                friendSunkCount += 1;
+            }
+            friendNowSum += friendCbNowHps.get(i).getAsInt();
+            friendAfterSum += Math.max(0, friendCbAfterHps.get(i).getAsInt());
         }
 
         int friendDamageRate = (friendNowSum - friendAfterSum) * 100 / friendNowSum;
