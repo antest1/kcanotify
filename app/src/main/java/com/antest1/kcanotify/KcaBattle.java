@@ -948,7 +948,6 @@ public class KcaBattle {
 
                 currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
-
                 String friendMaxHpsData = api_data.getAsJsonArray("api_f_maxhps").toString();
                 String friendNowHpsData = api_data.getAsJsonArray("api_f_nowhps").toString();
                 String enemyMaxHpsData = api_data.getAsJsonArray("api_e_maxhps").toString();
@@ -1031,10 +1030,11 @@ public class KcaBattle {
                     JsonObject openingattack = api_data.getAsJsonObject("api_opening_atack");
                     JsonArray openingattack_fdam = openingattack.getAsJsonArray("api_fdam");
                     JsonArray openingattack_edam = openingattack.getAsJsonArray("api_edam");
-                    for (int i = 0; i < friendCbAfterHps.size(); i++) {
-                        reduce_value(friendCbAfterHps, i, cnv(openingattack_fdam.get(i)));
+                    for (int i = 0; i < openingattack_fdam.size(); i++) {
+                        if (i < 6) reduce_value(friendAfterHps, i, cnv(openingattack_fdam.get(i)));
+                        else reduce_value(friendCbAfterHps, i - 6, cnv(openingattack_fdam.get(i)));
                     }
-                    for (int i = 0; i < enemyAfterHps.size(); i++) {
+                    for (int i = 0; i < openingattack_edam.size(); i++) {
                         reduce_value(enemyAfterHps, i, cnv(openingattack_edam.get(i)));
                     }
                 }
@@ -1079,10 +1079,11 @@ public class KcaBattle {
                     JsonObject raigeki = api_data.getAsJsonObject("api_raigeki");
                     JsonArray raigeki_fdam = raigeki.getAsJsonArray("api_fdam");
                     JsonArray raigeki_edam = raigeki.getAsJsonArray("api_edam");
-                    for (int i = 0; i < friendAfterHps.size(); i++) {
-                        reduce_value(friendCbAfterHps, i, cnv(raigeki_fdam.get(i)));
+                    for (int i = 0; i < raigeki_fdam.size(); i++) {
+                        if (i < 6) reduce_value(friendAfterHps, i, cnv(raigeki_fdam.get(i)));
+                        else reduce_value(friendCbAfterHps, i - 6, cnv(raigeki_fdam.get(i)));
                     }
-                    for (int i = 0; i < enemyAfterHps.size(); i++) {
+                    for (int i = 0; i < raigeki_edam.size(); i++) {
                         reduce_value(enemyAfterHps, i, cnv(raigeki_edam.get(i)));
                     }
                 }
