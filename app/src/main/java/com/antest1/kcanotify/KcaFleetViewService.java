@@ -278,17 +278,22 @@ public class KcaFleetViewService extends Service {
                         String item_id = "fleetview_item_".concat(String.valueOf(i + 1));
                         if (id == mView.findViewById(getId(item_id, R.id.class)).getId()) {
                             JsonArray data;
+                            JsonObject udata, kcdata;
+
                             if (isCombinedFlag(selected)) {
-                                if (i < 6)
+                                if (i < 6) {
                                     data = deckInfoCalc.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), 0);
-                                else
+                                } else {
                                     data = deckInfoCalc.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), 1);
+                                }
+                                udata = data.get(i % 6).getAsJsonObject().getAsJsonObject("user");
+                                kcdata = data.get(i % 6).getAsJsonObject().getAsJsonObject("kc");
                             } else {
                                 data = deckInfoCalc.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), selected);
+                                udata = data.get(i).getAsJsonObject().getAsJsonObject("user");
+                                kcdata = data.get(i).getAsJsonObject().getAsJsonObject("kc");
                             }
 
-                            JsonObject udata = data.get(i % 6).getAsJsonObject().getAsJsonObject("user");
-                            JsonObject kcdata = data.get(i % 6).getAsJsonObject().getAsJsonObject("kc");
                             JsonObject itemdata = new JsonObject();
                             itemdata.add("api_slot", udata.get("slot"));
                             itemdata.add("api_slot_ex", udata.get("slot_ex"));
@@ -420,6 +425,10 @@ public class KcaFleetViewService extends Service {
             mView.findViewById(R.id.fleet_list_combined).setVisibility(View.INVISIBLE);
         }
 
+        for (int i = 1; i <= 12; i++) {
+            mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", i), R.id.class)).setVisibility(View.INVISIBLE);
+        }
+
         int cn = seekcn_internal;
         List<String> infoList = new ArrayList<>();
 
@@ -536,7 +545,11 @@ public class KcaFleetViewService extends Service {
 
         } else {
             JsonArray maindata = deckInfoCalc.getDeckListInfo(data, idx);
-            for (int i = 0; i < 6; i++) {
+            int max_count = Math.max(6, maindata.size());
+            if (max_count > 6) {
+                mView.findViewById(R.id.fleet_list_combined).setVisibility(View.VISIBLE);
+            }
+            for (int i = 0; i < max_count; i++) {
                 int v = i + 1;
                 if (i >= maindata.size()) {
                     mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", v), R.id.class)).setVisibility(View.INVISIBLE);
