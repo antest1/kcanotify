@@ -499,30 +499,14 @@ public class KcaService extends Service {
         setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_DOCK, dockId));
     }
 
-    /*
-    private void toastInfo() {
-        if (!KcaApiData.isGameDataLoaded()) return;
-        else if (!isCurrentPortDeckDataReady()) return;
-        int cn = getSeekCn();
-        String seekType = getSeekType();
-        JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
 
-        int[] airPowerRange = deckInfoCalc.getAirPowerRange(portdeckdata, 0, KcaBattle.getEscapeFlag());
-        String airPowerValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
-        String seekValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, deckInfoCalc.getSeekValue(portdeckdata, "0", cn, KcaBattle.getEscapeFlag()));
-        int[] tp = deckInfoCalc.getTPValue(portdeckdata, "0", KcaBattle.getEscapeFlag());
-        String tpValue = KcaUtils.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
-        List<String> toastList = new ArrayList<String>();
-        if (airPowerRange[1] > 0) {
-            toastList.add(airPowerValue);
+    private void toastInfo() {
+        if (KcaFleetCheckPopupService.isActive()) {
+            Intent qintent = new Intent(getBaseContext(), KcaFleetCheckPopupService.class);
+            qintent.setAction(KcaFleetCheckPopupService.FCHK_SHOW_ACTION);
+            startService(qintent);
         }
-        toastList.add(seekValue);
-        if (tp[0] > 0) {
-            toastList.add(tpValue);
-        }
-        KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
-        showCustomToast(customToast, joinStr(toastList, " / "), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-    }*/
+    }
 
     private static class kcaServiceHandler extends Handler {
         private final WeakReference<KcaService> mService;
@@ -1620,7 +1604,7 @@ public class KcaService extends Service {
                             }
                         }
                         if (kaisouProcessFlag) {
-                            //toastInfo();
+                            toastInfo();
                             kaisouProcessFlag = false;
                             updateFleetView();
                         }
