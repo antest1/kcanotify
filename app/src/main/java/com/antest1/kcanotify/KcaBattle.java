@@ -44,8 +44,8 @@ public class KcaBattle {
     public static JsonArray enemyAfterHps, enemyCbAfterHps;
 
     public static JsonObject escapedata = null;
-    public static List<Integer> escapelist = new ArrayList<Integer>();
-    public static List<Integer> escapecblist = new ArrayList<Integer>();
+    public static JsonArray escapelist = new JsonArray();
+    public static JsonArray escapecblist = new JsonArray();
 
     public static boolean[] dameconflag = new boolean[7];
     public static boolean[] dameconcbflag = new boolean[7];
@@ -103,7 +103,8 @@ public class KcaBattle {
     public static int checkCombinedHeavyDamagedExist() {
         int status = HD_NONE;
         for (int i = 0; i < friendMaxHps.size(); i++) {
-            if (friendNowHps.get(i).getAsInt() * 4 <= friendMaxHps.get(i).getAsInt()  && !escapelist.contains(i)) {
+            if (friendNowHps.get(i).getAsInt() * 4 <= friendMaxHps.get(i).getAsInt()
+                    && !escapelist.contains(new JsonPrimitive(i + 1))) {
                 if (dameconflag[i]) {
                     status = Math.max(status, HD_DAMECON);
                 } else {
@@ -115,7 +116,8 @@ public class KcaBattle {
             }
         }
         for (int i = 0; i < friendCbMaxHps.size(); i++) {
-            if (friendCbNowHps.get(i).getAsInt() * 4 <= friendCbMaxHps.get(i).getAsInt() && !escapecblist.contains(i)) {
+            if (friendCbNowHps.get(i).getAsInt() * 4 <= friendCbMaxHps.get(i).getAsInt() &&
+                    !escapecblist.contains(new JsonPrimitive(i + 1))) {
                 if (dameconcbflag[i]) {
                     status = Math.max(status, HD_DAMECON);
                 } else {
@@ -127,22 +129,6 @@ public class KcaBattle {
             }
         }
         return status;
-    }
-
-    public static int getFriendIdx(int i) {
-        return i;
-    }
-
-    public static int getEnemyIdx(int i) {
-        return i + 6;
-    }
-
-    public static int getFriendCbIdx(int i) {
-        return i - 6;
-    }
-
-    public static int getEnemyCbIdx(int i) {
-        return i;
     }
 
     public static int cnv(JsonElement value) {
@@ -160,19 +146,15 @@ public class KcaBattle {
 
     public static void cleanEscapeList() {
         escapedata = null;
-        escapelist.clear();
-        escapecblist.clear();
+        escapelist = new JsonArray();
+        escapecblist = new JsonArray();
     }
 
-    public static boolean[] getEscapeFlag() { // TODO: FIX
-        boolean[] flag = new boolean[13];
-        for (int i = 0; i < escapelist.size(); i++) {
-            flag[escapelist.get(i)] = true;
-        }
-        for (int i = 0; i < escapecblist.size(); i++) {
-            flag[escapecblist.get(i) + 6] = true;
-        }
-        return flag;
+    public static JsonObject getEscapeFlag() {
+        JsonObject data = new JsonObject();
+        data.add("escape", escapelist);
+        data.add("escape_cb", escapecblist);
+        return data;
     }
 
     public static boolean isKeyExist(JsonObject data, String key) {
@@ -564,13 +546,10 @@ public class KcaBattle {
                 sHandler.sendMessage(sMsg);
 
                 JsonObject nodeInfo = api_data;
-                JsonArray api_escape = (JsonArray) new JsonParser().parse(gson.toJson(escapelist));
-                JsonArray api_escape_combined = (JsonArray) new JsonParser().parse(gson.toJson(escapecblist));
-
                 nodeInfo.addProperty("api_url", url);
                 nodeInfo.add("api_deck_port", deckportdata);
-                nodeInfo.add("api_escape", api_escape);
-                nodeInfo.add("api_escape_combined", api_escape_combined);
+                nodeInfo.add("api_escape", escapelist);
+                nodeInfo.add("api_escape_combined", escapecblist);
                 nodeInfo.addProperty("api_heavy_damaged", checkcbresult);
                 setCurrentApiData(nodeInfo);
                 helper.putValue(DB_KEY_BATTLENODE, nodeInfo.toString());
@@ -1701,16 +1680,16 @@ public class KcaBattle {
                     int api_tow_target = api_tow_idx.get(0).getAsInt(); // only first
 
                     if (api_escape_target > 6) {
-                        if (!escapecblist.contains(api_escape_target - 6)) {
+                        if (!escapecblist.contains(new JsonPrimitive(api_escape_target - 6))) {
                             escapecblist.add(api_escape_target - 6);
                         }
                     } else {
-                        if (!escapelist.contains(api_escape_target)) {
+                        if (!escapelist.contains(new JsonPrimitive(api_escape_target))) {
                             escapelist.add(api_escape_target);
                         }
                     }
 
-                    if (!escapecblist.contains(api_tow_target - 6)) {
+                    if (!escapecblist.contains(new JsonPrimitive(api_tow_target - 6))) {
                         escapecblist.add(api_tow_target - 6);
                     }
 

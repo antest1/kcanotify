@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 
 import org.json.JSONObject;
@@ -46,15 +47,24 @@ public class KcaDeckInfo {
     // Formula 33 (2016.12.26)
     // Reference: http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
     //            http://kancolle-calc.net/deckbuilder.html
-    public JsonObject getEachSeekValue(JsonArray deckShipIdList, int id, int Cn, boolean[] exclude_flag) {
+    public JsonObject getEachSeekValue(JsonArray deckShipIdList, int id, int Cn, JsonObject exclude_flag) {
         JsonObject data = new JsonObject();
         double pureTotalSeek = 0.0;
         double totalEquipSeek = 0.0;
         double totalShipSeek = 0.0;
         int noShipCount = 6;
+
         boolean excludeflagexist = (exclude_flag != null);
+        JsonArray excludeflagdata = null;
+        if (excludeflagexist) {
+            if (id == 0) excludeflagdata = exclude_flag.getAsJsonArray("escape");
+            if (id == 1) excludeflagdata = exclude_flag.getAsJsonArray("escapecb");
+        }
+
         for (int i = 0; i < deckShipIdList.size(); i++) {
-            if (excludeflagexist && exclude_flag[id * 6 + i + 1]) continue;
+            if (excludeflagdata != null && excludeflagdata.contains(new JsonPrimitive(i + 1)))
+                continue;
+
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 noShipCount -= 1;
@@ -113,7 +123,7 @@ public class KcaDeckInfo {
         return data;
     }
 
-    public double getSeekValue(JsonArray deckPortData, String deckid_list, int Cn, boolean[] exclude_flag) {
+    public double getSeekValue(JsonArray deckPortData, String deckid_list, int Cn, JsonObject exclude_flag) {
         double pureTotalSeek = 0.0;
         double totalSeek = 0.0;
 
@@ -249,13 +259,20 @@ public class KcaDeckInfo {
         return rangeAAC;
     }
 
-    public int[] getAirPowerRange(JsonArray deckPortData, int deckid, boolean[] exclude_flag) {
+    public int[] getAirPowerRange(JsonArray deckPortData, int deckid, JsonObject exclude_flag) {
         int[] totalRangeAAC = {0, 0};
         boolean excludeflagexist = (exclude_flag != null);
+        JsonArray excludeflagdata = null;
+        if (excludeflagexist) {
+            if (deckid == 0) excludeflagdata = exclude_flag.getAsJsonArray("escape");
+            if (deckid == 1) excludeflagdata = exclude_flag.getAsJsonArray("escapecb");
+        }
+
         JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
-            int excludeflagid = deckid * 6 + i + 1; // 1 ~ 13
-            if (excludeflagexist && exclude_flag[excludeflagid]) continue;
+                if (excludeflagdata != null && excludeflagdata.contains(new JsonPrimitive(i + 1)))
+                    continue;
+
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 JsonObject shipData = getUserShipDataById(shipId, "ship_id,lv,slot,onslot");
@@ -290,7 +307,7 @@ public class KcaDeckInfo {
         return totalRangeAAC;
     }
 
-    public String getAirPowerRangeString(JsonArray deckPortData, int deckid, boolean[] exclude_flag) {
+    public String getAirPowerRangeString(JsonArray deckPortData, int deckid, JsonObject exclude_flag) {
         String airPowerValue = "";
         int[] airPowerRange = getAirPowerRange(deckPortData, deckid, exclude_flag);
         if (airPowerRange[1] > 0) {
@@ -308,24 +325,30 @@ public class KcaDeckInfo {
         return value;
     }
 
-    public int getSpeed(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
+    public int getSpeed(JsonArray deckPortData, String deckid_list, JsonObject exclude_flag) {
         boolean is_slow_flag = false;
         boolean is_fast_flag = false;
         boolean is_fastplus_flag = false;
         boolean is_superfast_flag = false;
 
         boolean excludeflagexist = (exclude_flag != null);
-
         String[] decklist = deckid_list.split(",");
+
 
         for (int n = 0; n < decklist.length; n++) {
             int deckid = Integer.parseInt(decklist[n]);
+            JsonArray excludeflagdata = null;
+            if (excludeflagexist) {
+                if (deckid == 0) excludeflagdata = exclude_flag.getAsJsonArray("escape");
+                if (deckid == 1) excludeflagdata = exclude_flag.getAsJsonArray("escapecb");
+            }
             JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().get("api_ship").getAsJsonArray();
 
             // Retrieve Speed (soku) Information
             for (int i = 0; i < deckShipIdList.size(); i++) {
-                int excludeflagid = deckid * 6 + i + 1; // 1 ~ 13
-                if (excludeflagexist && exclude_flag[excludeflagid]) continue;
+                if (excludeflagdata != null && excludeflagdata.contains(new JsonPrimitive(i + 1)))
+                    continue;
+
                 int shipId = deckShipIdList.get(i).getAsInt();
                 if (shipId != -1) {
                     JsonObject shipData = getUserShipDataById(shipId, "soku");
@@ -364,7 +387,7 @@ public class KcaDeckInfo {
         }
     }
 
-    public String getSpeedString(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
+    public String getSpeedString(JsonArray deckPortData, String deckid_list, JsonObject exclude_flag) {
         int speedValue = getSpeed(deckPortData, deckid_list, exclude_flag);
         String speedStringValue = "";
         switch (speedValue) {
@@ -396,21 +419,25 @@ public class KcaDeckInfo {
         return speedStringValue;
     }
 
-    public int[] getTPValue(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
+    public int[] getTPValue(JsonArray deckPortData, String deckid_list, JsonObject exclude_flag) {
         double totalTP = 0.0;
 
         boolean excludeflagexist = (exclude_flag != null);
-
         String[] decklist = deckid_list.split(",");
 
         for (int n = 0; n < decklist.length; n++) {
             int deckid = Integer.parseInt(decklist[n]);
+            JsonArray excludeflagdata = null;
+            if (excludeflagexist) {
+                if (deckid == 0) excludeflagdata = exclude_flag.getAsJsonArray("escape");
+                if (deckid == 1) excludeflagdata = exclude_flag.getAsJsonArray("escapecb");
+            }
+
             JsonArray deckShipIdList = ((JsonObject) deckPortData.get(deckid)).getAsJsonArray("api_ship");
             for (int i = 0; i < deckShipIdList.size(); i++) {
-                if (deckid < 2) {
-                    int excludeflagid = deckid * 6 + i + 1; // 1 ~ 13
-                    if (excludeflagexist && exclude_flag[excludeflagid]) continue;
-                }
+                if (excludeflagdata != null && excludeflagdata.contains(new JsonPrimitive(i + 1)))
+                    continue;
+
                 int shipId = deckShipIdList.get(i).getAsInt();
                 if (shipId != -1) {
                     JsonObject shipData = getUserShipDataById(shipId, "slot,ship_id");
@@ -491,7 +518,7 @@ public class KcaDeckInfo {
         return estimatedTP;
     }
 
-    public String getTPString(JsonArray deckPortData, String deckid_list, boolean[] exclude_flag) {
+    public String getTPString(JsonArray deckPortData, String deckid_list, JsonObject exclude_flag) {
         int[] tp = getTPValue(deckPortData, deckid_list, exclude_flag);
         return KcaUtils.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
     }
