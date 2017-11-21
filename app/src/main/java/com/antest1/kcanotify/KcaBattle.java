@@ -1181,8 +1181,9 @@ public class KcaBattle {
                     }
 
                     for (int n = 1; n <= 2; n++) {
-                        if (isKeyExist(api_data, KcaUtils.format("api_n_hougeki%d", n))) {
-                            JsonObject hougeki = api_data.getAsJsonObject("api_n_hougeki");
+                        String api_name = KcaUtils.format("api_n_hougeki%d", n);
+                        if (isKeyExist(api_data, api_name)) {
+                            JsonObject hougeki = api_data.getAsJsonObject(api_name);
                             if(isKeyExist(hougeki, "api_df_list")) {
                                 JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
                                 JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
