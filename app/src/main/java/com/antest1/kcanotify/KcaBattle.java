@@ -630,10 +630,11 @@ public class KcaBattle {
                 // 선제대잠
                 if (isKeyExist(api_data, "api_opening_taisen")) {
                     JsonObject opening_taisen = api_data.getAsJsonObject("api_opening_taisen");
-                    JsonArray at_eflag = opening_taisen.getAsJsonArray("api_at_eflag").getAsJsonArray();
-                    JsonArray df_list = opening_taisen.getAsJsonArray("api_df_list").getAsJsonArray();
-                    JsonArray df_damage = opening_taisen.getAsJsonArray("api_damage").getAsJsonArray();
-                    if (!df_list.isJsonNull()) {
+                    if (isKeyExist(opening_taisen, "api_df_list")) {
+                        JsonArray at_eflag = opening_taisen.getAsJsonArray("api_at_eflag").getAsJsonArray();
+                        JsonArray df_list = opening_taisen.getAsJsonArray("api_df_list").getAsJsonArray();
+                        JsonArray df_damage = opening_taisen.getAsJsonArray("api_damage").getAsJsonArray();
+
                         for (int i = 0; i < df_list.size(); i++) {
                             int eflag = at_eflag.get(i).getAsInt();
                             JsonArray target = df_list.get(i).getAsJsonArray();
@@ -666,10 +667,10 @@ public class KcaBattle {
                     String api_name = KcaUtils.format("api_hougeki%d", n);
                     if (isKeyExist(api_data, api_name)) {
                         JsonObject hougeki = api_data.getAsJsonObject(api_name);
-                        JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
-                        JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
-                        JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
-                        if (!df_list.isJsonNull()) {
+                        if (isKeyExist(hougeki, "api_df_list")) {
+                            JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
+                            JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
+                            JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
                             for (int i = 0; i < df_list.size(); i++) {
                                 int eflag = at_eflag.get(i).getAsInt();
                                 JsonArray target = df_list.get(i).getAsJsonArray();
@@ -758,10 +759,10 @@ public class KcaBattle {
 
                 if (isKeyExist(api_data, "api_hougeki")) {
                     JsonObject hougeki = api_data.getAsJsonObject("api_hougeki");
-                    JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
-                    JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
-                    JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
-                    if (!df_list.isJsonNull()) {
+                    if(isKeyExist(hougeki, "api_df_list")) {
+                        JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
+                        JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
+                        JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
                         for (int i = 0; i < df_list.size(); i++) {
                             int eflag = at_eflag.get(i).getAsInt();
                             JsonArray target = df_list.get(i).getAsJsonArray();
@@ -1018,10 +1019,10 @@ public class KcaBattle {
                 // 선제대잠
                 if (isKeyExist(api_data, "api_opening_taisen")) {
                     JsonObject opening_taisen = api_data.getAsJsonObject("api_opening_taisen");
-                    JsonArray at_eflag = opening_taisen.getAsJsonArray("api_at_eflag");
-                    JsonArray df_list = opening_taisen.getAsJsonArray("api_df_list");
-                    JsonArray df_damage = opening_taisen.getAsJsonArray("api_damage");
-                    if (!df_list.isJsonNull()) {
+                    if(isKeyExist(opening_taisen, "api_df_list")) {
+                        JsonArray at_eflag = opening_taisen.getAsJsonArray("api_at_eflag");
+                        JsonArray df_list = opening_taisen.getAsJsonArray("api_df_list");
+                        JsonArray df_damage = opening_taisen.getAsJsonArray("api_damage");
                         for (int i = 0; i < df_list.size(); i++) {
                             int eflag = at_eflag.get(i).getAsInt();
                             JsonArray target = df_list.get(i).getAsJsonArray();
@@ -1053,10 +1054,10 @@ public class KcaBattle {
                     String api_name = KcaUtils.format("api_hougeki%d", n);
                     if (isKeyExist(api_data, api_name)) {
                         JsonObject hougeki = api_data.getAsJsonObject(api_name);
-                        JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
-                        JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
-                        JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
-                        if (!df_list.isJsonNull()) {
+                        if(isKeyExist(hougeki, "api_df_list")) {
+                            JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
+                            JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
+                            JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
                             for (int i = 0; i < df_list.size(); i++) {
                                 int eflag = at_eflag.get(i).getAsInt();
                                 JsonArray target = df_list.get(i).getAsJsonArray();
@@ -1179,10 +1180,10 @@ public class KcaBattle {
                     for (int n = 1; n <= 2; n++) {
                         if (isKeyExist(api_data, KcaUtils.format("api_n_hougeki%d", n))) {
                             JsonObject hougeki = api_data.getAsJsonObject("api_hougeki");
-                            JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
-                            JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
-                            JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
-                            if (!df_list.isJsonNull()) {
+                            if(isKeyExist(hougeki, "api_df_list")) {
+                                JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
+                                JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
+                                JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
                                 for (int i = 0; i < df_list.size(); i++) {
                                     int eflag = at_eflag.get(i).getAsInt();
                                     JsonArray target = df_list.get(i).getAsJsonArray();
@@ -1252,10 +1253,10 @@ public class KcaBattle {
                 // 선제대잠 TODO: NEEDS VALIDATED
                 if (isKeyExist(api_data, "api_opening_taisen")) {
                     JsonObject opening_taisen = api_data.getAsJsonObject("api_opening_taisen");
-                    JsonArray at_eflag = opening_taisen.getAsJsonArray("api_at_eflag");
-                    JsonArray df_list = opening_taisen.getAsJsonArray("api_df_list");
-                    JsonArray df_damage = opening_taisen.getAsJsonArray("api_damage");
-                    if (!df_list.isJsonNull()) {
+                    if(isKeyExist(opening_taisen, "api_df_list")) {
+                        JsonArray at_eflag = opening_taisen.getAsJsonArray("api_at_eflag");
+                        JsonArray df_list = opening_taisen.getAsJsonArray("api_df_list");
+                        JsonArray df_damage = opening_taisen.getAsJsonArray("api_damage");
                         for (int i = 0; i < df_list.size(); i++) {
                             int eflag = at_eflag.get(i).getAsInt();
                             JsonArray target = df_list.get(i).getAsJsonArray();
@@ -1317,10 +1318,10 @@ public class KcaBattle {
                     String api_name = KcaUtils.format("api_hougeki%d", n);
                     if (isKeyExist(api_data, api_name)) {
                         JsonObject hougeki = api_data.getAsJsonObject(KcaUtils.format("api_hougeki%d", n));
-                        JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
-                        JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
-                        JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
-                        if (!df_list.isJsonNull()) {
+                        if(isKeyExist(hougeki, "api_df_list")) {
+                            JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
+                            JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
+                            JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
                             for (int i = 0; i < df_list.size(); i++) {
                                 int eflag = at_eflag.get(i).getAsInt();
                                 JsonArray target = df_list.get(i).getAsJsonArray();
@@ -1490,10 +1491,10 @@ public class KcaBattle {
 
                 if (isKeyExist(api_data, "api_hougeki")) {
                     JsonObject hougeki = api_data.getAsJsonObject("api_hougeki");
-                    JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
-                    JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
-                    JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
-                    if (!df_list.isJsonNull()) {
+                    if(isKeyExist(hougeki, "api_df_list")) {
+                        JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
+                        JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
+                        JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
                         for (int i = 0; i < df_list.size(); i++) {
                             int eflag = at_eflag.get(i).getAsInt();
                             JsonArray target = df_list.get(i).getAsJsonArray();
@@ -1574,10 +1575,10 @@ public class KcaBattle {
 
                 if (isKeyExist(api_data, "api_hougeki")) {
                     JsonObject hougeki = api_data.getAsJsonObject("api_hougeki");
-                    JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
-                    JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
-                    JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
-                    if (!df_list.isJsonNull()) {
+                    if(isKeyExist(hougeki, "api_df_list")) {
+                        JsonArray at_eflag = hougeki.getAsJsonArray("api_at_eflag");
+                        JsonArray df_list = hougeki.getAsJsonArray("api_df_list");
+                        JsonArray df_damage = hougeki.getAsJsonArray("api_damage");
                         for (int i = 0; i < df_list.size(); i++) {
                             int eflag = at_eflag.get(i).getAsInt();
                             JsonArray target = df_list.get(i).getAsJsonArray();
