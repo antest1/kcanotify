@@ -416,14 +416,14 @@ public class KcaBattle {
                 JsonArray api_fdam = api_stage3.getAsJsonArray("api_fdam");
                 for (int i = 0; i < api_fdam.size(); i++) {
                     if (i < 6) reduce_value(friendAfterHps, i, cnv(api_fdam.get(i)));
-                    else reduce_value(friendCbAfterHps, i - 6, cnv(api_fdam.get(i)));
+                    else if (KcaBattle.isCombined) reduce_value(friendCbAfterHps, i - 6, cnv(api_fdam.get(i)));
                 }
             }
             if (isKeyExist(api_stage3, "api_edam")) {
                 JsonArray api_edam = api_stage3.getAsJsonArray("api_edam");
                 for (int i = 0; i < api_edam.size(); i++) {
                     if (i < 6) reduce_value(enemyAfterHps, i, cnv(api_edam.get(i)));
-                    else reduce_value(enemyCbAfterHps, i - 6, cnv(api_edam.get(i)));
+                    else if (ship_ke_combined != null) reduce_value(enemyCbAfterHps, i - 6, cnv(api_edam.get(i)));
                 }
             }
         }
