@@ -1020,14 +1020,14 @@ public class KcaApiData {
                 }
                 break;
             case API_NODE_EVENT_ID_BOSS:
-                if (kind == API_NODE_EVENT_KIND_BATTLE) {
-                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_boss), currentNode);
-                } else if (kind == API_NODE_EVENT_KIND_NIGHTBATTLE) {
+                if (kind == API_NODE_EVENT_KIND_NIGHTBATTLE) {
                     currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_boss_nightbattle), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE) {
                     currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_boss_nightdaybattle), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_ECBATTLE) {
                     currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_boss_ecbattle), currentNode);
+                } else {
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_boss), currentNode);
                 }
                 break;
             case API_NODE_EVENT_ID_NOEVENT:
@@ -1076,7 +1076,9 @@ public class KcaApiData {
                     } else {
                         return ContextCompat.getColor(context, R.color.colorNone);
                     }
-                } else {
+                } else if (api_event_kind == API_NODE_EVENT_KIND_NIGHTBATTLE) {
+                    return ContextCompat.getColor(context, R.color.colorNightBattle);
+                } else{
                     return ContextCompat.getColor(context, R.color.colorBattle);
                 }
             case 5:
@@ -1086,6 +1088,9 @@ public class KcaApiData {
                 return ContextCompat.getColor(context, R.color.colorAirBattle);
             case 8:
                 return ContextCompat.getColor(context, R.color.colorNone);
+            case 11:
+            case 12:
+                return ContextCompat.getColor(context, R.color.colorNightBattle);
             default:
                 return ContextCompat.getColor(context, R.color.colorPrimaryDark);
         }

@@ -1146,14 +1146,17 @@ public class KcaBattle {
                 enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
                 enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
-                String friendCbMaxHpsData = api_data.getAsJsonArray("api_f_maxhps_combined").toString();
-                String friendCbNowHpsData = api_data.getAsJsonArray("api_f_nowhps_combined").toString();
+                if (isKeyExist(api_data, "api_f_maxhps_combined")) {
+                    String friendCbMaxHpsData = api_data.getAsJsonArray("api_f_maxhps_combined").toString();
+                    String friendCbNowHpsData = api_data.getAsJsonArray("api_f_nowhps_combined").toString();
+
+                    friendCbMaxHps = KcaUtils.parseJson(friendCbMaxHpsData).getAsJsonArray();
+                    friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
+                    friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
+                }
+
                 String enemyCbMaxHpsData = api_data.getAsJsonArray("api_e_maxhps_combined").toString();
                 String enemyCbNowHpsData = api_data.getAsJsonArray("api_e_nowhps_combined").toString();
-
-                friendCbMaxHps = KcaUtils.parseJson(friendCbMaxHpsData).getAsJsonArray();
-                friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
-                friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
 
                 enemyCbMaxHps = KcaUtils.parseJson(enemyCbMaxHpsData).getAsJsonArray();
                 enemyCbNowHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
@@ -1288,7 +1291,7 @@ public class KcaBattle {
                     JsonArray openingattack_edam = openingattack.getAsJsonArray("api_edam");
                     for (int i = 0; i < openingattack_fdam.size(); i++) {
                         if (i < 6) reduce_value(friendAfterHps, i, cnv(openingattack_fdam.get(i)));
-                        else reduce_value(friendCbAfterHps, i - 6, cnv(openingattack_fdam.get(i)));
+                        else if (KcaBattle.isCombined) reduce_value(friendCbAfterHps, i - 6, cnv(openingattack_fdam.get(i)));
                     }
                     for (int i = 0; i < openingattack_edam.size(); i++) {
                         if (i < 6) reduce_value(enemyAfterHps, i, cnv(openingattack_edam.get(i)));
@@ -1370,7 +1373,7 @@ public class KcaBattle {
                     JsonArray raigeki_edam = raigeki.getAsJsonArray("api_edam");
                     for (int i = 0; i < raigeki_fdam.size(); i++) {
                         if (i < 6) reduce_value(friendAfterHps, i, cnv(raigeki_fdam.get(i)));
-                        else reduce_value(friendCbAfterHps, i - 6, cnv(raigeki_fdam.get(i)));
+                        else if (KcaBattle.isCombined) reduce_value(friendCbAfterHps, i - 6, cnv(raigeki_fdam.get(i)));
                     }
                     for (int i = 0; i < raigeki_edam.size(); i++) {
                         if (i < 6) reduce_value(enemyAfterHps, i, cnv(raigeki_edam.get(i)));
@@ -1546,12 +1549,13 @@ public class KcaBattle {
                 enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
                 enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
-                String friendCbNowHpsData = api_data.getAsJsonArray("api_f_nowhps_combined").toString();
+                if (isKeyExist(api_data, "api_f_nowhps_combined")) {
+                    String friendCbNowHpsData = api_data.getAsJsonArray("api_f_nowhps_combined").toString();
+                    friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
+                    friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
+                }
+
                 String enemyCbNowHpsData = api_data.getAsJsonArray("api_e_nowhps_combined").toString();
-
-                friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
-                friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
-
                 enemyCbNowHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
                 enemyCbAfterHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
 
@@ -1618,7 +1622,7 @@ public class KcaBattle {
 
             if (url.equals(API_REQ_COMBINED_BATTLERESULT)) {
                 friendNowHps = KcaUtils.parseJson(friendAfterHps.toString()).getAsJsonArray();
-                friendCbNowHps = KcaUtils.parseJson(friendCbAfterHps.toString()).getAsJsonArray();
+                if (friendCbAfterHps != null) friendCbNowHps = KcaUtils.parseJson(friendCbAfterHps.toString()).getAsJsonArray();
 
                 Bundle bundle;
                 Message sMsg;
@@ -1710,10 +1714,12 @@ public class KcaBattle {
                 qtrackData.add("deck_port", deckportdata);
                 qtrackData.add("afterhps_f", friendAfterHps);
                 qtrackData.add("afterhps_e", enemyAfterHps);
+                if (KcaBattle.isCombined) {
+                    qtrackData.add("aftercbhps_f", friendCbAfterHps);
+                }
                 if (ship_ke_combined != null) {
                     qtrackData.addProperty("combined_flag", true);
                     qtrackData.add("ship_ke_combined", ship_ke_combined);
-                    qtrackData.add("aftercbhps_f", friendCbAfterHps);
                     qtrackData.add("aftercbhps_e", enemyCbAfterHps);
                 } else {
                     qtrackData.addProperty("combined_flag", false);
