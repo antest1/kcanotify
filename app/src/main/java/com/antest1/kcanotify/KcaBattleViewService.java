@@ -211,7 +211,7 @@ public class KcaBattleViewService extends Service {
 
                 // View Settings
                 fc_flag = KcaBattle.currentFleet == 0 && KcaBattle.isCombined;
-                ec_flag = (api_event_kind == API_NODE_EVENT_KIND_ECBATTLE);
+                ec_flag = (api_event_kind == API_NODE_EVENT_KIND_ECBATTLE || api_event_kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE_EC);
                 setViewLayout(fc_flag, false);
 
                 ((TextView) battleview.findViewById(R.id.battle_node)).setText(currentNodeInfo);

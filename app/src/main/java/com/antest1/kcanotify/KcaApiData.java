@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.IntentCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -1009,7 +1008,7 @@ public class KcaApiData {
                     }
                 } else if (kind == API_NODE_EVENT_KIND_NIGHTBATTLE) {
                     currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_nightbattle), currentNode);
-                } else if (kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE) {
+                } else if (kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE_EC) {
                     currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_nightdaybattle), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_AIRBATTLE) {
                     currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_airbattle), currentNode);
@@ -1022,7 +1021,7 @@ public class KcaApiData {
             case API_NODE_EVENT_ID_BOSS:
                 if (kind == API_NODE_EVENT_KIND_NIGHTBATTLE) {
                     currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_boss_nightbattle), currentNode);
-                } else if (kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE) {
+                } else if (kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE_EC) {
                     currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_boss_nightdaybattle), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_ECBATTLE) {
                     currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_boss_ecbattle), currentNode);
