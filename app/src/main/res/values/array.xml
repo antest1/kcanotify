@@ -87,4 +87,14 @@
         <item >1</item>
     </string-array>
 
+    <string-array name="ServerLocation" translatable="false">
+        <item>WolfgangKruz Artworks</item>
+        <item>Backup Server</item>
+    </string-array>
+
+    <string-array name="ServerLocationValue" translatable="false">
+        <item>swaytwig.com</item>
+        <item>165.132.106.219</item>
+    </string-array>
+
 </resources>

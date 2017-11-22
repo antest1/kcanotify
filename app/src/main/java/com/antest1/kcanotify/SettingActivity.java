@@ -67,6 +67,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
+import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -445,8 +446,8 @@ public class SettingActivity extends AppCompatActivity {
         public String executeClient() {
             final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
             OkHttpClient client = new OkHttpClient.Builder().build();
-
-            String checkUrl = KcaUtils.format(getStringWithLocale(R.string.kcanotify_checkversion_link));
+            String update_server = KcaUtils.getUpdateServer(context);
+            String checkUrl = KcaUtils.format(getStringWithLocale(R.string.kcanotify_checkversion_link), update_server);
             Request.Builder builder = new Request.Builder().url(checkUrl).get();
             builder.addHeader("Referer", "app:/KCA/");
             builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -575,7 +576,8 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         public String executeClient() {
-            String dataUrl = KcaUtils.format(getStringWithLocale(R.string.api_start2_recent_version_link));
+            String update_server = KcaUtils.getUpdateServer(context);
+            String dataUrl = KcaUtils.format(getStringWithLocale(R.string.api_start2_recent_version_link), update_server);
 
             OkHttpClient client = new OkHttpClient.Builder().build();
             Request.Builder builder = new Request.Builder().url(dataUrl).get();

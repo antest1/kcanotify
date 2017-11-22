@@ -421,6 +421,9 @@ public class MainActivity extends AppCompatActivity {
                         String defaultversion = getString(R.string.default_gamedata_version);
                         editor.putString(prefKey, defaultversion);
                         break;
+                    case PREF_UPDATE_SERVER:
+                        String defaultserver = getString(R.string.server_swaytwig);
+                        editor.putString(prefKey, defaultserver);
                     default:
                         editor.putString(prefKey, "");
                         break;
@@ -517,8 +520,8 @@ public class MainActivity extends AppCompatActivity {
         public String executeClient() {
             final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
             OkHttpClient client = new OkHttpClient.Builder().build();
-
-            String checkUrl = KcaUtils.format(getString(R.string.kcanotify_checkversion_link));
+            String update_server = KcaUtils.getUpdateServer(getApplicationContext());
+            String checkUrl = KcaUtils.format(getString(R.string.kcanotify_checkversion_link), update_server);
             Request.Builder builder = new Request.Builder().url(checkUrl).get();
             builder.addHeader("Referer", "app:/KCA/");
             builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -615,7 +618,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public String executeClient() {
-            String dataUrl = KcaUtils.format(getString(R.string.api_start2_recent_version_link));
+            String update_server = KcaUtils.getUpdateServer(getApplicationContext());
+            String dataUrl = KcaUtils.format(getString(R.string.api_start2_recent_version_link), update_server);
             OkHttpClient client = new OkHttpClient.Builder().build();
 
             String checkUrl = KcaUtils.format(dataUrl);

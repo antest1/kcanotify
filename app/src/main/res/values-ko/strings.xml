@@ -183,6 +183,7 @@
     <string name="setting_menu_app_head">어플리케이션 정보</string>
     <string name="setting_menu_app_title_current">현재 어플리케이션 버전</string>
     <string name="setting_menu_app_title_updatecheck">업데이트 확인</string>
+    <string name="setting_menu_app_title_updatecheckserver">업데이트 확인 서버 선택</string>
     <string name="setting_menu_app_title_contact">건의/오류 보고</string>
     <string name="setting_menu_app_desc_contact">개발자에게 메일 전송</string>
     <string name="setting_menu_app_info">시제 깡들리티 정보</string>

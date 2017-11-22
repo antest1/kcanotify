@@ -48,6 +48,7 @@ import static android.R.attr.orientation;
 import static com.antest1.kcanotify.KcaAlarmService.ALARM_CHANNEL_ID;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 
 public class KcaUtils {
     public static String getStringFromException(Exception ex) {
@@ -103,20 +104,11 @@ public class KcaUtils {
         editor.commit();
     }
 
-    public static JsonObject readCacheData(Context ctx, String filename) {
-        try {
-            JsonObject data = new JsonObject();
-            JsonParser parser = new JsonParser();
-
-            FileInputStream fis = ctx.openFileInput(filename);
-            InputStreamReader fisr = new InputStreamReader(fis);
-            JsonElement jsonElement = parser.parse(fisr);
-            data = jsonElement.getAsJsonObject();
-            return data;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            //new retrieveApiStartData().execute("", "down", "");
-            return null;
+    public static String getUpdateServer(Context ctx) {
+        if (BuildConfig.VERSION_CODE == 2473) { // Temporal
+            return ctx.getString(R.string.server_antest1);
+        } else {
+            return getStringPreferences(ctx, PREF_UPDATE_SERVER);
         }
     }
 

@@ -36,8 +36,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="accessibility_service_description">This permission allows kcanotify to detect whether kancolle is on the screen.\nIt only check whether kancolle is on the screen or not.\nYou can disallow this permission and hide the fairy manually by touching it long time.</string>
 
     <!-- Link Information -->
-    <string name="kcanotify_checkversion_link" translatable="false">http://swaytwig.com/kcanotify/v.php</string>
-    <string name="api_start2_recent_version_link" translatable="false">http://swaytwig.com/kcanotify/kca_api_start2.php?v=recent</string>
+    <string name="server_swaytwig" translatable="false">swaytwig.com</string>
+    <string name="server_antest1" translatable="false">165.132.106.219</string>
+    <string name="kcanotify_checkversion_link" translatable="false" formatted="false">http://%s/kcanotify/v.php</string>
+    <string name="api_start2_recent_version_link" translatable="false" formatted="false">http://%s/kcanotify/kca_api_start2.php?v=recent</string>
 
     <!-- Common Text -->
     <string name="dialog_ok">OK</string>
@@ -237,6 +239,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="setting_menu_app_head">Application Information</string>
     <string name="setting_menu_app_title_current">Current Version</string>
+    <string name="setting_menu_app_title_updatecheckserver">Select Update Check Server</string>
     <string name="setting_menu_app_title_updatecheck">Check For Updates</string>
     <string name="setting_menu_app_title_down">APK Download Site</string>
     <string name="setting_menu_app_title_contact">Submit a Suggestion or Error Report</string>

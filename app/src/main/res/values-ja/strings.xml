@@ -179,6 +179,7 @@
     <string name="setting_menu_app_head">アプリケーション情報</string>
     <string name="setting_menu_app_title_current">現在アプリバージョン</string>
     <string name="setting_menu_app_title_updatecheck">更新の確認</string>
+    <string name="setting_menu_app_title_updatecheckserver">アップデートサーバー</string>
     <string name="setting_menu_app_title_contact">提案/エラーレポート</string>
     <string name="setting_menu_app_desc_contact">開発者にメールを送信</string>
     <string name="setting_menu_app_info">About Kcanotify</string>

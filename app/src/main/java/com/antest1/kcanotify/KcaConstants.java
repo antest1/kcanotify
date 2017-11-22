@@ -203,11 +203,11 @@ public final class KcaConstants {
     public static final int API_NODE_EVENT_KIND_NOBATTLE = 0;
     public static final int API_NODE_EVENT_KIND_BATTLE = 1;
     public static final int API_NODE_EVENT_KIND_NIGHTBATTLE = 2;
-    public static final int API_NODE_EVENT_KIND_NIGHTDAYBATTLE_OLD = 3;
+    public static final int API_NODE_EVENT_KIND_NIGHTDAYBATTLE = 3;
     public static final int API_NODE_EVENT_KIND_AIRBATTLE = 4;
     public static final int API_NODE_EVENT_KIND_ECBATTLE = 5;
     public static final int API_NODE_EVENT_KIND_LDAIRBATTLE = 6;
-    public static final int API_NODE_EVENT_KIND_NIGHTDAYBATTLE = 7;
+    public static final int API_NODE_EVENT_KIND_NIGHTDAYBATTLE_EC = 7;
 
     public static final int API_NODE_EVENT_KIND_SELECTABLE = 2;
 
@@ -372,6 +372,7 @@ public final class KcaConstants {
     public static final String PREF_DISABLE_CUSTOMTOAST = "disable_customtoast";
     public static final String PREF_KCA_NOTI_MOVETOAPPINFO = "noti_movetoappinfo";
     public static final String PREF_KCA_NOTI_QUEST_FAIRY_GLOW = "noti_quest_fairy_glow";
+    public static final String PREF_UPDATE_SERVER = "check_update_server";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -405,7 +406,8 @@ public final class KcaConstants {
             PREF_FAIRY_NOTI_LONGCLICK,
             PREF_DISABLE_CUSTOMTOAST,
             PREF_KCA_NOTI_MOVETOAPPINFO,
-            PREF_KCA_NOTI_QUEST_FAIRY_GLOW
+            PREF_KCA_NOTI_QUEST_FAIRY_GLOW,
+            PREF_UPDATE_SERVER
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

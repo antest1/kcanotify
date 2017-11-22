@@ -216,6 +216,15 @@
             android:key="kca_version"
             android:summary="@string/app_version"
             android:title="@string/setting_menu_app_title_current" />
+        <ListPreference
+            android:id="@+id/updateserver_value"
+            android:defaultValue="@string/default_locale"
+            android:entries="@array/ServerLocation"
+            android:entryValues="@array/ServerLocationValue"
+            android:key="check_update_server"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/setting_menu_kand_title_language" />
         <Preference
             android:defaultValue=""
             android:key="check_update"

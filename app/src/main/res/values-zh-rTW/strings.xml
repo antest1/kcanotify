@@ -199,6 +199,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_app_head">應用程式資訊</string>
     <string name="setting_menu_app_title_current">目前版本</string>
     <string name="setting_menu_app_title_updatecheck">檢查更新</string>
+    <string name="setting_menu_app_title_updatecheckserver">選擇更新檢查服務器</string>
     <string name="setting_menu_app_title_down">APK下載來源</string>
     <string name="setting_menu_app_title_contact">提交建議/回報錯誤</string>
     <string name="setting_menu_app_desc_contact">傳送郵件給開發人員</string>
