@@ -416,11 +416,15 @@ public class SettingActivity extends AppCompatActivity {
         Activity activity;
         Context context;
         boolean toastflag;
+        String update_server = "";
+        String checkUrl = "";
 
         public getRecentVersion(Activity a, boolean tf) {
             activity = a;
             context = a.getApplicationContext();
             toastflag = tf;
+            update_server = KcaUtils.getUpdateServer(context);
+            checkUrl = KcaUtils.format(getStringWithLocale(R.string.kcanotify_checkversion_link), update_server);
         }
 
         public String getStringWithLocale(int id) {
@@ -446,8 +450,6 @@ public class SettingActivity extends AppCompatActivity {
         public String executeClient() {
             final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
             OkHttpClient client = new OkHttpClient.Builder().build();
-            String update_server = KcaUtils.getUpdateServer(context);
-            String checkUrl = KcaUtils.format(getStringWithLocale(R.string.kcanotify_checkversion_link), update_server);
             Request.Builder builder = new Request.Builder().url(checkUrl).get();
             builder.addHeader("Referer", "app:/KCA/");
             builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -548,11 +550,15 @@ public class SettingActivity extends AppCompatActivity {
         Activity activity;
         Context context;
         KcaDBHelper dbHelper;
+        String update_server;
+        String dataUrl;
 
         public getKcaStart2Data(Activity a) {
             activity = a;
             context = a.getApplicationContext();
             dbHelper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
+            update_server = KcaUtils.getUpdateServer(context);
+            dataUrl = KcaUtils.format(getStringWithLocale(R.string.api_start2_recent_version_link), update_server);
         }
 
         public String getStringWithLocale(int id) {
@@ -576,8 +582,7 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         public String executeClient() {
-            String update_server = KcaUtils.getUpdateServer(context);
-            String dataUrl = KcaUtils.format(getStringWithLocale(R.string.api_start2_recent_version_link), update_server);
+
 
             OkHttpClient client = new OkHttpClient.Builder().build();
             Request.Builder builder = new Request.Builder().url(dataUrl).get();

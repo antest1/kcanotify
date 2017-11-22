@@ -93,8 +93,8 @@
     </string-array>
 
     <string-array name="ServerLocationValue" translatable="false">
-        <item>swaytwig.com</item>
-        <item>165.132.106.219</item>
+        <item>@string/server_swaytwig</item>
+        <item>@string/server_antest1</item>
     </string-array>
 
 </resources>

@@ -424,6 +424,7 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_UPDATE_SERVER:
                         String defaultserver = getString(R.string.server_swaytwig);
                         editor.putString(prefKey, defaultserver);
+                        break;
                     default:
                         editor.putString(prefKey, "");
                         break;
@@ -496,7 +497,11 @@ public class MainActivity extends AppCompatActivity {
     public class getRecentVersion extends AsyncTask<Context, String, String> {
         public String currentVersion = BuildConfig.VERSION_NAME;
         public String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
+        String update_server = KcaUtils.getUpdateServer(getApplicationContext());
+        String checkUrl = KcaUtils.format(getString(R.string.kcanotify_checkversion_link), update_server);
+        KcaDBHelper dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
 
+        public String error = "";
         public String getStringWithLocale(int id) {
             return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
         }
@@ -512,6 +517,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 content = executeClient();
             } catch (Exception e) {
+                error = getStringFromException(e);
                 e.printStackTrace();
             }
             return content;
@@ -520,8 +526,6 @@ public class MainActivity extends AppCompatActivity {
         public String executeClient() {
             final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
             OkHttpClient client = new OkHttpClient.Builder().build();
-            String update_server = KcaUtils.getUpdateServer(getApplicationContext());
-            String checkUrl = KcaUtils.format(getString(R.string.kcanotify_checkversion_link), update_server);
             Request.Builder builder = new Request.Builder().url(checkUrl).get();
             builder.addHeader("Referer", "app:/KCA/");
             builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -543,6 +547,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             if (result == null || result.length() == 0) {
                 Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
+                dbHelper.recordErrorLog(ERROR_TYPE_MAIN, checkUrl, "", "", error);
             } else if (result.length() > 0) {
                 Log.e("KCA", "Received: " + result);
                 JsonObject jsonDataObj = new JsonObject();
@@ -596,6 +601,8 @@ public class MainActivity extends AppCompatActivity {
         final String NODATA = "N";
         String error_msg = "";
         KcaDBHelper dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        String update_server = KcaUtils.getUpdateServer(getApplicationContext());
+        String checkUrl = KcaUtils.format(getString(R.string.api_start2_recent_version_link), update_server);
 
         public String getStringWithLocale(int id) {
             return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
@@ -618,11 +625,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public String executeClient() {
-            String update_server = KcaUtils.getUpdateServer(getApplicationContext());
-            String dataUrl = KcaUtils.format(getString(R.string.api_start2_recent_version_link), update_server);
             OkHttpClient client = new OkHttpClient.Builder().build();
 
-            String checkUrl = KcaUtils.format(dataUrl);
             Request.Builder builder = new Request.Builder().url(checkUrl).get();
             builder.addHeader("Referer", "app:/KCA/");
             builder.addHeader("Content-Type", "application/x-www-form-urlencoded");

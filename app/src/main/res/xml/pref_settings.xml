@@ -224,7 +224,7 @@
             android:key="check_update_server"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="@string/setting_menu_kand_title_language" />
+            android:title="@string/setting_menu_app_title_updatecheckserver" />
         <Preference
             android:defaultValue=""
             android:key="check_update"
