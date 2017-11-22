@@ -525,7 +525,7 @@
 	"187": {
 		"code": "A82",
 		"name": "Nishimura Fleet, 2nd Division Escort Force, Assemble!",
-		"desc": "Have Mogami, Asagumo, Michishio, Shigure and Yamagumo in Fleet 3. Press F10 to clear the overlay.",
+		"desc": "Have Mogami, Asagumo, Michishio, Shigure and Yamagumo in Fleet 3.",
 		"memo": "\u27a3Rewards either 2 Irako OR a Furniture Fairy OR a New Model Artillery Armament Materials"
 	},
 	
@@ -2245,5 +2245,24 @@
 		"name": "Flight Rigging Modernization",
 		"desc": "Have 5500 steel and 2500 bauxite. Modernize a CV(B) using 5 CV(L) twice.",
 		"memo": "\u2718Consumes the resources. \u27a3Rewards a New Model Aircraft Blueprint"
+	},
+
+	"188": {
+		"code": "Le1A1",
+		"name": "Fully Formed Nishimura Fleet, Prepare to Sortie!",
+		"desc": "Have Yamashiro, Fusou, Mogami, Michishio, Asagumo, Yamagumo and Shigure in Fleet 3.",
+		"memo": "\u27a3 Rewards a Reinforcement Expansion and either a Skilled Lookouts OR a Furniture Fairy OR 3 Combat Rations"
+	},
+	"672": {
+		"code": "F64",
+		"name": "The Establishment of the Striking Force's Fleet Command Facility",
+		"desc": "Have 10 Development Materials, 2000 Steel and 2 Action Reports. Equip a secretary with a Fleet Command Facility in her first slot. Scrap 3 Radars.",
+		"memo": "\u27a3 Rewards a Striking Force Fleet Command Facility"
+	},
+	"872": {
+		"code": "Le1B1",
+		"name": "Secure the Supply Line Logistics for Operation Sho-Ichi-Go!",
+		"desc": "Sortie to [E-2]. A-Rank+ the boss node twice.",
+		"memo": "\u27a3 Rewards a Mamiya and either 2 Type 13 Air Radars OR 2 Type 22 Surface Radars OR an Action Report"
 	}
 }
