@@ -1044,7 +1044,7 @@ public class KcaService extends Service {
                             }
                         }
                         KcaBattle.processData(dbHelper, url, battleApiData);
-                    } else if (url.equals(API_REQ_COMBINED_GOBACKPORT)) {
+                    } else if (url.equals(API_REQ_COMBINED_GOBACKPORT) || url.equals(API_REQ_SORTIE_GOBACKPORT)) {
                         KcaBattle.processData(dbHelper, url, null);
                     }
                     updateFleetView();

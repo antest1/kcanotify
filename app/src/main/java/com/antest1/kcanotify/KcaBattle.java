@@ -86,7 +86,8 @@ public class KcaBattle {
     public static int checkHeavyDamagedExist() {
         int status = HD_NONE;
         for (int i = 0; i < friendMaxHps.size(); i++) {
-            if (friendNowHps.get(i).getAsInt() * 4 <= friendMaxHps.get(i).getAsInt()) {
+            if (friendNowHps.get(i).getAsInt() * 4 <= friendMaxHps.get(i).getAsInt()
+                    && !escapelist.contains(new JsonPrimitive(i + 1))) {
                 if (dameconflag[i]) {
                     status = Math.max(status, HD_DAMECON);
                 } else {
@@ -233,6 +234,7 @@ public class KcaBattle {
         int enemyAfterSum = 0;
 
         for (int i = 0; i < api_f_nowhps.size(); i++) {
+            if (escapelist.contains(new JsonPrimitive(i + 1))) continue;
             friendCount += 1;
             if (api_f_afterhps.get(i).getAsInt() <= 0) {
                 friendSunkCount += 1;
@@ -242,6 +244,7 @@ public class KcaBattle {
         }
 
         for (int i = 0; i < api_f_nowhps_combined.size(); i++) {
+            if (escapecblist.contains(new JsonPrimitive(i + 1))) continue;
             friendCount += 1;
             if (api_f_afterhps_combined.get(i).getAsInt() <= 0) {
                 friendSunkCount += 1;

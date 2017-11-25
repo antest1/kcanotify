@@ -211,7 +211,8 @@ public class KcaBattleViewService extends Service {
 
                 // View Settings
                 fc_flag = KcaBattle.currentFleet == 0 && KcaBattle.isCombined;
-                ec_flag = (api_event_kind == API_NODE_EVENT_KIND_ECBATTLE || api_event_kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE_EC);
+                ec_flag = api_event_id != API_NODE_EVENT_ID_NOEVENT &&
+                        (api_event_kind == API_NODE_EVENT_KIND_ECBATTLE || api_event_kind == API_NODE_EVENT_KIND_NIGHTDAYBATTLE_EC);
                 setViewLayout(fc_flag, false);
 
                 ((TextView) battleview.findViewById(R.id.battle_node)).setText(currentNodeInfo);
@@ -323,7 +324,6 @@ public class KcaBattleViewService extends Service {
             }
 
             if (api_data.has("api_deck_port")) { // common sortie, practice
-                setViewLayout(fc_flag, ec_flag);
                 boolean midnight_flag = api_data.get("api_url").getAsString().contains("midnight");
                 if (is_practice && !midnight_flag) {
                     ((TextView) battleview.findViewById(R.id.battle_node)).setText(getStringWithLocale(R.string.node_info_practice));
@@ -344,6 +344,8 @@ public class KcaBattleViewService extends Service {
                 JsonArray api_escape_combined = new JsonArray();
                 if (api_data.has("api_escape")) {
                     api_escape = api_data.getAsJsonArray("api_escape");
+                }
+                if (api_data.has("api_escape_combined")) {
                     api_escape_combined = api_data.getAsJsonArray("api_escape_combined");
                 }
 
@@ -533,6 +535,7 @@ public class KcaBattleViewService extends Service {
                 JsonArray api_ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 JsonArray api_ship_lv = api_data.getAsJsonArray("api_ship_lv");
                 Log.e("KCA", api_data.toString());
+                setViewLayout(fc_flag, ec_flag);
 
                 JsonArray eSlot = api_data.getAsJsonArray("api_eSlot");
                 for (int i = 0; i < eSlot.size(); i++) {
