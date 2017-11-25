@@ -175,6 +175,8 @@ public final class KcaConstants {
             API_REQ_SORTIE_AIRBATTLE,
             API_REQ_SORTIE_LDAIRBATTLE,
             API_REQ_SORTIE_BATTLE_RESULT,
+            API_REQ_SORTIE_GOBACKPORT,
+
             API_REQ_COMBINED_BATTLE,
             API_REQ_COMBINED_BATTLE_WATER,
             API_REQ_COMBINED_AIRBATTLE,
