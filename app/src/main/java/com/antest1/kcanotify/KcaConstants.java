@@ -139,6 +139,8 @@ public final class KcaConstants {
     public static final String API_REQ_SORTIE_LDAIRBATTLE = "/api_req_sortie/ld_airbattle";
     public static final String API_REQ_SORTIE_BATTLE_RESULT = "/api_req_sortie/battleresult";
     public static final String API_REQ_SORTIE_NIGHTTODAY = "/api_req_sortie/night_to_day";
+    public static final String API_REQ_SORTIE_GOBACKPORT = "/api_req_sortie/goback_port"; // 단함퇴피
+
     public static final String API_REQ_MAP_SELECT_EVENTMAP_RANK = "/api_req_map/select_eventmap_rank";
 
     public static final String API_REQ_COMBINED_BATTLE = "/api_req_combined_battle/battle"; // 기동
@@ -156,7 +158,7 @@ public final class KcaConstants {
 
 
     public static final String API_REQ_COMBINED_BATTLERESULT = "/api_req_combined_battle/battleresult";
-    public static final String API_REQ_COMBINED_GOBACKPORT = "/api_req_combined_battle/goback_port"; // 퇴피
+    public static final String API_REQ_COMBINED_GOBACKPORT = "/api_req_combined_battle/goback_port"; // 연합 퇴피
 
     public static final String API_REQ_MEMBER_GET_PRACTICE_ENEMYINFO = "/api_req_member/get_practice_enemyinfo";
     public static final String API_REQ_PRACTICE_BATTLE = "/api_req_practice/battle";

@@ -415,9 +415,11 @@ public class KcaBattle {
             if (isKeyExist(api_stage3, "api_fdam")) {
                 JsonArray api_fdam = api_stage3.getAsJsonArray("api_fdam");
                 for (int i = 0; i < api_fdam.size(); i++) {
-                    if (i < 6) reduce_value(friendAfterHps, i, cnv(api_fdam.get(i)));
-                    else if (KcaBattle.isCombined)
+                    if (KcaBattle.isCombined && i >= 6) {
                         reduce_value(friendCbAfterHps, i - 6, cnv(api_fdam.get(i)));
+                    } else {
+                        reduce_value(friendAfterHps, i, cnv(api_fdam.get(i)));
+                    }
                 }
             }
             if (isKeyExist(api_stage3, "api_edam")) {
@@ -869,6 +871,17 @@ public class KcaBattle {
                             sMsg.setData(bundle);
                             sHandler.sendMessage(sMsg);
                         }
+
+                        if (isKeyExist(api_data, "api_escape_flag")) {
+                            int api_escape_flag = api_data.get("api_escape_flag").getAsInt();
+                            Log.e("KCA", "api_escape_flag: " + String.valueOf(api_escape_flag));
+                            if (api_escape_flag == 1) {
+                                escapedata = api_data.getAsJsonObject("api_escape");
+                                Log.e("KCA", "api_escape: " + escapedata.toString());
+                            } else {
+                                escapedata = null;
+                            }
+                        }
                     }
 
                     if (KcaApiData.checkUserPortEnough()) {
@@ -953,6 +966,20 @@ public class KcaBattle {
                 sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
+            }
+
+            if (url.equals(API_REQ_SORTIE_GOBACKPORT)) {
+                if (escapedata == null) {
+                    Log.e("KCA", "escapedata is null");
+                } else {
+                    JsonArray api_escape_idx = escapedata.getAsJsonArray("api_escape_idx");
+                    int api_escape_target = api_escape_idx.get(0).getAsInt(); // only first
+
+                    if (!escapelist.contains(new JsonPrimitive(api_escape_target))) {
+                        escapelist.add(api_escape_target);
+                    }
+                    Log.e("KCA", KcaUtils.format("Escape: %d", api_escape_target));
+                }
             }
 
             if (url.equals(API_REQ_COMBINED_BATTLE) || url.equals(API_REQ_COMBINED_BATTLE_WATER)) {
