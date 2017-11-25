@@ -105,11 +105,7 @@ public class KcaUtils {
     }
 
     public static String getUpdateServer(Context ctx) {
-        if (BuildConfig.VERSION_CODE == 2473) { // Temporal
-            return ctx.getString(R.string.server_antest1);
-        } else {
-            return getStringPreferences(ctx, PREF_UPDATE_SERVER);
-        }
+        return getStringPreferences(ctx, PREF_UPDATE_SERVER);
     }
 
     public static byte[] gzipcompress(String value) throws IOException {
