@@ -596,19 +596,17 @@ public class KcaViewButtonService extends Service {
                 }
             }
         } else {
+            recentPackageName = "not_kancolle_process";
             ActivityManager activityManager = (ActivityManager) getSystemService( Context.ACTIVITY_SERVICE );
             List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
-            List<String> process_list = new ArrayList<>();
             for(ActivityManager.RunningAppProcessInfo appProcess : appProcesses){
                 if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND){
-                    process_list.add(appProcess.processName);
+                    if (appProcess.processName.contains(KC_PACKAGE_NAME)) {
+                        recentPackageName = KC_PACKAGE_NAME;
+                    }
                 }
             }
-            if (process_list.contains(KC_PACKAGE_NAME)) {
-                recentPackageName = KC_PACKAGE_NAME;
-            }
         }
-        // Log.e("KCA-VB", "recentPackageName" + recentPackageName);
         return recentPackageName;
     }
 
