@@ -261,6 +261,44 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/view_excheck_fp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.0"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/view_excheck_fp_label"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
+                    android:text="@string/excheckview_fp_info"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
+
+                <LinearLayout
+                    android:id="@+id/view_excheck_fp_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/view_excheck_total_fp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginRight="4dp"
+                        android:text="180+"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/view_excheck_los"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
