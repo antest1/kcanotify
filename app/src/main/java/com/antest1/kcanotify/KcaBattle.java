@@ -1352,7 +1352,7 @@ public class KcaBattle {
                                         }
                                     } else if (n == all_phase) {
                                         if (eflag == 0) {
-                                            if (target_idx > 6) {
+                                            if (target_idx >= 6) {
                                                 reduce_value(enemyCbAfterHps, target_idx - 6, damage_value);
                                             } else if (target_idx != -1) {
                                                 reduce_value(enemyAfterHps, target_idx, damage_value);
