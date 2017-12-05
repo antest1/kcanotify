@@ -121,10 +121,6 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
 
-        if (getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION).equals("3.4.5")) {
-            setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, getString(R.string.default_gamedata_version));
-        }
-
         kcIntent = getKcIntent(getApplicationContext());
         is_kca_installed = (kcIntent != null);
 
