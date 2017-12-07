@@ -1639,6 +1639,7 @@ public class KcaBattleViewService extends Service {
 
         for (int i = 1; i <= 6; i++) {
             if (rid == getId(KcaUtils.format("em_%d_name", i), R.id.class) ||
+                    rid == getId(KcaUtils.format("em_%d_name_area", i), R.id.class) ||
                     rid == getId(KcaUtils.format("em_%d_lv", i), R.id.class)) {
                 api_data.addProperty("api_touched_idx", i + 20);
                 if (enemyShipData == null || i > enemyShipData.size()) return -1;
@@ -1648,6 +1649,7 @@ public class KcaBattleViewService extends Service {
 
         for (int i = 1; i <= 6; i++) {
             if (rid == getId(KcaUtils.format("es_%d_name", i), R.id.class) ||
+                    rid == getId(KcaUtils.format("es_%d_name_area", i), R.id.class) ||
                     rid == getId(KcaUtils.format("es_%d_lv", i), R.id.class)) {
                 api_data.addProperty("api_touched_idx", i + 120);
                 if (enemyCombinedShipData == null || i > enemyCombinedShipData.size()) return -1;
