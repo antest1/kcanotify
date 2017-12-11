@@ -116,7 +116,7 @@ public class KcaBattle {
                 }
             }
         }
-        for (int i = 0; i < friendCbMaxHps.size(); i++) {
+        for (int i = 1; i < friendCbMaxHps.size(); i++) {
             if (friendCbNowHps.get(i).getAsInt() * 4 <= friendCbMaxHps.get(i).getAsInt() &&
                     !escapecblist.contains(new JsonPrimitive(i + 1))) {
                 if (dameconcbflag[i]) {
