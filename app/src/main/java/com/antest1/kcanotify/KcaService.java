@@ -60,8 +60,10 @@ import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_DEFAUL
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_HIGH;
 import static android.widget.Toast.makeText;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
+import static com.antest1.kcanotify.KcaApiData.T2_FIGHTER;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
+import static com.antest1.kcanotify.KcaApiData.T2_GUN_SMALL;
 import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.getExpeditionNoByName;
@@ -1348,8 +1350,15 @@ public class KcaService extends Service {
                                     JsonObject status = getUserItemStatusById(Integer.parseInt(item), "alv", "type");
                                     if (status.has("type")) {
                                         switch (status.getAsJsonArray("type").get(2).getAsInt()) {
+                                            case T2_GUN_SMALL:
+                                                questTracker.updateIdCountTracker("673");
+                                                break;
+                                            case T2_FIGHTER:
+                                                questTracker.updateIdCountTracker("675", 0);
                                             case T2_MACHINE_GUN:
                                                 questTracker.updateIdCountTracker("638");
+                                                questTracker.updateIdCountTracker("674");
+                                                questTracker.updateIdCountTracker("675", 1);
                                                 break;
                                             case T2_GUN_LARGE:
                                             case T2_GUN_LARGE_II:
@@ -1449,30 +1458,37 @@ public class KcaService extends Service {
 
                     if (url.startsWith(API_REQ_KOUSYOU_DESTROYSHIP)) {
                         String targetShip = "";
+                        int slotDestFlag = 0;
                         String[] requestData = request.split("&");
                         for (int i = 0; i < requestData.length; i++) {
                             String decodedData = URLDecoder.decode(requestData[i], "utf-8");
                             if (decodedData.startsWith("api_ship_id")) {
                                 targetShip = decodedData.replace("api_ship_id=", "");
-                                KcaApiData.deleteUserShip(targetShip);
-                                break;
+                            } else if (decodedData.startsWith("api_slot_dest_flag")) {
+                                slotDestFlag = Integer.parseInt(decodedData.replace("api_slot_dest_flag=", ""));
                             }
                         }
+                        KcaApiData.deleteUserShip(targetShip, slotDestFlag);
+                        String[] targetShipList = targetShip.split(",");
+
                         JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
                         for (int i = 0; i < portdeckdata.size(); i++) {
                             JsonObject deckData = portdeckdata.get(i).getAsJsonObject();
                             JsonArray deckShipData = deckData.get("api_ship").getAsJsonArray();
                             for (int j = 0; j < deckShipData.size(); j++) {
-                                if (targetShip.equals(String.valueOf(deckShipData.get(j).getAsInt()))) {
-                                    deckShipData.set(j, new JsonPrimitive(-1));
-                                    deckData.add("api_ship", deckShipData);
-                                    portdeckdata.set(i, deckData);
-                                    dbHelper.putValue(DB_KEY_DECKPORT, portdeckdata.toString());
-                                    break;
+                                for (int k = 0; k < targetShipList.length; k++) {
+                                    if (targetShipList[k].equals(String.valueOf(deckShipData.get(j).getAsInt()))) {
+                                        deckShipData.set(j, new JsonPrimitive(-1));
+                                        deckData.add("api_ship", deckShipData);
+                                        portdeckdata.set(i, deckData);
+                                    }
                                 }
                             }
                         }
-                        questTracker.updateIdCountTracker("609");
+                        dbHelper.putValue(DB_KEY_DECKPORT, portdeckdata.toString());
+                        for (int i = 0; i < targetShipList.length; i++) {
+                            questTracker.updateIdCountTracker("609");
+                        }
                         updateQuestView();
                         updateFleetView();
                     }
@@ -1646,7 +1662,7 @@ public class KcaService extends Service {
                             dbHelper.putValue(DB_KEY_DECKPORT, api_data.getAsJsonArray("api_deck").toString());
                             dbHelper.test();
                             updateUserShip(api_data.getAsJsonObject("api_ship"));
-                            KcaApiData.deleteUserShip(itemIds);
+                            KcaApiData.deleteUserShip(itemIds, 1);
                             if (api_data.has("api_powerup_flag") && api_data.get("api_powerup_flag").getAsInt() == 1) {
                                 questTracker.updateIdCountTracker("702");
                                 questTracker.updateIdCountTracker("703");

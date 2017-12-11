@@ -959,7 +959,7 @@ public class KcaApiData {
         }
     }
 
-    public static void deleteUserShip(String list) {
+    public static void deleteUserShip(String list, int dest_flag) {
         if (kcGameData == null) return;
 
         String[] requestList = list.split(",");
@@ -968,16 +968,18 @@ public class KcaApiData {
             JsonObject shipKcData = getUserShipDataById(shipId, "ship_id,slot");
             if (shipKcData != null) {
                 int shipKcId = shipKcData.get("ship_id").getAsInt();
-                JsonArray shipSlotItem = (JsonArray) shipKcData.get("slot");
-                List<String> shipSlotItemList = new ArrayList<String>();
-                for (int j = 0; j < shipSlotItem.size(); j++) {
-                    int item = shipSlotItem.get(j).getAsInt();
-                    if (item != -1) {
-                        shipSlotItemList.add(String.valueOf(item));
+                if (dest_flag > 0) {
+                    JsonArray shipSlotItem = (JsonArray) shipKcData.get("slot");
+                    List<String> shipSlotItemList = new ArrayList<String>();
+                    for (int j = 0; j < shipSlotItem.size(); j++) {
+                        int item = shipSlotItem.get(j).getAsInt();
+                        if (item != -1) {
+                            shipSlotItemList.add(String.valueOf(item));
+                        }
                     }
-                }
-                if (shipSlotItemList.size() > 0) {
-                    removeSlotItemData(joinStr(shipSlotItemList, ","));
+                    if (shipSlotItemList.size() > 0) {
+                        removeSlotItemData(joinStr(shipSlotItemList, ","));
+                    }
                 }
                 userShipData.remove(shipId);
 
