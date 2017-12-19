@@ -1269,7 +1269,13 @@
 		"desc": "Sortie Arashio Kai Ni, Asashio Kai Ni (or D), Ooshio Kai Ni, Michishio Kai Ni and up to 2 other ships to [W3-2] and [W5-4]. S-Rank the boss nodes of each.",
 		"memo": "\u27a3Rewards 4 Screws and either a 12.7cm Twin Gun Mount Model C Kai Ni OR a Daihatsu Landing Craft OR a Type 22 Surface Radar"
 	},
-
+	"874": {
+        "code": "B110",
+        "name": "Execute a Combat Patrol of the Northern Region!",
+        "desc": "Sortie a CL, an AV, a CVL and up to 3 additional ships to [W3-5]. S-Rank the boss node twice.",
+        "memo": "\u27a3Rewards a present box and either 2 Shiden Kai Ni OR 4 Screws OR a New Model Aviation Armament Materials"
+    },
+	
 	"201": {
 		"code": "Bd1",
 		"name": "Daily Victory",
@@ -1480,6 +1486,12 @@
 		"name": "Quarterly [W6-3]",
 		"desc": "Sortie 1 AV, 2 CL and 3 additional ships to [W6-3]. A-Rank+ the boss node twice."
 	},
+	"873": {
+        "code": "Bq5",
+        "name": "Quarterly [W3]",
+        "desc": "Sortie a CL and up to 5 additional ships to [W3-1], [W3-2] and [W3-3]. A-Rank+ the boss nodes of each.",
+        "memo": "\u27a3Rewards a Combat Ration and either a Furniture Fairy OR a \u2605+3 12.7cm Twin Gun Mount Model C Kai Ni OR a Medal"
+    },
 
 	"301": {
 		"code": "C1",
@@ -1819,10 +1831,20 @@
 		"code": "F18",
 		"name": "Daily Upgrade",
 		"desc": "Upgrade a piece of equipment using Akashi's Improvement Arsenal.",
-		"memo": "\u203bIntensive Improvement of Equipment \u27a3Rewards a Screw",
-		"unlock": [637, 638],
-		"tracking": [[0, 1]]
+		"memo": "\u203bIntensive Improvement of Equipment \u27a3Rewards a Screw"
 	},
+	"673": {
+		"code": "F65",
+		"name": "Daily Gun Dismantlement",
+		"desc": "Scrap 4 small caliber main guns.",
+		"memo": "\u203bConsolidation of Equipment Development Capabilities"
+	},
+    "674": {
+        "code": "F66",
+        "name": "Daily AA Gun Dismantlement",
+        "desc": "Have 300 steel. Scrap 3 anti-air machine guns.",
+        "memo": "\u203bArsenal Environmental Consolidation"
+    },
 
 	"601": {
 		"code": "F1",
@@ -2214,6 +2236,12 @@
 		"desc": "Have a New Model Aviation Armament Materials, a Skilled Crew Member, 10 Screws, 5000 Ammo, 8000 Bauxite and 40 Development Materials. Set a CV as secretary and equip a TBF in her first slot. Scrap two Type 13 Air Radars and two Type 22 Surface Radars.",
 		"memo": "\u2718Consumes the resources, items and equipment. Make sure the equipment is unlocked! \u27a3Rewards a TBM-3D"
 	},
+    "675": {
+		"code": "F67",
+		"name": "Quarterly Interceptor",
+		"desc": "Have 800 Bauxite. Scrap 6 fighter aircraft and 4 anti-air machine guns. Press F10 to clear the overlay.",
+		"memo": "\u203bIntegrated Consolidation of Operational Equipment \u27a3Rewards either a Type 1 Fighter Hayabusa Model II OR a Shiden Model 11 OR 4 Screws"
+    },
 
 	"701": {
 		"code": "G1",
