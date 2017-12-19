@@ -410,6 +410,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="item_engine">Ne Type Engine</string>
     <string name="item_gmi_material">New Model Gun Mount Improvement Material</string>
     <string name="item_skilled_crew">Skilled Crew Member</string>
+    <string name="item_kouku_material">New Model Aerial Armament Materials</string>
     <string name="setting_menu_noti_title_notiatsvcoff">Enable notification when SVC is off</string>
     <string name="setting_menu_noti_desc_notiatsvcoff">Make expedition/docking notification available even if SVC is off</string>
     <string name="questview_nopage">No Quest</string>
