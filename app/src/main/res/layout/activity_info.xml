@@ -7,18 +7,16 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        app:titleTextColor="#fff"
         android:id="@+id/toolbar"
-        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:contentInsetStartWithNavigation="0dp"
+        android:background="@color/colorPrimary"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
-        >
-    </android.support.v7.widget.Toolbar>
+        app:contentInsetStartWithNavigation="0dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="#fff"></android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/fragment_container"

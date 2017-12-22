@@ -95,6 +95,7 @@
 
     <color name="colorQuestTrackProgress">#4e7bff</color>
 
+    <color name="colorFleetInfoButton">#2c3e50</color>
     <color name="colorFleetInfoNormal">#16a085</color>
     <color name="colorFleetInfoHeavyDamaged">#ff0000</color>
     <color name="colorFleetInfoNotSupplied">#f98d29</color>
