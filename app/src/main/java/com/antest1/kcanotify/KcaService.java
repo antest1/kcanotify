@@ -895,9 +895,11 @@ public class KcaService extends Service {
                                     KcaApiData.setEventMapDifficulty(eventMapCount, eventData.get("api_selected_rank").getAsInt());
                             }
                         }
-                        JsonArray api_airbase_info = api_data.getAsJsonArray("api_air_base");
-                        dbHelper.putValue(DB_KEY_LABSIFNO, api_airbase_info.toString());
-                        updateAirbasePopupInfo();
+                        if (api_data.has("api_air_base")) {
+                            JsonArray api_airbase_info = api_data.getAsJsonArray("api_air_base");
+                            dbHelper.putValue(DB_KEY_LABSIFNO, api_airbase_info.toString());
+                            updateAirbasePopupInfo();
+                        }
                     }
 
                     // Notification Part

@@ -365,7 +365,6 @@ public class KcaExpeditionCheckViewService extends Service {
         } else if (has_drum_num_optional) {
             int drum_num = data.get("drum-num-optional").getAsInt();
             result.addProperty("drum-num-optional", drum_num_value >= drum_num);
-            total_pass = total_pass && (drum_num_value >= drum_num);
         }
 
         result.addProperty("total-asw", true);
