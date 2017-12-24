@@ -235,7 +235,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_fairy_vib">Vibrate when hide the fairy by long-touch.</string>
     <string name="setting_menu_noti_title_fairy_glow">Alert quest completion via fairy</string>
     <string name="setting_menu_noti_desc_fairy_glow">Fairy will shine brightly when tracked quest is completed</string>
-    <string name="setting_menu_noti_title_disable_customtoast">Disable Custom Toast</string>
+    <string name="setting_menu_noti_title_disable_customtoast">Use Custom Toast Service</string>
     <string name="setting_menu_noti_desc_disable_customtoast">Try to enable this when node prediction/heavy damage alert does not appear.</string>
 
     <string name="setting_menu_app_head">Application Information</string>
