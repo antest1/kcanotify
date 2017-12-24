@@ -945,12 +945,14 @@ public class KcaApiData {
     }
 
     public static void updateShipMorale(int ship_id) {
-        JsonObject data = userShipData.get(ship_id);
-        int cond = data.get("api_cond").getAsInt();
-        if (cond < 40) {
-            cond = 40;
-            data.addProperty("api_cond", cond);
-            userShipData.put(ship_id, data);
+        if (userShipData.containsKey(ship_id)) {
+            JsonObject data = userShipData.get(ship_id);
+            int cond = data.get("api_cond").getAsInt();
+            if (cond < 40) {
+                cond = 40;
+                data.addProperty("api_cond", cond);
+                userShipData.put(ship_id, data);
+            }
         }
     }
 

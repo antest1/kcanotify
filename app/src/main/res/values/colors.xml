@@ -116,6 +116,7 @@
     <color name="colorFleetShipFatigue1">#f98b25</color>
     <color name="colorFleetShipFatigue2">#ff5252</color>
     <color name="colorFleetWarning">#7e2424</color>
+    <color name="colorFleetInRepair">#31834c</color>
     <color name="colorFullState">#4fc3f7</color>
 
     <color name="colorExpeditionBtnFailBack">#e91e63</color>

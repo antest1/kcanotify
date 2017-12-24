@@ -556,6 +556,8 @@ public class KcaFleetViewService extends Service {
                 } else {
                     JsonObject userData = maindata.get(i).getAsJsonObject().getAsJsonObject("user");
                     JsonObject kcData = maindata.get(i).getAsJsonObject().getAsJsonObject("kc");
+                    int ship_id = userData.get("id").getAsInt();
+
                     ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_name", v), R.id.class)))
                             .setText(getShipTranslation(kcData.get("name").getAsString(), false));
                     ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class)))
@@ -606,6 +608,11 @@ public class KcaFleetViewService extends Service {
                                 .setBackgroundColor(Color.TRANSPARENT);
                         ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_hp", v), R.id.class)))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFullState));
+                    }
+
+                    if (KcaDocking.checkShipInDock(ship_id)) {
+                        mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", v), R.id.class))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInRepair));
                     }
 
                     mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", v), R.id.class)).setVisibility(View.VISIBLE);

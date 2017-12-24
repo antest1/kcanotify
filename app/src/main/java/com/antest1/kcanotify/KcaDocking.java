@@ -10,4 +10,11 @@ public class KcaDocking {
     }
     public static int getShipId(int dock) { return dock_ship_id[dock]; }
     public static void setShipId(int dock, int id) { dock_ship_id[dock] = id; }
+    public static boolean checkShipInDock(int id) {
+        if (id <= 0) return false;
+        for (int sid : dock_ship_id) {
+            if (sid == id) return true;
+        }
+        return false;
+    }
 }
