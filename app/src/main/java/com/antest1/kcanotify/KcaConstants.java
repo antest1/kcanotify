@@ -84,6 +84,7 @@ public final class KcaConstants {
     public static final String API_REQ_HENSEI_PRESET = "/api_req_hensei/preset_select";
     public static final String API_REQ_HENSEI_COMBINED = "/api_req_hensei/combined";
 
+    public static final String API_GET_MEMBER_SHIP2 = "/api_get_member/ship2";
     public static final String API_GET_MEMBER_SHIP3 = "/api_get_member/ship3";
 
     public static final String API_REQ_KAISOU_SLOTSET = "/api_req_kaisou/slotset";

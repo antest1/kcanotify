@@ -76,6 +76,7 @@ import static com.antest1.kcanotify.KcaApiData.loadQuestTrackDataFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
+import static com.antest1.kcanotify.KcaApiData.updateShipMorale;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaFleetViewService.REFRESH_FLEETVIEW_ACTION;
@@ -709,6 +710,7 @@ public class KcaService extends Service {
                     JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
                     processDockingInfo(api_data);
                 }
+                updateFleetView();
             }
 
             if (url.startsWith(API_REQ_NYUKYO_START)) {
@@ -1594,6 +1596,16 @@ public class KcaService extends Service {
                         updateFleetView();
                     }
 
+                    if (url.startsWith(API_GET_MEMBER_SHIP2)) {
+                        if (jsonDataObj.has("api_data")) {
+                            JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
+                            JsonArray api_data_deck = jsonDataObj.getAsJsonArray("api_data_deck");
+                            KcaApiData.updateUserShipData(api_data);
+                            dbHelper.putValue(DB_KEY_DECKPORT, api_data_deck.toString());
+                        }
+                        updateFleetView();
+                    }
+
                     if (url.startsWith(API_GET_MEMBER_SHIP3)) {
                         String[] requestData = request.split("&");
                         int userShipId = -1;
@@ -2290,6 +2302,7 @@ public class KcaService extends Service {
             if (state != -1) {
                 dockId = ndockData.get("api_id").getAsInt() - 1;
                 shipId = ndockData.get("api_ship_id").getAsInt();
+                KcaApiData.updateShipMorale(shipId);
                 completeTime = ndockData.get("api_complete_time").getAsLong();
                 Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
                 if (KcaDocking.getCompleteTime(dockId) != -1) {

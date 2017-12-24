@@ -691,13 +691,6 @@ public class KcaApiData {
     }
 
     public static int getPortData(JsonObject api_data) {
-        Set<Integer> prevItemIds;
-        if (userShipData == null) {
-            userShipData = new HashMap<Integer, JsonObject>();
-            prevItemIds = new HashSet<Integer>();
-        } else {
-            prevItemIds = new HashSet<Integer>(userShipData.keySet());
-        }
         if (api_data.has("api_basic")) {
             JsonObject basicInfo = (JsonObject) api_data.get("api_basic");
             level = basicInfo.get("api_level").getAsInt();
@@ -705,17 +698,30 @@ public class KcaApiData {
         }
         if (api_data.has("api_ship")) {
             JsonArray shipDataArray = (JsonArray) api_data.get("api_ship");
-            JsonElement temp;
-            for (Iterator<JsonElement> itr = shipDataArray.iterator(); itr.hasNext(); ) {
-                temp = itr.next();
-                Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
-                if (!prevItemIds.contains(api_id)) {
-                    userShipData.put(api_id, temp.getAsJsonObject());
-                } else if (!userShipData.get(api_id).equals(temp)) {
-                    userShipData.put(api_id, temp.getAsJsonObject());
-                }
-                prevItemIds.remove(api_id);
+            updateUserShipData(shipDataArray);
+        }
+        return userShipData.size();
+    }
+
+    public static int updateUserShipData(JsonArray data) {
+        Set<Integer> prevItemIds;
+        if (userShipData == null) {
+            userShipData = new HashMap<Integer, JsonObject>();
+            prevItemIds = new HashSet<Integer>();
+        } else {
+            prevItemIds = new HashSet<Integer>(userShipData.keySet());
+        }
+
+        JsonElement temp;
+        for (Iterator<JsonElement> itr = data.iterator(); itr.hasNext(); ) {
+            temp = itr.next();
+            Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
+            if (!prevItemIds.contains(api_id)) {
+                userShipData.put(api_id, temp.getAsJsonObject());
+            } else if (!userShipData.get(api_id).equals(temp)) {
+                userShipData.put(api_id, temp.getAsJsonObject());
             }
+            prevItemIds.remove(api_id);
         }
         for (Integer i : prevItemIds) {
             userShipData.remove(i);
@@ -938,6 +944,15 @@ public class KcaApiData {
         }
     }
 
+    public static void updateShipMorale(int ship_id) {
+        JsonObject data = userShipData.get(ship_id);
+        int cond = data.get("api_cond").getAsInt();
+        if (cond < 40) {
+            cond = 40;
+            data.addProperty("api_cond", cond);
+            userShipData.put(ship_id, data);
+        }
+    }
 
     public static void updateUserShip(JsonObject api_data) {
         if (kcGameData == null) return;
