@@ -14,7 +14,7 @@
         app:contentInsetStartWithNavigation="0dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="#fff"></android.support.v7.widget.Toolbar>
+        app:titleTextColor="@color/colorToolbarText"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,6 +22,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:background="@drawable/background"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -36,46 +37,46 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="LOAD"
-                android:stateListAnimator="@null" />
+                android:stateListAnimator="@null"
+                android:text="LOAD" />
 
             <Button
                 android:id="@+id/error_clear"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="CLEAR"
-                android:stateListAnimator="@null" />
+                android:stateListAnimator="@null"
+                android:text="CLEAR" />
 
             <Button
                 android:id="@+id/error_export"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="EXPORT"
-                android:stateListAnimator="@null" />
+                android:stateListAnimator="@null"
+                android:text="EXPORT" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp">
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
 
             <TextView
-                android:text="Export Path"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/error_path_label"
-                android:textStyle="normal|bold"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp" />
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="Export Path"
+                android:textStyle="normal|bold" />
+
+            <TextView
                 android:id="@+id/error_path"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="(None)" />
 
         </LinearLayout>

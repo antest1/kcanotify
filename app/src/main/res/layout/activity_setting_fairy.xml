@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -16,7 +17,7 @@
         app:contentInsetStartWithNavigation="0dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="#fff"></android.support.v7.widget.Toolbar>
+        app:titleTextColor="@color/colorToolbarText" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,14 +49,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
-            android:padding="5dp"
-            android:gravity="center"
             android:background="@color/colorFairySelectPanel"
             android:columnWidth="48dp"
+            android:gravity="center"
             android:horizontalSpacing="6dp"
-            android:verticalSpacing="6dp"
             android:numColumns="auto_fit"
-            android:stretchMode="none" />
+            android:padding="5dp"
+            android:stretchMode="none"
+            android:verticalSpacing="6dp" />
 
     </LinearLayout>
 

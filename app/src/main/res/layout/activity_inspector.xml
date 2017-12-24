@@ -15,7 +15,7 @@
         app:contentInsetStartWithNavigation="0dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="#fff"></android.support.v7.widget.Toolbar>
+        app:titleTextColor="@color/colorToolbarText"/>
 
     <LinearLayout
         android:layout_width="match_parent"

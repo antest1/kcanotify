@@ -90,7 +90,7 @@ public class KcaFairySelectActivity extends AppCompatActivity {
                     int viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
                     MainActivity.kcafairybtn.setImageResource(viewBitmapSmallId);
                     MainActivity.kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                            R.color.black), PorterDuff.Mode.MULTIPLY);
+                            R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
 
                 }
             }

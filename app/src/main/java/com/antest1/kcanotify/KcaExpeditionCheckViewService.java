@@ -117,7 +117,7 @@ public class KcaExpeditionCheckViewService extends Service {
                         ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
             } else {
                 mView.findViewById(view_id).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                        ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
             }
         }
     }

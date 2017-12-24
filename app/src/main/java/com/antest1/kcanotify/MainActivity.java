@@ -8,7 +8,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,7 +22,6 @@ import android.net.VpnService;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -46,7 +44,6 @@ import android.widget.ToggleButton;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
-import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -200,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         int viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
         kcafairybtn.setImageResource(viewBitmapSmallId);
         kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                R.color.black), PorterDuff.Mode.MULTIPLY);
+                R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
         kcafairybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

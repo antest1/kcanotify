@@ -15,11 +15,12 @@
         app:contentInsetStartWithNavigation="0dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="#fff"></android.support.v7.widget.Toolbar>
+        app:titleTextColor="@color/colorToolbarText"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/background"
         android:orientation="vertical"
         android:padding="5dp">
 
@@ -33,48 +34,48 @@
                 android:id="@+id/akashi_btn_star"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/colorBtn"
-                android:text="☆"
-                android:textColor="@color/black"
+                android:layout_marginBottom="2dp"
+                android:layout_marginEnd="4dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="2dp"
                 android:layout_marginTop="2dp"
+                android:layout_weight="1"
+                android:background="@color/colorBtn"
+                android:text="☆"
+                android:textColor="@color/colorBtnText"
                 android:textSize="20dp" />
 
             <Button
                 android:id="@+id/akashi_btn_safe"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/colorBtn"
-                android:textColor="@color/black"
+                android:layout_marginBottom="2dp"
+                android:layout_marginEnd="4dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="2dp"
                 android:layout_marginTop="2dp"
-                android:textSize="20dp"
-                android:text="@string/aa_btn_safe_state0" />
+                android:layout_weight="1"
+                android:background="@color/colorBtn"
+                android:text="@string/aa_btn_safe_state0"
+                android:textColor="@color/colorBtnText"
+                android:textSize="20dp" />
 
             <Button
                 android:id="@+id/akashi_btn_filter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/colorBtn"
-                android:text="@string/aa_btn_filter"
-                android:textColor="@color/black"
+                android:layout_marginBottom="2dp"
+                android:layout_marginEnd="4dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="2dp"
                 android:layout_marginTop="2dp"
+                android:layout_weight="1"
+                android:background="@color/colorBtn"
+                android:text="@string/aa_btn_filter"
+                android:textColor="@color/colorBtnText"
                 android:textSize="20dp" />
 
         </LinearLayout>
@@ -83,24 +84,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:orientation="horizontal"
             android:layout_marginEnd="4dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:layout_marginStart="4dp">
+            android:layout_marginStart="4dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/akashi_day_0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/colorBtn"
+                android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_0"
                 android:textAlignment="gravity"
-                android:textSize="18dp"
-                android:textColor="@color/black"
-                android:background="@color/colorBtn"
-                android:gravity="center_vertical|center_horizontal" />
+                android:textColor="@color/colorBtnText"
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/akashi_day_1"
@@ -108,12 +109,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
+                android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_1"
                 android:textAlignment="gravity"
-                android:textSize="18dp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical|center_horizontal" />
+                android:textColor="@color/colorBtnText"
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/akashi_day_2"
@@ -121,12 +122,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
+                android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_2"
                 android:textAlignment="gravity"
-                android:textSize="18dp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical|center_horizontal" />
+                android:textColor="@color/colorBtnText"
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/akashi_day_3"
@@ -134,12 +135,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
+                android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_3"
                 android:textAlignment="gravity"
-                android:textSize="18dp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical|center_horizontal" />
+                android:textColor="@color/colorBtnText"
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/akashi_day_4"
@@ -147,12 +148,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
+                android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_4"
                 android:textAlignment="gravity"
-                android:textSize="18dp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical|center_horizontal" />
+                android:textColor="@color/colorBtnText"
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/akashi_day_5"
@@ -160,12 +161,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
+                android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_5"
                 android:textAlignment="gravity"
-                android:textSize="18dp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical|center_horizontal" />
+                android:textColor="@color/colorBtnText"
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/akashi_day_6"
@@ -173,12 +174,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
+                android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_6"
                 android:textAlignment="gravity"
-                android:textSize="18dp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical|center_horizontal" />
+                android:textColor="@color/colorBtnText"
+                android:textSize="18dp" />
         </LinearLayout>
 
 
@@ -190,8 +191,8 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:layout_marginStart="4dp"
-            android:listSelector="@android:color/transparent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:listSelector="@android:color/transparent" />
 
 
     </LinearLayout>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -16,7 +17,7 @@
         app:contentInsetStartWithNavigation="0dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="#fff"></android.support.v7.widget.Toolbar>
+        app:titleTextColor="@color/colorToolbarText" />
 
     <LinearLayout
         android:id="@+id/fragment_container"
@@ -26,45 +27,45 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/AppName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/AppName"
             android:text="@string/app_brand"
             android:textAlignment="center"
             android:textSize="36sp" />
 
         <TextView
+            android:id="@+id/AppVersion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/AppVersion"
-            android:textAlignment="center"
-            android:text="@string/app_version"
             android:layout_marginBottom="16dp"
+            android:text="@string/app_version"
+            android:textAlignment="center"
             android:textSize="18sp" />
 
         <TextView
-            android:text="@string/ia_license"
+            android:id="@+id/AppLicense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/AppLicense"
-            android:textAlignment="center"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:text="@string/ia_license"
+            android:textAlignment="center" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
         <TextView
-            android:text="AppGPL"
+            android:id="@+id/app_gpl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/app_gpl"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:text="AppGPL" />
 
     </LinearLayout>
 

@@ -106,7 +106,7 @@ public class AkashiActivity extends AppCompatActivity {
                 TextView tv = (TextView) findViewById(KcaUtils.getId(KcaUtils.format("akashi_day_%d", i), R.id.class));
                 if (week == currentClicked) {
                     tv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-                    tv.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                    tv.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
                 }
                 tv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -114,9 +114,9 @@ public class AkashiActivity extends AppCompatActivity {
                         if (currentClicked != week) {
                             TextView tv_prev = (TextView) findViewById(KcaUtils.getId(KcaUtils.format("akashi_day_%d", currentClicked), R.id.class));
                             tv_prev.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
-                            tv_prev.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
+                            tv_prev.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnText));
                             v.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-                            ((TextView) v).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                            ((TextView) v).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
                             currentClicked = week;
                             loadAkashiList(currentClicked, isSafeChecked);
                             resetListView(true);
@@ -204,11 +204,11 @@ public class AkashiActivity extends AppCompatActivity {
     private void setStarButton() {
         if (isStarChecked) {
             starButton.setText("★");
-            starButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            starButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
             starButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
         } else {
             starButton.setText("☆");
-            starButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
+            starButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnText));
             starButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
         }
         setPreferences(getApplicationContext(), PREF_AKASHI_STAR_CHECKED, isStarChecked);
@@ -217,11 +217,11 @@ public class AkashiActivity extends AppCompatActivity {
     private void setSafeButton() {
         if (isSafeChecked) {
             safeButton.setText(getStringWithLocale(R.string.aa_btn_safe_state1));
-            safeButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            safeButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
             safeButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
         } else {
             safeButton.setText(getStringWithLocale(R.string.aa_btn_safe_state0));
-            safeButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
+            safeButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnText));
             safeButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
         }
     }
@@ -239,10 +239,10 @@ public class AkashiActivity extends AppCompatActivity {
 
         if (!filterlist.equals("|")) {
             filterButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-            filterButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            filterButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
         } else {
             filterButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
-            filterButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
+            filterButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnText));
         }
 
         listViewItemList.clear();
