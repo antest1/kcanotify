@@ -305,6 +305,8 @@ public class KcaService extends Service {
         stopService(new Intent(this, KcaDevelopPopupService.class));
         stopService(new Intent(this, KcaLandAirBasePopupService.class));
         stopService(new Intent(this, KcaViewButtonService.class));
+        stopService(new Intent(this, KcaExpeditionCheckViewService.class));
+        stopService(new Intent(this, KcaCustomToastService.class));
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putBoolean("svcenabled", false).apply();
         KcaAlarmService.clearAlarmCount();
@@ -2385,7 +2387,15 @@ public class KcaService extends Service {
     public void showCustomToast(KcaCustomToast toast, String body, int duration, int color) {
         Context ctx = getApplicationContext();
         if (getBooleanPreferences(ctx, PREF_DISABLE_CUSTOMTOAST)) {
-            Toast.makeText(ctx, body, duration).show();
+            JsonObject data = new JsonObject();
+            data.addProperty("text", body);
+            data.addProperty("duration", duration);
+            data.addProperty("color", color);
+            Intent toastIntent = new Intent(getBaseContext(), KcaCustomToastService.class);
+            toastIntent.setAction(KcaCustomToastService.TOAST_SHOW_ACTION);
+            toastIntent.putExtra("data", data.toString());
+            startService(toastIntent);
+            //Toast.makeText(ctx, body, duration).show();
         } else {
             toast.showToast(body, duration, color);
         }

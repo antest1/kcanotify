@@ -125,6 +125,8 @@
         <service
             android:name=".KcaExpeditionCheckViewService" />
         <service
+            android:name=".KcaCustomToastService" />
+        <service
             android:name=".KcaVpnService"
             android:label="@string/app_vpn_name"
             android:permission="android.permission.BIND_VPN_SERVICE">
