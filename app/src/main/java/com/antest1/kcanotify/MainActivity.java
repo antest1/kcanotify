@@ -190,6 +190,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        kcakashibtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
 
         kcafairybtn = findViewById(R.id.kcafairybtn);
         String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
