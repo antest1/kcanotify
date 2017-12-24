@@ -16,6 +16,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_settings">Settings</string>
     <string name="action_errorlog">Error Log</string>
     <string name="action_inspector" translatable="false">Inspector</string>
+    <string name="app_vpn_name">Kcanotify Sniffer</string>
 
     <string name="backpress_msg">Press back one more time to exit</string>
     <string name="notification_appinfo_title">Kcanotify Notification</string>
