@@ -184,6 +184,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_exp">远征结束时通知栏提示</string>
     <string name="setting_menu_noti_title_dock">入渠</string>
     <string name="setting_menu_noti_desc_dock">入渠完成时通知栏提示</string>
+    <string name="setting_menu_noti_title_morale">疲劳值提醒</string>
+    <string name="setting_menu_noti_desc_morale">当舰队疲劳恢复时通知栏提示</string>
+    <string name="setting_menu_noti_title_morale_min">提醒最低值</string>
     <string name="setting_menu_noti_title_hdmg_vib">大破警告</string>
     <string name="setting_menu_noti_desc_hdmg_vib">有舰娘大破时响铃/振动（弹出通知）</string>
     <string name="setting_menu_noti_title_nspl_vib">未补给警告</string>

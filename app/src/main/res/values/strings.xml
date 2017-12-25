@@ -227,6 +227,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_exp">Screen notification on expedition arrival.</string>
     <string name="setting_menu_noti_title_dock">Docking</string>
     <string name="setting_menu_noti_desc_dock">Screen notification when docking completes.</string>
+    <string name="setting_menu_noti_title_morale">Morale</string>
+    <string name="setting_menu_noti_desc_morale">Screen notification when a fleet recovers the morale minimum.</string>
+    <string name="setting_menu_noti_title_morale_min">Morale Minimum</string>
     <string name="setting_menu_noti_title_hdmg_vib">Heavy Damage Alert</string>
     <string name="setting_menu_noti_desc_hdmg_vib">Sound/Vibrate when a ship is heavily damaged (Toast will always appear).</string>
     <string name="setting_menu_noti_title_nspl_vib">Incomplete Supply Alert</string>

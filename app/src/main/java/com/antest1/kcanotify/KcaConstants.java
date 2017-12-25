@@ -380,6 +380,8 @@ public final class KcaConstants {
     public static final String PREF_KCA_NOTI_MOVETOAPPINFO = "noti_movetoappinfo";
     public static final String PREF_KCA_NOTI_QUEST_FAIRY_GLOW = "noti_quest_fairy_glow";
     public static final String PREF_UPDATE_SERVER = "check_update_server";
+    public static final String PREF_KCA_NOTI_MORALE = "notify_morale";
+    public static final String PREF_KCA_MORALE_MIN = "morale_min";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -414,7 +416,9 @@ public final class KcaConstants {
             PREF_DISABLE_CUSTOMTOAST,
             PREF_KCA_NOTI_MOVETOAPPINFO,
             PREF_KCA_NOTI_QUEST_FAIRY_GLOW,
-            PREF_UPDATE_SERVER
+            PREF_UPDATE_SERVER,
+            PREF_KCA_NOTI_MORALE,
+            PREF_KCA_MORALE_MIN
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
@@ -60,6 +61,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_MORALE_MIN;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_MOVETOAPPINFO;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
@@ -249,6 +251,20 @@ public class SettingActivity extends AppCompatActivity {
                     });
                 }
 
+                if (key.equals(PREF_KCA_MORALE_MIN)) {
+                    pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            int value = Integer.parseInt((String) newValue);
+                            if (value > 100) {
+                                Toast.makeText(context, "value must be in 0~100", Toast.LENGTH_LONG).show();
+                                return false;
+                            }
+                            return true;
+                        }
+                    });
+                }
+
                 if (key.equals(PREF_VPN_BYPASS_ADDRESS)) {
                     pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                         @Override
@@ -310,6 +326,9 @@ public class SettingActivity extends AppCompatActivity {
                 } else if (pref instanceof ListPreference) {
                     ListPreference etp = (ListPreference) pref;
                     pref.setSummary(etp.getEntry());
+                } else if (pref instanceof EditTextPreference) {
+                    EditTextPreference etp = (EditTextPreference) pref;
+                    pref.setSummary(etp.getText());
                 }
             }
         }
@@ -404,6 +423,9 @@ public class SettingActivity extends AppCompatActivity {
             } else if (pref instanceof ListPreference) {
                 ListPreference etp = (ListPreference) pref;
                 pref.setSummary(etp.getEntry());
+            } else if (pref instanceof EditTextPreference) {
+                EditTextPreference etp = (EditTextPreference) pref;
+                pref.setSummary(etp.getText());
             }
         }
     }

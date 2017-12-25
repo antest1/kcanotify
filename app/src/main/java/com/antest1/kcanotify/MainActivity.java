@@ -385,6 +385,7 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_KCA_NOTI_NOTIFYATSVCOFF:
                     case PREF_KCA_NOTI_DOCK:
                     case PREF_KCA_NOTI_EXP:
+                    case PREF_KCA_NOTI_MORALE:
                     case PREF_KCA_BATTLEVIEW_USE:
                     case PREF_KCA_BATTLENODE_USE:
                     case PREF_KCA_QUESTVIEW_USE:
@@ -415,6 +416,9 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_FAIRY_ICON:
                     case PREF_KCA_EXP_TYPE:
                         editor.putString(prefKey, "0");
+                        break;
+                    case PREF_KCA_MORALE_MIN:
+                        editor.putString(prefKey, "40");
                         break;
                     case PREF_KCA_DATA_VERSION:
                         String defaultversion = getString(R.string.default_gamedata_version);
