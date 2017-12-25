@@ -956,6 +956,15 @@ public class KcaApiData {
         }
     }
 
+    public static void updateShipHpFull(int ship_id) {
+        if (userShipData.containsKey(ship_id)) {
+            JsonObject data = userShipData.get(ship_id);
+            int maxhp = data.get("api_maxhp").getAsInt();
+            data.addProperty("api_nowhp", maxhp);
+            userShipData.put(ship_id, data);
+        }
+    }
+
     public static void updateUserShip(JsonObject api_data) {
         if (kcGameData == null) return;
         if (api_data.has("api_id")) {

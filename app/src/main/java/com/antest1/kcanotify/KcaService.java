@@ -716,6 +716,20 @@ public class KcaService extends Service {
             if (url.startsWith(API_REQ_NYUKYO_START)) {
                 questTracker.updateIdCountTracker("503");
                 updateQuestView();
+
+                int ship_id = -1;
+                int highspeed = -1;
+                String[] requestData = request.split("&");
+                for (int i = 0; i < requestData.length; i++) {
+                    String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                    if (decodedData.startsWith("api_ship_id")) {
+                        ship_id = Integer.valueOf(decodedData.replace("api_ship_id=", ""));
+                    } else if (decodedData.startsWith("api_highspeed")) {
+                        highspeed = Integer.valueOf(decodedData.replace("api_highspeed=", ""));
+                    }
+                }
+                if (highspeed > 0) KcaApiData.updateShipHpFull(ship_id);
+                updateFleetView();
             }
 
             if (url.startsWith(API_REQ_NYUKYO_SPEEDCHAGNE)) {
@@ -729,6 +743,7 @@ public class KcaService extends Service {
                     }
                 }
                 if (ndock_id != -1) processDockingSpeedup(ndock_id);
+                updateFleetView();
             }
 
             if (url.startsWith(API_REQ_HOKYU_CHARGE)) {
@@ -2089,143 +2104,6 @@ public class KcaService extends Service {
         KcaApiData.maxItemSize = data.get("api_max_slotitem").getAsInt();
     }
 
-    /*private void processFirstDeckInfo() {
-        KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String delimeter = " | ";
-        if (!isGameDataLoaded()) {
-            Log.e("KCA", "processFirstDeckInfo: Game Data is Null");
-           showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-            // new retrieveApiStartData().execute("", "down", "");
-            return;
-        } else {
-            Log.e("KCA", KcaUtils.format("processFirstDeckInfo: data loaded"));
-        }
-
-        JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-
-        int cn = getSeekCn();
-        String seekType = getSeekType();
-
-        JsonArray deckInfoData = new JsonArray();
-        JsonObject infoData = null;
-
-        String airPowerValue = "";
-        int[] airPowerRange = KcaDeckInfo.getAirPowerRange(data, 0, null);
-        if (airPowerRange[0] > 0 && airPowerRange[1] > 0) {
-            airPowerValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
-            infoData = new JsonObject();
-            infoData.addProperty("is_newline", 0);
-            infoData.addProperty("portrait_value", airPowerValue);
-            infoData.addProperty("landscape_value", airPowerValue);
-            deckInfoData.add(infoData);
-        }
-
-        double seekValue = 0;
-        String seekStringValue = "";
-        seekValue = KcaDeckInfo.getSeekValue(data, 0, cn, KcaBattle.getEscapeFlag());
-        if (isCombined)
-            seekValue += KcaDeckInfo.getSeekValue(data, 1, cn, KcaBattle.getEscapeFlag());
-        if (cn == SEEK_PURE) {
-            seekStringValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_d), seekType, (int) seekValue);
-        } else {
-            seekStringValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, seekValue);
-        }
-        infoData = new JsonObject();
-        infoData.addProperty("is_newline", 0);
-        infoData.addProperty("is_portrait_newline", 0);
-        infoData.addProperty("portrait_value", seekStringValue);
-        infoData.addProperty("landscape_value", seekStringValue);
-        deckInfoData.add(infoData);
-
-        int speedValue = 0;
-        if (isCombined) {
-            speedValue = KcaDeckInfo.getSpeed(data, "0,1", KcaBattle.getEscapeFlag());
-        } else {
-            speedValue = KcaDeckInfo.getSpeed(data, "0", KcaBattle.getEscapeFlag());
-        }
-
-        String speedStringValue = "";
-        switch (speedValue) {
-            case KcaApiData.SPEED_SUPERFAST:
-                speedStringValue = getStringWithLocale(R.string.speed_superfast);
-                break;
-            case KcaApiData.SPEED_FASTPLUS:
-                speedStringValue = getStringWithLocale(R.string.speed_fastplus);
-                break;
-            case KcaApiData.SPEED_FAST:
-                speedStringValue = getStringWithLocale(R.string.speed_fast);
-                break;
-            case KcaApiData.SPEED_SLOW:
-                speedStringValue = getStringWithLocale(R.string.speed_slow);
-                break;
-            case KcaApiData.SPEED_MIXED_FASTPLUS:
-                speedStringValue = getStringWithLocale(R.string.speed_mixed_fastplus);
-                break;
-            case KcaApiData.SPEED_MIXED_FAST:
-                speedStringValue = getStringWithLocale(R.string.speed_mixed_fast);
-                break;
-            case KcaApiData.SPEED_MIXED_NORMAL:
-                speedStringValue = getStringWithLocale(R.string.speed_mixed_normal);
-                break;
-            default:
-                speedStringValue = getStringWithLocale(R.string.speed_none);
-                break;
-        }
-
-        infoData = new JsonObject();
-        infoData.addProperty("is_newline", 0);
-        infoData.addProperty("portrait_value", speedStringValue);
-        //infoData.addProperty("landscape_value", speedStringValue.concat(getStringWithLocale(R.string.speed_postfix)));
-        infoData.addProperty("landscape_value", speedStringValue);
-        deckInfoData.add(infoData);
-
-        int[] tp = new int[2];
-        if (isCombined) {
-            tp = KcaDeckInfo.getTPValue(data, "0,1", KcaBattle.getEscapeFlag());
-        } else {
-            tp = KcaDeckInfo.getTPValue(data, "0", KcaBattle.getEscapeFlag());
-        }
-        String tpValue = KcaUtils.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
-        infoData = new JsonObject();
-        infoData.addProperty("is_newline", 1);
-        infoData.addProperty("portrait_value", tpValue);
-        infoData.addProperty("landscape_value", tpValue);
-        deckInfoData.add(infoData);
-
-        int count = 0;
-        if (getBooleanPreferences(getApplicationContext(), PREF_FULLMORALE_SETTING)) {
-            count = data.size();
-        } else if (isCombined) {
-            count = 2;
-        } else {
-            count = 1;
-        }
-
-        for (int i = 0; i < count; i++) {
-            String conditionValue;
-            if (count == 1) {
-                conditionValue = KcaUtils.format(getStringWithLocale(R.string.kca_view_condition), KcaDeckInfo.getConditionStatus(data, i));
-            } else {
-                conditionValue = KcaUtils.format(getStringWithLocale(R.string.kca_view_condition_nformat), i + 1, KcaDeckInfo.getConditionStatus(data, i));
-            }
-            if (conditionValue.length() == 0) continue;
-
-            infoData = new JsonObject();
-            if (i < count - 1) {
-                infoData.addProperty("is_newline", 1);
-            } else {
-                infoData.addProperty("is_newline", 0);
-            }
-            infoData.addProperty("portrait_value", conditionValue);
-            infoData.addProperty("landscape_value", conditionValue);
-            deckInfoData.add(infoData);
-        }
-
-        kcaFirstDeckInfo = gson.toJson(deckInfoData);
-        
-    }*/
-
     private void processExpeditionInfo() {
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         //Log.e("KCA", "processExpeditionInfo Called");
@@ -2331,6 +2209,7 @@ public class KcaService extends Service {
     }
 
     private void processDockingSpeedup(int dockId) {
+        KcaApiData.updateShipHpFull(KcaDocking.getShipId(dockId));
         KcaDocking.setShipId(dockId, 0);
         KcaDocking.setCompleteTime(dockId, -1);
         PendingIntent pendingIntent = PendingIntent.getService(
