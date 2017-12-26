@@ -26,9 +26,13 @@ import android.widget.TextView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
 import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
@@ -623,10 +627,19 @@ public class KcaFleetViewService extends Service {
         }
 
         infoList.add("LV ".concat(String.valueOf(sum_level)));
-        fleetInfoLine.setText(joinStr(infoList, " / "));
+        String fleetCalcInfoText = joinStr(infoList, " / ");
+        long moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(idx);
         if (selected < 4 && KcaExpedition2.isInExpedition(selected)) {
+            fleetInfoLine.setText(fleetCalcInfoText);
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpedition));
+        } else if (moraleCompleteTime > 0) {
+            Date c_time = new Date(moraleCompleteTime);
+            DateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+            fleetCalcInfoText = f.format(c_time).concat(" | ").concat(fleetCalcInfoText);
+            fleetInfoLine.setText(fleetCalcInfoText);
+            fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNotGoodStatus));
         } else {
+            fleetInfoLine.setText(fleetCalcInfoText);
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNormal));
         }
 
@@ -817,6 +830,13 @@ public class KcaFleetViewService extends Service {
                 if (i < 4 && KcaExpedition2.isInExpedition(i)) {
                     mView.findViewById(view_id).setBackgroundColor(
                             ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpeditionBtn));
+                } else if (i < 4 && KcaMoraleInfo.getMoraleCompleteTime(i) > 0) {
+                    mView.findViewById(view_id).setBackgroundColor(
+                            ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNotGoodStatusBtn));
+                } else if (i == FLEET_COMBINED_ID &&
+                        (KcaMoraleInfo.getMoraleCompleteTime(0) > 0 || KcaMoraleInfo.getMoraleCompleteTime(1) > 0)) { // Combined Morale
+                    mView.findViewById(view_id).setBackgroundColor(
+                            ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNotGoodStatusBtn));
                 } else {
                     mView.findViewById(view_id).setBackgroundColor(
                             ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));

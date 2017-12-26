@@ -71,6 +71,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
+import static com.antest1.kcanotify.KcaMoraleInfo.setMinMorale;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -260,6 +261,7 @@ public class SettingActivity extends AppCompatActivity {
                                 Toast.makeText(context, "value must be in 0~100", Toast.LENGTH_LONG).show();
                                 return false;
                             }
+                            KcaMoraleInfo.setMinMorale(value);
                             return true;
                         }
                     });

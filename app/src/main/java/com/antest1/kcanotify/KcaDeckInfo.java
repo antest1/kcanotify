@@ -682,6 +682,31 @@ public class KcaDeckInfo {
         return false;
     }
 
+    public int checkShipInDeck(JsonArray deckPortData, int target) { // return -1 or 0~3
+        for (int i = 0; i < deckPortData.size(); i++) {
+            JsonArray deckShipIdList = deckPortData.get(i).getAsJsonObject().getAsJsonArray("api_ship");
+            for (int j = 0; j < deckShipIdList.size(); j++) {
+                int shipid = deckShipIdList.get(j).getAsInt();
+                if (shipid == target) return i;
+            }
+        }
+        return -1;
+    }
+
+    public int checkMinimumMorale(JsonArray deckPortData, int deckid) {
+        JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
+        int min_cond_value = 100;
+        for (int i = 0; i < deckShipIdList.size(); i++) {
+            int shipId = deckShipIdList.get(i).getAsInt();
+            if (shipId != -1) {
+                JsonObject shipData = getUserShipDataById(shipId, "cond");
+                int cond = shipData.get("cond").getAsInt();
+                min_cond_value = Math.min(cond, min_cond_value);
+            }
+        }
+        return min_cond_value;
+    }
+
     // Reference: http://kancolle.wikia.com/wiki/Land_Base_Aerial_Support#Fighter_Power_Calculations
     public int getAirPowerInAirBase(int status, JsonArray plane_info) {
         int air_power = 0;

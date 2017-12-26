@@ -946,7 +946,7 @@ public class KcaApiData {
 
     public static void updateShipMorale(int ship_id) {
         if (userShipData.containsKey(ship_id)) {
-            JsonObject data = userShipData.get(ship_id);
+            JsonObject data = userShipData.get(ship_id).getAsJsonObject();
             int cond = data.get("api_cond").getAsInt();
             if (cond < 40) {
                 cond = 40;
@@ -958,7 +958,7 @@ public class KcaApiData {
 
     public static void updateShipHpFull(int ship_id) {
         if (userShipData.containsKey(ship_id)) {
-            JsonObject data = userShipData.get(ship_id);
+            JsonObject data = userShipData.get(ship_id).getAsJsonObject();
             int maxhp = data.get("api_maxhp").getAsInt();
             data.addProperty("api_nowhp", maxhp);
             userShipData.put(ship_id, data);

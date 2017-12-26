@@ -73,6 +73,7 @@ public final class KcaConstants {
     public static final String API_GET_MEMBER_REQUIRED_INFO = "/api_get_member/require_info";
     public static final String API_GET_MEMBER_USEITEM = "/api_get_member/useitem";
     public static final String API_REQ_MEMBER_PRESET_DECK = "/api_get_member/preset_deck";
+    public static final String API_REQ_MEMBER_ITEMUSE_COND = "/api_req_member/itemuse_cond";
     public static final String API_GET_MEMBER_DECK = "/api_get_member/deck";
     public static final String API_GET_MEMBER_SHIP_DECK = "/api_get_member/ship_deck";
     public static final String API_GET_MEMBER_SLOT_ITEM = "/api_get_member/slot_item";
@@ -269,6 +270,7 @@ public final class KcaConstants {
     public static final int NOTI_EXP = 1;
     public static final int NOTI_DOCK = 2;
     public static final int NOTI_UPDATE = 3;
+    public static final int NOTI_MORALE = 4;
 
     public static final int FRONT_NONE = 0;
     public static final int FRONT_EXP_SET = 2;
@@ -438,7 +440,8 @@ public final class KcaConstants {
             PREF_SHOWDROP_SETTING,
             PREF_FAIRY_NOTI_LONGCLICK,
             PREF_FAIRY_AUTOHIDE,
-            PREF_KCA_NOTI_QUEST_FAIRY_GLOW
+            PREF_KCA_NOTI_QUEST_FAIRY_GLOW,
+            PREF_KCA_NOTI_MORALE
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

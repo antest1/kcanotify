@@ -56,6 +56,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static android.R.attr.id;
+import static android.R.attr.port;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_HIGH;
 import static android.widget.Toast.makeText;
@@ -79,7 +80,12 @@ import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaApiData.updateShipMorale;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaExpedition2.deck_name;
+import static com.antest1.kcanotify.KcaExpedition2.mission_no;
 import static com.antest1.kcanotify.KcaFleetViewService.REFRESH_FLEETVIEW_ACTION;
+import static com.antest1.kcanotify.KcaMoraleInfo.initMoraleValue;
+import static com.antest1.kcanotify.KcaMoraleInfo.setItemUseDeck;
+import static com.antest1.kcanotify.KcaMoraleInfo.setMoraleValue;
 import static com.antest1.kcanotify.KcaQuestViewService.REFRESH_QUESTVIEW_ACTION;
 import static com.antest1.kcanotify.KcaUtils.createBuilder;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
@@ -479,7 +485,7 @@ public class KcaService extends Service {
                 aIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
-        setAlarm(arrive_time, pendingIntent, getNotificationId(NOTI_EXP, idx));
+        setAlarm(arrive_time, pendingIntent, getNotificationId(NOTI_EXP, idx), true);
     }
 
     private void setDockingAlarm(int dockId, int shipId, long complete_time, Intent aIntent) {
@@ -501,9 +507,25 @@ public class KcaService extends Service {
                 aIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
-        setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_DOCK, dockId));
+        setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_DOCK, dockId), true);
     }
 
+    private void setMoraleAlarm(int deckId, String deck_name, long complete_time, Intent aIntent) {
+        JsonObject moraleAlarmData = new JsonObject();
+        moraleAlarmData.addProperty("type", KcaAlarmService.TYPE_MORALE);
+        moraleAlarmData.addProperty("kantai_name", deck_name);
+        moraleAlarmData.addProperty("idx", deckId);
+
+        aIntent.putExtra("data", moraleAlarmData.toString());
+        PendingIntent pendingIntent = PendingIntent.getService(
+                getApplicationContext(),
+                getNotificationId(NOTI_MORALE, deckId),
+                aIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_DOCK, deckId), false);
+    }
 
     private void toastInfo() {
         if (KcaFleetCheckPopupService.isActive()) {
@@ -552,6 +574,7 @@ public class KcaService extends Service {
             if (url.startsWith(KCA_VERSION)) {
                 isInitState = false;
                 isPortAccessed = false;
+                isInBattle = false;
                 api_start2_init = false;
                 api_start2_loading_flag = true;
                 KcaFleetViewService.setReadyFlag(false);
@@ -580,6 +603,8 @@ public class KcaService extends Service {
                     startService(new Intent(this, KcaQuestViewService.class));
                     sendQuestCompletionInfo();
                 }
+
+                KcaMoraleInfo.initMoraleValue(Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCA_MORALE_MIN)));
                 return;
                 //Toast.makeText(contextWithLocale, getPreferences("kca_version") + " " + String.valueOf(api_start2_down_mode), Toast.LENGTH_LONG).show();
             }
@@ -705,47 +730,6 @@ public class KcaService extends Service {
                 }
             }
 
-            if (url.startsWith(API_GET_MEMBER_NDOCK)) {
-                if (jsonDataObj.has("api_data")) {
-                    JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
-                    processDockingInfo(api_data);
-                }
-                updateFleetView();
-            }
-
-            if (url.startsWith(API_REQ_NYUKYO_START)) {
-                questTracker.updateIdCountTracker("503");
-                updateQuestView();
-
-                int ship_id = -1;
-                int highspeed = -1;
-                String[] requestData = request.split("&");
-                for (int i = 0; i < requestData.length; i++) {
-                    String decodedData = URLDecoder.decode(requestData[i], "utf-8");
-                    if (decodedData.startsWith("api_ship_id")) {
-                        ship_id = Integer.valueOf(decodedData.replace("api_ship_id=", ""));
-                    } else if (decodedData.startsWith("api_highspeed")) {
-                        highspeed = Integer.valueOf(decodedData.replace("api_highspeed=", ""));
-                    }
-                }
-                if (highspeed > 0) KcaApiData.updateShipHpFull(ship_id);
-                updateFleetView();
-            }
-
-            if (url.startsWith(API_REQ_NYUKYO_SPEEDCHAGNE)) {
-                int ndock_id = -1;
-                String[] requestData = request.split("&");
-                for (int i = 0; i < requestData.length; i++) {
-                    String decodedData = URLDecoder.decode(requestData[i], "utf-8");
-                    if (decodedData.startsWith("api_ndock_id")) {
-                        ndock_id = Integer.valueOf(decodedData.replace("api_ndock_id=", "")) - 1;
-                        break;
-                    }
-                }
-                if (ndock_id != -1) processDockingSpeedup(ndock_id);
-                updateFleetView();
-            }
-
             if (url.startsWith(API_REQ_HOKYU_CHARGE)) {
                 questTracker.updateIdCountTracker("504");
                 updateQuestView();
@@ -856,14 +840,22 @@ public class KcaService extends Service {
                         if (reqPortApiData.has("api_basic")) {
                             processBasicInfo(reqPortApiData.getAsJsonObject("api_basic"));
                         }
-                        //Log.e("KCA", "Total Ships: " + String.valueOf(size));
-                        if (reqPortApiData.has("api_deck_port")) {
-                            processExpeditionInfo();
-                            updateFleetView();
-                        }
+
                         if (reqPortApiData.has("api_ndock")) {
                             JsonArray nDockData = reqPortApiData.getAsJsonArray("api_ndock");
                             processDockingInfo(nDockData);
+                        }
+
+                        //Log.e("KCA", "Total Ships: " + String.valueOf(size));
+                        if (reqPortApiData.has("api_deck_port")) {
+                            processExpeditionInfo();
+                            JsonArray portdeckdata = reqPortApiData.getAsJsonArray("api_deck_port");
+                            KcaMoraleInfo.setDeckCount(portdeckdata.size());
+                            for (int i = 0; i < portdeckdata.size(); i++) {
+                                boolean result = KcaMoraleInfo.setMoraleValue(i, deckInfoCalc.checkMinimumMorale(portdeckdata, i), isInBattle, false);
+                                if (result) processMoraleInfo(i, portdeckdata);
+                            }
+                            updateFleetView();
                         }
                     }
                     updateFleetView();
@@ -1111,6 +1103,54 @@ public class KcaService extends Service {
                         JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                         KcaApiData.updateSuppliedUserShip(api_data.getAsJsonArray("api_ship"));
                     }
+                }
+
+                if (url.startsWith(API_GET_MEMBER_NDOCK)) {
+                    if (jsonDataObj.has("api_data")) {
+                        JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
+                        processDockingInfo(api_data);
+                    }
+                    updateFleetView();
+                }
+
+                if (url.startsWith(API_REQ_NYUKYO_SPEEDCHAGNE)) {
+                    int ndock_id = -1;
+                    String[] requestData = request.split("&");
+                    for (int i = 0; i < requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if (decodedData.startsWith("api_ndock_id")) {
+                            ndock_id = Integer.valueOf(decodedData.replace("api_ndock_id=", "")) - 1;
+                            break;
+                        }
+                    }
+                    if (ndock_id != -1) processDockingSpeedup(ndock_id);
+                    updateFleetView();
+                }
+
+                if (url.startsWith(API_REQ_NYUKYO_START)) {
+                    questTracker.updateIdCountTracker("503");
+                    updateQuestView();
+
+                    int ship_id = -1;
+                    int highspeed = -1;
+                    String[] requestData = request.split("&");
+                    for (int i = 0; i < requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if (decodedData.startsWith("api_ship_id")) {
+                            ship_id = Integer.valueOf(decodedData.replace("api_ship_id=", ""));
+                        } else if (decodedData.startsWith("api_highspeed")) {
+                            highspeed = Integer.valueOf(decodedData.replace("api_highspeed=", ""));
+                        }
+                    }
+                    KcaApiData.updateShipMorale(ship_id);
+                    JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+                    int check_in_deck = deckInfoCalc.checkShipInDeck(portdeckdata, ship_id);
+                    if (check_in_deck != -1) {
+                        boolean result = setMoraleValue(check_in_deck, deckInfoCalc.checkMinimumMorale(portdeckdata, check_in_deck), false, false);
+                        if (result) processMoraleInfo(check_in_deck, portdeckdata);
+                    }
+                    if (highspeed > 0) KcaApiData.updateShipHpFull(ship_id);
+                    updateFleetView();
                 }
 
                 if (url.startsWith(API_REQ_AIR_CORPS_SETPLANE)) {
@@ -1519,6 +1559,7 @@ public class KcaService extends Service {
                         int deckIdx = -1;
                         int shipIdx = -1;
                         int shipId = -3;
+                        boolean in_change = false;
 
                         for (int i = 0; i < requestData.length; i++) {
                             String decodedData = URLDecoder.decode(requestData[i], "utf-8");
@@ -1536,10 +1577,12 @@ public class KcaService extends Service {
                             JsonArray targetDeckIdxShipIdata = targetDeckIdxData.get("api_ship").getAsJsonArray();
 
                             if (shipId == -2) {
+                                in_change = true;
                                 for (int i = 1; i < 6; i++) {
                                     targetDeckIdxShipIdata.set(i, new JsonPrimitive(-1));
                                 }
                             } else if (shipId == -1) { // remove ship
+                                in_change = true;
                                 targetDeckIdxShipIdata.remove(shipIdx);
                                 targetDeckIdxShipIdata.add(new JsonPrimitive(-1));
                             } else { // add ship
@@ -1574,6 +1617,11 @@ public class KcaService extends Service {
                             targetDeckIdxData.add("api_ship", targetDeckIdxShipIdata);
                             portdeckdata.set(deckIdx, targetDeckIdxData);
                             dbHelper.putValue(DB_KEY_DECKPORT, portdeckdata.toString());
+
+                            for (int i = 0; i < portdeckdata.size(); i++) {
+                                boolean result = setMoraleValue(i, deckInfoCalc.checkMinimumMorale(portdeckdata, i), false, in_change);
+                                if (result) processMoraleInfo(i, portdeckdata);
+                            }
                         }
                         updateFleetView();
                     }
@@ -1590,10 +1638,22 @@ public class KcaService extends Service {
                         }
                         if (deckIdx != -1) {
                             if (jsonDataObj.has("api_data")) {
+                                boolean is_same = true;
                                 JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+                                JsonArray before_ship_list = portdeckdata.get(deckIdx).getAsJsonObject().getAsJsonArray("api_ship");
+
                                 JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                                JsonArray after_ship_list = api_data.getAsJsonArray("api_ship");
+                                for (int i = 0; i < after_ship_list.size(); i++) {
+                                    if (!before_ship_list.contains(after_ship_list.get(i))) {
+                                        is_same = false;
+                                        break;
+                                    }
+                                }
                                 portdeckdata.set(deckIdx, api_data);
                                 dbHelper.putValue(DB_KEY_DECKPORT, portdeckdata.toString());
+                                boolean result = setMoraleValue(deckIdx, deckInfoCalc.checkMinimumMorale(portdeckdata, deckIdx), false, is_same);
+                                if (result) processMoraleInfo(deckIdx, portdeckdata);
                             }
                         }
                         updateFleetView();
@@ -1611,12 +1671,29 @@ public class KcaService extends Service {
                         updateFleetView();
                     }
 
+                    if (url.startsWith(API_REQ_MEMBER_ITEMUSE_COND)) {
+                        String[] requestData = request.split("&");
+                        int deckIdx = -1;
+                        for (int i = 0; i < requestData.length; i++) {
+                            String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                            if (decodedData.startsWith("api_deck_id=")) {
+                                deckIdx = Integer.valueOf(decodedData.replace("api_deck_id=", "")) - 1;
+                                break;
+                            }
+                        }
+                        KcaMoraleInfo.setItemUseDeck(deckIdx);
+                    }
+
                     if (url.startsWith(API_GET_MEMBER_SHIP2)) {
                         if (jsonDataObj.has("api_data")) {
                             JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
                             JsonArray api_data_deck = jsonDataObj.getAsJsonArray("api_data_deck");
                             KcaApiData.updateUserShipData(api_data);
                             dbHelper.putValue(DB_KEY_DECKPORT, api_data_deck.toString());
+
+                            int itemuse_deck = KcaMoraleInfo.getItemUseDeckAndReset();
+                            boolean result = setMoraleValue(itemuse_deck, deckInfoCalc.checkMinimumMorale(api_data_deck, itemuse_deck), false, false);
+                            if (result) processMoraleInfo(itemuse_deck, api_data_deck);
                         }
                         updateFleetView();
                     }
@@ -2147,7 +2224,6 @@ public class KcaService extends Service {
                 setExpeditionAlarm(i, mission_no, deck_name, arrive_time, false, false, aIntent);
             }
         }
-
     }
 
     private void cancelExpeditionInfo(JsonObject data) {
@@ -2180,7 +2256,6 @@ public class KcaService extends Service {
             if (state != -1) {
                 dockId = ndockData.get("api_id").getAsInt() - 1;
                 shipId = ndockData.get("api_ship_id").getAsInt();
-                KcaApiData.updateShipMorale(shipId);
                 completeTime = ndockData.get("api_complete_time").getAsLong();
                 Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
                 if (KcaDocking.getCompleteTime(dockId) != -1) {
@@ -2222,6 +2297,27 @@ public class KcaService extends Service {
         alarmManager.cancel(pendingIntent);
     }
 
+    private void processMoraleInfo(int idx, JsonArray deckportdata) {
+        JsonObject deck = (JsonObject) deckportdata.get(idx);
+        String deck_name = deck.get("api_name").getAsString();
+        long morale_time = KcaMoraleInfo.getMoraleCompleteTime(idx);
+        Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
+        int nid = getNotificationId(NOTI_MORALE, idx);
+        notifiManager.cancel(nid);
+        if (morale_time < 0) {
+            PendingIntent pendingIntent = PendingIntent.getService(
+                    getApplicationContext(),
+                    nid,
+                    new Intent(getApplicationContext(), KcaAlarmService.class),
+                    PendingIntent.FLAG_UPDATE_CURRENT
+            );
+            pendingIntent.cancel();
+            alarmManager.cancel(pendingIntent);
+        } else {
+            setMoraleAlarm(idx, deck_name, morale_time, aIntent);
+        }
+    }
+
     public static boolean isJSONValid(String jsonInString) {
         Gson gson = new Gson();
         try {
@@ -2244,10 +2340,10 @@ public class KcaService extends Service {
         }
     }
 
-    private void setAlarm(long time, PendingIntent alarmIntent, int code) {
+    private void setAlarm(long time, PendingIntent alarmIntent, int code, boolean delay) {
         if (time == -1) {
             time = System.currentTimeMillis();
-        } else {
+        } else if (delay) {
             time = time - KcaAlarmService.ALARM_DELAY;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

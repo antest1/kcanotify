@@ -35,10 +35,12 @@ import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_NOTICOUNT_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
 import static com.antest1.kcanotify.KcaConstants.NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
+import static com.antest1.kcanotify.KcaConstants.NOTI_MORALE;
 import static com.antest1.kcanotify.KcaConstants.NOTI_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_MORALE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_NOTIFYATSVCOFF;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
@@ -54,11 +56,12 @@ public class KcaAlarmService extends Service {
     public static final int TYPE_EXPEDITION = 1;
     public static final int TYPE_DOCKING = 2;
     public static final int TYPE_UPDATE = 3;
+    public static final int TYPE_MORALE = 4;
 
     public static final String ALARM_CHANNEL_ID = "noti_alarm_channel";
     public static final String ALARM_CHANNEL_NAME = "Kcanotify Notification";
 
-    public static final int EXP_CANCEL_FLAG = 8;
+    public static final int EXP_CANCEL_FLAG = 32;
     public static final long ALARM_DELAY = 61000;
     public static Set<Integer> alarm_set = new HashSet<>();
 
@@ -70,7 +73,7 @@ public class KcaAlarmService extends Service {
     AudioManager mAudioManager;
     KcaDBHelper dbHelper;
     NotificationManager notificationManager;
-    Bitmap expBitmap, dockBitmap = null;
+    Bitmap expBitmap, dockBitmap, moraleBitmap = null;
     public static Handler sHandler = null;
     Bundle bundle;
     Message sMsg;
@@ -81,6 +84,10 @@ public class KcaAlarmService extends Service {
 
     private boolean isDockAlarmEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_DOCK);
+    }
+
+    private boolean isMoraleAlarmEnabled() {
+        return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_MORALE);
     }
 
     public String getStringWithLocale(int id) {
@@ -105,6 +112,7 @@ public class KcaAlarmService extends Service {
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
         dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
+        moraleBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.morale_notify_bigicon)).getBitmap();
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         super.onCreate();
     }
@@ -181,6 +189,14 @@ public class KcaAlarmService extends Service {
                             notificationManager.notify(nid, createDockingNotification(dockId, shipName, nid));
                             alarm_set.add(nid);
                         }
+                    } else if (type == TYPE_MORALE) {
+                        int idx = data.get("idx").getAsInt();
+                        if(isMoraleAlarmEnabled()) {
+                            int nid = getNotificationId(NOTI_MORALE, idx);
+                            String kantai_name = data.get("kantai_name").getAsString();
+                            notificationManager.notify(nid, createMoraleNotification(idx, kantai_name, nid));
+                            alarm_set.add(nid);
+                        }
                     }
                 }
             }
@@ -206,6 +222,10 @@ public class KcaAlarmService extends Service {
         if (dockBitmap != null) {
             dockBitmap.recycle();
             dockBitmap = null;
+        }
+        if (moraleBitmap != null) {
+            moraleBitmap.recycle();
+            moraleBitmap = null;
         }
         super.onDestroy();
     }
@@ -240,7 +260,6 @@ public class KcaAlarmService extends Service {
 
         }
 
-
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.expedition_notify_icon)
                 .setLargeIcon(expBitmap)
@@ -251,32 +270,7 @@ public class KcaAlarmService extends Service {
                 .setDeleteIntent(deletePendingIntent)
                 .setContentIntent(contentPendingIntent);
 
-        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-        if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
-            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                if (soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
-                    builder.setDefaults(Notification.DEFAULT_VIBRATE);
-                }
-                Uri content_uri = getContentUri(getApplicationContext(),
-                        Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
-                builder.setSound(content_uri);
-            } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
-                builder.setDefaults(Notification.DEFAULT_VIBRATE);
-            } else {
-                builder.setDefaults(0);
-            }
-        }
-        if (soundKind.equals(getString(R.string.sound_kind_value_vibrate))) {
-            if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-                builder.setDefaults(Notification.DEFAULT_VIBRATE);
-            } else {
-                builder.setDefaults(0);
-            }
-        }
-        if (soundKind.equals(getString(R.string.sound_kind_value_mute))) {
-            builder.setDefaults(0);
-        }
-
+        builder = setSoundSetting(builder);
         Notification Notifi = builder.build();
         Notifi.flags = Notification.FLAG_AUTO_CANCEL;
 
@@ -313,32 +307,8 @@ public class KcaAlarmService extends Service {
                 .setTicker(title)
                 .setDeleteIntent(deletePendingIntent)
                 .setContentIntent(contentPendingIntent);
-        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-        if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
-            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                if (soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
-                    builder.setDefaults(Notification.DEFAULT_VIBRATE);
-                }
-                Uri content_uri = getContentUri(getApplicationContext(),
-                        Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
-                builder.setSound(content_uri);
-            } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
-                builder.setDefaults(Notification.DEFAULT_VIBRATE);
-            } else {
-                builder.setDefaults(0);
-            }
-        }
-        if (soundKind.equals(getString(R.string.sound_kind_value_vibrate))) {
-            if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-                builder.setDefaults(Notification.DEFAULT_VIBRATE);
-            } else {
-                builder.setDefaults(0);
-            }
-        }
-        if (soundKind.equals(getString(R.string.sound_kind_value_mute))) {
-            builder.setDefaults(0);
-        }
 
+        builder = setSoundSetting(builder);
         Notification Notifi = builder.build();
         Notifi.flags = Notification.FLAG_AUTO_CANCEL;
 
@@ -350,6 +320,39 @@ public class KcaAlarmService extends Service {
             sMsg.setData(bundle);
             sHandler.sendMessage(sMsg);
             // send Handler to setFrontView
+        }
+        return Notifi;
+    }
+
+    private Notification createMoraleNotification(int idx, String kantaiName, int nid) {
+        PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
+                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
+                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+        String title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_morale_recovered), idx + 1);
+        String content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_morale_recovered), kantaiName);
+
+        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)
+                .setSmallIcon(R.mipmap.morale_notify_icon)
+                .setLargeIcon(moraleBitmap)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setAutoCancel(false)
+                .setTicker(title)
+                .setDeleteIntent(deletePendingIntent)
+                .setContentIntent(contentPendingIntent);
+
+        builder = setSoundSetting(builder);
+        Notification Notifi = builder.build();
+        Notifi.flags = Notification.FLAG_AUTO_CANCEL;
+
+        if (sHandler != null) {
+            bundle = new Bundle();
+            bundle.putString("url", KCA_API_UPDATE_FRONTVIEW);
+            bundle.putString("data", "");
+            sMsg = sHandler.obtainMessage();
+            sMsg.setData(bundle);
+            sHandler.sendMessage(sMsg);
         }
         return Notifi;
     }
@@ -383,6 +386,13 @@ public class KcaAlarmService extends Service {
                 .setDeleteIntent(deletePendingIntent)
                 .setContentIntent(contentPendingIntent);
 
+        builder = setSoundSetting(builder);
+        Notification Notifi = builder.build();
+        Notifi.flags = Notification.FLAG_AUTO_CANCEL;
+        return Notifi;
+    }
+
+    private NotificationCompat.Builder setSoundSetting(NotificationCompat.Builder builder) {
         String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
         if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
             if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
@@ -408,10 +418,7 @@ public class KcaAlarmService extends Service {
         if (soundKind.equals(getString(R.string.sound_kind_value_mute))) {
             builder.setDefaults(0);
         }
-
-        Notification Notifi = builder.build();
-        Notifi.flags = Notification.FLAG_AUTO_CANCEL;
-        return Notifi;
+        return builder;
     }
 
     @Override
