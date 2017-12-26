@@ -33,6 +33,7 @@ import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_NOTICOUNT_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
+import static com.antest1.kcanotify.KcaConstants.NOTI_AKASHI;
 import static com.antest1.kcanotify.KcaConstants.NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.NOTI_MORALE;
@@ -200,7 +201,7 @@ public class KcaAlarmService extends Service {
                             alarm_set.add(nid);
                         }
                     } else if (type == TYPE_AKASHI) {
-                        int nid = getNotificationId(NOTI_MORALE, 0);
+                        int nid = getNotificationId(NOTI_AKASHI, 0);
                         notificationManager.notify(nid, createAkashiRepairNotification(nid));
                         alarm_set.add(nid);
                     }

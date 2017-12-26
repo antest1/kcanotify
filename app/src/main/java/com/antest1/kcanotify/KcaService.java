@@ -537,6 +537,20 @@ public class KcaService extends Service {
         setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_DOCK, deckId), false);
     }
 
+    private void setAkashiAlarm(Intent aIntent) {
+        JsonObject akashiAlarmData = new JsonObject();
+        akashiAlarmData.addProperty("type", KcaAlarmService.TYPE_AKASHI);
+        aIntent.putExtra("data", akashiAlarmData.toString());
+        PendingIntent pendingIntent = PendingIntent.getService(
+                getApplicationContext(),
+                getNotificationId(NOTI_AKASHI, 0),
+                aIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        setAlarm(-1, pendingIntent, getNotificationId(NOTI_AKASHI, 0), false);
+    }
+
     private void toastInfo() {
         if (KcaFleetCheckPopupService.isActive()) {
             Intent qintent = new Intent(getBaseContext(), KcaFleetCheckPopupService.class);
@@ -868,7 +882,8 @@ public class KcaService extends Service {
                             }
 
                             JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
-                            if ((KcaAkashiRepairInfo.getAkashiTimerValue() < 0 && akashi_flagship_deck.size() > 0) || KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond() >= AKASHI_TIMER_20MIN) {
+                            boolean is_init_state = KcaAkashiRepairInfo.getAkashiTimerValue() < 0;
+                            if ((is_init_state && akashi_flagship_deck.size() > 0) || (!is_init_state && KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond() >= AKASHI_TIMER_20MIN)) {
                                 KcaAkashiRepairInfo.setAkashiTimer();
                                 isAkashiTimerNotiWait = true;
                             }
@@ -2353,6 +2368,13 @@ public class KcaService extends Service {
         } else {
             setMoraleAlarm(idx, deck_name, morale_time, aIntent);
         }
+    }
+
+    private void processAkashiTimerInfo() {
+        int nid = getNotificationId(NOTI_AKASHI, 0);
+        Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
+        notifiManager.cancel(nid);
+        setAkashiAlarm(aIntent);
     }
 
     public static boolean isJSONValid(String jsonInString) {

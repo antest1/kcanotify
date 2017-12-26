@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#433431</color>
     <color name="colorPrimaryDark">#2D1F1C</color>
-    <color name="colorAccent">#5C865E</color>
+    <color name="colorAccent">#5c865e</color>
     <color name="colorActivityBack">#efefef</color>
     <color name="colorActivityText">#5C865E</color>
     <color name="colorToolbarText">#F7EBCE</color>
@@ -111,6 +111,7 @@
     <color name="colorFleetInfoNotGoodStatusBtn">#ae7a00</color>
     <color name="colorFleetInfoExpeditionBtn">#5c6bc0</color>
 
+    <color name="colorFleetSwitchBtn">#9e9d24</color>
     <color name="colorFleetSeekCnBtn">#673ab7</color>
     <color name="colorFleetAkashiTimerBtnActive">#ff4081</color>
     <color name="colorFleetAkashiTimerBtnDeactive">#424242</color>

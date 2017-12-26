@@ -428,6 +428,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="fleetview_title">FleetView</string>
     <string name="fleetview_combined">CF</string>
+    <string name="fleetview_switch_1">Fleet 1</string>
+    <string name="fleetview_switch_2">Fleet 2</string>
     <string name="fleetview_expview" formatted="false">[Now] %.2f / [Today] %.2f</string>
     <string name="fleetview_seekvalue_d" formatted="false">LoS: %d</string>
     <string name="fleetview_seekvalue_f" formatted="false">LoS: %.2f</string>

@@ -362,6 +362,8 @@
 
     <string name="fleetview_title">함대정보</string>
     <string name="fleetview_combined">연합</string>
+    <string name="fleetview_switch_1">제1함대</string>
+    <string name="fleetview_switch_2">제2함대</string>
     <string name="fleetview_expview" formatted="false">[이번] %.2f / [오늘] %.2f</string>
     <string name="fleetview_seekvalue_d" formatted="false">색적: %d</string>
     <string name="fleetview_seekvalue_f" formatted="false">색적: %.2f</string>

@@ -34,6 +34,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static android.R.attr.id;
 import static android.view.View.GONE;
 import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
 import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
@@ -55,6 +56,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
+import static org.apache.commons.lang3.StringUtils.split;
 
 public class KcaFleetViewService extends Service {
     public static final String SHOW_FLEETVIEW_ACTION = "show_fleetview_action";
@@ -67,9 +69,11 @@ public class KcaFleetViewService extends Service {
     public KcaDBHelper helper;
     public KcaDeckInfo deckInfoCalc;
     int seekcn_internal = -1;
+    int switch_status = 1;
     Handler mHandler;
     Runnable timer;
     String fleetCalcInfoText = "";
+    boolean isAkashiTimerActive = false;
     ScheduledExecutorService timeScheduler = null;
 
     static boolean error_flag = false;
@@ -116,18 +120,12 @@ public class KcaFleetViewService extends Service {
     public int setView() {
         try {
             Log.e("KCA-FV", String.valueOf(selected));
-            boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
             float[] exp_score = helper.getExpScore();
 
-            if (is_landscape) {
-                fleetExpView.setText(KcaUtils.format(
-                        getStringWithLocale(R.string.fleetview_expview),
-                        exp_score[0], exp_score[1]));
-                fleetInfoTitle.setVisibility(View.VISIBLE);
-            } else {
-                fleetExpView.setText(makeSimpleExpString(exp_score[0], exp_score[1]));
-                fleetInfoTitle.setVisibility(GONE);
-            }
+            fleetExpView.setText(KcaUtils.format(
+                    getStringWithLocale(R.string.fleetview_expview),
+                    exp_score[0], exp_score[1]));
+            fleetInfoTitle.setVisibility(View.VISIBLE);
             updateSelectedView(selected);
 
             if (seekcn_internal == -1) seekcn_internal = getSeekCn();
@@ -161,6 +159,8 @@ public class KcaFleetViewService extends Service {
         }
         try {
             active = true;
+            switch_status = 1;
+            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
             helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             helper.updateExpScore(0);
@@ -171,36 +171,9 @@ public class KcaFleetViewService extends Service {
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
             //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mInflater = LayoutInflater.from(contextWithLocale);
-            mView = mInflater.inflate(R.layout.view_fleet_list, null);
-            mView.setVisibility(GONE);
-            mView.findViewById(R.id.fleetview_head).setOnTouchListener(mViewTouchListener);
-            mView.findViewById(R.id.fleetview_cn_change).setOnTouchListener(mViewTouchListener);
-            mView.findViewById(R.id.viewbutton_quest).setOnTouchListener(mViewTouchListener);
-            mView.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
-            mView.findViewById(R.id.viewbutton_develop).setOnTouchListener(mViewTouchListener);
-            mView.findViewById(R.id.viewbutton_construction).setOnTouchListener(mViewTouchListener);
-            mView.findViewById(R.id.viewbutton_maphp).setOnTouchListener(mViewTouchListener);
-            mView.findViewById(R.id.viewbutton_fchk).setOnTouchListener(mViewTouchListener);
-            mView.findViewById(R.id.viewbutton_labinfo).setOnTouchListener(mViewTouchListener);
-            mView.findViewById(R.id.viewbutton_excheck).setOnTouchListener(mViewTouchListener);
-            for (int i = 0; i < 5; i++) {
-                mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
-            }
-            for (int i = 0; i < 12; i++) {
-                mView.findViewById(getId("fleetview_item_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
-            }
+            initView();
 
-            ((TextView) mView.findViewById(R.id.viewbutton_quest)).setText(getStringWithLocale(R.string.viewmenu_quest));
-            ((TextView) mView.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
-            fleetInfoLine = mView.findViewById(R.id.fleetview_infoline);
             fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
-            fleetInfoLine.setOnTouchListener(mViewTouchListener);
-
-            fleetInfoTitle = mView.findViewById(R.id.fleetview_title);
-            fleetExpView = mView.findViewById(R.id.fleetview_exp);
-            fleetCnChangeBtn = mView.findViewById(R.id.fleetview_cn_change);
-            fleetAkashiTimerBtn = mView.findViewById(R.id.fleetview_akashi_timer);
-
             itemView = mInflater.inflate(R.layout.view_battleview_items, null);
             mHandler = new Handler();
             timer = new Runnable() {
@@ -211,17 +184,7 @@ public class KcaFleetViewService extends Service {
             };
             runTimer();
 
-            mParams = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    getWindowLayoutType(),
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSLUCENT);
-            mParams.gravity = Gravity.CENTER;
-
-            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             mManager.addView(mView, mParams);
-
             Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
@@ -246,6 +209,57 @@ public class KcaFleetViewService extends Service {
             if (itemView.getParent() != null) mManager.removeViewImmediate(itemView);
         }
         super.onDestroy();
+    }
+
+    private void initView() {
+        mView = mInflater.inflate(R.layout.view_fleet_list, null);
+        mView.setVisibility(GONE);
+        mView.findViewById(R.id.fleetview_head).setOnTouchListener(mViewTouchListener);
+        mView.findViewById(R.id.fleetview_cn_change).setOnTouchListener(mViewTouchListener);
+        mView.findViewById(R.id.fleetview_fleetswitch).setOnTouchListener(mViewTouchListener);
+
+        mView.findViewById(R.id.viewbutton_quest).setOnTouchListener(mViewTouchListener);
+        mView.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
+        mView.findViewById(R.id.viewbutton_develop).setOnTouchListener(mViewTouchListener);
+        mView.findViewById(R.id.viewbutton_construction).setOnTouchListener(mViewTouchListener);
+        mView.findViewById(R.id.viewbutton_maphp).setOnTouchListener(mViewTouchListener);
+        mView.findViewById(R.id.viewbutton_fchk).setOnTouchListener(mViewTouchListener);
+        mView.findViewById(R.id.viewbutton_labinfo).setOnTouchListener(mViewTouchListener);
+        mView.findViewById(R.id.viewbutton_excheck).setOnTouchListener(mViewTouchListener);
+
+        for (int i = 0; i < 5; i++) {
+            mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
+        }
+        for (int i = 0; i < 12; i++) {
+            mView.findViewById(getId("fleetview_item_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
+        }
+
+        ((TextView) mView.findViewById(R.id.viewbutton_quest)).setText(getStringWithLocale(R.string.viewmenu_quest));
+        ((TextView) mView.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
+        ((TextView) mView.findViewById(R.id.viewbutton_develop)).setText(getStringWithLocale(R.string.viewmenu_develop));
+        ((TextView) mView.findViewById(R.id.viewbutton_construction)).setText(getStringWithLocale(R.string.viewmenu_construction));
+        ((TextView) mView.findViewById(R.id.viewbutton_maphp)).setText(getStringWithLocale(R.string.viewmenu_maphp));
+        ((TextView) mView.findViewById(R.id.viewbutton_fchk)).setText(getStringWithLocale(R.string.viewmenu_fchk));
+        ((TextView) mView.findViewById(R.id.viewbutton_labinfo)).setText(getStringWithLocale(R.string.viewmenu_airbase));
+        ((TextView) mView.findViewById(R.id.viewbutton_excheck)).setText(getStringWithLocale(R.string.viewmenu_excheck));
+
+        mParams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                getWindowLayoutType(),
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
+        mParams.gravity = Gravity.CENTER;
+
+
+        fleetInfoLine = mView.findViewById(R.id.fleetview_infoline);
+
+        fleetInfoLine.setOnTouchListener(mViewTouchListener);
+
+        fleetInfoTitle = mView.findViewById(R.id.fleetview_title);
+        fleetExpView = mView.findViewById(R.id.fleetview_exp);
+        fleetCnChangeBtn = mView.findViewById(R.id.fleetview_cn_change);
+        fleetAkashiTimerBtn = mView.findViewById(R.id.fleetview_akashi_timer);
     }
 
     @Override
@@ -369,6 +383,18 @@ public class KcaFleetViewService extends Service {
                             changeInternalSeekCn();
                             fleetCnChangeBtn.setText(getSeekType());
                             processDeckInfo(selected, isCombinedFlag(selected));
+                        } else if (id == mView.findViewById(R.id.fleetview_fleetswitch).getId()) {
+                            if (switch_status == 1) {
+                                switch_status = 2;
+                                mView.findViewById(R.id.fleet_list_main).setVisibility(View.GONE);
+                                mView.findViewById(R.id.fleet_list_combined).setVisibility(View.VISIBLE);
+                                ((TextView) mView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_2));
+                            } else {
+                                switch_status = 1;
+                                mView.findViewById(R.id.fleet_list_main).setVisibility(View.VISIBLE);
+                                mView.findViewById(R.id.fleet_list_combined).setVisibility(View.GONE);
+                                ((TextView) mView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_1));
+                            }
                         } else if (id == mView.findViewById(R.id.viewbutton_quest).getId()) {
                             qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
                             qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
@@ -432,13 +458,14 @@ public class KcaFleetViewService extends Service {
     }
 
     private void processDeckInfo(int idx, boolean isCombined) {
-
+        boolean is_combined = idx == FLEET_COMBINED_ID;
+        boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         JsonArray deckportdata = helper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (!isReady) {
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
             fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
             mView.findViewById(R.id.fleet_list_main).setVisibility(View.INVISIBLE);
-            mView.findViewById(R.id.fleet_list_combined).setVisibility(View.INVISIBLE);
+            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape? View.INVISIBLE : View.GONE);
             return;
         }
 
@@ -448,11 +475,14 @@ public class KcaFleetViewService extends Service {
             return;
         }
 
-        mView.findViewById(R.id.fleet_list_main).setVisibility(View.VISIBLE);
-        if (idx == FLEET_COMBINED_ID) {
-            mView.findViewById(R.id.fleet_list_combined).setVisibility(View.VISIBLE);
+        if(is_combined) {
+            boolean switch_is_one = switch_status == 1;
+            mView.findViewById(R.id.fleetview_fleetswitch).setVisibility(View.VISIBLE);
+            mView.findViewById(R.id.fleet_list_main).setVisibility(switch_is_one ? View.VISIBLE : View.GONE);
+            mView.findViewById(R.id.fleet_list_combined).setVisibility(switch_is_one ? View.GONE : View.VISIBLE);
         } else {
-            mView.findViewById(R.id.fleet_list_combined).setVisibility(View.INVISIBLE);
+            mView.findViewById(R.id.fleet_list_main).setVisibility(View.VISIBLE);
+            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape ? View.INVISIBLE : View.GONE);
         }
 
         for (int i = 1; i <= 12; i++) {
@@ -652,16 +682,7 @@ public class KcaFleetViewService extends Service {
             }
         }
 
-        if (KcaAkashiRepairInfo.getAkashiTimerValue() < 0) {
-            fleetAkashiTimerBtn.setVisibility(View.GONE);
-        } else {
-            if (deckInfoCalc.checkAkashiFlagship(deckportdata).size() > 0) {
-                fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnActive));
-            } else {
-                fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnDeactive));
-            }
-            fleetAkashiTimerBtn.setVisibility(View.VISIBLE);
-        }
+        isAkashiTimerActive = deckInfoCalc.checkAkashiFlagship(deckportdata).size() > 0;
 
         infoList.add("LV ".concat(String.valueOf(sum_level)));
         fleetCalcInfoText = joinStr(infoList, " / ");
@@ -687,6 +708,7 @@ public class KcaFleetViewService extends Service {
     }
 
     public void updateFleetInfoLine(long moraleCompleteTime) {
+        boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         final String displayText;
         if (moraleCompleteTime < -1) {
             if (selected == FLEET_COMBINED_ID) {
@@ -709,8 +731,25 @@ public class KcaFleetViewService extends Service {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                fleetInfoLine.setText(displayText);
-                fleetAkashiTimerBtn.setText(akashi_timer_text);
+                if (displayText.length() > 0) {
+                    if (!displayText.contentEquals(fleetInfoLine.getText())) {
+                        fleetInfoLine.setText(displayText);
+                    }
+                } else {
+                    fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
+                }
+
+                if (KcaAkashiRepairInfo.getAkashiTimerValue() < 0) {
+                    fleetAkashiTimerBtn.setVisibility(View.GONE);
+                } else {
+                    if (isAkashiTimerActive) {
+                        fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnActive));
+                    } else {
+                        fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnDeactive));
+                    }
+                    fleetAkashiTimerBtn.setText(akashi_timer_text);
+                    fleetAkashiTimerBtn.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -933,18 +972,23 @@ public class KcaFleetViewService extends Service {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        boolean is_landscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
-        float[] exp_score = helper.getExpScore();
-
-        if (is_landscape) {
-            fleetExpView.setText(KcaUtils.format(
-                    getStringWithLocale(R.string.fleetview_expview),
-                    exp_score[0], exp_score[1]));
-            fleetInfoTitle.setVisibility(View.VISIBLE);
-        } else {
-            fleetExpView.setText(makeSimpleExpString(exp_score[0], exp_score[1]));
-            fleetInfoTitle.setVisibility(GONE);
-        }
         super.onConfigurationChanged(newConfig);
+        contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+        mInflater = LayoutInflater.from(contextWithLocale);
+        int visibllity = mView.getVisibility();
+        if (mManager != null) {
+            if (mView.getParent() != null) mManager.removeViewImmediate(mView);
+            initView();
+            mManager.addView(mView, mParams);
+
+            int setViewResult = setView();
+            if (setViewResult == 0) {
+                if (mView.getParent() != null) {
+                    mView.invalidate();
+                    mManager.updateViewLayout(mView, mParams);
+                }
+            }
+            mView.setVisibility(visibllity);
+        }
     }
 }
