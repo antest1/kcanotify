@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -33,6 +34,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
 import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
@@ -67,6 +71,10 @@ public class KcaFleetViewService extends Service {
     public KcaDeckInfo deckInfoCalc;
     KcaDeckInfo deckInfoObject;
     int seekcn_internal = -1;
+    Handler mHandler;
+    Runnable timer;
+    String fleetCalcInfoText = "";
+    ScheduledExecutorService timeScheduler = null;
 
     static boolean error_flag = false;
     boolean active;
@@ -136,6 +144,17 @@ public class KcaFleetViewService extends Service {
         }
     }
 
+    void runTimer() {
+        timeScheduler = Executors.newSingleThreadScheduledExecutor();
+        timeScheduler.scheduleAtFixedRate(timer, 0, 1, TimeUnit.SECONDS);
+    }
+
+    void stopTimer() {
+        if (timeScheduler != null) {
+            timeScheduler.shutdown();
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -186,6 +205,14 @@ public class KcaFleetViewService extends Service {
             fleetCnChangeBtn = mView.findViewById(R.id.fleetview_cn_change);
 
             itemView = mInflater.inflate(R.layout.view_battleview_items, null);
+            mHandler = new Handler();
+            timer = new Runnable() {
+                @Override
+                public void run() {
+                    updateFleetInfoLine();
+                }
+            };
+            runTimer();
 
             mParams = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
@@ -214,6 +241,7 @@ public class KcaFleetViewService extends Service {
     @Override
     public void onDestroy() {
         active = false;
+        stopTimer();
         if (mView != null) {
             if (mView.getParent() != null) mManager.removeViewImmediate(mView);
         }
@@ -407,6 +435,7 @@ public class KcaFleetViewService extends Service {
     }
 
     private void processDeckInfo(int idx, boolean isCombined) {
+
         JsonArray data = helper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (!isReady) {
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
@@ -627,23 +656,54 @@ public class KcaFleetViewService extends Service {
         }
 
         infoList.add("LV ".concat(String.valueOf(sum_level)));
-        String fleetCalcInfoText = joinStr(infoList, " / ");
-        long moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(idx);
+        fleetCalcInfoText = joinStr(infoList, " / ");
+        long moraleCompleteTime;
+        if (selected == FLEET_COMBINED_ID) {
+            moraleCompleteTime = Math.max(KcaMoraleInfo.getMoraleCompleteTime(0),
+                    KcaMoraleInfo.getMoraleCompleteTime(1));
+        } else {
+            moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(selected);
+        }
         if (selected < 4 && KcaExpedition2.isInExpedition(selected)) {
-            fleetInfoLine.setText(fleetCalcInfoText);
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpedition));
         } else if (moraleCompleteTime > 0) {
-            Date c_time = new Date(moraleCompleteTime);
-            DateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-            fleetCalcInfoText = f.format(c_time).concat(" | ").concat(fleetCalcInfoText);
-            fleetInfoLine.setText(fleetCalcInfoText);
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNotGoodStatus));
         } else {
-            fleetInfoLine.setText(fleetCalcInfoText);
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNormal));
         }
-
+        updateFleetInfoLine(moraleCompleteTime);
     }
+
+    public void updateFleetInfoLine() {
+        updateFleetInfoLine(-2);
+    }
+
+    public void updateFleetInfoLine(long moraleCompleteTime) {
+        final String displayText;
+        if (moraleCompleteTime < -1) {
+            if (selected == FLEET_COMBINED_ID) {
+                moraleCompleteTime = Math.max(KcaMoraleInfo.getMoraleCompleteTime(0),
+                        KcaMoraleInfo.getMoraleCompleteTime(1));
+            } else {
+                moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(selected);
+            }
+        }
+        if (moraleCompleteTime > 0) {
+            int diff = Math.max(0, (int)(moraleCompleteTime - System.currentTimeMillis()) / 1000);
+            String moraleTimeText = KcaUtils.getTimeStr(diff);
+            displayText = moraleTimeText.concat(" | ").concat(fleetCalcInfoText);
+        } else {
+            displayText = fleetCalcInfoText;
+        }
+
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                fleetInfoLine.setText(displayText);
+            }
+        });
+    }
+
 
     public void setItemViewLayout(JsonObject data) {
         Log.e("KCA", data.toString());
