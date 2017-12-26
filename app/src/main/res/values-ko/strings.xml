@@ -113,6 +113,8 @@
 
     <string name="kca_noti_title_morale_recovered" formatted="false">제%d함대 피로도 회복</string>
     <string name="kca_noti_content_morale_recovered" formatted="false">&lt;%s&gt; 내의 전 칸무스의 피로도가 회복되었습니다.</string>
+    <string name="kca_noti_title_akashirepair_recovered">박지수리 개시</string>
+    <string name="kca_noti_content_akashirepair_recovered">함대의 수리가 시작되었습니다.</string>
 
     <string name="kca_toast_airpower" formatted="false">제공: %d-%d</string>
     <string name="kca_toast_seekvalue_d" formatted="false">색적(%s): %d</string>
@@ -176,6 +178,8 @@
     <string name="setting_menu_noti_title_morale">피로도 회복 알림</string>
     <string name="setting_menu_noti_desc_morale">함대의 피로도 회복 시 상단 알림 설정</string>
     <string name="setting_menu_noti_title_morale_min">최소 피로도</string>
+    <string name="setting_menu_noti_title_akashirepair">박지수리 알림 (아카시 타이머)</string>
+    <string name="setting_menu_noti_desc_akashirepair">박지수리 시작 시(20분) 상단 알림 설정</string>
     <string name="setting_menu_noti_title_hdmg_vib">대파 알림</string>
     <string name="setting_menu_noti_desc_hdmg_vib">대파 발생 시 소리/진동 알림 여부 설정 (토스트는 항상 활성)</string>
     <string name="setting_menu_noti_title_nspl_vib">보급 미완료 알림</string>

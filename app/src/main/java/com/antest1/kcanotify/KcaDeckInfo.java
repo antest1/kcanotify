@@ -16,6 +16,7 @@ import java.util.List;
 
 import static android.R.attr.mode;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.*;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.LAB_STATUS_DEFENSE;
@@ -705,6 +706,20 @@ public class KcaDeckInfo {
             }
         }
         return min_cond_value;
+    }
+
+    public JsonArray checkAkashiFlagship(JsonArray deckPortData) {
+        JsonArray deck_id_list = new JsonArray();
+        for (int i = 0; i < deckPortData.size(); i++) {
+            JsonArray deckShipIdList = deckPortData.get(i).getAsJsonObject().getAsJsonArray("api_ship");
+            int flagship = deckShipIdList.get(0).getAsInt();
+            if (flagship != -1) {
+                JsonObject shipData = getUserShipDataById(flagship, "ship_id");
+                int kc_ship_id = shipData.get("ship_id").getAsInt();
+                if (kc_ship_id == 182 || kc_ship_id == 187) deck_id_list.add(i);
+            }
+        }
+        return deck_id_list;
     }
 
     // Reference: http://kancolle.wikia.com/wiki/Land_Base_Aerial_Support#Fighter_Power_Calculations

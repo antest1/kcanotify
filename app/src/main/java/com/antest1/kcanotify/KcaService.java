@@ -60,7 +60,9 @@ import static android.R.attr.port;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_HIGH;
 import static android.widget.Toast.makeText;
+import static com.antest1.kcanotify.KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
+import static com.antest1.kcanotify.KcaApiData.AKASHI_TIMER_20MIN;
 import static com.antest1.kcanotify.KcaApiData.T2_FIGHTER;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
@@ -111,6 +113,7 @@ public class KcaService extends Service {
     public static boolean isServiceOn = false;
     public static boolean isPortAccessed = false;
     public static boolean isUserItemDataLoaded = false;
+    public static boolean isAkashiTimerNotiWait = true;
     public static int heavyDamagedMode = 0;
     public static int checkKdockId = -1;
     public static boolean kaisouProcessFlag = false;
@@ -135,13 +138,13 @@ public class KcaService extends Service {
     public static boolean noti_vibr_on = true;
     int viewBitmapId, viewBitmapSmallId;
     Bitmap viewBitmap = null;
-    Runnable missionTimer;
+    Runnable timer;
     int notificationTimeCounter;
 
     kcaServiceHandler handler;
     kcaNotificationHandler nHandler;
     LocalBroadcastManager broadcaster;
-    ScheduledExecutorService missionTimeScheduler = null;
+    ScheduledExecutorService timeScheduler = null;
 
     String kcaFirstDeckInfo;
     static String kca_version;
@@ -179,17 +182,17 @@ public class KcaService extends Service {
     }
 
     void runTimer() {
-        if (isMissionTimerViewEnabled()) {
-            missionTimeScheduler = Executors.newSingleThreadScheduledExecutor();
-            missionTimeScheduler.scheduleAtFixedRate(missionTimer, 0, 1, TimeUnit.SECONDS);
-        } else {
-            missionTimeScheduler = null;
+        if (timeScheduler == null || timeScheduler.isShutdown()) {
+            if (isMissionTimerViewEnabled() || isAkashiTimerNotiEnabled()) {
+                timeScheduler = Executors.newSingleThreadScheduledExecutor();
+                timeScheduler.scheduleAtFixedRate(timer, 0, 1, TimeUnit.SECONDS);
+            }
         }
     }
 
     void stopTimer() {
-        if (missionTimeScheduler != null) {
-            missionTimeScheduler.shutdown();
+        if (timeScheduler != null) {
+            timeScheduler.shutdown();
         }
     }
 
@@ -266,15 +269,22 @@ public class KcaService extends Service {
         KcaFairySelectActivity.setHandler(nHandler);
 
         notificationTimeCounter = -1;
-        missionTimer = new Runnable() {
+        timer = new Runnable() {
             @Override
             public void run() {
-                if (viewNotificationBuilder != null && isMissionTimerViewEnabled()) {
+                if (isMissionTimerViewEnabled() && viewNotificationBuilder != null) {
                     notificationTimeCounter += 1;
                     if (notificationTimeCounter == 120) {
                         notificationTimeCounter = 0;
                     }
                     updateExpViewNotification();
+                }
+                if (isMissionTimerViewEnabled() && KcaAkashiRepairInfo.getAkashiTimerValue() > 0) {
+                    int second = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
+                    if (second >= AKASHI_TIMER_20MIN && isAkashiTimerNotiWait) {
+
+                        isAkashiTimerNotiWait = false;
+                    }
                 }
             }
         };
@@ -577,6 +587,7 @@ public class KcaService extends Service {
                 isInBattle = false;
                 api_start2_init = false;
                 api_start2_loading_flag = true;
+                KcaAkashiRepairInfo.initAkashiTimer();
                 KcaFleetViewService.setReadyFlag(false);
                 //Toast.makeText(contextWithLocale, "KCA_VERSION", Toast.LENGTH_LONG).show();
                 JsonObject api_version = jsonDataObj.get("api").getAsJsonObject();
@@ -855,9 +866,16 @@ public class KcaService extends Service {
                                 boolean result = KcaMoraleInfo.setMoraleValue(i, deckInfoCalc.checkMinimumMorale(portdeckdata, i), isInBattle, false);
                                 if (result) processMoraleInfo(i, portdeckdata);
                             }
+
+                            JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
+                            if ((KcaAkashiRepairInfo.getAkashiTimerValue() < 0 && akashi_flagship_deck.size() > 0) || KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond() >= AKASHI_TIMER_20MIN) {
+                                KcaAkashiRepairInfo.setAkashiTimer();
+                                isAkashiTimerNotiWait = true;
+                            }
                             updateFleetView();
                         }
                     }
+                    runTimer();
                     updateFleetView();
                     isInBattle = false;
                 }
@@ -1559,8 +1577,11 @@ public class KcaService extends Service {
                         int deckIdx = -1;
                         int shipIdx = -1;
                         int shipId = -3;
-                        boolean in_change = false;
 
+                        int originalDeckIdx = -1;
+                        int originalShipIdx = -1;
+
+                        boolean in_change = false;
                         for (int i = 0; i < requestData.length; i++) {
                             String decodedData = URLDecoder.decode(requestData[i], "utf-8");
                             if (decodedData.startsWith("api_ship_idx=")) {
@@ -1586,8 +1607,6 @@ public class KcaService extends Service {
                                 targetDeckIdxShipIdata.remove(shipIdx);
                                 targetDeckIdxShipIdata.add(new JsonPrimitive(-1));
                             } else { // add ship
-                                int originalDeckIdx = -1;
-                                int originalShipIdx = -1;
                                 // check whether target ship is in deck
                                 for (int i = 0; i < portdeckdata.size(); i++) {
                                     JsonArray deckData = portdeckdata.get(i).getAsJsonObject().get("api_ship").getAsJsonArray();
@@ -1621,6 +1640,20 @@ public class KcaService extends Service {
                             for (int i = 0; i < portdeckdata.size(); i++) {
                                 boolean result = setMoraleValue(i, deckInfoCalc.checkMinimumMorale(portdeckdata, i), false, in_change);
                                 if (result) processMoraleInfo(i, portdeckdata);
+                            }
+                            JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
+                            boolean akashi_nochange_flag = akashi_flagship_deck.size() == 0;
+                            for (int i = 0; i < akashi_flagship_deck.size(); i++) {
+                                int deckid = akashi_flagship_deck.get(i).getAsInt();
+                                if (deckid == deckIdx || deckid == originalDeckIdx) {
+                                    akashi_nochange_flag = false;
+                                    break;
+                                }
+                            }
+
+                            if (!akashi_nochange_flag) {
+                                KcaAkashiRepairInfo.setAkashiTimer();
+                                isAkashiTimerNotiWait = true;
                             }
                         }
                         updateFleetView();
@@ -2070,11 +2103,11 @@ public class KcaService extends Service {
 
             if (url.startsWith(KCA_API_PREF_EXPVIEW_CHANGED)) {
                 if (isMissionTimerViewEnabled()) {
-                    missionTimeScheduler = Executors.newSingleThreadScheduledExecutor();
-                    missionTimeScheduler.scheduleAtFixedRate(missionTimer, 0, 1, TimeUnit.SECONDS);
+                    timeScheduler = Executors.newSingleThreadScheduledExecutor();
+                    timeScheduler.scheduleAtFixedRate(timer, 0, 1, TimeUnit.SECONDS);
                 } else {
-                    if (missionTimeScheduler != null) missionTimeScheduler.shutdown();
-                    missionTimeScheduler = null;
+                    if (timeScheduler != null) timeScheduler.shutdown();
+                    timeScheduler = null;
                 }
             }
 
@@ -2134,6 +2167,10 @@ public class KcaService extends Service {
 
     private boolean isMissionTimerViewEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_EXP_VIEW);
+    }
+
+    private boolean isAkashiTimerNotiEnabled() {
+        return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_AKASHI);
     }
 
     private boolean getPriority() {

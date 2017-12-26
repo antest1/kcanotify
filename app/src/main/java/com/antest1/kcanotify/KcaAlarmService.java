@@ -57,6 +57,7 @@ public class KcaAlarmService extends Service {
     public static final int TYPE_DOCKING = 2;
     public static final int TYPE_UPDATE = 3;
     public static final int TYPE_MORALE = 4;
+    public static final int TYPE_AKASHI = 5;
 
     public static final String ALARM_CHANNEL_ID = "noti_alarm_channel";
     public static final String ALARM_CHANNEL_NAME = "Kcanotify Notification";
@@ -73,7 +74,7 @@ public class KcaAlarmService extends Service {
     AudioManager mAudioManager;
     KcaDBHelper dbHelper;
     NotificationManager notificationManager;
-    Bitmap expBitmap, dockBitmap, moraleBitmap = null;
+    Bitmap expBitmap, dockBitmap, moraleBitmap, akashiRepairBitmap = null;
     public static Handler sHandler = null;
     Bundle bundle;
     Message sMsg;
@@ -113,6 +114,7 @@ public class KcaAlarmService extends Service {
         expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
         dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
         moraleBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.morale_notify_bigicon)).getBitmap();
+        akashiRepairBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_akashi_notify_bigicon)).getBitmap();
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         super.onCreate();
     }
@@ -197,6 +199,10 @@ public class KcaAlarmService extends Service {
                             notificationManager.notify(nid, createMoraleNotification(idx, kantai_name, nid));
                             alarm_set.add(nid);
                         }
+                    } else if (type == TYPE_AKASHI) {
+                        int nid = getNotificationId(NOTI_MORALE, 0);
+                        notificationManager.notify(nid, createAkashiRepairNotification(nid));
+                        alarm_set.add(nid);
                     }
                 }
             }
@@ -335,6 +341,39 @@ public class KcaAlarmService extends Service {
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.morale_notify_icon)
                 .setLargeIcon(moraleBitmap)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setAutoCancel(false)
+                .setTicker(title)
+                .setDeleteIntent(deletePendingIntent)
+                .setContentIntent(contentPendingIntent);
+
+        builder = setSoundSetting(builder);
+        Notification Notifi = builder.build();
+        Notifi.flags = Notification.FLAG_AUTO_CANCEL;
+
+        if (sHandler != null) {
+            bundle = new Bundle();
+            bundle.putString("url", KCA_API_UPDATE_FRONTVIEW);
+            bundle.putString("data", "");
+            sMsg = sHandler.obtainMessage();
+            sMsg.setData(bundle);
+            sHandler.sendMessage(sMsg);
+        }
+        return Notifi;
+    }
+
+    private Notification createAkashiRepairNotification(int nid) {
+        PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
+                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
+                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+        String title = getStringWithLocale(R.string.kca_noti_title_akashirepair_recovered);
+        String content = getStringWithLocale(R.string.kca_noti_content_akashirepair_recovered);
+
+        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)
+                .setSmallIcon(R.mipmap.docking_notify_icon)
+                .setLargeIcon(akashiRepairBitmap)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setAutoCancel(false)

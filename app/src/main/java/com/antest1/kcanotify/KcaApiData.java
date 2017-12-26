@@ -178,6 +178,8 @@ public class KcaApiData {
     public static final int SPEED_MIXED_FAST = 101;
     public static final int SPEED_MIXED_FASTPLUS = 102;
 
+    public static final int AKASHI_TIMER_20MIN = 1200;
+
     public static void setHandler(Handler h) {
         sHandler = h;
     }

@@ -158,7 +158,6 @@ public final class KcaConstants {
     public static final String API_REQ_COMBINED_BATTLE_MIDNIGHT_SP = "/api_req_combined_battle/sp_midnight";
     public static final String API_REQ_COMBINED_BATTLE_MIDNIGHT_EC = "/api_req_combined_battle/ec_midnight_battle"; // 단대연 야전
 
-
     public static final String API_REQ_COMBINED_BATTLERESULT = "/api_req_combined_battle/battleresult";
     public static final String API_REQ_COMBINED_GOBACKPORT = "/api_req_combined_battle/goback_port"; // 연합 퇴피
 
@@ -271,6 +270,7 @@ public final class KcaConstants {
     public static final int NOTI_DOCK = 2;
     public static final int NOTI_UPDATE = 3;
     public static final int NOTI_MORALE = 4;
+    public static final int NOTI_AKASHI = 5;
 
     public static final int FRONT_NONE = 0;
     public static final int FRONT_EXP_SET = 2;
@@ -384,6 +384,7 @@ public final class KcaConstants {
     public static final String PREF_UPDATE_SERVER = "check_update_server";
     public static final String PREF_KCA_NOTI_MORALE = "notify_morale";
     public static final String PREF_KCA_MORALE_MIN = "morale_min";
+    public static final String PREF_KCA_NOTI_AKASHI = "notify_akashi";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -420,7 +421,8 @@ public final class KcaConstants {
             PREF_KCA_NOTI_QUEST_FAIRY_GLOW,
             PREF_UPDATE_SERVER,
             PREF_KCA_NOTI_MORALE,
-            PREF_KCA_MORALE_MIN
+            PREF_KCA_MORALE_MIN,
+            PREF_KCA_NOTI_AKASHI
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
@@ -441,7 +443,8 @@ public final class KcaConstants {
             PREF_FAIRY_NOTI_LONGCLICK,
             PREF_FAIRY_AUTOHIDE,
             PREF_KCA_NOTI_QUEST_FAIRY_GLOW,
-            PREF_KCA_NOTI_MORALE
+            PREF_KCA_NOTI_MORALE,
+            PREF_KCA_NOTI_AKASHI
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

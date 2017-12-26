@@ -207,6 +207,24 @@
                             android:textSize="14dp" />
 
                         <TextView
+                            android:id="@+id/fleetview_akashi_timer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginStart="5dp"
+                            android:background="@color/colorFleetAkashiTimerBtnActive"
+                            android:ellipsize="marquee"
+                            android:maxLines="1"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="true"
+                            android:text="00:15:23"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <TextView
                             android:id="@+id/fleetview_cn_change"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
