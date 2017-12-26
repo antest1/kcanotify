@@ -1,8 +1,7 @@
 # 시제 깡들리티 (kcanotify)
 
 <img src="https://upload.cc/i/bwxouv.png" width=250/>
-안드로이드용 칸코레를 위한 뷰어 어플리케이션  
-Viewer Application for KanColle Android  
+안드로이드용 칸코레를 위한 뷰어 어플리케이션 / Viewer Application for KanColle Android
 
 About Project
 -------
