@@ -56,6 +56,7 @@ import static com.antest1.kcanotify.KcaApiData.getUseitemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
+import static com.antest1.kcanotify.KcaApiData.kcShipData;
 import static com.antest1.kcanotify.KcaBattle.deckportdata;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaFleetViewService.SHOW_FLEETVIEW_ACTION;
@@ -156,6 +157,12 @@ public class KcaBattleViewService extends Service {
     private static String makeLvString(int level) {
         return KcaUtils.format("Lv %d", level);
     }
+
+    private static String makeExpString(int exp, boolean flag) {
+        if (flag) return String.valueOf(exp);
+        else return KcaUtils.format("next: %d", exp);
+    }
+
 
     public static int getFriendIdx(int i) {
         return i;
@@ -391,19 +398,27 @@ public class KcaBattleViewService extends Service {
                                 if (fc_flag || ec_flag) {
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_name", j + 1), R.id.class)))
                                             .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_cond", j + 1), R.id.class)))
+                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 8);
                                 } else {
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_name", j + 1), R.id.class)))
                                             .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_cond", j + 1), R.id.class)))
+                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
                                 }
 
                                 if (fc_flag || ec_flag) {
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_lv", j + 1), R.id.class)))
                                             .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_exp", j + 1), R.id.class)))
+                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 7);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", j + 1), R.id.class)))
                                             .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
                                 } else {
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_lv", j + 1), R.id.class)))
                                             .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_exp", j + 1), R.id.class)))
+                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", j + 1), R.id.class)))
                                             .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
                                 }
@@ -424,14 +439,32 @@ public class KcaBattleViewService extends Service {
                                     int maxhp = data.get("api_maxhp").getAsInt();
                                     int nowhp = data.get("api_nowhp").getAsInt();
                                     int level = data.get("api_lv").getAsInt();
+                                    int condition = data.get("api_cond").getAsInt();
+                                    int exp_left = data.getAsJsonArray("api_exp").get(1).getAsInt();
                                     JsonObject kcShipData = KcaApiData.getKcShipDataById(data.get("api_ship_id").getAsInt(), "name");
                                     String kcname = getShipTranslation(kcShipData.get("name").getAsString(), false);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_name", j + 1), R.id.class))).setText(kcname);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_name", j + 1), R.id.class)))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_cond", j + 1), R.id.class))).setText(String.valueOf(condition));
+                                    if (condition > 49) {
+                                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_cond", j + 1), R.id.class)))
+                                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipKira));
+                                    } else if (condition / 10 >= 3) {
+                                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_cond", j + 1), R.id.class)))
+                                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipNormal));
+                                    } else if (condition / 10 == 2) {
+                                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_cond", j + 1), R.id.class)))
+                                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue1));
+                                    } else {
+                                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_cond", j + 1), R.id.class)))
+                                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2));
+                                    }
 
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_lv", j + 1), R.id.class)))
                                             .setText(makeLvString(level));
+                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_exp", j + 1), R.id.class)))
+                                            .setText(makeExpString(exp_left, fc_flag));
                                     if (!((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", j + 1), R.id.class)))
                                             .getText().toString()
                                             .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
@@ -502,12 +535,29 @@ public class KcaBattleViewService extends Service {
                                     int maxhp = data.get("api_maxhp").getAsInt();
                                     int nowhp = data.get("api_nowhp").getAsInt();
                                     int level = data.get("api_lv").getAsInt();
+                                    int condition = data.get("api_cond").getAsInt();
+                                    int exp_left = data.getAsJsonArray("api_exp").get(1).getAsInt();
                                     JsonObject kcShipData = KcaApiData.getKcShipDataById(data.get("api_ship_id").getAsInt(), "name");
                                     String kcname = getShipTranslation(kcShipData.get("name").getAsString(), false);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_name", j + 1), R.id.class))).setText(kcname);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_name", j + 1), R.id.class)))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_cond", j + 1), R.id.class))).setText(String.valueOf(condition));
+                                    if (condition > 49) {
+                                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_cond", j + 1), R.id.class)))
+                                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipKira));
+                                    } else if (condition / 10 >= 3) {
+                                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_cond", j + 1), R.id.class)))
+                                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipNormal));
+                                    } else if (condition / 10 == 2) {
+                                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_cond", j + 1), R.id.class)))
+                                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue1));
+                                    } else {
+                                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_cond", j + 1), R.id.class)))
+                                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2));
+                                    }
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_lv", j + 1), R.id.class))).setText(makeLvString(level));
+                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_exp", j + 1), R.id.class))).setText(makeExpString(exp_left, true));
                                     if (!((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", j + 1), R.id.class))).getText().toString()
                                             .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
                                         ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", j + 1), R.id.class)))
@@ -1433,18 +1483,24 @@ public class KcaBattleViewService extends Service {
                 if (!error_flag) {
                     for (int i = 1; i <= 6; i++) {
                         battleview.findViewById(getId(KcaUtils.format("fm_%d_name", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
+                        battleview.findViewById(getId(KcaUtils.format("fm_%d_cond", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("fm_%d_lv", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
+                        battleview.findViewById(getId(KcaUtils.format("fm_%d_exp", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("em_%d_name", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("em_%d_name_area", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("em_%d_lv", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("fs_%d_name", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
+                        battleview.findViewById(getId(KcaUtils.format("fs_%d_cond", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("fs_%d_lv", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
+                        battleview.findViewById(getId(KcaUtils.format("fs_%d_exp", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("es_%d_name", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("es_%d_name_area", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                         battleview.findViewById(getId(KcaUtils.format("es_%d_lv", i), R.id.class)).setOnTouchListener(shipViewTouchListener);
                     }
                     battleview.findViewById(getId(KcaUtils.format("fm_%d_name", 7), R.id.class)).setOnTouchListener(shipViewTouchListener);
+                    battleview.findViewById(getId(KcaUtils.format("fm_%d_cond", 7), R.id.class)).setOnTouchListener(shipViewTouchListener);
                     battleview.findViewById(getId(KcaUtils.format("fm_%d_lv", 7), R.id.class)).setOnTouchListener(shipViewTouchListener);
+                    battleview.findViewById(getId(KcaUtils.format("fm_%d_exp", 7), R.id.class)).setOnTouchListener(shipViewTouchListener);
                     if (mView != null) mView.setVisibility(View.VISIBLE);
                 }
             }
@@ -1621,7 +1677,9 @@ public class KcaBattleViewService extends Service {
     private int getshipidx(int rid) {
         for (int i = 1; i <= 7; i++) {
             if (rid == getId(KcaUtils.format("fm_%d_name", i), R.id.class) ||
-                    rid == getId(KcaUtils.format("fm_%d_lv", i), R.id.class)) {
+                    rid == getId(KcaUtils.format("fm_%d_cond", i), R.id.class) ||
+                    rid == getId(KcaUtils.format("fm_%d_lv", i), R.id.class) ||
+                    rid == getId(KcaUtils.format("fm_%d_exp", i), R.id.class)) {
                 api_data.addProperty("api_touched_idx", i);
                 if (friendShipData == null || i > friendShipData.size()) return -1;
                 return i;
@@ -1630,7 +1688,9 @@ public class KcaBattleViewService extends Service {
 
         for (int i = 1; i <= 6; i++) {
             if (rid == getId(KcaUtils.format("fs_%d_name", i), R.id.class) ||
-                    rid == getId(KcaUtils.format("fs_%d_lv", i), R.id.class)) {
+                    rid == getId(KcaUtils.format("fs_%d_cond", i), R.id.class) ||
+                    rid == getId(KcaUtils.format("fs_%d_lv", i), R.id.class) ||
+                    rid == getId(KcaUtils.format("fs_%d_exp", i), R.id.class)) {
                 api_data.addProperty("api_touched_idx", i + 100);
                 if (friendCombinedShipData == null || i > friendCombinedShipData.size()) return -1;
                 return i + 100;

@@ -118,6 +118,7 @@
     <color name="colorFleetAkashiTimerBtnActive">#ff4081</color>
     <color name="colorFleetAkashiTimerBtnDeactive">#424242</color>
     <color name="colorFleetShipKira">#ffff8d</color>
+    <color name="colorFleetShipNormal">#bdbdbd</color>
     <color name="colorFleetShipFatigue1">#f98b25</color>
     <color name="colorFleetShipFatigue2">#ff5252</color>
     <color name="colorFleetWarning">#7e2424</color>
