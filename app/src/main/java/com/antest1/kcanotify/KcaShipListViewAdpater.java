@@ -29,6 +29,7 @@ import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
+import static com.antest1.kcanotify.KcaUtils.getId;
 
 public class KcaShipListViewAdpater extends BaseAdapter {
     private long exp_sum = 0L;
@@ -83,10 +84,10 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             holder.ship_equip_slot = new TextView[4];
             holder.ship_equip_icon = new ImageView[5];
             for (int i = 0; i < 4; i++) {
-                holder.ship_equip_slot[i] = v.findViewById(KcaUtils.getId(KcaUtils.format("ship_equip_%d_slot", i + 1), R.id.class));
+                holder.ship_equip_slot[i] = v.findViewById(getId(KcaUtils.format("ship_equip_%d_slot", i + 1), R.id.class));
             }
             for (int i = 0; i < 5; i++) {
-                holder.ship_equip_icon[i] = v.findViewById(KcaUtils.getId(KcaUtils.format("ship_equip_%d_icon", i + 1), R.id.class));
+                holder.ship_equip_icon[i] = v.findViewById(getId(KcaUtils.format("ship_equip_%d_icon", i + 1), R.id.class));
             }
             v.setTag(holder);
         }
@@ -137,6 +138,22 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         holder.ship_id.setText(item.get("api_id").getAsString());
         holder.ship_stype.setText(KcaApiData.getShipTypeAbbr(ship_stype));
         holder.ship_name.setText(KcaApiData.getShipTranslation(ship_name, false));
+
+        int cond = item.get("api_cond").getAsInt();
+        holder.ship_cond.setText(String.valueOf(cond));
+        if (cond > 49) {
+            holder.ship_cond.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFleetShipKira));
+            holder.ship_cond.setTextColor(ContextCompat.getColor(context, R.color.colorStatNormal));
+        } else if (cond / 10 >= 3) {
+            holder.ship_cond.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFleetShipNormal));
+            holder.ship_cond.setTextColor(ContextCompat.getColor(context, R.color.colorStatNormal));
+        } else if (cond / 10 == 2) {
+            holder.ship_cond.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFleetShipFatigue1));
+            holder.ship_cond.setTextColor(ContextCompat.getColor(context, R.color.white));
+        } else {
+            holder.ship_cond.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFleetShipFatigue2));
+            holder.ship_cond.setTextColor(ContextCompat.getColor(context, R.color.white));
+        }
 
         int ship_lv = item.get("api_lv").getAsInt();
         holder.ship_lv.setText(KcaUtils.format("LV %d", ship_lv));
@@ -260,7 +277,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                 holder.ship_equip_icon[i].setVisibility(View.INVISIBLE);
             } else {
                 holder.ship_equip_icon[i].setImageResource(
-                        KcaUtils.getId(KcaUtils.format("item_%d", item_id), R.mipmap.class));
+                        getId(KcaUtils.format("item_%d", item_id), R.mipmap.class));
                 holder.ship_equip_icon[i].setVisibility(View.VISIBLE);
             }
         }
@@ -269,7 +286,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             holder.ship_equip_icon[4].setVisibility(View.INVISIBLE);
         } else {
             holder.ship_equip_icon[4].setImageResource(
-                    KcaUtils.getId(KcaUtils.format("item_%d", ship_ex_item_icon), R.mipmap.class));
+                    getId(KcaUtils.format("item_%d", ship_ex_item_icon), R.mipmap.class));
             holder.ship_equip_icon[4].setVisibility(View.VISIBLE);
         }
 
@@ -284,7 +301,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
 
         if (item.has("api_sally_area")) {
             holder.ship_sally_area.setBackgroundColor(ContextCompat.getColor(context,
-                    KcaUtils.getId(KcaUtils.format("colorStatSallyArea%d", item.get("api_sally_area").getAsInt()), R.color.class)));
+                    getId(KcaUtils.format("colorStatSallyArea%d", item.get("api_sally_area").getAsInt()), R.color.class)));
             holder.ship_sally_area.setVisibility(View.VISIBLE);
         } else {
             holder.ship_sally_area.setVisibility(View.GONE);
