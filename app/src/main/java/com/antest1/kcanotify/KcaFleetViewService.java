@@ -475,14 +475,15 @@ public class KcaFleetViewService extends Service {
             return;
         }
 
-        if(is_combined) {
-            boolean switch_is_one = switch_status == 1;
-            mView.findViewById(R.id.fleetview_fleetswitch).setVisibility(View.VISIBLE);
-            mView.findViewById(R.id.fleet_list_main).setVisibility(switch_is_one ? View.VISIBLE : View.GONE);
-            mView.findViewById(R.id.fleet_list_combined).setVisibility(switch_is_one ? View.GONE : View.VISIBLE);
-        } else {
+        if(is_landscape) {
+            mView.findViewById(R.id.fleetview_fleetswitch).setVisibility(View.GONE);
             mView.findViewById(R.id.fleet_list_main).setVisibility(View.VISIBLE);
-            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape ? View.INVISIBLE : View.GONE);
+            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_combined ? View.VISIBLE : View.INVISIBLE);
+        } else {
+            boolean switch_is_one = switch_status == 1;
+            mView.findViewById(R.id.fleetview_fleetswitch).setVisibility(is_combined ? View.VISIBLE : View.GONE);
+            mView.findViewById(R.id.fleet_list_main).setVisibility((!is_combined || switch_is_one) ? View.VISIBLE : View.GONE);
+            mView.findViewById(R.id.fleet_list_combined).setVisibility((is_combined && !switch_is_one) ? View.VISIBLE : View.GONE);
         }
 
         for (int i = 1; i <= 12; i++) {
