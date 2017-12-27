@@ -313,6 +313,9 @@
     <string name="quest_type_5">他</string>
 
     <string name="questview_page" formatted="false">ページ %d/%d</string>
+
+    <string name="action_tools">ツール</string>
+
     <string name="action_akashi">改修工廠表</string>
     <string name="aa_btn_safe_state0">一般</string>
     <string name="aa_btn_safe_state1">確定</string>
@@ -366,6 +369,8 @@
     <string name="shipinfo_btn_total_exp_format" formatted="false">累積経験値：%,d</string>
 
     <string name="action_equipmentinfo">装備リスト</string>
+    <string name="action_expcalc">経験値計算機</string>
+    <string name="action_expdtable">遠征一覧</string>
 
     <string name="fleetview_title">艦隊情報</string>
     <string name="fleetview_combined">連合</string>

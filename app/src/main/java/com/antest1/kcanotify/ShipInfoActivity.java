@@ -71,7 +71,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shipinfo_list);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.action_akashi));
+        getSupportActionBar().setTitle(getResources().getString(R.string.action_shipinfo));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);

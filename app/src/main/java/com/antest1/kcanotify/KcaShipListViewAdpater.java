@@ -141,6 +141,12 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         int ship_lv = item.get("api_lv").getAsInt();
         holder.ship_lv.setText(KcaUtils.format("LV %d", ship_lv));
 
+        if (ship_lv >= 100) {
+            holder.ship_name.setTextColor(ContextCompat.getColor(context, R.color.colorStatMarried));
+        } else {
+            holder.ship_name.setTextColor(ContextCompat.getColor(context, R.color.colorStatNormal));
+        }
+
         if (ship_afterlv != 0 && ship_lv >= ship_afterlv) {
             holder.ship_stat_2_0.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatRemodel));
             holder.ship_lv.setTextColor(ContextCompat.getColor(context, R.color.white));
@@ -148,11 +154,10 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         } else {
             holder.ship_stat_2_0.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
             if (ship_lv >= 100) {
-                holder.ship_name.setTextColor(ContextCompat.getColor(context, R.color.colorStatMarried));
                 holder.ship_lv.setTextColor(ContextCompat.getColor(context, R.color.colorStatMarried));
                 holder.ship_exp.setTextColor(ContextCompat.getColor(context, R.color.colorStatMarried));
             } else {
-                holder.ship_name.setTextColor(ContextCompat.getColor(context, R.color.colorStatNormal));
+
                 holder.ship_lv.setTextColor(ContextCompat.getColor(context, R.color.colorStatNormal));
                 holder.ship_exp.setTextColor(ContextCompat.getColor(context, R.color.colorStatNormal));
             }

@@ -46,7 +46,8 @@
                 android:id="@+id/shiplist_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5sp"
+                android:layout_marginLeft="10sp"
+                android:layout_marginStart="10sp"
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:text="@string/action_shipinfo"
@@ -76,7 +77,8 @@
                 android:id="@+id/equipment_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5sp"
+                android:layout_marginLeft="10sp"
+                android:layout_marginStart="10sp"
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:text="@string/action_equipmentinfo"
@@ -106,10 +108,73 @@
                 android:id="@+id/akashi_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5sp"
+                android:layout_marginLeft="10sp"
+                android:layout_marginStart="10sp"
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:text="@string/action_akashi"
+                android:textColor="@color/darkgray"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/action_expcalc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@color/colorMenuBack"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/expcalc_icon"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:background="@color/colorAccent"
+                android:padding="5dp"
+                android:src="@mipmap/ic_expcalc"
+                app:srcCompat="@mipmap/ic_expcalc" />
+
+            <TextView
+                android:id="@+id/expcalc_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10sp"
+                android:layout_marginStart="10sp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="@string/action_expcalc"
+                android:textColor="@color/darkgray"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/action_expdtable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@color/colorMenuBack"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/expdtable_icon"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:background="@color/colorAccent"
+                android:padding="5dp"
+                android:src="@mipmap/ic_expdtable"
+                app:srcCompat="@mipmap/ic_expdtable" />
+
+            <TextView
+                android:id="@+id/expdtable_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10sp"
+                android:layout_marginStart="10sp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="@string/action_expdtable"
                 android:textColor="@color/darkgray"
                 android:textSize="22sp" />
         </LinearLayout>

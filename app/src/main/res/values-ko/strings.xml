@@ -317,6 +317,9 @@
     <string name="quest_type_5">타</string>
 
     <string name="questview_page" formatted="false">페이지 %d/%d</string>
+
+    <string name="action_tools">도구모음</string>
+
     <string name="action_akashi">개수공창표</string>
     <string name="aa_btn_safe_state0">일반</string>
     <string name="aa_btn_safe_state1">확정</string>
@@ -366,6 +369,8 @@
     <string name="shipinfo_btn_total_exp_format" formatted="false">누적경험치: %,d</string>
 
     <string name="action_equipmentinfo">장비 리스트</string>
+    <string name="action_expcalc">경험치 계산기</string>
+    <string name="action_expdtable">원정 일람</string>
 
     <string name="fleetview_title">함대정보</string>
     <string name="fleetview_combined">연합</string>

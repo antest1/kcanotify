@@ -391,6 +391,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="questview_page" formatted="false">Page %d/%d</string>
 
+    <string name="action_tools">Tools</string>
+
     <string name="action_akashi">Improvement Arsenal Chart</string>
     <string name="action_akashi_detail">Equipment Improvement Detail</string>
     <string name="action_akashi_filter">Filter Settings</string>
@@ -432,6 +434,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_btn_total_exp_format" formatted="false">Total Exp: %,d</string>
 
     <string name="action_equipmentinfo">Equipment List</string>
+    <string name="action_expcalc">EXP Calculator</string>
+    <string name="action_expdtable">Expedition Table</string>
 
     <string name="fleetview_title">FleetView</string>
     <string name="fleetview_combined">CF</string>

@@ -332,6 +332,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_type_5">他</string>
 
     <string name="questview_page" formatted="false">第 %d/%d 頁</string>
+
+    <string name="action_tools">效用</string>
+
     <string name="action_akashi">明石改修表</string>
     <string name="action_akashi_detail">裝備改修詳情</string>
     <string name="action_akashi_filter">過濾設定</string>
@@ -373,6 +376,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_btn_total_exp_format" formatted="false">累積的經驗：%,d</string>
 
     <string name="action_equipmentinfo">裝備目錄</string>
+    <string name="action_expcalc">経験値計算機</string>
+    <string name="action_expdtable">遠征表</string>
 
     <string name="fleetview_title">艦隊信息</string>
     <string name="fleetview_combined">聯合</string>
