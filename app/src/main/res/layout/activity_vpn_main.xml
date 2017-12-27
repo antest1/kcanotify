@@ -109,7 +109,7 @@
                 </ImageButton>
 
                 <ImageButton
-                    android:id="@+id/kcakashibtn"
+                    android:id="@+id/kcatoolbtn"
 
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                     android:layout_weight="0.15"
                     android:gravity="center"
                     android:minHeight="48dip"
-                    android:src="@mipmap/ic_screw"
+                    android:src="@mipmap/ic_dashboard"
                     android:stateListAnimator="@null">
 
 

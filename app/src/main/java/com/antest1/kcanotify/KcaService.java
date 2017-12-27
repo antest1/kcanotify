@@ -76,6 +76,7 @@ import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadQuestTrackDataFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
@@ -222,6 +223,11 @@ public class KcaService extends Service {
         int loadMapEdgeInfoResult = loadMapEdgeInfoFromAssets(assetManager);
         if (loadMapEdgeInfoResult != 1) {
             makeText(this, "Error loading Map Edge Info", Toast.LENGTH_LONG).show();
+        }
+
+        int loadExpShipInfoResult = loadShipExpInfoFromAssets(assetManager);
+        if (loadExpShipInfoResult != 1) {
+            makeText(this, "Error loading Exp Ship Info", Toast.LENGTH_LONG).show();
         }
 
         loadSimpleExpeditionInfoFromAssets(assetManager);
@@ -665,19 +671,11 @@ public class KcaService extends Service {
                     //dbHelper.putValue(DB_KEY_USEREQUIP, jsonDataObj.getAsJsonObject("api_data").getAsJsonArray("api_slot_item").toString());
                     JsonObject requiredInfoApiData = jsonDataObj.getAsJsonObject("api_data");
                     dbHelper.putValue(DB_KEY_KDOCKDATA, requiredInfoApiData.getAsJsonArray("api_kdock").toString());
-                    int size2 = KcaApiData.putSlotItemDataToDB(requiredInfoApiData.getAsJsonArray("api_slot_item"));
+                    JsonArray slotitem_data = requiredInfoApiData.getAsJsonArray("api_slot_item");
+                    int size2 = KcaApiData.putSlotItemDataToDB(slotitem_data);
                     int userId = KcaApiData.getUserId(requiredInfoApiData);
                     Log.e("KCA", "Total Items: " + String.valueOf(size2));
                     if (size2 > 0) isUserItemDataLoaded = true;
-                    //Toast.makeText(contextWithLocale, String.valueOf(userId), Toast.LENGTH_LONG).show();
-
-                    /*
-                    // Deactivate this code, force to download manually
-                    if (api_start2_data == null && api_start2_down_mode) {
-                       showCustomToast(customToast, getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-                        // new retrieveApiStartData().execute("", "down", "");
-                    }
-                    */
                 }
             }
 
@@ -774,6 +772,16 @@ public class KcaService extends Service {
                     if (reqPortApiData.has("api_deck_port")) {
                         dbHelper.putValue(DB_KEY_DECKPORT, reqPortApiData.getAsJsonArray("api_deck_port").toString());
                         dbHelper.test();
+                    }
+                    if (reqPortApiData.has("api_ship")) {
+                        final String ship_data = reqPortApiData.get("api_ship").toString();
+                        Thread ship_data_thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dbHelper.putValue(DB_KEY_SHIPIFNO, ship_data);
+                            }
+                        });
+                        ship_data_thread.start();
                     }
                 }
             }

@@ -15,8 +15,10 @@
     <color name="colorDataUpdateText">#1b1d5e</color>
     <color name="colorWarn">#ffcdd2</color>
     <color name="colorWarnText">#68000a</color>
+    <color name="colorMenuBack">#b4ffffff</color>
     <color name="black">#000000</color>
     <color name="grey">#888888</color>
+    <color name="darkgray">#212121</color>
     <color name="white">#ffffff</color>
     <color name="transparent">#00ffffff</color>
 
@@ -136,4 +138,27 @@
     <color name="colorLabsStatusFP">#009688</color>
     <color name="colorLabsStatusDist">#af85e8</color>
     <color name="colorLabsPlaneInChange">#c8fbc02d</color>
+
+    <color name="colorStatNormal">#212121</color>
+    <color name="colorStatMarried">#e91e63</color>
+    <color name="colorStatRemodel">#283593</color>
+    <color name="colorStatKaryoku">#c62828</color>
+    <color name="colorStatRaisou">#3f51b5</color>
+    <color name="colorStatTaiku">#ff5722</color>
+    <color name="colorStatSoukou">#f9a825</color>
+    <color name="colorStatYasen">#212121</color>
+    <color name="colorStatTaisen">#03a9f4</color>
+    <color name="colorStatKaihi">#673ab7</color>
+    <color name="colorStatSakuteki">#f9a825</color>
+    <color name="colorStatLuck">#64dd17</color>
+    <color name="colorStatEquipSlot">#212121</color>
+    <color name="colorStatEquipSlotBack">#40f9f9f9</color>
+    <color name="colorStatEquipReinforcement">#e0e0e0</color>
+
+    <color name="colorStatSallyArea0">#bdbdbd</color>
+    <color name="colorStatSallyArea1">#03A9F4</color>
+    <color name="colorStatSallyArea2">#4CAF50</color>
+    <color name="colorStatSallyArea3">#FFC107</color>
+    <color name="colorStatSallyArea4">#E91E63</color>
+    <color name="colorStatSallyArea5">#673AB7</color>
 </resources>

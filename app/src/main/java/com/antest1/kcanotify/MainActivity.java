@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     Intent kcIntent;
     ToggleButton vpnbtn, svcbtn;
     Button kcbtn;
-    ImageButton kcakashibtn;
+    ImageButton kctoolbtn;
     public static ImageButton kcafairybtn;
     HtmlTextView textDescription = null;
     TextView textWarn, textUpdate, textDataUpdate;
@@ -182,15 +182,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        kcakashibtn = findViewById(R.id.kcakashibtn);
-        kcakashibtn.setOnClickListener(new View.OnClickListener() {
+        kctoolbtn = findViewById(R.id.kcatoolbtn);
+        kctoolbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AkashiActivity.class);
+                Intent intent = new Intent(MainActivity.this, ToolsActivity.class);
                 startActivity(intent);
             }
         });
-        kcakashibtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+        kctoolbtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
 
         kcafairybtn = findViewById(R.id.kcafairybtn);

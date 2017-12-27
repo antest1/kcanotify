@@ -21,7 +21,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="backpress_msg">Press back one more time to exit</string>
     <string name="notification_appinfo_title">Kcanotify Notification</string>
     <string name="developer_email" translatable="false">kcanotify@gmail.com</string>
-    <string name="default_gamedata_version" translatable="false">3.5.0.5</string>
+    <string name="default_gamedata_version" translatable="false">3.5.1.0</string>
 
     <string name="app_download_link_playstore_label" translatable="false">Google Play Store</string>
     <string name="app_download_link_googledrive_label" translatable="false">Google Drive</string>
@@ -425,6 +425,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_title_notiatsvcoff">Enable notification when SVC is off</string>
     <string name="setting_menu_noti_desc_notiatsvcoff">Make expedition/docking notification available even if SVC is off</string>
     <string name="questview_nopage">No Quest</string>
+
+    <string name="action_shipinfo">Ship List</string>
+    <string name="shipinfo_btn_sort">Sort</string>
+    <string name="shipinfo_btn_filter">Filter</string>
+    <string name="shipinfo_btn_total_exp_format" formatted="false">Total Exp: %,d</string>
+
+    <string name="action_equipmentinfo">Equipment List</string>
 
     <string name="fleetview_title">FleetView</string>
     <string name="fleetview_combined">CF</string>

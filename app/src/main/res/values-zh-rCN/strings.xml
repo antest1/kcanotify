@@ -366,6 +366,14 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_notiatsvcoff">当SVC服务关闭时启用远征/入渠通知</string>
     <string name="kca_toast_renew_currentportdeck">游戏内返回母港并更新相关数据</string>
     <string name="questview_nopage">没有任务</string>
+
+    <string name="action_shipinfo">舰船目录</string>
+    <string name="shipinfo_btn_sort">排序</string>
+    <string name="shipinfo_btn_filter">过滤</string>
+    <string name="shipinfo_btn_total_exp_format" formatted="false">累积的经验：%,d</string>
+
+    <string name="action_equipmentinfo">装备目录</string>
+
     <string name="fleetview_title">舰队信息</string>
     <string name="fleetview_combined">联合</string>
     <string name="fleetview_switch_1">第１舰队</string>

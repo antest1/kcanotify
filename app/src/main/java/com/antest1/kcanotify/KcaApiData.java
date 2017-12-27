@@ -185,7 +185,7 @@ public class KcaApiData {
     }
 
     public static void setDBHelper(KcaDBHelper hp) {
-        helper = hp;
+        if (helper == null) helper = hp;
     }
 
     public static boolean checkDataLoadTriggered() {
@@ -401,6 +401,22 @@ public class KcaApiData {
             JsonElement edgesData = new JsonParser().parse(new String(bytes));
             if (edgesData.isJsonObject()) {
                 helper.putValue(DB_KEY_MAPEDGES, edgesData.toString());
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
+    public static int loadShipExpInfoFromAssets(AssetManager am) {
+        try {
+            AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("exp_ship.json");
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            JsonElement expShipData = new JsonParser().parse(new String(bytes));
+            if (expShipData.isJsonObject()) {
+                helper.putValue(DB_KEY_EXPSHIP, expShipData.toString());
                 return 1;
             } else {
                 return -1;
@@ -1279,5 +1295,20 @@ public class KcaApiData {
             result[i] = (int) filteredShipList.get(i);
         }
         return result;
+    }
+
+    public static int[] getLeftExpToNext(int current_lv, int exp) {
+        int[] info = {current_lv, 0};
+        if (current_lv != 99 && current_lv != 165) {
+            JsonObject expship_data = helper.getJsonObjectValue(DB_KEY_EXPSHIP);
+            JsonArray data_for_current = expship_data.getAsJsonArray(String.valueOf(current_lv));
+            int left = data_for_current.get(0).getAsInt() + data_for_current.get(1).getAsInt() - exp;
+            if (left > 0) {
+                info[1] = left;
+            } else {
+                return getLeftExpToNext(current_lv + 1, exp);
+            }
+        }
+        return info;
     }
 }

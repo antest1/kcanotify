@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp">
+
+        <LinearLayout
+            android:id="@+id/ship_item_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ship_sally_area"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorStatSallyArea0" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="4"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/ship_id"
+                        android:layout_width="42dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="1234567"
+                        android:textAlignment="center"
+                        android:textSize="10dp" />
+
+                    <TextView
+                        android:id="@+id/ship_name"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="2dp"
+                        android:paddingStart="2dp"
+                        android:singleLine="true"
+                        android:text="Saratoga Kai Ni A"
+                        android:textColor="@color/colorStatNormal"
+                        android:textSize="12dp" />
+
+                    <LinearLayout
+                        android:id="@+id/ship_stat_1_1"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/ship_karyoku"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_weight="1"
+                            android:background="@color/colorStatKaryoku"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="50"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="10dp" />
+
+                        <TextView
+                            android:id="@+id/ship_raisou"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_weight="1"
+                            android:background="@color/colorStatRaisou"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="50"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="10dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ship_stat_1_2"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2.5"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/ship_yasen"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_weight="1"
+                            android:background="@color/colorStatYasen"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="202"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="10dp" />
+
+                        <TextView
+                            android:id="@+id/ship_taisen"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="50"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorStatTaisen"
+                            android:textSize="10dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ship_stat_1_3"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:id="@+id/ship_equip_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/ship_equip_1_icon"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_weight="1"
+                                android:src="@mipmap/item_3" />
+
+                            <TextView
+                                android:id="@+id/ship_equip_1_slot"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_centerHorizontal="false"
+                                android:layout_centerVertical="false"
+                                android:layout_weight="1"
+                                android:background="@color/colorStatEquipSlotBack"
+                                android:gravity="center_vertical"
+                                android:singleLine="true"
+                                android:text="10"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorStatEquipSlot"
+                                android:textSize="10dp" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/ship_equip_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/ship_equip_2_icon"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_weight="1"
+                                android:src="@mipmap/item_3" />
+
+                            <TextView
+                                android:id="@+id/ship_equip_2_slot"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_centerHorizontal="false"
+                                android:layout_centerVertical="false"
+                                android:layout_weight="1"
+                                android:background="@color/colorStatEquipSlotBack"
+                                android:gravity="center_vertical"
+                                android:singleLine="true"
+                                android:text="10"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorStatEquipSlot"
+                                android:textSize="10dp" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/ship_equip_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/ship_equip_3_icon"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_weight="1"
+                                android:src="@mipmap/item_40" />
+
+                            <TextView
+                                android:id="@+id/ship_equip_3_slot"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_centerHorizontal="false"
+                                android:layout_centerVertical="false"
+                                android:layout_weight="1"
+                                android:background="@color/colorStatEquipSlotBack"
+                                android:gravity="center_vertical"
+                                android:singleLine="true"
+                                android:text="10"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorStatEquipSlot"
+                                android:textSize="10dp" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/ship_equip_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/ship_equip_4_icon"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_weight="1"
+                                android:src="@mipmap/item_37" />
+
+                            <TextView
+                                android:id="@+id/ship_equip_4_slot"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_centerHorizontal="false"
+                                android:layout_centerVertical="false"
+                                android:layout_weight="1"
+                                android:background="@color/colorStatEquipSlotBack"
+                                android:gravity="center_vertical"
+                                android:singleLine="true"
+                                android:text="10"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorStatEquipSlot"
+                                android:textSize="10dp" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/ship_equip_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/ship_equip_5_icon"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorStatEquipReinforcement"
+                                android:src="@mipmap/item_15" />
+
+                            <TextView
+                                android:id="@+id/ship_equip_5_slot"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_centerHorizontal="false"
+                                android:layout_centerVertical="false"
+                                android:layout_weight="1"
+                                android:background="@color/colorStatEquipSlotBack"
+                                android:singleLine="true"
+                                android:text="10"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorStatEquipSlot"
+                                android:textSize="10dp"
+                                android:visibility="gone" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_weight="4"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/ship_stype"
+                        android:layout_width="42dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="FBB"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="10dp" />
+
+                    <LinearLayout
+                        android:id="@+id/ship_stat_2_0"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="2"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/ship_lv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="2dp"
+                            android:paddingStart="2dp"
+                            android:text="Lv 165"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorStatMarried"
+                            android:textSize="10dp" />
+
+                        <TextView
+                            android:id="@+id/ship_exp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1.5"
+                            android:gravity="center_vertical"
+                            android:text="Next: 100020"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorStatNormal"
+                            android:textSize="8dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ship_stat_2_1"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/ship_taiku"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="top"
+                            android:layout_weight="1"
+                            android:background="@color/colorStatTaiku"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="50"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="10dp" />
+
+                        <TextView
+                            android:id="@+id/ship_soukou"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="top"
+                            android:layout_weight="1"
+                            android:background="@color/colorStatSoukou"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="50"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="10dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ship_stat_2_2"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2.5"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/ship_kaihi"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="50"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorStatKaihi"
+                            android:textSize="10dp" />
+
+                        <TextView
+                            android:id="@+id/ship_sakuteki"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="50"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorStatSakuteki"
+                            android:textSize="10dp" />
+
+                        <TextView
+                            android:id="@+id/ship_luck"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="50"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorStatLuck"
+                            android:textSize="10dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ship_stat_2_3"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/ship_cond"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="top"
+                            android:layout_weight="1"
+                            android:background="@color/colorFleetShipKira"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="50"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="10dp" />
+
+                        <TextView
+                            android:id="@+id/ship_hp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="top"
+                            android:layout_weight="2"
+                            android:background="@color/colorFullState"
+                            android:gravity="center_vertical"
+                            android:text="101/101"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="10dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
