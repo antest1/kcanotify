@@ -53,7 +53,7 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
         String starlistData = getStringPreferences(context, PREF_AKASHI_STARLIST);
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.listview_equip_item, parent, false);
+            v = inflater.inflate(R.layout.listview_akashi_equip_item, parent, false);
             ViewHolder holder = new ViewHolder();
             holder.itemView = (LinearLayout) v.findViewById(R.id.akashi_improv_item_area);
             holder.iconView = (ImageView) v.findViewById(R.id.akashi_improv_icon);
