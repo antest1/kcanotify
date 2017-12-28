@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,20 +21,27 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static android.R.id.list;
 import static android.media.CamcorderProfile.get;
-import static com.antest1.kcanotify.KcaApiData.getAirForceResultString;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
-import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
-import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
 import static com.antest1.kcanotify.KcaUtils.getId;
 
 public class KcaShipListViewAdpater extends BaseAdapter {
     private long exp_sum = 0L;
     private List<JsonObject> listViewItemList = new ArrayList<>();
 
+    private static final String[] total_key_list = {"api_id", "api_lv", "api_stype",
+            "api_karyoku", "api_raisou", "api_taiku", "api_soukou",
+            "api_yasen", "api_taisen", "api_kaihi", "api_sakuteki", "api_lucky"};
+
     public long getTotalExp() { return exp_sum; }
+
+    public static int getKeyIndex(String key) {
+        for (int i = 0; i < total_key_list.length; i++) {
+            if (total_key_list[i].equals(key)) return i;
+        }
+        return -1;
+    }
 
     @Override
     public int getCount() {
@@ -319,32 +325,71 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         ImageView ship_sally_area;
     }
 
-    public void setListViewItemList(JsonArray ship_list, String sort_key, boolean is_desc) {
+    public void setListViewItemList(JsonArray ship_list, String sort_key) {
         exp_sum = 0;
         Type listType = new TypeToken<List<JsonObject>>() {}.getType();
         listViewItemList = new Gson().fromJson(ship_list, listType);
-        StatComparator cmp = new StatComparator(sort_key, is_desc);
+        StatComparator cmp = new StatComparator(sort_key);
         Collections.sort(listViewItemList, cmp);
         for (int i = 0; i < listViewItemList.size(); i++) {
             exp_sum += listViewItemList.get(i).getAsJsonArray("api_exp").get(0).getAsLong();
         }
     }
 
+    public void resortListViewItem(String sort_key) {
+        StatComparator cmp = new StatComparator(sort_key);
+        Collections.sort(listViewItemList, cmp);
+    }
+
     public class StatComparator implements Comparator<JsonObject> {
         String sort_key;
-        boolean is_desc;
-        public StatComparator(String key, boolean desc) {
+        public StatComparator(String key) {
             sort_key = key;
-            is_desc = desc;
         }
+
+        public int getvalue(JsonObject o, int key_idx) {
+            String key = total_key_list[key_idx];
+            return getvalue(o, key);
+        }
+
+        public int getvalue(JsonObject o, String key) {
+            if (o.has(key)) {
+                if (o.get(key).isJsonArray()) {
+                    return o.getAsJsonArray(key).get(0).getAsInt();
+                } else {
+                    return o.get(key).getAsInt();
+                }
+            } else if (key.equals("api_yasen")) {
+                return getvalue(o, "api_karyoku") + getvalue(o, "api_raisou");
+            } else {
+                int kc_ship_id = o.get("api_ship_id").getAsInt();
+                JsonObject kcShipData = getKcShipDataById(kc_ship_id, "name,stype");
+                if (kcShipData.has(key)) {
+                    return kcShipData.get(key).getAsInt();
+                }
+            }
+            return 0;
+        }
+
         @Override
         public int compare(JsonObject o1, JsonObject o2) {
-            String key = "api_id";
-            if (o1.has(sort_key)) key = sort_key;
-            int val1 = o1.get(key).getAsInt();
-            int val2 = o2.get(key).getAsInt();
-            if (is_desc) return val2 - val1;
-            else return val1 - val2;
+            String[] sort_key_list = sort_key.split("\\|");
+            for (String key_idx: sort_key_list) {
+                if (key_idx.length() == 0) continue;
+                else {
+                    int idx = Integer.valueOf(key_idx.split(",")[0]);
+                    boolean is_desc = Boolean.valueOf(key_idx.split(",")[1]);
+                    String key = total_key_list[idx];
+
+                    int val1 = getvalue(o1, key);
+                    int val2 = getvalue(o2, key);
+                    if (val1 != val2) {
+                        if (is_desc) return val2 - val1;
+                        else return val1 - val2;
+                    }
+                }
+            }
+            return 0;
         }
     }
 }

@@ -42,16 +42,19 @@ import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 
 public class ShipInfoActivity extends AppCompatActivity {
+    static final int SHIPINFO_GET_SORT_KEY = 1;
+
     Toolbar toolbar;
     static Gson gson = new Gson();
     ListView listview;
-    TextView totalexpview;
+    TextView totalcountview, totalexpview;
 
     KcaDBHelper dbHelper;
     Button sortButton, filterButton;
@@ -76,8 +79,9 @@ public class ShipInfoActivity extends AppCompatActivity {
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         KcaApiData.setDBHelper(dbHelper);
+        setDefaultGameData();
 
-        AssetManager assetManager = getAssets();;
+        AssetManager assetManager = getAssets();
         int loadExpShipInfoResult = loadShipExpInfoFromAssets(assetManager);
         if (loadExpShipInfoResult != 1) {
             makeText(this, "Error loading Exp Ship Info", Toast.LENGTH_LONG).show();
@@ -85,17 +89,44 @@ public class ShipInfoActivity extends AppCompatActivity {
         }
 
         adapter = new KcaShipListViewAdpater();
+        totalcountview = findViewById(R.id.shipinfo_count);
         totalexpview = findViewById(R.id.shipinfo_total_exp);
         sortButton = findViewById(R.id.shipinfo_btn_sort);
         filterButton = findViewById(R.id.shipinfo_btn_filter);
 
+        sortButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent aIntent = new Intent(ShipInfoActivity.this, ShipInfoSortActivity.class);
+                startActivityForResult(aIntent, SHIPINFO_GET_SORT_KEY);
+            }
+        });
+
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
         if (data == null) data = new JsonArray();
-        adapter.setListViewItemList(data, "api_lv", true);
+        adapter.setListViewItemList(data, getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY));
+        totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));
         totalexpview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
 
         listview = findViewById(R.id.shipinfo_listview);
         listview.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(getApplicationContext(), KcaUtils.format("%d %d", requestCode, resultCode), Toast.LENGTH_LONG).show();
+        if (requestCode == SHIPINFO_GET_SORT_KEY) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(getApplicationContext(), "SHIPINFO_GET_SORT_KEY", Toast.LENGTH_LONG).show();
+                if (adapter != null) {
+                    Toast.makeText(getApplicationContext(), getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY), Toast.LENGTH_LONG).show();
+                    adapter.resortListViewItem(getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY));
+                    adapter.notifyDataSetChanged();
+                    listview.setAdapter(adapter);
+                }
+            }
+        }
     }
 
     @Override
@@ -112,6 +143,10 @@ public class ShipInfoActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private int setDefaultGameData() {
+        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
     }
 
     @Override

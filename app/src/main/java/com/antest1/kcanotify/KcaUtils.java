@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.AudioManager;
@@ -21,6 +22,7 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.google.common.io.ByteStreams;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -46,8 +48,10 @@ import java.util.zip.GZIPOutputStream;
 
 import static android.R.attr.orientation;
 import static com.antest1.kcanotify.KcaAlarmService.ALARM_CHANNEL_ID;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 
 public class KcaUtils {
@@ -229,8 +233,37 @@ public class KcaUtils {
         }
     }
 
+
+
     public static String getStringWithLocale(Context ac, Context bc, int id) {
         return getContextWithLocale(ac, bc).getString(id);
+    }
+
+    public static int setDefaultGameData(Context context, KcaDBHelper helper) {
+        if (KcaApiData.isGameDataLoaded()) return 1;
+        String current_version = getStringPreferences(context, PREF_KCA_VERSION);
+        String default_version = context.getString(R.string.default_gamedata_version);
+
+        if (helper.getLength(DB_KEY_STARTDATA) > 0 && KcaUtils.compareVersion(current_version, default_version)) {
+            JsonObject api_data = helper.getJsonObjectValue(DB_KEY_STARTDATA).getAsJsonObject("api_data");
+            KcaApiData.getKcGameData(api_data);
+            return 1;
+        } else {
+            try {
+                AssetManager assetManager = context.getAssets();
+                AssetManager.AssetInputStream ais =
+                        (AssetManager.AssetInputStream) assetManager.open("api_start2");
+                byte[] bytes = KcaUtils.gzipdecompress(ByteStreams.toByteArray(ais));
+                helper.putValue(DB_KEY_STARTDATA, new String(bytes));
+                JsonElement data = new JsonParser().parse(new String(bytes));
+                JsonObject api_data = new Gson().fromJson(data, JsonObject.class).getAsJsonObject("api_data");
+                KcaApiData.getKcGameData(api_data);
+                setPreferences(context, PREF_KCA_VERSION, default_version);
+            } catch (IOException e) {
+                return 0;
+            }
+            return 1;
+        }
     }
 
     public static Uri getContentUri(@NonNull Context context, @NonNull Uri uri) {

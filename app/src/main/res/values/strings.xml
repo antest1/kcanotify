@@ -431,7 +431,22 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_shipinfo">Ship List</string>
     <string name="shipinfo_btn_sort">Sort</string>
     <string name="shipinfo_btn_filter">Filter</string>
+    <string name="shipinfo_btn_total_format" formatted="false">Total Count: %d</string>
     <string name="shipinfo_btn_total_exp_format" formatted="false">Total Exp: %,d</string>
+    <string name="shipinfo_sort_asc">Ascending</string>
+    <string name="shipinfo_sort_desc">Descending</string>
+    <string name="ship_stat_sort_key_0">ID</string>
+    <string name="ship_stat_sort_key_1">Level</string>
+    <string name="ship_stat_sort_key_2">Ship Type</string>
+    <string name="ship_stat_sort_key_3">Firepower</string>
+    <string name="ship_stat_sort_key_4">Torpedo</string>
+    <string name="ship_stat_sort_key_5">AA</string>
+    <string name="ship_stat_sort_key_6">Armor</string>
+    <string name="ship_stat_sort_key_7">Nightpower</string>
+    <string name="ship_stat_sort_key_8">ASW</string>
+    <string name="ship_stat_sort_key_9">Evasion</string>
+    <string name="ship_stat_sort_key_10">LOS</string>
+    <string name="ship_stat_sort_key_11">Luck</string>
 
     <string name="action_equipmentinfo">Equipment List</string>
     <string name="action_expcalc">EXP Calculator</string>

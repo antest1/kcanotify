@@ -373,7 +373,22 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_shipinfo">艦船目錄</string>
     <string name="shipinfo_btn_sort">排序</string>
     <string name="shipinfo_btn_filter">過濾</string>
+    <string name="shipinfo_btn_total_format" formatted="false">總計：%d</string>
     <string name="shipinfo_btn_total_exp_format" formatted="false">累積的經驗：%,d</string>
+    <string name="shipinfo_sort_asc">升序</string>
+    <string name="shipinfo_sort_desc">降序</string>
+    <string name="ship_stat_sort_key_0">序號</string>
+    <string name="ship_stat_sort_key_1">等級</string>
+    <string name="ship_stat_sort_key_2">艦種</string>
+    <string name="ship_stat_sort_key_3">火力</string>
+    <string name="ship_stat_sort_key_4">雷裝</string>
+    <string name="ship_stat_sort_key_5">對空</string>
+    <string name="ship_stat_sort_key_6">裝甲</string>
+    <string name="ship_stat_sort_key_7">夜戰</string>
+    <string name="ship_stat_sort_key_8">對潛</string>
+    <string name="ship_stat_sort_key_9">迴避</string>
+    <string name="ship_stat_sort_key_10">索敵</string>
+    <string name="ship_stat_sort_key_11">運</string>
 
     <string name="action_equipmentinfo">裝備目錄</string>
     <string name="action_expcalc">経験値計算機</string>

@@ -17,4 +17,9 @@
     <style name="TextAppearance.AppCompat.Button.Custom">
         <item name="android:textColor">@color/colorBtnText</item>
     </style>
+
+    <style name="SpinnerTextViewItem" parent="@android:style/Widget.TextView" >
+        <item name="android:textStyle">normal</item>
+        <item name="android:background">@color/white</item>
+    </style>
 </resources>

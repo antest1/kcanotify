@@ -414,6 +414,9 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_AKASHI_FILTERLIST:
                         editor.putString(prefKey, "|");
                         break;
+                    case PREF_SHIPINFO_SORTKEY:
+                        editor.putString(prefKey, "|1,true|");
+                        break;
                     case PREF_FAIRY_ICON:
                     case PREF_KCA_EXP_TYPE:
                         editor.putString(prefKey, "0");
@@ -444,29 +447,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int setDefaultGameData() {
-        if (KcaApiData.isGameDataLoaded()) return 1;
-        String current_version = getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
-        String default_version = getString(R.string.default_gamedata_version);
-
-        if (dbHelper.getLength(DB_KEY_STARTDATA) > 0 && KcaUtils.compareVersion(current_version, default_version)) {
-            JsonObject api_data = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA).getAsJsonObject("api_data");
-            KcaApiData.getKcGameData(api_data);
-            return 1;
-        } else {
-            try {
-                AssetManager.AssetInputStream ais =
-                        (AssetManager.AssetInputStream) assetManager.open("api_start2");
-                byte[] bytes = KcaUtils.gzipdecompress(ByteStreams.toByteArray(ais));
-                dbHelper.putValue(DB_KEY_STARTDATA, new String(bytes));
-                JsonElement data = new JsonParser().parse(new String(bytes));
-                JsonObject api_data = gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data");
-                KcaApiData.getKcGameData(api_data);
-                setPreferences(getApplicationContext(), PREF_KCA_VERSION, default_version);
-            } catch (IOException e) {
-                return 0;
-            }
-            return 1;
-        }
+        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
     }
 
     @Override

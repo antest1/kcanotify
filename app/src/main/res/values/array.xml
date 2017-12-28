@@ -97,4 +97,19 @@
         <item>@string/server_antest1</item>
     </string-array>
 
+    <string-array name="ship_stat_array">
+        <item>@string/ship_stat_sort_key_0</item>
+        <item>@string/ship_stat_sort_key_1</item>
+        <item>@string/ship_stat_sort_key_2</item>
+        <item>@string/ship_stat_sort_key_3</item>
+        <item>@string/ship_stat_sort_key_4</item>
+        <item>@string/ship_stat_sort_key_5</item>
+        <item>@string/ship_stat_sort_key_6</item>
+        <item>@string/ship_stat_sort_key_7</item>
+        <item>@string/ship_stat_sort_key_8</item>
+        <item>@string/ship_stat_sort_key_9</item>
+        <item>@string/ship_stat_sort_key_10</item>
+        <item>@string/ship_stat_sort_key_11</item>
+    </string-array>
+
 </resources>
