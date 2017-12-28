@@ -42,6 +42,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -114,25 +115,49 @@ public class ShipInfoActivity extends AppCompatActivity {
 
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
         if (data == null) data = new JsonArray();
-        adapter.setListViewItemList(data, getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY));
+
+        String sortkey = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY);
+        String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
+        setFilterButton(filtcond.length() > 1);
+        adapter.setListViewItemList(data, sortkey, filtcond);
         totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));
         totalexpview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
 
         listview = findViewById(R.id.shipinfo_listview);
         listview.setAdapter(adapter);
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SHIPINFO_GET_SORT_KEY) {
-            if (resultCode == RESULT_OK) {
-                if (adapter != null) {
-                    adapter.resortListViewItem(getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY));
-                    adapter.notifyDataSetChanged();
-                    listview.setAdapter(adapter);
-                }
+        String sortkey = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY);
+        String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
+
+        if (resultCode == RESULT_OK && adapter != null && requestCode > 0) {
+            if (requestCode == SHIPINFO_GET_SORT_KEY) {
+                adapter.resortListViewItem(sortkey);
             }
+            if (requestCode == SHIPINFO_GET_FILTER_RESULT) {
+                JsonArray shipdata = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
+                if (data == null) shipdata = new JsonArray();
+                adapter.setListViewItemList(shipdata, sortkey, filtcond);
+                setFilterButton(filtcond.length() > 1);
+            }
+            adapter.notifyDataSetChanged();
+            listview.setAdapter(adapter);
+            totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));
+            totalexpview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
+        }
+    }
+
+    private void setFilterButton(boolean is_active) {
+        if (is_active) {
+            filterButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
+            filterButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+        } else {
+            filterButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnText));
+            filterButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
         }
     }
 

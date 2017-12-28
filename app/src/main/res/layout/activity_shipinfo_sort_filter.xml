@@ -18,12 +18,6 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:titleTextColor="@color/colorToolbarText"/>
 
-    <TextView
-        android:id="@+id/debug"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

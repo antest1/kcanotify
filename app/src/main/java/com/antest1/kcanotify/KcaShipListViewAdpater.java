@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -348,9 +350,104 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     }
 
     public void setListViewItemList(JsonArray ship_list, String sort_key) {
+        setListViewItemList(ship_list, sort_key, "|");
+    }
+
+    public void setListViewItemList(JsonArray ship_list, String sort_key, final String filter) {
         exp_sum = 0;
         Type listType = new TypeToken<List<JsonObject>>() {}.getType();
         listViewItemList = new Gson().fromJson(ship_list, listType);
+
+        if (!filter.equals("|")) {
+            listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, new Predicate<JsonObject>() {
+                @Override
+                public boolean apply(JsonObject input) {
+                    String[] filter_list = filter.split("\\|");
+                    for (String key_op_val: filter_list) {
+                        if (key_op_val.length() != 0) {
+                            String[] kov_split = key_op_val.split(",");
+                            int idx = Integer.valueOf(kov_split[0]);
+                            String key = total_key_list[idx];
+                            int op = Integer.valueOf(kov_split[1]);
+
+                            String v1 = KcaShipListViewAdpater.getstrvalue(input, key);
+                            String v2 = kov_split[2].trim();
+                            String[] v2_list = v2.split("_");
+
+                            int v1_int = KcaShipListViewAdpater.getintvalue(input, key);
+
+                            boolean flag = false;
+                            switch (op) {
+                                case 0:
+                                    for (String v2_val: v2_list) {
+                                        int v2_int = Integer.valueOf(v2_val);
+                                        if (v1_int == v2_int) {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!flag) return false;
+                                    break;
+                                case 1:
+                                    for (String v2_val: v2_list) {
+                                        int v2_int = Integer.valueOf(v2_val);
+                                        if (v1_int != v2_int) {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!flag) return false;
+                                    break;
+                                case 2:
+                                    for (String v2_val: v2_list) {
+                                        int v2_int = Integer.valueOf(v2_val);
+                                        if (v1_int < v2_int) {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!flag) return false;
+                                    break;
+                                case 3:
+                                    for (String v2_val: v2_list) {
+                                        int v2_int = Integer.valueOf(v2_val);
+                                        if (v1_int > v2_int) {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!flag) return false;
+                                    break;
+                                case 4:
+                                    for (String v2_val: v2_list) {
+                                        int v2_int = Integer.valueOf(v2_val);
+                                        if (v1_int <= v2_int) {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!flag) return false;
+                                    break;
+                                case 5:
+                                    for (String v2_val: v2_list) {
+                                        int v2_int = Integer.valueOf(v2_val);
+                                        if (v1_int >= v2_int) {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!flag) return false;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                    return true;
+                }
+            }));
+        }
+
         StatComparator cmp = new StatComparator(sort_key);
         Collections.sort(listViewItemList, cmp);
         for (int i = 0; i < listViewItemList.size(); i++) {
@@ -358,53 +455,55 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         }
     }
 
+    private static int getintvalue(JsonObject o, String key) {
+        if (o.has(key)) {
+            if (o.get(key).isJsonArray()) {
+                return o.getAsJsonArray(key).get(0).getAsInt();
+            } else {
+                return o.get(key).getAsInt();
+            }
+        } else if (key.equals("api_yasen")) {
+            return getintvalue(o, "api_karyoku") + getintvalue(o, "api_raisou");
+        } else {
+            int kc_ship_id = o.get("api_ship_id").getAsInt();
+            JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_stype");
+            if (kcShipData != null && kcShipData.has(key)) {
+                return kcShipData.get(key).getAsInt();
+            }
+        }
+        return 0;
+    }
+
+    private static String getstrvalue(JsonObject o, String key) {
+        if (o.has(key)) {
+            if (o.get(key).isJsonPrimitive()) return o.get(key).getAsString();
+            else return o.get(key).toString();
+        }
+        else return "";
+    }
+
     public void resortListViewItem(String sort_key) {
         StatComparator cmp = new StatComparator(sort_key);
         Collections.sort(listViewItemList, cmp);
     }
 
-    public class StatComparator implements Comparator<JsonObject> {
+    private class StatComparator implements Comparator<JsonObject> {
         String sort_key;
-        public StatComparator(String key) {
+        private StatComparator(String key) {
             sort_key = key;
-        }
-
-        public int getvalue(JsonObject o, int key_idx) {
-            String key = total_key_list[key_idx];
-            return getvalue(o, key);
-        }
-
-        public int getvalue(JsonObject o, String key) {
-            if (o.has(key)) {
-                if (o.get(key).isJsonArray()) {
-                    return o.getAsJsonArray(key).get(0).getAsInt();
-                } else {
-                    return o.get(key).getAsInt();
-                }
-            } else if (key.equals("api_yasen")) {
-                return getvalue(o, "api_karyoku") + getvalue(o, "api_raisou");
-            } else {
-                int kc_ship_id = o.get("api_ship_id").getAsInt();
-                JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_stype");
-                if (kcShipData.has(key)) {
-                    return kcShipData.get(key).getAsInt();
-                }
-            }
-            return 0;
         }
 
         @Override
         public int compare(JsonObject o1, JsonObject o2) {
             String[] sort_key_list = sort_key.split("\\|");
             for (String key_idx: sort_key_list) {
-                if (key_idx.length() == 0) continue;
-                else {
+                if (key_idx.length() != 0) {
                     int idx = Integer.valueOf(key_idx.split(",")[0]);
                     boolean is_desc = Boolean.valueOf(key_idx.split(",")[1]);
                     String key = total_key_list[idx];
 
-                    int val1 = getvalue(o1, key);
-                    int val2 = getvalue(o2, key);
+                    int val1 = KcaShipListViewAdpater.getintvalue(o1, key);
+                    int val2 = KcaShipListViewAdpater.getintvalue(o2, key);
                     if (val1 != val2) {
                         if (is_desc) return val2 - val1;
                         else return val1 - val2;

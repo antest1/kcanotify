@@ -1,6 +1,8 @@
 package com.antest1.kcanotify;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
@@ -19,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,11 +31,14 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import static com.antest1.kcanotify.KcaApiData.dataLoadTriggered;
+import static android.R.attr.key;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
@@ -46,8 +50,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
     Toolbar toolbar;
     static Gson gson = new Gson();
     LinearLayout listview;
-    public static int count;
-    static TextView debug;
+    public int count;
     public static SparseArray<String> sort_values = new SparseArray<>();
 
     KcaDBHelper dbHelper;
@@ -79,10 +82,6 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
     }
 
     private String makeStatFiltData() {
-        return makeStatFiltData(getApplicationContext());
-    }
-
-    private static String makeStatFiltData(Context context) {
         if (sort_values.size() <= 1) return "|";
         List<String> data = new ArrayList<>();
         for (int i = 0; i < sort_values.size(); i++) {
@@ -105,8 +104,6 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getStringWithLocale(R.string.shipinfo_btn_filter));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        debug = findViewById(R.id.debug);
 
         listview = findViewById(R.id.ship_stat_sort_list);
         String pref_sort_list = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
@@ -144,12 +141,12 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         Spinner sp_target = v.findViewById(R.id.ship_stat_spinner);
         Spinner sp_op = v.findViewById(R.id.ship_stat_operator);
         final EditText condition_val = v.findViewById(R.id.ship_stat_value);
-        final Spinner sp_val = v.findViewById(R.id.ship_stat_select);
+        final TextView sp_val = v.findViewById(R.id.ship_stat_select);
         ImageView add_remove_btn = v.findViewById(R.id.ship_stat_add_remove_btn);
 
         condition_val.setInputType(InputType.TYPE_CLASS_NUMBER);
         condition_val.setTag(target);
-        condition_val.addTextChangedListener(new KcaTextWatcher(getApplicationContext(), condition_val));
+        condition_val.addTextChangedListener(new KcaTextWatcher(condition_val));
 
         ArrayAdapter<CharSequence> adapter_target = ArrayAdapter.createFromResource(this,
                 R.array.ship_stat_array, android.R.layout.simple_spinner_item);
@@ -163,11 +160,14 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                 int prev_position = obj.get("idx").getAsInt();
                 obj.addProperty("idx", position);
 
-                ShipInfoFilterActivity.sort_values.put(target, ShipInfoFilterActivity.makeStatPrefValue(obj));
+                sort_values.put(target, ShipInfoFilterActivity.makeStatPrefValue(obj));
                 if (KcaShipListViewAdpater.isList(position)) {
                     condition_val.setVisibility(View.GONE);
                     sp_val.setVisibility(View.VISIBLE);
-                    if(prev_position != position) setupSpinner(sp_val, target, "val", position, null);
+                    if(prev_position != position) {
+                        setupListSelect(sp_val, target, "val", position, null);
+                        sp_val.setText(getStringWithLocale(R.string.shipinfo_filt_list_dialog_title));
+                    }
                 } else {
                     sp_val.setVisibility(View.GONE);
                     condition_val.setVisibility(View.VISIBLE);
@@ -178,7 +178,6 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                     }
                     if(prev_position != position) condition_val.setText("");
                 }
-                debug.setText(makeStatFiltData());
             }
 
             @Override
@@ -221,7 +220,6 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                         sort_values.delete(target);
                     }
                 }
-                debug.setText(makeStatFiltData());
             }
         });
 
@@ -230,14 +228,12 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         if (op != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_operator)).setSelection(op);
         if (value.length() > 0) {
             if (KcaShipListViewAdpater.isList(key)) {
-                setupSpinner(((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_select)),
-                        target, "val", key, Integer.valueOf(value));
+                setupListSelect(((TextView) listview.findViewWithTag(target).findViewById(R.id.ship_stat_select)),
+                        target, "val", key, value.split("_").length);
             } else {
                 ((TextView) listview.findViewWithTag(target).findViewById(R.id.ship_stat_value)).setText(value);
             }
         }
-
-        debug.setText(makeStatFiltData());
     }
 
     TextWatcher tw = new TextWatcher() {
@@ -279,8 +275,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                         obj.addProperty(key, position);
                         break;
                 }
-                ShipInfoFilterActivity.sort_values.put(target, ShipInfoFilterActivity.makeStatPrefValue(obj));
-                debug.setText(makeStatFiltData());
+                sort_values.put(target, ShipInfoFilterActivity.makeStatPrefValue(obj));
             }
 
             @Override
@@ -288,30 +283,99 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         };
     }
 
-    private void setupSpinner(Spinner sp_val, int target, String key, int position, Integer value) {
+    private void setupListSelect(TextView sp_val, int target, String key, int position, Integer value) {
+        String[] adapter = {};
         int fnc = 0;
-        if (position == 2) fnc = 1;
-        if (position == 12) fnc = 2;
-        sp_val.setAdapter(getStypeAdapter());
-        sp_val.setOnItemSelectedListener(getListener(target, "val", fnc));
-        if (value != null) sp_val.setSelection(getStypePosition(value));
+        if (position == 2) {
+            adapter = getStypeArray();
+            fnc = 1;
+        } else if (position == 12) {
+            adapter = getSpeedArray();
+            fnc = 2;
+        }
+        final AlertDialog dialog = makeDialog(sp_val, target, key, fnc, adapter);
+        sp_val.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.show();
+            }
+        });
+        if (value != null) {
+            sp_val.setText(KcaUtils.format("%d/%d", value, adapter.length));
+        }
     }
 
-    private ArrayAdapter<String> getStypeAdapter() {
+    private AlertDialog makeDialog(final TextView sp_val, final int target, final String key, final int fnc, final String[] arr) {
+        final List<Integer> selectedItems = new ArrayList<>();
+        boolean[] selected_arr = new boolean[arr.length];
+        Arrays.fill(selected_arr, false);
+        String data = sort_values.get(target);
+        final JsonObject obj = unpackPrefValue(data);
+        String[] val = obj.get("val").getAsString().split("_");
+
+        for (String v: val) {
+            if (v.length() > 0) {
+                int idx = getRealPosition(fnc, Integer.valueOf(v));
+                selected_arr[idx] = true;
+                selectedItems.add(idx);
+            }
+        }
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(getStringWithLocale(R.string.shipinfo_filt_list_dialog_title))
+                .setMultiChoiceItems(arr, selected_arr, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                        if (isChecked) {
+                            // If the user checked the item, add it to the selected items
+                            selectedItems.add(indexSelected);
+                        } else if (selectedItems.contains(indexSelected)) {
+                            // Else, if the item is already in the array, remove it
+                            selectedItems.remove(Integer.valueOf(indexSelected));
+                        }
+                    }
+                }).setPositiveButton(getStringWithLocale(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        sp_val.setText(KcaUtils.format("%d/%d", selectedItems.size(), arr.length));
+
+                        List<String> vals = new ArrayList<String>();
+                        for (int selected: selectedItems) {
+                            switch (fnc) {
+                                case 1:
+                                    vals.add(String.valueOf(selected + 1));
+                                    break;
+                                case 2:
+                                    vals.add(String.valueOf((selected + 1) * 5));
+                                    break;
+                                default:
+                                    vals.add(String.valueOf(selected));
+                                    break;
+                            }
+                        }
+                        obj.addProperty(key, KcaUtils.joinStr(vals, "_"));
+                        sort_values.put(target, makeStatPrefValue(obj));
+                    }
+                }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                }).create();
+        return dialog;
+    }
+
+    private String[] getStypeArray() {
         List<String> stype_list = new ArrayList<>();
         for (int i = 1; i < KcaApiData.getShipTypeSize(); i++) {
             stype_list.add(KcaApiData.getShipTypeAbbr(i));
         }
         String[] stype_arr = new String[stype_list.size()];
         stype_arr = stype_list.toArray(stype_arr);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stype_arr);
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        return adapter;
+        return stype_arr;
     }
 
-    private int getStypePosition(int i) { return i - 1; }
-
-    private ArrayAdapter<String> getSpeedAdapter() {
+    private String[] getSpeedArray() {
         List<String> speed_list = new ArrayList<>();
         speed_list.add(getStringWithLocale(R.string.speed_slow));
         speed_list.add(getStringWithLocale(R.string.speed_fast));
@@ -320,12 +384,21 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
 
         String[] speed_arr = new String[speed_list.size()];
         speed_arr = speed_list.toArray(speed_arr);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, speed_arr);
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        return adapter;
+        return speed_arr;
     }
 
+    private int getStypePosition(int i) { return i - 1; }
     private int getSpeedPosition(int i) { return (i - 1) / 5; }
+    private int getRealPosition(int fnc, int i) {
+        switch (fnc) {
+            case 1:
+                return getStypePosition(i);
+            case 2:
+                return getSpeedPosition(i);
+            default:
+                return i;
+        }
+    }
 
     private void setValueAndFinish() {
         setPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND, makeStatFiltData());
@@ -376,10 +449,8 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
 
     public static class KcaTextWatcher implements TextWatcher {
         private EditText mEditText;
-        private Context mContext;
-        public KcaTextWatcher(Context ctx, EditText editText) {
+        public KcaTextWatcher(EditText editText) {
             mEditText = editText;
-            mContext = ctx;
         }
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -393,8 +464,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
             String data = sort_values.get(target);
             JsonObject obj = ShipInfoFilterActivity.unpackPrefValue(data);
             obj.addProperty("val", editable.toString());
-            ShipInfoFilterActivity.sort_values.put(target, ShipInfoFilterActivity.makeStatPrefValue(obj));
-            debug.setText(makeStatFiltData(mContext));
+            sort_values.put(target, ShipInfoFilterActivity.makeStatPrefValue(obj));
         }
     }
 }
