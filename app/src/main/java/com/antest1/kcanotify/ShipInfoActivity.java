@@ -115,12 +115,9 @@ public class ShipInfoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Toast.makeText(getApplicationContext(), KcaUtils.format("%d %d", requestCode, resultCode), Toast.LENGTH_LONG).show();
         if (requestCode == SHIPINFO_GET_SORT_KEY) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(getApplicationContext(), "SHIPINFO_GET_SORT_KEY", Toast.LENGTH_LONG).show();
                 if (adapter != null) {
-                    Toast.makeText(getApplicationContext(), getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY), Toast.LENGTH_LONG).show();
                     adapter.resortListViewItem(getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY));
                     adapter.notifyDataSetChanged();
                     listview.setAdapter(adapter);
