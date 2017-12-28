@@ -392,6 +392,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_MORALE_MIN = "morale_min";
     public static final String PREF_KCA_NOTI_AKASHI = "notify_akashi";
     public static final String PREF_SHIPINFO_SORTKEY = "shipinfo_sortkey";
+    public static final String PREF_SHIPINFO_FILTCOND = "shipinfo_filtcond";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -430,7 +431,8 @@ public final class KcaConstants {
             PREF_KCA_NOTI_MORALE,
             PREF_KCA_MORALE_MIN,
             PREF_KCA_NOTI_AKASHI,
-            PREF_SHIPINFO_SORTKEY
+            PREF_SHIPINFO_SORTKEY,
+            PREF_SHIPINFO_FILTCOND
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

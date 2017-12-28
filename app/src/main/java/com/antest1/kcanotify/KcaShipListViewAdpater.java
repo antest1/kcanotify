@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -41,6 +42,16 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             if (total_key_list[i].equals(key)) return i;
         }
         return -1;
+    }
+
+    public static boolean isList(int idx) {
+        int[] list = {2, 12};
+        return (Arrays.binarySearch(list, idx) >= 0);
+    }
+
+    public static boolean isNumeric(int idx) {
+        int[] list = {2, 12};
+        return (Arrays.binarySearch(list, idx) < 0);
     }
 
     @Override
@@ -116,12 +127,15 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         int ship_ex_item_icon = 0;
 
         int slot_sum = 0;
+        boolean flag_931 = false;
         JsonArray ship_item_icon = new JsonArray();
         for (int j = 0; j < ship_slot.size(); j++) {
             int item_id = ship_slot.get(j).getAsInt();
             if (item_id > 0) {
-                JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "type");
+                JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "id,type");
                 if (itemData != null) {
+                    int item_kc_id = itemData.get("id").getAsInt();
+                    if (item_kc_id == 82 || item_kc_id == 83) flag_931 = true;
                     int item_type = itemData.get("type").getAsJsonArray().get(3).getAsInt();
                     ship_item_icon.add(item_type);
                 }
@@ -261,7 +275,10 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         }
         holder.ship_soukou.setText(ship_so.get(0).getAsString());
 
-        if (ship_ts.get(0).getAsInt() >= 100) {
+        int taisen_value = ship_ts.get(0).getAsInt();
+        if (taisen_value >= 100 || (ship_stype == 1 && taisen_value >= 60) ||
+                kc_ship_id == 141 || (kc_ship_id == 529 && taisen_value >= 65) ||
+                ((kc_ship_id == 380 || kc_ship_id == 526) && taisen_value >= 65 && flag_931)) {
             holder.ship_taisen.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatTaisen));
             holder.ship_taisen.setTextColor(ContextCompat.getColor(context, R.color.white));
         } else {
@@ -368,7 +385,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                 return getvalue(o, "api_karyoku") + getvalue(o, "api_raisou");
             } else {
                 int kc_ship_id = o.get("api_ship_id").getAsInt();
-                JsonObject kcShipData = getKcShipDataById(kc_ship_id, "name,stype");
+                JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_stype");
                 if (kcShipData.has(key)) {
                     return kcShipData.get(key).getAsInt();
                 }

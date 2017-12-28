@@ -156,7 +156,7 @@ public class KcaAlarmService extends Service {
                 notificationManager.notify(nid, createUpdateNotification(utype, version, nid));
                 alarm_set.add(nid);
             } else if (getBooleanPreferences(getApplication(), PREF_KCA_NOTI_NOTIFYATSVCOFF) || KcaService.getServiceStatus()) {
-                loadTranslationData(getAssets(), getApplicationContext());
+                loadTranslationData(getApplicationContext());
                 if (intent.getStringExtra("data") != null) {
                     String locale = LocaleUtils.getLocaleCode(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
                     if (type == TYPE_EXPEDITION) {

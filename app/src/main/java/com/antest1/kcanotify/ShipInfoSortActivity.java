@@ -75,7 +75,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shipinfo_sort_filter);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Sort");
+        getSupportActionBar().setTitle(getStringWithLocale(R.string.shipinfo_btn_sort));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listview = findViewById(R.id.ship_stat_sort_list);
         String pref_sort_list = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY);
@@ -112,7 +112,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                sort_values.append(target, makeStatPrefValue(position, desc_check.isChecked()));
+                sort_values.put(target, makeStatPrefValue(position, desc_check.isChecked()));
             }
 
             @Override
@@ -135,7 +135,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
                 }
                 if (sort_values.indexOfKey(target) >= 0) {
                     int value = Integer.valueOf(sort_values.get(target).split(",")[0]);
-                    sort_values.append(target, makeStatPrefValue(value, checked));
+                    sort_values.put(target, makeStatPrefValue(value, checked));
                 }
             }
         });
@@ -181,13 +181,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
         listview.removeView(target);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
+    private void setValueAndFinish() {
         setPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY, makeStatPrefData());
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
@@ -195,10 +189,20 @@ public class ShipInfoSortActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        setValueAndFinish();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                setValueAndFinish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -220,7 +224,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
             String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
             LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
         }
-        loadTranslationData(getAssets(), getApplicationContext());
+        loadTranslationData(getApplicationContext());
         super.onConfigurationChanged(newConfig);
     }
 }

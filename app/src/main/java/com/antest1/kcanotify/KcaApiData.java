@@ -382,6 +382,11 @@ public class KcaApiData {
         }
     }
 
+    public static int getShipTypeSize() {
+        if (kcStypeData != null) return kcStypeData.size();
+        else return -1;
+    }
+
     public static String getShipTypeAbbr(int idx) {
         if (kcStypeData != null && idx < kcStypeData.size()) {
             return kcStypeData.get(idx).getAsString();
@@ -508,8 +513,8 @@ public class KcaApiData {
         }
     }
 
-    public static void loadTranslationData(AssetManager assetManager, Context context) {
-        if (assetManager == null) return;
+    public static void loadTranslationData(Context context) {
+        AssetManager assetManager = context.getAssets();
         boolean isDataLoaded = (kcShipTranslationData.entrySet().size() != 0) &&
                 (kcItemTranslationData.entrySet().size() != 0) &&
                 (kcQuestInfoData.entrySet().size() != 0);

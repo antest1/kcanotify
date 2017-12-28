@@ -67,6 +67,13 @@
                 android:value="com.antest1.kcanotify.ShipInfoActivity" />
         </activity>
         <activity
+            android:name="com.antest1.kcanotify.ShipInfoFilterActivity"
+            android:configChanges="locale|layoutDirection">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.antest1.kcanotify.ShipInfoActivity" />
+        </activity>
+        <activity
             android:name="com.antest1.kcanotify.AkashiActivity"
             android:configChanges="locale|layoutDirection">
             <meta-data

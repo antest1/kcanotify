@@ -2516,7 +2516,7 @@ public class KcaService extends Service {
         }
 
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-        loadTranslationData(getAssets(), getApplicationContext());
+        loadTranslationData(getApplicationContext());
 
 
         super.onConfigurationChanged(newConfig);

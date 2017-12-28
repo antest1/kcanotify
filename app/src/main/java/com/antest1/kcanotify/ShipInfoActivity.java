@@ -81,6 +81,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
+        loadTranslationData(getApplicationContext());
 
         AssetManager assetManager = getAssets();
         int loadExpShipInfoResult = loadShipExpInfoFromAssets(assetManager);
@@ -100,6 +101,14 @@ public class ShipInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent aIntent = new Intent(ShipInfoActivity.this, ShipInfoSortActivity.class);
                 startActivityForResult(aIntent, SHIPINFO_GET_SORT_KEY);
+            }
+        });
+
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent aIntent = new Intent(ShipInfoActivity.this, ShipInfoFilterActivity.class);
+                startActivityForResult(aIntent, SHIPINFO_GET_FILTER_RESULT);
             }
         });
 
@@ -162,7 +171,7 @@ public class ShipInfoActivity extends AppCompatActivity {
             String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
             LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
         }
-        loadTranslationData(getAssets(), getApplicationContext());
+        loadTranslationData(getApplicationContext());
         super.onConfigurationChanged(newConfig);
     }
 }

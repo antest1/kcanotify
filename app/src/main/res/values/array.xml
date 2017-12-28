@@ -110,6 +110,16 @@
         <item>@string/ship_stat_sort_key_9</item>
         <item>@string/ship_stat_sort_key_10</item>
         <item>@string/ship_stat_sort_key_11</item>
+        <item>@string/ship_stat_sort_key_12</item>
+    </string-array>
+
+    <string-array name="ship_operations" translatable="false">
+        <item>&#61;</item>
+        <item>&#8800;</item>
+        <item>&#60;</item>
+        <item>&#62;</item>
+        <item>&#8805;</item>
+        <item>&#8804;</item>
     </string-array>
 
 </resources>

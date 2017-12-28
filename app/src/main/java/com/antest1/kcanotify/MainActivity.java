@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     if (is_kca_installed) {
                         prefs.edit().putBoolean(PREF_SVC_ENABLED, true).apply();
                         setCheckBtn();
-                        loadTranslationData(assetManager, getApplicationContext());
+                        loadTranslationData(getApplicationContext());
                         startService(intent);
                     } else {
                         Toast.makeText(getApplicationContext(), getString(R.string.ma_toast_kancolle_not_installed), Toast.LENGTH_LONG).show();
@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
 
         setVpnBtn();
         setCheckBtn();
-        loadTranslationData(assetManager, getApplicationContext());
+        loadTranslationData(getApplicationContext());
 
         Arrays.fill(warnType, false);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
@@ -412,6 +412,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case PREF_AKASHI_STARLIST:
                     case PREF_AKASHI_FILTERLIST:
+                    case PREF_SHIPINFO_FILTCOND:
                         editor.putString(prefKey, "|");
                         break;
                     case PREF_SHIPINFO_SORTKEY:
@@ -686,7 +687,7 @@ public class MainActivity extends AppCompatActivity {
             String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
             LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
         }
-        loadTranslationData(assetManager, getApplicationContext());
+        loadTranslationData(getApplicationContext());
         super.onConfigurationChanged(newConfig);
     }
 }
