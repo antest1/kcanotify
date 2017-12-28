@@ -20,8 +20,10 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -40,7 +42,6 @@ import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,12 +50,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static android.R.attr.orientation;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLEINFO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLENODE;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_FAIRYLOC;
 import static com.antest1.kcanotify.KcaConstants.FAIRY_REVERSE_LIST;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_FAIRY_CHECKED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_FAIRY_HIDDEN;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_HDMG;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_INFO;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_NODE;
@@ -62,7 +64,6 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_COMPLETE;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
-import static com.antest1.kcanotify.KcaConstants.MAINACTIVITY_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
@@ -121,11 +122,16 @@ public class KcaViewButtonService extends Service {
     public static int recentVisibility = View.VISIBLE;
     public static int type;
     public static int clickcount;
+    public static Handler sHandler;
     public boolean taiha_status = false;
     private boolean fairy_glow_on = false;
     private boolean fairy_glow_mode = false;
     ScheduledExecutorService checkForegroundScheduler;
     private boolean is_kc_foreground = true;
+
+    public static void setHandler(Handler h) {
+        sHandler = h;
+    }
 
     public static JsonObject getCurrentApiData() {
         return currentApiData;
@@ -311,6 +317,16 @@ public class KcaViewButtonService extends Service {
                 if (mView != null) {
                     mView.setVisibility(View.VISIBLE);
                     recentVisibility = View.VISIBLE;
+                }
+            }
+            if (intent.getAction().equals(RETURN_FAIRY_ACTION) || intent.getAction().equals(REMOVE_FAIRY_ACTION)) {
+                if (sHandler != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url", KCA_API_FAIRY_CHECKED);
+                    bundle.putString("data", "");
+                    Message sMsg = sHandler.obtainMessage();
+                    sMsg.setData(bundle);
+                    sHandler.sendMessage(sMsg);
                 }
             }
             if (intent.getAction().equals(FAIRY_INVISIBLE)) {
@@ -507,6 +523,16 @@ public class KcaViewButtonService extends Service {
             Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
             mView.setVisibility(View.GONE);
             recentVisibility = View.GONE;
+
+            if (sHandler != null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("url", KCA_API_FAIRY_HIDDEN);
+                bundle.putString("data", "");
+                Message sMsg = sHandler.obtainMessage();
+                sMsg.setData(bundle);
+                sHandler.sendMessage(sMsg);
+            }
+
         }
     };
 

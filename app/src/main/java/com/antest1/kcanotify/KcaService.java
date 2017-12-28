@@ -55,12 +55,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static android.R.attr.id;
-import static android.R.attr.port;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_HIGH;
 import static android.widget.Toast.makeText;
-import static com.antest1.kcanotify.KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaApiData.AKASHI_TIMER_20MIN;
 import static com.antest1.kcanotify.KcaApiData.T2_FIGHTER;
@@ -69,7 +66,6 @@ import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_SMALL;
 import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
-import static com.antest1.kcanotify.KcaApiData.getExpeditionNoByName;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
@@ -80,20 +76,14 @@ import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaApiData.updateShipMorale;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaConstants.*;
-import static com.antest1.kcanotify.KcaExpedition2.deck_name;
-import static com.antest1.kcanotify.KcaExpedition2.mission_no;
 import static com.antest1.kcanotify.KcaFleetViewService.REFRESH_FLEETVIEW_ACTION;
-import static com.antest1.kcanotify.KcaMoraleInfo.initMoraleValue;
-import static com.antest1.kcanotify.KcaMoraleInfo.setItemUseDeck;
 import static com.antest1.kcanotify.KcaMoraleInfo.setMoraleValue;
 import static com.antest1.kcanotify.KcaQuestViewService.REFRESH_QUESTVIEW_ACTION;
 import static com.antest1.kcanotify.KcaUtils.createBuilder;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
-import static com.antest1.kcanotify.KcaUtils.getContentUri;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
@@ -101,7 +91,8 @@ import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
-import static com.antest1.kcanotify.KcaVpnData.requestData;
+import static com.antest1.kcanotify.KcaViewButtonService.REMOVE_FAIRY_ACTION;
+import static com.antest1.kcanotify.KcaViewButtonService.RETURN_FAIRY_ACTION;
 
 public class KcaService extends Service {
     public static final String SERVICE_CHANNEL_ID = "noti_service_channel";
@@ -273,6 +264,7 @@ public class KcaService extends Service {
         KcaOpendbAPI.setHandler(nHandler);
         SettingActivity.setHandler(nHandler);
         KcaFairySelectActivity.setHandler(nHandler);
+        KcaViewButtonService.setHandler(nHandler);
 
         notificationTimeCounter = -1;
         timer = new Runnable() {
@@ -475,6 +467,47 @@ public class KcaService extends Service {
             } else {
                 viewNotificationBuilder.setPriority(IMPORTANCE_DEFAULT);
             }
+            Intent aIntent = new Intent(KcaService.this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+            notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.setContentIntent(pendingIntent).build());
+        }
+    }
+
+    private void updateNotificationAddFairyButton() {
+        if (viewNotificationBuilder != null) {
+
+            Intent returnIntent = new Intent(this, KcaViewButtonService.class)
+                    .setAction(RETURN_FAIRY_ACTION);
+
+            Intent removeIntent = new Intent(this, KcaViewButtonService.class)
+                    .setAction(REMOVE_FAIRY_ACTION);
+
+            PendingIntent returnPendingIntent = PendingIntent.getService(getApplicationContext(), 0,
+                    returnIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            PendingIntent removePendingIntent = PendingIntent.getService(getApplicationContext(), 0,
+                    removeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
+            int fairy_bitmap = getId(fairyId.concat("_small"), R.mipmap.class);
+
+            viewNotificationBuilder
+                .addAction(new NotificationCompat.Action(fairy_bitmap,
+                        getStringWithLocale(R.string.fairy_hidden_notification_action_return), returnPendingIntent))
+                .addAction(new NotificationCompat.Action(R.mipmap.ic_cancel,
+                        getStringWithLocale(R.string.fairy_hidden_notification_action_remove), removePendingIntent));
+
+            Intent aIntent = new Intent(KcaService.this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+            notifiManager.notify(getNotificationId(NOTI_FRONT, 1), viewNotificationBuilder.setContentIntent(pendingIntent).build());
+        }
+    }
+
+    private void updateNotificationClearFairyButton() {
+        if (viewNotificationBuilder != null) {
+            viewNotificationBuilder.mActions.clear();
             Intent aIntent = new Intent(KcaService.this, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT);
@@ -1987,6 +2020,14 @@ public class KcaService extends Service {
 
                     updateFleetView();
                 }
+            }
+
+            if (url.startsWith(KCA_API_FAIRY_HIDDEN)) {
+                updateNotificationAddFairyButton();
+            }
+
+            if (url.startsWith(KCA_API_FAIRY_CHECKED)) {
+                updateNotificationClearFairyButton();
             }
 
             if (url.startsWith(KCA_API_PREF_FAIRY_CHANGED)) {

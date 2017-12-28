@@ -79,7 +79,7 @@ public class KcaFleetViewService extends Service {
     static boolean error_flag = false;
     boolean active;
     private View mView, itemView;
-    private TextView fleetInfoTitle, fleetInfoLine, fleetExpView, fleetCnChangeBtn, fleetAkashiTimerBtn;
+    private TextView fleetInfoTitle, fleetInfoLine, fleetExpView, fleetCnChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn;
     private WindowManager mManager;
     private static boolean isReady;
 
@@ -260,6 +260,8 @@ public class KcaFleetViewService extends Service {
         fleetExpView = mView.findViewById(R.id.fleetview_exp);
         fleetCnChangeBtn = mView.findViewById(R.id.fleetview_cn_change);
         fleetAkashiTimerBtn = mView.findViewById(R.id.fleetview_akashi_timer);
+        fleetSwitchBtn = mView.findViewById(R.id.fleetview_fleetswitch);
+        fleetSwitchBtn.setVisibility(View.GONE);
     }
 
     @Override
@@ -476,12 +478,12 @@ public class KcaFleetViewService extends Service {
         }
 
         if(is_landscape) {
-            mView.findViewById(R.id.fleetview_fleetswitch).setVisibility(View.GONE);
+            fleetSwitchBtn.setVisibility(View.GONE);
             mView.findViewById(R.id.fleet_list_main).setVisibility(View.VISIBLE);
             mView.findViewById(R.id.fleet_list_combined).setVisibility(is_combined ? View.VISIBLE : View.INVISIBLE);
         } else {
             boolean switch_is_one = switch_status == 1;
-            mView.findViewById(R.id.fleetview_fleetswitch).setVisibility(is_combined ? View.VISIBLE : View.GONE);
+            fleetSwitchBtn.setVisibility(is_combined ? View.VISIBLE : View.GONE);
             mView.findViewById(R.id.fleet_list_main).setVisibility((!is_combined || switch_is_one) ? View.VISIBLE : View.GONE);
             mView.findViewById(R.id.fleet_list_combined).setVisibility((is_combined && !switch_is_one) ? View.VISIBLE : View.GONE);
         }
