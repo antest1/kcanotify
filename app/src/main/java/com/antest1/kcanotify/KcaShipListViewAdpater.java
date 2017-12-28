@@ -197,14 +197,19 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         }
         if (nowhp * 4 <= maxhp) {
             holder.ship_hp.setBackgroundColor(ContextCompat.getColor(context, R.color.colorHeavyDmgState));
+            holder.ship_hp.setTextColor(ContextCompat.getColor(context, R.color.white));
         } else if (nowhp * 2 <= maxhp) {
             holder.ship_hp.setBackgroundColor(ContextCompat.getColor(context, R.color.colorModerateDmgState));
+            holder.ship_hp.setTextColor(ContextCompat.getColor(context, R.color.white));
         } else if (nowhp * 4 <= maxhp * 3) {
             holder.ship_hp.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLightDmgState));
+            holder.ship_hp.setTextColor(ContextCompat.getColor(context, R.color.colorStatNormal));
         } else if (nowhp != maxhp) {
             holder.ship_hp.setBackgroundColor(ContextCompat.getColor(context, R.color.colorNormalState));
+            holder.ship_hp.setTextColor(ContextCompat.getColor(context, R.color.white));
         } else {
             holder.ship_hp.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFullState));
+            holder.ship_hp.setTextColor(ContextCompat.getColor(context, R.color.white));
         }
 
         JsonArray ship_kyouka = item.getAsJsonArray("api_kyouka");
