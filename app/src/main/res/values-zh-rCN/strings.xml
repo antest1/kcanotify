@@ -389,6 +389,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_sort_key_9">回避</string>
     <string name="ship_stat_sort_key_10">索敌</string>
     <string name="ship_stat_sort_key_11">运</string>
+    <string name="ship_stat_sort_key_12">速度</string>
 
     <string name="action_equipmentinfo">装备目录</string>
     <string name="action_expcalc">経験値計算機</string>

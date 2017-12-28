@@ -447,6 +447,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_sort_key_9">Evasion</string>
     <string name="ship_stat_sort_key_10">LOS</string>
     <string name="ship_stat_sort_key_11">Luck</string>
+    <string name="ship_stat_sort_key_12">Speed</string>
 
     <string name="action_equipmentinfo">Equipment List</string>
     <string name="action_expcalc">EXP Calculator</string>

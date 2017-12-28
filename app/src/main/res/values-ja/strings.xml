@@ -382,6 +382,7 @@
     <string name="ship_stat_sort_key_9">回避</string>
     <string name="ship_stat_sort_key_10">索敵</string>
     <string name="ship_stat_sort_key_11">運</string>
+    <string name="ship_stat_sort_key_12">速度</string>
 
     <string name="action_equipmentinfo">装備リスト</string>
     <string name="action_expcalc">経験値計算機</string>

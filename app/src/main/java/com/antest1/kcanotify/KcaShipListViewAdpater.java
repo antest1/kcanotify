@@ -31,8 +31,8 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     private List<JsonObject> listViewItemList = new ArrayList<>();
 
     private static final String[] total_key_list = {"api_id", "api_lv", "api_stype",
-            "api_karyoku", "api_raisou", "api_taiku", "api_soukou",
-            "api_yasen", "api_taisen", "api_kaihi", "api_sakuteki", "api_lucky"};
+            "api_karyoku", "api_raisou", "api_taiku", "api_soukou", "api_yasen",
+            "api_taisen", "api_kaihi", "api_sakuteki", "api_lucky", "api_soku"};
 
     public long getTotalExp() { return exp_sum; }
 

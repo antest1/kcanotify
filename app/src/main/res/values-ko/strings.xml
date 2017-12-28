@@ -382,6 +382,7 @@
     <string name="ship_stat_sort_key_9">회피</string>
     <string name="ship_stat_sort_key_10">색적</string>
     <string name="ship_stat_sort_key_11">운</string>
+    <string name="ship_stat_sort_key_12">속도</string>
 
     <string name="action_equipmentinfo">장비 리스트</string>
     <string name="action_expcalc">경험치 계산기</string>

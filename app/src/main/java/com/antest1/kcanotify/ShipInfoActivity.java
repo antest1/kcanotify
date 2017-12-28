@@ -50,6 +50,7 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class ShipInfoActivity extends AppCompatActivity {
     static final int SHIPINFO_GET_SORT_KEY = 1;
+    static final int SHIPINFO_GET_FILTER_RESULT = 2;
 
     Toolbar toolbar;
     static Gson gson = new Gson();
