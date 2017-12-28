@@ -160,12 +160,14 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 String data = sort_values.get(target);
                 JsonObject obj = ShipInfoFilterActivity.unpackPrefValue(data);
+                int prev_position = obj.get("idx").getAsInt();
                 obj.addProperty("idx", position);
+
                 ShipInfoFilterActivity.sort_values.put(target, ShipInfoFilterActivity.makeStatPrefValue(obj));
                 if (KcaShipListViewAdpater.isList(position)) {
                     condition_val.setVisibility(View.GONE);
                     sp_val.setVisibility(View.VISIBLE);
-                    setupSpinner(sp_val, target, "val", position, null);
+                    if(prev_position != position) setupSpinner(sp_val, target, "val", position, null);
                 } else {
                     sp_val.setVisibility(View.GONE);
                     condition_val.setVisibility(View.VISIBLE);
@@ -174,7 +176,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                     } else {
                         condition_val.setInputType(InputType.TYPE_CLASS_TEXT);
                     }
-                    condition_val.setText("");
+                    if(prev_position != position) condition_val.setText("");
                 }
                 debug.setText(makeStatFiltData());
             }
@@ -190,9 +192,6 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         adapter_op.setDropDownViewResource(R.layout.spinner_dropdown_item);
         sp_op.setAdapter(adapter_op);
         sp_op.setOnItemSelectedListener(getListener(target, "op", 0));
-
-        if (key != -1) sp_target.setSelection(key);
-        if (op != -1) sp_op.setSelection(op);
 
         if(add_flag) {
             add_remove_btn.setImageResource(R.mipmap.ic_add_circle);
@@ -227,9 +226,9 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         });
 
         listview.addView(v);
+        if (key != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_spinner)).setSelection(key);
+        if (op != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_operator)).setSelection(op);
         if (value.length() > 0) {
-            Toast.makeText(getApplicationContext(), value, Toast.LENGTH_LONG).show();
-            Toast.makeText(getApplicationContext(), String.valueOf(target), Toast.LENGTH_LONG).show();
             if (KcaShipListViewAdpater.isList(key)) {
                 setupSpinner(((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_select)),
                         target, "val", key, Integer.valueOf(value));
@@ -390,7 +389,6 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            Toast.makeText(mContext, "Editable: "+editable.toString(), Toast.LENGTH_LONG).show();
             int target = (Integer) mEditText.getTag();
             String data = sort_values.get(target);
             JsonObject obj = ShipInfoFilterActivity.unpackPrefValue(data);
