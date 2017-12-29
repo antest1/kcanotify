@@ -6,6 +6,214 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/expedition_item_abstract"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:minWidth="32dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_no_abs"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:background="@color/colorExpeditionTable1"
+                    android:gravity="center_vertical"
+                    android:text="13"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    tools:text="@string/expdtable_label_no" />
+
+                <TextView
+                    android:id="@+id/value_name_abs"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="ExpeditionName"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorExpeditionTable1"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/expedition_abstract_item_area"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/label_item_abs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorExpeditionTable1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/label_time_abs"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="@string/expdtable_label_time"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textColor="@color/white"
+                            android:textSize="12dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:id="@+id/label_total_num"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:text="@string/expdtable_label_item"
+                                android:textAlignment="center"
+                                android:textAllCaps="true"
+                                android:textColor="@color/white"
+                                android:textSize="12dp"
+                                android:visibility="visible" />
+
+                            <TextView
+                                android:id="@+id/label_flagship_lv"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:text="@string/expdtable_label_item"
+                                android:textAlignment="center"
+                                android:textAllCaps="true"
+                                android:textColor="@color/white"
+                                android:textSize="12dp"
+                                android:visibility="visible" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/label_spitem_abs"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="@string/expdtable_label_item"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            android:visibility="visible" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/value_time_abs"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="0.5"
+                            android:gravity="center_vertical"
+                            android:text="99:99"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/value_resources_abs"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="900/900/900/500"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="11dp"
+                            android:visibility="visible" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+
+                            <ImageView
+                                android:id="@+id/value_spitem1_abs"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:paddingBottom="2dp"
+                                android:paddingTop="2dp"
+                                android:visibility="visible"
+                                app:srcCompat="@mipmap/icon_development_material" />
+
+                            <ImageView
+                                android:id="@+id/value_spitem2_abs"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:paddingBottom="2dp"
+                                android:paddingTop="2dp"
+                                android:visibility="visible"
+                                app:srcCompat="@mipmap/icon_instant_repair" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/expedition_item_full"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
@@ -18,7 +226,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/expedition_item_area"
+                android:id="@+id/expedition_full_item_area"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -34,19 +242,22 @@
                     <TextView
                         android:id="@+id/label_no"
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:background="@color/colorExpeditionTable1"
-                        android:text="No"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="2dp"
+                        android:paddingTop="2dp"
+                        android:text="@string/expdtable_label_no"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/value_no"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
+                        android:paddingBottom="2dp"
+                        android:paddingTop="2dp"
                         android:text="1"
                         android:textAlignment="center"
                         android:textColor="@color/colorExpeditionTable1"
@@ -60,61 +271,71 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/label_item1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/colorExpeditionTable1"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/label_name"
                             android:layout_width="0dp"
-                            android:layout_height="20dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="3"
-                            android:background="@color/colorExpeditionTable1"
                             android:maxLines="1"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
                             android:singleLine="true"
-                            android:text="Name"
+                            android:text="@string/expdtable_label_name"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/label_time"
                             android:layout_width="0dp"
-                            android:layout_height="20dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="@color/colorExpeditionTable1"
                             android:maxLines="1"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
                             android:singleLine="true"
-                            android:text="Time"
+                            android:text="@string/expdtable_label_time"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/label_hq_exp"
                             android:layout_width="0dp"
-                            android:layout_height="20dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="@color/colorExpeditionTable1"
                             android:maxLines="1"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
                             android:singleLine="true"
-                            android:text="HQ"
+                            android:text="@string/expdtable_label_hq_exp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/label_ship_exp"
                             android:layout_width="0dp"
-                            android:layout_height="20dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="@color/colorExpeditionTable1"
                             android:maxLines="1"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
                             android:singleLine="true"
-                            android:text="Ship"
+                            android:text="@string/expdtable_label_ship_exp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -125,20 +346,25 @@
                         <TextView
                             android:id="@+id/value_name"
                             android:layout_width="0dp"
-                            android:layout_height="20dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="3"
-                            android:background="@color/white"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
                             android:text="TextView"
                             android:textAlignment="center"
                             android:textColor="@color/black"
-                            android:textSize="14dp" />
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/value_time"
                             android:layout_width="0dp"
-                            android:layout_height="20dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:background="@color/white"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
                             android:text="99:99"
                             android:textAlignment="center"
                             android:textColor="@color/black"
@@ -147,9 +373,11 @@
                         <TextView
                             android:id="@+id/value_hq_exp"
                             android:layout_width="0dp"
-                            android:layout_height="20dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:background="@color/white"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
                             android:text="100"
                             android:textAlignment="center"
                             android:textColor="@color/black"
@@ -158,9 +386,11 @@
                         <TextView
                             android:id="@+id/value_ship_exp"
                             android:layout_width="0dp"
-                            android:layout_height="20dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:background="@color/white"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
                             android:text="100"
                             android:textAlignment="center"
                             android:textColor="@color/black"
@@ -169,45 +399,51 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
                         <LinearLayout
+                            android:id="@+id/label_item2"
                             android:layout_width="match_parent"
-                            android:layout_height="20dp"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorExpeditionTable1"
                             android:orientation="horizontal">
 
                             <ImageView
                                 android:id="@+id/label_fuel"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="20dp"
                                 android:layout_weight="1"
-                                android:background="@color/colorExpeditionTable1"
+                                android:paddingBottom="2dp"
+                                android:paddingTop="2dp"
                                 android:src="@mipmap/icon_fuel" />
 
                             <ImageView
                                 android:id="@+id/label_ammo"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="20dp"
                                 android:layout_weight="1"
-                                android:background="@color/colorExpeditionTable1"
+                                android:paddingBottom="2dp"
+                                android:paddingTop="2dp"
                                 android:src="@mipmap/icon_ammo" />
 
                             <ImageView
                                 android:id="@+id/label_steel"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="20dp"
                                 android:layout_weight="1"
-                                android:background="@color/colorExpeditionTable1"
+                                android:paddingBottom="2dp"
+                                android:paddingTop="2dp"
                                 android:src="@mipmap/icon_steel" />
 
                             <ImageView
                                 android:id="@+id/label_bauxite"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="20dp"
                                 android:layout_weight="1"
-                                android:background="@color/colorExpeditionTable1"
+                                android:paddingBottom="2dp"
+                                android:paddingTop="2dp"
                                 android:src="@mipmap/icon_bauxite" />
 
                             <TextView
@@ -215,41 +451,46 @@
                                 android:layout_width="0dp"
                                 android:layout_height="20dp"
                                 android:layout_weight="1"
-                                android:background="@color/colorExpeditionTable1"
                                 android:maxLines="1"
+                                android:paddingBottom="2dp"
+                                android:paddingTop="2dp"
                                 android:singleLine="true"
-                                android:text="Item1"
+                                android:text="@string/expdtable_label_item1"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="14dp"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/label_spitem2"
                                 android:layout_width="0dp"
                                 android:layout_height="20dp"
                                 android:layout_weight="1"
-                                android:background="@color/colorExpeditionTable1"
                                 android:maxLines="1"
+                                android:paddingBottom="2dp"
+                                android:paddingTop="2dp"
                                 android:singleLine="true"
-                                android:text="Item2"
+                                android:text="@string/expdtable_label_item2"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="14dp"
+                                android:textStyle="bold" />
 
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="20dp"
+                            android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/value_fuel"
                                 android:layout_width="0dp"
-                                android:layout_height="20dp"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:background="@color/white"
                                 android:maxLines="1"
+                                android:paddingBottom="2dp"
+                                android:paddingTop="2dp"
                                 android:singleLine="true"
                                 android:text="1000"
                                 android:textAlignment="center"
@@ -259,10 +500,11 @@
                             <TextView
                                 android:id="@+id/value_ammo"
                                 android:layout_width="0dp"
-                                android:layout_height="20dp"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:background="@color/white"
                                 android:maxLines="1"
+                                android:paddingBottom="2dp"
+                                android:paddingTop="2dp"
                                 android:singleLine="true"
                                 android:text="1000"
                                 android:textAlignment="center"
@@ -272,10 +514,11 @@
                             <TextView
                                 android:id="@+id/value_steel"
                                 android:layout_width="0dp"
-                                android:layout_height="20dp"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:background="@color/white"
                                 android:maxLines="1"
+                                android:paddingBottom="2dp"
+                                android:paddingTop="2dp"
                                 android:singleLine="true"
                                 android:text="1000"
                                 android:textAlignment="center"
@@ -285,10 +528,11 @@
                             <TextView
                                 android:id="@+id/value_bauxite"
                                 android:layout_width="0dp"
-                                android:layout_height="20dp"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:background="@color/white"
                                 android:maxLines="1"
+                                android:paddingBottom="2dp"
+                                android:paddingTop="2dp"
                                 android:singleLine="true"
                                 android:text="1000"
                                 android:textAlignment="center"
@@ -297,17 +541,16 @@
 
                             <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
 
                                 <ImageView
                                     android:id="@+id/value_spitem1_type"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="20dp"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:background="@color/white"
                                     android:paddingBottom="2dp"
                                     android:paddingTop="2dp"
                                     app:srcCompat="@mipmap/icon_development_material" />
@@ -318,24 +561,24 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:background="@color/white"
+                                    android:paddingBottom="2dp"
+                                    android:paddingTop="2dp"
                                     android:text="x2"
                                     android:textColor="@color/black" />
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
 
                                 <ImageView
                                     android:id="@+id/value_spitem2_type"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="20dp"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:background="@color/white"
                                     android:paddingBottom="2dp"
                                     android:paddingTop="2dp"
                                     app:srcCompat="@mipmap/icon_instant_repair" />
@@ -346,7 +589,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:background="@color/white"
+                                    android:paddingBottom="2dp"
+                                    android:paddingTop="2dp"
                                     android:text="x2"
                                     android:textColor="@color/black" />
                             </LinearLayout>
@@ -357,38 +601,329 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/label_condition"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="3"
                             android:background="@color/colorExpeditionTable1"
                             android:maxLines="1"
+                            android:paddingBottom="2dp"
+                            android:paddingTop="2dp"
                             android:singleLine="true"
-                            android:text="Condition"
+                            android:text="@string/expdtable_label_condition"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
+                        <LinearLayout
                             android:id="@+id/value_condition"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="3"
-                            android:background="@color/white"
-                            android:text="TextView"
-                            android:textAlignment="center"
-                            android:textColor="@color/black"
-                            android:textSize="14dp" />
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:padding="4dp">
+
+                            <LinearLayout
+                                android:id="@+id/view_excheck_flagship"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/view_excheck_flagship_label"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/excheckview_flag_info"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="14dp" />
+
+                                <LinearLayout
+                                    android:id="@+id/view_excheck_flagship_data"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/view_excheck_flagship_lv"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="4dp"
+                                        android:layout_marginRight="4dp"
+                                        android:layout_weight="1"
+                                        android:text="Lv45"
+                                        android:textColor="@color/black" />
+
+                                    <TextView
+                                        android:id="@+id/view_excheck_flagship_cond"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="4dp"
+                                        android:layout_marginRight="4dp"
+                                        android:layout_weight="1"
+                                        android:text="CL"
+                                        android:textColor="@color/black" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/view_excheck_fleet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/view_excheck_fleet_label"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/excheckview_total_info"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="14dp" />
+
+                                <LinearLayout
+                                    android:id="@+id/view_excheck_fleet_data"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:id="@+id/view_excheck_fleet_data_total"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/view_excheck_fleet_total_num"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="4dp"
+                                            android:layout_marginRight="4dp"
+                                            android:text="6 ships"
+                                            android:textColor="@color/black"
+                                            android:textSize="14dp" />
+
+                                        <TextView
+                                            android:id="@+id/view_excheck_fleet_total_lv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="4dp"
+                                            android:layout_marginRight="4dp"
+                                            android:text="Total Lv 45"
+                                            android:textColor="@color/black"
+                                            android:textSize="14dp" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/view_excheck_fleet_condition"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="vertical">
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/view_excheck_drum"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1.0"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/view_excheck_drum_label"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/excheckview_drum_info"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="14dp" />
+
+                                <LinearLayout
+                                    android:id="@+id/view_excheck_drum_data"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/view_excheck_drum_ship"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="4dp"
+                                        android:layout_marginRight="4dp"
+                                        android:text="2 ships"
+                                        android:textColor="@color/black"
+                                        android:textSize="14dp" />
+
+                                    <TextView
+                                        android:id="@+id/view_excheck_drum_count"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="4dp"
+                                        android:layout_marginRight="4dp"
+                                        android:text="8 drums"
+                                        android:textColor="@color/black"
+                                        android:textSize="14dp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/view_excheck_asw"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1.0"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/view_excheck_asw_label"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/excheckview_asw_info"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="14dp" />
+
+                                <LinearLayout
+                                    android:id="@+id/view_excheck_asw_data"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/view_excheck_total_asw"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="4dp"
+                                        android:layout_marginRight="4dp"
+                                        android:text="180+"
+                                        android:textColor="@color/black"
+                                        android:textSize="14dp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/view_excheck_fp"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1.0"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/view_excheck_fp_label"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/excheckview_fp_info"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="14dp" />
+
+                                <LinearLayout
+                                    android:id="@+id/view_excheck_fp_data"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/view_excheck_total_fp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="4dp"
+                                        android:layout_marginRight="4dp"
+                                        android:text="180+"
+                                        android:textColor="@color/black"
+                                        android:textSize="14dp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/view_excheck_los"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1.0"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/view_excheck_los_label"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/excheckview_los_info"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="14dp" />
+
+                                <LinearLayout
+                                    android:id="@+id/view_excheck_los_data"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/view_excheck_total_los"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="4dp"
+                                        android:layout_marginRight="4dp"
+                                        android:text="180+"
+                                        android:textColor="@color/black"
+                                        android:textSize="14dp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/view_excheck_firepower"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1.0"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/view_excheck_firepower_label"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/excheckview_firepower_info"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="14dp" />
+
+                                <LinearLayout
+                                    android:id="@+id/view_excheck_firepower_data"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/view_excheck_total_firepower"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="4dp"
+                                        android:layout_marginRight="4dp"
+                                        android:text="180+"
+                                        android:textColor="@color/black"
+                                        android:textSize="14dp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -398,7 +933,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView17"
+            android:id="@+id/item_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -46,6 +46,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import static android.R.attr.min;
 import static android.R.attr.orientation;
 import static com.antest1.kcanotify.KcaAlarmService.ALARM_CHANNEL_ID;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
@@ -361,15 +362,22 @@ public class KcaUtils {
         }
     }
 
-    public static String getTimeStr(int left_time) {
+    public static String getTimeStr(int left_time, boolean is_min) {
         int sec, min, hour;
         sec = left_time;
         min = sec / 60;
         hour = min / 60;
         sec = sec % 60;
         min = min % 60;
-        return KcaUtils.format("%02d:%02d:%02d", hour, min, sec);
+        if (is_min) return KcaUtils.format("%02d:%02d", hour * 60 + min, sec);
+        else return KcaUtils.format("%02d:%02d:%02d", hour, min, sec);
     }
+
+    public static String getTimeStr(int left_time) {
+        return getTimeStr(left_time, false);
+    }
+
+
 
     public static void doVibrate(Vibrator v, int time) {
         if (Build.VERSION.SDK_INT >= 26) {

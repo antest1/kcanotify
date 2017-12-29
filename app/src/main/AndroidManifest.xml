@@ -95,6 +95,13 @@
                 android:value="com.antest1.kcanotify.AkashiActivity" />
         </activity>
         <activity
+            android:name="com.antest1.kcanotify.ExpeditionTableActivity"
+            android:configChanges="locale|layoutDirection">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.antest1.kcanotify.ToolsActivity" />
+        </activity>
+        <activity
             android:name="com.antest1.kcanotify.KcaFairySelectActivity"
             android:configChanges="locale|layoutDirection">
             <meta-data

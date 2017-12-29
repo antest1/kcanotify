@@ -388,6 +388,24 @@
     <string name="action_equipmentinfo">장비 리스트</string>
     <string name="action_expcalc">경험치 계산기</string>
     <string name="action_expdtable">원정 일람</string>
+    <string name="expdtable_btn_w0">전체</string>
+    <string name="expdtable_btn_w1">1해역</string>
+    <string name="expdtable_btn_w2">2해역</string>
+    <string name="expdtable_btn_w3">3해역</string>
+    <string name="expdtable_btn_w4">4해역</string>
+    <string name="expdtable_btn_w5">5해역</string>
+    <string name="expdtable_btn_s1">일반</string>
+    <string name="expdtable_btn_s2">대성공</string>
+
+    <string name="expdtable_label_no">번호</string>
+    <string name="expdtable_label_name">이름</string>
+    <string name="expdtable_label_time">시간</string>
+    <string name="expdtable_label_item">아이템</string>
+    <string name="expdtable_label_item1">1번</string>
+    <string name="expdtable_label_item2">2번</string>
+    <string name="expdtable_label_hq_exp">제독</string>
+    <string name="expdtable_label_ship_exp">함선</string>
+    <string name="expdtable_label_condition">성공 조건</string>
 
     <string name="fleetview_title">함대정보</string>
     <string name="fleetview_combined">연합</string>

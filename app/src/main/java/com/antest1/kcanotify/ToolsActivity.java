@@ -105,8 +105,8 @@ public class ToolsActivity extends AppCompatActivity {
         view_expdtable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(ToolsActivity.this, AkashiActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(ToolsActivity.this, ExpeditionTableActivity.class);
+                startActivity(intent);
             }
         });
     }

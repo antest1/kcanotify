@@ -388,6 +388,24 @@
     <string name="action_equipmentinfo">装備リスト</string>
     <string name="action_expcalc">経験値計算機</string>
     <string name="action_expdtable">遠征一覧</string>
+    <string name="expdtable_btn_w0">全体</string>
+    <string name="expdtable_btn_w1">鎮守府</string>
+    <string name="expdtable_btn_w2">南西諸島</string>
+    <string name="expdtable_btn_w3">北方</string>
+    <string name="expdtable_btn_w4">西方</string>
+    <string name="expdtable_btn_w5">南方</string>
+    <string name="expdtable_btn_s1">一般</string>
+    <string name="expdtable_btn_s2">大成功</string>
+
+    <string name="expdtable_label_no">ID</string>
+    <string name="expdtable_label_name">遠征名</string>
+    <string name="expdtable_label_time">時間</string>
+    <string name="expdtable_label_item">アイテム</string>
+    <string name="expdtable_label_item1">ア１</string>
+    <string name="expdtable_label_item2">ア２</string>
+    <string name="expdtable_label_hq_exp">提督</string>
+    <string name="expdtable_label_ship_exp">艦娘</string>
+    <string name="expdtable_label_condition">必要条件／編成</string>
 
     <string name="fleetview_title">艦隊情報</string>
     <string name="fleetview_combined">連合</string>

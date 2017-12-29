@@ -170,4 +170,7 @@
     <color name="colorExpeditionTable3">#03A9F4</color>
     <color name="colorExpeditionTable4">#4CAF50</color>
     <color name="colorExpeditionTable5">#AB47BC</color>
+    <color name="colorExpeditionTable99">#e53935</color>
+    <color name="colorExpeditionGreatSuccess">#ff5252</color>
+    <color name="colorExpeditionItemBack">#c0f5f5f5</color>
 </resources>

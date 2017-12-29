@@ -453,6 +453,23 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_equipmentinfo">Equipment List</string>
     <string name="action_expcalc">EXP Calculator</string>
     <string name="action_expdtable">Expedition Table</string>
+    <string name="expdtable_btn_w0">ALL</string>
+    <string name="expdtable_btn_w1">World 1</string>
+    <string name="expdtable_btn_w2">World 2</string>
+    <string name="expdtable_btn_w3">World 3</string>
+    <string name="expdtable_btn_w4">World 4</string>
+    <string name="expdtable_btn_w5">World 5</string>
+    <string name="expdtable_btn_s1">Normal</string>
+    <string name="expdtable_btn_s2">Great</string>
+    <string name="expdtable_label_no">No</string>
+    <string name="expdtable_label_name">Name</string>
+    <string name="expdtable_label_time">Time</string>
+    <string name="expdtable_label_item">Item</string>
+    <string name="expdtable_label_item1">Item1</string>
+    <string name="expdtable_label_item2">Item2</string>
+    <string name="expdtable_label_hq_exp">HQ</string>
+    <string name="expdtable_label_ship_exp">Ship</string>
+    <string name="expdtable_label_condition">Success Condition</string>
 
     <string name="fleetview_title">FleetView</string>
     <string name="fleetview_combined">CF</string>

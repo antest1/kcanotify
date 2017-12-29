@@ -395,6 +395,23 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_equipmentinfo">装备目录</string>
     <string name="action_expcalc">経験値計算機</string>
     <string name="action_expdtable">远征表</string>
+    <string name="expdtable_btn_w0">整个</string>
+    <string name="expdtable_btn_w1">镇守府</string>
+    <string name="expdtable_btn_w2">南西诸岛</string>
+    <string name="expdtable_btn_w3">北方</string>
+    <string name="expdtable_btn_w4">西方</string>
+    <string name="expdtable_btn_w5">南方</string>
+    <string name="expdtable_btn_s1">一般</string>
+    <string name="expdtable_btn_s2">大成功</string>
+    <string name="expdtable_label_no">编号</string>
+    <string name="expdtable_label_name">远征名称</string>
+    <string name="expdtable_label_time">耗时</string>
+    <string name="expdtable_label_item">奖励</string>
+    <string name="expdtable_label_item1">奖Ｉ</string>
+    <string name="expdtable_label_item2">奖Ⅱ</string>
+    <string name="expdtable_label_hq_exp">提督</string>
+    <string name="expdtable_label_ship_exp">舰娘</string>
+    <string name="expdtable_label_condition">要求的条件</string>
 
     <string name="fleetview_title">舰队信息</string>
     <string name="fleetview_combined">联合</string>
