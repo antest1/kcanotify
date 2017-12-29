@@ -424,6 +424,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_asw_info">对潜</string>
     <string name="excheckview_fp_info">对空</string>
     <string name="excheckview_los_info">索敌</string>
+    <string name="excheckview_firepower_info">火力</string>
     <string name="excheckview_flag_lv_format" formatted="false">等级：%d+</string>
     <string name="excheckview_total_num_format" formatted="false">最低数：%d</string>
     <string name="excheckview_total_lv_format" formatted="false">总等级：%d+</string>

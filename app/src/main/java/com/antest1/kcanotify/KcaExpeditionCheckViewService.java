@@ -271,6 +271,7 @@ public class KcaExpeditionCheckViewService extends Service {
         boolean has_total_asw = data.has("total-asw");
         boolean has_total_fp = data.has("total-fp");
         boolean has_total_los = data.has("total-los");
+        boolean has_total_firepower = data.has("total-firepower");
 
         int total_num = data.get("total-num").getAsInt();
         result.addProperty("total-num", ship_data.size() >= total_num);
@@ -398,6 +399,17 @@ public class KcaExpeditionCheckViewService extends Service {
             int total_los = data.get("total-los").getAsInt();
             result.addProperty("total-los", total_los_value >= total_los);
             total_pass = total_pass && (total_los_value >= total_los);
+        }
+
+        result.addProperty("total-firepower", true);
+        if (has_total_firepower) {
+            int total_firepower_value = 0;
+            for (JsonObject obj : ship_data) {
+                total_firepower_value += obj.get("karyoku").getAsInt();
+            }
+            int total_firepower = data.get("total-firepower").getAsInt();
+            result.addProperty("total-firepower", total_firepower_value >= total_firepower);
+            total_pass = total_pass && (total_firepower_value >= total_firepower);
         }
 
         result.addProperty("pass", total_pass);
@@ -575,6 +587,7 @@ public class KcaExpeditionCheckViewService extends Service {
         boolean has_total_asw = data.has("total-asw");
         boolean has_total_fp = data.has("total-fp");
         boolean has_total_los = data.has("total-los");
+        boolean has_total_firepower = data.has("total-firepower");
 
         ((LinearLayout) itemView.findViewById(R.id.view_excheck_fleet_condition)).removeAllViews();
 
@@ -677,6 +690,16 @@ public class KcaExpeditionCheckViewService extends Service {
             setItemTextViewColorById(R.id.view_excheck_total_los,
                     check.get("total-los").getAsBoolean(), true);
         }
+
+        setItemViewVisibilityById(R.id.view_excheck_firepower, has_total_firepower);
+        if (has_total_firepower) {
+            int total_firepower = data.get("total-firepower").getAsInt();
+            setItemTextViewById(R.id.view_excheck_total_firepower,
+                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_firepower));
+            setItemTextViewColorById(R.id.view_excheck_total_firepower,
+                    check.get("total-firepower").getAsBoolean(), true);
+        }
+
         itemView.setVisibility(View.VISIBLE);
     }
 
@@ -690,12 +713,13 @@ public class KcaExpeditionCheckViewService extends Service {
                     int id = api_ship.get(i).getAsInt();
                     if (id > 0) {
                         JsonObject data = new JsonObject();
-                        JsonObject usershipinfo = getUserShipDataById(id, "ship_id,lv,slot,cond,taisen,taiku,sakuteki");
+                        JsonObject usershipinfo = getUserShipDataById(id, "ship_id,lv,slot,cond,karyoku,taisen,taiku,sakuteki");
                         JsonObject kcshipinfo = getKcShipDataById(usershipinfo.get("ship_id").getAsInt(), "stype");
                         data.addProperty("ship_id", usershipinfo.get("ship_id").getAsInt());
                         data.addProperty("lv", usershipinfo.get("lv").getAsInt());
                         data.addProperty("cond", usershipinfo.get("cond").getAsInt());
                         data.addProperty("stype", kcshipinfo.get("stype").getAsInt());
+                        data.addProperty("karyoku", usershipinfo.getAsJsonArray("karyoku").get(0).getAsInt());
                         data.addProperty("taisen", usershipinfo.getAsJsonArray("taisen").get(0).getAsInt());
                         data.addProperty("taiku", usershipinfo.getAsJsonArray("taiku").get(0).getAsInt());
                         data.addProperty("sakuteki", usershipinfo.getAsJsonArray("sakuteki").get(0).getAsInt());

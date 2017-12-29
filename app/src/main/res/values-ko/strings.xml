@@ -417,6 +417,7 @@
     <string name="excheckview_asw_info">대잠</string>
     <string name="excheckview_fp_info">대공</string>
     <string name="excheckview_los_info">색적</string>
+    <string name="excheckview_firepower_info">화력</string>
     <string name="excheckview_flag_lv_format" formatted="false">레벨 %d+</string>
     <string name="excheckview_total_num_format" formatted="false">최저 %d척</string>
     <string name="excheckview_total_lv_format" formatted="false">레벨 합계 %d+</string>

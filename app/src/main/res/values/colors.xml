@@ -164,4 +164,10 @@
     <color name="colorStatSallyArea5">#673AB7</color>
 
     <color name="colorStatSortCurrentBack">#c0bdbdbd</color>
+
+    <color name="colorExpeditionTable1">#607D8B</color>
+    <color name="colorExpeditionTable2">#AFB42B</color>
+    <color name="colorExpeditionTable3">#03A9F4</color>
+    <color name="colorExpeditionTable4">#4CAF50</color>
+    <color name="colorExpeditionTable5">#AB47BC</color>
 </resources>

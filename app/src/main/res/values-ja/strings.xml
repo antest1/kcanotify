@@ -419,6 +419,7 @@
     <string name="excheckview_asw_info">対潜</string>
     <string name="excheckview_fp_info">対空</string>
     <string name="excheckview_los_info">索敵</string>
+    <string name="excheckview_firepower_info">火力</string>
     <string name="excheckview_flag_lv_format" formatted="false">Lv%d+</string>
     <string name="excheckview_total_num_format" formatted="false">最低%d隻</string>
     <string name="excheckview_total_lv_format" formatted="false">Lv合計%d+</string>

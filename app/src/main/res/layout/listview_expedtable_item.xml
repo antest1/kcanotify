@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/expedition_item_area"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:minWidth="32dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/label_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:background="@color/colorExpeditionTable1"
+                        android:text="No"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/value_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:text="1"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorExpeditionTable1"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/label_name"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="3"
+                            android:background="@color/colorExpeditionTable1"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="Name"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/label_time"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            android:background="@color/colorExpeditionTable1"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="Time"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/label_hq_exp"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            android:background="@color/colorExpeditionTable1"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="HQ"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/label_ship_exp"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            android:background="@color/colorExpeditionTable1"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="Ship"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/value_name"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="3"
+                            android:background="@color/white"
+                            android:text="TextView"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/value_time"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:text="99:99"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/value_hq_exp"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:text="100"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/value_ship_exp"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:text="100"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="14dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/label_fuel"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@color/colorExpeditionTable1"
+                                android:src="@mipmap/icon_fuel" />
+
+                            <ImageView
+                                android:id="@+id/label_ammo"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@color/colorExpeditionTable1"
+                                android:src="@mipmap/icon_ammo" />
+
+                            <ImageView
+                                android:id="@+id/label_steel"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@color/colorExpeditionTable1"
+                                android:src="@mipmap/icon_steel" />
+
+                            <ImageView
+                                android:id="@+id/label_bauxite"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@color/colorExpeditionTable1"
+                                android:src="@mipmap/icon_bauxite" />
+
+                            <TextView
+                                android:id="@+id/label_spitem1"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorExpeditionTable1"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:text="Item1"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textSize="14dp" />
+
+                            <TextView
+                                android:id="@+id/label_spitem2"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorExpeditionTable1"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:text="Item2"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textSize="14dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/value_fuel"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:text="1000"
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textSize="14dp" />
+
+                            <TextView
+                                android:id="@+id/value_ammo"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:text="1000"
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textSize="14dp" />
+
+                            <TextView
+                                android:id="@+id/value_steel"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:text="1000"
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textSize="14dp" />
+
+                            <TextView
+                                android:id="@+id/value_bauxite"
+                                android:layout_width="0dp"
+                                android:layout_height="20dp"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:text="1000"
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textSize="14dp" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/value_spitem1_type"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:background="@color/white"
+                                    android:paddingBottom="2dp"
+                                    android:paddingTop="2dp"
+                                    app:srcCompat="@mipmap/icon_development_material" />
+
+                                <TextView
+                                    android:id="@+id/value_spitem1_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:background="@color/white"
+                                    android:text="x2"
+                                    android:textColor="@color/black" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/value_spitem2_type"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:background="@color/white"
+                                    android:paddingBottom="2dp"
+                                    android:paddingTop="2dp"
+                                    app:srcCompat="@mipmap/icon_instant_repair" />
+
+                                <TextView
+                                    android:id="@+id/value_spitem2_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:background="@color/white"
+                                    android:text="x2"
+                                    android:textColor="@color/black" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/label_condition"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="3"
+                            android:background="@color/colorExpeditionTable1"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="Condition"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/value_condition"
+                            android:layout_width="0dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="3"
+                            android:background="@color/white"
+                            android:text="TextView"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="14dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:padding="1dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

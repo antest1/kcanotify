@@ -15,6 +15,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.acra.util.JsonUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.IOException;

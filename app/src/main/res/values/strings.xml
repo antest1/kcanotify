@@ -445,7 +445,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_sort_key_7">Nightpower</string>
     <string name="ship_stat_sort_key_8">ASW</string>
     <string name="ship_stat_sort_key_9">Evasion</string>
-    <string name="ship_stat_sort_key_10">LOS</string>
+    <string name="ship_stat_sort_key_10">LoS</string>
     <string name="ship_stat_sort_key_11">Luck</string>
     <string name="ship_stat_sort_key_12">Speed</string>
     <string name="shipinfo_filt_list_dialog_title">Select</string>
@@ -483,6 +483,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_asw_info">ASW</string>
     <string name="excheckview_fp_info">FP</string>
     <string name="excheckview_los_info">LoS</string>
+    <string name="excheckview_firepower_info">Firepower</string>
     <string name="excheckview_flag_lv_format" formatted="false">Lv %d+</string>
     <string name="excheckview_total_num_format" formatted="false">Total %d+</string>
     <string name="excheckview_total_lv_format" formatted="false">Lv Sum %d+</string>
