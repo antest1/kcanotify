@@ -97,8 +97,8 @@ public class ToolsActivity extends AppCompatActivity {
         view_expcalc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(ToolsActivity.this, ShipInfoActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(ToolsActivity.this, ExpCalcActivity.class);
+                startActivity(intent);
             }
         });
 

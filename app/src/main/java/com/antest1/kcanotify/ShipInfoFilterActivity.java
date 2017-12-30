@@ -52,7 +52,6 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
     LinearLayout listview;
     public int count;
     public static SparseArray<String> sort_values = new SparseArray<>();
-
     KcaDBHelper dbHelper;
 
     public ShipInfoFilterActivity() {

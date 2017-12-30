@@ -432,6 +432,22 @@ public class KcaApiData {
         }
     }
 
+    public static int loadSortieExpInfoFromAssets(AssetManager am) {
+        try {
+            AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("exp_sortie.json");
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            JsonElement expSortieData = new JsonParser().parse(new String(bytes));
+            if (expSortieData.isJsonObject()) {
+                helper.putValue(DB_KEY_EXPSORTIE, expSortieData.toString());
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
     public static int loadShipTranslationDataFromAssets(AssetManager am, String locale) {
         try {
             locale = getLocaleCode(locale);

@@ -387,6 +387,16 @@
 
     <string name="action_equipmentinfo">장비 리스트</string>
     <string name="action_expcalc">경험치 계산기</string>
+    <string name="expcalc_shipname">함선</string>
+    <string name="expcalc_currentlv">현재 레벨</string>
+    <string name="expcalc_targetlv">목표 레벨</string>
+    <string name="expcalc_map">해역</string>
+    <string name="expcalc_rank">랭크</string>
+    <string name="expcalc_flagship">기함</string>
+    <string name="expcalc_mvp">MVP</string>
+    <string name="expcalc_mapexp">해역 경험치</string>
+    <string name="expcalc_remainexp">남은 경험치</string>
+
     <string name="action_expdtable">원정 일람</string>
     <string name="expdtable_btn_w0">전체</string>
     <string name="expdtable_btn_w1">1해역</string>

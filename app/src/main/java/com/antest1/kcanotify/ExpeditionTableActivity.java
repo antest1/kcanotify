@@ -30,6 +30,7 @@ import java.util.Locale;
 
 import static android.widget.Toast.makeText;
 import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -81,6 +82,7 @@ public class ExpeditionTableActivity extends AppCompatActivity {
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
         loadTranslationData(getApplicationContext());
+        loadSimpleExpeditionInfoFromAssets(getAssets());
 
         AssetManager assetManager = getAssets();
 

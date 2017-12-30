@@ -165,6 +165,9 @@
 
     <color name="colorStatSortCurrentBack">#c0bdbdbd</color>
 
+    <color name="colorExpCalcPanelBack">#7ff5f5f5</color>
+    <color name="colorExpCalcDataArea">#e0e0e0</color>
+
     <color name="colorExpeditionTable1">#607D8B</color>
     <color name="colorExpeditionTable2">#AFB42B</color>
     <color name="colorExpeditionTable3">#03A9F4</color>

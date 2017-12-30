@@ -452,6 +452,16 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="action_equipmentinfo">Equipment List</string>
     <string name="action_expcalc">EXP Calculator</string>
+    <string name="expcalc_shipname">Ship</string>
+    <string name="expcalc_currentlv">Current Lv</string>
+    <string name="expcalc_targetlv">Target Lv</string>
+    <string name="expcalc_map">Map</string>
+    <string name="expcalc_rank">Rank</string>
+    <string name="expcalc_flagship">Flagship</string>
+    <string name="expcalc_mvp">MVP</string>
+    <string name="expcalc_mapexp">Map EXP</string>
+    <string name="expcalc_remainexp">Remain EXP</string>
+
     <string name="action_expdtable">Expedition Table</string>
     <string name="expdtable_btn_w0">ALL</string>
     <string name="expdtable_btn_w1">World 1</string>

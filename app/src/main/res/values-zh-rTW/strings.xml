@@ -394,6 +394,16 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="action_equipmentinfo">裝備目錄</string>
     <string name="action_expcalc">経験値計算機</string>
+    <string name="expcalc_shipname">艦娘</string>
+    <string name="expcalc_currentlv">現在等級</string>
+    <string name="expcalc_targetlv">目標等級</string>
+    <string name="expcalc_map">海域</string>
+    <string name="expcalc_rank">評價</string>
+    <string name="expcalc_flagship">旗艦</string>
+    <string name="expcalc_mvp">MVP</string>
+    <string name="expcalc_mapexp">海域經驗值</string>
+    <string name="expcalc_remainexp">剩餘經驗值</string>
+
     <string name="action_expdtable">遠征表</string>
     <string name="expdtable_btn_w0">整個</string>
     <string name="expdtable_btn_w1">鎮守府</string>

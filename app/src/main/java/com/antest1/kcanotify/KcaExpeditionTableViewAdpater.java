@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.R.attr.name;
+import static com.antest1.kcanotify.KcaApiData.getExpeditionInfo;
 import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
@@ -232,7 +233,7 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
         v.findViewById(R.id.expedition_item_abstract).setVisibility(active.contains(target) ? View.GONE : View.VISIBLE);
         v.findViewById(R.id.expedition_item_full).setVisibility(active.contains(target) ? View.VISIBLE : View.GONE);
 
-        setConditionContent(v.findViewWithTag(target), item);
+        setConditionContent(v.findViewWithTag(target), getExpeditionInfo(target, locale));
         return v;
     }
 
