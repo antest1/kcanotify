@@ -61,11 +61,14 @@ import static android.widget.Toast.makeText;
 import static com.antest1.kcanotify.KcaAkashiRepairInfo.getAkashiRepairTime;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaApiData.AKASHI_TIMER_20MIN;
+import static com.antest1.kcanotify.KcaApiData.T2_DRUM_CAN;
 import static com.antest1.kcanotify.KcaApiData.T2_FIGHTER;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
+import static com.antest1.kcanotify.KcaApiData.T2_GUN_MEDIUM;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_SMALL;
 import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
+import static com.antest1.kcanotify.KcaApiData.T2_SUB_GUN;
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
@@ -1490,6 +1493,12 @@ public class KcaService extends Service {
                                             case T2_GUN_SMALL:
                                                 questTracker.updateIdCountTracker("673");
                                                 break;
+                                            case T2_GUN_MEDIUM:
+                                                questTracker.updateIdCountTracker("676", 0);
+                                                break;
+                                            case T2_SUB_GUN:
+                                                questTracker.updateIdCountTracker("676", 1);
+                                                break;
                                             case T2_FIGHTER:
                                                 questTracker.updateIdCountTracker("675", 0);
                                             case T2_MACHINE_GUN:
@@ -1500,6 +1509,9 @@ public class KcaService extends Service {
                                             case T2_GUN_LARGE:
                                             case T2_GUN_LARGE_II:
                                                 questTracker.updateIdCountTracker("663");
+                                                break;
+                                            case T2_DRUM_CAN:
+                                                questTracker.updateIdCountTracker("676", 2);
                                                 break;
                                             default:
                                                 break;

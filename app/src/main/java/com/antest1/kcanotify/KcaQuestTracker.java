@@ -576,6 +576,22 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     if (requiredAV >= 1) requiredShip += 1;
                     wflag = world == 6 && map == 3 && isboss && isGoodRank(rank) && requiredShip == 2;
                     break;
+                case "873": // 3해역 분기퀘
+                    targetData = new JsonArray();
+                    targetData.add(cond0);
+                    targetData.add(cond1);
+                    targetData.add(cond2);
+                    if (world == 3 && map == 1 && isboss && isGoodRank(rank))
+                        targetData.set(0, new JsonPrimitive(1));
+                    if (world == 3 && map == 2 && isboss && isGoodRank(rank))
+                        targetData.set(1, new JsonPrimitive(1));
+                    if (world == 3 && map == 3 && isboss && isGoodRank(rank))
+                        targetData.set(2, new JsonPrimitive(1));
+                    updateTarget.add(key, targetData);
+                    break;
+                case "875": // 5-4 분기퀘
+                    wflag = world == 5 && map == 4 && isboss && isGoodRank(rank);
+                    break;
                 default:
                     break;
             }

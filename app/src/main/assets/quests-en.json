@@ -528,6 +528,13 @@
 		"desc": "Have Mogami, Asagumo, Michishio, Shigure and Yamagumo in Fleet 3.",
 		"memo": "\u27a3Rewards either 2 Irako OR a Furniture Fairy OR a New Model Artillery Armament Materials"
 	},
+	"188": {
+        "code": "A83",
+        "name": "Elite DesDiv 31, First Platoon, Prepare to Sortie!",
+        "desc": "Have Naganami Kai Ni as flagship and ONLY ONE of Takanami Kai, Asashimo Kai or Okinami Kai in your fleet.",
+        "memo": "\u27a3Rewards either 2 Combat Ration (Special Onigiri) OR a Furniture Fairy",
+        "unlock": [ 875 ]
+    },
 	
 	"202": {
 		"code": "B1",
@@ -1492,7 +1499,14 @@
         "desc": "Sortie a CL and up to 5 additional ships to [W3-1], [W3-2] and [W3-3]. A-Rank+ the boss nodes of each.",
         "memo": "\u27a3Rewards a Combat Ration and either a Furniture Fairy OR a \u2605+3 12.7cm Twin Gun Mount Model C Kai Ni OR a Medal"
     },
-
+	"875": {
+        "code": "Bq6",
+        "name": "Quarterly [W5-4]",
+        "desc": "Sortie Naganami Kai Ni as flagship, one of Takanami Kai, Asashimo Kai or Okinami Kai, and up to 4 additional ships to [W5-4]. S-Rank the boss node twice. Overlay: F10",
+        "memo": "\u203bElite DesDiv 31, Break Into the Iron Bottom Sound! \u27a3Rewards: \u00B6First choice: Either 2 Type 13 Air Radars OR 2 Type 22 Surface Radars OR an Action Report \u00B6Second choice: Either a New Model Artillery Armament Materials OR a Present Box",
+        "tracking": [ [0,2] ]
+    },
+	
 	"301": {
 		"code": "C1",
 		"name": "The First Exercise!",
@@ -1582,6 +1596,12 @@
 		"desc": "Secure 4 victories in Exercises within the same day. ",
 		"memo": "\u27a3Rewards 2 Screws and either a Furniture Fairy OR a Daihatsu Landing Craft."
 	},
+	"317": {
+        "code": "C15",
+        "name": "A Project to Facilitate the War Potential of the Type-A Destroyers",
+        "desc": "Secure 3 victories in Exercises using 2+ Kagerou-class or Yuugumo-class DDs. Then, sortie to [W2-2], [W2-3], [W2-4] and [W2-5]. A-Rank+ the bosses. You must use fleet 1.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either an Action Report OR a Furniture Fairy \u00B6Second choice: Either 5 Buckets OR 2 Combat Rations"
+    },
 
 	"401": {
 		"code": "D1",
@@ -2242,6 +2262,13 @@
 		"desc": "Have 800 Bauxite. Scrap 6 fighter aircraft and 4 anti-air machine guns. Press F10 to clear the overlay.",
 		"memo": "\u203bIntegrated Consolidation of Operational Equipment \u27a3Rewards either a Type 1 Fighter Hayabusa Model II OR a Shiden Model 11 OR 4 Screws"
     },
+	 "676": {
+        "code": "F68",
+        "name": "Weekly Gun Dismantlement",
+        "desc": "Have 2400 Steel. Scrap 3 medium-calibur main guns, 3 secondary guns and a Drum Canister.",
+        "memo": "\u203bIntegrated Consolidation of Equipment Development Capabilities \u2718Consumes the resources."
+    },
+
 
 	"701": {
 		"code": "G1",
@@ -2275,7 +2302,7 @@
 		"memo": "\u2718Consumes the resources. \u27a3Rewards a New Model Aircraft Blueprint"
 	},
 
-	"188": {
+	"188_old": {
 		"code": "Le1A1",
 		"name": "Fully Formed Nishimura Fleet, Prepare to Sortie!",
 		"desc": "Have Yamashiro, Fusou, Mogami, Michishio, Asagumo, Yamagumo and Shigure in Fleet 3.",
