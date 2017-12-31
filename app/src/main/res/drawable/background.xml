@@ -1,6 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-    <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-
-    android:src="@drawable/flakes3"
-    android:alpha="0.5"
-    android:tileMode="repeat"/>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/white" />
+</shape>

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#433431</color>
-    <color name="colorPrimaryDark">#2D1F1C</color>
-    <color name="colorAccent">#5c865e</color>
-    <color name="colorActivityBack">#efefef</color>
-    <color name="colorActivityText">#5C865E</color>
-    <color name="colorToolbarText">#F7EBCE</color>
-    <color name="colorBtn">#872211</color>
-    <color name="colorBtnText">#FFFFFF</color>
-    <color name="colorBtnTextAccent">#F7EBCE</color>
+    <color name="colorPrimary">#2c3e50</color>
+    <color name="colorPrimaryDark">#1d2935</color>
+    <color name="colorAccent">#16a085</color>
+    <color name="colorActivityBack">#ffffff</color>
+    <color name="colorActivityText">#888888</color>
+    <color name="colorToolbarText">#ffffff</color>
+    <color name="colorBtn">#d6d6d6</color>
+    <color name="colorBtnText">#000000</color>
+    <color name="colorBtnTextAccent">#ffffff</color>
+    <color name="colorFleetInfoBtn">#2c3e50</color>
+
     <color name="colorUpdate">#e8f5e9</color>
     <color name="colorUpdateText">#1b5e20</color>
     <color name="colorDataUpdate">#e8e9f5</color>
@@ -108,7 +110,6 @@
     <color name="colorFleetInfoExpedition">#4f7cff</color>
     <color name="colorFleetInfoNoShip">#aaaaaa</color>
 
-    <color name="colorFleetInfoBtn">#433431</color>
     <color name="colorFleetInfoHeavyDamagedBtn">#d50000</color>
     <color name="colorFleetInfoNotGoodStatusBtn">#ae7a00</color>
     <color name="colorFleetInfoExpeditionBtn">#5c6bc0</color>
