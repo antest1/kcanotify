@@ -58,6 +58,7 @@ import java.util.concurrent.TimeUnit;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_HIGH;
 import static android.widget.Toast.makeText;
+import static com.antest1.kcanotify.KcaAkashiRepairInfo.getAkashiRepairTime;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaApiData.AKASHI_TIMER_20MIN;
 import static com.antest1.kcanotify.KcaApiData.T2_FIGHTER;
@@ -280,7 +281,6 @@ public class KcaService extends Service {
                 if (isMissionTimerViewEnabled() && KcaAkashiRepairInfo.getAkashiTimerValue() > 0) {
                     int second = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
                     if (second >= AKASHI_TIMER_20MIN && isAkashiTimerNotiWait) {
-
                         isAkashiTimerNotiWait = false;
                     }
                 }
@@ -586,8 +586,8 @@ public class KcaService extends Service {
                 aIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
-
-        setAlarm(-1, pendingIntent, getNotificationId(NOTI_AKASHI, 0), false);
+        long complete_time = KcaAkashiRepairInfo.getAkashiRepairTime();
+        if (complete_time > 0) setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_AKASHI, 0), false);
     }
 
     private void toastInfo() {
@@ -926,8 +926,10 @@ public class KcaService extends Service {
                             boolean is_init_state = KcaAkashiRepairInfo.getAkashiTimerValue() < 0;
                             if ((is_init_state && akashi_flagship_deck.size() > 0) || (!is_init_state && KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond() >= AKASHI_TIMER_20MIN)) {
                                 KcaAkashiRepairInfo.setAkashiTimer();
+                                processAkashiTimerInfo();
                                 isAkashiTimerNotiWait = true;
                             }
+                            KcaAkashiRepairInfo.setAkashiExist(akashi_flagship_deck.size() > 0);
                             updateFleetView();
                         }
                     }
@@ -1706,9 +1708,10 @@ public class KcaService extends Service {
                                     break;
                                 }
                             }
-
+                            KcaAkashiRepairInfo.setAkashiExist(akashi_flagship_deck.size() > 0);
                             if (!akashi_nochange_flag) {
                                 KcaAkashiRepairInfo.setAkashiTimer();
+                                processAkashiTimerInfo();
                                 isAkashiTimerNotiWait = true;
                             }
                         }
@@ -2421,6 +2424,14 @@ public class KcaService extends Service {
 
     private void processAkashiTimerInfo() {
         int nid = getNotificationId(NOTI_AKASHI, 0);
+        PendingIntent pendingIntent = PendingIntent.getService(
+                getApplicationContext(),
+                nid,
+                new Intent(getApplicationContext(), KcaAlarmService.class),
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        pendingIntent.cancel();
+        alarmManager.cancel(pendingIntent);
         Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
         notifiManager.cancel(nid);
         setAkashiAlarm(aIntent);

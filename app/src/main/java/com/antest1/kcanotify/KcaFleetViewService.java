@@ -107,6 +107,8 @@ public class KcaFleetViewService extends Service {
         return KcaUtils.format("Lv %d", level);
     }
 
+    private static String makeExpString(int exp) { return KcaUtils.format("next: %d", exp);}
+
     private static String makeSimpleExpString(float e1, float e2) {
         return KcaUtils.format("%.2f/%.2f", e1, e2);
     }
@@ -552,6 +554,8 @@ public class KcaFleetViewService extends Service {
                                 .setText(getShipTypeAbbr(kcData.get("stype").getAsInt()));
                         ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_lv", v), R.id.class)))
                                 .setText(makeLvString(userData.get("lv").getAsInt()));
+                        ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_exp", v), R.id.class)))
+                                .setText(makeExpString(userData.getAsJsonArray("exp").get(1).getAsInt()));
                         ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_hp", v), R.id.class)))
                                 .setText(makeHpString(userData.get("nowhp").getAsInt(), userData.get("maxhp").getAsInt()));
                         ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class)))
@@ -627,6 +631,8 @@ public class KcaFleetViewService extends Service {
                             .setText(getShipTypeAbbr(kcData.get("stype").getAsInt()));
                     ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_lv", v), R.id.class)))
                             .setText(makeLvString(userData.get("lv").getAsInt()));
+                    ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_exp", v), R.id.class)))
+                            .setText(makeExpString(userData.getAsJsonArray("exp").get(1).getAsInt()));
                     ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_hp", v), R.id.class)))
                             .setText(makeHpString(userData.get("nowhp").getAsInt(), userData.get("maxhp").getAsInt()));
                     ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class)))

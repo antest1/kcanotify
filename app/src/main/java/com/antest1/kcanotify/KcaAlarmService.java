@@ -202,8 +202,10 @@ public class KcaAlarmService extends Service {
                         }
                     } else if (type == TYPE_AKASHI) {
                         int nid = getNotificationId(NOTI_AKASHI, 0);
-                        notificationManager.notify(nid, createAkashiRepairNotification(nid));
-                        alarm_set.add(nid);
+                        if (KcaAkashiRepairInfo.getAkashiInFlasship()) {
+                            notificationManager.notify(nid, createAkashiRepairNotification(nid));
+                            alarm_set.add(nid);
+                        }
                     }
                 }
             }
