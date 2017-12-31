@@ -353,11 +353,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_term_day_4">周四</string>
     <string name="akashi_term_day_5">周五</string>
     <string name="akashi_term_day_6">周六</string>
-    <string name="akashi_filter_equip_title">通过装备类型过滤</string>
+    <string name="filter_equip_title">通过装备类型过滤</string>
     <string name="action_akashi_filter">过滤设置</string>
-    <string name="akashi_filter_equip_all">全部</string>
-    <string name="akashi_filter_equip_none">清空</string>
-    <string name="akashi_filter_equip_rev">反选</string>
+    <string name="filter_equip_all">全部</string>
+    <string name="filter_equip_none">清空</string>
+    <string name="filter_equip_rev">反选</string>
     <string name="current_fairy_changed_in_next">※ 妖精形象将于战斗剧透/任务浏览结束后改变</string>
     <string name="setting_menu_app_title_down">APK下载地址</string>
     <string name="language_system">使用系统设置</string>
@@ -393,6 +393,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_filt_list_dialog_title">选择</string>
 
     <string name="action_equipmentinfo">装备目录</string>
+    <string name="equipinfo_summary" formatted="false">合计 %d（%d 装备中, %d 装备可能）</string>
+    <string name="equipinfo_filter">过滤</string>
+
     <string name="action_expcalc">経験値計算機</string>
     <string name="expcalc_shipname">舰娘</string>
     <string name="expcalc_currentlv">现在等级</string>

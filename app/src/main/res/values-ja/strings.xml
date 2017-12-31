@@ -335,11 +335,11 @@
     <string name="akashi_term_day_2">火</string>
     <string name="akashi_term_day_3">水</string>
     <string name="akashi_term_day_4">木</string>
-    <string name="akashi_filter_equip_title">装備別フィルタ設定</string>
+    <string name="filter_equip_title">装備別フィルタ設定</string>
     <string name="action_akashi_filter">フィルタ設定</string>
-    <string name="akashi_filter_equip_rev">反転</string>
-    <string name="akashi_filter_equip_none">クリア</string>
-    <string name="akashi_filter_equip_all">全選択</string>
+    <string name="filter_equip_rev">反転</string>
+    <string name="filter_equip_none">クリア</string>
+    <string name="filter_equip_all">全選択</string>
     <string name="setting_menu_kand_title_fairy_select">妖精選択</string>
     <string name="setting_menu_kand_desc_fairy_select">共にする妖精さんを選択</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">妖精を艦これ画面でのみ表示する</string>
@@ -386,6 +386,9 @@
     <string name="shipinfo_filt_list_dialog_title">選択</string>
 
     <string name="action_equipmentinfo">装備リスト</string>
+    <string name="equipinfo_summary" formatted="false">合計 %d（%d 装備中, %d 装備可能）</string>
+    <string name="equipinfo_filter">フィルタ</string>
+
     <string name="action_expcalc">経験値計算機</string>
     <string name="expcalc_shipname">艦娘</string>
     <string name="expcalc_currentlv">現在レベル</string>

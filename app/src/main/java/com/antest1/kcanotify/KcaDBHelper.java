@@ -253,6 +253,21 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         return set;
     }
 
+    public JsonArray getItemData() {
+        JsonArray data = new JsonArray();
+        db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT KEY, KCID, VALUE from ".concat(slotitem_table_name), null);
+        while (c.moveToNext()) {
+            JsonObject row = new JsonObject();
+            row.addProperty("key", c.getInt(c.getColumnIndex("KEY")));
+            row.addProperty("equip_id", c.getInt(c.getColumnIndex("KCID")));
+            row.addProperty("value", c.getInt(c.getColumnIndex("VALUE")));
+            data.add(row);
+        }
+        c.close();
+        return data;
+    }
+
     public String getItemValue(int key) {
         String value = null;
         db = this.getReadableDatabase();

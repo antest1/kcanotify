@@ -425,6 +425,9 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_KCA_MORALE_MIN:
                         editor.putString(prefKey, "40");
                         break;
+                    case PREF_EQUIPINFO_FILTCOND:
+                        editor.putString(prefKey, "all");
+                        break;
                     case PREF_KCA_DATA_VERSION:
                         String defaultversion = getString(R.string.default_gamedata_version);
                         editor.putString(prefKey, defaultversion);

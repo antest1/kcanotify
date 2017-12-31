@@ -81,8 +81,8 @@ public class ToolsActivity extends AppCompatActivity {
         view_equipment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(ToolsActivity.this, ShipInfoActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(ToolsActivity.this, EquipmentInfoActivity.class);
+                startActivity(intent);
             }
         });
 

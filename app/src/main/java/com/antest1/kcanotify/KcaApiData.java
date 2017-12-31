@@ -161,6 +161,7 @@ public class KcaApiData {
     public static final int[] T2LIST_FIGHT_AIRCRAFTS = {T2_FIGHTER, T2_BOMBER, T2_TORPEDO_BOMBER, T2_SEA_BOMBER,
             T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER};
 
+    public static final int T3_COUNT = 47;
     public static final int[] T3LIST_IMPROVABLE = {1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 13, 15, 16, 17, 18, 19, 20, 23, 24, 30, 34, 36, 38, 42, 43, 44};
 
     public static final int[] BASIC_MASTERY_MIN_BONUS = {0, 10, 25, 40, 55, 70, 85, 100};
@@ -275,6 +276,11 @@ public class KcaApiData {
 
     public static Integer getExperience() {
         return experience;
+    }
+
+    public static JsonArray getKcSlotitemGameData() {
+        if (kcGameData != null) return kcGameData.getAsJsonArray("api_mst_slotitem");
+        else return null;
     }
 
     public static void addShipCountInBattle() {

@@ -74,6 +74,20 @@
                 android:value="com.antest1.kcanotify.ShipInfoActivity" />
         </activity>
         <activity
+            android:name="com.antest1.kcanotify.EquipmentInfoActivity"
+            android:configChanges="locale|layoutDirection">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.antest1.kcanotify.ToolsActivity" />
+        </activity>
+        <activity
+            android:name="com.antest1.kcanotify.EquipmentListFilterActivity"
+            android:configChanges="locale|layoutDirection">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.antest1.kcanotify.EquipmentInfoActivity" />
+        </activity>
+        <activity
             android:name="com.antest1.kcanotify.AkashiActivity"
             android:configChanges="locale|layoutDirection">
             <meta-data

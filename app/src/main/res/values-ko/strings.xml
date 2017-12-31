@@ -339,11 +339,11 @@
     <string name="akashi_term_day_2">화</string>
     <string name="akashi_term_day_3">수</string>
     <string name="akashi_term_day_4">목</string>
-    <string name="akashi_filter_equip_title">장비별 필터 설정</string>
+    <string name="filter_equip_title">장비별 필터 설정</string>
     <string name="action_akashi_filter">필터 설정</string>
-    <string name="akashi_filter_equip_rev">선택반전</string>
-    <string name="akashi_filter_equip_none">전체해제</string>
-    <string name="akashi_filter_equip_all">전체선택</string>
+    <string name="filter_equip_rev">선택반전</string>
+    <string name="filter_equip_none">전체해제</string>
+    <string name="filter_equip_all">전체선택</string>
     <string name="current_fairy_changed_in_next">※ 현재 전투예보/임무번역이 끝난 후 변경됩니다.</string>
     <string name="setting_menu_app_title_down">APK 다운로드 사이트 설정</string>
     <string name="language_system">시스템 설정 사용</string>
@@ -386,6 +386,9 @@
     <string name="shipinfo_filt_list_dialog_title">선택</string>
 
     <string name="action_equipmentinfo">장비 리스트</string>
+    <string name="equipinfo_summary" formatted="false">합계 %d (%d 장비중, %d 장비가능)</string>
+    <string name="equipinfo_filter">필터</string>
+
     <string name="action_expcalc">경험치 계산기</string>
     <string name="expcalc_shipname">함선</string>
     <string name="expcalc_currentlv">현재 레벨</string>

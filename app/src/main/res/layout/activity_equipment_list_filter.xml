@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="@color/colorToolbarText" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+
+        <TextView
+            android:id="@+id/filter_equip_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="@string/filter_equip_title"
+            android:textColor="@color/colorAccent"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/equipment_filter_btn_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/colorBtn"
+                android:padding="3dp"
+                android:stateListAnimator="@null"
+                android:text="@string/filter_equip_all"
+                android:textSize="14dp" />
+
+            <Button
+                android:id="@+id/equipment_filter_btn_none"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/colorBtn"
+                android:padding="3dp"
+                android:stateListAnimator="@null"
+                android:text="@string/filter_equip_none"
+                android:textSize="14dp" />
+
+            <Button
+                android:id="@+id/equipment_filter_btn_reverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/colorBtn"
+                android:padding="3dp"
+                android:stateListAnimator="@null"
+                android:text="@string/filter_equip_rev"
+                android:textSize="14dp" />
+        </LinearLayout>
+
+        <GridView
+            android:id="@+id/equipment_gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:background="@color/colorFairySelectPanel"
+            android:columnWidth="48dp"
+            android:gravity="center"
+            android:horizontalSpacing="6dp"
+            android:numColumns="auto_fit"
+            android:padding="5dp"
+            android:stretchMode="none"
+            android:verticalSpacing="6dp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

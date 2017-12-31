@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:text="@string/akashi_filter_equip_title"
+            android:text="@string/filter_equip_title"
             android:textColor="@color/colorAccent"
             android:textSize="15dp" />
 
@@ -414,7 +414,7 @@
                     android:background="@color/colorBtn"
                     android:padding="3dp"
                     android:stateListAnimator="@null"
-                    android:text="@string/akashi_filter_equip_all"
+                    android:text="@string/filter_equip_all"
                     android:textSize="14dp" />
 
                 <Button
@@ -426,7 +426,7 @@
                     android:background="@color/colorBtn"
                     android:padding="3dp"
                     android:stateListAnimator="@null"
-                    android:text="@string/akashi_filter_equip_none"
+                    android:text="@string/filter_equip_none"
                     android:textSize="14dp" />
 
                 <Button
@@ -438,7 +438,7 @@
                     android:background="@color/colorBtn"
                     android:padding="3dp"
                     android:stateListAnimator="@null"
-                    android:text="@string/akashi_filter_equip_rev"
+                    android:text="@string/filter_equip_rev"
                     android:textSize="14dp" />
             </LinearLayout>
 

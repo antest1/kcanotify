@@ -1,6 +1,5 @@
 package com.antest1.kcanotify;
 
-import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,14 +7,10 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -59,8 +54,8 @@ public class KcaFairySelectActivity extends AppCompatActivity {
             fairy_id.add(btnId);
         }
 
-        final FairyAdapter adapter = new FairyAdapter(getApplicationContext(),
-                R.layout.listview_fairy_item, fairy_id);
+        final KcaItemAdapter adapter = new KcaItemAdapter(getApplicationContext(),
+                R.layout.listview_image_item, fairy_id);
 
         String pref_value = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
         if (pref_value.length() > 0) {
@@ -111,51 +106,5 @@ public class KcaFairySelectActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-}
-
-class FairyAdapter extends BaseAdapter {
-    Context context;
-    int layout;
-    List<Integer> fairy = new ArrayList<>();
-    LayoutInflater inf;
-    private int prevactive = -1;
-
-    public FairyAdapter(Context context, int layout, List<Integer> data) {
-        this.context = context;
-        this.layout = layout;
-        this.fairy = data;
-        inf = (LayoutInflater) context.getSystemService
-                (Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    public void setPrevActive(int v) {
-        prevactive = v;
-    }
-
-    @Override
-    public int getCount() {
-        return fairy.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return fairy.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView==null)
-            convertView = inf.inflate(layout, null);
-        ImageView iv = (ImageView) convertView.findViewById(R.id.setting_fairy_pic);
-        iv.setImageResource(fairy.get(position));
-        if (position == prevactive) iv.setBackground(ContextCompat.getDrawable(context, R.drawable.imagebtn_on));
-        else iv.setBackground(ContextCompat.getDrawable(context, R.drawable.imagebtn_off));
-        return convertView;
     }
 }

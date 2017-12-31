@@ -5,11 +5,9 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/equipment_item_area"
@@ -17,18 +15,38 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
+            android:background="@color/colorEquipListBack"
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/equipment_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="4dp">
 
-                <ImageView
-                    android:id="@+id/equipment_icon"
+                <TextView
+                    android:id="@+id/equipment_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:minWidth="36dp"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:text="234"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/grey"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:id="@+id/equipment_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginStart="4dp"
                     android:src="@mipmap/item_1" />
 
                 <TextView
@@ -36,10 +54,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="4dp"
                     android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
                     android:layout_marginStart="4dp"
                     android:layout_weight="1"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
                     android:text="TextView"
+                    android:textColor="@color/black"
                     android:textSize="16dp" />
 
                 <TextView
@@ -55,11 +78,34 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/equipment_item_detail_list"
+                android:id="@+id/equipment_item_detail"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:background="@color/colorEquipDetailPanelBack"
+                android:orientation="vertical"
+                android:padding="4dp">
 
+                <LinearLayout
+                    android:id="@+id/equipment_item_detail_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:orientation="vertical">
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/equipment_item_detail_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingStart="5dp"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black"
+                    android:textSize="12dp" />
 
             </LinearLayout>
 

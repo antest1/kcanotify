@@ -42,7 +42,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_weight="1"
                 android:background="@color/colorBtn"
-                android:text="@string/aa_btn_filter"
+                android:text="@string/equipinfo_filter"
                 android:textColor="@color/colorBtnText"
                 android:textSize="20dp" />
 

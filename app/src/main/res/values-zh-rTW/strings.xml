@@ -356,10 +356,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_term_day_5">週五</string>
     <string name="akashi_term_day_6">週六</string>
 
-    <string name="akashi_filter_equip_title">以裝備類型過濾</string>
-    <string name="akashi_filter_equip_all">全部</string>
-    <string name="akashi_filter_equip_none">清空</string>
-    <string name="akashi_filter_equip_rev">反序</string>
+    <string name="filter_equip_title">以裝備類型過濾</string>
+    <string name="filter_equip_all">全部</string>
+    <string name="filter_equip_none">清空</string>
+    <string name="filter_equip_rev">反序</string>
     <string name="language_system">使用系統設置</string>
     <string name="item_engine">Ne式噴射發動機</string>
     <string name="item_gmi_material">新型火炮兵裝資材</string>
@@ -393,6 +393,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_filt_list_dialog_title">選擇</string>
 
     <string name="action_equipmentinfo">裝備目錄</string>
+    <string name="equipinfo_summary" formatted="false">合計 %d（%d 裝備中, %d 裝備可能）</string>
+    <string name="equipinfo_filter">過濾</string>
+
     <string name="action_expcalc">経験値計算機</string>
     <string name="expcalc_shipname">艦娘</string>
     <string name="expcalc_currentlv">現在等級</string>
