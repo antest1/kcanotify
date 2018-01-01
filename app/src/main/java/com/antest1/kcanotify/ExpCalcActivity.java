@@ -199,6 +199,7 @@ public class ExpCalcActivity extends AppCompatActivity {
         );
 
         JsonArray ship_data = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
+        if (ship_data == null) ship_data = new JsonArray();
         Type listType = new TypeToken<List<JsonObject>>() {
         }.getType();
         final List<JsonObject> shipItemList = new Gson().fromJson(ship_data, listType);
