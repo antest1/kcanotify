@@ -922,7 +922,7 @@ public class KcaService extends Service {
                             KcaMoraleInfo.setDeckCount(portdeckdata.size());
                             for (int i = 0; i < portdeckdata.size(); i++) {
                                 boolean result = KcaMoraleInfo.setMoraleValue(i, deckInfoCalc.checkMinimumMorale(portdeckdata, i), isInBattle, false);
-                                if (result) processMoraleInfo(i, portdeckdata);
+                                processMoraleInfo(i, portdeckdata, result);
                             }
 
                             JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
@@ -1226,7 +1226,7 @@ public class KcaService extends Service {
                     int check_in_deck = deckInfoCalc.checkShipInDeck(portdeckdata, ship_id);
                     if (check_in_deck != -1) {
                         boolean result = setMoraleValue(check_in_deck, deckInfoCalc.checkMinimumMorale(portdeckdata, check_in_deck), false, false);
-                        if (result) processMoraleInfo(check_in_deck, portdeckdata);
+                        processMoraleInfo(check_in_deck, portdeckdata, result);
                     }
                     if (highspeed > 0) KcaApiData.updateShipHpFull(ship_id);
                     updateFleetView();
@@ -1709,7 +1709,7 @@ public class KcaService extends Service {
 
                             for (int i = 0; i < portdeckdata.size(); i++) {
                                 boolean result = setMoraleValue(i, deckInfoCalc.checkMinimumMorale(portdeckdata, i), false, in_change);
-                                if (result) processMoraleInfo(i, portdeckdata);
+                                processMoraleInfo(i, portdeckdata, result);
                             }
                             JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
                             boolean akashi_nochange_flag = akashi_flagship_deck.size() == 0;
@@ -1757,7 +1757,7 @@ public class KcaService extends Service {
                                 portdeckdata.set(deckIdx, api_data);
                                 dbHelper.putValue(DB_KEY_DECKPORT, portdeckdata.toString());
                                 boolean result = setMoraleValue(deckIdx, deckInfoCalc.checkMinimumMorale(portdeckdata, deckIdx), false, is_same);
-                                if (result) processMoraleInfo(deckIdx, portdeckdata);
+                                processMoraleInfo(deckIdx, portdeckdata, result);
                             }
                         }
                         updateFleetView();
@@ -1797,7 +1797,7 @@ public class KcaService extends Service {
 
                             int itemuse_deck = KcaMoraleInfo.getItemUseDeckAndReset();
                             boolean result = setMoraleValue(itemuse_deck, deckInfoCalc.checkMinimumMorale(api_data_deck, itemuse_deck), false, false);
-                            if (result) processMoraleInfo(itemuse_deck, api_data_deck);
+                            processMoraleInfo(itemuse_deck, api_data_deck, result);
                         }
                         updateFleetView();
                     }
@@ -2413,13 +2413,12 @@ public class KcaService extends Service {
         alarmManager.cancel(pendingIntent);
     }
 
-    private void processMoraleInfo(int idx, JsonArray deckportdata) {
+    private void processMoraleInfo(int idx, JsonArray deckportdata, boolean set_alarm) {
         JsonObject deck = (JsonObject) deckportdata.get(idx);
         String deck_name = deck.get("api_name").getAsString();
         long morale_time = KcaMoraleInfo.getMoraleCompleteTime(idx);
         Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
         int nid = getNotificationId(NOTI_MORALE, idx);
-        notifiManager.cancel(nid);
         if (morale_time < 0) {
             PendingIntent pendingIntent = PendingIntent.getService(
                     getApplicationContext(),
@@ -2429,7 +2428,7 @@ public class KcaService extends Service {
             );
             pendingIntent.cancel();
             alarmManager.cancel(pendingIntent);
-        } else {
+        } else if (set_alarm) {
             setMoraleAlarm(idx, deck_name, morale_time, aIntent);
         }
     }
