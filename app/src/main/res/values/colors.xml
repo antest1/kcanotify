@@ -19,6 +19,7 @@
     <color name="colorWarnText">#68000a</color>
     <color name="colorMenuBack">#b4ffffff</color>
     <color name="black">#000000</color>
+    <color name="lightgray">#d6d6d6</color>
     <color name="grey">#888888</color>
     <color name="darkgray">#212121</color>
     <color name="white">#ffffff</color>
