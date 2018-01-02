@@ -170,37 +170,39 @@ public class KcaVpnData {
                 if (isreadyflag) {
                     String requestStr = portToRequestData.get(tport).toString();
                     String[] requestHeadBody = requestStr.split("\r\n\r\n", 2);
-                    byte[] requestBody = new byte[]{};
-                    if (requestHeadBody[1].length() > 0) {
-                        requestBody = requestHeadBody[1].getBytes();
-                    }
-                    byte[] responseData = ArrayUtils.toPrimitive(portToResponseData.get(tport));
-                    byte[] responseBody = Arrays.copyOfRange(responseData, portToResponseHeaderLength.get(tport) + 4, responseData.length);
-                    Log.e("KCA", String.valueOf(responseData.length));
-                    Log.e("KCA", String.valueOf(portToResponseHeaderPart.get(tport).length()));
-                    Log.e("KCA", "====================================");
-                    if (chunkflag) {
-                        Log.e("KCA", byteArrayToHex(Arrays.copyOfRange(responseBody, 0, 15)));
-                        Log.e("KCA", byteArrayToHex(Arrays.copyOfRange(responseBody, responseBody.length - 15, responseBody.length)));
-                        responseBody = unchunkAllData(responseBody, gzipflag);
-                    } else if (gzipflag) {
-                        Log.e("KCA", "Ungzip " + String.valueOf(tport));
-                        responseBody = gzipdecompress(responseBody);
-                    }
+                    if (requestHeadBody.length > 1) {
+                        byte[] requestBody = new byte[]{};
+                        if (requestHeadBody[1].length() > 0) {
+                            requestBody = requestHeadBody[1].getBytes();
+                        }
+                        byte[] responseData = ArrayUtils.toPrimitive(portToResponseData.get(tport));
+                        byte[] responseBody = Arrays.copyOfRange(responseData, portToResponseHeaderLength.get(tport) + 4, responseData.length);
+                        //Log.e("KCA", String.valueOf(responseData.length));
+                        //Log.e("KCA", String.valueOf(portToResponseHeaderPart.get(tport).length()));
+                        //Log.e("KCA", "====================================");
+                        if (chunkflag) {
+                            //Log.e("KCA", byteArrayToHex(Arrays.copyOfRange(responseBody, 0, 15)));
+                            //Log.e("KCA", byteArrayToHex(Arrays.copyOfRange(responseBody, responseBody.length - 15, responseBody.length)));
+                            responseBody = unchunkAllData(responseBody, gzipflag);
+                        } else if (gzipflag) {
+                            //Log.e("KCA", "Ungzip " + String.valueOf(tport));
+                            responseBody = gzipdecompress(responseBody);
+                        }
 
-                    //Log.e("KCA", String.valueOf(responseData.length));
-                    String requestUri = portToUri.get(tport);
-                    if (checkKcApi(requestUri)) {
-                        KcaHandler k = new KcaHandler(handler, requestUri, requestBody, responseBody);
-                        executorService.execute(k);
+                        //Log.e("KCA", String.valueOf(responseData.length));
+                        String requestUri = portToUri.get(tport);
+                        if (checkKcApi(requestUri)) {
+                            KcaHandler k = new KcaHandler(handler, requestUri, requestBody, responseBody);
+                            executorService.execute(k);
+                        }
+                        portToUri.delete(tport);
+                        portToRequestData.delete(tport);
+                        portToResponseData.delete(tport);
+                        portToResponseHeaderLength.delete(tport);
+                        portToLength.delete(tport);
+                        portToGzipped.delete(tport);
+                        isreadyflag = false;
                     }
-                    portToUri.delete(tport);
-                    portToRequestData.delete(tport);
-                    portToResponseData.delete(tport);
-                    portToResponseHeaderLength.delete(tport);
-                    portToLength.delete(tport);
-                    portToGzipped.delete(tport);
-                    isreadyflag = false;
                 }
             }
         } catch (IOException e) {
