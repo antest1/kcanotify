@@ -553,8 +553,10 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         float[] exp = new float[2];
         db = this.getReadableDatabase();
         ContentValues values = new ContentValues();
-        int currentExp = Integer.parseInt(getValue(DB_KEY_EXPCRNT));
-        int todayExp = Integer.parseInt(getValue(DB_KEY_EXPTDAY));
+        String expCurrentText = getValue(DB_KEY_EXPCRNT);
+        String expTodayText = getValue(DB_KEY_EXPTDAY);
+        int currentExp = expCurrentText != null ? Integer.parseInt(expCurrentText) : 0;
+        int todayExp = expTodayText != null ? Integer.parseInt(expTodayText) : 0;
         exp[0] = currentExp * 7.0f / 10000;
         exp[1] = todayExp * 7.0f / 10000;
         return exp;
