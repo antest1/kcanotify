@@ -2365,7 +2365,6 @@ public class KcaService extends Service {
             JsonObject ndockData = data.get(i).getAsJsonObject();
             state = ndockData.get("api_state").getAsInt();
             int nid = getNotificationId(NOTI_DOCK, i);
-            notifiManager.cancel(nid);
             Intent deleteIntent = new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid)));
             startService(deleteIntent);
 
@@ -2420,6 +2419,9 @@ public class KcaService extends Service {
         Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
         int nid = getNotificationId(NOTI_MORALE, idx);
         if (morale_time < 0) {
+            Intent deleteIntent = new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid)));
+            startService(deleteIntent);
+
             PendingIntent pendingIntent = PendingIntent.getService(
                     getApplicationContext(),
                     nid,
