@@ -351,6 +351,7 @@
     <string name="item_gmi_material">신형포공병장자재</string>
     <string name="item_skilled_crew">숙련탑승원</string>
     <string name="item_kouku_material">신형항공병장자재</string>
+    <string name="item_action_report">전투상보</string>
     <string name="setting_menu_kand_desc_bypass_address">CIDR 형식으로 프록시를 사용하지 않을 주소 설정 (각 CIDR는 쉼표로 구분)</string>
     <string name="settings_menu_kand_title_bypass_address">예외 주소</string>
     <string name="setting_menu_kand_warn_adv_network">경고: 해당 설정을 올바르게 하지 않은 경우 VPN이 작동하지 않을 수 있습니다. 이 설정이 무엇을 하는지 모르는 경우 설정하지 마십시오. 해당 설정을 적용하기 위해서는 VPN을 재시작하여야 합니다.</string>

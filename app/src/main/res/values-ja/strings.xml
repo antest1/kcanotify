@@ -351,6 +351,7 @@
     <string name="item_gmi_material">新型砲熕兵装資材</string>
     <string name="item_skilled_crew">熟練搭乗員</string>
     <string name="item_kouku_material">新型航空兵装資材</string>
+    <string name="item_action_report">戦闘詳報</string>
     <string name="setting_menu_kand_desc_bypass_address">CIDR形式でプロキシを使用しないアドレスを設定 (各CIDRはカンマで区切って)</string>
     <string name="settings_menu_kand_title_bypass_address">例外リスト</string>
     <string name="setting_menu_kand_warn_adv_network">警告：これらの設定を正しくしていない場合は、Snifferが動作しないことがあります。この設定が何をするかわからない場合は設定しないでください。設定を適用するためには、Sniffer(VPN)を再起動してください。</string>

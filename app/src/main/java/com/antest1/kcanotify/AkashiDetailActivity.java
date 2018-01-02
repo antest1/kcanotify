@@ -96,28 +96,36 @@ public class AkashiDetailActivity extends AppCompatActivity {
                                 .setText(mse_string[1]);
                         if (j == 3 && data.has("require_item")) {
                             String e3 = mse_string[2];
-                            JsonArray require_item = data.getAsJsonArray("require_item");
-                            String require_item_name;
-                            int require_item_count = require_item.get(1).getAsInt();
-                            switch (require_item.get(0).getAsInt()) {
-                                case 1:
-                                    require_item_name = getStringWithLocale(R.string.item_engine);
-                                    break;
-                                case 2:
-                                    require_item_name = getStringWithLocale(R.string.item_gmi_material);
-                                    break;
-                                case 3:
-                                    require_item_name = getStringWithLocale(R.string.item_skilled_crew);
-                                    break;
-                                case 4:
-                                    require_item_name = getStringWithLocale(R.string.item_kouku_material);
-                                    break;
-                                default:
-                                    require_item_name = "";
-                                    break;
+                            JsonArray require_items = data.getAsJsonArray("require_item");
+                            List<String> require_items_str = new ArrayList<>();
+                            require_items_str.add(e3);
+                            for (int k = 0; k < require_items.size(); k++) {
+                                JsonArray r_item = require_items.get(k).getAsJsonArray();
+                                String require_item_name;
+                                int require_item_count = r_item.get(1).getAsInt();
+                                switch (r_item.get(0).getAsInt()) {
+                                    case 1:
+                                        require_item_name = getStringWithLocale(R.string.item_engine);
+                                        break;
+                                    case 2:
+                                        require_item_name = getStringWithLocale(R.string.item_gmi_material);
+                                        break;
+                                    case 3:
+                                        require_item_name = getStringWithLocale(R.string.item_skilled_crew);
+                                        break;
+                                    case 4:
+                                        require_item_name = getStringWithLocale(R.string.item_kouku_material);
+                                        break;
+                                    case 5:
+                                        require_item_name = getStringWithLocale(R.string.item_action_report);
+                                        break;
+                                    default:
+                                        require_item_name = "";
+                                        break;
+                                }
+                                require_items_str.add(KcaUtils.format("%s x %d", require_item_name, require_item_count));
                             }
-
-                            e3 = KcaUtils.format("%s\n%s x %d", e3, require_item_name, require_item_count);
+                            e3 = KcaUtils.joinStr(require_items_str, "\n");
                             ((TextView) findViewById(getId("akashi_improv_detail_e".concat(String.valueOf(j))
                                     .concat("_").concat(String.valueOf(i + 1)), R.id.class)))
                                     .setText(e3);
