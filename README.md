@@ -35,7 +35,7 @@ Demo
 
 주요 기능
 -------
-- 원정 및 입거 알림
+- 원정 및 입거, 피로도회복 알림
 - 대파 알림 (출격 중 및 출격 전)
 - 미보급 함선 알림
 - 색적/제공치/피로도/수송게이지 표시
@@ -44,8 +44,10 @@ Demo
 - 임무 목록 (번역, 반복퀘스트 추적)
 - 개발/건조 정보 확인
 - 해역 HP 확인
-- 원정 조건 확인
+- 원정 조건 확인 및 원정목록
 - 개수공창표 (일반/확정 정보 표시)
+- 박지수리 타이머 (아카시 타이머) 및 알림
+- 함선목록, 장비목록, 경험치 계산기
 - OpenDB에 데이터 전송 (선택 가능)
 
 지원 언어
@@ -64,7 +66,7 @@ Attribution
 - 요정 이미지 및 장비 이미지는 칸코레 내 게임 이미지를 사용하고 있으며, 저작권리자로부터의 정정 요청이 있을 시 즉시 조치하겠습니다.
 - 칸무스명 및 장비명, 퀘스트 번역 데이터는 [kc3-translations](https://github.com/KC3Kai/kc3-translations)의 데이터를 변형하여 사용하고 있습니다.
   - License for kc3-translations: The MIT License [Text](https://github.com/KC3Kai/kc3-translations/blob/master/LICENSE)
-- 해역 노드 정보는 [KC3Kai](https://github.com/KC3Kai/KC3Kai)의 데이터를 사용하고 있습니다. 
+- 해역 노드 정보 및 경험치 관련 데이터는 [KC3Kai](https://github.com/KC3Kai/KC3Kai)의 데이터를 사용하고 있습니다. 
   - License for KC3Kai: The MIT License [Text](https://github.com/KC3Kai/KC3Kai/blob/master/LICENSE)
 - 색적 및 제공치 계산식은 [艦隊シミュレーター＆デッキビルダー](http://kancolle-calc.net/deckbuilder.html)의 코드를 일부 차용 및 수정하여 작성되었습니다.
 - 개수공창 정보는 [KC3Kai](https://github.com/KC3Kai/KC3Kai) 및 [明石の改修工廠早見表](http://akashi-list.me)의 데이터를 참고하고 있습니다.
