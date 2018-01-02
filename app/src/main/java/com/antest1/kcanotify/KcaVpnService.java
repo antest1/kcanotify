@@ -115,21 +115,18 @@ public class KcaVpnService extends VpnService {
                 queue++;
                 //reportQueueSize();
             }
+            Command cmd = (Command) intent.getSerializableExtra(EXTRA_COMMAND);
             Message msg = commandHandler.obtainMessage();
             msg.obj = intent;
-            msg.what = MSG_SERVICE_INTENT;
+            msg.what = cmd.ordinal();
             commandHandler.sendMessage(msg);
         }
 
         @Override
         public void handleMessage(Message msg) {
             try {
-                switch (msg.what) {
-                    case MSG_SERVICE_INTENT:
-                        handleIntent((Intent) msg.obj);
-                        break;
-                    default:
-                        Log.e(TAG, "Unknown command message=" + msg.what);
+                synchronized (KcaVpnService.this) {
+                    handleIntent((Intent) msg.obj);
                 }
             } catch (Throwable ex) {
                 Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
@@ -385,7 +382,7 @@ public class KcaVpnService extends VpnService {
 
         // Build VPN service
         Builder builder = new Builder();
-        builder.setSession(getString(R.string.app_name));
+        builder.setSession(getString(R.string.app_vpn_name));
 
         // VPN address
         String vpn4 = prefs.getString("vpn4", "10.1.10.1");
@@ -440,12 +437,55 @@ public class KcaVpnService extends VpnService {
             }
 
             Configuration config = getResources().getConfiguration();
-            if (config.mcc == 310 && config.mnc == 260) {
-                // T-Mobile Wi-Fi calling
+            // T-Mobile Wi-Fi calling
+            if (config.mcc == 310 && (config.mnc == 160 ||
+                    config.mnc == 200 ||
+                    config.mnc == 210 ||
+                    config.mnc == 220 ||
+                    config.mnc == 230 ||
+                    config.mnc == 240 ||
+                    config.mnc == 250 ||
+                    config.mnc == 260 ||
+                    config.mnc == 270 ||
+                    config.mnc == 310 ||
+                    config.mnc == 490 ||
+                    config.mnc == 660 ||
+                    config.mnc == 800)) {
                 listExclude.add(new IPUtil.CIDR("66.94.2.0", 24));
                 listExclude.add(new IPUtil.CIDR("66.94.6.0", 23));
                 listExclude.add(new IPUtil.CIDR("66.94.8.0", 22));
                 listExclude.add(new IPUtil.CIDR("208.54.0.0", 16));
+            }
+
+            // Verizon wireless calling
+            if ((config.mcc == 310 &&
+                    (config.mnc == 4 ||
+                            config.mnc == 5 ||
+                            config.mnc == 6 ||
+                            config.mnc == 10 ||
+                            config.mnc == 12 ||
+                            config.mnc == 13 ||
+                            config.mnc == 350 ||
+                            config.mnc == 590 ||
+                            config.mnc == 820 ||
+                            config.mnc == 890 ||
+                            config.mnc == 910)) ||
+                    (config.mcc == 311 && (config.mnc == 12 ||
+                            config.mnc == 110 ||
+                            (config.mnc >= 270 && config.mnc <= 289) ||
+                            config.mnc == 390 ||
+                            (config.mnc >= 480 && config.mnc <= 489) ||
+                            config.mnc == 590)) ||
+                    (config.mcc == 312 && (config.mnc == 770))) {
+                listExclude.add(new IPUtil.CIDR("66.174.0.0", 16)); // 66.174.0.0 - 66.174.255.255
+                listExclude.add(new IPUtil.CIDR("66.82.0.0", 15)); // 69.82.0.0 - 69.83.255.255
+                listExclude.add(new IPUtil.CIDR("69.96.0.0", 13)); // 69.96.0.0 - 69.103.255.255
+                listExclude.add(new IPUtil.CIDR("70.192.0.0", 11)); // 70.192.0.0 - 70.223.255.255
+                listExclude.add(new IPUtil.CIDR("97.128.0.0", 9)); // 97.128.0.0 - 97.255.255.255
+                listExclude.add(new IPUtil.CIDR("174.192.0.0", 9)); // 174.192.0.0 - 174.255.255.255
+                listExclude.add(new IPUtil.CIDR("72.96.0.0", 9)); // 72.96.0.0 - 72.127.255.255
+                listExclude.add(new IPUtil.CIDR("75.192.0.0", 9)); // 75.192.0.0 - 75.255.255.255
+                listExclude.add(new IPUtil.CIDR("97.0.0.0", 10)); // 97.0.0.0 - 97.63.255.255
             }
             listExclude.add(new IPUtil.CIDR("224.0.0.0", 3)); // broadcast
 
@@ -463,7 +503,8 @@ public class KcaVpnService extends VpnService {
                         }
                     start = IPUtil.plus1(exclude.getEnd());
                 }
-                for (IPUtil.CIDR include : IPUtil.toCIDR("224.0.0.0", "255.255.255.255"))
+                String end = (lan ? "255.255.255.254" : "255.255.255.255");
+                for (IPUtil.CIDR include : IPUtil.toCIDR("224.0.0.0", end))
                     try {
                         builder.addRoute(include.address, include.prefix);
                     } catch (Throwable ex) {
@@ -472,76 +513,17 @@ public class KcaVpnService extends VpnService {
             } catch (UnknownHostException ex) {
                 Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
             }
-        } else {
-            String addresses = prefs.getString("bypass_address", "");
-            if (!addresses.equals("")) {
-                List<IPUtil.CIDR> listExclude = new ArrayList<>();
-                for (String cidr : addresses.split(",")) {
-                    String[] cidr_split = cidr.trim().split("/");
-                    listExclude.add(new IPUtil.CIDR(cidr_split[0], Integer.parseInt(cidr_split[1])));
-                }
-
-                Collections.sort(listExclude);
-
-                try {
-                    InetAddress start = InetAddress.getByName("0.0.0.0");
-
-                    for (IPUtil.CIDR exclude : listExclude) {
-                        for (IPUtil.CIDR include : IPUtil.toCIDR(start, IPUtil.minus1(exclude.getStart())))
-                            try {
-                                builder.addRoute(include.address, include.prefix);
-                            } catch (Throwable ex) {
-                                Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-                            }
-                        start = IPUtil.plus1(exclude.getEnd());
-                    }
-
-                    for (IPUtil.CIDR include : IPUtil.toCIDR(start.getHostAddress(), "255.255.255.255"))
-                        try {
-                            builder.addRoute(include.address, include.prefix);
-                        } catch (Throwable ex) {
-                            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-                        }
-                } catch (UnknownHostException ex) {
-                    Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-                }
-            } else builder.addRoute("0.0.0.0", 0);
-        }
+        } else
+            builder.addRoute("0.0.0.0", 0);
 
         Log.i(TAG, "IPv6=" + ip6);
         if (ip6)
-            builder.addRoute("0:0:0:0:0:0:0:0", 0);
+            builder.addRoute("2000::", 3); // unicast
 
         // MTU
         int mtu = jni_get_mtu();
         Log.i(TAG, "MTU=" + mtu);
         builder.setMtu(mtu);
-
-        /*
-        // Add list of allowed applications
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            if (last_connected && !filter)
-                for (Rule rule : listAllowed)
-                    try {
-                        builder.addDisallowedApplication(rule.info.packageName);
-                    } catch (PackageManager.NameNotFoundException ex) {
-                        Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-                    }
-            else if (filter)
-                for (Rule rule : listRule)
-                    if (!rule.apply || (!system && rule.system))
-                        try {
-                            Log.i(TAG, "Not routing " + rule.info.packageName);
-                            builder.addDisallowedApplication(rule.info.packageName);
-                        } catch (PackageManager.NameNotFoundException ex) {
-                            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-                        }
-        */
-        // Build configure intent
-        //Intent configure = new Intent(this, MainActivity.class);
-        //PendingIntent pi = PendingIntent.getActivity(this, 0, configure, PendingIntent.FLAG_UPDATE_CURRENT);
-        //builder.setConfigureIntent(pi);
-
 
         return builder;
     }

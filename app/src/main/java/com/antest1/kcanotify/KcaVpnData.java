@@ -65,7 +65,7 @@ public class KcaVpnData {
     private static SparseBooleanArray portToGzipped = new SparseBooleanArray();
     private static SparseArray<String> portToResponseHeaderPart = new SparseArray<>();
 
-    private static Queue<Integer> ignoreResponseList = EvictingQueue.create(8);
+    private static Queue<Integer> ignoreResponseList = EvictingQueue.create(32);
 
     public static void setHandler(Handler h) {
         handler = h;
