@@ -112,7 +112,7 @@
     <string name="kca_noti_content_dock_finished_nodata" formatted="false">第%dドックにいる艦娘の整備が完了しました。</string>
 
     <string name="kca_noti_title_morale_recovered" formatted="false">第%d艦隊：疲労度回復</string>
-    <string name="kca_noti_content_morale_recovered" formatted="false">&lt;%s&gt;の前艦船の疲労度が回復しました。</string>
+    <string name="kca_noti_content_morale_recovered" formatted="false">&lt;%s&gt;の全艦船の疲労度が回復しました。</string>
     <string name="kca_noti_title_akashirepair_recovered">泊地修理の開始</string>
     <string name="kca_noti_content_akashirepair_recovered">艦隊が現在修理中にあります。。</string>
 
