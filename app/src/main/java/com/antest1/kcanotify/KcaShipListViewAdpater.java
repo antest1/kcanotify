@@ -357,8 +357,9 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         exp_sum = 0;
         Type listType = new TypeToken<List<JsonObject>>() {}.getType();
         listViewItemList = new Gson().fromJson(ship_list, listType);
+        if (listViewItemList == null) listViewItemList = new ArrayList<>();
 
-        if (!filter.equals("|")) {
+        if (!filter.equals("|") && listViewItemList.size() > 1) {
             listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, new Predicate<JsonObject>() {
                 @Override
                 public boolean apply(JsonObject input) {

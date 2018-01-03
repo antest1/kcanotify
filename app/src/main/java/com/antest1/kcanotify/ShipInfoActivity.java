@@ -140,7 +140,7 @@ public class ShipInfoActivity extends AppCompatActivity {
             }
             if (requestCode == SHIPINFO_GET_FILTER_RESULT) {
                 JsonArray shipdata = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
-                if (data == null) shipdata = new JsonArray();
+                if (shipdata == null) shipdata = new JsonArray();
                 adapter.setListViewItemList(shipdata, sortkey, filtcond);
                 setFilterButton(filtcond.length() > 1);
             }
