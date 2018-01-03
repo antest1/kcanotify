@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static com.antest1.kcanotify.KcaApiData.checkUserShipDataLoaded;
+import static com.antest1.kcanotify.KcaApiData.getCurrentNodeAlphabet;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_APIMAPINFO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -59,6 +60,8 @@ public class KcaFleetCheckPopupService extends Service {
     public static int type;
     public static boolean active = false;
     public static int recent_no = 1;
+    public static int deck_cnt = 1;
+    public static List<Integer> no_list;
     public static boolean isActive() {
         return active;
     }
@@ -73,14 +76,22 @@ public class KcaFleetCheckPopupService extends Service {
     }
 
     public void increaseNo() {
-        recent_no += 1;
-        if (recent_no > 5) recent_no = 1;
+        int current_idx = no_list.indexOf(recent_no);
+        if (current_idx + 1 >= no_list.size()) {
+            recent_no = no_list.get(0);
+        } else {
+            recent_no = no_list.get(current_idx + 1);
+        }
         setText();
     }
 
     public void decreaseNo() {
-        recent_no -= 1;
-        if (recent_no < 1) recent_no = 5;
+        int current_idx = no_list.indexOf(recent_no);
+        if (current_idx - 1 < 0) {
+            recent_no = no_list.get(no_list.size() - 1);
+        } else {
+            recent_no = no_list.get(current_idx - 1);
+        }
         setText();
     }
 
@@ -148,6 +159,12 @@ public class KcaFleetCheckPopupService extends Service {
         } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(FCHK_SHOW_ACTION)) {
                 portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+                no_list = new ArrayList<>();
+                deck_cnt = portdeckdata.size();
+                for (int i = 1 ; i <= deck_cnt; i++) {
+                    no_list.add(i);
+                }
+                if (deck_cnt > 1) no_list.add(5);
                 setText();
             }
         }
