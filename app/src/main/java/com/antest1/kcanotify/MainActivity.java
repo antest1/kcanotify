@@ -49,6 +49,8 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -280,7 +282,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new getRecentVersion().execute();
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                new getRecentVersion().execute();
+            }
+        }, 1000);
 
         setVpnBtn();
         setCheckBtn();
