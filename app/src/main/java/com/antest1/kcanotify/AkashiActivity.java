@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
@@ -54,6 +55,8 @@ public class AkashiActivity extends AppCompatActivity {
     Button starButton, safeButton, filterButton;
     boolean isStarChecked, isSafeChecked = false;
     ArrayList<KcaAkashiListViewItem> listViewItemList;
+
+    KcaDBHelper dbHelper;
     KcaAkashiListViewAdpater adapter;
     UpdateHandler handler;
 
@@ -73,6 +76,11 @@ public class AkashiActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.action_akashi));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        KcaApiData.setDBHelper(dbHelper);
+        setDefaultGameData();
+        loadTranslationData(getApplicationContext());
 
         Calendar calendar = Calendar.getInstance(Locale.JAPAN);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0(Sun) ~ 6(Sat)
@@ -298,6 +306,10 @@ public class AkashiActivity extends AppCompatActivity {
     public void handleUpdateMessage() {
         loadAkashiList(currentClicked, isSafeChecked);
         resetListView(false);
+    }
+
+    private int setDefaultGameData() {
+        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
     }
 
     @Override
