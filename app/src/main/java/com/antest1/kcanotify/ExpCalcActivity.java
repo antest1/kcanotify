@@ -166,7 +166,7 @@ public class ExpCalcActivity extends AppCompatActivity {
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        if (!shipselect_current_flag && userIsInteracting) {
+                        if (!shipselect_current_flag && userIsInteracting && exp_ship_data != null) {
                             String value = String.valueOf(position + 1);
                             JsonArray exp_data = exp_ship_data.getAsJsonArray(value);
                             current_exp = exp_data.get(1).getAsInt();
@@ -187,10 +187,12 @@ public class ExpCalcActivity extends AppCompatActivity {
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        String value = String.valueOf(position + 1);
-                        JsonArray exp_data = exp_ship_data.getAsJsonArray(value);
-                        target_exp = exp_data.get(1).getAsInt();
-                        setScreen();
+                        if (exp_ship_data != null) {
+                            String value = String.valueOf(position + 1);
+                            JsonArray exp_data = exp_ship_data.getAsJsonArray(value);
+                            target_exp = exp_data.get(1).getAsInt();
+                            setScreen();
+                        }
                     }
 
                     @Override
