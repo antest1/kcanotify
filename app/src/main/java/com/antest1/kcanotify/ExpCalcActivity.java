@@ -286,7 +286,7 @@ public class ExpCalcActivity extends AppCompatActivity {
         value_target_exp.setText(String.valueOf(target_exp));
 
         value_mapexp.setText(String.valueOf(mapexp));
-        int remainexp = target_exp - current_exp;
+        int remainexp = Math.max(0, target_exp - current_exp);
         value_remainexp.setText(String.valueOf(remainexp));
         int left_count = (int) Math.ceil((double) remainexp / mapexp);
         value_counter.setText(String.valueOf(left_count));
