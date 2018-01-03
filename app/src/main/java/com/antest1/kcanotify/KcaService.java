@@ -2256,14 +2256,6 @@ public class KcaService extends Service {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_SET_PRIORITY);
     }
 
-    private boolean isExpNotifyEnabled() {
-        return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_EXP);
-    }
-
-    private boolean isDockNotifyEnabled() {
-        return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_DOCK);
-    }
-
     private boolean isHDVibrateEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_V_HD);
     }

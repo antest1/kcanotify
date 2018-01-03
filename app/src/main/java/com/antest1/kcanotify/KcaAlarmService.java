@@ -39,6 +39,7 @@ import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.NOTI_MORALE;
 import static com.antest1.kcanotify.KcaConstants.NOTI_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_AKASHI;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_MORALE;
@@ -90,6 +91,10 @@ public class KcaAlarmService extends Service {
 
     private boolean isMoraleAlarmEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_MORALE);
+    }
+
+    private boolean isAkashiAlarmEnabled() {
+        return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_AKASHI);
     }
 
     public String getStringWithLocale(int id) {
@@ -201,10 +206,12 @@ public class KcaAlarmService extends Service {
                             alarm_set.add(nid);
                         }
                     } else if (type == TYPE_AKASHI) {
-                        int nid = getNotificationId(NOTI_AKASHI, 0);
-                        if (KcaAkashiRepairInfo.getAkashiInFlasship()) {
-                            notificationManager.notify(nid, createAkashiRepairNotification(nid));
-                            alarm_set.add(nid);
+                        if (isAkashiAlarmEnabled()) {
+                            int nid = getNotificationId(NOTI_AKASHI, 0);
+                            if (KcaAkashiRepairInfo.getAkashiInFlasship()) {
+                                notificationManager.notify(nid, createAkashiRepairNotification(nid));
+                                alarm_set.add(nid);
+                            }
                         }
                     }
                 }
