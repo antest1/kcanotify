@@ -25,6 +25,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
+import static com.antest1.kcanotify.KcaUtils.setDefaultGameData;
 
 
 public class KcaDeckInfo {
@@ -39,6 +40,8 @@ public class KcaDeckInfo {
         this.ac = a;
         this.bc = b;
         helper = new KcaDBHelper(ac, null, KCANOTIFY_DB_VERSION);
+        KcaApiData.setDBHelper(helper);
+        setDefaultGameData(a, helper);
     }
 
     public String getStringWithLocale(int id) {
