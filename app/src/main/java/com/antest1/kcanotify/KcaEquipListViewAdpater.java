@@ -80,7 +80,9 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
 
         JsonObject item = listViewItemList.get(pos);
         int item_id = item.get("api_id").getAsInt();
+        int item_type_2 = item.getAsJsonArray("api_type").get(2).getAsInt();
         int item_type_3 = item.getAsJsonArray("api_type").get(3).getAsInt();
+        boolean is_item_aircraft = KcaApiData.isItemAircraft(item_type_2);
         String item_name = KcaApiData.getItemTranslation(item.get("api_name").getAsString());
         int item_count = getTotalCount(countInfo, item_id);
         final Integer target = item_id;
@@ -97,18 +99,18 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
             String key_noalv = getItemKey(item_id, lv, -1);
             if (countInfo.containsKey(key_noalv)) {
                 if (shipEquipInfo.has(key_noalv)) item_equipped_count += shipEquipInfo.getAsJsonArray(key_noalv).size();
-                LinearLayout ship_equip_item = getEquipmentShipDetailView(context, inflater, holder.equipment_item_detail_list, lv, -1, key_noalv);
+                LinearLayout ship_equip_item = getEquipmentShipDetailView(context, inflater, holder.equipment_item_detail_list, lv, -1, key_noalv, is_item_aircraft);
                 holder.equipment_item_detail_list.addView(ship_equip_item);
-            } else {
-                for (int alv = 0; alv <= 7; alv++) {
-                    String key_alv = getItemKey(item_id, lv, alv);
-                    if (countInfo.containsKey(key_alv)){
-                        if (shipEquipInfo.has(key_alv)) item_equipped_count += shipEquipInfo.getAsJsonArray(key_alv).size();
-                        LinearLayout ship_equip_item = getEquipmentShipDetailView(context, inflater, holder.equipment_item_detail_list, lv, alv, key_alv);
-                        holder.equipment_item_detail_list.addView(ship_equip_item);
-                    }
+            }
+            for (int alv = 0; alv <= 7; alv++) {
+                String key_alv = getItemKey(item_id, lv, alv);
+                if (countInfo.containsKey(key_alv)){
+                    if (shipEquipInfo.has(key_alv)) item_equipped_count += shipEquipInfo.getAsJsonArray(key_alv).size();
+                    LinearLayout ship_equip_item = getEquipmentShipDetailView(context, inflater, holder.equipment_item_detail_list, lv, alv, key_alv, is_item_aircraft);
+                    holder.equipment_item_detail_list.addView(ship_equip_item);
                 }
             }
+
         }
         holder.equipment_item_detail_summary.setText(KcaUtils.format(summary_format,
                 item_count, item_equipped_count, item_count - item_equipped_count));
@@ -171,7 +173,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         return ret_data;
     }
 
-    private LinearLayout getEquipmentShipDetailView(Context context, LayoutInflater inflater, LinearLayout root, int lv, int alv, String key) {
+    private LinearLayout getEquipmentShipDetailView(Context context, LayoutInflater inflater, LinearLayout root, int lv, int alv, String key, boolean is_aircraft) {
         LinearLayout ship_equip_item = (LinearLayout)inflater.inflate(R.layout.listview_equipment_count, root, false);
         TextView ship_equip_item_lv = ship_equip_item.findViewById(R.id.equipment_lv);
         TextView ship_equip_item_alv = ship_equip_item.findViewById(R.id.equipment_alv);
@@ -182,10 +184,10 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         ship_equip_item_lv.setText(getLvText(lv));
         if (lv == 0) ship_equip_item_lv.setTextColor(ContextCompat.getColor(context, R.color.grey));
         else ship_equip_item_lv.setTextColor(ContextCompat.getColor(context, R.color.itemlevel));
-        if (alv != -1) {
+        if (is_aircraft) {
             ship_equip_item_alv.setVisibility(View.VISIBLE);
             ship_equip_item_alv.setText(getAlvText(alv));
-            if (alv == 0) ship_equip_item_alv.setTextColor(ContextCompat.getColor(context, R.color.grey));
+            if (alv < 0) ship_equip_item_alv.setTextColor(ContextCompat.getColor(context, R.color.grey));
             else if (alv < 4) ship_equip_item_alv.setTextColor(ContextCompat.getColor(context, R.color.itemalv1));
             else ship_equip_item_alv.setTextColor(ContextCompat.getColor(context, R.color.itemalv2));
         } else {
@@ -206,7 +208,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
     }
 
     private String getAlvText(int value) {
-        return KcaUtils.format("+%d", value);
+        return KcaUtils.format("+%d", value > 0 ? value : 0);
     }
 
     private String getItemKey(int id, int lv, int alv) {
