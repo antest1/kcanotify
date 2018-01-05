@@ -24,7 +24,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.R.attr.key;
@@ -33,7 +35,7 @@ import static android.media.CamcorderProfile.get;
 public class KcaEquipListViewAdpater extends BaseAdapter {
     private List<JsonObject> listViewItemList = new ArrayList<>();
     private JsonObject shipEquipInfo = new JsonObject();
-    private SparseArray<AtomicInteger> countInfo = new SparseArray<>();
+    private Map<String, AtomicInteger> countInfo = new HashMap<>();
     private List<Integer> active = new ArrayList<>();
     private String summary_format = "";
 
@@ -70,6 +72,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
             holder.equipment_item_detail = v.findViewById(R.id.equipment_item_detail);
             holder.equipment_item_detail_list = v.findViewById(R.id.equipment_item_detail_list);
             holder.equipment_item_detail_summary = v.findViewById(R.id.equipment_item_detail_summary);
+            holder.equipment_item_detail_line = v.findViewById(R.id.equipment_item_detail_line);
             v.setTag(holder);
         }
 
@@ -79,7 +82,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         int item_id = item.get("api_id").getAsInt();
         int item_type_3 = item.getAsJsonArray("api_type").get(3).getAsInt();
         String item_name = KcaApiData.getItemTranslation(item.get("api_name").getAsString());
-        int item_count = countInfo.get(item_id).get();
+        int item_count = getTotalCount(countInfo, item_id);
         final Integer target = item_id;
 
         holder.equipment_id.setText(String.valueOf(item_id));
@@ -92,15 +95,15 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         int item_equipped_count = 0;
         for (int lv = 0; lv <= 10; lv++) {
             String key_noalv = getItemKey(item_id, lv, -1);
-            if (shipEquipInfo.has(key_noalv)) {
-                item_equipped_count += shipEquipInfo.getAsJsonArray(key_noalv).size();
+            if (countInfo.containsKey(key_noalv)) {
+                if (shipEquipInfo.has(key_noalv)) item_equipped_count += shipEquipInfo.getAsJsonArray(key_noalv).size();
                 LinearLayout ship_equip_item = getEquipmentShipDetailView(context, inflater, holder.equipment_item_detail_list, lv, -1, key_noalv);
                 holder.equipment_item_detail_list.addView(ship_equip_item);
             } else {
                 for (int alv = 0; alv <= 7; alv++) {
                     String key_alv = getItemKey(item_id, lv, alv);
-                    if (shipEquipInfo.has(key_alv)){
-                        item_equipped_count += shipEquipInfo.getAsJsonArray(key_alv).size();
+                    if (countInfo.containsKey(key_alv)){
+                        if (shipEquipInfo.has(key_alv)) item_equipped_count += shipEquipInfo.getAsJsonArray(key_alv).size();
                         LinearLayout ship_equip_item = getEquipmentShipDetailView(context, inflater, holder.equipment_item_detail_list, lv, alv, key_alv);
                         holder.equipment_item_detail_list.addView(ship_equip_item);
                     }
@@ -134,9 +137,11 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         return v;
     }
 
-    private String getEquipmentShipDetail(String key) {
-        JsonArray data = shipEquipInfo.getAsJsonArray(key);
+    private JsonObject getEquipmentShipDetail(String key) {
+        JsonObject ret_data = new JsonObject();
+        JsonArray data = shipEquipInfo.has(key) ? shipEquipInfo.getAsJsonArray(key) : new JsonArray();
         SparseArray<AtomicInteger> counter = new SparseArray<>();
+        int count_sum = 0;
         for (int k = 0; k < data.size(); k++) {
             JsonObject ship_info = data.get(k).getAsJsonObject();
             int ship_id = ship_info.get("id").getAsInt();
@@ -153,11 +158,17 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
             int ship_lv = ship_info.get("lv").getAsInt();
             String ship_name = KcaApiData.getShipTranslation(ship_info.get("name").getAsString(), false);
             int ship_count = counter.get(ship_id).get();
-
             String val = KcaUtils.format("%s (Lv %d) x%d", ship_name, ship_lv, ship_count);
-            equipment_ship_info_list.add(val);
+            if (!equipment_ship_info_list.contains(val)) {
+                equipment_ship_info_list.add(val);
+                count_sum += ship_count;
+            }
         }
-        return KcaUtils.joinStr(equipment_ship_info_list, ", ");
+
+        String content = KcaUtils.joinStr(equipment_ship_info_list, ", ");
+        ret_data.addProperty("ship", (content.length() > 0) ? content : "-");
+        ret_data.addProperty("count", count_sum);
+        return ret_data;
     }
 
     private LinearLayout getEquipmentShipDetailView(Context context, LayoutInflater inflater, LinearLayout root, int lv, int alv, String key) {
@@ -165,7 +176,8 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         TextView ship_equip_item_lv = ship_equip_item.findViewById(R.id.equipment_lv);
         TextView ship_equip_item_alv = ship_equip_item.findViewById(R.id.equipment_alv);
         TextView ship_equip_item_ships = ship_equip_item.findViewById(R.id.equipment_ships);
-        String ship_equip_detail = getEquipmentShipDetail(key);
+        TextView ship_equip_item_cnt_sum = ship_equip_item.findViewById(R.id.equipment_cnt_sum);
+        JsonObject ship_equip_detail = getEquipmentShipDetail(key);
 
         ship_equip_item_lv.setText(getLvText(lv));
         if (lv == 0) ship_equip_item_lv.setTextColor(ContextCompat.getColor(context, R.color.grey));
@@ -181,7 +193,11 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
             ship_equip_item_alv.setText("");
         }
 
-        ship_equip_item_ships.setText(ship_equip_detail);
+        int item_count = countInfo.get(key).get();
+        int item_equip_count = ship_equip_detail.get("count").getAsInt();
+        ship_equip_item_cnt_sum.setText(KcaUtils.format(summary_format,
+                item_count, item_equip_count, item_count - item_equip_count));
+        ship_equip_item_ships.setText(ship_equip_detail.get("ship").getAsString());
         return ship_equip_item;
     }
 
@@ -199,7 +215,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
     }
 
     static class ViewHolder {
-        ImageView equipment_icon;
+        ImageView equipment_icon, equipment_item_detail_line;
         TextView equipment_id, equipment_name, equipment_count, equipment_item_detail_summary;
         LinearLayout equipment_item, equipment_item_detail, equipment_item_detail_list;
     }
@@ -208,7 +224,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         summary_format = value;
     }
 
-    public void setListViewItemList(JsonArray total_equip_list, SparseArray<AtomicInteger> counter, JsonObject ship_equip_info, final String filtcond) {
+    public void setListViewItemList(JsonArray total_equip_list, Map<String, AtomicInteger> counter, JsonObject ship_equip_info, final String filtcond) {
         shipEquipInfo = ship_equip_info;
         countInfo = counter;
         if (filtcond.length() > 0) {
@@ -219,7 +235,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
                 public boolean apply(JsonObject input) {
                     int key = input.get("api_id").getAsInt();
                     if (filtcond.equals("all")) {
-                        return countInfo.indexOfKey(key) >= 0;
+                        return checkCountExist(countInfo, key);
                     } else {
                         Integer type_3 = input.getAsJsonArray("api_type").get(3).getAsInt();
                         String[] position_list = filtcond.split(",");
@@ -227,7 +243,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
                         for (String p: position_list) {
                             filt_list.add(Integer.valueOf(p) + 1);
                         }
-                        return filt_list.contains(type_3) && countInfo.indexOfKey(key) >= 0;
+                        return filt_list.contains(type_3) && checkCountExist(countInfo, key);
                     }
                 }}));
 
@@ -250,5 +266,24 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
             if (o1_type_2 != o2_type_2) return o1_type_2 - o2_type_2;
             return o1_id - o2_id;
         }
+    }
+
+    private int getTotalCount(Map<String, AtomicInteger> count, int equip_id) {
+        int cnt = 0;
+        for (String key: count.keySet()) {
+            String[] key_split = key.split("_");
+            int target_equip_id = Integer.parseInt(key_split[0]);
+            if (target_equip_id == equip_id) cnt += count.get(key).get();
+        }
+        return cnt;
+    }
+
+    private boolean checkCountExist(Map<String, AtomicInteger> count, int equip_id) {
+        for (String key: count.keySet()) {
+            String[] key_split = key.split("_");
+            int target_equip_id = Integer.parseInt(key_split[0]);
+            if (target_equip_id == equip_id) return true;
+        }
+        return false;
     }
 }

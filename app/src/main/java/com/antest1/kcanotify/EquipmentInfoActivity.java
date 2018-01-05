@@ -66,7 +66,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
     JsonArray equipment_data = new JsonArray();
     JsonArray ship_data = new JsonArray();
     JsonObject ship_equip_info = new JsonObject();
-    SparseArray<AtomicInteger> counter = new SparseArray<>();
+    Map<String, AtomicInteger> counter = new HashMap<>();
 
     public EquipmentInfoActivity() {
         LocaleUtils.updateConfig(this);
@@ -98,8 +98,9 @@ public class EquipmentInfoActivity extends AppCompatActivity {
 
         for (JsonElement data: user_equipment_data) {
             JsonObject equip = data.getAsJsonObject();
-            int id = equip.get("equip_id").getAsInt();
-            if(counter.indexOfKey(id) < 0) {
+            JsonObject value = new JsonParser().parse(equip.get("value").getAsString()).getAsJsonObject();
+            String id = getItemKey(value);
+            if(!counter.containsKey(id)) {
                 counter.put(id,  new AtomicInteger(1));
             } else {
                 counter.get(id).incrementAndGet();

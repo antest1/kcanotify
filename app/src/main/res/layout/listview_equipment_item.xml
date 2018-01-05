@@ -95,6 +95,14 @@
 
                 </LinearLayout>
 
+                <ImageView
+                    android:id="@+id/equipment_item_detail_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/grey"
+                    android:paddingBottom="1dp" />
+
                 <TextView
                     android:id="@+id/equipment_item_detail_summary"
                     android:layout_width="match_parent"
@@ -105,7 +113,8 @@
                     android:paddingStart="5dp"
                     android:textAlignment="textEnd"
                     android:textColor="@color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
