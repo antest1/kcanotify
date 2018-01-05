@@ -301,7 +301,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         }
         holder.ship_luck.setText(ship_lk.get(0).getAsString());
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < ship_item_icon.size(); i++) {
             int item_id = ship_item_icon.get(i).getAsInt();
             if (item_id == 0) {
                 holder.ship_equip_icon[i].setVisibility(View.INVISIBLE);
@@ -320,7 +320,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             holder.ship_equip_icon[4].setVisibility(View.VISIBLE);
         }
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < ship_onslot.size(); i++) {
             if (slot_sum == 0) {
                 holder.ship_equip_slot[i].setVisibility(View.INVISIBLE);
             } else {
