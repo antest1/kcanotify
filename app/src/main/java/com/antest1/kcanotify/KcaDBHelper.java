@@ -261,7 +261,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             JsonObject row = new JsonObject();
             row.addProperty("key", c.getInt(c.getColumnIndex("KEY")));
             row.addProperty("equip_id", c.getInt(c.getColumnIndex("KCID")));
-            row.addProperty("value", c.getInt(c.getColumnIndex("VALUE")));
+            row.addProperty("value", c.getString(c.getColumnIndex("VALUE")));
             data.add(row);
         }
         c.close();
