@@ -259,10 +259,12 @@ public class AkashiActivity extends AppCompatActivity {
         for (int i = 0; i < equipList.size(); i++) {
             int equipid = equipList.get(i).getAsInt();
             JsonObject kcItemData = KcaApiData.getKcItemStatusById(equipid, "type");
-            int type2 = kcItemData.getAsJsonArray("type").get(2).getAsInt();
-            int type3 = kcItemData.getAsJsonArray("type").get(3).getAsInt();
-            if (!checkFiltered(filterlist, type3)) {
-                keylist.add(type2 * TYPE_MUL + equipid);
+            if (kcItemData != null) {
+                int type2 = kcItemData.getAsJsonArray("type").get(2).getAsInt();
+                int type3 = kcItemData.getAsJsonArray("type").get(3).getAsInt();
+                if (!checkFiltered(filterlist, type3)) {
+                    keylist.add(type2 * TYPE_MUL + equipid);
+                }
             }
         }
         Collections.sort(keylist);
