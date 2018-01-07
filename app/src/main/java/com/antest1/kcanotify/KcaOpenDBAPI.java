@@ -21,7 +21,7 @@ import okhttp3.Response;
 
 import static com.antest1.kcanotify.KcaConstants.KCA_API_OPENDB_FAILED;
 
-public class KcaOpendbAPI {
+public class KcaOpenDBAPI {
     public static final String SUCCESSED_CODE = "successed";
     public static final String FAILED_CODE = "failed";
     public static final String TIMEOUT_CODE = "timeout";

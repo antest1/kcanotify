@@ -58,7 +58,6 @@ import java.util.concurrent.TimeUnit;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_HIGH;
 import static android.widget.Toast.makeText;
-import static com.antest1.kcanotify.KcaAkashiRepairInfo.getAkashiRepairTime;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaApiData.AKASHI_TIMER_20MIN;
 import static com.antest1.kcanotify.KcaApiData.T2_DRUM_CAN;
@@ -265,7 +264,7 @@ public class KcaService extends Service {
         KcaBattle.setHandler(nHandler);
         KcaApiData.setHandler(nHandler);
         KcaAlarmService.setHandler(nHandler);
-        KcaOpendbAPI.setHandler(nHandler);
+        KcaOpenDBAPI.setHandler(nHandler);
         SettingActivity.setHandler(nHandler);
         KcaFairySelectActivity.setHandler(nHandler);
         KcaViewButtonService.setHandler(nHandler);
@@ -1445,7 +1444,7 @@ public class KcaService extends Service {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                             int itemKcId = KcaApiData.updateSlotItemData(api_data);
                             if (isOpendbEnabled()) {
-                                KcaOpendbAPI.sendEquipDevData(flagship, materials[0], materials[1], materials[2], materials[3], itemKcId);
+                                KcaOpenDBAPI.sendEquipDevData(flagship, materials[0], materials[1], materials[2], materials[3], itemKcId);
                             }
                             questTracker.updateIdCountTracker("605");
                             questTracker.updateIdCountTracker("607");
@@ -1606,7 +1605,7 @@ public class KcaService extends Service {
                                 }
                                 int created_ship_id = api_kdock_item.get("api_created_ship_id").getAsInt();
                                 if (isOpendbEnabled()) {
-                                    KcaOpendbAPI.sendShipDevData(flagship, materials[0], materials[1], materials[2], materials[3], materials[4], created_ship_id);
+                                    KcaOpenDBAPI.sendShipDevData(flagship, materials[0], materials[1], materials[2], materials[3], materials[4], created_ship_id);
                                 }
                                 checkKdockId = -1;
                             }
@@ -1938,7 +1937,7 @@ public class KcaService extends Service {
                             }
                         }
                         if (certainFlag != 1 && isOpendbEnabled()) {
-                            KcaOpendbAPI.sendRemodelData(flagship, assistant, itemKcId, level, api_remodel_flag);
+                            KcaOpenDBAPI.sendRemodelData(flagship, assistant, itemKcId, level, api_remodel_flag);
                         }
                         questTracker.updateIdCountTracker("619");
                         updateQuestView();
@@ -2148,7 +2147,7 @@ public class KcaService extends Service {
                 int inventory = jsonDataObj.get("inventory").getAsInt();
                 int result = jsonDataObj.get("result").getAsInt();
                 if (isOpendbEnabled()) {
-                    KcaOpendbAPI.sendShipDropData(world, map, node, rank, maprank, enemy, inventory, result);
+                    KcaOpenDBAPI.sendShipDropData(world, map, node, rank, maprank, enemy, inventory, result);
                 }
             }
 
