@@ -382,6 +382,7 @@ public class MainActivity extends AppCompatActivity {
                         editor.putString(prefKey, String.valueOf(SEEK_33CN1));
                         break;
                     case PREF_OPENDB_API_USE:
+                    case PREF_POIDB_API_USE:
                     case PREF_AKASHI_STAR_CHECKED:
                     case PREF_KCA_SET_PRIORITY:
                     case PREF_DISABLE_CUSTOMTOAST:

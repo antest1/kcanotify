@@ -22,12 +22,6 @@
             android:title="@string/setting_menu_kand_title_saku_cal" />
 
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="opendb_api_use"
-            android:summary="@string/setting_menu_kand_desc_opendb"
-            android:title="@string/setting_menu_kand_title_opendb" />
-
-        <CheckBoxPreference
             android:defaultValue="true"
             android:key="expedition_view"
             android:summary="@string/setting_menu_kand_desc_exp_realtime_show"
@@ -228,7 +222,19 @@
             android:summary="@string/setting_menu_noti_desc_disable_customtoast"
             android:title="@string/setting_menu_noti_title_disable_customtoast" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/setting_menu_stat_head">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="opendb_api_use"
+            android:summary="@string/setting_menu_stat_desc_opendb"
+            android:title="@string/setting_menu_stat_title_opendb" />
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="poidb_api_use"
+            android:summary="@string/setting_menu_stat_desc_poidb"
+            android:title="@string/setting_menu_stat_title_poidb" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_menu_app_head">
         <Preference
             android:defaultValue=" "

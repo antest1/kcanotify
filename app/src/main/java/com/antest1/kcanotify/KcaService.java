@@ -69,6 +69,7 @@ import static com.antest1.kcanotify.KcaApiData.T2_GUN_SMALL;
 import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
 import static com.antest1.kcanotify.KcaApiData.T2_SUB_GUN;
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
+import static com.antest1.kcanotify.KcaApiData.getAdmiralLevel;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
@@ -80,6 +81,7 @@ import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
+import static com.antest1.kcanotify.KcaBattle.isBossReached;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaFleetViewService.REFRESH_FLEETVIEW_ACTION;
 import static com.antest1.kcanotify.KcaMoraleInfo.setMoraleValue;
@@ -110,7 +112,11 @@ public class KcaService extends Service {
     public static boolean isUserItemDataLoaded = false;
     public static boolean isAkashiTimerNotiWait = true;
     public static int heavyDamagedMode = 0;
+
     public static int checkKdockId = -1;
+    public static int checkLargeFlag = -1;
+    public static int checkHighSpeed = -1;
+
     public static boolean kaisouProcessFlag = false;
     public static String currentNodeInfo = "";
     public static boolean isInBattle;
@@ -715,7 +721,6 @@ public class KcaService extends Service {
                     dbHelper.putValue(DB_KEY_KDOCKDATA, requiredInfoApiData.getAsJsonArray("api_kdock").toString());
                     JsonArray slotitem_data = requiredInfoApiData.getAsJsonArray("api_slot_item");
                     int size2 = KcaApiData.putSlotItemDataToDB(slotitem_data);
-                    int userId = KcaApiData.getUserId(requiredInfoApiData);
                     Log.e("KCA", "Total Items: " + String.valueOf(size2));
                     if (size2 > 0) isUserItemDataLoaded = true;
                 }
@@ -1442,10 +1447,17 @@ public class KcaService extends Service {
 
                         if (jsonDataObj.has("api_data")) {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                            boolean createFlag = api_data.get("api_create_flag").getAsInt() == 1;
                             int itemKcId = KcaApiData.updateSlotItemData(api_data);
-                            if (isOpendbEnabled()) {
-                                KcaOpenDBAPI.sendEquipDevData(flagship, materials[0], materials[1], materials[2], materials[3], itemKcId);
+                            int itemFailKcId = -1;
+                            if (api_data.has("api_fdata")) {
+                                String[] fdata = api_data.get("api_fdata").getAsString().split(",");
+                                itemFailKcId = Integer.parseInt(fdata[1]);
                             }
+
+                            if (isOpenDBEnabled()) KcaOpenDBAPI.sendEquipDevData(flagship, materials[0], materials[1], materials[2], materials[3], itemKcId);
+                            if (isPoiDBEnabled()) KcaPoiDBAPI.sendEquipDevData(Arrays.toString(materials), flagship, createFlag ? itemKcId : itemFailKcId, getAdmiralLevel(), createFlag);
+
                             questTracker.updateIdCountTracker("605");
                             questTracker.updateIdCountTracker("607");
                             updateQuestView();
@@ -1455,7 +1467,7 @@ public class KcaService extends Service {
                                 int itemtype = 0;
                                 String itemcount = "";
 
-                                if (itemKcId > 0) {
+                                if (createFlag) {
                                     JsonObject itemData = KcaApiData.getKcItemStatusById(itemKcId, "name,type");
                                     itemname = KcaApiData.getItemTranslation(itemData.get("name").getAsString());
                                     itemtype = itemData.get("type").getAsJsonArray().get(3).getAsInt();
@@ -1539,7 +1551,10 @@ public class KcaService extends Service {
                             String decodedData = URLDecoder.decode(requestData[i], "utf-8");
                             if (decodedData.startsWith("api_kdock_id=")) {
                                 checkKdockId = Integer.valueOf(decodedData.replace("api_kdock_id=", "")) - 1;
-                                break;
+                            } else if (decodedData.startsWith("api_highspeed=")) {
+                                checkHighSpeed = Integer.valueOf(decodedData.replace("api_highspeed=", ""));
+                            } else if (decodedData.startsWith("api_large_flag=")) {
+                                checkLargeFlag = Integer.valueOf(decodedData.replace("api_large_flag=", ""));
                             }
                         }
                         questTracker.updateIdCountTracker("606");
@@ -1604,10 +1619,12 @@ public class KcaService extends Service {
                                     materials[i] = api_kdock_item.get(KcaUtils.format("api_item%d", i + 1)).getAsInt();
                                 }
                                 int created_ship_id = api_kdock_item.get("api_created_ship_id").getAsInt();
-                                if (isOpendbEnabled()) {
-                                    KcaOpenDBAPI.sendShipDevData(flagship, materials[0], materials[1], materials[2], materials[3], materials[4], created_ship_id);
-                                }
+                                if (isOpenDBEnabled()) KcaOpenDBAPI.sendShipDevData(flagship, materials[0], materials[1], materials[2], materials[3], materials[4], created_ship_id);
+                                if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDevData(Arrays.toString(materials), checkKdockId, flagship, created_ship_id, checkHighSpeed, getAdmiralLevel(), checkLargeFlag);
+
                                 checkKdockId = -1;
+                                checkLargeFlag = -1;
+                                checkHighSpeed = -1;
                             }
                         }
                     }
@@ -1936,7 +1953,7 @@ public class KcaService extends Service {
                                 KcaApiData.removeSlotItemData(joinStr(use_slot_id_list, ","));
                             }
                         }
-                        if (certainFlag != 1 && isOpendbEnabled()) {
+                        if (certainFlag != 1 && isOpenDBEnabled()) {
                             KcaOpenDBAPI.sendRemodelData(flagship, assistant, itemKcId, level, api_remodel_flag);
                         }
                         questTracker.updateIdCountTracker("619");
@@ -2137,18 +2154,21 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_DROPINFO)) {
-                Log.e("KCA", KCA_API_NOTI_BATTLE_DROPINFO + " " + String.valueOf(isOpendbEnabled()));
+                Log.e("KCA", KCA_API_NOTI_BATTLE_DROPINFO + " " + String.valueOf(isOpenDBEnabled()));
                 int world = jsonDataObj.get("world").getAsInt();
                 int map = jsonDataObj.get("map").getAsInt();
                 int node = jsonDataObj.get("node").getAsInt();
                 String rank = jsonDataObj.get("rank").getAsString();
                 int maprank = jsonDataObj.get("maprank").getAsInt();
-                String enemy = jsonDataObj.get("enemy").getAsJsonObject().toString();
+                JsonObject enemy = jsonDataObj.getAsJsonObject("enemy");
+                boolean isboss = jsonDataObj.get("isboss").getAsBoolean();
+                String quest_name = jsonDataObj.get("quest_name").getAsString();
+                String enemy_name = jsonDataObj.get("enemy_name").getAsString();
                 int inventory = jsonDataObj.get("inventory").getAsInt();
                 int result = jsonDataObj.get("result").getAsInt();
-                if (isOpendbEnabled()) {
-                    KcaOpenDBAPI.sendShipDropData(world, map, node, rank, maprank, enemy, inventory, result);
-                }
+
+                if (isOpenDBEnabled()) KcaOpenDBAPI.sendShipDropData(world, map, node, rank, maprank, enemy, inventory, result);
+                if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDropData(result, world * 10 + map, quest_name, node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
             }
 
             if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {
@@ -2239,9 +2259,14 @@ public class KcaService extends Service {
         return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_EXP_TYPE));
     }
 
-    private boolean isOpendbEnabled() {
+    private boolean isOpenDBEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_OPENDB_API_USE);
     }
+
+    private boolean isPoiDBEnabled() {
+        return getBooleanPreferences(getApplicationContext(), PREF_POIDB_API_USE);
+    }
+
 
     private boolean isBattleViewEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE);

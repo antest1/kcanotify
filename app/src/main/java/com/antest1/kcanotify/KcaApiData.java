@@ -46,8 +46,10 @@ public class KcaApiData {
     public static Map<Integer, JsonObject> kcUseitemData = new HashMap<Integer, JsonObject>();
     //public static Map<String, String> kcShipTranslationData = null;
 
-    public static int level = 0;
-    public static Integer experience = 0;
+    private static int userlevel = 0;
+    private static int userid = 0;
+    private static String username = "";
+    private static Integer experience = 0;
 
     public static int maxShipSize = 0;
     public static int maxItemSize = 0;
@@ -270,13 +272,15 @@ public class KcaApiData {
         return kcGameData != null;
     }
 
-    public static int getLevel() {
-        return level;
+    public static int getAdmiralLevel() {
+        return userlevel;
     }
 
-    public static Integer getExperience() {
-        return experience;
-    }
+    public static Integer getUserId() { return userid; }
+
+    public static String getUserName() { return username; }
+
+    public static Integer getUserExperience() { return experience; }
 
     public static JsonArray getKcSlotitemGameData() {
         if (kcGameData != null) return kcGameData.getAsJsonArray("api_mst_slotitem");
@@ -739,7 +743,9 @@ public class KcaApiData {
     public static int getPortData(JsonObject api_data) {
         if (api_data.has("api_basic")) {
             JsonObject basicInfo = (JsonObject) api_data.get("api_basic");
-            level = basicInfo.get("api_level").getAsInt();
+            userlevel = basicInfo.get("api_level").getAsInt();
+            userid = basicInfo.get("api_member_id").getAsInt();
+            username = basicInfo.get("api_nickname").getAsString();
             experience = basicInfo.get("api_experience").getAsInt();
         }
         if (api_data.has("api_ship")) {
@@ -788,14 +794,6 @@ public class KcaApiData {
         } else {
             return -1;
         }
-    }
-
-    public static Integer getUserId(JsonObject api_data) {
-        if (api_data.has("api_basic")) {
-            JsonObject basic = api_data.get("api_basic").getAsJsonObject();
-            return basic.get("api_member_id").getAsInt();
-        }
-        return -1;
     }
 
     // DB-based functions

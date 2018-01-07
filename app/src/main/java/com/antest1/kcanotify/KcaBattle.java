@@ -892,6 +892,9 @@ public class KcaBattle {
                         dropInfo.addProperty("world", currentMapArea);
                         dropInfo.addProperty("map", currentMapNo);
                         dropInfo.addProperty("node", currentNode);
+                        dropInfo.addProperty("isboss", isBossReached);
+                        dropInfo.addProperty("quest_name", api_data.get("api_quest_name").getAsString());
+                        dropInfo.addProperty("enemy_name", api_data.getAsJsonObject("api_enemy_info").get("api_deck_name").getAsString());
                         dropInfo.addProperty("rank", api_data.get("api_win_rank").getAsString());
                         dropInfo.addProperty("maprank", currentEventMapRank);
                         if (api_data.has("api_get_ship")) {
@@ -906,18 +909,7 @@ public class KcaBattle {
                         }
                         JsonObject enemyInfo = new JsonObject();
                         enemyInfo.addProperty("formation", currentEnemyFormation);
-                        if (ship_ke != null) {
-                            JsonArray enemyinfo_ship = new JsonArray();
-                            for (int i = 0; i < 6; i++) {
-                                if (i < ship_ke.size()) {
-                                    int ship_value = ship_ke.get(i).getAsInt();
-                                    enemyinfo_ship.add(ship_value);
-                                } else {
-                                    enemyinfo_ship.add(0);
-                                }
-                            }
-                            enemyInfo.add("ships", enemyinfo_ship);
-                        }
+                        if (ship_ke != null) enemyInfo.add("ships", ship_ke);
                         dropInfo.add("enemy", enemyInfo);
 
                         bundle = new Bundle();
@@ -1885,6 +1877,9 @@ public class KcaBattle {
                 dropInfo.addProperty("world", currentMapArea);
                 dropInfo.addProperty("map", currentMapNo);
                 dropInfo.addProperty("node", currentNode);
+                dropInfo.addProperty("isboss", isBossReached);
+                dropInfo.addProperty("quest_name", api_data.get("api_quest_name").getAsString());
+                dropInfo.addProperty("enemy_name", api_data.getAsJsonObject("api_enemy_info").get("api_deck_name").getAsString());
                 dropInfo.addProperty("rank", api_data.get("api_win_rank").getAsString());
                 dropInfo.addProperty("maprank", currentEventMapRank);
                 if (api_data.has("api_get_ship")) {
@@ -1899,30 +1894,8 @@ public class KcaBattle {
                 }
                 JsonObject enemyInfo = new JsonObject();
                 enemyInfo.addProperty("formation", currentEnemyFormation);
-                if (ship_ke != null) {
-                    JsonArray enemyinfo_ship = new JsonArray();
-                    for (int i = 0; i < 6; i++) {
-                        if (i < ship_ke.size()) {
-                            int ship_value = ship_ke.get(i).getAsInt();
-                            enemyinfo_ship.add(ship_value);
-                        } else {
-                            enemyinfo_ship.add(0);
-                        }
-                    }
-                    enemyInfo.add("ships", enemyinfo_ship);
-                }
-                if (ship_ke_combined != null) {
-                    JsonArray enemyinfo_ship_cb = new JsonArray();
-                    for (int i = 0; i < 6; i++) {
-                        if (i < ship_ke_combined.size()) {
-                            int ship_value = ship_ke_combined.get(i).getAsInt();
-                            enemyinfo_ship_cb.add(ship_value);
-                        } else {
-                            enemyinfo_ship_cb.add(0);
-                        }
-                    }
-                    enemyInfo.add("ships2", enemyinfo_ship_cb);
-                }
+                if (ship_ke != null) enemyInfo.add("ships", ship_ke);
+                if (ship_ke_combined != null) enemyInfo.add("ships2", ship_ke_combined);
                 dropInfo.add("enemy", enemyInfo);
 
                 bundle = new Bundle();

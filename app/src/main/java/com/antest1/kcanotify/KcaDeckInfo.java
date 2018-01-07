@@ -8,22 +8,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static android.R.attr.mode;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.*;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.LAB_STATUS_DEFENSE;
 import static com.antest1.kcanotify.KcaConstants.LAB_STATUS_SORTIE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
-import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.setDefaultGameData;
 
@@ -137,7 +131,7 @@ public class KcaDeckInfo {
         double noShipBonus = 0;
         int noShipCount = 0;
 
-        int userLevel = getLevel();
+        int userLevel = getAdmiralLevel();
         hqPenalty = Math.ceil(0.4 * userLevel);
 
         String[] decklist = deckid_list.split(",");

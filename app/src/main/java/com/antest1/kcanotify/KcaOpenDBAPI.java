@@ -7,6 +7,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.apache.commons.httpclient.HttpStatus;
@@ -32,6 +33,8 @@ public class KcaOpenDBAPI {
     public static final String REQ_SHIP_DROP = "/opendb/report/ship_drop.php";
     public static final String REQ_EQUIP_REMODEL = "/opendb/report/equip_remodel.php";
 
+    public static final String USER_AGENT = KcaUtils.format("Kcanotify/%s ", BuildConfig.VERSION_NAME);
+
     public static Handler sHandler;
     private static Gson gson = new Gson();
 
@@ -52,7 +55,34 @@ public class KcaOpenDBAPI {
         new opendbRequest().execute(REQ_SHIP_DEV, param);
     }
 
-    public static void sendShipDropData(int world, int map, int node, String rank, int maprank, String enemy, int inventory, int result) {
+    public static void sendShipDropData(int world, int map, int node, String rank, int maprank, JsonObject enemy, int inventory, int result) {
+        if (enemy.has("ships")) {
+            JsonArray ship_ke = enemy.getAsJsonArray("ships");
+            JsonArray enemyinfo_ship = new JsonArray();
+            for (int i = 0; i < 6; i++) {
+                if (i < ship_ke.size()) {
+                    int ship_value = ship_ke.get(i).getAsInt();
+                    enemyinfo_ship.add(ship_value);
+                } else {
+                    enemyinfo_ship.add(0);
+                }
+            }
+            enemy.add("ships", enemyinfo_ship);
+        }
+        if (enemy.has("ships2")) {
+            JsonArray ship_ke_combined = enemy.getAsJsonArray("ships2");
+            JsonArray enemyinfo_ship_cb = new JsonArray();
+            for (int i = 0; i < 6; i++) {
+                if (i < ship_ke_combined.size()) {
+                    int ship_value = ship_ke_combined.get(i).getAsInt();
+                    enemyinfo_ship_cb.add(ship_value);
+                } else {
+                    enemyinfo_ship_cb.add(0);
+                }
+            }
+            enemy.add("ships2", enemyinfo_ship_cb);
+        }
+
         String param = KcaUtils.format("apiver=5&world=%d&map=%d&node=%d&rank=%s&maprank=%d&enemy=%s&inventory=%d&result=%d",
                 world, map, node, rank, maprank, enemy, inventory, result);
         new opendbRequest().execute(REQ_SHIP_DROP, param);
@@ -107,7 +137,7 @@ public class KcaOpenDBAPI {
             try {
                 body = RequestBody.create(FORM_DATA, data);
                 Request.Builder builder = new Request.Builder().url(url).post(body);
-                builder.addHeader("User-Agent", KcaUtils.format("Kca/%s ", BuildConfig.VERSION_NAME));
+                builder.addHeader("User-Agent", USER_AGENT);
                 builder.addHeader("Referer", "app:/KCA/");
                 builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
                 Request request = builder.build();

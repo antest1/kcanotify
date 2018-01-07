@@ -264,6 +264,7 @@ public final class KcaConstants {
     public static final String KCA_API_PROCESS_BATTLEVIEW_FAILED = "/kca_api/process_battleview_failed";
     public static final String KCA_API_PROCESS_QUESTVIEW_FAILED = "/kca_api/process_questview_failed";
     public static final String KCA_API_OPENDB_FAILED = "/kca_api/opendb_failed";
+    public static final String KCA_API_POIDB_FAILED = "/kca_api/poidb_failed";
 
     public static final String KCA_API_VPN_DATA_ERROR = "/kca_api/vpn_data_error";
 
@@ -360,6 +361,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_LANGUAGE = "kca_language";
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
     public static final String PREF_OPENDB_API_USE = "opendb_api_use";
+    public static final String PREF_POIDB_API_USE = "poidb_api_use";
     public static final String PREF_KCA_EXP_VIEW = "expedition_view";
     public static final String PREF_KCA_EXP_TYPE = "expedition_type";
     public static final String PREF_KCA_SET_PRIORITY = "set_priority";

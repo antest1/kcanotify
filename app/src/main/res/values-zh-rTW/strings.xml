@@ -154,7 +154,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_movetoappinfo">Android 8.0+</string>
     <string name="setting_menu_kand_title_language">語言設定</string>
     <string name="setting_menu_kand_title_saku_cal">選擇索敵公式</string>
-    <string name="setting_menu_kand_title_opendb">向OpenDB傳送遊戲數據</string>
     <string name="setting_menu_kand_title_exp_realtime_show">追蹤遠征時間</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">於裝置的通知欄顯示遠征的時間</string>
     <string name="setting_menu_kand_title_exp_type">遠征時間顯示類型</string>
@@ -208,6 +207,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_fairy_glow">追蹤任務完成時妖精將閃耀光芒</string>
     <string name="setting_menu_noti_title_disable_customtoast">使用自定義吐司服務</string>
     <string name="setting_menu_noti_desc_disable_customtoast">當羅盤劇透或大破警告不顯示時設置</string>
+
+    <string name="setting_menu_stat_head">統計插件設置</string>
+    <string name="setting_menu_stat_title_opendb">向OpenDB傳送遊戲數據</string>
+    <string name="setting_menu_stat_title_poidb">向poi-statistics傳送遊戲數據</string>
 
     <string name="setting_menu_app_head">應用程式資訊</string>
     <string name="setting_menu_app_title_current">目前版本</string>

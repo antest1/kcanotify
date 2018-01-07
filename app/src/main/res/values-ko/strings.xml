@@ -143,7 +143,6 @@
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">깡들리티 설정</string>
     <string name="setting_menu_kand_title_saku_cal">색적 계산방식 선택</string>
-    <string name="setting_menu_kand_title_opendb">OpenDB에 데이터 전송</string>
     <string name="setting_menu_kand_title_exp_realtime_show">원정 남은 시간 실시간 표시</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">상단의 원정 시간 표시 여부</string>
     <string name="setting_menu_kand_title_exp_type">원정 시간 표시 타입</string>
@@ -192,6 +191,10 @@
     <string name="setting_menu_noti_desc_fairy_glow">추적중인 퀘스트가 완료되었을 때 요정이 반짝반짝 빛남</string>
     <string name="setting_menu_noti_title_disable_customtoast">커스텀 토스트 서비스 사용</string>
     <string name="setting_menu_noti_desc_disable_customtoast">마스 정보나 대파알림이 표시되지 않을 때 설정</string>
+
+    <string name="setting_menu_stat_head">통계 플러그인 설정</string>
+    <string name="setting_menu_stat_title_opendb">OpenDB에 데이터 전송</string>
+    <string name="setting_menu_stat_title_poidb">poi-statistics(뽀이DB)에 데이터 전송</string>
 
     <string name="setting_menu_app_head">어플리케이션 정보</string>
     <string name="setting_menu_app_title_current">현재 어플리케이션 버전</string>
