@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.app.FragmentManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -344,7 +345,15 @@ public class SettingActivity extends AppCompatActivity {
         @TargetApi(Build.VERSION_CODES.M)
         public void showObtainingPermissionOverlayWindow() {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
-            startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION);
+            if(intent.resolveActivity(context.getPackageManager()) != null) {
+                startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION);
+            } else {
+                try {
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_APPLICATION_SETTINGS), REQUEST_OVERLAY_PERMISSION);
+                } finally {
+                    Toast.makeText(context, getStringWithLocale(R.string.sa_overlay_appearontop), Toast.LENGTH_LONG).show();
+                }
+            }
         }
 
         public void showObtainingPermissionAccessibility() {

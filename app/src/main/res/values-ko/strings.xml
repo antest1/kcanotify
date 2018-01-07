@@ -88,6 +88,7 @@
     <string name="sa_getupdate_ioexceptionerror">데이터 저장 중 오류 발생</string>
 
     <string name="sa_overlay_under_m">안드로이드 6.0 (마시멜로) 미만의 경우 설정할 필요가 없습니다.</string>
+    <string name="sa_overlay_appearontop">어플리케이션 관리자 설정의 "화면 위에 그릴 수 있는 앱"(다른 앱 위에 표시되는 앱) 항목에서 [시제 깡들리티]를 활성화하세요.</string>
     <string name="sa_overlay_ok">화면 오버레이 권한이 설정되었습니다.</string>
     <string name="sa_overlay_no">화면 오버레이 권한이 설정되지 않았습니다. (전투예보 이용 불가)</string>
     <string name="sa_usagestat_ok">사용정보 접근 허용</string>
@@ -127,6 +128,7 @@
     <string name="kca_toast_loading_data">게임 데이터 로딩 중</string>
     <string name="kca_toast_inconsistent_data">현재 버전의 데이터가 원격 서버에 업로드하지 않았습니다.\n잠시 후(10~20분 뒤) 다시 시도해주세요.</string>
     <string name="kca_toast_ioexceptionerror">데이터 캐시에 쓰는 중 오류 발생</string>
+    <string name="kca_toast_server_select">플레이할 서버를 선택하세요. (팁: 위쪽, 왼쪽에 있을수록 좋습니다. 맨 오른쪽 아래는 되도록이면 피하세요. 헬시라지마)</string>
 
     <string name="kca_view_activate_vpn">VPN 서비스를 활성화해주세요</string>
     <string name="kca_view_condition" formatted="false">피로도: %s</string>

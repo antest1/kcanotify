@@ -245,7 +245,7 @@ public class KcaUtils {
         String current_version = getStringPreferences(context, PREF_KCA_VERSION);
         String default_version = context.getString(R.string.default_gamedata_version);
 
-        if (helper.getLength(DB_KEY_STARTDATA) > 0 && KcaUtils.compareVersion(current_version, default_version)) {
+        if (helper.getJsonObjectValue(DB_KEY_STARTDATA) != null && KcaUtils.compareVersion(current_version, default_version)) {
             JsonObject api_data = helper.getJsonObjectValue(DB_KEY_STARTDATA).getAsJsonObject("api_data");
             KcaApiData.getKcGameData(api_data);
             return 1;

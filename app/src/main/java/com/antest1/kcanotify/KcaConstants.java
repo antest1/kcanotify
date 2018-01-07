@@ -73,6 +73,7 @@ public final class KcaConstants {
             145, 146, 147, 148, 152, 153, 156, 157, 160, 163, 167, 169, 170, 173, 176, 178, 180, 181, 182};
 
     public static final String API_PORT = "/api_port/port";
+    public static final String API_WORLD_GET_WORLDINFO = "/api_world/get_worldinfo";
     public static final String API_WORLD_GET_ID = "/api_world/get_id";
     public static final String API_START2 = "/api_start2";
     public static final String API_REQ_MEMBER_GET_INCENTIVE = "/api_req_member/get_incentive";

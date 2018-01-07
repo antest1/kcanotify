@@ -86,8 +86,9 @@
     <string name="sa_getupdate_started">ゲームデータリクエスト&#8230;</string>
     <string name="sa_getupdate_servererror" formatted="false">サーバーエラー: %s</string>
     <string name="sa_getupdate_ioexceptionerror">エラー (IOException)</string>
-
     <string name="sa_overlay_under_m">Android 6.0 (Marshmallow)未満の場合には設定する必要がありません。</string>
+    <string name="sa_overlay_appearontop">アプリケーション管理の「他のアプリの上に表示」(フローティング表示するアプリ)設定で「Kcanotify」を有効にしてください。</string>
+
     <string name="sa_overlay_ok">画面オーバーレイ権限が設定されました。</string>
     <string name="sa_overlay_no">画面オーバーレイ権限が設定されていません。 (戦闘予報利用不可)</string>
     <string name="sa_usagestat_ok">使用履歴へのアクセスを許可しました。</string>
@@ -127,6 +128,7 @@
     <string name="kca_toast_loading_data">ゲームデータを読み込み中</string>
     <string name="kca_toast_inconsistent_data">最新バージョンのデータがサーバーに存在しません。\n時間を置いてやり直してください。</string>
     <string name="kca_toast_ioexceptionerror">データキャッシュへの書き込み中にエラーが発生しました。</string>
+    <string name="kca_toast_server_select">プレイするサーバーを選択してください（ヒント：上、左の方が良いです。）</string>
 
     <string name="kca_view_activate_vpn">Snifferを有効にしてください</string>
     <string name="kca_view_condition" formatted="false">疲労度：%s</string>

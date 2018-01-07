@@ -676,6 +676,12 @@ public class KcaService extends Service {
                 //Toast.makeText(contextWithLocale, getPreferences("kca_version") + " " + String.valueOf(api_start2_down_mode), Toast.LENGTH_LONG).show();
             }
 
+            if (url.startsWith(API_WORLD_GET_WORLDINFO)) {
+                showCustomToast(customToast,getStringWithLocale(R.string.kca_toast_server_select), Toast.LENGTH_LONG,
+                        ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                return;
+            }
+
             if (url.startsWith(API_WORLD_GET_ID)) {
                 return;
             }
@@ -698,6 +704,7 @@ public class KcaService extends Service {
                         setPreferences(getApplicationContext(), "kca_version", kca_version);
                     }
                 }
+                return;
             }
 
             if (url.startsWith(API_GET_MEMBER_REQUIRED_INFO)) {
@@ -713,6 +720,7 @@ public class KcaService extends Service {
                     Log.e("KCA", "Total Items: " + String.valueOf(size2));
                     if (size2 > 0) isUserItemDataLoaded = true;
                 }
+                return;
             }
 
             if (url.startsWith(API_GET_MEMBER_USEITEM)) {

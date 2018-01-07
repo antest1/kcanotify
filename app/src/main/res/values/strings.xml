@@ -129,6 +129,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_getupdate_ioexceptionerror">An error occured while saving data.</string>
 
     <string name="sa_overlay_under_m">This setting is not required for Android versions below 6.0.</string>
+    <string name="sa_overlay_appearontop">In application manager, activate [Kcanotify] in "Draw over other apps"(Apps that can appear on top).</string>
     <string name="sa_overlay_ok">Allow Screen Overlay: On</string>
     <string name="sa_overlay_no">Allow Screen Overlay: Off (BattleView will be disabled)</string>
     <string name="sa_usagestat_ok">UsageStats Access Allowed</string>
@@ -174,7 +175,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_toast_get_data_at_settings_2">A problem in game data was detected.\\\\nPlease download game data using kcanotify Settings manually.</string>
     <string name="kca_toast_loading_data">Loading game data</string>
     <string name="kca_toast_inconsistent_data">There is no data for current api version in kcanotify server.\nPlease restart the kcanotify later(about 10~20 min).</string>
-    <string name="kca_toast_ioexceptionerror">An error occured while writing to data cache.</string>
+    <string name="kca_toast_ioexceptionerror">An error occurred while writing to data cache.</string>
+    <string name="kca_toast_server_select">Select server you want to play. (Hint: the higher the left, the better. recommend to avoid two bottom servers if available.)</string>
 
     <string name="kca_view_activate_vpn">Please Activate VPN Service.</string>
     <string name="kca_view_condition" formatted="false">Morale: %s</string>

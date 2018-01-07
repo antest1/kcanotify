@@ -94,6 +94,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_getupdate_ioexceptionerror">保存数据时出错</string>
 
     <string name="sa_overlay_under_m">安卓6.0以下可跳过该设置</string>
+    <string name="sa_overlay_appearontop">In application manager, activate [Kcanotify] in "Draw over other apps"(Apps that can appear on top).</string>
     <string name="sa_overlay_ok">允许悬浮：是</string>
     <string name="sa_overlay_no">允许悬浮：否（战斗剧透会被禁用）</string>
     <string name="sa_usagestat_ok">允许访问使用信息</string>
@@ -135,6 +136,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_toast_loading_data">加载游戏数据</string>
     <string name="kca_toast_inconsistent_data">kcanotify服务器中没有当前api版本的数据\n请10~20分钟后重启kcanotify</string>
     <string name="kca_toast_ioexceptionerror">写入数据时出错</string>
+    <string name="kca_toast_server_select">服务器选择（建议选择上部和左侧、避免底部的两个服务器）</string>
 
     <string name="kca_view_activate_vpn">请启用VPN服务</string>
     <string name="kca_view_condition" formatted="false">士气：%s</string>
