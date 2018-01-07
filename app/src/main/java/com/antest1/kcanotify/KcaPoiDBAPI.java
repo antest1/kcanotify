@@ -43,6 +43,8 @@ public class KcaPoiDBAPI {
     }
 
     public static void sendEquipDevData(String items, int secretary, int itemId, int teitokuLv, boolean successful) {
+        if (teitokuLv < 1 || secretary < 0 || itemId < 0) return;
+
         JsonObject response = new JsonObject();
         response.add("items", gson.fromJson(items, JsonArray.class));
         response.addProperty("secretary", secretary);
@@ -54,6 +56,8 @@ public class KcaPoiDBAPI {
     }
 
     public static void sendShipDevData(String items, int kdockId, int secretary, int shipId, int highpeed, int teitokuLv, int largeFlag) {
+        if (teitokuLv < 1 || kdockId < 0 || secretary < 0 || shipId < 0 || highpeed < 0 || largeFlag < 0) return;
+
         JsonObject response = new JsonObject();
         response.add("items", gson.fromJson(items, JsonArray.class));
         response.addProperty("kdockId", kdockId);
@@ -67,6 +71,8 @@ public class KcaPoiDBAPI {
     }
 
     public static void sendShipDropData(int shipId, int mapId, String quest, int cellId, String enemy, String rank, boolean isBoss, int teitokuLv, int mapLv, JsonObject enemyInfo) {
+        if (teitokuLv < 1 || mapId < 0 || cellId < 0 || mapLv < 0) return;
+
         JsonObject response = new JsonObject();
         response.addProperty("shipId", shipId);
         response.addProperty("mapId", mapId);
