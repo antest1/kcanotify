@@ -113,7 +113,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
 
         JsonObject item = listViewItemList.get(position);
         int kc_ship_id = item.get("api_ship_id").getAsInt();
-        JsonObject kcShipData = getKcShipDataById(kc_ship_id, "name,stype,houg,raig,tyku,souk,tais,luck,afterlv");
+        JsonObject kcShipData = getKcShipDataById(kc_ship_id, "name,stype,houg,raig,tyku,souk,tais,luck,afterlv,slot_num");
         String ship_name = kcShipData.get("name").getAsString();
         int ship_stype = kcShipData.get("stype").getAsInt();
         int ship_init_ka = kcShipData.getAsJsonArray("houg").get(0).getAsInt();
@@ -122,6 +122,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         int ship_init_so = kcShipData.getAsJsonArray("souk").get(0).getAsInt();
         int ship_init_lk = kcShipData.getAsJsonArray("luck").get(0).getAsInt();
         int ship_afterlv = kcShipData.get("afterlv").getAsInt();
+        int ship_slot_num = kcShipData.get("slot_num").getAsInt();
 
         JsonArray ship_slot = item.getAsJsonArray("api_slot");
         JsonArray ship_onslot = item.getAsJsonArray("api_onslot");
@@ -302,6 +303,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         holder.ship_luck.setText(ship_lk.get(0).getAsString());
 
         for (int i = 0; i < ship_item_icon.size(); i++) {
+            if (i >= holder.ship_equip_icon.length) break;
             int item_id = ship_item_icon.get(i).getAsInt();
             if (item_id == 0) {
                 holder.ship_equip_icon[i].setVisibility(View.INVISIBLE);
@@ -321,7 +323,10 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         }
 
         for (int i = 0; i < ship_onslot.size(); i++) {
+            if (i >= holder.ship_equip_slot.length || i >= ship_slot.size()) break;
             if (slot_sum == 0) {
+                holder.ship_equip_slot[i].setVisibility(View.INVISIBLE);
+            } else if (i >= ship_slot_num) {
                 holder.ship_equip_slot[i].setVisibility(View.INVISIBLE);
             } else {
                 holder.ship_equip_slot[i].setText(ship_onslot.get(i).getAsString());
