@@ -1,4 +1,4 @@
-# Kcanotify
+# Kcanotify (시제 깡들리티)
 <img src="https://upload.cc/i/bwxouv.png" width=250/>
 Viewer Application for KanColle Android
 
