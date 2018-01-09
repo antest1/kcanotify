@@ -142,7 +142,10 @@ public class KcaLandAirBasePopupService extends Service {
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(LAB_DATA_ACTION)) {
-                updatePopup();
+                // check item data exist in db
+                if (dbHelper != null && dbHelper.getItemCount() > 0) {
+                    updatePopup();
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId);
