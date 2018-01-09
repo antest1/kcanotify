@@ -1,5 +1,4 @@
 # Kcanotify
--------
 <img src="https://upload.cc/i/bwxouv.png" width=250/>
 Viewer Application for KanColle Android
 
