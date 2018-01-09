@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -20,10 +21,13 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.google.common.collect.EvictingQueue;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
+import java.util.Queue;
 import java.util.Set;
 
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
@@ -67,11 +71,13 @@ public class KcaAlarmService extends Service {
     public static final int EXP_CANCEL_FLAG = 32;
     public static final long ALARM_DELAY = 61000;
     public static Set<Integer> alarm_set = new HashSet<>();
+    private static Queue<String> alarmChannelList = EvictingQueue.create(4);
 
     public static final String ACTION_PREFIX = "action_";
     public static final String CLICK_ACTION = "action_click_";
     public static final String DELETE_ACTION = "action_delete_";
     public static final String UPDATE_ACTION = "action_update_";
+    public static final String REFRESH_CHANNEL = "refresh_channel";
 
     AudioManager mAudioManager;
     KcaDBHelper dbHelper;
@@ -122,6 +128,7 @@ public class KcaAlarmService extends Service {
         moraleBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.morale_notify_bigicon)).getBitmap();
         akashiRepairBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_akashi_notify_bigicon)).getBitmap();
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        createAlarmChannel();
         super.onCreate();
     }
 
@@ -133,7 +140,11 @@ public class KcaAlarmService extends Service {
             String action = intent.getAction();
             Log.e("KCA-N", "Action: ".concat(action));
             Log.e("KCA-N", "B> " + alarm_set.toString());
-            if (action.startsWith(ACTION_PREFIX)) {
+            if (action.startsWith(REFRESH_CHANNEL)) {
+                String uri = intent.getStringExtra("uri");
+                Log.e("KCA-A", REFRESH_CHANNEL + " recv: " + uri);
+                createAlarmChannel(uri);
+            } else if (action.startsWith(ACTION_PREFIX)) {
                 if (action.startsWith(CLICK_ACTION)) {
                     Intent kcintent = getKcIntent(getApplicationContext());
                     if (kcintent != null) startActivity(kcintent);
@@ -246,14 +257,37 @@ public class KcaAlarmService extends Service {
         super.onDestroy();
     }
 
-    private void createAlarmChannel() {
+    private String createAlarmId(String uri, Boolean isvibrate) {
+        return KcaUtils.format("%s_%s_%s", ALARM_CHANNEL_ID, String.valueOf(uri.hashCode()), String.valueOf(isvibrate));
+    }
+
+    private void createAlarmChannel(String uri) {
+        Log.e("KCA-A", "recv: " + uri);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(ALARM_CHANNEL_ID,
-                    getStringWithLocale(R.string.notification_appinfo_title), NotificationManager.IMPORTANCE_DEFAULT);
-            channel.enableVibration(true);
+            String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
+            boolean isVibrate = soundKind.equals(getString(R.string.sound_kind_value_mixed)) || soundKind.equals(getString(R.string.sound_kind_value_vibrate));
+            notificationManager.deleteNotificationChannel(ALARM_CHANNEL_ID);
+            while (!alarmChannelList.isEmpty()) {
+                notificationManager.deleteNotificationChannel(alarmChannelList.poll());
+            }
+
+            AudioAttributes.Builder attrs = new AudioAttributes.Builder();
+            attrs.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
+            attrs.setUsage(AudioAttributes.USAGE_NOTIFICATION);
+
+            String channel_name = createAlarmId(uri, isVibrate);
+            alarmChannelList.add(channel_name);
+            NotificationChannel channel = new NotificationChannel(alarmChannelList.peek(),
+                    getStringWithLocale(R.string.notification_appinfo_title), NotificationManager.IMPORTANCE_HIGH);
+            channel.setSound(Uri.parse(uri), attrs.build());
+            channel.enableVibration(isVibrate);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    private void createAlarmChannel() {
+        createAlarmChannel(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE));
     }
 
     private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag, boolean caFlag, int nid) {
@@ -276,7 +310,7 @@ public class KcaAlarmService extends Service {
 
         }
 
-        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)
+        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.expedition_notify_icon)
                 .setLargeIcon(expBitmap)
                 .setContentTitle(title)
@@ -314,7 +348,7 @@ public class KcaAlarmService extends Service {
             content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
         }
 
-        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)
+        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.docking_notify_icon)
                 .setLargeIcon(dockBitmap)
                 .setContentTitle(title)
@@ -348,7 +382,7 @@ public class KcaAlarmService extends Service {
         String title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_morale_recovered), idx + 1);
         String content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_morale_recovered), kantaiName);
 
-        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)
+        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.morale_notify_icon)
                 .setLargeIcon(moraleBitmap)
                 .setContentTitle(title)
@@ -381,7 +415,7 @@ public class KcaAlarmService extends Service {
         String title = getStringWithLocale(R.string.kca_noti_title_akashirepair_recovered);
         String content = getStringWithLocale(R.string.kca_noti_content_akashirepair_recovered);
 
-        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)
+        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.docking_notify_icon)
                 .setLargeIcon(akashiRepairBitmap)
                 .setContentTitle(title)
@@ -425,7 +459,7 @@ public class KcaAlarmService extends Service {
         String content = version;
 
         Bitmap updateBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, getId("ic_update_" + String.valueOf(type), R.mipmap.class))).getBitmap();
-        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), ALARM_CHANNEL_ID)
+        NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.ic_stat_notify_1)
                 .setLargeIcon(updateBitmap)
                 .setContentTitle(title)

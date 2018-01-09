@@ -390,7 +390,6 @@ public final class KcaConstants {
     public static final String PREF_KCA_DATA_VERSION = "kca_data_version";
     public static final String PREF_FAIRY_NOTI_LONGCLICK = "notify_fairy_longclick";
     public static final String PREF_DISABLE_CUSTOMTOAST = "disable_customtoast";
-    public static final String PREF_KCA_NOTI_MOVETOAPPINFO = "noti_movetoappinfo";
     public static final String PREF_KCA_NOTI_QUEST_FAIRY_GLOW = "noti_quest_fairy_glow";
     public static final String PREF_UPDATE_SERVER = "check_update_server";
     public static final String PREF_KCA_NOTI_MORALE = "notify_morale";
@@ -432,7 +431,6 @@ public final class KcaConstants {
             PREF_KCA_DATA_VERSION,
             PREF_FAIRY_NOTI_LONGCLICK,
             PREF_DISABLE_CUSTOMTOAST,
-            PREF_KCA_NOTI_MOVETOAPPINFO,
             PREF_KCA_NOTI_QUEST_FAIRY_GLOW,
             PREF_UPDATE_SERVER,
             PREF_KCA_NOTI_MORALE,

@@ -49,6 +49,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
+import static com.antest1.kcanotify.KcaAlarmService.REFRESH_CHANNEL;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
@@ -63,7 +65,6 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_MORALE_MIN;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_MOVETOAPPINFO;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
@@ -161,19 +162,6 @@ public class SettingActivity extends AppCompatActivity {
                         }
                     });
                 }
-
-                /*
-                if (key.equals(PREF_ACCESSIBILITY_SETTING)) {
-                    pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                        @Override
-                        public boolean onPreferenceClick(Preference preference) {
-                            Log.e("KCA", PREF_ACCESSIBILITY_SETTING);
-                            showObtainingPermissionAccessibility();
-                            return false;
-                        }
-                    });
-                }
-                */
 
                 if (key.equals(PREF_FAIRY_AUTOHIDE)) {
                     pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -287,34 +275,13 @@ public class SettingActivity extends AppCompatActivity {
                     });
                 }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    if (key.equals(PREF_KCA_NOTI_SOUND_KIND) || key.equals(PREF_KCA_NOTI_RINGTONE)) {
-                        PreferenceCategory category = (PreferenceCategory) findPreference("pref_noti_category");
-                        category.removePreference(findPreference(key));
-                    } else if (key.equals(PREF_KCA_NOTI_MOVETOAPPINFO)) {
-                        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                            @Override
-                            public boolean onPreferenceClick(Preference preference) {
-                                Intent i = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                i.setData(Uri.parse("package:" + BuildConfig.APPLICATION_ID));
-                                startActivity(i);
-                                return false;
-                            }
-                        });
-                    }
-                } else {
-                    if (key.equals(PREF_KCA_NOTI_MOVETOAPPINFO)) {
-                        PreferenceCategory category = (PreferenceCategory) findPreference("pref_noti_category");
-                        category.removePreference(findPreference(key));
-                    }
-                }
-
                 if (pref instanceof RingtonePreference) {
                     String uri = pref.getSharedPreferences().getString(key, "");
                     if (uri.length() == 0) {
                         pref.setSummary(silentText);
                     } else {
                         Uri ringtoneUri = Uri.parse(uri);
+                        getActivity().grantUriPermission(BuildConfig.APPLICATION_ID, ringtoneUri, FLAG_GRANT_READ_URI_PERMISSION);
                         Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
                         if (ringtone == null) {
                             Toast.makeText(context,
@@ -420,6 +387,7 @@ public class SettingActivity extends AppCompatActivity {
                     pref.setSummary(silentText);
                 } else {
                     Uri ringtoneUri = Uri.parse(uri);
+                    getActivity().grantUriPermission(BuildConfig.APPLICATION_ID, ringtoneUri, FLAG_GRANT_READ_URI_PERMISSION);
                     Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
                     if (ringtone == null) {
                         Toast.makeText(context,
@@ -431,6 +399,11 @@ public class SettingActivity extends AppCompatActivity {
                         pref.setSummary(name);
                     }
                 }
+                Log.e("KCA-S", "sdf");
+                Intent aIntent = new Intent(getActivity(), KcaAlarmService.class);
+                aIntent.setAction(REFRESH_CHANNEL);
+                aIntent.putExtra("uri", uri);
+                context.startService(aIntent);
             } else if (pref instanceof ListPreference) {
                 ListPreference etp = (ListPreference) pref;
                 pref.setSummary(etp.getEntry());
