@@ -42,6 +42,7 @@ import static com.antest1.kcanotify.KcaConstants.NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.NOTI_MORALE;
 import static com.antest1.kcanotify.KcaConstants.NOTI_UPDATE;
+import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_AKASHI;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
@@ -132,6 +133,8 @@ public class KcaAlarmService extends Service {
         moraleBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.morale_notify_bigicon)).getBitmap();
         akashiRepairBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_akashi_notify_bigicon)).getBitmap();
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        String delay_value = getStringPreferences(getApplicationContext(), PREF_ALARM_DELAY);
+        if (delay_value.length() > 0) setAlarmDelay(Integer.parseInt(delay_value));
         createAlarmChannel();
         super.onCreate();
     }
