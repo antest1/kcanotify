@@ -128,6 +128,10 @@ public class KcaAlarmService extends Service {
     public void onCreate() {
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        KcaApiData.setDBHelper(dbHelper);
+        setDefaultGameData();
+        loadTranslationData(getApplicationContext());
+
         expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
         dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
         moraleBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.morale_notify_bigicon)).getBitmap();
@@ -509,6 +513,10 @@ public class KcaAlarmService extends Service {
             builder.setDefaults(0);
         }
         return builder;
+    }
+
+    private int setDefaultGameData() {
+        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
     }
 
     @Override
