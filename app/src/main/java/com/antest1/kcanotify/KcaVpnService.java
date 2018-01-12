@@ -115,18 +115,21 @@ public class KcaVpnService extends VpnService {
                 queue++;
                 //reportQueueSize();
             }
-            Command cmd = (Command) intent.getSerializableExtra(EXTRA_COMMAND);
             Message msg = commandHandler.obtainMessage();
             msg.obj = intent;
-            msg.what = cmd.ordinal();
+            msg.what = MSG_SERVICE_INTENT;
             commandHandler.sendMessage(msg);
         }
 
         @Override
         public void handleMessage(Message msg) {
             try {
-                synchronized (KcaVpnService.this) {
-                    handleIntent((Intent) msg.obj);
+                switch (msg.what) {
+                    case MSG_SERVICE_INTENT:
+                        handleIntent((Intent) msg.obj);
+                        break;
+                    default:
+                        Log.e(TAG, "Unknown command message=" + msg.what);
                 }
             } catch (Throwable ex) {
                 Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
@@ -456,37 +459,6 @@ public class KcaVpnService extends VpnService {
                 listExclude.add(new IPUtil.CIDR("66.94.8.0", 22));
                 listExclude.add(new IPUtil.CIDR("208.54.0.0", 16));
             }
-
-            // Verizon wireless calling
-            if ((config.mcc == 310 &&
-                    (config.mnc == 4 ||
-                            config.mnc == 5 ||
-                            config.mnc == 6 ||
-                            config.mnc == 10 ||
-                            config.mnc == 12 ||
-                            config.mnc == 13 ||
-                            config.mnc == 350 ||
-                            config.mnc == 590 ||
-                            config.mnc == 820 ||
-                            config.mnc == 890 ||
-                            config.mnc == 910)) ||
-                    (config.mcc == 311 && (config.mnc == 12 ||
-                            config.mnc == 110 ||
-                            (config.mnc >= 270 && config.mnc <= 289) ||
-                            config.mnc == 390 ||
-                            (config.mnc >= 480 && config.mnc <= 489) ||
-                            config.mnc == 590)) ||
-                    (config.mcc == 312 && (config.mnc == 770))) {
-                listExclude.add(new IPUtil.CIDR("66.174.0.0", 16)); // 66.174.0.0 - 66.174.255.255
-                listExclude.add(new IPUtil.CIDR("66.82.0.0", 15)); // 69.82.0.0 - 69.83.255.255
-                listExclude.add(new IPUtil.CIDR("69.96.0.0", 13)); // 69.96.0.0 - 69.103.255.255
-                listExclude.add(new IPUtil.CIDR("70.192.0.0", 11)); // 70.192.0.0 - 70.223.255.255
-                listExclude.add(new IPUtil.CIDR("97.128.0.0", 9)); // 97.128.0.0 - 97.255.255.255
-                listExclude.add(new IPUtil.CIDR("174.192.0.0", 9)); // 174.192.0.0 - 174.255.255.255
-                listExclude.add(new IPUtil.CIDR("72.96.0.0", 9)); // 72.96.0.0 - 72.127.255.255
-                listExclude.add(new IPUtil.CIDR("75.192.0.0", 9)); // 75.192.0.0 - 75.255.255.255
-                listExclude.add(new IPUtil.CIDR("97.0.0.0", 10)); // 97.0.0.0 - 97.63.255.255
-            }
             listExclude.add(new IPUtil.CIDR("224.0.0.0", 3)); // broadcast
 
             Collections.sort(listExclude);
@@ -513,8 +485,9 @@ public class KcaVpnService extends VpnService {
             } catch (UnknownHostException ex) {
                 Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
             }
-        } else
+        } else {
             builder.addRoute("0.0.0.0", 0);
+        }
 
         Log.i(TAG, "IPv6=" + ip6);
         if (ip6)
