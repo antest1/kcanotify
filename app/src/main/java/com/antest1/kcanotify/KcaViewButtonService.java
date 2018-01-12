@@ -178,6 +178,8 @@ public class KcaViewButtonService extends Service {
                 && !Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
+        } else if (!KcaService.getServiceStatus()) {
+            stopSelf();
         } else {
             clickcount = 0;
             mHandler = new Handler();
@@ -303,6 +305,8 @@ public class KcaViewButtonService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && !Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
+            stopSelf();
+        } else if (!KcaService.getServiceStatus()) {
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(KCA_STATUS_ON)) {
