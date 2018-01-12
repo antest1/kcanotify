@@ -719,20 +719,24 @@ public class KcaFleetViewService extends Service {
     public void updateFleetInfoLine(long moraleCompleteTime) {
         boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         final String displayText;
-        if (moraleCompleteTime < -1) {
-            if (selected == FLEET_COMBINED_ID) {
-                moraleCompleteTime = Math.max(KcaMoraleInfo.getMoraleCompleteTime(0),
-                        KcaMoraleInfo.getMoraleCompleteTime(1));
-            } else {
-                moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(selected);
+        if (KcaService.isPortAccessed) {
+            if (moraleCompleteTime < -1) {
+                if (selected == FLEET_COMBINED_ID) {
+                    moraleCompleteTime = Math.max(KcaMoraleInfo.getMoraleCompleteTime(0),
+                            KcaMoraleInfo.getMoraleCompleteTime(1));
+                } else {
+                    moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(selected);
+                }
             }
-        }
-        if (moraleCompleteTime > 0) {
-            int diff = Math.max(0, (int)(moraleCompleteTime - System.currentTimeMillis()) / 1000);
-            String moraleTimeText = KcaUtils.getTimeStr(diff);
-            displayText = moraleTimeText.concat(" | ").concat(fleetCalcInfoText);
+            if (moraleCompleteTime > 0) {
+                int diff = Math.max(0, (int)(moraleCompleteTime - System.currentTimeMillis()) / 1000);
+                String moraleTimeText = KcaUtils.getTimeStr(diff);
+                displayText = moraleTimeText.concat(" | ").concat(fleetCalcInfoText);
+            } else {
+                displayText = fleetCalcInfoText;
+            }
         } else {
-            displayText = fleetCalcInfoText;
+            displayText = "";
         }
 
         final String akashi_timer_text = KcaUtils.getTimeStr(KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond());
@@ -744,20 +748,21 @@ public class KcaFleetViewService extends Service {
                     if (!displayText.contentEquals(fleetInfoLine.getText())) {
                         fleetInfoLine.setText(displayText);
                     }
+
+                    if (KcaAkashiRepairInfo.getAkashiTimerValue() < 0) {
+                        fleetAkashiTimerBtn.setVisibility(View.GONE);
+                    } else {
+                        if (isAkashiTimerActive) {
+                            fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnActive));
+                        } else {
+                            fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnDeactive));
+                        }
+                        fleetAkashiTimerBtn.setText(akashi_timer_text);
+                        fleetAkashiTimerBtn.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
-                }
-
-                if (KcaAkashiRepairInfo.getAkashiTimerValue() < 0) {
                     fleetAkashiTimerBtn.setVisibility(View.GONE);
-                } else {
-                    if (isAkashiTimerActive) {
-                        fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnActive));
-                    } else {
-                        fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnDeactive));
-                    }
-                    fleetAkashiTimerBtn.setText(akashi_timer_text);
-                    fleetAkashiTimerBtn.setVisibility(View.VISIBLE);
                 }
             }
         });
