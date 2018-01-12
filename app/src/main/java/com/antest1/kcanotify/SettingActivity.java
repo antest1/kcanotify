@@ -49,6 +49,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static android.R.attr.value;
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static com.antest1.kcanotify.KcaAlarmService.REFRESH_CHANNEL;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
@@ -247,7 +248,9 @@ public class SettingActivity extends AppCompatActivity {
                     pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                         @Override
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            int value = Integer.parseInt((String) newValue);
+                            String new_val = ((String) newValue);
+                            if (new_val.length() == 0) return false;
+                            int value = Integer.parseInt(new_val);
                             KcaAlarmService.setAlarmDelay(value);
                             if (sHandler != null) {
                                 Bundle bundle = new Bundle();
@@ -266,7 +269,9 @@ public class SettingActivity extends AppCompatActivity {
                     pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                         @Override
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            int value = Integer.parseInt((String) newValue);
+                            String new_val = ((String) newValue);
+                            if (new_val.length() == 0) return false;
+                            int value = Integer.parseInt(new_val);
                             if (value > 100) {
                                 Toast.makeText(context, "value must be in 0~100", Toast.LENGTH_LONG).show();
                                 return false;
