@@ -69,7 +69,7 @@ public class KcaAlarmService extends Service {
     public static final String ALARM_CHANNEL_NAME = "Kcanotify Notification";
 
     public static final int EXP_CANCEL_FLAG = 32;
-    public static final long ALARM_DELAY = 61000;
+    public static long ALARM_DELAY = 61000;
     public static Set<Integer> alarm_set = new HashSet<>();
     private static Queue<String> alarmChannelList = EvictingQueue.create(4);
 
@@ -86,6 +86,10 @@ public class KcaAlarmService extends Service {
     public static Handler sHandler = null;
     Bundle bundle;
     Message sMsg;
+
+    public static void setAlarmDelay(int val) {
+        ALARM_DELAY = val * 1000;
+    }
 
     private boolean isExpAlarmEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_EXP);

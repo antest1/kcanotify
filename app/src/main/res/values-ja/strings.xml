@@ -166,8 +166,7 @@
     <string name="setting_menu_view_title_questview_use">任務情報を使う</string>
 
     <string name="setting_menu_noti_head">通知設定</string>
-    <string name="setting_menu_noti_title_movetoappinfo">アプリ情報に移動</string>
-    <string name="setting_menu_noti_desc_movetoappinfo">Android 8.0+</string>
+    <string name="setting_menu_noti_title_alarm_delay">タイマー調整（秒）</string>
     <string name="setting_menu_noti_title_exp">遠征通知</string>
     <string name="setting_menu_noti_desc_exp">遠征完了のときに上部に通知する</string>
     <string name="setting_menu_noti_title_dock">入渠通知</string>

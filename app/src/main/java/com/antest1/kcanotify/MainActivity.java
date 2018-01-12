@@ -430,6 +430,9 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_KCA_EXP_TYPE:
                         editor.putString(prefKey, "0");
                         break;
+                    case PREF_ALARM_DELAY:
+                        editor.putString(prefKey, "61");
+                        break;
                     case PREF_KCA_MORALE_MIN:
                         editor.putString(prefKey, "40");
                         break;

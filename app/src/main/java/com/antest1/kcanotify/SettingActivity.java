@@ -53,10 +53,12 @@ import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static com.antest1.kcanotify.KcaAlarmService.REFRESH_CHANNEL;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_ALARMDELAY_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_LANGUAGE_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_PRIORITY_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
@@ -236,6 +238,25 @@ public class SettingActivity extends AppCompatActivity {
                                 sHandler.sendMessage(sMsg);
                             }
                             Toast.makeText(context, getStringWithLocale(R.string.sa_language_changed), Toast.LENGTH_LONG).show();
+                            return true;
+                        }
+                    });
+                }
+
+                if (key.equals(PREF_ALARM_DELAY)) {
+                    pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            int value = Integer.parseInt((String) newValue);
+                            KcaAlarmService.setAlarmDelay(value);
+                            if (sHandler != null) {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("url", KCA_API_PREF_ALARMDELAY_CHANGED);
+                                bundle.putString("data", "");
+                                Message sMsg = sHandler.obtainMessage();
+                                sMsg.setData(bundle);
+                                sHandler.sendMessage(sMsg);
+                            }
                             return true;
                         }
                     });

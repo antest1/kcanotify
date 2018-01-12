@@ -170,8 +170,7 @@
     <string name="setting_menu_view_title_questview_use">임무번역 사용</string>
 
     <string name="setting_menu_noti_head">알림 설정</string>
-    <string name="setting_menu_noti_title_movetoappinfo">[어플리케이션 정보]로 이동</string>
-    <string name="setting_menu_noti_desc_movetoappinfo">Android 8.0 이상</string>
+    <string name="setting_menu_noti_title_alarm_delay">타이머 여유 (초)</string>
     <string name="setting_menu_noti_title_exp">원정 알림</string>
     <string name="setting_menu_noti_desc_exp">원정 도착 시 상단 알림 설정</string>
     <string name="setting_menu_noti_title_dock">입거 알림</string>

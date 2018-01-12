@@ -83,6 +83,7 @@ import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaBattle.isBossReached;
 import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaExpedition2.mission_no;
 import static com.antest1.kcanotify.KcaFleetViewService.REFRESH_FLEETVIEW_ACTION;
 import static com.antest1.kcanotify.KcaMoraleInfo.setMoraleValue;
 import static com.antest1.kcanotify.KcaQuestViewService.REFRESH_QUESTVIEW_ACTION;
@@ -924,7 +925,8 @@ public class KcaService extends Service {
 
                         if (reqPortApiData.has("api_ndock")) {
                             JsonArray nDockData = reqPortApiData.getAsJsonArray("api_ndock");
-                            processDockingInfo(nDockData);
+                            KcaDocking.setDockData(nDockData);
+                            processDockingInfo();
                         }
 
                         //Log.e("KCA", "Total Ships: " + String.valueOf(size));
@@ -1199,7 +1201,8 @@ public class KcaService extends Service {
                 if (url.startsWith(API_GET_MEMBER_NDOCK)) {
                     if (jsonDataObj.has("api_data")) {
                         JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
-                        processDockingInfo(api_data);
+                        KcaDocking.setDockData(api_data);
+                        processDockingInfo();
                     }
                     updateFleetView();
                 }
@@ -2095,6 +2098,13 @@ public class KcaService extends Service {
                 updateExpViewNotification();
             }
 
+            if (url.startsWith(KCA_API_PREF_ALARMDELAY_CHANGED)) {
+                processExpeditionInfo(true);
+                processDockingInfo(true);
+
+                updateExpViewNotification();
+            }
+
             if (url.startsWith(KCA_API_PREF_PRIORITY_CHANGED)) {
                 updateNotificationPriority(getPriority());
             }
@@ -2322,7 +2332,12 @@ public class KcaService extends Service {
     }
 
     private void processExpeditionInfo() {
+        processExpeditionInfo(false);
+    }
+
+    private void processExpeditionInfo(boolean reset_flag) {
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+        if (data == null) return;
         //Log.e("KCA", "processExpeditionInfo Called");
         int deck_id, mission_no;
         long arrive_time;
@@ -2344,18 +2359,18 @@ public class KcaService extends Service {
             Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
             if (KcaExpedition2.isInMission(i)) {
                 boolean isNotIdenticalMission = (arrive_time != KcaExpedition2.getArriveTime(i));
-                if (mission_no == -1 || isNotIdenticalMission) {
-                    PendingIntent pendingIntent = PendingIntent.getService(
-                            getApplicationContext(),
-                            getNotificationId(NOTI_EXP, i),
-                            new Intent(getApplicationContext(), KcaAlarmService.class),
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
-                    pendingIntent.cancel();
-                    alarmManager.cancel(pendingIntent);
-                    KcaExpedition2.clearMissionData(i);
-                }
-                if (arrive_time != KcaExpedition2.getArriveTime(i)) {
+                if (isNotIdenticalMission || reset_flag) {
+                    if (mission_no == -1) {
+                        PendingIntent pendingIntent = PendingIntent.getService(
+                                getApplicationContext(),
+                                getNotificationId(NOTI_EXP, i),
+                                new Intent(getApplicationContext(), KcaAlarmService.class),
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        );
+                        pendingIntent.cancel();
+                        alarmManager.cancel(pendingIntent);
+                        KcaExpedition2.clearMissionData(i);
+                    }
                     KcaExpedition2.setMissionData(i, deck_name, mission_no, arrive_time);
                     setExpeditionAlarm(i, mission_no, deck_name, arrive_time, false, false, aIntent);
                 }
@@ -2381,9 +2396,15 @@ public class KcaService extends Service {
         }
     }
 
-    private void processDockingInfo(JsonArray data) {
+    private void processDockingInfo() {
+        processDockingInfo(false);
+    }
+
+    private void processDockingInfo(boolean reset_flag) {
         int dockId, shipId, state;
         long completeTime;
+        JsonArray data = KcaDocking.getDockData();
+        if (data == null) return;
 
         for (int i = 0; i < data.size(); i++) {
             JsonObject ndockData = data.get(i).getAsJsonObject();
@@ -2398,7 +2419,7 @@ public class KcaService extends Service {
                 completeTime = ndockData.get("api_complete_time").getAsLong();
                 Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
                 if (KcaDocking.getCompleteTime(dockId) != -1) {
-                    if (KcaDocking.getShipId(dockId) != shipId) {
+                    if (KcaDocking.getShipId(dockId) != shipId || reset_flag) {
                         PendingIntent pendingIntent = PendingIntent.getService(
                                 getApplicationContext(),
                                 getNotificationId(NOTI_DOCK, dockId),

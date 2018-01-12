@@ -247,6 +247,7 @@ public final class KcaConstants {
     public static final String KCA_API_PREF_PRIORITY_CHANGED = "/kca_api/pref_priority_changed";
     public static final String KCA_API_PREF_NOTICOUNT_CHANGED = "/kca_api/pref_noticount_changed";
     public static final String KCA_API_PREF_LANGUAGE_CHANGED = "/kca_api/pref_language_changed";
+    public static final String KCA_API_PREF_ALARMDELAY_CHANGED = "/kca_api/pref_alarmdelay_changed";
 
     public static final String KCA_MSG_FAIRY_CHANGED = "com.antest1.kcanotify.KcaFairySelectActivity.KCA_MSG_FAIRY_CHANGED";
     public static final String KCA_MSG_BATTLE_NODE = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_NODE";
@@ -397,8 +398,9 @@ public final class KcaConstants {
     public static final String PREF_KCA_NOTI_AKASHI = "notify_akashi";
     public static final String PREF_SHIPINFO_SORTKEY = "shipinfo_sortkey";
     public static final String PREF_SHIPINFO_FILTCOND = "shipinfo_filtcond";
-    public static final String PREF_EQUIPINFO_SORTKEY = "EQUIPINFO_sortkey";
-    public static final String PREF_EQUIPINFO_FILTCOND = "EQUIPINFO_filtcond";
+    public static final String PREF_EQUIPINFO_SORTKEY = "equipinfo_sortkey";
+    public static final String PREF_EQUIPINFO_FILTCOND = "equipinfo_filtcond";
+    public static final String PREF_ALARM_DELAY = "alarm_delay";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,

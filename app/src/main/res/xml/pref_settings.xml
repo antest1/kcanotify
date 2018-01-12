@@ -154,6 +154,12 @@
             android:summary="@string/setting_menu_noti_desc_notiatsvcoff"
             android:title="@string/setting_menu_noti_title_notiatsvcoff" />
 
+        <EditTextPreference
+            android:defaultValue="61"
+            android:key="alarm_delay"
+            android:numeric="integer|signed"
+            android:title="@string/setting_menu_noti_title_alarm_delay" />
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="notify_expedition"
