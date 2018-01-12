@@ -268,8 +268,7 @@ public final class KcaConstants {
     public static final String KCA_API_POIDB_FAILED = "/kca_api/poidb_failed";
 
     public static final String KCA_API_VPN_DATA_ERROR = "/kca_api/vpn_data_error";
-
-
+    public static final String KCA_API_RESOURCE_URL = "/kca_api/resource_url";
 
     public static final int SEEK_PURE = 0;
     public static final int SEEK_33CN1 = 1;

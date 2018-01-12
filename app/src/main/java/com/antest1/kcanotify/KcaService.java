@@ -635,13 +635,44 @@ public class KcaService extends Service {
             return;
         }
 
-        JsonObject jsonDataObj;
+        final JsonObject jsonDataObj;
         try {
             String init = new String(Arrays.copyOfRange(raw, 0, 7));
             if (init.contains("svdata=")) {
                 data.skip("svdata=".length());
             }
-            jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
+            if (raw.length > 0) jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
+            else jsonDataObj = new JsonObject();
+
+            if (url.equals(KCA_API_RESOURCE_URL)) {
+                dbHelper.recordErrorLog(ERROR_TYPE_VPN, KCA_API_RESOURCE_URL, "", "", request);
+                return;
+            }
+
+            if (url.equals(KCA_API_VPN_DATA_ERROR)) { // VPN Data Dump Send
+                String api_url = jsonDataObj.get("uri").getAsString();
+                String api_request = jsonDataObj.get("request").getAsString();
+                String api_response = jsonDataObj.get("response").getAsString();
+                String api_error = jsonDataObj.get("error").getAsString();
+
+                List<String> filtered_resquest_list = new ArrayList<String>();
+                try {
+                    String[] requestData = api_request.split("&");
+                    for (int i = 0; i < requestData.length; i++) {
+                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                        if (!decodedData.startsWith("api_token")) {
+                            filtered_resquest_list.add(requestData[i]);
+                        }
+                    }
+                    api_request = joinStr(filtered_resquest_list, "&");
+                } catch (UnsupportedEncodingException e1) {
+                    e1.printStackTrace();
+                }
+
+                showCustomToast(customToast, getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                dbHelper.recordErrorLog(ERROR_TYPE_VPN, api_url, api_request, api_response, api_error);
+                return;
+            }
 
             if (url.startsWith(KCA_VERSION)) {
                 isInitState = false;
@@ -1965,29 +1996,6 @@ public class KcaService extends Service {
                 }
             }
             sendQuestCompletionInfo();
-            if (url.equals(KCA_API_VPN_DATA_ERROR)) { // VPN Data Dump Send
-                String api_url = jsonDataObj.get("uri").getAsString();
-                String api_request = jsonDataObj.get("request").getAsString();
-                String api_response = jsonDataObj.get("response").getAsString();
-                String api_error = jsonDataObj.get("error").getAsString();
-
-                List<String> filtered_resquest_list = new ArrayList<String>();
-                try {
-                    String[] requestData = api_request.split("&");
-                    for (int i = 0; i < requestData.length; i++) {
-                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
-                        if (!decodedData.startsWith("api_token")) {
-                            filtered_resquest_list.add(requestData[i]);
-                        }
-                    }
-                    api_request = joinStr(filtered_resquest_list, "&");
-                } catch (UnsupportedEncodingException e1) {
-                    e1.printStackTrace();
-                }
-
-                showCustomToast(customToast, getStringWithLocale(R.string.service_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-                dbHelper.recordErrorLog(ERROR_TYPE_VPN, api_url, api_request, api_response, api_error);
-            }
         } catch (JsonSyntaxException e) {
             //Log.e("KCA", "ParseError");
             //Log.e("KCA", data);

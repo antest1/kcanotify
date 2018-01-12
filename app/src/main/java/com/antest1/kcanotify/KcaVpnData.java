@@ -21,6 +21,7 @@ import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.antest1.kcanotify.KcaConstants.KCA_API_RESOURCE_URL;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_VPN_DATA_ERROR;
 import static com.antest1.kcanotify.KcaUtils.byteArrayToHex;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -118,6 +119,8 @@ public class KcaVpnData {
                             ignoreResponseList.remove(sport);
                         }
                     } else {
+                        //KcaHandler k = new KcaHandler(handler, KCA_API_RESOURCE_URL, (requestUri + " " + sport).getBytes(), new byte[]{});
+                        //executorService.execute(k);
                         if (!ignoreResponseList.contains(sport)) {
                             ignoreResponseList.add(sport);
                         }
