@@ -1032,6 +1032,10 @@ public class KcaService extends Service {
                             JsonArray api_airbase_info = api_data.getAsJsonArray("api_air_base");
                             dbHelper.putValue(DB_KEY_LABSIFNO, api_airbase_info.toString());
                             updateAirbasePopupInfo();
+                        } else {
+                            JsonArray api_airbase_info = new JsonArray();
+                            dbHelper.putValue(DB_KEY_LABSIFNO, api_airbase_info.toString());
+                            updateAirbasePopupInfo();
                         }
                     }
 
