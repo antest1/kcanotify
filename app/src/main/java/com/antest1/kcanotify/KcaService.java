@@ -938,6 +938,7 @@ public class KcaService extends Service {
                     KcaFleetViewService.setReadyFlag(true);
                     heavyDamagedMode = HD_NONE;
                     currentNodeInfo = "";
+                    KcaBattle.currentFleet = -1;
                     KcaApiData.resetShipCountInBattle();
                     KcaApiData.resetItemCountInBattle();
                     Log.e("KCA", "Port Handler Called");
@@ -2465,6 +2466,8 @@ public class KcaService extends Service {
     }
 
     private void processMoraleInfo(int idx, JsonArray deckportdata, boolean set_alarm) {
+        if (KcaBattle.currentFleet == idx) return;
+
         JsonObject deck = (JsonObject) deckportdata.get(idx);
         String deck_name = deck.get("api_name").getAsString();
         long morale_time = KcaMoraleInfo.getMoraleCompleteTime(idx);
