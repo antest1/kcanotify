@@ -521,16 +521,22 @@ public class KcaFleetViewService extends Service {
         boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         JsonArray deckportdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (!isReady) {
+            fleetCalcInfoText = "";
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
             fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
             mView.findViewById(R.id.fleet_list_main).setVisibility(View.INVISIBLE);
             mView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape? View.INVISIBLE : View.GONE);
+            fleetSwitchBtn.setVisibility(View.GONE);
             return;
         }
 
         if (idx != FLEET_COMBINED_ID && idx >= deckportdata.size()) {
+            fleetCalcInfoText = "Not Opened";
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
-            fleetInfoLine.setText("Not Opened");
+            fleetInfoLine.setText(fleetCalcInfoText);
+            mView.findViewById(R.id.fleet_list_main).setVisibility(View.INVISIBLE);
+            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape? View.INVISIBLE : View.GONE);
+            fleetSwitchBtn.setVisibility(View.GONE);
             return;
         }
 
@@ -799,7 +805,7 @@ public class KcaFleetViewService extends Service {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (displayText.length() > 0) {
+                if (isReady && displayText.length() > 0) {
                     if (!displayText.contentEquals(fleetInfoLine.getText())) {
                         fleetInfoLine.setText(displayText);
                     }
