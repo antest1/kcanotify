@@ -46,13 +46,6 @@ public class KcaApiData {
     public static Map<Integer, JsonObject> kcUseitemData = new HashMap<Integer, JsonObject>();
     //public static Map<String, String> kcShipTranslationData = null;
 
-    private static int userlevel = 0;
-    private static int userid = 0;
-    private static String username = "";
-    private static Integer experience = 0;
-
-    public static int maxShipSize = 0;
-    public static int maxItemSize = 0;
     public static int getShipCountInBattle = 0;
     public static int getItemCountInBattle = 0;
 
@@ -273,14 +266,28 @@ public class KcaApiData {
     }
 
     public static int getAdmiralLevel() {
-        return userlevel;
+        JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
+        if (basic_info != null) return basic_info.get("api_level").getAsInt();
+        else return 0;
     }
 
-    public static Integer getUserId() { return userid; }
+    public static Integer getUserId() {
+        JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
+        if(basic_info != null) return basic_info.get("api_member_id").getAsInt();
+        else return 0;
+    }
 
-    public static String getUserName() { return username; }
+    public static String getUserName() {
+        JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
+        if (basic_info != null) return basic_info.get("api_nickname").getAsString();
+        else return "";
+    }
 
-    public static Integer getUserExperience() { return experience; }
+    public static Integer getUserExperience() {
+        JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
+        if (basic_info != null) return basic_info.get("api_experience").getAsInt();
+        else return 0;
+    }
 
     public static JsonArray getKcSlotitemGameData() {
         if (kcGameData != null) return kcGameData.getAsJsonArray("api_mst_slotitem");
@@ -314,13 +321,55 @@ public class KcaApiData {
     }
 
     public static boolean checkUserShipMax() {
-        return maxShipSize == (userShipData.size() + getShipCountInBattle);
+        int ship_size = 0;
+        if (userShipData != null) ship_size = userShipData.size();
+        else ship_size = helper.getShipCount();
+        int max_ship_size = 0;
+        JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
+        if (basic_info != null) max_ship_size = basic_info.get("api_max_chara").getAsInt();
+        return max_ship_size == (ship_size + getShipCountInBattle);
+    }
+
+    public static int getUserMaxShipCount() {
+        int max_ship_size = 0;
+        JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
+        if (basic_info != null) max_ship_size = basic_info.get("api_max_chara").getAsInt();
+        return max_ship_size;
+    }
+
+    public static int getUserMaxItemCount() {
+        int max_item_size = 0;
+        JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
+        if (basic_info != null) max_item_size = basic_info.get("api_max_slotitem").getAsInt();
+        return max_item_size;
     }
 
     public static boolean checkUserItemMax() {
-        Log.e("KCA", KcaUtils.format("Item: %d - %d", maxItemSize, helper.getItemCount() + getItemCountInBattle));
-        return maxItemSize <= (helper.getItemCount() + getItemCountInBattle);
+        //Log.e("KCA", KcaUtils.format("Item: %d - %d", maxItemSize, helper.getItemCount() + getItemCountInBattle));
+        int max_equip_size = 0;
+        JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
+        if (basic_info != null) max_equip_size = basic_info.get("api_max_slotitem").getAsInt();
+        return max_equip_size <= (helper.getItemCount() + getItemCountInBattle);
     }
+
+    public static boolean checkEventUserShip() {
+        int ship_size = 0;
+        int max_ship_size = 0;
+        if (userShipData != null) ship_size = userShipData.size();
+        else ship_size = helper.getShipCount();
+        JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
+        if (basic_info != null) max_ship_size = basic_info.get("api_max_chara").getAsInt();
+        return max_ship_size < (ship_size + 5);
+    }
+
+    public static boolean checkEventUserItem() {
+        int max_item_size = 0;
+        JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
+        if (basic_info != null) max_item_size = basic_info.get("api_max_slotitem").getAsInt();
+        //Log.e("KCA", KcaUtils.format("Item: %d - %d", maxItemSize, helper.getItemCount() + getItemCountInBattle));
+        return (max_item_size + 3) < (helper.getItemCount() + 20);
+    }
+
 
     public static boolean checkUserPortEnough() {
         return !(checkUserShipMax() || checkUserItemMax());
@@ -407,8 +456,13 @@ public class KcaApiData {
     }
 
     public static int getShipSize() {
-        return userShipData.size();
+        int ship_size = 0;
+        if (userShipData != null) ship_size = userShipData.size();
+        else ship_size = helper.getShipCount();
+        return ship_size;
     }
+
+    public static int getItemSize() { return helper.getItemCount() + getItemCountInBattle; }
 
     public static int loadMapEdgeInfoFromAssets(AssetManager am) {
         try {
@@ -743,10 +797,7 @@ public class KcaApiData {
     public static int getPortData(JsonObject api_data) {
         if (api_data.has("api_basic")) {
             JsonObject basicInfo = (JsonObject) api_data.get("api_basic");
-            userlevel = basicInfo.get("api_level").getAsInt();
-            userid = basicInfo.get("api_member_id").getAsInt();
-            username = basicInfo.get("api_nickname").getAsString();
-            experience = basicInfo.get("api_experience").getAsInt();
+            helper.putValue(DB_KEY_BASICIFNO, basicInfo.toString());
         }
         if (api_data.has("api_ship")) {
             JsonArray shipDataArray = (JsonArray) api_data.get("api_ship");
@@ -862,33 +913,55 @@ public class KcaApiData {
     }
 
     public static JsonObject getUserShipDataById(int id, String list) {
-        if (userShipData == null || userShipData.size() == 0) return null;
-        JsonObject temp = new JsonObject();
-        if (userShipData.containsKey(id)) {
+        JsonObject target_data = null;
+        JsonObject return_data = new JsonObject();
+        if (userShipData != null) {
+            if (userShipData.containsKey(id)) {
+                target_data = userShipData.get(id);
+            }
+        } else if (helper.getShipCount() > 0) {
+            JsonArray data = helper.getJsonArrayValue(DB_KEY_SHIPIFNO);
+            for (int i = 0; i < data.size(); i++) {
+                JsonObject item = data.get(i).getAsJsonObject();
+                int aid = item.get("api_id").getAsInt();
+                if (aid == id) {
+                    target_data = item;
+                    break;
+                }
+            }
+        }
+
+        if (target_data != null) {
             if (list.equals("all")) {
                 return userShipData.get(id);
             } else {
                 String[] requestList = list.split(",");
-                for (int i = 0; i < requestList.length; i++) {
-                    String orig_api_item = requestList[i];
+                for (String orig_api_item: requestList) {
                     String api_item = orig_api_item;
                     if (!api_item.startsWith("api_")) {
                         api_item = "api_" + api_item;
                     }
-                    temp.add(orig_api_item, userShipData.get(id).get(api_item));
+                    return_data.add(orig_api_item, userShipData.get(id).get(api_item));
                 }
-                return temp;
             }
-        } else {
-            return null;
         }
+        return return_data;
     }
 
     public static int countUserShipById(int ship_id) {
         int count = 0;
-        if (userShipData == null || userShipData.size() == 0) return -1;
-        for (JsonObject ship : userShipData.values()) {
-            if (ship_id == ship.get("api_ship_id").getAsInt()) count += 1;
+        if (userShipData == null && helper.getShipCount() == 0) return -1;
+        else if (userShipData != null) {
+            for (JsonObject ship : userShipData.values()) {
+                if (ship_id == ship.get("api_ship_id").getAsInt()) count += 1;
+            }
+        }
+        else if (helper.getShipCount() > 0) {
+            JsonArray data = helper.getJsonArrayValue(DB_KEY_SHIPIFNO);
+            for (int i = 0; i < data.size(); i++) {
+                JsonObject ship = data.get(i).getAsJsonObject();
+                if (ship_id == ship.get("api_ship_id").getAsInt()) count += 1;
+            }
         }
         return count;
     }

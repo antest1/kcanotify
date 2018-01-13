@@ -950,10 +950,6 @@ public class KcaService extends Service {
                             KcaBattle.cleanEscapeList();
                         }
 
-                        if (reqPortApiData.has("api_basic")) {
-                            processBasicInfo(reqPortApiData.getAsJsonObject("api_basic"));
-                        }
-
                         if (reqPortApiData.has("api_ndock")) {
                             JsonArray nDockData = reqPortApiData.getAsJsonArray("api_ndock");
                             KcaDocking.setDockData(nDockData);
@@ -1581,6 +1577,7 @@ public class KcaService extends Service {
                         }
                         questTracker.updateIdCountTracker("613");
                         updateQuestView();
+                        updateFleetView();
                     }
 
                     if (url.equals(API_REQ_KOUSYOU_CREATESHIP)) {
@@ -1848,6 +1845,7 @@ public class KcaService extends Service {
                             }
                         }
                         KcaMoraleInfo.setItemUseDeck(deckIdx);
+                        updateFleetView();
                     }
 
                     if (url.startsWith(API_GET_MEMBER_SHIP2)) {
@@ -2336,11 +2334,6 @@ public class KcaService extends Service {
                 break;
         }
         return seekType;
-    }
-
-    private void processBasicInfo(JsonObject data) {
-        KcaApiData.maxShipSize = data.get("api_max_chara").getAsInt();
-        KcaApiData.maxItemSize = data.get("api_max_slotitem").getAsInt();
     }
 
     private void processExpeditionInfo() {

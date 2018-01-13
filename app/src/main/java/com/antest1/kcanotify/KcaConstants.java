@@ -31,6 +31,7 @@ public final class KcaConstants {
     public static final String DB_KEY_SHIPIFNO = "key_shipinfo";
     public static final String DB_KEY_EXPSHIP = "key_expship";
     public static final String DB_KEY_EXPSORTIE = "key_expsortie";
+    public static final String DB_KEY_BASICIFNO = "key_basicinfo";
 
     public static final String[] DB_KEY_ARRAY = {
             DB_KEY_STARTDATA,
@@ -50,7 +51,8 @@ public final class KcaConstants {
             DB_KEY_LABSIFNO,
             DB_KEY_SHIPIFNO,
             DB_KEY_EXPSHIP,
-            DB_KEY_EXPSORTIE
+            DB_KEY_EXPSORTIE,
+            DB_KEY_BASICIFNO
     };
 
     public static final String ERROR_TYPE_SERVICE = "S";

@@ -32,6 +32,7 @@ import static android.R.attr.value;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPCRNT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTDAY;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTIME;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DB;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_VPN;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
@@ -220,6 +221,12 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             db.insert(table_name, null, values);
         }
         c.close();
+    }
+
+    public int getShipCount() {
+        JsonArray data = getJsonArrayValue(DB_KEY_SHIPIFNO);
+        if (data != null) return data.size();
+        else return 0;
     }
 
     // for kca_slotitem

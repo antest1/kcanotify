@@ -134,7 +134,6 @@
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
                 android:src="@mipmap/ic_cancel"
                 app:srcCompat="@mipmap/ic_cancel" />
         </LinearLayout>
@@ -143,7 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -162,17 +161,91 @@
                 android:scaleType="fitXY"
                 android:src="@android:drawable/divider_horizontal_bright" />
 
-            <TextView
-                android:id="@+id/fleetview_exp"
+            <LinearLayout
+                android:id="@+id/fleetview_hqinfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:ellipsize="end"
                 android:gravity="right"
-                android:singleLine="true"
-                android:text="[이번] 12.42 / [오늘] 54.23"
-                android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/fleetview_cnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:gravity="right"
+                    android:orientation="horizontal"
+                    android:paddingEnd="4dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingStart="4dp">
+
+                    <ImageView
+                        android:id="@+id/fleetview_cnt1_icon"
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:layout_gravity="center_vertical"
+                        android:paddingEnd="2dp"
+                        android:paddingRight="2dp"
+                        android:src="@mipmap/ic_ship"
+                        app:srcCompat="@mipmap/ic_ship" />
+
+                    <TextView
+                        android:id="@+id/fleetview_cnt1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginRight="4dp"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="150/150"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+
+                    <ImageView
+                        android:id="@+id/fleetview_cnt2_icon"
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:layout_gravity="center_vertical"
+                        android:paddingEnd="2dp"
+                        android:paddingRight="2dp"
+                        android:src="@mipmap/ic_equip"
+                        app:srcCompat="@mipmap/ic_equip" />
+
+                    <TextView
+                        android:id="@+id/fleetview_cnt2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="1500/1500"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/fleetview_exp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:ellipsize="end"
+                    android:gravity="right"
+                    android:singleLine="true"
+                    android:text="[이번] 12.42 / [오늘] 54.23"
+                    android:textColor="@color/white"
+                    android:textSize="12dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

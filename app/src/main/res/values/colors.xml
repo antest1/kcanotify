@@ -126,6 +126,7 @@
     <color name="colorFleetWarning">#7e2424</color>
     <color name="colorFleetInRepair">#1b5e20</color>
     <color name="colorFullState">#4fc3f7</color>
+    <color name="colorHqCheckEventCondFailed">#ff5252</color>
 
     <color name="colorExpeditionBtnFailBack">#e91e63</color>
     <color name="colorExpeditionBtnFailText">#f8bbd0</color>

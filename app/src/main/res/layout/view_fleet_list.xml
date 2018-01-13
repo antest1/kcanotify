@@ -129,27 +129,109 @@
                 android:layout_weight="1.0"
                 android:singleLine="true" />
 
-            <TextView
-                android:id="@+id/fleetview_exp"
+            <LinearLayout
+                android:id="@+id/fleetview_hqinfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"
-                android:ellipsize="end"
                 android:gravity="right"
-                android:singleLine="true"
-                android:text="[이번] 12.42 / [오늘] 54.23"
-                android:textColor="@color/white"
-                android:textSize="15dp" />
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/fleetview_cnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:gravity="right"
+                    android:orientation="horizontal"
+                    android:paddingBottom="4dp"
+                    android:paddingEnd="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingStart="8dp"
+                    android:paddingTop="4dp">
+
+                    <ImageView
+                        android:id="@+id/fleetview_cnt1_icon"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginRight="2dp"
+                        android:src="@mipmap/ic_ship"
+                        app:srcCompat="@mipmap/ic_ship" />
+
+                    <TextView
+                        android:id="@+id/fleetview_cnt1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="150/150"
+                        android:textColor="@color/white"
+                        android:textSize="15dp" />
+
+                    <ImageView
+                        android:id="@+id/fleetview_cnt2_icon"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginRight="2dp"
+                        android:src="@mipmap/ic_equip"
+                        app:srcCompat="@mipmap/ic_equip" />
+
+                    <TextView
+                        android:id="@+id/fleetview_cnt2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="1500/1500"
+                        android:textColor="@color/white"
+                        android:textSize="15dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/fleetview_exp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:ellipsize="end"
+                    android:gravity="right"
+                    android:paddingBottom="4dp"
+                    android:paddingEnd="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingStart="8dp"
+                    android:paddingTop="4dp"
+                    android:singleLine="true"
+                    android:text="[이번] 12.42 / [오늘] 54.23"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/akashi_exit"
-                android:layout_width="20dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:src="@mipmap/ic_cancel"
                 app:srcCompat="@mipmap/ic_cancel" />
+
         </LinearLayout>
 
         <ImageView

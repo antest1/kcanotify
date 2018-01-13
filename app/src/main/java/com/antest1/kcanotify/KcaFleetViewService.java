@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -22,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
@@ -34,7 +36,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static android.R.attr.id;
 import static android.view.View.GONE;
 import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
 import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
@@ -44,6 +45,7 @@ import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_BASICIFNO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_FLEETVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -64,9 +66,13 @@ public class KcaFleetViewService extends Service {
     public static final String CLOSE_FLEETVIEW_ACTION = "close_fleetview_action";
     public static final int FLEET_COMBINED_ID = 4;
 
+    private static final int HQINFO_TOTAL = 2;
+    private static final int HQINFO_EXPVIEW = 0;
+    private static final int HQINFO_SECOUNT = 1;
+
     Context contextWithLocale;
     LayoutInflater mInflater;
-    public KcaDBHelper helper;
+    public KcaDBHelper dbHelper;
     public KcaDeckInfo deckInfoCalc;
     int seekcn_internal = -1;
     int switch_status = 1;
@@ -78,10 +84,11 @@ public class KcaFleetViewService extends Service {
 
     static boolean error_flag = false;
     boolean active;
-    private View mView, itemView;
-    private TextView fleetInfoTitle, fleetInfoLine, fleetExpView, fleetCnChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn;
+    private View mView, itemView, fleetHqInfoView;
+    private TextView fleetInfoTitle, fleetInfoLine, fleetCnChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn;
     private WindowManager mManager;
     private static boolean isReady;
+    private static int hqinfoState = 0;
 
     int displayWidth = 0;
 
@@ -122,11 +129,7 @@ public class KcaFleetViewService extends Service {
     public int setView() {
         try {
             Log.e("KCA-FV", String.valueOf(selected));
-            float[] exp_score = helper.getExpScore();
-
-            fleetExpView.setText(KcaUtils.format(
-                    getStringWithLocale(R.string.fleetview_expview),
-                    exp_score[0], exp_score[1]));
+            setHqInfo();
             fleetInfoTitle.setVisibility(View.VISIBLE);
             updateSelectedView(selected);
 
@@ -137,6 +140,54 @@ public class KcaFleetViewService extends Service {
             e.printStackTrace();
             sendReport(e, 0);
             return 1;
+        }
+    }
+
+    private void setHqInfo() {
+        int[] view_id = {R.id.fleetview_exp, R.id.fleetview_cnt};
+        for (int i = 0; i < view_id.length; i++) {
+            fleetHqInfoView.findViewById(view_id[i]).setVisibility((i == hqinfoState) ? View.VISIBLE : View.GONE);
+        }
+
+        switch (hqinfoState) {
+            case HQINFO_EXPVIEW:
+                TextView expview = fleetHqInfoView.findViewById(R.id.fleetview_exp);
+                float[] exp_score = dbHelper.getExpScore();
+                expview.setText(KcaUtils.format(
+                        getStringWithLocale(R.string.fleetview_expview),
+                        exp_score[0], exp_score[1]));
+
+                break;
+            case HQINFO_SECOUNT:
+                TextView shipcntview = fleetHqInfoView.findViewById(R.id.fleetview_cnt1);
+                TextView equipcntview = fleetHqInfoView.findViewById(R.id.fleetview_cnt2);
+                ImageView shipcntviewicon = fleetHqInfoView.findViewById(R.id.fleetview_cnt1_icon);
+                ImageView equipcntviewicon = fleetHqInfoView.findViewById(R.id.fleetview_cnt2_icon);
+
+                shipcntview.setText(KcaUtils.format("%d/%d", KcaApiData.getShipSize(), KcaApiData.getUserMaxShipCount()));
+                if (KcaApiData.checkEventUserShip()){
+                    shipcntview.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHqCheckEventCondFailed));
+                    shipcntviewicon.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                            R.color.colorHqCheckEventCondFailed), PorterDuff.Mode.MULTIPLY);
+                } else {
+                    shipcntview.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                    shipcntviewicon.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                            R.color.white), PorterDuff.Mode.MULTIPLY);
+                }
+
+                equipcntview.setText(KcaUtils.format("%d/%d", KcaApiData.getItemSize(), KcaApiData.getUserMaxItemCount() + 3));
+                if (KcaApiData.checkEventUserItem()){
+                    equipcntview.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHqCheckEventCondFailed));
+                    equipcntviewicon.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                            R.color.colorHqCheckEventCondFailed), PorterDuff.Mode.MULTIPLY);
+                } else {
+                    equipcntview.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                    equipcntviewicon.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                            R.color.white), PorterDuff.Mode.MULTIPLY);
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -164,11 +215,12 @@ public class KcaFleetViewService extends Service {
             switch_status = 1;
             mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
-            helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-            helper.updateExpScore(0);
-            if (helper.getJsonArrayValue(DB_KEY_DECKPORT) == null) {
+            dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+            dbHelper.updateExpScore(0);
+            if (dbHelper.getJsonArrayValue(DB_KEY_DECKPORT) == null) {
                 stopSelf();
             }
+            KcaApiData.setDBHelper(dbHelper);
 
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
             //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -219,7 +271,7 @@ public class KcaFleetViewService extends Service {
         mView.findViewById(R.id.fleetview_head).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_cn_change).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_fleetswitch).setOnTouchListener(mViewTouchListener);
-
+        mView.findViewById(R.id.fleetview_hqinfo).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.viewbutton_quest).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.viewbutton_develop).setOnTouchListener(mViewTouchListener);
@@ -259,7 +311,7 @@ public class KcaFleetViewService extends Service {
         fleetInfoLine.setOnTouchListener(mViewTouchListener);
 
         fleetInfoTitle = mView.findViewById(R.id.fleetview_title);
-        fleetExpView = mView.findViewById(R.id.fleetview_exp);
+        fleetHqInfoView = mView.findViewById(R.id.fleetview_hqinfo);
         fleetCnChangeBtn = mView.findViewById(R.id.fleetview_cn_change);
         fleetAkashiTimerBtn = mView.findViewById(R.id.fleetview_akashi_timer);
         fleetSwitchBtn = mView.findViewById(R.id.fleetview_fleetswitch);
@@ -329,14 +381,14 @@ public class KcaFleetViewService extends Service {
 
                             if (isCombinedFlag(selected)) {
                                 if (i < 6) {
-                                    data = deckInfoCalc.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), 0);
+                                    data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 0);
                                 } else {
-                                    data = deckInfoCalc.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), 1);
+                                    data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 1);
                                 }
                                 udata = data.get(i % 6).getAsJsonObject().getAsJsonObject("user");
                                 kcdata = data.get(i % 6).getAsJsonObject().getAsJsonObject("kc");
                             } else {
-                                data = deckInfoCalc.getDeckListInfo(helper.getJsonArrayValue(DB_KEY_DECKPORT), selected);
+                                data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), selected);
                                 udata = data.get(i).getAsJsonObject().getAsJsonObject("user");
                                 kcdata = data.get(i).getAsJsonObject().getAsJsonObject("kc");
                             }
@@ -399,6 +451,9 @@ public class KcaFleetViewService extends Service {
                                 mView.findViewById(R.id.fleet_list_combined).setVisibility(View.GONE);
                                 ((TextView) mView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_1));
                             }
+                        } else if (id == mView.findViewById(R.id.fleetview_hqinfo).getId()) {
+                            hqinfoState = (hqinfoState + 1) % HQINFO_TOTAL;
+                            setHqInfo();
                         } else if (id == mView.findViewById(R.id.viewbutton_quest).getId()) {
                             qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
                             qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
@@ -464,7 +519,7 @@ public class KcaFleetViewService extends Service {
     private void processDeckInfo(int idx, boolean isCombined) {
         boolean is_combined = idx == FLEET_COMBINED_ID;
         boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        JsonArray deckportdata = helper.getJsonArrayValue(DB_KEY_DECKPORT);
+        JsonArray deckportdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (!isReady) {
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
             fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
@@ -972,7 +1027,7 @@ public class KcaFleetViewService extends Service {
     private void sendReport(Exception e, int type) {
         error_flag = true;
         String data_str;
-        JsonArray data = helper.getJsonArrayValue(DB_KEY_DECKPORT);
+        JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (data == null) {
             data_str = "data is null";
         } else {
