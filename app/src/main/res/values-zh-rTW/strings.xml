@@ -14,7 +14,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_settings">設定</string>
     <string name="backpress_msg">再按一次後退鍵退出應用程序</string>
     <string name="notification_appinfo_title">Kcanotify通知</string>
-    <string name="accessibility_service_description">This permission allows kcanotify to detect whether kancolle is on the screen.\nIt only check whether kancolle is on the screen or not.\nYou can disallow this permission and hide the fairy manually by touching it long time.</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>
 
     <!-- Common Text -->
@@ -94,13 +93,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_getupdate_ioexceptionerror">保存數據時出現錯誤</string>
 
     <string name="sa_overlay_under_m">Android 6.0以下版本可以跳過該設定</string>
-    <string name="sa_overlay_appearontop">In application manager, activate [Kcanotify] in "Draw over other apps"(Apps that can appear on top).</string>
+    <string name="sa_overlay_appearontop">請於應用管理中給予Kcanotify「蓋過其他應用程式」 的權限。(以在其他應用程式之上顯示內容)</string>
     <string name="sa_overlay_ok">懸浮視窗權限：已取得</string>
     <string name="sa_overlay_no">懸浮視窗權限：未取得（將會關閉戰鬥劇透功能）</string>
     <string name="sa_usagestat_ok">允許訪問使用信息</string>
     <string name="sa_usagestat_no">禁止訪問使用信息</string>
-    <string name="sa_usagestat_dialog_title">UsageStats Access Permission</string>
-    <string name="sa_usagestat_dialog_desc">In Android 5.0+, you should set this permission to use this feature. This permission is required for checking kancolle is on the screen.</string>
+    <string name="sa_usagestat_dialog_title">UsageStats存取權限</string>
+    <string name="sa_usagestat_dialog_desc">在Android 5.0+的裝置上，你需要準許這個權限以使用此功能。這是用於檢測艦隊收藏是否啟動於螢幕上的所需權限。</string>
 
     <string name="sa_language_changed">請重新啟動Kcanotify來套用新語言設定。</string>
 

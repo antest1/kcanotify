@@ -34,8 +34,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_download_link_playstore" translatable="false">market://details?id=com.antest1.kcanotify</string>
     <string name="app_download_link_baidu" translatable="false">http://pan.baidu.com/s/1i5f37Rv</string>
 
-    <string name="accessibility_service_description">This permission allows kcanotify to detect whether kancolle is on the screen.\nIt only check whether kancolle is on the screen or not.\nYou can disallow this permission and hide the fairy manually by touching it long time.</string>
-
     <!-- Link Information -->
     <string name="server_swaytwig" translatable="false">http://swaytwig.com</string>
     <string name="server_antest1" translatable="false">http://165.132.106.219</string>

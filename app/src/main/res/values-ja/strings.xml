@@ -6,7 +6,6 @@
     <string name="action_settings">設定</string>
     <string name="backpress_msg">もう一度押すとアプリが終了します</string>
     <string name="notification_appinfo_title">Kcanotify通知</string>
-    <string name="accessibility_service_description">Kcanotifyが艦これの動作を検出するためには、この権限が設定されている。\n艦これが実行されているかどうかを検査する目的のほか、他の目的には使用されません。\nこの権限を設定しなくても大丈夫ですが、この場合妖精さんをゲーム画面外で非表示するためには長く押して隠してください。</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>
 
     <!-- Link Information, Do Not Translate Here -->
