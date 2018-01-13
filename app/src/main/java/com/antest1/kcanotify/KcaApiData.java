@@ -321,13 +321,10 @@ public class KcaApiData {
     }
 
     public static boolean checkUserShipMax() {
-        int ship_size = 0;
-        if (userShipData != null) ship_size = userShipData.size();
-        else ship_size = helper.getShipCount();
         int max_ship_size = 0;
         JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
         if (basic_info != null) max_ship_size = basic_info.get("api_max_chara").getAsInt();
-        return max_ship_size == (ship_size + getShipCountInBattle);
+        return max_ship_size == (getShipSize() + getShipCountInBattle);
     }
 
     public static int getUserMaxShipCount() {
@@ -349,17 +346,14 @@ public class KcaApiData {
         int max_equip_size = 0;
         JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
         if (basic_info != null) max_equip_size = basic_info.get("api_max_slotitem").getAsInt();
-        return max_equip_size <= (helper.getItemCount() + getItemCountInBattle);
+        return max_equip_size <= getItemSize();
     }
 
     public static boolean checkEventUserShip() {
-        int ship_size = 0;
         int max_ship_size = 0;
-        if (userShipData != null) ship_size = userShipData.size();
-        else ship_size = helper.getShipCount();
         JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
         if (basic_info != null) max_ship_size = basic_info.get("api_max_chara").getAsInt();
-        return max_ship_size < (ship_size + 5);
+        return max_ship_size < (getShipSize() + 5);
     }
 
     public static boolean checkEventUserItem() {
@@ -367,7 +361,7 @@ public class KcaApiData {
         JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
         if (basic_info != null) max_item_size = basic_info.get("api_max_slotitem").getAsInt();
         //Log.e("KCA", KcaUtils.format("Item: %d - %d", maxItemSize, helper.getItemCount() + getItemCountInBattle));
-        return (max_item_size + 3) < (helper.getItemCount() + 20);
+        return (max_item_size + 3) < (getItemSize() + 20);
     }
 
 
@@ -459,7 +453,7 @@ public class KcaApiData {
         int ship_size = 0;
         if (userShipData != null) ship_size = userShipData.size();
         else ship_size = helper.getShipCount();
-        return ship_size;
+        return ship_size + getShipCountInBattle;
     }
 
     public static int getItemSize() { return helper.getItemCount() + getItemCountInBattle; }

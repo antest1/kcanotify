@@ -938,6 +938,8 @@ public class KcaService extends Service {
                     KcaFleetViewService.setReadyFlag(true);
                     heavyDamagedMode = HD_NONE;
                     currentNodeInfo = "";
+                    KcaApiData.resetShipCountInBattle();
+                    KcaApiData.resetItemCountInBattle();
                     Log.e("KCA", "Port Handler Called");
                     if (jsonDataObj.has("api_data")) {
                         JsonObject reqPortApiData = jsonDataObj.getAsJsonObject("api_data");
