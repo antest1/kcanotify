@@ -2372,19 +2372,19 @@ public class KcaService extends Service {
             if (KcaExpedition2.isInMission(i)) {
                 boolean isNotIdenticalMission = (arrive_time != KcaExpedition2.getArriveTime(i));
                 if (isNotIdenticalMission || reset_flag) {
-                    if (mission_no == -1) {
-                        PendingIntent pendingIntent = PendingIntent.getService(
-                                getApplicationContext(),
-                                getNotificationId(NOTI_EXP, i),
-                                new Intent(getApplicationContext(), KcaAlarmService.class),
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        );
-                        pendingIntent.cancel();
-                        alarmManager.cancel(pendingIntent);
-                        KcaExpedition2.clearMissionData(i);
+                    PendingIntent pendingIntent = PendingIntent.getService(
+                            getApplicationContext(),
+                            getNotificationId(NOTI_EXP, i),
+                            new Intent(getApplicationContext(), KcaAlarmService.class),
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+                    pendingIntent.cancel();
+                    alarmManager.cancel(pendingIntent);
+                    KcaExpedition2.clearMissionData(i);
+                    if (mission_no != -1) {
+                        KcaExpedition2.setMissionData(i, deck_name, mission_no, arrive_time);
+                        setExpeditionAlarm(i, mission_no, deck_name, arrive_time, false, false, aIntent);
                     }
-                    KcaExpedition2.setMissionData(i, deck_name, mission_no, arrive_time);
-                    setExpeditionAlarm(i, mission_no, deck_name, arrive_time, false, false, aIntent);
                 }
             } else if (mission_no != -1) {
                 KcaExpedition2.setMissionData(i, deck_name, mission_no, arrive_time);
