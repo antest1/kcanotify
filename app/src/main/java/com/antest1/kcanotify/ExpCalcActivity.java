@@ -230,15 +230,20 @@ public class ExpCalcActivity extends AppCompatActivity {
                         int lv = shipItemList.get(position).get("api_lv").getAsInt();
                         int ship_id = shipItemList.get(position).get("api_ship_id").getAsInt();
                         JsonObject kc_ship_data = KcaApiData.getKcShipDataById(ship_id, "afterlv");
-                        int ship_afterlv = kc_ship_data.get("afterlv").getAsInt();
+                        int ship_afterlv;
+                        if (kc_ship_data != null) {
+                            ship_afterlv = kc_ship_data.get("afterlv").getAsInt();
+                        } else {
+                            ship_afterlv = 0;
+                        }
 
                         shipselect_current_flag = true;
                         if (current_lv_adapter != null) {
                             value_current_lv.setSelection(lv - 1);
                         }
                         if (target_lv_adapter != null) {
-                            if (lv < ship_afterlv) value_target_lv.setSelection(ship_afterlv - 1);
-                            else value_target_lv.setSelection(lv);
+                            if (ship_afterlv > 0 || lv < ship_afterlv) value_target_lv.setSelection(ship_afterlv - 1);
+                            else value_target_lv.setSelection(Math.min(lv, LEVEL_MAX - 1));
                         }
 
                         current_exp = shipItemList.get(position).getAsJsonArray("api_exp").get(0).getAsInt();
