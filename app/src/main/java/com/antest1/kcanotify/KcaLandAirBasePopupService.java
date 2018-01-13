@@ -164,12 +164,12 @@ public class KcaLandAirBasePopupService extends Service {
 
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            LinearLayout view_list = (LinearLayout) mView.findViewById(R.id.view_lab_list);
+            LinearLayout view_list = mView.findViewById(R.id.view_lab_list);
             LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view_list.removeAllViews();
             JsonArray api_air_base = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
             String value = "";
-            if (api_air_base != null) {
+            if (api_air_base != null && api_air_base.size() > 0) {
                 for (int i = 0; i < api_air_base.size(); i++) {
                     JsonObject item = api_air_base.get(i).getAsJsonObject();
                     View v = vi.inflate(R.layout.listivew_lab, null);
