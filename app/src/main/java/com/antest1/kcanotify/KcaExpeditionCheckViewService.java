@@ -670,7 +670,7 @@ public class KcaExpeditionCheckViewService extends Service {
             setItemTextViewById(R.id.view_excheck_total_asw,
                     KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_asw));
             setItemTextViewColorById(R.id.view_excheck_total_asw,
-                    check.get("total-asw").getAsBoolean(), true);
+                    check.get("total-asw").getAsBoolean(), false);
         }
 
         setItemViewVisibilityById(R.id.view_excheck_fp, has_total_asw);
@@ -679,7 +679,7 @@ public class KcaExpeditionCheckViewService extends Service {
             setItemTextViewById(R.id.view_excheck_total_fp,
                     KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_fp));
             setItemTextViewColorById(R.id.view_excheck_total_fp,
-                    check.get("total-fp").getAsBoolean(), true);
+                    check.get("total-fp").getAsBoolean(), false);
         }
 
         setItemViewVisibilityById(R.id.view_excheck_los, has_total_los);
@@ -688,7 +688,7 @@ public class KcaExpeditionCheckViewService extends Service {
             setItemTextViewById(R.id.view_excheck_total_los,
                     KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_los));
             setItemTextViewColorById(R.id.view_excheck_total_los,
-                    check.get("total-los").getAsBoolean(), true);
+                    check.get("total-los").getAsBoolean(), false);
         }
 
         setItemViewVisibilityById(R.id.view_excheck_firepower, has_total_firepower);
@@ -697,7 +697,7 @@ public class KcaExpeditionCheckViewService extends Service {
             setItemTextViewById(R.id.view_excheck_total_firepower,
                     KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_firepower));
             setItemTextViewColorById(R.id.view_excheck_total_firepower,
-                    check.get("total-firepower").getAsBoolean(), true);
+                    check.get("total-firepower").getAsBoolean(), false);
         }
 
         itemView.setVisibility(View.VISIBLE);
