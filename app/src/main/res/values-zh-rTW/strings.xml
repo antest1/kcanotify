@@ -12,13 +12,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="action_settings">設定</string>
-    <string name="backpress_msg">再按一次後退鍵退出應用程序</string>
+    <string name="backpress_msg">再按一次返回鍵退出應用程序</string>
     <string name="notification_appinfo_title">Kcanotify通知</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>
 
     <!-- Common Text -->
-    <string name="dialog_ok">是</string>
-    <string name="dialog_cancel">否</string>
+    <string name="dialog_ok">確認</string>
+    <string name="dialog_cancel">取消</string>
 
     <string name="error_text">發生錯誤，請聯繫開發人員。</string>
 
@@ -47,8 +47,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_postfix">&#160;艦隊</string>
 
     <string name="opendb_failed_msg">向OpenDB網站傳送資料時出現錯誤。</string>
-    <string name="process_battle_failed_msg">處理戰鬥數據出現錯誤。</string>
-    <string name="service_failed_msg">處理數據出現錯誤。\n建議重新啟動Kcanotify</string>
+    <string name="process_battle_failed_msg">處理戰鬥數據時出現錯誤。</string>
+    <string name="service_failed_msg">處理數據時出現錯誤。\n建議重新啟動Kcanotify</string>
 
     <string name="node_info_noevent" formatted="false">%s (戰鬥迴避)</string>
     <string name="node_info_obtain" formatted="false">%s (發現資源)</string>
@@ -75,14 +75,14 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_svc_toggleon">Service ON</string>
     <string name="ma_svc_toggleoff">Service OFF</string>
     <string name="ma_toast_kancolle_not_installed">Android版本的艦これ尚未安裝</string>
-    <string name="ma_toast_overay_diabled">戰鬥劇透需要取得懸浮視窗權限  請至設定 > 懸浮視窗設定來允許懸浮視窗</string>
+    <string name="ma_toast_overay_diabled">戰鬥劇透需要取得懸浮視窗權限  請至設定 > 允許懸浮視窗的相關設定</string>
     <string name="ma_hasupdate" formatted="false">有可用的更新。 (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">有可用的遊戲資料更新。 (%s)</string>
     <string name="description"><b>Help</b>\n請啟用VPN與SVC服務後再開啟艦これ\n\n※ VPN是為了監測遊戲數據 \n\n<b>主要功能</b>\n - 遠征/入渠通知 \n - 大破警告\n - 索敵/制空/士氣值顯示\n - 羅盤預測\n - 戰鬥劇透 / 任務翻譯\n - 裝備改修表\n - 傳送數據至OpenDB（可選）\n \n可至官網 http://swaytwig.com/kcanotify 了解詳細資料（韓文）</string>
 
     <!-- SettingActivity Strings -->
     <string name="sa_checkupdate_latest" formatted="false">目前已是最新版本。 (%s)</string>
-    <string name="sa_checkupdate_hasupdate" formatted="false">有可用的更新。 (%s)\nDo 你想下載嗎？</string>
+    <string name="sa_checkupdate_hasupdate" formatted="false">有可用的更新。 (%s)\nDo 請問你想下載嗎？</string>
     <string name="sa_checkupdate_dialogtitle">檢查更新</string>
     <string name="sa_checkupdate_nodataerror">檢查更新時出現問題</string>
     <string name="sa_checkupdate_servererror">更新伺服器出現錯誤</string>
@@ -93,25 +93,25 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_getupdate_ioexceptionerror">保存數據時出現錯誤</string>
 
     <string name="sa_overlay_under_m">Android 6.0以下版本可以跳過該設定</string>
-    <string name="sa_overlay_appearontop">請於應用管理中給予Kcanotify「蓋過其他應用程式」 的權限。(以在其他應用程式之上顯示內容)</string>
+    <string name="sa_overlay_appearontop">請於應用管理中給予Kcanotify「蓋過其他應用程式」的權限。(以在其他應用程式之上顯示內容)</string>
     <string name="sa_overlay_ok">懸浮視窗權限：已取得</string>
-    <string name="sa_overlay_no">懸浮視窗權限：未取得（將會關閉戰鬥劇透功能）</string>
-    <string name="sa_usagestat_ok">允許訪問使用信息</string>
-    <string name="sa_usagestat_no">禁止訪問使用信息</string>
+    <string name="sa_overlay_no">懸浮視窗權限：未取得（將無法使用戰鬥劇透功能）</string>
+    <string name="sa_usagestat_ok">允許存取使用信息</string>
+    <string name="sa_usagestat_no">禁止存取使用信息</string>
     <string name="sa_usagestat_dialog_title">UsageStats存取權限</string>
-    <string name="sa_usagestat_dialog_desc">在Android 5.0+的裝置上，你需要準許這個權限以使用此功能。這是用於檢測艦隊收藏是否啟動於螢幕上的所需權限。</string>
+    <string name="sa_usagestat_dialog_desc">在Android 5.0+的裝置上，你需要準許這個權限以使用此功能。這是用於檢測艦これ是否啟動於螢幕上的所需權限。</string>
 
     <string name="sa_language_changed">請重新啟動Kcanotify來套用新語言設定。</string>
 
-    <string name="sa_bypass_list_invalid">繞行地址列表有誤，請檢查後重試。</string>
+    <string name="sa_bypass_list_invalid">繞行地址列表有誤，請檢查及更正後重試。</string>
 
     <!-- KcaService Strings -->
-    <string name="kca_init_title" formatted="false">%s 工作中</string>
+    <string name="kca_init_title" formatted="false">%s 運作中</string>
     <string name="kca_init_content">請從Kcanotify內開啟遊戲</string>
 
-    <string name="kca_noti_title_exp_canceled" formatted="false">遠征 %s (%s) 中止。</string>
-    <string name="kca_noti_content_exp_canceled" formatted="false"> &lt;%s&gt; 從遠征%s召回。</string>
-    <string name="kca_noti_title_exp_finished" formatted="false">遠征 %s (%s) 完成。</string>
+    <string name="kca_noti_title_exp_canceled" formatted="false">遠征 %s (%s) 已中止。</string>
+    <string name="kca_noti_content_exp_canceled" formatted="false"> &lt;%s&gt; 已從遠征%s中召回。</string>
+    <string name="kca_noti_title_exp_finished" formatted="false">遠征 %s (%s) 已完成。</string>
     <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; 從遠征%s歸還。</string>
     <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; 從遠征%s歸還（中止）。</string>
 
@@ -119,7 +119,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_noti_content_dock_finished" formatted="false">澡堂 %d: %s 已入渠。</string>
     <string name="kca_noti_content_dock_finished_nodata" formatted="false">澡堂 %d: 艦娘入渠完成。</string>
 
-    <string name="kca_noti_title_morale_recovered" formatted="false">第%d艦隊：恢復疲勞</string>
+    <string name="kca_noti_title_morale_recovered" formatted="false">第%d艦隊：疲勞已恢復</string>
     <string name="kca_noti_content_morale_recovered" formatted="false">&lt;%s&gt;的所有船隻的疲勞已經恢復。</string>
     <string name="kca_noti_title_akashirepair_recovered">開始泊地修理</string>
     <string name="kca_noti_content_akashirepair_recovered">艦隊目前正在修理。</string>
@@ -130,58 +130,58 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_toast_tpvalue" formatted="false">輸送: S%d/A%d</string>
 
     <string name="kca_toast_restart_at_kcanotify">請以Kcanotify重啟遊戲</string>
-    <string name="kca_toast_get_data_at_settings">遊戲資料載入不完全\\n如果一直沒有載入完成，請手動於Kcanotify設定內進行下載。</string>
-    <string name="kca_toast_get_data_at_settings_2">偵測到遊戲錯誤\\\\n請手動於Kcanotify設定內進行下載遊戲資料。</string>
+    <string name="kca_toast_get_data_at_settings">遊戲資料載入不完全\\n如果一直沒有完成載入，請手動於Kcanotify設定內下載遊戲資料。</string>
+    <string name="kca_toast_get_data_at_settings_2">偵測到遊戲資料錯誤\\\\n請手動於Kcanotify設定內下載遊戲資料。</string>
     <string name="kca_toast_loading_data">載入遊戲資料</string>
     <string name="kca_toast_inconsistent_data">Kcanotify伺服器中並沒有目前API版本資料。\n請於10~20分鐘後重新啟動Kcanotify</string>
     <string name="kca_toast_ioexceptionerror">寫入資料時出現錯誤</string>
-    <string name="kca_toast_server_select">服務器選擇（建議選擇上部和左側、避免底部的兩個服務器）</string>
+    <string name="kca_toast_server_select">服務器選擇（建議選擇上部和左側的服務器，盡量避免底部的兩個）</string>
 
     <string name="kca_view_activate_vpn">請啟用VPN服務。</string>
     <string name="kca_view_condition" formatted="false">士氣： %s</string>
     <string name="kca_view_condition_nformat" formatted="false">士氣 #%d: %s</string>
-    <string name="kca_view_hdmg_damecon_format" formatted="false">[有艦娘大破！（緊急修理可用）] %s 工作中 %s</string>
-    <string name="kca_view_hdmg_format" formatted="false">[有艦娘大破！] %s 工作中 %s</string>
-    <string name="kca_view_normal_format" formatted="false">%s 工作中 %s</string>
-    <string name="kca_view_context_expand">請向下滑動以顯示資料</string>
+    <string name="kca_view_hdmg_damecon_format" formatted="false">[有艦娘大破！（緊急修理可用）] %s 運作中 %s</string>
+    <string name="kca_view_hdmg_format" formatted="false">[有艦娘大破！] %s 運作中 %s</string>
+    <string name="kca_view_normal_format" formatted="false">%s 運作中 %s</string>
+    <string name="kca_view_context_expand">向下滑動以顯示資料</string>
     <string name="kca_view_noexpedition">沒有進行中的遠征。</string>
     <string name="kca_view_expedition_header">剩餘時間：</string>
 
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">Kcanotify設定</string>
-    <string name="setting_menu_noti_title_alarm_delay">時間提前（秒）</string>
+    <string name="setting_menu_noti_title_alarm_delay">通知時間提前值（秒）</string>
     <string name="setting_menu_kand_title_language">語言設定</string>
     <string name="setting_menu_kand_title_saku_cal">選擇索敵公式</string>
-    <string name="setting_menu_kand_title_exp_realtime_show">追蹤遠征時間</string>
-    <string name="setting_menu_kand_desc_exp_realtime_show">於裝置的通知欄顯示遠征的時間</string>
+    <string name="setting_menu_kand_title_exp_realtime_show">展示遠征時間</string>
+    <string name="setting_menu_kand_desc_exp_realtime_show">於裝置的通知欄顯示遠征時間</string>
     <string name="setting_menu_kand_title_exp_type">遠征時間顯示類型</string>
-    <string name="setting_menu_kand_title_set_noti_priority">設置通知優先級高</string>
-    <string name="setting_menu_kand_desc_set_noti_priority">選中時通知將始終是頂部</string>
+    <string name="setting_menu_kand_title_set_noti_priority">高優先度通知</string>
+    <string name="setting_menu_kand_desc_set_noti_priority">選中時通知將始終位於通知欄頂部</string>
     <string name="setting_menu_kand_title_game_data_down">下載遊戲資料</string>
-    <string name="setting_menu_kand_desc_game_data_down">請於遊戲資料未載入時使用</string>
-    <string name="setting_menu_kand_desc_fairy_select">選擇懸浮視窗的妖精影像</string>
-    <string name="setting_menu_kand_title_fairy_select">選擇要攜帶的妖精</string>
+    <string name="setting_menu_kand_desc_game_data_down">請於遊戲資料未自動載入時使用</string>
+    <string name="setting_menu_kand_desc_fairy_select">選擇輔助妖精</string>
+    <string name="setting_menu_kand_title_fairy_select">選擇你想要攜帶的妖精</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">使妖精只顯示在艦これ屏幕上</string>
-    <string name="setting_menu_kand_desc_fairy_auto_hide">顯示/隱藏妖精有一個延遲</string>
+    <string name="setting_menu_kand_desc_fairy_auto_hide">在顯示/隱藏妖精時有短暫的延遲</string>
     <string name="current_fairy_changed_in_next">※妖精會於戰鬥劇透/任務瀏覽結束後更換</string>
     <string name="setting_menu_kand_title_adv_network">進階網路設定</string>
-    <string name="setting_menu_kand_warn_adv_network">警告：錯誤的設定可能會讓VPN失效。請在你確定每個選項作用時更改設定！更改設定後你需要重新啟用VPN來使設定生效</string>
+    <string name="setting_menu_kand_warn_adv_network">警告：錯誤的設定可能會讓VPN失效。請在你清楚確定每個選項的作用時更改設定！更改設定後你需要重新啟用VPN來使設定生效</string>
     <string name="setting_menu_kand_title_socks5_address">SOCKS5代理伺服器位址</string>
-    <string name="setting_menu_kand_title_socks5_port">SOCKS5代理伺服器Port</string>
-    <string name="settings_menu_kand_title_bypass_address">繞行位址</string>
-    <string name="setting_menu_kand_desc_bypass_address">使用CIDR描述不進行代理的位址，使用逗號來分隔各CIDR。</string>
+    <string name="setting_menu_kand_title_socks5_port">SOCKS5代理伺服器埠</string>
+    <string name="settings_menu_kand_title_bypass_address">繞行地址（代理）</string>
+    <string name="setting_menu_kand_desc_bypass_address">使用CIDR來敘述代理的地址，使用逗號來分隔各個CIDR。</string>
 
     <string name="setting_menu_view_head">功能設定</string>
     <string name="setting_menu_view_title_accessibility_setting">輔助功能設置</string>
     <string name="setting_menu_view_desc_accessibility_setting">選擇並開啟Kcanotify服務（以檢測艦これ客戶端）</string>
     <string name="setting_menu_view_title_overlay_setting">懸浮視窗設定</string>
-    <string name="setting_menu_view_desc_overlay_setting">取得懸浮視窗權限（以開啟戰鬥劇透功能）</string>
-    <string name="setting_menu_view_title_battlenode_use">罗盘剧透</string>
-    <string name="setting_menu_view_desc_battlenode_use">出擊時顯示次路線</string>
-    <string name="setting_menu_view_title_battleview_use">戰鬥劇透</string>
-    <string name="setting_menu_view_desc_battleview_use">出擊時顯示戰鬥結果</string>
+    <string name="setting_menu_view_desc_overlay_setting">取得懸浮視窗權限（以使用戰鬥劇透功能）</string>
+    <string name="setting_menu_view_title_battlenode_use">預知羅盤娘的陰謀</string>
+    <string name="setting_menu_view_desc_battlenode_use">進擊時顯示下一個會進入的路線</string>
+    <string name="setting_menu_view_title_battleview_use">預知戰況</string>
+    <string name="setting_menu_view_desc_battleview_use">戰鬥時顯示最終結果</string>
     <string name="setting_menu_view_title_drop_visible">顯示掉落艦娘</string>
-    <string name="setting_menu_view_desc_drop_visible">於戰鬥劇透中顯示掉落艦娘名稱</string>
+    <string name="setting_menu_view_desc_drop_visible">於預知戰報中顯示掉落艦娘的名稱</string>
     <string name="setting_menu_view_title_questview_use">任務瀏覽</string>
     <string name="setting_menu_view_desc_questview_use">顯示任務內容與翻譯</string>
 
@@ -191,20 +191,20 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_title_dock">入渠</string>
     <string name="setting_menu_noti_desc_dock">入渠結束通知</string>
     <string name="setting_menu_noti_title_morale">疲勞值提醒</string>
-    <string name="setting_menu_noti_desc_morale">當艦隊疲勞恢復通知</string>
+    <string name="setting_menu_noti_desc_morale">艦隊疲勞恢復時通知</string>
     <string name="setting_menu_noti_title_morale_min">提醒最低值</string>
     <string name="setting_menu_noti_title_akashirepair">泊地修理</string>
-    <string name="setting_menu_noti_desc_akashirepair">泊地修理開始通知</string>
+    <string name="setting_menu_noti_desc_akashirepair">泊地修理開始時發出通知及提示</string>
     <string name="setting_menu_noti_title_hdmg_vib">大破警告</string>
-    <string name="setting_menu_noti_desc_hdmg_vib">於艦娘大破時響鈴/震動（會彈出通知）</string>
+    <string name="setting_menu_noti_desc_hdmg_vib">於艦娘大破時響鈴/震動（即使不勾選也會彈出通知）</string>
     <string name="setting_menu_noti_title_nspl_vib">未補給警告</string>
-    <string name="setting_menu_noti_desc_nspl_vib">於艦娘未補給時響鈴/震動（會彈出通知）</string>
-    <string name="setting_menu_noti_title_fairy_vib">妖精按鈕隱藏時振動</string>
-    <string name="setting_menu_noti_desc_fairy_vib">設置長按妖精按鈕時是否振動</string>
+    <string name="setting_menu_noti_desc_nspl_vib">於艦娘未補給時響鈴/震動（即使不勾選也會彈出通知）</string>
+    <string name="setting_menu_noti_title_fairy_vib">隱藏妖精時震動</string>
+    <string name="setting_menu_noti_desc_fairy_vib">長按妖精以隱藏時是否發出一下振動</string>
     <string name="setting_menu_noti_title_fairy_glow">任務完成時通過妖精通知</string>
-    <string name="setting_menu_noti_desc_fairy_glow">追蹤任務完成時妖精將閃耀光芒</string>
-    <string name="setting_menu_noti_title_disable_customtoast">使用自定義吐司服務</string>
-    <string name="setting_menu_noti_desc_disable_customtoast">當羅盤劇透或大破警告不顯示時設置</string>
+    <string name="setting_menu_noti_desc_fairy_glow">進行中的任務完成時妖精將閃耀並發出光芒</string>
+    <string name="setting_menu_noti_title_disable_customtoast">使用Custom Toast服務</string>
+    <string name="setting_menu_noti_desc_disable_customtoast">當羅盤預知或大破警告不顯示時設置</string>
 
     <string name="setting_menu_stat_head">統計插件設置</string>
     <string name="setting_menu_stat_title_opendb">向OpenDB傳送遊戲數據</string>
@@ -213,7 +213,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_app_head">應用程式資訊</string>
     <string name="setting_menu_app_title_current">目前版本</string>
     <string name="setting_menu_app_title_updatecheck">檢查更新</string>
-    <string name="setting_menu_app_title_updatecheckserver">選擇更新檢查服務器</string>
+    <string name="setting_menu_app_title_updatecheckserver">選擇更新檢查的服務器</string>
     <string name="setting_menu_app_title_down">APK下載來源</string>
     <string name="setting_menu_app_title_contact">提交建議/回報錯誤</string>
     <string name="setting_menu_app_desc_contact">傳送郵件給開發人員</string>
@@ -276,8 +276,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="item_ammo">彈藥</string>
     <string name="item_stel">鋼材</string>
     <string name="item_baux">鋁土</string>
-    <string name="item_brnr">高速建造材料</string>
-    <string name="item_bgtz">高速修復材料</string>
+    <string name="item_brnr">高速建造材</string>
+    <string name="item_bgtz">高速修復材</string>
     <string name="item_mmat">開發資材</string>
     <string name="item_kmat">改修資材</string>
     <string name="item_boxs">家具箱(小)</string>
@@ -290,8 +290,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sound_kind_normal">音效</string>
     <string name="sound_kind_vibrate">震動</string>
     <string name="sound_kind_mute">靜音</string>
-    <string name="ma_permission_external_confirmed">讀取外接儲存空間：允許</string>
-    <string name="ma_permission_external_denied">讀取外接儲存空間：不允許（只能使用系統鈴聲/Cannot export error log）</string>
+    <string name="ma_permission_external_confirmed">讀取外部存儲空間的權限：允許</string>
+    <string name="ma_permission_external_denied">讀取外部存儲空間：不允許（只能使用系統鈴聲/無法生成錯誤日誌）</string>
     <string name="airbase_term">基地航空隊</string>
     <string name="phase_term" formatted="false">階段%d</string>
     <string name="injection_term">噴氣式強襲</string>
@@ -310,7 +310,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="not_supplied" formatted="false">艦隊 %d 未補給!</string>
     <string name="slot_empty">(沒有裝備)</string>
     <string name="sound_kind_mixed">響鈴+震動</string>
-    <string name="viewbutton_hide">妖精：再見！</string>
+    <string name="viewbutton_hide">妖精：再見的說！</string>
     <string name="fairy_hidden_notification_title">隱藏妖精</string>
     <string name="fairy_hidden_notification_text">下滑以選擇操作</string>
     <string name="fairy_hidden_notification_bigtext">選擇操作</string>
@@ -336,7 +336,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="questview_page" formatted="false">第 %d/%d 頁</string>
 
-    <string name="action_tools">效用</string>
+    <string name="action_tools">實用工具</string>
 
     <string name="action_akashi">明石改修表</string>
     <string name="action_akashi_detail">裝備改修詳情</string>
@@ -370,15 +370,15 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="item_kouku_material">新型航空兵裝資材</string>
     <string name="item_action_report">戰鬥詳報</string>
     <string name="setting_menu_noti_title_notiatsvcoff">當SVC服務關閉時啟用通知</string>
-    <string name="setting_menu_noti_desc_notiatsvcoff">當SVC服務關閉時啟用遠征/入渠通知</string>
-    <string name="kca_toast_renew_currentportdeck">遊戲內返回母港並更新相關數據</string>
+    <string name="setting_menu_noti_desc_notiatsvcoff">當SVC服務關閉時仍然啟用遠征/入渠等通知</string>
+    <string name="kca_toast_renew_currentportdeck">於遊戲內返回母港並刷新相關數據</string>
     <string name="questview_nopage">沒有任務</string>
 
     <string name="action_shipinfo">艦船目錄</string>
     <string name="shipinfo_btn_sort">排序</string>
     <string name="shipinfo_btn_filter">過濾</string>
-    <string name="shipinfo_btn_total_format" formatted="false">總計：%d</string>
-    <string name="shipinfo_btn_total_exp_format" formatted="false">累積的經驗：%,d</string>
+    <string name="shipinfo_btn_total_format" formatted="false">總計船艦數目：%d</string>
+    <string name="shipinfo_btn_total_exp_format" formatted="false">總計經驗：%,d</string>
     <string name="shipinfo_sort_asc">升序</string>
     <string name="shipinfo_sort_desc">降序</string>
     <string name="ship_stat_sort_key_0">序號</string>
@@ -397,10 +397,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_filt_list_dialog_title">選擇</string>
 
     <string name="action_equipmentinfo">裝備目錄</string>
-    <string name="equipinfo_summary" formatted="false">合計 %d（%d 裝備中, %d 裝備可能）</string>
+    <string name="equipinfo_summary" formatted="false">合計 %d（%d 裝備中, %d 閒置）</string>
     <string name="equipinfo_filter">過濾</string>
 
-    <string name="action_expcalc">経験値計算機</string>
+    <string name="action_expcalc">經験値計算機</string>
     <string name="expcalc_shipname">艦娘</string>
     <string name="expcalc_currentlv">現在等級</string>
     <string name="expcalc_targetlv">目標等級</string>
@@ -411,8 +411,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expcalc_mapexp">海域經驗值</string>
     <string name="expcalc_remainexp">剩餘經驗值</string>
 
-    <string name="action_expdtable">遠征表</string>
-    <string name="expdtable_btn_w0">整個</string>
+    <string name="action_expdtable">遠征資訊</string>
+    <string name="expdtable_btn_w0">所有海域</string>
     <string name="expdtable_btn_w1">鎮守府</string>
     <string name="expdtable_btn_w2">南西諸島</string>
     <string name="expdtable_btn_w3">北方</string>
@@ -424,8 +424,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expdtable_label_name">遠征名稱</string>
     <string name="expdtable_label_time">耗時</string>
     <string name="expdtable_label_item">獎勵</string>
-    <string name="expdtable_label_item1">獎Ｉ</string>
-    <string name="expdtable_label_item2">獎Ⅱ</string>
+    <string name="expdtable_label_item1">獎勵1</string>
+    <string name="expdtable_label_item2">獎勵2</string>
     <string name="expdtable_label_hq_exp">提督</string>
     <string name="expdtable_label_ship_exp">艦娘</string>
     <string name="expdtable_label_condition">要求的條件</string>
@@ -434,7 +434,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_combined">聯合</string>
     <string name="fleetview_switch_1">第１艦隊</string>
     <string name="fleetview_switch_2">第２艦隊</string>
-    <string name="fleetview_expview" formatted="false">［這回］%.2f・［今天］%.2f</string>
+    <string name="fleetview_expview" formatted="false">［現在］%.2f・［今天］%.2f</string>
     <string name="fleetview_seekvalue_d" formatted="false">索敵: %d</string>
     <string name="fleetview_seekvalue_f" formatted="false">索敵: %.2f</string>
     <string name="viewmenu_battle">戰鬥</string>
@@ -460,10 +460,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_los_info">索敵</string>
     <string name="excheckview_firepower_info">火力</string>
     <string name="excheckview_flag_lv_format" formatted="false">等級：%d+</string>
-    <string name="excheckview_total_num_format" formatted="false">最低數：%d</string>
+    <string name="excheckview_total_num_format" formatted="false">最低艦數：%d</string>
     <string name="excheckview_total_lv_format" formatted="false">總等級：%d+</string>
-    <string name="excheckview_drum_ship_format" formatted="false">至少%d個艦娘</string>
-    <string name="excheckview_drum_num_format" formatted="false">%d個以上</string>
+    <string name="excheckview_drum_ship_format" formatted="false">至少裝備於%d個艦娘上</string>
+    <string name="excheckview_drum_num_format" formatted="false">總數%d個以上</string>
     <string name="excheckview_total_format" formatted="false">總合：%d+</string>
     <string name="excheckview_bonus_asw" formatted="false">對潛：%d</string>
     <string name="excheckview_bonus_los" formatted="false">索敵：%d</string>
@@ -480,7 +480,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="labinfoview_status_retreat">退避</string>
     <string name="labinfoview_status_rest">休息</string>
     <string name="labinfoview_fp_format" formatted="false">制空 %d</string>
-    <string name="labinfoview_dist_format" formatted="false">半徑 %d</string>
+    <string name="labinfoview_dist_format" formatted="false">作戰半徑 %d</string>
     <string name="action_errorlog">錯誤日誌</string>
     <string name="errlog_dialog_message">你想清空所有錯誤日誌嗎？</string>
     <string name="errlog_cpy_to_clipboard">已複製文本到剪貼板</string>
