@@ -474,7 +474,7 @@
     <string name="labinfoview_status_retreat">퇴피</string>
     <string name="labinfoview_status_rest">휴식</string>
     <string name="labinfoview_fp_format" formatted="false">제공 %d</string>
-    <string name="labinfoview_dist_format" formatted="false">반경 %d</string>
+    <string name="labinfoview_dist_format" formatted="false">작전반경 %d</string>
     <string name="action_errorlog">오류 로그</string>
     <string name="errlog_dialog_message">전체 오류 로그를 지우시겠습니까?</string>
     <string name="errlog_cpy_to_clipboard">내용이 클립보드에 복사되었습니다.</string>
