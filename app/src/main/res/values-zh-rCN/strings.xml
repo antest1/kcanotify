@@ -234,9 +234,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="formation_lineabreast">单横</string>
     <string name="formation_defensive">警戒</string>
     <string name="formation_c1">第一警戒航行序列(对潜警戒)</string>
-    <string name="formation_c2">第一警戒航行序列(前方警戒)</string>
-    <string name="formation_c3">第一警戒航行序列(轮型阵)</string>
-    <string name="formation_c4">第一警戒航行序列(战斗队形)</string>
+    <string name="formation_c2">第二警戒航行序列(前方警戒)</string>
+    <string name="formation_c3">第三警戒航行序列(轮型阵)</string>
+    <string name="formation_c4">第四警戒航行序列(战斗队形)</string>
     <string name="formation_c1_short">对潜警戒</string>
     <string name="formation_c2_short">前方警戒</string>
     <string name="formation_c3_short">轮型阵</string>
