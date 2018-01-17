@@ -1054,7 +1054,7 @@ public class KcaService extends Service {
                         }
 
                         if (url.startsWith(API_GET_MEMBER_MAPINFO)) {
-                            for (int i = 0; i < 4; i++) {
+                            for (int i = 0; i < portdeckdata.size(); i++) {
                                 int checkvalue = deckInfoCalc.checkHeavyDamageExist(portdeckdata, i);
                                 switch (checkvalue) {
                                     case HD_DAMECON:
