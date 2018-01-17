@@ -535,6 +535,11 @@
         "memo": "\u27a3Rewards either 2 Combat Ration (Special Onigiri) OR a Furniture Fairy",
         "unlock": [ 875 ]
     },
+	"189": {
+		"code": "A84",
+		"name": "Elite 4th Torpedo Squadron, Prepare for Sortie! ",
+		"desc": "Murasame Kai Ni as the flagship, choose three of {Yura Kai Ni, Yuudachi Kai Ni, Harusame Kai, Samidare Kai and Akizuki Kai} and two additional ships in the fleet."
+	},
 	
 	"202": {
 		"code": "B1",
@@ -1282,6 +1287,16 @@
         "desc": "Sortie a CL, an AV, a CVL and up to 3 additional ships to [W3-5]. S-Rank the boss node twice.",
         "memo": "\u27a3Rewards a present box and either 2 Shiden Kai Ni OR 4 Screws OR a New Model Aviation Armament Materials"
     },
+	"876": {
+		"code": "B111",
+		"name": "Start the Matsu Transport Operation!",
+		"desc": "Sortie a fleet with Tatsuta Kai Ni or Tatsuta Kai as the flagship, 3+ DD/DE. S-Rank the [W1-4] boss node twice, Reach node N of [W1-6] twice."
+	},
+	"877": {
+		"code": "B112",
+		"name": "Elite 4th Torpedo Squadron, Sortie to the Southern Ocean Area!",
+		"desc": "Murasame Kai Ni as the flagship, choose three of following ships as companion ships: Yura Kai Ni, Yuudachi Kai Ni, Harusame kai, Samidare kai and Akizuki kai plus two wildcards in the fleet. Get A rank or above in 5-1, 5-3 and 5-4 boss nodes."
+	},
 	
 	"201": {
 		"code": "Bd1",
@@ -1602,6 +1617,12 @@
         "desc": "Secure 3 victories in Exercises using 2+ Kagerou-class or Yuugumo-class DDs. Then, sortie to [W2-2], [W2-3], [W2-4] and [W2-5]. A-Rank+ the bosses. You must use fleet 1.",
         "memo": "\u27a3Rewards: \u00B6First choice: Either an Action Report OR a Furniture Fairy \u00B6Second choice: Either 5 Buckets OR 2 Combat Rations"
     },
+	"318": {
+		"code": "C16",
+		"name": "Supply Ship Irako's Support",
+		"desc": "Using a fleet with 2 CL to get 3 victory in PvP. Then, equip 2 Combat Rations on the flagship.",
+		"memo": "The combat rations will be consumed. Rewards 1 Irako and 2 buckets OR 2 devmats. (Monthly quest)"
+	},
 
 	"401": {
 		"code": "D1",
@@ -2268,7 +2289,12 @@
         "desc": "Have 2400 Steel. Scrap 3 medium-calibur main guns, 3 secondary guns and a Drum Canister.",
         "memo": "\u203bIntegrated Consolidation of Equipment Development Capabilities \u2718Consumes the resources."
     },
-
+	"677": {
+		"code": "F69",
+		"name": "The Maintenance of Warfare Support Ability",
+		"desc": "Have 3600 Steel. Scrap 4 large caliber guns, 2 reconnaissance seaplanes and 3 torpedoes.",
+		"memo": "\u2718Consumes the resources, items and equipment."
+	},
 
 	"701": {
 		"code": "G1",
@@ -2302,31 +2328,6 @@
 		"memo": "\u2718Consumes the resources. \u27a3Rewards a New Model Aircraft Blueprint"
 	},
 
-	"801": {
-		"code": "SB26",
-		"name": "Happy New Year! Torpedo Squadron, Commence with the Sorties!",
-		"desc": "Sortie a CL as flagship and up to 5 DD to [W1-2] and [W1-4]. A-Rank+ each boss node twice.",
-		"memo": "\u27a3Rewards an Emergency Repair Goddess and either 2 Combat Rations OR 5 Development Materials"
-	},
-	"802": {
-		"code": "SB27",
-		"name": "Helping Out Irako in the New Year!",
-		"desc": "Sortie an AV/CA(V)/CL(T)/CT as flagship and up to 5 additional ships to [W2-2] and [W2-3]. A-Rank+ each boss node twice.",
-		"memo": "\u27a3Rewards 3 Irako and either a Combat Ration (Special Onigiri) OR 5 Buckets OR a New Model Artillery Armament Materials"
-	},
-	"803": {
-		"code": "SB28",
-		"name": "Commence the Escorts! A New Year for the Naval Escort Squadrons!",
-		"desc": "Sortie only DD/DE (1 CVL is allowed) to [W1-5] and [W1-6]. A-Rank+ the [W1-5] boss node three times. Reach [W1-6] node N three times.",
-		"memo": "\u27a3Rewards 3 Screws, a Furniture Fairy and either 2 Type 2 Depth Charges OR an Action Report OR a Raiden"
-	},
-	"804": {
-		"code": "SB29",
-		"name": "Happy New Year! Carrier Task Force, Sortie at Full Strength!",
-		"desc": "Sortie a CV(B/L) as flagship, 2 DD and 3 additional ships to [W5-5]. A-Rank+ the boss node four times.",
-		"memo": "\u27a3Rewards furniture and either a Skilled Crew Member OR 2 New Model Aviation Armament Materials OR 3 Shiden Kai Ni"
-	},
-
 	"188_old": {
 		"code": "Le1A1",
 		"name": "Fully Formed Nishimura Fleet, Prepare to Sortie!",
@@ -2344,5 +2345,29 @@
 		"name": "Secure the Supply Line Logistics for Operation Sho-Ichi-Go!",
 		"desc": "Sortie to [E-2]. A-Rank+ the boss node twice.",
 		"memo": "\u27a3 Rewards a Mamiya and either 2 Type 13 Air Radars OR 2 Type 22 Surface Radars OR an Action Report"
+	},
+	"801NY2018": {
+		"code": "SB26",
+		"name": "Happy New Year! Torpedo Squadron, Commence with the Sorties!",
+		"desc": "Sortie a CL as flagship and up to 5 DD to [W1-2] and [W1-4]. A-Rank+ each boss node twice.",
+		"memo": "\u27a3Rewards an Emergency Repair Goddess and either 2 Combat Rations OR 5 Development Materials"
+	},
+	"802NY2018": {
+		"code": "SB27",
+		"name": "Helping Out Irako in the New Year!",
+		"desc": "Sortie an AV/CA(V)/CL(T)/CT as flagship and up to 5 additional ships to [W2-2] and [W2-3]. A-Rank+ each boss node twice.",
+		"memo": "\u27a3Rewards 3 Irako and either a Combat Ration (Special Onigiri) OR 5 Buckets OR a New Model Artillery Armament Materials"
+	},
+	"803NY2018": {
+		"code": "SB28",
+		"name": "Commence the Escorts! A New Year for the Naval Escort Squadrons!",
+		"desc": "Sortie only DD/DE (1 CVL is allowed) to [W1-5] and [W1-6]. A-Rank+ the [W1-5] boss node three times. Reach [W1-6] node N three times.",
+		"memo": "\u27a3Rewards 3 Screws, a Furniture Fairy and either 2 Type 2 Depth Charges OR an Action Report OR a Raiden"
+	},
+	"804NY2018": {
+		"code": "SB29",
+		"name": "Happy New Year! Carrier Task Force, Sortie at Full Strength!",
+		"desc": "Sortie a CV(B/L) as flagship, 2 DD and 3 additional ships to [W5-5]. A-Rank+ the boss node four times.",
+		"memo": "\u27a3Rewards furniture and either a Skilled Crew Member OR 2 New Model Aviation Armament Materials OR 3 Shiden Kai Ni"
 	}
 }
