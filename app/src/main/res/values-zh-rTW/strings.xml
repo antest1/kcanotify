@@ -293,6 +293,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_permission_external_confirmed">讀取外部存儲空間的權限：允許</string>
     <string name="ma_permission_external_denied">讀取外部存儲空間：不允許（只能使用系統鈴聲/無法生成錯誤日誌）</string>
     <string name="airbase_term">基地航空隊</string>
+    <string name="contact_term">觸接</string>
+    <string name="contact_none">(無)</string>
     <string name="phase_term" formatted="false">階段%d</string>
     <string name="injection_term">噴氣式強襲</string>
     <string name="raid_type1">資源損失</string>

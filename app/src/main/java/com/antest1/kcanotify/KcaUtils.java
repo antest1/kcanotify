@@ -51,6 +51,7 @@ import static android.R.attr.orientation;
 import static com.antest1.kcanotify.KcaAlarmService.ALARM_CHANNEL_ID;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
+import static com.antest1.kcanotify.KcaConstants.PREF_DISABLE_CUSTOMTOAST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
@@ -384,6 +385,22 @@ public class KcaUtils {
             v.vibrate(VibrationEffect.createOneShot(time, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
             v.vibrate(time);
+        }
+    }
+
+    public static void showCustomToast(Context a, Context b, KcaCustomToast toast, String body, int duration, int color) {
+        if (getBooleanPreferences(a, PREF_DISABLE_CUSTOMTOAST)) {
+            JsonObject data = new JsonObject();
+            data.addProperty("text", body);
+            data.addProperty("duration", duration);
+            data.addProperty("color", color);
+            Intent toastIntent = new Intent(b, KcaCustomToastService.class);
+            toastIntent.setAction(KcaCustomToastService.TOAST_SHOW_ACTION);
+            toastIntent.putExtra("data", data.toString());
+            a.startService(toastIntent);
+            //Toast.makeText(ctx, body, duration).show();
+        } else {
+            toast.showToast(body, duration, color);
         }
     }
 

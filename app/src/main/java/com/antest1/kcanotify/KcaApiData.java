@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaUtils.getId;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
@@ -1403,5 +1405,17 @@ public class KcaApiData {
             }
         }
         return info;
+    }
+
+    public static int getTypeRes(int type) {
+        int typeres = 0;
+        try {
+            typeres = KcaUtils.getId(KcaUtils.format("item_%d", type), R.mipmap.class);
+        }
+        catch (Exception e) {
+            helper.recordErrorLog(ERROR_TYPE_BATTLEVIEW, "", "", "", getStringFromException(e));
+            typeres = R.mipmap.item_0;
+        }
+        return typeres;
     }
 }

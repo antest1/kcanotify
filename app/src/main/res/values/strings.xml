@@ -338,6 +338,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_permission_external_confirmed">Allow External Storage Permission: On</string>
     <string name="ma_permission_external_denied">Allow External Storage: Off (You can use only system notification sound. You cannot export error log.)</string>
     <string name="airbase_term">LBAS</string>
+    <string name="contact_term">Contact</string>
+    <string name="contact_none">(None)</string>
     <string name="phase_term" formatted="false">Phase %d</string>
     <string name="injection_term">Jet Assault</string>
     <string name="raid_type1">Resources Loss</string>

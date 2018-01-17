@@ -274,6 +274,8 @@
     <string name="ma_permission_external_confirmed">ストレージ権限が設定されました。</string>
     <string name="ma_permission_external_denied">ストレージ権限が設定されていません。(システム通知音のみ使用可能/エラーログのエクスポート不可)</string>
     <string name="airbase_term">基地航空隊</string>
+    <string name="contact_term">触接</string>
+    <string name="contact_none">(なし)</string>
     <string name="phase_term" formatted="false">フェイズ %d</string>
     <string name="injection_term">噴式強襲</string>
     <string name="raid_type1">資源損害</string>

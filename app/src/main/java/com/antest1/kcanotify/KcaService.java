@@ -2563,20 +2563,7 @@ public class KcaService extends Service {
     }
 
     public void showCustomToast(KcaCustomToast toast, String body, int duration, int color) {
-        Context ctx = getApplicationContext();
-        if (getBooleanPreferences(ctx, PREF_DISABLE_CUSTOMTOAST)) {
-            JsonObject data = new JsonObject();
-            data.addProperty("text", body);
-            data.addProperty("duration", duration);
-            data.addProperty("color", color);
-            Intent toastIntent = new Intent(getBaseContext(), KcaCustomToastService.class);
-            toastIntent.setAction(KcaCustomToastService.TOAST_SHOW_ACTION);
-            toastIntent.putExtra("data", data.toString());
-            startService(toastIntent);
-            //Toast.makeText(ctx, body, duration).show();
-        } else {
-            toast.showToast(body, duration, color);
-        }
+        KcaUtils.showCustomToast(getApplicationContext(), getBaseContext(), toast, body, duration, color);
     }
 
     @Override

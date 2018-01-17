@@ -34,11 +34,14 @@ import android.widget.Toast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 import static com.antest1.kcanotify.KcaApiData.checkUserPortEnough;
 import static com.antest1.kcanotify.KcaApiData.getAirForceResultString;
 import static com.antest1.kcanotify.KcaApiData.getCurrentNodeAlphabet;
@@ -120,6 +123,7 @@ public class KcaBattleViewService extends Service {
 
     private View mView, itemView, acView, menuView;
     private WindowManager mManager;
+    KcaCustomToast customToast;
 
     int displayWidth = 0;
 
@@ -1115,13 +1119,7 @@ public class KcaBattleViewService extends Service {
 
                 String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
                 int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
-
-                int typeres = 0;
-                try {
-                    typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
-                } catch (Exception e) {
-                    typeres = R.mipmap.item_0;
-                }
+                int typeres = KcaApiData.getTypeRes(type);
                 ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class))).setText(kcItemName);
                 ((ImageView) itemView.findViewById(getId(KcaUtils.format("item%d_icon", i + 1), R.id.class))).setImageResource(typeres);
                 itemView.findViewById(slotViewList[i]).setVisibility(View.VISIBLE);
@@ -1141,12 +1139,7 @@ public class KcaBattleViewService extends Service {
             String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
             int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
             int lv = kcItemData.get("level").getAsInt();
-            int typeres = 0;
-            try {
-                typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
-            } catch (Exception e) {
-                typeres = R.mipmap.item_0;
-            }
+            int typeres = KcaApiData.getTypeRes(type);
             ((TextView) itemView.findViewById(R.id.item_ex_name)).setText(kcItemName);
             ((ImageView) itemView.findViewById(R.id.item_ex_icon)).setImageResource(typeres);
             if (lv > 0) {
@@ -1199,6 +1192,8 @@ public class KcaBattleViewService extends Service {
                 dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
                 deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
                 //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                customToast = new KcaCustomToast(getApplicationContext());
+
                 mInflater = LayoutInflater.from(contextWithLocale);
                 mView = mInflater.inflate(R.layout.view_sortie_battle, null);
                 mView.setVisibility(View.GONE);
@@ -1208,6 +1203,10 @@ public class KcaBattleViewService extends Service {
                 itemView = mInflater.inflate(R.layout.view_battleview_items, null);
                 acView = mInflater.inflate(R.layout.view_battleview_aircombat, null);
                 acView.findViewById(R.id.view_ac_head).setOnTouchListener(acViewTouchListener);
+                acView.findViewById(R.id.view_ac_phase1_0_f).setOnTouchListener(acViewTouchListener);
+                acView.findViewById(R.id.view_ac_phase1_0_e).setOnTouchListener(acViewTouchListener);
+                acView.findViewById(R.id.view_ac_phase2_0_f).setOnTouchListener(acViewTouchListener);
+                acView.findViewById(R.id.view_ac_phase2_0_e).setOnTouchListener(acViewTouchListener);
                 ((TextView) acView.findViewById(R.id.view_ac_title)).setText(getStringWithLocale(R.string.battleview_menu0));
                 menuView = mInflater.inflate(R.layout.view_battleview_menu, null);
                 menuView.setVisibility(View.GONE);
@@ -1326,6 +1325,59 @@ public class KcaBattleViewService extends Service {
         ((TextView) menuView.findViewById(R.id.view_menu_fleetinfo)).setText(joinStr(infoList, "\n"));
     }
 
+    private void setAirCombatContact(String prefix, JsonObject data) {
+        ((TextView) acView.findViewById(getId(prefix.concat("0_msg"), R.id.class))).setText(
+                getStringWithLocale(R.string.contact_term));
+        TextView friendContactText = acView.findViewById(getId(prefix.concat("0_f"), R.id.class));
+        TextView enemyContactText = acView.findViewById(getId(prefix.concat("0_e"), R.id.class));
+        ImageView friendContactIcon = acView.findViewById(getId(prefix.concat("0_f_icon"), R.id.class));
+        ImageView enemyContactIcon = acView.findViewById(getId(prefix.concat("0_e_icon"), R.id.class));
+
+        if (!data.get("api_stage1").isJsonNull()) {
+            JsonObject stage1_data = data.getAsJsonObject("api_stage1");
+            JsonArray touch_plane = stage1_data.getAsJsonArray("api_touch_plane");
+            if (touch_plane != null && !touch_plane.isJsonNull()) {
+                int friend_contact = touch_plane.get(0).getAsInt();
+                if (friend_contact != -1) {
+                    JsonObject f_data = getKcItemStatusById(friend_contact, "name,type");
+                    if (f_data != null) {
+                        friendContactText.setText(getItemTranslation(f_data.get("name").getAsString()));
+                        int type = f_data.getAsJsonArray("type").get(3).getAsInt();
+                        int typeres = KcaApiData.getTypeRes(type);
+                        friendContactIcon.setImageResource(typeres);
+                    } else {
+                        friendContactText.setText("");
+                        friendContactIcon.setImageResource(R.mipmap.item_0);
+                    }
+                    friendContactIcon.setVisibility(View.VISIBLE);
+                    friendContactText.setSelected(true);
+                } else {
+                    friendContactText.setText(getStringWithLocale(R.string.contact_none));
+                    friendContactIcon.setVisibility(View.GONE);
+                }
+
+                int enemy_contact = touch_plane.get(1).getAsInt();
+                if (enemy_contact != -1) {
+                    JsonObject e_data = getKcItemStatusById(enemy_contact, "name,type");
+                    if (e_data != null) {
+                        enemyContactText.setText(getItemTranslation(e_data.get("name").getAsString()));
+                        int type = e_data.getAsJsonArray("type").get(3).getAsInt();
+                        int typeres = KcaApiData.getTypeRes(type);
+                        enemyContactIcon.setImageResource(typeres);
+                    } else {
+                        enemyContactText.setText("???");
+                        enemyContactIcon.setImageResource(R.mipmap.item_0);
+                    }
+                    enemyContactIcon.setVisibility(View.VISIBLE);
+                    enemyContactText.setSelected(true);
+                } else {
+                    enemyContactText.setText(getStringWithLocale(R.string.contact_none));
+                    enemyContactIcon.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
     private void setAirCombatTextView(String prefix, JsonObject data) {
         String countformat = "%d/%d (-%d)";
         for (int n = 1; n <= 2; n++) {
@@ -1385,6 +1437,7 @@ public class KcaBattleViewService extends Service {
                 ((TextView) acView.findViewById(R.id.view_ac_phase1_title))
                         .setText(KcaUtils.format(getStringWithLocale(R.string.phase_term), 1));
                 setAirCombatTextView("view_ac_phase1_", kdata);
+                setAirCombatContact("view_ac_phase1_", kdata);
                 acView.findViewById(R.id.view_ac_phase1).setVisibility(View.VISIBLE);
             } else {
                 acView.findViewById(R.id.view_ac_phase1).setVisibility(View.GONE);
@@ -1395,6 +1448,7 @@ public class KcaBattleViewService extends Service {
                 ((TextView) acView.findViewById(R.id.view_ac_phase2_title))
                         .setText(KcaUtils.format(getStringWithLocale(R.string.phase_term), 2));
                 setAirCombatTextView("view_ac_phase2_", kdata);
+                setAirCombatContact("view_ac_phase2_", kdata);
                 acView.findViewById(R.id.view_ac_phase2).setVisibility(View.VISIBLE);
             } else {
                 acView.findViewById(R.id.view_ac_phase2).setVisibility(View.GONE);
@@ -1543,9 +1597,14 @@ public class KcaBattleViewService extends Service {
                     Log.e("KCA", "ACTION_DOWN");
                     return true;
                 case MotionEvent.ACTION_UP:
-                    acView.setVisibility(View.GONE);
-                    mManager.removeViewImmediate(acView);
-                    Log.e("KCA", "ACTION_UP");
+                    if (v.getId() == acView.findViewById(R.id.view_ac_head).getId()) {
+                        acView.setVisibility(View.GONE);
+                        mManager.removeViewImmediate(acView);
+                        Log.e("KCA", "ACTION_UP");
+                    } else if (v instanceof TextView){
+                        String val = (String) ((TextView) v).getText();
+                        showCustomToast(customToast, val, Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                    }
                     return false;
                 default:
                     return false;
@@ -1750,6 +1809,10 @@ public class KcaBattleViewService extends Service {
 
     private int getSeekCn() {
         return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
+    }
+
+    public void showCustomToast(KcaCustomToast toast, String body, int duration, int color) {
+        KcaUtils.showCustomToast(getApplicationContext(), getBaseContext(), toast, body, duration, color);
     }
 
     private boolean checkStart(String url) {
