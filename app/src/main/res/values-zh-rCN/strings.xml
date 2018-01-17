@@ -40,9 +40,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_fastplus">高速+</string>
     <string name="speed_fast">高速</string>
     <string name="speed_slow">低速</string>
-    <string name="speed_mixed_normal">(低速)溷合</string>
-    <string name="speed_mixed_fast">(高速)溷合</string>
-    <string name="speed_mixed_fastplus">(高速+)溷合</string>
+    <string name="speed_mixed_normal">(低速)混合</string>
+    <string name="speed_mixed_fast">(高速)混合</string>
+    <string name="speed_mixed_fastplus">(高速+)混合</string>
     <string name="speed_none">\?\?</string>
     <string name="speed_postfix">&#160;舰队</string>
 
