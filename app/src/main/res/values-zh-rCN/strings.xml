@@ -40,9 +40,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_fastplus">高速+</string>
     <string name="speed_fast">高速</string>
     <string name="speed_slow">低速</string>
-    <string name="speed_mixed_normal">(低速)溷合</string>
-    <string name="speed_mixed_fast">(高速)溷合</string>
-    <string name="speed_mixed_fastplus">(高速+)溷合</string>
+    <string name="speed_mixed_normal">(低速)混合</string>
+    <string name="speed_mixed_fast">(高速)混合</string>
+    <string name="speed_mixed_fastplus">(高速+)混合</string>
     <string name="speed_none">\?\?</string>
     <string name="speed_postfix">&#160;舰队</string>
 
@@ -110,7 +110,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_init_content">请从Kcanotify内开启游戏</string>
 
     <string name="kca_noti_title_exp_canceled" formatted="false">远征 %s (%s) 已中止。</string>
-    <string name="kca_noti_content_exp_canceled" formatted="false"> &lt;%s&gt; 已从远征%s中召回。</string>
+    <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt; 已从远征%s中召回。</string>
     <string name="kca_noti_title_exp_finished" formatted="false">远征 %s (%s) 已完成。</string>
     <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; 从远征%s归还。</string>
     <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; 从远征%s归还（中止）。</string>
