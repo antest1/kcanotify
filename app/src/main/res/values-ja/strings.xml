@@ -276,6 +276,7 @@
     <string name="airbase_term">基地航空隊</string>
     <string name="contact_term">触接</string>
     <string name="contact_none">(なし)</string>
+    <string name="contact_dm" formatted="false">攻撃力補正：%d%%</string>
     <string name="phase_term" formatted="false">フェイズ %d</string>
     <string name="injection_term">噴式強襲</string>
     <string name="raid_type1">資源損害</string>

@@ -295,6 +295,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="airbase_term">基地航空队</string>
     <string name="contact_term">触接</string>
     <string name="contact_none">(无)</string>
+    <string name="contact_dm" formatted="false">攻撃力补正：%d%%</string>
     <string name="phase_term" formatted="false">阶段%d</string>
     <string name="injection_term">喷气式强袭</string>
     <string name="raid_type1">资源损失</string>

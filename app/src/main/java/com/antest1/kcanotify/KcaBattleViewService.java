@@ -79,6 +79,8 @@ public class KcaBattleViewService extends Service {
     public static final String SHOW_BATTLEVIEW_ACTION = "show_battleview";
     public static final String HIDE_BATTLEVIEW_ACTION = "hide_battleview";
 
+    public static final int[] contact_bonus = {112, 112, 117, 120};
+
     Context contextWithLocale;
     KcaDBHelper dbHelper;
     KcaDeckInfo deckInfoCalc;
@@ -1332,6 +1334,8 @@ public class KcaBattleViewService extends Service {
         TextView enemyContactText = acView.findViewById(getId(prefix.concat("0_e"), R.id.class));
         ImageView friendContactIcon = acView.findViewById(getId(prefix.concat("0_f_icon"), R.id.class));
         ImageView enemyContactIcon = acView.findViewById(getId(prefix.concat("0_e_icon"), R.id.class));
+        TextView friendContactDm = acView.findViewById(getId(prefix.concat("0_f_dm"), R.id.class));
+        TextView enemyContactDm = acView.findViewById(getId(prefix.concat("0_e_dm"), R.id.class));
 
         if (!data.get("api_stage1").isJsonNull()) {
             JsonObject stage1_data = data.getAsJsonObject("api_stage1");
@@ -1339,39 +1343,51 @@ public class KcaBattleViewService extends Service {
             if (touch_plane != null && !touch_plane.isJsonNull()) {
                 int friend_contact = touch_plane.get(0).getAsInt();
                 if (friend_contact != -1) {
-                    JsonObject f_data = getKcItemStatusById(friend_contact, "name,type");
+                    JsonObject f_data = getKcItemStatusById(friend_contact, "name,type,houm");
                     if (f_data != null) {
                         friendContactText.setText(getItemTranslation(f_data.get("name").getAsString()));
                         int type = f_data.getAsJsonArray("type").get(3).getAsInt();
                         int typeres = KcaApiData.getTypeRes(type);
                         friendContactIcon.setImageResource(typeres);
+                        int houm_val = Math.min(f_data.get("houm").getAsInt(), 3);
+                        int dm_value = contact_bonus[houm_val];
+                        friendContactDm.setText(KcaUtils.format(getStringWithLocale(R.string.contact_dm), dm_value));
                     } else {
-                        friendContactText.setText("");
+                        friendContactText.setText("???");
+                        friendContactDm.setText("???");
                         friendContactIcon.setImageResource(R.mipmap.item_0);
                     }
                     friendContactIcon.setVisibility(View.VISIBLE);
+                    friendContactDm.setVisibility(View.VISIBLE);
                     friendContactText.setSelected(true);
                 } else {
                     friendContactText.setText(getStringWithLocale(R.string.contact_none));
+                    friendContactDm.setVisibility(View.GONE);
                     friendContactIcon.setVisibility(View.GONE);
                 }
 
                 int enemy_contact = touch_plane.get(1).getAsInt();
                 if (enemy_contact != -1) {
-                    JsonObject e_data = getKcItemStatusById(enemy_contact, "name,type");
+                    JsonObject e_data = getKcItemStatusById(enemy_contact, "name,type,houm");
                     if (e_data != null) {
                         enemyContactText.setText(getItemTranslation(e_data.get("name").getAsString()));
                         int type = e_data.getAsJsonArray("type").get(3).getAsInt();
                         int typeres = KcaApiData.getTypeRes(type);
                         enemyContactIcon.setImageResource(typeres);
+                        int houm_val = Math.min(e_data.get("houm").getAsInt(), 3);
+                        int dm_value = contact_bonus[houm_val];
+                        enemyContactDm.setText(KcaUtils.format(getStringWithLocale(R.string.contact_dm), dm_value));
                     } else {
                         enemyContactText.setText("???");
+                        enemyContactDm.setText("???");
                         enemyContactIcon.setImageResource(R.mipmap.item_0);
                     }
                     enemyContactIcon.setVisibility(View.VISIBLE);
+                    enemyContactDm.setVisibility(View.VISIBLE);
                     enemyContactText.setSelected(true);
                 } else {
                     enemyContactText.setText(getStringWithLocale(R.string.contact_none));
+                    enemyContactDm.setVisibility(View.GONE);
                     enemyContactIcon.setVisibility(View.GONE);
                 }
             }

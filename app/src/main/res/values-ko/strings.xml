@@ -279,6 +279,7 @@
     <string name="ma_permission_external_denied">저장공간 권한이 설정되지 않았습니다. (시스템 알림음만 사용 가능/오류 로그 내보내기 불가)</string>
     <string name="airbase_term">기지항공대</string>
     <string name="contact_term">촉접</string>
+    <string name="contact_dm" formatted="false">공격력보정: %d%%</string>
     <string name="contact_none">(없음)</string>
     <string name="phase_term" formatted="false">Phase %d</string>
     <string name="injection_term">분식강습</string>
