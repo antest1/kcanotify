@@ -537,8 +537,9 @@
     },
 	"189": {
 		"code": "A84",
-		"name": "Elite 4th Torpedo Squadron, Prepare for Sortie! ",
-		"desc": "Murasame Kai Ni as the flagship, choose three of {Yura Kai Ni, Yuudachi Kai Ni, Harusame Kai, Samidare Kai and Akizuki Kai} and two additional ships in the fleet."
+		"name": "Elite DesRon 4, Prepare to Set Sail!",
+		"desc": "Fill an entire six-ship fleet with Murasame Kai Ni as flagship, 3+ of Yura Kai Ni, Yuudachi Kai Ni, Harusame Kai, Samidare Kai or Akizuki Kai and your choice of other ships.",
+		"memo": "\u27a3Rewards a Repair Goddess"
 	},
 	
 	"202": {
@@ -1289,13 +1290,15 @@
     },
 	"876": {
 		"code": "B111",
-		"name": "Start the Matsu Transport Operation!",
-		"desc": "Sortie a fleet with Tatsuta Kai Ni or Tatsuta Kai as the flagship, 3+ DD/DE. S-Rank the [W1-4] boss node twice, Reach node N of [W1-6] twice."
+		"name": "Matsu Transport Operation, Commence!",
+		"desc": "Sortie Tatsuta Kai or Kai Ni as flagship and 3+ DE/DD to [W1-4] and [W1-6]. A-Rank+ the [W1-4] boss node twice. Reach [W1-6] node N twice.",
+		"memo": "You may use up to 2 additional ships of any class. \u27a3Rewards: \u00B6First choice: Either a New Model Artillery Armament Materials OR a New Model Aviation Armament Materials \u00B6Second choice: Either a Furniture Fairy OR a Daihatsu Landing Craft OR an Action Report"
 	},
 	"877": {
 		"code": "B112",
-		"name": "Elite 4th Torpedo Squadron, Sortie to the Southern Ocean Area!",
-		"desc": "Murasame Kai Ni as the flagship, choose three of following ships as companion ships: Yura Kai Ni, Yuudachi Kai Ni, Harusame kai, Samidare kai and Akizuki kai plus two wildcards in the fleet. Get A rank or above in 5-1, 5-3 and 5-4 boss nodes."
+		"name": "Elite DesRon 4, Deploy to the Southern Region!",
+		"desc": "Sortie Murasame Kai Ni as flagship and 3+ of Yura Kai Ni, Yuudachi Kai Ni, Harusame Kai, Samidare Kai or Akizuki Kai to [W5-1], [W5-3] and [W5-4]. A-Rank+ the bosses.",
+		"memo": "You can bring up to two additional ships. Press F10 to clear the overlay that blocks the reward selection screen. \u27a3Rewards: \u00B6First choice: Either a 12.7cm Twin Gun Mount Model C Kai Ni OR 2 Type 22 Surface Radars OR 2 12.7cm Twin Gun Mount Model B Kai Nis \u00B6Second choice: Either 2 Underway Replenishments OR 3 Drum Canisters OR 4 Screws"
 	},
 	
 	"201": {
@@ -1517,7 +1520,7 @@
 	"875": {
         "code": "Bq6",
         "name": "Quarterly [W5-4]",
-        "desc": "Sortie Naganami Kai Ni as flagship, one of Takanami Kai, Asashimo Kai or Okinami Kai, and up to 4 additional ships to [W5-4]. S-Rank the boss node twice. Overlay: F10",
+        "desc": "Sortie Naganami Kai Ni as flagship, one of Takanami Kai, Asashimo Kai or Okinami Kai, and up to 4 additional ships to [W5-4]. S-Rank the boss node twice.",
         "memo": "\u203bElite DesDiv 31, Break Into the Iron Bottom Sound! \u27a3Rewards: \u00B6First choice: Either 2 Type 13 Air Radars OR 2 Type 22 Surface Radars OR an Action Report \u00B6Second choice: Either a New Model Artillery Armament Materials OR a Present Box",
         "tracking": [ [0,2] ]
     },
@@ -1619,9 +1622,9 @@
     },
 	"318": {
 		"code": "C16",
-		"name": "Supply Ship Irako's Support",
-		"desc": "Using a fleet with 2 CL to get 3 victory in PvP. Then, equip 2 Combat Rations on the flagship.",
-		"memo": "The combat rations will be consumed. Rewards 1 Irako and 2 buckets OR 2 devmats. (Monthly quest)"
+		"name": "Monthly Exercises 2",
+		"desc": "Secure 3 victories in Exercises using 2 CLs. Then, equip the Fleet 1 flagship with 2 Combat Rations.",
+		"memo": "\u2718Consumes the equipment. Make sure the equipment is unlocked! \u203bThe Supply Ship Irako's Support \u27a3Rewards an Irako and either 2 Buckets OR 2 Development Materials"
 	},
 
 	"401": {
@@ -2291,9 +2294,9 @@
     },
 	"677": {
 		"code": "F69",
-		"name": "The Maintenance of Warfare Support Ability",
-		"desc": "Have 3600 Steel. Scrap 4 large caliber guns, 2 reconnaissance seaplanes and 3 torpedoes.",
-		"memo": "\u2718Consumes the resources, items and equipment."
+		"name": "Weekly Dismantlement 2",
+		"desc": "Have 3600 Steel. Scrap 4 Large Cal. Main Guns, 2 Recon Seaplanes and 3 Torpedoes.",
+		"memo": "\u203bConsolidation of Faculties to Support Ongoing War Efforts \u2718Consumes the resources."
 	},
 
 	"701": {
