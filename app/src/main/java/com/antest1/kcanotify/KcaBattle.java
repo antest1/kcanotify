@@ -513,7 +513,7 @@ public class KcaBattle {
 
                 bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_NODE);
-                bundle.putString("data", "");
+                bundle.putString("data", qtrackData.toString());
                 sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
@@ -570,7 +570,7 @@ public class KcaBattle {
 
                 bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_NODE);
-                bundle.putString("data", "");
+                bundle.putString("data", qtrackData.toString());
                 sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
@@ -722,7 +722,7 @@ public class KcaBattle {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
-                bundle.putString("data", "");
+                bundle.putString("data", battleResultInfo.toString());
                 Message sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
@@ -801,7 +801,7 @@ public class KcaBattle {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
-                bundle.putString("data", "");
+                bundle.putString("data", battleResultInfo.toString());
                 Message sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
@@ -843,7 +843,7 @@ public class KcaBattle {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
-                bundle.putString("data", "");
+                bundle.putString("data", battleResultInfo.toString());
                 Message sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
@@ -1153,7 +1153,7 @@ public class KcaBattle {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
-                bundle.putString("data", "");
+                bundle.putString("data", battleResultInfo.toString());
                 Message sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
 
@@ -1392,7 +1392,7 @@ public class KcaBattle {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
-                bundle.putString("data", "");
+                bundle.putString("data", battleResultInfo.toString());
                 Message sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
@@ -1440,7 +1440,7 @@ public class KcaBattle {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
-                bundle.putString("data", "");
+                bundle.putString("data", battleResultInfo.toString());
                 Message sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
@@ -1524,7 +1524,7 @@ public class KcaBattle {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
-                bundle.putString("data", "");
+                bundle.putString("data", battleResultInfo.toString());
                 Message sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
@@ -1617,7 +1617,7 @@ public class KcaBattle {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
-                bundle.putString("data", "");
+                bundle.putString("data", battleResultInfo.toString());
                 Message sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
@@ -1832,7 +1832,7 @@ public class KcaBattle {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
-                bundle.putString("data", "");
+                bundle.putString("data", battleResultInfo.toString());
                 Message sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
@@ -1936,7 +1936,7 @@ public class KcaBattle {
 
                 bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
-                bundle.putString("data", "");
+                bundle.putString("data", battleResultInfo.toString());
                 sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);

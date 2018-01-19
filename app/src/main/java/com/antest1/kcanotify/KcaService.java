@@ -2132,7 +2132,7 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_INFO)) {
-                jsonDataObj = dbHelper.getJsonObjectValue(DB_KEY_BATTLEINFO);
+                // jsonDataObj = dbHelper.getJsonObjectValue(DB_KEY_BATTLEINFO);
                 String api_url = jsonDataObj.get("api_url").getAsString();
                 if (api_url.startsWith(API_REQ_SORTIE_BATTLE_RESULT) || url.startsWith(API_REQ_COMBINED_BATTLERESULT)) {
                     JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
@@ -2156,7 +2156,7 @@ public class KcaService extends Service {
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_NODE)) {
                 // Reference: https://github.com/andanteyk/ElectronicObserver/blob/1052a7b177a62a5838b23387ff35283618f688dd/ElectronicObserver/Other/Information/apilist.txt
-                jsonDataObj = dbHelper.getJsonObjectValue(DB_KEY_BATTLENODE);
+                // jsonDataObj = dbHelper.getJsonObjectValue(DB_KEY_BATTLENODE);
                 if (jsonDataObj.has("api_maparea_id") && isBattleNodeEnabled()) {
                     int currentMapArea = jsonDataObj.get("api_maparea_id").getAsInt();
                     int currentMapNo = jsonDataObj.get("api_mapinfo_no").getAsInt();
