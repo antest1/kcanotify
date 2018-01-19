@@ -846,8 +846,8 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="right"
                                     android:orientation="horizontal"
                                     android:weightSum="1">
 
@@ -883,11 +883,10 @@
                                     android:id="@+id/view_ac_phase1_0_f_dm"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="right|center_vertical"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:alpha="0.8"
                                     android:ellipsize="end"
-                                    android:gravity="right"
                                     android:maxLines="1"
                                     android:singleLine="true"
                                     android:text="Damage Modifier: 112%"
@@ -917,8 +916,8 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="left"
                                     android:orientation="horizontal">
 
                                     <ImageView
@@ -951,11 +950,10 @@
                                     android:id="@+id/view_ac_phase1_0_e_dm"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="right|center_vertical"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:alpha="0.8"
                                     android:ellipsize="end"
-                                    android:gravity="right"
                                     android:maxLines="1"
                                     android:singleLine="true"
                                     android:text="Damage Modifier: 112%"
