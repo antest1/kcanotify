@@ -524,7 +524,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_flag_lv_format" formatted="false">Lv %d+</string>
     <string name="excheckview_total_num_format" formatted="false">Total %d+</string>
     <string name="excheckview_total_lv_format" formatted="false">Lv Sum %d+</string>
-    <string name="excheckview_drum_ship_format" formatted="false">%d+ Ships</string>
+    <string name="excheckview_drum_ship_format" formatted="false">%d+ ships carryings</string>
     <string name="excheckview_drum_num_format" formatted="false">%d+ Drums</string>
     <string name="excheckview_total_format" formatted="false">Total %d+</string>
     <string name="excheckview_bonus_asw" formatted="false">ASW: %d</string>

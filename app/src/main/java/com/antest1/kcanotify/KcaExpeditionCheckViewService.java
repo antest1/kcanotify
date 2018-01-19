@@ -95,7 +95,7 @@ public class KcaExpeditionCheckViewService extends Service {
         localLayoutParams.x = ((int) (125.0F + paramMotionEvent.getRawX()));
         localLayoutParams.y = ((int) paramMotionEvent.getRawY());
         if (selected >= 100) {
-            if (selected == 134) localLayoutParams.x -= (125 + width);
+            if (selected >= 111) localLayoutParams.x -= (125 + width);
             localLayoutParams.y -= (height + 25);
         } else {
             if ((selected - 1) % 8 >= 4) localLayoutParams.x -= (125 + width);

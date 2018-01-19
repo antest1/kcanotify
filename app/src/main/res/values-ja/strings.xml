@@ -461,8 +461,8 @@
     <string name="excheckview_flag_lv_format" formatted="false">Lv%d+</string>
     <string name="excheckview_total_num_format" formatted="false">最低%d隻</string>
     <string name="excheckview_total_lv_format" formatted="false">Lv合計%d+</string>
-    <string name="excheckview_drum_ship_format" formatted="false">%d隻以上</string>
-    <string name="excheckview_drum_num_format" formatted="false">%dつ以上</string>
+    <string name="excheckview_drum_ship_format" formatted="false">%d隻以上に装備</string>
+    <string name="excheckview_drum_num_format" formatted="false">合計%dつ以上</string>
     <string name="excheckview_total_format" formatted="false">合計%d+</string>
     <string name="excheckview_bonus_asw" formatted="false">潜%d</string>
     <string name="excheckview_bonus_los" formatted="false">索%d</string>

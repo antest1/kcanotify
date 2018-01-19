@@ -85,7 +85,7 @@
                 <LinearLayout
                     android:id="@+id/view_excheck_flagship_data"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
@@ -115,7 +115,7 @@
             <LinearLayout
                 android:id="@+id/view_excheck_fleet"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
@@ -177,7 +177,7 @@
             <LinearLayout
                 android:id="@+id/view_excheck_drum"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:orientation="horizontal">
 
@@ -195,8 +195,8 @@
                 <LinearLayout
                     android:id="@+id/view_excheck_drum_data"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/view_excheck_drum_ship"
@@ -225,7 +225,7 @@
             <LinearLayout
                 android:id="@+id/view_excheck_asw"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:orientation="horizontal">
 
@@ -263,7 +263,7 @@
             <LinearLayout
                 android:id="@+id/view_excheck_fp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:orientation="horizontal">
 
@@ -301,7 +301,7 @@
             <LinearLayout
                 android:id="@+id/view_excheck_los"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:orientation="horizontal">
 
@@ -339,7 +339,7 @@
             <LinearLayout
                 android:id="@+id/view_excheck_firepower"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:orientation="horizontal">
 
