@@ -127,6 +127,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_toast_airpower" formatted="false">制空: %d-%d</string>
     <string name="kca_toast_seekvalue_d" formatted="false">索敵(%s): %d</string>
     <string name="kca_toast_seekvalue_f" formatted="false">索敵(%s): %.2f</string>
+    <string name="fleetview_contactvalue" formatted="false">接%s/選%s</string>
     <string name="kca_toast_tpvalue" formatted="false">輸送: S%d/A%d</string>
 
     <string name="kca_toast_restart_at_kcanotify">請以Kcanotify重啟遊戲</string>
@@ -255,6 +256,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="air_denial">制空劣勢</string>
     <string name="air_incapability">制空權喪失</string>
 
+    <string name="air_supermacy_abbr">確保</string>
+    <string name="air_superiority_abbr">優勢</string>
+
     <string name="enemy_fleet_name">敵方艦隊</string>
     <string name="enemy_main_fleet_name">敵方主力艦隊</string>
     <string name="enemy_combined_fleet_name">敵方護衛艦隊</string>
@@ -305,7 +309,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="getship_label">掉落</string>
     <string name="getship_none">(無)</string>
     <string name="getship_max">(船位已滿)</string>
-    <string name="kca_view_tpvalue" formatted="false" >運輸：%d~%d</string>
+    <string name="kca_view_tpvalue" formatted="false" >運輸: %d~%d</string>
     <string name="ship_name_class">船型</string>
 
     <string name="kca_view_condition_1" formatted="false">士氣 #1: %s</string>

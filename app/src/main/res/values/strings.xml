@@ -297,6 +297,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="air_denial">AD</string>
     <string name="air_incapability">AI</string>
 
+    <string name="air_supermacy_abbr">AS+</string>
+    <string name="air_superiority_abbr">AS</string>
+
     <string name="enemy_fleet_name">Enemy Fleet</string>
     <string name="enemy_main_fleet_name">Enemy Main Fleet</string>
     <string name="enemy_combined_fleet_name">Enemy Support Fleet</string>
@@ -498,6 +501,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_expview" formatted="false">[Now] %.2f / [Today] %.2f</string>
     <string name="fleetview_seekvalue_d" formatted="false">LoS: %d</string>
     <string name="fleetview_seekvalue_f" formatted="false">LoS: %.2f</string>
+    <string name="fleetview_contactvalue" formatted="false">T%s/S%s</string>
     <string name="fleetview_condmark" translatable="false">●</string>
     <string name="viewmenu_battle">Battle</string>
     <string name="viewmenu_excheck">Exped.</string>

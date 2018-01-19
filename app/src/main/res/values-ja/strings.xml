@@ -234,6 +234,9 @@
     <string name="air_denial">航空劣勢</string>
     <string name="air_incapability">制空権喪失</string>
 
+    <string name="air_supermacy_abbr">確保</string>
+    <string name="air_superiority_abbr">優勢</string>
+
     <string name="enemy_fleet_name">敵艦隊</string>
     <string name="enemy_main_fleet_name">敵本艦隊</string>
     <string name="enemy_combined_fleet_name">敵護衛艦隊</string>
@@ -434,6 +437,7 @@
     <string name="fleetview_expview" formatted="false">[今回] %.2f / [今日] %.2f</string>
     <string name="fleetview_seekvalue_d" formatted="false">索敵：%d</string>
     <string name="fleetview_seekvalue_f" formatted="false">索敵：%.2f</string>
+    <string name="fleetview_contactvalue" formatted="false">接%s/選%s</string>
     <string name="viewmenu_battle">戦闘</string>
     <string name="viewmenu_quest">任務</string>
     <string name="viewmenu_akashi">改修</string>

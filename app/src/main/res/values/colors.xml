@@ -116,6 +116,7 @@
     <color name="colorFleetInfoExpeditionBtn">#5c6bc0</color>
 
     <color name="colorFleetSwitchBtn">#9e9d24</color>
+    <color name="colorFleetAirStatBtn">#303f9f</color>
     <color name="colorFleetSeekCnBtn">#673ab7</color>
     <color name="colorFleetAkashiTimerBtnActive">#ff4081</color>
     <color name="colorFleetAkashiTimerBtnDeactive">#424242</color>

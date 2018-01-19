@@ -145,6 +145,30 @@
             android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/fleetview_akashi_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_toLeftOf="@+id/fleetview_fleetswitch"
+                android:layout_toStartOf="@+id/fleetview_fleetswitch"
+                android:alpha="0.9"
+                android:background="@color/colorFleetAkashiTimerBtnActive"
+                android:ellipsize="marquee"
+                android:maxLines="1"
+                android:paddingBottom="1dp"
+                android:paddingEnd="4dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingStart="4dp"
+                android:paddingTop="1dp"
+                android:singleLine="true"
+                android:text="00:15:23"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+
             <ImageView
                 android:id="@+id/imageView5"
                 android:layout_width="fill_parent"
@@ -287,81 +311,87 @@
                             android:singleLine="false"
                             android:text=""
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="12dp" />
 
                     </LinearLayout>
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="2dp"
-                        android:layout_marginRight="2dp"
                         android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/fleetview_fleetswitch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginStart="2dp"
-                            android:layout_toLeftOf="@+id/fleetview_cn_change"
-                            android:layout_toStartOf="@+id/fleetview_cn_change"
-                            android:background="@color/colorFleetSwitchBtn"
-                            android:ellipsize="marquee"
-                            android:maxLines="1"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingTop="2dp"
-                            android:singleLine="true"
-                            android:text="@string/fleetview_switch_1"
-                            android:textColor="@color/white"
-                            android:textSize="14dp" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="2dp"
+                            android:layout_marginRight="2dp"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/fleetview_akashi_timer"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginStart="2dp"
-                            android:layout_toLeftOf="@+id/fleetview_fleetswitch"
-                            android:layout_toStartOf="@+id/fleetview_fleetswitch"
-                            android:background="@color/colorFleetAkashiTimerBtnActive"
-                            android:ellipsize="marquee"
-                            android:maxLines="1"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingTop="2dp"
-                            android:singleLine="true"
-                            android:text="00:15:23"
-                            android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            <TextView
+                                android:id="@+id/fleetview_fleetswitch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginStart="2dp"
+                                android:layout_toLeftOf="@+id/fleetview_as_change"
+                                android:layout_toStartOf="@+id/fleetview_as_change"
+                                android:background="@color/colorFleetSwitchBtn"
+                                android:ellipsize="marquee"
+                                android:maxLines="1"
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="2dp"
+                                android:singleLine="true"
+                                android:text="@string/fleetview_switch_1"
+                                android:textColor="@color/white"
+                                android:textSize="12dp" />
 
-                        <TextView
-                            android:id="@+id/fleetview_cn_change"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginStart="2dp"
-                            android:background="@color/colorFleetSeekCnBtn"
-                            android:ellipsize="marquee"
-                            android:maxLines="1"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingTop="2dp"
-                            android:singleLine="true"
-                            android:text="@string/seek_type_1"
-                            android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            <TextView
+                                android:id="@+id/fleetview_as_change"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginStart="2dp"
+                                android:layout_toStartOf="@+id/fleetview_cn_change"
+                                android:background="@color/colorFleetAirStatBtn"
+                                android:ellipsize="marquee"
+                                android:maxLines="1"
+                                android:paddingBottom="2dp"
+                                android:paddingEnd="6dp"
+                                android:paddingLeft="6dp"
+                                android:paddingRight="6dp"
+                                android:paddingStart="6dp"
+                                android:paddingTop="2dp"
+                                android:singleLine="true"
+                                android:text="@string/air_supermacy_abbr"
+                                android:textColor="@color/white"
+                                android:textSize="12dp" />
 
-                    </RelativeLayout>
+                            <TextView
+                                android:id="@+id/fleetview_cn_change"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginStart="2dp"
+                                android:background="@color/colorFleetSeekCnBtn"
+                                android:ellipsize="marquee"
+                                android:maxLines="1"
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="2dp"
+                                android:singleLine="true"
+                                android:text="@string/seek_type_1"
+                                android:textColor="@color/white"
+                                android:textSize="12dp" />
+
+                        </RelativeLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -1846,7 +1876,7 @@
                         android:paddingTop="8dp"
                         android:text="@string/viewmenu_quest"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/viewbutton_excheck"
@@ -1862,7 +1892,7 @@
                         android:paddingTop="8dp"
                         android:text="@string/viewmenu_excheck"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/viewbutton_develop"
@@ -1878,7 +1908,7 @@
                         android:paddingTop="8dp"
                         android:text="@string/viewmenu_develop"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/viewbutton_construction"
@@ -1895,7 +1925,7 @@
                         android:scrollIndicators="right"
                         android:text="@string/viewmenu_construction"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/viewbutton_maphp"
@@ -1911,7 +1941,7 @@
                         android:paddingTop="8dp"
                         android:text="@string/viewmenu_maphp"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/viewbutton_fchk"
@@ -1928,7 +1958,7 @@
                         android:scrollIndicators="right"
                         android:text="@string/viewmenu_fchk"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/viewbutton_labinfo"
@@ -1945,7 +1975,7 @@
                         android:scrollIndicators="right"
                         android:text="@string/viewmenu_airbase"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/viewbutton_akashi"
@@ -1961,7 +1991,7 @@
                         android:paddingTop="8dp"
                         android:text="@string/viewmenu_akashi"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>

@@ -255,6 +255,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="air_denial">制空劣势</string>
     <string name="air_incapability">制空权丧失</string>
 
+    <string name="air_supermacy_abbr">确保</string>
+    <string name="air_superiority_abbr">优势</string>
+
     <string name="enemy_fleet_name">敌方舰队</string>
     <string name="enemy_main_fleet_name">敌方主力舰队</string>
     <string name="enemy_combined_fleet_name">敌方护卫舰队</string>
@@ -440,6 +443,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_expview" formatted="false">［现在］%.2f・［今天］%.2f</string>
     <string name="fleetview_seekvalue_d" formatted="false">索敌: %d</string>
     <string name="fleetview_seekvalue_f" formatted="false">索敌: %.2f</string>
+    <string name="fleetview_contactvalue" formatted="false">接%s/选%s</string>
     <string name="viewmenu_battle">战斗</string>
     <string name="viewmenu_quest">任务</string>
     <string name="viewmenu_excheck">远征</string>

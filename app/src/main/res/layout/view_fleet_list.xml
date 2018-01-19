@@ -249,6 +249,113 @@
             android:src="@android:drawable/divider_horizontal_bright" />
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="2dp"
+            android:layout_marginRight="2dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fleetview_infoline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorQuestTrackProgress"
+                android:ellipsize="marquee"
+                android:maxLines="1"
+                android:paddingBottom="3dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="3dp"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/fleetview_fleetswitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
+                android:layout_toLeftOf="@+id/fleetview_cn_change"
+                android:layout_toStartOf="@+id/fleetview_cn_change"
+                android:layout_weight="1"
+                android:background="@color/colorFleetSwitchBtn"
+                android:ellipsize="marquee"
+                android:maxLines="1"
+                android:paddingBottom="2dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:singleLine="true"
+                android:text="@string/fleetview_switch_1"
+                android:textColor="@color/white"
+                android:textSize="14dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/fleetview_as_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@color/colorFleetAirStatBtn"
+                android:ellipsize="marquee"
+                android:maxLines="1"
+                android:paddingBottom="3dp"
+                android:paddingEnd="6dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingStart="6dp"
+                android:paddingTop="3dp"
+                android:singleLine="true"
+                android:text="@string/air_supermacy_abbr"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/fleetview_akashi_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@color/colorFleetAkashiTimerBtnActive"
+                android:ellipsize="marquee"
+                android:maxLines="1"
+                android:paddingBottom="3dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="3dp"
+                android:singleLine="true"
+                android:text="00:15:23"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/fleetview_cn_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@color/colorFleetSeekCnBtn"
+                android:ellipsize="marquee"
+                android:maxLines="1"
+                android:paddingBottom="3dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="3dp"
+                android:singleLine="true"
+                android:text="@string/seek_type_1"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1.0"
@@ -263,90 +370,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="2dp"
-                        android:layout_marginRight="2dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/fleetview_infoline"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@color/colorQuestTrackProgress"
-                            android:ellipsize="marquee"
-                            android:maxLines="1"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingTop="2dp"
-                            android:singleLine="true"
-                            android:text=""
-                            android:textColor="@color/white"
-                            android:textSize="14dp" />
-
-                        <TextView
-                            android:id="@+id/fleetview_fleetswitch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginStart="2dp"
-                            android:layout_toLeftOf="@+id/fleetview_cn_change"
-                            android:layout_toStartOf="@+id/fleetview_cn_change"
-                            android:layout_weight="1"
-                            android:background="@color/colorFleetSwitchBtn"
-                            android:ellipsize="marquee"
-                            android:maxLines="1"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingTop="2dp"
-                            android:singleLine="true"
-                            android:text="@string/fleetview_switch_1"
-                            android:textColor="@color/white"
-                            android:textSize="14dp"
-                            android:visibility="gone" />
-
-                        <TextView
-                            android:id="@+id/fleetview_akashi_timer"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginStart="5dp"
-                            android:background="@color/colorFleetAkashiTimerBtnActive"
-                            android:ellipsize="marquee"
-                            android:maxLines="1"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingTop="2dp"
-                            android:singleLine="true"
-                            android:text="00:15:23"
-                            android:textColor="@color/white"
-                            android:textSize="14dp" />
-
-                        <TextView
-                            android:id="@+id/fleetview_cn_change"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginStart="5dp"
-                            android:background="@color/colorFleetSeekCnBtn"
-                            android:ellipsize="marquee"
-                            android:maxLines="1"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingTop="2dp"
-                            android:singleLine="true"
-                            android:text="@string/seek_type_1"
-                            android:textColor="@color/white"
-                            android:textSize="14dp" />
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="fill_parent"

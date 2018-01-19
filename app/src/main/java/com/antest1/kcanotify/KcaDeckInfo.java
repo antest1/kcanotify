@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.content.Context;
+import android.support.annotation.IntegerRes;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -10,10 +11,19 @@ import com.google.gson.JsonPrimitive;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.*;
+import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.LAB_STATUS_DEFENSE;
 import static com.antest1.kcanotify.KcaConstants.LAB_STATUS_SORTIE;
@@ -314,6 +324,87 @@ public class KcaDeckInfo {
         return airPowerValue;
     }
 
+    public JsonObject getContactProb(JsonArray deckPortData, String deckid_list, JsonObject exclude_flag) {
+        JsonObject return_data = new JsonObject();
+        JsonArray stage1_prob = new JsonArray();
+        JsonArray stage2_prob = new JsonArray();
+
+        SortedMap<Integer, Double> stage2_prob_data = new TreeMap<>();
+
+        boolean excludeflagexist = (exclude_flag != null);
+        String[] decklist = deckid_list.split(",");
+
+        double stage1_prob_sum[] = {0.0, 0.0};
+        double stage2_prob_sum[] = {0.0, 0.0};
+
+        for (int n = 0; n < decklist.length; n++) {
+            int deckid = Integer.parseInt(decklist[n]);
+            JsonArray excludeflagdata = null;
+            if (excludeflagexist) {
+                if (deckid == 0) excludeflagdata = exclude_flag.getAsJsonArray("escape");
+                if (deckid == 1) excludeflagdata = exclude_flag.getAsJsonArray("escapecb");
+            }
+            JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().get("api_ship").getAsJsonArray();
+            for (int i = 0; i < deckShipIdList.size(); i++) {
+                if (excludeflagdata != null && excludeflagdata.contains(new JsonPrimitive(i + 1)))
+                    continue;
+
+                int shipId = deckShipIdList.get(i).getAsInt();
+                if (shipId != -1) {
+                    JsonObject shipData = getUserShipDataById(shipId, "ship_id,lv,slot,onslot");
+                    int shipKcId = shipData.get("ship_id").getAsInt();
+                    int shipLv = shipData.get("lv").getAsInt();
+                    JsonArray shipItem = (JsonArray) shipData.get("slot");
+                    JsonArray shipSlotCount = (JsonArray) shipData.get("onslot");
+                    for (int j = 0; j < shipItem.size(); j++) {
+                        int item_id = shipItem.get(j).getAsInt();
+                        int slot = shipSlotCount.get(j).getAsInt();
+                        if (item_id != -1) {
+                            JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "id,name,type,saku,houm");
+                            if (itemData == null) continue;
+                            String itemName = itemData.get("name").getAsString();
+                            int itemLevel = itemData.get("level").getAsInt();
+                            int itemMastery = 0;
+                            if (itemData.has("alv")) itemMastery = itemData.get("alv").getAsInt();
+                            int itemAcc = itemData.get("houm").getAsInt();
+                            int itemSeek = itemData.get("saku").getAsInt();
+                            int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                            if (itemType == T2_SEA_SCOUT || itemType == T2_SCOUT || itemType == T2_SCOUT_II || itemType == T2_FLYING_BOAT) {
+                                stage1_prob_sum[0] += Math.sqrt(slot) * itemSeek * 4.0 / 100;
+                                stage1_prob_sum[1] += Math.sqrt(slot) * itemSeek * 2.4 / 100; // 0.6 * 4.0 / 100
+                                Integer key = (10 - itemAcc) * 1000 + n * 100 + i * 10 + j;
+                                stage2_prob_data.put(key, (double) itemSeek);
+                            } else if (itemType == T2_TORPEDO_BOMBER) {
+                                stage1_prob_sum[0] += 0.00001;
+                                Integer key = (10 - itemAcc) * 1000 + n * 100 + i * 10 + j;
+                                stage2_prob_data.put(key, (double) itemSeek);
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+        double[] remain_percentage = {1.0, 1.0};
+        for (Double item: stage2_prob_data.values()) {
+            stage2_prob_sum[0] += remain_percentage[0] * item * 0.07; // AS++
+            remain_percentage[0] = 1.0 - stage2_prob_sum[0];
+            stage2_prob_sum[1] += remain_percentage[1] * item * 0.06; // AS
+            remain_percentage[1] = 1.0 - stage2_prob_sum[1];
+        }
+
+        stage1_prob.add(stage1_prob_sum[0]);
+        stage1_prob.add(stage1_prob_sum[1]);
+
+        stage2_prob.add(Math.min(stage1_prob_sum[0], 1.0) * stage2_prob_sum[0]);
+        stage2_prob.add(Math.min(stage1_prob_sum[1], 1.0) * stage2_prob_sum[1]);
+
+        return_data.add("stage1", stage1_prob);
+        return_data.add("stage2", stage2_prob);
+        return return_data;
+    }
+
     public int getSpeedFlagValue(boolean s, boolean f, boolean fp, boolean sf) {
         int value = 0;
         if (s) value += SPEEDFLAG_SLOW;
@@ -331,7 +422,6 @@ public class KcaDeckInfo {
 
         boolean excludeflagexist = (exclude_flag != null);
         String[] decklist = deckid_list.split(",");
-
 
         for (int n = 0; n < decklist.length; n++) {
             int deckid = Integer.parseInt(decklist[n]);

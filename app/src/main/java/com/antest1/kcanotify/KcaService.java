@@ -971,10 +971,19 @@ public class KcaService extends Service {
 
                             JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
                             boolean is_init_state = KcaAkashiRepairInfo.getAkashiTimerValue() < 0;
-                            if ((is_init_state && akashi_flagship_deck.size() > 0) || (!is_init_state && KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond() >= AKASHI_TIMER_20MIN)) {
-                                KcaAkashiRepairInfo.setAkashiTimer();
-                                processAkashiTimerInfo();
-                                isAkashiTimerNotiWait = true;
+                            boolean over_20min = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond() >= AKASHI_TIMER_20MIN;
+                            if (akashi_flagship_deck.size() > 0) {
+                                if (is_init_state || over_20min) {
+                                    KcaAkashiRepairInfo.setAkashiTimer();
+                                    processAkashiTimerInfo();
+                                    isAkashiTimerNotiWait = true;
+                                }
+                            } else {
+                                if (!is_init_state && over_20min) {
+                                    KcaAkashiRepairInfo.initAkashiTimer();
+                                    processAkashiTimerInfo();
+                                    isAkashiTimerNotiWait = false;
+                                }
                             }
                             KcaAkashiRepairInfo.setAkashiExist(akashi_flagship_deck.size() > 0);
                             updateFleetView();

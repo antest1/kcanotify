@@ -238,6 +238,9 @@
     <string name="air_denial">제공열세</string>
     <string name="air_incapability">제공권상실</string>
 
+    <string name="air_supermacy_abbr">확보</string>
+    <string name="air_superiority_abbr">우세</string>
+
     <string name="enemy_fleet_name">적 함대</string>
     <string name="enemy_main_fleet_name">적 본함대</string>
     <string name="enemy_combined_fleet_name">적 호위함대</string>
@@ -434,6 +437,7 @@
     <string name="fleetview_expview" formatted="false">[이번] %.2f / [오늘] %.2f</string>
     <string name="fleetview_seekvalue_d" formatted="false">색적: %d</string>
     <string name="fleetview_seekvalue_f" formatted="false">색적: %.2f</string>
+    <string name="fleetview_contactvalue" formatted="false">T%s/S%s</string>
     <string name="viewmenu_battle">전투</string>
     <string name="viewmenu_quest">임무</string>
     <string name="viewmenu_excheck">원정</string>
