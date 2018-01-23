@@ -452,7 +452,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_construction">建造</string>
     <string name="viewmenu_airbase">基航</string>
     <string name="viewmenu_maphp">海域</string>
-    <string name="viewmenu_fchk">狀態</string>
+    <string name="viewmenu_fchk">詳細</string>
     <string name="viewmenu_develop_title">開發信息</string>
     <string name="viewmenu_construction_title">建造信息</string>
     <string name="viewmenu_airbase_title">基地航空隊</string>
@@ -493,4 +493,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="errlog_cpy_to_clipboard">已複製文本到剪貼板</string>
     <string name="expedition_type_value_0">剩下時間</string>
     <string name="expedition_type_value_1">結束時間</string>
+    <string name="fleetcheckview_title">艦隊詳細</string>
+    <string name="fleetcheckview_btn_seeklos">索敵/輸送</string>
+    <string name="fleetcheckview_content_seeklos" formatted="false">Fleet Total LoS: %d\nFormula 33: %.2f (2&#45;5, 33+)\nF33/Cn=3: %.2f (6&#45;2, 6&#45;3)\nF33/Cn=4: %.2f (3&#45;5, 6&#45;1)\n───────────────\nTP Gauge:\n%d(S) /%d(A)</string>
+    <string name="fleetcheckview_btn_airbattle">航空戰</string>
+    <string name="fleetcheckview_content_airbattle" formatted="false">Total Airstrike Power: %d ~ %d\n───────────────\nContact Success Chance\n[AS+] Trigger Chance: %.1f%%, Selection Chance: %.1f%%\n[AS] Trigger Chance: %.1f%%, Selection Chance: %.1f%%\n</string>
+    <string name="fleetcheckview_btn_fuelbull">燃弾</string>
 </resources>

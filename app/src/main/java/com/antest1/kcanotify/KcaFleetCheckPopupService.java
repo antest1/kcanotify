@@ -24,17 +24,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static android.R.attr.id;
 import static com.antest1.kcanotify.KcaApiData.checkUserShipDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.getCurrentNodeAlphabet;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_APIMAPINFO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
+import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
 import static com.antest1.kcanotify.KcaMapHpPopupService.MAPHP_RESET_ACTION;
 import static com.antest1.kcanotify.KcaMapHpPopupService.MAPHP_SHOW_ACTION;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -44,6 +47,18 @@ import static com.antest1.kcanotify.KcaUtils.joinStr;
 public class KcaFleetCheckPopupService extends Service {
     public static final String FCHK_SHOW_ACTION = "fchk_show_action";
     public static final String FCHK_RESET_ACTION = "fchk_reset_action";
+
+    private static final int FCHK_FUNC_SEEKTP = 0;
+    private static final int FCHK_FUNC_AIRBATTLE = 1;
+    private static final int FCHK_FUNC_FUELBULL = 2;
+
+    private static final int[] FCHK_FLEET_LIST = {
+        R.id.fleet_1, R.id.fleet_2, R.id.fleet_3, R.id.fleet_4, R.id.fleet_5
+    };
+
+    private static final int[] FCHK_BTN_LIST = {
+        R.id.fchk_btn_seektp, R.id.fchk_btn_airbattle, R.id.fchk_btn_fuelbull
+    };
 
     private View mView;
     private WindowManager mManager;
@@ -59,40 +74,16 @@ public class KcaFleetCheckPopupService extends Service {
 
     public static int type;
     public static boolean active = false;
-    public static int recent_no = 1;
+    public static int recent_no = 0;
+    public static int current_func = FCHK_FUNC_SEEKTP;
     public static int deck_cnt = 1;
-    public static List<Integer> no_list;
+
     public static boolean isActive() {
         return active;
     }
 
     public String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-    }
-
-    public String getFleetName() {
-        if (recent_no == 5) return getStringWithLocale(R.string.fleetview_combined);
-        else return KcaUtils.format("#%d", recent_no);
-    }
-
-    public void increaseNo() {
-        int current_idx = no_list.indexOf(recent_no);
-        if (current_idx + 1 >= no_list.size()) {
-            recent_no = no_list.get(0);
-        } else {
-            recent_no = no_list.get(current_idx + 1);
-        }
-        setText();
-    }
-
-    public void decreaseNo() {
-        int current_idx = no_list.indexOf(recent_no);
-        if (current_idx - 1 < 0) {
-            recent_no = no_list.get(no_list.size() - 1);
-        } else {
-            recent_no = no_list.get(current_idx - 1);
-        }
-        setText();
     }
 
     @Nullable
@@ -118,8 +109,12 @@ public class KcaFleetCheckPopupService extends Service {
             mView = mInflater.inflate(R.layout.view_fleet_check, null);
             mView.setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.view_fchk_head).setOnTouchListener(mViewTouchListener);
-            mView.findViewById(R.id.fchk_prev).setOnTouchListener(mViewTouchListener);
-            mView.findViewById(R.id.fchk_next).setOnTouchListener(mViewTouchListener);
+            for (int fchk_id: FCHK_BTN_LIST) {
+                mView.findViewById(fchk_id).setOnTouchListener(mViewTouchListener);
+            }
+            for (int fleet_id: FCHK_FLEET_LIST) {
+                mView.findViewById(fleet_id).setOnTouchListener(mViewTouchListener);
+            }
 
             mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             popupWidth = mView.getMeasuredWidth();
@@ -142,8 +137,8 @@ public class KcaFleetCheckPopupService extends Service {
             screenHeight = size.y;
             Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
 
-            mParams.x = 0;
-            mParams.y = 0;
+            mParams.x = (screenWidth - popupWidth) / 2;
+            mParams.y = (screenHeight - popupHeight) / 2;
             mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             mManager.addView(mView, mParams);
         }
@@ -159,13 +154,18 @@ public class KcaFleetCheckPopupService extends Service {
         } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(FCHK_SHOW_ACTION)) {
                 portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-                no_list = new ArrayList<>();
                 deck_cnt = portdeckdata.size();
-                for (int i = 1 ; i <= deck_cnt; i++) {
-                    no_list.add(i);
-                }
-                if (deck_cnt > 1) no_list.add(5);
+                setFchkFleetBtnColor(recent_no, deck_cnt);
+                setFchkFuncBtnColor(current_func);
                 setText();
+
+                mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                popupWidth = mView.getMeasuredWidth();
+                popupHeight = mView.getMeasuredHeight();
+
+                mParams.x = (screenWidth - popupWidth) / 2;
+                mParams.y = (screenHeight - popupHeight) / 2;
+                mManager.updateViewLayout(mView, mParams);
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -184,33 +184,47 @@ public class KcaFleetCheckPopupService extends Service {
 
     private void setText() {
         if (fchk_info != null) {
-            int target = recent_no - 1;
-            String target_str = String.valueOf(target);
-            if (recent_no == 5) {
+            int target = recent_no;
+            String target_str;
+            if (recent_no == 4) {
                 target = 0;
                 target_str = "0,1";
+            } else {
+                target_str = String.valueOf(target);
             }
 
-            ((TextView) mView.findViewById(R.id.view_fchk_title)).setText(getFleetName());
             if (KcaApiData.isGameDataLoaded() && KcaApiData.checkUserShipDataLoaded() && portdeckdata != null) {
                 int cn = getSeekCn();
                 String seekType = getSeekType();
 
-                int[] airPowerRange = deckInfoCalc.getAirPowerRange(portdeckdata, target, KcaBattle.getEscapeFlag());
-                String airPowerValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_airpower), airPowerRange[0], airPowerRange[1]);
-                String seekValue = KcaUtils.format(getStringWithLocale(R.string.kca_toast_seekvalue_f), seekType, deckInfoCalc.getSeekValue(portdeckdata, target_str, cn, KcaBattle.getEscapeFlag()));
-                int[] tp = deckInfoCalc.getTPValue(portdeckdata, target_str, KcaBattle.getEscapeFlag());
-                String tpValue = KcaUtils.format(getStringWithLocale(R.string.kca_view_tpvalue), tp[1], tp[0]);
-                List<String> toastList = new ArrayList<String>();
-                if (airPowerRange[1] > 0) {
-                    toastList.add(airPowerValue);
-                }
-                toastList.add(seekValue);
-                if (tp[0] > 0) {
-                    toastList.add(tpValue);
-                }
+                switch (current_func) {
+                    case FCHK_FUNC_SEEKTP:
+                        int seekValue_0 = (int) deckInfoCalc.getSeekValue(portdeckdata, target_str, SEEK_PURE, KcaBattle.getEscapeFlag());
+                        double seekValue_1 = deckInfoCalc.getSeekValue(portdeckdata, target_str, 1, KcaBattle.getEscapeFlag());
+                        double seekValue_3 = deckInfoCalc.getSeekValue(portdeckdata, target_str, 3, KcaBattle.getEscapeFlag());
+                        double seekValue_4 = deckInfoCalc.getSeekValue(portdeckdata, target_str, 4, KcaBattle.getEscapeFlag());
 
-                fchk_info.setText(joinStr(toastList, " / "));
+                        int[] tp = deckInfoCalc.getTPValue(portdeckdata, target_str, KcaBattle.getEscapeFlag());
+                        fchk_info.setText(KcaUtils.format(getStringWithLocale(R.string.fleetcheckview_content_seeklos),
+                                seekValue_0, seekValue_1, seekValue_3, seekValue_4, tp[0], tp[1]));
+                        break;
+                    case FCHK_FUNC_AIRBATTLE:
+                        int[] airPowerRange = deckInfoCalc.getAirPowerRange(portdeckdata, target, KcaBattle.getEscapeFlag());
+                        JsonObject contact = deckInfoCalc.getContactProb(portdeckdata, target_str, KcaBattle.getEscapeFlag());
+                        double start_rate_1 = contact.getAsJsonArray("stage1").get(0).getAsDouble() * 100;
+                        double select_rate_1 = contact.getAsJsonArray("stage2").get(0).getAsDouble() * 100;
+                        double start_rate_2 = contact.getAsJsonArray("stage1").get(1).getAsDouble() * 100;
+                        double select_rate_2 = contact.getAsJsonArray("stage2").get(1).getAsDouble() * 100;
+                        fchk_info.setText(KcaUtils.format(getStringWithLocale(R.string.fleetcheckview_content_airbattle),
+                                airPowerRange[0], airPowerRange[1], start_rate_1, select_rate_1, start_rate_2, select_rate_2));
+                        break;
+                    case FCHK_FUNC_FUELBULL:
+                        fchk_info.setText("fuel_bull");
+                        break;
+                    default:
+                        fchk_info.setText("");
+                        break;
+                }
             } else {
                 fchk_info.setText("data not loaded");
             }
@@ -268,8 +282,20 @@ public class KcaFleetCheckPopupService extends Service {
                     long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                     if (clickDuration < MAX_CLICK_DURATION) {
                         if (id == R.id.view_fchk_head) stopPopup();
-                        else if (id == R.id.fchk_prev) decreaseNo();
-                        else if (id == R.id.fchk_next) increaseNo();
+                        for (int i = 0; i < FCHK_FLEET_LIST.length; i++) {
+                            if ((id == FCHK_FLEET_LIST[i]) && (i < deck_cnt || i == 4)) {
+                                recent_no = i;
+                                setFchkFleetBtnColor(recent_no, deck_cnt);
+                                setText();
+                            }
+                        }
+                        for (int i = 0; i < FCHK_BTN_LIST.length; i++) {
+                            if (id == FCHK_BTN_LIST[i]) {
+                                current_func = i;
+                                setFchkFuncBtnColor(current_func);
+                                setText();
+                            }
+                        }
                     }
 
                     int[] locations = new int[2];
@@ -298,6 +324,35 @@ public class KcaFleetCheckPopupService extends Service {
             return true;
         }
     };
+
+    private void setFchkFleetBtnColor(int n, int size) {
+        for (int i = 0; i < FCHK_FLEET_LIST.length; i++) {
+            int fleet_id = FCHK_FLEET_LIST[i];
+            if (size < 4 && i >= size) {
+                mView.findViewById(fleet_id).setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+                ((TextView) mView.findViewById(fleet_id)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            } else if (i == n) {
+                mView.findViewById(fleet_id).setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                ((TextView) mView.findViewById(fleet_id)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
+            } else {
+                mView.findViewById(fleet_id).setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+                ((TextView) mView.findViewById(fleet_id)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            }
+        }
+    }
+
+    private void setFchkFuncBtnColor(int n) {
+        for (int i = 0; i < FCHK_BTN_LIST.length; i++) {
+            int fchk_id = FCHK_BTN_LIST[i];
+            if (i == n) {
+                mView.findViewById(fchk_id).setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                ((TextView) mView.findViewById(fchk_id)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
+            } else {
+                mView.findViewById(fchk_id).setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+                ((TextView) mView.findViewById(fchk_id)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            }
+        }
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

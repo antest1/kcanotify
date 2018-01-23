@@ -334,8 +334,8 @@
                                 android:layout_alignParentTop="true"
                                 android:layout_marginLeft="2dp"
                                 android:layout_marginStart="2dp"
-                                android:layout_toLeftOf="@+id/fleetview_as_change"
-                                android:layout_toStartOf="@+id/fleetview_as_change"
+                                android:layout_toLeftOf="@+id/fleetview_cn_change"
+                                android:layout_toStartOf="@+id/fleetview_cn_change"
                                 android:background="@color/colorFleetSwitchBtn"
                                 android:ellipsize="marquee"
                                 android:maxLines="1"
@@ -345,27 +345,6 @@
                                 android:paddingTop="2dp"
                                 android:singleLine="true"
                                 android:text="@string/fleetview_switch_1"
-                                android:textColor="@color/white"
-                                android:textSize="12dp" />
-
-                            <TextView
-                                android:id="@+id/fleetview_as_change"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="2dp"
-                                android:layout_marginStart="2dp"
-                                android:layout_toStartOf="@+id/fleetview_cn_change"
-                                android:background="@color/colorFleetAirStatBtn"
-                                android:ellipsize="marquee"
-                                android:maxLines="1"
-                                android:paddingBottom="2dp"
-                                android:paddingEnd="6dp"
-                                android:paddingLeft="6dp"
-                                android:paddingRight="6dp"
-                                android:paddingStart="6dp"
-                                android:paddingTop="2dp"
-                                android:singleLine="true"
-                                android:text="@string/air_supermacy_abbr"
                                 android:textColor="@color/white"
                                 android:textSize="12dp" />
 

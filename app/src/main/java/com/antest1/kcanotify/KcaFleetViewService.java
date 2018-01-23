@@ -85,11 +85,10 @@ public class KcaFleetViewService extends Service {
     static boolean error_flag = false;
     boolean active;
     private View mView, itemView, fleetHqInfoView;
-    private TextView fleetInfoTitle, fleetInfoLine, fleetCnChangeBtn, fleetAsChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn;
+    private TextView fleetInfoTitle, fleetInfoLine, fleetCnChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn;
     private WindowManager mManager;
     private static boolean isReady;
     private static int hqinfoState = 0;
-    private static boolean isasp = true;
 
     int displayWidth = 0;
 
@@ -270,7 +269,6 @@ public class KcaFleetViewService extends Service {
         mView = mInflater.inflate(R.layout.view_fleet_list, null);
         mView.setVisibility(GONE);
         mView.findViewById(R.id.fleetview_head).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.fleetview_as_change).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_cn_change).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_fleetswitch).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_hqinfo).setOnTouchListener(mViewTouchListener);
@@ -315,11 +313,9 @@ public class KcaFleetViewService extends Service {
         fleetInfoTitle = mView.findViewById(R.id.fleetview_title);
         fleetHqInfoView = mView.findViewById(R.id.fleetview_hqinfo);
         fleetCnChangeBtn = mView.findViewById(R.id.fleetview_cn_change);
-        fleetAsChangeBtn = mView.findViewById(R.id.fleetview_as_change);
         fleetAkashiTimerBtn = mView.findViewById(R.id.fleetview_akashi_timer);
         fleetSwitchBtn = mView.findViewById(R.id.fleetview_fleetswitch);
         fleetSwitchBtn.setVisibility(View.GONE);
-        fleetAsChangeBtn.setVisibility(View.GONE);
     }
 
     @Override
@@ -443,10 +439,6 @@ public class KcaFleetViewService extends Service {
                             changeInternalSeekCn();
                             fleetCnChangeBtn.setText(getSeekType());
                             processDeckInfo(selected, isCombinedFlag(selected));
-                        } else if (id == mView.findViewById(R.id.fleetview_as_change).getId()) {
-                            changeAsStatus();
-                            processDeckInfo(selected, isCombinedFlag(selected));
-                            setContactBtn(selected, isCombinedFlag(selected));
                         } else if (id == mView.findViewById(R.id.fleetview_fleetswitch).getId()) {
                             if (switch_status == 1) {
                                 switch_status = 2;
@@ -589,7 +581,6 @@ public class KcaFleetViewService extends Service {
             seekStringValue = KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_f), seekValue);
         }
         infoList.add(seekStringValue);
-        setContactBtn(idx, isCombined);
 
         String speedStringValue = "";
         if (isCombined) {
@@ -991,36 +982,6 @@ public class KcaFleetViewService extends Service {
                 break;
         }
         return seekType;
-    }
-
-    private void changeAsStatus() {
-        isasp = !isasp;
-    }
-
-    private void setContactBtn(int idx, boolean isCombined) {
-        JsonObject contact;
-        JsonArray deckportdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-        if (isCombined) {
-            contact = deckInfoCalc.getContactProb(deckportdata, "0,1", KcaBattle.getEscapeFlag());
-        } else {
-            contact = deckInfoCalc.getContactProb(deckportdata, String.valueOf(idx), null);
-        }
-
-        int a_idx = isasp ? 0 : 1;
-        String start_rate = KcaUtils.format("%.1f%%", contact.getAsJsonArray("stage1").get(a_idx).getAsDouble() * 100);
-        String select_rate = KcaUtils.format("%.1f%%", contact.getAsJsonArray("stage2").get(a_idx).getAsDouble() * 100);
-        String value = KcaUtils.format(getStringWithLocale(R.string.fleetview_contactvalue), start_rate, select_rate);
-        if (isasp) {
-            value = getStringWithLocale(R.string.air_supermacy_abbr).concat(" ").concat(value);
-        } else {
-            value = getStringWithLocale(R.string.air_superiority_abbr).concat(" ").concat(value);
-        }
-        if (contact.has("stage1") && contact.getAsJsonArray("stage1").get(0).getAsDouble() > 0) {
-            fleetAsChangeBtn.setText(value);
-            fleetAsChangeBtn.setVisibility(View.VISIBLE);
-        } else {
-            fleetAsChangeBtn.setVisibility(View.GONE);
-        }
     }
 
     private void changeInternalSeekCn() {

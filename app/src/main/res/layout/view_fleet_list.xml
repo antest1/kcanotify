@@ -263,14 +263,14 @@
                 android:background="@color/colorQuestTrackProgress"
                 android:ellipsize="marquee"
                 android:maxLines="1"
-                android:paddingBottom="3dp"
+                android:paddingBottom="2dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:paddingTop="3dp"
+                android:paddingTop="2dp"
                 android:singleLine="true"
                 android:text=""
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="14dp" />
 
             <TextView
                 android:id="@+id/fleetview_fleetswitch"
@@ -296,27 +296,6 @@
                 android:visibility="gone" />
 
             <TextView
-                android:id="@+id/fleetview_as_change"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:background="@color/colorFleetAirStatBtn"
-                android:ellipsize="marquee"
-                android:maxLines="1"
-                android:paddingBottom="3dp"
-                android:paddingEnd="6dp"
-                android:paddingLeft="6dp"
-                android:paddingRight="6dp"
-                android:paddingStart="6dp"
-                android:paddingTop="3dp"
-                android:singleLine="true"
-                android:text="@string/air_supermacy_abbr"
-                android:textColor="@color/white"
-                android:textSize="12dp" />
-
-            <TextView
                 android:id="@+id/fleetview_akashi_timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -326,14 +305,14 @@
                 android:background="@color/colorFleetAkashiTimerBtnActive"
                 android:ellipsize="marquee"
                 android:maxLines="1"
-                android:paddingBottom="3dp"
+                android:paddingBottom="2dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:paddingTop="3dp"
+                android:paddingTop="2dp"
                 android:singleLine="true"
                 android:text="00:15:23"
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="14dp" />
 
             <TextView
                 android:id="@+id/fleetview_cn_change"
@@ -345,14 +324,14 @@
                 android:background="@color/colorFleetSeekCnBtn"
                 android:ellipsize="marquee"
                 android:maxLines="1"
-                android:paddingBottom="3dp"
-                android:paddingLeft="6dp"
-                android:paddingRight="6dp"
-                android:paddingTop="3dp"
+                android:paddingBottom="2dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
                 android:singleLine="true"
                 android:text="@string/seek_type_1"
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="14dp" />
         </LinearLayout>
 
         <LinearLayout
