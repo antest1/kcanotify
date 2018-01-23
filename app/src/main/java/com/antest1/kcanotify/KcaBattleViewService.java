@@ -1273,7 +1273,8 @@ public class KcaBattleViewService extends Service {
     }
 
     private void setBattleViewMenu() {
-        if (menuView == null) return;
+        int idx = KcaBattle.currentFleet;
+        if (menuView == null || idx == -1) return;
 
         List<String> infoList = new ArrayList<>();
         float[] exp_score = dbHelper.getExpScore();
@@ -1283,7 +1284,6 @@ public class KcaBattleViewService extends Service {
 
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         int cn = getSeekCn();
-        int idx = KcaBattle.currentFleet;
         boolean isCombined = KcaBattle.isCombined;
         String airPowerValue = "";
         if (isCombined) {
