@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import static android.R.attr.id;
@@ -87,8 +88,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
     }
 
     public void addQuestTrack(int id) {
-        Date currentTime = Calendar.getInstance(Locale.JAPAN).getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH");
+        Date currentTime = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo")).getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH", Locale.US);
         String time = df.format(currentTime);
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -158,8 +159,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
 
     public boolean checkQuestValid(int type, int id, String time) {
         boolean valid_flag = true;
-        Date currentTime = Calendar.getInstance(Locale.JAPAN).getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH");
+        Date currentTime = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo")).getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH", Locale.US);
         String[] current_time = df.format(currentTime).split("-");
         String[] quest_time = time.split("-");
         boolean reset_passed = Integer.parseInt(current_time[3]) >= 5;
@@ -175,7 +176,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     }
                     break;
                 case 2: // Weekly
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd", Locale.US);
                     try {
                         Date date1 = dateFormat.parse(KcaUtils.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
                         Date date2 = dateFormat.parse(KcaUtils.format("%s %s %s", current_time[0], current_time[1], current_time[2]));
