@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fleetviewlayout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -1807,151 +1808,190 @@
                 </LinearLayout>
             </ScrollView>
 
-            <ScrollView
-                android:id="@+id/fleetview_menu"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="4dp"
-                android:padding="4dp">
+                android:layout_marginTop="4dp">
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
+                <ScrollView
+                    android:id="@+id/fleetview_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:paddingBottom="2dp"
+                    android:paddingEnd="4dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingStart="4dp"
+                    android:paddingTop="2dp">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/viewbutton_quest"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginBottom="8dp"
+                            android:background="@color/colorFleetInfoBtn"
+                            android:gravity="center"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="14dp"
+                            android:paddingRight="14dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/viewmenu_quest"
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/viewbutton_excheck"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginBottom="8dp"
+                            android:background="@color/colorFleetInfoBtn"
+                            android:gravity="center"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="14dp"
+                            android:paddingRight="14dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/viewmenu_excheck"
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/viewbutton_develop"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginBottom="8dp"
+                            android:background="@color/colorFleetInfoBtn"
+                            android:gravity="center"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="14dp"
+                            android:paddingRight="14dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/viewmenu_develop"
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/viewbutton_construction"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginBottom="8dp"
+                            android:background="@color/colorFleetInfoBtn"
+                            android:gravity="center"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="14dp"
+                            android:paddingRight="14dp"
+                            android:paddingTop="8dp"
+                            android:scrollIndicators="right"
+                            android:text="@string/viewmenu_construction"
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/viewbutton_maphp"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginBottom="8dp"
+                            android:background="@color/colorFleetInfoBtn"
+                            android:gravity="center"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="14dp"
+                            android:paddingRight="14dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/viewmenu_maphp"
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/viewbutton_fchk"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginBottom="8dp"
+                            android:background="@color/colorFleetInfoBtn"
+                            android:gravity="center"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="14dp"
+                            android:paddingRight="14dp"
+                            android:paddingTop="8dp"
+                            android:scrollIndicators="right"
+                            android:text="@string/viewmenu_fchk"
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/viewbutton_labinfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginBottom="8dp"
+                            android:background="@color/colorFleetInfoBtn"
+                            android:gravity="center"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="14dp"
+                            android:paddingRight="14dp"
+                            android:paddingTop="8dp"
+                            android:scrollIndicators="right"
+                            android:text="@string/viewmenu_airbase"
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/viewbutton_akashi"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginBottom="8dp"
+                            android:background="@color/colorFleetInfoBtn"
+                            android:gravity="center"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="14dp"
+                            android:paddingRight="14dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/viewmenu_akashi"
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
+                    </LinearLayout>
+                </ScrollView>
+
+                <ImageView
+                    android:id="@+id/fleetview_menu_up"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_alignParentEnd="false"
+                    android:layout_alignParentRight="false"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="false"
+                    android:alpha="0.75"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@mipmap/ic_arrow_up"
+                    app:srcCompat="@mipmap/ic_arrow_up" />
 
-                    <TextView
-                        android:id="@+id/viewbutton_quest"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8dp"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="14dp"
-                        android:paddingRight="14dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/viewmenu_quest"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
+                <ImageView
+                    android:id="@+id/fleetview_menu_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/fleetview_menu"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="false"
+                    android:alpha="0.75"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@mipmap/ic_arrow_down"
+                    app:srcCompat="@mipmap/ic_arrow_down" />
 
-                    <TextView
-                        android:id="@+id/viewbutton_excheck"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8dp"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="14dp"
-                        android:paddingRight="14dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/viewmenu_excheck"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
+            </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/viewbutton_develop"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8dp"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="14dp"
-                        android:paddingRight="14dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/viewmenu_develop"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:id="@+id/viewbutton_construction"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8dp"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="14dp"
-                        android:paddingRight="14dp"
-                        android:paddingTop="8dp"
-                        android:scrollIndicators="right"
-                        android:text="@string/viewmenu_construction"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:id="@+id/viewbutton_maphp"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8dp"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="14dp"
-                        android:paddingRight="14dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/viewmenu_maphp"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:id="@+id/viewbutton_fchk"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8dp"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="14dp"
-                        android:paddingRight="14dp"
-                        android:paddingTop="8dp"
-                        android:scrollIndicators="right"
-                        android:text="@string/viewmenu_fchk"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:id="@+id/viewbutton_labinfo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8dp"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="14dp"
-                        android:paddingRight="14dp"
-                        android:paddingTop="8dp"
-                        android:scrollIndicators="right"
-                        android:text="@string/viewmenu_airbase"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:id="@+id/viewbutton_akashi"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="8dp"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="14dp"
-                        android:paddingRight="14dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/viewmenu_akashi"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
-                </LinearLayout>
-            </ScrollView>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

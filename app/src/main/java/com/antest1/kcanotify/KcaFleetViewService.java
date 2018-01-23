@@ -21,10 +21,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -58,6 +61,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
+import static java.security.AccessController.getContext;
 import static org.apache.commons.lang3.StringUtils.split;
 
 public class KcaFleetViewService extends Service {
@@ -87,6 +91,8 @@ public class KcaFleetViewService extends Service {
     private View mView, itemView, fleetHqInfoView;
     private TextView fleetInfoTitle, fleetInfoLine, fleetCnChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn;
     private WindowManager mManager;
+    private ScrollView fleetMenu;
+    private ImageView fleetMenuArrowUp, fleetMenuArrowDown;
     private static boolean isReady;
     private static int hqinfoState = 0;
 
@@ -316,19 +322,50 @@ public class KcaFleetViewService extends Service {
         fleetAkashiTimerBtn = mView.findViewById(R.id.fleetview_akashi_timer);
         fleetSwitchBtn = mView.findViewById(R.id.fleetview_fleetswitch);
         fleetSwitchBtn.setVisibility(View.GONE);
+
+        fleetMenu = mView.findViewById(R.id.fleetview_menu);
+        fleetMenuArrowUp = mView.findViewById(R.id.fleetview_menu_up);
+        fleetMenuArrowDown = mView.findViewById(R.id.fleetview_menu_down);
+        fleetMenu.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                ViewTreeObserver observer = fleetMenu.getViewTreeObserver();
+                observer.addOnScrollChangedListener(fleetMenuScrollChangeListener);
+                return false;
+            }
+        });
     }
+
+    final ViewTreeObserver.OnScrollChangedListener fleetMenuScrollChangeListener = new ViewTreeObserver.OnScrollChangedListener() {
+        @Override
+        public void onScrollChanged() {
+            if (fleetMenu != null && fleetMenuArrowUp != null && fleetMenuArrowDown != null) {
+                if (fleetMenu.getScrollY() == 0) {
+                    fleetMenuArrowUp.setVisibility(View.GONE);
+                } else if (fleetMenu.getChildAt(0).getBottom() <=
+                        fleetMenu.getHeight() + fleetMenu.getScrollY()) {
+                    fleetMenuArrowDown.setVisibility(View.GONE);
+                } else {
+                    fleetMenuArrowUp.setVisibility(View.VISIBLE);
+                    fleetMenuArrowDown.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    };
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(SHOW_FLEETVIEW_ACTION)) {
-                int setViewResult = setView();
-                if (setViewResult == 0) {
-                    mView.setVisibility(View.VISIBLE);
-                    if (mView.getParent() != null) {
-                        mManager.removeViewImmediate(mView);
+                if (mView.getVisibility() != View.VISIBLE) {
+                    int setViewResult = setView();
+                    if (setViewResult == 0) {
+                        mView.setVisibility(View.VISIBLE);
+                        if (mView.getParent() != null) {
+                            mManager.removeViewImmediate(mView);
+                        }
+                        mManager.addView(mView, mParams);
                     }
-                    mManager.addView(mView, mParams);
                 }
             }
             if (intent.getAction().equals(REFRESH_FLEETVIEW_ACTION)) {
