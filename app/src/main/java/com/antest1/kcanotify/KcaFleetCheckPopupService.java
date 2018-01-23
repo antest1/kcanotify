@@ -40,6 +40,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
 import static com.antest1.kcanotify.KcaMapHpPopupService.MAPHP_RESET_ACTION;
 import static com.antest1.kcanotify.KcaMapHpPopupService.MAPHP_SHOW_ACTION;
+import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
@@ -60,7 +61,9 @@ public class KcaFleetCheckPopupService extends Service {
         R.id.fchk_btn_seektp, R.id.fchk_btn_airbattle, R.id.fchk_btn_fuelbull
     };
 
+    Context contextWithLocale;
     private View mView;
+    LayoutInflater mInflater;
     private WindowManager mManager;
     private int screenWidth, screenHeight;
     private int popupWidth, popupHeight;
@@ -104,11 +107,15 @@ public class KcaFleetCheckPopupService extends Service {
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
 
-            LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+
+            mInflater = LayoutInflater.from(contextWithLocale);
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
             mView = mInflater.inflate(R.layout.view_fleet_check, null);
             mView.setOnTouchListener(mViewTouchListener);
             mView.findViewById(R.id.view_fchk_head).setOnTouchListener(mViewTouchListener);
+            ((TextView) mView.findViewById(R.id.view_fchk_title)).setText(getStringWithLocale(R.string.fleetcheckview_title));
+
             for (int fchk_id: FCHK_BTN_LIST) {
                 mView.findViewById(fchk_id).setOnTouchListener(mViewTouchListener);
             }
@@ -356,6 +363,9 @@ public class KcaFleetCheckPopupService extends Service {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+        mInflater = LayoutInflater.from(contextWithLocale);
         Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
