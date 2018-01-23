@@ -24,10 +24,8 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -48,7 +46,6 @@ import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_BASICIFNO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_FLEETVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -61,7 +58,6 @@ import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
-import static java.security.AccessController.getContext;
 import static org.apache.commons.lang3.StringUtils.split;
 
 public class KcaFleetViewService extends Service {
@@ -69,6 +65,7 @@ public class KcaFleetViewService extends Service {
     public static final String REFRESH_FLEETVIEW_ACTION = "update_fleetview_action";
     public static final String CLOSE_FLEETVIEW_ACTION = "close_fleetview_action";
     public static final int FLEET_COMBINED_ID = 4;
+    final int fleetview_menu_margin = 40;
 
     private static final int HQINFO_TOTAL = 2;
     private static final int HQINFO_EXPVIEW = 0;
@@ -138,7 +135,6 @@ public class KcaFleetViewService extends Service {
             setHqInfo();
             fleetInfoTitle.setVisibility(View.VISIBLE);
             updateSelectedView(selected);
-
             if (seekcn_internal == -1) seekcn_internal = getSeekCn();
             processDeckInfo(selected, isCombinedFlag(selected));
             return 0;
@@ -340,10 +336,9 @@ public class KcaFleetViewService extends Service {
         @Override
         public void onScrollChanged() {
             if (fleetMenu != null && fleetMenuArrowUp != null && fleetMenuArrowDown != null) {
-                if (fleetMenu.getScrollY() == 0) {
+                if (fleetMenu.getScrollY() < fleetview_menu_margin) {
                     fleetMenuArrowUp.setVisibility(View.GONE);
-                } else if (fleetMenu.getChildAt(0).getBottom() <=
-                        fleetMenu.getHeight() + fleetMenu.getScrollY()) {
+                } else if (fleetMenu.getChildAt(0).getBottom() - (fleetMenu.getHeight() + fleetMenu.getScrollY()) < fleetview_menu_margin) {
                     fleetMenuArrowDown.setVisibility(View.GONE);
                 } else {
                     fleetMenuArrowUp.setVisibility(View.VISIBLE);

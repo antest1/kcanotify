@@ -1990,6 +1990,7 @@
                     android:clickable="false"
                     android:focusable="false"
                     android:src="@mipmap/ic_arrow_up"
+                    android:visibility="gone"
                     app:srcCompat="@mipmap/ic_arrow_up" />
 
                 <ImageView
