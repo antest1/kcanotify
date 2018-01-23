@@ -338,11 +338,15 @@ public class KcaFleetViewService extends Service {
             if (fleetMenu != null && fleetMenuArrowUp != null && fleetMenuArrowDown != null) {
                 if (fleetMenu.getScrollY() < fleetview_menu_margin) {
                     fleetMenuArrowUp.setVisibility(View.GONE);
+                    fleetMenuArrowDown.setAlpha(0.9f);
                 } else if (fleetMenu.getChildAt(0).getBottom() - (fleetMenu.getHeight() + fleetMenu.getScrollY()) < fleetview_menu_margin) {
                     fleetMenuArrowDown.setVisibility(View.GONE);
+                    fleetMenuArrowUp.setAlpha(0.9f);
                 } else {
                     fleetMenuArrowUp.setVisibility(View.VISIBLE);
                     fleetMenuArrowDown.setVisibility(View.VISIBLE);
+                    fleetMenuArrowUp.setAlpha(0.6f);
+                    fleetMenuArrowDown.setAlpha(0.6f);
                 }
             }
         }
