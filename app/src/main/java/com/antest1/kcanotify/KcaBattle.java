@@ -513,7 +513,7 @@ public class KcaBattle {
 
                 bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_NODE);
-                bundle.putString("data", qtrackData.toString());
+                bundle.putString("data", nodeInfo.toString());
                 sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
@@ -570,7 +570,7 @@ public class KcaBattle {
 
                 bundle = new Bundle();
                 bundle.putString("url", KCA_API_NOTI_BATTLE_NODE);
-                bundle.putString("data", qtrackData.toString());
+                bundle.putString("data", nodeInfo.toString());
                 sMsg = sHandler.obtainMessage();
                 sMsg.setData(bundle);
                 sHandler.sendMessage(sMsg);
