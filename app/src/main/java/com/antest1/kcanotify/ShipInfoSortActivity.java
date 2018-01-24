@@ -105,6 +105,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
         Spinner sp = v.findViewById(R.id.ship_stat_spinner);
         ImageView add_remove_btn = v.findViewById(R.id.ship_stat_add_remove_btn);
         final CheckBox desc_check = v.findViewById(R.id.ship_stat_isdesc);
+        desc_check.setText(getStringWithLocale(R.string.shipinfo_sort_asc));
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.ship_stat_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
