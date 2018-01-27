@@ -16,8 +16,8 @@
 
     <string name="error_text">エラーが発生しました。開発者にエラーログを送信してください。</string>
 
-    <string name="heavy_damaged">大破された艦娘があります！</string>
-    <string name="heavy_damaged_damecon">大破された艦娘があります！ (ダメコンあり)</string>
+    <string name="heavy_damaged">大破した艦娘があります！</string>
+    <string name="heavy_damaged_damecon">大破した艦娘があります！ (ダメコンあり)</string>
     <string name="goback_left">退避は左側</string>
 
     <string name="seek_type_0">総合</string>
