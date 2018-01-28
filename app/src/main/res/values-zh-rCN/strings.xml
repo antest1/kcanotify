@@ -441,22 +441,22 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expdtable_label_ship_exp">舰娘</string>
     <string name="expdtable_label_condition">要求的条件</string>
 
-    <string name="action_droplog">Drop Log</string>
-    <string name="droplog_search">検索</string>
-    <string name="droplog_export">Export data to CSV</string>
-    <string name="droplog_label_date">期間</string>
+    <string name="action_droplog">掉落纪录</string>
+    <string name="droplog_search">搜索</string>
+    <string name="droplog_export">以.csv档案汇出</string>
+    <string name="droplog_label_date">日期</string>
     <string name="droplog_label_area">海域</string>
-    <string name="droplog_label_level">難易度</string>
-    <string name="droplog_label_isboss">Boss</string>
+    <string name="droplog_label_level">难易度</string>
+    <string name="droplog_label_isboss">王点</string>
     <string name="droplog_item_label_no">No</string>
-    <string name="droplog_item_label_time">Time</string>
-    <string name="droplog_item_label_area">Area</string>
+    <string name="droplog_item_label_time">时间</string>
+    <string name="droplog_item_label_area">海域</string>
     <string name="droplog_item_label_isboss">B</string>
     <string name="droplog_item_label_rank">R</string>
-    <string name="droplog_item_label_name">Name</string>
-    <string name="droplog_ship_none">(None)</string>
-    <string name="droplog_ship_full">(Full)</string>
-    <string name="droplog_total_format" formatted="false">Total Count: %d</string>
+    <string name="droplog_item_label_name">名称</string>
+    <string name="droplog_ship_none">(没有)</string>
+    <string name="droplog_ship_full">(已满)</string>
+    <string name="droplog_total_format" formatted="false">总数: %d</string>
 	
     <string name="fleetview_title">舰队信息</string>
     <string name="fleetview_combined">联合</string>
