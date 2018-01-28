@@ -254,6 +254,10 @@
     <string name="rank_d">敗北D</string>
     <string name="rank_e">敗北E</string>
 
+    <string name="maprank_1">丙</string>
+    <string name="maprank_2">乙</string>
+    <string name="maprank_3">甲</string>
+
     <string name="item_fuel">燃料</string>
     <string name="item_ammo">弾薬</string>
     <string name="item_stel">鋼材</string>
@@ -430,6 +434,23 @@
     <string name="expdtable_label_hq_exp">提督</string>
     <string name="expdtable_label_ship_exp">艦娘</string>
     <string name="expdtable_label_condition">必要条件／編成</string>
+
+    <string name="action_droplog">ドロップ記録</string>
+    <string name="droplog_search">検索</string>
+    <string name="droplog_export">CSV形式でエクスポート</string>
+    <string name="droplog_label_date">期間</string>
+    <string name="droplog_label_area">海域</string>
+    <string name="droplog_label_level">難易度</string>
+    <string name="droplog_label_isboss">ボス</string>
+    <string name="droplog_item_label_no">No</string>
+    <string name="droplog_item_label_time">日付</string>
+    <string name="droplog_item_label_area">海域</string>
+    <string name="droplog_item_label_isboss">B</string>
+    <string name="droplog_item_label_rank">R</string>
+    <string name="droplog_item_label_name">名前</string>
+    <string name="droplog_ship_none">(なし)</string>
+    <string name="droplog_ship_full">(満員)</string>
+    <string name="droplog_total_format" formatted="false">総合：%d</string>
 
     <string name="fleetview_title">艦隊情報</string>
     <string name="fleetview_combined">連合</string>

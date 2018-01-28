@@ -276,6 +276,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="rank_d">D</string>
     <string name="rank_e">E</string>
 
+    <string name="maprank_1">丙</string>
+    <string name="maprank_2">乙</string>
+    <string name="maprank_3">甲</string>
+	
     <string name="item_fuel">燃料</string>
     <string name="item_ammo">彈藥</string>
     <string name="item_stel">鋼材</string>
@@ -438,6 +442,23 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expdtable_label_ship_exp">艦娘</string>
     <string name="expdtable_label_condition">要求的條件</string>
 
+    <string name="action_droplog">Drop Log</string>
+    <string name="droplog_search">検索</string>
+    <string name="droplog_export">Export data to CSV</string>
+    <string name="droplog_label_date">期間</string>
+    <string name="droplog_label_area">海域</string>
+    <string name="droplog_label_level">難易度</string>
+    <string name="droplog_label_isboss">Boss</string>
+    <string name="droplog_item_label_no">No</string>
+    <string name="droplog_item_label_time">Time</string>
+    <string name="droplog_item_label_area">Area</string>
+    <string name="droplog_item_label_isboss">B</string>
+    <string name="droplog_item_label_rank">R</string>
+    <string name="droplog_item_label_name">Name</string>
+    <string name="droplog_ship_none">(None)</string>
+    <string name="droplog_ship_full">(Full)</string>
+    <string name="droplog_total_format" formatted="false">Total Count: %d</string>
+	
     <string name="fleetview_title">艦隊信息</string>
     <string name="fleetview_combined">聯合</string>
     <string name="fleetview_switch_1">第１艦隊</string>

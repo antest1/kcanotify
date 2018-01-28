@@ -87,6 +87,37 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/action_droplog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@color/colorMenuBack"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/droplog_icon"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:background="@color/colorAccent"
+                android:padding="5dp"
+                android:src="@mipmap/ic_droplog"
+                app:srcCompat="@mipmap/ic_droplog" />
+
+            <TextView
+                android:id="@+id/droplog_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10sp"
+                android:layout_marginStart="10sp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="@string/action_droplog"
+                android:textColor="@color/darkgray"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/action_akashi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

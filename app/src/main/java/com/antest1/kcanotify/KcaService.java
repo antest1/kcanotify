@@ -126,6 +126,7 @@ public class KcaService extends Service {
     Context contextWithLocale;
     KcaDBHelper dbHelper;
     KcaQuestTracker questTracker;
+    KcaDropLogger dropLogger;
     KcaDeckInfo deckInfoCalc;
 
     AlarmManager alarmManager;
@@ -217,6 +218,7 @@ public class KcaService extends Service {
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
+        dropLogger = new KcaDropLogger(getApplicationContext(), null, KCANOTIFY_DROPLOG_VERSION);
         deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
         KcaApiData.setDBHelper(dbHelper);
 
@@ -2200,8 +2202,11 @@ public class KcaService extends Service {
                 int inventory = jsonDataObj.get("inventory").getAsInt();
                 int result = jsonDataObj.get("result").getAsInt();
 
-                if (isOpenDBEnabled()) KcaOpenDBAPI.sendShipDropData(world, map, node, rank, maprank, enemy, inventory, result);
-                if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDropData(result, world * 10 + map, quest_name, node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
+                if (KcaApiData.checkUserPortEnough()) {
+                    if (isOpenDBEnabled()) KcaOpenDBAPI.sendShipDropData(world, map, node, rank, maprank, enemy, inventory, result);
+                    if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDropData(result, world * 10 + map, quest_name, node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
+                }
+                dropLogger.recordDropLog(jsonDataObj, !KcaApiData.checkUserPortEnough());
             }
 
             if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {

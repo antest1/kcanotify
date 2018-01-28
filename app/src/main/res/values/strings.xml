@@ -317,6 +317,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="rank_d">D</string>
     <string name="rank_e">E</string>
 
+	<string name="maprank_1">E</string>
+	<string name="maprank_2">N</string>
+	<string name="maprank_3">H</string>
+	
     <string name="item_fuel">Fuel</string>
     <string name="item_ammo">Ammo</string>
     <string name="item_stel">Steel</string>
@@ -494,6 +498,23 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expdtable_label_hq_exp">HQ</string>
     <string name="expdtable_label_ship_exp">Ship</string>
     <string name="expdtable_label_condition">Success Condition</string>
+
+    <string name="action_droplog">Drop Log</string>
+    <string name="droplog_search">Search</string>
+    <string name="droplog_export">Export data to CSV</string>
+    <string name="droplog_label_date">Date</string>
+    <string name="droplog_label_area">Area</string>
+    <string name="droplog_label_level">Diff.</string>
+    <string name="droplog_label_isboss">Boss</string>
+    <string name="droplog_item_label_no">No</string>
+    <string name="droplog_item_label_time">Time</string>
+    <string name="droplog_item_label_area">Area</string>
+    <string name="droplog_item_label_isboss">B</string>
+    <string name="droplog_item_label_rank">R</string>
+    <string name="droplog_item_label_name">Name</string>
+    <string name="droplog_ship_none">(None)</string>
+    <string name="droplog_ship_full">(Full)</string>
+    <string name="droplog_total_format" formatted="false">Total Count: %d</string>
 
     <string name="fleetview_title">FleetView</string>
     <string name="fleetview_combined">CF</string>

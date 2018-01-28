@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:background="@color/colorEquipListBack"
+            android:background="@color/colorListItemBack"
             android:orientation="vertical">
 
             <LinearLayout
@@ -81,7 +81,7 @@
                 android:id="@+id/equipment_item_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorEquipDetailPanelBack"
+                android:background="@color/colorListItemDetailPanelBack"
                 android:orientation="vertical"
                 android:padding="4dp">
 

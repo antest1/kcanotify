@@ -887,38 +887,36 @@ public class KcaBattle {
                         }
                     }
 
-                    if (KcaApiData.checkUserPortEnough()) {
-                        JsonObject dropInfo = new JsonObject();
-                        dropInfo.addProperty("world", currentMapArea);
-                        dropInfo.addProperty("map", currentMapNo);
-                        dropInfo.addProperty("node", currentNode);
-                        dropInfo.addProperty("isboss", isBossReached);
-                        dropInfo.addProperty("quest_name", api_data.get("api_quest_name").getAsString());
-                        dropInfo.addProperty("enemy_name", api_data.getAsJsonObject("api_enemy_info").get("api_deck_name").getAsString());
-                        dropInfo.addProperty("rank", api_data.get("api_win_rank").getAsString());
-                        dropInfo.addProperty("maprank", currentEventMapRank);
-                        if (api_data.has("api_get_ship")) {
-                            int api_ship_id = api_data.getAsJsonObject("api_get_ship").get("api_ship_id").getAsInt();
-                            dropInfo.addProperty("result", api_ship_id);
-                            dropInfo.addProperty("inventory", KcaApiData.countUserShipById(api_ship_id));
-                            KcaApiData.addShipCountInBattle();
-                            KcaApiData.addItemCountInBattle(api_ship_id);
-                        } else {
-                            dropInfo.addProperty("result", 0);
-                            dropInfo.addProperty("inventory", 0);
-                        }
-                        JsonObject enemyInfo = new JsonObject();
-                        enemyInfo.addProperty("formation", currentEnemyFormation);
-                        if (ship_ke != null) enemyInfo.add("ships", ship_ke);
-                        dropInfo.add("enemy", enemyInfo);
-
-                        bundle = new Bundle();
-                        bundle.putString("url", KCA_API_NOTI_BATTLE_DROPINFO);
-                        bundle.putString("data", gson.toJson(dropInfo));
-                        sMsg = sHandler.obtainMessage();
-                        sMsg.setData(bundle);
-                        sHandler.sendMessage(sMsg);
+                    JsonObject dropInfo = new JsonObject();
+                    dropInfo.addProperty("world", currentMapArea);
+                    dropInfo.addProperty("map", currentMapNo);
+                    dropInfo.addProperty("node", currentNode);
+                    dropInfo.addProperty("isboss", isBossReached);
+                    dropInfo.addProperty("quest_name", api_data.get("api_quest_name").getAsString());
+                    dropInfo.addProperty("enemy_name", api_data.getAsJsonObject("api_enemy_info").get("api_deck_name").getAsString());
+                    dropInfo.addProperty("rank", api_data.get("api_win_rank").getAsString());
+                    dropInfo.addProperty("maprank", currentEventMapRank);
+                    if (api_data.has("api_get_ship")) {
+                        int api_ship_id = api_data.getAsJsonObject("api_get_ship").get("api_ship_id").getAsInt();
+                        dropInfo.addProperty("result", api_ship_id);
+                        dropInfo.addProperty("inventory", KcaApiData.countUserShipById(api_ship_id));
+                        KcaApiData.addShipCountInBattle();
+                        KcaApiData.addItemCountInBattle(api_ship_id);
+                    } else {
+                        dropInfo.addProperty("result", 0);
+                        dropInfo.addProperty("inventory", 0);
                     }
+                    JsonObject enemyInfo = new JsonObject();
+                    enemyInfo.addProperty("formation", currentEnemyFormation);
+                    if (ship_ke != null) enemyInfo.add("ships", ship_ke);
+                    dropInfo.add("enemy", enemyInfo);
+
+                    bundle = new Bundle();
+                    bundle.putString("url", KCA_API_NOTI_BATTLE_DROPINFO);
+                    bundle.putString("data", gson.toJson(dropInfo));
+                    sMsg = sHandler.obtainMessage();
+                    sMsg.setData(bundle);
+                    sHandler.sendMessage(sMsg);
 
                     qtrackData.addProperty("world", currentMapArea);
                     qtrackData.addProperty("map", currentMapNo);

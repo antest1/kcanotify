@@ -1,0 +1,441 @@
+package com.antest1.kcanotify;
+
+import android.app.DatePickerDialog;
+import android.content.res.Configuration;
+import android.graphics.PorterDuff;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ListViewCompat;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import com.google.gson.JsonObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DROPLOG_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+
+
+public class DropLogActivity extends AppCompatActivity {
+    public static final long DAY_MILLISECOND = 86400000;
+    public static final String[] world_list = {"*", "1", "2", "3", "4", "5", "6", "41"};
+
+    public static final int RANK_S = 32;
+    public static final int RANK_A = 16;
+    public static final int RANK_B = 8;
+    public static final int RANK_C = 4;
+    public static final int RANK_D = 2;
+    public static final int RANK_E = 1;
+
+    Toolbar toolbar;
+    KcaDBHelper dbHelper;
+    KcaDropLogger dropLogger;
+    KcaDroplogItemAdpater adapter;
+    String[] maprank_info = new String[4];
+    String[] map_list = {};
+    String[] node_list = {};
+
+    JsonObject condition_data = new JsonObject();
+    TextView start_date, end_date, row_count;
+    Spinner sp_world, sp_map, sp_node, sp_maprank;
+    ImageView showhide_btn;
+    CheckBox chkbox_boss, chkbox_s, chkbox_a, chkbox_b, chkbox_x;
+    boolean is_hidden = false;
+    int rank_flag = RANK_S | RANK_A | RANK_B;
+    int current_world, current_map, current_node;
+    Button btn_search;
+    ListView droplog_listview;
+
+    public DropLogActivity() {
+        LocaleUtils.updateConfig(this);
+    }
+
+    private String getStringWithLocale(int id) {
+        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_droplog_list);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getStringWithLocale(R.string.action_droplog));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        dropLogger = new KcaDropLogger(getApplicationContext(), null, KCANOTIFY_DROPLOG_VERSION);
+        KcaApiData.setDBHelper(dbHelper);
+        setDefaultGameData();
+        loadTranslationData(getApplicationContext());
+
+        showhide_btn = findViewById(R.id.droplog_showhide);
+        showhide_btn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                R.color.black), PorterDuff.Mode.MULTIPLY);
+        showhide_btn.setImageResource(R.mipmap.ic_arrow_up);
+        showhide_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                is_hidden = !is_hidden;
+                if (is_hidden) {
+                    showhide_btn.setImageResource(R.mipmap.ic_arrow_down);
+                    findViewById(R.id.droplog_filter_area).setVisibility(View.GONE);
+                } else {
+                    showhide_btn.setImageResource(R.mipmap.ic_arrow_up);
+                    findViewById(R.id.droplog_filter_area).setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        maprank_info[0] = "-";
+        for (int i = 1; i < maprank_info.length; i++) {
+            maprank_info[i] = getStringWithLocale(KcaUtils.getId("maprank_" + String.valueOf(i), R.string.class));
+        }
+        KcaDroplogItemAdpater.maprank_info = maprank_info;
+        KcaDroplogItemAdpater.ship_none = getStringWithLocale(R.string.droplog_ship_none);
+        KcaDroplogItemAdpater.ship_full = getStringWithLocale(R.string.droplog_ship_full);
+        KcaDroplogItemAdpater.color_normal = ContextCompat.getColor(getApplicationContext(), R.color.black);
+        KcaDroplogItemAdpater.color_none = ContextCompat.getColor(getApplicationContext(), R.color.lightgray);
+
+        start_date = findViewById(R.id.droplog_date_start);
+        start_date.setOnClickListener(dateViewListener);
+        end_date = findViewById(R.id.droplog_date_end);
+        end_date.setOnClickListener(dateViewListener);
+
+        row_count = findViewById(R.id.droplog_result_info);
+        row_count.setText(KcaUtils.format(getStringWithLocale(R.string.droplog_total_format), 0));
+
+        sp_world = findViewById(R.id.droplog_world);
+        sp_map = findViewById(R.id.droplog_map);
+        sp_node = findViewById(R.id.droplog_node);
+
+        ArrayAdapter<CharSequence> sp_world_adapter =
+                new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, world_list);
+        sp_world_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        sp_world.setAdapter(sp_world_adapter);
+
+        setSpinnerEnable(sp_world, true);
+        setSpinnerEnable(sp_map, false);
+        setSpinnerEnable(sp_node, false);
+        sp_world.setOnItemSelectedListener(sp_world_listener);
+        sp_map.setOnItemSelectedListener(sp_map_listener);
+        sp_node.setOnItemSelectedListener(sp_node_listener);
+
+        sp_maprank = findViewById(R.id.droplog_maprank);
+        ArrayAdapter<CharSequence> sp_maprank_adapter =
+                new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, maprank_info);
+        sp_maprank_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        sp_maprank.setAdapter(sp_maprank_adapter);
+        sp_maprank.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                condition_data.addProperty("maprank", position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        droplog_listview = findViewById(R.id.droplog_listview);
+        adapter = new KcaDroplogItemAdpater();
+
+        btn_search = findViewById(R.id.droplog_search);
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setListView();
+            }
+        });
+
+        chkbox_s = findViewById(R.id.droplog_rank_s);
+        chkbox_s.setOnCheckedChangeListener(chkboxListener);
+        chkbox_a = findViewById(R.id.droplog_rank_a);
+        chkbox_a.setOnCheckedChangeListener(chkboxListener);
+        chkbox_b = findViewById(R.id.droplog_rank_b);
+        chkbox_b.setOnCheckedChangeListener(chkboxListener);
+        chkbox_x = findViewById(R.id.droplog_rank_x);
+        chkbox_x.setOnCheckedChangeListener(chkboxListener);
+        chkbox_boss = findViewById(R.id.droplog_isboss);
+        chkbox_boss.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                setConditionData("isboss", b ? 1 : 0);
+            }
+        });
+
+        btn_search = findViewById(R.id.droplog_search);
+
+        long current_time = System.currentTimeMillis();
+        current_time = getCurrentDateTimestamp(current_time);
+
+        start_date.setText(convertMillsToDate(current_time));
+        end_date.setText(convertMillsToDate(current_time + DAY_MILLISECOND));
+
+        current_world = 0;
+        current_map = 0;
+        current_node = 0;
+
+        condition_data.addProperty("startdate", current_time);
+        condition_data.addProperty("enddate", current_time + DAY_MILLISECOND - 1);
+        condition_data.addProperty("isboss", 0);
+        condition_data.addProperty("maprank", 0);
+        condition_data.addProperty("rank", "B,A,S");
+    }
+
+    private int setDefaultGameData() {
+        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void setListView() {
+        adapter.setListViewItemList(dropLogger.getDropLogWithCondition(condition_data), 0);
+        droplog_listview.setAdapter(adapter);
+        row_count.setText(KcaUtils.format(getStringWithLocale(R.string.droplog_total_format), adapter.getCount()));
+        findViewById(R.id.droplog_infoline).setVisibility(View.VISIBLE);
+    }
+
+    public void setSpinnerEnable(Spinner sp, boolean b) {
+        if (sp != null) {
+            sp.setEnabled(b);
+        }
+    }
+
+    public void setConditionData(String key, int value) {
+        condition_data.addProperty(key, value);
+    }
+
+    public void setConditionData(String key, String value) {
+        condition_data.addProperty(key, value);
+    }
+
+    public static int rank_bitop(int source, int target, boolean b) {
+        if (b) return source | target;
+        else return source & ~target;
+    }
+
+    public String convertRankFlagToText(int r) {
+        List<String> data = new ArrayList<>();
+        String[] rank_list = {"E", "D", "C", "B", "A", "S"};
+        for (int i = 0; i < 6; i++) {
+            if (r % 2 == 1) data.add(rank_list[i]);
+            r /= 2;
+        }
+        return KcaUtils.joinStr(data, ",");
+    }
+
+    public static String convertMillsToDate(long timestamp) {
+        Date d = new Date(timestamp);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+        return dateFormat.format(d);
+    }
+
+    public long getCurrentDateTimestamp (long current_time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+        String timetext = dateFormat.format(new Date(current_time));
+        long timestamp = 0;
+        try {
+            timestamp = dateFormat.parse(timetext).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return timestamp;
+    }
+
+    View.OnClickListener dateViewListener = new View.OnClickListener() {
+        @Override
+        public void onClick(final View view) {
+            DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+
+                @Override
+                public void onDateSet(DatePicker v, int year, int monthOfYear, int dayOfMonth) {
+                    String text = KcaUtils.format("%02d-%02d-%04d", monthOfYear + 1, dayOfMonth, year);
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+                        long timestamp = dateFormat.parse(text).getTime();
+                        if (view.getId() == R.id.droplog_date_start) {
+                            condition_data.addProperty("startdate", timestamp);
+                        } else if (view.getId() == R.id.droplog_date_end) {
+                            condition_data.addProperty("enddate", timestamp + (DAY_MILLISECOND - 1));
+                        }
+                        ((TextView) view).setText(convertMillsToDate(timestamp));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            long current_time = System.currentTimeMillis();
+            current_time = getCurrentDateTimestamp(current_time);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date(current_time));
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            if (view.getId() == R.id.droplog_date_end) current_time += (DAY_MILLISECOND - 1);
+            DatePickerDialog dialog = new DatePickerDialog(DropLogActivity.this, listener, year, month, day);
+            dialog.show();
+        }
+    };
+
+    CompoundButton.OnCheckedChangeListener chkboxListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            int id = compoundButton.getId();
+            switch (id) {
+                case R.id.droplog_rank_s:
+                    rank_flag = rank_bitop(rank_flag, RANK_S, b);
+                    break;
+                case R.id.droplog_rank_a:
+                    rank_flag = rank_bitop(rank_flag, RANK_A, b);
+                    break;
+                case R.id.droplog_rank_b:
+                    rank_flag = rank_bitop(rank_flag, RANK_B, b);
+                    break;
+                case R.id.droplog_rank_x:
+                    rank_flag = rank_bitop(rank_flag, RANK_C | RANK_D | RANK_E, b);
+                    break;
+                default:
+                    break;
+            }
+            setConditionData("rank", convertRankFlagToText(rank_flag));
+        }
+    };
+
+
+    AdapterView.OnItemSelectedListener sp_world_listener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            String value = world_list[position];
+            if (position == 0) {
+                current_world = 0;
+                current_map = 0;
+                current_node = 0;
+                condition_data.remove("world");
+                condition_data.remove("map");
+                condition_data.remove("node");
+                setSpinnerEnable(sp_map, false);
+                sp_map.setAdapter(null);
+            } else {
+                current_world = Integer.parseInt(value);
+                condition_data.addProperty("world", current_world);
+                map_list = dropLogger.getMapList(current_world);
+                ArrayAdapter<CharSequence> sp_map_adapter =
+                        new ArrayAdapter<CharSequence>(getBaseContext(),
+                                android.R.layout.simple_spinner_item, map_list);
+                sp_map_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+                sp_map.setAdapter(sp_map_adapter);
+                setSpinnerEnable(sp_map, true);
+            }
+            sp_node.setAdapter(null);
+            setSpinnerEnable(sp_node, false);
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    AdapterView.OnItemSelectedListener sp_map_listener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            String value = map_list[position];
+            if (position == 0) {
+                current_map = 0;
+                current_node = 0;
+                condition_data.remove("map");
+                condition_data.remove("node");
+                sp_node.setAdapter(null);
+                setSpinnerEnable(sp_node, false);
+            } else {
+                current_map = Integer.parseInt(value);
+                condition_data.addProperty("map", current_map);
+                node_list = dropLogger.getNodeList(current_world, current_map);
+                ArrayAdapter<CharSequence> sp_node_adapter =
+                        new ArrayAdapter<CharSequence>(getBaseContext(),
+                                android.R.layout.simple_spinner_item, node_list);
+                sp_node_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+                sp_node.setAdapter(sp_node_adapter);
+                setSpinnerEnable(sp_node, true);
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    AdapterView.OnItemSelectedListener sp_node_listener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            String value = node_list[position];
+            if (position == 0) {
+                current_node = 0;
+                condition_data.remove("node");
+            } else {
+                current_node = Integer.parseInt(value.split("\\(")[0]);
+                condition_data.addProperty("node", current_node);
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
+            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
+        } else {
+            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
+            KcaApplication.defaultLocale = newConfig.locale;
+        }
+        if (getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
+            LocaleUtils.setLocale(Locale.getDefault());
+        } else {
+            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
+            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
+        }
+        super.onConfigurationChanged(newConfig);
+    }
+}
