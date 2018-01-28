@@ -31,13 +31,14 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.antest1.kcanotify.KcaApiData.getCurrentNodeAlphabet;
+import static com.antest1.kcanotify.R.id.droplog_item;
 import static com.antest1.kcanotify.R.id.ship_id;
 
 public class KcaDroplogItemAdpater extends BaseAdapter {
     private List<JsonObject> listViewItemList = new ArrayList<>();
     public static String[] maprank_info;
     public static String ship_none, ship_full;
-    public static int color_normal, color_none;
+    public static int color_normal, color_none, color_item, color_item_acc;
 
     @Override
     public int getCount() {
@@ -64,6 +65,7 @@ public class KcaDroplogItemAdpater extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.listview_droplist_item, parent, false);
             ViewHolder holder = new ViewHolder();
+            holder.droplog_item = v.findViewById(droplog_item);
             holder.item_time = v.findViewById(R.id.droplog_item_time);
             holder.item_area = v.findViewById(R.id.droplog_item_area);
             holder.item_isboss = v.findViewById(R.id.droplog_item_isboss);
@@ -109,10 +111,18 @@ public class KcaDroplogItemAdpater extends BaseAdapter {
             }
             holder.item_name.setTextColor(color_normal);
         }
+
+        if ((pos + 1) % 5 == 0) {
+            holder.droplog_item.setBackgroundColor(color_item_acc);
+        } else {
+            holder.droplog_item.setBackgroundColor(color_item);
+        }
+
         return v;
     }
 
     static class ViewHolder {
+        View droplog_item;
         TextView item_time, item_area, item_isboss, item_rank, item_name;
     }
 

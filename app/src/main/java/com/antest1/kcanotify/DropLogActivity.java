@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -118,7 +119,9 @@ public class DropLogActivity extends AppCompatActivity {
         KcaDroplogItemAdpater.ship_none = getStringWithLocale(R.string.droplog_ship_none);
         KcaDroplogItemAdpater.ship_full = getStringWithLocale(R.string.droplog_ship_full);
         KcaDroplogItemAdpater.color_normal = ContextCompat.getColor(getApplicationContext(), R.color.black);
-        KcaDroplogItemAdpater.color_none = ContextCompat.getColor(getApplicationContext(), R.color.lightgray);
+        KcaDroplogItemAdpater.color_none = ContextCompat.getColor(getApplicationContext(), R.color.grey);
+        KcaDroplogItemAdpater.color_item = ContextCompat.getColor(getApplicationContext(), R.color.colorListItemBack);
+        KcaDroplogItemAdpater.color_item_acc = ContextCompat.getColor(getApplicationContext(), R.color.colorListItemBackAccent);
 
         start_date = findViewById(R.id.droplog_date_start);
         start_date.setOnClickListener(dateViewListener);

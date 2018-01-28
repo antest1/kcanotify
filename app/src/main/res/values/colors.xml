@@ -171,6 +171,7 @@
 
 
     <color name="colorListItemBack">#7ff5f5f5</color>
+    <color name="colorListItemBackAccent">#7fe1e1e1</color>
     <color name="colorListItemDetailPanelBack">#7fdcdcdc</color>
 
     <color name="colorPanelBack">#7ff5f5f5</color>
