@@ -501,6 +501,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="action_droplog">Drop Log</string>
     <string name="droplog_search">Search</string>
+    <string name="droplog_clear">Clear drop log</string>
     <string name="droplog_export">Export data to CSV</string>
     <string name="droplog_label_date">Date</string>
     <string name="droplog_label_area">Area</string>
@@ -515,6 +516,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="droplog_ship_none">(None)</string>
     <string name="droplog_ship_full">(Full)</string>
     <string name="droplog_total_format" formatted="false">Total Count: %d</string>
+    <string name="droplog_clear_dialog_message">Do you want to clear the whole error log?</string>
+    <string name="droplog_sort_asc">ASC</string>
+    <string name="droplog_sort_desc">DESC</string>
 
     <string name="fleetview_title">FleetView</string>
     <string name="fleetview_combined">CF</string>

@@ -87,6 +87,20 @@
                     android:text="2017/11/12"
                     android:textSize="16dp" />
 
+                <CheckBox
+                    android:id="@+id/droplog_isdesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="0"
+                    android:checked="true"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
+                    android:text="@string/droplog_sort_desc"
+                    android:textSize="20dp"
+                    android:translationX="-5dp" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -163,7 +177,7 @@
                             android:layout_height="wrap_content"
                             android:scaleX="0.75"
                             android:scaleY="0.75"
-                            android:text="Boss"
+                            android:text="@string/droplog_label_isboss"
                             android:textSize="20dp"
                             android:translationX="-5dp" />
 
@@ -259,9 +273,9 @@
                         android:checked="false"
                         android:scaleX="0.75"
                         android:scaleY="0.75"
-                        android:text="X"
+                        android:text="C/D/E"
                         android:textSize="20dp"
-                        android:translationX="0dp" />
+                        android:translationX="-5dp" />
                 </LinearLayout>
 
                 <LinearLayout

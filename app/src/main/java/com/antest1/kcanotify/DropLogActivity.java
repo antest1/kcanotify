@@ -2,15 +2,19 @@ package com.antest1.kcanotify;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.gson.JsonObject;
 
 import java.text.ParseException;
@@ -33,6 +39,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static android.R.attr.id;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DROPLOG_VERSION;
@@ -63,7 +70,7 @@ public class DropLogActivity extends AppCompatActivity {
     TextView start_date, end_date, row_count;
     Spinner sp_world, sp_map, sp_node, sp_maprank;
     ImageView showhide_btn;
-    CheckBox chkbox_boss, chkbox_s, chkbox_a, chkbox_b, chkbox_x;
+    CheckBox chkbox_desc, chkbox_boss, chkbox_s, chkbox_a, chkbox_b, chkbox_x;
     boolean is_hidden = false;
     int rank_flag = RANK_S | RANK_A | RANK_B;
     int current_world, current_map, current_node;
@@ -189,22 +196,32 @@ public class DropLogActivity extends AppCompatActivity {
                 setConditionData("isboss", b ? 1 : 0);
             }
         });
+        chkbox_desc = findViewById(R.id.droplog_isdesc);
+        chkbox_desc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                setConditionData("isdesc", b ? 1 : 0);
+                chkbox_desc.setText(getStringWithLocale(b ? R.string.droplog_sort_desc : R.string.droplog_sort_asc));
+            }
+        });
+        chkbox_desc.setChecked(true);
 
         btn_search = findViewById(R.id.droplog_search);
 
         long current_time = System.currentTimeMillis();
         current_time = getCurrentDateTimestamp(current_time);
 
-        start_date.setText(convertMillsToDate(current_time));
-        end_date.setText(convertMillsToDate(current_time + DAY_MILLISECOND));
+        start_date.setText(convertMillsToDate(current_time - DAY_MILLISECOND * 7));
+        end_date.setText(convertMillsToDate(current_time + DAY_MILLISECOND - 1));
 
         current_world = 0;
         current_map = 0;
         current_node = 0;
 
-        condition_data.addProperty("startdate", current_time);
+        condition_data.addProperty("startdate", current_time - DAY_MILLISECOND * 7); // 7 days before
         condition_data.addProperty("enddate", current_time + DAY_MILLISECOND - 1);
         condition_data.addProperty("isboss", 0);
+        condition_data.addProperty("isdesc", 1);
         condition_data.addProperty("maprank", 0);
         condition_data.addProperty("rank", "B,A,S");
     }
@@ -219,10 +236,36 @@ public class DropLogActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.droplog, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.action_droplog_clear:
+                AlertDialog.Builder alert = new AlertDialog.Builder(DropLogActivity.this);
+                alert.setPositiveButton(getStringWithLocale(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dropLogger.clearDropLog();
+                        Toast.makeText(getApplicationContext(), "Cleared", Toast.LENGTH_LONG).show();
+                        setListView();
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alert.setMessage(getStringWithLocale(R.string.droplog_clear_dialog_message));
+                alert.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -308,12 +351,13 @@ public class DropLogActivity extends AppCompatActivity {
 
             long current_time = System.currentTimeMillis();
             current_time = getCurrentDateTimestamp(current_time);
+            if (view.getId() == R.id.droplog_date_end) current_time += (DAY_MILLISECOND - 1);
+
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date(current_time));
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DAY_OF_MONTH);
-            if (view.getId() == R.id.droplog_date_end) current_time += (DAY_MILLISECOND - 1);
             DatePickerDialog dialog = new DatePickerDialog(DropLogActivity.this, listener, year, month, day);
             dialog.show();
         }

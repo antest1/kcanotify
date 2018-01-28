@@ -107,11 +107,13 @@ public class KcaDropLogger extends SQLiteOpenHelper {
             }
         }
         String where_str = " WHERE ".concat(KcaUtils.joinStr(where_conds, " AND "));
-
+        boolean is_desc = condition.get("isdesc").getAsInt() > 0;
+        String order_str = is_desc ? "DESC" : "";
         Cursor c = db.rawQuery("SELECT * from "
                 .concat(droplog_table_name)
                 .concat(where_str)
-                .concat(" ORDER BY key DESC"), null);
+                .concat(" ORDER BY key "
+                .concat(order_str).trim()), null);
 
         while (c.moveToNext()) {
             result.add(retrieveDataFromCursor(c));

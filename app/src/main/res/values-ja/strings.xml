@@ -437,6 +437,7 @@
 
     <string name="action_droplog">ドロップ記録</string>
     <string name="droplog_search">検索</string>
+    <string name="droplog_clear">記録を削除する</string>
     <string name="droplog_export">CSV形式でエクスポート</string>
     <string name="droplog_label_date">期間</string>
     <string name="droplog_label_area">海域</string>
@@ -445,12 +446,15 @@
     <string name="droplog_item_label_no">No</string>
     <string name="droplog_item_label_time">日付</string>
     <string name="droplog_item_label_area">海域</string>
-    <string name="droplog_item_label_isboss">B</string>
-    <string name="droplog_item_label_rank">R</string>
+    <string name="droplog_item_label_isboss">ボ</string>
+    <string name="droplog_item_label_rank">ラ</string>
     <string name="droplog_item_label_name">名前</string>
     <string name="droplog_ship_none">(なし)</string>
     <string name="droplog_ship_full">(満員)</string>
     <string name="droplog_total_format" formatted="false">総合：%d</string>
+    <string name="droplog_clear_dialog_message">全体ドロップ記録を削除しますか？</string>
+    <string name="droplog_sort_asc">昇順</string>
+    <string name="droplog_sort_desc">降順</string>
 
     <string name="fleetview_title">艦隊情報</string>
     <string name="fleetview_combined">連合</string>

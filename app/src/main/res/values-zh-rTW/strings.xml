@@ -444,20 +444,24 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="action_droplog">掉落紀錄</string>
     <string name="droplog_search">搜索</string>
+    <string name="droplog_clear">清除掉落紀錄</string>
     <string name="droplog_export">以.csv檔案匯出</string>
     <string name="droplog_label_date">日期</string>
     <string name="droplog_label_area">海域</string>
     <string name="droplog_label_level">難易度</string>
     <string name="droplog_label_isboss">王點</string>
-    <string name="droplog_item_label_no">No</string>
+    <string name="droplog_item_label_no">數</string>
     <string name="droplog_item_label_time">時間</string>
     <string name="droplog_item_label_area">海域</string>
-    <string name="droplog_item_label_isboss">B</string>
-    <string name="droplog_item_label_rank">R</string>
+    <string name="droplog_item_label_isboss">王</string>
+    <string name="droplog_item_label_rank">級</string>
     <string name="droplog_item_label_name">名稱</string>
     <string name="droplog_ship_none">(沒有)</string>
     <string name="droplog_ship_full">(已滿)</string>
     <string name="droplog_total_format" formatted="false">總數: %d</string>
+    <string name="droplog_clear_dialog_message">你想清空所有掉落紀錄嗎？</string>
+    <string name="droplog_sort_asc">升序</string>
+    <string name="droplog_sort_desc">降序</string>
 	
     <string name="fleetview_title">艦隊信息</string>
     <string name="fleetview_combined">聯合</string>

@@ -92,8 +92,8 @@ public class KcaDroplogItemAdpater extends BaseAdapter {
             holder.item_area.setText(KcaUtils.format("%d-%d-%s", world, map, node_alpha));
         }
 
-        if (item.get("isboss").getAsInt() > 0) holder.item_isboss.setText("O");
-        else holder.item_isboss.setText("X");
+        if (item.get("isboss").getAsInt() > 0) holder.item_isboss.setText("✓");
+        else holder.item_isboss.setText("");
 
         holder.item_rank.setText(item.get("rank").getAsString());
 
