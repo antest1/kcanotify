@@ -48,6 +48,7 @@
                         android:singleLine="true"
                         android:text="1234567"
                         android:textAlignment="center"
+                        android:textColor="@color/colorStatNotLocked"
                         android:textSize="10dp" />
 
                     <TextView

@@ -398,6 +398,7 @@
     <string name="ship_stat_sort_key_11">運</string>
     <string name="ship_stat_sort_key_12">速度</string>
     <string name="ship_stat_sort_key_13">疲労度</string>
+    <string name="ship_stat_sort_key_14">ロック</string>
     <string name="shipinfo_filt_list_dialog_title">選択</string>
 
     <string name="action_equipmentinfo">装備リスト</string>

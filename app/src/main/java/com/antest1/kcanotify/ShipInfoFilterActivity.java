@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,7 +40,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import static android.R.attr.key;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
@@ -137,18 +138,22 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         v.setTag(count);
         final int target = count;
 
+        final View selector1 = v.findViewById(R.id.ship_stat_selector1);
+        final View selector2 = v.findViewById(R.id.ship_stat_selector2);
+
         Spinner sp_target = v.findViewById(R.id.ship_stat_spinner);
         Spinner sp_op = v.findViewById(R.id.ship_stat_operator);
         final EditText condition_val = v.findViewById(R.id.ship_stat_value);
         final TextView sp_val = v.findViewById(R.id.ship_stat_select);
         ImageView add_remove_btn = v.findViewById(R.id.ship_stat_add_remove_btn);
+        final CheckBox cb_target = v.findViewById(R.id.ship_stat_checked);
 
         condition_val.setInputType(InputType.TYPE_CLASS_NUMBER);
         condition_val.setTag(target);
         condition_val.addTextChangedListener(new KcaTextWatcher(condition_val));
 
         ArrayAdapter<CharSequence> adapter_target = ArrayAdapter.createFromResource(this,
-                R.array.ship_stat_array, android.R.layout.simple_spinner_item);
+                R.array.ship_filt_array, android.R.layout.simple_spinner_item);
         adapter_target.setDropDownViewResource(R.layout.spinner_dropdown_item);
         sp_target.setAdapter(adapter_target);
         sp_target.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -159,29 +164,46 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                 int prev_position = obj.get("idx").getAsInt();
                 obj.addProperty("idx", position);
 
-                sort_values.put(target, ShipInfoFilterActivity.makeStatPrefValue(obj));
-                if (KcaShipListViewAdpater.isList(position)) {
-                    condition_val.setVisibility(View.GONE);
-                    sp_val.setVisibility(View.VISIBLE);
-                    if(prev_position != position) {
-                        setupListSelect(sp_val, target, "val", position, null);
-                        sp_val.setText(getStringWithLocale(R.string.shipinfo_filt_list_dialog_title));
-                    }
+                sort_values.put(target, makeStatPrefValue(obj));
+                if (KcaShipListViewAdpater.isBoolean(position)) {
+                    selector1.setVisibility(View.GONE);
+                    selector2.setVisibility(View.VISIBLE);
                 } else {
-                    sp_val.setVisibility(View.GONE);
-                    condition_val.setVisibility(View.VISIBLE);
-                    if (KcaShipListViewAdpater.isNumeric(position)) {
-                        condition_val.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    selector1.setVisibility(View.VISIBLE);
+                    selector2.setVisibility(View.GONE);
+                    if (KcaShipListViewAdpater.isList(position)) {
+                        condition_val.setVisibility(View.GONE);
+                        sp_val.setVisibility(View.VISIBLE);
+                        if(prev_position != position) {
+                            setupListSelect(sp_val, target, "val", position, null);
+                            sp_val.setText(getStringWithLocale(R.string.shipinfo_filt_list_dialog_title));
+                        }
                     } else {
-                        condition_val.setInputType(InputType.TYPE_CLASS_TEXT);
+                        sp_val.setVisibility(View.GONE);
+                        condition_val.setVisibility(View.VISIBLE);
+                        if (KcaShipListViewAdpater.isNumeric(position)) {
+                            condition_val.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        } else {
+                            condition_val.setInputType(InputType.TYPE_CLASS_TEXT);
+                        }
+                        if(prev_position != position) condition_val.setText("");
                     }
-                    if(prev_position != position) condition_val.setText("");
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+
+        cb_target.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                String data = sort_values.get(target);
+                JsonObject obj = ShipInfoFilterActivity.unpackPrefValue(data);
+                obj.addProperty("val", b ? 1 : 0);
+                sort_values.put(target, makeStatPrefValue(obj));
             }
         });
 
@@ -226,7 +248,9 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         if (key != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_spinner)).setSelection(key);
         if (op != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_operator)).setSelection(op);
         if (value.length() > 0) {
-            if (KcaShipListViewAdpater.isList(key)) {
+            if (KcaShipListViewAdpater.isBoolean(key)) {
+                ((CheckBox) listview.findViewWithTag(target).findViewById(R.id.ship_stat_checked)).setChecked(Integer.parseInt(value) > 0);
+            } else if (KcaShipListViewAdpater.isList(key)) {
                 setupListSelect(((TextView) listview.findViewWithTag(target).findViewById(R.id.ship_stat_select)),
                         target, "val", key, value.split("_").length);
             } else {
@@ -274,7 +298,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                         obj.addProperty(key, position);
                         break;
                 }
-                sort_values.put(target, ShipInfoFilterActivity.makeStatPrefValue(obj));
+                sort_values.put(target, makeStatPrefValue(obj));
             }
 
             @Override
@@ -288,7 +312,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         if (position == 2) {
             adapter = getStypeArray();
             fnc = 1;
-        } else if (position == 12) {
+        } else if (position == 14) {
             adapter = getSpeedArray();
             fnc = 2;
         }
@@ -463,7 +487,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
             String data = sort_values.get(target);
             JsonObject obj = ShipInfoFilterActivity.unpackPrefValue(data);
             obj.addProperty("val", editable.toString());
-            sort_values.put(target, ShipInfoFilterActivity.makeStatPrefValue(obj));
+            sort_values.put(target, makeStatPrefValue(obj));
         }
     }
 }

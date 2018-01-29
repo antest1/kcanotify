@@ -160,6 +160,9 @@
     <color name="colorStatEquipSlotBack">#40f9f9f9</color>
     <color name="colorStatEquipReinforcement">#e0e0e0</color>
 
+    <color name="colorStatNotLocked">#bdbdbd</color>
+    <color name="colorStatLocked">#4e7bff</color>
+
     <color name="colorStatSallyArea0">#bdbdbd</color>
     <color name="colorStatSallyArea1">#03A9F4</color>
     <color name="colorStatSallyArea2">#4CAF50</color>

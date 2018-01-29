@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static android.R.id.list;
 import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
@@ -33,7 +34,8 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     private long exp_sum = 0L;
     private List<JsonObject> listViewItemList = new ArrayList<>();
 
-    private static final String[] total_key_list = {"api_id", "api_lv", "api_stype", "api_cond",
+    private static final String[] total_key_list = {
+            "api_id", "api_lv", "api_stype", "api_cond", "api_locked",
             "api_karyoku", "api_raisou", "api_taiku", "api_soukou", "api_yasen",
             "api_taisen", "api_kaihi", "api_sakuteki", "api_lucky", "api_soku"};
 
@@ -47,13 +49,17 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     }
 
     public static boolean isList(int idx) {
-        int[] list = {2, 12};
+        int[] list = {2, 14};  // ship_filt_array
+        return (Arrays.binarySearch(list, idx) >= 0);
+    }
+
+    public static boolean isBoolean(int idx) {
+        int[] list = {4}; // ship_filt_array
         return (Arrays.binarySearch(list, idx) >= 0);
     }
 
     public static boolean isNumeric(int idx) {
-        int[] list = {2, 12};
-        return (Arrays.binarySearch(list, idx) < 0);
+        return !isList(idx) && !isBoolean(idx);
     }
 
     @Override
@@ -128,6 +134,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         JsonArray ship_onslot = item.getAsJsonArray("api_onslot");
         int ship_slot_ex = item.get("api_slot_ex").getAsInt();
         int ship_ex_item_icon = 0;
+        int ship_locked = item.get("api_locked").getAsInt();
 
         int slot_sum = 0;
         boolean flag_931 = false;
@@ -159,6 +166,12 @@ public class KcaShipListViewAdpater extends BaseAdapter {
 
         ViewHolder holder = (ViewHolder) v.getTag();
         holder.ship_id.setText(item.get("api_id").getAsString());
+        if (ship_locked > 0) {
+            holder.ship_id.setTextColor(ContextCompat.getColor(context, R.color.colorStatLocked));
+        } else {
+            holder.ship_id.setTextColor(ContextCompat.getColor(context, R.color.colorStatNotLocked));
+        }
+
         holder.ship_stype.setText(KcaApiData.getShipTypeAbbr(ship_stype));
         holder.ship_name.setText(KcaApiData.getShipTranslation(ship_name, false));
 
