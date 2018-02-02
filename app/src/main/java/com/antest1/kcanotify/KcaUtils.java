@@ -40,6 +40,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.YearMonth;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -378,7 +383,27 @@ public class KcaUtils {
         return getTimeStr(left_time, false);
     }
 
+    public static long getCurrentDateTimestamp (long current_time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+        String timetext = dateFormat.format(new Date(current_time));
+        long timestamp = 0;
+        try {
+            timestamp = dateFormat.parse(timetext).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return timestamp;
+    }
 
+    public static int getLastDay(int year, int month) {
+        int[] day31 = {1, 3, 5, 7, 8, 10, 12};
+        if (month == 2) {
+            if (year % 100 != 0 && year % 4 == 0) return 29;
+            else return 28;
+        } else {
+            return Arrays.binarySearch(day31, month) >= 0 ? 31 : 30;
+        }
+    }
 
     public static void doVibrate(Vibrator v, int time) {
         if (Build.VERSION.SDK_INT >= 26) {

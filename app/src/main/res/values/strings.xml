@@ -521,6 +521,22 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="droplog_sort_asc">ASC</string>
     <string name="droplog_sort_desc">DESC</string>
 
+    <string name="action_reslog">Resource Log</string>
+    <string name="reslog_label_date">Date</string>
+    <string name="reslog_label_interval">Interval</string>
+    <string name="reslog_interval_6hour">6 hours</string>
+    <string name="reslog_interval_12hour">12 hours</string>
+    <string name="reslog_interval_1day">1 day</string>
+    <string name="reslog_interval_3day">3 day</string>
+    <string name="reslog_interval_1week">1 week</string>
+    <string name="reslog_interval_2week">2 week</string>
+    <string name="reslog_interval_1month">1 month</string>
+    <string name="reslog_interval_day">Day</string>
+    <string name="reslog_interval_week">Week</string>
+    <string name="reslog_interval_month">Month</string>
+    <string name="reslog_label_resource">Resource</string>
+    <string name="reslog_label_consumable">Consumable</string>
+
     <string name="fleetview_title">FleetView</string>
     <string name="fleetview_combined">CF</string>
     <string name="fleetview_switch_1">Fleet 1</string>

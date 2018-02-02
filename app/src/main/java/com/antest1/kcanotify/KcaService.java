@@ -127,6 +127,7 @@ public class KcaService extends Service {
     KcaDBHelper dbHelper;
     KcaQuestTracker questTracker;
     KcaDropLogger dropLogger;
+    KcaResourceLogger resourceLogger;
     KcaDeckInfo deckInfoCalc;
 
     AlarmManager alarmManager;
@@ -219,6 +220,7 @@ public class KcaService extends Service {
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
         dropLogger = new KcaDropLogger(getApplicationContext(), null, KCANOTIFY_DROPLOG_VERSION);
+        resourceLogger = new KcaResourceLogger(getApplicationContext(), null, KCANOTIFY_RESOURCELOG_VERSION);
         deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
         KcaApiData.setDBHelper(dbHelper);
 
@@ -865,6 +867,10 @@ public class KcaService extends Service {
                         });
                         ship_data_thread.start();
                     }
+                    if (reqPortApiData.has("api_material")) {
+                        JsonArray material_data = reqPortApiData.getAsJsonArray("api_material");
+                        resourceLogger.recordResourceLog(material_data, true);
+                    }
                 }
             }
 
@@ -874,6 +880,14 @@ public class KcaService extends Service {
                     KcaApiData.putSlotItemDataToDB(api_data);
                     isUserItemDataLoaded = true;
                 }
+            }
+
+            if (url.equals(API_GET_MEMBER_MATERIAL)) {
+                if (jsonDataObj.has("api_data")) {
+                    JsonArray api_data = jsonDataObj.get("api_data").getAsJsonArray();
+                    resourceLogger.recordResourceLog(api_data, true);
+                }
+                return;
             }
 
             if (!API_QUEST_REQS.contains(url) && !url.equals(API_GET_MEMBER_MATERIAL) && KcaQuestViewService.getQuestMode()) {
@@ -907,6 +921,7 @@ public class KcaService extends Service {
                     startService(new Intent(getBaseContext(), KcaQuestViewService.class)
                             .setAction(REFRESH_QUESTVIEW_ACTION).putExtra("tab_id", api_tab_id));
                 }
+                return;
             }
 
             if (url.startsWith(API_REQ_QUEST_CLEARITEMGET)) {
@@ -923,6 +938,7 @@ public class KcaService extends Service {
                 dbHelper.removeQuest(quest_id);
                 questTracker.removeQuestTrack(quest_id, true);
                 if (quest_id == 212 || quest_id == 218) questTracker.clearApDupFlag();
+                return;
             }
 
             // Game Data Dependent Tasks
@@ -1510,6 +1526,9 @@ public class KcaService extends Service {
                             questTracker.updateIdCountTracker("605");
                             questTracker.updateIdCountTracker("607");
                             updateQuestView();
+
+                            JsonArray material_data = api_data.getAsJsonArray("api_material");
+                            resourceLogger.recordResourceLog(material_data, false);
 
                             if (KcaDevelopPopupService.isActive()) {
                                 String itemname = "";

@@ -141,4 +141,14 @@
         <item>&#8805;</item>
     </string-array>
 
+    <string-array name="time_interval_array">
+        <item>@string/reslog_interval_6hour</item>
+        <item>@string/reslog_interval_12hour</item>
+        <item>@string/reslog_interval_1day</item>
+        <item>@string/reslog_interval_3day</item>
+        <item>@string/reslog_interval_1week</item>
+        <item>@string/reslog_interval_2week</item>
+        <item>@string/reslog_interval_month</item>
+    </string-array>
+
 </resources>

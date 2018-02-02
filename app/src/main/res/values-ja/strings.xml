@@ -457,6 +457,22 @@
     <string name="droplog_sort_asc">昇順</string>
     <string name="droplog_sort_desc">降順</string>
 
+    <string name="action_reslog">資源記録</string>
+    <string name="reslog_label_date">期間</string>
+    <string name="reslog_label_interval">単位</string>
+    <string name="reslog_interval_6hour">６時間</string>
+    <string name="reslog_interval_12hour">１２時間</string>
+    <string name="reslog_interval_1day">１日</string>
+    <string name="reslog_interval_3day">３日</string>
+    <string name="reslog_interval_1week">１週</string>
+    <string name="reslog_interval_2week">２週</string>
+    <string name="reslog_interval_1month">１ヶ月</string>
+    <string name="reslog_interval_day">１日</string>
+    <string name="reslog_interval_week">１週</string>
+    <string name="reslog_interval_month">１ヶ月</string>
+    <string name="reslog_label_resource">資源</string>
+    <string name="reslog_label_consumable">アイテム</string>
+
     <string name="fleetview_title">艦隊情報</string>
     <string name="fleetview_combined">連合</string>
     <string name="fleetview_switch_1">第１艦隊</string>

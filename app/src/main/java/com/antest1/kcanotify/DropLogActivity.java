@@ -209,7 +209,7 @@ public class DropLogActivity extends AppCompatActivity {
         btn_search = findViewById(R.id.droplog_search);
 
         long current_time = System.currentTimeMillis();
-        current_time = getCurrentDateTimestamp(current_time);
+        current_time = KcaUtils.getCurrentDateTimestamp(current_time);
 
         start_date.setText(convertMillsToDate(current_time - DAY_MILLISECOND * 7));
         end_date.setText(convertMillsToDate(current_time + DAY_MILLISECOND - 1));
@@ -314,18 +314,6 @@ public class DropLogActivity extends AppCompatActivity {
         return dateFormat.format(d);
     }
 
-    public long getCurrentDateTimestamp (long current_time) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
-        String timetext = dateFormat.format(new Date(current_time));
-        long timestamp = 0;
-        try {
-            timestamp = dateFormat.parse(timetext).getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return timestamp;
-    }
-
     View.OnClickListener dateViewListener = new View.OnClickListener() {
         @Override
         public void onClick(final View view) {
@@ -350,7 +338,7 @@ public class DropLogActivity extends AppCompatActivity {
             };
 
             long current_time = System.currentTimeMillis();
-            current_time = getCurrentDateTimestamp(current_time);
+            current_time = KcaUtils.getCurrentDateTimestamp(current_time);
             if (view.getId() == R.id.droplog_date_end) current_time += (DAY_MILLISECOND - 1);
 
             Calendar cal = Calendar.getInstance();

@@ -13,6 +13,7 @@ public final class KcaConstants {
     public static final int KCANOTIFY_DB_VERSION = 3;
     public static final int KCANOTIFY_QTDB_VERSION = 1;
     public static final int KCANOTIFY_DROPLOG_VERSION = 1;
+    public static final int KCANOTIFY_RESOURCELOG_VERSION = 1;
 
     public static final String DB_KEY_STARTDATA = "key_startdata";
     public static final String DB_KEY_DECKPORT = "key_deckport";
