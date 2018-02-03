@@ -246,6 +246,10 @@ public class KcaUtils {
         return getContextWithLocale(ac, bc).getString(id);
     }
 
+    public static JsonObject getJsonObjectCopy(JsonObject data) {
+        return new JsonParser().parse(data.toString()).getAsJsonObject();
+    }
+
     public static int setDefaultGameData(Context context, KcaDBHelper helper) {
         if (KcaApiData.isGameDataLoaded()) return 1;
         String current_version = getStringPreferences(context, PREF_KCA_VERSION);

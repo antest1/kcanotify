@@ -460,16 +460,16 @@
     <string name="action_reslog">資源記録</string>
     <string name="reslog_label_date">期間</string>
     <string name="reslog_label_interval">単位</string>
-    <string name="reslog_interval_6hour">６時間</string>
-    <string name="reslog_interval_12hour">１２時間</string>
-    <string name="reslog_interval_1day">１日</string>
-    <string name="reslog_interval_3day">３日</string>
-    <string name="reslog_interval_1week">１週</string>
-    <string name="reslog_interval_2week">２週</string>
-    <string name="reslog_interval_1month">１ヶ月</string>
-    <string name="reslog_interval_day">１日</string>
-    <string name="reslog_interval_week">１週</string>
-    <string name="reslog_interval_month">１ヶ月</string>
+    <string name="reslog_interval_6hour">6時間</string>
+    <string name="reslog_interval_12hour">12時間</string>
+    <string name="reslog_interval_1day">1日</string>
+    <string name="reslog_interval_3day">3日</string>
+    <string name="reslog_interval_1week">1週</string>
+    <string name="reslog_interval_2week">2週</string>
+    <string name="reslog_interval_1month">1ヶ月</string>
+    <string name="reslog_interval_day">1日</string>
+    <string name="reslog_interval_week">1週</string>
+    <string name="reslog_interval_month">1ヶ月</string>
     <string name="reslog_label_resource">資源</string>
     <string name="reslog_label_consumable">アイテム</string>
 

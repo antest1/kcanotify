@@ -9,9 +9,13 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.antest1.kcanotify.KcaResourcelogItemAdpater.resourceData;
+
 public class KcaResourceLogPageAdapter extends FragmentStatePagerAdapter {
     private final static int tabCount = 2;
-    JsonObject data = new JsonObject();
     public KcaResourceLogPageAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -19,11 +23,8 @@ public class KcaResourceLogPageAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Log.e("KCA", "getItem "+position);
-        JsonObject data = new JsonObject();
-        data.addProperty("0", "resource_data");
-        data.addProperty("1", "consumable_data");
 
-        KcaResoureLogFragment f = KcaResoureLogFragment.create(data, position);
+        KcaResoureLogFragment f = KcaResoureLogFragment.create(resourceData, position);
         switch(position) {
             case 0:
                 return f;
@@ -37,10 +38,6 @@ public class KcaResourceLogPageAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return tabCount;
-    }
-
-    public void setData(JsonObject d) {
-        data = d;
     }
 
     @Override

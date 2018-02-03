@@ -5,13 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:visibility="gone" />
-
     <LinearLayout
         android:id="@+id/reslog_data_area"
         android:layout_width="match_parent"
@@ -23,9 +16,10 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/reslog_chart_area"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.5"
+            android:layout_weight="1.4"
             android:orientation="vertical">
 
             <com.github.mikephil.charting.charts.LineChart
@@ -45,7 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:checked="true"
+                    android:checked="false"
                     android:scaleX="0.75"
                     android:scaleY="0.75"
                     android:text="@string/item_fuel"
@@ -58,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:checked="true"
+                    android:checked="false"
                     android:scaleX="0.75"
                     android:scaleY="0.75"
                     android:text="@string/item_ammo"
@@ -71,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:checked="true"
+                    android:checked="false"
                     android:scaleX="0.75"
                     android:scaleY="0.75"
                     android:text="@string/item_stel"
@@ -84,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:checked="true"
+                    android:checked="false"
                     android:scaleX="0.75"
                     android:scaleY="0.75"
                     android:text="@string/item_baux"
@@ -99,7 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
 
                 <android.support.v7.widget.AppCompatCheckBox
@@ -107,11 +101,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:checked="true"
+                    android:checked="false"
                     android:scaleX="0.75"
                     android:scaleY="0.75"
                     android:text="@string/item_bgtz"
-                    android:textSize="14dp"
+                    android:textSize="12dp"
                     android:translationX="-5dp"
                     app:buttonTint="@color/colorConsumableBucket" />
 
@@ -120,11 +114,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:checked="true"
+                    android:checked="false"
                     android:scaleX="0.75"
                     android:scaleY="0.75"
                     android:text="@string/item_brnr"
-                    android:textSize="14dp"
+                    android:textSize="12dp"
                     android:translationX="-5dp"
                     app:buttonTint="@color/colorConsumableTorch" />
 
@@ -133,11 +127,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:checked="true"
+                    android:checked="false"
                     android:scaleX="0.75"
                     android:scaleY="0.75"
                     android:text="@string/item_mmat"
-                    android:textSize="14dp"
+                    android:textSize="12dp"
                     android:translationX="-5dp"
                     app:buttonTint="@color/colorConsumableDevmat" />
 
@@ -146,11 +140,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:checked="true"
+                    android:checked="false"
                     android:scaleX="0.75"
                     android:scaleY="0.75"
                     android:text="@string/item_kmat"
-                    android:textSize="14dp"
+                    android:textSize="12dp"
                     android:translationX="-5dp"
                     app:buttonTint="@color/colorConsumableScrew" />
 
