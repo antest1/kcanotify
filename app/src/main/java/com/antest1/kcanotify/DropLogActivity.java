@@ -321,16 +321,27 @@ public class DropLogActivity extends AppCompatActivity {
 
                 @Override
                 public void onDateSet(DatePicker v, int year, int monthOfYear, int dayOfMonth) {
+                    boolean valid_flag = true;
                     String text = KcaUtils.format("%02d-%02d-%04d", monthOfYear + 1, dayOfMonth, year);
                     try {
                         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
                         long timestamp = dateFormat.parse(text).getTime();
+                        long new_value = timestamp;
                         if (view.getId() == R.id.droplog_date_start) {
-                            condition_data.addProperty("startdate", timestamp);
+                            if (new_value < condition_data.get("enddate").getAsLong()) {
+                                condition_data.addProperty("startdate", timestamp);
+                            } else {
+                                valid_flag = false;
+                            }
                         } else if (view.getId() == R.id.droplog_date_end) {
-                            condition_data.addProperty("enddate", timestamp + (DAY_MILLISECOND - 1));
+                            new_value = timestamp + (DAY_MILLISECOND - 1);
+                            if (new_value > condition_data.get("startdate").getAsLong()) {
+                                condition_data.addProperty("enddate", timestamp + (DAY_MILLISECOND - 1));
+                            } else {
+                                valid_flag = false;
+                            }
                         }
-                        ((TextView) view).setText(convertMillsToDate(timestamp));
+                        if (valid_flag) ((TextView) view).setText(convertMillsToDate(timestamp));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
