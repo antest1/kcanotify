@@ -61,6 +61,17 @@
             android:title="@string/setting_menu_kand_title_fairy_auto_hide" />
 
         <Preference
+            android:defaultValue=""
+            android:key="fleetview_menu_order"
+            android:summary="@string/setting_menu_kand_desc_fleetview_button_order"
+            android:title="@string/setting_menu_kand_title_fleetview_button_order">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.antest1.kcanotify"
+                android:targetClass="com.antest1.kcanotify.KcaFleetViewMenuOrderActivity" />
+        </Preference>
+
+        <Preference
         android:defaultValue=""
         android:key="download_data"
         android:summary="@string/setting_menu_kand_desc_game_data_down"

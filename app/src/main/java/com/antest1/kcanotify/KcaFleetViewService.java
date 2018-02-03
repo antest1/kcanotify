@@ -15,20 +15,24 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewGroupCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,6 +53,7 @@ import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_FLEETVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_FV_MENU_ORDER;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
 import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION_NEW;
@@ -64,6 +69,8 @@ public class KcaFleetViewService extends Service {
     public static final String SHOW_FLEETVIEW_ACTION = "show_fleetview_action";
     public static final String REFRESH_FLEETVIEW_ACTION = "update_fleetview_action";
     public static final String CLOSE_FLEETVIEW_ACTION = "close_fleetview_action";
+    public static final String[] fleetview_menu_keys = {"quest", "excheck", "develop", "construction", "docking", "maphp", "fchk", "labinfo", "akashi"};
+
     public static final int FLEET_COMBINED_ID = 4;
     final int fleetview_menu_margin = 40;
 
@@ -267,6 +274,31 @@ public class KcaFleetViewService extends Service {
         super.onDestroy();
     }
 
+    private void setFleetMenu() {
+        LinearLayout fleetMenuArea = mView.findViewById(R.id.viewbutton_area);
+        List<TextView> menuBtnList = new ArrayList<>();
+        for (int i = 0; i < fleetview_menu_keys.length; i++) {
+            String key = fleetview_menu_keys[i];
+            TextView tv = mView.findViewById(KcaUtils.getId(KcaUtils.format("viewbutton_%s", key), R.id.class));
+            tv.setText(getStringWithLocale(KcaUtils.getId(KcaUtils.format("viewmenu_%s", key), R.string.class)));
+            tv.setOnTouchListener(mViewTouchListener);
+            menuBtnList.add(tv);
+            ((ViewGroup) tv.getParent()).removeView(tv);
+        }
+
+        String order_data = getStringPreferences(getApplicationContext(), PREF_FV_MENU_ORDER);
+        if (order_data.length() > 0) {
+            JsonArray order = new JsonParser().parse(order_data).getAsJsonArray();
+            for (int i = 0; i < order.size(); i++) {
+                fleetMenuArea.addView(menuBtnList.get(order.get(i).getAsInt()));
+            }
+        } else {
+            for (TextView tv: menuBtnList) {
+                fleetMenuArea.addView(tv);
+            }
+        }
+    }
+
     private void initView() {
         mView = mInflater.inflate(R.layout.view_fleet_list, null);
         mView.setVisibility(GONE);
@@ -274,15 +306,6 @@ public class KcaFleetViewService extends Service {
         mView.findViewById(R.id.fleetview_cn_change).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_fleetswitch).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_hqinfo).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.viewbutton_quest).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.viewbutton_develop).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.viewbutton_construction).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.viewbutton_docking).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.viewbutton_maphp).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.viewbutton_fchk).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.viewbutton_labinfo).setOnTouchListener(mViewTouchListener);
-        mView.findViewById(R.id.viewbutton_excheck).setOnTouchListener(mViewTouchListener);
 
         for (int i = 0; i < 5; i++) {
             mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
@@ -291,16 +314,7 @@ public class KcaFleetViewService extends Service {
             mView.findViewById(getId("fleetview_item_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
         }
 
-        ((TextView) mView.findViewById(R.id.viewbutton_quest)).setText(getStringWithLocale(R.string.viewmenu_quest));
-        ((TextView) mView.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
-        ((TextView) mView.findViewById(R.id.viewbutton_develop)).setText(getStringWithLocale(R.string.viewmenu_develop));
-        ((TextView) mView.findViewById(R.id.viewbutton_construction)).setText(getStringWithLocale(R.string.viewmenu_construction));
-        ((TextView) mView.findViewById(R.id.viewbutton_docking)).setText(getStringWithLocale(R.string.viewmenu_docking));
-        ((TextView) mView.findViewById(R.id.viewbutton_maphp)).setText(getStringWithLocale(R.string.viewmenu_maphp));
-        ((TextView) mView.findViewById(R.id.viewbutton_fchk)).setText(getStringWithLocale(R.string.viewmenu_fchk));
-        ((TextView) mView.findViewById(R.id.viewbutton_labinfo)).setText(getStringWithLocale(R.string.viewmenu_airbase));
-        ((TextView) mView.findViewById(R.id.viewbutton_excheck)).setText(getStringWithLocale(R.string.viewmenu_excheck));
-
+        setFleetMenu();
         mParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -1097,8 +1111,8 @@ public class KcaFleetViewService extends Service {
         int visibllity = mView.getVisibility();
         if (mManager != null) {
             if (mView.getParent() != null) mManager.removeViewImmediate(mView);
-            initView();
             mManager.addView(mView, mParams);
+            initView();
 
             int setViewResult = setView();
             if (setViewResult == 0) {

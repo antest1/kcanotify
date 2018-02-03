@@ -405,6 +405,7 @@ public final class KcaConstants {
     public static final String PREF_EQUIPINFO_SORTKEY = "equipinfo_sortkey";
     public static final String PREF_EQUIPINFO_FILTCOND = "equipinfo_filtcond";
     public static final String PREF_ALARM_DELAY = "alarm_delay";
+    public static final String PREF_FV_MENU_ORDER = "fleetview_menu_order";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -445,7 +446,8 @@ public final class KcaConstants {
             PREF_SHIPINFO_SORTKEY,
             PREF_SHIPINFO_FILTCOND,
             PREF_EQUIPINFO_SORTKEY,
-            PREF_EQUIPINFO_FILTCOND
+            PREF_EQUIPINFO_FILTCOND,
+            PREF_FV_MENU_ORDER
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

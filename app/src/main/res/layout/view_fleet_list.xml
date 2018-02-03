@@ -1826,6 +1826,7 @@
                     android:paddingTop="2dp">
 
                     <LinearLayout
+                        android:id="@+id/viewbutton_area"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -1958,7 +1959,7 @@
                             android:paddingRight="14dp"
                             android:paddingTop="8dp"
                             android:scrollIndicators="right"
-                            android:text="@string/viewmenu_airbase"
+                            android:text="@string/viewmenu_labinfo"
                             android:textColor="@color/white"
                             android:textSize="20dp" />
 

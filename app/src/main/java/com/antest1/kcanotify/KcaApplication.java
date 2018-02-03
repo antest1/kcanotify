@@ -1,31 +1,31 @@
 package com.antest1.kcanotify;
 
-/**
- * Created by alias on 2016-12-18.
- */
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import org.acra.ACRA;
-import org.acra.ReportingInteractionMode;
-import org.acra.annotation.ReportsCrashes;
-
-import android.app.Application;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.Build;
-import android.util.Log;
+import org.acra.annotation.AcraCore;
+import org.acra.annotation.AcraMailSender;
 
 import java.util.Locale;
 
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
-@ReportsCrashes(
-        resToastText = R.string.error_text,
-        mailTo = "kcanotify@gmail.com"
+@AcraCore(buildConfigClass = BuildConfig.class)
+@AcraMailSender(
+        mailTo = "kcanotify@gmail.com",
+        reportAsFile = false
 )
 
 public class KcaApplication extends Application {
     public static Locale defaultLocale;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        ACRA.init(this);
+    }
 
     @Override
     public void onCreate() {

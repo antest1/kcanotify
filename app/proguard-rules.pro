@@ -43,6 +43,7 @@
 
 -dontwarn oauth.**
 -dontwarn com.androidquery.auth.**
+-keep class com.woxthebox.draglistview.** { *; }
 
 -keepattributes SourceFile,LineNumberTable
 -keep class org.acra.** { *; }

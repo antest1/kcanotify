@@ -164,6 +164,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.antest1.kcanotify.SettingActivity" />
         </activity>
+        <activity
+            android:name="com.antest1.kcanotify.KcaFleetViewMenuOrderActivity"
+            android:configChanges="locale|layoutDirection">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.antest1.kcanotify.SettingActivity" />
+        </activity>
 
         <service
             android:name=".KcaService"
