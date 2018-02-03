@@ -197,7 +197,7 @@ public class KcaResoureLogFragment extends Fragment {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         //xAxis.setLabelCount(8, true);
 
-        setChartYRange(chart, max_value, min_value, y_count);
+        setChartYRange(chart, max_value, min_value, y_count, interval_value);
 
         chart.getDescription().setEnabled(false);
         chart.getLegend().setEnabled(false);
@@ -205,13 +205,16 @@ public class KcaResoureLogFragment extends Fragment {
         chart.invalidate();
     }
 
-    public void setChartYRange(LineChart chart, int max_value, int min_value, int y_count) {
+    public void setChartYRange(LineChart chart, int max_value, int min_value, int y_count, int interval) {
+        int margin = interval;
+        if (max_value + margin < maximum[position]) max_value  += margin;
+        if (min_value - margin > 0) min_value -= margin;
         chart.getAxisLeft().setAxisMaximum(max_value);
         chart.getAxisLeft().setAxisMinimum(min_value);
-        chart.getAxisLeft().setLabelCount(y_count, true);
+        chart.getAxisLeft().setLabelCount(y_count, false);
         chart.getAxisRight().setAxisMaximum(max_value);
         chart.getAxisRight().setAxisMinimum(min_value);
-        chart.getAxisRight().setLabelCount(y_count, true);
+        chart.getAxisRight().setLabelCount(y_count, false);
     }
 
     public void setChartDataVisibility(View v, int k) {
@@ -233,7 +236,7 @@ public class KcaResoureLogFragment extends Fragment {
             min_value = (int) (Math.floor(min_value / (float) interval_value) * interval_value);
             int range = max_value - min_value;
             while (range % (y_count - 1) != 0) y_count -= 1;
-            setChartYRange(chart, max_value, min_value, y_count);
+            setChartYRange(chart, max_value, min_value, y_count, interval_value);
             chart.notifyDataSetChanged();
             chart.invalidate();
         }

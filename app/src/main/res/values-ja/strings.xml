@@ -460,6 +460,8 @@
     <string name="action_reslog">資源記録</string>
     <string name="reslog_label_date">期間</string>
     <string name="reslog_label_interval">単位</string>
+    <string name="reslog_interval_1hour">1時間</string>
+    <string name="reslog_interval_3hour">3時間</string>
     <string name="reslog_interval_6hour">6時間</string>
     <string name="reslog_interval_12hour">12時間</string>
     <string name="reslog_interval_1day">1日</string>

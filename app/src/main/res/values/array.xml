@@ -142,6 +142,8 @@
     </string-array>
 
     <string-array name="time_interval_array">
+        <item>@string/reslog_interval_1hour</item>
+        <item>@string/reslog_interval_3hour</item>
         <item>@string/reslog_interval_6hour</item>
         <item>@string/reslog_interval_12hour</item>
         <item>@string/reslog_interval_1day</item>

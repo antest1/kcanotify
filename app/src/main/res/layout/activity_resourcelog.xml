@@ -22,7 +22,8 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/reslog_tab"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp">
 
     </android.support.design.widget.TabLayout>
 
@@ -30,8 +31,12 @@
         android:id="@+id/reslog_filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="4dp">
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginStart="4dp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/reslog_date_layout"
@@ -196,5 +201,10 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/reslog_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginStart="4dp" />
 </LinearLayout>

@@ -34,13 +34,16 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_RESOURCELOG_VERSION;
 public class ResourceLogActivity extends AppCompatActivity {
     Toolbar toolbar;
     public static final long DAY_MILLISECOND = 86400000;
-    public static final int INTERVAL_6H = 0;
-    public static final int INTERVAL_12H = 1;
-    public static final int INTERVAL_1D = 2;
-    public static final int INTERVAL_3D = 3;
-    public static final int INTERVAL_1W = 4;
-    public static final int INTERVAL_2W = 5;
-    public static final int INTERVAL_1M = 6;
+
+    public static final int INTERVAL_1H = 0;
+    public static final int INTERVAL_3H = 1;
+    public static final int INTERVAL_6H = 2;
+    public static final int INTERVAL_12H = 3;
+    public static final int INTERVAL_1D = 4;
+    public static final int INTERVAL_3D = 5;
+    public static final int INTERVAL_1W = 6;
+    public static final int INTERVAL_2W = 7;
+    public static final int INTERVAL_1M = 8;
 
     static boolean is_hidden = false;
 
@@ -249,6 +252,10 @@ public class ResourceLogActivity extends AppCompatActivity {
 
     public long getInterval(int interval_value) {
         switch (interval_value) {
+            case INTERVAL_1H:
+                return DAY_MILLISECOND / 24;
+            case INTERVAL_3H:
+                return DAY_MILLISECOND / 8;
             case INTERVAL_6H:
                 return DAY_MILLISECOND / 4;
             case INTERVAL_12H:
@@ -271,6 +278,8 @@ public class ResourceLogActivity extends AppCompatActivity {
     public void setFragmentChartInfo(int interval_type) {
         long interval_timestamp = getInterval(interval_type) / 8;
         switch (interval_type) {
+            case INTERVAL_1H:
+            case INTERVAL_3H:
             case INTERVAL_6H:
             case INTERVAL_12H:
                 KcaResourcelogItemAdpater.setTimeFormat("HH:mm");
@@ -307,8 +316,9 @@ public class ResourceLogActivity extends AppCompatActivity {
             timestamp_list.add(item.get("timestamp").getAsLong());
         }
 
-        for (int i = 0 ; i < Math.ceil((end - start) / (float) interval); i++) {
-            long time = start + interval * i;
+        int count = 0;
+        long time = start;
+        while (time < end) {
             int recent_idx = 0;
             for (int k = 0; k < timestamp_list.size(); k++) {
                 long ts = timestamp_list.get(k);
@@ -321,6 +331,9 @@ public class ResourceLogActivity extends AppCompatActivity {
             JsonObject item = KcaUtils.getJsonObjectCopy(data.get(recent_idx));
             item.addProperty("timestamp", time);
             new_data.add(item);
+
+            time += interval;
+            count += 1;
         }
         JsonObject last_item = KcaUtils.getJsonObjectCopy(data.get(data.size() - 1));
         last_item.addProperty("itemstamp", end);
