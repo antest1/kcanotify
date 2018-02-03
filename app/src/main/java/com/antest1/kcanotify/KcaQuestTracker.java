@@ -185,6 +185,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 case 1: // Daily
                     if (!quest_time[1].equals(current_time[1]) || !quest_time[2].equals(current_time[2])) {
                         valid_flag = false;
+                    } else if (Integer.parseInt(quest_time[3]) < 5 && reset_passed) {
+                        valid_flag = false;
                     }
                     break;
                 case 2: // Weekly
