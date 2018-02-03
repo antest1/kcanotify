@@ -278,6 +278,7 @@ public class KcaFleetViewService extends Service {
         mView.findViewById(R.id.viewbutton_akashi).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.viewbutton_develop).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.viewbutton_construction).setOnTouchListener(mViewTouchListener);
+        mView.findViewById(R.id.viewbutton_docking).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.viewbutton_maphp).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.viewbutton_fchk).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.viewbutton_labinfo).setOnTouchListener(mViewTouchListener);
@@ -294,6 +295,7 @@ public class KcaFleetViewService extends Service {
         ((TextView) mView.findViewById(R.id.viewbutton_akashi)).setText(getStringWithLocale(R.string.viewmenu_akashi));
         ((TextView) mView.findViewById(R.id.viewbutton_develop)).setText(getStringWithLocale(R.string.viewmenu_develop));
         ((TextView) mView.findViewById(R.id.viewbutton_construction)).setText(getStringWithLocale(R.string.viewmenu_construction));
+        ((TextView) mView.findViewById(R.id.viewbutton_docking)).setText(getStringWithLocale(R.string.viewmenu_docking));
         ((TextView) mView.findViewById(R.id.viewbutton_maphp)).setText(getStringWithLocale(R.string.viewmenu_maphp));
         ((TextView) mView.findViewById(R.id.viewbutton_fchk)).setText(getStringWithLocale(R.string.viewmenu_fchk));
         ((TextView) mView.findViewById(R.id.viewbutton_labinfo)).setText(getStringWithLocale(R.string.viewmenu_airbase));
@@ -507,6 +509,12 @@ public class KcaFleetViewService extends Service {
                             if (isGameDataLoaded()) {
                                 qintent = new Intent(getBaseContext(), KcaConstructPopupService.class);
                                 qintent.setAction(KcaConstructPopupService.CONSTR_DATA_ACTION);
+                                startService(qintent);
+                            }
+                        } else if (id == mView.findViewById(R.id.viewbutton_docking).getId()) {
+                            if (isGameDataLoaded()) {
+                                qintent = new Intent(getBaseContext(), KcaDockingPopupService.class);
+                                qintent.setAction(KcaDockingPopupService.DOCKING_DATA_ACTION);
                                 startService(qintent);
                             }
                         } else if (id == mView.findViewById(R.id.viewbutton_maphp).getId()) {

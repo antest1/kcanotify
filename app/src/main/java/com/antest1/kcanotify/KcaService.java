@@ -867,6 +867,9 @@ public class KcaService extends Service {
                         });
                         ship_data_thread.start();
                     }
+                    if (reqPortApiData.has("api_ndock")) {
+                        dbHelper.putValue(DB_KEY_NDOCKDATA, reqPortApiData.getAsJsonArray("api_ndock").toString());
+                    }
                     if (reqPortApiData.has("api_material")) {
                         JsonArray material_data = reqPortApiData.getAsJsonArray("api_material");
                         resourceLogger.recordResourceLog(material_data, true);
@@ -1266,6 +1269,7 @@ public class KcaService extends Service {
                     if (jsonDataObj.has("api_data")) {
                         JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
                         KcaDocking.setDockData(api_data);
+                        dbHelper.putValue(DB_KEY_NDOCKDATA, api_data.toString());
                         processDockingInfo();
                     }
                     updateFleetView();

@@ -554,11 +554,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="viewmenu_akashi">Akashi</string>
     <string name="viewmenu_develop">Develop</string>
     <string name="viewmenu_construction">Constr</string>
+    <string name="viewmenu_docking">Docking</string>
     <string name="viewmenu_airbase">Airbase</string>
     <string name="viewmenu_maphp">MapHP</string>
     <string name="viewmenu_fchk">Detail</string>
     <string name="viewmenu_develop_title">Development Info</string>
     <string name="viewmenu_construction_title">Construction Info</string>
+    <string name="viewmenu_docking_title">Docking Info</string>
     <string name="viewmenu_airbase_title">Land Air Base Info</string>
     <string name="viewmenu_maphp_title">Map HP Info</string>
     <string name="develop_failed_text">Penguin-in-a-box</string>
