@@ -39,6 +39,7 @@ import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
+import static com.antest1.kcanotify.KcaQuestTracker.getInitialCondValue;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -179,8 +180,8 @@ public class KcaQuestViewService extends Service {
                         String trackinfo_text = "";
                         JsonObject questTrackInfo = getQuestTrackInfo(api_no);
                         if (questTrackInfo != null) {
-                            JsonArray trackCond = questTrackInfo.getAsJsonArray("cond");
                             JsonArray trackData = questTracker.getQuestTrackInfo(api_no);
+                            JsonArray trackCond = questTrackInfo.getAsJsonArray("cond");
 
                             if (trackData.size() == 1) {
                                 JsonArray updatevalue = new JsonArray();
@@ -203,8 +204,8 @@ public class KcaQuestViewService extends Service {
                             }
 
                             for (int n = 0; n < trackData.size(); n++) {
-                                int cond = trackCond.get(n).getAsInt();
-                                int val = trackData.get(n).getAsInt();
+                                int cond = trackCond.get(n).getAsInt() - KcaQuestTracker.getInitialCondValue(api_no);
+                                int val = trackData.get(n).getAsInt() - KcaQuestTracker.getInitialCondValue(api_no);
                                 Log.e("KCA-QV", api_no + " " + String.valueOf(val) + " " + String.valueOf(cond));
                                 trackinfo_list.add(KcaUtils.format("%d/%d", Math.min(val, cond), cond));
                             }

@@ -52,7 +52,8 @@ import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTTRACK;
 public class KcaQuestTracker extends SQLiteOpenHelper {
     private static final String qt_db_name = "quest_track_db";
     private static final String qt_table_name = "quest_track_table";
-    private final int[] quarterly_quest_id = {426, 428, 637, 643, 822, 852, 861, 862};
+    private final static int[] quarterly_quest_id = {426, 428, 637, 643, 822, 852, 861, 862};
+    private final static int[] quest_cont_quest_id = {411, 607, 608};
     private static boolean ap_dup_flag = false;
 
     public void setApDupFlag() {
@@ -61,6 +62,14 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
 
     public void clearApDupFlag() {
         ap_dup_flag = false;
+    }
+
+    public static int getInitialCondValue(String id) {
+        if (Arrays.binarySearch(quest_cont_quest_id, Integer.valueOf(id)) >= 0) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public KcaQuestTracker(Context context, SQLiteDatabase.CursorFactory factory, int version) {
@@ -91,20 +100,21 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         Date currentTime = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo")).getTime();
         SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH", Locale.US);
         String time = df.format(currentTime);
+        String id_str = String.valueOf(id);
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("ACTIVE", 1);
-        Cursor c = db.query(qt_table_name, null, "KEY=?", new String[]{String.valueOf(id)}, null, null, null, null);
+        Cursor c = db.query(qt_table_name, null, "KEY=?", new String[]{id_str}, null, null, null, null);
         if (c.moveToFirst()) {
-            JsonObject questInfo = KcaApiData.getQuestTrackInfo(String.valueOf(id));
+            JsonObject questInfo = KcaApiData.getQuestTrackInfo(id_str);
             if (questInfo != null) {
                 int questType = questInfo.get("type").getAsInt();
                 String questTime = c.getString(c.getColumnIndex("TIME"));
                 if (checkQuestValid(questType, id, questTime)) {
-                    db.update(qt_table_name, values, "KEY=?", new String[]{String.valueOf(id)});
+                    db.update(qt_table_name, values, "KEY=?", new String[]{id_str});
                 } else {
-                    db.delete(qt_table_name, "KEY=?", new String[]{String.valueOf(id)});
+                    db.delete(qt_table_name, "KEY=?", new String[]{id_str});
                     c.close();
                     addQuestTrack(id);
                     return;
@@ -112,7 +122,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             }
         } else {
             values.put("KEY", id);
-            for (int i = 0; i < 4; i++) values.put("CND".concat(String.valueOf(i)), 0);
+            values.put("CND0", getInitialCondValue(id_str));
+            for (int i = 1; i < 4; i++) values.put("CND".concat(String.valueOf(i)), 0);
             values.put("TIME", time);
             db.insert(qt_table_name, null, values);
         }
@@ -121,15 +132,16 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
     }
 
     public void removeQuestTrack(int id, boolean hard) {
+        String id_str = String.valueOf(id);
         SQLiteDatabase db = this.getWritableDatabase();
         if (hard) {
-            db.delete(qt_table_name, "KEY=?", new String[]{String.valueOf(id)});
+            db.delete(qt_table_name, "KEY=?", new String[]{id_str});
         } else {
             ContentValues values = new ContentValues();
             values.put("ACTIVE", 0);
-            Cursor c = db.query(qt_table_name, null, "KEY=?", new String[]{String.valueOf(id)}, null, null, null, null);
+            Cursor c = db.query(qt_table_name, null, "KEY=?", new String[]{id_str}, null, null, null, null);
             if (c.moveToFirst()) {
-                db.update(qt_table_name, values, "KEY=?", new String[]{String.valueOf(id)});
+                db.update(qt_table_name, values, "KEY=?", new String[]{id_str});
             }
             c.close();
         }
