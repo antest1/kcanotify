@@ -921,6 +921,7 @@ public class KcaService extends Service {
                     startService(new Intent(getBaseContext(), KcaQuestViewService.class)
                             .setAction(REFRESH_QUESTVIEW_ACTION).putExtra("tab_id", api_tab_id));
                 }
+                sendQuestCompletionInfo();
                 return;
             }
 
@@ -938,6 +939,7 @@ public class KcaService extends Service {
                 dbHelper.removeQuest(quest_id);
                 questTracker.removeQuestTrack(quest_id, true);
                 if (quest_id == 212 || quest_id == 218) questTracker.clearApDupFlag();
+                sendQuestCompletionInfo();
                 return;
             }
 
