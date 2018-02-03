@@ -457,7 +457,7 @@
     <string name="droplog_sort_asc">오름</string>
     <string name="droplog_sort_desc">내림</string>
 
-    <string name="action_reslog">자원기록</string>
+    <string name="action_reslog">자원 기록</string>
     <string name="reslog_label_date">기간</string>
     <string name="reslog_label_interval">간격</string>
     <string name="reslog_interval_6hour">6시간</string>
