@@ -173,8 +173,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_bypass_address">使用CIDR來敘述代理的地址，使用逗號來分隔各個CIDR。</string>
     <string name="setting_menu_kand_title_record_droplog">記錄掉落日誌</string>
     <string name="setting_menu_kand_title_record_resourcelog">記錄資源日誌</string>
-    <string name="setting_menu_kand_title_fleetview_button_order">FleetView選單順序</string>
-    <string name="setting_menu_kand_desc_fleetview_button_order">為FleetView右方的功能表中的按鈕設定順序</string>
+    <string name="setting_menu_kand_title_fleetview_button_order">艦隊信息選單順序</string>
+    <string name="setting_menu_kand_desc_fleetview_button_order">為艦隊信息右方的功能表中的按鈕設定順序</string>
     <string name="fleetview_button_order_change_when_restart">重啟應用以套用設定</string>
     <string name="record_storage_warning">會佔用設備部分的儲存空間</string>
 
