@@ -156,6 +156,9 @@
     <string name="setting_menu_kand_title_fleetview_button_order">함대정보 메뉴 순서</string>
     <string name="setting_menu_kand_desc_fleetview_button_order">우측 버튼의 순서를 변경</string>
     <string name="fleetview_button_order_change_when_restart">변경사항을 적용하려면 서비스를 재시작하세요.</string>
+    <string name="setting_menu_kand_title_record_droplog">드랍 기록 기능 활성화</string>
+    <string name="setting_menu_kand_title_record_resourcelog">자원 기록 기능 활성화</string>
+    <string name="record_storage_warning">내부 저장공간의 일부를 차지합니다.</string>
 
     <string name="setting_menu_view_head">권한 및 전투예보 설정</string>
     <string name="setting_menu_view_title_accessibility_setting">접근성 설정</string>

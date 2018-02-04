@@ -403,6 +403,8 @@ public class MainActivity extends AppCompatActivity {
                     case PREF_SHOWDROP_SETTING:
                     case PREF_FAIRY_NOTI_LONGCLICK:
                     case PREF_KCA_NOTI_QUEST_FAIRY_GLOW:
+                    case PREF_KCA_ACTIVATE_DROPLOG:
+                    case PREF_KCA_ACTIVATE_RESLOG:
                         editor.putBoolean(prefKey, true);
                         break;
                     case PREF_KCA_LANGUAGE:

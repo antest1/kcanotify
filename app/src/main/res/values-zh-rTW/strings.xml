@@ -171,9 +171,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_socks5_port">SOCKS5代理伺服器埠</string>
     <string name="settings_menu_kand_title_bypass_address">繞行地址（代理）</string>
     <string name="setting_menu_kand_desc_bypass_address">使用CIDR來敘述代理的地址，使用逗號來分隔各個CIDR。</string>
+    <string name="setting_menu_kand_title_record_droplog">Record Drop Log</string>
+    <string name="setting_menu_kand_title_record_resourcelog">Record Resource Log</string>
     <string name="setting_menu_kand_title_fleetview_button_order">FleetView Menu Order</string>
     <string name="setting_menu_kand_desc_fleetview_button_order">Set button order in the right side</string>
     <string name="fleetview_button_order_change_when_restart">Restart service to apply the change.</string>
+    <string name="record_storage_warning">Takes up some of device\'s storage space.</string>
 
     <string name="setting_menu_view_head">功能設定</string>
     <string name="setting_menu_view_title_accessibility_setting">輔助功能設置</string>

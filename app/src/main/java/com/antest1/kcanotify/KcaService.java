@@ -872,7 +872,7 @@ public class KcaService extends Service {
                     }
                     if (reqPortApiData.has("api_material")) {
                         JsonArray material_data = reqPortApiData.getAsJsonArray("api_material");
-                        resourceLogger.recordResourceLog(material_data, true);
+                        recordResourceLog(material_data, true);
                     }
                 }
             }
@@ -888,7 +888,7 @@ public class KcaService extends Service {
             if (url.equals(API_GET_MEMBER_MATERIAL)) {
                 if (jsonDataObj.has("api_data")) {
                     JsonArray api_data = jsonDataObj.get("api_data").getAsJsonArray();
-                    resourceLogger.recordResourceLog(api_data, true);
+                    recordResourceLog(api_data, true);
                 }
                 return;
             }
@@ -1534,7 +1534,7 @@ public class KcaService extends Service {
                             updateQuestView();
 
                             JsonArray material_data = api_data.getAsJsonArray("api_material");
-                            resourceLogger.recordResourceLog(material_data, false);
+                            recordResourceLog(material_data, false);
 
                             if (KcaDevelopPopupService.isActive()) {
                                 String itemname = "";
@@ -2231,7 +2231,7 @@ public class KcaService extends Service {
                     if (isOpenDBEnabled()) KcaOpenDBAPI.sendShipDropData(world, map, node, rank, maprank, enemy, inventory, result);
                     if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDropData(result, world * 10 + map, quest_name, node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
                 }
-                dropLogger.recordDropLog(jsonDataObj, !KcaApiData.checkUserPortEnough());
+                recordDropLog(jsonDataObj, !KcaApiData.checkUserPortEnough());
             }
 
             if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {
@@ -2328,6 +2328,14 @@ public class KcaService extends Service {
 
     private boolean isPoiDBEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_POIDB_API_USE);
+    }
+
+    private boolean isDropLogEnable() {
+        return getBooleanPreferences(getApplicationContext(), PREF_KCA_ACTIVATE_DROPLOG);
+    }
+
+    private boolean isResourceLogEnable() {
+        return getBooleanPreferences(getApplicationContext(), PREF_KCA_ACTIVATE_DROPLOG);
     }
 
 
@@ -2598,6 +2606,18 @@ public class KcaService extends Service {
             Intent qintent = new Intent(getBaseContext(), KcaLandAirBasePopupService.class);
             qintent.setAction(KcaLandAirBasePopupService.LAB_DATA_ACTION);
             startService(qintent);
+        }
+    }
+
+    public void recordDropLog(JsonObject data, boolean port_full) {
+        if (isDropLogEnable()) {
+            dropLogger.recordDropLog(data, port_full);
+        }
+    }
+
+    public void recordResourceLog(JsonArray material_data, boolean is_object) {
+        if (isResourceLogEnable()) {
+            resourceLogger.recordResourceLog(material_data, is_object);
         }
     }
 

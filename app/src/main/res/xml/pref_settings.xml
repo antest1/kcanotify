@@ -71,6 +71,18 @@
                 android:targetClass="com.antest1.kcanotify.KcaFleetViewMenuOrderActivity" />
         </Preference>
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="activate_droplog"
+            android:summary="@string/record_storage_warning"
+            android:title="@string/setting_menu_kand_title_record_droplog" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="activate_resourcelog"
+            android:summary="@string/record_storage_warning"
+            android:title="@string/setting_menu_kand_title_record_resourcelog" />
+
         <Preference
         android:defaultValue=""
         android:key="download_data"
