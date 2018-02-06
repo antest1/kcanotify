@@ -9,6 +9,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -19,8 +20,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
+import com.commonsware.cwac.provider.StreamProvider;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -53,6 +56,7 @@ import static com.antest1.kcanotify.KcaAlarmService.ALARM_CHANNEL_ID;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_DISABLE_CUSTOMTOAST;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
@@ -248,11 +252,11 @@ public class KcaUtils {
 
     public static int setDefaultGameData(Context context, KcaDBHelper helper) {
         boolean valid_data = false;
-        if (KcaApiData.isGameDataLoaded()) return 1;
-        String current_version = getStringPreferences(context, PREF_KCA_VERSION);
+        String current_version = getStringPreferences(context, PREF_KCA_DATA_VERSION);
         String default_version = context.getString(R.string.default_gamedata_version);
 
         if (helper.getJsonObjectValue(DB_KEY_STARTDATA) != null && KcaUtils.compareVersion(current_version, default_version)) {
+            if (KcaApiData.isGameDataLoaded()) return 1;
             JsonObject start_data = helper.getJsonObjectValue(DB_KEY_STARTDATA);
             if (start_data.has("api_data") && start_data.get("api_data").isJsonObject()) {
                 KcaApiData.getKcGameData(start_data.getAsJsonObject("api_data"));
@@ -271,6 +275,7 @@ public class KcaUtils {
                 JsonObject api_data = new Gson().fromJson(data, JsonObject.class).getAsJsonObject("api_data");
                 KcaApiData.getKcGameData(api_data);
                 setPreferences(context, PREF_KCA_VERSION, default_version);
+                setPreferences(context, PREF_KCA_DATA_VERSION, default_version);
             } catch (IOException e) {
                 return 0;
             }
@@ -284,7 +289,8 @@ public class KcaUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (uri.toString().startsWith("file")) {
                 File file = new File(uri.getPath());
-                return FileProvider.getUriForFile(context, "com.antest1.kcanotify.provider", file);
+                Uri content_uri = StreamProvider.getUriForFile("com.antest1.kcanotify.provider", file);
+                return content_uri;
             } else {
                 return uri;
             }
@@ -300,7 +306,14 @@ public class KcaUtils {
             }
             if (!uri.equals(Uri.EMPTY)) {
                 mediaPlayer.setDataSource(context, uri);
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    AudioAttributes attr = new AudioAttributes.Builder()
+                            .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
+                            .build();
+                    mediaPlayer.setAudioAttributes(attr);
+                } else {
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
+                }
                 mediaPlayer.prepare();
                 mediaPlayer.start();
             }

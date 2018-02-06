@@ -182,6 +182,7 @@ public class KcaAlarmService extends Service {
                 int nid = getNotificationId(NOTI_UPDATE, utype);
                 notificationManager.notify(nid, createUpdateNotification(utype, version, nid));
                 alarm_set.add(nid);
+
             } else if (getBooleanPreferences(getApplication(), PREF_KCA_NOTI_NOTIFYATSVCOFF) || KcaService.getServiceStatus()) {
                 loadTranslationData(getApplicationContext());
                 if (intent.getStringExtra("data") != null) {
