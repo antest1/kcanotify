@@ -40,7 +40,6 @@ import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
-import static com.antest1.kcanotify.KcaQuestTracker.getInitialCondValue;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -63,6 +62,7 @@ public class KcaQuestViewService extends Service {
     private BroadcastReceiver refreshreceiver;
     public static boolean active;
     public static JsonObject api_data;
+    private static boolean isamenuvisible = false;
     private static boolean isquestlist = false;
     private static int currentPage = 1;
     private static int prevpagelastno = -1;
@@ -80,7 +80,7 @@ public class KcaQuestViewService extends Service {
     WindowManager.LayoutParams mParams;
     ScrollView questview;
     TextView questprev, questnext;
-    ImageView questclear;
+    ImageView questclear, questamenubtn;
     ImageView exitbtn;
 
     @Nullable
@@ -336,6 +336,12 @@ public class KcaQuestViewService extends Service {
                 questclear = questview.findViewById(R.id.quest_clear);
                 questclear.setOnTouchListener(mViewTouchListener);
 
+                isamenuvisible = false;
+                questview.findViewById(R.id.quest_amenu).setVisibility(View.GONE);
+                questamenubtn = questview.findViewById(R.id.quest_amenu_btn);
+                questamenubtn.setOnTouchListener(mViewTouchListener);
+                questamenubtn.setImageResource(R.mipmap.ic_arrow_up);
+
                 mParams = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.MATCH_PARENT,
                         WindowManager.LayoutParams.MATCH_PARENT,
@@ -436,6 +442,15 @@ public class KcaQuestViewService extends Service {
                         if (id == questview.findViewById(R.id.quest_head).getId()) {
                             mView.setVisibility(View.GONE);
                             mManager.removeViewImmediate(mView);
+                        } else if (id == questamenubtn.getId()) {
+                            if (isamenuvisible) {
+                                questview.findViewById(R.id.quest_amenu).setVisibility(View.GONE);
+                                questamenubtn.setImageResource(R.mipmap.ic_arrow_up);
+                            } else {
+                                questview.findViewById(R.id.quest_amenu).setVisibility(View.VISIBLE);
+                                questamenubtn.setImageResource(R.mipmap.ic_arrow_down);
+                            }
+                            isamenuvisible = !isamenuvisible;
                         } else if (id == questclear.getId()) {
                             questTracker.clearQuestTrack();
                         } else if (id == questprev.getId() || id == questnext.getId()) {
