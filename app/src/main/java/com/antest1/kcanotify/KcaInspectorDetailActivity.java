@@ -118,8 +118,8 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
                             SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
                             SharedPreferences.Editor editor = pref.edit();
                             String value = SettingActivity.getDefaultValue(key);
-                            if (value.startsWith("R.string")) {
-                                editor.putString(key, getString(getId(value, R.string.class)));
+                            if (value.startsWith("R.string.")) {
+                                editor.putString(key, getString(getId(value.replace("R.string.", ""), R.string.class)));
                             } else if (value.startsWith("boolean_")) {
                                 editor.putBoolean(key, Boolean.parseBoolean(value.replace("boolean_", "")));
                             } else {
