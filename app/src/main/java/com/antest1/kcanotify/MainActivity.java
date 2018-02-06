@@ -561,30 +561,34 @@ public class MainActivity extends AppCompatActivity {
                     if (jsonDataObj.has("version")) {
                         String recentVersion = jsonDataObj.get("version").getAsString();
                         if (!compareVersion(currentVersion, recentVersion)) { // True if latest
-                            textUpdate.setVisibility(View.VISIBLE);
-                            textUpdate.setText(KcaUtils.format(getStringWithLocale(R.string.ma_hasupdate), recentVersion));
-                            Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
-                            JsonObject data = new JsonObject();
-                            data.addProperty("type", TYPE_UPDATE);
-                            data.addProperty("utype", 0);
-                            data.addProperty("version", recentVersion);
-                            aIntent.putExtra("data", data.toString());
-                            startService(aIntent);
+                            if (textUpdate.getVisibility() == View.GONE) {
+                                Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
+                                JsonObject data = new JsonObject();
+                                data.addProperty("type", TYPE_UPDATE);
+                                data.addProperty("utype", 0);
+                                data.addProperty("version", recentVersion);
+                                aIntent.putExtra("data", data.toString());
+                                startService(aIntent);
+                                textUpdate.setVisibility(View.VISIBLE);
+                                textUpdate.setText(KcaUtils.format(getStringWithLocale(R.string.ma_hasupdate), recentVersion));
+                            }
                         }
                     }
 
                     if (jsonDataObj.has("data_version")) {
                         String recentVersion = jsonDataObj.get("data_version").getAsString();
                         if (!compareVersion(currentDataVersion, recentVersion)) { // True if latest
-                            textDataUpdate.setVisibility(View.VISIBLE);
-                            textDataUpdate.setText(KcaUtils.format(getStringWithLocale(R.string.ma_hasdataupdate), recentVersion));
-                            Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
-                            JsonObject data = new JsonObject();
-                            data.addProperty("type", TYPE_UPDATE);
-                            data.addProperty("utype", 1);
-                            data.addProperty("version", recentVersion);
-                            aIntent.putExtra("data", data.toString());
-                            startService(aIntent);
+                            if (textDataUpdate.getVisibility() == View.GONE) {
+                                Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
+                                JsonObject data = new JsonObject();
+                                data.addProperty("type", TYPE_UPDATE);
+                                data.addProperty("utype", 1);
+                                data.addProperty("version", recentVersion);
+                                aIntent.putExtra("data", data.toString());
+                                startService(aIntent);
+                                textDataUpdate.setVisibility(View.VISIBLE);
+                                textDataUpdate.setText(KcaUtils.format(getStringWithLocale(R.string.ma_hasdataupdate), recentVersion));
+                            }
                         }
                     }
                 } catch (Exception e) {
