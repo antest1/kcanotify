@@ -48,6 +48,7 @@ import java.util.zip.GZIPOutputStream;
 
 import static android.R.attr.min;
 import static android.R.attr.orientation;
+import static android.R.attr.value;
 import static com.antest1.kcanotify.KcaAlarmService.ALARM_CHANNEL_ID;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
@@ -246,15 +247,20 @@ public class KcaUtils {
     }
 
     public static int setDefaultGameData(Context context, KcaDBHelper helper) {
+        boolean valid_data = false;
         if (KcaApiData.isGameDataLoaded()) return 1;
         String current_version = getStringPreferences(context, PREF_KCA_VERSION);
         String default_version = context.getString(R.string.default_gamedata_version);
 
         if (helper.getJsonObjectValue(DB_KEY_STARTDATA) != null && KcaUtils.compareVersion(current_version, default_version)) {
-            JsonObject api_data = helper.getJsonObjectValue(DB_KEY_STARTDATA).getAsJsonObject("api_data");
-            KcaApiData.getKcGameData(api_data);
-            return 1;
-        } else {
+            JsonObject start_data = helper.getJsonObjectValue(DB_KEY_STARTDATA);
+            if (start_data.has("api_data") && start_data.get("api_data").isJsonObject()) {
+                KcaApiData.getKcGameData(start_data.getAsJsonObject("api_data"));
+                valid_data = true;
+            }
+        }
+
+        if (!valid_data) {
             try {
                 AssetManager assetManager = context.getAssets();
                 AssetManager.AssetInputStream ais =
@@ -268,6 +274,8 @@ public class KcaUtils {
             } catch (IOException e) {
                 return 0;
             }
+            return 1;
+        } else {
             return 1;
         }
     }
