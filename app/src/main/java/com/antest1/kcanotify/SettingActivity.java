@@ -59,23 +59,50 @@ import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_LANGUAGE_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_PRIORITY_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
+import static com.antest1.kcanotify.KcaConstants.PREF_DISABLE_CUSTOMTOAST;
+import static com.antest1.kcanotify.KcaConstants.PREF_EQUIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_ACTIVATE_DROPLOG;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_ACTIVATE_RESLOG;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLENODE_USE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_TYPE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_MORALE_MIN;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_AKASHI;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_MORALE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_NOTIFYATSVCOFF;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_QUEST_FAIRY_GLOW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_NS;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_QUESTVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
+import static com.antest1.kcanotify.KcaConstants.PREF_POIDB_API_USE;
+import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
+import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
+import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
+import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
 import static com.antest1.kcanotify.KcaMoraleInfo.setMinMorale;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -702,5 +729,65 @@ public class SettingActivity extends AppCompatActivity {
         int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
                 android.os.Process.myUid(), context.getPackageName());
         return mode == AppOpsManager.MODE_ALLOWED;
+    }
+
+    public static String getDefaultValue(String prefKey) {
+        switch (prefKey) {
+            case PREF_KCA_SEEK_CN:
+                return String.valueOf(SEEK_33CN1);
+            case PREF_OPENDB_API_USE:
+            case PREF_POIDB_API_USE:
+            case PREF_AKASHI_STAR_CHECKED:
+            case PREF_KCA_SET_PRIORITY:
+            case PREF_DISABLE_CUSTOMTOAST:
+            case PREF_FAIRY_AUTOHIDE:
+            case PREF_KCA_NOTI_AKASHI:
+                return "boolean_false";
+            case PREF_KCA_EXP_VIEW:
+            case PREF_KCA_NOTI_NOTIFYATSVCOFF:
+            case PREF_KCA_NOTI_DOCK:
+            case PREF_KCA_NOTI_EXP:
+            case PREF_KCA_NOTI_MORALE:
+            case PREF_KCA_BATTLEVIEW_USE:
+            case PREF_KCA_BATTLENODE_USE:
+            case PREF_KCA_QUESTVIEW_USE:
+            case PREF_KCA_NOTI_V_HD:
+            case PREF_KCA_NOTI_V_NS:
+            case PREF_SHOWDROP_SETTING:
+            case PREF_FAIRY_NOTI_LONGCLICK:
+            case PREF_KCA_NOTI_QUEST_FAIRY_GLOW:
+            case PREF_KCA_ACTIVATE_DROPLOG:
+            case PREF_KCA_ACTIVATE_RESLOG:
+                return "boolean_true";
+            case PREF_KCA_LANGUAGE:
+                return "R.string.default_locale";
+            case PREF_KCA_NOTI_SOUND_KIND:
+                return "R.string.sound_kind_value_vibrate";
+            case PREF_KCA_NOTI_RINGTONE:
+                return RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString();
+            case PREF_APK_DOWNLOAD_SITE:
+                return "R.string.app_download_link_playstore";
+            case PREF_AKASHI_STARLIST:
+            case PREF_AKASHI_FILTERLIST:
+            case PREF_SHIPINFO_FILTCOND:
+                return "|";
+            case PREF_SHIPINFO_SORTKEY:
+                return "|1,true|";
+            case PREF_FAIRY_ICON:
+            case PREF_KCA_EXP_TYPE:
+                return "0";
+            case PREF_ALARM_DELAY:
+                return "61";
+            case PREF_KCA_MORALE_MIN:
+                return "40";
+            case PREF_EQUIPINFO_FILTCOND:
+                return "all";
+            case PREF_KCA_DATA_VERSION:
+                return "R.string.default_gamedata_version";
+            case PREF_UPDATE_SERVER:
+                return "R.string.server_swaytwig";
+            default:
+                return "";
+        }
     }
 }

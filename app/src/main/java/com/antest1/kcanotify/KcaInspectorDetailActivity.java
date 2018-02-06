@@ -1,6 +1,9 @@
 package com.antest1.kcanotify;
 
+import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -8,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +35,7 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_BOOLEAN_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_ARRAY;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
+import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 public class KcaInspectorDetailActivity extends AppCompatActivity {
@@ -43,6 +48,7 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
     boolean is_formatted = true;
     Toolbar toolbar;
     TextView view_key, view_value, view_format;
+    ImageView view_delete;
     View view_holder;
     ScrollView sv;
     KcaDBHelper dbHelper;
@@ -61,7 +67,7 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
-        String type_key = bundle.getString("key", null);
+        final String type_key = bundle.getString("key", null);
         if (type_key == null) {
             finish();
         } else {
@@ -82,36 +88,52 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
             view_key = findViewById(R.id.inspect_data_key);
             view_value = findViewById(R.id.inspect_data_value);
             view_format = findViewById(R.id.inspect_data_format);
+            view_delete = findViewById(R.id.inspect_data_delete);
+            view_delete.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                    R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
+
+            String[] type_key_list = type_key.split(" ");
+            key = type_key_list[1];
+            view_key.setText(key);
 
             view_format.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (value_text == null || value_text.length() > 0) {
                         is_formatted = !is_formatted;
-                        setText();
+                        setText(type_key);
                     }
                 }
             });
 
-            String[] type_key_list = type_key.split(" ");
-            key = type_key_list[1];
-            view_key.setText(key);
-
-            if (type_key.startsWith(DB_PREFIX)) {
-                value_text = dbHelper.getValue(key);
-                if (value_text == null) value_text = "<null>";
-            } else if (type_key.startsWith(PREF_PREFIX)) {
-                if (PREFS_BOOLEAN_LIST.contains(key)) {
-                    value_text = String.valueOf(getBooleanPreferences(getApplicationContext(), key));
-                } else {
-                    value_text = getStringPreferences(getApplicationContext(), key);
+            view_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (value_text != null) {
+                        if (type_key.startsWith(DB_PREFIX)) {
+                            dbHelper.deleteValue(key);
+                        } else if (type_key.startsWith(QT_PREFIX)) {
+                            questTracker.clearQuestTrack();
+                        } else if (type_key.startsWith(PREF_PREFIX)) {
+                            SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = pref.edit();
+                            String value = SettingActivity.getDefaultValue(key);
+                            if (value.startsWith("R.string")) {
+                                editor.putString(key, getString(getId(value, R.string.class)));
+                            } else if (value.startsWith("boolean_")) {
+                                editor.putBoolean(key, Boolean.parseBoolean(value.replace("boolean_", "")));
+                            } else {
+                                editor.putString(key, value);
+                            }
+                            editor.apply();
+                        }
+                        setText(type_key);
+                    }
                 }
-            } else if (type_key.startsWith(QT_PREFIX)) {
-                value_text = questTracker.getQuestTrackerData();
-            } else if (type_key.startsWith(DQ_PREFIX)) {
-                value_text = dbHelper.getQuestListData();
-            }
-            setText();
+            });
+
+
+            setText(type_key);
             sv.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
                 @Override
                 public void onScrollChanged() {
@@ -150,7 +172,22 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void setText() {
+    public void setText(String type_key) {
+        if (type_key.startsWith(DB_PREFIX)) {
+            value_text = dbHelper.getValue(key);
+            if (value_text == null) value_text = "<null>";
+        } else if (type_key.startsWith(PREF_PREFIX)) {
+            if (PREFS_BOOLEAN_LIST.contains(key)) {
+                value_text = String.valueOf(getBooleanPreferences(getApplicationContext(), key));
+            } else {
+                value_text = getStringPreferences(getApplicationContext(), key);
+            }
+        } else if (type_key.startsWith(QT_PREFIX)) {
+            value_text = questTracker.getQuestTrackerData();
+        } else if (type_key.startsWith(DQ_PREFIX)) {
+            value_text = dbHelper.getQuestListData();
+        }
+
         if (value_text == null || value_text.length() == 0) {
             view_value.setText("");
         } else {

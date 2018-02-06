@@ -174,11 +174,16 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         } catch (Exception e) {
             recordErrorLog(ERROR_TYPE_DB, "getValue", key, "", getStringFromException(e));
         } finally {
-            if(c != null) {
+            if (c != null) {
                 c.close();
             }
         }
         return value;
+    }
+
+    public void deleteValue(String key) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(table_name, "KEY=?", new String[]{key});
     }
 
     public int getLength(String key) {

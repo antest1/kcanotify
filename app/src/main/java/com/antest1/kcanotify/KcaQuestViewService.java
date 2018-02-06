@@ -79,7 +79,8 @@ public class KcaQuestViewService extends Service {
 
     WindowManager.LayoutParams mParams;
     ScrollView questview;
-    TextView questprev, questnext, questclear;
+    TextView questprev, questnext;
+    ImageView questclear;
     ImageView exitbtn;
 
     @Nullable

@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -371,87 +372,20 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("ApplySharedPref")
     private void setDefaultPreferences() {
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         for (String prefKey : PREFS_LIST) {
             if (!pref.contains(prefKey)) {
                 Log.e("KCA", prefKey + " pref add");
-                switch (prefKey) {
-                    case PREF_KCA_SEEK_CN:
-                        editor.putString(prefKey, String.valueOf(SEEK_33CN1));
-                        break;
-                    case PREF_OPENDB_API_USE:
-                    case PREF_POIDB_API_USE:
-                    case PREF_AKASHI_STAR_CHECKED:
-                    case PREF_KCA_SET_PRIORITY:
-                    case PREF_DISABLE_CUSTOMTOAST:
-                    case PREF_FAIRY_AUTOHIDE:
-                    case PREF_KCA_NOTI_AKASHI:
-                        editor.putBoolean(prefKey, false);
-                        break;
-                    case PREF_KCA_EXP_VIEW:
-                    case PREF_KCA_NOTI_NOTIFYATSVCOFF:
-                    case PREF_KCA_NOTI_DOCK:
-                    case PREF_KCA_NOTI_EXP:
-                    case PREF_KCA_NOTI_MORALE:
-                    case PREF_KCA_BATTLEVIEW_USE:
-                    case PREF_KCA_BATTLENODE_USE:
-                    case PREF_KCA_QUESTVIEW_USE:
-                    case PREF_KCA_NOTI_V_HD:
-                    case PREF_KCA_NOTI_V_NS:
-                    case PREF_SHOWDROP_SETTING:
-                    case PREF_FAIRY_NOTI_LONGCLICK:
-                    case PREF_KCA_NOTI_QUEST_FAIRY_GLOW:
-                    case PREF_KCA_ACTIVATE_DROPLOG:
-                    case PREF_KCA_ACTIVATE_RESLOG:
-                        editor.putBoolean(prefKey, true);
-                        break;
-                    case PREF_KCA_LANGUAGE:
-                        String localecode = getString(R.string.default_locale);
-                        editor.putString(prefKey, localecode);
-                        break;
-                    case PREF_KCA_NOTI_SOUND_KIND:
-                        editor.putString(prefKey, getString(R.string.sound_kind_value_vibrate));
-                        break;
-                    case PREF_KCA_NOTI_RINGTONE:
-                        editor.putString(prefKey, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
-                        break;
-                    case PREF_APK_DOWNLOAD_SITE:
-                        editor.putString(prefKey, getString(R.string.app_download_link_playstore));
-                        break;
-                    case PREF_AKASHI_STARLIST:
-                    case PREF_AKASHI_FILTERLIST:
-                    case PREF_SHIPINFO_FILTCOND:
-                        editor.putString(prefKey, "|");
-                        break;
-                    case PREF_SHIPINFO_SORTKEY:
-                        editor.putString(prefKey, "|1,true|");
-                        break;
-                    case PREF_FAIRY_ICON:
-                    case PREF_KCA_EXP_TYPE:
-                        editor.putString(prefKey, "0");
-                        break;
-                    case PREF_ALARM_DELAY:
-                        editor.putString(prefKey, "61");
-                        break;
-                    case PREF_KCA_MORALE_MIN:
-                        editor.putString(prefKey, "40");
-                        break;
-                    case PREF_EQUIPINFO_FILTCOND:
-                        editor.putString(prefKey, "all");
-                        break;
-                    case PREF_KCA_DATA_VERSION:
-                        String defaultversion = getString(R.string.default_gamedata_version);
-                        editor.putString(prefKey, defaultversion);
-                        break;
-                    case PREF_UPDATE_SERVER:
-                        String defaultserver = getString(R.string.server_swaytwig);
-                        editor.putString(prefKey, defaultserver);
-                        break;
-                    default:
-                        editor.putString(prefKey, "");
-                        break;
+                String value = SettingActivity.getDefaultValue(prefKey);
+                if (value.startsWith("R.string")) {
+                    editor.putString(prefKey, getString(getId(value, R.string.class)));
+                } else if (value.startsWith("boolean_")) {
+                    editor.putBoolean(prefKey, Boolean.parseBoolean(value.replace("boolean_", "")));
+                } else {
+                    editor.putString(prefKey, value);
                 }
             }
         }
