@@ -339,7 +339,7 @@ public class KcaApiData {
         int max_item_size = 0;
         JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
         if (basic_info != null) max_item_size = basic_info.get("api_max_slotitem").getAsInt();
-        return max_item_size;
+        return max_item_size + 3;
     }
 
     public static boolean checkUserItemMax() {
@@ -347,7 +347,7 @@ public class KcaApiData {
         int max_equip_size = 0;
         JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
         if (basic_info != null) max_equip_size = basic_info.get("api_max_slotitem").getAsInt();
-        return max_equip_size <= getItemSize();
+        return (max_equip_size + 3) <= getItemSize();
     }
 
     public static boolean checkEventUserShip() {
