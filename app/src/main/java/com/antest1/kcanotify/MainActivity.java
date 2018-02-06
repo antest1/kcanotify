@@ -381,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("KCA", prefKey + " pref add");
                 String value = SettingActivity.getDefaultValue(prefKey);
                 if (value.startsWith("R.string")) {
-                    editor.putString(prefKey, getString(getId(value, R.string.class)));
+                    editor.putString(prefKey, getString(getId(value.replace("R.string.", ""), R.string.class)));
                 } else if (value.startsWith("boolean_")) {
                     editor.putBoolean(prefKey, Boolean.parseBoolean(value.replace("boolean_", "")));
                 } else {
