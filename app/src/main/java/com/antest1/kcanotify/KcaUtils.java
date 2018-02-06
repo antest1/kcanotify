@@ -43,12 +43,15 @@ import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import static android.R.attr.data;
 import static android.R.attr.min;
 import static android.R.attr.orientation;
 import static android.R.attr.value;
@@ -401,6 +404,16 @@ public class KcaUtils {
 
     public static String getTimeStr(int left_time) {
         return getTimeStr(left_time, false);
+    }
+
+    public static Calendar getJapanCalendarInstance() {
+        return Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
+    }
+
+    public static SimpleDateFormat getJapanSimpleDataFormat(String format) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.US);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
+        return dateFormat;
     }
 
     public static long getCurrentDateTimestamp (long current_time) {

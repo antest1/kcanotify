@@ -48,6 +48,8 @@ import static com.antest1.kcanotify.KcaApiData.kcShipData;
 import static com.antest1.kcanotify.KcaConstants.API_REQ_MAP_START;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTTRACK;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTTRACK;
+import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
+import static com.antest1.kcanotify.KcaUtils.getJapanSimpleDataFormat;
 
 public class KcaQuestTracker extends SQLiteOpenHelper {
     private static final String qt_db_name = "quest_track_db";
@@ -97,8 +99,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
     }
 
     public void addQuestTrack(int id) {
-        Date currentTime = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo")).getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH", Locale.US);
+        Date currentTime = getJapanCalendarInstance().getTime();
+        SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String time = df.format(currentTime);
         String id_str = String.valueOf(id);
 
@@ -148,6 +150,13 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         test();
     }
 
+    public void clearQuestTrack() {
+        String id_str = String.valueOf(id);
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(qt_table_name, null, null);
+        test();
+    }
+
     public void deleteQuestTrackWithRange(int startId, int endId) {
         SQLiteDatabase db = this.getWritableDatabase();
         if (startId == -1) {
@@ -171,8 +180,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
 
     public boolean checkQuestValid(int type, int id, String time) {
         boolean valid_flag = true;
-        Date currentTime = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo")).getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH", Locale.US);
+        Date currentTime = getJapanCalendarInstance().getTime();
+        SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String[] current_time = df.format(currentTime).split("-");
         String[] quest_time = time.split("-");
         boolean reset_passed = Integer.parseInt(current_time[3]) >= 5;

@@ -41,6 +41,8 @@ import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_VPN;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaQuestViewService.getPrevPageLastNo;
 import static com.antest1.kcanotify.KcaQuestViewService.setPrevPageLastNo;
+import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
+import static com.antest1.kcanotify.KcaUtils.getJapanSimpleDataFormat;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 
 /**
@@ -353,8 +355,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public JsonArray getCurrentQuestList() {
-        Date currentTime = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo")).getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH", Locale.US);
+        Date currentTime = getJapanCalendarInstance().getTime();
+        SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String[] current_time = df.format(currentTime).split("-");
 
         db = this.getReadableDatabase();
@@ -371,6 +373,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                 int quest_type = quest_data.get("api_type").getAsInt();
 
                 String[] quest_time = getQuestDate(quest_id).split("-");
+                if (current_time.length != 4) continue;
                 boolean reset_passed = Integer.parseInt(current_time[3]) >= 5;
                 switch (quest_type) {
                     case 1: // Daily
@@ -426,8 +429,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     // for kca_questlist
     public void checkValidQuest(int page, int lastpage, JsonArray api_list) {
-        Date currentTime = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo")).getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH", Locale.US);
+        Date currentTime = getJapanCalendarInstance().getTime();
+        SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String[] current_time = df.format(currentTime).split("-");
         int last_no = -1;
 
@@ -520,8 +523,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void putQuest(int key, String value) {
-        Date currentTime = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo")).getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH", Locale.US);
+        Date currentTime = getJapanCalendarInstance().getTime();
+        SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String time = df.format(currentTime);
 
         db = this.getWritableDatabase();
@@ -547,8 +550,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void initExpScore() {
-        Date currentTime = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo")).getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH", Locale.US);
+        Date currentTime = getJapanCalendarInstance().getTime();
+        SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String time = df.format(currentTime);
 
         String prevTime = getValue(DB_KEY_EXPTIME);
@@ -573,8 +576,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void updateExpScore(int exp) {
-        Date currentTime = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo")).getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd-HH", Locale.US);
+        Date currentTime = getJapanCalendarInstance().getTime();
+        SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String time = df.format(currentTime);
         db = this.getWritableDatabase();
 

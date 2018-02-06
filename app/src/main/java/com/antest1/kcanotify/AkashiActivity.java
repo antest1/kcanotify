@@ -30,8 +30,10 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -40,6 +42,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
+import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
@@ -82,7 +85,7 @@ public class AkashiActivity extends AppCompatActivity {
         setDefaultGameData();
         loadTranslationData(getApplicationContext());
 
-        Calendar calendar = Calendar.getInstance(Locale.JAPAN);
+        Calendar calendar = getJapanCalendarInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0(Sun) ~ 6(Sat)
         currentClicked = dayOfWeek;
         listViewItemList = new ArrayList<>();

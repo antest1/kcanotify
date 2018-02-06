@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static android.R.attr.id;
 import static com.antest1.kcanotify.KcaApiData.getQuestTrackInfo;
 import static com.antest1.kcanotify.KcaApiData.isQuestTrackable;
 import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
@@ -78,7 +79,7 @@ public class KcaQuestViewService extends Service {
 
     WindowManager.LayoutParams mParams;
     ScrollView questview;
-    TextView questprev, questnext;
+    TextView questprev, questnext, questclear;
     ImageView exitbtn;
 
     @Nullable
@@ -331,6 +332,9 @@ public class KcaQuestViewService extends Service {
                 questnext.setOnTouchListener(mViewTouchListener);
                 questnext.setVisibility(View.GONE);
 
+                questclear = questview.findViewById(R.id.quest_clear);
+                questclear.setOnTouchListener(mViewTouchListener);
+
                 mParams = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.MATCH_PARENT,
                         WindowManager.LayoutParams.MATCH_PARENT,
@@ -431,6 +435,8 @@ public class KcaQuestViewService extends Service {
                         if (id == questview.findViewById(R.id.quest_head).getId()) {
                             mView.setVisibility(View.GONE);
                             mManager.removeViewImmediate(mView);
+                        } else if (id == questclear.getId()) {
+                            questTracker.clearQuestTrack();
                         } else if (id == questprev.getId() || id == questnext.getId()) {
                             if (id == questprev.getId() && currentPage > 1) {
                                 currentPage -= 1;

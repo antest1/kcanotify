@@ -36,11 +36,13 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
+import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
@@ -91,7 +93,7 @@ public class KcaAkashiViewService extends Service {
 
     public int setView() {
         try {
-            Calendar calendar = Calendar.getInstance(Locale.JAPAN);
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
             int day = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0(Sun) ~ 6(Sat)
             ((TextView) akashiview.findViewById(R.id.akashiview_day))
                     .setText(getStringWithLocale(getId("akashi_term_day_".concat(String.valueOf(day)), R.string.class)));
@@ -273,7 +275,7 @@ public class KcaAkashiViewService extends Service {
     }
 
     private void loadTodayAkashiList(boolean checked) {
-        Calendar calendar = Calendar.getInstance(Locale.JAPAN);
+        Calendar calendar = getJapanCalendarInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0(Sun) ~ 6(Sat)
         loadAkashiList(day, checked);
     }

@@ -372,7 +372,7 @@ public class KcaFleetViewService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(SHOW_FLEETVIEW_ACTION)) {
-                if (mView.getVisibility() != View.VISIBLE) {
+                if (mView != null && mView.getVisibility() != View.VISIBLE) {
                     int setViewResult = setView();
                     if (setViewResult == 0) {
                         mView.setVisibility(View.VISIBLE);
@@ -386,20 +386,22 @@ public class KcaFleetViewService extends Service {
             if (intent.getAction().equals(REFRESH_FLEETVIEW_ACTION)) {
                 int setViewResult = setView();
                 if (setViewResult == 0) {
-                    if (mView.getParent() != null) {
+                    if (mView != null && mView.getParent() != null) {
                         mView.invalidate();
                         mManager.updateViewLayout(mView, mParams);
                     }
                 }
             }
             if (intent.getAction().equals(CLOSE_FLEETVIEW_ACTION)) {
-                mView.setVisibility(GONE);
-                if (mView.getParent() != null) {
-                    mManager.removeViewImmediate(mView);
-                }
-                itemView.setVisibility(GONE);
-                if (itemView.getParent() != null) {
-                    mManager.removeViewImmediate(itemView);
+                if (mView != null) {
+                    mView.setVisibility(GONE);
+                    if (mView.getParent() != null) {
+                        mManager.removeViewImmediate(mView);
+                    }
+                    itemView.setVisibility(GONE);
+                    if (itemView.getParent() != null) {
+                        mManager.removeViewImmediate(itemView);
+                    }
                 }
             }
         }
