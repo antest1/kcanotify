@@ -1111,8 +1111,8 @@ public class KcaFleetViewService extends Service {
         int visibllity = mView.getVisibility();
         if (mManager != null) {
             if (mView.getParent() != null) mManager.removeViewImmediate(mView);
-            mManager.addView(mView, mParams);
             initView();
+            mManager.addView(mView, mParams);
 
             int setViewResult = setView();
             if (setViewResult == 0) {
