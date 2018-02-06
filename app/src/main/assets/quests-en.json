@@ -541,6 +541,13 @@
 		"desc": "Fill an entire six-ship fleet with Murasame Kai Ni as flagship, 3+ of Yura Kai Ni, Yuudachi Kai Ni, Harusame Kai, Samidare Kai or Akizuki Kai and your choice of other ships.",
 		"memo": "\u27a3Rewards a Repair Goddess"
 	},
+	"190": {
+		"code": "A85",
+		"name": "Elite 21st Destroyer Division, Prepare to Set Sail!",
+		"desc": "Have Wakaba Kai, Hatsuharu Kai Ni and Hatsushimo Kai Ni, up to 1 other DD, and no other ships in your fleet.",
+		"memo": "If Nenohi is in the fleet, additional audio dialogue will play after the quest is turned in. There may be other unknown requirements for this. \u27a3Rewards a Combat Ration",
+		"unlock": [ 319 ]
+	},
 	
 	"202": {
 		"code": "B1",
@@ -1298,7 +1305,19 @@
 		"code": "B112",
 		"name": "Elite DesRon 4, Deploy to the Southern Region!",
 		"desc": "Sortie Murasame Kai Ni as flagship and 3+ of Yura Kai Ni, Yuudachi Kai Ni, Harusame Kai, Samidare Kai or Akizuki Kai to [W5-1], [W5-3] and [W5-4]. A-Rank+ the bosses.",
-		"memo": "You can bring up to two additional ships. Press F10 to clear the overlay that blocks the reward selection screen. \u27a3Rewards: \u00B6First choice: Either a 12.7cm Twin Gun Mount Model C Kai Ni OR 2 Type 22 Surface Radars OR 2 12.7cm Twin Gun Mount Model B Kai Nis \u00B6Second choice: Either 2 Underway Replenishments OR 3 Drum Canisters OR 4 Screws"
+		"memo": "You can bring up to two additional ships. \u27a3Rewards: \u00B6First choice: Either a 12.7cm Twin Gun Mount Model C Kai Ni OR 2 Type 22 Surface Radars OR 2 12.7cm Twin Gun Mount Model B Kai Nis \u00B6Second choice: Either 2 Underway Replenishments OR 3 Drum Canisters OR 4 Screws"
+	},
+	"878": {
+		"code": "B113",
+		"name": "Continue to Execute the Matsu Transport Operation!",
+		"desc": "Sortie a CL(T)/CT/DD as flagship and 3 or more additional DE/DD to [W1-4] and [W1-6]. A-Rank+ the [W1-4] boss node three times. Reach [W1-6] node N three times.",
+		"memo": "You may use up to 2 additional ships of any class. \u27a3Rewards: \u00B6First choice: Either a Daihatsu Landing Craft OR 3 Screws \u00B6Second choice: Either a New Model Artillery Armament Materials OR two 12cm 30-tube Rocket Launchers OR a Furniture Fairy"
+	},
+	"879": {
+		"code": "B114",
+		"name": "New CarDiv 4, Sortie at Full Strength!",
+		"desc": "Sortie Ise Kai, Hyuuga Kai, Ooyodo Kai, at least 1 DD and up to 2 other ships [W1-6], [W2-5], [W3-5] and [W4-5]. Reach [W1-6] node N and A-Rank+ the boss nodes.",
+		"memo": "\u27a3Rewards a 12cm 30-tube Rocket Launcher Kai Ni and either a New Model Artillery Armament Materials OR an Action Report"
 	},
 	
 	"201": {
@@ -1625,6 +1644,12 @@
 		"name": "Monthly Exercises 2",
 		"desc": "Secure 3 victories in Exercises using 2 CLs. Then, equip the Fleet 1 flagship with 2 Combat Rations.",
 		"memo": "\u2718Consumes the equipment. Make sure the equipment is unlocked! \u203bThe Supply Ship Irako's Support \u27a3Rewards an Irako and either 2 Buckets OR 2 Development Materials"
+	},
+	"319": {
+		"code": "C17",
+		"name": "Elite 21st Destroyer Division, Train Intensively!",
+		"desc": "Secure 4 victories in Exercises using Hatsuharu Kai Ni, Wakaba Kai, Hatsushimo Kai Ni and up to 3 other ships.",
+		"memo": "\u27a3Rewards a Mamiya and either 6 Development Materials OR an Action Report"
 	},
 
 	"401": {
@@ -2297,6 +2322,18 @@
 		"name": "Weekly Dismantlement 2",
 		"desc": "Have 3600 Steel. Scrap 4 Large Cal. Main Guns, 2 Recon Seaplanes and 3 Torpedoes.",
 		"memo": "\u203bConsolidation of Faculties to Support Ongoing War Efforts \u2718Consumes the resources."
+	},
+	"678": {
+		"code": "F70",
+		"name": "An Update for the Mainstay Ship-based Fighter Aircraft",
+		"desc": "Have 4000 Bauxite. Equip a secretary with Type 0 Fighter Model 52s in her first two slots. Scrap 3 Type 96 Fighters and 5 Type 0 Fighter Model 21s.",
+		"memo": "\u2718Consumes the resources. \u27a3Rewards two Shiden Kai Ni either a New Model Aviation Armament Materials OR 8 Development Materials"
+	},
+	"679": {
+		"code": "F71",
+		"name": "An Expansion of Anti-Air Armaments",
+		"desc": "Have 900 Bauxite. Scrap 6 Medium Cal. Main Guns and 3 Secondary Guns.",
+		"memo": "\u2718Consumes the resources. \u27a3Rewards either two 25mm Triple Autocannon Mounts OR two 12cm 30-tube Rocket Launchers OR a Reinforcement Expansion"
 	},
 
 	"701": {
