@@ -106,14 +106,16 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             holder.ship_yasen = v.findViewById(R.id.ship_yasen);
             holder.ship_taisen = v.findViewById(R.id.ship_taisen);
             holder.ship_sally_area = v.findViewById(R.id.ship_sally_area);
-            holder.ship_equip_slot = new TextView[4];
+            holder.ship_equip_slot = new TextView[5];
             holder.ship_equip_icon = new ImageView[5];
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 5; i++) {
                 holder.ship_equip_slot[i] = v.findViewById(getId(KcaUtils.format("ship_equip_%d_slot", i + 1), R.id.class));
             }
             for (int i = 0; i < 5; i++) {
                 holder.ship_equip_icon[i] = v.findViewById(getId(KcaUtils.format("ship_equip_%d_icon", i + 1), R.id.class));
             }
+            holder.ship_equip_slot_ex = v.findViewById(R.id.ship_equip_ex_slot);
+            holder.ship_equip_icon_ex = v.findViewById(R.id.ship_equip_ex_icon);
             v.setTag(holder);
         }
 
@@ -319,7 +321,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             if (i >= holder.ship_equip_icon.length) break;
             int item_id = ship_item_icon.get(i).getAsInt();
             if (item_id == 0) {
-                holder.ship_equip_icon[i].setVisibility(View.INVISIBLE);
+                holder.ship_equip_icon[i].setVisibility(i == 4 ? View.GONE : View.INVISIBLE);
             } else {
                 holder.ship_equip_icon[i].setImageResource(
                         getId(KcaUtils.format("item_%d", item_id), R.mipmap.class));
@@ -328,19 +330,19 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         }
 
         if (ship_slot_ex == 0) {
-            holder.ship_equip_icon[4].setVisibility(View.INVISIBLE);
+            holder.ship_equip_icon_ex.setVisibility(View.INVISIBLE);
         } else {
-            holder.ship_equip_icon[4].setImageResource(
+            holder.ship_equip_icon_ex.setImageResource(
                     getId(KcaUtils.format("item_%d", ship_ex_item_icon), R.mipmap.class));
-            holder.ship_equip_icon[4].setVisibility(View.VISIBLE);
+            holder.ship_equip_icon_ex.setVisibility(View.VISIBLE);
         }
 
         for (int i = 0; i < ship_onslot.size(); i++) {
             if (i >= holder.ship_equip_slot.length || i >= ship_slot.size()) break;
             if (slot_sum == 0) {
-                holder.ship_equip_slot[i].setVisibility(View.INVISIBLE);
+                holder.ship_equip_slot[i].setVisibility(i == 4 ? View.GONE : View.INVISIBLE);
             } else if (i >= ship_slot_num) {
-                holder.ship_equip_slot[i].setVisibility(View.INVISIBLE);
+                holder.ship_equip_slot[i].setVisibility(i == 4 ? View.GONE : View.INVISIBLE);
             } else {
                 holder.ship_equip_slot[i].setText(ship_onslot.get(i).getAsString());
                 holder.ship_equip_slot[i].setVisibility(View.VISIBLE);
@@ -364,6 +366,8 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         TextView ship_yasen, ship_taisen, ship_kaihi, ship_sakuteki, ship_luck;
         TextView[] ship_equip_slot;
         ImageView[] ship_equip_icon;
+        TextView ship_equip_slot_ex;
+        ImageView ship_equip_icon_ex;
         ImageView ship_sally_area;
     }
 

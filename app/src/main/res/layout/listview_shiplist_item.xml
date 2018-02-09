@@ -150,134 +150,178 @@
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
+                        <HorizontalScrollView
+                            android:layout_width="64dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:scrollbars="none">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <RelativeLayout
+                                    android:id="@+id/ship_equip_1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/ship_equip_1_icon"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_weight="1"
+                                        android:src="@mipmap/item_3" />
+
+                                    <TextView
+                                        android:id="@+id/ship_equip_1_slot"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_centerHorizontal="false"
+                                        android:layout_centerVertical="false"
+                                        android:layout_weight="1"
+                                        android:background="@color/colorStatEquipSlotBack"
+                                        android:gravity="center_vertical"
+                                        android:singleLine="true"
+                                        android:text="10"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorStatEquipSlot"
+                                        android:textSize="10dp" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/ship_equip_2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/ship_equip_2_icon"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_weight="1"
+                                        android:src="@mipmap/item_3" />
+
+                                    <TextView
+                                        android:id="@+id/ship_equip_2_slot"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_centerHorizontal="false"
+                                        android:layout_centerVertical="false"
+                                        android:layout_weight="1"
+                                        android:background="@color/colorStatEquipSlotBack"
+                                        android:gravity="center_vertical"
+                                        android:singleLine="true"
+                                        android:text="10"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorStatEquipSlot"
+                                        android:textSize="10dp" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/ship_equip_3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/ship_equip_3_icon"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_weight="1"
+                                        android:src="@mipmap/item_40" />
+
+                                    <TextView
+                                        android:id="@+id/ship_equip_3_slot"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_centerHorizontal="false"
+                                        android:layout_centerVertical="false"
+                                        android:layout_weight="1"
+                                        android:background="@color/colorStatEquipSlotBack"
+                                        android:gravity="center_vertical"
+                                        android:singleLine="true"
+                                        android:text="10"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorStatEquipSlot"
+                                        android:textSize="10dp" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/ship_equip_4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/ship_equip_4_icon"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_weight="1"
+                                        android:src="@mipmap/item_37" />
+
+                                    <TextView
+                                        android:id="@+id/ship_equip_4_slot"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_centerHorizontal="false"
+                                        android:layout_centerVertical="false"
+                                        android:layout_weight="1"
+                                        android:background="@color/colorStatEquipSlotBack"
+                                        android:gravity="center_vertical"
+                                        android:singleLine="true"
+                                        android:text="10"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorStatEquipSlot"
+                                        android:textSize="10dp" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/ship_equip_5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/ship_equip_5_icon"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_weight="1"
+                                        android:src="@mipmap/item_37" />
+
+                                    <TextView
+                                        android:id="@+id/ship_equip_5_slot"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:layout_centerHorizontal="false"
+                                        android:layout_centerVertical="false"
+                                        android:layout_weight="1"
+                                        android:background="@color/colorStatEquipSlotBack"
+                                        android:gravity="center_vertical"
+                                        android:singleLine="true"
+                                        android:text="10"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorStatEquipSlot"
+                                        android:textSize="10dp" />
+
+                                </RelativeLayout>
+
+                            </LinearLayout>
+                        </HorizontalScrollView>
+
                         <RelativeLayout
-                            android:id="@+id/ship_equip_1"
+                            android:id="@+id/ship_equip_ex"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <ImageView
-                                android:id="@+id/ship_equip_1_icon"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_weight="1"
-                                android:src="@mipmap/item_3" />
-
-                            <TextView
-                                android:id="@+id/ship_equip_1_slot"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_centerHorizontal="false"
-                                android:layout_centerVertical="false"
-                                android:layout_weight="1"
-                                android:background="@color/colorStatEquipSlotBack"
-                                android:gravity="center_vertical"
-                                android:singleLine="true"
-                                android:text="10"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorStatEquipSlot"
-                                android:textSize="10dp" />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/ship_equip_2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <ImageView
-                                android:id="@+id/ship_equip_2_icon"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_weight="1"
-                                android:src="@mipmap/item_3" />
-
-                            <TextView
-                                android:id="@+id/ship_equip_2_slot"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_centerHorizontal="false"
-                                android:layout_centerVertical="false"
-                                android:layout_weight="1"
-                                android:background="@color/colorStatEquipSlotBack"
-                                android:gravity="center_vertical"
-                                android:singleLine="true"
-                                android:text="10"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorStatEquipSlot"
-                                android:textSize="10dp" />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/ship_equip_3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <ImageView
-                                android:id="@+id/ship_equip_3_icon"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_weight="1"
-                                android:src="@mipmap/item_40" />
-
-                            <TextView
-                                android:id="@+id/ship_equip_3_slot"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_centerHorizontal="false"
-                                android:layout_centerVertical="false"
-                                android:layout_weight="1"
-                                android:background="@color/colorStatEquipSlotBack"
-                                android:gravity="center_vertical"
-                                android:singleLine="true"
-                                android:text="10"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorStatEquipSlot"
-                                android:textSize="10dp" />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/ship_equip_4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <ImageView
-                                android:id="@+id/ship_equip_4_icon"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_weight="1"
-                                android:src="@mipmap/item_37" />
-
-                            <TextView
-                                android:id="@+id/ship_equip_4_slot"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_centerHorizontal="false"
-                                android:layout_centerVertical="false"
-                                android:layout_weight="1"
-                                android:background="@color/colorStatEquipSlotBack"
-                                android:gravity="center_vertical"
-                                android:singleLine="true"
-                                android:text="10"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorStatEquipSlot"
-                                android:textSize="10dp" />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/ship_equip_5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <ImageView
-                                android:id="@+id/ship_equip_5_icon"
+                                android:id="@+id/ship_equip_ex_icon"
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
                                 android:layout_weight="1"
@@ -285,7 +329,7 @@
                                 android:src="@mipmap/item_15" />
 
                             <TextView
-                                android:id="@+id/ship_equip_5_slot"
+                                android:id="@+id/ship_equip_ex_slot"
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
                                 android:layout_centerHorizontal="false"
