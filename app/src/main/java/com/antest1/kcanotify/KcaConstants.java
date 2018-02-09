@@ -290,6 +290,10 @@ public final class KcaConstants {
     public static final int FRONT_NONE = 0;
     public static final int FRONT_EXP_SET = 2;
 
+    public static final int PHASE_1 = 1;
+    public static final int PHASE_2 = 2;
+    public static final int PHASE_3 = 3;
+
     public static final int COMBINED_A = 1;
     public static final int COMBINED_W = 2;
 
