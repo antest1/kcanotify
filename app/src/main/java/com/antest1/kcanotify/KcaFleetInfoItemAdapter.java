@@ -53,16 +53,15 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
             holder.ship_stype = v.findViewById(R.id.fship_stype);
             holder.ship_lv = v.findViewById(R.id.fship_lv);
             holder.ship_maxhp = v.findViewById(R.id.fship_maxhp);
-            holder.ship_kaihi = v.findViewById(R.id.fship_kaihi);
-            holder.ship_sakuteki = v.findViewById(R.id.fship_sakuteki);
+            holder.ship_speed = v.findViewById(R.id.fship_speed);
             holder.ship_luck = v.findViewById(R.id.fship_luck);
             holder.ship_taisen = v.findViewById(R.id.fship_taisen);
             holder.ship_equip_slot = new TextView[5];
             holder.ship_equip_name = new TextView[5];
             holder.ship_equip_lv = new TextView[5];
             holder.ship_equip_alv = new TextView[5];
-
             holder.ship_equip_icon = new ImageView[5];
+
             for (int i = 0; i < 5; i++) {
                 holder.ship_equip_slot[i] = v.findViewById(getId(KcaUtils.format("fship_equip_%d_slot", i + 1), R.id.class));
                 holder.ship_equip_name[i] = v.findViewById(getId(KcaUtils.format("fship_equip_%d_name", i + 1), R.id.class));
@@ -88,12 +87,9 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
         holder.ship_stype.setText(KcaApiData.getShipTypeAbbr(kcdata.get("stype").getAsInt()));
         holder.ship_lv.setText("Lv ".concat(userdata.get("api_lv").getAsString()));
         holder.ship_maxhp.setText("HP ".concat(userdata.get("api_maxhp").getAsString()));
+        holder.ship_speed.setText(KcaApiData.getSpeedString(context, userdata.get("api_soku").getAsInt()));
 
         int ship_stype = kcdata.get("stype").getAsInt();
-        int ship_init_ka = kcdata.getAsJsonArray("houg").get(0).getAsInt();
-        int ship_init_ra = kcdata.getAsJsonArray("raig").get(0).getAsInt();
-        int ship_init_ta = kcdata.getAsJsonArray("tyku").get(0).getAsInt();
-        int ship_init_so = kcdata.getAsJsonArray("souk").get(0).getAsInt();
         int ship_init_lk = kcdata.getAsJsonArray("luck").get(0).getAsInt();
         int ship_slot_num = kcdata.get("slot_num").getAsInt();
 
@@ -151,78 +147,25 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
         JsonArray ship_st = userdata.getAsJsonArray("api_sakuteki");
         JsonArray ship_lk = userdata.getAsJsonArray("api_lucky");
 
-        if (ship_init_ka + ship_kyouka.get(0).getAsInt() == ship_ka.get(1).getAsInt()) {
-            holder.ship_karyoku.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatKaryoku));
-            holder.ship_karyoku.setTextColor(ContextCompat.getColor(context, R.color.white));
-        } else {
-            holder.ship_karyoku.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
-            holder.ship_karyoku.setTextColor(ContextCompat.getColor(context, R.color.colorStatKaryoku));
-        }
         holder.ship_karyoku.setText(ship_ka.get(0).getAsString());
-
-        if (ship_init_ra + ship_kyouka.get(1).getAsInt() == ship_ra.get(1).getAsInt()) {
-            holder.ship_raisou.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatRaisou));
-            holder.ship_raisou.setTextColor(ContextCompat.getColor(context, R.color.white));
-        } else {
-            holder.ship_raisou.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
-            holder.ship_raisou.setTextColor(ContextCompat.getColor(context, R.color.colorStatRaisou));
-        }
         holder.ship_raisou.setText(ship_ra.get(0).getAsString());
-
-        if (ship_init_ta + ship_kyouka.get(2).getAsInt() == ship_ta.get(1).getAsInt()) {
-            holder.ship_taiku.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatTaiku));
-            holder.ship_taiku.setTextColor(ContextCompat.getColor(context, R.color.white));
-        } else {
-            holder.ship_taiku.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
-            holder.ship_taiku.setTextColor(ContextCompat.getColor(context, R.color.colorStatTaiku));
-        }
         holder.ship_taiku.setText(ship_ta.get(0).getAsString());
-
-        if (ship_init_so + ship_kyouka.get(3).getAsInt() == ship_so.get(1).getAsInt()) {
-            holder.ship_soukou.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatSoukou));
-            holder.ship_soukou.setTextColor(ContextCompat.getColor(context, R.color.white));
-        } else {
-            holder.ship_soukou.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
-            holder.ship_soukou.setTextColor(ContextCompat.getColor(context, R.color.colorStatSoukou));
-        }
         holder.ship_soukou.setText(ship_so.get(0).getAsString());
 
         int taisen_value = ship_ts.get(0).getAsInt();
         if (taisen_value >= 100 || (ship_stype == 1 && taisen_value >= 60) ||
                 kc_ship_id == 141 || (kc_ship_id == 529 && taisen_value >= 65) ||
                 ((kc_ship_id == 380 || kc_ship_id == 526) && taisen_value >= 65 && flag_931)) {
-            holder.ship_taisen.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatTaisen));
-            holder.ship_taisen.setTextColor(ContextCompat.getColor(context, R.color.white));
-        } else {
-            holder.ship_taisen.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
             holder.ship_taisen.setTextColor(ContextCompat.getColor(context, R.color.colorStatTaisen));
+        } else {
+            holder.ship_taisen.setTextColor(ContextCompat.getColor(context, R.color.grey));
         }
         holder.ship_taisen.setText(ship_ts.get(0).getAsString());
 
-        if (ship_kh.get(1).getAsInt() == ship_st.get(0).getAsInt()) {
-            holder.ship_kaihi.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatKaihi));
-            holder.ship_kaihi.setTextColor(ContextCompat.getColor(context, R.color.white));
-        } else {
-            holder.ship_kaihi.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
-            holder.ship_kaihi.setTextColor(ContextCompat.getColor(context, R.color.colorStatKaihi));
-        }
-        holder.ship_kaihi.setText(ship_kh.get(0).getAsString());
-
-        if (ship_st.get(1).getAsInt() == ship_st.get(0).getAsInt()) {
-            holder.ship_sakuteki.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatSakuteki));
-            holder.ship_sakuteki.setTextColor(ContextCompat.getColor(context, R.color.white));
-        } else {
-            holder.ship_sakuteki.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
-            holder.ship_sakuteki.setTextColor(ContextCompat.getColor(context, R.color.colorStatSakuteki));
-        }
-        holder.ship_sakuteki.setText(ship_st.get(0).getAsString());
-
-        if (ship_init_lk + ship_kyouka.get(4).getAsInt() == ship_lk.get(1).getAsInt()) {
-            holder.ship_luck.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatLuck));
-            holder.ship_luck.setTextColor(ContextCompat.getColor(context, R.color.white));
-        } else {
-            holder.ship_luck.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
+        if (ship_init_lk + ship_kyouka.get(4).getAsInt() >= 50) {
             holder.ship_luck.setTextColor(ContextCompat.getColor(context, R.color.colorStatLuck));
+        } else {
+            holder.ship_luck.setTextColor(ContextCompat.getColor(context, R.color.grey));
         }
         holder.ship_luck.setText(ship_lk.get(0).getAsString());
 
@@ -249,8 +192,8 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
                         getId(KcaUtils.format("item_%d", item_icon), R.mipmap.class));
                 holder.ship_equip_icon[i].setVisibility(View.VISIBLE);
 
-                if (item_data.has("lv")) {
-                    int lv = item_data.get("lv").getAsInt();
+                if (item_data.has("level")) {
+                    int lv = item_data.get("level").getAsInt();
                     if (lv > 0) {
                         holder.ship_equip_lv[i].setText(KcaUtils.format("★%d", lv));
                     } else {
@@ -299,9 +242,9 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView ship_stype, ship_name, ship_lv, ship_maxhp;
+        TextView ship_stype, ship_name, ship_lv, ship_maxhp, ship_speed;
         TextView ship_karyoku, ship_raisou, ship_taiku, ship_soukou;
-        TextView ship_taisen, ship_kaihi, ship_sakuteki, ship_luck;
+        TextView ship_taisen, ship_luck;
         TextView[] ship_equip_slot, ship_equip_name, ship_equip_lv, ship_equip_alv;
         ImageView[] ship_equip_icon;
         TextView ship_equip_slot_ex, ship_equip_name_ex, ship_equip_lv_ex;

@@ -177,6 +177,17 @@ public class FleetInfoActivity extends AppCompatActivity {
             String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
             LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
         }
+
+        int orientation = newConfig.orientation;
+        if (fleetlist_ships != null && adapter != null) {
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                fleetlist_ships.setNumColumns(1);
+            } else {
+                fleetlist_ships.setNumColumns(2);
+            }
+            adapter.notifyDataSetChanged();
+        }
+
         super.onConfigurationChanged(newConfig);
     }
 }

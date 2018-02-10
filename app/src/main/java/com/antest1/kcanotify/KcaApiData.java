@@ -1329,6 +1329,37 @@ public class KcaApiData {
         }
     }
 
+    public static String getSpeedString(Context context, int speedValue) {
+        String speedStringValue = "";
+        switch (speedValue) {
+            case KcaApiData.SPEED_SUPERFAST:
+                speedStringValue = context.getString(R.string.speed_superfast);
+                break;
+            case KcaApiData.SPEED_FASTPLUS:
+                speedStringValue = context.getString(R.string.speed_fastplus);
+                break;
+            case KcaApiData.SPEED_FAST:
+                speedStringValue = context.getString(R.string.speed_fast);
+                break;
+            case KcaApiData.SPEED_SLOW:
+                speedStringValue = context.getString(R.string.speed_slow);
+                break;
+            case KcaApiData.SPEED_MIXED_FASTPLUS:
+                speedStringValue = context.getString(R.string.speed_mixed_fastplus);
+                break;
+            case KcaApiData.SPEED_MIXED_FAST:
+                speedStringValue = context.getString(R.string.speed_mixed_fast);
+                break;
+            case KcaApiData.SPEED_MIXED_NORMAL:
+                speedStringValue = context.getString(R.string.speed_mixed_normal);
+                break;
+            default:
+                speedStringValue = context.getString(R.string.speed_none);
+                break;
+        }
+        return speedStringValue;
+    }
+
     public static JsonObject findRemodelLv(String idlist) {
         JsonObject result = new JsonObject();
         String[] target = idlist.split(",");

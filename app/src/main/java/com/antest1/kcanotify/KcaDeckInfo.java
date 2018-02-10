@@ -477,34 +477,7 @@ public class KcaDeckInfo {
 
     public String getSpeedString(JsonArray deckPortData, String deckid_list, JsonObject exclude_flag) {
         int speedValue = getSpeed(deckPortData, deckid_list, exclude_flag);
-        String speedStringValue = "";
-        switch (speedValue) {
-            case KcaApiData.SPEED_SUPERFAST:
-                speedStringValue = getStringWithLocale(R.string.speed_superfast);
-                break;
-            case KcaApiData.SPEED_FASTPLUS:
-                speedStringValue = getStringWithLocale(R.string.speed_fastplus);
-                break;
-            case KcaApiData.SPEED_FAST:
-                speedStringValue = getStringWithLocale(R.string.speed_fast);
-                break;
-            case KcaApiData.SPEED_SLOW:
-                speedStringValue = getStringWithLocale(R.string.speed_slow);
-                break;
-            case KcaApiData.SPEED_MIXED_FASTPLUS:
-                speedStringValue = getStringWithLocale(R.string.speed_mixed_fastplus);
-                break;
-            case KcaApiData.SPEED_MIXED_FAST:
-                speedStringValue = getStringWithLocale(R.string.speed_mixed_fast);
-                break;
-            case KcaApiData.SPEED_MIXED_NORMAL:
-                speedStringValue = getStringWithLocale(R.string.speed_mixed_normal);
-                break;
-            default:
-                speedStringValue = getStringWithLocale(R.string.speed_none);
-                break;
-        }
-        return speedStringValue;
+        return KcaApiData.getSpeedString(bc, speedValue);
     }
 
     public int[] getTPValue(JsonArray deckPortData, String deckid_list, JsonObject exclude_flag) {
