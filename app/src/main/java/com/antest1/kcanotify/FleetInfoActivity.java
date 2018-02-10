@@ -17,6 +17,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -32,6 +34,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.R.id.fleetlist_raw;
 
 
 public class FleetInfoActivity extends AppCompatActivity {
@@ -41,8 +44,7 @@ public class FleetInfoActivity extends AppCompatActivity {
     KcaDBHelper dbHelper;
 
     int current_fleet = 0;
-    ArrayAdapter<String> fleet_no_adapter;
-    TextView fleetlist_name, fleetlist_raw, fleetlist_fp, fleetlist_seek;
+    TextView fleetlist_name, fleetlist_fp, fleetlist_seek;
     ImageView fleetlist_select;
     GridView fleetlist_ships;
     KcaFleetInfoItemAdapter adapter;
@@ -94,7 +96,6 @@ public class FleetInfoActivity extends AppCompatActivity {
         });
 
         fleetlist_name = findViewById(R.id.fleetlist_name);
-        fleetlist_raw = findViewById(R.id.fleetlist_raw);
         fleetlist_ships = findViewById(R.id.fleetlist_ships);
         fleetlist_fp = findViewById(R.id.fleetlist_fp);
         fleetlist_seek = findViewById(R.id.fleetlist_seek);
@@ -112,21 +113,34 @@ public class FleetInfoActivity extends AppCompatActivity {
     private void setShipList() {
         JsonArray deck_data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (deck_data == null) {
-            fleetlist_raw.setText("no data");
+            findViewById(R.id.fleetlist_info_area).setVisibility(View.GONE);
         } else {
             if (current_fleet == 4) {
+                fleetlist_name.setText(getStringWithLocale(R.string.fleetlist_combined_fleet));
                 if (deck_data.size() < 2) {
                     findViewById(R.id.fleetlist_info_area).setVisibility(View.GONE);
-
                 } else {
+                    KcaFleetInfoItemAdapter.is_combined = true;
                     findViewById(R.id.fleetlist_info_area).setVisibility(View.VISIBLE);
+                    JsonArray data = deckInfoCalc.getDeckListInfo(deck_data, 0, "all", KC_REQ_LIST);
+                    JsonArray data_c = deckInfoCalc.getDeckListInfo(deck_data, 1, "all", KC_REQ_LIST);
+                    for (int i = 0; i < data_c.size(); i++) {
+                        JsonObject item_c = data_c.get(i).getAsJsonObject();
+                        item_c.addProperty("cb_flag", true);
+                        data.add(item_c);
+                    }
+                    adapter.setListViewItemList(data);
+                    fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, 0, null));
+                    fleetlist_seek.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_f),
+                            deckInfoCalc.getSeekValue(deck_data, "0,1", SEEK_33CN1, null)));
                 }
             } else {
                 if (deck_data.size() <= current_fleet) {
+                    fleetlist_name.setText(String.valueOf(current_fleet + 1));
                     findViewById(R.id.fleetlist_info_area).setVisibility(View.GONE);
                 } else {
+                    KcaFleetInfoItemAdapter.is_combined = false;
                     findViewById(R.id.fleetlist_info_area).setVisibility(View.VISIBLE);
-                    fleetlist_raw.setText(deck_data.get(current_fleet).toString());
                     JsonObject fleet_data = deck_data.get(current_fleet).getAsJsonObject();
                     String fleet_name = fleet_data.get("api_name").getAsString();
                     JsonArray data = deckInfoCalc.getDeckListInfo(deck_data, current_fleet, "all", KC_REQ_LIST);
@@ -137,8 +151,8 @@ public class FleetInfoActivity extends AppCompatActivity {
                     fleetlist_seek.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_f),
                             deckInfoCalc.getSeekValue(deck_data, String.valueOf(current_fleet), SEEK_33CN1, null)));
                 }
-                adapter.notifyDataSetChanged();
             }
+            adapter.notifyDataSetChanged();
         }
     }
 

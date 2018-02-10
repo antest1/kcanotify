@@ -21,6 +21,7 @@ import static com.antest1.kcanotify.KcaUtils.getId;
 public class KcaFleetInfoItemAdapter extends BaseAdapter {
     public static String[] alv_format = {"", "", "", "", "", "", "", ""};
     JsonArray item = new JsonArray();
+    public static boolean is_combined = false;
 
     @Override
     public int getCount() {
@@ -54,6 +55,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
             holder.ship_lv = v.findViewById(R.id.fship_lv);
             holder.ship_maxhp = v.findViewById(R.id.fship_maxhp);
             holder.ship_speed = v.findViewById(R.id.fship_speed);
+            holder.ship_cb_indicator = v.findViewById(R.id.fship_cb_indicator);
             holder.ship_luck = v.findViewById(R.id.fship_luck);
             holder.ship_taisen = v.findViewById(R.id.fship_taisen);
             holder.ship_equip_slot = new TextView[5];
@@ -88,6 +90,17 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
         holder.ship_lv.setText("Lv ".concat(userdata.get("api_lv").getAsString()));
         holder.ship_maxhp.setText("HP ".concat(userdata.get("api_maxhp").getAsString()));
         holder.ship_speed.setText(KcaApiData.getSpeedString(context, userdata.get("api_soku").getAsInt()));
+
+        if (is_combined) {
+            holder.ship_cb_indicator.setVisibility(View.VISIBLE);
+            if (data.has("cb_flag")) {
+                holder.ship_cb_indicator.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatSallyArea2));
+            } else {
+                holder.ship_cb_indicator.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatSallyArea1));
+            }
+        } else {
+            holder.ship_cb_indicator.setVisibility(View.GONE);
+        }
 
         int ship_stype = kcdata.get("stype").getAsInt();
         int ship_init_lk = kcdata.getAsJsonArray("luck").get(0).getAsInt();
@@ -245,6 +258,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
         TextView ship_stype, ship_name, ship_lv, ship_maxhp, ship_speed;
         TextView ship_karyoku, ship_raisou, ship_taiku, ship_soukou;
         TextView ship_taisen, ship_luck;
+        ImageView ship_cb_indicator;
         TextView[] ship_equip_slot, ship_equip_name, ship_equip_lv, ship_equip_alv;
         ImageView[] ship_equip_icon;
         TextView ship_equip_slot_ex, ship_equip_name_ex, ship_equip_lv_ex;

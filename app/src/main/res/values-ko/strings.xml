@@ -384,7 +384,7 @@
     <string name="questview_nopage">임무 없음</string>
 
     <string name="action_fleetlist">함대 편성</string>
-
+    <string name="fleetlist_combined_fleet">연합함대</string>
 
     <string name="action_shipinfo">함선 리스트</string>
     <string name="shipinfo_btn_sort">정렬</string>
