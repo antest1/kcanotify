@@ -766,6 +766,7 @@
         android:id="@+id/item_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_weight="0.04" />
+        android:layout_weight="0.04"
+        android:background="@color/colorAccent" />
 
 </LinearLayout>
