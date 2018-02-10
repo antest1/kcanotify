@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/battleviewlayout"
     android:layout_width="match_parent"
@@ -331,15 +332,35 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fm_1_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fm_1_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    android:visibility="gone"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fm_1_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -438,15 +459,34 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fm_2_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fm_2_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    android:visibility="gone"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fm_2_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -545,16 +585,34 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fm_3_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fm_3_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    android:visibility="gone"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fm_3_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -654,16 +712,34 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fm_4_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fm_4_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    android:visibility="gone"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fm_4_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -763,16 +839,34 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fm_5_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fm_5_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    android:visibility="gone"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fm_5_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -872,16 +966,34 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fm_6_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fm_6_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    android:visibility="gone"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fm_6_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -982,17 +1094,33 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fm_7_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:text="HP 13/13"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fm_7_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fm_7_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -1183,16 +1311,34 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fs_1_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fs_1_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    android:visibility="gone"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fs_1_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -1292,16 +1438,34 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fs_2_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fs_2_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    android:visibility="gone"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fs_2_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -1401,16 +1565,34 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fs_3_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fs_3_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    android:visibility="gone"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fs_3_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -1510,16 +1692,34 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fs_4_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fs_4_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    android:visibility="gone"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fs_4_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -1619,16 +1819,34 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fs_5_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fs_5_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    android:visibility="gone"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fs_5_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -1728,16 +1946,34 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/fs_6_hp_txt"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="0.4"
+                                android:gravity="center_vertical"
                                 android:minHeight="10dp"
-                                android:textColor="@android:color/white"
-                                android:textSize="9dp" />
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/fs_6_dcflag"
+                                    android:layout_width="9dp"
+                                    android:layout_height="9dp"
+                                    android:layout_weight="0"
+                                    android:baselineAlignBottom="false"
+                                    android:visibility="gone"
+                                    app:srcCompat="@mipmap/item_14" />
+
+                                <TextView
+                                    android:id="@+id/fs_6_hp_txt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:minHeight="10dp"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="9dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout

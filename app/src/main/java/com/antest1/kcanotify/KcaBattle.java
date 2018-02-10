@@ -70,6 +70,7 @@ import static com.antest1.kcanotify.KcaConstants.PHASE_1;
 import static com.antest1.kcanotify.KcaConstants.PHASE_2;
 import static com.antest1.kcanotify.KcaConstants.PHASE_3;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
+import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaBattle {
     public static JsonObject deckportdata = null;
@@ -89,6 +90,7 @@ public class KcaBattle {
     public static JsonObject escapedata = null;
     public static JsonArray escapelist = new JsonArray();
     public static JsonArray escapecblist = new JsonArray();
+    public static JsonArray damecon_used = new JsonArray();
 
     public static boolean[] dameconflag = new boolean[7];
     public static boolean[] dameconcbflag = new boolean[7];
@@ -223,17 +225,23 @@ public class KcaBattle {
                         int item_id = shipItem.get(j).getAsInt();
                         if (item_id != -1) {
                             JsonObject itemData = getUserItemStatusById(item_id, "slotitem_id", "type");
+                            if (itemData == null) return value;
                             int item = itemData.get("slotitem_id").getAsInt();
-                            if (item == 42) return max_hp / 4; // 요원
-                            else if (item == 43) return max_hp; // 여신
+                            if (item == 42 || item == 43) { // 요원 / 여신
+                                damecon_used.add(KcaUtils.format("%d_%d", cb_flag ? 1 : 0, idx));
+                                return item == 43 ? max_hp : max_hp / 4;
+                            }
                         }
                     }
                     int ex_item_id = shipData.get("slot_ex").getAsInt();
                     if (ex_item_id > 0) {
                         JsonObject itemData = getUserItemStatusById(ex_item_id, "slotitem_id", "type");
+                        if (itemData == null) return value;
                         int item = itemData.get("slotitem_id").getAsInt();
-                        if (item == 42) return max_hp / 4;
-                        else if (item == 43) return max_hp;
+                        if (item == 42 || item == 43) { // 요원 / 여신
+                            damecon_used.add(KcaUtils.format("%d_%d", cb_flag ? 1 : 0, idx));
+                            return item == 43 ? max_hp : max_hp / 4;
+                        }
                     }
                 }
             }
@@ -680,6 +688,7 @@ public class KcaBattle {
                 KcaApiData.resetShipCountInBattle();
                 KcaApiData.resetItemCountInBattle();
                 cleanEscapeList();
+                damecon_used = new JsonArray();
 
                 currentMapArea = api_data.get("api_maparea_id").getAsInt();
                 currentMapNo = api_data.get("api_mapinfo_no").getAsInt();
@@ -712,6 +721,7 @@ public class KcaBattle {
 
                 JsonObject nodeInfo = api_data;
                 nodeInfo.addProperty("api_url", url);
+                nodeInfo.add("api_dc_used", damecon_used);
                 nodeInfo.add("api_deck_port", deckportdata);
                 nodeInfo.addProperty("api_heavy_damaged", startHeavyDamageExist);
                 setCurrentApiData(nodeInfo);
@@ -743,6 +753,7 @@ public class KcaBattle {
 
                 int checkcbresult = checkCombinedHeavyDamagedExist();
                 Log.e("KCA", "hd: " + String.valueOf(checkcbresult));
+                damecon_used = new JsonArray();
 
                 currentMapArea = api_data.get("api_maparea_id").getAsInt();
                 currentMapNo = api_data.get("api_mapinfo_no").getAsInt();
@@ -767,6 +778,7 @@ public class KcaBattle {
 
                 JsonObject nodeInfo = api_data;
                 nodeInfo.addProperty("api_url", url);
+                nodeInfo.add("api_dc_used", damecon_used);
                 nodeInfo.add("api_deck_port", deckportdata);
                 nodeInfo.add("api_escape", escapelist);
                 nodeInfo.add("api_escape_combined", escapecblist);
@@ -868,6 +880,7 @@ public class KcaBattle {
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
+                battleResultInfo.add("api_dc_used", damecon_used);
                 battleResultInfo.add("api_deck_port", deckportdata);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
@@ -924,6 +937,7 @@ public class KcaBattle {
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
+                battleResultInfo.add("api_dc_used", damecon_used);
                 battleResultInfo.add("api_deck_port", deckportdata);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
@@ -970,6 +984,7 @@ public class KcaBattle {
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
+                battleResultInfo.add("api_dc_used", damecon_used);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
                 setCurrentApiData(battleResultInfo);
@@ -1080,6 +1095,7 @@ public class KcaBattle {
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
+                battleResultInfo.add("api_dc_used", damecon_used);
                 if (url.equals(API_REQ_PRACTICE_BATTLE_RESULT)) {
                     battleResultInfo.addProperty("api_practice_flag", true);
                 }
@@ -1200,6 +1216,7 @@ public class KcaBattle {
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
+                battleResultInfo.add("api_dc_used", damecon_used);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
@@ -1334,6 +1351,7 @@ public class KcaBattle {
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
+                battleResultInfo.add("api_dc_used", damecon_used);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
@@ -1382,6 +1400,7 @@ public class KcaBattle {
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
+                battleResultInfo.add("api_dc_used", damecon_used);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
@@ -1441,6 +1460,7 @@ public class KcaBattle {
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
+                battleResultInfo.add("api_dc_used", damecon_used);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
@@ -1501,6 +1521,7 @@ public class KcaBattle {
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
+                battleResultInfo.add("api_dc_used", damecon_used);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
@@ -1629,6 +1650,7 @@ public class KcaBattle {
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
+                battleResultInfo.add("api_dc_used", damecon_used);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
@@ -1736,6 +1758,7 @@ public class KcaBattle {
 
                 JsonObject battleResultInfo = api_data;
                 battleResultInfo.addProperty("api_url", url);
+                battleResultInfo.add("api_dc_used", damecon_used);
                 battleResultInfo.addProperty("api_heavy_damaged", checkresult);
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());

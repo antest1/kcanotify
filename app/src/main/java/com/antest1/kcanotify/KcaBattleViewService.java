@@ -143,6 +143,12 @@ public class KcaBattleViewService extends Service {
         return KcaUtils.format("HP %d/%d", currenthp, maxhp);
     }
 
+    private static String makeHpString(int currenthp, int maxhp, boolean damecon_flag) {
+        String data = KcaUtils.format(" %d/%d", currenthp, maxhp);
+        if (damecon_flag) return data;
+        else return "HP".concat(data);
+    }
+
     public String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
@@ -194,6 +200,14 @@ public class KcaBattleViewService extends Service {
         } else {
             return ContextCompat.getDrawable(context, R.drawable.progress_bar_heavydmg);
         }
+    }
+
+    public boolean checkItemPairExist(JsonArray data, int key1, int key2) {
+        String key = KcaUtils.format("%d_%d", key1, key2);
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getAsString().equals(key)) return true;
+        }
+        return false;
     }
 
     public void setBattleview() {
@@ -682,6 +696,8 @@ public class KcaBattleViewService extends Service {
                 api_e_nowhps = api_data.getAsJsonArray("api_e_nowhps");
                 api_e_afterhps = api_data.getAsJsonArray("api_e_afterhps");
 
+                JsonArray api_dc_used = api_data.getAsJsonArray("api_dc_used");
+
                 for (int i = 0; i < api_f_maxhps.size(); i++) {
                     if (fc_flag || ec_flag) {
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", i + 1), R.id.class)))
@@ -696,10 +712,13 @@ public class KcaBattleViewService extends Service {
                     if (maxhp == -1) continue;
                     else {
                         float hpPercent = afterhp * VIEW_HP_MAX / (float) maxhp;
-                        if (!((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", i + 1), R.id.class))).getText().toString()
-                                .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
+                        boolean damecon_flag = checkItemPairExist(api_dc_used, 0, i);
+                        battleview.findViewById(getId(KcaUtils.format("fm_%d_dcflag", i + 1), R.id.class))
+                                .setVisibility(damecon_flag ? View.VISIBLE : View.GONE);
+                        if (!((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", i + 1), R.id.class)))
+                                .getText().toString().contains(getStringWithLocale(R.string.battleview_text_retreated))) {
                             ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", i + 1), R.id.class)))
-                                    .setText(makeHpString(afterhp, maxhp));
+                                    .setText(makeHpString(afterhp, maxhp, damecon_flag));
                         }
                         ((ProgressBar) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_bar", i + 1), R.id.class)))
                                 .setProgress(Math.round(hpPercent));
@@ -731,7 +750,6 @@ public class KcaBattleViewService extends Service {
                     }
                 }
 
-
                 if (api_data.has("api_f_maxhps_combined")) {
                     api_f_maxhps_combined = api_data.getAsJsonArray("api_f_maxhps_combined");
                     api_f_nowhps_combined = api_data.getAsJsonArray("api_f_nowhps_combined");
@@ -749,12 +767,17 @@ public class KcaBattleViewService extends Service {
                         if (maxhp == -1) continue;
                         else {
                             float hpPercent = afterhp * VIEW_HP_MAX / (float) maxhp;
-                            if (!((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", i + 1), R.id.class))).getText().toString()
-                                    .contains(getStringWithLocale(R.string.battleview_text_retreated))) {
-                                ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", i + 1), R.id.class))).setText(makeHpString(afterhp, maxhp));
+                            boolean damecon_flag = checkItemPairExist(api_dc_used, 1, i);
+                            battleview.findViewById(getId(KcaUtils.format("fs_%d_dcflag", i + 1), R.id.class))
+                                    .setVisibility(damecon_flag ? View.VISIBLE : View.GONE);
+                            if (!((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", i + 1), R.id.class)))
+                                    .getText().toString().contains(getStringWithLocale(R.string.battleview_text_retreated))) {
+                                ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", i + 1), R.id.class)))
+                                        .setText(makeHpString(afterhp, maxhp, damecon_flag));
                             }
                             ((ProgressBar) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_bar", i + 1), R.id.class))).setProgress(Math.round(hpPercent));
-                            ((ProgressBar) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_bar", i + 1), R.id.class))).setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
+                            ((ProgressBar) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_bar", i + 1), R.id.class)))
+                                    .setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
                         }
                     }
                 } else {
