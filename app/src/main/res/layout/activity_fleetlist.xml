@@ -51,7 +51,6 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:ellipsize="end"
-                    android:text="TextView"
                     android:textColor="@color/black"
                     android:textSize="18dp"
                     android:textStyle="bold" />
@@ -71,7 +70,6 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="0"
-                    android:text="TextView"
                     android:textColor="@color/colorStatFighterPower"
                     android:textSize="14dp" />
 
@@ -82,16 +80,33 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="0"
-                    android:text="TextView"
                     android:textColor="@color/colorStatSakuteki"
                     android:textSize="14dp" />
 
             </LinearLayout>
 
-            <GridView
-                android:id="@+id/fleetlist_ships"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+
+                <GridView
+                    android:id="@+id/fleetlist_ships"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/fleetlist_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.5"
+                    android:background="@color/darkgray"
+                    android:gravity="center_vertical|center"
+                    android:text="@string/fleetlist_loading"
+                    android:textColor="@color/white"
+                    android:textSize="40dp" />
+
+            </RelativeLayout>
+
         </LinearLayout>
 
     </LinearLayout>

@@ -1,8 +1,10 @@
 package com.antest1.kcanotify;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -20,15 +22,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static android.R.attr.orientation;
 import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
@@ -43,8 +49,9 @@ public class FleetInfoActivity extends AppCompatActivity {
     Toolbar toolbar;
     KcaDBHelper dbHelper;
 
-    int current_fleet = 0;
-    TextView fleetlist_name, fleetlist_fp, fleetlist_seek;
+    static int current_fleet = 0;
+    static boolean is_portrait = true;
+    TextView fleetlist_name, fleetlist_fp, fleetlist_seek, fleetlist_loading;
     ImageView fleetlist_select;
     GridView fleetlist_ships;
     KcaFleetInfoItemAdapter adapter;
@@ -87,7 +94,7 @@ public class FleetInfoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int n) {
                         current_fleet = n;
-                        setShipList();
+                        new ShipItemLoadTask().execute();
                         dialog.dismiss();
                     }
                 });
@@ -99,65 +106,100 @@ public class FleetInfoActivity extends AppCompatActivity {
         fleetlist_ships = findViewById(R.id.fleetlist_ships);
         fleetlist_fp = findViewById(R.id.fleetlist_fp);
         fleetlist_seek = findViewById(R.id.fleetlist_seek);
-
+        fleetlist_loading = findViewById(R.id.fleetlist_loading);
         for (int i = 1; i <= 7; i++) {
             KcaFleetInfoItemAdapter.alv_format[i] = getStringWithLocale(getId(KcaUtils.format("alv_%d", i), R.string.class));
         }
 
         adapter = new KcaFleetInfoItemAdapter();
         fleetlist_ships.setAdapter(adapter);
-        fleetlist_ships.setNumColumns(1);
-        setShipList();
-    }
 
-    private void setShipList() {
-        JsonArray deck_data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-        if (deck_data == null) {
-            findViewById(R.id.fleetlist_info_area).setVisibility(View.GONE);
+        is_portrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        if (is_portrait) {
+            fleetlist_ships.setNumColumns(1);
         } else {
-            if (current_fleet == 4) {
-                fleetlist_name.setText(getStringWithLocale(R.string.fleetlist_combined_fleet));
-                if (deck_data.size() < 2) {
-                    findViewById(R.id.fleetlist_info_area).setVisibility(View.GONE);
-                } else {
-                    KcaFleetInfoItemAdapter.is_combined = true;
-                    findViewById(R.id.fleetlist_info_area).setVisibility(View.VISIBLE);
-                    JsonArray data = deckInfoCalc.getDeckListInfo(deck_data, 0, "all", KC_REQ_LIST);
-                    JsonArray data_c = deckInfoCalc.getDeckListInfo(deck_data, 1, "all", KC_REQ_LIST);
-                    for (int i = 0; i < data_c.size(); i++) {
-                        JsonObject item_c = data_c.get(i).getAsJsonObject();
-                        item_c.addProperty("cb_flag", true);
-                        data.add(item_c);
-                    }
-                    adapter.setListViewItemList(data);
-                    fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, 0, null));
-                    fleetlist_seek.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_f),
-                            deckInfoCalc.getSeekValue(deck_data, "0,1", SEEK_33CN1, null)));
-                }
-            } else {
-                if (deck_data.size() <= current_fleet) {
-                    fleetlist_name.setText(String.valueOf(current_fleet + 1));
-                    findViewById(R.id.fleetlist_info_area).setVisibility(View.GONE);
-                } else {
-                    KcaFleetInfoItemAdapter.is_combined = false;
-                    findViewById(R.id.fleetlist_info_area).setVisibility(View.VISIBLE);
-                    JsonObject fleet_data = deck_data.get(current_fleet).getAsJsonObject();
-                    String fleet_name = fleet_data.get("api_name").getAsString();
-                    JsonArray data = deckInfoCalc.getDeckListInfo(deck_data, current_fleet, "all", KC_REQ_LIST);
-                    fleetlist_name.setText(fleet_name);
-                    adapter.setListViewItemList(data);
-
-                    fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, current_fleet, null));
-                    fleetlist_seek.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_f),
-                            deckInfoCalc.getSeekValue(deck_data, String.valueOf(current_fleet), SEEK_33CN1, null)));
-                }
-            }
-            adapter.notifyDataSetChanged();
+            fleetlist_ships.setNumColumns(2);
         }
+
+        new ShipItemLoadTask().execute();
     }
 
     private int setDefaultGameData() {
         return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
+    }
+
+    private class ShipItemLoadTask extends AsyncTask<String, String, JsonArray> {
+        String fleet_name = "";
+
+        @Override
+        protected void onPreExecute() {
+            fleetlist_loading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected JsonArray doInBackground(String[] params) {
+            JsonArray deck_data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+            JsonArray data = null;
+            if (deck_data == null) {
+                fleet_name = "-";
+                return null;
+            } else {
+                if (current_fleet == 4) {
+                    fleet_name = getStringWithLocale(R.string.fleetlist_combined_fleet);
+                    if (deck_data.size() < 2) {
+                        return null;
+                    } else {
+                        KcaFleetInfoItemAdapter.is_combined = true;
+                        data = deckInfoCalc.getDeckListInfo(deck_data, 0, "all", KC_REQ_LIST);
+                        JsonArray data_c = deckInfoCalc.getDeckListInfo(deck_data, 1, "all", KC_REQ_LIST);
+                        while (!is_portrait && data.size() < 6) data.add(new JsonObject());
+
+                        for (int i = 0; i < data_c.size(); i++) {
+                            JsonObject item_c = data_c.get(i).getAsJsonObject();
+                            item_c.addProperty("cb_flag", true);
+                            data.add(item_c);
+                        }
+                        while (!is_portrait && data.size() < 12) data.add(new JsonObject());
+                        adapter.setListViewItemList(data);
+                    }
+                } else {
+                    if (deck_data.size() <= current_fleet) {
+                        fleet_name = String.valueOf(current_fleet + 1);
+                        return null;
+                    } else {
+                        KcaFleetInfoItemAdapter.is_combined = false;
+                        JsonObject fleet_data = deck_data.get(current_fleet).getAsJsonObject();
+                        fleet_name = fleet_data.get("api_name").getAsString();
+                        data = deckInfoCalc.getDeckListInfo(deck_data, current_fleet, "all", KC_REQ_LIST);
+                        adapter.setListViewItemList(data);
+                    }
+                }
+            }
+            return deck_data;
+        }
+
+        @Override
+        protected void onPostExecute(JsonArray deck_data) {
+            fleetlist_name.setText(fleet_name);
+            if (deck_data == null) {
+                findViewById(R.id.fleetlist_info_area).setVisibility(View.GONE);
+            } else {
+                if (current_fleet == 4) {
+                    findViewById(R.id.fleetlist_info_area).setVisibility(View.VISIBLE);
+                    fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, 0, null));
+                    fleetlist_seek.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_f),
+                            deckInfoCalc.getSeekValue(deck_data, "0,1", SEEK_33CN1, null)));
+
+                } else {
+                    findViewById(R.id.fleetlist_info_area).setVisibility(View.VISIBLE);
+                    fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, current_fleet, null));
+                    fleetlist_seek.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_f),
+                            deckInfoCalc.getSeekValue(deck_data, String.valueOf(current_fleet), SEEK_33CN1, null)));
+                }
+                adapter.notifyDataSetChanged();
+            }
+            fleetlist_loading.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -190,16 +232,6 @@ public class FleetInfoActivity extends AppCompatActivity {
         } else {
             String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
             LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
-        }
-
-        int orientation = newConfig.orientation;
-        if (fleetlist_ships != null && adapter != null) {
-            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                fleetlist_ships.setNumColumns(1);
-            } else {
-                fleetlist_ships.setNumColumns(2);
-            }
-            adapter.notifyDataSetChanged();
         }
 
         super.onConfigurationChanged(newConfig);

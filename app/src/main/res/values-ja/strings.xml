@@ -385,6 +385,7 @@
 
     <string name="action_fleetlist">艦隊編成</string>
     <string name="fleetlist_combined_fleet">連合艦隊</string>
+    <string name="fleetlist_loading">ロード中</string>
 
     <string name="action_shipinfo">艦船リスト</string>
     <string name="shipinfo_btn_sort">ソート</string>

@@ -58,6 +58,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
             holder.ship_cb_indicator = v.findViewById(R.id.fship_cb_indicator);
             holder.ship_luck = v.findViewById(R.id.fship_luck);
             holder.ship_taisen = v.findViewById(R.id.fship_taisen);
+            holder.ship_layout = v.findViewById(R.id.fship_layout);
             holder.ship_equip_slot = new TextView[5];
             holder.ship_equip_name = new TextView[5];
             holder.ship_equip_lv = new TextView[5];
@@ -80,11 +81,16 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
             v.setTag(holder);
         }
 
+        ViewHolder holder = (ViewHolder) v.getTag();
         JsonObject data = item.get(position).getAsJsonObject();
+        if (!data.has("kc")) {
+            holder.ship_layout.setVisibility(View.INVISIBLE);
+            return v;
+        }
+        holder.ship_layout.setVisibility(View.VISIBLE);
         JsonObject kcdata = data.getAsJsonObject("kc");
         JsonObject userdata = data.getAsJsonObject("user");
 
-        ViewHolder holder = (ViewHolder) v.getTag();
         holder.ship_name.setText(KcaApiData.getShipTranslation(kcdata.get("name").getAsString(), false));
         holder.ship_stype.setText(KcaApiData.getShipTypeAbbr(kcdata.get("stype").getAsInt()));
         holder.ship_lv.setText("Lv ".concat(userdata.get("api_lv").getAsString()));
@@ -237,7 +243,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
         }
 
         if (ship_slot_ex == 0) {
-            holder.ship_equip_ex_area.setVisibility(View.GONE);
+            holder.ship_equip_ex_area.setVisibility(View.INVISIBLE);
         } else {
             holder.ship_equip_name_ex.setText(ship_ex_item_name);
             holder.ship_equip_icon_ex.setImageResource(
@@ -263,7 +269,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
         ImageView[] ship_equip_icon;
         TextView ship_equip_slot_ex, ship_equip_name_ex, ship_equip_lv_ex;
         ImageView ship_equip_icon_ex;
-        View ship_equip_ex_area;
+        View ship_layout, ship_equip_ex_area;
     }
 
     public void setListViewItemList(JsonArray ship_list) {

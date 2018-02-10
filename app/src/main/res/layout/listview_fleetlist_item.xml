@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/fship_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -26,7 +27,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
-            android:layout_weight="0.9"
+            android:layout_weight="0.8"
             android:orientation="vertical">
 
             <LinearLayout
@@ -364,7 +365,6 @@
                         android:id="@+id/fship_equip_1_slot"
                         android:layout_width="10dp"
                         android:layout_height="10dp"
-                        android:background="@color/colorStatEquipSlotBack"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text="10"
@@ -397,7 +397,6 @@
                         android:layout_height="10dp"
                         android:layout_marginLeft="2dp"
                         android:layout_marginStart="2dp"
-                        android:background="@color/colorStatEquipSlotBack"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text=">>7"
@@ -412,7 +411,6 @@
                         android:layout_marginLeft="2dp"
                         android:layout_marginStart="2dp"
                         android:layout_weight="0"
-                        android:background="@color/colorStatEquipSlotBack"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text="★10"
@@ -432,7 +430,6 @@
                         android:id="@+id/fship_equip_2_slot"
                         android:layout_width="10dp"
                         android:layout_height="10dp"
-                        android:background="@color/colorStatEquipSlotBack"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text="10"
@@ -465,7 +462,6 @@
                         android:layout_height="10dp"
                         android:layout_marginLeft="2dp"
                         android:layout_marginStart="2dp"
-                        android:background="@color/colorStatEquipSlotBack"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text=">>7"
@@ -480,7 +476,6 @@
                         android:layout_marginLeft="2dp"
                         android:layout_marginStart="2dp"
                         android:layout_weight="0"
-                        android:background="@color/colorStatEquipSlotBack"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text="★10"
@@ -500,7 +495,6 @@
                         android:id="@+id/fship_equip_3_slot"
                         android:layout_width="10dp"
                         android:layout_height="10dp"
-                        android:background="@color/colorStatEquipSlotBack"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text="10"
@@ -533,7 +527,6 @@
                         android:layout_height="10dp"
                         android:layout_marginLeft="2dp"
                         android:layout_marginStart="2dp"
-                        android:background="@color/colorStatEquipSlotBack"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text=">>7"
@@ -548,7 +541,6 @@
                         android:layout_marginLeft="2dp"
                         android:layout_marginStart="2dp"
                         android:layout_weight="0"
-                        android:background="@color/colorStatEquipSlotBack"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text="★10"
@@ -568,7 +560,6 @@
                         android:id="@+id/fship_equip_4_slot"
                         android:layout_width="10dp"
                         android:layout_height="10dp"
-                        android:background="@color/colorStatEquipSlotBack"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text="10"
@@ -601,7 +592,6 @@
                         android:layout_height="10dp"
                         android:layout_marginLeft="2dp"
                         android:layout_marginStart="2dp"
-                        android:background="@color/colorStatEquipSlotBack"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text=">>7"
@@ -616,7 +606,6 @@
                         android:layout_marginLeft="2dp"
                         android:layout_marginStart="2dp"
                         android:layout_weight="0"
-                        android:background="@color/colorStatEquipSlotBack"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text="★10"
@@ -706,8 +695,7 @@
                         android:id="@+id/fship_equip_ex_line"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_weight="1"
-                        android:background="@color/lightgray" />
+                        android:layout_weight="1" />
 
                     <LinearLayout
                         android:id="@+id/fship_equip_ex"
@@ -759,7 +747,6 @@
                             android:layout_marginLeft="2dp"
                             android:layout_marginStart="2dp"
                             android:layout_weight="0"
-                            android:background="@color/colorStatEquipSlotBack"
                             android:gravity="center_vertical"
                             android:singleLine="true"
                             android:text="★10"
@@ -779,7 +766,6 @@
         android:id="@+id/item_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_weight="0.04"
-        android:background="@color/colorAccent" />
+        android:layout_weight="0.04" />
 
 </LinearLayout>
