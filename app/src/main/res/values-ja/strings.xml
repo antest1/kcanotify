@@ -383,6 +383,8 @@
     <string name="kca_toast_renew_currentportdeck">母港に戻ってゲームデータを更新してください。</string>
     <string name="questview_nopage">任務なし</string>
 
+    <string name="action_fleetlist">艦隊編成</string>
+
     <string name="action_shipinfo">艦船リスト</string>
     <string name="shipinfo_btn_sort">ソート</string>
     <string name="shipinfo_btn_filter">フィルター</string>

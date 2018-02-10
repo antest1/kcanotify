@@ -383,6 +383,9 @@
     <string name="kca_toast_renew_currentportdeck">모항으로 돌아가 게임 데이터를 업데이트하세요.</string>
     <string name="questview_nopage">임무 없음</string>
 
+    <string name="action_fleetlist">함대 편성</string>
+
+
     <string name="action_shipinfo">함선 리스트</string>
     <string name="shipinfo_btn_sort">정렬</string>
     <string name="shipinfo_btn_filter">필터</string>

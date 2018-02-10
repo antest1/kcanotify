@@ -448,6 +448,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_desc_notiatsvcoff">Make expedition/docking notification available even if SVC is off</string>
     <string name="questview_nopage">No Quest</string>
 
+    <string name="action_fleetlist">Fleet Info</string>
+
     <string name="action_shipinfo">Ship List</string>
     <string name="shipinfo_btn_sort">Sort</string>
     <string name="shipinfo_btn_filter">Filter</string>

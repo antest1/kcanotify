@@ -391,6 +391,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_toast_renew_currentportdeck">於遊戲內返回母港並刷新相關數據</string>
     <string name="questview_nopage">沒有任務</string>
 
+    <string name="action_fleetlist">艦隊配置</string>
+
     <string name="action_shipinfo">艦船目錄</string>
     <string name="shipinfo_btn_sort">排序</string>
     <string name="shipinfo_btn_filter">過濾</string>

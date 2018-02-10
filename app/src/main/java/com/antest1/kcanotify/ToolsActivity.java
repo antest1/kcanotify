@@ -47,7 +47,7 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 public class ToolsActivity extends AppCompatActivity {
     Toolbar toolbar;
     static Gson gson = new Gson();
-    LinearLayout view_shiplist, view_equipment, view_droplog, view_reslog, view_akashi, view_expcalc, view_expdtable;
+    LinearLayout view_fleetlist, view_shiplist, view_equipment, view_droplog, view_reslog, view_akashi, view_expcalc, view_expdtable;
     public ToolsActivity() {
         LocaleUtils.updateConfig(this);
     }
@@ -64,6 +64,7 @@ public class ToolsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getStringWithLocale(R.string.action_tools));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        view_fleetlist = findViewById(R.id.action_fleetlist);
         view_shiplist = findViewById(R.id.action_shiplist);
         view_equipment = findViewById(R.id.action_equipment);
         view_droplog = findViewById(R.id.action_droplog);
@@ -71,6 +72,14 @@ public class ToolsActivity extends AppCompatActivity {
         view_akashi = findViewById(R.id.action_akashi);
         view_expcalc = findViewById(R.id.action_expcalc);
         view_expdtable = findViewById(R.id.action_expdtable);
+
+        view_fleetlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ToolsActivity.this, ShipInfoActivity.class);
+                startActivity(intent);
+            }
+        });
 
         view_shiplist.setOnClickListener(new View.OnClickListener() {
             @Override
