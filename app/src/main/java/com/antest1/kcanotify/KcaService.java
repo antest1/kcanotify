@@ -280,6 +280,7 @@ public class KcaService extends Service {
         SettingActivity.setHandler(nHandler);
         KcaFairySelectActivity.setHandler(nHandler);
         KcaViewButtonService.setHandler(nHandler);
+        KcaAkashiRepairInfo.initAkashiTimer();
 
         notificationTimeCounter = -1;
         timer = new Runnable() {
@@ -292,7 +293,7 @@ public class KcaService extends Service {
                     }
                     updateExpViewNotification();
                 }
-                if (isMissionTimerViewEnabled() && KcaAkashiRepairInfo.getAkashiTimerValue() > 0) {
+                if (KcaAkashiRepairInfo.getAkashiTimerValue() > 0) {
                     int second = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
                     if (second >= AKASHI_TIMER_20MIN && isAkashiTimerNotiWait) {
                         isAkashiTimerNotiWait = false;
@@ -685,7 +686,6 @@ public class KcaService extends Service {
                 isInBattle = false;
                 api_start2_init = false;
                 api_start2_loading_flag = true;
-                KcaAkashiRepairInfo.initAkashiTimer();
                 KcaFleetViewService.setReadyFlag(false);
                 //Toast.makeText(contextWithLocale, "KCA_VERSION", Toast.LENGTH_LONG).show();
                 JsonObject api_version = jsonDataObj.get("api").getAsJsonObject();
@@ -1812,7 +1812,7 @@ public class KcaService extends Service {
                                 processMoraleInfo(i, portdeckdata, result);
                             }
                             JsonArray akashi_flagship_deck = deckInfoCalc.checkAkashiFlagship(portdeckdata);
-                            boolean akashi_nochange_flag = akashi_flagship_deck.size() == 0;
+                            boolean akashi_nochange_flag = true;
                             for (int i = 0; i < akashi_flagship_deck.size(); i++) {
                                 int deckid = akashi_flagship_deck.get(i).getAsInt();
                                 if (deckid == deckIdx || deckid == originalDeckIdx) {
