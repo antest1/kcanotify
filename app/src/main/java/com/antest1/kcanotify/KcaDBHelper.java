@@ -45,10 +45,6 @@ import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
 import static com.antest1.kcanotify.KcaUtils.getJapanSimpleDataFormat;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 
-/**
- * Created by Gyeong Bok Lee on 2017-04-26.
- */
-
 public class KcaDBHelper extends SQLiteOpenHelper {
     private Context context;
     private static final String db_name = "kcanotify_db";
@@ -58,7 +54,6 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     private static final String questlist_table_name = "kca_questlist";
 
     private KcaQuestTracker qt;
-    SQLiteDatabase db;
 
     public KcaDBHelper(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, db_name, factory, version);
@@ -112,7 +107,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void recordErrorLog(String type, String url, String request, String data, String error) {
-        db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("type", type);
         values.put("version", BuildConfig.VERSION_NAME);
@@ -125,7 +120,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     public List<String> getErrorLog(int limit, boolean full) {
         List<String> log_list = new ArrayList<>();
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         String col, sql;
         String type, version, url, request, data, error, timestamp;
         if (full)
@@ -157,14 +152,14 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void clearErrorLog() {
-        db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         db.delete(error_table_name, null, null);
     }
 
     // for kca_userdata
     public String getValue(String key) {
         String value = null;
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(table_name, null, "KEY=?", new String[]{key}, null, null, null, null);
         try {
             if (c != null && c.getCount() > 0) {
@@ -220,7 +215,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void putValue(String key, String value) {
-        db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("KEY", key);
         values.put("VALUE", value);
@@ -242,7 +237,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     // for kca_slotitem
     public int getItemCount() {
         int result = 0;
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT KEY from ".concat(slotitem_table_name), null);
         result = c.getCount();
         c.close();
@@ -252,7 +247,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     public int getItemCountByKcId(int id) {
         int result = 0;
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT KEY from ".concat(slotitem_table_name).concat(" WHERE KCID=".concat(String.valueOf(id))), null);
         result = c.getCount();
         c.close();
@@ -261,7 +256,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     public HashSet<Integer> getItemKeyList() {
         HashSet<Integer> set = new HashSet<>();
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(slotitem_table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
             set.add(c.getInt(c.getColumnIndex("KEY")));
@@ -272,7 +267,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     public JsonArray getItemData() {
         JsonArray data = new JsonArray();
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT KEY, KCID, VALUE from ".concat(slotitem_table_name), null);
         while (c.moveToNext()) {
             JsonObject row = new JsonObject();
@@ -287,7 +282,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     public String getItemValue(int key) {
         String value = null;
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(slotitem_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
@@ -298,7 +293,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void putItemValue(int key, String value) {
-        db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         JsonObject obj = new JsonParser().parse(value).getAsJsonObject();
         int slotitem_id = obj.get("api_slotitem_id").getAsInt();
         ContentValues values = new ContentValues();
@@ -347,7 +342,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void removeItemValue(String[] keys) {
-        db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         String condition = "";
         for (int i = 0; i < keys.length; i++) {
             condition = condition.concat("KEY=").concat(keys[i]);
@@ -364,7 +359,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String[] current_time = df.format(currentTime).split("-");
 
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         JsonArray data = new JsonArray();
         Cursor c = db.rawQuery("SELECT KEY, VALUE FROM ".concat(questlist_table_name), null);
         Log.e("KCA", "getCurrentQuestList: " + String.valueOf(c.getCount()));
@@ -440,7 +435,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         int last_no = -1;
 
         List<Integer> questIdList = new ArrayList<>();
-        db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         if (api_list == null) {
             db.delete(slotitem_table_name, "", null);
         } else {
@@ -506,7 +501,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     public String getQuest(int key) {
         String value = null;
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(questlist_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
         if (c.moveToFirst()) {
             value = c.getString(c.getColumnIndex("VALUE"));
@@ -517,7 +512,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     public String getQuestDate(int key) {
         String value = null;
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(questlist_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
@@ -532,7 +527,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String time = df.format(currentTime);
 
-        db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("KEY", key);
         values.put("VALUE", value);
@@ -549,7 +544,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void removeQuest(int key) {
-        db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         db.delete(questlist_table_name, "KEY=?", new String[]{String.valueOf(key)});
         qt.removeQuestTrack(key, false);
     }
@@ -569,7 +564,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     public float[] getExpScore() {
         float[] exp = new float[2];
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         ContentValues values = new ContentValues();
         String expCurrentText = getValue(DB_KEY_EXPCRNT);
         String expTodayText = getValue(DB_KEY_EXPTDAY);
@@ -584,7 +579,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         Date currentTime = getJapanCalendarInstance().getTime();
         SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String time = df.format(currentTime);
-        db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
 
         String prevTime = getValue(DB_KEY_EXPTIME);
         if (prevTime == null) {
@@ -626,7 +621,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public String getQuestListData() {
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         StringBuilder sb = new StringBuilder();
         Cursor c = db.query(questlist_table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
@@ -641,7 +636,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     // test code
     public void test() {
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
             String key = c.getString(c.getColumnIndex("KEY"));
@@ -660,7 +655,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void test2() {
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         int count = 0;
         Cursor c = db.query(slotitem_table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
@@ -674,7 +669,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void test3() {
-        db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         int count = 0;
         Cursor c = db.query(questlist_table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
