@@ -25,35 +25,73 @@
         android:padding="5dp">
 
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/fleetlist_raw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp">
+            android:text="TextView"
+            android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/label_ship"
-                android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/fleetlist_info_area"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/fleetlist_infoline"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:gravity="center_vertical"
-                android:padding="4dp"
-                android:text="@string/expcalc_shipname"
-                android:textAlignment="textStart"
-                android:textColor="@color/black"
-                android:textSize="18dp" />
+                android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/value_ship"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="3" />
+                <TextView
+                    android:id="@+id/fleetlist_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:ellipsize="end"
+                    android:text="TextView"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
 
+                <ImageView
+                    android:id="@+id/fleetlist_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    app:srcCompat="@mipmap/ic_arrow_down" />
+
+                <TextView
+                    android:id="@+id/fleetlist_fp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0"
+                    android:text="TextView"
+                    android:textColor="@color/colorStatFighterPower"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/fleetlist_seek"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0"
+                    android:text="TextView"
+                    android:textColor="@color/colorStatSakuteki"
+                    android:textSize="14dp" />
+
+            </LinearLayout>
+
+            <GridView
+                android:id="@+id/fleetlist_ships"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
     </LinearLayout>

@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/fship_stype"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="2dp"
+                    android:paddingStart="2dp"
+                    android:singleLine="true"
+                    android:text="FBB"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorStatLocked"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/fship_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:ellipsize="marquee"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingLeft="2dp"
+                    android:paddingStart="2dp"
+                    android:singleLine="true"
+                    android:text="Saratoga Kai Ni A"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/colorStatNormal"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/fship_lv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="2dp"
+                    android:paddingStart="2dp"
+                    android:text="Lv 165"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorStatMarried"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/fship_maxhp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="2dp"
+                    android:paddingStart="2dp"
+                    android:text="HP 101"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorFullState"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/fship_stat_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/fship_karyoku"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:background="@color/colorStatKaryoku"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="50"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/fship_raisou"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:background="@color/colorStatRaisou"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="50"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/fship_taiku"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:background="@color/colorStatTaiku"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="50"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/fship_soukou"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:background="@color/colorStatSoukou"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="50"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fship_stat_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/fship_sakuteki"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="50"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorStatSakuteki"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/fship_luck"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="50"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorStatLuck"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/fship_taisen"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="50"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorStatTaisen"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/fship_kaihi"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="50"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorStatKaihi"
+                        android:textSize="12dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fship_stat_1_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/fship_equip_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/fship_equip_1_slot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="10"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorStatEquipSlot"
+                        android:textSize="9dp" />
+
+                    <ImageView
+                        android:id="@+id/fship_equip_1_icon"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@mipmap/item_3" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_1_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="TextViewTextViewTextViewTextViewTextViewTextViewTextView"
+                        android:textColor="@color/black"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_1_lv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="0"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="+7"
+                        android:textAlignment="center"
+                        android:textColor="@color/itemalv2"
+                        android:textSize="9dp" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_1_alv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="+10"
+                        android:textAlignment="center"
+                        android:textColor="@color/itemlevel"
+                        android:textSize="9dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fship_equip_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/fship_equip_2_slot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="10"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorStatEquipSlot"
+                        android:textSize="9dp" />
+
+                    <ImageView
+                        android:id="@+id/fship_equip_2_icon"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@mipmap/item_4" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_2_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="TextViewTextViewTextViewTextViewTextViewTextViewTextView"
+                        android:textColor="@color/black"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_2_lv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="0"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="+7"
+                        android:textAlignment="center"
+                        android:textColor="@color/itemalv2"
+                        android:textSize="9dp" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_2_alv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="+10"
+                        android:textAlignment="center"
+                        android:textColor="@color/itemlevel"
+                        android:textSize="9dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fship_equip_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/fship_equip_3_slot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="10"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorStatEquipSlot"
+                        android:textSize="9dp" />
+
+                    <ImageView
+                        android:id="@+id/fship_equip_3_icon"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@mipmap/item_6" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_3_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="TextViewTextViewTextViewTextViewTextViewTextViewTextView"
+                        android:textColor="@color/black"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_3_lv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="0"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="+7"
+                        android:textAlignment="center"
+                        android:textColor="@color/itemalv2"
+                        android:textSize="9dp" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_3_alv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="+10"
+                        android:textAlignment="center"
+                        android:textColor="@color/itemlevel"
+                        android:textSize="9dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fship_equip_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/fship_equip_4_slot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="10"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorStatEquipSlot"
+                        android:textSize="9dp" />
+
+                    <ImageView
+                        android:id="@+id/fship_equip_4_icon"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@mipmap/item_7" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_4_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="TextViewTextViewTextViewTextViewTextViewTextViewTextView"
+                        android:textColor="@color/black"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_4_lv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="0"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="+7"
+                        android:textAlignment="center"
+                        android:textColor="@color/itemalv2"
+                        android:textSize="9dp" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_4_alv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="+10"
+                        android:textAlignment="center"
+                        android:textColor="@color/itemlevel"
+                        android:textSize="9dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fship_equip_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/fship_equip_5_slot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="10"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorStatEquipSlot"
+                        android:textSize="9dp" />
+
+                    <ImageView
+                        android:id="@+id/fship_equip_5_icon"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@mipmap/item_37" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_5_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="TextViewTextViewTextViewTextViewTextViewTextViewTextView"
+                        android:textColor="@color/black"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_5_lv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_weight="0"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="+7"
+                        android:textAlignment="center"
+                        android:textColor="@color/itemalv2"
+                        android:textSize="9dp" />
+
+                    <TextView
+                        android:id="@+id/fship_equip_5_alv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:background="@color/colorStatEquipSlotBack"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="+10"
+                        android:textAlignment="center"
+                        android:textColor="@color/itemlevel"
+                        android:textSize="9dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fship_equip_ex_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/fship_equip_ex_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/lightgray" />
+
+                    <LinearLayout
+                        android:id="@+id/fship_equip_ex"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/fship_equip_ex_slot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="16dp"
+                            android:layout_centerHorizontal="false"
+                            android:layout_centerVertical="false"
+                            android:layout_weight="0"
+                            android:background="@color/colorStatEquipSlotBack"
+                            android:singleLine="true"
+                            android:text="10"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorStatEquipSlot"
+                            android:textSize="10dp"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/fship_equip_ex_icon"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_toRightOf="@+id/fship_equip_ex_slot"
+                            android:layout_weight="0"
+                            android:src="@mipmap/item_15" />
+
+                        <TextView
+                            android:id="@+id/fship_equip_ex_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginStart="2dp"
+                            android:layout_toRightOf="@+id/fship_equip_ex_icon"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:textColor="@color/black"
+                            android:textSize="11dp" />
+
+                        <TextView
+                            android:id="@+id/fship_equip_ex_lv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="10dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginStart="2dp"
+                            android:layout_weight="0"
+                            android:background="@color/colorStatEquipSlotBack"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="+10"
+                            android:textAlignment="center"
+                            android:textColor="@color/itemlevel"
+                            android:textSize="9dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/item_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="0.04"
+        android:background="@color/colorAccent" />
+
+</LinearLayout>

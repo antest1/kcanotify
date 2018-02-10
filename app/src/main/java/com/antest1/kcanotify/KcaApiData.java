@@ -928,7 +928,7 @@ public class KcaApiData {
 
         if (target_data != null) {
             if (list.equals("all")) {
-                return userShipData.get(id);
+                return target_data;
             } else {
                 String[] requestList = list.split(",");
                 for (String orig_api_item: requestList) {

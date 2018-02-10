@@ -656,7 +656,7 @@ public class KcaDeckInfo {
         }
     }
 
-    public JsonArray getDeckListInfo(JsonArray deckPortData, int deckid) {
+    public JsonArray getDeckListInfo(JsonArray deckPortData, int deckid, String request_list, String kc_request_list) {
         JsonArray deckListInfo = new JsonArray();
         int deckSize = deckPortData.size();
         if (deckid < deckSize) {
@@ -665,10 +665,15 @@ public class KcaDeckInfo {
                 JsonObject data = new JsonObject();
                 int shipId = deckShipIdList.get(i).getAsInt();
                 if (shipId != -1) {
-                    JsonObject shipData = getUserShipDataById(shipId, "id,ship_id,lv,exp,slot,slot_ex,onslot,cond,maxhp,nowhp");
+                    int shipKcId;
+                    JsonObject shipData = getUserShipDataById(shipId, request_list);
                     data.add("user", shipData);
-                    int shipKcId = shipData.get("ship_id").getAsInt();
-                    data.add("kc", getKcShipDataById(shipKcId, "name,maxeq,stype"));
+                    if (shipData.has("api_ship_id")) {
+                        shipKcId = shipData.get("api_ship_id").getAsInt();
+                    } else {
+                        shipKcId = shipData.get("ship_id").getAsInt();
+                    }
+                    data.add("kc", getKcShipDataById(shipKcId, kc_request_list));
                     deckListInfo.add(data);
                 }
             }

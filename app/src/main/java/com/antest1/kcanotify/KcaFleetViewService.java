@@ -15,7 +15,6 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewGroupCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -70,6 +69,8 @@ public class KcaFleetViewService extends Service {
     public static final String REFRESH_FLEETVIEW_ACTION = "update_fleetview_action";
     public static final String CLOSE_FLEETVIEW_ACTION = "close_fleetview_action";
     public static final String[] fleetview_menu_keys = {"quest", "excheck", "develop", "construction", "docking", "maphp", "fchk", "labinfo", "akashi"};
+    public static final String DECKINFO_REQ_LIST = "id,ship_id,lv,exp,slot,slot_ex,onslot,cond,maxhp,nowhp";
+    public static final String KC_DECKINFO_REQ_LIST = "name,maxeq,stype";
 
     public static final int FLEET_COMBINED_ID = 4;
     final int fleetview_menu_margin = 40;
@@ -435,14 +436,14 @@ public class KcaFleetViewService extends Service {
 
                             if (isCombinedFlag(selected)) {
                                 if (i < 6) {
-                                    data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 0);
+                                    data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 0, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
                                 } else {
-                                    data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 1);
+                                    data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 1, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
                                 }
                                 udata = data.get(i % 6).getAsJsonObject().getAsJsonObject("user");
                                 kcdata = data.get(i % 6).getAsJsonObject().getAsJsonObject("kc");
                             } else {
-                                data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), selected);
+                                data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), selected, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
                                 udata = data.get(i).getAsJsonObject().getAsJsonObject("user");
                                 kcdata = data.get(i).getAsJsonObject().getAsJsonObject("kc");
                             }
@@ -661,7 +662,7 @@ public class KcaFleetViewService extends Service {
         int sum_level = 0;
         if (isCombined) {
             for (int n = 0; n < 2; n++) {
-                JsonArray maindata = deckInfoCalc.getDeckListInfo(deckportdata, n);
+                JsonArray maindata = deckInfoCalc.getDeckListInfo(deckportdata, n, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
                 for (int i = 0; i < 6; i++) {
                     int v = n * 6 + i + 1;
                     if (i >= maindata.size()) {
@@ -732,7 +733,7 @@ public class KcaFleetViewService extends Service {
             }
 
         } else {
-            JsonArray maindata = deckInfoCalc.getDeckListInfo(deckportdata, idx);
+            JsonArray maindata = deckInfoCalc.getDeckListInfo(deckportdata, idx, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
             int max_count = Math.max(6, maindata.size());
             if (max_count > 6) {
                 mView.findViewById(R.id.fleet_list_combined).setVisibility(View.VISIBLE);
@@ -1114,6 +1115,13 @@ public class KcaFleetViewService extends Service {
         if (mManager != null) {
             if (mView.getParent() != null) mManager.removeViewImmediate(mView);
             initView();
+            mParams = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    getWindowLayoutType(),
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    PixelFormat.TRANSLUCENT);
+            mParams.gravity = Gravity.CENTER;
             mManager.addView(mView, mParams);
 
             int setViewResult = setView();

@@ -76,7 +76,7 @@ public class ToolsActivity extends AppCompatActivity {
         view_fleetlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ToolsActivity.this, ShipInfoActivity.class);
+                Intent intent = new Intent(ToolsActivity.this, FleetInfoActivity.class);
                 startActivity(intent);
             }
         });
