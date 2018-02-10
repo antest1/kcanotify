@@ -378,8 +378,8 @@
     <string name="setting_menu_kand_title_socks5_address">SOCKS5 프록시 주소</string>
     <string name="setting_menu_kand_title_adv_network">고급 네트워크 설정</string>
     <string name="sa_bypass_list_invalid">설정된 예외 주소 목록이 올바른 형식이 아닙니다. 입력을 다시 확인하세요.</string>
-    <string name="setting_menu_noti_title_notiatsvcoff">SVC가 꺼진 상태에서 알람 활성 여부</string>
-    <string name="setting_menu_noti_desc_notiatsvcoff">SVC를 끈 상태에서도 원정/입거 완료 알림이 오도록 함</string>
+    <string name="setting_menu_noti_title_notiatsvcoff">서비스가 꺼진 상태에서 알람 활성 여부</string>
+    <string name="setting_menu_noti_desc_notiatsvcoff">깡들리티 서비스를 끈 상태에서도 원정/입거 완료 알림이 오도록 함</string>
     <string name="kca_toast_renew_currentportdeck">모항으로 돌아가 게임 데이터를 업데이트하세요.</string>
     <string name="questview_nopage">임무 없음</string>
 
