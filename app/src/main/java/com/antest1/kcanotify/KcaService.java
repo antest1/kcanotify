@@ -81,6 +81,7 @@ import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
+import static com.antest1.kcanotify.KcaBattle.currentMapArea;
 import static com.antest1.kcanotify.KcaBattle.isBossReached;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaExpedition2.mission_no;
@@ -2106,12 +2107,10 @@ public class KcaService extends Service {
                 if (jsonDataObj.has("ship")) {
                     Log.e("KCA", KcaUtils.format("Ship: %d", jsonDataObj.get("ship").getAsInt()));
                     Log.e("KCA", KcaUtils.format("Item: %d", jsonDataObj.get("item").getAsInt()));
+                    isUserItemDataLoaded = true;
                 }
                 api_start2_loading_flag = false;
-                if (isUserItemDataLoaded) {
-
-                    updateFleetView();
-                }
+                updateFleetView();
             }
 
             if (url.startsWith(KCA_API_FAIRY_HIDDEN)) {
@@ -2186,30 +2185,29 @@ public class KcaService extends Service {
                     updateQuestView();
                 }
                 Intent intent = new Intent(KCA_MSG_BATTLE_INFO);
-                // intent.putExtra(KCA_MSG_DATA, data);
                 broadcaster.sendBroadcast(intent);
             }
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_NODE)) {
                 // Reference: https://github.com/andanteyk/ElectronicObserver/blob/1052a7b177a62a5838b23387ff35283618f688dd/ElectronicObserver/Other/Information/apilist.txt
-                // jsonDataObj = dbHelper.getJsonObjectValue(DB_KEY_BATTLENODE);
-                if (jsonDataObj.has("api_maparea_id") && isBattleNodeEnabled()) {
-                    int currentMapArea = jsonDataObj.get("api_maparea_id").getAsInt();
-                    int currentMapNo = jsonDataObj.get("api_mapinfo_no").getAsInt();
-                    int currentNode = jsonDataObj.get("api_no").getAsInt();
-                    String currentNodeAlphabet = KcaApiData.getCurrentNodeAlphabet(currentMapArea, currentMapNo, currentNode);
-                    int api_event_kind = jsonDataObj.get("api_event_kind").getAsInt();
-                    int api_event_id = jsonDataObj.get("api_event_id").getAsInt();
-                    int api_color_no = jsonDataObj.get("api_color_no").getAsInt();
-                    currentNodeInfo = KcaApiData.getNodeFullInfo(contextWithLocale, currentNodeAlphabet, api_event_id, api_event_kind, false);
-                    showCustomToast(customToast, currentNodeInfo, Toast.LENGTH_LONG,
-                            getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
+                if (jsonDataObj.has("api_maparea_id")) {
+                    if (isBattleNodeEnabled()) {
+                        int currentMapArea = jsonDataObj.get("api_maparea_id").getAsInt();
+                        int currentMapNo = jsonDataObj.get("api_mapinfo_no").getAsInt();
+                        int currentNode = jsonDataObj.get("api_no").getAsInt();
+                        String currentNodeAlphabet = KcaApiData.getCurrentNodeAlphabet(currentMapArea, currentMapNo, currentNode);
+                        int api_event_kind = jsonDataObj.get("api_event_kind").getAsInt();
+                        int api_event_id = jsonDataObj.get("api_event_id").getAsInt();
+                        int api_color_no = jsonDataObj.get("api_color_no").getAsInt();
+                        currentNodeInfo = KcaApiData.getNodeFullInfo(contextWithLocale, currentNodeAlphabet, api_event_id, api_event_kind, false);
+                        showCustomToast(customToast, currentNodeInfo, Toast.LENGTH_LONG,
+                                getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
+                    }
                     JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
                     questTracker.updateNodeTracker(questTrackData);
                 }
 
                 Intent intent = new Intent(KCA_MSG_BATTLE_NODE);
-                //intent.putExtra(KCA_MSG_DATA, data);
                 broadcaster.sendBroadcast(intent);
             }
 
