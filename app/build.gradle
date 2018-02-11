@@ -36,6 +36,7 @@ model {
             release {
                 minifyEnabled true
                 useProguard = true
+                shrinkResources true
                 proguardFiles.add(file('proguard-rules.pro'))
                 ndk.with {
                     debuggable = true
@@ -48,11 +49,12 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
     })
     compile 'com.android.support:appcompat-v7:27.0.2'
     compile 'com.android.support:support-v4:27.0.2'
     compile 'com.android.support:design:27.0.2'
-    compile group: 'com.google.guava', name: 'guava', version: '20.0'
+    compile 'com.google.guava:guava:23.0-android'
     compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
     compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.7.0'
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'

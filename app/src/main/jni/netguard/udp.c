@@ -335,7 +335,7 @@ jboolean handle_udp(const struct arguments *args,
             log_android(ANDROID_LOG_DEBUG,
                         "DNS query qtype %d qclass %d name %s",
                         qtype, qclass, qname);
-
+            /*
             if (0)
                 if (check_domain(args, &cur->udp, data, datalen, qclass, qtype, qname)) {
                     // Log qname
@@ -351,6 +351,7 @@ jboolean handle_udp(const struct arguments *args,
                     cur->udp.state = UDP_FINISHING;
                     return 0;
                 }
+            */
         }
     }
 

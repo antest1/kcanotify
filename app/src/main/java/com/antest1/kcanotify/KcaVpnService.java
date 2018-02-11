@@ -38,7 +38,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
-import eu.faircode.netguard.Allowed;
 import eu.faircode.netguard.IPUtil;
 import eu.faircode.netguard.Packet;
 import eu.faircode.netguard.ResourceRecord;
@@ -610,19 +609,6 @@ public class KcaVpnService extends VpnService {
     }
 
     // Called from native code
-    private void logPacket(Packet packet) {
-        Log.e("KCAV", packet.data);
-        /*
-        Message msg = logHandler.obtainMessage();
-        msg.obj = packet;
-        msg.what = MSG_PACKET;
-        msg.arg1 = (last_connected ? (last_metered ? 2 : 1) : 0);
-        msg.arg2 = (last_interactive ? 1 : 0);
-        logHandler.sendMessage(msg);
-        */
-    }
-
-    // Called from native code
     private void dnsResolved(ResourceRecord rr) {
         /*
         if (DatabaseHelper.getInstance(KcaVpnService.this).insertDns(rr)) {
@@ -631,32 +617,11 @@ public class KcaVpnService extends VpnService {
         }*/
     }
 
-    // Called from native code
-    private boolean isDomainBlocked(String name) {
-        /*
-        lock.readLock().lock();
-        boolean blocked = (mapHostsBlocked.containsKey(name) && mapHostsBlocked.get(name));
-        lock.readLock().unlock();
-        return blocked;
-        */
-        return false;
-    }
-
     private boolean isSupported(int protocol) {
         return (protocol == 1 /* ICMPv4 */ ||
                 protocol == 59 /* ICMPv6 */ ||
                 protocol == 6 /* TCP */ ||
                 protocol == 17 /* UDP */);
-    }
-
-    // Called from native code
-    private Allowed isAddressAllowed(Packet packet) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        //lock.readLock().lock();
-
-        Allowed allowed = new Allowed();
-        return allowed;
     }
 
     private BroadcastReceiver interactiveStateReceiver = new BroadcastReceiver() {

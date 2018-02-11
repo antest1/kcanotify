@@ -16,6 +16,13 @@
 #   public *;
 #}
 
+-dontobfuscate
+-keepattributes SoureFile,LineNumberTable
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
+
+-keepattributes Signature
+-keepattributes *Annotation*
+
 -dontwarn okhttp3.**
 -dontwarn okio.**
 -dontwarn org.slf4j.**
@@ -23,37 +30,41 @@
 
 -dontwarn javax.annotation.**
 -dontwarn javax.inject.**
--dontwarn sun.misc.Unsafe
 
 -dontwarn org.apache.commons.**
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
 -dontwarn org.apache.log4j.**
 
-# Jzlib
--keep class com.jcraft.jzlib.** { *; }
--keep interface com.jcraft.jzlib.** { *; }
-
--keepattributes Signature
--keepattributes *Annotation*
+# Gson
 -keep class sun.misc.Unsafe { *; }
--keep class * implements com.google.gson.TypeAdapterFactory
--keep class * implements com.google.gson.JsonSerializer
--keep class * implements com.google.gson.JsonDeserializer
+#-keep class com.google.gson.stream.** { *; }
 
 -dontwarn oauth.**
--dontwarn com.androidquery.auth.**
 -keep class com.woxthebox.draglistview.** { *; }
+-keep class com.github.mikephil.charting.** { *; }
 
 -keepattributes SourceFile,LineNumberTable
 -keep class org.acra.** { *; }
 
 -dontwarn android.test.**
--keep public class android.widget.** { *; }
+# -keep public class android.widget.** { *; }
 
 #Support library
--keep class android.support.v7.widget.** { *; }
--dontwarn android.support.v4.**
+-keep public class android.support.v7.widget.** { *; }
+-keep public class android.support.v7.internal.widget.** { *; }
+-keep public class android.support.v7.internal.view.menu.** { *; }
+
+-keep public class * extends android.support.v4.view.ActionProvider {
+    public <init>(android.content.Context);
+}
+
+# Design
+-dontwarn android.support.**
+-dontwarn android.support.design.**
+-keep class android.support.design.** { *; }
+-keep interface android.support.design.** { *; }
+-keep public class android.support.design.R$* { *; }
 
 -keepclassmembers class **.R$* {
     public static <fields>;
@@ -68,8 +79,8 @@
     public static *** wtf(...);
 }
 
+-keep class com.antest1.kcanotify.** { *; }
 -keepnames class com.antest1.kcanotify.** { *; }
-
 
 #NetGuard
 -keepnames class eu.faircode.netguard.** { *; }
@@ -90,10 +101,7 @@
 -keep class com.antest1.kcanotify.KcaVpnService {
     void nativeExit(java.lang.String);
     void nativeError(int, java.lang.String);
-    void logPacket(eu.faircode.netguard.Packet);
     void dnsResolved(eu.faircode.netguard.ResourceRecord);
-    boolean isDomainBlocked(java.lang.String);
-    eu.faircode.netguard.Allowed isAddressAllowed(eu.faircode.netguard.Packet);
 }
 
 -keep class com.antest1.kcanotify.KcaVpnData {

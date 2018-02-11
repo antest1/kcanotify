@@ -43,9 +43,7 @@ extern long pcap_file_size;
 // JNI
 
 jclass clsPacket;
-jclass clsAllowed;
 jclass clsRR;
-jclass clsUsage;
 jclass clsData;
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved) {
@@ -59,9 +57,6 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
 
     const char *packet = "eu/faircode/netguard/Packet";
     clsPacket = jniGlobalRef(env, jniFindClass(env, packet));
-
-    const char *allowed = "eu/faircode/netguard/Allowed";
-    clsAllowed = jniGlobalRef(env, jniFindClass(env, allowed));
 
     const char *rr = "eu/faircode/netguard/ResourceRecord";
     clsRR = jniGlobalRef(env, jniFindClass(env, rr));
@@ -496,6 +491,7 @@ int jniCheckException(JNIEnv *env) {
 
 static jmethodID midLogPacket = NULL;
 
+/*
 void log_packet(const struct arguments *args, jobject jpacket) {
 #ifdef PROFILE_JNI
     float mselapsed;
@@ -523,6 +519,7 @@ void log_packet(const struct arguments *args, jobject jpacket) {
         log_android(ANDROID_LOG_WARN, "log_packet %f", mselapsed);
 #endif
 }
+*/
 
 static jmethodID midDnsResolved = NULL;
 static jmethodID midInitRR = NULL;
@@ -592,6 +589,7 @@ void dns_resolved(const struct arguments *args,
 
 static jmethodID midIsDomainBlocked = NULL;
 
+/*
 jboolean is_domain_blocked(const struct arguments *args, const char *name) {
 #ifdef PROFILE_JNI
     float mselapsed;
@@ -624,64 +622,7 @@ jboolean is_domain_blocked(const struct arguments *args, const char *name) {
 
     return jallowed;
 }
-
-static jmethodID midIsAddressAllowed = NULL;
-jfieldID fidRaddr = NULL;
-jfieldID fidRport = NULL;
-struct allowed allowed;
-
-struct allowed *is_address_allowed(const struct arguments *args, jobject jpacket) {
-#ifdef PROFILE_JNI
-    float mselapsed;
-    struct timeval start, end;
-    gettimeofday(&start, NULL);
-#endif
-
-    jclass clsService = (*args->env)->GetObjectClass(args->env, args->instance);
-
-    const char *signature = "(Leu/faircode/netguard/Packet;)Leu/faircode/netguard/Allowed;";
-    if (midIsAddressAllowed == NULL)
-        midIsAddressAllowed = jniGetMethodID(args->env, clsService, "isAddressAllowed", signature);
-
-    jobject jallowed = (*args->env)->CallObjectMethod(
-            args->env, args->instance, midIsAddressAllowed, jpacket);
-    jniCheckException(args->env);
-
-    if (jallowed != NULL) {
-        if (fidRaddr == NULL) {
-            const char *string = "Ljava/lang/String;";
-            fidRaddr = jniGetFieldID(args->env, clsAllowed, "raddr", string);
-            fidRport = jniGetFieldID(args->env, clsAllowed, "rport", "I");
-        }
-
-        jstring jraddr = (*args->env)->GetObjectField(args->env, jallowed, fidRaddr);
-        if (jraddr == NULL)
-            *allowed.raddr = 0;
-        else {
-            const char *raddr = (*args->env)->GetStringUTFChars(args->env, jraddr, NULL);
-            strcpy(allowed.raddr, raddr);
-            (*args->env)->ReleaseStringUTFChars(args->env, jraddr, raddr);
-        }
-        allowed.rport = (uint16_t) (*args->env)->GetIntField(args->env, jallowed, fidRport);
-
-        (*args->env)->DeleteLocalRef(args->env, jraddr);
-    }
-
-
-    (*args->env)->DeleteLocalRef(args->env, jpacket);
-    (*args->env)->DeleteLocalRef(args->env, clsService);
-    (*args->env)->DeleteLocalRef(args->env, jallowed);
-
-#ifdef PROFILE_JNI
-    gettimeofday(&end, NULL);
-    mselapsed = (end.tv_sec - start.tv_sec) * 1000.0 +
-                (end.tv_usec - start.tv_usec) / 1000.0;
-    if (mselapsed > PROFILE_JNI)
-        log_android(ANDROID_LOG_WARN, "is_address_allowed %f", mselapsed);
-#endif
-
-    return (jallowed == NULL ? NULL : &allowed);
-}
+*/
 
 jmethodID midInitPacket = NULL;
 

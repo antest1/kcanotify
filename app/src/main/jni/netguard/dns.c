@@ -152,42 +152,6 @@ void parse_dns_response(const struct arguments *args, const struct udp_session *
                 return;
             }
         }
-
-        if (qcount > 0 && is_domain_blocked(args, qname)) {
-            dns->qr = 1;
-            dns->aa = 0;
-            dns->tc = 0;
-            dns->rd = 0;
-            dns->ra = 0;
-            dns->z = 0;
-            dns->ad = 0;
-            dns->cd = 0;
-            dns->rcode = (uint16_t) args->rcode;
-            dns->ans_count = 0;
-            dns->auth_count = 0;
-            dns->add_count = 0;
-            *datalen = aoff;
-
-            char source[INET6_ADDRSTRLEN + 1];
-            char dest[INET6_ADDRSTRLEN + 1];
-            if (u->version == 4) {
-                inet_ntop(AF_INET, &u->saddr.ip4, source, sizeof(source));
-                inet_ntop(AF_INET, &u->daddr.ip4, dest, sizeof(dest));
-            }
-            else {
-                inet_ntop(AF_INET6, &u->saddr.ip6, source, sizeof(source));
-                inet_ntop(AF_INET6, &u->daddr.ip6, dest, sizeof(dest));
-            }
-
-            // Log qname
-            char name[DNS_QNAME_MAX + 40 + 1];
-            sprintf(name, "qtype %d qname %s rcode %d", qtype, qname, dns->rcode);
-            jobject objPacket = create_packet(
-                    args, u->version, IPPROTO_UDP, "",
-                    source, ntohs(u->source), dest, ntohs(u->dest),
-                    name, 0, 0);
-            log_packet(args, objPacket);
-        }
     }
     else if (acount > 0)
         log_android(ANDROID_LOG_WARN,
@@ -228,63 +192,5 @@ int get_dns_query(const struct arguments *args, const struct udp_session *u,
 int check_domain(const struct arguments *args, const struct udp_session *u,
                  const uint8_t *data, const size_t datalen,
                  uint16_t qclass, uint16_t qtype, const char *name) {
-
-    if (qclass == DNS_QCLASS_IN &&
-        (qtype == DNS_QTYPE_A || qtype == DNS_QTYPE_AAAA) &&
-        is_domain_blocked(args, name)) {
-
-        log_android(ANDROID_LOG_INFO, "DNS query type %d name %s blocked", qtype, name);
-
-        // Build response
-        size_t rlen = datalen + sizeof(struct dns_rr) + (qtype == DNS_QTYPE_A ? 4 : 16);
-        uint8_t *response = malloc(rlen);
-
-        // Copy header & query
-        memcpy(response, data, datalen);
-
-        // Modify copied header
-        struct dns_header *rh = (struct dns_header *) response;
-        rh->qr = 1;
-        rh->aa = 0;
-        rh->tc = 0;
-        rh->rd = 0;
-        rh->ra = 0;
-        rh->z = 0;
-        rh->ad = 0;
-        rh->cd = 0;
-        rh->rcode = 0;
-        rh->ans_count = htons(1);
-        rh->auth_count = 0;
-        rh->add_count = 0;
-
-        // Build answer
-        struct dns_rr *answer = (struct dns_rr *) (response + datalen);
-        answer->qname_ptr = htons(sizeof(struct dns_header) | 0xC000);
-        answer->qtype = htons(qtype);
-        answer->qclass = htons(qclass);
-        answer->ttl = htonl(DNS_TTL);
-        answer->rdlength = htons(qtype == DNS_QTYPE_A ? 4 : 16);
-
-        // Add answer address
-        uint8_t *addr = response + datalen + sizeof(struct dns_rr);
-        if (qtype == DNS_QTYPE_A)
-            inet_pton(AF_INET, "127.0.0.1", addr);
-        else
-            inet_pton(AF_INET6, "::1", addr);
-
-        // Send selected negative response
-        rlen = datalen;
-        rh->rcode = (uint16_t) args->rcode;
-        rh->ans_count = 0;
-
-        // Send response
-        if (write_udp(args, u, response, rlen) < 0)
-            log_android(ANDROID_LOG_WARN, "UDP DNS write error %d: %s", errno, strerror(errno));
-
-        free(response);
-
-        return 1;
-    }
-
     return 0;
 }
