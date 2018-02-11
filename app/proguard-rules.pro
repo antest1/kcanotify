@@ -17,6 +17,7 @@
 #}
 
 -dontobfuscate
+-dontskipnonpubliclibraryclasses
 -keepattributes SoureFile,LineNumberTable
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
 
@@ -48,6 +49,7 @@
 -keep class org.acra.** { *; }
 
 -dontwarn android.test.**
+-dontwarn java.lang.invoke.**
 # -keep public class android.widget.** { *; }
 
 #Support library
@@ -65,6 +67,9 @@
 -keep class android.support.design.** { *; }
 -keep interface android.support.design.** { *; }
 -keep public class android.support.design.R$* { *; }
+
+# Guava
+-keep class com.google.common.base.** {*;}
 
 -keepclassmembers class **.R$* {
     public static <fields>;

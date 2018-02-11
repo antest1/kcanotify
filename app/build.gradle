@@ -1,71 +1,68 @@
-apply plugin: 'com.android.model.application'
-model {
-    android {
-        compileSdkVersion 27
-        buildToolsVersion "27.0.3"
-        defaultConfig {
-            applicationId "com.antest1.kcanotify"
-            minSdkVersion.apiLevel 16
-            targetSdkVersion.apiLevel 27
-            versionCode 2522
-            versionName "2.5.2r2"
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
+    defaultConfig {
+        applicationId "com.antest1.kcanotify"
+        minSdkVersion 16
+        targetSdkVersion 27
+        versionCode 2522
+        versionName "2.5.2r2"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+                arguments "-DANDROID_PLATFORM=android-16"
+                // https://developer.android.com/ndk/guides/cmake.html
+            }
         }
 
         ndk {
-            platformVersion = "16"
-            moduleName = "netguard"
-            toolchain = "clang"
-            ldLibs.add("log")
+            // https://developer.android.com/ndk/guides/abis.html#sa
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
+    }
 
-        sources {
-            main {
-                jni {
-                    source {
-                        srcDirs.removeAll()
-                        srcDirs.add('src/main/jni/netguard')
-                    }
-                    exportedHeaders {
-                    }
-                }
-            }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
         }
+    }
 
-        buildTypes {
-            release {
-                minifyEnabled true
-                useProguard = true
-                shrinkResources true
-                proguardFiles.add(file('proguard-rules.pro'))
-                ndk.with {
-                    debuggable = true
-                }
-            }
+    buildTypes {
+        release {
+            minifyEnabled true
+            useProguard = true
+            shrinkResources true
+            proguardFiles.add(file('proguard-rules.pro'))
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.google.code.findbugs'
-    })
-    compile 'com.android.support:appcompat-v7:27.0.2'
-    compile 'com.android.support:support-v4:27.0.2'
-    compile 'com.android.support:design:27.0.2'
-    compile 'com.google.guava:guava:23.0-android'
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
-    compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.7.0'
-    compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
-    compile (group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1') {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:support-v4:27.0.2'
+    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.google.guava:guava:23.0-android'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.7.0'
+    implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
+    implementation (group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1') {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
-    compile 'org.sufficientlysecure:html-textview:3.4'
-    compile 'ch.acra:acra-mail:5.0.2'
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.3'
-    compile 'com.github.woxthebox:draglistview:1.5.2'
-    compile 'com.commonsware.cwac:provider:0.5.3'
-    testCompile 'junit:junit:4.12'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+    implementation 'org.sufficientlysecure:html-textview:3.4'
+    implementation 'ch.acra:acra-mail:5.1.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.github.woxthebox:draglistview:1.5.2'
+    implementation 'com.commonsware.cwac:provider:0.5.3'
+    // testCompile 'junit:junit:4.12'
 }
