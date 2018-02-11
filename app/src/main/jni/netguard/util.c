@@ -66,7 +66,7 @@ void log_android(int prio, const char *fmt, ...) {
         va_list argptr;
         va_start(argptr, fmt);
         vsprintf(line, fmt, argptr);
-        __android_log_print(prio, TAG, line);
+        __android_log_print(prio, TAG, "%s", line);
         va_end(argptr);
     }
 }
