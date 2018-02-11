@@ -538,6 +538,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_bonus_amp" formatted="false">内火艇：%d</string>
     <string name="excheckview_bonus_toku" formatted="false">特大发：%d</string>
     <string name="excheckview_bonus_result" formatted="false">（收益：%.1f%%）</string>
+    <string name="excheckview_ship_cvs">空母系</string>
     <string name="labinfoview_status_standby">待机</string>
     <string name="labinfoview_status_sortie">出击</string>
     <string name="labinfoview_status_defense">防空</string>

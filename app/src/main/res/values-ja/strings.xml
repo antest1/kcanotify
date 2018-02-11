@@ -534,6 +534,7 @@
     <string name="excheckview_bonus_amp" formatted="false">内火艇：%d</string>
     <string name="excheckview_bonus_toku" formatted="false">特大発：%d</string>
     <string name="excheckview_bonus_result" formatted="false">（ボーナス：%.1f%%）</string>
+    <string name="excheckview_ship_cvs">空母系</string>
     <string name="labinfoview_status_standby">待機</string>
     <string name="labinfoview_status_sortie">出撃</string>
     <string name="labinfoview_status_defense">防空</string>

@@ -523,12 +523,17 @@ public class KcaExpeditionCheckViewService extends Service {
 
     private String convertTotalCond(String str) {
         String[] ship_count = str.split("\\-");
-        String[] ship = ship_count[0].split(",");
-        List<String> ship_list = new ArrayList<>();
-        for (String s : ship) {
-            ship_list.add(getShipTypeAbbr(Integer.parseInt(s)));
+        String ship_concat;
+        if (ship_count[0].equals("7,11,16,18")) {
+            ship_concat = getStringWithLocale(R.string.excheckview_ship_cvs);
+        } else {
+            String[] ship = ship_count[0].split(",");
+            List<String> ship_list = new ArrayList<>();
+            for (String s : ship) {
+                ship_list.add(getShipTypeAbbr(Integer.parseInt(s)));
+            }
+            ship_concat = joinStr(ship_list, "/");
         }
-        String ship_concat = joinStr(ship_list, "/");
         return ship_concat.concat(":").concat(ship_count[1]);
     }
 

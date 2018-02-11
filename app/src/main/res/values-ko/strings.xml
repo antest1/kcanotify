@@ -532,6 +532,7 @@
     <string name="excheckview_bonus_amp" formatted="false">내화정: %d</string>
     <string name="excheckview_bonus_toku" formatted="false">특대발: %d</string>
     <string name="excheckview_bonus_result" formatted="false">（보너스: %.1f%%）</string>
+    <string name="excheckview_ship_cvs">항모류</string>
     <string name="labinfoview_status_standby">대기</string>
     <string name="labinfoview_status_sortie">출격</string>
     <string name="labinfoview_status_defense">방공</string>

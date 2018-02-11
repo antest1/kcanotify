@@ -597,6 +597,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_bonus_amp" formatted="false">ALC: %d</string>
     <string name="excheckview_bonus_toku" formatted="false">TokuDLC: %d</string>
     <string name="excheckview_bonus_result" formatted="false">（Bonus: %.1f%%）</string>
+    <string name="excheckview_ship_cvs">CV*</string>
     <string name="labinfoview_status_standby">Standby</string>
     <string name="labinfoview_status_sortie">Sortie</string>
     <string name="labinfoview_status_defense">Defense</string>
