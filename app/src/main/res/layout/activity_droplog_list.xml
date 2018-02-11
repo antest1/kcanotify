@@ -61,7 +61,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:background="@color/colorFairySelectPanel"
                     android:padding="4dp"
                     android:text="2017/11/12"
                     android:textSize="16dp" />
@@ -82,7 +81,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:background="@color/colorFairySelectPanel"
                     android:padding="4dp"
                     android:text="2017/11/12"
                     android:textSize="16dp" />

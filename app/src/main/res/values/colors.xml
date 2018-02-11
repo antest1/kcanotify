@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#4d3434</color>
+    <color name="colorPrimaryDark">#352424</color>
+    <color name="colorAccent">#E67E95</color>
+    <color name="colorActivityBack">#F2EEE6</color>
+    <color name="colorActivityText">#4d3434</color>
+    <color name="colorToolbarText">#FBFAF8</color>
+    <color name="colorBtn">#E2DBD4</color>
+    <color name="colorBtnText">#52280b</color>
+    <color name="colorBtnTextAccent">#FBFAF8</color>
+    <color name="colorFleetInfoBtn">#654444</color>
+
+    <!-- Default Color
     <color name="colorPrimary">#2c3e50</color>
     <color name="colorPrimaryDark">#1d2935</color>
     <color name="colorAccent">#16a085</color>
@@ -10,6 +22,7 @@
     <color name="colorBtnText">#000000</color>
     <color name="colorBtnTextAccent">#ffffff</color>
     <color name="colorFleetInfoBtn">#2c3e50</color>
+    -->
 
     <color name="colorUpdate">#e8f5e9</color>
     <color name="colorUpdateText">#1b5e20</color>
@@ -17,7 +30,7 @@
     <color name="colorDataUpdateText">#1b1d5e</color>
     <color name="colorWarn">#ffcdd2</color>
     <color name="colorWarnText">#68000a</color>
-    <color name="colorMenuBack">#b4ffffff</color>
+    <color name="colorMenuBack">#80ffffff</color>
     <color name="black">#000000</color>
     <color name="lightgray">#d6d6d6</color>
     <color name="grey">#888888</color>
