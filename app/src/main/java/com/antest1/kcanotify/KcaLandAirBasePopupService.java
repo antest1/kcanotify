@@ -89,6 +89,8 @@ public class KcaLandAirBasePopupService extends Service {
             clickcount = 0;
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
+            KcaApiData.setDBHelper(dbHelper);
+            setDefaultGameData();
 
             LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mView = mInflater.inflate(R.layout.view_labinfo_view, null);
@@ -460,6 +462,10 @@ public class KcaLandAirBasePopupService extends Service {
     private void stopPopup() {
         active = false;
         stopSelf();
+    }
+
+    private int setDefaultGameData() {
+        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
     }
 
     @Override
