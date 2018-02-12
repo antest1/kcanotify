@@ -1206,7 +1206,7 @@ public class KcaBattleViewService extends Service {
                 active = true;
                 contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
                 dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-                deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
+                deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
                 //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 customToast = new KcaCustomToast(getApplicationContext());
 

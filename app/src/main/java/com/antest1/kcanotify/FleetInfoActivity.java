@@ -38,6 +38,7 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
+import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.R.id.fleetlist_raw;
@@ -48,6 +49,7 @@ public class FleetInfoActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     KcaDBHelper dbHelper;
+    Context contextWithLocale;
 
     static int current_fleet = 0;
     static boolean is_portrait = true;
@@ -74,7 +76,8 @@ public class FleetInfoActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getStringWithLocale(R.string.action_fleetlist));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
+        contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+        deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();

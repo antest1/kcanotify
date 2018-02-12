@@ -224,7 +224,7 @@ public class KcaFleetViewService extends Service {
             active = true;
             switch_status = 1;
             mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
+
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             dbHelper.updateExpScore(0);
             if (dbHelper.getJsonArrayValue(DB_KEY_DECKPORT) == null) {
@@ -233,6 +233,8 @@ public class KcaFleetViewService extends Service {
             KcaApiData.setDBHelper(dbHelper);
 
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+            deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
+
             //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mInflater = LayoutInflater.from(contextWithLocale);
             initView();
