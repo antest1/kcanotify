@@ -31,6 +31,7 @@ import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
+import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLEINFO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_LATESTDEV;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -93,7 +94,7 @@ public class KcaDevelopPopupService extends Service {
                     Log.e("KCA", "KCA_MSG_BATTLE_INFO Received: \n".concat(s));
                 }
             };
-
+            loadTranslationData(getApplicationContext());
             LocalBroadcastManager.getInstance(this).registerReceiver((data_receiver), new IntentFilter(KCA_MSG_BATTLE_INFO));
 
             LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -232,8 +232,6 @@ public class KcaFleetViewService extends Service {
                 stopSelf();
             }
             KcaApiData.setDBHelper(dbHelper);
-            setDefaultGameData();
-            loadTranslationData(getApplicationContext());
 
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
             deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
@@ -1099,10 +1097,6 @@ public class KcaFleetViewService extends Service {
                 }
             }
         }
-    }
-
-    private int setDefaultGameData() {
-        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
     }
 
     private void sendReport(Exception e, int type) {
