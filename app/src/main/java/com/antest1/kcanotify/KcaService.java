@@ -73,6 +73,7 @@ import static com.antest1.kcanotify.KcaApiData.getAdmiralLevel;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
+import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadQuestTrackDataFromAssets;
@@ -105,10 +106,10 @@ public class KcaService extends Service {
     public static String currentLocale;
     public static boolean isInitState;
     public static boolean isFirstState;
+    public static boolean restartFlag = false;
 
     public static boolean isServiceOn = false;
     public static boolean isPortAccessed = false;
-    public static boolean isUserItemDataLoaded = false;
     public static boolean isAkashiTimerNotiWait = true;
     public static int heavyDamagedMode = 0;
 
@@ -207,7 +208,7 @@ public class KcaService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         isInitState = true;
         isFirstState = true;
-        isUserItemDataLoaded = false;
+        restartFlag = true;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Log.e("KCA", String.valueOf(prefs.contains(PREF_SVC_ENABLED)));
@@ -699,7 +700,7 @@ public class KcaService extends Service {
                     JsonArray slotitem_data = requiredInfoApiData.getAsJsonArray("api_slot_item");
                     int size2 = KcaApiData.putSlotItemDataToDB(slotitem_data);
                     Log.e("KCA", "Total Items: " + String.valueOf(size2));
-                    if (size2 > 0) isUserItemDataLoaded = true;
+                    if (size2 > 0) restartFlag = false;
                 }
                 return;
             }
@@ -783,6 +784,15 @@ public class KcaService extends Service {
                 updateQuestView();
             }
 
+            if (url.startsWith(API_GET_MEMBER_RECORD)) {
+                if (jsonDataObj.has("api_data")) {
+                    JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                    JsonArray slotitem = api_data.getAsJsonArray("api_slotitem");
+                    restartFlag = (slotitem.get(0).getAsInt() != helper.getItemCount());
+                }
+                return;
+            }
+
             if (url.startsWith(API_PORT)) {
                 isPortAccessed = true;
                 isFirstState = false;
@@ -791,6 +801,7 @@ public class KcaService extends Service {
                         .setAction(KcaViewButtonService.DEACTIVATE_BATTLEVIEW_ACTION));
                 startService(new Intent(this, KcaViewButtonService.class)
                         .setAction(KcaViewButtonService.RESET_FAIRY_STATUS_ACTION));
+
                 if (jsonDataObj.has("api_data")) {
                     JsonObject reqPortApiData = jsonDataObj.getAsJsonObject("api_data");
                     KcaApiData.getPortData(reqPortApiData);
@@ -837,7 +848,7 @@ public class KcaService extends Service {
                 if (jsonDataObj.has("api_data")) {
                     JsonArray api_data = jsonDataObj.get("api_data").getAsJsonArray();
                     KcaApiData.putSlotItemDataToDB(api_data);
-                    isUserItemDataLoaded = true;
+                    restartFlag = false;
                 }
             }
 
@@ -903,7 +914,7 @@ public class KcaService extends Service {
             }
 
             // Game Data Dependent Tasks
-            if (!isUserItemDataLoaded) {
+            if (restartFlag) {
                 makeToast(getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
             } else if (!checkDataLoadTriggered()) {
                 if (!api_start2_loading_flag) {
@@ -1537,7 +1548,7 @@ public class KcaService extends Service {
                                 String[] itemlist_array = itemlist.split(",");
                                 for (String item : itemlist_array) {
                                     JsonObject status = getUserItemStatusById(Integer.parseInt(item), "alv", "type");
-                                    if (status.has("type")) {
+                                    if (status != null && status.has("type")) {
                                         switch (status.getAsJsonArray("type").get(2).getAsInt()) {
                                             case T2_GUN_SMALL:
                                                 questTracker.updateIdCountTracker("673");
@@ -1961,35 +1972,37 @@ public class KcaService extends Service {
                         }
 
                         JsonObject itemData = KcaApiData.getUserItemStatusById(itemId, "slotitem_id,level", "");
-                        int itemKcId = itemData.get("slotitem_id").getAsInt();
-                        int level = itemData.get("level").getAsInt();
-                        int api_remodel_flag = 0;
-                        if (jsonDataObj.has("api_data")) {
-                            JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
-                            api_remodel_flag = api_data.get("api_remodel_flag").getAsInt();
-                            if (certainFlag == 1 || api_remodel_flag == 1) {
-                                JsonObject api_after_slot = api_data.get("api_after_slot").getAsJsonObject();
-                                JsonArray api_slot_item = new JsonArray();
-                                api_slot_item.add(api_after_slot);
-                                for (int i = 0; i < api_slot_item.size(); i++) {
-                                    JsonObject item = api_slot_item.get(i).getAsJsonObject();
-                                    dbHelper.putItemValue(item.get("api_id").getAsInt(), item.toString());
+                        if (itemData != null) {
+                            int itemKcId = itemData.get("slotitem_id").getAsInt();
+                            int level = itemData.get("level").getAsInt();
+                            int api_remodel_flag = 0;
+                            if (jsonDataObj.has("api_data")) {
+                                JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
+                                api_remodel_flag = api_data.get("api_remodel_flag").getAsInt();
+                                if (certainFlag == 1 || api_remodel_flag == 1) {
+                                    JsonObject api_after_slot = api_data.get("api_after_slot").getAsJsonObject();
+                                    JsonArray api_slot_item = new JsonArray();
+                                    api_slot_item.add(api_after_slot);
+                                    for (int i = 0; i < api_slot_item.size(); i++) {
+                                        JsonObject item = api_slot_item.get(i).getAsJsonObject();
+                                        dbHelper.putItemValue(item.get("api_id").getAsInt(), item.toString());
+                                    }
+                                }
+                                JsonElement use_slot_id = api_data.get("api_use_slot_id");
+                                List<String> use_slot_id_list = new ArrayList<String>();
+                                if (use_slot_id != null) {
+                                    for (JsonElement id : use_slot_id.getAsJsonArray()) {
+                                        use_slot_id_list.add(id.getAsString());
+                                    }
+                                    KcaApiData.removeSlotItemData(joinStr(use_slot_id_list, ","));
                                 }
                             }
-                            JsonElement use_slot_id = api_data.get("api_use_slot_id");
-                            List<String> use_slot_id_list = new ArrayList<String>();
-                            if (use_slot_id != null) {
-                                for (JsonElement id : use_slot_id.getAsJsonArray()) {
-                                    use_slot_id_list.add(id.getAsString());
-                                }
-                                KcaApiData.removeSlotItemData(joinStr(use_slot_id_list, ","));
+                            if (certainFlag != 1 && isOpenDBEnabled()) {
+                                KcaOpenDBAPI.sendRemodelData(flagship, assistant, itemKcId, level, api_remodel_flag);
                             }
+                            questTracker.updateIdCountTracker("619");
+                            updateQuestView();
                         }
-                        if (certainFlag != 1 && isOpenDBEnabled()) {
-                            KcaOpenDBAPI.sendRemodelData(flagship, assistant, itemKcId, level, api_remodel_flag);
-                        }
-                        questTracker.updateIdCountTracker("619");
-                        updateQuestView();
                     }
                 }
             }
@@ -2061,7 +2074,7 @@ public class KcaService extends Service {
                 if (jsonDataObj.has("ship")) {
                     Log.e("KCA", KcaUtils.format("Ship: %d", jsonDataObj.get("ship").getAsInt()));
                     Log.e("KCA", KcaUtils.format("Item: %d", jsonDataObj.get("item").getAsInt()));
-                    isUserItemDataLoaded = true;
+                    restartFlag = false;
                 }
                 api_start2_loading_flag = false;
                 updateFleetView();

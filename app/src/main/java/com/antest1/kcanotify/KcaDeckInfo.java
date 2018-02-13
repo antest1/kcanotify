@@ -293,7 +293,7 @@ public class KcaDeckInfo {
                     int slot = shipSlotCount.get(j).getAsInt();
                     if (item_id != -1) {
                         JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "id,name,type,tyku");
-                        if (itemData == null) continue; // TODO: will be removed after item null issue resolved
+                        if (itemData == null) continue;
                         String itemName = itemData.get("name").getAsString();
                         int itemLevel = itemData.get("level").getAsInt();
                         int itemMastery = 0;
@@ -549,7 +549,7 @@ public class KcaDeckInfo {
                         int item_id = shipItem.get(j).getAsInt();
                         if (item_id != -1) {
                             JsonObject itemData = getUserItemStatusById(item_id, "level", "type");
-                            if (itemData == null) continue; // TODO: will be removed after item null issue resolved
+                            if (itemData == null) continue;
                             int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
 
                             switch (itemType) {
@@ -615,6 +615,7 @@ public class KcaDeckInfo {
                     int slot = shipSlotCount.get(j).getAsInt();
                     if (item_id != -1) {
                         JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "name,type,tyku");
+                        if (itemData == null) continue;
                         String itemName = itemData.get("name").getAsString();
                         int itemLevel = itemData.get("level").getAsInt();
                         int itemMastery = 0;
@@ -672,6 +673,7 @@ public class KcaDeckInfo {
                     int item_id = shipItem.get(j).getAsInt();
                     if (item_id != -1) {
                         JsonObject itemData = getUserItemStatusById(item_id, "id", "type");
+                        if (itemData == null) continue;
                         int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                         if (itemType == T2_DAMECON && status[i] != 0) {
                             status[i] = 1;
@@ -682,6 +684,7 @@ public class KcaDeckInfo {
                 if (ex_item_id != 0 && ex_item_id != -1) {
                     Log.e("KCA", String.valueOf(ex_item_id));
                     JsonObject itemData = getUserItemStatusById(ex_item_id, "id", "type");
+                    if (itemData == null) continue;
                     int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                     if (itemType == T2_DAMECON && status[i] != 0) {
                         status[i] = 1;
@@ -709,6 +712,7 @@ public class KcaDeckInfo {
                     int item_id = shipItem.get(j).getAsInt();
                     if (item_id != -1) {
                         JsonObject itemData = getUserItemStatusById(item_id, "id", "type");
+                        if (itemData == null) continue;
                         int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                         if (itemType == T2_DAMECON) {
                             dameconStatus[i] = true;
@@ -718,6 +722,7 @@ public class KcaDeckInfo {
                 int ex_item_id = shipData.get("slot_ex").getAsInt();
                 if (ex_item_id != 0 && ex_item_id != -1) {
                     JsonObject itemData = getUserItemStatusById(ex_item_id, "id", "type");
+                    if (itemData == null) continue;
                     int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                     if (itemType == T2_DAMECON) {
                         dameconStatus[i] = true;
@@ -799,6 +804,7 @@ public class KcaDeckInfo {
                 int count = item.get("api_count").getAsInt();
                 int slotid = item.get("api_slotid").getAsInt();
                 JsonObject itemData = getUserItemStatusById(slotid, "level,alv", "type,tyku,houk");
+                if (itemData == null) continue;
                 int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                 int itemLevel = itemData.get("level").getAsInt();
                 int itemMastery = 0;
@@ -820,6 +826,7 @@ public class KcaDeckInfo {
                 int count = item.get("api_count").getAsInt();
                 int slotid = item.get("api_slotid").getAsInt();
                 JsonObject itemData = getUserItemStatusById(slotid, "level,alv", "type,tyku,houk,houm,saku");
+                if (itemData == null) continue;
                 int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                 int itemLevel = itemData.get("level").getAsInt();
                 int itemMastery = 0;

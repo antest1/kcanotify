@@ -921,6 +921,7 @@ public class KcaFleetViewService extends Service {
                 if (onslot != null) {
                     Log.e("KCA", "item_id: " + String.valueOf(item_id));
                     kcItemData = getUserItemStatusById(item_id, "level,alv", "type,name");
+                    if (kcItemData == null) continue;
                     Log.e("KCA", kcItemData.toString());
                     lv = kcItemData.get("level").getAsInt();
                     if (kcItemData.has("alv")) {
@@ -990,25 +991,29 @@ public class KcaFleetViewService extends Service {
             // EX_SLOT
             slot_count += 1;
             JsonObject kcItemData = getUserItemStatusById(slot_ex, "level", "type,name");
-            String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
-            int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
-            int lv = kcItemData.get("level").getAsInt();
-            int typeres = 0;
-            try {
-                typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
-            } catch (Exception e) {
-                typeres = R.mipmap.item_0;
-            }
-            ((TextView) itemView.findViewById(R.id.item_ex_name)).setText(kcItemName);
-            ((ImageView) itemView.findViewById(R.id.item_ex_icon)).setImageResource(typeres);
-            if (lv > 0) {
-                ((TextView) itemView.findViewById(R.id.item_ex_level))
-                        .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
-                itemView.findViewById(R.id.item_ex_level).setVisibility(View.VISIBLE);
+            if (kcItemData != null) {
+                String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
+                int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
+                int lv = kcItemData.get("level").getAsInt();
+                int typeres = 0;
+                try {
+                    typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
+                } catch (Exception e) {
+                    typeres = R.mipmap.item_0;
+                }
+                ((TextView) itemView.findViewById(R.id.item_ex_name)).setText(kcItemName);
+                ((ImageView) itemView.findViewById(R.id.item_ex_icon)).setImageResource(typeres);
+                if (lv > 0) {
+                    ((TextView) itemView.findViewById(R.id.item_ex_level))
+                            .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
+                    itemView.findViewById(R.id.item_ex_level).setVisibility(View.VISIBLE);
+                } else {
+                    itemView.findViewById(R.id.item_ex_level).setVisibility(GONE);
+                }
+                itemView.findViewById(R.id.view_slot_ex).setVisibility(View.VISIBLE);
             } else {
-                itemView.findViewById(R.id.item_ex_level).setVisibility(GONE);
+                itemView.findViewById(R.id.view_slot_ex).setVisibility(View.INVISIBLE);
             }
-            itemView.findViewById(R.id.view_slot_ex).setVisibility(View.VISIBLE);
         } else {
             itemView.findViewById(R.id.view_slot_ex).setVisibility(GONE);
         }

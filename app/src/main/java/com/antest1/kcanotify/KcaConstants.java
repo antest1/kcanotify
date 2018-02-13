@@ -83,6 +83,7 @@ public final class KcaConstants {
     public static final String API_START2 = "/api_start2";
     public static final String API_REQ_MEMBER_GET_INCENTIVE = "/api_req_member/get_incentive";
     public static final String API_GET_MEMBER_REQUIRED_INFO = "/api_get_member/require_info";
+    public static final String API_GET_MEMBER_RECORD = "/api_get_member/record";
     public static final String API_GET_MEMBER_USEITEM = "/api_get_member/useitem";
     public static final String API_REQ_MEMBER_PRESET_DECK = "/api_get_member/preset_deck";
     public static final String API_REQ_MEMBER_ITEMUSE_COND = "/api_req_member/itemuse_cond";

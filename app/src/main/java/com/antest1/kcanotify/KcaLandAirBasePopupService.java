@@ -308,6 +308,7 @@ public class KcaLandAirBasePopupService extends Service {
             } else {
                 int item_id = item.get("api_slotid").getAsInt();
                 JsonObject kcItemData = getUserItemStatusById(item_id, "level,alv", "type,name");
+                if (kcItemData == null) continue;
                 int lv = kcItemData.get("level").getAsInt();
                 int alv = 0;
                 if (kcItemData.has("alv")) {

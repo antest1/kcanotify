@@ -734,7 +734,7 @@ public class KcaExpeditionCheckViewService extends Service {
                             int itemid = shipslot.get(j).getAsInt();
                             if (itemid > 0) {
                                 JsonObject iteminfo = getUserItemStatusById(itemid, "slotitem_id,level", "type,tais");
-                                data.getAsJsonArray("item").add(iteminfo);
+                                if (iteminfo != null) data.getAsJsonArray("item").add(iteminfo);
                             }
                         }
                         ship_data.add(data);
