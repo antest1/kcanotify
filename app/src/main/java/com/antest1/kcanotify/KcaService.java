@@ -1503,34 +1503,36 @@ public class KcaService extends Service {
                             JsonArray material_data = api_data.getAsJsonArray("api_material");
                             recordResourceLog(material_data, false);
 
+                            String itemname = "";
+                            int itemtype = 0;
+                            String itemcount = "";
+
+                            if (createFlag) {
+                                JsonObject itemData = KcaApiData.getKcItemStatusById(itemKcId, "name,type");
+                                itemname = itemData.get("name").getAsString();
+                                itemtype = itemData.get("type").getAsJsonArray().get(3).getAsInt();
+                                itemcount = KcaUtils.format("(%d)", KcaApiData.getItemCountByKcId(itemKcId));
+                            } else {
+                                itemname = "item_fail";
+                                itemtype = 999;
+                            }
+
+                            JsonObject shipData = KcaApiData.getKcShipDataById(flagship, "name");
+                            String shipname = shipData.get("name").getAsString();
+
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            String timetext = dateFormat.format(new Date());
+
+                            JsonObject equipdevdata = new JsonObject();
+                            equipdevdata.addProperty("flagship", shipname);
+                            equipdevdata.addProperty("name", itemname);
+                            equipdevdata.addProperty("type", itemtype);
+                            equipdevdata.addProperty("count", itemcount);
+                            equipdevdata.addProperty("time", timetext);
+
+                            dbHelper.putValue(DB_KEY_LATESTDEV, equipdevdata.toString());
+
                             if (KcaDevelopPopupService.isActive()) {
-                                String itemname = "";
-                                int itemtype = 0;
-                                String itemcount = "";
-
-                                if (createFlag) {
-                                    JsonObject itemData = KcaApiData.getKcItemStatusById(itemKcId, "name,type");
-                                    itemname = KcaApiData.getItemTranslation(itemData.get("name").getAsString());
-                                    itemtype = itemData.get("type").getAsJsonArray().get(3).getAsInt();
-                                    itemcount = KcaUtils.format("(%d)", KcaApiData.getItemCountByKcId(itemKcId));
-                                } else {
-                                    itemname = getStringWithLocale(R.string.develop_failed_text);
-                                    itemtype = 999;
-                                }
-
-                                JsonObject shipData = KcaApiData.getKcShipDataById(flagship, "name");
-                                String shipname = KcaApiData.getShipTranslation(shipData.get("name").getAsString(), false);
-
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                String timetext = dateFormat.format(new Date());
-
-                                JsonObject equipdevdata = new JsonObject();
-                                equipdevdata.addProperty("flagship", shipname);
-                                equipdevdata.addProperty("name", itemname);
-                                equipdevdata.addProperty("type", itemtype);
-                                equipdevdata.addProperty("count", itemcount);
-                                equipdevdata.addProperty("time", timetext);
-
                                 Intent qintent = new Intent(getBaseContext(), KcaDevelopPopupService.class);
                                 qintent.setAction(KcaDevelopPopupService.DEV_DATA_ACTION);
                                 qintent.putExtra("data", equipdevdata.toString());

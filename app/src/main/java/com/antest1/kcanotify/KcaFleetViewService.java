@@ -49,6 +49,7 @@ import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
+import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_FLEETVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -231,6 +232,8 @@ public class KcaFleetViewService extends Service {
                 stopSelf();
             }
             KcaApiData.setDBHelper(dbHelper);
+            setDefaultGameData();
+            loadTranslationData(getApplicationContext());
 
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
             deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
@@ -1096,6 +1099,10 @@ public class KcaFleetViewService extends Service {
                 }
             }
         }
+    }
+
+    private int setDefaultGameData() {
+        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
     }
 
     private void sendReport(Exception e, int type) {
