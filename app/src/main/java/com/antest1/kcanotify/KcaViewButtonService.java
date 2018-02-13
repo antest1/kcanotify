@@ -120,6 +120,7 @@ public class KcaViewButtonService extends Service {
     NotificationManagerCompat notificationManager;
     public static JsonObject currentApiData;
     public static int recentVisibility = View.VISIBLE;
+    public static boolean hiddenByUser = false;
     public static int type;
     public static int clickcount;
     public static Handler sHandler;
@@ -331,6 +332,7 @@ public class KcaViewButtonService extends Service {
                     Message sMsg = sHandler.obtainMessage();
                     sMsg.setData(bundle);
                     sHandler.sendMessage(sMsg);
+                    hiddenByUser = false;
                 }
             }
             if (intent.getAction().equals(FAIRY_INVISIBLE)) {
@@ -527,7 +529,7 @@ public class KcaViewButtonService extends Service {
             Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.viewbutton_hide), Toast.LENGTH_LONG).show();
             mView.setVisibility(View.GONE);
             recentVisibility = View.GONE;
-
+            hiddenByUser = true;
             if (sHandler != null) {
                 Bundle bundle = new Bundle();
                 bundle.putString("url", KCA_API_FAIRY_HIDDEN);
