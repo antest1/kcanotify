@@ -361,7 +361,7 @@ public class KcaService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
-        int type = KcaAlarmService.getAlarmCount();
+        int type = KcaAlarmService.getAlarmCount() > 0 ? 1 : 0;
         String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
         int viewBitmapId = getId(fairyId, R.mipmap.class);
         int viewBitmapSmallId = getId("ic_stat_notify_".concat(String.valueOf(type)), R.mipmap.class);
