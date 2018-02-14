@@ -374,6 +374,7 @@ public class KcaService extends Service {
                 .setContentIntent(pendingIntent)
                 .setOnlyAlertOnce(true)
                 .setContentText(content2)
+                .setOnlyAlertOnce(true)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(content2))
                 .setOngoing(true).setAutoCancel(false);
