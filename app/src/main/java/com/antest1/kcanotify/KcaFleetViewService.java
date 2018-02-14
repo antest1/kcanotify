@@ -1118,28 +1118,34 @@ public class KcaFleetViewService extends Service {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-        mInflater = LayoutInflater.from(contextWithLocale);
-        int visibllity = mView.getVisibility();
-        if (mManager != null) {
-            if (mView.getParent() != null) mManager.removeViewImmediate(mView);
-            initView();
-            mParams = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    getWindowLayoutType(),
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSLUCENT);
-            mParams.gravity = Gravity.CENTER;
-            mManager.addView(mView, mParams);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(getApplicationContext())) {
+            // Can not draw overlays: pass
+            stopSelf();
+        } else {
+            mInflater = LayoutInflater.from(contextWithLocale);
+            int visibllity = mView.getVisibility();
+            if (mManager != null) {
+                if (mView.getParent() != null) mManager.removeViewImmediate(mView);
+                initView();
+                mParams = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        getWindowLayoutType(),
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                        PixelFormat.TRANSLUCENT);
+                mParams.gravity = Gravity.CENTER;
+                mManager.addView(mView, mParams);
 
-            int setViewResult = setView();
-            if (setViewResult == 0) {
-                if (mView.getParent() != null) {
-                    mView.invalidate();
-                    mManager.updateViewLayout(mView, mParams);
+                int setViewResult = setView();
+                if (setViewResult == 0) {
+                    if (mView.getParent() != null) {
+                        mView.invalidate();
+                        mManager.updateViewLayout(mView, mParams);
+                    }
                 }
+                mView.setVisibility(visibllity);
             }
-            mView.setVisibility(visibllity);
         }
     }
 }
