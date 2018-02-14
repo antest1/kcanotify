@@ -68,7 +68,9 @@ import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_MEDIUM;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_SMALL;
 import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
+import static com.antest1.kcanotify.KcaApiData.T2_SEA_SCOUT;
 import static com.antest1.kcanotify.KcaApiData.T2_SUB_GUN;
+import static com.antest1.kcanotify.KcaApiData.T2_TORPEDO;
 import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
 import static com.antest1.kcanotify.KcaApiData.getAdmiralLevel;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
@@ -1571,8 +1573,13 @@ public class KcaService extends Service {
                                             case T2_SUB_GUN:
                                                 questTracker.updateIdCountTracker("676", 1);
                                                 break;
+                                            case T2_TORPEDO:
+                                                questTracker.updateIdCountTracker("677", 2);
+                                                break;
                                             case T2_FIGHTER:
                                                 questTracker.updateIdCountTracker("675", 0);
+                                            case T2_SEA_SCOUT:
+                                                questTracker.updateIdCountTracker("677", 1);
                                             case T2_MACHINE_GUN:
                                                 questTracker.updateIdCountTracker("638");
                                                 questTracker.updateIdCountTracker("674");
@@ -1581,6 +1588,7 @@ public class KcaService extends Service {
                                             case T2_GUN_LARGE:
                                             case T2_GUN_LARGE_II:
                                                 questTracker.updateIdCountTracker("663");
+                                                questTracker.updateIdCountTracker("677", 0);
                                                 break;
                                             case T2_DRUM_CAN:
                                                 questTracker.updateIdCountTracker("676", 2);

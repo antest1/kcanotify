@@ -252,13 +252,10 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 .concat(qt_table_name)
                 .concat(" WHERE KEY=?"), new String[]{id});
         if (c.moveToFirst()) {
-            info.add(c.getInt(c.getColumnIndex("CND0")));
-            if (id.equals("214") || id.equals("426") || id.equals("854")) {
-                for (int i = 1; i < 4; i++) {
-                    info.add(c.getInt(c.getColumnIndex("CND".concat(String.valueOf(i)))));
-                }
-            } else if (id.equals("428")) {
-                for (int i = 1; i < 3; i++) {
+            JsonObject questTrackInfo = KcaApiData.getQuestTrackInfo(id);
+            if (questTrackInfo != null) {
+                int cond_count = questTrackInfo.getAsJsonArray("cond").size();
+                for (int i = 0; i < cond_count; i++) {
                     info.add(c.getInt(c.getColumnIndex("CND".concat(String.valueOf(i)))));
                 }
             }
