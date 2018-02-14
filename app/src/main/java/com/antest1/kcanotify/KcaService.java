@@ -374,7 +374,6 @@ public class KcaService extends Service {
                 .setContentIntent(pendingIntent)
                 .setOnlyAlertOnce(true)
                 .setContentText(content2)
-                .setOnlyAlertOnce(true)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(content2))
                 .setOngoing(true).setAutoCancel(false);
@@ -569,7 +568,7 @@ public class KcaService extends Service {
 
     private void makeToast(String message, int length, int color) {
         KcaCustomToast customToast = new KcaCustomToast(getApplicationContext());
-        customToast.showToast(message, length, color);
+        showCustomToast(customToast, message, length, color);
     }
 
     public void handleServiceMessage(Message msg) {
