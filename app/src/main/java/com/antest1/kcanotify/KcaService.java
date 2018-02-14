@@ -15,6 +15,7 @@ import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -100,7 +101,8 @@ import static com.antest1.kcanotify.KcaViewButtonService.REMOVE_FAIRY_ACTION;
 import static com.antest1.kcanotify.KcaViewButtonService.RETURN_FAIRY_ACTION;
 
 public class KcaService extends Service {
-    public static final String SERVICE_CHANNEL_ID = "noti_service_channel";
+    public static final String SERVICE_CHANNEL_ID = "kcaservice_noti_channel_";
+    public static final String SERVICE_CHANNEL_ID_OLD = "noti_service_channel";
     public static final String SERVICE_CHANNEL_NAME = "Kcanotify Service";
 
     public static String currentLocale;
@@ -141,8 +143,10 @@ public class KcaService extends Service {
     Runnable timer;
     int notificationTimeCounter;
 
-    String notifyTitle = "";
-    String notifyContent = "";
+    private String notifyTitle = "";
+    private String notifyContent = "";
+    private boolean notifyFirstTime = true;
+    private NotificationCompat.Builder notifyBuilder;
 
     kcaServiceHandler handler;
     kcaNotificationHandler nHandler;
@@ -172,12 +176,19 @@ public class KcaService extends Service {
             if (getBooleanPreferences(getApplicationContext(), PREF_KCA_SET_PRIORITY)) {
                 priority = IMPORTANCE_HIGH;
             }
-            NotificationChannel channel = new NotificationChannel(SERVICE_CHANNEL_ID,
+            NotificationChannel channel = new NotificationChannel(getServiceChannelId(),
                     SERVICE_CHANNEL_NAME, priority);
-            channel.enableVibration(true);
+            channel.enableVibration(false);
+            channel.setSound(null, null);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            notifiManager.deleteNotificationChannel(SERVICE_CHANNEL_ID_OLD);
             notifiManager.createNotificationChannel(channel);
         }
+    }
+
+    private String getServiceChannelId() {
+        boolean priority = getBooleanPreferences(getApplicationContext(), PREF_KCA_SET_PRIORITY);
+        return SERVICE_CHANNEL_ID.concat(String.valueOf(priority));
     }
 
     public String getStringWithLocale(int id) {
@@ -209,7 +220,6 @@ public class KcaService extends Service {
         isInitState = true;
         isFirstState = true;
         restartFlag = true;
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Log.e("KCA", String.valueOf(prefs.contains(PREF_SVC_ENABLED)));
         if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
@@ -257,11 +267,14 @@ public class KcaService extends Service {
         nHandler = new kcaNotificationHandler(this);
         broadcaster = LocalBroadcastManager.getInstance(this);
 
+        notifyFirstTime = true;
+        notifyBuilder = createBuilder(contextWithLocale, getServiceChannelId());
         notifyTitle = KcaUtils.format(getStringWithLocale(R.string.kca_init_title), getStringWithLocale(R.string.app_name));
         notifyContent = getStringWithLocale(R.string.kca_init_content);
         // String initSubContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
         kcaFirstDeckInfo = getStringWithLocale(R.string.kca_init_content);
-        startForeground(getNotificationId(NOTI_FRONT, 1), createViewNotificationBuilder(notifyTitle, notifyContent).build());
+        updateViewNotificationBuilder(notifyTitle, notifyContent);
+        startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
         isServiceOn = true;
 
         KcaVpnData.setHandler(handler);
@@ -355,8 +368,7 @@ public class KcaService extends Service {
         return isExist;
     }
 
-    private NotificationCompat.Builder createViewNotificationBuilder(String title, String content2) {
-        NotificationCompat.Builder builder = createBuilder(contextWithLocale, SERVICE_CHANNEL_ID);
+    private void updateViewNotificationBuilder(String title, String content2) {
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
@@ -367,7 +379,7 @@ public class KcaService extends Service {
         int viewBitmapSmallId = getId("ic_stat_notify_".concat(String.valueOf(type)), R.mipmap.class);
         Bitmap viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
 
-        builder.setContentTitle(title)
+        notifyBuilder.setContentTitle(title)
                 .setSmallIcon(viewBitmapSmallId)
                 .setLargeIcon(viewBitmap)
                 .setTicker(title)
@@ -379,9 +391,9 @@ public class KcaService extends Service {
                 .setOngoing(true).setAutoCancel(false);
 
         if (getBooleanPreferences(getApplicationContext(), PREF_KCA_SET_PRIORITY)) {
-            builder.setPriority(IMPORTANCE_HIGH);
+            notifyBuilder.setPriority(IMPORTANCE_HIGH);
         } else {
-            builder.setPriority(IMPORTANCE_DEFAULT);
+            notifyBuilder.setPriority(IMPORTANCE_DEFAULT);
         }
 
         if (KcaViewButtonService.hiddenByUser) {
@@ -399,15 +411,14 @@ public class KcaService extends Service {
 
             int fairy_bitmap = getId(fairyId.concat("_small"), R.mipmap.class);
 
-            builder.addAction(new NotificationCompat.Action(fairy_bitmap, getStringWithLocale(R.string.fairy_hidden_notification_action_return), returnPendingIntent))
+            notifyBuilder.addAction(new NotificationCompat.Action(fairy_bitmap, getStringWithLocale(R.string.fairy_hidden_notification_action_return), returnPendingIntent))
                     .addAction(new NotificationCompat.Action(R.mipmap.ic_cancel, getStringWithLocale(R.string.fairy_hidden_notification_action_remove), removePendingIntent));
         }
 
         if (isMissionTimerViewEnabled() && content2 != null) {
-            builder.setContentText(content2);
-            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(content2));
+            notifyBuilder.setContentText(content2);
+            notifyBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(content2));
         }
-        return builder;
     }
 
     private void updateExpViewNotification() {
@@ -452,19 +463,18 @@ public class KcaService extends Service {
                 notifyTitle = KcaUtils.format(getStringWithLocale(R.string.kca_view_normal_format), getStringWithLocale(R.string.app_name), nodeString).trim();
                 break;
         }
-
         updateNotification();
     }
 
     private void updateNotification() {
-        NotificationCompat.Builder builder = createViewNotificationBuilder(notifyTitle, notifyContent);
-        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), builder.build());
+        updateViewNotificationBuilder(notifyTitle, notifyContent);
+        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
     }
 
     private void updateNotificationClearFairyButton() {
-        NotificationCompat.Builder builder = createViewNotificationBuilder(notifyTitle, notifyContent);
-        builder.mActions.clear();
-        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), builder.build());
+        updateViewNotificationBuilder(notifyTitle, notifyContent);
+        notifyBuilder.mActions.clear();
+        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
     }
 
     private void setExpeditionAlarm(int idx, int mission_no, String deck_name, long arrive_time, boolean cancel_flag, boolean ca_flag, Intent aIntent) {
