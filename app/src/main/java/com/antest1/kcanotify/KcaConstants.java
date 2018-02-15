@@ -238,6 +238,7 @@ public final class KcaConstants {
     public static final String KCA_API_DATA_LOADED = "/kca_api/data_loaded";
     public static final String KCA_API_UPDATE_FRONTVIEW = "/kca_api/update_frontview";
     public static final String KCA_API_FAIRY_HIDDEN = "/kca_api/fairy_hidden";
+    public static final String KCA_API_FAIRY_RETURN = "/kca_api/fairy_return";
     public static final String KCA_API_FAIRY_CHECKED = "/kca_api/fairy_checked";
     public static final String KCA_API_NOTI_EXP_LEFT = "/kca_api/noti_exp_left";
     public static final String KCA_API_NOTI_EXP_FIN = "/kca_api/noti_exp_fin";

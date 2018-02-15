@@ -23,6 +23,8 @@ import android.net.VpnService;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -91,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
     ToggleButton vpnbtn, svcbtn;
     Button kcbtn;
     ImageButton kctoolbtn;
-    public static ImageButton kcafairybtn;
+    public ImageButton kcafairybtn;
+    public static Handler sHandler;
     HtmlTextView textDescription = null;
     TextView textWarn, textUpdate, textDataUpdate;
     Gson gson = new Gson();
@@ -100,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
     Boolean is_kca_installed = false;
     private WindowManager windowManager;
     private BackPressCloseHandler backPressCloseHandler;
+
+    public static void setHandler(Handler h) {
+        sHandler = h;
+    }
 
     public MainActivity() {
         LocaleUtils.updateConfig(this);
@@ -209,9 +216,13 @@ public class MainActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                         && !Settings.canDrawOverlays(getApplicationContext())) {
                     // Can not draw overlays: pass
-                } else if (KcaService.getServiceStatus()) {
-                    startService(new Intent(getApplicationContext(), KcaViewButtonService.class)
-                            .setAction(KcaViewButtonService.RETURN_FAIRY_ACTION));
+                } else if (KcaService.getServiceStatus() && sHandler != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url", KCA_API_FAIRY_RETURN);
+                    bundle.putString("data", "");
+                    Message sMsg = sHandler.obtainMessage();
+                    sMsg.setData(bundle);
+                    sHandler.sendMessage(sMsg);
                 }
             }
         });
@@ -293,6 +304,14 @@ public class MainActivity extends AppCompatActivity {
         setVpnBtn();
         setCheckBtn();
         loadTranslationData(getApplicationContext());
+
+        kcafairybtn = findViewById(R.id.kcafairybtn);
+        String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
+        String fairyPath = "noti_icon_".concat(fairyIdValue);
+        int viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
+        kcafairybtn.setImageResource(viewBitmapSmallId);
+        kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
 
         Arrays.fill(warnType, false);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||

@@ -80,14 +80,6 @@ public class KcaFairySelectActivity extends AppCompatActivity {
                 }
                 adapter.setPrevActive(position);
                 gv.invalidateViews();
-                if (MainActivity.kcafairybtn != null) {
-                    String fairyPath = "noti_icon_".concat(String.valueOf(position));
-                    int viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
-                    MainActivity.kcafairybtn.setImageResource(viewBitmapSmallId);
-                    MainActivity.kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                            R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
-
-                }
             }
         });
     }

@@ -167,6 +167,10 @@ public class KcaService extends Service {
         return isServiceOn;
     }
 
+    public Handler getNofiticationHandler() {
+        return nHandler;
+    }
+
     private boolean checkKeyInPreferences(String key) {
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         return pref.contains(key);
@@ -284,6 +288,7 @@ public class KcaService extends Service {
         KcaApiData.setHandler(nHandler);
         KcaAlarmService.setHandler(nHandler);
         KcaOpenDBAPI.setHandler(nHandler);
+        MainActivity.setHandler(nHandler);
         SettingActivity.setHandler(nHandler);
         KcaFairySelectActivity.setHandler(nHandler);
         KcaViewButtonService.setHandler(nHandler);
@@ -398,6 +403,7 @@ public class KcaService extends Service {
             notifyBuilder.setPriority(IMPORTANCE_DEFAULT);
         }
 
+        notifyBuilder.mActions.clear();
         if (KcaViewButtonService.hiddenByUser) {
             Intent returnIntent = new Intent(this, KcaViewButtonService.class)
                     .setAction(RETURN_FAIRY_ACTION);
@@ -2098,6 +2104,11 @@ public class KcaService extends Service {
                 }
                 api_start2_loading_flag = false;
                 updateFleetView();
+            }
+
+            if (url.startsWith(KCA_API_FAIRY_RETURN)) {
+                startService(new Intent(this, KcaViewButtonService.class)
+                        .setAction(KcaViewButtonService.RETURN_FAIRY_ACTION));
             }
 
             if (url.startsWith(KCA_API_FAIRY_HIDDEN)) {
