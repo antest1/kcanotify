@@ -59,6 +59,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
             holder.ship_luck = v.findViewById(R.id.fship_luck);
             holder.ship_taisen = v.findViewById(R.id.fship_taisen);
             holder.ship_layout = v.findViewById(R.id.fship_layout);
+            holder.ship_equip_holder = new View[5];
             holder.ship_equip_slot = new TextView[5];
             holder.ship_equip_name = new TextView[5];
             holder.ship_equip_lv = new TextView[5];
@@ -66,6 +67,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
             holder.ship_equip_icon = new ImageView[5];
 
             for (int i = 0; i < 5; i++) {
+                holder.ship_equip_holder[i] = v.findViewById(getId(KcaUtils.format("fship_equip_%d", i + 1), R.id.class));
                 holder.ship_equip_slot[i] = v.findViewById(getId(KcaUtils.format("fship_equip_%d_slot", i + 1), R.id.class));
                 holder.ship_equip_name[i] = v.findViewById(getId(KcaUtils.format("fship_equip_%d_name", i + 1), R.id.class));
                 holder.ship_equip_icon[i] = v.findViewById(getId(KcaUtils.format("fship_equip_%d_icon", i + 1), R.id.class));
@@ -200,6 +202,9 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
             }
         }
 
+        for (int i = 0; i < 4; i++) holder.ship_equip_holder[i].setVisibility(View.INVISIBLE);
+        holder.ship_equip_holder[4].setVisibility(View.GONE);
+
         for (int i = 0; i < ship_item.size(); i++) {
             if (i >= holder.ship_equip_icon.length) break;
             JsonObject item_data = ship_item.get(i).getAsJsonObject();
@@ -234,11 +239,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
                 } else {
                     holder.ship_equip_alv[i].setText("");
                 }
-            } else {
-                holder.ship_equip_icon[i].setVisibility(i == 4 ? View.GONE : View.INVISIBLE);
-                holder.ship_equip_name[i].setText("");
-                holder.ship_equip_lv[i].setText("");
-                holder.ship_equip_alv[i].setText("");
+                holder.ship_equip_holder[i].setVisibility(View.VISIBLE);
             }
         }
 
@@ -265,6 +266,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
         TextView ship_karyoku, ship_raisou, ship_taiku, ship_soukou;
         TextView ship_taisen, ship_luck;
         ImageView ship_cb_indicator;
+        View[] ship_equip_holder;
         TextView[] ship_equip_slot, ship_equip_name, ship_equip_lv, ship_equip_alv;
         ImageView[] ship_equip_icon;
         TextView ship_equip_slot_ex, ship_equip_name_ex, ship_equip_lv_ex;
