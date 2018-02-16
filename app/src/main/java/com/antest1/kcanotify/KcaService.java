@@ -317,6 +317,7 @@ public class KcaService extends Service {
                 }
             }
         };
+        processExpeditionInfo(true);
         runTimer();
         dbHelper.initExpScore();
         return START_STICKY;
@@ -424,9 +425,10 @@ public class KcaService extends Service {
     private void updateExpViewNotification() {
         int viewType = getExpeditionType();
         notifyContent = "";
-        if (!isFirstState && isMissionTimerViewEnabled()) {
+        if (isMissionTimerViewEnabled()) {
             if (!KcaExpedition2.isMissionExist()) {
-                notifyContent = notifyContent.concat(getStringWithLocale(R.string.kca_view_noexpedition));
+                if (isFirstState) notifyContent = notifyContent.concat(getStringWithLocale(R.string.kca_view_noexpedition));
+                else notifyContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
             } else {
                 List<String> kcaExpStrList = new ArrayList<String>();
                 for (int i = 1; i < 4; i++) {
@@ -2576,6 +2578,7 @@ public class KcaService extends Service {
             time = System.currentTimeMillis();
         } else if (delay) {
             time = time - KcaAlarmService.ALARM_DELAY;
+            if (time < System.currentTimeMillis()) return;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, alarmIntent);
