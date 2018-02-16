@@ -272,6 +272,13 @@
   "12cm30連装噴進砲改二": "12cm 30-tube Rocket Launcher Kai 2",
   "46cm三連装砲改": "46cm Triple Gun Mount Kai",
   "FM-2": "FM-2",
+  "10cm連装高角砲改+増設機銃": "10cm Twin High-angle Gun Mount Kai + Extra Machine Gun",
+  "SK レーダー": "SK Radar",
+  "SK&SG レーダー": "SK&SG Radar",
+  "QF 4.7inch砲 Mk.XII改": "QF 4.7inch Gun Mount Mk.XII Kai",
+  "51cm連装砲": "51cm Twin Gun Mount",
+  "130mm B-13連装砲": "130mm B-13 Twin Gun Mount",
+  "533mm 三連装魚雷": "533mm Triple Torpedo Mount",
 
   "プレゼント箱": "Present Box",
   "秋刀魚": "Saury",
@@ -354,5 +361,8 @@
   "深海15inch四連装砲": "Abyssal 15inch Quadruple Gun Mount",
   "深海15inch連装砲後期型": "Abyssal 15inch Twin Gun Mount Late Model",
   "深海14inch海峡連装砲": "Abyssal 14inch Straight Twin Gun Mount",
-  "深海待伏魚雷": "Abyssal Ambush Torpedo"
+  "深海待伏魚雷": "Abyssal Ambush Torpedo",
+  "夜猫深海艦戦": "Night Abyssal Cat Fighter",
+  "夜深海艦爆": "Night Abyssal Dive Bomber",
+  "夜復讐深海艦攻": "Night Abyssal Revenge Torpedo Bomber"
 }
