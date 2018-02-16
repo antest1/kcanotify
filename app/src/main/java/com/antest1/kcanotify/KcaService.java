@@ -427,8 +427,8 @@ public class KcaService extends Service {
         notifyContent = "";
         if (isMissionTimerViewEnabled()) {
             if (!KcaExpedition2.isMissionExist()) {
-                if (isFirstState) notifyContent = notifyContent.concat(getStringWithLocale(R.string.kca_view_noexpedition));
-                else notifyContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
+                if (isFirstState) notifyContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
+                else notifyContent = notifyContent.concat(getStringWithLocale(R.string.kca_view_noexpedition));
             } else {
                 List<String> kcaExpStrList = new ArrayList<String>();
                 for (int i = 1; i < 4; i++) {
@@ -444,6 +444,9 @@ public class KcaService extends Service {
                 } else {
                     notifyContent = joinStr(kcaExpStrList, " / ");
                 }
+            }
+            if (notifyContent.trim().length() == 0) {
+                notifyContent = notifyContent.concat(getStringWithLocale(R.string.kca_view_noexpedition));
             }
         } else {
             notifyContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
