@@ -44,6 +44,8 @@ import eu.faircode.netguard.ResourceRecord;
 import eu.faircode.netguard.Rule;
 import eu.faircode.netguard.Util;
 
+import static com.antest1.kcanotify.KcaConstants.VPN_STOP_REASON;
+
 public class KcaVpnService extends VpnService {
     private final static String TAG = "KCAV";
 
@@ -319,6 +321,11 @@ public class KcaVpnService extends VpnService {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean enabled = prefs.getBoolean("enabled", false);
+
+        if (intent != null && intent.hasExtra(EXTRA_REASON)) {
+            String reason = intent.getStringExtra(EXTRA_REASON);
+            if (reason.equals(VPN_STOP_REASON)) stopSelf();
+        }
 
         if (intent == null) {
             Log.i(TAG, "Restart");

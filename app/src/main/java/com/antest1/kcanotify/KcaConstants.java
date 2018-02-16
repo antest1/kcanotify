@@ -369,6 +369,7 @@ public final class KcaConstants {
 
     public static final String PREF_VPN_ENABLED = "enabled";
     public static final String PREF_SVC_ENABLED = "svcenabled";
+    public static final String VPN_STOP_REASON = "vpn_stop_from_main";
 
     public static final String PREF_KCA_VERSION = "kca_version";
     public static final String PREF_KCA_LANGUAGE = "kca_language";

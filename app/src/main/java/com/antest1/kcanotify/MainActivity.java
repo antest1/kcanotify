@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
                     }
                 } else {
-                    KcaVpnService.stop("switch off", MainActivity.this);
+                    KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
                     prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
                 }
             }
