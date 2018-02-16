@@ -279,7 +279,7 @@ public class KcaService extends Service {
         notifyContent = getStringWithLocale(R.string.kca_init_content);
         // String initSubContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
         kcaFirstDeckInfo = getStringWithLocale(R.string.kca_init_content);
-        updateViewNotificationBuilder(notifyTitle, notifyContent);
+        initViewNotificationBuilder(notifyTitle, notifyContent);
         startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
         isServiceOn = true;
 
@@ -298,18 +298,22 @@ public class KcaService extends Service {
         timer = new Runnable() {
             @Override
             public void run() {
-                if (isMissionTimerViewEnabled()) {
-                    notificationTimeCounter += 1;
-                    if (notificationTimeCounter == 120) {
-                        notificationTimeCounter = 0;
+                try {
+                    if (isMissionTimerViewEnabled()) {
+                        notificationTimeCounter += 1;
+                        if (notificationTimeCounter == 120) {
+                            notificationTimeCounter = 0;
+                        }
+                        updateExpViewNotification();
                     }
-                    updateExpViewNotification();
-                }
-                if (KcaAkashiRepairInfo.getAkashiTimerValue() > 0) {
-                    int second = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
-                    if (second >= AKASHI_TIMER_20MIN && isAkashiTimerNotiWait) {
-                        isAkashiTimerNotiWait = false;
+                    if (KcaAkashiRepairInfo.getAkashiTimerValue() > 0) {
+                        int second = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
+                        if (second >= AKASHI_TIMER_20MIN && isAkashiTimerNotiWait) {
+                            isAkashiTimerNotiWait = false;
+                        }
                     }
+                } catch (Exception e) {
+                    dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "tmer", "", "", getStringFromException(e));
                 }
             }
         };
@@ -375,7 +379,7 @@ public class KcaService extends Service {
         return isExist;
     }
 
-    private void updateViewNotificationBuilder(String title, String content2) {
+    private void initViewNotificationBuilder(String title, String content) {
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
@@ -384,7 +388,7 @@ public class KcaService extends Service {
         String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
         int viewBitmapId = getId(fairyId, R.mipmap.class);
         int viewBitmapSmallId = getId("ic_stat_notify_".concat(String.valueOf(type)), R.mipmap.class);
-        Bitmap viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, viewBitmapId)).getBitmap();
+        Bitmap viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(getApplicationContext(), viewBitmapId)).getBitmap();
 
         notifyBuilder.setContentTitle(title)
                 .setSmallIcon(viewBitmapSmallId)
@@ -392,9 +396,9 @@ public class KcaService extends Service {
                 .setTicker(title)
                 .setContentIntent(pendingIntent)
                 .setOnlyAlertOnce(true)
-                .setContentText(content2)
+                .setContentText(content)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(content2))
+                        .bigText(content))
                 .setOngoing(true).setAutoCancel(false);
 
         if (getBooleanPreferences(getApplicationContext(), PREF_KCA_SET_PRIORITY)) {
@@ -402,31 +406,19 @@ public class KcaService extends Service {
         } else {
             notifyBuilder.setPriority(IMPORTANCE_DEFAULT);
         }
+    }
 
-        notifyBuilder.mActions.clear();
-        if (KcaViewButtonService.hiddenByUser) {
-            Intent returnIntent = new Intent(this, KcaViewButtonService.class)
-                    .setAction(RETURN_FAIRY_ACTION);
+    private void updateViewNotificationBuilder(String title, String content2) {
+        Intent aIntent = new Intent(KcaService.this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
-            Intent removeIntent = new Intent(this, KcaViewButtonService.class)
-                    .setAction(REMOVE_FAIRY_ACTION);
-
-            PendingIntent returnPendingIntent = PendingIntent.getService(getApplicationContext(), 0,
-                    returnIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            PendingIntent removePendingIntent = PendingIntent.getService(getApplicationContext(), 0,
-                    removeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            int fairy_bitmap = getId(fairyId.concat("_small"), R.mipmap.class);
-
-            notifyBuilder.addAction(new NotificationCompat.Action(fairy_bitmap, getStringWithLocale(R.string.fairy_hidden_notification_action_return), returnPendingIntent))
-                    .addAction(new NotificationCompat.Action(R.mipmap.ic_cancel, getStringWithLocale(R.string.fairy_hidden_notification_action_remove), removePendingIntent));
-        }
-
-        if (isMissionTimerViewEnabled() && content2 != null) {
-            notifyBuilder.setContentText(content2);
-            notifyBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(content2));
-        }
+        notifyBuilder.setContentTitle(title)
+                .setTicker(title)
+                .setContentIntent(pendingIntent)
+                .setContentText(content2)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(content2));
     }
 
     private void updateExpViewNotification() {
@@ -471,16 +463,18 @@ public class KcaService extends Service {
                 notifyTitle = KcaUtils.format(getStringWithLocale(R.string.kca_view_normal_format), getStringWithLocale(R.string.app_name), nodeString).trim();
                 break;
         }
-        updateNotification();
+        updateNotification(true);
     }
 
-    private void updateNotification() {
-        updateViewNotificationBuilder(notifyTitle, notifyContent);
+    private void updateNotification(boolean change_content) {
+        if (change_content) {
+            updateViewNotificationBuilder(notifyTitle, notifyContent);
+        }
         notifiManager.notify(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
     }
 
     private void updateNotificationClearFairyButton() {
-        updateViewNotificationBuilder(notifyTitle, notifyContent);
+        // updateViewNotificationBuilder(notifyTitle, notifyContent);
         notifyBuilder.mActions.clear();
         notifiManager.notify(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
     }
@@ -2112,23 +2106,46 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_FAIRY_HIDDEN)) {
-                updateNotification();
+                Intent returnIntent = new Intent(this, KcaViewButtonService.class)
+                        .setAction(RETURN_FAIRY_ACTION);
+                Intent removeIntent = new Intent(this, KcaViewButtonService.class)
+                        .setAction(REMOVE_FAIRY_ACTION);
+                PendingIntent returnPendingIntent = PendingIntent.getService(getApplicationContext(), 0,
+                        returnIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent removePendingIntent = PendingIntent.getService(getApplicationContext(), 0,
+                        removeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
+                int fairy_bitmap = getId(fairyId.concat("_small"), R.mipmap.class);
+
+                notifyBuilder.addAction(new NotificationCompat.Action(fairy_bitmap, getStringWithLocale(R.string.fairy_hidden_notification_action_return), returnPendingIntent))
+                        .addAction(new NotificationCompat.Action(R.mipmap.ic_cancel, getStringWithLocale(R.string.fairy_hidden_notification_action_remove), removePendingIntent));
+
             }
 
             if (url.startsWith(KCA_API_FAIRY_CHECKED)) {
-                updateNotificationClearFairyButton();
+                notifyBuilder.mActions.clear();
+                updateNotification(false);
             }
 
             if (url.startsWith(KCA_API_PREF_FAIRY_CHANGED)) {
-                if (jsonDataObj.has("id")) {
-                    updateNotification();
-                    startService(new Intent(this, KcaViewButtonService.class)
-                            .setAction(KcaViewButtonService.FAIRY_CHANGE));
-                }
+                String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
+                int viewBitmapId = getId(fairyId, R.mipmap.class);
+                Bitmap viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(getApplicationContext(), viewBitmapId)).getBitmap();
+                notifyBuilder.setLargeIcon(viewBitmap);
+                updateNotification(false);
+                startService(new Intent(this, KcaViewButtonService.class)
+                        .setAction(KcaViewButtonService.FAIRY_CHANGE));
             }
 
             if (url.startsWith(KCA_API_PREF_NOTICOUNT_CHANGED)) {
-                updateNotification();
+                int count = KcaAlarmService.getAlarmCount();
+                if (count > 0) {
+                    notifyBuilder.setSmallIcon(R.mipmap.ic_stat_notify_1);
+                } else {
+                    notifyBuilder.setSmallIcon(R.mipmap.ic_stat_notify_0);
+                }
+                updateNotification(false);
             }
 
             if (url.startsWith(KCA_API_PREF_LANGUAGE_CHANGED)) {
@@ -2143,7 +2160,12 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_PREF_PRIORITY_CHANGED)) {
-                updateNotification();
+                if (getPriority()) {
+                    notifyBuilder.setPriority(IMPORTANCE_HIGH);
+                } else {
+                    notifyBuilder.setPriority(IMPORTANCE_DEFAULT);
+                }
+                updateNotification(false);
             }
 
             if (url.startsWith(KCA_API_NOTI_EXP_FIN)) {
