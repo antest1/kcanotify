@@ -374,10 +374,8 @@ public class KcaVpnService extends VpnService {
     public void onRevoke() {
         Log.i(TAG, "Revoke");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!prefs.getBoolean("svcenabled", false)) {
-            prefs.edit().putBoolean("enabled", false).apply();
-            super.onRevoke();
-        }
+        prefs.edit().putBoolean("enabled", false).apply();
+        super.onRevoke();
     }
 
     private Builder getBuilder(List<Rule> listAllowed, List<Rule> listRule) {
