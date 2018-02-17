@@ -1512,6 +1512,12 @@ public class KcaBattle {
                 enemyCbNowHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
                 enemyCbAfterHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
 
+                if (isKeyExist(api_data, "api_friendly_battle")) {
+                    JsonObject friendly_battle = api_data.getAsJsonObject("api_friendly_battle");
+                    JsonObject friendly_data = friendly_battle.getAsJsonObject("api_hougeki");
+                    calculateEnemyCombinedHougekiDamage(friendly_data, false, PHASE_3);
+                }
+
                 // 야간지원함대
                 if (isKeyExist(api_data, "api_n_support_info")) {
                     JsonObject support_info = api_data.getAsJsonObject("api_n_support_info");
