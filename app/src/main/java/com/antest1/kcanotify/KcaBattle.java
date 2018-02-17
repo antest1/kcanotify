@@ -567,8 +567,11 @@ public class KcaBattle {
             damage = support_hourai.getAsJsonArray("api_damage");
         }
         for (int d = 0; d < damage.size(); d++) {
-            if (d < 6) reduce_value(false, enemyAfterHps, d, cnv(damage.get(d)), false);
-            else reduce_value(false, enemyCbAfterHps, d - 6, cnv(damage.get(d)), true);
+            int damage_value = cnv(damage.get(d));
+            if (damage_value > 0) {
+                if (d < 6) reduce_value(false, enemyAfterHps, d, damage_value, false);
+                else reduce_value(false, enemyCbAfterHps, d - 6, damage_value, true);
+            }
         }
     }
 
@@ -583,8 +586,11 @@ public class KcaBattle {
             }
         }
         for (int i = 0; i < damage_info_edam.size(); i++) {
-            if (i < 6) reduce_value(false, enemyAfterHps, i, cnv(damage_info_edam.get(i)), false);
-            else reduce_value(false, enemyCbAfterHps, i - 6, cnv(damage_info_edam.get(i)), true);
+            int value = cnv(damage_info_edam.get(i));
+            if (value > 0) {
+                if (i < 6) reduce_value(false, enemyAfterHps, i, value, false);
+                else reduce_value(false, enemyCbAfterHps, i - 6, value, true);
+            }
         }
     }
 
