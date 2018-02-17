@@ -584,7 +584,7 @@ public class KcaBattle {
         }
         for (int i = 0; i < damage_info_edam.size(); i++) {
             if (i < 6) reduce_value(false, enemyAfterHps, i, cnv(damage_info_edam.get(i)), false);
-            else if (KcaBattle.isCombined) reduce_value(false, enemyCbAfterHps, i - 6, cnv(damage_info_edam.get(i)), true);
+            else reduce_value(false, enemyCbAfterHps, i - 6, cnv(damage_info_edam.get(i)), true);
         }
     }
 
