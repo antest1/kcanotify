@@ -323,10 +323,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="rank_d">D</string>
     <string name="rank_e">E</string>
 
-	<string name="maprank_1">E</string>
-	<string name="maprank_2">N</string>
-	<string name="maprank_3">H</string>
-	
+    <string name="maprank_1">C</string>
+    <string name="maprank_2">E</string>
+    <string name="maprank_3">N</string>
+    <string name="maprank_4">H</string>
+
     <string name="item_fuel">Fuel</string>
     <string name="item_ammo">Ammo</string>
     <string name="item_stel">Steel</string>

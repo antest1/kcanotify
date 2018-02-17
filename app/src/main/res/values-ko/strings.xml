@@ -264,9 +264,10 @@
     <string name="rank_d">D패배</string>
     <string name="rank_e">E패배</string>
 
-    <string name="maprank_1">병</string>
-    <string name="maprank_2">을</string>
-    <string name="maprank_3">갑</string>
+    <string name="maprank_1">정</string>
+    <string name="maprank_2">병</string>
+    <string name="maprank_3">을</string>
+    <string name="maprank_4">갑</string>
 	
     <string name="item_fuel">연료</string>
     <string name="item_ammo">탄약</string>

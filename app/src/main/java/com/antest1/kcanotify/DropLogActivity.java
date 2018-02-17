@@ -62,7 +62,7 @@ public class DropLogActivity extends AppCompatActivity {
     KcaDBHelper dbHelper;
     KcaDropLogger dropLogger;
     KcaDroplogItemAdpater adapter;
-    String[] maprank_info = new String[4];
+    String[] maprank_info = new String[5];
     String[] map_list = {};
     String[] node_list = {};
 
@@ -254,7 +254,6 @@ public class DropLogActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dropLogger.clearDropLog();
-                        Toast.makeText(getApplicationContext(), "Cleared", Toast.LENGTH_LONG).show();
                         setListView();
                         dialog.dismiss();
                     }
@@ -273,6 +272,7 @@ public class DropLogActivity extends AppCompatActivity {
     }
 
     public void setListView() {
+        Toast.makeText(getApplicationContext(), condition_data.toString(), Toast.LENGTH_LONG).show();
         adapter.setListViewItemList(dropLogger.getDropLogWithCondition(condition_data), 0);
         droplog_listview.setAdapter(adapter);
         row_count.setText(KcaUtils.format(getStringWithLocale(R.string.droplog_total_format), adapter.getCount()));

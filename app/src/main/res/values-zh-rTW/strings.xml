@@ -282,10 +282,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="rank_d">D</string>
     <string name="rank_e">E</string>
 
-    <string name="maprank_1">丙</string>
-    <string name="maprank_2">乙</string>
-    <string name="maprank_3">甲</string>
-	
+    <string name="maprank_1">丁</string>
+    <string name="maprank_2">丙</string>
+    <string name="maprank_3">乙</string>
+    <string name="maprank_4">甲</string>
+
     <string name="item_fuel">燃料</string>
     <string name="item_ammo">彈藥</string>
     <string name="item_stel">鋼材</string>
