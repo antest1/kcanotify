@@ -2233,6 +2233,10 @@ public class KcaService extends Service {
                     if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDropData(result, world * 10 + map, quest_name, node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
                 }
                 recordDropLog(jsonDataObj, !KcaApiData.checkUserPortEnough());
+                if (result > 0) {
+                    KcaApiData.addShipCountInBattle();
+                    KcaApiData.addItemCountInBattle(result);
+                }
             }
 
             if (url.startsWith(KCA_API_NOTI_HEAVY_DMG)) {
