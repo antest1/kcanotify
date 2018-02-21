@@ -653,33 +653,34 @@ public class KcaViewButtonService extends Service {
         Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
 
         JsonObject locdata = null;
-        if (dbHelper != null) locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
+        if (dbHelper != null) {
+            locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
 
-        if (locdata != null && locdata.toString().length() > 0) {
-            if (locdata.has(ori_prefix.concat("x"))) {
-                mParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
+            if (locdata != null && locdata.toString().length() > 0) {
+                if (locdata.has(ori_prefix.concat("x"))) {
+                    mParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
+                }
+                if (locdata.has(ori_prefix.concat("y"))) {
+                    mParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
+                }
             }
-            if (locdata.has(ori_prefix.concat("y"))) {
-                mParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
+
+            if (mManager != null && mParams != null) {
+                if (mParams.x < 0) mParams.x = 0;
+                else if (mParams.x > screenWidth - buttonWidth) mParams.x = screenWidth - buttonWidth;
+                if (mParams.y < 0) mParams.y = 0;
+                else if (mParams.y > screenHeight - buttonHeight) mParams.y = screenHeight - buttonHeight;
+                mManager.updateViewLayout(mView, mParams);
             }
-        }
 
-        if (mManager != null && mParams != null) {
-            if (mParams.x < 0) mParams.x = 0;
-            else if (mParams.x > screenWidth - buttonWidth) mParams.x = screenWidth - buttonWidth;
-            if (mParams.y < 0) mParams.y = 0;
-            else if (mParams.y > screenHeight - buttonHeight) mParams.y = screenHeight - buttonHeight;
-            mManager.updateViewLayout(mView, mParams);
+            if (locdata != null && locdata.toString().length() > 0) {
+                locdata.addProperty(ori_prefix.concat("x"), mParams.x);
+                locdata.addProperty(ori_prefix.concat("y"), mParams.y);
+            } else {
+                locdata = new JsonObject();
+            }
+            dbHelper.putValue(DB_KEY_FAIRYLOC, locdata.toString());
         }
-
-        if (locdata != null && locdata.toString().length() > 0) {
-            locdata.addProperty(ori_prefix.concat("x"), mParams.x);
-            locdata.addProperty(ori_prefix.concat("y"), mParams.y);
-        } else {
-            locdata = new JsonObject();
-        }
-        dbHelper.putValue(DB_KEY_FAIRYLOC, locdata.toString());
-
         super.onConfigurationChanged(newConfig);
     }
 }
