@@ -383,7 +383,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                         }
                         break;
                     case 2: // Weekly
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd", Locale.US);
                         try {
                             Date date1 = dateFormat.parse(KcaUtils.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
                             Date date2 = dateFormat.parse(KcaUtils.format("%s %s %s", current_time[0], current_time[1], current_time[2]));
@@ -425,6 +425,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                 db.delete(questlist_table_name, "KEY = ?", new String[]{String.valueOf(quest_id)});
             }
         }
+        c.close();
         return data;
     }
 
@@ -580,7 +581,6 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         Date currentTime = getJapanCalendarInstance().getTime();
         SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String time = df.format(currentTime);
-        SQLiteDatabase db = this.getWritableDatabase();
 
         String prevTime = getValue(DB_KEY_EXPTIME);
         if (prevTime == null) {
