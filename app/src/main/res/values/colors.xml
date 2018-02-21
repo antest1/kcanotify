@@ -163,11 +163,11 @@
     <color name="colorStatNotLocked">#bdbdbd</color>
     <color name="colorStatLocked">#4e7bff</color>
 
-    <color name="colorStatSallyArea0">#bdbdbd</color>
-    <color name="colorStatSallyArea1">#03A9F4</color>
+    <color name="colorStatSallyArea0">#FFFFFF</color>
+    <color name="colorStatSallyArea1">#bdbdbd</color>
     <color name="colorStatSallyArea2">#4CAF50</color>
     <color name="colorStatSallyArea3">#FFC107</color>
-    <color name="colorStatSallyArea4">#E91E63</color>
+    <color name="colorStatSallyArea4">#0d47a1</color>
     <color name="colorStatSallyArea5">#673AB7</color>
 
     <color name="colorStatFighterPower">#16a085</color>

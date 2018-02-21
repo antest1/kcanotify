@@ -40,9 +40,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import static com.antest1.kcanotify.KcaApiData.TAG_COUNT;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
+import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
@@ -315,6 +317,8 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         } else if (position == 14) {
             adapter = getSpeedArray();
             fnc = 2;
+        } else if (position == 15) {
+            adapter = getTagArray();
         }
         final AlertDialog dialog = makeDialog(sp_val, target, key, fnc, adapter);
         sp_val.setOnClickListener(new View.OnClickListener() {
@@ -408,6 +412,17 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         String[] speed_arr = new String[speed_list.size()];
         speed_arr = speed_list.toArray(speed_arr);
         return speed_arr;
+    }
+
+    private String[] getTagArray() {
+        List<String> tag_list = new ArrayList<>();
+        for (int i = 0; i <= TAG_COUNT; i++) {
+            tag_list.add(getStringWithLocale(getId(KcaUtils.format("ship_tag_%d", i), R.string.class)));
+        }
+
+        String[] tag_arr = new String[tag_list.size()];
+        tag_arr = tag_list.toArray(tag_arr);
+        return tag_arr;
     }
 
     private int getStypePosition(int i) { return i - 1; }

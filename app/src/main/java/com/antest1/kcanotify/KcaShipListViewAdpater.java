@@ -37,7 +37,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     private static final String[] total_key_list = {
             "api_id", "api_lv", "api_stype", "api_cond", "api_locked",
             "api_karyoku", "api_raisou", "api_taiku", "api_soukou", "api_yasen",
-            "api_taisen", "api_kaihi", "api_sakuteki", "api_lucky", "api_soku"};
+            "api_taisen", "api_kaihi", "api_sakuteki", "api_lucky", "api_soku", "api_sally_area"};
 
     public long getTotalExp() { return exp_sum; }
 
@@ -49,7 +49,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     }
 
     public static boolean isList(int idx) {
-        int[] list = {2, 14};  // ship_filt_array
+        int[] list = {2, 14, 15};  // ship_filt_array
         return (Arrays.binarySearch(list, idx) >= 0);
     }
 

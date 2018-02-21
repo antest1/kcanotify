@@ -410,7 +410,15 @@
     <string name="ship_stat_sort_key_12">속도</string>
     <string name="ship_stat_sort_key_13">피로도</string>
     <string name="ship_stat_sort_key_14">잠금</string>
+    <string name="ship_stat_sort_key_15">딱지</string>
     <string name="shipinfo_filt_list_dialog_title">선택</string>
+
+    <string name="ship_tag_0">없음</string>
+    <string name="ship_tag_1">경계부대(회색)</string>
+    <string name="ship_tag_2">구리다(연두색)</string>
+    <string name="ship_tag_3">니시무라(노란색)</string>
+    <string name="ship_tag_4">오자와(파란색)</string>
+    <string name="ship_tag_5">시마(보라색)</string>
 
     <string name="action_equipmentinfo">장비 리스트</string>
     <string name="equipinfo_summary" formatted="false">합계 %d (%d 장비중, %d 장비가능)</string>

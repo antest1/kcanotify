@@ -417,7 +417,15 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_sort_key_12">速度</string>
     <string name="ship_stat_sort_key_13">士气</string>
     <string name="ship_stat_sort_key_14">锁定</string>
+    <string name="ship_stat_sort_key_15">札</string>
     <string name="shipinfo_filt_list_dialog_title">选择</string>
+
+    <string name="ship_tag_0">没有</string>
+    <string name="ship_tag_1">警戒部队（银）</string>
+    <string name="ship_tag_2">栗田舰队（绿）</string>
+    <string name="ship_tag_3">西村舰队（黄）</string>
+    <string name="ship_tag_4">小沢舰队（蓝）</string>
+    <string name="ship_tag_5">志摩舰队（紫）</string>
 
     <string name="action_equipmentinfo">装备目录</string>
     <string name="equipinfo_summary" formatted="false">合计 %d（%d 装备中, %d 閒置）</string>

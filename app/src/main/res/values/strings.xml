@@ -475,7 +475,15 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_sort_key_12">Speed</string>
     <string name="ship_stat_sort_key_13">Morale</string>
     <string name="ship_stat_sort_key_14">Locked</string>
+    <string name="ship_stat_sort_key_15">Tag</string>
     <string name="shipinfo_filt_list_dialog_title">Select</string>
+
+    <string name="ship_tag_0">None</string>
+    <string name="ship_tag_1">Patrol(Gray)</string>
+    <string name="ship_tag_2">Kurita(Green)</string>
+    <string name="ship_tag_3">Nishimura(Yellow)</string>
+    <string name="ship_tag_4">Ozawa(Blue)</string>
+    <string name="ship_tag_5">Shima(Purple)</string>
 
     <string name="action_equipmentinfo">Equipment List</string>
     <string name="equipinfo_summary" formatted="false">Total %d (%d Equipped, %d Equippable)</string>
