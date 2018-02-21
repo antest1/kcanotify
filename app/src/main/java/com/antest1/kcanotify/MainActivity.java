@@ -620,27 +620,29 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            switch (s) {
-                case SUCCESS:
-                    Toast.makeText(getApplicationContext(),
-                            getStringWithLocale(R.string.sa_getupdate_finished),
-                            Toast.LENGTH_LONG).show();
-                    textDataUpdate.setVisibility(View.GONE);
-                    break;
-                case FAILURE:
-                    if (error_msg == null) error_msg = "null";
-                    Toast.makeText(getApplicationContext(),
-                            KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
-                            Toast.LENGTH_LONG).show();
-                    break;
-                case ERROR:
-                case NODATA:
-                    // temoporal message: this situation occured in case of no file in server.
-                    // this will be reverted after server issue fixed.
-                    Toast.makeText(getApplicationContext(),
-                            getStringWithLocale(R.string.kca_toast_inconsistent_data),
-                            Toast.LENGTH_LONG).show();
-                    break;
+            if (s != null) {
+                switch (s) {
+                    case SUCCESS:
+                        Toast.makeText(getApplicationContext(),
+                                getStringWithLocale(R.string.sa_getupdate_finished),
+                                Toast.LENGTH_LONG).show();
+                        textDataUpdate.setVisibility(View.GONE);
+                        break;
+                    case FAILURE:
+                        if (error_msg == null) error_msg = "null";
+                        Toast.makeText(getApplicationContext(),
+                                KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case ERROR:
+                    case NODATA:
+                        // temoporal message: this situation occured in case of no file in server.
+                        // this will be reverted after server issue fixed.
+                        Toast.makeText(getApplicationContext(),
+                                getStringWithLocale(R.string.kca_toast_inconsistent_data),
+                                Toast.LENGTH_LONG).show();
+                        break;
+                }
             }
         }
     }
