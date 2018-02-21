@@ -18,6 +18,11 @@
 */
 
 #include "netguard.h"
+#ifdef NDEBUG
+#define LOGD(...)
+#else
+#define LOGD(prio, tag, ...) __android_log_print(prio, tag, __VA_ARGS__)
+#endif
 
 extern int loglevel;
 
@@ -66,7 +71,7 @@ void log_android(int prio, const char *fmt, ...) {
         va_list argptr;
         va_start(argptr, fmt);
         vsprintf(line, fmt, argptr);
-        __android_log_print(prio, TAG, "%s", line);
+        LOGD(prio, TAG, "%s", line);
         va_end(argptr);
     }
 }
