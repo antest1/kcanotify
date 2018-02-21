@@ -125,7 +125,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         String type, version, url, request, data, error, timestamp;
         if (full)
             col = "type, version, url, request, data, error, datetime(timestamp, 'localtime') AS ts";
-        else col = "type, url, error";
+        else col = "type, version, url, error";
 
         if (limit > 0)
             sql = KcaUtils.format("SELECT %s FROM %s ORDER BY timestamp DESC LIMIT %d", col, error_table_name, limit);
@@ -137,14 +137,15 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             type = c.getString(c.getColumnIndex("type"));
             url = c.getString(c.getColumnIndex("url"));
             error = c.getString(c.getColumnIndex("error"));
+            version = c.getString(c.getColumnIndex("version"));
             if (full) {
-                version = c.getString(c.getColumnIndex("version"));
                 request = c.getString(c.getColumnIndex("request"));
                 data = c.getString(c.getColumnIndex("data"));
                 timestamp = c.getString(c.getColumnIndex("ts"));
                 log_list.add(KcaUtils.format("[%s]\t%s\t%s\t%s\t%s\t%s\t%s", type, version, url, error, request, data, timestamp));
             } else {
-                log_list.add(KcaUtils.format("[%s]\t%s\t%s", type, url, error));
+                String recent_indicate = version.equals(BuildConfig.VERSION_NAME) ? "*" : "";
+                log_list.add(KcaUtils.format("[%s%s]\t%s\t%s", type, recent_indicate, url, error));
             }
         }
         c.close();
