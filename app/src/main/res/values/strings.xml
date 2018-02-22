@@ -44,7 +44,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
 
-    <string name="error_text">An error occured. Please contact the developer.</string>
+    <string name="error_text">An error occurred. Please contact the developer.</string>
     <string name="questview_prev" translatable="false">PREV</string>
     <string name="questview_next" translatable="false">NEXT</string>
 
@@ -80,9 +80,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_none">\?\?</string>
     <string name="speed_postfix">&#160;Fleet</string>
 
-    <string name="opendb_failed_msg">An error occured while sending data to OpenDB.</string>
-    <string name="process_battle_failed_msg">An error occured while processing battle data.</string>
-    <string name="service_failed_msg">An error occured while processing data. \nIt is recommended that you restart kcanotify.</string>
+    <string name="opendb_failed_msg">An error occurred while sending data to OpenDB.</string>
+    <string name="process_battle_failed_msg">An error occurred while processing battle data.</string>
+    <string name="service_failed_msg">An error occurred while processing data. \nIt is recommended that you restart kcanotify.</string>
 
     <string name="node_info_noevent" formatted="false">%s (Battle Avoided)</string>
     <string name="node_info_obtain" formatted="false">%s (Resources Found)</string>
@@ -111,7 +111,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_toast_kancolle_not_installed">Kancolle For Android is not installed.</string>
     <string name="ma_toast_overay_diabled">Screen Overlay Permission is required for BattleView. Enable Screen Overlay at Settings > Screen Overlay Settings.</string>
     <string name="ma_hasupdate" formatted="false">An update is available. (%s)</string>
-    <string name="ma_hasdataupdate" formatted="false">New game data is avaliable. (%s)</string>
+    <string name="ma_hasdataupdate" formatted="false">New game data is available. (%s)</string>
     <string name="description"><b>Help</b>\nTurn on VPN and SVC then run Kancolle\n\n※ VPN is required for detecting game data. \n\n<b>Main Features</b>\n - Expedition/Docking notifications \n - Heavy Damage Alert (prior to/during combat)\n - LoS/FP/Fatigue indicators\n - Node tracking during sorties\n - BattleView / QuestView\n - Improvement Arsenal Chart\n - Send statistics to OpenDB (optional)\n \nVisit http://swaytwig.com/kcanotify for detail. (Korean)</string>
 
     <!-- SettingActivity Strings -->
@@ -123,8 +123,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="sa_getupdate_finished">Game Data Download Completed</string>
     <string name="sa_getupdate_started">Downloading Game Data&#8230;</string>
-    <string name="sa_getupdate_servererror" formatted="false">A Server Error Occured: %s</string>
-    <string name="sa_getupdate_ioexceptionerror">An error occured while saving data.</string>
+    <string name="sa_getupdate_servererror" formatted="false">A Server Error Occurred: %s</string>
+    <string name="sa_getupdate_ioexceptionerror">An error occurred while saving data.</string>
 
     <string name="sa_overlay_under_m">This setting is not required for Android versions below 6.0.</string>
     <string name="sa_overlay_appearontop">In application manager, activate [Kcanotify] in "Draw over other apps"(Apps that can appear on top).</string>
@@ -268,7 +268,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_app_info">About kcanotify</string>
 
     <!-- BattleView Strings -->
-    <string name="battleview_error">An error occured while processing battle data.</string>
+    <string name="battleview_error">An error occurred while processing battle data.</string>
     <string name="battleview_menu_head">Menu</string>
     <string name="battleview_menu0">Aerial Combat Info</string>
     <string name="battleview_menu1">Current Quest List</string>
