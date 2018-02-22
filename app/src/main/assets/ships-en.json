@@ -8,7 +8,9 @@
 		"改母": "Kai Bo",
 		"два"  : "dva",
 		" Mk.II": " Mk.II",
-		" Mk.II Mod.2": " Mk.II Mod.2"
+		" Mk.II Mod.2": " Mk.II Mod.2",
+		"-壊": " - Damaged",
+		"改-壊": " Kai - Damaged"
 	},
 	"金剛":"Kongou",
 	"比叡":"Hiei",
@@ -426,6 +428,7 @@
 	"防空埋護姫":"Confined Air Defense Princess",
 	"護衛棲水姫": "Escort Water Princess",
 	"護衛棲水姫-壊": "Escort Water Princess - Damaged",
+	"深海鶴棲姫": "Abyssal Crane Princess",
 
 	"elite":" elite",
 	"flagship":" flagship"

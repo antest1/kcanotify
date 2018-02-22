@@ -272,7 +272,7 @@
   "10cm連装高角砲改+増設機銃" : "10cm Twin High-angle Gun Mount Kai + Additional Machine Guns",
   "紫電改(三四三空) 戦闘301" : "Shiden Kai (343rd Air Group) 301st Fighter Squadron",
   "SK レーダー" : "SK Radar",
-  "SK&SG レーダー" : "SK&SG Radar",
+  "SK+SG レーダー" : "SK+SG Radar",
   "QF 4.7inch砲 Mk.XII改" : "QF 4.7inch Gun Mk.XII Kai",
   "51cm連装砲" : "51cm Twin Gun Mount",
   "130mm B-13連装砲" : "130mm B-13 Twin Gun Mount",
@@ -362,5 +362,7 @@
   "深海待伏魚雷": "Abyssal Ambush Torpedo",
   "夜猫深海艦戦": "Abyssal Night Cat Fighter",
   "夜深海艦爆": "Abyssal Night Dive Bomber",
-  "夜復讐深海艦攻": "Abyssal Night Revenge Torpedo Bomber"
+  "夜復讐深海艦攻": "Abyssal Night Revenge Torpedo Bomber",
+  "深海14inch連装砲改": "Abyssal 14inch Twin Gun Mount Kai",
+  "深海16inch三連装砲改": "Abyssal 16inch Triple Gun Mount Kai"
 }
