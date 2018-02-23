@@ -357,16 +357,6 @@ public class KcaBattleViewService extends Service {
                 }
 
                 deckportdata = api_data.getAsJsonObject("api_deck_port");
-
-                JsonArray api_escape = new JsonArray();
-                JsonArray api_escape_combined = new JsonArray();
-                if (api_data.has("api_escape")) {
-                    api_escape = api_data.getAsJsonArray("api_escape");
-                }
-                if (api_data.has("api_escape_combined")) {
-                    api_escape_combined = api_data.getAsJsonArray("api_escape_combined");
-                }
-
                 if (deckportdata != null) {
                     JsonArray deckData = deckportdata.getAsJsonArray("api_deck_data");
                     JsonArray portData = deckportdata.getAsJsonArray("api_ship_data");
@@ -393,16 +383,6 @@ public class KcaBattleViewService extends Service {
                             for (int j = 0; j < portData.size(); j++) {
                                 JsonObject data = portData.get(j).getAsJsonObject();
                                 shipData.add(String.valueOf(data.get("api_id").getAsInt()), data);
-                            }
-
-                            for (int j = 0; j < api_escape.size(); j++) {
-                                int idx = api_escape.get(j).getAsInt();
-                                ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", idx), R.id.class)))
-                                        .setText(getStringWithLocale(R.string.battleview_text_retreated));
-                                ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", idx), R.id.class)))
-                                        .setGravity(Gravity.CENTER_HORIZONTAL);
-                                battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", idx), R.id.class))
-                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRetreated));
                             }
 
                             for (int j = 0; j < mainDeck.size(); j++) {
@@ -512,16 +492,6 @@ public class KcaBattleViewService extends Service {
                                 shipData.add(String.valueOf(data.get("api_id").getAsInt()), data);
                             }
 
-                            for (int j = 0; j < api_escape_combined.size(); j++) {
-                                int idx = api_escape_combined.get(j).getAsInt();
-                                ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", idx), R.id.class)))
-                                        .setText(getStringWithLocale(R.string.battleview_text_retreated));
-                                ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", idx), R.id.class)))
-                                        .setGravity(Gravity.CENTER_HORIZONTAL);
-                                battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", idx), R.id.class))
-                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRetreated));
-                            }
-
                             for (int j = 0; j < combinedDeck.size(); j++) {
                                 ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_name", j + 1), R.id.class)))
                                         .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
@@ -586,6 +556,32 @@ public class KcaBattleViewService extends Service {
                             Log.e("KCA", "FCSD: " + String.valueOf(friendCombinedShipData.size()));
                         }
                     }
+                }
+            }
+
+            if (api_data.has("api_escape") && api_data.get("api_escape").isJsonArray()) {
+                JsonArray api_escape = api_data.getAsJsonArray("api_escape");
+                for (int j = 0; j < api_escape.size(); j++) {
+                    int idx = api_escape.get(j).getAsInt();
+                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", idx), R.id.class)))
+                            .setText(getStringWithLocale(R.string.battleview_text_retreated));
+                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", idx), R.id.class)))
+                            .setGravity(Gravity.CENTER_HORIZONTAL);
+                    battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", idx), R.id.class))
+                            .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRetreated));
+                }
+            }
+
+            if (api_data.has("api_escape_combined") && api_data.get("api_escape_combined").isJsonArray()) {
+                JsonArray api_escape_combined = api_data.getAsJsonArray("api_escape_combined");
+                for (int j = 0; j < api_escape_combined.size(); j++) {
+                    int idx = api_escape_combined.get(j).getAsInt();
+                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", idx), R.id.class)))
+                            .setText(getStringWithLocale(R.string.battleview_text_retreated));
+                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", idx), R.id.class)))
+                            .setGravity(Gravity.CENTER_HORIZONTAL);
+                    battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", idx), R.id.class))
+                            .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorRetreated));
                 }
             }
 

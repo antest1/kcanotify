@@ -1129,6 +1129,17 @@ public class KcaBattle {
                     }
                     Log.e("KCA", KcaUtils.format("Escape: %d", api_escape_target));
                 }
+
+                JsonObject battleResultInfo = helper.getJsonObjectValue(DB_KEY_BATTLEINFO);
+                battleResultInfo.add("api_escape", escapelist);
+                setCurrentApiData(battleResultInfo);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
+                bundle.putString("data", battleResultInfo.toString());
+                Message sMsg = sHandler.obtainMessage();
+                sMsg.setData(bundle);
+                sHandler.sendMessage(sMsg);
             }
 
             if (url.equals(API_REQ_COMBINED_BATTLE) || url.equals(API_REQ_COMBINED_BATTLE_WATER)) {
@@ -1799,7 +1810,18 @@ public class KcaBattle {
                         escapecblist.add(api_tow_target - 6);
                     }
 
+                    JsonObject battleResultInfo = helper.getJsonObjectValue(DB_KEY_BATTLEINFO);
+                    battleResultInfo.add("api_escape", escapelist);
+                    battleResultInfo.add("api_escape_combined", escapecblist);
+                    setCurrentApiData(battleResultInfo);
+
                     Log.e("KCA", KcaUtils.format("Escape: %d with %d", api_escape_target, api_tow_target));
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url", KCA_API_NOTI_BATTLE_INFO);
+                    bundle.putString("data", battleResultInfo.toString());
+                    Message sMsg = sHandler.obtainMessage();
+                    sMsg.setData(bundle);
+                    sHandler.sendMessage(sMsg);
                 }
             }
         } catch (Exception e) {
