@@ -126,6 +126,8 @@ public class KcaBattle {
         startHeavyDamageExist = v;
     }
 
+    public static boolean isCombinedFleetInSortie() { return KcaBattle.currentFleet == 0 && KcaBattle.isCombined; }
+
     public static String currentEnemyDeckName = "";
 
     public static int checkHeavyDamagedExist() {
@@ -523,7 +525,7 @@ public class KcaBattle {
             if (isKeyExist(api_stage3, "api_fdam")) {
                 JsonArray api_fdam = api_stage3.getAsJsonArray("api_fdam");
                 for (int i = 0; i < api_fdam.size(); i++) {
-                    if (KcaBattle.isCombined && i >= 6) {
+                    if (isCombinedFleetInSortie() && i >= 6) {
                         reduce_value(true, friendCbAfterHps, i - 6, cnv(api_fdam.get(i)), true);
                     } else {
                         reduce_value(true, friendAfterHps, i, cnv(api_fdam.get(i)), false);
@@ -579,7 +581,7 @@ public class KcaBattle {
         JsonArray damage_info_fdam = damage_info.getAsJsonArray("api_fdam");
         JsonArray damage_info_edam = damage_info.getAsJsonArray("api_edam");
         for (int i = 0; i < damage_info_fdam.size(); i++) {
-            if (KcaBattle.isCombined && i >= 6) {
+            if (isCombinedFleetInSortie() && i >= 6) {
                 reduce_value(true, friendCbAfterHps, i - 6, cnv(damage_info_fdam.get(i)), true);
             } else {
                 reduce_value(true, friendAfterHps, i, cnv(damage_info_fdam.get(i)), false);
@@ -653,7 +655,7 @@ public class KcaBattle {
                         if (target_idx_cb) reduce_value(false, enemyCbAfterHps, target, -6, target_dmg, true);
                         else if (target_idx_valid) reduce_value(false, enemyAfterHps, target, target_dmg, false);
                     } else {
-                        if (KcaBattle.isCombined && target_idx_cb) reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
+                        if (isCombinedFleetInSortie() && target_idx_cb) reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
                         else if (target_idx_valid) reduce_value(true, friendAfterHps, target, target_dmg, false);
                     }
                     break;
@@ -675,7 +677,7 @@ public class KcaBattle {
                 if (activedeck[1] == 1) reduce_value(false, enemyAfterHps, target, target_dmg, false);
                 else reduce_value(false, enemyCbAfterHps, target, -6, target_dmg, true);
             } else {
-                if (!KcaBattle.isCombined) reduce_value(true, friendAfterHps, target, target_dmg, false);
+                if (!isCombinedFleetInSortie()) reduce_value(true, friendAfterHps, target, target_dmg, false);
                 else reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
             }
          }
@@ -1744,7 +1746,7 @@ public class KcaBattle {
                 qtrackData.add("deck_port", deckportdata);
                 qtrackData.add("afterhps_f", friendAfterHps);
                 qtrackData.add("afterhps_e", enemyAfterHps);
-                if (KcaBattle.isCombined) {
+                if (isCombinedFleetInSortie()) {
                     qtrackData.add("aftercbhps_f", friendCbAfterHps);
                 }
                 if (ship_ke_combined != null) {
