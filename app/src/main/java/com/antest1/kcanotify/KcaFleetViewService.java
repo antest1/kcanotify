@@ -70,7 +70,7 @@ public class KcaFleetViewService extends Service {
     public static final String REFRESH_FLEETVIEW_ACTION = "update_fleetview_action";
     public static final String CLOSE_FLEETVIEW_ACTION = "close_fleetview_action";
     public static final String[] fleetview_menu_keys = {"quest", "excheck", "develop", "construction", "docking", "maphp", "fchk", "labinfo", "akashi"};
-    public static final String DECKINFO_REQ_LIST = "id,ship_id,lv,exp,slot,slot_ex,onslot,cond,maxhp,nowhp";
+    public static final String DECKINFO_REQ_LIST = "id,ship_id,lv,exp,slot,slot_ex,onslot,cond,maxhp,nowhp,sally_area";
     public static final String KC_DECKINFO_REQ_LIST = "name,maxeq,stype";
 
     public static final int FLEET_COMBINED_ID = 4;
@@ -677,6 +677,22 @@ public class KcaFleetViewService extends Service {
                                 .setText(getShipTranslation(kcData.get("name").getAsString(), false));
                         ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class)))
                                 .setText(getShipTypeAbbr(kcData.get("stype").getAsInt()));
+                        mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+                        ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class)))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                        if (userData.has("sally_area")) {
+                            int sally_area = userData.get("sally_area").getAsInt();
+                            if (sally_area > 0) {
+                                mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class))
+                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
+                                                getId("colorStatSallyArea".concat(String.valueOf(sally_area)), R.color.class)));
+                                mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class))
+                                        .getBackground().setAlpha(192);
+                                ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class)))
+                                        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                            }
+                        }
                         ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_lv", v), R.id.class)))
                                 .setText(makeLvString(userData.get("lv").getAsInt()));
                         ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_exp", v), R.id.class)))
@@ -754,6 +770,22 @@ public class KcaFleetViewService extends Service {
                             .setText(getShipTranslation(kcData.get("name").getAsString(), false));
                     ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class)))
                             .setText(getShipTypeAbbr(kcData.get("stype").getAsInt()));
+                    mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class))
+                            .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+                    ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class)))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                    if (userData.has("sally_area")) {
+                        int sally_area = userData.get("sally_area").getAsInt();
+                        if (sally_area > 0) {
+                            mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class))
+                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
+                                            getId("colorStatSallyArea".concat(String.valueOf(sally_area)), R.color.class)));
+                            mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class))
+                                    .getBackground().setAlpha(192);
+                            ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", v), R.id.class)))
+                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                        }
+                    }
                     ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_lv", v), R.id.class)))
                             .setText(makeLvString(userData.get("lv").getAsInt()));
                     ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_exp", v), R.id.class)))

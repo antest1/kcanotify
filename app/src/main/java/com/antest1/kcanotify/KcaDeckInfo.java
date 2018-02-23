@@ -501,8 +501,12 @@ public class KcaDeckInfo {
 
                 int shipId = deckShipIdList.get(i).getAsInt();
                 if (shipId != -1) {
-                    JsonObject shipData = getUserShipDataById(shipId, "slot,ship_id");
+                    JsonObject shipData = getUserShipDataById(shipId, "slot,ship_id,nowhp,maxhp");
                     int kcShipId = shipData.get("ship_id").getAsInt();
+                    int nowhp = shipData.get("nowhp").getAsInt();
+                    int maxhp = shipData.get("maxhp").getAsInt();
+                    if (nowhp * 4 <= maxhp) continue;
+
                     JsonObject kcShipData = getKcShipDataById(kcShipId, "stype");
                     int stype = kcShipData.get("stype").getAsInt();
 

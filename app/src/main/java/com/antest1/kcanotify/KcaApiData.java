@@ -938,7 +938,9 @@ public class KcaApiData {
                     if (!api_item.startsWith("api_")) {
                         api_item = "api_" + api_item;
                     }
-                    return_data.add(orig_api_item, target_data.get(api_item));
+                    if (target_data.has(api_item)) {
+                        return_data.add(orig_api_item, target_data.get(api_item));
+                    }
                 }
             }
         }
