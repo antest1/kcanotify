@@ -981,6 +981,19 @@ public class KcaBattle {
                 enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
                 enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
+                // 기항대분식항공전 Stage 3
+                if (isKeyExist(api_data, "api_air_base_injection")) {
+                    calculateAirBattle(api_data.getAsJsonObject("api_air_base_injection"));
+                }
+
+                // 기지항공대 Stage 3
+                if (isKeyExist(api_data, "api_air_base_attack")) {
+                    JsonArray airbase_attack = api_data.getAsJsonArray("api_air_base_attack");
+                    for (int i = 0; i < airbase_attack.size(); i++) {
+                        calculateAirBattle(airbase_attack.get(i).getAsJsonObject());
+                    }
+                }
+
                 // 항공전 Stage 3
                 if (isKeyExist(api_data, "api_kouku")) {
                     calculateAirBattle(api_data.getAsJsonObject("api_kouku"));
@@ -1408,6 +1421,19 @@ public class KcaBattle {
                 friendCbMaxHps = KcaUtils.parseJson(friendCbMaxHpsData).getAsJsonArray();
                 friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
                 friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
+
+                // 기항대분식항공전 Stage 3
+                if (isKeyExist(api_data, "api_air_base_injection")) {
+                    calculateAirBattle(api_data.getAsJsonObject("api_air_base_injection"));
+                }
+
+                // 기지항공대 Stage 3
+                if (isKeyExist(api_data, "api_air_base_attack")) {
+                    JsonArray airbase_attack = api_data.getAsJsonArray("api_air_base_attack");
+                    for (int i = 0; i < airbase_attack.size(); i++) {
+                        calculateAirBattle(airbase_attack.get(i).getAsJsonObject());
+                    }
+                }
 
                 // 제1항공전 Stage 3
                 calculateAirBattle(api_data.getAsJsonObject("api_kouku"));
