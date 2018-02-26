@@ -59,7 +59,7 @@ dependencies {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
-    implementation 'org.sufficientlysecure:html-textview:3.4'
+    implementation 'com.pixplicity.htmlcompat:library:1.1.1'
     implementation 'ch.acra:acra-mail:5.1.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.woxthebox:draglistview:1.5.2'

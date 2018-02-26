@@ -134,7 +134,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="16dp">
 
-                <org.sufficientlysecure.htmltextview.HtmlTextView
+                <TextView
                     android:id="@+id/textDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

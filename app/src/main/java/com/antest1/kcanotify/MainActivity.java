@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import com.pixplicity.htmlcompat.HtmlCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -33,6 +34,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,8 +46,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton kctoolbtn;
     public ImageButton kcafairybtn;
     public static Handler sHandler;
-    HtmlTextView textDescription = null;
+    TextView textDescription;
     TextView textWarn, textUpdate, textDataUpdate;
     Gson gson = new Gson();
 
@@ -279,7 +279,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         textDescription = findViewById(R.id.textDescription);
-        textDescription.setHtml(main_html);
+        Spanned fromHtml = HtmlCompat.fromHtml(getApplicationContext(), main_html, 0);
+        textDescription.setText(fromHtml);
         //Linkify.addLinks(textDescription, Linkify.WEB_URLS);
 
         backPressCloseHandler = new BackPressCloseHandler(this);
@@ -336,7 +337,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
     }
 
     public void setWarning() {
