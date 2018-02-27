@@ -40,6 +40,8 @@ import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -53,6 +55,8 @@ import static android.R.attr.value;
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static com.antest1.kcanotify.KcaAlarmService.REFRESH_CHANNEL;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_MAIN;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_ALARMDELAY_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
@@ -472,11 +476,15 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public static class getRecentVersion extends AsyncTask<Context, String, String> {
+        final String ERROR = "E";
+        final String ERROR_SOCKET = "ES";
+
         Activity activity;
         Context context;
         boolean toastflag;
         String update_server = "";
         String checkUrl = "";
+        KcaDBHelper dbHelper;
 
         public getRecentVersion(Activity a, boolean tf) {
             activity = a;
@@ -484,8 +492,10 @@ public class SettingActivity extends AppCompatActivity {
             toastflag = tf;
             update_server = KcaUtils.getUpdateServer(context);
             checkUrl = KcaUtils.format(getStringWithLocale(R.string.kcanotify_checkversion_link), update_server);
+            dbHelper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
         }
 
+        public String error = "";
         public String getStringWithLocale(int id) {
             return KcaUtils.getStringWithLocale(activity.getApplicationContext(), activity.getBaseContext(), id);
         }
@@ -501,6 +511,7 @@ public class SettingActivity extends AppCompatActivity {
             try {
                 content = executeClient();
             } catch (Exception e) {
+                error = getStringFromException(e);
                 e.printStackTrace();
             }
             return content;
@@ -517,16 +528,26 @@ public class SettingActivity extends AppCompatActivity {
             try {
                 Response response = client.newCall(request).execute();
                 return response.body().string().trim();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+            } catch (SocketTimeoutException e) {
+                e.printStackTrace();
+                error = getStringFromException(e);
+                return ERROR_SOCKET;
+            } catch (Exception e) {
+                e.printStackTrace();
+                error = getStringFromException(e);
                 return "";
             }
         }
 
         @Override
         protected void onPostExecute(String result) {
-            if (result == null) {
+            if (result == null || result.length() == 0) {
                 Toast.makeText(context, getStringWithLocale(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
+                dbHelper.recordErrorLog(ERROR_TYPE_SETTING, checkUrl, "", "", error);
+            } else if (result.equals(ERROR_SOCKET)) {
+                Toast.makeText(context,
+                        KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), "Timeout"),
+                        Toast.LENGTH_LONG).show();
             } else if (result.length() > 0) {
                 Log.e("KCA", "Received: " + result);
                 JsonObject jsonDataObj = new JsonObject();
@@ -603,6 +624,7 @@ public class SettingActivity extends AppCompatActivity {
         final String SUCCESS = "S";
         final String FAILURE = "F";
         final String ERROR = "E";
+        final String ERROR_SOCKET = "ES";
         final String NODATA = "N";
         String error_msg = "";
 
@@ -641,8 +663,6 @@ public class SettingActivity extends AppCompatActivity {
         }
 
         public String executeClient() {
-
-
             OkHttpClient client = new OkHttpClient.Builder().build();
             Request.Builder builder = new Request.Builder().url(dataUrl).get();
             builder.addHeader("Referer", "app:/KCA/");
@@ -669,7 +689,10 @@ public class SettingActivity extends AppCompatActivity {
                     error_msg = response.message();
                     result = FAILURE;
                 }
-            } catch (IOException e) {
+            } catch (SocketTimeoutException e) {
+                error_msg = getStringFromException(e);
+                result = ERROR_SOCKET;
+            } catch (Exception e) {
                 error_msg = getStringFromException(e);
                 result = ERROR;
             }
@@ -689,6 +712,12 @@ public class SettingActivity extends AppCompatActivity {
                         if (error_msg == null) error_msg = "null";
                         Toast.makeText(context,
                                 KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case ERROR_SOCKET:
+                        if (error_msg == null) error_msg = "null";
+                        Toast.makeText(context,
+                                KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), "Timeout"),
                                 Toast.LENGTH_LONG).show();
                         break;
                     case ERROR:

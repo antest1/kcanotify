@@ -50,6 +50,7 @@ import android.widget.ToggleButton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.SocketTimeoutException;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Timer;
@@ -450,6 +451,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class getRecentVersion extends AsyncTask<Context, String, String> {
+        final String ERROR = "E";
+        final String ERROR_SOCKET = "ES";
+
         public String currentVersion = BuildConfig.VERSION_NAME;
         public String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
         String update_server = KcaUtils.getUpdateServer(getApplicationContext());
@@ -489,10 +493,11 @@ public class MainActivity extends AppCompatActivity {
             try {
                 Response response = client.newCall(request).execute();
                 return response.body().string().trim();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "";
-            } catch (AssertionError e) {
+            } catch (SocketTimeoutException e) {
+                error = getStringFromException(e);
+                return ERROR_SOCKET;
+            } catch (Exception e) {
+                error = getStringFromException(e);
                 e.printStackTrace();
                 return "";
             }
@@ -503,6 +508,10 @@ public class MainActivity extends AppCompatActivity {
             if (result == null || result.length() == 0) {
                 Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
                 dbHelper.recordErrorLog(ERROR_TYPE_MAIN, checkUrl, "", "", error);
+            } else if (result.startsWith(ERROR_SOCKET)) {
+                Toast.makeText(getApplicationContext(),
+                        KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), "Timeout"),
+                        Toast.LENGTH_LONG).show();
             } else if (result.length() > 0) {
                 Log.e("KCA", "Received: " + result);
                 JsonObject jsonDataObj = new JsonObject();
@@ -557,6 +566,7 @@ public class MainActivity extends AppCompatActivity {
         final String SUCCESS = "S";
         final String FAILURE = "F";
         final String ERROR = "E";
+        final String ERROR_SOCKET = "ES";
         final String NODATA = "N";
         String error_msg = "";
         KcaDBHelper dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
@@ -611,7 +621,10 @@ public class MainActivity extends AppCompatActivity {
                     error_msg = response.message();
                     result = FAILURE;
                 }
-            } catch (IOException e) {
+            } catch (SocketTimeoutException e) {
+                error_msg = getStringFromException(e);
+                result = ERROR_SOCKET;
+            } catch (Exception e) {
                 error_msg = getStringFromException(e);
                 result = ERROR;
             }
@@ -632,6 +645,12 @@ public class MainActivity extends AppCompatActivity {
                         if (error_msg == null) error_msg = "null";
                         Toast.makeText(getApplicationContext(),
                                 KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case ERROR_SOCKET:
+                        if (error_msg == null) error_msg = "null";
+                        Toast.makeText(getApplicationContext(),
+                                KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), "Timeout"),
                                 Toast.LENGTH_LONG).show();
                         break;
                     case ERROR:
