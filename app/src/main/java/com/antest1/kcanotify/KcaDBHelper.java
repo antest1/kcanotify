@@ -106,6 +106,11 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public void closeDatabase() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.close();
+    }
+
     public void recordErrorLog(String type, String url, String request, String data, String error) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

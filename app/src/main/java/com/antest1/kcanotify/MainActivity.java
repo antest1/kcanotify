@@ -2,10 +2,8 @@ package com.antest1.kcanotify;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import com.pixplicity.htmlcompat.HtmlCompat;
 
 import android.Manifest;
@@ -18,10 +16,8 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.net.VpnService;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +31,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,17 +46,13 @@ import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.net.SocketTimeoutException;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static com.antest1.kcanotify.KcaAlarmService.TYPE_UPDATE;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
@@ -70,7 +63,6 @@ import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
-import static com.antest1.kcanotify.KcaUtils.setPreferences;
 import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
 
 public class MainActivity extends AppCompatActivity {
@@ -87,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     AssetManager assetManager;
     KcaDBHelper dbHelper;
     Toolbar toolbar;
+    KcaDownloader downloader;
     private boolean running = false;
     private AlertDialog dialogVpn = null;
     Context ctx;
@@ -128,6 +121,12 @@ public class MainActivity extends AppCompatActivity {
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(KcaUtils.getUpdateServer(getApplicationContext()))
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        downloader = retrofit.create(KcaDownloader.class);
 
         kcIntent = getKcIntent(getApplicationContext());
         is_kca_installed = (kcIntent != null);
@@ -265,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         textDataUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new getKcaStart2Data().execute();
+                downloadGameData();
             }
         });
 
@@ -296,12 +295,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                new getRecentVersion().execute();
-            }
-        }, 1000);
+        checkRecentVersion();
 
         setVpnBtn();
         setCheckBtn();
@@ -338,6 +332,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        dbHelper.closeDatabase();
+        super.onDestroy();
     }
 
     public void setWarning() {
@@ -450,220 +450,115 @@ public class MainActivity extends AppCompatActivity {
         backPressCloseHandler.onBackPressed();
     }
 
-    public class getRecentVersion extends AsyncTask<Context, String, String> {
-        final String ERROR = "E";
-        final String ERROR_SOCKET = "ES";
-
-        public String currentVersion = BuildConfig.VERSION_NAME;
-        public String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
-        String update_server = KcaUtils.getUpdateServer(getApplicationContext());
-        String checkUrl = KcaUtils.format(getString(R.string.kcanotify_checkversion_link), update_server);
-        KcaDBHelper dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-
-        public String error = "";
-        public String getStringWithLocale(int id) {
-            return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(Context... params) {
-            String content = null;
-            try {
-                content = executeClient();
-            } catch (Exception e) {
-                error = getStringFromException(e);
-                e.printStackTrace();
-            }
-            return content;
-        }
-
-        public String executeClient() {
-            final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
-            OkHttpClient client = new OkHttpClient.Builder().build();
-            Request.Builder builder = new Request.Builder().url(checkUrl).get();
-            builder.addHeader("Referer", "app:/KCA/");
-            builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
-            Request request = builder.build();
-
-            try {
-                Response response = client.newCall(request).execute();
-                return response.body().string().trim();
-            } catch (SocketTimeoutException e) {
-                error = getStringFromException(e);
-                return ERROR_SOCKET;
-            } catch (Exception e) {
-                error = getStringFromException(e);
-                e.printStackTrace();
-                return "";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (result == null || result.length() == 0) {
-                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
-                dbHelper.recordErrorLog(ERROR_TYPE_MAIN, checkUrl, "", "", error);
-            } else if (result.startsWith(ERROR_SOCKET)) {
-                Toast.makeText(getApplicationContext(),
-                        KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), "Timeout"),
-                        Toast.LENGTH_LONG).show();
-            } else if (result.length() > 0) {
-                Log.e("KCA", "Received: " + result);
-                JsonObject jsonDataObj = new JsonObject();
+    private void checkRecentVersion() {
+        String currentVersion = BuildConfig.VERSION_NAME;
+        String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
+        final Call<String> rv_data = downloader.getRecentVersion();
+        rv_data.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                JsonObject response_data = new JsonObject();
                 try {
-                    StringReader reader = new StringReader(result.trim());
-                    JsonReader jsonReader = new JsonReader(reader);
-                    jsonReader.setLenient(true);
-                    jsonDataObj = new JsonParser().parse(jsonReader).getAsJsonObject();
-                    if (jsonDataObj.has("version")) {
-                        String recentVersion = jsonDataObj.get("version").getAsString();
-                        if (!compareVersion(currentVersion, recentVersion)) { // True if latest
-                            if (textUpdate.getVisibility() == View.GONE) {
-                                Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
-                                JsonObject data = new JsonObject();
-                                data.addProperty("type", TYPE_UPDATE);
-                                data.addProperty("utype", 0);
-                                data.addProperty("version", recentVersion);
-                                aIntent.putExtra("data", data.toString());
-                                startService(aIntent);
-                                textUpdate.setVisibility(View.VISIBLE);
-                                textUpdate.setText(KcaUtils.format(getStringWithLocale(R.string.ma_hasupdate), recentVersion));
-                            }
+                    if (response.body() != null) {
+                        response_data = new JsonParser().parse(response.body()).getAsJsonObject();
+                    }
+                } catch (Exception e) {
+                    dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "version_check", "", "", getStringFromException(e));
+                }
+
+                Log.e("KCA", response_data.toString());
+                if (response_data.has("version")) {
+                    String recentVersion = response_data.get("version").getAsString();
+                    if (!compareVersion(currentVersion, recentVersion)) { // True if latest
+                        if (textUpdate.getVisibility() == View.GONE) {
+                            Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
+                            JsonObject data = new JsonObject();
+                            data.addProperty("type", TYPE_UPDATE);
+                            data.addProperty("utype", 0);
+                            data.addProperty("version", recentVersion);
+                            aIntent.putExtra("data", data.toString());
+                            startService(aIntent);
+                            textUpdate.setVisibility(View.VISIBLE);
+                            textUpdate.setText(KcaUtils.format(getStringWithLocale(R.string.ma_hasupdate), recentVersion));
                         }
                     }
+                }
 
-                    if (jsonDataObj.has("data_version")) {
-                        String recentVersion = jsonDataObj.get("data_version").getAsString();
-                        if (!compareVersion(currentDataVersion, recentVersion)) { // True if latest
-                            if (textDataUpdate.getVisibility() == View.GONE) {
-                                Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
-                                JsonObject data = new JsonObject();
-                                data.addProperty("type", TYPE_UPDATE);
-                                data.addProperty("utype", 1);
-                                data.addProperty("version", recentVersion);
-                                aIntent.putExtra("data", data.toString());
-                                startService(aIntent);
-                                textDataUpdate.setVisibility(View.VISIBLE);
-                                textDataUpdate.setText(KcaUtils.format(getStringWithLocale(R.string.ma_hasdataupdate), recentVersion));
-                            }
+                if (response_data.has("data_version")) {
+                    String recentVersion = response_data.get("data_version").getAsString();
+                    if (!compareVersion(currentDataVersion, recentVersion)) { // True if latest
+                        if (textDataUpdate.getVisibility() == View.GONE) {
+                            Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
+                            JsonObject data = new JsonObject();
+                            data.addProperty("type", TYPE_UPDATE);
+                            data.addProperty("utype", 1);
+                            data.addProperty("version", recentVersion);
+                            aIntent.putExtra("data", data.toString());
+                            startService(aIntent);
+                            textDataUpdate.setVisibility(View.VISIBLE);
+                            textDataUpdate.setText(KcaUtils.format(getStringWithLocale(R.string.ma_hasdataupdate), recentVersion));
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                if (KcaUtils.checkOnline(getApplicationContext())) {
+                    Toast.makeText(getApplicationContext(),
+                            getStringWithLocale(R.string.sa_checkupdate_servererror),
+                            Toast.LENGTH_LONG).show();
+                    dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "version_check", "", "", t.getMessage());
+                }
+            }
+        });
+    }
+
+    private void downloadGameData() {
+        final Call<String> down_gamedata = downloader.getGameData("recent");
+        down_gamedata.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                String kca_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
+                JsonObject response_data = new JsonObject();
+                try {
+                    if (response.body() != null) {
+                        String server_kca_version = response.headers().get("X-Api-Version");
+                        response_data = new JsonParser().parse(response.body()).getAsJsonObject();
+                        Log.e("KCA", "api_version: " + server_kca_version);
+                        if (kca_version == null || compareVersion(server_kca_version, kca_version)) {
+                            dbHelper.putValue(DB_KEY_STARTDATA, response_data.toString());
+                            KcaApiData.getKcGameData(response_data.getAsJsonObject("api_data"));
+                            KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, server_kca_version);
+                            KcaApiData.setDataLoadTriggered();
+                            Toast.makeText(getApplicationContext(),
+                                    getStringWithLocale(R.string.sa_getupdate_finished),
+                                    Toast.LENGTH_LONG).show();
+                            textDataUpdate.setVisibility(View.GONE);
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    getStringWithLocale(R.string.kca_toast_inconsistent_data),
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(),
-                            getStringWithLocale(R.string.sa_checkupdate_servererror),
+                            "Error: not valid data.",
                             Toast.LENGTH_LONG).show();
+                    dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "download_data", "", "", getStringFromException(e));
                 }
             }
-        }
-    }
 
-    private class getKcaStart2Data extends AsyncTask<Context, String, String> {
-        final String SUCCESS = "S";
-        final String FAILURE = "F";
-        final String ERROR = "E";
-        final String ERROR_SOCKET = "ES";
-        final String NODATA = "N";
-        String error_msg = "";
-        KcaDBHelper dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-        String update_server = KcaUtils.getUpdateServer(getApplicationContext());
-        String checkUrl = KcaUtils.format(getString(R.string.api_start2_recent_version_link), update_server);
-
-        public String getStringWithLocale(int id) {
-            return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(Context... params) {
-            String content = null;
-            try {
-                content = executeClient();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return content;
-        }
-
-        public String executeClient() {
-            OkHttpClient client = new OkHttpClient.Builder().build();
-
-            Request.Builder builder = new Request.Builder().url(checkUrl).get();
-            builder.addHeader("Referer", "app:/KCA/");
-            builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
-            error_msg = "";
-            Request request = builder.build();
-            String result;
-            try {
-                Response response = client.newCall(request).execute();
-                if (response.code() == org.apache.http.HttpStatus.SC_OK) {
-                    String kca_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
-                    String server_kca_version = response.header("X-Api-Version");
-                    if (kca_version == null || compareVersion(server_kca_version, kca_version)) {
-                        String data = response.body().string().trim();
-                        dbHelper.putValue(DB_KEY_STARTDATA, data);
-                        KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
-                        KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, response.header("X-Api-Version"));
-                        KcaApiData.setDataLoadTriggered();
-                        result = SUCCESS;
-                    } else {
-                        result = NODATA;
-                    }
-                } else {
-                    error_msg = response.message();
-                    result = FAILURE;
-                }
-            } catch (SocketTimeoutException e) {
-                error_msg = getStringFromException(e);
-                result = ERROR_SOCKET;
-            } catch (Exception e) {
-                error_msg = getStringFromException(e);
-                result = ERROR;
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            if (s != null) {
-                switch (s) {
-                    case SUCCESS:
-                        Toast.makeText(getApplicationContext(),
-                                getStringWithLocale(R.string.sa_getupdate_finished),
-                                Toast.LENGTH_LONG).show();
-                        textDataUpdate.setVisibility(View.GONE);
-                        break;
-                    case FAILURE:
-                        if (error_msg == null) error_msg = "null";
-                        Toast.makeText(getApplicationContext(),
-                                KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case ERROR_SOCKET:
-                        if (error_msg == null) error_msg = "null";
-                        Toast.makeText(getApplicationContext(),
-                                KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), "Timeout"),
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case ERROR:
-                    case NODATA:
-                        // temoporal message: this situation occured in case of no file in server.
-                        // this will be reverted after server issue fixed.
-                        Toast.makeText(getApplicationContext(),
-                                getStringWithLocale(R.string.kca_toast_inconsistent_data),
-                                Toast.LENGTH_LONG).show();
-                        break;
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                if (KcaUtils.checkOnline(getApplicationContext())) {
+                    Toast.makeText(getApplicationContext(),
+                            KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), t.getMessage()),
+                            Toast.LENGTH_LONG).show();
+                    dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "download_data", "", "", t.getMessage());
                 }
             }
-        }
+        });
     }
 
     @Override

@@ -1,10 +1,8 @@
 package com.antest1.kcanotify;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AppOpsManager;
 import android.app.FragmentManager;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +12,6 @@ import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +19,6 @@ import android.os.Message;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.RingtonePreference;
 import android.provider.Settings;
@@ -36,22 +32,16 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-import static android.R.attr.value;
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static com.antest1.kcanotify.KcaAlarmService.REFRESH_CHANNEL;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
@@ -107,7 +97,6 @@ import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
-import static com.antest1.kcanotify.KcaMoraleInfo.setMinMorale;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -118,6 +107,8 @@ public class SettingActivity extends AppCompatActivity {
     Toolbar toolbar;
     public static Handler sHandler;
     static Gson gson = new Gson();
+    KcaDBHelper dbHelper;
+    public KcaDownloader downloader;
     public static String currentVersion = BuildConfig.VERSION_NAME;
     public static final String TAG = "KCA";
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
@@ -138,6 +129,13 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(KcaUtils.getUpdateServer(getApplicationContext()))
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        downloader = retrofit.create(KcaDownloader.class);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.action_settings));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -160,7 +158,14 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        dbHelper.closeDatabase();
+        super.onDestroy();
+    }
+
     public static class PrefsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
+        public SettingActivity activity;
         public Context context;
 
         public String getStringWithLocale(int id) {
@@ -170,6 +175,7 @@ public class SettingActivity extends AppCompatActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            activity = (SettingActivity) getActivity();
             context = getActivity().getApplicationContext();
             getPreferenceManager().setSharedPreferencesName("pref");
             //SharedPreferences prefs = this.getActivity().getSharedPreferences("pref", MODE_PRIVATE);
@@ -182,7 +188,7 @@ public class SettingActivity extends AppCompatActivity {
                     pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            new getRecentVersion(getActivity(), true).execute();
+                            activity.checkRecentVersion();
                             return false;
                         }
                     });
@@ -191,7 +197,7 @@ public class SettingActivity extends AppCompatActivity {
                     pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference preference) {
-                            new getKcaStart2Data(getActivity()).execute();
+                            activity.downloadGameData();
                             return false;
                         }
                     });
@@ -475,124 +481,56 @@ public class SettingActivity extends AppCompatActivity {
         sHandler = h;
     }
 
-    public static class getRecentVersion extends AsyncTask<Context, String, String> {
-        final String ERROR = "E";
-        final String ERROR_SOCKET = "ES";
 
-        Activity activity;
-        Context context;
-        boolean toastflag;
-        String update_server = "";
-        String checkUrl = "";
-        KcaDBHelper dbHelper;
-
-        public getRecentVersion(Activity a, boolean tf) {
-            activity = a;
-            context = a.getApplicationContext();
-            toastflag = tf;
-            update_server = KcaUtils.getUpdateServer(context);
-            checkUrl = KcaUtils.format(getStringWithLocale(R.string.kcanotify_checkversion_link), update_server);
-            dbHelper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
-        }
-
-        public String error = "";
-        public String getStringWithLocale(int id) {
-            return KcaUtils.getStringWithLocale(activity.getApplicationContext(), activity.getBaseContext(), id);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(Context... params) {
-            String content = null;
-            try {
-                content = executeClient();
-            } catch (Exception e) {
-                error = getStringFromException(e);
-                e.printStackTrace();
-            }
-            return content;
-        }
-
-        public String executeClient() {
-            final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
-            OkHttpClient client = new OkHttpClient.Builder().build();
-            Request.Builder builder = new Request.Builder().url(checkUrl).get();
-            builder.addHeader("Referer", "app:/KCA/");
-            builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
-            Request request = builder.build();
-
-            try {
-                Response response = client.newCall(request).execute();
-                return response.body().string().trim();
-            } catch (SocketTimeoutException e) {
-                e.printStackTrace();
-                error = getStringFromException(e);
-                return ERROR_SOCKET;
-            } catch (Exception e) {
-                e.printStackTrace();
-                error = getStringFromException(e);
-                return "";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (result == null || result.length() == 0) {
-                Toast.makeText(context, getStringWithLocale(R.string.sa_checkupdate_nodataerror), Toast.LENGTH_LONG).show();
-                dbHelper.recordErrorLog(ERROR_TYPE_SETTING, checkUrl, "", "", error);
-            } else if (result.equals(ERROR_SOCKET)) {
-                Toast.makeText(context,
-                        KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), "Timeout"),
-                        Toast.LENGTH_LONG).show();
-            } else if (result.length() > 0) {
-                Log.e("KCA", "Received: " + result);
-                JsonObject jsonDataObj = new JsonObject();
+    private void checkRecentVersion() {
+        String currentVersion = BuildConfig.VERSION_NAME;
+        final Call<String> rv_data = downloader.getRecentVersion();
+        rv_data.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                JsonObject response_data = new JsonObject();
                 try {
-                    StringReader reader = new StringReader(result.trim());
-                    JsonReader jsonReader = new JsonReader(reader);
-                    jsonReader.setLenient(true);
-                    jsonDataObj = new JsonParser().parse(jsonReader).getAsJsonObject();
+                    if (response.body() != null) {
+                        response_data = new JsonParser().parse(response.body()).getAsJsonObject();
+                    }
                 } catch (Exception e) {
-                    // data from server is broken?
+                    dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "version_check", "", "", getStringFromException(e));
                 }
-                if (jsonDataObj.has("version")) {
-                    String recentVersion = jsonDataObj.get("version").getAsString();
+
+                Log.e("KCA", response_data.toString());
+
+                if (response_data.has("version")) {
+                    String recentVersion = response_data.get("version").getAsString();
                     if (compareVersion(currentVersion, recentVersion)) { // True if latest
-                        if (toastflag) {
-                            Toast.makeText(context,
-                                    KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_latest), currentVersion),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    } else if (!activity.isFinishing()) {
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+                        Toast.makeText(getApplicationContext(),
+                                KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_latest), currentVersion),
+                                Toast.LENGTH_LONG).show();
+                    } else if (!isFinishing()) {
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(SettingActivity.this);
                         alertDialog.setMessage(KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
                         alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        String downloadUrl = getStringPreferences(context, PREF_APK_DOWNLOAD_SITE);
+                                        String downloadUrl = getStringPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE);
                                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        if (intent.resolveActivity(context.getPackageManager()) != null) {
-                                            context.startActivity(intent);
+                                        if (intent.resolveActivity(getPackageManager()) != null) {
+                                            startActivity(intent);
                                         } else if (downloadUrl.contains(getStringWithLocale(R.string.app_download_link_playstore))) {
-                                            Toast.makeText(context, "Google Play Store not found", Toast.LENGTH_LONG).show();
-                                            AlertDialog.Builder apkDownloadPathDialog = new AlertDialog.Builder(activity);
+                                            Toast.makeText(getApplicationContext(), "Google Play Store not found", Toast.LENGTH_LONG).show();
+                                            AlertDialog.Builder apkDownloadPathDialog = new AlertDialog.Builder(SettingActivity.this);
                                             apkDownloadPathDialog.setIcon(R.mipmap.ic_launcher);
                                             apkDownloadPathDialog.setTitle(getStringWithLocale(R.string.setting_menu_app_title_down));
                                             apkDownloadPathDialog.setCancelable(true);
                                             apkDownloadPathDialog.setItems(R.array.downloadSiteOptionWithoutPlayStore, new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                                    String[] path_value = context.getResources().getStringArray(R.array.downloadSiteOptionWithoutPlayStoreValue);
-                                                    setPreferences(context, PREF_APK_DOWNLOAD_SITE, path_value[i]);
+                                                    String[] path_value = getResources().getStringArray(R.array.downloadSiteOptionWithoutPlayStoreValue);
+                                                    setPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE, path_value[i]);
                                                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(path_value[i]));
                                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                    context.startActivity(intent);
+                                                    startActivity(intent);
                                                 }
                                             });
                                             apkDownloadPathDialog.show();
@@ -612,125 +550,68 @@ public class SettingActivity extends AppCompatActivity {
                         alert.show();
                     }
                 } else {
-                    Toast.makeText(context,
+                    Toast.makeText(getApplicationContext(),
                             getStringWithLocale(R.string.sa_checkupdate_servererror),
                             Toast.LENGTH_LONG).show();
                 }
             }
-        }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                if (KcaUtils.checkOnline(getApplicationContext())) {
+                    Toast.makeText(getApplicationContext(),
+                            getStringWithLocale(R.string.sa_checkupdate_servererror),
+                            Toast.LENGTH_LONG).show();
+                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "version_check", "", "", t.getMessage());
+                }
+            }
+        });
     }
 
-    private static class getKcaStart2Data extends AsyncTask<Context, String, String> {
-        final String SUCCESS = "S";
-        final String FAILURE = "F";
-        final String ERROR = "E";
-        final String ERROR_SOCKET = "ES";
-        final String NODATA = "N";
-        String error_msg = "";
-
-        Activity activity;
-        Context context;
-        KcaDBHelper dbHelper;
-        String update_server;
-        String dataUrl;
-
-        public getKcaStart2Data(Activity a) {
-            activity = a;
-            context = a.getApplicationContext();
-            dbHelper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
-            update_server = KcaUtils.getUpdateServer(context);
-            dataUrl = KcaUtils.format(getStringWithLocale(R.string.api_start2_recent_version_link), update_server);
-        }
-
-        public String getStringWithLocale(int id) {
-            return KcaUtils.getStringWithLocale(activity.getApplicationContext(), activity.getBaseContext(), id);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(Context... params) {
-            String content = null;
-            try {
-                content = executeClient();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return content;
-        }
-
-        public String executeClient() {
-            OkHttpClient client = new OkHttpClient.Builder().build();
-            Request.Builder builder = new Request.Builder().url(dataUrl).get();
-            builder.addHeader("Referer", "app:/KCA/");
-            builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
-            error_msg = "";
-            Request request = builder.build();
-            String result;
-            try {
-                Response response = client.newCall(request).execute();
-                if (response.code() == org.apache.http.HttpStatus.SC_OK) {
-                    String kca_version = KcaUtils.getStringPreferences(context, PREF_KCA_VERSION);
-                    String server_kca_version = response.header("X-Api-Version");
-                    if (kca_version == null || compareVersion(server_kca_version, kca_version)) {
-                        String data = response.body().string().trim();
-                        dbHelper.putValue(DB_KEY_STARTDATA, data);
-                        KcaApiData.getKcGameData(gson.fromJson(data, JsonObject.class).getAsJsonObject("api_data"));
-                        setPreferences(context, PREF_KCA_DATA_VERSION, server_kca_version);
-                        KcaApiData.setDataLoadTriggered();
-                        result = SUCCESS;
-                    } else {
-                        result = NODATA;
+    private void downloadGameData() {
+        final Call<String> down_gamedata = downloader.getGameData("recent");
+        down_gamedata.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                JsonObject response_data = new JsonObject();
+                try {
+                    if (response.body() != null) {
+                        response_data = new JsonParser().parse(response.body()).getAsJsonObject();
+                        String kca_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
+                        String server_kca_version = response.headers().get("X-Api-Version");
+                        Log.e("KCA", "api_version: " + server_kca_version);
+                        if (kca_version == null || compareVersion(server_kca_version, kca_version)) {
+                            dbHelper.putValue(DB_KEY_STARTDATA, response_data.toString());
+                            KcaApiData.getKcGameData(response_data.getAsJsonObject("api_data"));
+                            KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, server_kca_version);
+                            KcaApiData.setDataLoadTriggered();
+                            Toast.makeText(getApplicationContext(),
+                                    getStringWithLocale(R.string.sa_getupdate_finished),
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    getStringWithLocale(R.string.kca_toast_inconsistent_data),
+                                    Toast.LENGTH_LONG).show();
+                        }
                     }
-                } else {
-                    error_msg = response.message();
-                    result = FAILURE;
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(),
+                            "Error: not valid data.",
+                            Toast.LENGTH_LONG).show();
+                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "download_data", "", "", getStringFromException(e));
                 }
-            } catch (SocketTimeoutException e) {
-                error_msg = getStringFromException(e);
-                result = ERROR_SOCKET;
-            } catch (Exception e) {
-                error_msg = getStringFromException(e);
-                result = ERROR;
             }
-            return result;
-        }
 
-        @Override
-        protected void onPostExecute(String s) {
-            if (s != null) {
-                switch (s) {
-                    case SUCCESS:
-                        Toast.makeText(context,
-                                getStringWithLocale(R.string.sa_getupdate_finished),
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case FAILURE:
-                        if (error_msg == null) error_msg = "null";
-                        Toast.makeText(context,
-                                KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), error_msg),
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case ERROR_SOCKET:
-                        if (error_msg == null) error_msg = "null";
-                        Toast.makeText(context,
-                                KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), "Timeout"),
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    case ERROR:
-                    case NODATA:
-                        // temoporal message: this situation occured in case of no file in server.
-                        // this will be reverted after server issue fixed.
-                        Toast.makeText(context,
-                                getStringWithLocale(R.string.kca_toast_inconsistent_data),
-                                Toast.LENGTH_LONG).show();
-                        break;
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                if (KcaUtils.checkOnline(getApplicationContext())) {
+                    Toast.makeText(getApplicationContext(),
+                            KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), t.getMessage()),
+                            Toast.LENGTH_LONG).show();
+                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "download_data", "", "", t.getMessage());
                 }
             }
-        }
+        });
     }
 
     @Override
@@ -814,7 +695,7 @@ public class SettingActivity extends AppCompatActivity {
             case PREF_KCA_DATA_VERSION:
                 return "R.string.default_gamedata_version";
             case PREF_UPDATE_SERVER:
-                return "R.string.server_swaytwig";
+                return "R.string.server_nova";
             default:
                 return "";
         }

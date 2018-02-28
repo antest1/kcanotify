@@ -48,12 +48,13 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:27.0.2'
-    implementation 'com.android.support:support-v4:27.0.2'
-    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'com.android.support:support-v4:27.1.0'
+    implementation 'com.android.support:design:27.1.0'
     implementation 'com.google.guava:guava:23.0-android'
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
-    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.7.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
     implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     implementation (group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1') {
         exclude group: 'commons-logging', module: 'commons-logging'
