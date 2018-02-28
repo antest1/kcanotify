@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
         textDescription = findViewById(R.id.textDescription);
         Spanned fromHtml = HtmlCompat.fromHtml(getApplicationContext(), main_html, 0);
+        textDescription.setMovementMethod(LinkMovementMethod.getInstance());
         textDescription.setText(fromHtml);
         //Linkify.addLinks(textDescription, Linkify.WEB_URLS);
 
