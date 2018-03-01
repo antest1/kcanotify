@@ -43,24 +43,23 @@
                         android:src="@mipmap/item_6" />
 
                     <TextView
-                        android:text="영식 함상전투기 21형 (숙련)"
+                        android:id="@+id/item1_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item1_name"
                         android:layout_gravity="left|center_vertical"
-                        android:textSize="11dp"
-                        android:layout_marginRight="6dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginRight="3dp"
+                        android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
-                        android:layout_marginEnd="6dp" />
+                        android:textSize="11dp" />
 
                     <TextView
                         android:id="@+id/item1_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center_vertical"
+                        android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
-                        android:paddingBottom="1dp"
-                        android:paddingTop="1dp"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
                         android:textSize="10dp" />
@@ -70,10 +69,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center_vertical"
-                        android:layout_marginRight="4dp"
-                        android:paddingBottom="1dp"
-                        android:paddingTop="1dp"
-                        android:text="@string/alv_6"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginRight="1dp"
+                        android:text="@string/alv_4"
                         android:textColor="@color/itemalv2"
                         android:textSize="10dp" />
                 </LinearLayout>
@@ -99,24 +97,23 @@
                         android:src="@mipmap/item_6" />
 
                     <TextView
-                        android:text="영식 함상전투기 21형 (숙련)"
+                        android:id="@+id/item2_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item2_name"
                         android:layout_gravity="left|center_vertical"
-                        android:textSize="11dp"
-                        android:layout_marginRight="6dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginRight="3dp"
+                        android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
-                        android:layout_marginEnd="6dp" />
+                        android:textSize="11dp" />
 
                     <TextView
                         android:id="@+id/item2_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center_vertical"
+                        android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
-                        android:paddingBottom="1dp"
-                        android:paddingTop="1dp"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
                         android:textSize="10dp" />
@@ -124,12 +121,11 @@
                     <TextView
                         android:id="@+id/item2_alv"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
-                        android:layout_marginRight="4dp"
-                        android:paddingBottom="1dp"
-                        android:paddingTop="1dp"
-                        android:text=">> 7"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginRight="1dp"
+                        android:text="@string/alv_7"
                         android:textColor="@color/itemalv2"
                         android:textSize="10dp" />
                 </LinearLayout>
@@ -155,24 +151,23 @@
                         android:src="@mipmap/item_6" />
 
                     <TextView
-                        android:text="영식 함상전투기 21형 (숙련)"
+                        android:id="@+id/item3_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item3_name"
                         android:layout_gravity="left|center_vertical"
-                        android:textSize="11dp"
-                        android:layout_marginRight="6dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginRight="3dp"
+                        android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
-                        android:layout_marginEnd="6dp" />
+                        android:textSize="11dp" />
 
                     <TextView
                         android:id="@+id/item3_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center_vertical"
+                        android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
-                        android:paddingBottom="1dp"
-                        android:paddingTop="1dp"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
                         android:textSize="10dp" />
@@ -182,10 +177,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center_vertical"
-                        android:layout_marginRight="4dp"
-                        android:paddingBottom="1dp"
-                        android:paddingTop="1dp"
-                        android:text=">> 7"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginRight="1dp"
+                        android:text="@string/alv_7"
                         android:textColor="@color/itemalv2"
                         android:textSize="10dp" />
                 </LinearLayout>
@@ -211,24 +205,23 @@
                         android:src="@mipmap/item_6" />
 
                     <TextView
-                        android:text="영식 함상전투기 21형 (숙련)"
+                        android:id="@+id/item4_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item4_name"
                         android:layout_gravity="left|center_vertical"
-                        android:textSize="11dp"
-                        android:layout_marginRight="6dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginRight="3dp"
+                        android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
-                        android:layout_marginEnd="6dp" />
+                        android:textSize="11dp" />
 
                     <TextView
                         android:id="@+id/item4_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center_vertical"
+                        android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
-                        android:paddingBottom="1dp"
-                        android:paddingTop="1dp"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
                         android:textSize="10dp" />
@@ -238,75 +231,62 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center_vertical"
-                        android:layout_marginRight="4dp"
-                        android:paddingBottom="1dp"
-                        android:paddingTop="1dp"
-                        android:text=">> 7"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginRight="1dp"
+                        android:text="@string/alv_7"
                         android:textColor="@color/itemalv2"
                         android:textSize="10dp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:id="@+id/item5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/item5"
-                    android:visibility="gone"
-                    android:layout_marginBottom="1dp">
+                    android:layout_marginBottom="1dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <ImageView
-                        app:srcCompat="@mipmap/item_6"
                         android:id="@+id/item5_icon"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
-                        android:src="@mipmap/item_6" />
+                        android:src="@mipmap/item_6"
+                        app:srcCompat="@mipmap/item_6" />
 
                     <TextView
-                        android:text="영식 함상전투기 21형 (숙련)"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:id="@+id/item5_name"
-                        android:layout_gravity="left|center_vertical"
-                        android:textSize="11dp"
-                        android:layout_marginRight="6dp"
-                        android:textColor="@color/white"
-                        android:layout_marginEnd="6dp" />
-
-                    <TextView
-                        android:text="+10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginRight="3dp"
+                        android:text="영식 함상전투기 21형 (숙련)"
+                        android:textColor="@color/white"
+                        android:textSize="11dp" />
+
+                    <TextView
                         android:id="@+id/item5_level"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginRight="4dp"
-                        android:background="@color/itemlevel"
-                        android:paddingBottom="1dp"
-                        android:paddingTop="1dp"
-                        android:paddingStart="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingLeft="2dp"
-                        android:paddingEnd="2dp"
-                        android:textColor="@color/white"
-                        android:textSize="8dp" />
-
-                    <TextView
-                        android:text=">> 7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item5_alv"
                         android:layout_gravity="left|center_vertical"
+                        android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
-                        android:paddingBottom="1dp"
-                        android:paddingTop="1dp"
-                        android:paddingStart="3dp"
-                        android:paddingRight="3dp"
-                        android:paddingLeft="3dp"
-                        android:paddingEnd="3dp"
-                        android:background="@color/itemalv2"
-                        android:textColor="@color/white"
-                        android:textSize="8dp" />
+                        android:text="+10"
+                        android:textColor="@color/itemlevel"
+                        android:textSize="10dp" />
+
+                    <TextView
+                        android:id="@+id/item5_alv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginRight="1dp"
+                        android:text="@string/alv_7"
+                        android:textColor="@color/itemalv2"
+                        android:textSize="10dp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -317,128 +297,132 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:layout_marginStart="4dp">
+
                 <TextView
-                    android:text="[34/34]"
-                    android:layout_width="wrap_content"
-                    android:layout_height="15dp"
                     android:id="@+id/item1_slot"
-                    android:layout_gravity="left|center_vertical"
-                    android:textSize="11dp"
-                    android:layout_marginRight="4dp"
-                    android:textColor="@android:color/darker_gray"
-                    android:layout_marginBottom="1dp" />
-                <TextView
-                    android:text="[34/34]"
                     android:layout_width="wrap_content"
                     android:layout_height="15dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginRight="4dp"
+                    android:text="[34/34]"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="11dp" />
+
+                <TextView
                     android:id="@+id/item2_slot"
-                    android:layout_gravity="left|center_vertical"
-                    android:textSize="11dp"
-                    android:layout_marginRight="4dp"
-                    android:textColor="@android:color/darker_gray"
-                    android:layout_marginBottom="1dp" />
-                <TextView
-                    android:text="[34/34]"
                     android:layout_width="wrap_content"
                     android:layout_height="15dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginRight="4dp"
+                    android:text="[34/34]"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="11dp" />
+
+                <TextView
                     android:id="@+id/item3_slot"
-                    android:layout_gravity="left|center_vertical"
-                    android:textSize="11dp"
-                    android:layout_marginRight="4dp"
-                    android:textColor="@android:color/darker_gray"
-                    android:layout_marginBottom="1dp" />
-                <TextView
-                    android:text="[34/34]"
                     android:layout_width="wrap_content"
                     android:layout_height="15dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginRight="4dp"
+                    android:text="[34/34]"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="11dp" />
+
+                <TextView
                     android:id="@+id/item4_slot"
-                    android:layout_gravity="left|center_vertical"
-                    android:textSize="11dp"
-                    android:layout_marginRight="4dp"
-                    android:textColor="@android:color/darker_gray"
-                    android:layout_marginBottom="1dp" />
-                <TextView
-                    android:text="[34/34]"
                     android:layout_width="wrap_content"
                     android:layout_height="15dp"
-                    android:id="@+id/item5_slot"
                     android:layout_gravity="left|center_vertical"
-                    android:textSize="11dp"
+                    android:layout_marginBottom="1dp"
                     android:layout_marginRight="4dp"
+                    android:text="[34/34]"
                     android:textColor="@android:color/darker_gray"
-                    android:visibility="gone"
-                    android:layout_marginBottom="1dp" />
+                    android:textSize="11dp" />
+
+                <TextView
+                    android:id="@+id/item5_slot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginRight="4dp"
+                    android:text="[34/34]"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="11dp"
+                    android:visibility="gone" />
             </LinearLayout>
 
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/view_slot_ex"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/view_slot_ex">
+            android:orientation="vertical">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_gravity="left|clip_vertical"
+                android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp"
+                android:layout_weight="1"
                 android:background="@android:color/darker_gray"
                 android:paddingBottom="0.5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingTop="0dp"
                 android:scaleType="fitXY"
-                android:src="@android:drawable/divider_horizontal_bright"
-                android:layout_gravity="left|clip_vertical"
-                android:layout_weight="1"
-                android:layout_marginBottom="1dp" />
+                android:src="@android:drawable/divider_horizontal_bright" />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:id="@+id/item_ex"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/item_ex"
-                    android:layout_marginBottom="1dp">
+                    android:layout_marginBottom="1dp"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        app:srcCompat="@mipmap/item_6"
                         android:id="@+id/item_ex_icon"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:adjustViewBounds="true"
-                        android:scaleType="fitXY"
                         android:maxHeight="15dp"
                         android:maxWidth="15dp"
-                        android:src="@mipmap/item_6" />
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/item_6"
+                        app:srcCompat="@mipmap/item_6" />
 
                     <TextView
-                        android:text="영식 함상전투기 21형 (숙련)"
+                        android:id="@+id/item_ex_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item_ex_name"
                         android:layout_gravity="left|center_vertical"
-                        android:textSize="11dp"
-                        android:layout_marginRight="6dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginRight="3dp"
+                        android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
-                        android:layout_marginEnd="6dp" />
+                        android:textSize="11dp" />
 
                     <TextView
                         android:id="@+id/item_ex_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center_vertical"
+                        android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
-                        android:paddingBottom="1dp"
-                        android:paddingTop="1dp"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
                         android:textSize="10dp" />

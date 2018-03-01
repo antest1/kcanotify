@@ -378,7 +378,7 @@ public class KcaLandAirBasePopupService extends Service {
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2));
                     } else {
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class)))
-                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                     }
                 }
                 itemView.findViewById(getId("item".concat(String.valueOf(i + 1)), R.id.class)).setVisibility(View.VISIBLE);
