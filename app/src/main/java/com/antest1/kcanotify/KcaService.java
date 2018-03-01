@@ -1760,7 +1760,7 @@ public class KcaService extends Service {
 
                             if (shipId == -2) {
                                 in_change = true;
-                                for (int i = 1; i < 6; i++) {
+                                for (int i = 1; i < targetDeckIdxShipIdata.size(); i++) {
                                     targetDeckIdxShipIdata.set(i, new JsonPrimitive(-1));
                                 }
                             } else if (shipId == -1) { // remove ship
