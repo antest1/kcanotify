@@ -54,38 +54,28 @@
                         android:layout_marginEnd="6dp" />
 
                     <TextView
-                        android:text="+10"
+                        android:id="@+id/item1_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item1_level"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
-                        android:background="@color/itemlevel"
                         android:paddingBottom="1dp"
                         android:paddingTop="1dp"
-                        android:paddingStart="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingLeft="2dp"
-                        android:paddingEnd="2dp"
-                        android:textColor="@color/white"
-                        android:textSize="8dp" />
+                        android:text="+10"
+                        android:textColor="@color/itemlevel"
+                        android:textSize="10dp" />
 
                     <TextView
-                        android:text="@string/alv_6"
+                        android:id="@+id/item1_alv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item1_alv"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:paddingBottom="1dp"
                         android:paddingTop="1dp"
-                        android:paddingStart="3dp"
-                        android:paddingRight="3dp"
-                        android:paddingLeft="3dp"
-                        android:paddingEnd="3dp"
-                        android:background="@color/itemalv2"
-                        android:textColor="@color/white"
-                        android:textSize="8dp" />
+                        android:text="@string/alv_6"
+                        android:textColor="@color/itemalv2"
+                        android:textSize="10dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -120,38 +110,28 @@
                         android:layout_marginEnd="6dp" />
 
                     <TextView
-                        android:text="+10"
+                        android:id="@+id/item2_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item2_level"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
-                        android:background="@color/itemlevel"
                         android:paddingBottom="1dp"
                         android:paddingTop="1dp"
-                        android:paddingStart="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingLeft="2dp"
-                        android:paddingEnd="2dp"
-                        android:textColor="@color/white"
-                        android:textSize="8dp" />
+                        android:text="+10"
+                        android:textColor="@color/itemlevel"
+                        android:textSize="10dp" />
 
                     <TextView
-                        android:text=">> 7"
+                        android:id="@+id/item2_alv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item2_alv"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:paddingBottom="1dp"
                         android:paddingTop="1dp"
-                        android:paddingStart="3dp"
-                        android:paddingRight="3dp"
-                        android:paddingLeft="3dp"
-                        android:paddingEnd="3dp"
-                        android:background="@color/itemalv2"
-                        android:textColor="@color/white"
-                        android:textSize="8dp" />
+                        android:text=">> 7"
+                        android:textColor="@color/itemalv2"
+                        android:textSize="10dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -186,38 +166,28 @@
                         android:layout_marginEnd="6dp" />
 
                     <TextView
-                        android:text="+10"
+                        android:id="@+id/item3_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item3_level"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
-                        android:background="@color/itemlevel"
                         android:paddingBottom="1dp"
                         android:paddingTop="1dp"
-                        android:paddingStart="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingLeft="2dp"
-                        android:paddingEnd="2dp"
-                        android:textColor="@color/white"
-                        android:textSize="8dp" />
+                        android:text="+10"
+                        android:textColor="@color/itemlevel"
+                        android:textSize="10dp" />
 
                     <TextView
-                        android:text=">> 7"
+                        android:id="@+id/item3_alv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item3_alv"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:paddingBottom="1dp"
                         android:paddingTop="1dp"
-                        android:paddingStart="3dp"
-                        android:paddingRight="3dp"
-                        android:paddingLeft="3dp"
-                        android:paddingEnd="3dp"
-                        android:background="@color/itemalv2"
-                        android:textColor="@color/white"
-                        android:textSize="8dp" />
+                        android:text=">> 7"
+                        android:textColor="@color/itemalv2"
+                        android:textSize="10dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -252,38 +222,28 @@
                         android:layout_marginEnd="6dp" />
 
                     <TextView
-                        android:text="+10"
+                        android:id="@+id/item4_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item4_level"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
-                        android:background="@color/itemlevel"
                         android:paddingBottom="1dp"
                         android:paddingTop="1dp"
-                        android:paddingStart="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingLeft="2dp"
-                        android:paddingEnd="2dp"
-                        android:textColor="@color/white"
-                        android:textSize="8dp" />
+                        android:text="+10"
+                        android:textColor="@color/itemlevel"
+                        android:textSize="10dp" />
 
                     <TextView
-                        android:text=">> 7"
+                        android:id="@+id/item4_alv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item4_alv"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:paddingBottom="1dp"
                         android:paddingTop="1dp"
-                        android:paddingStart="3dp"
-                        android:paddingRight="3dp"
-                        android:paddingLeft="3dp"
-                        android:paddingEnd="3dp"
-                        android:background="@color/itemalv2"
-                        android:textColor="@color/white"
-                        android:textSize="8dp" />
+                        android:text=">> 7"
+                        android:textColor="@color/itemalv2"
+                        android:textSize="10dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -472,21 +432,16 @@
                         android:layout_marginEnd="6dp" />
 
                     <TextView
-                        android:text="+10"
+                        android:id="@+id/item_ex_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/item_ex_level"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
-                        android:background="@color/itemlevel"
                         android:paddingBottom="1dp"
                         android:paddingTop="1dp"
-                        android:paddingStart="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingLeft="2dp"
-                        android:paddingEnd="2dp"
-                        android:textColor="@color/white"
-                        android:textSize="8dp" />
+                        android:text="+10"
+                        android:textColor="@color/itemlevel"
+                        android:textSize="10dp" />
 
                 </LinearLayout>
             </LinearLayout>

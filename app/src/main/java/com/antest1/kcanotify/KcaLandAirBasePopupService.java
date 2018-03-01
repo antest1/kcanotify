@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -164,6 +165,7 @@ public class KcaLandAirBasePopupService extends Service {
         super.onDestroy();
     }
 
+    @SuppressLint("HandlerLeak")
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             LinearLayout view_list = mView.findViewById(R.id.view_lab_list);
@@ -241,6 +243,7 @@ public class KcaLandAirBasePopupService extends Service {
                         ImageView iconView = v.findViewById(getId(KcaUtils.format("lab_icon%d", j + 1), R.id.class));
                         if (state > 0) {
                             int typeres = 0;
+                            int cond = plane.get("api_cond").getAsInt();
                             int slotid = plane.get("api_slotid").getAsInt();
                             JsonObject itemData = getUserItemStatusById(slotid, "id", "type");
                             int itemType = itemData.get("type").getAsJsonArray().get(3).getAsInt();
@@ -252,11 +255,16 @@ public class KcaLandAirBasePopupService extends Service {
                             iconView.setImageResource(typeres);
                             if (state == 2) {
                                 iconView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsPlaneInChange), PorterDuff.Mode.OVERLAY);
+                            } else if (cond == 3) {
+                                iconView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2), PorterDuff.Mode.OVERLAY);
+                            } else if (cond == 2) {
+                                iconView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue1), PorterDuff.Mode.OVERLAY);
                             } else {
                                 iconView.clearColorFilter();
                             }
                         } else {
                             empty_count += 1;
+                            iconView.clearColorFilter();
                             iconView.setImageResource(R.mipmap.item_0);
                         }
                     }
@@ -327,8 +335,8 @@ public class KcaLandAirBasePopupService extends Service {
                     ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)))
                             .setText(getStringWithLocale(getId(KcaUtils.format("alv_%d", alv), R.string.class)));
                     int alvColorId = (alv <= 3) ? 1 : 2;
-                    itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class))
-                            .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), getId(KcaUtils.format("itemalv%d", alvColorId), R.color.class)));
+                    ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), getId(KcaUtils.format("itemalv%d", alvColorId), R.color.class)));
                     itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.VISIBLE);
                 } else {
                     itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.GONE);
@@ -358,6 +366,21 @@ public class KcaLandAirBasePopupService extends Service {
                 }
                 ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class))).setText(kcItemName);
                 ((ImageView) itemView.findViewById(getId(KcaUtils.format("item%d_icon", i + 1), R.id.class))).setImageResource(typeres);
+
+                if (item.has("api_cond")) {
+                    int cond = item.get("api_cond").getAsInt();
+                    if (cond == 2) {
+                        ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class)))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue1));
+                    }
+                    else if (cond == 3) {
+                        ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class)))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2));
+                    } else {
+                        ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class)))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+                    }
+                }
                 itemView.findViewById(getId("item".concat(String.valueOf(i + 1)), R.id.class)).setVisibility(View.VISIBLE);
             }
         }
