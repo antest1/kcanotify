@@ -122,11 +122,7 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(KcaUtils.getUpdateServer(getApplicationContext()))
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        downloader = retrofit.create(KcaDownloader.class);
+        downloader = KcaUtils.getDewnloader(getApplicationContext());
 
         kcIntent = getKcIntent(getApplicationContext());
         is_kca_installed = (kcIntent != null);

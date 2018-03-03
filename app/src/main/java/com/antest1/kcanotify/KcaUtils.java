@@ -50,8 +50,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.R.attr.data;
 import static android.R.attr.min;
@@ -470,6 +475,20 @@ public class KcaUtils {
         } else {
             return "ori_h_";
         }
+    }
+
+    public static KcaDownloader getDewnloader(Context context){
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(1, TimeUnit.MINUTES)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(KcaUtils.getUpdateServer(context))
+                .client(okHttpClient)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        return retrofit.create(KcaDownloader.class);
     }
 
     public static boolean checkOnline(Context context) {

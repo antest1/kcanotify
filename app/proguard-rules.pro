@@ -29,6 +29,7 @@
 -dontwarn org.slf4j.**
 -dontwarn com.google.**
 
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 -keepclassmembernames,allowobfuscation interface * {
     @retrofit2.http.* <methods>;
 }
@@ -37,6 +38,7 @@
 
 -dontwarn javax.annotation.**
 -dontwarn javax.inject.**
+-dontwarn org.conscrypt.**
 
 -dontwarn org.apache.commons.**
 -keep class org.apache.http.** { *; }

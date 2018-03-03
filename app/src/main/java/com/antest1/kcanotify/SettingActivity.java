@@ -130,11 +130,7 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(KcaUtils.getUpdateServer(getApplicationContext()))
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        downloader = retrofit.create(KcaDownloader.class);
+        downloader = KcaUtils.getDewnloader(getApplicationContext());
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.action_settings));

@@ -59,6 +59,7 @@ dependencies {
     implementation (group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1') {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
     implementation 'com.pixplicity.htmlcompat:library:1.1.1'
     implementation 'ch.acra:acra-mail:5.1.1'
