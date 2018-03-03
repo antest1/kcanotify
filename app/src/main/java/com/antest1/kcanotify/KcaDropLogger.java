@@ -100,6 +100,10 @@ public class KcaDropLogger extends SQLiteOpenHelper {
                             rankcond.add(KcaUtils.format("%s=\"%s\"", key, rank));
                         }
                         where_conds.add(KcaUtils.format("(%s)", KcaUtils.joinStr(rankcond, " OR ")));
+                    } else if (key.equals("maprank")) {
+                        if (Integer.parseInt(value) > 0) {
+                            where_conds.add(KcaUtils.format("%s=%s", key, value));
+                        }
                     } else {
                         where_conds.add(KcaUtils.format("%s=%s", key, value));
                     }

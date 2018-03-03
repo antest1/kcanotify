@@ -271,7 +271,7 @@ public class DropLogActivity extends AppCompatActivity {
     }
 
     public void setListView() {
-        Toast.makeText(getApplicationContext(), condition_data.toString(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), condition_data.toString(), Toast.LENGTH_LONG).show();
         adapter.setListViewItemList(dropLogger.getDropLogWithCondition(condition_data), 0);
         droplog_listview.setAdapter(adapter);
         row_count.setText(KcaUtils.format(getStringWithLocale(R.string.droplog_total_format), adapter.getCount()));
