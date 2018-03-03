@@ -143,10 +143,10 @@
     <string name="setting_menu_kand_head">Kcanotify設定</string>
     <string name="setting_menu_kand_title_saku_cal">索敵計算式</string>
     <string name="setting_menu_kand_title_exp_realtime_show">遠征の残り時間を表示</string>
-    <string name="setting_menu_kand_desc_exp_realtime_show">ノーティバーで遠征の時間情報を表示</string>
+    <string name="setting_menu_kand_desc_exp_realtime_show">通知バーで遠征の時間情報を表示</string>
     <string name="setting_menu_kand_title_exp_type">遠征時間の表示タイプ</string>
-    <string name="setting_menu_kand_title_set_noti_priority">ノーティバーのプライオリティを高く設定</string>
-    <string name="setting_menu_kand_desc_set_noti_priority">ノーティバーを常に上に表示する</string>
+    <string name="setting_menu_kand_title_set_noti_priority">通知バーのプライオリティを高く設定</string>
+    <string name="setting_menu_kand_desc_set_noti_priority">通知バーを常に上に表示する</string>
     <string name="setting_menu_kand_title_game_data_down">ゲームデータをダウンロード</string>
     <string name="setting_menu_kand_desc_game_data_down">ゲームデータがロードされない場合に使用</string>
     <string name="setting_menu_kand_title_fleetview_button_order">艦隊情報メニュー順序</string>
@@ -193,8 +193,8 @@
     <string name="setting_menu_noti_desc_disable_customtoast">マス情報や大破通知が表示されないときに有効にしてください。</string>
 
     <string name="setting_menu_stat_head">通計プラグイン設定</string>
-    <string name="setting_menu_stat_title_opendb">OpenDBに通計を送信</string>
-    <string name="setting_menu_stat_title_poidb">poi-statisticsに通計を送信</string>
+    <string name="setting_menu_stat_title_opendb">OpenDBに統計を送信</string>
+    <string name="setting_menu_stat_title_poidb">poi-statisticsに統計を送信</string>
 
     <string name="setting_menu_app_head">アプリケーション情報</string>
     <string name="setting_menu_app_title_current">現在アプリバージョン</string>
