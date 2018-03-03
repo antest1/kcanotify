@@ -22,10 +22,6 @@ Download
 - [MEGA](https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw) (All versions)
 - [百度云](http://pan.baidu.com/s/1i5f37Rv) (Password: c2in)
 
-**※ For users using before version 2.4 rev4**
-
-For 2.4 rev4, App signing key for kcanotify was changed to make compatible with google play store app.  For this reason, update may fail when trying to update from version below 2.4 rev3. In this case, please delete existing application and re-install the newest version.
-
 Demo
 -------
 [![Youtube](https://img.youtube.com/vi/ZEAor_9jsaM/0.jpg)](https://www.youtube.com/watch?v=ZEAor_9jsaM)
@@ -41,7 +37,7 @@ Main Features
 - BattleView (predicts battle result)
 - QuestView (quest translation, show quest progress)
 - Akashi's improvement arsenal
-- Ship list, Equipment list, EXP calculator, Expedition list
+- Ship list, Equipment list, EXP calculator, Expedition list, ...
 - Sending statistics to OpenDB and poi-statistics (optional)
 
 Language
@@ -77,12 +73,6 @@ I can speak Korean and English, and I can understand Japanese (but not good at w
 **※ For non-supported locale, English is the default language.**
 
 E-mail: kcanotify@gmail.com
-
-Donate
--------
-※ All the features of the Kcanotify are free. No advertisement!
-
-BTC: 1K8wNaLkU1mmZaHEBY8eermUoKW7MZHNYu
 
 License
 -------
