@@ -243,7 +243,8 @@ public class KcaLandAirBasePopupService extends Service {
                         ImageView iconView = v.findViewById(getId(KcaUtils.format("lab_icon%d", j + 1), R.id.class));
                         if (state > 0) {
                             int typeres = 0;
-                            int cond = plane.get("api_cond").getAsInt();
+                            int cond = 1;
+                            if (plane.has("api_cond")) plane.get("api_cond").getAsInt();
                             int slotid = plane.get("api_slotid").getAsInt();
                             JsonObject itemData = getUserItemStatusById(slotid, "id", "type");
                             int itemType = itemData.get("type").getAsJsonArray().get(3).getAsInt();
