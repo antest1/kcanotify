@@ -1583,8 +1583,10 @@ public class KcaService extends Service {
                                                 break;
                                             case T2_FIGHTER:
                                                 questTracker.updateIdCountTracker("675", 0);
+                                                break;
                                             case T2_SEA_SCOUT:
                                                 questTracker.updateIdCountTracker("677", 1);
+                                                break;
                                             case T2_MACHINE_GUN:
                                                 questTracker.updateIdCountTracker("638");
                                                 questTracker.updateIdCountTracker("674");
