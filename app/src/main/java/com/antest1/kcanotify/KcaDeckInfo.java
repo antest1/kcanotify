@@ -643,16 +643,18 @@ public class KcaDeckInfo {
                 JsonObject data = new JsonObject();
                 int shipId = deckShipIdList.get(i).getAsInt();
                 if (shipId != -1) {
-                    int shipKcId;
+                    int shipKcId = -1;
                     JsonObject shipData = getUserShipDataById(shipId, request_list);
                     data.add("user", shipData);
                     if (shipData.has("api_ship_id")) {
                         shipKcId = shipData.get("api_ship_id").getAsInt();
-                    } else {
+                    } else if (shipData.has("ship_id")) {
                         shipKcId = shipData.get("ship_id").getAsInt();
                     }
-                    data.add("kc", getKcShipDataById(shipKcId, kc_request_list));
-                    deckListInfo.add(data);
+                    if (shipKcId != -1) {
+                        data.add("kc", getKcShipDataById(shipKcId, kc_request_list));
+                        deckListInfo.add(data);
+                    }
                 }
             }
         }
