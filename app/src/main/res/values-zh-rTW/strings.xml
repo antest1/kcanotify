@@ -560,6 +560,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="errlog_cpy_to_clipboard">已複製文本到剪貼板</string>
     <string name="expedition_type_value_0">剩下時間</string>
     <string name="expedition_type_value_1">結束時間</string>
+    <string name="expedition_type_value_2">經過時間</string>
     <string name="fleetcheckview_title">艦隊詳細</string>
     <string name="fleetcheckview_btn_seeklos">索敵/輸送</string>
     <string name="fleetcheckview_content_seeklos" formatted="false">艦隊索敵值加總: %d\n33式/分歧係數1: %.2f (2&#45;5, 33+)\n33式/分歧係數3: %.2f (6&#45;2, 6&#45;3)\n33式/分歧係數4: %.2f (3&#45;5, 6&#45;1)\n───────────────\nTP 運輸搭載量:\n%d(S) /%d(A)</string>

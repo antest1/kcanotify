@@ -779,6 +779,17 @@ public class KcaApiData {
         }
     }
 
+    public static long getExpeditionDuration(int mission_no) {
+        int mission_key = mission_no;
+        if (mission_no >= 130) {
+            if (mission_no % 2 == 1) mission_key = 133;
+            else mission_key = 134;
+        }
+        JsonObject data = kcExpeditionData.getAsJsonObject(String.valueOf(mission_key));
+        int time = data.get("time").getAsInt();
+        return (long) (time * 60 * 1000);
+    }
+
     // warning: event support expedition will not work with this
     public static int getExpeditionNoByName(String name) {
         for(Map.Entry<String, JsonElement> v: kcExpeditionData.entrySet()) {

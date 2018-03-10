@@ -560,6 +560,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="errlog_cpy_to_clipboard">已複製文本到剪贴板</string>
     <string name="expedition_type_value_0">剩下时间</string>
     <string name="expedition_type_value_1">结束时间</string>
+    <string name="expedition_type_value_2">经过时间</string>
     <string name="fleetcheckview_title">舰队详细</string>
     <string name="fleetcheckview_btn_seeklos">索敌/输送</string>
     <string name="fleetcheckview_content_seeklos" formatted="false">舰队索敌值加总: %d\n33式/1: %.2f (2&#45;5, 33+)\n33式/3: %.2f (6&#45;2, 6&#45;3)\n33式/4: %.2f (3&#45;5, 6&#45;1)\n───────────────\nTP 运输搭载量:\n%d(S) /%d(A)</string>

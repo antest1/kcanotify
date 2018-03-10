@@ -554,6 +554,7 @@
     <string name="viewmenu_excheck">遠征</string>
     <string name="expedition_type_value_0">残り時間</string>
     <string name="expedition_type_value_1">終了時間</string>
+    <string name="expedition_type_value_2">経過時間</string>
     <string name="fleetcheckview_title">艦隊詳細</string>
     <string name="fleetcheckview_btn_seeklos">索敵/輸送</string>
     <string name="fleetcheckview_content_seeklos" formatted="false">艦隊総索敵: %d\n33式: %.2f (2&#45;5, 33必須)\n33式/3倍: %.2f (6&#45;2, 6&#45;3)\n33式/4倍: %.2f (3&#45;5, 6&#45;1)\n───────────────\n輸送総量:\n%d(S勝利)/%d(A勝利)</string>

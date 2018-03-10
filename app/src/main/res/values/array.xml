@@ -80,11 +80,13 @@
     <string-array name="expeditionTypeOption">
         <item>@string/expedition_type_value_0</item>
         <item>@string/expedition_type_value_1</item>
+        <item>@string/expedition_type_value_2</item>
     </string-array>
 
     <string-array name="expeditionTypeOptionValue" translatable="false">
         <item >0</item>
         <item >1</item>
+        <item >2</item>
     </string-array>
 
     <string-array name="ServerLocation" translatable="false">

@@ -81,11 +81,26 @@ public class KcaExpedition2 {
         }
     }
 
+    public static String getSpentTimeStr(int idx) {
+        if (complete_time_check[idx] == -1) return "";
+        else {
+            long current_time = System.currentTimeMillis();
+            long arrive_time = complete_time_check[idx];
+            int current_mission_no = mission_no[idx];
+            long duration = KcaApiData.getExpeditionDuration(current_mission_no);
+            long start_time = arrive_time - duration;
+
+            int pass_time = (int) (System.currentTimeMillis() - start_time) / 1000;
+            String mission_no_head = getExpeditionHeader(mission_no[idx]);
+            return mission_no_head.concat(getTimeStr(pass_time));
+        }
+    }
+
     public static String getEndTimeStr(int idx) {
         if (complete_time_check[idx] == -1) return "";
         else {
             long arrive_time = complete_time_check[idx] - ALARM_DELAY;
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
             String mission_no_head = getExpeditionHeader(mission_no[idx]);
             return mission_no_head.concat(sdf.format(new Date(arrive_time)));
@@ -93,10 +108,13 @@ public class KcaExpedition2 {
     }
 
     public static String getTimeInfoStr(int idx, int type) {
-        if (type == 1) {
-            return getEndTimeStr(idx);
-        } else {
-            return getLeftTimeStr(idx);
+        switch (type) {
+            case 2:
+                return getSpentTimeStr(idx);
+            case 1:
+                return getEndTimeStr(idx);
+            default:
+                return getLeftTimeStr(idx);
         }
     }
 
