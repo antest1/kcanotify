@@ -190,6 +190,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_view_desc_drop_visible">于预知战报中显示掉落舰娘的名称</string>
     <string name="setting_menu_view_title_questview_use">任务浏览</string>
     <string name="setting_menu_view_desc_questview_use">显示任务内容与翻译</string>
+    <string name="setting_menu_view_title_show_constrship">显示建造中的船舰名称</string>
+    <string name="setting_menu_view_desc_show_constrship">于舰队信息中显示建造中的船舰名称</string>
 
     <string name="setting_menu_noti_head">通知设定</string>
     <string name="setting_menu_noti_title_exp">远征</string>

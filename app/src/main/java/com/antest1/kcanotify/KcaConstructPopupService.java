@@ -40,8 +40,11 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_KDOCKDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_INFO;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
+import static com.antest1.kcanotify.KcaConstants.PREF_SHOW_CONSTRSHIP_NAME;
+import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
 public class KcaConstructPopupService extends Service {
@@ -163,6 +166,7 @@ public class KcaConstructPopupService extends Service {
 
     final Handler handler = new Handler()  {
         public void handleMessage(Message msg) {
+            boolean ship_shipname = getBooleanPreferences(getApplicationContext(), PREF_SHOW_CONSTRSHIP_NAME);
             JsonArray api_kdock = dbHelper.getJsonArrayValue(DB_KEY_KDOCKDATA);
             if (api_kdock != null) {
                 for (int i = 0; i<api_kdock.size(); i++) {
@@ -174,7 +178,11 @@ public class KcaConstructPopupService extends Service {
                         int ship_id = item.get("api_created_ship_id").getAsInt();
                         if (ship_id > 0) {
                             JsonObject shipdata = KcaApiData.getKcShipDataById(item.get("api_created_ship_id").getAsInt(), "name");
-                            nameview.setText(KcaApiData.getShipTranslation(shipdata.get("name").getAsString(), false));
+                            if (ship_shipname) {
+                                nameview.setText(KcaApiData.getShipTranslation(shipdata.get("name").getAsString(), false));
+                            } else {
+                                nameview.setText("？？？");
+                            }
                             timeview.setText(getLeftTimeStr(item.get("api_complete_time").getAsLong()));
                         } else {
                             nameview.setText("-");

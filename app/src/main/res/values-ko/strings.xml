@@ -160,7 +160,7 @@
     <string name="setting_menu_kand_title_record_resourcelog">자원 기록 기능 활성화</string>
     <string name="record_storage_warning">내부 저장공간의 일부를 차지합니다.</string>
 
-    <string name="setting_menu_view_head">권한 및 전투예보 설정</string>
+    <string name="setting_menu_view_head">권한 및 기능 설정</string>
     <string name="setting_menu_view_title_accessibility_setting">접근성 설정</string>
     <string name="setting_menu_view_desc_accessibility_setting">서비스에서 시제 깡들리티 선택 (칸코레 감지를 위해 필요)</string>
     <string name="setting_menu_view_title_overlay_setting">화면 오버레이 설정</string>
@@ -173,6 +173,8 @@
     <string name="setting_menu_view_desc_drop_visible">전투예보에서 드랍된 칸무스 이름 표시</string>
     <string name="setting_menu_view_desc_questview_use">임무 화면에서 임무 번역 및 정보 표시</string>
     <string name="setting_menu_view_title_questview_use">임무번역 사용</string>
+    <string name="setting_menu_view_title_show_constrship">건조 중인 칸무스 이름 표시</string>
+    <string name="setting_menu_view_desc_show_constrship">함대정보에서 건조 독에 있는 칸무스를 표시</string>
 
     <string name="setting_menu_noti_head">알림 설정</string>
     <string name="setting_menu_noti_title_alarm_delay">타이머 여유 (초)</string>

@@ -216,7 +216,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_button_order_change_when_restart">Restart service to apply the change.</string>
     <string name="record_storage_warning">Takes up some of device\'s storage space.</string>
 
-    <string name="setting_menu_view_head">Permission/BattleView Settings</string>
+    <string name="setting_menu_view_head">Permission/Function Settings</string>
     <string name="setting_menu_view_title_accessibility_setting">Accessibility Settings</string>
     <string name="setting_menu_view_desc_accessibility_setting">Select Kcanotify from Services. (required for detect kancolle app)</string>
     <string name="setting_menu_view_title_overlay_setting">Screen Overlay Settings</string>
@@ -229,6 +229,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_view_desc_drop_visible">Show dropped ship name in BattleView</string>
     <string name="setting_menu_view_title_questview_use">Use QuestView</string>
     <string name="setting_menu_view_desc_questview_use">Display quest translation and information.</string>
+    <string name="setting_menu_view_title_show_constrship">Show Name of Ship in Construction</string>
+    <string name="setting_menu_view_desc_show_constrship">Display the name of the ship in construction by FleetView.</string>
 
     <string name="setting_menu_noti_head">Notification Settings</string>
     <string name="setting_menu_noti_title_alarm_delay">Timer Allowance (sec)</string>

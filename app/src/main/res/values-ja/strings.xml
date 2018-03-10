@@ -156,7 +156,7 @@
     <string name="setting_menu_kand_title_record_resourcelog">資源記録機能を使用</string>
     <string name="record_storage_warning">内部ストレージの一部を使用します</string>
 
-    <string name="setting_menu_view_head">権限/戦闘予報設定</string>
+    <string name="setting_menu_view_head">権限/機能設定</string>
     <string name="setting_menu_view_title_accessibility_setting">アクセシビリティ(ユーザー補助)設定</string>
     <string name="setting_menu_view_desc_accessibility_setting">サービスでKcanotifyを選択 (艦これの動作を検出するために必要)</string>
     <string name="setting_menu_view_title_overlay_setting">画面オーバーレイ設定</string>
@@ -169,6 +169,8 @@
     <string name="setting_menu_view_desc_drop_visible">戦闘予報でドロップされた艦娘の名前を見る</string>
     <string name="setting_menu_view_desc_questview_use">任務画面で任務の翻訳や攻略情報を表示する</string>
     <string name="setting_menu_view_title_questview_use">任務情報を使う</string>
+    <string name="setting_menu_view_title_show_constrship">建造中の艦娘の名前を表示</string>
+    <string name="setting_menu_view_desc_show_constrship">艦隊情報で建造中の艦娘をネタバレする</string>
 
     <string name="setting_menu_noti_head">通知設定</string>
     <string name="setting_menu_noti_title_alarm_delay">タイマー調整（秒）</string>

@@ -418,6 +418,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_ACTIVATE_DROPLOG = "activate_droplog";
     public static final String PREF_KCA_ACTIVATE_RESLOG = "activate_resourcelog";
     public static final String PREF_FV_MENU_ORDER = "fleetview_menu_order";
+    public static final String PREF_SHOW_CONSTRSHIP_NAME = "show_constrship_name";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -461,7 +462,8 @@ public final class KcaConstants {
             PREF_EQUIPINFO_FILTCOND,
             PREF_KCA_ACTIVATE_DROPLOG,
             PREF_KCA_ACTIVATE_RESLOG,
-            PREF_FV_MENU_ORDER
+            PREF_FV_MENU_ORDER,
+            PREF_SHOW_CONSTRSHIP_NAME
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
@@ -485,7 +487,8 @@ public final class KcaConstants {
             PREF_KCA_NOTI_MORALE,
             PREF_KCA_NOTI_AKASHI,
             PREF_KCA_ACTIVATE_DROPLOG,
-            PREF_KCA_ACTIVATE_RESLOG
+            PREF_KCA_ACTIVATE_RESLOG,
+            PREF_SHOW_CONSTRSHIP_NAME
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

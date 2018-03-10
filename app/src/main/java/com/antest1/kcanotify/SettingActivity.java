@@ -94,6 +94,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_POIDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
+import static com.antest1.kcanotify.KcaConstants.PREF_SHOW_CONSTRSHIP_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
@@ -648,6 +649,7 @@ public class SettingActivity extends AppCompatActivity {
             case PREF_DISABLE_CUSTOMTOAST:
             case PREF_FAIRY_AUTOHIDE:
             case PREF_KCA_NOTI_AKASHI:
+            case PREF_SHOW_CONSTRSHIP_NAME:
                 return "boolean_false";
             case PREF_KCA_EXP_VIEW:
             case PREF_KCA_NOTI_NOTIFYATSVCOFF:
