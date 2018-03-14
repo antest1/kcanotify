@@ -569,4 +569,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetcheckview_btn_airbattle">航空戰</string>
     <string name="fleetcheckview_content_airbattle" formatted="false">制空總值: %d ~ %d\n───────────────\n接觸成功機率\n[AS+] 開始率: %.1f%%, 選擇率: %.1f%%\n[AS] 開始率: %.1f%%, 選擇率: %.1f%%\n</string>
     <string name="fleetcheckview_btn_fuelbull">燃弾</string>
+    <string name="setting_menu_kand_title_socks5_enable">啟用SOCKS5代理</string>
 </resources>

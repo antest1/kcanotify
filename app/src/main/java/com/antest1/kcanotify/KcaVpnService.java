@@ -561,15 +561,19 @@ public class KcaVpnService extends VpnService {
         int prio = Log.ERROR;
         int rcode = 3;
         SharedPreferences prefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        boolean enable = prefs.getBoolean("socks5_enable", false);
         String addr = prefs.getString("socks5_address", "");
         String portNum = prefs.getString("socks5_port", "0");
         int port = 0;
         if (!portNum.equals(""))
             port = Integer.parseInt(portNum);
-        if (addr.equals("") || port == 0)
-            jni_socks5("", 0, "", "");
-        else
+        if (enable && !(addr.equals("") || port == 0)) {
+            Log.i(TAG, String.format("Proxy enabled, with address %s and port %d", addr, port));
             jni_socks5(addr, port, "", "");
+        } else {
+            Log.i(TAG, "Proxy disabled");
+            jni_socks5("", 0, "", "");
+        }
         jni_start(vpn.getFd(), true, rcode, prio);
     }
 
