@@ -20,7 +20,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="dialog_ok">确认</string>
     <string name="dialog_cancel">取消</string>
 
-    <string name="error_text">发生错误，请联繫开发人员。</string>
+    <string name="error_text">发生错误，请联系开发人员。</string>
 
     <string name="heavy_damaged">有舰娘大破！</string>
     <string name="heavy_damaged_damecon">有舰娘大破！（紧急修理可用）</string>
@@ -85,11 +85,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_checkupdate_hasupdate" formatted="false">有可用的更新。 (%s)\nDo 请问你想下载吗？</string>
     <string name="sa_checkupdate_dialogtitle">检查更新</string>
     <string name="sa_checkupdate_nodataerror">检查更新时出现问题</string>
-    <string name="sa_checkupdate_servererror">更新伺服器出现错误</string>
+    <string name="sa_checkupdate_servererror">更新服务器出现错误</string>
 
     <string name="sa_getupdate_finished">游戏资料全数下载完成</string>
     <string name="sa_getupdate_started">下载游戏资料&#8230;</string>
-    <string name="sa_getupdate_servererror" formatted="false">伺服器出错: %s</string>
+    <string name="sa_getupdate_servererror" formatted="false">服务器出错: %s</string>
     <string name="sa_getupdate_ioexceptionerror">保存数据时出现错误</string>
 
     <string name="sa_overlay_under_m">Android 6.0以下版本可以跳过该设定</string>
@@ -145,7 +145,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_view_normal_format" formatted="false">%s 运作中 %s</string>
     <string name="kca_view_context_expand">向下滑动以显示资料</string>
     <string name="kca_view_noexpedition">没有进行中的远征。</string>
-    <string name="kca_view_expedition_header">剩馀时间：</string>
+    <string name="kca_view_expedition_header">剩余时间：</string>
 
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">Kcanotify设定</string>
@@ -164,10 +164,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_fairy_auto_hide">使妖精只显示在舰これ屏幕上</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">在显示/隐藏妖精时有短暂的延迟</string>
     <string name="current_fairy_changed_in_next">※妖精会于战斗剧透/任务浏览结束后更换</string>
-    <string name="setting_menu_kand_title_adv_network">进阶网路设定</string>
+    <string name="setting_menu_kand_title_adv_network">高级网络设置</string>
     <string name="setting_menu_kand_warn_adv_network">警告：错误的设定可能会让VPN失效。请在你清楚确定每个选项的作用时更改设定！更改设定后你需要重新启用VPN来使设定生效</string>
-    <string name="setting_menu_kand_title_socks5_address">SOCKS5代理伺服器位址</string>
-    <string name="setting_menu_kand_title_socks5_port">SOCKS5代理伺服器埠</string>
+    <string name="setting_menu_kand_title_socks5_enable">启用SOCKS5代理</string>
+    <string name="setting_menu_kand_title_socks5_address">SOCKS5代理服务器地址</string>
+    <string name="setting_menu_kand_title_socks5_port">SOCKS5代理服务器端口</string>
     <string name="settings_menu_kand_title_bypass_address">绕行地址（代理）</string>
     <string name="setting_menu_kand_desc_bypass_address">使用CIDR来叙述代理的地址，使用逗号来分隔各个CIDR。</string>
     <string name="setting_menu_kand_title_record_droplog">记录掉落日志</string>
@@ -433,7 +434,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="equipinfo_summary" formatted="false">合计 %d（%d 装备中, %d 閒置）</string>
     <string name="equipinfo_filter">过滤</string>
 
-    <string name="action_expcalc">经験値计算机</string>
+    <string name="action_expcalc">经验值计算器</string>
     <string name="expcalc_shipname">舰娘</string>
     <string name="expcalc_currentlv">现在等级</string>
     <string name="expcalc_targetlv">目标等级</string>
@@ -442,7 +443,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expcalc_flagship">旗舰</string>
     <string name="expcalc_mvp">MVP</string>
     <string name="expcalc_mapexp">海域经验值</string>
-    <string name="expcalc_remainexp">剩馀经验值</string>
+    <string name="expcalc_remainexp">剩余经验值</string>
 
     <string name="action_expdtable">远征资讯</string>
     <string name="expdtable_btn_w0">所有海域</string>
@@ -484,7 +485,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="droplog_sort_asc">升序</string>
     <string name="droplog_sort_desc">降序</string>
 
-    <string name="action_reslog">資源記録</string>
+    <string name="action_reslog">资源记录</string>
     <string name="reslog_label_date">日期</string>
     <string name="reslog_label_interval">间隔</string>
     <string name="reslog_interval_1hour">1小时</string>
@@ -499,7 +500,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="reslog_interval_day">日</string>
     <string name="reslog_interval_week">周</string>
     <string name="reslog_interval_month">月</string>
-    <string name="reslog_label_resource">資源</string>
+    <string name="reslog_label_resource">资源</string>
     <string name="reslog_label_consumable">消耗品</string>
 
     <string name="fleetview_title">舰队信息</string>
@@ -557,9 +558,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="labinfoview_status_rest">休息</string>
     <string name="labinfoview_fp_format" formatted="false">制空 %d</string>
     <string name="labinfoview_dist_format" formatted="false">作战半径 %d</string>
-    <string name="action_errorlog">错误日誌</string>
-    <string name="errlog_dialog_message">你想清空所有错误日誌吗？</string>
-    <string name="errlog_cpy_to_clipboard">已複製文本到剪贴板</string>
+    <string name="action_errorlog">错误日志</string>
+    <string name="errlog_dialog_message">你想清空所有错误日志吗？</string>
+    <string name="errlog_cpy_to_clipboard">已复制文本到剪贴板</string>
     <string name="expedition_type_value_0">剩下时间</string>
     <string name="expedition_type_value_1">结束时间</string>
     <string name="expedition_type_value_2">经过时间</string>

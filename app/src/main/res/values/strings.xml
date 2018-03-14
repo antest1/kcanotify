@@ -628,4 +628,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetcheckview_btn_airbattle">Air Battle</string>
     <string name="fleetcheckview_content_airbattle" formatted="false">Total Airstrike Power: %d ~ %d\n───────────────\nContact Success Chance\n[AS+] Trigger Chance: %.1f%%, Selection Chance: %.1f%%\n[AS] Trigger Chance: %.1f%%, Selection Chance: %.1f%%\n</string>
     <string name="fleetcheckview_btn_fuelbull">Consumption</string>
+    <string name="setting_menu_kand_title_socks5_enable">Enable SOCKS5 Proxy</string>
 </resources>

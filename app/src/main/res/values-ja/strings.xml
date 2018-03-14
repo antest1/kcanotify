@@ -563,4 +563,5 @@
     <string name="fleetcheckview_btn_airbattle">航空戦</string>
     <string name="fleetcheckview_content_airbattle" formatted="false">総制空値: %d ~ %d\n───────────────\n触接\n[確保] 開始率: %.1f%%, 触接選択率: %.1f%%\n[優勢] 開始率: %.1f%%, 触接選択率: %.1f%%\n</string>
     <string name="fleetcheckview_btn_fuelbull">燃費</string>
+    <string name="setting_menu_kand_title_socks5_enable">SOCKS5プロキシを使用</string>
 </resources>
