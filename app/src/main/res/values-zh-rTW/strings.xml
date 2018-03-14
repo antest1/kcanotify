@@ -167,6 +167,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="current_fairy_changed_in_next">※妖精會於戰鬥劇透/任務瀏覽結束後更換</string>
     <string name="setting_menu_kand_title_adv_network">進階網路設定</string>
     <string name="setting_menu_kand_warn_adv_network">警告：錯誤的設定可能會讓VPN失效。請在你清楚確定每個選項的作用時更改設定！更改設定後你需要重新啟用VPN來使設定生效</string>
+    <string name="setting_menu_kand_title_socks5_enable">啟用SOCKS5代理</string>
     <string name="setting_menu_kand_title_socks5_address">SOCKS5代理伺服器位址</string>
     <string name="setting_menu_kand_title_socks5_port">SOCKS5代理伺服器埠</string>
     <string name="settings_menu_kand_title_bypass_address">繞行地址（代理）</string>
@@ -569,5 +570,4 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetcheckview_btn_airbattle">航空戰</string>
     <string name="fleetcheckview_content_airbattle" formatted="false">制空總值: %d ~ %d\n───────────────\n接觸成功機率\n[AS+] 開始率: %.1f%%, 選擇率: %.1f%%\n[AS] 開始率: %.1f%%, 選擇率: %.1f%%\n</string>
     <string name="fleetcheckview_btn_fuelbull">燃弾</string>
-    <string name="setting_menu_kand_title_socks5_enable">啟用SOCKS5代理</string>
 </resources>

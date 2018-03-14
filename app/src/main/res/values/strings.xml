@@ -205,6 +205,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="current_fairy_changed_in_next">※ Fairy will be changed after current BattleView/QuestView ends.</string>
     <string name="setting_menu_kand_title_adv_network">Advanced Network Settings</string>
     <string name="setting_menu_kand_warn_adv_network">Warning: Setting these incorrectly may make VPN Service unusable. Don\'t change these options unless you know what you are doing! You need to restart VPN Service to make these options effective.</string>
+    <string name="setting_menu_kand_title_socks5_enable">Enable SOCKS5 Proxy</string>
     <string name="setting_menu_kand_title_socks5_address">SOCKS5 Proxy Address</string>
     <string name="setting_menu_kand_title_socks5_port">SOCKS5 Proxy Port</string>
     <string name="settings_menu_kand_title_bypass_address">Bypass Addresses</string>
@@ -628,5 +629,4 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetcheckview_btn_airbattle">Air Battle</string>
     <string name="fleetcheckview_content_airbattle" formatted="false">Total Airstrike Power: %d ~ %d\n───────────────\nContact Success Chance\n[AS+] Trigger Chance: %.1f%%, Selection Chance: %.1f%%\n[AS] Trigger Chance: %.1f%%, Selection Chance: %.1f%%\n</string>
     <string name="fleetcheckview_btn_fuelbull">Consumption</string>
-    <string name="setting_menu_kand_title_socks5_enable">Enable SOCKS5 Proxy</string>
 </resources>

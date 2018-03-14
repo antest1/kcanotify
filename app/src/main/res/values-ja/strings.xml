@@ -377,6 +377,7 @@
     <string name="setting_menu_kand_desc_bypass_address">CIDR形式でプロキシを使用しないアドレスを設定 (各CIDRはカンマで区切って)</string>
     <string name="settings_menu_kand_title_bypass_address">例外リスト</string>
     <string name="setting_menu_kand_warn_adv_network">警告：これらの設定を正しくしていない場合は、Snifferが動作しないことがあります。この設定が何をするかわからない場合は設定しないでください。設定を適用するためには、Sniffer(VPN)を再起動してください。</string>
+    <string name="setting_menu_kand_title_socks5_enable">SOCKS5プロキシを使用</string>
     <string name="setting_menu_kand_title_socks5_port">SOCKS5プロキシポートT</string>
     <string name="setting_menu_kand_title_socks5_address">SOCKS5プロキシアドレス</string>
     <string name="setting_menu_kand_title_adv_network">高級ネットワーク設定</string>
@@ -563,5 +564,4 @@
     <string name="fleetcheckview_btn_airbattle">航空戦</string>
     <string name="fleetcheckview_content_airbattle" formatted="false">総制空値: %d ~ %d\n───────────────\n触接\n[確保] 開始率: %.1f%%, 触接選択率: %.1f%%\n[優勢] 開始率: %.1f%%, 触接選択率: %.1f%%\n</string>
     <string name="fleetcheckview_btn_fuelbull">燃費</string>
-    <string name="setting_menu_kand_title_socks5_enable">SOCKS5プロキシを使用</string>
 </resources>
