@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 
+import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import android.util.SparseArray;
@@ -29,6 +30,7 @@ import static com.antest1.kcanotify.KcaUtils.gzipdecompress;
 import static com.antest1.kcanotify.KcaUtils.unchunkdata;
 
 public class KcaVpnData {
+    public static KcaDBHelper helper;
     public static Handler handler;
 
     private static final int NONE = 0;
@@ -95,7 +97,7 @@ public class KcaVpnData {
             String s = new String(data);
             String saddrstr = new String(source);
             String taddrstr = new String(target);
-            //Log.e("KCAV", KcaUtils.format("getDataFromNative[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
+            Log.e("KCAV", KcaUtils.format("getDataFromNative[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
 
             if (type == REQUEST) {
                 if (s.startsWith("GET") || s.startsWith("POST")) {
@@ -103,7 +105,9 @@ public class KcaVpnData {
                     state = REQUEST;
                     portToRequestData.put(sport, new StringBuilder());
                 }
-                portToRequestData.get(sport).append(s);
+                if (portToRequestData.get(sport) == null) return;
+                else portToRequestData.get(sport).append(s);
+
                 if(!isRequestUriReady && portToRequestData.get(sport).toString().contains("HTTP/1.1")) {
                     isRequestUriReady = true;
                     String[] head_line = portToRequestData.get(sport).toString().split("\r\n");

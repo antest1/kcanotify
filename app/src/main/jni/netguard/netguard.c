@@ -734,6 +734,8 @@ jbyteArray cstr2jbyteArray( JNIEnv *env, const char *nativeStr, int size)
 }
 
 void get_packet_data(const struct arguments *args, char* data, int size, int type, char* saddr, char* taddr, int sport, int tport) {
+    if (sport != 80 && tport != 80) return; // do not capture non-HTTP data
+
     jmethodID method_callback = NULL;
     JNIEnv *env = args->env;
 
