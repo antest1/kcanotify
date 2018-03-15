@@ -332,7 +332,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         }
     }
 
-    private AlertDialog makeDialog(final TextView sp_val, final int target, final String key, final int fnc, final String[] arr) {
+        private AlertDialog makeDialog(final TextView sp_val, final int target, final String key, final int fnc, final String[] arr) {
         final List<Integer> selectedItems = new ArrayList<>();
         boolean[] selected_arr = new boolean[arr.length];
         Arrays.fill(selected_arr, false);
@@ -343,8 +343,10 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         for (String v: val) {
             if (v.length() > 0) {
                 int idx = getRealPosition(fnc, Integer.valueOf(v));
-                selected_arr[idx] = true;
-                selectedItems.add(idx);
+                if (idx < selected_arr.length) {
+                    selected_arr[idx] = true;
+                    selectedItems.add(idx);
+                }
             }
         }
 
