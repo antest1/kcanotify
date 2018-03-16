@@ -225,13 +225,10 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("KEY", key);
         values.put("VALUE", value);
-        Cursor c = db.query(table_name, null, "KEY=?", new String[]{key}, null, null, null, null);
-        if (c.getCount() > 0) {
-            db.update(table_name, values, "KEY=?", new String[]{key});
-        } else {
-            db.insert(table_name, null, values);
+        int u = db.update(table_name, values, "KEY=?", new String[]{key});
+        if (u == 0) {
+            db.insertWithOnConflict(table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         }
-        c.close();
     }
 
     public int getShipCount() {
@@ -306,13 +303,10 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         values.put("KEY", key);
         values.put("KCID", slotitem_id);
         values.put("VALUE", value);
-        Cursor c = db.query(slotitem_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
-        if (c.getCount() > 0) {
-            db.update(slotitem_table_name, values, "KEY=?", new String[]{String.valueOf(key)});
-        } else {
-            db.insert(slotitem_table_name, null, values);
+        int u = db.update(slotitem_table_name, values, "KEY=?", new String[]{String.valueOf(key)});
+        if (u == 0) {
+            db.insertWithOnConflict(slotitem_table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         }
-        c.close();
     }
 
     public void putBulkItemValue(JsonArray api_data) {
@@ -540,13 +534,10 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         values.put("VALUE", value);
         values.put("TIME", time);
 
-        Cursor c = db.query(questlist_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
-        if (c.getCount() > 0) {
-            db.update(questlist_table_name, values, "KEY=?", new String[]{String.valueOf(key)});
-        } else {
-            db.insert(questlist_table_name, null, values);
+        int u = db.update(questlist_table_name, values, "KEY=?", new String[]{String.valueOf(key)});
+        if (u == 0) {
+            db.insertWithOnConflict(questlist_table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         }
-        c.close();
         qt.addQuestTrack(key);
     }
 
