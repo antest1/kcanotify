@@ -163,7 +163,8 @@
 	"flag-lv": 20,
 	"total-num": 4,
 	"total-cond": "1,2-4",
-	"total-asw": 180
+	"total-asw": 180,
+	"total-fp": 70
 }, {
 	"no": "102",
 	"area": 1,
@@ -182,7 +183,8 @@
 	"total-num": 5,
 	"total-lv": 185,
 	"total-cond": "3-1|1,2-4/2-2|1-3/2-1|1-4",
-	"total-asw": 280
+	"total-asw": 280,
+	"total-los": 60
 }, {
 	"no": "9",
 	"area": 2,
