@@ -5,11 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -33,7 +35,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -77,7 +78,10 @@ public class KcaBattleViewService extends Service {
     KcaDeckInfo deckInfoCalc;
     LayoutInflater mInflater;
     private BroadcastReceiver refreshreceiver;
+    SharedPreferences prefs;
+
     public static boolean active;
+    public static int view_status = 0;
     public static JsonObject api_data;
     public static String currentNodeInfo = "";
 
@@ -1205,11 +1209,13 @@ public class KcaBattleViewService extends Service {
         } else {
             try {
                 active = true;
+                view_status = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_VIEW_YLOC));
                 contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
                 dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
                 deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
                 //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 customToast = new KcaCustomToast(getApplicationContext());
+                prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
                 mInflater = LayoutInflater.from(contextWithLocale);
                 mView = mInflater.inflate(R.layout.view_sortie_battle, null);
@@ -1235,12 +1241,12 @@ public class KcaBattleViewService extends Service {
 
                 mParams = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.MATCH_PARENT,
-                        WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.WRAP_CONTENT,
                         getWindowLayoutType(),
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                         PixelFormat.TRANSLUCENT);
-                mParams.gravity = Gravity.CENTER;
-
+                mParams.gravity = KcaUtils.getGravity(view_status);
+                prefs.edit().putInt(PREF_VIEW_YLOC, view_status).apply();
                 mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
                 mManager.addView(mView, mParams);
 
@@ -1601,20 +1607,37 @@ public class KcaBattleViewService extends Service {
         private static final int MAX_CLICK_DURATION = 200;
         private long startClickTime = -1;
         private long clickDuration;
+        private float mBeforeY, mAfterY;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    mBeforeY = event.getRawY();
+                    mAfterY = event.getRawY();
                     startClickTime = Calendar.getInstance().getTimeInMillis();
                     break;
                 case MotionEvent.ACTION_UP:
-                    clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                    if (clickDuration < MAX_CLICK_DURATION) {
-                        if (mView != null) mView.setVisibility(View.GONE);
-                        if (itemView != null) itemView.setVisibility(View.GONE);
+                    int y_direction = (int) (mAfterY - mBeforeY);
+                    if (Math.abs(y_direction) > 400) {
+                        int status_change = y_direction > 0 ? 1 : -1;
+                        view_status += status_change;
+                        if (Math.abs(view_status) > 1) view_status /= Math.abs(view_status);
+                        mParams.gravity = KcaUtils.getGravity(view_status);
+                        mManager.updateViewLayout(mView, mParams);
+                        prefs.edit().putInt(PREF_VIEW_YLOC, view_status).apply();
+                    } else {
+                        clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                        if (clickDuration < MAX_CLICK_DURATION) {
+                            if (mView != null) mView.setVisibility(View.GONE);
+                            if (itemView != null) itemView.setVisibility(View.GONE);
+                        }
                     }
                     break;
+                case MotionEvent.ACTION_MOVE:
+                    mAfterY = event.getRawY();
+                    break;
+
             }
             return false;
         }
@@ -1841,6 +1864,8 @@ public class KcaBattleViewService extends Service {
     private int getSeekCn() {
         return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
     }
+
+
 
     public void showCustomToast(KcaCustomToast toast, String body, int duration, int color) {
         KcaUtils.showCustomToast(getApplicationContext(), getBaseContext(), toast, body, duration, color);

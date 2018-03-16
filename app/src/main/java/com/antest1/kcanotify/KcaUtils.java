@@ -23,6 +23,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.WindowManager;
 
 import com.commonsware.cwac.provider.StreamProvider;
@@ -495,5 +496,24 @@ public class KcaUtils {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
         return (netInfo != null && netInfo.isConnected());
+    }
+
+    public static int getGravity(int status) {
+        int value;
+        switch (status) {
+            case 1:
+                value = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
+                break;
+            case 0:
+                value = Gravity.CENTER;
+                break;
+            case -1:
+                value = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+                break;
+            default:
+                value = Gravity.CENTER;
+                break;
+        }
+        return value;
     }
 }

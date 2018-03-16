@@ -96,6 +96,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOW_CONSTRSHIP_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
+import static com.antest1.kcanotify.KcaConstants.PREF_VIEW_YLOC;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
@@ -683,6 +684,7 @@ public class SettingActivity extends AppCompatActivity {
                 return "|1,true|";
             case PREF_FAIRY_ICON:
             case PREF_KCA_EXP_TYPE:
+            case PREF_VIEW_YLOC:
                 return "0";
             case PREF_ALARM_DELAY:
                 return "61";

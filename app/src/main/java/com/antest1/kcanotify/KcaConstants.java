@@ -419,6 +419,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_ACTIVATE_RESLOG = "activate_resourcelog";
     public static final String PREF_FV_MENU_ORDER = "fleetview_menu_order";
     public static final String PREF_SHOW_CONSTRSHIP_NAME = "show_constrship_name";
+    public static final String PREF_VIEW_YLOC = "view_yloc";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -463,7 +464,8 @@ public final class KcaConstants {
             PREF_KCA_ACTIVATE_DROPLOG,
             PREF_KCA_ACTIVATE_RESLOG,
             PREF_FV_MENU_ORDER,
-            PREF_SHOW_CONSTRSHIP_NAME
+            PREF_SHOW_CONSTRSHIP_NAME,
+            PREF_VIEW_YLOC
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

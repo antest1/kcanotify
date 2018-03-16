@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -12,6 +13,7 @@ import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -55,6 +57,7 @@ import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_FLEETVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_FV_MENU_ORDER;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
+import static com.antest1.kcanotify.KcaConstants.PREF_VIEW_YLOC;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
 import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION_NEW;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
@@ -82,6 +85,7 @@ public class KcaFleetViewService extends Service {
 
     Context contextWithLocale;
     LayoutInflater mInflater;
+    SharedPreferences prefs;
     public KcaDBHelper dbHelper;
     public KcaDeckInfo deckInfoCalc;
     int seekcn_internal = -1;
@@ -92,12 +96,13 @@ public class KcaFleetViewService extends Service {
     boolean isAkashiTimerActive = false;
     ScheduledExecutorService timeScheduler = null;
 
+    static int view_status = 0;
     static boolean error_flag = false;
     boolean active;
     private View mView, itemView, fleetHqInfoView;
     private TextView fleetInfoTitle, fleetInfoLine, fleetCnChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn;
     private WindowManager mManager;
-    private ScrollView fleetMenu;
+    private ScrollView fleetMenu, fleetShipArea;
     private ImageView fleetMenuArrowUp, fleetMenuArrowDown;
     private static boolean isReady;
     private static int hqinfoState = 0;
@@ -224,6 +229,8 @@ public class KcaFleetViewService extends Service {
         try {
             active = true;
             switch_status = 1;
+            prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            view_status = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_VIEW_YLOC));
             mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
@@ -306,6 +313,7 @@ public class KcaFleetViewService extends Service {
     private void initView() {
         mView = mInflater.inflate(R.layout.view_fleet_list, null);
         mView.setVisibility(GONE);
+        mView.findViewById(R.id.fleetview_shiparea).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_head).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_cn_change).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_fleetswitch).setOnTouchListener(mViewTouchListener);
@@ -325,8 +333,8 @@ public class KcaFleetViewService extends Service {
                 getWindowLayoutType(),
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
-        mParams.gravity = Gravity.CENTER;
-
+        mParams.gravity = KcaUtils.getGravity(view_status);
+        prefs.edit().putInt(PREF_VIEW_YLOC, view_status).apply();
 
         fleetInfoLine = mView.findViewById(R.id.fleetview_infoline);
 
@@ -338,7 +346,7 @@ public class KcaFleetViewService extends Service {
         fleetAkashiTimerBtn = mView.findViewById(R.id.fleetview_akashi_timer);
         fleetSwitchBtn = mView.findViewById(R.id.fleetview_fleetswitch);
         fleetSwitchBtn.setVisibility(View.GONE);
-
+        fleetShipArea = mView.findViewById(R.id.fleetview_shiparea);
         fleetMenu = mView.findViewById(R.id.fleetview_menu);
         fleetMenuArrowUp = mView.findViewById(R.id.fleetview_menu_up);
         fleetMenuArrowDown = mView.findViewById(R.id.fleetview_menu_down);
@@ -416,6 +424,7 @@ public class KcaFleetViewService extends Service {
         private static final int MAX_CLICK_DURATION = 200;
         private long startClickTime = -1;
         private long clickDuration;
+        private float mBeforeY, mAfterY;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -427,6 +436,8 @@ public class KcaFleetViewService extends Service {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     Log.e("KCA-FV", "ACTION_DOWN");
+                    mBeforeY = event.getRawY();
+                    mAfterY = event.getRawY();
                     startClickTime = Calendar.getInstance().getTimeInMillis();
                     if (id == fleetInfoLine.getId()) {
                         fleetInfoLine.setSelected(true);
@@ -487,6 +498,16 @@ public class KcaFleetViewService extends Service {
                             itemView.setVisibility(GONE);
                             break;
                         }
+                    }
+
+                    int y_direction = (int) (mAfterY - mBeforeY);
+                    if (Math.abs(y_direction) > 400) {
+                        int status_change = y_direction > 0 ? 1 : -1;
+                        view_status += status_change;
+                        if (Math.abs(view_status) > 1) view_status /= Math.abs(view_status);
+                        mParams.gravity = KcaUtils.getGravity(view_status);
+                        mManager.updateViewLayout(mView, mParams);
+                        prefs.edit().putInt(PREF_VIEW_YLOC, view_status).apply();
                     }
 
                     if (clickDuration < MAX_CLICK_DURATION) {
@@ -563,9 +584,14 @@ public class KcaFleetViewService extends Service {
                             }
                         }
                     }
+
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    mAfterY = event.getRawY();
                     break;
             }
-            return true;
+            if (id == mView.findViewById(R.id.fleetview_shiparea).getId()) return false;
+            else return true;
         }
     };
 
