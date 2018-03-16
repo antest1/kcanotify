@@ -83,7 +83,6 @@ public class KcaAlarmService extends Service {
     AudioManager mAudioManager;
     KcaDBHelper dbHelper;
     NotificationManager notificationManager;
-    Bitmap expBitmap, dockBitmap, moraleBitmap, akashiRepairBitmap = null;
     public static Handler sHandler = null;
     Bundle bundle;
     Message sMsg;
@@ -132,10 +131,6 @@ public class KcaAlarmService extends Service {
         setDefaultGameData();
         loadTranslationData(getApplicationContext());
 
-        expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
-        dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
-        moraleBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.morale_notify_bigicon)).getBitmap();
-        akashiRepairBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_akashi_notify_bigicon)).getBitmap();
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String delay_value = getStringPreferences(getApplicationContext(), PREF_ALARM_DELAY);
         if (delay_value.length() > 0) setAlarmDelay(Integer.parseInt(delay_value));
@@ -254,18 +249,6 @@ public class KcaAlarmService extends Service {
 
     @Override
     public void onDestroy() {
-        if (expBitmap != null) {
-            expBitmap.recycle();
-            expBitmap = null;
-        }
-        if (dockBitmap != null) {
-            dockBitmap.recycle();
-            dockBitmap = null;
-        }
-        if (moraleBitmap != null) {
-            moraleBitmap.recycle();
-            moraleBitmap = null;
-        }
         super.onDestroy();
     }
 
@@ -322,6 +305,7 @@ public class KcaAlarmService extends Service {
 
         }
 
+        Bitmap expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.expedition_notify_icon)
                 .setLargeIcon(expBitmap)
@@ -360,6 +344,7 @@ public class KcaAlarmService extends Service {
             content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
         }
 
+        Bitmap dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.docking_notify_icon)
                 .setLargeIcon(dockBitmap)
@@ -394,6 +379,7 @@ public class KcaAlarmService extends Service {
         String title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_morale_recovered), idx + 1);
         String content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_morale_recovered), kantaiName);
 
+        Bitmap moraleBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.morale_notify_bigicon)).getBitmap();
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.morale_notify_icon)
                 .setLargeIcon(moraleBitmap)
@@ -427,6 +413,7 @@ public class KcaAlarmService extends Service {
         String title = getStringWithLocale(R.string.kca_noti_title_akashirepair_recovered);
         String content = getStringWithLocale(R.string.kca_noti_content_akashirepair_recovered);
 
+        Bitmap akashiRepairBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_akashi_notify_bigicon)).getBitmap();
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.docking_notify_icon)
                 .setLargeIcon(akashiRepairBitmap)
