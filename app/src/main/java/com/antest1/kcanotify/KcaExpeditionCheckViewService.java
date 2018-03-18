@@ -193,21 +193,25 @@ public class KcaExpeditionCheckViewService extends Service {
         if (intent != null && intent.getAction() != null) {
             if (intent.getAction().startsWith(SHOW_EXCHECKVIEW_ACTION)) {
                 deckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-                int selected_new = Integer.parseInt(intent.getAction().split("/")[1]);
-                if (selected_new < 1) selected_new = 1;
-                else if (selected_new > 3) selected_new = 2;
-                if (selected_new < deckdata.size()) {
-                    selected = selected_new;
-                }
-                int setViewResult = setView();
-                if (setViewResult == 0) {
-                    if (mView.getParent() != null) {
-                        mManager.removeViewImmediate(mView);
+                if (deckdata != null) {
+                    int selected_new = Integer.parseInt(intent.getAction().split("/")[1]);
+                    if (selected_new < 1) selected_new = 1;
+                    else if (selected_new > 3) selected_new = 2;
+                    if (selected_new < deckdata.size()) {
+                        selected = selected_new;
                     }
-                    mManager.addView(mView, mParams);
+                    int setViewResult = setView();
+                    if (setViewResult == 0) {
+                        if (mView.getParent() != null) {
+                            mManager.removeViewImmediate(mView);
+                        }
+                        mManager.addView(mView, mParams);
+                    }
+                    Log.e("KCA", "show_excheckview_action " + String.valueOf(setViewResult));
+                    mView.setVisibility(View.VISIBLE);
+                } else {
+                    stopSelf();
                 }
-                Log.e("KCA", "show_excheckview_action " + String.valueOf(setViewResult));
-                mView.setVisibility(View.VISIBLE);
             }
         }
         return super.onStartCommand(intent, flags, startId);

@@ -235,9 +235,6 @@ public class KcaFleetViewService extends Service {
 
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             dbHelper.updateExpScore(0);
-            if (dbHelper.getJsonArrayValue(DB_KEY_DECKPORT) == null) {
-                stopSelf();
-            }
             KcaApiData.setDBHelper(dbHelper);
 
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());

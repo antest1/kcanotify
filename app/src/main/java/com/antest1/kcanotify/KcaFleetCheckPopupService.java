@@ -161,10 +161,12 @@ public class KcaFleetCheckPopupService extends Service {
         } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(FCHK_SHOW_ACTION)) {
                 portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-                deck_cnt = portdeckdata.size();
-                setFchkFleetBtnColor(recent_no, deck_cnt);
-                setFchkFuncBtnColor(current_func);
-                setText();
+                if (portdeckdata != null) {
+                    deck_cnt = portdeckdata.size();
+                    setFchkFleetBtnColor(recent_no, deck_cnt);
+                    setFchkFuncBtnColor(current_func);
+                    setText();
+                }
 
                 mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
                 popupWidth = mView.getMeasuredWidth();
