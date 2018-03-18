@@ -39,6 +39,7 @@ import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaExpedition2.getExpeditionHeader;
 import static com.antest1.kcanotify.KcaUtils.getId;
@@ -139,7 +140,7 @@ public class KcaExpeditionCheckViewService extends Service {
             locale = LocaleUtils.getLocaleCode(KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
             ship_data = new ArrayList<>();
             checkdata = new HashMap<>();
-            dbHelper = new KcaDBHelper(getApplicationContext(), null, 3);
+            dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             contextWithLocale = KcaUtils.getContextWithLocale(getApplicationContext(), getBaseContext());
             mInflater = LayoutInflater.from(contextWithLocale);
             mView = mInflater.inflate(R.layout.view_excheck_list, null);
