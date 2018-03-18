@@ -524,7 +524,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                     int idx = Integer.valueOf(key_idx.split(",")[0]);
                     boolean is_desc = Boolean.valueOf(key_idx.split(",")[1]);
                     String key = total_key_list[idx];
-
+                    if (key.equals("api_lv")) key = "api_exp";
                     int val1 = KcaShipListViewAdpater.getintvalue(o1, key);
                     int val2 = KcaShipListViewAdpater.getintvalue(o2, key);
                     if (val1 != val2) {
