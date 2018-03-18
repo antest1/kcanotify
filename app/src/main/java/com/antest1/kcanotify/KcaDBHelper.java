@@ -456,31 +456,32 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
             String type_cond = "";
             if (type % 9 != 0) type_cond = " AND TYPE = ".concat(String.valueOf(type));
+            if (questIdList.size() > 0) {
+                // remove invalid quest
+                if (page == 1) {
+                    setPrevPageLastNo(-1);
+                    db.delete(questlist_table_name, "KEY < ?".concat(type_cond), new String[]{String.valueOf(questIdList.get(0))});
+                    qt.deleteQuestTrackWithRange(-1, questIdList.get(0));
+                    Log.e("KCA", KcaUtils.format("delete KEV < %d", questIdList.get(0)));
+                }
+                if (page == lastpage) {
+                    db.delete(questlist_table_name, "KEY > ?".concat(type_cond), new String[]{String.valueOf(last_no)});
+                    qt.deleteQuestTrackWithRange(last_no, -1);
+                    Log.e("KCA", KcaUtils.format("delete KEV > %d", last_no));
+                }
+                if (getPrevPageLastNo() != -1) {
+                    db.delete(questlist_table_name, "KEY > ? AND KEY < ?".concat(type_cond),
+                            new String[]{String.valueOf(getPrevPageLastNo()), String.valueOf(questIdList.get(0))});
+                    qt.deleteQuestTrackWithRange(getPrevPageLastNo(), questIdList.get(0));
+                    Log.e("KCA", KcaUtils.format("delete KEV > %d AND KEY < %d".concat(type_cond), getPrevPageLastNo(), questIdList.get(0)));
+                }
 
-            // remove invalid quest
-            if (page == 1) {
-                setPrevPageLastNo(-1);
-                db.delete(questlist_table_name, "KEY < ?".concat(type_cond), new String[]{String.valueOf(questIdList.get(0))});
-                qt.deleteQuestTrackWithRange(-1, questIdList.get(0));
-                Log.e("KCA", KcaUtils.format("delete KEV < %d", questIdList.get(0)));
-            }
-            if (page == lastpage) {
-                db.delete(questlist_table_name, "KEY > ?".concat(type_cond), new String[]{String.valueOf(last_no)});
-                qt.deleteQuestTrackWithRange(last_no, -1);
-                Log.e("KCA", KcaUtils.format("delete KEV > %d", last_no));
-            }
-            if (getPrevPageLastNo() != -1) {
-                db.delete(questlist_table_name, "KEY > ? AND KEY < ?".concat(type_cond),
-                        new String[]{String.valueOf(getPrevPageLastNo()), String.valueOf(questIdList.get(0))});
-                qt.deleteQuestTrackWithRange(getPrevPageLastNo(), questIdList.get(0));
-                Log.e("KCA", KcaUtils.format("delete KEV > %d AND KEY < %d".concat(type_cond), getPrevPageLastNo(), questIdList.get(0)));
-            }
-
-            for (int i = 0; i < questIdList.size() - 1; i++) {
-                db.delete(questlist_table_name, "KEY > ? AND KEY < ?".concat(type_cond),
-                        new String[]{String.valueOf(questIdList.get(i)), String.valueOf(questIdList.get(i + 1))});
-                qt.deleteQuestTrackWithRange(questIdList.get(i), questIdList.get(i + 1));
-                Log.e("KCA", KcaUtils.format("delete KEV > %d AND KEY < %d".concat(type_cond), questIdList.get(i), questIdList.get(i + 1)));
+                for (int i = 0; i < questIdList.size() - 1; i++) {
+                    db.delete(questlist_table_name, "KEY > ? AND KEY < ?".concat(type_cond),
+                            new String[]{String.valueOf(questIdList.get(i)), String.valueOf(questIdList.get(i + 1))});
+                    qt.deleteQuestTrackWithRange(questIdList.get(i), questIdList.get(i + 1));
+                    Log.e("KCA", KcaUtils.format("delete KEV > %d AND KEY < %d".concat(type_cond), questIdList.get(i), questIdList.get(i + 1)));
+                }
             }
 
             if (questIdList.contains(212) && questIdList.contains(218)) {
