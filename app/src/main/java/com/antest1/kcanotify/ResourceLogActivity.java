@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.antest1.kcanotify.DropLogActivity.convertMillsToDate;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_RESLOG;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_RESOURCELOG_VERSION;
 
 public class ResourceLogActivity extends AppCompatActivity {
@@ -51,6 +53,7 @@ public class ResourceLogActivity extends AppCompatActivity {
     private ViewPager viewPager;
     KcaResourceLogPageAdapter pageAdapter;
 
+    KcaDBHelper dbHelper;
     KcaResourceLogger resourceLogger;
     List<JsonObject> resourceLog;
     TextView start_date, end_date;
@@ -83,7 +86,9 @@ public class ResourceLogActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getStringWithLocale(R.string.action_reslog));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         resourceLogger = new KcaResourceLogger(getApplicationContext(), null, KCANOTIFY_RESOURCELOG_VERSION);
+        KcaApiData.setDBHelper(dbHelper);
 
         tabLayout = findViewById(R.id.reslog_tab);
         tabLayout.addTab(tabLayout.newTab().setText(getStringWithLocale(R.string.reslog_label_resource)));
@@ -377,6 +382,7 @@ public class ResourceLogActivity extends AppCompatActivity {
                             pageAdapter.notifyDataSetChanged();
                         }
                     } catch (ParseException e) {
+                        dbHelper.recordErrorLog(ERROR_TYPE_RESLOG, "", "", "", KcaUtils.getStringFromException(e));
                         e.printStackTrace();
                     }
                 }
