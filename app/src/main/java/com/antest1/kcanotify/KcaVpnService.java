@@ -45,6 +45,7 @@ import eu.faircode.netguard.ResourceRecord;
 import eu.faircode.netguard.Rule;
 import eu.faircode.netguard.Util;
 
+import static com.antest1.kcanotify.KcaConstants.DMMLOGIN_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.VPN_STOP_REASON;
 
@@ -389,12 +390,20 @@ public class KcaVpnService extends VpnService {
         boolean filter = prefs.getBoolean("filter", false);
         boolean system = prefs.getBoolean("manage_system", false);
 
+        boolean socks5_enable = prefs.getBoolean("socks5_enable", false);
+        boolean socks5_onlykc = prefs.getBoolean("socks5_onlykc", false);
+
         // Build VPN service
         Builder builder = new Builder();
         builder.setSession(getString(R.string.app_vpn_name));
         if (Build.VERSION.SDK_INT >= 21) {
             try {
-                builder.addAllowedApplication(KC_PACKAGE_NAME);
+                if (socks5_enable && socks5_onlykc) {
+                    builder.addAllowedApplication(KC_PACKAGE_NAME);
+                    builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
+                } else if (!socks5_enable) {
+                    builder.addAllowedApplication(KC_PACKAGE_NAME);
+                }
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }

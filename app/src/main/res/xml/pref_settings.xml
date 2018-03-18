@@ -99,6 +99,10 @@
             <CheckBoxPreference
                 android:key="socks5_enable"
                 android:title="@string/setting_menu_kand_title_socks5_enable" />
+            <CheckBoxPreference
+                android:key="socks5_onlykc"
+                android:dependency="socks5_enable"
+                android:title="@string/setting_menu_kand_title_socks5_onlykc" />
             <EditTextPreference
                 android:key="socks5_address"
                 android:dependency="socks5_enable"
