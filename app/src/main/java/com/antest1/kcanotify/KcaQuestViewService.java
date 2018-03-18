@@ -122,7 +122,6 @@ public class KcaQuestViewService extends Service {
         if (api_page_count > 0 && api_list.size() > 0) {
             ((TextView) questview.findViewById(R.id.quest_page))
                     .setText(KcaUtils.format(getStringWithLocale(R.string.questview_page), api_disp_page, api_page_count));
-            if (checkValid) helper.checkValidQuest(api_disp_page, api_page_count, api_list);
             for (int i = 0; i < api_list.size(); i++) {
                 int index = i + 1;
                 JsonElement api_list_item = api_list.get(i);
@@ -259,7 +258,7 @@ public class KcaQuestViewService extends Service {
         }
     }
 
-    public int setView(boolean isquestlist, boolean checkValid) {
+    public int setView(boolean isquestlist, boolean checkValid, int tab_id) {
         try {
             Log.e("KCA", "QuestView setView " + String.valueOf(isquestlist));
             error_flag = false;
@@ -294,6 +293,7 @@ public class KcaQuestViewService extends Service {
                 questnext.setVisibility(api_page_count == 0 || api_disp_page == api_page_count ? View.GONE : View.VISIBLE);
             }
             Log.e("KCA", api_list.toString());
+            if (checkValid) helper.checkValidQuest(api_disp_page, api_page_count, api_list, tab_id);
             setQuestView(api_disp_page, api_page_count, api_list, checkValid);
             return 0;
         } catch (Exception e) {
@@ -400,19 +400,15 @@ public class KcaQuestViewService extends Service {
         if (intent != null && intent.getAction() != null && mView != null) {
             if (intent.getAction().equals(REFRESH_QUESTVIEW_ACTION)) {
                 int extra = intent.getIntExtra("tab_id", -1);
-                if (extra != -1) {
-                    boolean checkValid = extra % 9 == 0;
-                    updateView(setView(isquestlist, checkValid), false);
-                } else {
-                    setView(isquestlist, false);
-                }
+                boolean checkValid = extra % 9 == 0;
+                updateView(setView(isquestlist, true, extra), false);
             } else if (intent.getAction().equals(SHOW_QUESTVIEW_ACTION)) {
                 currentPage = 1;
-                updateView(setView(isquestlist, false), false);
+                updateView(setView(isquestlist, false, 0), false);
                 mView.setVisibility(View.VISIBLE);
             } else if (intent.getAction().equals(SHOW_QUESTVIEW_ACTION_NEW)) {
                 currentPage = 1;
-                updateView(setView(isquestlist, false), true);
+                updateView(setView(isquestlist, false, 0), true);
                 mView.setVisibility(View.VISIBLE);
             } else if (intent.getAction().equals(CLOSE_QUESTVIEW_ACTION)) {
                 if (mView.getParent() != null) {
@@ -459,7 +455,7 @@ public class KcaQuestViewService extends Service {
                             } else if (id == questnext.getId() && currentPage < maxPage) {
                                 currentPage += 1;
                             }
-                            int setViewResult = setView(isquestlist, false);
+                            int setViewResult = setView(isquestlist, false, 0);
                             if (setViewResult == 0) {
                                 mView.invalidate();
                                 mManager.updateViewLayout(mView, mParams);

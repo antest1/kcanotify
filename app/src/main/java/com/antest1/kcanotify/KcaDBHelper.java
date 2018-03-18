@@ -64,13 +64,13 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         StringBuffer sb = new StringBuffer();
-        sb.append(" CREATE TABLE ".concat(table_name).concat(" ( "));
+        sb.append(" CREATE TABLE IF NOT EXISTS ".concat(table_name).concat(" ( "));
         sb.append(" KEY TEXT PRIMARY KEY, ");
         sb.append(" VALUE TEXT ) ");
         db.execSQL(sb.toString());
 
         sb = new StringBuffer();
-        sb.append(" CREATE TABLE ".concat(slotitem_table_name).concat(" ( "));
+        sb.append(" CREATE TABLE IF NOT EXISTS ".concat(slotitem_table_name).concat(" ( "));
         sb.append(" KEY INTEGER PRIMARY KEY, ");
         sb.append(" KCID INTEGER, ");
         sb.append(" VALUE TEXT ) ");
@@ -78,15 +78,16 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         Log.e("KCA", "table generated");
 
         sb = new StringBuffer();
-        sb.append(" CREATE TABLE ".concat(questlist_table_name).concat(" ( "));
+        sb.append(" CREATE TABLE IF NOT EXISTS ".concat(questlist_table_name).concat(" ( "));
         sb.append(" KEY INTEGER PRIMARY KEY, ");
         sb.append(" VALUE TEXT, ");
+        sb.append(" TYPE TEXT, ");
         sb.append(" TIME TEXT ) "); // YY-MM-DD-HH
         db.execSQL(sb.toString());
         Log.e("KCA", "table generated");
 
         sb = new StringBuffer();
-        sb.append(" CREATE TABLE ".concat(error_table_name).concat(" ( "));
+        sb.append(" CREATE TABLE IF NOT EXISTS ".concat(error_table_name).concat(" ( "));
         sb.append(" type TEXT, ");
         sb.append(" version TEXT, ");
         sb.append(" url TEXT, ");
@@ -99,9 +100,11 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("drop table if exists " + table_name);
-        db.execSQL("drop table if exists " + error_table_name);
-        db.execSQL("drop table if exists " + slotitem_table_name);
+        if (oldVersion < 3) {
+            db.execSQL("drop table if exists " + table_name);
+            db.execSQL("drop table if exists " + error_table_name);
+            db.execSQL("drop table if exists " + slotitem_table_name);
+        }
         db.execSQL("drop table if exists " + questlist_table_name);
         onCreate(db);
     }
@@ -421,7 +424,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             if (valid_flag) {
                 data.add(new JsonParser().parse(quest_str).getAsJsonObject());
             } else {
-                db.delete(questlist_table_name, "KEY = ?", new String[]{String.valueOf(quest_id)});
+                db.delete(questlist_table_name, "KEY=?", new String[]{String.valueOf(quest_id)});
             }
         }
         c.close();
@@ -429,7 +432,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     // for kca_questlist
-    public void checkValidQuest(int page, int lastpage, JsonArray api_list) {
+    public void checkValidQuest(int page, int lastpage, JsonArray api_list, int type) {
         Date currentTime = getJapanCalendarInstance().getTime();
         SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String[] current_time = df.format(currentTime).split("-");
@@ -451,30 +454,33 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                 }
             }
 
+            String type_cond = "";
+            if (type % 9 != 0) type_cond = " AND TYPE = ".concat(String.valueOf(type));
+
             // remove invalid quest
             if (page == 1) {
                 setPrevPageLastNo(-1);
-                db.delete(questlist_table_name, "KEY < ?", new String[]{String.valueOf(questIdList.get(0))});
+                db.delete(questlist_table_name, "KEY < ?".concat(type_cond), new String[]{String.valueOf(questIdList.get(0))});
                 qt.deleteQuestTrackWithRange(-1, questIdList.get(0));
                 Log.e("KCA", KcaUtils.format("delete KEV < %d", questIdList.get(0)));
             }
             if (page == lastpage) {
-                db.delete(questlist_table_name, "KEY > ?", new String[]{String.valueOf(last_no)});
+                db.delete(questlist_table_name, "KEY > ?".concat(type_cond), new String[]{String.valueOf(last_no)});
                 qt.deleteQuestTrackWithRange(last_no, -1);
                 Log.e("KCA", KcaUtils.format("delete KEV > %d", last_no));
             }
             if (getPrevPageLastNo() != -1) {
-                db.delete(questlist_table_name, "KEY > ? AND KEY < ?",
+                db.delete(questlist_table_name, "KEY > ? AND KEY < ?".concat(type_cond),
                         new String[]{String.valueOf(getPrevPageLastNo()), String.valueOf(questIdList.get(0))});
                 qt.deleteQuestTrackWithRange(getPrevPageLastNo(), questIdList.get(0));
-                Log.e("KCA", KcaUtils.format("delete KEV > %d AND KEY < %d", getPrevPageLastNo(), questIdList.get(0)));
+                Log.e("KCA", KcaUtils.format("delete KEV > %d AND KEY < %d".concat(type_cond), getPrevPageLastNo(), questIdList.get(0)));
             }
 
             for (int i = 0; i < questIdList.size() - 1; i++) {
-                db.delete(questlist_table_name, "KEY > ? AND KEY < ?",
+                db.delete(questlist_table_name, "KEY > ? AND KEY < ?".concat(type_cond),
                         new String[]{String.valueOf(questIdList.get(i)), String.valueOf(questIdList.get(i + 1))});
                 qt.deleteQuestTrackWithRange(questIdList.get(i), questIdList.get(i + 1));
-                Log.e("KCA", KcaUtils.format("delete KEV > %d AND KEY < %d", questIdList.get(i), questIdList.get(i + 1)));
+                Log.e("KCA", KcaUtils.format("delete KEV > %d AND KEY < %d".concat(type_cond), questIdList.get(i), questIdList.get(i + 1)));
             }
 
             if (questIdList.contains(212) && questIdList.contains(218)) {
@@ -487,8 +493,9 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                     JsonObject item = api_list_item.getAsJsonObject();
                     int api_no = item.get("api_no").getAsInt();
                     int api_state = item.get("api_state").getAsInt();
+                    int api_type = item.get("api_type").getAsInt();
                     if (api_state == 2 || api_state == 3) {
-                        putQuest(api_no, item.toString());
+                        putQuest(api_no, item.toString(), api_type);
                     } else {
                         removeQuest(api_no);
                     }
@@ -523,7 +530,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         return value;
     }
 
-    public void putQuest(int key, String value) {
+    public void putQuest(int key, String value, int type) {
         Date currentTime = getJapanCalendarInstance().getTime();
         SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String time = df.format(currentTime);
@@ -532,6 +539,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("KEY", key);
         values.put("VALUE", value);
+        values.put("TYPE", type);
         values.put("TIME", time);
 
         int u = db.update(questlist_table_name, values, "KEY=?", new String[]{String.valueOf(key)});
