@@ -548,6 +548,12 @@
 		"memo": "If Nenohi is in the fleet, additional audio dialogue will play after the quest is turned in. There may be other unknown requirements for this. \u27a3Rewards a Combat Ration",
 		"unlock": [ 319 ]
 	},
+	"191": {
+		"code": "A86",
+		"name": "Remodeled 17th Destroyer Division, Commence Restructuring!",
+		"desc": "Have ONLY Hamakaze Kai B, Isokaze Kai B, Urakaze Kai and Tanikaze Kai in your fleet.",
+		"memo": "\u27a3Rewards a Mamiya and a Reinforcement Expansion"
+	},
 	
 	"202": {
 		"code": "B1",
@@ -1319,6 +1325,12 @@
 		"desc": "Sortie Ise Kai, Hyuuga Kai, Ooyodo Kai, at least 1 DD and up to 2 other ships [W1-6], [W2-5], [W3-5] and [W4-5]. Reach [W1-6] node N and A-Rank+ the boss nodes.",
 		"memo": "\u27a3Rewards a 12cm 30-tube Rocket Launcher Kai Ni and either a New Model Artillery Armament Materials OR an Action Report"
 	},
+	"880": {
+		"code": "B115",
+		"name": "Elite Destroyer Division, Wreak Havoc!",
+		"desc": "Sortie 4 DD and up to 2 additional ships [W1-6], [W2-3], [W3-2] and [W4-2]. Reach [W1-6] node N and A-Rank+ the boss nodes.",
+		"memo": "f\u27a3Rewards: \u00B6First choice: Either a Furniture Fairy OR a New Model Artillery Armament Materials \u00B6Second choice: Either an Action Report OR a Medal"
+	},
 	
 	"201": {
 		"code": "Bd1",
@@ -1650,6 +1662,12 @@
 		"name": "Elite 21st Destroyer Division, Train Intensively!",
 		"desc": "Secure 4 victories in Exercises using Hatsuharu Kai Ni, Wakaba Kai, Hatsushimo Kai Ni and up to 3 other ships.",
 		"memo": "\u27a3Rewards a Mamiya and either 6 Development Materials OR an Action Report"
+	},
+	"320": {
+		"code": "C18",
+		"name": "Destroyer Division, Commence Intensive Training!",
+		"desc": "Secure 4 victories in Exercises within the same day using 4 DD and up to 2 additional ships.",
+		"memo": "\u27a3Rewards either 2 Screws OR 4 Development Materials"
 	},
 
 	"401": {
@@ -2334,6 +2352,13 @@
 		"name": "An Expansion of Anti-Air Armaments",
 		"desc": "Have 900 Bauxite. Scrap 6 Medium Cal. Main Guns and 3 Secondary Guns.",
 		"memo": "\u2718Consumes the resources. \u27a3Rewards either two 25mm Triple Autocannon Mounts OR two 12cm 30-tube Rocket Launchers OR a Reinforcement Expansion"
+	},
+	"680": {
+		"code": "F72",
+		"name": "Quarterly AA Guns",
+		"desc": "Have 1500 Bauxite. Scrap 4 AA Machine Guns and 4 Radars.",
+		"memo": "\u203bA Consolidated Expansion of Anti-Air Armaments \u2718Consumes the resources. \u27a3Rewards: \u00B6First choice: Either two 10cm Twin High-angle Gun Mounts OR two 12cm 30-tube Rocket Launchers \u00B6Second choice: Either two 8cm High-angle Guns OR six Development Materials",
+		"tracking": [ [0,4], [0,4] ]
 	},
 
 	"701": {
