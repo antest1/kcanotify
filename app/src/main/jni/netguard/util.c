@@ -66,6 +66,7 @@ int sdk_int(JNIEnv *env) {
 }
 
 void log_android(int prio, const char *fmt, ...) {
+    /*
     if (prio >= loglevel) {
         char line[1024];
         va_list argptr;
@@ -73,7 +74,7 @@ void log_android(int prio, const char *fmt, ...) {
         vsprintf(line, fmt, argptr);
         LOGD(prio, TAG, "%s", line);
         va_end(argptr);
-    }
+    }*/
 }
 
 uint8_t char2nible(const char c) {
