@@ -4,14 +4,14 @@
 		"改二甲"  : " Kai Ni A",
 		"改二乙"  : " Kai Ni B",
 		"改二丁"  : " Kai Ni D",
-		"改"      : " Kai",
+		"乙改": " Kai B",
 		"改母": " Kai Bo",
-		"乙改": " B Kai",
 		" два"  : " dva",
 		" Mk.II": " Mk.II",
 		" Mk.II Mod.2": " Mk.II Mod.2",
 		"改-壊": " Kai - Damaged",
-		"-壊": " - Damaged"
+		"-壊": " - Damaged",
+		"改"      : " Kai"
 	},
 	"金剛":"Kongou",
 	"比叡":"Hiei",
