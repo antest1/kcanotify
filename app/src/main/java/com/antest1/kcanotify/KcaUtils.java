@@ -287,7 +287,7 @@ public class KcaUtils {
                 KcaApiData.getKcGameData(api_data);
                 setPreferences(context, PREF_KCA_VERSION, default_version);
                 setPreferences(context, PREF_KCA_DATA_VERSION, default_version);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 return 0;
             }
             return 1;
