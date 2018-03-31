@@ -2,11 +2,11 @@
     <string name="locale_code">ko-KR</string>
 
     <!-- Application Information -->
-    <string name="app_name">시제 깡들리티</string>
-    <string name="action_settings">깡들리티 설정</string>
+    <string name="app_name">깡 들리 띠</string>
+    <string name="action_settings">깡 들리 띠  설정</string>
     <string name="backpress_msg">\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.</string>
-    <string name="notification_appinfo_title">깡들리티 알림</string>
-    <string name="app_vpn_name">시제 깡들리티 스니퍼</string>
+    <string name="notification_appinfo_title">깡 들리 띠 알림</string>
+    <string name="app_vpn_name">깡 들리 띠 스니퍼</string>
 
     <!-- Link Information, Do Not Translate Here -->
 
@@ -42,7 +42,7 @@
 
     <string name="opendb_failed_msg">OpenDB 데이터 처리 오류 발생</string>
     <string name="process_battle_failed_msg">전투 데이터 처리 오류 발생.</string>
-    <string name="service_failed_msg">데이터 처리 오류 발생.\n깡들리티를 재시작하는 것을 권장합니다.</string>
+    <string name="service_failed_msg">데이터 처리 오류 발생.\n깡 들리 띠 를 재시작하는 것을 권장합니다.</string>
 
     <string name="node_info_noevent" formatted="false">%s (기분탓)</string>
     <string name="node_info_obtain" formatted="false">%s (자원방)</string>
@@ -99,7 +99,7 @@
 
     <!-- KcaService Strings -->
     <string name="kca_init_title" formatted="false">%s 동작중</string>
-    <string name="kca_init_content">깡들리티에서 게임을 실행해주세요</string>
+    <string name="kca_init_content">깡 들리 띠 에서 게임을 실행해주세요</string>
 
     <string name="kca_noti_title_exp_canceled" formatted="false">%s번 원정(%s) 취소</string>
     <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt; 가 %s번 원정으로부터 귀환합니다.</string>
@@ -121,7 +121,7 @@
     <string name="kca_toast_seekvalue_f" formatted="false">색적(%s): %.2f</string>
     <string name="kca_toast_tpvalue" formatted="false">TP: S%d/A%d</string>
 
-    <string name="kca_toast_restart_at_kcanotify">깡들리티에서 게임을 다시 시작해주세요</string>
+    <string name="kca_toast_restart_at_kcanotify">깡 들리 띠 에서 게임을 다시 시작해주세요</string>
     <string name="kca_toast_get_data_at_settings">게임 데이터가 완전히 로딩되지 않았습니다. 만약 긴 시간이 지나도 완료되지 않는 경우 깡들리티 설정에서 게임 데이터를 수동으로 받아주세요</string>
     <string name="kca_toast_get_data_at_settings_2">게임 데이터에 이상이 있습니다. 깡들리티 설정에서 게임 데이터를 수동으로 받아주세요.</string>
     <string name="kca_toast_loading_data">게임 데이터 로딩 중</string>
@@ -140,7 +140,7 @@
     <string name="kca_view_expedition_header">원정 남은 시간:</string>
 
     <!-- Setting Strings -->
-    <string name="setting_menu_kand_head">깡들리티 설정</string>
+    <string name="setting_menu_kand_head">깡 들리 띠 설정</string>
     <string name="setting_menu_kand_title_saku_cal">색적 계산방식 선택</string>
     <string name="setting_menu_kand_title_exp_realtime_show">원정 남은 시간 실시간 표시</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">상단의 원정 시간 표시 여부</string>
@@ -208,7 +208,7 @@
     <string name="setting_menu_app_title_updatecheckserver">업데이트 확인 서버 선택</string>
     <string name="setting_menu_app_title_contact">건의/오류 보고</string>
     <string name="setting_menu_app_desc_contact">개발자에게 메일 전송</string>
-    <string name="setting_menu_app_info">시제 깡들리티 정보</string>
+    <string name="setting_menu_app_info">깡 들리 띠 정보~~</string>
 
     <!-- BattleView Strings -->
     <string name="battleview_error">처리 중 오류가 발생하였습니다.</string>
@@ -282,7 +282,7 @@
     <string name="item_boxs">가구함(소)</string>
     <string name="item_boxm">가구함(중)</string>
     <string name="item_boxl">가구함(대)</string>
-    <string name="sa_language_changed">변경된 언어 설정을 적용하려면 깡들리티를 다시 시작하세요. (Please restart kcanotify)</string>
+    <string name="sa_language_changed">변경된 언어 설정을 적용하려면 깡 들리 띠~를 다시 시작하세요. (Please restart kcanotify)</string>
     <string name="setting_menu_kand_title_language">언어 설정</string>
     <string name="setting_menu_noti_title_ringtone">알림음</string>
     <string name="setting_menu_noti_desc_ringtone">알람음 선택</string>
@@ -313,7 +313,7 @@
     <string name="kca_view_condition_2" formatted="false">피로도 #2: %s</string>
     <string name="not_supplied" formatted="false">제%d함대가 보급되지 않았습니다!</string>
     <string name="sound_kind_mixed">소리+진동</string>
-    <string name="viewbutton_hide">요정님: ㅂㅂ</string>
+    <string name="viewbutton_hide">요정님: 깡 들리 띠~</string>
     <string name="fairy_hidden_notification_action_remove">제거하기</string>
     <string name="fairy_hidden_notification_action_return">다시 표시하기</string>
     <string name="fairy_hidden_notification_title">요정님이 숨김됨</string>
@@ -384,7 +384,7 @@
     <string name="setting_menu_kand_title_adv_network">고급 네트워크 설정</string>
     <string name="sa_bypass_list_invalid">설정된 예외 주소 목록이 올바른 형식이 아닙니다. 입력을 다시 확인하세요.</string>
     <string name="setting_menu_noti_title_notiatsvcoff">서비스가 꺼진 상태에서 알람 활성 여부</string>
-    <string name="setting_menu_noti_desc_notiatsvcoff">깡들리티 서비스를 끈 상태에서도 원정/입거 완료 알림이 오도록 함</string>
+    <string name="setting_menu_noti_desc_notiatsvcoff">깡 들리 띠~ 서비스를 끈 상태에서도 원정/입거 완료 알림이 오도록 함</string>
     <string name="kca_toast_renew_currentportdeck">모항으로 돌아가 게임 데이터를 업데이트하세요.</string>
     <string name="questview_nopage">임무 없음</string>
 
