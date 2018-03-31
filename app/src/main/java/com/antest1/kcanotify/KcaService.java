@@ -68,6 +68,9 @@ import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_MEDIUM;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_SMALL;
 import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
+import static com.antest1.kcanotify.KcaApiData.T2_RADAR_LARGE;
+import static com.antest1.kcanotify.KcaApiData.T2_RADAR_SMALL;
+import static com.antest1.kcanotify.KcaApiData.T2_RADER_LARGE_II;
 import static com.antest1.kcanotify.KcaApiData.T2_SEA_SCOUT;
 import static com.antest1.kcanotify.KcaApiData.T2_SUB_GUN;
 import static com.antest1.kcanotify.KcaApiData.T2_TORPEDO;
@@ -1566,7 +1569,18 @@ public class KcaService extends Service {
                                 String itemlist = decodedData.replace("api_slotitem_ids=", "");
                                 String[] itemlist_array = itemlist.split(",");
                                 for (String item : itemlist_array) {
-                                    JsonObject status = getUserItemStatusById(Integer.parseInt(item), "alv", "type");
+                                    JsonObject status = getUserItemStatusById(Integer.parseInt(item), "lv,alv", "id,type");
+                                    if (status != null && status.has("id")) {
+                                        int item_id = status.get("id").getAsInt();
+                                        switch (item_id) {
+                                            case 19: // Type 96 Fighter
+                                                questTracker.updateIdCountTracker("678", 0);
+                                            case 20: // Type 0 Model 21
+                                                questTracker.updateIdCountTracker("678", 1);
+                                            default:
+                                                break;
+                                        }
+                                    }
                                     if (status != null && status.has("type")) {
                                         switch (status.getAsJsonArray("type").get(2).getAsInt()) {
                                             case T2_GUN_SMALL:
@@ -1591,6 +1605,12 @@ public class KcaService extends Service {
                                                 questTracker.updateIdCountTracker("638");
                                                 questTracker.updateIdCountTracker("674");
                                                 questTracker.updateIdCountTracker("675", 1);
+                                                questTracker.updateIdCountTracker("680", 0);
+                                                break;
+                                            case T2_RADAR_SMALL:
+                                            case T2_RADAR_LARGE:
+                                            case T2_RADER_LARGE_II:
+                                                questTracker.updateIdCountTracker("680", 1);
                                                 break;
                                             case T2_GUN_LARGE:
                                             case T2_GUN_LARGE_II:

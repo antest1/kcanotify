@@ -273,7 +273,7 @@ public class KcaQuestViewService extends Service {
                 Log.e("KCA-Q", api_data.toString());
                 api_page_count = api_data.get("api_page_count").getAsInt();
                 api_disp_page = api_data.get("api_disp_page").getAsInt();
-                if(!api_data.get("api_list").isJsonNull()) {
+                if(api_data.has("api_list") && api_data.get("api_list").isJsonArray()) {
                     api_list = api_data.getAsJsonArray("api_list");
                 }
             } else {

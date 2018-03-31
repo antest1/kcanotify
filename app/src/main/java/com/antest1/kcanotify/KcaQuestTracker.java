@@ -54,7 +54,7 @@ import static com.antest1.kcanotify.KcaUtils.getJapanSimpleDataFormat;
 public class KcaQuestTracker extends SQLiteOpenHelper {
     private static final String qt_db_name = "quest_track_db";
     private static final String qt_table_name = "quest_track_table";
-    private final static int[] quarterly_quest_id = {426, 428, 637, 643, 822, 852, 861, 862};
+    private final static int[] quarterly_quest_id = {426, 428, 637, 643, 663, 675, 678, 680, 822, 854, 861, 862, 873, 875};
     private final static int[] quest_cont_quest_id = {411, 607, 608};
     private static boolean ap_dup_flag = false;
 
@@ -151,20 +151,19 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
     }
 
     public void clearQuestTrack() {
-        String id_str = String.valueOf(id);
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(qt_table_name, null, null);
         test();
     }
 
-    public void deleteQuestTrackWithRange(int startId, int endId) {
+    public void deleteQuestTrackWithRange(int startId, int endId, String type_cond) {
         SQLiteDatabase db = this.getWritableDatabase();
         if (startId == -1) {
-            db.delete(qt_table_name, "KEY < ?", new String[]{String.valueOf(endId)});
+            db.delete(qt_table_name, "KEY < ?".concat(type_cond), new String[]{String.valueOf(endId)});
         } else if (endId == -1) {
-            db.delete(qt_table_name, "KEY > ?", new String[]{String.valueOf(startId)});
+            db.delete(qt_table_name, "KEY > ?".concat(type_cond), new String[]{String.valueOf(startId)});
         } else {
-            db.delete(qt_table_name, "KEY > ? AND KEY < ?",
+            db.delete(qt_table_name, "KEY > ? AND KEY < ?".concat(type_cond),
                     new String[]{String.valueOf(startId), String.valueOf(endId)});
         }
     }
@@ -199,7 +198,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     }
                     break;
                 case 2: // Weekly
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd", Locale.US);
+                    SimpleDateFormat dateFormat = getJapanSimpleDataFormat("yy MM dd");
                     try {
                         Date date1 = dateFormat.parse(KcaUtils.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
                         Date date2 = dateFormat.parse(KcaUtils.format("%s %s %s", current_time[0], current_time[1], current_time[2]));
@@ -218,7 +217,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     }
                     break;
                 case 5: // Quarterly, Else
-                    if (Arrays.binarySearch(quarterly_quest_id, id) >= 0) { // Bq1 ~ Bq4, D24, D26, F35, F39 (Quarterly)
+                    if (Arrays.binarySearch(quarterly_quest_id, id) >= 0) { // Bq1 ~ Bq6, D24, D26, F35, F39 (Quarterly)
                         int quest_month = Integer.parseInt(quest_time[1]);
                         int quest_quarter = quest_month - quest_month % 3;
                         int current_month = Integer.parseInt(current_time[1]);
@@ -706,6 +705,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             int cond2 = c.getInt(c.getColumnIndex("CND2"));
             int cond3 = c.getInt(c.getColumnIndex("CND3"));
             String time = c.getString(c.getColumnIndex("TIME"));
+            String type = c.getString(c.getColumnIndex("TYPE"));
             sb.append(KcaUtils.format("[%s] A:%s C:%02d,%02d,%02d,%02d T:%s\n", key, active, cond0, cond1, cond2, cond3, time));
         }
         c.close();
