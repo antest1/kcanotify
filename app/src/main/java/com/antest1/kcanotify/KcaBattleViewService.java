@@ -64,6 +64,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
+import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 
 public class KcaBattleViewService extends Service {
@@ -1246,7 +1247,7 @@ public class KcaBattleViewService extends Service {
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                         PixelFormat.TRANSLUCENT);
                 mParams.gravity = KcaUtils.getGravity(view_status);
-                prefs.edit().putInt(PREF_VIEW_YLOC, view_status).apply();
+                setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                 mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
                 mManager.addView(mView, mParams);
 
@@ -1625,7 +1626,7 @@ public class KcaBattleViewService extends Service {
                         if (Math.abs(view_status) > 1) view_status /= Math.abs(view_status);
                         mParams.gravity = KcaUtils.getGravity(view_status);
                         mManager.updateViewLayout(mView, mParams);
-                        prefs.edit().putInt(PREF_VIEW_YLOC, view_status).apply();
+                        setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                     } else {
                         clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                         if (clickDuration < MAX_CLICK_DURATION) {

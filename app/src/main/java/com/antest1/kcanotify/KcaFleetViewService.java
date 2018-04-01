@@ -66,6 +66,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
+import static com.antest1.kcanotify.KcaUtils.setPreferences;
 import static org.apache.commons.lang3.StringUtils.split;
 
 public class KcaFleetViewService extends Service {
@@ -331,7 +332,7 @@ public class KcaFleetViewService extends Service {
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
         mParams.gravity = KcaUtils.getGravity(view_status);
-        prefs.edit().putInt(PREF_VIEW_YLOC, view_status).apply();
+        setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
 
         fleetInfoLine = mView.findViewById(R.id.fleetview_infoline);
 
@@ -504,7 +505,7 @@ public class KcaFleetViewService extends Service {
                         if (Math.abs(view_status) > 1) view_status /= Math.abs(view_status);
                         mParams.gravity = KcaUtils.getGravity(view_status);
                         mManager.updateViewLayout(mView, mParams);
-                        prefs.edit().putInt(PREF_VIEW_YLOC, view_status).apply();
+                        setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                     }
 
                     if (clickDuration < MAX_CLICK_DURATION) {
@@ -1163,6 +1164,7 @@ public class KcaFleetViewService extends Service {
     private void sendReport(Exception e, int type) {
         error_flag = true;
         String data_str;
+        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
         if (data == null) {
             data_str = "data is null";

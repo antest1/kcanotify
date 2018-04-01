@@ -102,6 +102,11 @@ public class KcaUtils {
 
     public static String getStringPreferences(Context ctx, String key) {
         SharedPreferences pref = ctx.getSharedPreferences("pref", Context.MODE_PRIVATE);
+        try {
+            return String.valueOf(pref.getInt(key, 0));
+        } catch (Exception e) {
+            // Nothing to do
+        }
         return pref.getString(key, "");
     }
 
@@ -119,7 +124,7 @@ public class KcaUtils {
         } else if (value instanceof Boolean) {
             editor.putBoolean(key, (Boolean) value);
         } else if (value instanceof Integer) {
-            editor.putInt(key, (Integer) value);
+            editor.putString(key, String.valueOf(value));
         } else {
             editor.putString(key, value.toString());
         }
