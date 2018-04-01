@@ -456,7 +456,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             setPrevPageLastNo(last_no);
 
             String type_cond = "";
-            if (type % 9 != 0) type_cond = " AND TYPE = ".concat(String.valueOf(type));
+            if (type != -1 && type % 9 != 0) type_cond = " AND TYPE = ".concat(String.valueOf(type));
             if (questIdList.size() > 0) {
                 // remove invalid quest
                 if (page == 1) {

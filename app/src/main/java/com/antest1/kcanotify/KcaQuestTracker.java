@@ -88,6 +88,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         sb.append(" CND1 INTEGER, ");
         sb.append(" CND2 INTEGER, ");
         sb.append(" CND3 INTEGER, ");
+        sb.append(" TYPE INTEGER, ");
         sb.append(" TIME TEXT ) ");
         db.execSQL(sb.toString());
     }
@@ -103,17 +104,18 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String time = df.format(currentTime);
         String id_str = String.valueOf(id);
+        int quest_type = 0;
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("ACTIVE", 1);
+        JsonObject questInfo = KcaApiData.getQuestTrackInfo(id_str);
+        if (questInfo != null) quest_type = questInfo.get("type").getAsInt();
         Cursor c = db.query(qt_table_name, null, "KEY=?", new String[]{id_str}, null, null, null, null);
         if (c.moveToFirst()) {
-            JsonObject questInfo = KcaApiData.getQuestTrackInfo(id_str);
             if (questInfo != null) {
-                int questType = questInfo.get("type").getAsInt();
                 String questTime = c.getString(c.getColumnIndex("TIME"));
-                if (checkQuestValid(questType, id, questTime)) {
+                if (checkQuestValid(quest_type, id, questTime)) {
                     db.update(qt_table_name, values, "KEY=?", new String[]{id_str});
                 } else {
                     db.delete(qt_table_name, "KEY=?", new String[]{id_str});
@@ -127,6 +129,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             values.put("CND0", getInitialCondValue(id_str));
             for (int i = 1; i < 4; i++) values.put("CND".concat(String.valueOf(i)), 0);
             values.put("TIME", time);
+            values.put("TYPE", quest_type);
             db.insert(qt_table_name, null, values);
         }
         c.close();
@@ -704,9 +707,9 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             int cond1 = c.getInt(c.getColumnIndex("CND1"));
             int cond2 = c.getInt(c.getColumnIndex("CND2"));
             int cond3 = c.getInt(c.getColumnIndex("CND3"));
+            int type = c.getInt(c.getColumnIndex("TYPE"));
             String time = c.getString(c.getColumnIndex("TIME"));
-            String type = c.getString(c.getColumnIndex("TYPE"));
-            sb.append(KcaUtils.format("[%s] A:%s C:%02d,%02d,%02d,%02d T:%s\n", key, active, cond0, cond1, cond2, cond3, time));
+            sb.append(KcaUtils.format("[%s] A:%s C:%02d,%02d,%02d,%02d K:%d T:%s\n", key, active, cond0, cond1, cond2, cond3, type, time));
         }
         c.close();
         return sb.toString().trim();
