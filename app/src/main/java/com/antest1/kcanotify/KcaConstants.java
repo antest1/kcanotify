@@ -12,7 +12,7 @@ public final class KcaConstants {
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
     public static final String KCANOTIFY_USERITEM_CACHE_FILENAME = "kca_userslotitem";
     public static final int KCANOTIFY_DB_VERSION = 4;
-    public static final int KCANOTIFY_QTDB_VERSION = 1;
+    public static final int KCANOTIFY_QTDB_VERSION = 2;
     public static final int KCANOTIFY_DROPLOG_VERSION = 1;
     public static final int KCANOTIFY_RESOURCELOG_VERSION = 1;
 
@@ -422,6 +422,7 @@ public final class KcaConstants {
     public static final String PREF_FV_MENU_ORDER = "fleetview_menu_order";
     public static final String PREF_SHOW_CONSTRSHIP_NAME = "show_constrship_name";
     public static final String PREF_VIEW_YLOC = "view_yloc";
+    public static final String PREF_LAST_UPDATE_CHECK = "last_update_check";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -467,7 +468,8 @@ public final class KcaConstants {
             PREF_KCA_ACTIVATE_RESLOG,
             PREF_FV_MENU_ORDER,
             PREF_SHOW_CONSTRSHIP_NAME,
-            PREF_VIEW_YLOC
+            PREF_VIEW_YLOC,
+            PREF_LAST_UPDATE_CHECK
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

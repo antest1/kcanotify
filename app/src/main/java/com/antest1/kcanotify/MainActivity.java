@@ -63,6 +63,7 @@ import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.setPreferences;
 import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
 
 public class MainActivity extends AppCompatActivity {
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_VPN = 1;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_EXTERNAL_PERMISSION = 3;
+    public static final int UPDATECHECK_INTERVAL_MS = 30000;
 
     public String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
@@ -292,7 +294,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        checkRecentVersion();
+        if (prefs != null) {
+            long current_time = System.currentTimeMillis();
+            long last_check_time = Long.parseLong(getStringPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK));
+            if (current_time - last_check_time > UPDATECHECK_INTERVAL_MS) {
+                checkRecentVersion();
+            }
+        }
 
         setVpnBtn();
         setCheckBtn();
@@ -497,6 +505,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+                setPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK, String.valueOf(System.currentTimeMillis()));
             }
 
             @Override
