@@ -337,6 +337,7 @@
     <string name="questview_page" formatted="false">ページ %d/%d</string>
 
     <string name="action_tools">ツール</string>
+    <string name="action_save_msg">処理中</string>
 
     <string name="action_akashi">改修工廠表</string>
     <string name="aa_btn_safe_state0">一般</string>
@@ -467,6 +468,7 @@
     <string name="droplog_label_area">海域</string>
     <string name="droplog_label_level">難易度</string>
     <string name="droplog_label_isboss">ボス</string>
+    <string name="droplog_label_rank">ランク</string>
     <string name="droplog_item_label_no">No</string>
     <string name="droplog_item_label_time">日付</string>
     <string name="droplog_item_label_area">海域</string>

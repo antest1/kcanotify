@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -28,8 +29,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,6 +53,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
 public class DropLogActivity extends AppCompatActivity {
+    private final String FILE_PATH = "/export_data";
     public static final long DAY_MILLISECOND = 86400000;
     public static final String[] world_list = {"*", "1", "2", "3", "4", "5", "6", "41"};
 
@@ -71,6 +78,7 @@ public class DropLogActivity extends AppCompatActivity {
     ImageView showhide_btn;
     CheckBox chkbox_desc, chkbox_boss, chkbox_s, chkbox_a, chkbox_b, chkbox_x;
     boolean is_hidden = false;
+    boolean is_exporting = false;
     int rank_flag = RANK_S | RANK_A | RANK_B;
     int current_world, current_map, current_node;
     Button btn_search;
@@ -121,9 +129,9 @@ public class DropLogActivity extends AppCompatActivity {
         for (int i = 1; i < maprank_info.length; i++) {
             maprank_info[i] = getStringWithLocale(KcaUtils.getId("maprank_" + String.valueOf(i), R.string.class));
         }
-        KcaDroplogItemAdpater.maprank_info = maprank_info;
-        KcaDroplogItemAdpater.ship_none = getStringWithLocale(R.string.droplog_ship_none);
-        KcaDroplogItemAdpater.ship_full = getStringWithLocale(R.string.droplog_ship_full);
+        KcaDropLogger.maprank_info = maprank_info;
+        KcaDropLogger.ship_none = getStringWithLocale(R.string.droplog_ship_none);
+        KcaDropLogger.ship_full = getStringWithLocale(R.string.droplog_ship_full);
         KcaDroplogItemAdpater.color_normal = ContextCompat.getColor(getApplicationContext(), R.color.black);
         KcaDroplogItemAdpater.color_none = ContextCompat.getColor(getApplicationContext(), R.color.grey);
         KcaDroplogItemAdpater.color_item = ContextCompat.getColor(getApplicationContext(), R.color.colorListItemBack);
@@ -265,8 +273,82 @@ public class DropLogActivity extends AppCompatActivity {
                 alert.setMessage(getStringWithLocale(R.string.droplog_clear_dialog_message));
                 alert.show();
                 return true;
+            case R.id.action_droplog_export:
+                new LogSaveTask().execute();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private class LogSaveTask extends AsyncTask<String, String, Integer> {
+        File file;
+
+        @Override
+        protected void onPreExecute() {
+            is_exporting = true;
+            row_count.setText(getStringWithLocale(R.string.action_save_msg));
+            row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExportProcess));
+        }
+
+        @Override
+        protected Integer doInBackground(String[] params) {
+            File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(FILE_PATH));
+            if (!savedir.exists()) savedir.mkdirs();
+            String exportPath = savedir.getPath();
+
+            String label_date = getStringWithLocale(R.string.droplog_item_label_time);
+            String label_area = getStringWithLocale(R.string.droplog_item_label_area);
+            String label_isboss = getStringWithLocale(R.string.droplog_label_isboss);
+            String label_rank = getStringWithLocale(R.string.droplog_label_rank);
+            String label_name = getStringWithLocale(R.string.droplog_item_label_name);
+
+            String label_line = KcaUtils.format("%s,%s,%s,%s,%s", label_date, label_area, label_isboss, label_rank, label_name);
+
+            List<String> loglist = dropLogger.getFullStringDropLog();
+            if (loglist.size() > 0) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
+                String timetext = dateFormat.format(new Date());
+
+                String filename = KcaUtils.format("/kca_droplog_%s.csv", timetext);
+                file = new File(exportPath.concat(filename));
+                try {
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
+                    bw.write(label_line);
+                    bw.write("\r\n");
+                    for(String line: loglist) {
+                        bw.write(line);
+                        bw.write("\r\n");
+                    }
+                    bw.close();
+                    return 0;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return 2;
+                }
+            } else {
+                return 1;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            is_exporting = false;
+            row_count.setText(KcaUtils.format(getStringWithLocale(R.string.droplog_total_format), adapter.getCount()));
+            row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+            switch (result) {
+                case 0:
+                    Toast.makeText(getApplicationContext(), "Exported to ".concat(file.getPath()), Toast.LENGTH_LONG).show();
+                    break;
+                case 1:
+                    Toast.makeText(getApplicationContext(), "No log to export.", Toast.LENGTH_LONG).show();
+                    break;
+                case 2:
+                    Toast.makeText(getApplicationContext(), "An error occurred when exporting drop log.", Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -274,7 +356,7 @@ public class DropLogActivity extends AppCompatActivity {
         //Toast.makeText(getApplicationContext(), condition_data.toString(), Toast.LENGTH_LONG).show();
         adapter.setListViewItemList(dropLogger.getDropLogWithCondition(condition_data), 0);
         droplog_listview.setAdapter(adapter);
-        row_count.setText(KcaUtils.format(getStringWithLocale(R.string.droplog_total_format), adapter.getCount()));
+        if (!is_exporting) row_count.setText(KcaUtils.format(getStringWithLocale(R.string.droplog_total_format), adapter.getCount()));
         findViewById(R.id.droplog_infoline).setVisibility(View.VISIBLE);
     }
 

@@ -417,6 +417,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="questview_page" formatted="false">Page %d/%d</string>
 
     <string name="action_tools">Tools</string>
+    <string name="action_save_msg">Processing...</string>
 
     <string name="action_akashi">Improvement Arsenal Chart</string>
     <string name="action_akashi_detail">Equipment Improvement Detail</string>
@@ -532,6 +533,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="droplog_label_area">Area</string>
     <string name="droplog_label_level">Diff.</string>
     <string name="droplog_label_isboss">Boss</string>
+    <string name="droplog_label_rank">Rank</string>
     <string name="droplog_item_label_no">No</string>
     <string name="droplog_item_label_time">Time</string>
     <string name="droplog_item_label_area">Area</string>

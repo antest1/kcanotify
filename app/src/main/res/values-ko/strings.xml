@@ -341,6 +341,7 @@
     <string name="questview_page" formatted="false">페이지 %d/%d</string>
 
     <string name="action_tools">도구모음</string>
+    <string name="action_save_msg">처리중</string>
 
     <string name="action_akashi">개수공창표</string>
     <string name="aa_btn_safe_state0">일반</string>
@@ -467,6 +468,7 @@
     <string name="droplog_label_area">해역</string>
     <string name="droplog_label_level">난이도</string>
     <string name="droplog_label_isboss">보스</string>
+    <string name="droplog_label_rank">랭크</string>
     <string name="droplog_item_label_no">No</string>
     <string name="droplog_item_label_time">날짜</string>
     <string name="droplog_item_label_area">해역</string>

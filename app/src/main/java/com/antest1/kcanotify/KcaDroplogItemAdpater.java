@@ -36,8 +36,6 @@ import static com.antest1.kcanotify.R.id.ship_id;
 
 public class KcaDroplogItemAdpater extends BaseAdapter {
     private List<JsonObject> listViewItemList = new ArrayList<>();
-    public static String[] maprank_info;
-    public static String ship_none, ship_full;
     public static int color_normal, color_none, color_item, color_item_acc;
 
     @Override
@@ -87,7 +85,7 @@ public class KcaDroplogItemAdpater extends BaseAdapter {
         int maprank = item.get("maprank").getAsInt();
         String node_alpha = KcaApiData.getCurrentNodeAlphabet(world, map, node);
         if (maprank > 0) {
-            holder.item_area.setText(KcaUtils.format("%d-%d[%s]-%s", world, map, maprank_info[maprank], node_alpha));
+            holder.item_area.setText(KcaUtils.format("%d-%d[%s]-%s", world, map, KcaDropLogger.maprank_info[maprank], node_alpha));
         } else {
             holder.item_area.setText(KcaUtils.format("%d-%d-%s", world, map, node_alpha));
         }
@@ -99,8 +97,8 @@ public class KcaDroplogItemAdpater extends BaseAdapter {
 
         int ship_id = item.get("ship_id").getAsInt();
         if (ship_id <= 0) {
-            if (ship_id == -1) holder.item_name.setText(ship_full);
-            else if (ship_id == 0) holder.item_name.setText(ship_none);
+            if (ship_id == -1) holder.item_name.setText(KcaDropLogger.ship_full);
+            else if (ship_id == 0) holder.item_name.setText(KcaDropLogger.ship_none);
             holder.item_name.setTextColor(color_none);
         }
         else {

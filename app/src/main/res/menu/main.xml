@@ -1,16 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.antest1.kca_nofity.MainActivity" >
+    tools:context="com.antest1.kcanofity.MainActivity" >
 
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/action_settings"/>
     <item
         android:id="@+id/action_errorlog"
         android:orderInCategory="101"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/action_errorlog"/>
 
 

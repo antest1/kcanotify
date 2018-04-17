@@ -358,6 +358,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="questview_page" formatted="false">第 %d/%d 页</string>
 
     <string name="action_tools">实用工具</string>
+    <string name="action_save_msg">处理中</string>
 
     <string name="action_akashi">明石改修表</string>
     <string name="action_akashi_detail">装备改修详情</string>
@@ -473,6 +474,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="droplog_label_area">海域</string>
     <string name="droplog_label_level">难易度</string>
     <string name="droplog_label_isboss">王点</string>
+    <string name="droplog_label_rank">评价</string>
     <string name="droplog_item_label_no">数</string>
     <string name="droplog_item_label_time">时间</string>
     <string name="droplog_item_label_area">海域</string>

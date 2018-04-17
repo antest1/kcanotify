@@ -180,6 +180,7 @@
 
     <color name="colorPanelBack">#7ff5f5f5</color>
     <color name="colorDataArea">#e0e0e0</color>
+    <color name="colorExportProcess">#ff5252</color>
 
     <color name="colorExpeditionTable1">#607D8B</color>
     <color name="colorExpeditionTable2">#AFB42B</color>

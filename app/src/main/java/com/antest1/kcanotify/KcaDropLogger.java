@@ -10,10 +10,13 @@ import android.util.Log;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static android.R.attr.id;
 import static android.R.attr.value;
@@ -24,6 +27,9 @@ public class KcaDropLogger extends SQLiteOpenHelper {
     private static final String droplog_db_name = "droplogger_db";
     private static final String droplog_table_name = "droplog_table";
     private static final String[] droplog_condition_key = {"startdate", "enddate", "world", "map", "node", "maprank", "isboss", "rank"};
+
+    public static String[] maprank_info;
+    public static String ship_none, ship_full;
 
     public KcaDropLogger(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, droplog_db_name, factory, version);
@@ -120,7 +126,57 @@ public class KcaDropLogger extends SQLiteOpenHelper {
                 .concat(order_str).trim()), null);
 
         while (c.moveToNext()) {
-            result.add(retrieveDataFromCursor(c));
+            JsonObject item = retrieveDataFromCursor(c);
+            result.add(item);
+        }
+        c.close();
+        return result;
+    }
+
+    public List<String> getFullStringDropLog() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<String> result = new ArrayList<>();
+
+        Cursor c = db.rawQuery("SELECT * from "
+                .concat(droplog_table_name)
+                .concat(" ORDER BY key "), null);
+
+        while (c.moveToNext()) {
+            JsonObject item = retrieveDataFromCursor(c);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
+            String timetext = dateFormat.format(new Date(item.get("timestamp").getAsLong()));
+
+            int world = item.get("world").getAsInt();
+            int map = item.get("map").getAsInt();
+            int node = item.get("node").getAsInt();
+            int maprank = item.get("maprank").getAsInt();
+
+            String node_alpha = KcaApiData.getCurrentNodeAlphabet(world, map, node);
+            String node_text = "";
+            if (maprank > 0) node_text = KcaUtils.format("%d-%d[%s]-%s", world, map, maprank_info[maprank], node_alpha);
+            else node_text = KcaUtils.format("%d-%d-%s", world, map, node_alpha);
+
+            String isboss_text = "";
+            if (item.get("isboss").getAsInt() > 0) isboss_text = "O";
+            else isboss_text = "-";
+
+            String rank_text = item.get("rank").getAsString();
+
+            String ship_name_text = "";
+            int ship_id = item.get("ship_id").getAsInt();
+            if (ship_id <= 0) {
+                if (ship_id == -1) ship_name_text = ship_full;
+                else if (ship_id == 0) ship_name_text = ship_none;
+            }
+            else {
+                JsonObject kc_data = KcaApiData.getKcShipDataById(ship_id, "name");
+                if (kc_data != null) {
+                    String kc_name = kc_data.get("name").getAsString();
+                    ship_name_text = KcaApiData.getShipTranslation(kc_name, false);
+                }
+            }
+            String str_item = KcaUtils.format("%s,%s,%s,%s,%s", timetext, node_text, isboss_text, rank_text, ship_name_text);
+            result.add(str_item);
         }
         c.close();
         return result;
