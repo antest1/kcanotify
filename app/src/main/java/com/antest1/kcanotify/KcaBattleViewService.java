@@ -131,7 +131,7 @@ public class KcaBattleViewService extends Service {
 
     private int[] slotViewList = {R.id.item1, R.id.item2, R.id.item3, R.id.item4, R.id.item5};
 
-    WindowManager.LayoutParams mParams;
+    WindowManager.LayoutParams mParams, acViewParams;
     ScrollView battleview;
 
     @Nullable
@@ -1644,26 +1644,88 @@ public class KcaBattleViewService extends Service {
         }
     };
 
+    private int screenWidth, screenHeight;
+    private int popupWidth, popupHeight;
+    private float acTouchX, acTouchY;
+    private int acViewX, acViewY;
+
+    private void initAcViewParams() {
+        acView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        popupWidth = acView.getMeasuredWidth();
+        popupHeight = acView.getMeasuredHeight();
+        Toast.makeText(getApplicationContext(), KcaUtils.format("%d %d", popupWidth, popupHeight), Toast.LENGTH_LONG).show();
+        acViewParams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                getWindowLayoutType(),
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
+
+        acViewParams.gravity = Gravity.TOP | Gravity.START;
+        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
+        Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+
+        acViewParams.x = (screenWidth - popupWidth) / 2;
+        acViewParams.y = (screenHeight - popupHeight) / 2;
+    }
+
     private View.OnTouchListener acViewTouchListener = new View.OnTouchListener() {
+        private static final int MAX_CLICK_DURATION = 200;
+
+        private long startClickTime;
+
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    Log.e("KCA", "ACTION_DOWN");
-                    return true;
-                case MotionEvent.ACTION_UP:
-                    if (v.getId() == acView.findViewById(R.id.view_ac_head).getId()) {
-                        acView.setVisibility(View.GONE);
-                        mManager.removeViewImmediate(acView);
+            if (v.getId() == acView.findViewById(R.id.view_ac_head).getId()) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        acTouchX = event.getRawX();
+                        acTouchY = event.getRawY();
+                        acViewX = acViewParams.x;
+                        acViewY = acViewParams.y;
+                        Log.e("KCA", "ACTION_DOWN");
+                        startClickTime = Calendar.getInstance().getTimeInMillis();
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                        if (clickDuration < MAX_CLICK_DURATION) {
+                            if (v.getId() == acView.findViewById(R.id.view_ac_head).getId()) {
+                                acView.setVisibility(View.GONE);
+                                mManager.removeViewImmediate(acView);
+                            }
+                        }
                         Log.e("KCA", "ACTION_UP");
-                    } else if (v instanceof TextView){
-                        String val = (String) ((TextView) v).getText();
-                        showCustomToast(customToast, val, Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-                    }
-                    return false;
-                default:
-                    return false;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        int x = (int) (event.getRawX() - acTouchX);
+                        int y = (int) (event.getRawY() - acTouchY);
+
+                        acViewParams.x = acViewX + x;
+                        acViewParams.y = acViewY + y;
+                        if (acViewParams.x < 0) acViewParams.x = 0;
+                        else if (acViewParams.x > screenWidth - popupWidth)
+                            acViewParams.x = screenWidth - popupWidth;
+                        if (acViewParams.y < 0) acViewParams.y = 0;
+                        else if (acViewParams.y > screenHeight - popupHeight)
+                            acViewParams.y = screenHeight - popupHeight;
+                        mManager.updateViewLayout(acView, acViewParams);
+                        break;
+
+                    default:
+                        break;
+                }
+            } else if (v instanceof TextView){
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    String val = (String) ((TextView) v).getText();
+                    showCustomToast(customToast, val, Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                }
             }
+            return true;
         }
     };
 
@@ -1748,21 +1810,15 @@ public class KcaBattleViewService extends Service {
         @Override
         public void onClick(View v) {
             Intent qintent;
-            WindowManager.LayoutParams acViewParams;
+
             Log.e("KCA-BV", getResources().getResourceEntryName(v.getId()));
             switch (v.getId()) {
                 case R.id.view_item0:
-                    acViewParams = new WindowManager.LayoutParams(
-                            WindowManager.LayoutParams.WRAP_CONTENT,
-                            WindowManager.LayoutParams.WRAP_CONTENT,
-                            getWindowLayoutType(),
-                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                            PixelFormat.TRANSLUCENT);
-
-                    acView.setVisibility(View.VISIBLE);
-                    if (acView.getParent() != null) {
+                    initAcViewParams();
+                    if (acView != null && acView.getParent() != null) {
                         mManager.updateViewLayout(acView, acViewParams);
                     } else {
+                        acView.setVisibility(View.VISIBLE);
                         mManager.addView(acView, acViewParams);
                     }
                     break;
