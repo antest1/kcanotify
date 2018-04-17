@@ -667,6 +667,8 @@ public class KcaDeckInfo {
         for (int i = 0; i < deckShipIdList.size(); i++) {
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
+                if (KcaDocking.checkShipInDock(shipId)) continue;
+
                 JsonObject shipData = getUserShipDataById(shipId, "nowhp,maxhp,slot,slot_ex");
                 int shipNowHp = shipData.get("nowhp").getAsInt();
                 int shipMaxHp = shipData.get("maxhp").getAsInt();
