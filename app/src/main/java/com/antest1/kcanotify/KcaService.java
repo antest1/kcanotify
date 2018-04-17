@@ -841,7 +841,11 @@ public class KcaService extends Service {
                     }
                     if (reqPortApiData.has("api_ndock")) {
                         dbHelper.putValue(DB_KEY_NDOCKDATA, reqPortApiData.getAsJsonArray("api_ndock").toString());
+                        JsonArray nDockData = reqPortApiData.getAsJsonArray("api_ndock");
+                        KcaDocking.setDockData(nDockData);
+                        processDockingInfo();
                     }
+
                     if (reqPortApiData.has("api_material")) {
                         JsonArray material_data = reqPortApiData.getAsJsonArray("api_material");
                         recordResourceLog(material_data, true);
@@ -963,11 +967,7 @@ public class KcaService extends Service {
                             KcaBattle.cleanEscapeList();
                         }
 
-                        if (reqPortApiData.has("api_ndock")) {
-                            JsonArray nDockData = reqPortApiData.getAsJsonArray("api_ndock");
-                            KcaDocking.setDockData(nDockData);
-                            processDockingInfo();
-                        }
+
 
                         //Log.e("KCA", "Total Ships: " + String.valueOf(size));
                         if (reqPortApiData.has("api_deck_port")) {
