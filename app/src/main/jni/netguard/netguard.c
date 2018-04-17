@@ -419,6 +419,10 @@ int protect_socket(const struct arguments *args, int socket) {
     jclass cls = (*args->env)->GetObjectClass(args->env, args->instance);
     if (midProtect == NULL)
         midProtect = jniGetMethodID(args->env, cls, "protect", "(I)Z");
+    if (midProtect == NULL) {
+        log_android(ANDROID_LOG_ERROR, "protect socket failed to get method");
+        return -1;
+    }
 
     jboolean isProtected = (*args->env)->CallBooleanMethod(
             args->env, args->instance, midProtect, socket);
