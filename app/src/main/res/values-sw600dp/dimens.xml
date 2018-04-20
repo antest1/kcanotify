@@ -13,6 +13,19 @@
     <dimen name="fleetview_text_ship_medium">18dp</dimen>
     <dimen name="fleetview_text_ship_small">15dp</dimen>
 
+    <dimen name="questview_tag_size">40dp</dimen>
+    <dimen name="questview_desc_height">54dp</dimen>
+    <dimen name="questview_text_top">24dp</dimen>
+    <dimen name="questview_button_top">22dp</dimen>
+    <dimen name="questview_text_large">20dp</dimen>
+    <dimen name="questview_text_medium">16dp</dimen>
+    <dimen name="questview_text_small">14dp</dimen>
+
+    <dimen name="item_popup_icon_size">20dp</dimen>
+    <dimen name="item_popup_text_size_large">16dp</dimen>
+    <dimen name="item_popup_text_size_small">14dp</dimen>
+    <dimen name="item_popup_xmargin">72dp</dimen>
+
     <dimen name="button_size">128dp</dimen>
     <dimen name="button_select_size">72dp</dimen>
 

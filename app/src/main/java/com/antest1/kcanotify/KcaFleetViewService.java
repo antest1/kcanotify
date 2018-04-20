@@ -427,7 +427,7 @@ public class KcaFleetViewService extends Service {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             WindowManager.LayoutParams itemViewParams;
-            int xMargin = 200;
+            int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
 
             Intent qintent;
             int id = v.getId();

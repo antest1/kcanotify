@@ -396,7 +396,7 @@ public class KcaLandAirBasePopupService extends Service {
     private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
         private static final int LONG_CLICK_DURATION = 800;
-        int xMargin = 200;
+        int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
         int itemViewWidth, itemViewHeight;
 
         private long startClickTime;

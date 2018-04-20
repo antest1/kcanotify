@@ -1730,7 +1730,7 @@ public class KcaBattleViewService extends Service {
 
     private View.OnTouchListener shipViewTouchListener = new View.OnTouchListener() {
         WindowManager.LayoutParams itemViewParams;
-        int xMargin = 200;
+        int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
         boolean isTouchDown = false;
 
         @Override

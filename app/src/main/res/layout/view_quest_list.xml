@@ -48,17 +48,18 @@
                     android:layout_marginRight="10dp"
                     android:text="Page 1"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="@dimen/questview_text_top" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/quest_amenu_btn"
-                        android:layout_width="18dp"
+                        android:layout_width="@dimen/questview_button_top"
                         android:layout_height="18dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginBottom="2dp"
@@ -79,7 +80,7 @@
 
                         <ImageView
                             android:id="@+id/quest_clear"
-                            android:layout_width="18dp"
+                            android:layout_width="@dimen/questview_button_top"
                             android:layout_height="18dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
@@ -104,7 +105,7 @@
                     android:paddingStart="5dp"
                     android:text="@string/questview_prev"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="@dimen/questview_text_top" />
 
                 <TextView
                     android:id="@+id/quest_next"
@@ -121,11 +122,11 @@
                     android:paddingStart="5dp"
                     android:text="@string/questview_next"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="@dimen/questview_text_top" />
 
                 <ImageView
                     android:id="@+id/quest_exit"
-                    android:layout_width="16dp"
+                    android:layout_width="@dimen/questview_button_top"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
@@ -158,7 +159,7 @@
 
                 <LinearLayout
                     android:id="@+id/quest1_info"
-                    android:layout_width="30dp"
+                    android:layout_width="@dimen/questview_tag_size"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="0dp">
@@ -171,9 +172,10 @@
                         android:layout_weight="0.5"
                         android:background="@color/colorRankA"
                         android:gravity="center"
+                        android:text="출"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/questview_text_large" />
 
                     <TextView
                         android:id="@+id/quest1_type"
@@ -184,9 +186,10 @@
                         android:background="@color/colorQuestCategory1"
                         android:gravity="center"
                         android:orientation="horizontal"
+                        android:text="출"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/questview_text_large" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -211,7 +214,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="left|center_vertical"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="@dimen/questview_text_large" />
 
                         <TextView
                             android:id="@+id/quest1_progress"
@@ -229,7 +232,7 @@
                             android:paddingTop="1dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="10dp" />
+                            android:textSize="@dimen/questview_text_small" />
 
                         <TextView
                             android:id="@+id/quest1_progress_track"
@@ -247,19 +250,19 @@
                             android:paddingTop="1dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="10dp" />
+                            android:textSize="@dimen/questview_text_small" />
 
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/quest1_desc"
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="@dimen/questview_desc_height"
                         android:layout_marginLeft="5dp"
                         android:maxLines="2"
                         android:scrollbars="vertical"
                         android:textColor="@color/white"
-                        android:textSize="11dp" />
+                        android:textSize="@dimen/questview_text_medium" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -274,7 +277,7 @@
 
                 <LinearLayout
                     android:id="@+id/quest2_info"
-                    android:layout_width="30dp"
+                    android:layout_width="@dimen/questview_tag_size"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="0dp">
@@ -289,7 +292,7 @@
                         android:gravity="center"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/questview_text_large" />
 
                     <TextView
                         android:id="@+id/quest2_type"
@@ -302,7 +305,7 @@
                         android:orientation="horizontal"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/questview_text_large" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -327,7 +330,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="left|center_vertical"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="@dimen/questview_text_large" />
 
                         <TextView
                             android:id="@+id/quest2_progress"
@@ -345,7 +348,7 @@
                             android:paddingTop="1dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="10dp" />
+                            android:textSize="@dimen/questview_text_small" />
 
                         <TextView
                             android:id="@+id/quest2_progress_track"
@@ -363,18 +366,18 @@
                             android:paddingTop="1dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="10dp" />
+                            android:textSize="@dimen/questview_text_small" />
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/quest2_desc"
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="@dimen/questview_desc_height"
                         android:layout_marginLeft="5dp"
                         android:maxLines="2"
                         android:scrollbars="vertical"
                         android:textColor="@color/white"
-                        android:textSize="11dp" />
+                        android:textSize="@dimen/questview_text_medium" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -389,7 +392,7 @@
 
                 <LinearLayout
                     android:id="@+id/quest3_info"
-                    android:layout_width="30dp"
+                    android:layout_width="@dimen/questview_tag_size"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="0dp">
@@ -404,7 +407,7 @@
                         android:gravity="center"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/questview_text_large" />
 
                     <TextView
                         android:id="@+id/quest3_type"
@@ -417,7 +420,7 @@
                         android:orientation="horizontal"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/questview_text_large" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -442,7 +445,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="left|center_vertical"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="@dimen/questview_text_large" />
 
                         <TextView
                             android:id="@+id/quest3_progress"
@@ -460,7 +463,7 @@
                             android:paddingTop="1dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="10dp" />
+                            android:textSize="@dimen/questview_text_small" />
 
                         <TextView
                             android:id="@+id/quest3_progress_track"
@@ -478,18 +481,18 @@
                             android:paddingTop="1dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="10dp" />
+                            android:textSize="@dimen/questview_text_small" />
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/quest3_desc"
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="@dimen/questview_desc_height"
                         android:layout_marginLeft="5dp"
                         android:maxLines="2"
                         android:scrollbars="vertical"
                         android:textColor="@color/white"
-                        android:textSize="11dp" />
+                        android:textSize="@dimen/questview_text_medium" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -504,7 +507,7 @@
 
                 <LinearLayout
                     android:id="@+id/quest4_info"
-                    android:layout_width="30dp"
+                    android:layout_width="@dimen/questview_tag_size"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="0dp">
@@ -519,7 +522,7 @@
                         android:gravity="center"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/questview_text_large" />
 
                     <TextView
                         android:id="@+id/quest4_type"
@@ -532,7 +535,7 @@
                         android:orientation="horizontal"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/questview_text_large" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -557,7 +560,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="left|center_vertical"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="@dimen/questview_text_large" />
 
                         <TextView
                             android:id="@+id/quest4_progress"
@@ -575,7 +578,7 @@
                             android:paddingTop="1dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="10dp" />
+                            android:textSize="@dimen/questview_text_small" />
 
                         <TextView
                             android:id="@+id/quest4_progress_track"
@@ -593,18 +596,18 @@
                             android:paddingTop="1dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="10dp" />
+                            android:textSize="@dimen/questview_text_small" />
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/quest4_desc"
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="@dimen/questview_desc_height"
                         android:layout_marginLeft="5dp"
                         android:maxLines="2"
                         android:scrollbars="vertical"
                         android:textColor="@color/white"
-                        android:textSize="11dp" />
+                        android:textSize="@dimen/questview_text_medium" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -619,7 +622,7 @@
 
                 <LinearLayout
                     android:id="@+id/quest5_info"
-                    android:layout_width="30dp"
+                    android:layout_width="@dimen/questview_tag_size"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="0dp">
@@ -634,7 +637,7 @@
                         android:gravity="center"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/questview_text_large" />
 
                     <TextView
                         android:id="@+id/quest5_type"
@@ -647,7 +650,7 @@
                         android:orientation="horizontal"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/questview_text_large" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -672,7 +675,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="left|center_vertical"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="@dimen/questview_text_large" />
 
                         <TextView
                             android:id="@+id/quest5_progress"
@@ -690,7 +693,7 @@
                             android:paddingTop="1dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="10dp" />
+                            android:textSize="@dimen/questview_text_small" />
 
                         <TextView
                             android:id="@+id/quest5_progress_track"
@@ -708,18 +711,18 @@
                             android:paddingTop="1dp"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="10dp" />
+                            android:textSize="@dimen/questview_text_small" />
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/quest5_desc"
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="@dimen/questview_desc_height"
                         android:layout_marginLeft="5dp"
                         android:maxLines="2"
                         android:scrollbars="vertical"
                         android:textColor="@color/white"
-                        android:textSize="11dp" />
+                        android:textSize="@dimen/questview_text_medium" />
 
                 </LinearLayout>
             </LinearLayout>

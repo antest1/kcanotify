@@ -23,24 +23,24 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:id="@+id/item1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/item1"
-                    android:layout_marginBottom="1dp">
+                    android:layout_marginBottom="1dp"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        app:srcCompat="@mipmap/item_6"
                         android:id="@+id/item1_icon"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
+                        android:layout_width="@dimen/item_popup_icon_size"
+                        android:layout_height="@dimen/item_popup_icon_size"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:adjustViewBounds="true"
-                        android:scaleType="fitXY"
                         android:maxHeight="15dp"
                         android:maxWidth="15dp"
-                        android:src="@mipmap/item_6" />
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/item_6"
+                        app:srcCompat="@mipmap/item_6" />
 
                     <TextView
                         android:id="@+id/item1_name"
@@ -51,7 +51,7 @@
                         android:layout_marginRight="3dp"
                         android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
-                        android:textSize="11dp" />
+                        android:textSize="@dimen/item_popup_text_size_large" />
 
                     <TextView
                         android:id="@+id/item1_level"
@@ -62,7 +62,7 @@
                         android:layout_marginRight="4dp"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
-                        android:textSize="10dp" />
+                        android:textSize="@dimen/item_popup_text_size_small" />
 
                     <TextView
                         android:id="@+id/item1_alv"
@@ -73,28 +73,28 @@
                         android:layout_marginRight="1dp"
                         android:text="@string/alv_4"
                         android:textColor="@color/itemalv2"
-                        android:textSize="10dp" />
+                        android:textSize="@dimen/item_popup_text_size_small" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:id="@+id/item2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/item2"
-                    android:layout_marginBottom="1dp">
+                    android:layout_marginBottom="1dp"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        app:srcCompat="@mipmap/item_6"
                         android:id="@+id/item2_icon"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
+                        android:layout_width="@dimen/item_popup_icon_size"
+                        android:layout_height="@dimen/item_popup_icon_size"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:adjustViewBounds="true"
-                        android:scaleType="fitXY"
                         android:maxHeight="15dp"
                         android:maxWidth="15dp"
-                        android:src="@mipmap/item_6" />
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/item_6"
+                        app:srcCompat="@mipmap/item_6" />
 
                     <TextView
                         android:id="@+id/item2_name"
@@ -105,7 +105,7 @@
                         android:layout_marginRight="3dp"
                         android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
-                        android:textSize="11dp" />
+                        android:textSize="@dimen/item_popup_text_size_large" />
 
                     <TextView
                         android:id="@+id/item2_level"
@@ -116,7 +116,7 @@
                         android:layout_marginRight="4dp"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
-                        android:textSize="10dp" />
+                        android:textSize="@dimen/item_popup_text_size_small" />
 
                     <TextView
                         android:id="@+id/item2_alv"
@@ -127,28 +127,28 @@
                         android:layout_marginRight="1dp"
                         android:text="@string/alv_7"
                         android:textColor="@color/itemalv2"
-                        android:textSize="10dp" />
+                        android:textSize="@dimen/item_popup_text_size_small" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:id="@+id/item3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/item3"
-                    android:layout_marginBottom="1dp">
+                    android:layout_marginBottom="1dp"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        app:srcCompat="@mipmap/item_6"
                         android:id="@+id/item3_icon"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
+                        android:layout_width="@dimen/item_popup_icon_size"
+                        android:layout_height="@dimen/item_popup_icon_size"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:adjustViewBounds="true"
-                        android:scaleType="fitXY"
                         android:maxHeight="15dp"
                         android:maxWidth="15dp"
-                        android:src="@mipmap/item_6" />
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/item_6"
+                        app:srcCompat="@mipmap/item_6" />
 
                     <TextView
                         android:id="@+id/item3_name"
@@ -159,7 +159,7 @@
                         android:layout_marginRight="3dp"
                         android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
-                        android:textSize="11dp" />
+                        android:textSize="@dimen/item_popup_text_size_large" />
 
                     <TextView
                         android:id="@+id/item3_level"
@@ -170,7 +170,7 @@
                         android:layout_marginRight="4dp"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
-                        android:textSize="10dp" />
+                        android:textSize="@dimen/item_popup_text_size_small" />
 
                     <TextView
                         android:id="@+id/item3_alv"
@@ -181,28 +181,28 @@
                         android:layout_marginRight="1dp"
                         android:text="@string/alv_7"
                         android:textColor="@color/itemalv2"
-                        android:textSize="10dp" />
+                        android:textSize="@dimen/item_popup_text_size_small" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:id="@+id/item4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/item4"
-                    android:layout_marginBottom="1dp">
+                    android:layout_marginBottom="1dp"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        app:srcCompat="@mipmap/item_6"
                         android:id="@+id/item4_icon"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
+                        android:layout_width="@dimen/item_popup_icon_size"
+                        android:layout_height="@dimen/item_popup_icon_size"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:adjustViewBounds="true"
-                        android:scaleType="fitXY"
                         android:maxHeight="15dp"
                         android:maxWidth="15dp"
-                        android:src="@mipmap/item_6" />
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/item_6"
+                        app:srcCompat="@mipmap/item_6" />
 
                     <TextView
                         android:id="@+id/item4_name"
@@ -213,7 +213,7 @@
                         android:layout_marginRight="3dp"
                         android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
-                        android:textSize="11dp" />
+                        android:textSize="@dimen/item_popup_text_size_large" />
 
                     <TextView
                         android:id="@+id/item4_level"
@@ -224,7 +224,7 @@
                         android:layout_marginRight="4dp"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
-                        android:textSize="10dp" />
+                        android:textSize="@dimen/item_popup_text_size_small" />
 
                     <TextView
                         android:id="@+id/item4_alv"
@@ -235,7 +235,7 @@
                         android:layout_marginRight="1dp"
                         android:text="@string/alv_7"
                         android:textColor="@color/itemalv2"
-                        android:textSize="10dp" />
+                        android:textSize="@dimen/item_popup_text_size_small" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -248,7 +248,7 @@
 
                     <ImageView
                         android:id="@+id/item5_icon"
-                        android:layout_width="15dp"
+                        android:layout_width="@dimen/item_popup_icon_size"
                         android:layout_height="15dp"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
@@ -264,7 +264,7 @@
                         android:layout_marginRight="3dp"
                         android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
-                        android:textSize="11dp" />
+                        android:textSize="@dimen/item_popup_text_size_large" />
 
                     <TextView
                         android:id="@+id/item5_level"
@@ -275,7 +275,7 @@
                         android:layout_marginRight="4dp"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
-                        android:textSize="10dp" />
+                        android:textSize="@dimen/item_popup_text_size_small" />
 
                     <TextView
                         android:id="@+id/item5_alv"
@@ -286,7 +286,7 @@
                         android:layout_marginRight="1dp"
                         android:text="@string/alv_7"
                         android:textColor="@color/itemalv2"
-                        android:textSize="10dp" />
+                        android:textSize="@dimen/item_popup_text_size_small" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -301,57 +301,57 @@
                 <TextView
                     android:id="@+id/item1_slot"
                     android:layout_width="wrap_content"
-                    android:layout_height="15dp"
+                    android:layout_height="@dimen/item_popup_icon_size"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginBottom="1dp"
                     android:layout_marginRight="4dp"
                     android:text="[34/34]"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="11dp" />
+                    android:textSize="@dimen/item_popup_text_size_large" />
 
                 <TextView
                     android:id="@+id/item2_slot"
                     android:layout_width="wrap_content"
-                    android:layout_height="15dp"
+                    android:layout_height="@dimen/item_popup_icon_size"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginBottom="1dp"
                     android:layout_marginRight="4dp"
                     android:text="[34/34]"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="11dp" />
+                    android:textSize="@dimen/item_popup_text_size_large" />
 
                 <TextView
                     android:id="@+id/item3_slot"
                     android:layout_width="wrap_content"
-                    android:layout_height="15dp"
+                    android:layout_height="@dimen/item_popup_icon_size"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginBottom="1dp"
                     android:layout_marginRight="4dp"
                     android:text="[34/34]"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="11dp" />
+                    android:textSize="@dimen/item_popup_text_size_large" />
 
                 <TextView
                     android:id="@+id/item4_slot"
                     android:layout_width="wrap_content"
-                    android:layout_height="15dp"
+                    android:layout_height="@dimen/item_popup_icon_size"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginBottom="1dp"
                     android:layout_marginRight="4dp"
                     android:text="[34/34]"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="11dp" />
+                    android:textSize="@dimen/item_popup_text_size_large" />
 
                 <TextView
                     android:id="@+id/item5_slot"
                     android:layout_width="wrap_content"
-                    android:layout_height="15dp"
+                    android:layout_height="@dimen/item_popup_icon_size"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginBottom="1dp"
                     android:layout_marginRight="4dp"
                     android:text="[34/34]"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="11dp"
+                    android:textSize="@dimen/item_popup_text_size_large"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -394,8 +394,8 @@
 
                     <ImageView
                         android:id="@+id/item_ex_icon"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
+                        android:layout_width="@dimen/item_popup_icon_size"
+                        android:layout_height="@dimen/item_popup_icon_size"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:adjustViewBounds="true"
@@ -403,6 +403,7 @@
                         android:maxWidth="15dp"
                         android:scaleType="fitXY"
                         android:src="@mipmap/item_6"
+                        
                         app:srcCompat="@mipmap/item_6" />
 
                     <TextView
@@ -414,7 +415,7 @@
                         android:layout_marginRight="3dp"
                         android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
-                        android:textSize="11dp" />
+                        android:textSize="@dimen/item_popup_text_size_large" />
 
                     <TextView
                         android:id="@+id/item_ex_level"
@@ -425,7 +426,7 @@
                         android:layout_marginRight="4dp"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
-                        android:textSize="10dp" />
+                        android:textSize="@dimen/item_popup_text_size_small" />
 
                 </LinearLayout>
             </LinearLayout>
