@@ -1,6 +1,10 @@
 package com.antest1.kcanotify;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KcaItemAdapter extends BaseAdapter {
+    public static final int IMAGE_SIZE = 128;
     Context context;
     int layout;
     int rescale = -1;
@@ -55,7 +60,9 @@ public class KcaItemAdapter extends BaseAdapter {
         if (convertView==null)
             convertView = inf.inflate(layout, null);
         ImageView iv = (ImageView) convertView.findViewById(R.id.setting_image_pic);
-        iv.setImageResource(item.get(position));
+
+        Bitmap bitmap = KcaUtils.decodeSampledBitmapFromResource(convertView.getResources(), item.get(position), IMAGE_SIZE, IMAGE_SIZE);
+        iv.setImageBitmap(bitmap);
         if (position == prevactive) iv.setBackground(ContextCompat.getDrawable(context, R.drawable.imagebtn_on));
         else iv.setBackground(ContextCompat.getDrawable(context, R.drawable.imagebtn_off));
         if (rescale > 0) {

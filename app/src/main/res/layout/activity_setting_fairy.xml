@@ -50,7 +50,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:background="@color/colorFairySelectPanel"
-            android:columnWidth="48dp"
+            android:columnWidth="@dimen/button_select_size"
             android:gravity="center"
             android:horizontalSpacing="6dp"
             android:numColumns="auto_fit"

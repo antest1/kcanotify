@@ -286,7 +286,7 @@ public class KcaViewButtonService extends Service {
                     mParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
                 }
             } else {
-                mParams.y = screenHeight - buttonHeight;
+                mParams.y = screenHeight - buttonHeight / 2;
             }
 
             mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -480,11 +480,11 @@ public class KcaViewButtonService extends Service {
                         int yy = locations[1];
                         Log.e("KCA", KcaUtils.format("Coord: %d %d", xx, yy));
                         if (mParams.x < 0) mParams.x = 0;
-                        else if (mParams.x > screenWidth - buttonWidth)
-                            mParams.x = screenWidth - buttonWidth;
+                        else if (mParams.x > screenWidth - buttonWidth / 2)
+                            mParams.x = screenWidth - buttonWidth / 2;
                         if (mParams.y < 0) mParams.y = 0;
-                        else if (mParams.y > screenHeight - buttonHeight)
-                            mParams.y = screenHeight - buttonHeight;
+                        else if (mParams.y > screenHeight - buttonHeight / 2)
+                            mParams.y = screenHeight - buttonHeight / 2;
 
                         JsonObject locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
                         String ori_prefix = getOrientationPrefix(getResources().getConfiguration().orientation);
@@ -504,9 +504,9 @@ public class KcaViewButtonService extends Service {
                         mParams.x = mViewX + x;
                         mParams.y = mViewY + y;
                         if (mParams.x < 0) mParams.x = 0;
-                        else if (mParams.x > screenWidth - buttonWidth) mParams.x = screenWidth - buttonWidth;
+                        else if (mParams.x > screenWidth - buttonWidth / 2) mParams.x = screenWidth - buttonWidth / 2;
                         if (mParams.y < 0) mParams.y = 0;
-                        else if (mParams.y > screenHeight - buttonWidth) mParams.y = screenHeight - buttonWidth;
+                        else if (mParams.y > screenHeight - buttonHeight / 2) mParams.y = screenHeight - buttonHeight / 2;
                         mManager.updateViewLayout(mView, mParams);
                         if (Math.abs(x) > 20 || Math.abs(y) > 20) {
                             Log.e("KCA", "Callback Canceled");
@@ -667,9 +667,9 @@ public class KcaViewButtonService extends Service {
 
             if (mManager != null && mParams != null) {
                 if (mParams.x < 0) mParams.x = 0;
-                else if (mParams.x > screenWidth - buttonWidth) mParams.x = screenWidth - buttonWidth;
+                else if (mParams.x > screenWidth - buttonWidth / 2) mParams.x = screenWidth - buttonWidth / 2;
                 if (mParams.y < 0) mParams.y = 0;
-                else if (mParams.y > screenHeight - buttonHeight) mParams.y = screenHeight - buttonHeight;
+                else if (mParams.y > screenHeight - buttonHeight / 2) mParams.y = screenHeight - buttonHeight / 2;
                 mManager.updateViewLayout(mView, mParams);
             }
 

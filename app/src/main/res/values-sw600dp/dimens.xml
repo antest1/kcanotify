@@ -1,0 +1,21 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+
+    <dimen name="view_text_title">24dp</dimen>
+
+    <dimen name="fleetview_text_statusarea">18dp</dimen>
+    <dimen name="fleetview_text_tbutton">20dp</dimen>
+    <dimen name="fleetview_text_rbutton">24dp</dimen>
+    <dimen name="fleetview_text_ship_large">21dp</dimen>
+    <dimen name="fleetview_text_ship_medium">18dp</dimen>
+    <dimen name="fleetview_text_ship_small">15dp</dimen>
+
+    <dimen name="button_size">128dp</dimen>
+    <dimen name="button_select_size">72dp</dimen>
+
+    <dimen name="text_description_medium">20dp</dimen>
+    <dimen name="text_description_small">15dp</dimen>
+</resources>

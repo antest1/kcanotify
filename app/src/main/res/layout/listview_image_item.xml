@@ -11,8 +11,8 @@
 
         <ImageView
             android:id="@+id/setting_image_pic"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/button_select_size"
+            android:layout_height="@dimen/button_select_size"
             android:adjustViewBounds="true"
             android:background="@drawable/imagebtn_off"
             android:padding="6dp"

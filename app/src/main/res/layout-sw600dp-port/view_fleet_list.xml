@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fleetviewlayout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -36,7 +35,7 @@
                 android:layout_marginRight="5dp"
                 android:text="@string/fleetview_title"
                 android:textColor="@color/white"
-                android:textSize="@dimen/view_text_title" />
+                android:textSize="24dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -61,7 +60,7 @@
                     android:paddingTop="4dp"
                     android:text="\#1"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/fleetview_text_tbutton" />
+                    android:textSize="18dp" />
 
                 <TextView
                     android:id="@+id/fleet_2"
@@ -77,23 +76,7 @@
                     android:paddingTop="4dp"
                     android:text="\#2"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/fleetview_text_tbutton" />
-
-                <TextView
-                    android:id="@+id/fleet_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginRight="8dp"
-                    android:background="@color/colorFleetInfoBtn"
-                    android:gravity="top"
-                    android:paddingBottom="4dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="4dp"
-                    android:text="\#3"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/fleetview_text_tbutton" />
+                    android:textSize="18dp" />
 
                 <TextView
                     android:id="@+id/fleet_4"
@@ -109,7 +92,23 @@
                     android:paddingTop="4dp"
                     android:text="\#4"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/fleetview_text_tbutton" />
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/fleet_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/colorFleetInfoBtn"
+                    android:gravity="top"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:text="\#3"
+                    android:textColor="@color/white"
+                    android:textSize="18dp" />
 
                 <TextView
                     android:id="@+id/fleet_5"
@@ -125,7 +124,7 @@
                     android:paddingTop="4dp"
                     android:text="@string/fleetview_combined"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/fleetview_text_tbutton" />
+                    android:textSize="18dp" />
             </LinearLayout>
 
             <TextView
@@ -134,6 +133,38 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:singleLine="true" />
+
+            <ImageView
+                android:id="@+id/akashi_exit"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/ic_cancel"
+                app:srcCompat="@mipmap/ic_cancel" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray"
+                android:paddingBottom="1dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="0dp"
+                android:scaleType="fitXY"
+                android:src="@android:drawable/divider_horizontal_bright" />
 
             <LinearLayout
                 android:id="@+id/fleetview_hqinfo"
@@ -152,20 +183,18 @@
                     android:background="@color/colorPrimary"
                     android:gravity="right"
                     android:orientation="horizontal"
-                    android:paddingBottom="4dp"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingStart="8dp"
-                    android:paddingTop="4dp">
+                    android:paddingEnd="4dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingStart="4dp">
 
                     <ImageView
                         android:id="@+id/fleetview_cnt1_icon"
-                        android:layout_width="@dimen/fleetview_text_tbutton"
-                        android:layout_height="@dimen/fleetview_text_tbutton"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="2dp"
-                        android:layout_marginRight="2dp"
+                        android:paddingEnd="2dp"
+                        android:paddingRight="2dp"
                         android:src="@mipmap/ic_ship"
                         app:srcCompat="@mipmap/ic_ship" />
 
@@ -174,22 +203,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginRight="4dp"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:singleLine="true"
                         android:text="150/150"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/fleetview_text_tbutton" />
+                        android:textSize="18dp" />
 
                     <ImageView
                         android:id="@+id/fleetview_cnt2_icon"
-                        android:layout_width="@dimen/fleetview_text_tbutton"
-                        android:layout_height="@dimen/fleetview_text_tbutton"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="2dp"
-                        android:layout_marginRight="2dp"
+                        android:paddingEnd="2dp"
+                        android:paddingRight="2dp"
                         android:src="@mipmap/ic_equip"
                         app:srcCompat="@mipmap/ic_equip" />
 
@@ -203,7 +232,7 @@
                         android:singleLine="true"
                         android:text="1500/1500"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/fleetview_text_tbutton" />
+                        android:textSize="18dp" />
                 </LinearLayout>
 
                 <TextView
@@ -215,129 +244,14 @@
                     android:background="@color/colorPrimary"
                     android:ellipsize="end"
                     android:gravity="right"
-                    android:paddingBottom="4dp"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingStart="8dp"
-                    android:paddingTop="4dp"
                     android:singleLine="true"
                     android:text="[이번] 12.42 / [오늘] 54.23"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/fleetview_text_tbutton"
+                    android:textSize="18dp"
                     android:visibility="gone" />
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/fleetview_exit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:src="@mipmap/ic_cancel"
-                app:srcCompat="@mipmap/ic_cancel" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="2dp"
-            android:layout_weight="1.0"
-            android:background="@android:color/darker_gray"
-            android:paddingBottom="1dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="0dp"
-            android:scaleType="fitXY"
-            android:src="@android:drawable/divider_horizontal_bright" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="2dp"
-            android:layout_marginRight="2dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/fleetview_infoline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/colorQuestTrackProgress"
-                android:ellipsize="marquee"
-                android:maxLines="1"
-                android:paddingBottom="2dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="2dp"
-                android:singleLine="true"
-                android:text=""
-                android:textColor="@color/white"
-                android:textSize="@dimen/fleetview_text_statusarea" />
-
-            <TextView
-                android:id="@+id/fleetview_fleetswitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="2dp"
-                android:layout_marginStart="2dp"
-                android:layout_toLeftOf="@+id/fleetview_cn_change"
-                android:layout_toStartOf="@+id/fleetview_cn_change"
-                android:layout_weight="1"
-                android:background="@color/colorFleetSwitchBtn"
-                android:ellipsize="marquee"
-                android:maxLines="1"
-                android:paddingBottom="2dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="2dp"
-                android:singleLine="true"
-                android:text="@string/fleetview_switch_1"
-                android:textColor="@color/white"
-                android:textSize="@dimen/fleetview_text_statusarea"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/fleetview_akashi_timer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:background="@color/colorFleetAkashiTimerBtnActive"
-                android:ellipsize="marquee"
-                android:maxLines="1"
-                android:paddingBottom="2dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="2dp"
-                android:singleLine="true"
-                android:text="00:15:23"
-                android:textColor="@color/white"
-                android:textSize="@dimen/fleetview_text_statusarea" />
-
-            <TextView
-                android:id="@+id/fleetview_cn_change"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:background="@color/colorFleetSeekCnBtn"
-                android:ellipsize="marquee"
-                android:maxLines="1"
-                android:paddingBottom="2dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="2dp"
-                android:singleLine="true"
-                android:text="@string/seek_type_1"
-                android:textColor="@color/white"
-                android:textSize="@dimen/fleetview_text_statusarea" />
         </LinearLayout>
 
         <LinearLayout
@@ -358,11 +272,116 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginRight="2dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/fleetview_infoline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@color/colorQuestTrackProgress"
+                            android:ellipsize="marquee"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="2dp"
+                            android:singleLine="false"
+                            android:text=""
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="2dp"
+                            android:layout_marginRight="2dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/fleetview_akashi_timer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginStart="4dp"
+                                android:layout_toLeftOf="@+id/fleetview_cn_change"
+                                android:layout_toStartOf="@+id/fleetview_cn_change"
+                                android:alpha="0.9"
+                                android:background="@color/colorFleetAkashiTimerBtnActive"
+                                android:ellipsize="marquee"
+                                android:maxLines="1"
+                                android:paddingBottom="3dp"
+                                android:paddingEnd="8dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingStart="8dp"
+                                android:paddingTop="3dp"
+                                android:singleLine="true"
+                                android:text="00:15:23"
+                                android:textColor="@color/white"
+                                android:textSize="16dp" />
+
+                            <TextView
+                                android:id="@+id/fleetview_fleetswitch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_toLeftOf="@+id/fleetview_akashi_timer"
+                                android:layout_toStartOf="@+id/fleetview_akashi_timer"
+                                android:background="@color/colorFleetSwitchBtn"
+                                android:ellipsize="marquee"
+                                android:maxLines="1"
+                                android:paddingBottom="3dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingTop="3dp"
+                                android:singleLine="true"
+                                android:text="@string/fleetview_switch_1"
+                                android:textColor="@color/white"
+                                android:textSize="16dp" />
+
+                            <TextView
+                                android:id="@+id/fleetview_cn_change"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginStart="2dp"
+                                android:background="@color/colorFleetSeekCnBtn"
+                                android:ellipsize="marquee"
+                                android:maxLines="1"
+                                android:paddingBottom="3dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingTop="3dp"
+                                android:singleLine="true"
+                                android:text="@string/seek_type_1"
+                                android:textColor="@color/white"
+                                android:textSize="16dp" />
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
                         android:layout_marginTop="2dp"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:id="@+id/fleet_list_main"
@@ -401,15 +420,26 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginLeft="6dp"
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_1_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_1_condmark"
@@ -418,7 +448,7 @@
                                             android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -428,16 +458,6 @@
                                         android:orientation="horizontal">
 
                                         <TextView
-                                            android:id="@+id/fleetview_item_1_stype"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="6dp"
-                                            android:gravity="top"
-                                            android:maxLines="1"
-                                            android:textColor="@color/colorAccent"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
-
-                                        <TextView
                                             android:id="@+id/fleetview_item_1_lv"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
@@ -445,7 +465,7 @@
                                             android:maxLines="1"
                                             android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_1_exp"
@@ -457,7 +477,7 @@
                                             android:paddingStart="6dp"
                                             android:singleLine="true"
                                             android:textColor="@color/grey"
-                                            android:textSize="@dimen/fleetview_text_ship_small" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -477,7 +497,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_1_cond"
@@ -487,7 +507,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -520,15 +540,15 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginLeft="6dp"
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_2_condmark"
@@ -537,7 +557,7 @@
                                             android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -550,11 +570,11 @@
                                             android:id="@+id/fleetview_item_2_stype"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="6dp"
                                             android:gravity="top"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_2_lv"
@@ -564,7 +584,7 @@
                                             android:maxLines="1"
                                             android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_2_exp"
@@ -576,7 +596,7 @@
                                             android:paddingStart="6dp"
                                             android:singleLine="true"
                                             android:textColor="@color/grey"
-                                            android:textSize="@dimen/fleetview_text_ship_small" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -596,7 +616,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_2_cond"
@@ -606,7 +626,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -639,15 +659,15 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginLeft="6dp"
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_3_condmark"
@@ -656,7 +676,7 @@
                                             android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -669,11 +689,11 @@
                                             android:id="@+id/fleetview_item_3_stype"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="6dp"
                                             android:gravity="top"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_3_lv"
@@ -683,7 +703,7 @@
                                             android:maxLines="1"
                                             android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_3_exp"
@@ -695,7 +715,7 @@
                                             android:paddingStart="6dp"
                                             android:singleLine="true"
                                             android:textColor="@color/grey"
-                                            android:textSize="@dimen/fleetview_text_ship_small" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -715,7 +735,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_3_cond"
@@ -725,7 +745,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -758,15 +778,15 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginLeft="6dp"
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_4_condmark"
@@ -775,7 +795,7 @@
                                             android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -788,11 +808,11 @@
                                             android:id="@+id/fleetview_item_4_stype"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="6dp"
                                             android:gravity="top"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_4_lv"
@@ -802,7 +822,7 @@
                                             android:maxLines="1"
                                             android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_4_exp"
@@ -814,7 +834,7 @@
                                             android:paddingStart="6dp"
                                             android:singleLine="true"
                                             android:textColor="@color/grey"
-                                            android:textSize="@dimen/fleetview_text_ship_small" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -834,7 +854,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_4_cond"
@@ -844,7 +864,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -877,15 +897,15 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginLeft="6dp"
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_5_condmark"
@@ -894,7 +914,7 @@
                                             android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -907,11 +927,11 @@
                                             android:id="@+id/fleetview_item_5_stype"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="6dp"
                                             android:gravity="top"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_5_lv"
@@ -921,7 +941,7 @@
                                             android:maxLines="1"
                                             android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_5_exp"
@@ -933,7 +953,7 @@
                                             android:paddingStart="6dp"
                                             android:singleLine="true"
                                             android:textColor="@color/grey"
-                                            android:textSize="@dimen/fleetview_text_ship_small" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -953,7 +973,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_5_cond"
@@ -963,7 +983,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -996,15 +1016,15 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginLeft="6dp"
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_6_condmark"
@@ -1013,7 +1033,7 @@
                                             android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1026,11 +1046,11 @@
                                             android:id="@+id/fleetview_item_6_stype"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="6dp"
                                             android:gravity="top"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_6_lv"
@@ -1040,7 +1060,7 @@
                                             android:maxLines="1"
                                             android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_6_exp"
@@ -1052,7 +1072,7 @@
                                             android:paddingStart="6dp"
                                             android:singleLine="true"
                                             android:textColor="@color/grey"
-                                            android:textSize="@dimen/fleetview_text_ship_small" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1072,7 +1092,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_6_cond"
@@ -1082,7 +1102,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -1124,15 +1144,15 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginLeft="6dp"
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_7_condmark"
@@ -1141,7 +1161,7 @@
                                             android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1154,11 +1174,11 @@
                                             android:id="@+id/fleetview_item_7_stype"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="6dp"
                                             android:gravity="top"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_7_lv"
@@ -1168,7 +1188,7 @@
                                             android:maxLines="1"
                                             android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_7_exp"
@@ -1180,7 +1200,7 @@
                                             android:paddingStart="6dp"
                                             android:singleLine="true"
                                             android:textColor="@color/grey"
-                                            android:textSize="@dimen/fleetview_text_ship_small" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1200,7 +1220,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_7_cond"
@@ -1210,7 +1230,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -1243,15 +1263,15 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginLeft="6dp"
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_8_condmark"
@@ -1260,7 +1280,7 @@
                                             android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1273,11 +1293,11 @@
                                             android:id="@+id/fleetview_item_8_stype"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="6dp"
                                             android:gravity="top"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_8_lv"
@@ -1287,7 +1307,7 @@
                                             android:maxLines="1"
                                             android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_8_exp"
@@ -1299,7 +1319,7 @@
                                             android:paddingStart="6dp"
                                             android:singleLine="true"
                                             android:textColor="@color/grey"
-                                            android:textSize="@dimen/fleetview_text_ship_small" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1319,7 +1339,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_8_cond"
@@ -1329,7 +1349,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -1362,15 +1382,15 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginLeft="6dp"
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_9_condmark"
@@ -1379,7 +1399,7 @@
                                             android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1392,11 +1412,11 @@
                                             android:id="@+id/fleetview_item_9_stype"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="6dp"
                                             android:gravity="top"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_9_lv"
@@ -1406,7 +1426,7 @@
                                             android:maxLines="1"
                                             android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_9_exp"
@@ -1418,7 +1438,7 @@
                                             android:paddingStart="6dp"
                                             android:singleLine="true"
                                             android:textColor="@color/grey"
-                                            android:textSize="@dimen/fleetview_text_ship_small" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1438,7 +1458,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_9_cond"
@@ -1448,7 +1468,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -1481,15 +1501,15 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginLeft="6dp"
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_10_condmark"
@@ -1498,7 +1518,7 @@
                                             android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1511,11 +1531,11 @@
                                             android:id="@+id/fleetview_item_10_stype"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="6dp"
                                             android:gravity="top"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_10_lv"
@@ -1525,7 +1545,7 @@
                                             android:maxLines="1"
                                             android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_10_exp"
@@ -1537,7 +1557,7 @@
                                             android:paddingStart="6dp"
                                             android:singleLine="true"
                                             android:textColor="@color/grey"
-                                            android:textSize="@dimen/fleetview_text_ship_small" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1557,7 +1577,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_10_cond"
@@ -1567,8 +1587,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
-
+                                        android:textSize="14dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -1601,15 +1620,15 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginLeft="6dp"
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_11_condmark"
@@ -1618,7 +1637,7 @@
                                             android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1631,11 +1650,11 @@
                                             android:id="@+id/fleetview_item_11_stype"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="6dp"
                                             android:gravity="top"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_11_lv"
@@ -1645,7 +1664,7 @@
                                             android:maxLines="1"
                                             android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_11_exp"
@@ -1657,7 +1676,7 @@
                                             android:paddingStart="6dp"
                                             android:singleLine="true"
                                             android:textColor="@color/grey"
-                                            android:textSize="@dimen/fleetview_text_ship_small" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1677,7 +1696,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_11_cond"
@@ -1687,7 +1706,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -1720,15 +1739,15 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginLeft="6dp"
                                             android:ellipsize="end"
                                             android:gravity="center_vertical"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:paddingRight="6dp"
                                             android:singleLine="true"
                                             android:text=""
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_12_condmark"
@@ -1737,7 +1756,7 @@
                                             android:paddingLeft="2dp"
                                             android:text="@string/fleetview_condmark"
                                             android:textColor="@android:color/transparent"
-                                            android:textSize="@dimen/fleetview_text_ship_large" />
+                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1750,11 +1769,11 @@
                                             android:id="@+id/fleetview_item_12_stype"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="6dp"
                                             android:gravity="top"
                                             android:maxLines="1"
+                                            android:paddingLeft="6dp"
                                             android:textColor="@color/colorAccent"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_12_lv"
@@ -1764,7 +1783,7 @@
                                             android:maxLines="1"
                                             android:paddingLeft="6dp"
                                             android:textColor="@color/white"
-                                            android:textSize="@dimen/fleetview_text_ship_medium" />
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_12_exp"
@@ -1776,7 +1795,7 @@
                                             android:paddingStart="6dp"
                                             android:singleLine="true"
                                             android:textColor="@color/grey"
-                                            android:textSize="@dimen/fleetview_text_ship_small" />
+                                            android:textSize="12dp" />
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1796,7 +1815,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
 
                                     <TextView
                                         android:id="@+id/fleetview_item_12_cond"
@@ -1806,7 +1825,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/fleetview_text_ship_medium" />
+                                        android:textSize="14dp" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -1823,13 +1842,8 @@
                 <ScrollView
                     android:id="@+id/fleetview_menu"
                     android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:paddingBottom="2dp"
-                    android:paddingEnd="4dp"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:paddingStart="4dp"
-                    android:paddingTop="2dp">
+                    android:layout_height="match_parent"
+                    android:padding="4dp">
 
                     <LinearLayout
                         android:id="@+id/viewbutton_area"
@@ -1851,7 +1865,7 @@
                             android:paddingTop="8dp"
                             android:text="@string/viewmenu_quest"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/fleetview_text_rbutton" />
+                            android:textSize="22dp" />
 
                         <TextView
                             android:id="@+id/viewbutton_excheck"
@@ -1867,7 +1881,7 @@
                             android:paddingTop="8dp"
                             android:text="@string/viewmenu_excheck"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/fleetview_text_rbutton" />
+                            android:textSize="22dp" />
 
                         <TextView
                             android:id="@+id/viewbutton_develop"
@@ -1883,7 +1897,7 @@
                             android:paddingTop="8dp"
                             android:text="@string/viewmenu_develop"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/fleetview_text_rbutton" />
+                            android:textSize="22dp" />
 
                         <TextView
                             android:id="@+id/viewbutton_construction"
@@ -1900,7 +1914,7 @@
                             android:scrollIndicators="right"
                             android:text="@string/viewmenu_construction"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/fleetview_text_rbutton" />
+                            android:textSize="22dp" />
 
                         <TextView
                             android:id="@+id/viewbutton_docking"
@@ -1914,10 +1928,9 @@
                             android:paddingLeft="14dp"
                             android:paddingRight="14dp"
                             android:paddingTop="8dp"
-                            android:scrollIndicators="right"
                             android:text="@string/viewmenu_docking"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/fleetview_text_rbutton" />
+                            android:textSize="22dp" />
 
                         <TextView
                             android:id="@+id/viewbutton_maphp"
@@ -1933,7 +1946,7 @@
                             android:paddingTop="8dp"
                             android:text="@string/viewmenu_maphp"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/fleetview_text_rbutton" />
+                            android:textSize="22dp" />
 
                         <TextView
                             android:id="@+id/viewbutton_fchk"
@@ -1950,7 +1963,7 @@
                             android:scrollIndicators="right"
                             android:text="@string/viewmenu_fchk"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/fleetview_text_rbutton" />
+                            android:textSize="22dp" />
 
                         <TextView
                             android:id="@+id/viewbutton_labinfo"
@@ -1967,7 +1980,7 @@
                             android:scrollIndicators="right"
                             android:text="@string/viewmenu_labinfo"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/fleetview_text_rbutton" />
+                            android:textSize="22dp" />
 
                         <TextView
                             android:id="@+id/viewbutton_akashi"
@@ -1983,7 +1996,7 @@
                             android:paddingTop="8dp"
                             android:text="@string/viewmenu_akashi"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/fleetview_text_rbutton" />
+                            android:textSize="22dp" />
                     </LinearLayout>
                 </ScrollView>
 
