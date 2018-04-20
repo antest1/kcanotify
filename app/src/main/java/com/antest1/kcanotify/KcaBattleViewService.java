@@ -1653,7 +1653,6 @@ public class KcaBattleViewService extends Service {
         acView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         popupWidth = acView.getMeasuredWidth();
         popupHeight = acView.getMeasuredHeight();
-        Toast.makeText(getApplicationContext(), KcaUtils.format("%d %d", popupWidth, popupHeight), Toast.LENGTH_LONG).show();
         acViewParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
