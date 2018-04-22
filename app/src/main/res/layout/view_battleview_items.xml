@@ -36,8 +36,8 @@
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:adjustViewBounds="true"
-                        android:maxHeight="15dp"
-                        android:maxWidth="15dp"
+                        android:maxHeight="@dimen/item_popup_icon_size"
+                        android:maxWidth="@dimen/item_popup_icon_size"
                         android:scaleType="fitXY"
                         android:src="@mipmap/item_6"
                         app:srcCompat="@mipmap/item_6" />
@@ -45,10 +45,11 @@
                     <TextView
                         android:id="@+id/item1_name"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="3dp"
                         android:layout_marginRight="3dp"
+                        android:gravity="center_vertical"
                         android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
                         android:textSize="@dimen/item_popup_text_size_large" />
@@ -56,10 +57,11 @@
                     <TextView
                         android:id="@+id/item1_level"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
+                        android:gravity="center_vertical"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
                         android:textSize="@dimen/item_popup_text_size_small" />
@@ -67,10 +69,11 @@
                     <TextView
                         android:id="@+id/item1_alv"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="1dp"
                         android:layout_marginRight="1dp"
+                        android:gravity="center_vertical"
                         android:text="@string/alv_4"
                         android:textColor="@color/itemalv2"
                         android:textSize="@dimen/item_popup_text_size_small" />
@@ -90,8 +93,8 @@
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:adjustViewBounds="true"
-                        android:maxHeight="15dp"
-                        android:maxWidth="15dp"
+                        android:maxHeight="@dimen/item_popup_icon_size"
+                        android:maxWidth="@dimen/item_popup_icon_size"
                         android:scaleType="fitXY"
                         android:src="@mipmap/item_6"
                         app:srcCompat="@mipmap/item_6" />
@@ -99,10 +102,11 @@
                     <TextView
                         android:id="@+id/item2_name"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="3dp"
                         android:layout_marginRight="3dp"
+                        android:gravity="center_vertical"
                         android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
                         android:textSize="@dimen/item_popup_text_size_large" />
@@ -110,10 +114,11 @@
                     <TextView
                         android:id="@+id/item2_level"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
+                        android:gravity="center_vertical"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
                         android:textSize="@dimen/item_popup_text_size_small" />
@@ -125,6 +130,7 @@
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="1dp"
                         android:layout_marginRight="1dp"
+                        android:gravity="center_vertical"
                         android:text="@string/alv_7"
                         android:textColor="@color/itemalv2"
                         android:textSize="@dimen/item_popup_text_size_small" />
@@ -144,8 +150,8 @@
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:adjustViewBounds="true"
-                        android:maxHeight="15dp"
-                        android:maxWidth="15dp"
+                        android:maxHeight="@dimen/item_popup_icon_size"
+                        android:maxWidth="@dimen/item_popup_icon_size"
                         android:scaleType="fitXY"
                         android:src="@mipmap/item_6"
                         app:srcCompat="@mipmap/item_6" />
@@ -153,10 +159,11 @@
                     <TextView
                         android:id="@+id/item3_name"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="3dp"
                         android:layout_marginRight="3dp"
+                        android:gravity="center_vertical"
                         android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
                         android:textSize="@dimen/item_popup_text_size_large" />
@@ -164,10 +171,11 @@
                     <TextView
                         android:id="@+id/item3_level"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
+                        android:gravity="center_vertical"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
                         android:textSize="@dimen/item_popup_text_size_small" />
@@ -175,10 +183,11 @@
                     <TextView
                         android:id="@+id/item3_alv"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="1dp"
                         android:layout_marginRight="1dp"
+                        android:gravity="center_vertical"
                         android:text="@string/alv_7"
                         android:textColor="@color/itemalv2"
                         android:textSize="@dimen/item_popup_text_size_small" />
@@ -198,8 +207,8 @@
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:adjustViewBounds="true"
-                        android:maxHeight="15dp"
-                        android:maxWidth="15dp"
+                        android:maxHeight="@dimen/item_popup_icon_size"
+                        android:maxWidth="@dimen/item_popup_icon_size"
                         android:scaleType="fitXY"
                         android:src="@mipmap/item_6"
                         app:srcCompat="@mipmap/item_6" />
@@ -207,21 +216,23 @@
                     <TextView
                         android:id="@+id/item4_name"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="3dp"
                         android:layout_marginRight="3dp"
                         android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/item_popup_text_size_large" />
+                        android:textSize="@dimen/item_popup_text_size_large"
+                        android:gravity="center_vertical" />
 
                     <TextView
                         android:id="@+id/item4_level"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
+                        android:gravity="center_vertical"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
                         android:textSize="@dimen/item_popup_text_size_small" />
@@ -229,10 +240,11 @@
                     <TextView
                         android:id="@+id/item4_alv"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="1dp"
                         android:layout_marginRight="1dp"
+                        android:gravity="center_vertical"
                         android:text="@string/alv_7"
                         android:textColor="@color/itemalv2"
                         android:textSize="@dimen/item_popup_text_size_small" />
@@ -252,16 +264,20 @@
                         android:layout_height="15dp"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
+                        android:maxHeight="@dimen/item_popup_icon_size"
+                        android:maxWidth="@dimen/item_popup_icon_size"
+                        android:scaleType="fitXY"
                         android:src="@mipmap/item_6"
                         app:srcCompat="@mipmap/item_6" />
 
                     <TextView
                         android:id="@+id/item5_name"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="3dp"
                         android:layout_marginRight="3dp"
+                        android:gravity="center_vertical"
                         android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
                         android:textSize="@dimen/item_popup_text_size_large" />
@@ -269,10 +285,11 @@
                     <TextView
                         android:id="@+id/item5_level"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
+                        android:gravity="center_vertical"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
                         android:textSize="@dimen/item_popup_text_size_small" />
@@ -280,10 +297,11 @@
                     <TextView
                         android:id="@+id/item5_alv"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="1dp"
                         android:layout_marginRight="1dp"
+                        android:gravity="center_vertical"
                         android:text="@string/alv_7"
                         android:textColor="@color/itemalv2"
                         android:textSize="@dimen/item_popup_text_size_small" />
@@ -305,6 +323,7 @@
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginBottom="1dp"
                     android:layout_marginRight="4dp"
+                    android:gravity="center_vertical"
                     android:text="[34/34]"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="@dimen/item_popup_text_size_large" />
@@ -316,6 +335,7 @@
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginBottom="1dp"
                     android:layout_marginRight="4dp"
+                    android:gravity="center_vertical"
                     android:text="[34/34]"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="@dimen/item_popup_text_size_large" />
@@ -327,6 +347,7 @@
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginBottom="1dp"
                     android:layout_marginRight="4dp"
+                    android:gravity="center_vertical"
                     android:text="[34/34]"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="@dimen/item_popup_text_size_large" />
@@ -338,6 +359,7 @@
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginBottom="1dp"
                     android:layout_marginRight="4dp"
+                    android:gravity="center_vertical"
                     android:text="[34/34]"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="@dimen/item_popup_text_size_large" />
@@ -349,6 +371,7 @@
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginBottom="1dp"
                     android:layout_marginRight="4dp"
+                    android:gravity="center_vertical"
                     android:text="[34/34]"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="@dimen/item_popup_text_size_large"
@@ -399,11 +422,11 @@
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginRight="4dp"
                         android:adjustViewBounds="true"
-                        android:maxHeight="15dp"
-                        android:maxWidth="15dp"
+                        android:maxHeight="@dimen/item_popup_icon_size"
+                        android:maxWidth="@dimen/item_popup_icon_size"
                         android:scaleType="fitXY"
                         android:src="@mipmap/item_6"
-                        
+
                         app:srcCompat="@mipmap/item_6" />
 
                     <TextView
@@ -413,6 +436,7 @@
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="3dp"
                         android:layout_marginRight="3dp"
+                        android:gravity="center_vertical"
                         android:text="영식 함상전투기 21형 (숙련)"
                         android:textColor="@color/white"
                         android:textSize="@dimen/item_popup_text_size_large" />
@@ -424,6 +448,7 @@
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginEnd="4dp"
                         android:layout_marginRight="4dp"
+                        android:gravity="center_vertical"
                         android:text="+10"
                         android:textColor="@color/itemlevel"
                         android:textSize="@dimen/item_popup_text_size_small" />
