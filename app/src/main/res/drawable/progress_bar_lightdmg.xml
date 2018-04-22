@@ -19,7 +19,7 @@
         android:gravity="center_vertical|fill_horizontal">
         <shape android:shape="rectangle"
             android:tint="@color/colorProgressBack">
-            <size android:height="4dp" />
+            <size android:height="@dimen/battleview_hp_height" />
             <solid android:color="@color/colorProgressBack" />
         </shape>
     </item>
@@ -28,7 +28,7 @@
         <scale android:scaleWidth="100%">
             <shape android:shape="rectangle"
                 android:tint="@color/colorLightDmgState">
-                <size android:height="4dp" />
+                <size android:height="@dimen/battleview_hp_height" />
                 <solid android:color="@color/colorLightDmgState" />
             </shape>
         </scale>
@@ -38,7 +38,7 @@
         <scale android:scaleWidth="100%">
             <shape android:shape="rectangle"
                 android:tint="@color/colorLightDmgState">
-                <size android:height="4dp" />
+                <size android:height="@dimen/battleview_hp_height" />
                 <solid android:color="@color/colorLightDmgState" />
             </shape>
         </scale>

@@ -216,6 +216,15 @@ public class KcaBattleViewService extends Service {
     }
 
     public void setBattleview() {
+        int textsize_n_large = getResources().getDimensionPixelSize(R.dimen.battleview_text_n_large);
+        int textsize_n_medium = getResources().getDimensionPixelSize(R.dimen.battleview_text_n_medium);
+        int textsize_n_small = getResources().getDimensionPixelSize(R.dimen.battleview_text_n_small);
+
+        int textsize_c_large = getResources().getDimensionPixelSize(R.dimen.battleview_text_c_large);
+        int textsize_c_medium = getResources().getDimensionPixelSize(R.dimen.battleview_text_c_medium);
+        int textsize_c_small = getResources().getDimensionPixelSize(R.dimen.battleview_text_c_small);
+        int textsize_c_xsmall = getResources().getDimensionPixelSize(R.dimen.battleview_text_c_xsmall);
+
         if (api_data != null) {
             boolean is_practice = api_data.has("api_practice_flag");
 
@@ -393,30 +402,30 @@ public class KcaBattleViewService extends Service {
                             for (int j = 0; j < mainDeck.size(); j++) {
                                 if (fc_flag || ec_flag) {
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_name", j + 1), R.id.class)))
-                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+                                            .setTextSize(textsize_c_large);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_cond", j + 1), R.id.class)))
-                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 8);
+                                            .setTextSize(textsize_c_xsmall);
                                 } else {
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_name", j + 1), R.id.class)))
-                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                                            .setTextSize(textsize_n_large);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_cond", j + 1), R.id.class)))
-                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+                                            .setTextSize(textsize_n_medium);
                                 }
 
                                 if (fc_flag || ec_flag) {
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_lv", j + 1), R.id.class)))
-                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                                            .setTextSize(textsize_c_medium);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_exp", j + 1), R.id.class)))
-                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 7);
+                                            .setTextSize(textsize_c_xsmall);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", j + 1), R.id.class)))
-                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                                            .setTextSize(textsize_c_medium);
                                 } else {
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_lv", j + 1), R.id.class)))
-                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+                                            .setTextSize(textsize_n_medium);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_exp", j + 1), R.id.class)))
-                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+                                            .setTextSize(textsize_n_small);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", j + 1), R.id.class)))
-                                            .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                                            .setTextSize(textsize_n_large);
                                 }
 
                                 if (mainDeck.get(j).getAsInt() == -1) {
@@ -499,11 +508,11 @@ public class KcaBattleViewService extends Service {
 
                             for (int j = 0; j < combinedDeck.size(); j++) {
                                 ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_name", j + 1), R.id.class)))
-                                        .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
-                                ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_lv", j + 1), R.id.class))).
-                                        setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                                        .setTextSize(textsize_c_large);
+                                ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_lv", j + 1), R.id.class)))
+                                        .setTextSize(textsize_c_medium);
                                 ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", j + 1), R.id.class)))
-                                        .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                                        .setTextSize(textsize_c_medium);
 
                                 if (combinedDeck.get(j).getAsInt() == -1) {
                                     //Log.e("KCA", KcaUtils.format("%d: invisible", j + 1));
@@ -643,13 +652,13 @@ public class KcaBattleViewService extends Service {
 
                 for (int i = 0; i < api_ship_ke.size(); i++) {
                     if (fc_flag || ec_flag) {
-                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_lv", i + 1), R.id.class))).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
-                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_name", i + 1), R.id.class))).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
-                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_lv", i + 1), R.id.class))).setTextSize(textsize_c_medium);
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_name", i + 1), R.id.class))).setTextSize(textsize_c_large);
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setTextSize(textsize_c_medium);
                     } else {
-                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_lv", i + 1), R.id.class))).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
-                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_name", i + 1), R.id.class))).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_lv", i + 1), R.id.class))).setTextSize(textsize_n_medium);
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_name", i + 1), R.id.class))).setTextSize(textsize_n_large);
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setTextSize(textsize_n_small);
                     }
 
                     if (api_ship_ke.get(i).getAsInt() == -1) {
@@ -702,10 +711,10 @@ public class KcaBattleViewService extends Service {
                 for (int i = 0; i < api_f_maxhps.size(); i++) {
                     if (fc_flag || ec_flag) {
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", i + 1), R.id.class)))
-                                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                                .setTextSize(textsize_c_medium);
                     } else {
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", i + 1), R.id.class)))
-                                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                                .setTextSize(textsize_n_large);
                     }
 
                     int maxhp = api_f_maxhps.get(i).getAsInt();
@@ -731,10 +740,10 @@ public class KcaBattleViewService extends Service {
                 for (int i = 0; i < api_e_maxhps.size(); i++) {
                     if (fc_flag || ec_flag) {
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_hp_txt", i + 1), R.id.class)))
-                                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                                .setTextSize(textsize_c_medium);
                     } else {
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_hp_txt", i + 1), R.id.class)))
-                                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                                .setTextSize(textsize_n_large);
                     }
 
                     int maxhp = api_e_maxhps.get(i).getAsInt();
@@ -758,9 +767,11 @@ public class KcaBattleViewService extends Service {
 
                     for (int i = 0; i < api_f_maxhps_combined.size(); i++) {
                         if (fc_flag || ec_flag) {
-                            ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", i + 1), R.id.class))).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                            ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", i + 1), R.id.class)))
+                                    .setTextSize(textsize_c_medium);
                         } else {
-                            ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", i + 1), R.id.class))).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                            ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_hp_txt", i + 1), R.id.class)))
+                                    .setTextSize(textsize_n_large);
                         }
 
                         int maxhp = api_f_maxhps_combined.get(i).getAsInt();
@@ -803,9 +814,9 @@ public class KcaBattleViewService extends Service {
                     Log.e("KCA", "ECSD: " + String.valueOf(enemyCombinedShipData.size()));
                     JsonArray api_ship_ke_combined = api_data.getAsJsonArray("api_ship_ke_combined");
                     for (int i = 0; i < api_ship_ke_combined.size(); i++) {
-                        ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_name", i + 1), R.id.class))).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
-                        ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_lv", i + 1), R.id.class))).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
-                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_name", i + 1), R.id.class))).setTextSize(textsize_c_large);
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_lv", i + 1), R.id.class))).setTextSize(textsize_c_medium);
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_yomi", i + 1), R.id.class))).setTextSize(textsize_c_medium);
 
                         if (api_ship_ke_combined.get(i).getAsInt() == -1) {
                             battleview.findViewById(getId(KcaUtils.format("es_%d", i + 1), R.id.class)).setVisibility(View.INVISIBLE);
@@ -842,7 +853,7 @@ public class KcaBattleViewService extends Service {
                     api_e_afterhps_combined = api_data.getAsJsonArray("api_e_afterhps_combined");
                     for (int i = 0; i < api_e_maxhps_combined.size(); i++) {
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_hp_txt", i + 1), R.id.class)))
-                                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
+                                .setTextSize(textsize_c_medium);
 
                         int maxhp_combined = api_e_maxhps_combined.get(i).getAsInt();
                         int afterhp_combined = api_e_afterhps_combined.get(i).getAsInt();
@@ -1730,11 +1741,11 @@ public class KcaBattleViewService extends Service {
 
     private View.OnTouchListener shipViewTouchListener = new View.OnTouchListener() {
         WindowManager.LayoutParams itemViewParams;
-        int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
         boolean isTouchDown = false;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
             if (menuView.getParent() != null) {
                 return false;
             }

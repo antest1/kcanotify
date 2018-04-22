@@ -12,17 +12,17 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_weight="1"
+        android:gravity="center_vertical|center_horizontal"
         android:minWidth="72dp"
+        android:paddingBottom="@dimen/toast_margin_tb"
+        android:paddingEnd="@dimen/toast_margin_se"
+        android:paddingLeft="@dimen/toast_margin_se"
+        android:paddingRight="@dimen/toast_margin_se"
+        android:paddingStart="@dimen/toast_margin_se"
+        android:paddingTop="@dimen/toast_margin_tb"
         android:textAlignment="gravity"
         android:textColor="@android:color/white"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingBottom="4dp"
-        android:paddingEnd="12dp"
-        android:paddingStart="12dp"
-        android:paddingTop="4dp"
-        android:textSize="16dp"
-        android:gravity="center_vertical|center_horizontal" />
+        android:textSize="@dimen/toast_text_size" />
 
 
 </LinearLayout>

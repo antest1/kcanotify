@@ -21,6 +21,22 @@
     <dimen name="questview_text_medium">11dp</dimen>
     <dimen name="questview_text_small">10dp</dimen>
 
+    <dimen name="battleview_text_label_large">18dp</dimen>
+    <dimen name="battleview_text_label_medium">14dp</dimen>
+    <dimen name="battleview_text_label_small">10dp</dimen>
+    <dimen name="battleview_text_label_width">60dp</dimen>
+
+    <dimen name="battleview_text_n_large">13dp</dimen>
+    <dimen name="battleview_text_n_medium">11dp</dimen>
+    <dimen name="battleview_text_n_small">10dp</dimen>
+    <dimen name="battleview_text_c_large">10dp</dimen>
+    <dimen name="battleview_text_c_medium">9dp</dimen>
+    <dimen name="battleview_text_c_small">8dp</dimen>
+    <dimen name="battleview_text_c_xsmall">7dp</dimen>
+    <dimen name="battleview_hp_height">4dp</dimen>
+    <dimen name="battleview_padding">8dp</dimen>
+    <dimen name="battleview_nodeinfo_margin">20dp</dimen>
+
     <dimen name="item_popup_icon_size">15dp</dimen>
     <dimen name="item_popup_text_size_large">11dp</dimen>
     <dimen name="item_popup_text_size_small">10dp</dimen>
@@ -31,4 +47,9 @@
 
     <dimen name="text_description_medium">15dp</dimen>
     <dimen name="text_description_small">12dp</dimen>
+
+    <dimen name="toast_text_size">16dp</dimen>
+    <dimen name="toast_margin_tb">4dp</dimen>
+    <dimen name="toast_margin_se">12dp</dimen>
+    <dimen name="toast_minwidth">72dp</dimen>
 </resources>

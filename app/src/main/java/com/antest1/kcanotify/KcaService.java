@@ -388,11 +388,12 @@ public class KcaService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
+        int IMAGE_SIZE = 128;
         int type = KcaAlarmService.getAlarmCount() > 0 ? 1 : 0;
         String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
         int viewBitmapId = getId(fairyId, R.mipmap.class);
         int viewBitmapSmallId = getId("ic_stat_notify_".concat(String.valueOf(type)), R.mipmap.class);
-        Bitmap viewBitmap = ((BitmapDrawable) ContextCompat.getDrawable(getApplicationContext(), viewBitmapId)).getBitmap();
+        Bitmap viewBitmap = KcaUtils.decodeSampledBitmapFromResource(getResources(), viewBitmapId, IMAGE_SIZE, IMAGE_SIZE);
 
         notifyBuilder.setContentTitle(title)
                 .setSmallIcon(viewBitmapSmallId)
@@ -2054,11 +2055,6 @@ public class KcaService extends Service {
                 }
             }
             sendQuestCompletionInfo();
-        } catch (JsonSyntaxException e) {
-            //Log.e("KCA", "ParseError");
-            //Log.e("KCA", data);
-            e.printStackTrace();
-
         } catch (Exception e) {
             e.printStackTrace();
             String api_request = "";
