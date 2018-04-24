@@ -59,7 +59,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_weight="1"
-                        android:minWidth="72dp"
+                        android:minWidth="@dimen/battleview_nodeinfo_minwidth"
                         android:paddingEnd="@dimen/battleview_padding"
                         android:paddingLeft="@dimen/battleview_padding"
                         android:paddingRight="@dimen/battleview_padding"

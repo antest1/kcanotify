@@ -6,58 +6,58 @@
     android:alpha="0.8">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_width="@dimen/popup_t3_width"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:padding="6dp"
-        android:layout_width="350dp">
+        android:orientation="vertical"
+        android:padding="@dimen/popup_padding">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/view_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/view_menu">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:id="@+id/view_ac_head"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:paddingBottom="2dp"
-                android:id="@+id/view_ac_head">
+                android:orientation="horizontal"
+                android:paddingBottom="2dp">
 
                 <TextView
-                    android:text="@string/battleview_menu0"
+                    android:id="@+id/view_ac_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/view_ac_title"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
                     android:layout_gravity="center_vertical"
-                    android:textSize="16dp" />
+                    android:layout_weight="1"
+                    android:text="@string/battleview_menu0"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/popup_text_large" />
 
                 <ImageView
-                    android:layout_height="wrap_content"
                     android:id="@+id/view_cancel"
+                    android:layout_width="@dimen/popup_text_large"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@mipmap/ic_cancel"
-                    android:layout_width="16dp" />
+                    android:src="@mipmap/ic_cancel" />
             </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_gravity="left|clip_vertical"
+                android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp"
+                android:layout_weight="1"
                 android:background="@android:color/darker_gray"
                 android:paddingBottom="0.5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingTop="0dp"
                 android:scaleType="fitXY"
-                android:src="@android:drawable/divider_horizontal_bright"
-                android:layout_gravity="left|clip_vertical"
-                android:layout_weight="1"
-                android:layout_marginBottom="1dp" />
+                android:src="@android:drawable/divider_horizontal_bright" />
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -86,7 +86,7 @@
                             android:text="AB JET INJ"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="@dimen/popup_text_normal" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -102,7 +102,7 @@
                                 android:text="TextView"
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_abinj_1_msg"
@@ -112,7 +112,7 @@
                                 android:text="-"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_abinj_1_e"
@@ -122,7 +122,7 @@
                                 android:text="TextView"
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -139,7 +139,7 @@
                                 android:text="TextView"
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_abinj_2_msg"
@@ -149,7 +149,7 @@
                                 android:text="-"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_abinj_2_e"
@@ -159,7 +159,7 @@
                                 android:text="TextView"
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -180,7 +180,7 @@
                             android:text="JET INJ"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="@dimen/popup_text_normal" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -196,7 +196,7 @@
                                 android:text="TextView"
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_inj_1_msg"
@@ -206,7 +206,7 @@
                                 android:text="-"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_inj_1_e"
@@ -216,7 +216,7 @@
                                 android:text="TextView"
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -233,7 +233,7 @@
                                 android:text="TextView"
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_inj_2_msg"
@@ -243,7 +243,7 @@
                                 android:text="-"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_inj_2_e"
@@ -253,7 +253,7 @@
                                 android:text="TextView"
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -280,7 +280,7 @@
                                 android:text="AB PHASE #1"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="@dimen/popup_text_normal" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -296,7 +296,7 @@
                                     android:text="TextView"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_0_1_msg"
@@ -306,7 +306,7 @@
                                     android:text="TextView"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_0_1_e"
@@ -316,7 +316,7 @@
                                     android:text="TextView"
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -333,7 +333,7 @@
                                     android:text="TextView"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_0_2_msg"
@@ -343,7 +343,7 @@
                                     android:text="TextView"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_0_2_e"
@@ -353,7 +353,7 @@
                                     android:text="TextView"
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -371,7 +371,7 @@
                                 android:text="AB PHASE #2"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="@dimen/popup_text_normal" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -387,7 +387,7 @@
                                     android:text="TextView"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_1_1_msg"
@@ -397,7 +397,7 @@
                                     android:text="TextView"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_1_1_e"
@@ -407,7 +407,7 @@
                                     android:text="TextView"
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -424,7 +424,7 @@
                                     android:text="TextView"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_1_2_msg"
@@ -434,7 +434,7 @@
                                     android:text="TextView"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_1_2_e"
@@ -444,7 +444,7 @@
                                     android:text="TextView"
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -462,7 +462,7 @@
                                 android:text="AB PHASE #3"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="@dimen/popup_text_normal" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -478,7 +478,7 @@
                                     android:text="TextView"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_2_1_msg"
@@ -488,7 +488,7 @@
                                     android:text="TextView"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_2_1_e"
@@ -498,7 +498,7 @@
                                     android:text="TextView"
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -515,7 +515,7 @@
                                     android:text="TextView"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_2_2_msg"
@@ -525,7 +525,7 @@
                                     android:text="TextView"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_2_2_e"
@@ -535,7 +535,7 @@
                                     android:text="TextView"
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -553,7 +553,7 @@
                                 android:text="AB PHASE #4"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="@dimen/popup_text_normal" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -569,7 +569,7 @@
                                     android:text="TextView"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_3_1_msg"
@@ -579,7 +579,7 @@
                                     android:text="TextView"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_3_1_e"
@@ -589,7 +589,7 @@
                                     android:text="TextView"
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -606,7 +606,7 @@
                                     android:text="TextView"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_3_2_msg"
@@ -616,7 +616,7 @@
                                     android:text="TextView"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_3_2_e"
@@ -626,7 +626,7 @@
                                     android:text="TextView"
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -644,7 +644,7 @@
                                 android:text="AB PHASE #5"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="@dimen/popup_text_normal" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -660,7 +660,7 @@
                                     android:text="TextView"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_4_1_msg"
@@ -670,7 +670,7 @@
                                     android:text="TextView"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_4_1_e"
@@ -680,7 +680,7 @@
                                     android:text="TextView"
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -697,7 +697,7 @@
                                     android:text="TextView"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_4_2_msg"
@@ -707,7 +707,7 @@
                                     android:text="TextView"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_4_2_e"
@@ -717,7 +717,7 @@
                                     android:text="TextView"
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -735,7 +735,7 @@
                                 android:text="AB PHASE #6"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="14dp" />
+                                android:textSize="@dimen/popup_text_normal" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -751,7 +751,7 @@
                                     android:text="TextView"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_5_1_msg"
@@ -761,7 +761,7 @@
                                     android:text="TextView"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_5_1_e"
@@ -771,7 +771,7 @@
                                     android:text="TextView"
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -788,7 +788,7 @@
                                     android:text="TextView"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_5_2_msg"
@@ -798,7 +798,7 @@
                                     android:text="TextView"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
 
                                 <TextView
                                     android:id="@+id/view_ac_aba_5_2_e"
@@ -808,7 +808,7 @@
                                     android:text="TextView"
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
-                                    android:textSize="12dp" />
+                                    android:textSize="@dimen/popup_text_small" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -829,7 +829,7 @@
                             android:text="Phase #1"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="@dimen/popup_text_normal" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -864,12 +864,12 @@
                                         android:text="TextView"
                                         android:textAlignment="textEnd"
                                         android:textColor="@color/white"
-                                        android:textSize="10dp" />
+                                        android:textSize="@dimen/popup_text_xsmall" />
 
                                     <ImageView
                                         android:id="@+id/view_ac_phase1_0_f_icon"
-                                        android:layout_width="11dp"
-                                        android:layout_height="11dp"
+                                        android:layout_width="@dimen/aircombat_text_mid"
+                                        android:layout_height="@dimen/aircombat_text_mid"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginLeft="2dp"
                                         android:layout_marginStart="2dp"
@@ -892,7 +892,7 @@
                                     android:text="Damage Modifier: 112%"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/lightgray"
-                                    android:textSize="8dp" />
+                                    android:textSize="@dimen/popup_text_xsmall" />
 
                             </LinearLayout>
 
@@ -905,7 +905,7 @@
                                 android:text="TextView"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="11dp" />
+                                android:textSize="@dimen/aircombat_text_mid" />
 
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -922,8 +922,8 @@
 
                                     <ImageView
                                         android:id="@+id/view_ac_phase1_0_e_icon"
-                                        android:layout_width="11dp"
-                                        android:layout_height="11dp"
+                                        android:layout_width="@dimen/aircombat_text_mid"
+                                        android:layout_height="@dimen/aircombat_text_mid"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginEnd="2dp"
                                         android:layout_marginRight="2dp"
@@ -943,7 +943,7 @@
                                         android:text="TextView"
                                         android:textAlignment="textStart"
                                         android:textColor="@color/white"
-                                        android:textSize="10dp" />
+                                        android:textSize="@dimen/popup_text_xsmall" />
                                 </LinearLayout>
 
                                 <TextView
@@ -959,7 +959,7 @@
                                     android:text="Damage Modifier: 112%"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/lightgray"
-                                    android:textSize="8dp" />
+                                    android:textSize="@dimen/popup_text_xsmall" />
 
                             </LinearLayout>
 
@@ -979,7 +979,7 @@
                                 android:text="TextView"
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_phase1_1_msg"
@@ -989,7 +989,7 @@
                                 android:text="TextView"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_phase1_1_e"
@@ -999,7 +999,7 @@
                                 android:text="TextView"
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1016,7 +1016,7 @@
                                 android:text="TextView"
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_phase1_2_msg"
@@ -1026,7 +1026,7 @@
                                 android:text="TextView"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_phase1_2_e"
@@ -1036,7 +1036,7 @@
                                 android:text="TextView"
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1056,7 +1056,7 @@
                             android:text="Phase #2"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="@dimen/popup_text_normal" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -1091,12 +1091,12 @@
                                         android:text="TextView"
                                         android:textAlignment="textEnd"
                                         android:textColor="@color/white"
-                                        android:textSize="10dp" />
+                                        android:textSize="@dimen/popup_text_xsmall" />
 
                                     <ImageView
                                         android:id="@+id/view_ac_phase2_0_f_icon"
-                                        android:layout_width="11dp"
-                                        android:layout_height="11dp"
+                                        android:layout_width="@dimen/aircombat_text_mid"
+                                        android:layout_height="@dimen/aircombat_text_mid"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginLeft="2dp"
                                         android:layout_marginStart="2dp"
@@ -1120,7 +1120,7 @@
                                     android:text="Damage Modifier: 112%"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/lightgray"
-                                    android:textSize="8dp" />
+                                    android:textSize="@dimen/popup_text_xsmall" />
 
                             </LinearLayout>
 
@@ -1133,7 +1133,7 @@
                                 android:text="TextView"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="11dp" />
+                                android:textSize="@dimen/aircombat_text_mid" />
 
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -1150,8 +1150,8 @@
 
                                     <ImageView
                                         android:id="@+id/view_ac_phase2_0_e_icon"
-                                        android:layout_width="11dp"
-                                        android:layout_height="11dp"
+                                        android:layout_width="@dimen/aircombat_text_mid"
+                                        android:layout_height="@dimen/aircombat_text_mid"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginEnd="2dp"
                                         android:layout_marginRight="2dp"
@@ -1172,7 +1172,7 @@
                                         android:text="TextView"
                                         android:textAlignment="textStart"
                                         android:textColor="@color/white"
-                                        android:textSize="10dp" />
+                                        android:textSize="@dimen/popup_text_xsmall" />
                                 </LinearLayout>
 
                                 <TextView
@@ -1189,7 +1189,7 @@
                                     android:text="Damage Modifier: 112%"
                                     android:textAlignment="textStart"
                                     android:textColor="@color/lightgray"
-                                    android:textSize="8dp" />
+                                    android:textSize="@dimen/popup_text_xsmall" />
 
                             </LinearLayout>
 
@@ -1209,7 +1209,7 @@
                                 android:text="TextView"
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_phase2_1_msg"
@@ -1219,7 +1219,7 @@
                                 android:text="TextView"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_phase2_1_e"
@@ -1229,7 +1229,7 @@
                                 android:text="TextView"
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1246,7 +1246,7 @@
                                 android:text="TextView"
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_phase2_2_msg"
@@ -1256,7 +1256,7 @@
                                 android:text="TextView"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
 
                             <TextView
                                 android:id="@+id/view_ac_phase2_2_e"
@@ -1266,7 +1266,7 @@
                                 android:text="TextView"
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:textSize="@dimen/popup_text_small" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

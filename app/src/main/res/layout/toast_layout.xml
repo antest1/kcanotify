@@ -13,7 +13,7 @@
         android:layout_centerVertical="true"
         android:layout_weight="1"
         android:gravity="center_vertical|center_horizontal"
-        android:minWidth="72dp"
+        android:minWidth="@dimen/toast_minwidth"
         android:paddingBottom="@dimen/toast_margin_tb"
         android:paddingEnd="@dimen/toast_margin_se"
         android:paddingLeft="@dimen/toast_margin_se"

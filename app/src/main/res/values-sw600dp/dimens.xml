@@ -1,29 +1,30 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">18dp</dimen>
+    <dimen name="activity_vertical_margin">18dp</dimen>
 
 
-    <dimen name="view_text_title">24dp</dimen>
+    <dimen name="view_text_title">22dp</dimen>
+    <dimen name="view_padding">12dp</dimen>
 
-    <dimen name="fleetview_text_statusarea">18dp</dimen>
-    <dimen name="fleetview_text_tbutton">20dp</dimen>
-    <dimen name="fleetview_text_rbutton">24dp</dimen>
-    <dimen name="fleetview_text_ship_large">21dp</dimen>
-    <dimen name="fleetview_text_ship_medium">18dp</dimen>
-    <dimen name="fleetview_text_ship_small">15dp</dimen>
+    <dimen name="fleetview_text_statusarea">16dp</dimen>
+    <dimen name="fleetview_text_tbutton">18dp</dimen>
+    <dimen name="fleetview_text_rbutton">22dp</dimen>
+    <dimen name="fleetview_text_ship_large">16dp</dimen>
+    <dimen name="fleetview_text_ship_medium">14dp</dimen>
+    <dimen name="fleetview_text_ship_small">12dp</dimen>
 
-    <dimen name="questview_tag_size">40dp</dimen>
-    <dimen name="questview_desc_height">54dp</dimen>
-    <dimen name="questview_text_top">24dp</dimen>
-    <dimen name="questview_button_top">22dp</dimen>
-    <dimen name="questview_text_large">20dp</dimen>
-    <dimen name="questview_text_medium">16dp</dimen>
-    <dimen name="questview_text_small">14dp</dimen>
+    <dimen name="questview_tag_size">36dp</dimen>
+    <dimen name="questview_desc_height">52dp</dimen>
+    <dimen name="questview_text_top">22dp</dimen>
+    <dimen name="questview_button_top">20dp</dimen>
+    <dimen name="questview_text_large">18dp</dimen>
+    <dimen name="questview_text_medium">15dp</dimen>
+    <dimen name="questview_text_small">12dp</dimen>
 
-    <dimen name="battleview_text_label_large">28dp</dimen>
-    <dimen name="battleview_text_label_medium">20dp</dimen>
-    <dimen name="battleview_text_label_small">16dp</dimen>
+    <dimen name="battleview_text_label_large">22dp</dimen>
+    <dimen name="battleview_text_label_medium">18dp</dimen>
+    <dimen name="battleview_text_label_small">14dp</dimen>
     <dimen name="battleview_text_label_width">70dp</dimen>
 
     <dimen name="battleview_text_n_large">16dp</dimen>
@@ -35,6 +36,7 @@
     <dimen name="battleview_text_c_xsmall">9dp</dimen>
     <dimen name="battleview_hp_height">6dp</dimen>
     <dimen name="battleview_padding">12dp</dimen>
+    <dimen name="battleview_nodeinfo_minwidth">96dp</dimen>
     <dimen name="battleview_nodeinfo_margin">20dp</dimen>
 
     <dimen name="item_popup_icon_size">20dp</dimen>
@@ -42,7 +44,7 @@
     <dimen name="item_popup_text_size_small">14dp</dimen>
     <dimen name="item_popup_xmargin">72dp</dimen>
 
-    <dimen name="button_size">128dp</dimen>
+    <dimen name="button_size">96dp</dimen>
     <dimen name="button_select_size">72dp</dimen>
 
     <dimen name="text_description_medium">20dp</dimen>
@@ -57,10 +59,16 @@
     <dimen name="popup_text_large">24dp</dimen>
     <dimen name="popup_text_normal">20dp</dimen>
     <dimen name="popup_text_small">16dp</dimen>
-    <dimen name="popup_text_xsmall">12dp</dimen>
+    <dimen name="popup_text_xsmall">13dp</dimen>
+    <dimen name="popup_text_xxsmall">10dp</dimen>
     <dimen name="popup_item_icon_size">28dp</dimen>
     <dimen name="popup_t2_width">350dp</dimen>
     <dimen name="popup_t3_width">420dp</dimen>
+    <dimen name="popup_padding">8dp</dimen>
+
+
+    <dimen name="aircombat_text_mid">12dp</dimen>
+    <dimen name="aircombat_mid_width">140dp</dimen>
 
     <dimen name="toast_text_size">24dp</dimen>
     <dimen name="toast_margin_tb">6dp</dimen>

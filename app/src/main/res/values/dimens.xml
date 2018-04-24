@@ -5,6 +5,7 @@
 
 
     <dimen name="view_text_title">20dp</dimen>
+    <dimen name="view_padding">8dp</dimen>
 
     <dimen name="fleetview_text_statusarea">14dp</dimen>
     <dimen name="fleetview_text_tbutton">15dp</dimen>
@@ -35,6 +36,7 @@
     <dimen name="battleview_text_c_xsmall">7dp</dimen>
     <dimen name="battleview_hp_height">4dp</dimen>
     <dimen name="battleview_padding">8dp</dimen>
+    <dimen name="battleview_nodeinfo_minwidth">72dp</dimen>
     <dimen name="battleview_nodeinfo_margin">20dp</dimen>
 
     <dimen name="item_popup_icon_size">15dp</dimen>
@@ -58,9 +60,14 @@
     <dimen name="popup_text_normal">14dp</dimen>
     <dimen name="popup_text_small">12dp</dimen>
     <dimen name="popup_text_xsmall">10dp</dimen>
+    <dimen name="popup_text_xxsmall">8dp</dimen>
     <dimen name="popup_item_icon_size">22dp</dimen>
     <dimen name="popup_t2_width">250dp</dimen>
     <dimen name="popup_t3_width">350dp</dimen>
+    <dimen name="popup_padding">6dp</dimen>
+
+    <dimen name="aircombat_text_mid">11dp</dimen>
+    <dimen name="aircombat_mid_width">100dp</dimen>
 
     <dimen name="toast_text_size">16dp</dimen>
     <dimen name="toast_margin_tb">4dp</dimen>

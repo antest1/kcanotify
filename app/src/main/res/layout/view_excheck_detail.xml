@@ -44,7 +44,7 @@
                     android:layout_marginStart="10dp"
                     android:text="00:00:00"
                     android:textColor="@color/white"
-                    android:textSize="12dp" />
+                    android:textSize="@dimen/popup_text_small" />
 
             </LinearLayout>
 

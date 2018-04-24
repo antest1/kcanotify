@@ -6,25 +6,25 @@
     android:alpha="0.8">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_width="@dimen/popup_t2_width"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:padding="6dp"
-        android:layout_width="@dimen/popup_t2_width">
+        android:orientation="vertical"
+        android:padding="@dimen/popup_padding">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/view_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/view_menu">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:id="@+id/view_dock_head"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:paddingBottom="2dp"
-                android:id="@+id/view_dock_head">
+                android:orientation="horizontal"
+                android:paddingBottom="2dp">
 
                 <TextView
                     android:id="@+id/view_dock_title"
@@ -37,133 +37,133 @@
                     android:textSize="@dimen/popup_text_large" />
 
                 <ImageView
-                    android:layout_height="wrap_content"
                     android:id="@+id/view_cancel"
+                    android:layout_width="@dimen/popup_text_large"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@mipmap/ic_cancel"
-                    android:layout_width="@dimen/popup_text_large" />
+                    android:src="@mipmap/ic_cancel" />
             </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_gravity="left|clip_vertical"
+                android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp"
+                android:layout_weight="1"
                 android:background="@android:color/darker_gray"
                 android:paddingBottom="0.5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingTop="0dp"
                 android:scaleType="fitXY"
-                android:src="@android:drawable/divider_horizontal_bright"
-                android:layout_gravity="left|clip_vertical"
-                android:layout_weight="1"
-                android:layout_marginBottom="1dp" />
+                android:src="@android:drawable/divider_horizontal_bright" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:layout_margin="5dp">
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:id="@+id/dock_list_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/dock_list_1">
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
                         android:id="@+id/dock1_name"
-                        android:layout_weight="5"
-                        android:textSize="@dimen/popup_text_large"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="@color/white"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end" />
-
-                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="5"
+                        android:ellipsize="end"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_large" />
+
+                    <TextView
                         android:id="@+id/dock1_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="3"
-                        android:textSize="@dimen/popup_text_large"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_large" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:id="@+id/dock_list_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/dock_list_2">
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
                         android:id="@+id/dock2_name"
-                        android:layout_weight="5"
-                        android:textSize="@dimen/popup_text_large"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="@color/white"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end" />
-
-                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="5"
+                        android:ellipsize="end"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_large" />
+
+                    <TextView
                         android:id="@+id/dock2_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="3"
-                        android:textSize="@dimen/popup_text_large"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_large" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:id="@+id/dock_list_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/dock_list_3">
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
                         android:id="@+id/dock3_name"
-                        android:layout_weight="5"
-                        android:textSize="@dimen/popup_text_large"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="@color/white"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end" />
-
-                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="5"
+                        android:ellipsize="end"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_large" />
+
+                    <TextView
                         android:id="@+id/dock3_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="3"
-                        android:textSize="@dimen/popup_text_large"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_large" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:id="@+id/dock_list_4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/dock_list_4">
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
                         android:id="@+id/dock4_name"
-                        android:layout_weight="5"
-                        android:textSize="@dimen/popup_text_large"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="@color/white"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end" />
-
-                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="5"
+                        android:ellipsize="end"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_large" />
+
+                    <TextView
                         android:id="@+id/dock4_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="3"
-                        android:textSize="@dimen/popup_text_large"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_large" />
                 </LinearLayout>
 
             </LinearLayout>

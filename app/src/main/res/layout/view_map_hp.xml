@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:orientation="vertical"
-        android:padding="6dp">
+        android:padding="@dimen/popup_padding">
 
         <LinearLayout
             android:id="@+id/view_menu"
