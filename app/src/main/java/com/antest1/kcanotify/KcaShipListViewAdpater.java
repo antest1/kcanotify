@@ -194,7 +194,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         }
 
         int ship_lv = item.get("api_lv").getAsInt();
-        holder.ship_lv.setText(KcaUtils.format("LV %d", ship_lv));
+        holder.ship_lv.setText(KcaUtils.format("Lv %d", ship_lv));
 
         if (ship_lv >= 100) {
             holder.ship_name.setTextColor(ContextCompat.getColor(context, R.color.colorStatMarried));

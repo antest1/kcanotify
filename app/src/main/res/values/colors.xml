@@ -121,7 +121,7 @@
     <color name="colorFleetAkashiTimerBtnActive">#ff4081</color>
     <color name="colorFleetAkashiTimerBtnDeactive">#424242</color>
     <color name="colorFleetShipKira">#ffff8d</color>
-    <color name="colorFleetShipNormal">#bdbdbd</color>
+    <color name="colorFleetShipNormal">#c0d6d6d6</color>
     <color name="colorFleetShipFatigue1">#f98b25</color>
     <color name="colorFleetShipFatigue2">#ff5252</color>
     <color name="colorFleetWarning">#7e2424</color>
@@ -146,6 +146,7 @@
 
     <color name="colorStatNormal">#212121</color>
     <color name="colorStatMarried">#e91e63</color>
+    <color name="colorStatExpleft">#616161</color>
     <color name="colorStatRemodel">#283593</color>
     <color name="colorStatKaryoku">#c62828</color>
     <color name="colorStatRaisou">#3f51b5</color>

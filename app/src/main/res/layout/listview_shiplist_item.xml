@@ -44,7 +44,7 @@
                         android:layout_width="42dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
+                        android:layout_weight="0"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text="1234567"
@@ -54,12 +54,10 @@
 
                     <TextView
                         android:id="@+id/ship_name"
-                        android:layout_width="100dp"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="2dp"
-                        android:layout_marginRight="2dp"
-                        android:layout_weight="2"
+                        android:layout_weight="0"
                         android:gravity="center_vertical"
                         android:paddingLeft="2dp"
                         android:paddingStart="2dp"
@@ -70,15 +68,15 @@
 
                     <LinearLayout
                         android:id="@+id/ship_stat_1_1"
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/ship_karyoku"
-                            android:layout_width="0dp"
+                            android:layout_width="25dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="bottom"
                             android:layout_weight="1"
@@ -92,7 +90,7 @@
 
                         <TextView
                             android:id="@+id/ship_raisou"
-                            android:layout_width="0dp"
+                            android:layout_width="25dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="bottom"
                             android:layout_weight="1"
@@ -108,15 +106,15 @@
 
                     <LinearLayout
                         android:id="@+id/ship_stat_1_2"
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="2.5"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/ship_yasen"
-                            android:layout_width="0dp"
+                            android:layout_width="25dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="bottom"
                             android:layout_weight="1"
@@ -130,7 +128,7 @@
 
                         <TextView
                             android:id="@+id/ship_taisen"
-                            android:layout_width="0dp"
+                            android:layout_width="25dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="bottom"
                             android:layout_weight="1"
@@ -148,7 +146,7 @@
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:orientation="horizontal">
 
                         <HorizontalScrollView
@@ -318,8 +316,7 @@
                         <RelativeLayout
                             android:id="@+id/ship_equip_ex"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
+                            android:layout_height="wrap_content">
 
                             <ImageView
                                 android:id="@+id/ship_equip_ex_icon"
@@ -361,7 +358,7 @@
                         android:layout_width="42dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
+                        android:layout_weight="0"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text="FBB"
@@ -371,20 +368,18 @@
 
                     <LinearLayout
                         android:id="@+id/ship_stat_2_0"
-                        android:layout_width="100dp"
+                        android:layout_width="120dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="2dp"
-                        android:layout_marginRight="2dp"
-                        android:layout_weight="2"
+                        android:layout_weight="0"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/ship_lv"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
+                            android:layout_gravity="bottom"
+                            android:layout_weight="0"
                             android:gravity="center_vertical"
                             android:paddingLeft="2dp"
                             android:paddingStart="2dp"
@@ -397,27 +392,43 @@
                             android:id="@+id/ship_exp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="1.5"
+                            android:layout_gravity="bottom"
+                            android:layout_weight="1.4"
+                            android:ellipsize="marquee"
                             android:gravity="center_vertical"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
                             android:text="Next: 100020"
                             android:textAlignment="textStart"
-                            android:textColor="@color/colorStatNormal"
+                            android:textColor="@color/colorStatExpleft"
                             android:textSize="8dp" />
+
+                        <TextView
+                            android:id="@+id/ship_cond"
+                            android:layout_width="25dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="top"
+                            android:background="@color/colorFleetShipKira"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="50"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="10dp" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ship_stat_2_1"
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/ship_taiku"
-                            android:layout_width="0dp"
+                            android:layout_width="25dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="top"
                             android:layout_weight="1"
@@ -431,7 +442,7 @@
 
                         <TextView
                             android:id="@+id/ship_soukou"
-                            android:layout_width="0dp"
+                            android:layout_width="25dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="top"
                             android:layout_weight="1"
@@ -447,15 +458,15 @@
 
                     <LinearLayout
                         android:id="@+id/ship_stat_2_2"
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="2.5"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/ship_kaihi"
-                            android:layout_width="0dp"
+                            android:layout_width="25dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="bottom"
                             android:layout_weight="1"
@@ -468,7 +479,7 @@
 
                         <TextView
                             android:id="@+id/ship_sakuteki"
-                            android:layout_width="0dp"
+                            android:layout_width="25dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="bottom"
                             android:layout_weight="1"
@@ -479,40 +490,25 @@
                             android:textColor="@color/colorStatSakuteki"
                             android:textSize="10dp" />
 
-                        <TextView
-                            android:id="@+id/ship_luck"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="bottom"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:singleLine="true"
-                            android:text="50"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorStatLuck"
-                            android:textSize="10dp" />
-
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ship_stat_2_3"
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/ship_cond"
-                            android:layout_width="0dp"
+                            android:id="@+id/ship_luck"
+                            android:layout_width="25dp"
                             android:layout_height="match_parent"
-                            android:layout_gravity="top"
-                            android:layout_weight="1"
-                            android:background="@color/colorFleetShipKira"
+                            android:layout_gravity="bottom"
                             android:gravity="center_vertical"
                             android:singleLine="true"
                             android:text="50"
                             android:textAlignment="center"
-                            android:textColor="@color/black"
+                            android:textColor="@color/colorStatLuck"
                             android:textSize="10dp" />
 
                         <TextView
