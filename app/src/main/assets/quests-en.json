@@ -2405,6 +2405,41 @@
 		"memo": "\u2718Consumes the resources. \u27a3Rewards a New Model Aircraft Blueprint"
 	},
 
+	"681": {
+		"code": "5A01",
+		"name": "Fifth Anniversary Mission I: The Arsenal",
+		"desc": "Scrap 5 Small Cal. Main Guns and 5 Medium Cal. Main Guns.",
+		"memo": "\u27a3Rewards: \u00B6First choice: Either eight Development Materials OR three 12cm 30-tube Rocket Launchers OR two Shiden Kai Ni \u00B6Second choice: Either a Furniture Fairy OR a New Model Artillery Armament Materials OR a Reinforcement Expansion",
+		"unlock": [ 882 ]
+	},
+	"882": {
+		"code": "5A02",
+		"name": "Fifth Anniversary Mission II: Naval Base Region Patrol",
+		"desc": "Sortie a CL(T)/CT as flagship and 3 or more DD/DE to [W1-1], [W1-2], [W1-3], [W1-4] and [W1-5]. A-Rank+ the boss nodes of each.",
+		"memo": "\u27a3Rewards the DE, Tsushima \u2623CAUTION\u2623You will need this Tsushima reward for the next quest if you lack a modernizable DE.",
+		"unlock": [ 706 ]
+	},
+	"706": {
+		"code": "5A03",
+		"name": "Fifth Anniversary Mission III: Modernization",
+		"desc": "Have 555 steel and bauxite. Successfully modernize a DE using 5 DD twice.",
+		"memo": "\u2718If no stats are boosted, it doesn't count. \u2718Consumes the resources. \u27a3Rewards furniture and either ten Buckets, five Screws, or five Combat Rations.",
+		"unlock": [ 321 ]
+	},
+	"321": {
+		"code": "5A04",
+		"name": "Fifth Anniversary Mission IV: Exercises",
+		"desc": "Secure 4 victories in Exercises within the same day using 2 DD/DE and 3 additional ships. You cannot use a 6th ship.",
+		"memo": "\u27a3Rewards: \u00B6First choice: Either five Irako OR a +5 Type 95 Depth Charge \u00B6Second choice: Either an Action Report OR a +5 12.7cm Twin Gun Mount Model C Kai Ni",
+		"unlock": [ 883 ]
+	},
+	"883": {
+		"code": "5A05",
+		"name": "Fifth Anniversary Mission V: The Fifth Anniversary Fleet Sortie!",
+		"desc": "Sortie a CL(T)/CT, 2 DD/DE and up to 3 additional ships. Pick one of these: A-Rank+ all [W2] maps OR A-Rank+ [W5-3] and [W5-5] OR A-Rank+ [W6-5]",
+		"memo": "You may use up to 3 additional ships. \u27a3Rewards the DD, Samuel B. Roberts"
+	},
+
 	"188_old": {
 		"code": "Le1A1",
 		"name": "Fully Formed Nishimura Fleet, Prepare to Sortie!",
