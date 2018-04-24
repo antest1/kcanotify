@@ -396,7 +396,6 @@ public class KcaLandAirBasePopupService extends Service {
     private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
         private static final int LONG_CLICK_DURATION = 800;
-        int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
         int itemViewWidth, itemViewHeight;
 
         private long startClickTime;
@@ -404,6 +403,7 @@ public class KcaLandAirBasePopupService extends Service {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             int id = v.getId();
+            int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
