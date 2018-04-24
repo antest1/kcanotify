@@ -79,22 +79,6 @@
                     android:textSize="18dp" />
 
                 <TextView
-                    android:id="@+id/fleet_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginRight="8dp"
-                    android:background="@color/colorFleetInfoBtn"
-                    android:gravity="top"
-                    android:paddingBottom="4dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="4dp"
-                    android:text="\#4"
-                    android:textColor="@color/white"
-                    android:textSize="18dp" />
-
-                <TextView
                     android:id="@+id/fleet_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -107,6 +91,22 @@
                     android:paddingRight="8dp"
                     android:paddingTop="4dp"
                     android:text="\#3"
+                    android:textColor="@color/white"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/fleet_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/colorFleetInfoBtn"
+                    android:gravity="top"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="4dp"
+                    android:text="\#4"
                     android:textColor="@color/white"
                     android:textSize="18dp" />
 
@@ -431,17 +431,6 @@
                                             android:textSize="18dp" />
 
                                         <TextView
-                                            android:id="@+id/fleetview_item_1_stype"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="1"
-                                            android:gravity="top"
-                                            android:maxLines="1"
-                                            android:paddingLeft="6dp"
-                                            android:textColor="@color/colorAccent"
-                                            android:textSize="14dp" />
-
-                                        <TextView
                                             android:id="@+id/fleetview_item_1_condmark"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
@@ -456,6 +445,17 @@
                                         android:layout_height="fill_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/fleetview_item_1_stype"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:gravity="top"
+                                            android:maxLines="1"
+                                            android:paddingLeft="6dp"
+                                            android:textColor="@color/colorAccent"
+                                            android:textSize="14dp" />
 
                                         <TextView
                                             android:id="@+id/fleetview_item_1_lv"
