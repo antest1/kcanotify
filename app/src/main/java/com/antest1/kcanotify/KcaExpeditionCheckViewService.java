@@ -544,7 +544,7 @@ public class KcaExpeditionCheckViewService extends Service {
     }
 
     private List<View> generateConditionView(String data, JsonArray check) {
-        int textsize = getResources().getDimensionPixelSize(R.dimen.popup_text_small);
+        int textsize = getResources().getDimensionPixelSize(R.dimen.popup_text_normal);
         List<View> views = new ArrayList<>();
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -560,7 +560,7 @@ public class KcaExpeditionCheckViewService extends Service {
             String[] shipcond = cond.split("\\|");
             for (String sc : shipcond) {
                 TextView scView = new TextView(this);
-                scView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textsize);
+                scView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textsize);
                 scView.setText(convertTotalCond(sc));
                 if (check.get(count).getAsJsonObject().get(sc.split("\\-")[0]).getAsBoolean()) {
                     scView.setTextColor(ContextCompat
