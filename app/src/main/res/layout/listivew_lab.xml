@@ -32,7 +32,7 @@
                 android:singleLine="true"
                 android:text="6-1 第一基地航空隊"
                 android:textColor="@color/white"
-                android:textSize="16dp" />
+                android:textSize="@dimen/popup_text_large" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
                     android:singleLine="true"
                     android:text="退避"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="@dimen/popup_text_large" />
 
                 <TextView
                     android:id="@+id/lab_fp"
@@ -73,7 +73,7 @@
                     android:singleLine="true"
                     android:text="FP 237"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="@dimen/popup_text_large" />
 
                 <TextView
                     android:id="@+id/lab_dist"
@@ -91,7 +91,7 @@
                     android:singleLine="true"
                     android:text="DIST 7"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="@dimen/popup_text_large" />
 
             </LinearLayout>
 
@@ -104,56 +104,56 @@
 
                 <ImageView
                     android:id="@+id/lab_icon1"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="@dimen/popup_item_icon_size"
+                    android:layout_height="@dimen/popup_item_icon_size"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:maxHeight="15dp"
-                    android:maxWidth="15dp"
+                    android:maxHeight="@dimen/item_popup_icon_size"
+                    android:maxWidth="@dimen/item_popup_icon_size"
                     android:scaleType="fitXY"
                     android:src="@mipmap/item_0"
                     app:srcCompat="@mipmap/item_0" />
 
                 <ImageView
                     android:id="@+id/lab_icon2"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="@dimen/popup_item_icon_size"
+                    android:layout_height="@dimen/popup_item_icon_size"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:maxHeight="15dp"
-                    android:maxWidth="15dp"
+                    android:maxHeight="@dimen/item_popup_icon_size"
+                    android:maxWidth="@dimen/item_popup_icon_size"
                     android:scaleType="fitXY"
                     android:src="@mipmap/item_0"
                     app:srcCompat="@mipmap/item_0" />
 
                 <ImageView
                     android:id="@+id/lab_icon3"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="@dimen/popup_item_icon_size"
+                    android:layout_height="@dimen/popup_item_icon_size"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:maxHeight="15dp"
-                    android:maxWidth="15dp"
+                    android:maxHeight="@dimen/item_popup_icon_size"
+                    android:maxWidth="@dimen/item_popup_icon_size"
                     android:scaleType="fitXY"
                     android:src="@mipmap/item_0"
                     app:srcCompat="@mipmap/item_0" />
 
                 <ImageView
                     android:id="@+id/lab_icon4"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="@dimen/popup_item_icon_size"
+                    android:layout_height="@dimen/popup_item_icon_size"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:maxHeight="15dp"
-                    android:maxWidth="15dp"
+                    android:maxHeight="@dimen/item_popup_icon_size"
+                    android:maxWidth="@dimen/item_popup_icon_size"
                     android:scaleType="fitXY"
                     android:src="@mipmap/item_0"
                     app:srcCompat="@mipmap/item_0" />

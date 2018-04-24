@@ -48,8 +48,23 @@
     <dimen name="text_description_medium">15dp</dimen>
     <dimen name="text_description_small">12dp</dimen>
 
+    <dimen name="excheckview_text_tbutton">15dp</dimen>
+    <dimen name="excheckview_text_statusarea">14dp</dimen>
+    <dimen name="excheckview_text_cbutton">16dp</dimen>
+    <dimen name="excheckview_popup_width">240dp</dimen>
+    <dimen name="excheckview_label_width">64dp</dimen>
+
+    <dimen name="popup_text_large">16dp</dimen>
+    <dimen name="popup_text_normal">14dp</dimen>
+    <dimen name="popup_text_small">12dp</dimen>
+    <dimen name="popup_text_xsmall">10dp</dimen>
+    <dimen name="popup_item_icon_size">22dp</dimen>
+    <dimen name="popup_t2_width">250dp</dimen>
+    <dimen name="popup_t3_width">350dp</dimen>
+
     <dimen name="toast_text_size">16dp</dimen>
     <dimen name="toast_margin_tb">4dp</dimen>
     <dimen name="toast_margin_se">12dp</dimen>
     <dimen name="toast_minwidth">72dp</dimen>
 </resources>
+

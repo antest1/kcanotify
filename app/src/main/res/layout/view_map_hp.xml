@@ -6,76 +6,76 @@
     android:alpha="0.8">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_width="@dimen/popup_t2_width"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:padding="6dp"
-        android:layout_width="250dp">
+        android:orientation="vertical"
+        android:padding="6dp">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/view_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/view_menu">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:id="@+id/view_hp_head"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:paddingBottom="2dp"
-                android:id="@+id/view_hp_head">
+                android:orientation="horizontal"
+                android:paddingBottom="2dp">
 
                 <TextView
-                    android:text="@string/viewmenu_maphp_title"
+                    android:id="@+id/view_hp_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/view_hp_title"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
                     android:layout_gravity="center_vertical"
-                    android:textSize="16dp" />
+                    android:layout_weight="1"
+                    android:text="@string/viewmenu_maphp_title"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/popup_text_large" />
 
                 <ImageView
-                    android:layout_height="wrap_content"
                     android:id="@+id/view_cancel"
+                    android:layout_width="@dimen/popup_text_large"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@mipmap/ic_cancel"
-                    android:layout_width="16dp" />
+                    android:src="@mipmap/ic_cancel" />
             </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_gravity="left|clip_vertical"
+                android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp"
+                android:layout_weight="1"
                 android:background="@android:color/darker_gray"
                 android:paddingBottom="0.5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingTop="0dp"
                 android:scaleType="fitXY"
-                android:src="@android:drawable/divider_horizontal_bright"
-                android:layout_gravity="left|clip_vertical"
-                android:layout_weight="1"
-                android:layout_marginBottom="1dp" />
+                android:src="@android:drawable/divider_horizontal_bright" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:layout_margin="5dp">
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
                     android:id="@+id/hp_info"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@color/white"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
                     android:ellipsize="end"
-                    android:textSize="14dp"
-                    android:text="[1-6] HP 4/6" />
+                    android:text="[1-6] HP 4/6"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/popup_text_normal" />
 
             </LinearLayout>
 

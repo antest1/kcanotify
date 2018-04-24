@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:alpha="0.8">
 
     <LinearLayout
-        android:layout_width="350dp"
+        android:layout_width="@dimen/popup_t3_width"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:orientation="vertical"
@@ -33,7 +34,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/fleetcheckview_title"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="@dimen/popup_text_large" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -61,7 +62,7 @@
                         android:paddingTop="2dp"
                         android:text="\#1"
                         android:textColor="@color/white"
-                        android:textSize="12dp" />
+                        android:textSize="@dimen/popup_text_small" />
 
                     <TextView
                         android:id="@+id/fleet_2"
@@ -79,7 +80,7 @@
                         android:paddingTop="2dp"
                         android:text="\#2"
                         android:textColor="@color/white"
-                        android:textSize="12dp" />
+                        android:textSize="@dimen/popup_text_small" />
 
                     <TextView
                         android:id="@+id/fleet_3"
@@ -97,7 +98,7 @@
                         android:paddingTop="2dp"
                         android:text="\#3"
                         android:textColor="@color/white"
-                        android:textSize="12dp" />
+                        android:textSize="@dimen/popup_text_small" />
 
                     <TextView
                         android:id="@+id/fleet_4"
@@ -115,7 +116,7 @@
                         android:paddingTop="2dp"
                         android:text="\#4"
                         android:textColor="@color/white"
-                        android:textSize="12dp" />
+                        android:textSize="@dimen/popup_text_small" />
 
                     <TextView
                         android:id="@+id/fleet_5"
@@ -133,12 +134,12 @@
                         android:paddingTop="2dp"
                         android:text="@string/fleetview_combined"
                         android:textColor="@color/white"
-                        android:textSize="12dp" />
+                        android:textSize="@dimen/popup_text_small" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/view_cancel"
-                    android:layout_width="16dp"
+                    android:layout_width="@dimen/popup_text_large"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:src="@mipmap/ic_cancel" />
@@ -187,7 +188,7 @@
                         android:paddingTop="4dp"
                         android:text="@string/fleetcheckview_btn_seeklos"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/popup_text_normal" />
 
                     <TextView
                         android:id="@+id/fchk_btn_airbattle"
@@ -204,7 +205,7 @@
                         android:paddingTop="4dp"
                         android:text="@string/fleetcheckview_btn_airbattle"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/popup_text_normal" />
 
                     <TextView
                         android:id="@+id/fchk_btn_fuelbull"
@@ -221,7 +222,7 @@
                         android:paddingTop="4dp"
                         android:text="@string/fleetcheckview_btn_fuelbull"
                         android:textColor="@color/white"
-                        android:textSize="14dp"
+                        android:textSize="@dimen/popup_text_normal"
                         android:visibility="gone" />
                 </LinearLayout>
             </HorizontalScrollView>
@@ -244,7 +245,7 @@
                     android:text="Fleet Values"
                     android:textAlignment="textStart"
                     android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/popup_text_normal" />
 
             </LinearLayout>
 

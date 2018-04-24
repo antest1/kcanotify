@@ -35,7 +35,7 @@
                 android:layout_marginRight="5dp"
                 android:text="@string/excheckview_title"
                 android:textColor="@color/white"
-                android:textSize="20dp" />
+                android:textSize="@dimen/view_text_title" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -59,7 +59,8 @@
                     android:paddingRight="8dp"
                     android:paddingTop="4dp"
                     android:text="\#2"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/excheckview_text_tbutton" />
 
                 <TextView
                     android:id="@+id/fleet_3"
@@ -74,7 +75,8 @@
                     android:paddingRight="8dp"
                     android:paddingTop="4dp"
                     android:text="\#3"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/excheckview_text_tbutton" />
 
                 <TextView
                     android:id="@+id/fleet_4"
@@ -89,7 +91,8 @@
                     android:paddingRight="8dp"
                     android:paddingTop="4dp"
                     android:text="\#4"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/excheckview_text_tbutton" />
             </LinearLayout>
 
             <TextView
@@ -101,7 +104,7 @@
 
             <ImageView
                 android:id="@+id/excheckview_exit"
-                android:layout_width="20dp"
+                android:layout_width="@dimen/view_text_title"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
@@ -144,7 +147,7 @@
                 android:paddingTop="2dp"
                 android:singleLine="true"
                 android:textColor="@color/white"
-                android:textSize="14dp" />
+                android:textSize="@dimen/excheckview_text_statusarea" />
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -182,7 +185,7 @@
                             android:text="1"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_2"
@@ -197,7 +200,7 @@
                             android:text="2"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_3"
@@ -212,7 +215,7 @@
                             android:text="3"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_4"
@@ -227,7 +230,7 @@
                             android:text="4"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_5"
@@ -242,7 +245,7 @@
                             android:text="5"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_6"
@@ -257,7 +260,7 @@
                             android:text="6"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_7"
@@ -272,7 +275,7 @@
                             android:text="7"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_8"
@@ -287,7 +290,7 @@
                             android:text="8"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -312,7 +315,7 @@
                             android:text="9"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_10"
@@ -327,7 +330,7 @@
                             android:text="10"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_11"
@@ -342,7 +345,7 @@
                             android:text="11"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_12"
@@ -357,7 +360,7 @@
                             android:text="12"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_13"
@@ -372,7 +375,7 @@
                             android:text="13"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_14"
@@ -387,7 +390,7 @@
                             android:text="14"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_15"
@@ -402,7 +405,7 @@
                             android:text="15"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_16"
@@ -417,7 +420,7 @@
                             android:text="16"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -442,7 +445,7 @@
                             android:text="17"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_18"
@@ -457,7 +460,7 @@
                             android:text="18"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_19"
@@ -472,7 +475,7 @@
                             android:text="19"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_20"
@@ -487,7 +490,7 @@
                             android:text="20"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_21"
@@ -502,7 +505,7 @@
                             android:text="21"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_22"
@@ -517,7 +520,7 @@
                             android:text="22"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_23"
@@ -532,7 +535,7 @@
                             android:text="23"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_24"
@@ -547,7 +550,7 @@
                             android:text="24"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -572,7 +575,7 @@
                             android:text="25"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_26"
@@ -587,7 +590,7 @@
                             android:text="26"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_27"
@@ -602,7 +605,7 @@
                             android:text="27"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_28"
@@ -617,7 +620,7 @@
                             android:text="28"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_29"
@@ -632,7 +635,7 @@
                             android:text="29"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_30"
@@ -647,7 +650,7 @@
                             android:text="30"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_31"
@@ -662,7 +665,7 @@
                             android:text="31"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_32"
@@ -677,7 +680,7 @@
                             android:text="32"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -702,7 +705,7 @@
                             android:text="33"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_34"
@@ -717,7 +720,7 @@
                             android:text="34"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_35"
@@ -732,7 +735,7 @@
                             android:text="35"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_36"
@@ -747,7 +750,7 @@
                             android:text="36"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_37"
@@ -762,7 +765,7 @@
                             android:text="37"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_38"
@@ -777,7 +780,7 @@
                             android:text="38"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_39"
@@ -792,7 +795,7 @@
                             android:text="39"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_40"
@@ -807,7 +810,7 @@
                             android:text="40"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -833,7 +836,7 @@
                             android:text="A1"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_101"
@@ -848,7 +851,7 @@
                             android:text="A2"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_102"
@@ -863,7 +866,7 @@
                             android:text="A3"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_110"
@@ -878,7 +881,7 @@
                             android:text="B1"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_111"
@@ -893,7 +896,7 @@
                             android:text="B2"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_133"
@@ -908,7 +911,7 @@
                             android:text="E1"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:id="@+id/expedition_btn_134"
@@ -923,7 +926,7 @@
                             android:text="E2"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="@dimen/popup_text_large" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -936,7 +939,7 @@
                             android:padding="6dp"
                             android:textAlignment="center"
                             android:textColor="@color/colorExpeditionBtnGoodText"
-                            android:textSize="16dp"
+                            android:textSize="@dimen/popup_text_large"
                             android:visibility="invisible" />
                     </LinearLayout>
                 </LinearLayout>

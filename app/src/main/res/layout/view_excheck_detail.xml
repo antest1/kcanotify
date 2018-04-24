@@ -17,7 +17,7 @@
             android:id="@+id/view_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="240dp"
+            android:minWidth="@dimen/excheckview_popup_width"
             android:orientation="vertical"
             android:padding="6.0dip">
 
@@ -34,7 +34,7 @@
                     android:singleLine="true"
                     android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="@dimen/popup_text_large" />
 
                 <TextView
                     android:id="@+id/view_excheck_time"
@@ -73,14 +73,14 @@
 
                 <TextView
                     android:id="@+id/view_excheck_flagship_label"
-                    android:layout_width="64dp"
+                    android:layout_width="@dimen/excheckview_label_width"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
                     android:text="@string/excheckview_flag_info"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/popup_text_normal" />
 
                 <LinearLayout
                     android:id="@+id/view_excheck_flagship_data"
@@ -96,7 +96,8 @@
                         android:layout_marginRight="4dp"
                         android:layout_weight="1"
                         android:text="Lv45"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_normal" />
 
                     <TextView
                         android:id="@+id/view_excheck_flagship_cond"
@@ -106,7 +107,8 @@
                         android:layout_marginRight="4dp"
                         android:layout_weight="1"
                         android:text="CL"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_normal" />
 
                 </LinearLayout>
 
@@ -120,14 +122,14 @@
 
                 <TextView
                     android:id="@+id/view_excheck_fleet_label"
-                    android:layout_width="64dp"
+                    android:layout_width="@dimen/excheckview_label_width"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
                     android:text="@string/excheckview_total_info"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/popup_text_normal" />
 
                 <LinearLayout
                     android:id="@+id/view_excheck_fleet_data"
@@ -149,7 +151,7 @@
                             android:layout_marginRight="4dp"
                             android:text="6 ships"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="@dimen/popup_text_normal" />
 
                         <TextView
                             android:id="@+id/view_excheck_fleet_total_lv"
@@ -159,7 +161,7 @@
                             android:layout_marginRight="4dp"
                             android:text="Total Lv 45"
                             android:textColor="@color/white"
-                            android:textSize="14dp" />
+                            android:textSize="@dimen/popup_text_normal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -183,14 +185,14 @@
 
                 <TextView
                     android:id="@+id/view_excheck_drum_label"
-                    android:layout_width="64dp"
+                    android:layout_width="@dimen/excheckview_label_width"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
                     android:text="@string/excheckview_drum_info"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/popup_text_normal" />
 
                 <LinearLayout
                     android:id="@+id/view_excheck_drum_data"
@@ -206,7 +208,7 @@
                         android:layout_marginRight="4dp"
                         android:text="2 ships"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/popup_text_normal" />
 
                     <TextView
                         android:id="@+id/view_excheck_drum_count"
@@ -216,7 +218,7 @@
                         android:layout_marginRight="4dp"
                         android:text="8 drums"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/popup_text_normal" />
 
                 </LinearLayout>
 
@@ -231,14 +233,14 @@
 
                 <TextView
                     android:id="@+id/view_excheck_asw_label"
-                    android:layout_width="64dp"
+                    android:layout_width="@dimen/excheckview_label_width"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
                     android:text="@string/excheckview_asw_info"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/popup_text_normal" />
 
                 <LinearLayout
                     android:id="@+id/view_excheck_asw_data"
@@ -254,7 +256,7 @@
                         android:layout_marginRight="4dp"
                         android:text="180+"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/popup_text_normal" />
 
                 </LinearLayout>
 
@@ -269,14 +271,14 @@
 
                 <TextView
                     android:id="@+id/view_excheck_fp_label"
-                    android:layout_width="64dp"
+                    android:layout_width="@dimen/excheckview_label_width"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
                     android:text="@string/excheckview_fp_info"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/popup_text_normal" />
 
                 <LinearLayout
                     android:id="@+id/view_excheck_fp_data"
@@ -292,7 +294,7 @@
                         android:layout_marginRight="4dp"
                         android:text="180+"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/popup_text_normal" />
 
                 </LinearLayout>
 
@@ -307,14 +309,14 @@
 
                 <TextView
                     android:id="@+id/view_excheck_los_label"
-                    android:layout_width="64dp"
+                    android:layout_width="@dimen/excheckview_label_width"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
                     android:text="@string/excheckview_los_info"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/popup_text_normal" />
 
                 <LinearLayout
                     android:id="@+id/view_excheck_los_data"
@@ -330,7 +332,7 @@
                         android:layout_marginRight="4dp"
                         android:text="180+"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/popup_text_normal" />
 
                 </LinearLayout>
 
@@ -345,14 +347,14 @@
 
                 <TextView
                     android:id="@+id/view_excheck_firepower_label"
-                    android:layout_width="64dp"
+                    android:layout_width="@dimen/excheckview_label_width"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
                     android:text="@string/excheckview_firepower_info"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/popup_text_normal" />
 
                 <LinearLayout
                     android:id="@+id/view_excheck_firepower_data"
@@ -368,7 +370,7 @@
                         android:layout_marginRight="4dp"
                         android:text="180+"
                         android:textColor="@color/white"
-                        android:textSize="14dp" />
+                        android:textSize="@dimen/popup_text_normal" />
 
                 </LinearLayout>
 

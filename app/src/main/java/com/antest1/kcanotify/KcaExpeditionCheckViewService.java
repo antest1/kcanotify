@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -543,6 +544,7 @@ public class KcaExpeditionCheckViewService extends Service {
     }
 
     private List<View> generateConditionView(String data, JsonArray check) {
+        int textsize = getResources().getDimensionPixelSize(R.dimen.popup_text_small);
         List<View> views = new ArrayList<>();
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -558,6 +560,7 @@ public class KcaExpeditionCheckViewService extends Service {
             String[] shipcond = cond.split("\\|");
             for (String sc : shipcond) {
                 TextView scView = new TextView(this);
+                scView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textsize);
                 scView.setText(convertTotalCond(sc));
                 if (check.get(count).getAsJsonObject().get(sc.split("\\-")[0]).getAsBoolean()) {
                     scView.setTextColor(ContextCompat

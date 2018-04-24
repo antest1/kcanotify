@@ -35,11 +35,11 @@
                     android:layout_weight="1"
                     android:text="@string/viewmenu_airbase_title"
                     android:textColor="@color/white"
-                    android:textSize="20dp" />
+                    android:textSize="@dimen/view_text_title" />
 
                 <ImageView
                     android:id="@+id/view_cancel"
-                    android:layout_width="20dp"
+                    android:layout_width="@dimen/view_text_title"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:src="@mipmap/ic_cancel" />
