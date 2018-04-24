@@ -166,7 +166,8 @@ public class KcaVpnData {
 
                 boolean chunkflag = (portToLength.get(tport) == -1);
                 boolean gzipflag = portToGzipped.get(tport);
-                Byte[] responsePrevData = portToResponseData.get(tport);
+                Byte[] empty = {};
+                Byte[] responsePrevData = portToResponseData.get(tport, empty);
                 portToResponseData.put(tport, ArrayUtils.toObject(Bytes.concat(ArrayUtils.toPrimitive(responsePrevData), data)));
                 if (portToLength.get(tport) == -1 && isChunkEnd(ArrayUtils.toPrimitive(portToResponseData.get(tport)))) {
                     isreadyflag = true;
