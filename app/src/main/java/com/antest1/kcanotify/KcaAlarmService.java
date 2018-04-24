@@ -66,6 +66,8 @@ public class KcaAlarmService extends Service {
     public static final int TYPE_MORALE = 4;
     public static final int TYPE_AKASHI = 5;
 
+    public static final int NOTI_ICON_SIZE = 128;
+
     public static final String ALARM_CHANNEL_ID = "noti_alarm_channel";
     public static final String ALARM_CHANNEL_NAME = "Kcanotify Notification";
 
@@ -305,7 +307,7 @@ public class KcaAlarmService extends Service {
 
         }
 
-        Bitmap expBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.expedition_notify_bigicon)).getBitmap();
+        Bitmap expBitmap = KcaUtils.decodeSampledBitmapFromResource(getResources(),  R.mipmap.expedition_notify_bigicon, NOTI_ICON_SIZE, NOTI_ICON_SIZE);
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.expedition_notify_icon)
                 .setLargeIcon(expBitmap)
@@ -344,7 +346,7 @@ public class KcaAlarmService extends Service {
             content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_dock_finished_nodata), dockId + 1);
         }
 
-        Bitmap dockBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_notify_bigicon)).getBitmap();
+        Bitmap dockBitmap = KcaUtils.decodeSampledBitmapFromResource(getResources(),  R.mipmap.docking_notify_bigicon, NOTI_ICON_SIZE, NOTI_ICON_SIZE);
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.docking_notify_icon)
                 .setLargeIcon(dockBitmap)
@@ -379,7 +381,7 @@ public class KcaAlarmService extends Service {
         String title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_morale_recovered), idx + 1);
         String content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_morale_recovered), kantaiName);
 
-        Bitmap moraleBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.morale_notify_bigicon)).getBitmap();
+        Bitmap moraleBitmap = KcaUtils.decodeSampledBitmapFromResource(getResources(),  R.mipmap.morale_notify_bigicon, NOTI_ICON_SIZE, NOTI_ICON_SIZE);
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.morale_notify_icon)
                 .setLargeIcon(moraleBitmap)
@@ -413,7 +415,7 @@ public class KcaAlarmService extends Service {
         String title = getStringWithLocale(R.string.kca_noti_title_akashirepair_recovered);
         String content = getStringWithLocale(R.string.kca_noti_content_akashirepair_recovered);
 
-        Bitmap akashiRepairBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.docking_akashi_notify_bigicon)).getBitmap();
+        Bitmap akashiRepairBitmap = KcaUtils.decodeSampledBitmapFromResource(getResources(),  R.mipmap.docking_akashi_notify_bigicon, NOTI_ICON_SIZE, NOTI_ICON_SIZE);
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.docking_notify_icon)
                 .setLargeIcon(akashiRepairBitmap)
@@ -457,7 +459,8 @@ public class KcaAlarmService extends Service {
         String title = getStringWithLocale(title_text_id).replace("(%s)", "").trim();
         String content = version;
 
-        Bitmap updateBitmap = ((BitmapDrawable) ContextCompat.getDrawable(this, getId("ic_update_" + String.valueOf(type), R.mipmap.class))).getBitmap();
+        Bitmap updateBitmap = KcaUtils.decodeSampledBitmapFromResource(getResources(),
+                getId("ic_update_" + String.valueOf(type), R.mipmap.class), NOTI_ICON_SIZE, NOTI_ICON_SIZE);
         NotificationCompat.Builder builder = createBuilder(getApplicationContext(), alarmChannelList.peek())
                 .setSmallIcon(R.mipmap.ic_stat_notify_1)
                 .setLargeIcon(updateBitmap)
