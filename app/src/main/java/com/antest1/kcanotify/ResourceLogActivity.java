@@ -459,7 +459,7 @@ public class ResourceLogActivity extends AppCompatActivity {
             count += 1;
         }
         JsonObject last_item = KcaUtils.getJsonObjectCopy(data.get(data.size() - 1));
-        last_item.addProperty("itemstamp", end);
+        last_item.addProperty("timestamp", end);
         new_data.add(last_item);
         return new_data;
     }
