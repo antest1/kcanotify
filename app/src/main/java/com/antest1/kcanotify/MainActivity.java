@@ -54,6 +54,7 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaAlarmService.TYPE_UPDATE;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.*;
@@ -61,6 +62,7 @@ import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
+import static com.antest1.kcanotify.KcaUtils.getNotificationId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
@@ -506,6 +508,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 setPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK, String.valueOf(System.currentTimeMillis()));
+
+                int nid = getNotificationId(NOTI_UPDATE, 0);
+                Intent deleteIntent = new Intent(MainActivity.this, KcaAlarmService.class)
+                        .setAction(DELETE_ACTION.concat(String.valueOf(nid)));
+                startService(deleteIntent);
             }
 
             @Override
@@ -516,6 +523,10 @@ public class MainActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "version_check", "", "", t.getMessage());
                 }
+                int nid = getNotificationId(NOTI_UPDATE, 0);
+                Intent deleteIntent = new Intent(MainActivity.this, KcaAlarmService.class)
+                        .setAction(DELETE_ACTION.concat(String.valueOf(nid)));
+                startService(deleteIntent);
             }
         });
     }
@@ -553,6 +564,10 @@ public class MainActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "download_data", "", "", getStringFromException(e));
                 }
+                int nid = getNotificationId(NOTI_UPDATE, 1);
+                Intent deleteIntent = new Intent(MainActivity.this, KcaAlarmService.class)
+                        .setAction(DELETE_ACTION.concat(String.valueOf(nid)));
+                startService(deleteIntent);
             }
 
             @Override
@@ -563,6 +578,10 @@ public class MainActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "download_data", "", "", t.getMessage());
                 }
+                int nid = getNotificationId(NOTI_UPDATE, 1);
+                Intent deleteIntent = new Intent(MainActivity.this, KcaAlarmService.class)
+                        .setAction(DELETE_ACTION.concat(String.valueOf(nid)));
+                startService(deleteIntent);
             }
         });
     }
