@@ -1911,8 +1911,10 @@ public class KcaService extends Service {
                             dbHelper.putValue(DB_KEY_DECKPORT, api_data_deck.toString());
 
                             int itemuse_deck = KcaMoraleInfo.getItemUseDeckAndReset();
-                            boolean result = setMoraleValue(itemuse_deck, deckInfoCalc.checkMinimumMorale(api_data_deck, itemuse_deck), false, false);
-                            processMoraleInfo(itemuse_deck, api_data_deck, result);
+                            if (itemuse_deck > 0) {
+                                boolean result = setMoraleValue(itemuse_deck, deckInfoCalc.checkMinimumMorale(api_data_deck, itemuse_deck), false, false);
+                                processMoraleInfo(itemuse_deck, api_data_deck, result);
+                            }
                         }
                         updateFleetView();
                     }
