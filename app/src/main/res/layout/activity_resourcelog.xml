@@ -196,13 +196,32 @@
         android:text="TextView"
         android:visibility="gone" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/reslog_pager"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginStart="4dp" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/export_msg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.5"
+            android:background="@color/darkgray"
+            android:gravity="center_vertical|center"
+            android:text="@string/action_save_msg"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:visibility="gone" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/reslog_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginStart="4dp" />
+    </RelativeLayout>
+
 </LinearLayout>

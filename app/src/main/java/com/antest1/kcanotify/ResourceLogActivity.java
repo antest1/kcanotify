@@ -1,14 +1,18 @@
 package com.antest1.kcanotify;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,9 +21,14 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +44,7 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_RESOURCELOG_VERSION;
 
 public class ResourceLogActivity extends AppCompatActivity {
     Toolbar toolbar;
+    private final String FILE_PATH = "/export_data";
     public static final long DAY_MILLISECOND = 86400000;
 
     public static final int INTERVAL_1H = 0;
@@ -48,6 +58,7 @@ public class ResourceLogActivity extends AppCompatActivity {
     public static final int INTERVAL_1M = 8;
 
     static boolean is_hidden = false;
+    boolean is_exporting = false;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -58,6 +69,7 @@ public class ResourceLogActivity extends AppCompatActivity {
     List<JsonObject> resourceLog;
     TextView start_date, end_date;
     TextView interval_d, interval_w, interval_m;
+    TextView export_msg;
     Spinner interval_select;
     ImageView showhide_btn;
     int tab_position = 0;
@@ -95,6 +107,7 @@ public class ResourceLogActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText(getStringWithLocale(R.string.reslog_label_consumable)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
+        export_msg = findViewById(R.id.export_msg);
         viewPager = findViewById(R.id.reslog_pager);
 
         pageAdapter = new KcaResourceLogPageAdapter(getSupportFragmentManager());
@@ -245,10 +258,40 @@ public class ResourceLogActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.reslog, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                return true;
+            case R.id.action_reslog_clear:
+                AlertDialog.Builder alert = new AlertDialog.Builder(ResourceLogActivity.this);
+                alert.setPositiveButton(getStringWithLocale(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        resourceLogger.clearResoureLog();
+                        resourceLog = resourceLogger.getResourceLogInRange(start_timestamp, end_timestamp);
+                        KcaResourcelogItemAdpater.setListViewItemList(convertData(resourceLog));
+                        pageAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alert.setMessage(getStringWithLocale(R.string.reslog_clear_dialog_message));
+                alert.show();
+                return true;
+            case R.id.action_reslog_export:
+                new LogSaveTask().execute();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -306,6 +349,81 @@ public class ResourceLogActivity extends AppCompatActivity {
                 break;
             default:
                 break;
+        }
+    }
+
+    private class LogSaveTask extends AsyncTask<String, String, Integer> {
+        File file;
+
+        @Override
+        protected void onPreExecute() {
+            is_exporting = true;
+            export_msg.setText(getStringWithLocale(R.string.action_save_msg));
+            export_msg.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Integer doInBackground(String[] params) {
+            File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(FILE_PATH));
+            if (!savedir.exists()) savedir.mkdirs();
+            String exportPath = savedir.getPath();
+
+            String label_date = getStringWithLocale(R.string.reslog_label_time);
+            String label_1 = getStringWithLocale(R.string.item_fuel);
+            String label_2 = getStringWithLocale(R.string.item_ammo);
+            String label_3 = getStringWithLocale(R.string.item_stel);
+            String label_4 = getStringWithLocale(R.string.item_baux);
+            String label_5 = getStringWithLocale(R.string.item_bgtz);
+            String label_6 = getStringWithLocale(R.string.item_brnr);
+            String label_7 = getStringWithLocale(R.string.item_mmat);
+            String label_8 = getStringWithLocale(R.string.item_kmat);
+
+            String label_line = KcaUtils.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                    label_date, label_1, label_2, label_3, label_4, label_5, label_6, label_7, label_8);
+
+            List<String> loglist = resourceLogger.getFullStringResourceLog();
+            if (loglist.size() > 0) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
+                String timetext = dateFormat.format(new Date());
+
+                String filename = KcaUtils.format("/kca_resourcelog_%s.csv", timetext);
+                file = new File(exportPath.concat(filename));
+                try {
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
+                    bw.write(label_line);
+                    bw.write("\r\n");
+                    for (String line : loglist) {
+                        bw.write(line);
+                        bw.write("\r\n");
+                    }
+                    bw.close();
+                    return 0;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return 2;
+                }
+            } else {
+                return 1;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            is_exporting = false;
+            export_msg.setVisibility(View.GONE);
+            switch (result) {
+                case 0:
+                    Toast.makeText(getApplicationContext(), "Exported to ".concat(file.getPath()), Toast.LENGTH_LONG).show();
+                    break;
+                case 1:
+                    Toast.makeText(getApplicationContext(), "No log to export.", Toast.LENGTH_LONG).show();
+                    break;
+                case 2:
+                    Toast.makeText(getApplicationContext(), "An error occurred when exporting drop log.", Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

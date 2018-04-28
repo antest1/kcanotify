@@ -483,7 +483,10 @@
     <string name="droplog_sort_desc">降順</string>
 
     <string name="action_reslog">資源記録</string>
+    <string name="reslog_clear">記録を削除する</string>
+    <string name="reslog_export">CSV形式でエクスポート</string>
     <string name="reslog_label_date">期間</string>
+    <string name="reslog_label_time">日付</string>
     <string name="reslog_label_interval">単位</string>
     <string name="reslog_interval_1hour">1時間</string>
     <string name="reslog_interval_3hour">3時間</string>
@@ -499,6 +502,7 @@
     <string name="reslog_interval_month">1ヶ月</string>
     <string name="reslog_label_resource">資源</string>
     <string name="reslog_label_consumable">アイテム</string>
+    <string name="reslog_clear_dialog_message">全体記録を削除しますか？</string>
 
     <string name="fleetview_title">艦隊情報</string>
     <string name="fleetview_combined">連合</string>

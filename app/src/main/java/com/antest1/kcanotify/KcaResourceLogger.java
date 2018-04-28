@@ -9,10 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.antest1.kcanotify.R.id.ship_id;
 
@@ -115,6 +118,28 @@ public class KcaResourceLogger extends SQLiteOpenHelper {
         }
         return data;
     }
+
+    public List<String> getFullStringResourceLog() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<String> result = new ArrayList<>();
+        Cursor c = db.rawQuery("SELECT * from "
+                .concat(resourcelog_table_name)
+                .concat(" ORDER BY timestamp"), null);
+        while (c.moveToNext()) {
+            JsonObject item = retrieveDataFromCursor(c);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
+            String timetext = dateFormat.format(new Date(item.get("timestamp").getAsLong()));
+            List<String> row = new ArrayList<>();
+            for (int i = 1; i < c.getColumnCount(); i++) {
+                row.add(String.valueOf(c.getInt(i)));
+            }
+            String str_item = KcaUtils.format("%s,%s", timetext, KcaUtils.joinStr(row, ","));
+            result.add(str_item);
+        }
+        c.close();
+        return result;
+    }
+
 
     public void clearResoureLog() {
         SQLiteDatabase db = this.getWritableDatabase();

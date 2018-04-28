@@ -490,7 +490,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="droplog_sort_desc">降序</string>
 
     <string name="action_reslog">資源記録</string>
+    <string name="reslog_clear">清除資源紀錄</string>
+    <string name="reslog_export">以.csv檔案匯出</string>
     <string name="reslog_label_date">日期</string>
+    <string name="reslog_label_time">時間</string>
     <string name="reslog_label_interval">間隔</string>
     <string name="reslog_interval_1hour">1小時</string>
     <string name="reslog_interval_3hour">3小時</string>
@@ -506,6 +509,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="reslog_interval_month">月</string>
     <string name="reslog_label_resource">資源</string>
     <string name="reslog_label_consumable">消耗品</string>
+    <string name="reslog_clear_dialog_message">你想清空所有資源紀錄嗎？</string>
 
     <string name="fleetview_title">艦隊信息</string>
     <string name="fleetview_combined">聯合</string>

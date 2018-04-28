@@ -528,7 +528,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_droplog">Drop Log</string>
     <string name="droplog_search">Search</string>
     <string name="droplog_clear">Clear drop log</string>
-    <string name="droplog_export">Export data to CSV</string>
+    <string name="droplog_export">Export data as CSV</string>
     <string name="droplog_label_date">Date</string>
     <string name="droplog_label_area">Area</string>
     <string name="droplog_label_level">Diff.</string>
@@ -543,12 +543,15 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="droplog_ship_none">(None)</string>
     <string name="droplog_ship_full">(Full)</string>
     <string name="droplog_total_format" formatted="false">Total Count: %d</string>
-    <string name="droplog_clear_dialog_message">Do you want to clear the whole error log?</string>
+    <string name="droplog_clear_dialog_message">Do you want to clear the whole drop log?</string>
     <string name="droplog_sort_asc">ASC</string>
     <string name="droplog_sort_desc">DESC</string>
 
     <string name="action_reslog">Resource Log</string>
+    <string name="reslog_clear">Clear resource log</string>
+    <string name="reslog_export">Export data as CSV</string>
     <string name="reslog_label_date">Date</string>
+    <string name="reslog_label_time">Time</string>
     <string name="reslog_label_interval">Interval</string>
     <string name="reslog_interval_1hour">1 hour</string>
     <string name="reslog_interval_3hour">3 hours</string>
@@ -564,6 +567,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="reslog_interval_month">Month</string>
     <string name="reslog_label_resource">Resource</string>
     <string name="reslog_label_consumable">Consumable</string>
+    <string name="reslog_clear_dialog_message">Do you want to clear the whole resource log?</string>
 
     <string name="fleetview_title">FleetView</string>
     <string name="fleetview_combined">CF</string>

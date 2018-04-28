@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.antest1.kcanofity.DropLogActivity" >
+
+    <item
+        android:id="@+id/action_reslog_clear"
+        android:orderInCategory="1"
+        android:title="@string/reslog_clear"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_reslog_export"
+        android:orderInCategory="2"
+        android:title="@string/reslog_export"
+        app:showAsAction="never" />
+
+</menu>
