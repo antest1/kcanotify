@@ -130,7 +130,7 @@ public class KcaResourceLogger extends SQLiteOpenHelper {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
             String timetext = dateFormat.format(new Date(item.get("timestamp").getAsLong()));
             List<String> row = new ArrayList<>();
-            for (int i = 1; i < c.getColumnCount(); i++) {
+            for (int i = 2; i < c.getColumnCount(); i++) {
                 row.add(String.valueOf(c.getInt(i)));
             }
             String str_item = KcaUtils.format("%s,%s", timetext, KcaUtils.joinStr(row, ","));
