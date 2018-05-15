@@ -155,7 +155,14 @@ public class KcaAlarmService extends Service {
             } else if (action.startsWith(ACTION_PREFIX)) {
                 if (action.startsWith(CLICK_ACTION)) {
                     Intent kcintent = getKcIntent(getApplicationContext());
-                    if (kcintent != null) startActivity(kcintent);
+                    if (kcintent != null) {
+                        PendingIntent pintent = PendingIntent.getActivity(getApplicationContext(), 0, kcintent, 0);
+                        try {
+                            pintent.send();
+                        } catch (PendingIntent.CanceledException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
                 if (action.startsWith(UPDATE_ACTION)) {
                     Intent i = new Intent(this, MainActivity.class);
