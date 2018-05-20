@@ -511,7 +511,7 @@
 	"185": {
 		"code": "A80",
 		"name": "Form the Powerful Task Force!",
-		"desc": "Have Saratoga Mk.II or Mod.2 as flagship, 1 CL and 2 DD in Fleet 1. ",
+		"desc": "Have Saratoga Mk.II or Mod.2 as flagship, 1 CL and 2 DD in Fleet 1 .",
 		"memo": "\u27a3Rewards: \u27a3First choice: Either a F6F-3 OR a F4U-1D \u27a3Second choice: Either a TBF OR a New Model Aviation Armament Materials",
 		"unlock": [ 864 ]
 	},
@@ -1251,14 +1251,14 @@
 	"864": {
 		"code": "B105",
 		"name": "Powerful Large-Scale Aircraft Carrier, Setting Sail!",
-		"desc": "Sortie Saratoga Mk.II or Mod.2 as Fleet 1 flagship, 1 CL, 2 DD and up to 2 additional ships to [W5-5] and [W6-2]. S-Rank the boss nodes. ",
+		"desc": "Sortie Saratoga Mk.II or Mod.2 as Fleet 1 flagship, 1 CL, 2 DD and up to 2 additional ships to [W5-5] and [W6-2]. S-Rank the boss nodes .",
 		"memo": "\u2623Be wary of rewards potentially being listed in the wrong order. \u27a3Rewards: \u27a3First choice: Either a F6F-3 OR a Skilled Crew Member OR a New Model Aviation Armament Materials \u27a3Second choice: Either a TBF OR a Night Operations Aviation Personnel",
 		"unlock": [ 865 ]
 	},
 	"865": {
 		"code": "B106",
 		"name": "Night Operations Carrier, Sortie to the Frontlines!",
-		"desc": "Sortie Saratoga Mk.II (NOT Mod.2) as Fleet 1 flagship to [W6-5]. S-Rank? the boss node. ",
+		"desc": "Sortie Saratoga Mk.II (NOT Mod.2) as Fleet 1 flagship to [W6-5]. S-Rank? the boss node .",
 		"memo": "\u2623Be wary of rewards potentially being listed in the wrong order. \u27a3Rewards: \u27a3First choice: Either a TBF OR a New Model Aviation Armament Materials OR a Night Operations Aviation Personnel \u27a3Second choice: Either a Reinforcement Expansion OR a New Model Aviation Armament Materials OR a Skilled Crew Member"
 	},
 	"866": {
@@ -1644,7 +1644,7 @@
 	"316": {
 		"code": "C13",
 		"name": "Strive to Improve the Transport Force's Level of Training!",
-		"desc": "Secure 4 victories in Exercises within the same day. ",
+		"desc": "Secure 4 victories in Exercises within the same day .",
 		"memo": "\u27a3Rewards 2 Screws and either a Furniture Fairy OR a Daihatsu Landing Craft."
 	},
 	"314": {
@@ -2452,6 +2452,62 @@
 		"desc": "Have 10 Development Materials, 2000 Steel and 2 Action Reports. Equip a secretary with a Fleet Command Facility in her first slot. Scrap 3 Radars.",
 		"memo": "\u27a3 Rewards a Striking Force Fleet Command Facility"
 	},
+
+	"505": {
+		"code": "Su01",
+		"name": "Accounting Department Mission: Time to Make Onigiri!",
+		"desc": "Make an Onigiri using 5 Rice while this quest is activated.",
+		"memo": "Obtain Rice by farming various maps. Go to the item menu where Medals, Gift Boxes, etc. are shown. Click the upper right > arrow. Select the Rice item, use it, and pick the farthest left choice to make Onigiri. \u27a3Rewards either a Searchlight OR 2 Screws"
+	},
+	"506": {
+		"code": "Su02",
+		"name": "Accounting Department Mission: Treat Everyone to Onigiri!",
+		"desc": "Make 3 more Onigiri using 15 Rice while this quest is activated.",
+		"memo": "\u2718Consumes the Onigiri. \u27a3Rewards either a Type 2 Large-sized Flying Boat OR a Toku Daihatsu Landing Craft OR a 61cm Triple (Oxygen) Torpedo Mount Late Model"
+	},
+	"507": {
+		"code": "Su03",
+		"name": "Accounting Department Mission: Time to Make High-Class Onigiri!",
+		"desc": "Make High-Class Onigiri (2nd option) using 6 Rice, 2 Umeboshi and 3 Nori while this quest is activated.",
+		"memo": "\u27a3Rewards either a Skilled Lookouts OR two 12cm 30-tube Rocket Launchers OR 7 Buckets"
+	},
+	"508": {
+		"code": "Su04",
+		"name": "Accounting Department Mission: A Care Package! It's High-Class Onigiri",
+		"desc": "Make 2 High-Class Onigiri (2nd option) using 12 Rice, 4 Umeboshi and 6 Nori while this quest is activated.",
+		"memo": "\u27a3Rewards: \u00B6First choice: Either 3 Type 0 Fighter Model 52s OR 2 Shiden Kai Ni OR a New Model Aviation Armament Materials \u00B6Second choice: Either a Furniture Fairy OR a Reinforcement Expansion"
+	},
+	"509": {
+		"code": "Su05",
+		"name": "Accounting Department Mission: Let's Make Ochazuke!",
+		"desc": "Make Ochazuke (3rd option) using 8 Rice, 3 Umeboshi, 3 Nori and 4 Tea while this quest is activated.",
+		"memo": "\u27a3Rewards either a Canned Saury OR 7 Screws OR a 61cm Quadruple (Oxygen) Torpedo Mount Late Model"
+	},
+	"510": {
+		"code": "Su06",
+		"name": "Accounting Department Mission: Here, Have Some Ochazuke for Supper!",
+		"desc": "Make 2 Ochazuke (3rd option) using 16 Rice, 6 Umeboshi, 6 Nori and 8 Tea while this quest is activated.",
+		"memo": "\u27a3Rewards: \u00B6First choice: Either a Canned Saury OR a Reinforcement Expansion \u00B6Second choice: Either a Canned Saury OR a Type 3 Depth Charge Projector (Concentrated Deployment)"
+	},
+	"511": {
+		"code": "Su07",
+		"name": "Accounting Department Mission: Let's Make Nori Rolls!",
+		"desc": "Acquire 12 Rice and 6 Nori .",
+		"memo": "\u27a3Rewards a Canned Saury and either a 25mm Triple Autocannon Mount OR a 12cm 30-tube Rocket Launcher"
+	},
+	"512": {
+		"code": "Su08",
+		"name": "Accounting Department Mission: Make a Japanese set meal and eat up!",
+		"desc": "Make 3 Onigiri (1st option) and a Japanese Meal Set (4th option) using 26 Rice, 5 Umeboshi, 6 Nori and 7 Tea while this quest is activated.",
+		"memo": "Press F10 to clear the overlay if it blocks the reward choices. \u27a3Rewards a Type 2 Depth Charge and furniture"
+	},
+	"513": {
+		"code": "Su09",
+		"name": "Acc. Dpt. Mission: A Mass Production of Rising Sun Lunch Boxes!",
+		"desc": "Have 50 Rice, 15 Umeboshi and 10 Tea in your inventory. Equip a DD secretary with a 12cm30t Rocket in her first slot and a Type 2 Depth Charge in her second slot.",
+		"memo": "\u27a3Rewards a Prototype 15cm 9-tube ASW Rocket Launcher"
+	},
+	
 	"872": {
 		"code": "Le1B1",
 		"name": "Secure the Supply Line Logistics for Operation Sho-Ichi-Go!",
