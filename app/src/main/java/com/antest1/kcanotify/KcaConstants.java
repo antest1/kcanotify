@@ -83,12 +83,12 @@ public final class KcaConstants {
     public static final String ERROR_TYPE_SETTING = "AS";
     public static final String ERROR_TYPE_RESLOG = "RL";
 
-    public static final int FAIRY_TOTAL_COUNT = 233;
+    public static final int FAIRY_TOTAL_COUNT = 239;
     public static final int[] FAIRY_REVERSE_LIST = {0, 1, 2, 8, 9, 11, 12, 15, 19, 23, 24, 25, 27, 28, 30, 32, 33, 34,
             35, 36, 40, 42, 44, 45, 47, 49, 50, 51, 59, 60, 62, 63, 64, 73, 78, 79, 80, 81, 82, 84, 85, 88, 92, 93, 95, 98, 99,
             104, 105, 106, 107, 108, 109, 110, 111, 112, 117, 121, 122, 126, 127, 128, 129, 132, 134, 138, 140, 142, 143, 145,
             146, 147, 148, 152, 153, 156, 157, 160, 163, 167, 169, 170, 173, 176, 178, 180, 181, 182, 183, 184, 185, 186, 197,
-            204, 207, 210, 211, 212, 214, 215, 216, 217, 218, 219, 221, 225, 229, 231, 232};
+            204, 207, 210, 211, 212, 214, 215, 216, 217, 218, 219, 221, 225, 229, 231, 232, 235, 236, 238};
 
     public static final String API_PORT = "/api_port/port";
     public static final String API_WORLD_GET_WORLDINFO = "/api_world/get_worldinfo";
