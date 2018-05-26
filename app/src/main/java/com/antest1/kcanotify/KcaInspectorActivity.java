@@ -1,6 +1,8 @@
 package com.antest1.kcanotify;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -18,11 +20,14 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_BOOLEAN_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_ARRAY;
+import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
+import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
 public class KcaInspectorActivity extends AppCompatActivity {
+    final String SPREF_PREFIX = "SPREF ";
     final String PREF_PREFIX = "PREF ";
     final String DB_PREFIX = "DB ";
     final String DQ_PREFIX = "DQ ";
@@ -76,6 +81,9 @@ public class KcaInspectorActivity extends AppCompatActivity {
         String questtrack_data = questTracker.getQuestTrackerData();
         listViewItemList.add(new AbstractMap.SimpleEntry<> (QT_PREFIX.concat("tracked_data"), questtrack_data));
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        listViewItemList.add(new AbstractMap.SimpleEntry<>(SPREF_PREFIX.concat(PREF_VPN_ENABLED), String.valueOf(prefs.getBoolean(PREF_VPN_ENABLED, false))));
+        listViewItemList.add(new AbstractMap.SimpleEntry<>(SPREF_PREFIX.concat(PREF_SVC_ENABLED), String.valueOf(prefs.getBoolean(PREF_SVC_ENABLED, false))));
         for (String pref_key: PREFS_LIST) {
             String pref_value = "";
             if (PREFS_BOOLEAN_LIST.contains(pref_key)) {

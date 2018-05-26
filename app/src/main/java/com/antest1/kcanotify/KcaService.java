@@ -6,8 +6,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -157,6 +159,7 @@ public class KcaService extends Service {
     kcaNotificationHandler nHandler;
     LocalBroadcastManager broadcaster;
     ScheduledExecutorService timeScheduler = null;
+    private BroadcastReceiver receiver;
 
     String kcaFirstDeckInfo;
     static String kca_version;
@@ -172,6 +175,12 @@ public class KcaService extends Service {
 
     public Handler getNofiticationHandler() {
         return nHandler;
+    }
+
+    private void registerReceiver() {
+        receiver = new KcaReceiver();
+        IntentFilter filter = new IntentFilter(BROADCAST_ACTION);
+        registerReceiver(receiver, filter);
     }
 
     private boolean checkKeyInPreferences(String key) {
@@ -226,14 +235,14 @@ public class KcaService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.e("KCA-S", "onStartCommand Called");
+        isServiceOn = true;
         isInitState = true;
         isFirstState = true;
         restartFlag = true;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.e("KCA", String.valueOf(prefs.contains(PREF_SVC_ENABLED)));
-        if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
-            stopSelf();
-        }
+        prefs.edit().putBoolean(PREF_SVC_ENABLED, true).apply();
+
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
@@ -276,17 +285,19 @@ public class KcaService extends Service {
         nHandler = new kcaNotificationHandler(this);
         broadcaster = LocalBroadcastManager.getInstance(this);
 
-        notifyFirstTime = true;
-        notifyBuilder = createBuilder(contextWithLocale, getServiceChannelId());
-        notifyTitle = KcaUtils.format(getStringWithLocale(R.string.kca_init_title), getStringWithLocale(R.string.app_name));
-        notifyContent = getStringWithLocale(R.string.kca_init_content);
-        // String initSubContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
-        kcaFirstDeckInfo = getStringWithLocale(R.string.kca_init_content);
-        initViewNotificationBuilder(notifyTitle, notifyContent);
-        startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
-        isServiceOn = true;
+        int sniffer_mode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
+        Log.e("KCA-S", String.valueOf(sniffer_mode));
+        switch (sniffer_mode) {
+            case SNIFFER_ACTIVE:
+                KcaVpnData.setHandler(handler);
+                break;
+            case SNIFFER_PASSIVE:
+                KcaReceiver.setHandler(handler);
+                break;
+            default:
+                stopSelf();
+        }
 
-        KcaVpnData.setHandler(handler);
         KcaBattle.setHandler(nHandler);
         KcaApiData.setHandler(nHandler);
         KcaAlarmService.setHandler(nHandler);
@@ -296,6 +307,16 @@ public class KcaService extends Service {
         KcaFairySelectActivity.setHandler(nHandler);
         KcaViewButtonService.setHandler(nHandler);
         KcaAkashiRepairInfo.initAkashiTimer();
+        registerReceiver();
+
+        notifyFirstTime = true;
+        notifyBuilder = createBuilder(contextWithLocale, getServiceChannelId());
+        notifyTitle = KcaUtils.format(getStringWithLocale(R.string.kca_init_title), getStringWithLocale(R.string.app_name));
+        notifyContent = getStringWithLocale(R.string.kca_init_content);
+        // String initSubContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
+        kcaFirstDeckInfo = getStringWithLocale(R.string.kca_init_content);
+        initViewNotificationBuilder(notifyTitle, notifyContent);
+        startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
 
         notificationTimeCounter = -1;
         timer = new Runnable() {
@@ -338,13 +359,17 @@ public class KcaService extends Service {
         mediaPlayer.release();
         mediaPlayer = null;
 
-        stopForeground(true);
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver = null;
+        }
+
         notifiManager.cancelAll();
         isServiceOn = false;
     }
 
     public void onDestroy() {
-        setServiceDown();
+        Log.e("KCA-S", "onDestroy Called");
         stopService(new Intent(this, KcaBattleViewService.class));
         stopService(new Intent(this, KcaQuestViewService.class));
         stopService(new Intent(this, KcaFleetViewService.class));
@@ -356,9 +381,11 @@ public class KcaService extends Service {
         stopService(new Intent(this, KcaViewButtonService.class));
         stopService(new Intent(this, KcaExpeditionCheckViewService.class));
         stopService(new Intent(this, KcaCustomToastService.class));
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().putBoolean("svcenabled", false).apply();
+        setServiceDown();
         KcaAlarmService.clearAlarmCount();
+        stopForeground(true);
+        dbHelper.close();
+        super.onDestroy();
     }
 
     public boolean isPackageExist(String name) {

@@ -142,6 +142,7 @@
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">Kcanotify設定</string>
     <string name="setting_menu_kand_title_saku_cal">索敵計算式</string>
+    <string name="setting_menu_kand_title_sniffer_type">Snifferモード</string>
     <string name="setting_menu_kand_title_exp_realtime_show">遠征の残り時間を表示</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">通知バーで遠征の時間情報を表示</string>
     <string name="setting_menu_kand_title_exp_type">遠征時間の表示タイプ</string>

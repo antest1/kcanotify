@@ -131,9 +131,12 @@ public class MainActivity extends AppCompatActivity {
         kcIntent = getKcIntent(getApplicationContext());
         is_kca_installed = (kcIntent != null);
 
+        int sniffer_mode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
+
         vpnbtn = findViewById(R.id.vpnbtn);
         vpnbtn.setTextOff(getStringWithLocale(R.string.ma_vpn_toggleoff));
         vpnbtn.setTextOn(getStringWithLocale(R.string.ma_vpn_toggleon));
+        vpnbtn.setText("PASSIVE");
         vpnbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -157,17 +160,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if (sniffer_mode == SNIFFER_ACTIVE) {
+            vpnbtn.setEnabled(true);
+
+        } else {
+            vpnbtn.setEnabled(false);
+        }
+
         svcbtn = findViewById(R.id.svcbtn);
         svcbtn.setTextOff(getStringWithLocale(R.string.ma_svc_toggleoff));
         svcbtn.setTextOn(getStringWithLocale(R.string.ma_svc_toggleon));
-        svcbtn.setOnClickListener(new CompoundButton.OnClickListener() {
+        svcbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Intent intent = new Intent(MainActivity.this, KcaService.class);
-                if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
-                    if (is_kca_installed) {
-                        prefs.edit().putBoolean(PREF_SVC_ENABLED, true).apply();
-                        setCheckBtn();
+                if (isChecked) {
+                    if (true || is_kca_installed) {
                         loadTranslationData(getApplicationContext());
                         startService(intent);
                     } else {
@@ -175,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     stopService(intent);
+                    prefs.edit().putBoolean(PREF_SVC_ENABLED, false).apply();
                 }
             }
         });
@@ -367,7 +376,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setVpnBtn() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        vpnbtn.setChecked(prefs.getBoolean(PREF_VPN_ENABLED, false));
+        int sniffer_mode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
+        if (sniffer_mode == SNIFFER_ACTIVE) {
+            vpnbtn.setEnabled(true);
+            vpnbtn.setChecked(prefs.getBoolean(PREF_VPN_ENABLED, false));
+        } else {
+            vpnbtn.setText("PASSIVE");
+            vpnbtn.setEnabled(false);
+        }
     }
 
     public void setCheckBtn() {

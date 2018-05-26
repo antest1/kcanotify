@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.antest1.kcasniffer.contentprovider.READ_DATA"/>
     <uses-permission
         xmlns:tools="http://schemas.android.com/tools"
         android:name="android.permission.PACKAGE_USAGE_STATS"
@@ -182,7 +183,11 @@
 
         <service
             android:name=".KcaService"
-            android:configChanges="locale|layoutDirection" />
+            android:configChanges="locale|layoutDirection" >
+            <intent-filter>
+                <action android:name="com.antest1.kcasniffer.broadcast"/>
+            </intent-filter>
+        </service>
         <service
             android:name=".KcaAlarmService" />
         <service

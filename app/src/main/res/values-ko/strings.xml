@@ -142,6 +142,7 @@
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">깡들리티 설정</string>
     <string name="setting_menu_kand_title_saku_cal">색적 계산방식 선택</string>
+    <string name="setting_menu_kand_title_sniffer_type">스니퍼 모드</string>
     <string name="setting_menu_kand_title_exp_realtime_show">원정 남은 시간 실시간 표시</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">상단의 원정 시간 표시 여부</string>
     <string name="setting_menu_kand_title_exp_type">원정 시간 표시 타입</string>

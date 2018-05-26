@@ -20,6 +20,7 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
@@ -96,10 +97,14 @@ import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOW_CONSTRSHIP_NAME;
+import static com.antest1.kcanotify.KcaConstants.PREF_SNIFFER_MODE;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaConstants.PREF_VIEW_YLOC;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
+import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
+import static com.antest1.kcanotify.KcaConstants.SNIFFER_PASSIVE;
+import static com.antest1.kcanotify.KcaConstants.VPN_STOP_REASON;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -251,6 +256,21 @@ public class SettingActivity extends AppCompatActivity {
                                 Toast.makeText(context, getStringWithLocale(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT).show();
                             }
                             return false;
+                        }
+                    });
+                }
+
+                if (key.equals(PREF_SNIFFER_MODE)) {
+                    pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                            String val = (String) newValue;
+                            if (Integer.parseInt(val) == SNIFFER_PASSIVE && prefs.getBoolean(PREF_VPN_ENABLED, false)) {
+                                KcaVpnService.stop(VPN_STOP_REASON, getActivity());
+                                prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                            }
+                            return true;
                         }
                     });
                 }
@@ -687,6 +707,7 @@ public class SettingActivity extends AppCompatActivity {
             case PREF_KCA_EXP_TYPE:
             case PREF_VIEW_YLOC:
             case PREF_LAST_UPDATE_CHECK:
+            case PREF_SNIFFER_MODE:
                 return "0";
             case PREF_ALARM_DELAY:
                 return "61";

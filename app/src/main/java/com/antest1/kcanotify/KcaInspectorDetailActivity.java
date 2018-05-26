@@ -39,6 +39,7 @@ import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 public class KcaInspectorDetailActivity extends AppCompatActivity {
+    final String SPREF_PREFIX = "SPREF ";
     final String PREF_PREFIX = "PREF ";
     final String DB_PREFIX = "DB ";
     final String DQ_PREFIX = "DQ ";

@@ -191,6 +191,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_head">Kcanotify Settings</string>
     <string name="setting_menu_kand_title_language">Language Settings</string>
     <string name="setting_menu_kand_title_saku_cal">Select LoS formula</string>
+    <string name="setting_menu_kand_title_sniffer_type">Sniffer Mode</string>
     <string name="setting_menu_kand_title_exp_realtime_show">Track Expedition Time</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">Display remaining/left time for Expeditions on the navbar</string>
     <string name="setting_menu_kand_title_exp_type">Expedition Time View Type</string>

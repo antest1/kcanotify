@@ -1,5 +1,7 @@
 package com.antest1.kcanotify;
 
+import android.net.Uri;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,6 +9,12 @@ public final class KcaConstants {
     public final static String KC_PACKAGE_NAME = "com.dmm.dmmlabo.kancolle";
     public final static String DMMLOGIN_PACKAGE_NAME = "com.dmm.app.store";
     public final static String MAINACTIVITY_NAME = "com.antest1.kcanotify.MainActivity";
+
+    public static final String AUTHORITY = "com.antest1.kcasniffer.contentprovider";
+    public static final String PATH  = "/request";
+
+    public static final Uri CONTENT_URI = Uri.parse("content://".concat(AUTHORITY).concat(PATH));
+    public static final String BROADCAST_ACTION = "com.antest1.kcasniffer.broadcast";
 
     public static final String KCA_VERSION = "/kca/version.json";
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
@@ -374,8 +382,12 @@ public final class KcaConstants {
     public static final String PREF_SVC_ENABLED = "svcenabled";
     public static final String VPN_STOP_REASON = "vpn_stop_from_main";
 
+    public static final int SNIFFER_ACTIVE = 0;
+    public static final int SNIFFER_PASSIVE = 1;
+
     public static final String PREF_KCA_VERSION = "kca_version";
     public static final String PREF_KCA_LANGUAGE = "kca_language";
+    public static final String PREF_SNIFFER_MODE = "kca_sniffer_mode";
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
     public static final String PREF_OPENDB_API_USE = "opendb_api_use";
     public static final String PREF_POIDB_API_USE = "poidb_api_use";
@@ -428,6 +440,7 @@ public final class KcaConstants {
             PREF_CHECK_UPDATE,
             PREF_KCA_VERSION,
             PREF_KCA_LANGUAGE,
+            PREF_SNIFFER_MODE,
             PREF_KCA_SEEK_CN,
             PREF_OPENDB_API_USE,
             PREF_KCA_EXP_VIEW,

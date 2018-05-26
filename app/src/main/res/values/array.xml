@@ -159,4 +159,13 @@
         <item>@string/reslog_interval_month</item>
     </string-array>
 
+    <string-array name="snifferOption" translatable="false">
+        <item>ACTIVE</item>
+        <item>PASSIVE</item>
+    </string-array>
+
+    <string-array name="snifferOptionValue" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
 </resources>
