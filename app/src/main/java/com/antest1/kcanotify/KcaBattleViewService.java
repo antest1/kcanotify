@@ -1481,6 +1481,12 @@ public class KcaBattleViewService extends Service {
 
     private void setAirCombatView() {
         if (api_data != null && !api_data.has("api_enemy_info") && !api_data.has("api_flare_pos")) {
+            if (api_data.has("api_plane_from")) {
+                if (api_data.get("api_plane_from").isJsonNull()) {
+                    acView.findViewById(R.id.view_ac_phase1).setVisibility(View.GONE);
+                }
+            }
+
             if (api_data.has("api_kouku")) {
                 JsonObject kdata = api_data.getAsJsonObject("api_kouku");
                 ((TextView) acView.findViewById(R.id.view_ac_phase1_title))
