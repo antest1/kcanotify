@@ -53,6 +53,7 @@ import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_USEITEMS;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_FLEETVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_FV_MENU_ORDER;
@@ -80,9 +81,10 @@ public class KcaFleetViewService extends Service {
     public static final int FLEET_COMBINED_ID = 4;
     final int fleetview_menu_margin = 40;
 
-    private static final int HQINFO_TOTAL = 2;
+    private static final int HQINFO_TOTAL = 3;
     private static final int HQINFO_EXPVIEW = 0;
     private static final int HQINFO_SECOUNT = 1;
+    private static final int HQINFO_EVENT = 2;
 
     Context contextWithLocale;
     LayoutInflater mInflater;
@@ -161,7 +163,7 @@ public class KcaFleetViewService extends Service {
     }
 
     private void setHqInfo() {
-        int[] view_id = {R.id.fleetview_exp, R.id.fleetview_cnt};
+        int[] view_id = {R.id.fleetview_exp, R.id.fleetview_cnt, R.id.fleetview_18spring};
         for (int i = 0; i < view_id.length; i++) {
             fleetHqInfoView.findViewById(view_id[i]).setVisibility((i == hqinfoState) ? View.VISIBLE : View.GONE);
         }
@@ -202,6 +204,32 @@ public class KcaFleetViewService extends Service {
                     equipcntviewicon.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                             R.color.white), PorterDuff.Mode.MULTIPLY);
                 }
+                break;
+
+            case HQINFO_EVENT:
+                TextView spring_item_1 = fleetHqInfoView.findViewById(R.id.fleetview_18spring_1);
+                TextView spring_item_2 = fleetHqInfoView.findViewById(R.id.fleetview_18spring_2);
+                TextView spring_item_3 = fleetHqInfoView.findViewById(R.id.fleetview_18spring_3);
+                TextView spring_item_4 = fleetHqInfoView.findViewById(R.id.fleetview_18spring_4);
+
+                JsonArray useitem_data = dbHelper.getJsonArrayValue(DB_KEY_USEITEMS);
+                int[] item_count = {0, 0, 0, 0};
+                if (useitem_data != null) {
+                    for (int i = 0; i < useitem_data.size(); i++) {
+                        JsonObject item = useitem_data.get(i).getAsJsonObject();
+                        int key = item.get("api_id").getAsInt();
+                        switch (key) {
+                            case 85: case 86: case 87: case 88:
+                                item_count[key - 85] += item.get("api_count").getAsInt();
+                                break;
+                        }
+                    }
+                }
+
+                spring_item_1.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_18spring_rice), item_count[0]));
+                spring_item_2.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_18spring_umeboshi), item_count[1]));
+                spring_item_3.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_18spring_nori), item_count[2]));
+                spring_item_4.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_18spring_tea), item_count[3]));
                 break;
             default:
                 break;

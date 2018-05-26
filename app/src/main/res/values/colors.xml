@@ -201,4 +201,8 @@
     <color name="colorConsumableDevmat">#00acc1</color>
     <color name="colorConsumableScrew">#9e9e9e</color>
     <color name="colorConsumableTorch">#f57c00</color>
+    <color name="colorEventRice">#dfd7c5</color>
+    <color name="colorEventNori">#ddc8e3</color>
+    <color name="colorEventUmeboshi">#ffbcb7</color>
+    <color name="colorEventTea">#d4ffd8</color>
 </resources>

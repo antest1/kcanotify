@@ -175,6 +175,87 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/fleetview_18spring"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:gravity="right"
+                    android:orientation="horizontal"
+                    android:paddingEnd="4dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingStart="4dp">
+
+                    <TextView
+                        android:id="@+id/fleetview_18spring_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginStart="3dp"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="R 00"
+                        android:textColor="@color/colorEventRice"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/fleetview_18spring_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginStart="3dp"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="U 00"
+                        android:textColor="@color/colorEventUmeboshi"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/fleetview_18spring_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="N 00"
+                        android:textColor="@color/colorEventNori"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/fleetview_18spring_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="T 00"
+                        android:textColor="@color/colorEventTea"
+                        android:textSize="18dp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/fleetview_cnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -186,7 +267,8 @@
                     android:paddingEnd="4dp"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
-                    android:paddingStart="4dp">
+                    android:paddingStart="4dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/fleetview_cnt1_icon"

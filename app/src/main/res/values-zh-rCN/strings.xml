@@ -578,4 +578,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetcheckview_btn_airbattle">航空战</string>
     <string name="fleetcheckview_content_airbattle" formatted="false">制空总值: %d ~ %d\n───────────────\n接触成功机率\n[AS+] 开始率: %.1f%%, 选择率: %.1f%%\n[AS] 开始率: %.1f%%, 选择率: %.1f%%\n</string>
     <string name="fleetcheckview_btn_fuelbull">燃弾</string>
+
+    <string name="fleetview_18spring_rice" formatted="false">米 %02d</string>
+    <string name="fleetview_18spring_umeboshi" formatted="false">梅 %02d</string>
+    <string name="fleetview_18spring_nori" formatted="false">苔 %02d</string>
+    <string name="fleetview_18spring_tea" formatted="false">茶 %02d</string>
+
 </resources>

@@ -572,4 +572,10 @@
     <string name="fleetcheckview_btn_airbattle">항공전</string>
     <string name="fleetcheckview_content_airbattle" formatted="false">총 제공치: %d ~ %d\n───────────────\n촉접률:\n[확보] 개시 확률: %.1f%%, 선택 확률: %.1f%%\n[우세] 개시 확률: %.1f%%, 선택 확률: %.1f%%</string>
     <string name="fleetcheckview_btn_fuelbull">연비</string>
+
+    <string name="fleetview_18spring_rice" formatted="false">쌀 %02d</string>
+    <string name="fleetview_18spring_umeboshi" formatted="false">매 %02d</string>
+    <string name="fleetview_18spring_nori" formatted="false">김 %02d</string>
+    <string name="fleetview_18spring_tea" formatted="false">차 %02d</string>
+
 </resources>

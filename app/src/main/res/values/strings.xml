@@ -637,4 +637,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetcheckview_btn_airbattle">Air Battle</string>
     <string name="fleetcheckview_content_airbattle" formatted="false">Total Airstrike Power: %d ~ %d\n───────────────\nContact Success Chance\n[AS+] Trigger Chance: %.1f%%, Selection Chance: %.1f%%\n[AS] Trigger Chance: %.1f%%, Selection Chance: %.1f%%\n</string>
     <string name="fleetcheckview_btn_fuelbull">Consumption</string>
+
+    <string name="fleetview_18spring_rice" formatted="false">R %02d</string>
+    <string name="fleetview_18spring_umeboshi" formatted="false">U %02d</string>
+    <string name="fleetview_18spring_nori" formatted="false">N %02d</string>
+    <string name="fleetview_18spring_tea" formatted="false">T %02d</string>
 </resources>

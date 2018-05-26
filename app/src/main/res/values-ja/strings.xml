@@ -572,4 +572,10 @@
     <string name="fleetcheckview_btn_airbattle">航空戦</string>
     <string name="fleetcheckview_content_airbattle" formatted="false">総制空値: %d ~ %d\n───────────────\n触接\n[確保] 開始率: %.1f%%, 触接選択率: %.1f%%\n[優勢] 開始率: %.1f%%, 触接選択率: %.1f%%\n</string>
     <string name="fleetcheckview_btn_fuelbull">燃費</string>
+
+    <string name="fleetview_18spring_rice" formatted="false">米 %02d</string>
+    <string name="fleetview_18spring_umeboshi" formatted="false">梅 %02d</string>
+    <string name="fleetview_18spring_nori" formatted="false">苔 %02d</string>
+    <string name="fleetview_18spring_tea" formatted="false">茶 %02d</string>
+
 </resources>
