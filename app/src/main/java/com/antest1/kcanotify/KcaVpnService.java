@@ -61,7 +61,7 @@ public class KcaVpnService extends VpnService {
 
     private State state = State.none;
 
-    private native void jni_init();
+    private native void jni_init(int sdk);
 
     private native void jni_start(int tun, boolean fwd53, int rcode, int loglevel);
 
@@ -306,7 +306,7 @@ public class KcaVpnService extends VpnService {
 
     @Override
     public void onCreate() {
-        jni_init();
+        jni_init(Build.VERSION.SDK_INT);
         super.onCreate();
 
         HandlerThread commandThread = new HandlerThread(getString(R.string.app_name) + " command");

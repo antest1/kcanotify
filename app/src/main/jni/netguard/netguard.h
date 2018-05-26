@@ -66,6 +66,7 @@
 struct arguments {
     JNIEnv *env;
     jobject instance;
+    int sdk;
     int tun;
     jboolean fwd53;
     jint rcode;
