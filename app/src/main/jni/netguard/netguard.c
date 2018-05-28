@@ -417,8 +417,6 @@ void report_error(const struct arguments *args, jint error, const char *fmt, ...
 static jmethodID midProtect = NULL;
 
 int protect_socket(const struct arguments *args, int socket) {
-    if (args->sdk >= 21) return 0;
-
     jclass cls = (*args->env)->GetObjectClass(args->env, args->instance);
     if (cls == NULL) {
         log_android(ANDROID_LOG_ERROR, "protect socket failed to get class");
