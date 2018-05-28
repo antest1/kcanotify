@@ -115,6 +115,7 @@ public class KcaService extends Service {
     public static String currentLocale;
     public static boolean isInitState;
     public static boolean isFirstState;
+    public static boolean isPassiveMode = false;
     public static boolean restartFlag = false;
 
     public static boolean isServiceOn = false;
@@ -175,12 +176,6 @@ public class KcaService extends Service {
 
     public Handler getNofiticationHandler() {
         return nHandler;
-    }
-
-    private void registerReceiver() {
-        receiver = new KcaReceiver();
-        IntentFilter filter = new IntentFilter(BROADCAST_ACTION);
-        registerReceiver(receiver, filter);
     }
 
     private boolean checkKeyInPreferences(String key) {
@@ -307,7 +302,13 @@ public class KcaService extends Service {
         KcaFairySelectActivity.setHandler(nHandler);
         KcaViewButtonService.setHandler(nHandler);
         KcaAkashiRepairInfo.initAkashiTimer();
-        registerReceiver();
+
+        isPassiveMode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE)) == SNIFFER_PASSIVE;
+        if (isPassiveMode) {
+            receiver = new KcaReceiver();
+            IntentFilter filter = new IntentFilter(BROADCAST_ACTION);
+            registerReceiver(receiver, filter);
+        }
 
         notifyFirstTime = true;
         notifyBuilder = createBuilder(contextWithLocale, getServiceChannelId());
@@ -359,10 +360,8 @@ public class KcaService extends Service {
         mediaPlayer.release();
         mediaPlayer = null;
 
-        if (receiver != null) {
-            unregisterReceiver(receiver);
-            receiver = null;
-        }
+        if (receiver != null) unregisterReceiver(receiver);
+        receiver = null;
 
         notifiManager.cancelAll();
         isServiceOn = false;
