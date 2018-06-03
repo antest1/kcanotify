@@ -447,7 +447,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 case "212": // 보급5회
                     int mult = 1;
                     if (ap_dup_flag) mult = 2;
-                    updateTarget.addProperty(key, cond0 + apcount * mult);
+                    updateTarget.addProperty(key, cond0 + Math.min(apcount * mult, 4));
                     break;
                 case "213": // 통상파괴
                 case "221": // 로호
