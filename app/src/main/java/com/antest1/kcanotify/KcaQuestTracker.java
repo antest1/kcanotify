@@ -26,9 +26,6 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import static android.R.attr.id;
-import static android.R.attr.key;
-import static android.R.attr.value;
 import static com.antest1.kcanotify.KcaApiData.STYPE_AO;
 import static com.antest1.kcanotify.KcaApiData.STYPE_AP;
 import static com.antest1.kcanotify.KcaApiData.STYPE_AV;
@@ -44,10 +41,6 @@ import static com.antest1.kcanotify.KcaApiData.STYPE_SS;
 import static com.antest1.kcanotify.KcaApiData.STYPE_SSV;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
-import static com.antest1.kcanotify.KcaApiData.kcShipData;
-import static com.antest1.kcanotify.KcaConstants.API_REQ_MAP_START;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTTRACK;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTTRACK;
 import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
 import static com.antest1.kcanotify.KcaUtils.getJapanSimpleDataFormat;
 
@@ -681,7 +674,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 for (int i = 0; i < cond.size(); i++) {
                     if(Integer.parseInt(cond_value[i]) >= Integer.parseInt(cond.get(i).getAsString())) {
                         if (!checkQuestValid(type, Integer.parseInt(key), time)) {
-                            db.delete(qt_table_name, "KEY=?", new String[]{String.valueOf(id)});
+                            db.delete(qt_table_name, "KEY=?", new String[]{String.valueOf(key)});
                         } else {
                             counter += 1;
                         }
