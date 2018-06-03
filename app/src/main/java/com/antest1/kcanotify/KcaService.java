@@ -1159,7 +1159,7 @@ public class KcaService extends Service {
                             JsonArray portdeckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
                             isInBattle = true;
 
-                            int deck_id = 0;
+                            int deck_id = -1;
                             String[] requestData = request.split("&");
                             for (int i = 0; i < requestData.length; i++) {
                                 String decodedData = URLDecoder.decode(requestData[i], "utf-8");
@@ -1168,8 +1168,9 @@ public class KcaService extends Service {
                                     break;
                                 }
                             }
-
-                            KcaBattle.currentFleet = deck_id;
+                            if (deck_id != -1) {
+                                KcaBattle.currentFleet = deck_id;
+                            }
 
                             JsonObject api_data = new JsonObject();
                             JsonArray api_deck_data = new JsonArray();
