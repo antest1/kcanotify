@@ -98,6 +98,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOW_CONSTRSHIP_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_SNIFFER_MODE;
+import static com.antest1.kcanotify.KcaConstants.PREF_TIMER_WIDGET_STATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaConstants.PREF_VIEW_YLOC;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_BYPASS_ADDRESS;
@@ -700,6 +701,7 @@ public class SettingActivity extends AppCompatActivity {
             case PREF_AKASHI_STARLIST:
             case PREF_AKASHI_FILTERLIST:
             case PREF_SHIPINFO_FILTCOND:
+            case PREF_TIMER_WIDGET_STATE:
                 return "|";
             case PREF_SHIPINFO_SORTKEY:
                 return "|1,true|";

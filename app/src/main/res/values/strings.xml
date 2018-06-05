@@ -642,4 +642,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_18spring_umeboshi" formatted="false">U %02d</string>
     <string name="fleetview_18spring_nori" formatted="false">N %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">T %02d</string>
+
+    <string name="widget_timer_name">Kcanotify Timer Widget</string>
+    <string name="widget_timer_fleetname">Fleet %d</string>
 </resources>

@@ -28,6 +28,7 @@ public final class KcaConstants {
     public static final String DB_KEY_DECKPORT = "key_deckport";
     public static final String DB_KEY_USEITEMS = "key_useitems";
     public static final String DB_KEY_MAPEDGES = "key_mapedges";
+    public static final String DB_KEY_EXPDINFO = "key_expdinfo";
     public static final String DB_KEY_QUESTTRACK = "key_questtrack";
     public static final String DB_KEY_BATTLEINFO = "key_battleinfo";
     public static final String DB_KEY_BATTLENODE = "key_battlenode";
@@ -51,6 +52,7 @@ public final class KcaConstants {
             DB_KEY_DECKPORT,
             DB_KEY_USEITEMS,
             DB_KEY_MAPEDGES,
+            DB_KEY_EXPDINFO,
             DB_KEY_QUESTTRACK,
             DB_KEY_BATTLEINFO,
             DB_KEY_BATTLENODE,
@@ -435,6 +437,7 @@ public final class KcaConstants {
     public static final String PREF_SHOW_CONSTRSHIP_NAME = "show_constrship_name";
     public static final String PREF_VIEW_YLOC = "view_yloc";
     public static final String PREF_LAST_UPDATE_CHECK = "last_update_check";
+    public static final String PREF_TIMER_WIDGET_STATE = "timer_widget_state";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -482,7 +485,8 @@ public final class KcaConstants {
             PREF_FV_MENU_ORDER,
             PREF_SHOW_CONSTRSHIP_NAME,
             PREF_VIEW_YLOC,
-            PREF_LAST_UPDATE_CHECK
+            PREF_LAST_UPDATE_CHECK,
+            PREF_TIMER_WIDGET_STATE
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

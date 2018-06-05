@@ -205,4 +205,6 @@
     <color name="colorEventNori">#ddc8e3</color>
     <color name="colorEventUmeboshi">#ffbcb7</color>
     <color name="colorEventTea">#d4ffd8</color>
+
+    <color name="colorWidgetAlert">#ff5252</color>
 </resources>

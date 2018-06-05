@@ -227,6 +227,18 @@
             </intent-filter>
         </service>
 
+        <receiver
+            android:name=".KcaTimerWidget"
+            android:label="@string/widget_timer_name">
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widgetconfig_timer" />
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+        </receiver>
+
         <provider
             android:name="com.commonsware.cwac.provider.StreamProvider"
             android:authorities="com.antest1.kcanotify.provider"
