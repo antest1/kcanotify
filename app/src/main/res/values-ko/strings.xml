@@ -578,6 +578,8 @@
     <string name="fleetview_18spring_nori" formatted="false">김 %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">차 %02d</string>
 
+    <string name="special_playstore_1st">구글 플레이 출시 1주년!</string>
+
     <string name="widget_timer_name">시제 깡들리티 타이머</string>
     <string name="widget_timer_fleetname">제%d함대</string>
 

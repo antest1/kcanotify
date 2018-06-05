@@ -578,6 +578,8 @@
     <string name="fleetview_18spring_nori" formatted="false">苔 %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">茶 %02d</string>
 
+    <string name="special_playstore_1st">一周年記念！</string>
+
     <string name="widget_timer_name">Kcanotifyタイマーウィジェット</string>
     <string name="widget_timer_fleetname">第%d艦隊</string>
 </resources>

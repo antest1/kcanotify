@@ -40,6 +40,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton kcafairybtn;
     public static Handler sHandler;
     TextView textDescription;
-    TextView textWarn, textUpdate, textDataUpdate;
+    TextView textWarn, textUpdate, textDataUpdate, textSpecial;
     Gson gson = new Gson();
 
     SharedPreferences prefs;
@@ -296,6 +297,24 @@ public class MainActivity extends AppCompatActivity {
         //Linkify.addLinks(textDescription, Linkify.WEB_URLS);
 
         backPressCloseHandler = new BackPressCloseHandler(this);
+
+        ImageView specialImage = findViewById(R.id.special_image);
+        specialImage.setVisibility(View.GONE);
+        specialImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setVisibility(View.GONE);
+            }
+        });
+
+        textSpecial = findViewById(R.id.textSpecial);
+        textSpecial.setText(getStringWithLocale(R.string.special_playstore_1st));
+        textSpecial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                specialImage.setVisibility(View.VISIBLE);
+            }
+        });
 
         ctx = getApplicationContext();
         int setDefaultGameDataResult = setDefaultGameData();

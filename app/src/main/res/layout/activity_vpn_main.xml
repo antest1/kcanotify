@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -7,24 +8,22 @@
     tools:context="com.antest1.kcanotify.MainActivity">
 
     <LinearLayout
+        android:id="@+id/layout_base"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            app:titleTextColor="@color/colorToolbarText"
+        <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/toolbar"
-            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:background="@color/colorPrimary"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            >
-        </android.support.v7.widget.Toolbar>
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:titleTextColor="@color/colorToolbarText"></android.support.v7.widget.Toolbar>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -202,11 +201,44 @@
                     android:textColor="@color/colorDataUpdateText"
                     android:textSize="14dp" />
 
+                <TextView
+                    android:id="@+id/textSpecial"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_above="@id/textMainDataUpdate"
+                    android:layout_alignParentBottom="false"
+                    android:layout_alignWithParentIfMissing="true"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/colorSpecial"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:minLines="4"
+                    android:padding="4dp"
+                    android:text="플레이 스토어 출시 1주년!"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorSpecialText"
+                    android:textSize="14dp" />
+
             </RelativeLayout>
 
         </LinearLayout>
 
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/special_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="#A0000000"
+        android:padding="20dp"
+        android:src="@mipmap/special_image"
+        android:visibility="gone"
+        app:srcCompat="@mipmap/special_image" />
 
 </RelativeLayout>

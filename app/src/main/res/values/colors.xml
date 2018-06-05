@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#2c3e50</color>
     <color name="colorPrimaryDark">#1d2935</color>
-    <color name="colorAccent">#03A9F4</color>
+    <color name="colorAccent">#03a9f4</color>
     <color name="colorActivityBack">#ffffff</color>
     <color name="colorActivityText">#888888</color>
     <color name="colorToolbarText">#ffffff</color>
@@ -15,6 +15,8 @@
     <color name="colorUpdateText">#1b5e20</color>
     <color name="colorDataUpdate">#e8e9f5</color>
     <color name="colorDataUpdateText">#1b1d5e</color>
+    <color name="colorSpecial">#fff8d2</color>
+    <color name="colorSpecialText">#a76400</color>
     <color name="colorWarn">#ffcdd2</color>
     <color name="colorWarnText">#68000a</color>
     <color name="colorMenuBack">#80ffffff</color>
