@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#2c3e50</color>
     <color name="colorPrimaryDark">#1d2935</color>
-    <color name="colorAccent">#16a085</color>
+    <color name="colorAccent">#03A9F4</color>
     <color name="colorActivityBack">#ffffff</color>
     <color name="colorActivityText">#888888</color>
     <color name="colorToolbarText">#ffffff</color>
