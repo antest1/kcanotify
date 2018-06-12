@@ -5,6 +5,7 @@
     android:minHeight = "40dp"
     android:previewImage="@mipmap/widget_timer_example"
     android:initialLayout="@layout/widget_timer"
+    android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
     >
 </appwidget-provider>
