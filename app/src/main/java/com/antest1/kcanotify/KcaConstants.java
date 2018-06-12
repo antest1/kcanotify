@@ -138,6 +138,16 @@ public final class KcaConstants {
     public static final String API_GET_MEMBER_KDOCK = "/api_get_member/kdock";
     public static final String API_REQ_KOUSYOU_CREATESHIP_SPEEDCHANGE = "/api_req_kousyou/createship_speedchange";
 
+    public static final String[] API_WIDGET_TIMERUPDATE_LIST = new String[]{
+            API_PORT,
+            API_GET_MEMBER_NDOCK,
+            API_REQ_NYUKYO_START,
+            API_GET_MEMBER_DECK,
+            API_GET_MEMBER_KDOCK,
+            API_REQ_KOUSYOU_GETSHIP,
+            API_REQ_KOUSYOU_CREATESHIP_SPEEDCHANGE
+    };
+
     public static final String API_GET_MEMBER_QUESTLIST = "/api_get_member/questlist";
     public static final String API_REQ_QUEST_START = "/api_req_quest/start";
     public static final String API_REQ_QUEST_STOP = "/api_req_quest/stop";
@@ -320,6 +330,7 @@ public final class KcaConstants {
 
     public static final List<String> API_BATTLE_REQS = Arrays.asList(API_BATTLE_REQ_LIST);
     public static final List<String> API_QUEST_REQS = Arrays.asList(API_QUEST_REQ_LIST);
+    public static final List<String> API_WIDGET_TU_REQS = Arrays.asList(API_WIDGET_TIMERUPDATE_LIST);
 
     public static final int VIEW_HP_MAX = 100;
     public static final int STATE_NORMAL = 0;

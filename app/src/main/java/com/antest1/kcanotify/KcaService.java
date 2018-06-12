@@ -17,7 +17,6 @@ import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -94,6 +93,7 @@ import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaFleetViewService.REFRESH_FLEETVIEW_ACTION;
 import static com.antest1.kcanotify.KcaMoraleInfo.setMoraleValue;
 import static com.antest1.kcanotify.KcaQuestViewService.REFRESH_QUESTVIEW_ACTION;
+import static com.antest1.kcanotify.KcaTimerWidget.WIDGET_DATA_UPDATE;
 import static com.antest1.kcanotify.KcaUtils.createBuilder;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
@@ -766,6 +766,14 @@ public class KcaService extends Service {
                 }
             }
 
+            if (url.startsWith(API_GET_MEMBER_NDOCK)) {
+                if (jsonDataObj.has("api_data")) {
+                    JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
+                    KcaDocking.setDockData(api_data);
+                    dbHelper.putValue(DB_KEY_NDOCKDATA, api_data.toString());
+                }
+            }
+
             if (url.startsWith(API_REQ_MISSION_RESULT)) {
                 int deck_id = -1;
                 String[] requestData = request.split("&");
@@ -962,6 +970,12 @@ public class KcaService extends Service {
                 if (quest_id == 212 || quest_id == 218) questTracker.clearApDupFlag();
                 sendQuestCompletionInfo();
                 return;
+            }
+
+            if (API_WIDGET_TU_REQS.contains(url)) {
+                Intent widgetUpdateIndent = new Intent(getApplicationContext(), KcaTimerWidget.class);
+                widgetUpdateIndent.setAction(WIDGET_DATA_UPDATE);
+                sendBroadcast(widgetUpdateIndent);
             }
 
             // Game Data Dependent Tasks
@@ -1281,12 +1295,7 @@ public class KcaService extends Service {
                 }
 
                 if (url.startsWith(API_GET_MEMBER_NDOCK)) {
-                    if (jsonDataObj.has("api_data")) {
-                        JsonArray api_data = jsonDataObj.getAsJsonArray("api_data");
-                        KcaDocking.setDockData(api_data);
-                        dbHelper.putValue(DB_KEY_NDOCKDATA, api_data.toString());
-                        processDockingInfo();
-                    }
+                    processDockingInfo();
                     updateFleetView();
                 }
 

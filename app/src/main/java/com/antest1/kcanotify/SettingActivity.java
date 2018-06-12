@@ -701,7 +701,6 @@ public class SettingActivity extends AppCompatActivity {
             case PREF_AKASHI_STARLIST:
             case PREF_AKASHI_FILTERLIST:
             case PREF_SHIPINFO_FILTCOND:
-            case PREF_TIMER_WIDGET_STATE:
                 return "|";
             case PREF_SHIPINFO_SORTKEY:
                 return "|1,true|";
@@ -721,6 +720,8 @@ public class SettingActivity extends AppCompatActivity {
                 return "R.string.default_gamedata_version";
             case PREF_UPDATE_SERVER:
                 return "R.string.server_nova";
+            case PREF_TIMER_WIDGET_STATE:
+                return "{}";
             default:
                 return "";
         }
