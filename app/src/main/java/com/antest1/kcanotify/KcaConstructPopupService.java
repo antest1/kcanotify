@@ -166,7 +166,7 @@ public class KcaConstructPopupService extends Service {
 
     final Handler handler = new Handler()  {
         public void handleMessage(Message msg) {
-            boolean ship_shipname = getBooleanPreferences(getApplicationContext(), PREF_SHOW_CONSTRSHIP_NAME);
+            boolean show_shipname = getBooleanPreferences(getApplicationContext(), PREF_SHOW_CONSTRSHIP_NAME);
             JsonArray api_kdock = dbHelper.getJsonArrayValue(DB_KEY_KDOCKDATA);
             if (api_kdock != null) {
                 for (int i = 0; i<api_kdock.size(); i++) {
@@ -178,7 +178,7 @@ public class KcaConstructPopupService extends Service {
                         int ship_id = item.get("api_created_ship_id").getAsInt();
                         if (ship_id > 0) {
                             JsonObject shipdata = KcaApiData.getKcShipDataById(item.get("api_created_ship_id").getAsInt(), "name");
-                            if (ship_shipname) {
+                            if (show_shipname) {
                                 nameview.setText(KcaApiData.getShipTranslation(shipdata.get("name").getAsString(), false));
                             } else {
                                 nameview.setText("？？？");

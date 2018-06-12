@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_KDOCKDATA;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_NDOCKDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstructPopupService.CONSTR_DATA_ACTION;
