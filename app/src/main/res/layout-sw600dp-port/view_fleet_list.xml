@@ -173,7 +173,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="right"
                 android:orientation="horizontal">
-
+                <!--
                 <LinearLayout
                     android:id="@+id/fleetview_18spring"
                     android:layout_width="match_parent"
@@ -254,7 +254,7 @@
                         android:textColor="@color/colorEventTea"
                         android:textSize="18dp" />
                 </LinearLayout>
-
+                -->
                 <LinearLayout
                     android:id="@+id/fleetview_cnt"
                     android:layout_width="wrap_content"
@@ -267,8 +267,7 @@
                     android:paddingEnd="4dp"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
-                    android:paddingStart="4dp"
-                    android:visibility="gone">
+                    android:paddingStart="4dp">
 
                     <ImageView
                         android:id="@+id/fleetview_cnt1_icon"

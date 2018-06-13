@@ -81,7 +81,7 @@ public class KcaFleetViewService extends Service {
     public static final int FLEET_COMBINED_ID = 4;
     final int fleetview_menu_margin = 40;
 
-    private static final int HQINFO_TOTAL = 3;
+    private static final int HQINFO_TOTAL = 2;
     private static final int HQINFO_EXPVIEW = 0;
     private static final int HQINFO_SECOUNT = 1;
     private static final int HQINFO_EVENT = 2;
@@ -163,7 +163,7 @@ public class KcaFleetViewService extends Service {
     }
 
     private void setHqInfo() {
-        int[] view_id = {R.id.fleetview_exp, R.id.fleetview_cnt, R.id.fleetview_18spring};
+        int[] view_id = {R.id.fleetview_exp, R.id.fleetview_cnt};
         for (int i = 0; i < view_id.length; i++) {
             fleetHqInfoView.findViewById(view_id[i]).setVisibility((i == hqinfoState) ? View.VISIBLE : View.GONE);
         }
@@ -205,7 +205,7 @@ public class KcaFleetViewService extends Service {
                             R.color.white), PorterDuff.Mode.MULTIPLY);
                 }
                 break;
-
+            /*
             case HQINFO_EVENT:
                 TextView spring_item_1 = fleetHqInfoView.findViewById(R.id.fleetview_18spring_1);
                 TextView spring_item_2 = fleetHqInfoView.findViewById(R.id.fleetview_18spring_2);
@@ -231,6 +231,7 @@ public class KcaFleetViewService extends Service {
                 spring_item_3.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_18spring_nori), item_count[2]));
                 spring_item_4.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_18spring_tea), item_count[3]));
                 break;
+            */
             default:
                 break;
         }
