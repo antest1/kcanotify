@@ -143,67 +143,80 @@ public class KcaTimerWidget extends AppWidgetProvider {
         switch (status) {
             case STATE_EXPD:
                 String name_format = getStringWithLocale(context, R.string.widget_timer_fleetname);
-                JsonArray deckport = widgetData.getAsJsonArray("deckport");
-                if (deckport == null) {
+                if (!widgetData.has("deckport") || widgetData.get("deckport").isJsonNull()) {
                     for (int i = 0; i < 4; i++) entries.add(new AbstractMap.SimpleEntry<>("no data", ""));
                 } else {
-                    for (int i = 1; i < deckport.size(); i++) {
-                        JsonArray mission = deckport.get(i).getAsJsonObject().getAsJsonArray("api_mission");
-                        if (mission.get(0).getAsInt() == 1) {
-                            int mission_no = mission.get(1).getAsInt();
-                            String expedition_name = KcaUtils.format(name_format, i+1).concat(" ").concat(KcaExpedition2.getExpeditionHeader(mission_no).trim());
-                            String arrive_time = getLeftTimeStr(mission.get(2).getAsLong());
-                            entries.add(new AbstractMap.SimpleEntry<>(expedition_name, arrive_time));
-                        } else {
-                            String expedition_name = KcaUtils.format(name_format, i+1);
-                            entries.add(new AbstractMap.SimpleEntry<>(expedition_name, "-"));
+                    JsonArray deckport = widgetData.getAsJsonArray("deckport");
+                    if (deckport == null) {
+                        for (int i = 0; i < 4; i++) entries.add(new AbstractMap.SimpleEntry<>("no data", ""));
+                    } else {
+                        for (int i = 1; i < deckport.size(); i++) {
+                            JsonArray mission = deckport.get(i).getAsJsonObject().getAsJsonArray("api_mission");
+                            if (mission.get(0).getAsInt() == 1) {
+                                int mission_no = mission.get(1).getAsInt();
+                                String expedition_name = KcaUtils.format(name_format, i+1).concat(" ").concat(KcaExpedition2.getExpeditionHeader(mission_no).trim());
+                                String arrive_time = getLeftTimeStr(mission.get(2).getAsLong());
+                                entries.add(new AbstractMap.SimpleEntry<>(expedition_name, arrive_time));
+                            } else {
+                                String expedition_name = KcaUtils.format(name_format, i+1);
+                                entries.add(new AbstractMap.SimpleEntry<>(expedition_name, "-"));
+                            }
                         }
+                        entries.add(new AbstractMap.SimpleEntry<>("", ""));
                     }
-                    entries.add(new AbstractMap.SimpleEntry<>("", ""));
                 }
                 break;
             case STATE_DOCK:
-                JsonArray ndock = widgetData.getAsJsonArray("ndock");
-                if (ndock == null) {
+                if (!widgetData.has("ndock") || widgetData.get("ndock").isJsonNull()) {
                     for (int i = 0; i < 4; i++) entries.add(new AbstractMap.SimpleEntry<>("no data", ""));
                 } else {
-                    for (int i = 0; i < ndock.size(); i++) {
-                        JsonObject item = ndock.get(i).getAsJsonObject();
-                        if (item.get("api_state").getAsInt() != -1) {
-                            int ship_id = item.get("api_ship_id").getAsInt();
-                            if (ship_id > 0) {
-                                String ship_name = "";
-                                JsonObject shipData = getUserShipDataById(ship_id, "ship_id");
-                                JsonObject kcShipData = KcaApiData.getKcShipDataById(shipData.get("ship_id").getAsInt(), "name");
-                                if (kcShipData != null) {
-                                    ship_name = getShipTranslation(kcShipData.get("name").getAsString(), false);
+                    JsonArray ndock = widgetData.getAsJsonArray("ndock");
+                    if (ndock == null) {
+                        for (int i = 0; i < 4; i++)
+                            entries.add(new AbstractMap.SimpleEntry<>("no data", ""));
+                    } else {
+                        for (int i = 0; i < ndock.size(); i++) {
+                            JsonObject item = ndock.get(i).getAsJsonObject();
+                            if (item.get("api_state").getAsInt() != -1) {
+                                int ship_id = item.get("api_ship_id").getAsInt();
+                                if (ship_id > 0) {
+                                    String ship_name = "";
+                                    JsonObject shipData = getUserShipDataById(ship_id, "ship_id");
+                                    JsonObject kcShipData = KcaApiData.getKcShipDataById(shipData.get("ship_id").getAsInt(), "name");
+                                    if (kcShipData != null) {
+                                        ship_name = getShipTranslation(kcShipData.get("name").getAsString(), false);
+                                    }
+                                    entries.add(new AbstractMap.SimpleEntry<>(ship_name, getLeftTimeStr(item.get("api_complete_time").getAsLong())));
+                                } else {
+                                    entries.add(new AbstractMap.SimpleEntry<>("-", ""));
                                 }
-                                entries.add(new AbstractMap.SimpleEntry<>(ship_name, getLeftTimeStr(item.get("api_complete_time").getAsLong())));
+                            } else {
+                                entries.add(new AbstractMap.SimpleEntry<>("CLOSED", ""));
+                            }
+                        }
+                    }
+                }
+                break;
+            case STATE_CONSTR:
+                if (widgetData.has("kdock") || widgetData.get("kdock").isJsonNull()) {
+                    for (int i = 0; i < 4; i++) entries.add(new AbstractMap.SimpleEntry<>("no data", ""));
+                } else {
+                    JsonArray kdock = widgetData.getAsJsonArray("kdock");
+                    boolean show_shipname = getBooleanPreferences(context, PREF_SHOW_CONSTRSHIP_NAME);
+                    for (int i = 0; i < kdock.size(); i++) {
+                        JsonObject item = kdock.get(i).getAsJsonObject();
+                        if (item.get("api_state").getAsInt() != -1) {
+                            int ship_id = item.get("api_created_ship_id").getAsInt();
+                            if (ship_id > 0) {
+                                JsonObject shipdata = KcaApiData.getKcShipDataById(item.get("api_created_ship_id").getAsInt(), "name");
+                                String shipname = show_shipname ? KcaApiData.getShipTranslation(shipdata.get("name").getAsString(), false) : "？？？";
+                                entries.add(new AbstractMap.SimpleEntry<>(shipname, getConstrLeftTimeStr(item.get("api_complete_time").getAsLong())));
                             } else {
                                 entries.add(new AbstractMap.SimpleEntry<>("-", ""));
                             }
                         } else {
                             entries.add(new AbstractMap.SimpleEntry<>("CLOSED", ""));
                         }
-                    }
-                }
-                break;
-            case STATE_CONSTR:
-                JsonArray kdock = widgetData.getAsJsonArray("kdock");
-                boolean show_shipname = getBooleanPreferences(context, PREF_SHOW_CONSTRSHIP_NAME);
-                for (int i = 0; i < kdock.size(); i++) {
-                    JsonObject item = kdock.get(i).getAsJsonObject();
-                    if (item.get("api_state").getAsInt() != -1) {
-                        int ship_id = item.get("api_created_ship_id").getAsInt();
-                        if (ship_id > 0) {
-                            JsonObject shipdata = KcaApiData.getKcShipDataById(item.get("api_created_ship_id").getAsInt(), "name");
-                            String shipname = show_shipname ? KcaApiData.getShipTranslation(shipdata.get("name").getAsString(), false) : "？？？";
-                            entries.add(new AbstractMap.SimpleEntry<>(shipname, getConstrLeftTimeStr(item.get("api_complete_time").getAsLong())));
-                        } else {
-                            entries.add(new AbstractMap.SimpleEntry<>("-", ""));
-                        }
-                    } else {
-                        entries.add(new AbstractMap.SimpleEntry<>("CLOSED", ""));
                     }
                 }
                 break;
