@@ -242,7 +242,7 @@ public class KcaUtils {
     public static Context getContextWithLocale(Context ac, Context bc) {
         Locale locale;
         String[] pref_locale = getStringPreferences(ac, PREF_KCA_LANGUAGE).split("-");
-        if (pref_locale[0].equals("default")) {
+        if (pref_locale[0].toLowerCase().equals("default") || pref_locale.length < 2) {
             locale = Locale.getDefault();
         } else {
             locale = new Locale(pref_locale[0], pref_locale[1]);
@@ -371,10 +371,13 @@ public class KcaUtils {
         String[] default_split = version_default.replace("r", ".0.").split("\\.");
         int min_length = Math.min(current_split.length, default_split.length);
         for (int i = 0; i < min_length; i++) {
-            if (Integer.parseInt(current_split[i]) > Integer.parseInt(default_split[i]))
-                return true;
-            else if (Integer.parseInt(current_split[i]) < Integer.parseInt(default_split[i]))
-                return false;
+            if (current_split[i].trim().length() > 0 && default_split[i].trim().length() > 0) {
+                if (Integer.parseInt(current_split[i]) > Integer.parseInt(default_split[i])) {
+                    return true;
+                } else if (Integer.parseInt(current_split[i]) < Integer.parseInt(default_split[i])) {
+                    return false;
+                }
+            }
         }
         return current_split.length > default_split.length;
     }
