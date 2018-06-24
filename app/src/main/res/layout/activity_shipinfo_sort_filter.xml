@@ -18,6 +18,14 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:titleTextColor="@color/colorToolbarText"/>
 
+    <TextView
+        android:id="@+id/ship_stat_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

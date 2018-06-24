@@ -52,6 +52,7 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 public class ShipInfoFilterActivity extends AppCompatActivity {
     Toolbar toolbar;
     static Gson gson = new Gson();
+    TextView listcounter;
     LinearLayout listview;
     public int count;
     public static SparseArray<String> sort_values = new SparseArray<>();
@@ -108,6 +109,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         listview = findViewById(R.id.ship_stat_sort_list);
+        listcounter = findViewById(R.id.ship_stat_count);
         String pref_sort_list = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
         String[] sort_keys = pref_sort_list.split("\\|");
         count = 0;
@@ -241,12 +243,14 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                     if (sort_values.size() > 1) {
                         removeViewByTag(target);
                         sort_values.delete(target);
+                        listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
                     }
                 }
             }
         });
 
         listview.addView(v);
+        listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
         if (key != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_spinner)).setSelection(key);
         if (op != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_operator)).setSelection(op);
         if (value.length() > 0) {

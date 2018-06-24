@@ -21,6 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -40,6 +41,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
     Toolbar toolbar;
     static Gson gson = new Gson();
     LinearLayout listview;
+    TextView listcounter;
     public int count;
     public List<Integer> sort_items = new ArrayList<>();
     public SparseArray<String> sort_values = new SparseArray<>();
@@ -78,6 +80,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getStringWithLocale(R.string.shipinfo_btn_sort));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listview = findViewById(R.id.ship_stat_sort_list);
+        listcounter = findViewById(R.id.ship_stat_count);
         String pref_sort_list = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY);
         String[] sort_keys = pref_sort_list.split("\\|");
         count = 0;
@@ -137,6 +140,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
                 if (sort_values.indexOfKey(target) >= 0) {
                     int value = Integer.valueOf(sort_values.get(target).split(",")[0]);
                     sort_values.put(target, makeStatPrefValue(value, checked));
+                    listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size()));
                 }
             }
         });
@@ -168,11 +172,13 @@ public class ShipInfoSortActivity extends AppCompatActivity {
                         removeViewByTag(target);
                         sort_items.remove(Integer.valueOf(target));
                         sort_values.delete(target);
+                        listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
                     }
                 }
             }
         });
         listview.addView(v);
+        listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_items.size() - 1));
         CheckBox cb = listview.findViewWithTag(target).findViewById(R.id.ship_stat_isdesc);
         cb.setChecked(is_desc);
     }

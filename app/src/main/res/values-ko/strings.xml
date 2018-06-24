@@ -418,6 +418,7 @@
     <string name="ship_stat_sort_key_14">잠금</string>
     <string name="ship_stat_sort_key_15">딱지</string>
     <string name="shipinfo_filt_list_dialog_title">선택</string>
+    <string name="shipinfo_criteria_count" formatted="false">적용된 기준: %d개</string>
 
     <string name="ship_tag_0">없음</string>
     <string name="ship_tag_1">경계부대(회색)</string>

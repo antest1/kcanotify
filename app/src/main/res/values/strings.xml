@@ -484,6 +484,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_sort_key_14">Locked</string>
     <string name="ship_stat_sort_key_15">Tag</string>
     <string name="shipinfo_filt_list_dialog_title">Select</string>
+    <string name="shipinfo_criteria_count" formatted="false">Applied criteria: %d</string>
 
     <string name="ship_tag_0">None</string>
     <string name="ship_tag_1">Patrol(Gray)</string>
