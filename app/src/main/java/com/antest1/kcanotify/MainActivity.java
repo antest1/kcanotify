@@ -179,7 +179,11 @@ public class MainActivity extends AppCompatActivity {
                     if (is_kca_installed) {
                         if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
                             loadTranslationData(getApplicationContext());
-                            startService(intent);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                startForegroundService(intent);
+                            } else {
+                                startService(intent);
+                            }
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), getString(R.string.ma_toast_kancolle_not_installed), Toast.LENGTH_LONG).show();
