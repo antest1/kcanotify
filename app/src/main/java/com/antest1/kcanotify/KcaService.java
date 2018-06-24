@@ -357,8 +357,10 @@ public class KcaService extends Service {
         handler = null;
         nHandler = null;
 
-        mediaPlayer.release();
-        mediaPlayer = null;
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
 
         if (receiver != null) unregisterReceiver(receiver);
         receiver = null;
