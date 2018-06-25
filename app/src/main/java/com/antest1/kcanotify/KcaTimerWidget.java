@@ -198,7 +198,7 @@ public class KcaTimerWidget extends AppWidgetProvider {
                 }
                 break;
             case STATE_CONSTR:
-                if (widgetData.has("kdock") || widgetData.get("kdock").isJsonNull()) {
+                if (!widgetData.has("kdock") || widgetData.get("kdock").isJsonNull()) {
                     for (int i = 0; i < 4; i++) entries.add(new AbstractMap.SimpleEntry<>("no data", ""));
                 } else {
                     JsonArray kdock = widgetData.getAsJsonArray("kdock");
