@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_VPN = 1;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_EXTERNAL_PERMISSION = 3;
-    public static final int UPDATECHECK_INTERVAL_MS = 30000;
 
     public String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
@@ -97,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton kcafairybtn;
     public static Handler sHandler;
     TextView textDescription;
-    TextView textWarn, textDataUpdate, textSpecial;
+    TextView textWarn, textSpecial;
     Gson gson = new Gson();
 
     SharedPreferences prefs;
@@ -240,15 +239,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         textWarn = findViewById(R.id.textMainWarn);
-        textDataUpdate = findViewById(R.id.textMainDataUpdate);
         textWarn.setVisibility(View.GONE);
-        textDataUpdate.setVisibility(View.GONE);
-        textDataUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                downloadGameData();
-            }
-        });
 
         String main_html = "";
         try {
@@ -293,14 +284,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (prefs != null) {
-            long current_time = System.currentTimeMillis();
-            long last_check_time = Long.parseLong(getStringPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK));
-            if (current_time - last_check_time > UPDATECHECK_INTERVAL_MS) {
-                checkRecentVersion();
-            }
-        }
-
         setVpnBtn();
         setCheckBtn();
 
@@ -452,24 +435,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 Log.e("KCA", response_data.toString());
-                if (response_data.has("data_version")) {
-                    String recentVersion = response_data.get("data_version").getAsString();
-                    if (!compareVersion(currentDataVersion, recentVersion)) { // True if latest
-                        if (textDataUpdate.getVisibility() == View.GONE) {
-                            Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
-                            JsonObject data = new JsonObject();
-                            data.addProperty("type", TYPE_UPDATE);
-                            data.addProperty("utype", 1);
-                            data.addProperty("version", recentVersion);
-                            aIntent.putExtra("data", data.toString());
-                            startService(aIntent);
-                            textDataUpdate.setVisibility(View.VISIBLE);
-                            textDataUpdate.setText(KcaUtils.format(getStringWithLocale(R.string.ma_hasdataupdate), recentVersion));
-                        }
-                    }
-                }
-                setPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK, String.valueOf(System.currentTimeMillis()));
-
                 int nid = getNotificationId(NOTI_UPDATE, 0);
                 Intent deleteIntent = new Intent(MainActivity.this, KcaAlarmService.class)
                         .setAction(DELETE_ACTION.concat(String.valueOf(nid)));
@@ -485,61 +450,6 @@ public class MainActivity extends AppCompatActivity {
                     dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "version_check", "", "", t.getMessage());
                 }
                 int nid = getNotificationId(NOTI_UPDATE, 0);
-                Intent deleteIntent = new Intent(MainActivity.this, KcaAlarmService.class)
-                        .setAction(DELETE_ACTION.concat(String.valueOf(nid)));
-                startService(deleteIntent);
-            }
-        });
-    }
-
-    private void downloadGameData() {
-        final Call<String> down_gamedata = downloader.getGameData("recent");
-        down_gamedata.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                String kca_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
-                JsonObject response_data = new JsonObject();
-                try {
-                    if (response.body() != null) {
-                        String server_kca_version = response.headers().get("X-Api-Version");
-                        response_data = new JsonParser().parse(response.body()).getAsJsonObject();
-                        Log.e("KCA", "api_version: " + server_kca_version);
-                        if (kca_version == null || compareVersion(server_kca_version, kca_version)) {
-                            dbHelper.putValue(DB_KEY_STARTDATA, response_data.toString());
-                            KcaApiData.getKcGameData(response_data.getAsJsonObject("api_data"));
-                            KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, server_kca_version);
-                            KcaApiData.setDataLoadTriggered();
-                            Toast.makeText(getApplicationContext(),
-                                    getStringWithLocale(R.string.sa_getupdate_finished),
-                                    Toast.LENGTH_LONG).show();
-                            textDataUpdate.setVisibility(View.GONE);
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    getStringWithLocale(R.string.kca_toast_inconsistent_data),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(),
-                            "Error: not valid data.",
-                            Toast.LENGTH_LONG).show();
-                    dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "download_data", "", "", getStringFromException(e));
-                }
-                int nid = getNotificationId(NOTI_UPDATE, 1);
-                Intent deleteIntent = new Intent(MainActivity.this, KcaAlarmService.class)
-                        .setAction(DELETE_ACTION.concat(String.valueOf(nid)));
-                startService(deleteIntent);
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                if (KcaUtils.checkOnline(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(),
-                            KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), t.getMessage()),
-                            Toast.LENGTH_LONG).show();
-                    dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "download_data", "", "", t.getMessage());
-                }
-                int nid = getNotificationId(NOTI_UPDATE, 1);
                 Intent deleteIntent = new Intent(MainActivity.this, KcaAlarmService.class)
                         .setAction(DELETE_ACTION.concat(String.valueOf(nid)));
                 startService(deleteIntent);

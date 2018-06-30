@@ -201,7 +201,8 @@
                     android:text="데이터 업데이트 가능"
                     android:textAlignment="center"
                     android:textColor="@color/colorDataUpdateText"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/textSpecial"

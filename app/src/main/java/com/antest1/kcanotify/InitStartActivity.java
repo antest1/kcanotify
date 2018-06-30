@@ -34,13 +34,18 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_MAIN;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_LAST_UPDATE_CHECK;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -50,6 +55,7 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 public class InitStartActivity extends Activity {
     public final static int DELAY_TIME = 250;
     public final static String FAIRY_INFO_FILENAME = "icon_info.json";
+    public static final int UPDATECHECK_INTERVAL_MS = 30000;
 
     boolean download_finished = false;
     Handler handler = new Handler();
@@ -137,6 +143,7 @@ public class InitStartActivity extends Activity {
                     if (!compareVersion(currentVersion, recentVersion)) { // True if latest
                         JsonObject data = response_data;
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(InitStartActivity.this);
+                        alertDialog.setCancelable(false);
                         alertDialog.setMessage(KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
                         alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
                                 (dialog, which) -> {
@@ -186,13 +193,26 @@ public class InitStartActivity extends Activity {
     }
 
     private void dataCheck(JsonObject response_data) {
+        String lasttime = getStringPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK);
+        if (lasttime != null) {
+            long current_time = System.currentTimeMillis();
+            long last_check_time = Long.parseLong(lasttime);
+            if (current_time - last_check_time <= UPDATECHECK_INTERVAL_MS) {
+                startMainActivity();
+                return;
+            }
+        }
+
         String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
         int currentKcaResVersion = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION));
 
         if (response_data.has("data_version")) {
             String recentVersion = response_data.get("data_version").getAsString();
             if (!compareVersion(currentDataVersion, recentVersion)) { // True if latest
-
+                JsonObject info = new JsonObject();
+                info.addProperty("name", "api_start2");
+                info.addProperty("url", "");
+                download_data.add(info);
             }
         }
 
@@ -219,13 +239,28 @@ public class InitStartActivity extends Activity {
                 Log.e("KCA", download_data.toString());
             }
         }
-
+        setPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK, String.valueOf(System.currentTimeMillis()));
         if (download_data.size() == 0) {
             startMainActivity();
         } else {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(InitStartActivity.this);
+            alertDialog.setMessage(KcaUtils.format("Update data available\n(total %d)", download_data.size()));
+            alertDialog.setCancelable(false);
+            alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
+                    (dialog, which) -> {
+                        final KcaResourceDownloader downloadTask = new KcaResourceDownloader();
+                        downloadTask.execute(new_resversion, fairy_flag);
+                    });
+            alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel), (dialog, which) -> {
+                startMainActivity();
+            });
+
             handler.post(() -> {
-                final KcaResourceDownloader downloadTask = new KcaResourceDownloader();
-                downloadTask.execute(new_resversion, fairy_flag);
+                AlertDialog alert = alertDialog.create();
+                alert.setIcon(R.mipmap.ic_launcher);
+                alert.setTitle(
+                        getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
+                alert.show();
             });
         }
     }
@@ -289,12 +324,13 @@ public class InitStartActivity extends Activity {
         editor.commit();
     }
 
-    private class KcaResourceDownloader extends AsyncTask<Integer, Integer, String> {
+    private class KcaResourceDownloader extends AsyncTask<Integer, Integer, Integer> {
         boolean fairy_wait = false;
         int update_version = 0;
         int totalFiles = 0;
         int successedFiles = 0;
         int failedFiles = 0;
+        int download_result = 0;
 
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
 
@@ -419,6 +455,27 @@ public class InitStartActivity extends Activity {
             }
         };
 
+        private void startDownloadProgress() {
+            fetch.removeListener(fetchFairyListListener);
+            fetch.addListener(fetchDownloadListener);
+            totalFiles = download_data.size();
+            mProgressDialog.setMax(totalFiles);
+            for (int i = 0; i < download_data.size(); i++) {
+                JsonObject item = download_data.get(i).getAsJsonObject();
+                String name = item.get("name").getAsString();
+                String url = item.get("url").getAsString();
+                if (name.equals("api_start2")) {
+                    downloadGameData();
+                } else if (item.has("is_fairy")) {
+                    downloadFile("fairy", url, name);
+                } else {
+                    downloadFile("data", url, name);
+                    int version = item.get("version").getAsInt();
+                    dbHelper.putResVer(name, version);
+                }
+            }
+        }
+
         @Override
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
@@ -433,7 +490,7 @@ public class InitStartActivity extends Activity {
         }
 
         @Override
-        protected String doInBackground(Integer... params) {
+        protected Integer doInBackground(Integer... params) {
             update_version = params[0];
             fairy_wait = params[1] == 1;
             if (fairy_wait) {
@@ -448,32 +505,60 @@ public class InitStartActivity extends Activity {
                 startDownloadProgress();
             }
             //downloadFairyIcon();
-            return null;
+            return download_result;
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(Integer s) {
             super.onPostExecute(s);
+            if (s >= 4) {
+                Toast.makeText(getApplicationContext(),
+                        getStringWithLocale(R.string.kca_toast_inconsistent_data),
+                        Toast.LENGTH_LONG).show();
+            }
         }
 
-        private void startDownloadProgress() {
-            fetch.removeListener(fetchFairyListListener);
-            fetch.addListener(fetchDownloadListener);
-            totalFiles = download_data.size();
-            mProgressDialog.setMax(totalFiles);
-            for (int i = 0; i < download_data.size(); i++) {
-                JsonObject item = download_data.get(i).getAsJsonObject();
-                String name = item.get("name").getAsString();
-                String url = item.get("url").getAsString();
-                if (item.has("is_fairy")) {
-                    downloadFile("fairy", url, name);
-                } else {
-                    downloadFile("data", url, name);
-                    int version = item.get("version").getAsInt();
-                    dbHelper.putResVer(name, version);
+        private void downloadGameData() {
+            final Call<String> down_gamedata = downloader.getGameData("recent");
+            down_gamedata.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                    JsonObject response_data = new JsonObject();
+                    try {
+                        if (response.body() != null) {
+                            response_data = new JsonParser().parse(response.body()).getAsJsonObject();
+                            String kca_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
+                            String server_kca_version = response.headers().get("X-Api-Version");
+                            Log.e("KCA", "api_version: " + server_kca_version);
+                            if (kca_version == null || compareVersion(server_kca_version, kca_version)) {
+                                dbHelper.putValue(DB_KEY_STARTDATA, response_data.toString());
+                                KcaApiData.getKcGameData(response_data.getAsJsonObject("api_data"));
+                                KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, server_kca_version);
+                                KcaApiData.setDataLoadTriggered();
+                                successedFiles += 1;
+                                if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
+                            } else {
+                                failedFiles += 1;
+                                if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
+                                download_result += 4;
+                            }
+                        }
+                    } catch (Exception e) {
+                        failedFiles += 1;
+                        if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
+                        dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "download_data", "", "", getStringFromException(e));
+                    }
                 }
-            }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    if (KcaUtils.checkOnline(getApplicationContext())) {
+                        failedFiles += 1;
+                        if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
+                        dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "download_data", "", "", t.getMessage());
+                    }
+                }
+            });
         }
     }
 }
-
