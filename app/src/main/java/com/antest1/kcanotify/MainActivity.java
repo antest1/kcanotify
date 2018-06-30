@@ -298,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
 
         backPressCloseHandler = new BackPressCloseHandler(this);
 
+        /*
         ImageView specialImage = findViewById(R.id.special_image);
         specialImage.setVisibility(View.GONE);
         specialImage.setOnClickListener(new View.OnClickListener() {
@@ -312,16 +313,11 @@ public class MainActivity extends AppCompatActivity {
         textSpecial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KcaUtils.setFairyImageFromStorage(getApplicationContext(), "noti_icon_104", specialImage, 0);
                 specialImage.setVisibility(View.VISIBLE);
             }
         });
+        */
 
-        ctx = getApplicationContext();
-        int setDefaultGameDataResult = setDefaultGameData();
-        if (setDefaultGameDataResult != 1) {
-            Toast.makeText(this, "error loading game data", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -438,10 +434,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean checkOverlayPermission() {
         return !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && !Settings.canDrawOverlays(getApplicationContext()));
-    }
-
-    private int setDefaultGameData() {
-        return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
     }
 
     @Override

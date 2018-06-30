@@ -100,6 +100,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_weight="0.15"
                     android:gravity="center"
+                    android:scaleType="fitXY"
                     android:src="@mipmap/noti_icon_0"
                     android:stateListAnimator="@null">
 
@@ -218,7 +219,8 @@
                     android:text="플레이 스토어 출시 1주년!"
                     android:textAlignment="center"
                     android:textColor="@color/colorSpecialText"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 

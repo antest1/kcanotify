@@ -98,6 +98,11 @@ public class InitStartActivity extends Activity {
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
 
+        int setDefaultGameDataResult = KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
+        if (setDefaultGameDataResult != 1) {
+            Toast.makeText(this, "error loading game data", Toast.LENGTH_LONG).show();
+        }
+
         if (!KcaUtils.checkOnline(getApplicationContext())) {
             Toast.makeText(getApplicationContext(), "Cannot check the update", Toast.LENGTH_LONG).show();
             startMainActivity();
