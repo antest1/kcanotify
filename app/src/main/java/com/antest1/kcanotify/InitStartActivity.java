@@ -5,14 +5,17 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +38,7 @@ import retrofit2.Call;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_MAIN;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
@@ -52,6 +56,7 @@ public class InitStartActivity extends Activity {
     Runnable r;
 
     KcaDBHelper dbHelper;
+    KcaDownloader downloader;
     ProgressDialog mProgressDialog;
     PowerManager pm;
     PowerManager.WakeLock mWakeLock;
@@ -80,7 +85,11 @@ public class InitStartActivity extends Activity {
         mProgressDialog.setCancelable(false);
         mProgressDialog.setProgressNumberFormat("%1d");
 
+        PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
+        setDefaultPreferences();
+
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        downloader = KcaUtils.getInfoDownloader(getApplicationContext());
         pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, InitStartActivity.class.getName());
 
@@ -95,9 +104,6 @@ public class InitStartActivity extends Activity {
         appversion = findViewById(R.id.app_version);
         appversion.setText(getString(R.string.app_version));
 
-        PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
-        setDefaultPreferences();
-
         int setDefaultGameDataResult = KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
         if (setDefaultGameDataResult != 1) {
             Toast.makeText(this, "error loading game data", Toast.LENGTH_LONG).show();
@@ -107,17 +113,12 @@ public class InitStartActivity extends Activity {
             Toast.makeText(getApplicationContext(), "Cannot check the update", Toast.LENGTH_LONG).show();
             startMainActivity();
         } else {
-            Handler mHandler = new Handler();
+            handler = new Handler();
             Thread t = new Thread(() -> {
-                KcaDownloader downloader = KcaUtils.getInfoDownloader(getApplicationContext());
-
                 String currentVersion = BuildConfig.VERSION_NAME;
-                String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
-                int currentKcaResVersion = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION));
+
                 final Call<String> rv_data = downloader.getRecentVersion();
                 String response = getResultFromCall(rv_data);
-
-                boolean allgreen_flag = true;
                 new_resversion = -1;
                 fairy_flag = 0;
 
@@ -134,57 +135,98 @@ public class InitStartActivity extends Activity {
                 if (response_data.has("version")) {
                     String recentVersion = response_data.get("version").getAsString();
                     if (!compareVersion(currentVersion, recentVersion)) { // True if latest
-                        Toast.makeText(getApplicationContext(), "update required", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                }
+                        JsonObject data = response_data;
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(InitStartActivity.this);
+                        alertDialog.setMessage(KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
+                        alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
+                                (dialog, which) -> {
+                                    String downloadUrl = getStringPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE);
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    if (intent.resolveActivity(getPackageManager()) != null) {
+                                        startActivity(intent);
+                                    } else if (downloadUrl.contains(getStringWithLocale(R.string.app_download_link_playstore))) {
+                                        Toast.makeText(getApplicationContext(), "Google Play Store not found", Toast.LENGTH_LONG).show();
+                                        AlertDialog.Builder apkDownloadPathDialog = new AlertDialog.Builder(InitStartActivity.this);
+                                        apkDownloadPathDialog.setIcon(R.mipmap.ic_launcher);
+                                        apkDownloadPathDialog.setTitle(getStringWithLocale(R.string.setting_menu_app_title_down));
+                                        apkDownloadPathDialog.setCancelable(true);
+                                        apkDownloadPathDialog.setItems(R.array.downloadSiteOptionWithoutPlayStore, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                String[] path_value = getResources().getStringArray(R.array.downloadSiteOptionWithoutPlayStoreValue);
+                                                setPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE, path_value[i]);
+                                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(path_value[i]));
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                        apkDownloadPathDialog.show();
+                                    }
+                                });
+                        alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
+                                (dialog, which) -> {
+                                    dataCheck(data);
+                                });
 
-                if (response_data.has("data_version")) {
-                    String recentVersion = response_data.get("data_version").getAsString();
-                    if (!compareVersion(currentDataVersion, recentVersion)) { // True if latest
-                        allgreen_flag = false;
-                        Toast.makeText(getApplicationContext(), "data update required", Toast.LENGTH_LONG).show();
+                        handler.post(() -> {
+                            AlertDialog alert = alertDialog.create();
+                            alert.setIcon(R.mipmap.ic_launcher);
+                            alert.setTitle(
+                                    getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
+                            alert.show();
+                        });
+                    } else {
+                        dataCheck(response_data);
                     }
-                }
-
-                if (response_data.has("kcadata_version")) {
-                    new_resversion = response_data.get("kcadata_version").getAsInt();
-                    if (new_resversion > currentKcaResVersion) {
-                        allgreen_flag = false;
-                        JsonArray resource_list = new JsonArray();
-                        final Call<String> load_resource = downloader.getResourceList();
-                        String result = getResultFromCall(load_resource);
-                        if (result.length() > 0) resource_list = new JsonParser().parse(result).getAsJsonArray();
-                        for (int i = 0; i < resource_list.size(); i++) {
-                            JsonObject item = resource_list.get(i).getAsJsonObject();
-                            String name = item.get("name").getAsString();
-                            int version = item.get("version").getAsInt();
-                            if (dbHelper.getResVer(name) < version) {
-                                if (name.equals(FAIRY_INFO_FILENAME)) {
-                                    fairy_flag = 1;
-                                    fairy_info = item;
-                                } else {
-                                    download_data.add(item);
-                                }
-                            }
-                        }
-                        Log.e("KCA", download_data.toString());
-                    }
-                }
-
-                if (allgreen_flag) {
-                    startMainActivity();
-                } else {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            final KcaResourceDownloader downloadTask = new KcaResourceDownloader();
-                            downloadTask.execute(new_resversion, fairy_flag);
-                        }
-                    });
                 }
             });
             t.start();
+        }
+    }
+
+    private void dataCheck(JsonObject response_data) {
+        String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
+        int currentKcaResVersion = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION));
+
+        if (response_data.has("data_version")) {
+            String recentVersion = response_data.get("data_version").getAsString();
+            if (!compareVersion(currentDataVersion, recentVersion)) { // True if latest
+
+            }
+        }
+
+        if (response_data.has("kcadata_version")) {
+            new_resversion = response_data.get("kcadata_version").getAsInt();
+            if (new_resversion > currentKcaResVersion) {
+                JsonArray resource_list = new JsonArray();
+                final Call<String> load_resource = downloader.getResourceList();
+                String result = getResultFromCall(load_resource);
+                if (result.length() > 0) resource_list = new JsonParser().parse(result).getAsJsonArray();
+                for (int i = 0; i < resource_list.size(); i++) {
+                    JsonObject item = resource_list.get(i).getAsJsonObject();
+                    String name = item.get("name").getAsString();
+                    int version = item.get("version").getAsInt();
+                    if (dbHelper.getResVer(name) < version) {
+                        if (name.equals(FAIRY_INFO_FILENAME)) {
+                            fairy_flag = 1;
+                            fairy_info = item;
+                        } else {
+                            download_data.add(item);
+                        }
+                    }
+                }
+                Log.e("KCA", download_data.toString());
+            }
+        }
+
+        if (download_data.size() == 0) {
+            startMainActivity();
+        } else {
+            handler.post(() -> {
+                final KcaResourceDownloader downloadTask = new KcaResourceDownloader();
+                downloadTask.execute(new_resversion, fairy_flag);
+            });
         }
     }
 

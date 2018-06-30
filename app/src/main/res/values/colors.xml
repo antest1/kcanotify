@@ -11,6 +11,10 @@
     <color name="colorBtnTextAccent">#ffffff</color>
     <color name="colorFleetInfoBtn">#2c3e50</color>
 
+    <color name="colorGameStartBtn">#2a5aac</color>
+    <color name="colorFairyShowBtn">#009688</color>
+    <color name="colorToolsBtn">#5c6bc0</color>
+
     <color name="colorUpdate">#e8f5e9</color>
     <color name="colorUpdateText">#1b5e20</color>
     <color name="colorDataUpdate">#e8e9f5</color>
@@ -209,4 +213,5 @@
     <color name="colorEventTea">#d4ffd8</color>
 
     <color name="colorWidgetAlert">#ff5252</color>
+    <color name="colorFairyBtn">#009688</color>
 </resources>

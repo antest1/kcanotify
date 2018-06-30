@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton kcafairybtn;
     public static Handler sHandler;
     TextView textDescription;
-    TextView textWarn, textUpdate, textDataUpdate, textSpecial;
+    TextView textWarn, textDataUpdate, textSpecial;
     Gson gson = new Gson();
 
     SharedPreferences prefs;
@@ -214,14 +214,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         kctoolbtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
+                R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         kcafairybtn = findViewById(R.id.kcafairybtn);
         String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
         String fairyPath = "noti_icon_".concat(fairyIdValue);
         KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
         kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
+                R.color.white), PorterDuff.Mode.SRC_ATOP);
         kcafairybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -240,38 +240,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         textWarn = findViewById(R.id.textMainWarn);
-        textUpdate = findViewById(R.id.textMainUpdate);
         textDataUpdate = findViewById(R.id.textMainDataUpdate);
         textWarn.setVisibility(View.GONE);
-        textUpdate.setVisibility(View.GONE);
-        textUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String downloadUrl = getStringPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE);
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
-                } else if (downloadUrl.contains(getString(R.string.app_download_link_playstore))) {
-                    Toast.makeText(getApplicationContext(), "Google Play Store not found", Toast.LENGTH_LONG).show();
-                    AlertDialog.Builder apkDownloadPathDialog = new AlertDialog.Builder(MainActivity.this);
-                    apkDownloadPathDialog.setIcon(R.mipmap.ic_launcher);
-                    apkDownloadPathDialog.setTitle(getStringWithLocale(R.string.setting_menu_app_title_down));
-                    apkDownloadPathDialog.setCancelable(true);
-                    apkDownloadPathDialog.setItems(R.array.downloadSiteOptionWithoutPlayStore, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            String[] path_value = getResources().getStringArray(R.array.downloadSiteOptionWithoutPlayStoreValue);
-                            KcaUtils.setPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE, path_value[i]);
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(path_value[i]));
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-                    });
-                    apkDownloadPathDialog.show();
-                }
-            }
-        });
         textDataUpdate.setVisibility(View.GONE);
         textDataUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -339,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
         String fairyPath = "noti_icon_".concat(fairyIdValue);
         KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
         kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
+                R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         Arrays.fill(warnType, false);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
@@ -482,23 +452,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 Log.e("KCA", response_data.toString());
-                if (response_data.has("version")) {
-                    String recentVersion = response_data.get("version").getAsString();
-                    if (!compareVersion(currentVersion, recentVersion)) { // True if latest
-                        if (textUpdate.getVisibility() == View.GONE) {
-                            Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
-                            JsonObject data = new JsonObject();
-                            data.addProperty("type", TYPE_UPDATE);
-                            data.addProperty("utype", 0);
-                            data.addProperty("version", recentVersion);
-                            aIntent.putExtra("data", data.toString());
-                            startService(aIntent);
-                            textUpdate.setVisibility(View.VISIBLE);
-                            textUpdate.setText(KcaUtils.format(getStringWithLocale(R.string.ma_hasupdate), recentVersion));
-                        }
-                    }
-                }
-
                 if (response_data.has("data_version")) {
                     String recentVersion = response_data.get("data_version").getAsString();
                     if (!compareVersion(currentDataVersion, recentVersion)) { // True if latest
