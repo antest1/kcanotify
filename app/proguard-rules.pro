@@ -84,6 +84,12 @@
     public static <fields>;
 }
 
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
 
 -keep class com.antest1.kcanotify.** { *; }
 -keepnames class com.antest1.kcanotify.** { *; }

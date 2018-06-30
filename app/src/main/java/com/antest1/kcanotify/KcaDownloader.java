@@ -16,6 +16,15 @@ public interface KcaDownloader {
     Call<String> getRecentVersion();
 
     @Headers({
+            "Accept: application/json",
+            "X-Identify: app/kcanotify",
+            "Referer: app:/KCA/",
+            "Content-Type: application/x-www-form-urlencoded"
+    })
+    @GET("/kcanotify/list.php")
+    Call<String> getResourceList();
+
+    @Headers({
             "Accept: application/octet-stream",
             "X-Identify: app/kcanotify",
             "Referer: app:/KCA/",

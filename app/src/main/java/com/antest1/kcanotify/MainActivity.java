@@ -6,7 +6,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.pixplicity.htmlcompat.HtmlCompat;
-import com.squareup.picasso.Target;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -17,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.net.VpnService;
@@ -124,9 +124,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.app_name);
         prefs.edit().putBoolean(PREF_SVC_ENABLED, KcaService.getServiceStatus()).apply();
         prefs.edit().putBoolean(PREF_VPN_ENABLED, KcaVpnService.checkOn()).apply();
-
-        PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
-        setDefaultPreferences();
 
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
         kcIntent = getKcIntent(getApplicationContext());
@@ -436,26 +433,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressLint("ApplySharedPref")
-    private void setDefaultPreferences() {
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        for (String prefKey : PREFS_LIST) {
-            if (!pref.contains(prefKey)) {
-                Log.e("KCA", prefKey + " pref add");
-                String value = SettingActivity.getDefaultValue(prefKey);
-                if (value.startsWith("R.string")) {
-                    editor.putString(prefKey, getString(getId(value.replace("R.string.", ""), R.string.class)));
-                } else if (value.startsWith("boolean_")) {
-                    editor.putBoolean(prefKey, Boolean.parseBoolean(value.replace("boolean_", "")));
-                } else {
-                    editor.putString(prefKey, value);
-                }
-            }
-        }
-        editor.commit();
     }
 
     private boolean checkOverlayPermission() {

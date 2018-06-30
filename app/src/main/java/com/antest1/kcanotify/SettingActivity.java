@@ -63,6 +63,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_EQUIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_ACTIVATE_DROPLOG;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_ACTIVATE_RESLOG;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLENODE_USE;
@@ -707,6 +708,7 @@ public class SettingActivity extends AppCompatActivity {
             case PREF_VIEW_YLOC:
             case PREF_LAST_UPDATE_CHECK:
             case PREF_SNIFFER_MODE:
+            case PREF_KCARESOURCE_VERSION:
                 return "0";
             case PREF_ALARM_DELAY:
                 return "61";

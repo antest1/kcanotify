@@ -19,7 +19,7 @@ public final class KcaConstants {
     public static final String KCA_VERSION = "/kca/version.json";
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
     public static final String KCANOTIFY_USERITEM_CACHE_FILENAME = "kca_userslotitem";
-    public static final int KCANOTIFY_DB_VERSION = 4;
+    public static final int KCANOTIFY_DB_VERSION = 5;
     public static final int KCANOTIFY_QTDB_VERSION = 2;
     public static final int KCANOTIFY_DROPLOG_VERSION = 1;
     public static final int KCANOTIFY_RESOURCELOG_VERSION = 1;
@@ -46,6 +46,7 @@ public final class KcaConstants {
     public static final String DB_KEY_EXPSORTIE = "key_expsortie";
     public static final String DB_KEY_BASICIFNO = "key_basicinfo";
     public static final String DB_KEY_LATESTDEV = "key_latestdev";
+    public static final String DB_KEY_KCARESDAT = "key_kcaresdat";
 
     public static final String[] DB_KEY_ARRAY = {
             DB_KEY_STARTDATA,
@@ -399,6 +400,7 @@ public final class KcaConstants {
     public static final int SNIFFER_PASSIVE = 1;
 
     public static final String PREF_KCA_VERSION = "kca_version";
+    public static final String PREF_KCARESOURCE_VERSION = "kcadata_version";
     public static final String PREF_KCA_LANGUAGE = "kca_language";
     public static final String PREF_SNIFFER_MODE = "kca_sniffer_mode";
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
@@ -453,6 +455,7 @@ public final class KcaConstants {
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
             PREF_KCA_VERSION,
+            PREF_KCARESOURCE_VERSION,
             PREF_KCA_LANGUAGE,
             PREF_SNIFFER_MODE,
             PREF_KCA_SEEK_CN,

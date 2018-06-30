@@ -68,7 +68,8 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.woxthebox:draglistview:1.5.2'
     implementation 'com.commonsware.cwac:provider:0.5.3'
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
     implementation "com.tonyodev.fetch2:fetch2:2.1.0-RC10"
     // testCompile 'junit:junit:4.12'

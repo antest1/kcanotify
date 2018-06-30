@@ -32,15 +32,15 @@ import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.commonsware.cwac.provider.StreamProvider;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.apache.commons.httpclient.ChunkedInputStream;
 
@@ -51,8 +51,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.text.ParseException;
@@ -67,7 +69,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -79,6 +80,8 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
+
+
 
 public class KcaUtils {
     public static String getStringFromException(Exception ex) {
@@ -508,69 +511,6 @@ public class KcaUtils {
         return retrofit.create(KcaDownloader.class);
     }
 
-    public static KcaResourceInfoDownloader getResourceDownloader(Context context){
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(1, TimeUnit.MINUTES)
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://165.132.106.219/")
-                .client(okHttpClient)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        return retrofit.create(KcaResourceInfoDownloader.class);
-    }
-
-    // Code from: http://www.codexpedia.com/android/android-download-and-save-image-through-picasso/
-    public static Target saveFairyImageFromUrlWithPicasso(Context context, final String image_name, final Callback callback) {
-        ContextWrapper cw = new ContextWrapper(context);
-        final File dir = cw.getDir("fairy", Context.MODE_PRIVATE);
-        return new Target() {
-            @Override
-            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-                Log.e("KCA", "onBitmapLoaded");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final File myImageFile = new File(dir, image_name);
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(myImageFile);
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } finally {
-                            try {
-                                fos.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        callback.onSuccess();
-                    }
-                }).start();
-            }
-
-            @Override
-            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                e.printStackTrace();
-                callback.onError(e);
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                if (placeHolderDrawable != null) {}
-            }
-        };
-    }
-
-    public static Target saveFairyImageToStorage(Context context, String url, String filename, Callback callback) {
-        Target target = KcaUtils.saveFairyImageFromUrlWithPicasso(context, filename, callback);
-        Picasso.get().load(url).into(target);
-        return target;
-    }
-
     public static boolean checkFairyImageInStorage(Context context, String name) {
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("fairy", Context.MODE_PRIVATE);
@@ -578,8 +518,32 @@ public class KcaUtils {
         return image.exists();
     }
 
-    public static void setFairyImageFromStorage(Context context, String name, ImageView view) {
-        setFairyImageFromStorage(context, name, view, 0);
+    public static JsonObject getJsonObjectFromStorage(Context context, String name) {
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("data", Context.MODE_PRIVATE);
+        File jsonFile = new File(directory, KcaUtils.format("%s", name));
+        JsonObject data = new JsonObject();
+        try {
+            Reader reader = new FileReader(jsonFile);
+            data = new JsonParser().parse(reader).getAsJsonObject();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public static JsonArray getJsonArrayFromStorage(Context context, String name) {
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("data", Context.MODE_PRIVATE);
+        File jsonFile = new File(directory, KcaUtils.format("%s", name));
+        JsonArray data = new JsonArray();
+        try {
+            Reader reader = new FileReader(jsonFile);
+            data = new JsonParser().parse(reader).getAsJsonArray();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 
     public static Bitmap getFairyImageFromStorage(Context context, String name) {
@@ -604,10 +568,12 @@ public class KcaUtils {
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("fairy", Context.MODE_PRIVATE);
         File myImageFile = new File(directory, KcaUtils.format("%s.png", name));
+
         if (px > 0) {
-            Picasso.get().load(myImageFile).resize(px, px).centerInside().into(view);
+            GlideApp.with(context).load(myImageFile.getPath())
+                    .dontAnimate().override(px, px).into(view);
         } else {
-            Picasso.get().load(myImageFile).into(view);
+            GlideApp.with(context).load(myImageFile.getPath()).into(view);
         }
     }
 

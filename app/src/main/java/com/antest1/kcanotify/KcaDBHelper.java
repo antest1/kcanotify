@@ -50,6 +50,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     private static final String db_name = "kcanotify_db";
     private static final String table_name = "kca_userdata";
     private static final String error_table_name = "kca_errorlog";
+    private static final String resver_table_name = "kca_resver";
     private static final String slotitem_table_name = "kca_slotitem";
     private static final String questlist_table_name = "kca_questlist";
 
@@ -96,22 +97,60 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         sb.append(" error TEXT, ");
         sb.append(" timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ) "); // YY-MM-DD-HH
         db.execSQL(sb.toString());
+
+        sb = new StringBuffer();
+        sb.append(" CREATE TABLE IF NOT EXISTS ".concat(resver_table_name).concat(" ( "));
+        sb.append(" file TEXT, ");
+        sb.append(" version INTEGER ) ");
+        db.execSQL(sb.toString());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 3) {
-            db.execSQL("drop table if exists " + table_name);
-            db.execSQL("drop table if exists " + error_table_name);
-            db.execSQL("drop table if exists " + slotitem_table_name);
+        if (oldVersion < 4) {
+            if (oldVersion < 3) {
+                db.execSQL("drop table if exists " + table_name);
+                db.execSQL("drop table if exists " + error_table_name);
+                db.execSQL("drop table if exists " + slotitem_table_name);
+            }
+            db.execSQL("drop table if exists " + questlist_table_name);
         }
-        db.execSQL("drop table if exists " + questlist_table_name);
         onCreate(db);
     }
 
     public void closeDatabase() {
         SQLiteDatabase db = this.getReadableDatabase();
         db.close();
+    }
+
+    public int getResVer(String filename) {
+        int value = -1;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.query(resver_table_name, null, "file=?", new String[]{filename}, null, null, null);
+        try {
+            if (c != null && c.getCount() > 0) {
+                c.moveToFirst();
+                value = c.getInt(c.getColumnIndex("version"));
+            }
+        } catch (Exception e) {
+            recordErrorLog(ERROR_TYPE_DB, "getResVer", filename, "", getStringFromException(e));
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return value;
+    }
+
+    public void putResVer(String filename, int version) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("file", filename);
+        values.put("version", version);
+        int u = db.update(resver_table_name, values, "file=?", new String[]{filename});
+        if (u == 0) {
+            db.insertWithOnConflict(resver_table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        }
     }
 
     public void recordErrorLog(String type, String url, String request, String data, String error) {
