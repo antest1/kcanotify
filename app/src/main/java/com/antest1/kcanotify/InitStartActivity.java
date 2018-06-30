@@ -100,6 +100,7 @@ public class InitStartActivity extends Activity {
 
         if (!KcaUtils.checkOnline(getApplicationContext())) {
             Toast.makeText(getApplicationContext(), "Cannot check the update", Toast.LENGTH_LONG).show();
+            startMainActivity();
         } else {
             Handler mHandler = new Handler();
             Thread t = new Thread(() -> {
@@ -287,16 +288,13 @@ public class InitStartActivity extends Activity {
             final File data = new File(root_dir, name);
 
             final Request request = new Request(url, data.getPath());
-            fetch.enqueue(request, updatedRequest -> {
-                successedFiles += 1;
-                if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
-            }, error -> {
+            fetch.enqueue(request, updatedRequest -> {}, error -> {
                 failedFiles += 1;
                 if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
             });
         }
 
-        FetchListener fetchListener = new FetchListener() {
+        FetchListener fetchFairyListListener = new FetchListener() {
             @Override
             public void onDeleted(Download download) {}
 
@@ -339,6 +337,41 @@ public class InitStartActivity extends Activity {
             }
         };
 
+        FetchListener fetchDownloadListener = new FetchListener() {
+            @Override
+            public void onDeleted(Download download) {}
+
+            @Override
+            public void onRemoved(Download download) {}
+
+            @Override
+            public void onResumed(Download download) {}
+
+            @Override
+            public void onPaused(Download download) {}
+
+            @Override
+            public void onProgress(Download download, long l, long l1) {}
+
+            @Override
+            public void onQueued(Download download, boolean b) {}
+
+            @Override
+            public void onCancelled(Download download) {}
+
+            @Override
+            public void onError(Download download) {
+                failedFiles += 1;
+                if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
+            }
+
+            @Override
+            public void onCompleted(@NotNull Download download) {
+                successedFiles += 1;
+                if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
+            }
+        };
+
         @Override
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
@@ -360,7 +393,7 @@ public class InitStartActivity extends Activity {
                 final File root_dir = cw.getDir("data", Context.MODE_PRIVATE);
                 final File myImageFile = new File(root_dir, FAIRY_INFO_FILENAME);
                 final Request request = new Request(fairy_info.get("url").getAsString(), myImageFile.getPath());
-                fetch.addListener(fetchListener);
+                fetch.addListener(fetchFairyListListener);
                 fetch.enqueue(request, updatedRequest -> {}, error -> {
                     startDownloadProgress();
                 });
@@ -377,7 +410,8 @@ public class InitStartActivity extends Activity {
         }
 
         private void startDownloadProgress() {
-            fetch.removeListener(fetchListener);
+            fetch.removeListener(fetchFairyListListener);
+            fetch.addListener(fetchDownloadListener);
             totalFiles = download_data.size();
             mProgressDialog.setMax(totalFiles);
             for (int i = 0; i < download_data.size(); i++) {

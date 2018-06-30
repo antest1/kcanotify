@@ -8,7 +8,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -18,21 +17,19 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.common.collect.EvictingQueue;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
 
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
-import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_NOTICOUNT_CHANGED;
@@ -196,7 +193,7 @@ public class KcaAlarmService extends Service {
                         KcaExpedition2.clearMissionData(idx);
                         if (isExpAlarmEnabled()) {
                             if (!isExpeditionDataLoaded())
-                                loadSimpleExpeditionInfoFromAssets(getAssets());
+                                loadSimpleExpeditionInfoFromStorage(getApplicationContext());
                             int mission_no = data.get("mission_no").getAsInt();
                             String mission_name = KcaApiData.getExpeditionName(mission_no, locale);
                             String kantai_name = data.get("kantai_name").getAsString();

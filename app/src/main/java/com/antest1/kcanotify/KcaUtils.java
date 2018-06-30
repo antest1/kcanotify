@@ -522,7 +522,7 @@ public class KcaUtils {
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("data", Context.MODE_PRIVATE);
         File jsonFile = new File(directory, KcaUtils.format("%s", name));
-        JsonObject data = new JsonObject();
+        JsonObject data = null;
         try {
             Reader reader = new FileReader(jsonFile);
             data = new JsonParser().parse(reader).getAsJsonObject();

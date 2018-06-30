@@ -16,7 +16,6 @@ import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -82,11 +81,11 @@ import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
-import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadQuestTrackDataFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromStorage;
+import static com.antest1.kcanotify.KcaApiData.loadQuestTrackDataFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromStorage;
+import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaConstants.*;
@@ -247,7 +246,7 @@ public class KcaService extends Service {
         KcaApiData.setDBHelper(dbHelper);
 
         AssetManager assetManager = getResources().getAssets();
-        int loadMapEdgeInfoResult = loadMapEdgeInfoFromAssets(assetManager);
+        int loadMapEdgeInfoResult = loadMapEdgeInfoFromStorage(getApplicationContext());
         if (loadMapEdgeInfoResult != 1) {
             makeText(this, "Error loading Map Edge Info", Toast.LENGTH_LONG).show();
         }
@@ -257,9 +256,9 @@ public class KcaService extends Service {
             makeText(this, "Error loading Exp Ship Info", Toast.LENGTH_LONG).show();
         }
 
-        loadSimpleExpeditionInfoFromAssets(assetManager);
-        loadShipInitEquipCountFromAssets(assetManager);
-        loadQuestTrackDataFromAssets(dbHelper, assetManager);
+        loadSimpleExpeditionInfoFromStorage(getApplicationContext());
+        loadShipInitEquipCountFromStorage(getApplicationContext());
+        loadQuestTrackDataFromStorage(dbHelper, getApplicationContext());
 
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {

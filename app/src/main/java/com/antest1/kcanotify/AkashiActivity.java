@@ -30,10 +30,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -100,7 +98,7 @@ public class AkashiActivity extends AppCompatActivity {
         adapter.setHandler(handler);
         AkashiFilterActivity.setHandler(handler);
 
-        akashiDataLoadingFlag = getAkashiDataFromAssets();
+        akashiDataLoadingFlag = getAkashiDataFromStorage();
         if (akashiDataLoadingFlag != 1) {
             Toast.makeText(getApplicationContext(), "Error Loading Akashi Data", Toast.LENGTH_LONG).show();
         } else if (KcaApiData.getKcItemStatusById(2, "name") == null) {
@@ -183,33 +181,23 @@ public class AkashiActivity extends AppCompatActivity {
         }
     }
 
-    private int getAkashiDataFromAssets() {
-        try {
-            AssetManager.AssetInputStream ais;
-            JsonElement data;
-
-            ais = (AssetManager.AssetInputStream) getAssets().open("akashi_data.json");
-            data = new JsonParser().parse(new String(ByteStreams.toByteArray(ais)));
-            ais.close();
-            if (data.isJsonObject()) {
-                akashiData = data.getAsJsonObject();
-            } else {
-                return -1;
-            }
-
-            ais = (AssetManager.AssetInputStream) getAssets().open("akashi_day.json");
-            data = new JsonParser().parse(new String(ByteStreams.toByteArray(ais)));
-            ais.close();
-            if (data.isJsonObject()) {
-                akashiDay = data.getAsJsonObject();
-            } else {
-                return -1;
-            }
-
-            return 1;
-        } catch (IOException e) {
-            return 0;
+    private int getAkashiDataFromStorage() {
+        JsonObject data;
+        data = KcaUtils.getJsonObjectFromStorage(getApplicationContext(), "akashi_data.json");
+        if (data != null) {
+            akashiData = data;
+        } else {
+            return -1;
         }
+
+        data = KcaUtils.getJsonObjectFromStorage(getApplicationContext(), "akashi_day.json");
+        if (data != null) {
+            akashiDay = data;
+        } else {
+            return -1;
+        }
+
+        return 1;
     }
 
     private void setStarButton() {

@@ -11,33 +11,22 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-
-import org.json.JSONArray;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.Locale;
 
 import static android.widget.Toast.makeText;
-import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
-import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
@@ -82,7 +71,7 @@ public class ExpeditionTableActivity extends AppCompatActivity {
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
         loadTranslationData(getApplicationContext());
-        loadSimpleExpeditionInfoFromAssets(getAssets());
+        loadSimpleExpeditionInfoFromStorage(getApplicationContext());
 
         AssetManager assetManager = getAssets();
 
@@ -129,15 +118,7 @@ public class ExpeditionTableActivity extends AppCompatActivity {
             }
         });
 
-        AssetManager.AssetInputStream ais = null;
-        try {
-            ais = (AssetManager.AssetInputStream) assetManager.open("expedition.json");
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            expeditionData = new JsonParser().parse(new String(bytes)).getAsJsonArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        expeditionData = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "expedition.json");
         adapter.setListViewItemList(expeditionData, world_idx);
         listview = findViewById(R.id.expeditiontable_listiview);
         listview.setAdapter(adapter);

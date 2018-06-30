@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.antest1.kcanotify.KcaConstants.*;
-import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
@@ -461,19 +460,13 @@ public class KcaApiData {
 
     public static int getItemSize() { return helper.getItemCount() + getItemCountInBattle; }
 
-    public static int loadMapEdgeInfoFromAssets(AssetManager am) {
-        try {
-            AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("edges.json");
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            JsonElement edgesData = new JsonParser().parse(new String(bytes));
-            if (edgesData.isJsonObject()) {
-                helper.putValue(DB_KEY_MAPEDGES, edgesData.toString());
-                return 1;
-            } else {
-                return -1;
-            }
-        } catch (IOException e) {
-            return 0;
+    public static int loadMapEdgeInfoFromStorage(Context context) {
+        JsonObject data = KcaUtils.getJsonObjectFromStorage(context, "edges.json");
+        if (data != null) {
+            helper.putValue(DB_KEY_MAPEDGES, data.toString());
+            return 1;
+        } else {
+            return -1;
         }
     }
 
@@ -509,21 +502,17 @@ public class KcaApiData {
         }
     }
 
-    public static int loadShipTranslationDataFromAssets(AssetManager am, String locale) {
+    public static int loadShipTranslationDataFromStorage(Context context, String locale) {
         try {
             locale = getLocaleCode(locale);
-            AssetManager.AssetInputStream ais =
-                    (AssetManager.AssetInputStream) am.open(KcaUtils.format("ships-%s.json", locale));
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            JsonElement data = new JsonParser().parse(new String(bytes));
-
+            JsonObject data = KcaUtils.getJsonObjectFromStorage(context, KcaUtils.format("ships-%s.json", locale));
             AssetManager.AssetInputStream ais_abbr =
-                    (AssetManager.AssetInputStream) am.open("en-abbr.json");
+                    (AssetManager.AssetInputStream) context.getResources().getAssets().open("en-abbr.json");
             byte[] bytes_abbr = ByteStreams.toByteArray(ais_abbr);
             JsonElement data_abbr = new JsonParser().parse(new String(bytes_abbr));
 
-            if (data.isJsonObject()) {
-                kcShipTranslationData = data.getAsJsonObject();
+            if (data != null) {
+                kcShipTranslationData = data;
                 kcShipAbbrData = data_abbr.getAsJsonObject();
                 return 1;
             } else {
@@ -534,65 +523,40 @@ public class KcaApiData {
         }
     }
 
-    public static int loadItemTranslationDataFromAssets(AssetManager am, String locale) {
-        try {
-            locale = getLocaleCode(locale);
-            AssetManager.AssetInputStream ais =
-                    (AssetManager.AssetInputStream) am.open(KcaUtils.format("items-%s.json", locale));
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            JsonElement data = new JsonParser().parse(new String(bytes));
-
-            if (data.isJsonObject()) {
-                kcItemTranslationData = data.getAsJsonObject();
-                return 1;
-            } else {
-                return -1;
-            }
-        } catch (IOException e) {
-            return 0;
+    public static int loadItemTranslationDataFromStorage(Context context, String locale) {
+        locale = getLocaleCode(locale);
+        JsonObject data = KcaUtils.getJsonObjectFromStorage(context, KcaUtils.format("items-%s.json", locale));
+        if (data != null) {
+            kcItemTranslationData = data.getAsJsonObject();
+            return 1;
+        } else {
+            return -1;
         }
     }
 
-    public static int loadStypeTranslationDataFromAssets(AssetManager am, String locale) {
-        try {
-            locale = getLocaleCode(locale);
-            AssetManager.AssetInputStream ais =
-                    (AssetManager.AssetInputStream) am.open(KcaUtils.format("stype-%s.json", locale));
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            JsonElement data = new JsonParser().parse(new String(bytes));
-
-            if (data.isJsonArray()) {
-                kcStypeData = data.getAsJsonArray();
-                return 1;
-            } else {
-                return -1;
-            }
-        } catch (IOException e) {
-            return 0;
+    public static int loadStypeTranslationDataFromStorage(Context context, String locale) {
+        locale = getLocaleCode(locale);
+        JsonArray data = KcaUtils.getJsonArrayFromStorage(context, KcaUtils.format("stype-%s.json", locale));
+        if (data != null) {
+            kcStypeData = data;
+            return 1;
+        } else {
+            return -1;
         }
     }
 
-    public static int loadQuestInfoDataFromAssets(AssetManager am, String locale) {
-        try {
-            locale = getLocaleCode(locale);
-            AssetManager.AssetInputStream ais =
-                    (AssetManager.AssetInputStream) am.open(KcaUtils.format("quests-%s.json", locale));
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            JsonElement data = new JsonParser().parse(new String(bytes));
-
-            if (data.isJsonObject()) {
-                kcQuestInfoData = data.getAsJsonObject();
-                return 1;
-            } else {
-                return -1;
-            }
-        } catch (IOException e) {
-            return 0;
+    public static int loadQuestInfoDataFromStorage(Context context, String locale) {
+        locale = getLocaleCode(locale);
+        JsonObject data = KcaUtils.getJsonObjectFromStorage(context, KcaUtils.format("quests-%s.json", locale));
+        if (data != null) {
+            kcQuestInfoData = data.getAsJsonObject();
+            return 1;
+        } else {
+            return -1;
         }
     }
 
     public static void loadTranslationData(Context context) {
-        AssetManager assetManager = context.getAssets();
         boolean isDataLoaded = (kcShipTranslationData.entrySet().size() != 0) &&
                 (kcItemTranslationData.entrySet().size() != 0) &&
                 (kcQuestInfoData.entrySet().size() != 0);
@@ -600,80 +564,56 @@ public class KcaApiData {
         if (!isDataLoaded || !currentLocaleCode.equals(getLocaleCode(locale))) {
             currentLocaleCode = getLocaleCode(locale);
             if (!currentLocaleCode.equals("jp")) {
-                int loadShipTranslationDataResult = loadShipTranslationDataFromAssets(assetManager, locale);
+                int loadShipTranslationDataResult = loadShipTranslationDataFromStorage(context, locale);
                 if (loadShipTranslationDataResult != 1) {
                     Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
                 }
-                int loadItemTranslationDataResult = loadItemTranslationDataFromAssets(assetManager, locale);
+                int loadItemTranslationDataResult = loadItemTranslationDataFromStorage(context, locale);
                 if (loadItemTranslationDataResult != 1) {
                     Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
                 }
             }
-            int loadStypeTranslationDataResult = loadStypeTranslationDataFromAssets(assetManager, locale);
+            int loadStypeTranslationDataResult = loadStypeTranslationDataFromStorage(context, locale);
             if (loadStypeTranslationDataResult != 1) {
                 Toast.makeText(context, "Error loading Stype Info", Toast.LENGTH_LONG).show();
             }
-            int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromAssets(assetManager, locale);
+            int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromStorage(context, locale);
             if (loadQuestInfoTranslationDataResult != 1) {
                 Toast.makeText(context, "Error loading Quest Info", Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    public static int loadSimpleExpeditionInfoFromAssets(AssetManager am) {
-        try {
-            AssetManager.AssetInputStream ais =
-                    (AssetManager.AssetInputStream) am.open("expedition.json");
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            //Log.e("KCA", new String(bytes));
-            JsonElement data = new JsonParser().parse(new String(bytes));
-            if (data.isJsonArray()) {
-                JsonArray array = data.getAsJsonArray();
-                for (JsonElement item : array) {
-                    JsonObject expdata = item.getAsJsonObject();
-                    kcExpeditionData.add(expdata.get("no").getAsString(), expdata);
-                }
-                return 1;
-            } else {
-                return -1;
+    public static int loadSimpleExpeditionInfoFromStorage(Context context) {
+        JsonArray data = KcaUtils.getJsonArrayFromStorage(context, "expedition.json");
+        if (data != null) {
+            for (JsonElement item : data) {
+                JsonObject expdata = item.getAsJsonObject();
+                kcExpeditionData.add(expdata.get("no").getAsString(), expdata);
             }
-        } catch (IOException e) {
-            return 0;
+            return 1;
+        } else {
+            return -1;
         }
     }
 
-    public static int loadShipInitEquipCountFromAssets(AssetManager am) {
-        try {
-            AssetManager.AssetInputStream ais =
-                    (AssetManager.AssetInputStream) am.open("ships_init_equip_count.json");
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            //Log.e("KCA", new String(bytes));
-            JsonElement data = new JsonParser().parse(new String(bytes));
-            if (data.isJsonObject()) {
-                kcShipInitEquipCount = data.getAsJsonObject();
-                return 1;
-            } else {
-                return -1;
-            }
-        } catch (IOException e) {
-            return 0;
+    public static int loadShipInitEquipCountFromStorage(Context context) {
+        JsonObject data = KcaUtils.getJsonObjectFromStorage(context, "ships_init_equip_count.json");
+        if (data != null) {
+            kcShipInitEquipCount = data.getAsJsonObject();
+            return 1;
+        } else {
+            return -1;
         }
     }
 
-    public static int loadQuestTrackDataFromAssets(KcaDBHelper helper, AssetManager am) {
-        try {
-            AssetManager.AssetInputStream ais =
-                    (AssetManager.AssetInputStream) am.open("quest_track.json");
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            JsonElement data = new JsonParser().parse(new String(bytes));
-            if (data.isJsonObject()) {
-                helper.putValue(DB_KEY_QUESTTRACK, data.toString());
-                return 1;
-            } else {
-                return -1;
-            }
-        } catch (IOException e) {
-            return 0;
+    public static int loadQuestTrackDataFromStorage(KcaDBHelper helper, Context context) {
+        JsonObject data = KcaUtils.getJsonObjectFromStorage(context, "quest_track.json");
+        if (data != null) {
+            helper.putValue(DB_KEY_QUESTTRACK, data.toString());
+            return 1;
+        } else {
+            return -1;
         }
     }
 
