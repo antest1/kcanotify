@@ -40,8 +40,6 @@ import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static com.antest1.kcanotify.KcaAlarmService.REFRESH_CHANNEL;
@@ -139,7 +137,7 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-        downloader = KcaUtils.getDewnloader(getApplicationContext());
+        downloader = KcaUtils.getInfoDownloader(getApplicationContext());
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.action_settings));

@@ -10,6 +10,7 @@ android {
         versionCode 2586
         versionName "2.5.8r6"
 
+        multiDexEnabled true
         externalNativeBuild {
             cmake {
                 cppFlags ""
@@ -48,6 +49,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    compile 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:appcompat-v7:27.1.0'
     implementation 'com.android.support:support-v4:27.1.0'
     implementation 'com.android.support:design:27.1.0'
@@ -66,5 +68,8 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.woxthebox:draglistview:1.5.2'
     implementation 'com.commonsware.cwac:provider:0.5.3'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation "com.tonyodev.fetch2:fetch2:2.1.0-RC10"
     // testCompile 'junit:junit:4.12'
 }

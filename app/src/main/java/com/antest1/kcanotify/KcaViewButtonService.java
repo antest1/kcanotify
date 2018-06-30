@@ -114,8 +114,7 @@ public class KcaViewButtonService extends Service {
     private KcaDBHelper dbHelper;
     private boolean battleviewEnabled = false;
     private boolean questviewEnabled = false;
-    public int viewBitmapId = 0;
-    public int viewBitmapSmallId = 0;
+    public String viewBitmapId;
     WindowManager.LayoutParams mParams;
     NotificationManagerCompat notificationManager;
     public static JsonObject currentApiData;
@@ -245,9 +244,7 @@ public class KcaViewButtonService extends Service {
             // Button (Fairy) Settings
             viewbutton = mView.findViewById(R.id.viewbutton);
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
-            String fairyPath = "noti_icon_".concat(fairyIdValue);
-            viewBitmapId = getId(fairyPath, R.mipmap.class);
-            viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
+            viewBitmapId = "noti_icon_".concat(fairyIdValue);
             setFairyImage();
 
             int index = Arrays.binarySearch(FAIRY_REVERSE_LIST, Integer.parseInt(fairyIdValue));
@@ -350,8 +347,7 @@ public class KcaViewButtonService extends Service {
             if (intent.getAction().equals(FAIRY_CHANGE)) {
                 String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
                 String fairyPath = "noti_icon_".concat(fairyIdValue);
-                viewBitmapId = getId(fairyPath, R.mipmap.class);
-                viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
+                viewBitmapId = "noti_icon_".concat(fairyIdValue);
                 setFairyImage();
                 int index = Arrays.binarySearch(FAIRY_REVERSE_LIST, Integer.parseInt(fairyIdValue));
                 if (index >= 0) viewbutton.setScaleX(-1.0f);
@@ -397,7 +393,7 @@ public class KcaViewButtonService extends Service {
 
     private void setFairyImage() {
         boolean glow_available = fairy_glow_on && getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_QUEST_FAIRY_GLOW);
-        Bitmap src = BitmapFactory.decodeResource(getResources(), viewBitmapId);
+        Bitmap src = KcaUtils.getFairyImageFromStorage(getApplicationContext(), viewBitmapId);
         Bitmap alpha = src.extractAlpha();
         Bitmap bmp = Bitmap.createBitmap(src.getWidth() + margin,
                 src.getHeight() + margin, Bitmap.Config.ARGB_8888);

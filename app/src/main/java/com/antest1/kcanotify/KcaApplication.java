@@ -3,6 +3,8 @@ package com.antest1.kcanotify;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 import org.acra.ACRA;
 import org.acra.annotation.AcraCore;
@@ -18,12 +20,13 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
         reportAsFile = false
 )
 
-public class KcaApplication extends Application {
+public class KcaApplication extends MultiDexApplication {
     public static Locale defaultLocale;
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        MultiDex.install(this);
         ACRA.init(this);
     }
 

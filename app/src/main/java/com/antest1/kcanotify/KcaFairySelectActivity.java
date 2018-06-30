@@ -48,10 +48,9 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getResources().getString(R.string.setting_menu_kand_title_fairy_select));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        List<Integer> fairy_id = new ArrayList<>();
+        List<String> fairy_id = new ArrayList<>();
         for(int i = 0; i<FAIRY_TOTAL_COUNT; i++) {
-            int btnId = getId("noti_icon_".concat(String.valueOf(i)), R.mipmap.class);
-            fairy_id.add(btnId);
+            fairy_id.add("noti_icon_".concat(String.valueOf(i)));
         }
 
         final KcaItemAdapter adapter = new KcaItemAdapter(getApplicationContext(),

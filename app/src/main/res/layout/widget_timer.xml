@@ -77,16 +77,6 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/open_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:padding="2dp"
-                    android:src="@mipmap/noti_icon_106_small"
-                    app:srcCompat="@mipmap/noti_icon_106_small" />
-
             </RelativeLayout>
 
             <ImageView

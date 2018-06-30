@@ -93,15 +93,14 @@
                     android:id="@+id/kcafairybtn"
 
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_marginBottom="2dp"
                     android:layout_marginEnd="2dp"
                     android:layout_marginRight="2dp"
                     android:layout_marginTop="2dp"
                     android:layout_weight="0.15"
                     android:gravity="center"
-                    android:minHeight="48dip"
-                    android:src="@mipmap/noti_icon_0_small"
+                    android:src="@mipmap/noti_icon_0"
                     android:stateListAnimator="@null">
 
 
@@ -111,14 +110,13 @@
                     android:id="@+id/kcatoolbtn"
 
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_marginBottom="2dp"
                     android:layout_marginEnd="2dp"
                     android:layout_marginRight="2dp"
                     android:layout_marginTop="2dp"
                     android:layout_weight="0.15"
                     android:gravity="center"
-                    android:minHeight="48dip"
                     android:src="@mipmap/ic_dashboard"
                     android:stateListAnimator="@null">
 

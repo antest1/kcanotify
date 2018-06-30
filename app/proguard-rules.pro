@@ -34,7 +34,8 @@
     @retrofit2.http.* <methods>;
 }
 
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn org.codehaus.mojo.animal_sniffer.*
+-dontwarn okhttp3.internal.platform.ConscryptPlatform
 
 -dontwarn javax.annotation.**
 -dontwarn javax.inject.**
@@ -83,14 +84,6 @@
     public static <fields>;
 }
 
--assumenosideeffects class android.util.Log {
-    public static *** d(...);
-    public static *** v(...);
-    public static *** i(...);
-    public static *** e(...);
-    public static *** w(...);
-    public static *** wtf(...);
-}
 
 -keep class com.antest1.kcanotify.** { *; }
 -keepnames class com.antest1.kcanotify.** { *; }

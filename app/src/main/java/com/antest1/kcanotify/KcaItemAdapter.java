@@ -16,15 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KcaItemAdapter extends BaseAdapter {
-    public static final int IMAGE_SIZE = 128;
+    public static final int IMAGE_SIZE = 18;
     Context context;
     int layout;
     int rescale = -1;
-    List<Integer> item = new ArrayList<>();
+    List<String> item = new ArrayList<>();
     LayoutInflater inf;
     private int prevactive = -1;
 
-    public KcaItemAdapter(Context context, int layout, List<Integer> data) {
+    public KcaItemAdapter(Context context, int layout, List<String> data) {
         this.context = context;
         this.layout = layout;
         this.item = data;
@@ -60,9 +60,7 @@ public class KcaItemAdapter extends BaseAdapter {
         if (convertView==null)
             convertView = inf.inflate(layout, null);
         ImageView iv = (ImageView) convertView.findViewById(R.id.setting_image_pic);
-
-        Bitmap bitmap = KcaUtils.decodeSampledBitmapFromResource(convertView.getResources(), item.get(position), IMAGE_SIZE, IMAGE_SIZE);
-        iv.setImageBitmap(bitmap);
+        KcaUtils.setFairyImageFromStorage(context, item.get(position), iv, IMAGE_SIZE);
         if (position == prevactive) iv.setBackground(ContextCompat.getDrawable(context, R.drawable.imagebtn_on));
         else iv.setBackground(ContextCompat.getDrawable(context, R.drawable.imagebtn_off));
         if (rescale > 0) {

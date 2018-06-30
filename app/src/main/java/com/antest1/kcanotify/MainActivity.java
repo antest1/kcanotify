@@ -2,9 +2,11 @@ package com.antest1.kcanotify;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.pixplicity.htmlcompat.HtmlCompat;
+import com.squareup.picasso.Target;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -47,13 +49,13 @@ import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaAlarmService.TYPE_UPDATE;
@@ -102,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
     Boolean is_kca_installed = false;
     private WindowManager windowManager;
     private BackPressCloseHandler backPressCloseHandler;
-
     public static void setHandler(Handler h) {
         sHandler = h;
     }
@@ -127,8 +128,7 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
 
-        downloader = KcaUtils.getDewnloader(getApplicationContext());
-
+        downloader = KcaUtils.getInfoDownloader(getApplicationContext());
         kcIntent = getKcIntent(getApplicationContext());
         is_kca_installed = (kcIntent != null);
 
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Intent intent = new Intent(MainActivity.this, KcaService.class);
                 if (isChecked) {
-                    if (is_kca_installed) {
+                    if (true || is_kca_installed) {
                         if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
                             loadTranslationData(getApplicationContext());
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -222,8 +222,7 @@ public class MainActivity extends AppCompatActivity {
         kcafairybtn = findViewById(R.id.kcafairybtn);
         String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
         String fairyPath = "noti_icon_".concat(fairyIdValue);
-        int viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
-        kcafairybtn.setImageResource(viewBitmapSmallId);
+        KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
         kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
         kcafairybtn.setOnClickListener(new View.OnClickListener() {
@@ -316,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
         textSpecial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                KcaUtils.setFairyImageFromStorage(getApplicationContext(), "noti_icon_104", specialImage, 0);
                 specialImage.setVisibility(View.VISIBLE);
             }
         });
@@ -340,13 +340,11 @@ public class MainActivity extends AppCompatActivity {
 
         setVpnBtn();
         setCheckBtn();
-        loadTranslationData(getApplicationContext());
 
         kcafairybtn = findViewById(R.id.kcafairybtn);
         String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
         String fairyPath = "noti_icon_".concat(fairyIdValue);
-        int viewBitmapSmallId = getId(fairyPath.concat("_small"), R.mipmap.class);
-        kcafairybtn.setImageResource(viewBitmapSmallId);
+        KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
         kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
 

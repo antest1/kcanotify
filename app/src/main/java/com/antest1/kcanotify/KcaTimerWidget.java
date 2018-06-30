@@ -97,15 +97,8 @@ public class KcaTimerWidget extends AppWidgetProvider {
         int layout_id = R.layout.widget_timer;
         int[] menu_list = { R.id.menu_1, R.id.menu_2, R.id.menu_3 };
         int[] menu_text_list = { R.string.viewmenu_excheck, R.string.viewmenu_docking, R.string.viewmenu_construction };
-        String fairyId = "noti_icon_".concat(getStringPreferences(context, PREF_FAIRY_ICON));
-        int fairy_bitmap = getId(fairyId.concat("_small"), R.mipmap.class);
 
         RemoteViews views = new RemoteViews(context.getPackageName(), layout_id);
-        views.setImageViewResource(R.id.open_icon, fairy_bitmap);
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent openIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        views.setOnClickPendingIntent(R.id.open_icon, openIntent);
-
         for (int i = 0; i < menu_list.length; i++) {
             int color = status == i + 1 ? R.color.colorAccent : R.color.white;
             views.setTextColor(menu_list[i], ContextCompat.getColor(context, color));
