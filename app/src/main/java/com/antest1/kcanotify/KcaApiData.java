@@ -65,7 +65,7 @@ public class KcaApiData {
     public static boolean isEventTime = false;
 
     // Ship Type Constants (api_stype)
-    public static final int STYPE_ES = 1;
+    public static final int STYPE_DE = 1;
     public static final int STYPE_DD = 2;
     public static final int STYPE_CL = 3;
     public static final int STYPE_CLT = 4;

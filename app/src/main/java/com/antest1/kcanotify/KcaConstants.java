@@ -59,6 +59,7 @@ public final class KcaConstants {
             DB_KEY_BATTLENODE,
             DB_KEY_QTRACKINFO,
             DB_KEY_APIMAPINFO,
+            DB_KEY_NDOCKDATA,
             DB_KEY_KDOCKDATA,
             DB_KEY_EXPTDAY,
             DB_KEY_EXPCRNT,

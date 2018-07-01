@@ -527,6 +527,7 @@
     <string name="viewmenu_develop_title">開発情報</string>
     <string name="viewmenu_construction_title">建造情報</string>
     <string name="viewmenu_docking_title">入渠情報</string>
+    <string name="viewmenu_docking_list">リスト</string>
     <string name="viewmenu_airbase_title">基地航空隊</string>
     <string name="viewmenu_maphp_title">海域HP情報</string>
     <string name="develop_failed_text">ペンギン (´;ω;｀)</string>

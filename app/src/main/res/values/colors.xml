@@ -45,7 +45,7 @@
 
     <color name="colorProgressBack">#d6d6d6</color>
     <color name="colorNormalState">#64dd17</color>
-    <color name="colorLightDmgState">#ffee58</color>
+    <color name="colorLightDmgState">#fdd835</color>
     <color name="colorModerateDmgState">#f9a825</color>
     <color name="colorHeavyDmgState">#ff5252</color>
     <color name="colorHeavyDmgStateWarn">#ff5252</color>
