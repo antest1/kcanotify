@@ -188,13 +188,14 @@ public class KcaDockingPopupService extends Service {
                             int repair_time = 0;
                             JsonObject repair_item = new JsonObject();
                             String name = getShipTranslation(kcdata.get("name").getAsString(), false);
+                            String name_level = KcaUtils.format("%s (Lv %d)", name, level);
                             double multiplier = getMultiplier(kcdata.get("stype").getAsInt());
                             if (level <= 11) {
                                 repair_time = 30 + (int) (hp_loss * (level * 10) * multiplier);
                             } else {
                                 repair_time = 30 + (int) (hp_loss * ((level * 5) + Math.floor(Math.sqrt(level - 11)) * 10 + 50) * multiplier);
                             }
-                            repair_item.addProperty("name", name);
+                            repair_item.addProperty("name", name_level);
                             repair_item.addProperty("time_raw", repair_time);
                             repair_item.addProperty("time", KcaUtils.getTimeStr(repair_time));
                             repair_item.addProperty("state", getState(now_hp, max_hp));
