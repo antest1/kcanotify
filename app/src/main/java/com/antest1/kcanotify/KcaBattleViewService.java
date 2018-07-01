@@ -1031,7 +1031,6 @@ public class KcaBattleViewService extends Service {
                     }
 
                     String map_text = KcaUtils.format("%d-%d", KcaBattle.currentMapArea, KcaBattle.currentMapNo);
-                    Toast.makeText(getApplicationContext(), map_text, Toast.LENGTH_LONG).show();
                     JsonObject leveling_data = new JsonObject();
                     JsonArray leveling_track = dbHelper.getJsonArrayValue(DB_KEY_EXPCALTRK);
                     if (leveling_track != null) {
