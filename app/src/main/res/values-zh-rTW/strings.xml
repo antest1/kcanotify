@@ -449,6 +449,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expcalc_mvp">MVP</string>
     <string name="expcalc_mapexp">海域經驗值</string>
     <string name="expcalc_remainexp">剩餘經驗值</string>
+    <string name="expcalc_battle">戰鬥</string>
 
     <string name="action_expdtable">遠征資訊</string>
     <string name="expdtable_btn_w0">所有海域</string>

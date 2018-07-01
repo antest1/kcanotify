@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:layout_weight="0"
+        android:background="@color/colorAkashiTableBack"
+        android:padding="6dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/ship_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_weight="0.35"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:maxWidth="75dp"
+                    android:minWidth="75dp"
+                    android:singleLine="true"
+                    android:text="ship_name"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+                <LinearLayout
+                    android:id="@+id/ship_level"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/ship_name"
+                    android:layout_toRightOf="@+id/ship_name"
+                    android:layout_weight="0.25"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/level_before"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="30"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/level_to"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="0"
+                            android:text="▶"
+                            android:textAlignment="center"
+                            android:textSize="10dp" />
+
+                        <TextView
+                            android:id="@+id/level_after"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="50"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="14dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/exp_left"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Left: 124545"
+                        android:textAlignment="center"
+                        android:textSize="9dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ship_battle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/ship_level"
+                    android:layout_toRightOf="@id/ship_level"
+                    android:layout_weight="0.2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/label_battle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Battle"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="9dp" />
+
+                    <TextView
+                        android:id="@+id/value_battle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:text="30"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBossBattle"
+                        android:textSize="14dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:alpha="0.5"
+                android:background="@color/lightgray" />
+
+            <LinearLayout
+                android:id="@+id/area_property"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/ship_battle"
+                android:layout_toRightOf="@id/ship_battle"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/stat_rank"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="S"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/stat_area"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="5-4"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/stat_flagship"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="FS"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorExpCalcFlagship"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/stat_mvp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="MVP"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorExpCalcMVP"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/ship_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="4dp"
+            android:src="@mipmap/ic_cancel"
+            app:srcCompat="@mipmap/ic_cancel" />
+    </LinearLayout>
+
+</LinearLayout>

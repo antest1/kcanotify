@@ -46,7 +46,7 @@ public final class KcaConstants {
     public static final String DB_KEY_EXPSORTIE = "key_expsortie";
     public static final String DB_KEY_BASICIFNO = "key_basicinfo";
     public static final String DB_KEY_LATESTDEV = "key_latestdev";
-    public static final String DB_KEY_KCARESDAT = "key_kcaresdat";
+    public static final String DB_KEY_EXPCALTRK = "key_expcaltrk";
 
     public static final String[] DB_KEY_ARRAY = {
             DB_KEY_STARTDATA,
@@ -69,7 +69,8 @@ public final class KcaConstants {
             DB_KEY_EXPSHIP,
             DB_KEY_EXPSORTIE,
             DB_KEY_BASICIFNO,
-            DB_KEY_LATESTDEV
+            DB_KEY_LATESTDEV,
+            DB_KEY_EXPCALTRK
     };
 
     public static final String ERROR_TYPE_SERVICE = "S";

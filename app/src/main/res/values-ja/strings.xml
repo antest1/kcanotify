@@ -441,6 +441,7 @@
     <string name="expcalc_mvp">MVP</string>
     <string name="expcalc_mapexp">海域経験値</string>
     <string name="expcalc_remainexp">残り経験値</string>
+    <string name="expcalc_battle">戦闘</string>
 
     <string name="action_expdtable">遠征一覧</string>
     <string name="expdtable_btn_w0">全体</string>

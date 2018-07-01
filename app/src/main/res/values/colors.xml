@@ -140,6 +140,9 @@
     <color name="colorExpeditionBtnGoodBack">#009688</color>
     <color name="colorExpeditionBtnGoodText">#b2dfdb</color>
 
+    <color name="colorExpCalcFlagship">#16a085</color>
+    <color name="colorExpCalcMVP">#ffa000</color>
+
     <color name="colorLabsStatusSortie">#ff0000</color>
     <color name="colorLabsStatusDefense">#f98c27</color>
     <color name="colorLabsStatusRetreat">#673ab7</color>

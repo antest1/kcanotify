@@ -1,17 +1,27 @@
 package com.antest1.kcanotify;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -34,6 +45,8 @@ import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadSortieExpInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
+import static com.antest1.kcanotify.KcaApiData.setDataLoadTriggered;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPCALTRK;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPSHIP;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPSORTIE;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
@@ -53,6 +66,7 @@ public class ExpCalcActivity extends AppCompatActivity {
     Toolbar toolbar;
     KcaDBHelper dbHelper;
 
+    public int count;
     boolean is_flagship = false;
     boolean is_mvp = false;
     int sortie_val = -1;
@@ -62,11 +76,19 @@ public class ExpCalcActivity extends AppCompatActivity {
 
     private boolean userIsInteracting;
     boolean shipselect_current_flag = false;
+    boolean cal_visible = true;
+    JsonObject current_ship_data;
+    public static SparseArray<String> track_values = new SparseArray<>();
 
+    View cal_area;
     Spinner value_ship, value_current_lv, value_target_lv, value_map, value_rank;
     TextView value_current_exp, value_target_exp, value_mapexp, value_counter, value_remainexp;
     CheckBox chkbox_flagship, chkbox_mvp;
     ArrayAdapter<String> ship_adapter, current_lv_adapter, target_lv_adapter, map_adapter, rank_adapter;
+    ImageView cal_hide_bar;
+    FloatingActionButton add_button;
+    LinearLayout listview;
+
 
     public ExpCalcActivity() {
         LocaleUtils.updateConfig(this);
@@ -85,6 +107,8 @@ public class ExpCalcActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getStringWithLocale(R.string.action_expcalc));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        current_ship_data = null;
+        track_values = new SparseArray<>();
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
@@ -95,6 +119,44 @@ public class ExpCalcActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Error loading data.", Toast.LENGTH_LONG).show();
             finish();
         }
+
+        cal_area = findViewById(R.id.cal_area);
+        cal_hide_bar = findViewById(R.id.cal_hide_bar);
+        cal_hide_bar.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                R.color.grey), PorterDuff.Mode.SRC_ATOP);
+        cal_hide_bar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cal_visible) {
+                    cal_hide_bar.setImageResource(R.mipmap.ic_arrow_down);
+                    cal_area.setVisibility(View.GONE);
+                } else {
+                    cal_hide_bar.setImageResource(R.mipmap.ic_arrow_up);
+                    cal_area.setVisibility(View.VISIBLE);
+                }
+                cal_visible = !cal_visible;
+            }
+        });
+
+        listview = findViewById(R.id.ship_leveling_list);
+        add_button = findViewById(R.id.add_exp_track);
+        add_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (current_ship_data != null) {
+                    JsonObject data = KcaUtils.getJsonObjectCopy(current_ship_data);
+                    data.addProperty("current_lv", String.valueOf(value_current_lv.getSelectedItem()));
+                    data.addProperty("target_lv", String.valueOf(value_target_lv.getSelectedItem()));
+                    data.addProperty("map", String.valueOf(value_map.getSelectedItem()));
+                    data.addProperty("rank", String.valueOf(value_rank.getSelectedItem()));
+                    data.addProperty("is_flagship", chkbox_flagship.isChecked());
+                    data.addProperty("is_mvp", chkbox_mvp.isChecked());
+                    data.addProperty("remain_exp", value_remainexp.getText().toString());
+                    data.addProperty("counter", value_counter.getText().toString());
+                    makeFilterItem(data);
+                }
+            }
+        });
 
         value_ship = findViewById(R.id.value_ship);
         value_current_lv = findViewById(R.id.value_current_lv);
@@ -227,8 +289,9 @@ public class ExpCalcActivity extends AppCompatActivity {
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        int lv = shipItemList.get(position).get("api_lv").getAsInt();
-                        int ship_id = shipItemList.get(position).get("api_ship_id").getAsInt();
+                        current_ship_data = shipItemList.get(position);
+                        int lv = current_ship_data.get("api_lv").getAsInt();
+                        int ship_id = current_ship_data.get("api_ship_id").getAsInt();
                         JsonObject kc_ship_data = KcaApiData.getKcShipDataById(ship_id, "afterlv");
                         int ship_afterlv;
                         if (kc_ship_data != null) {
@@ -242,11 +305,11 @@ public class ExpCalcActivity extends AppCompatActivity {
                             value_current_lv.setSelection(lv - 1);
                         }
                         if (target_lv_adapter != null) {
-                            if (ship_afterlv > 0 || lv < ship_afterlv) value_target_lv.setSelection(ship_afterlv - 1);
-                            else value_target_lv.setSelection(Math.min(lv, LEVEL_MAX - 1));
+                            if (ship_afterlv <= 0 || lv >= ship_afterlv) value_target_lv.setSelection(Math.min(lv, LEVEL_MAX - 1));
+                            else value_target_lv.setSelection(ship_afterlv - 1);
                         }
 
-                        current_exp = shipItemList.get(position).getAsJsonArray("api_exp").get(0).getAsInt();
+                        current_exp = current_ship_data.getAsJsonArray("api_exp").get(0).getAsInt();
                         setScreen();
                     }
 
@@ -270,6 +333,13 @@ public class ExpCalcActivity extends AppCompatActivity {
                 setScreen();
             }
         });
+
+        JsonArray saved_data = dbHelper.getJsonArrayValue(DB_KEY_EXPCALTRK);
+        if (saved_data != null) {
+            for (int i = 0; i < saved_data.size(); i++) {
+                makeFilterItem(saved_data.get(i).getAsJsonObject());
+            }
+        }
     }
 
     private void setScreen() {
@@ -299,12 +369,91 @@ public class ExpCalcActivity extends AppCompatActivity {
         value_counter.setText(String.valueOf(left_count));
     }
 
+    private void makeFilterItem(JsonObject data) {
+        count += 1;
+        track_values.append(count, data.toString());
+
+        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = vi.inflate(R.layout.listview_expcalc_item, null);
+        v.setTag(count);
+        final int target = count;
+
+        TextView ship_name = v.findViewById(R.id.ship_name);
+        TextView level_before = v.findViewById(R.id.level_before);
+        TextView level_after = v.findViewById(R.id.level_after);
+        TextView exp_left = v.findViewById(R.id.exp_left);
+        TextView label_battle = v.findViewById(R.id.label_battle);
+        TextView value_battle = v.findViewById(R.id.value_battle);
+        TextView stat_area = v.findViewById(R.id.stat_area);
+        TextView stat_rank = v.findViewById(R.id.stat_rank);
+        TextView stat_flagship = v.findViewById(R.id.stat_flagship);
+        TextView stat_mvp = v.findViewById(R.id.stat_mvp);
+
+        int ship_id = data.get("api_ship_id").getAsInt();
+        String ship_name_value = "???";
+        JsonObject kc_ship_data = KcaApiData.getKcShipDataById(ship_id, "name");
+        if (kc_ship_data != null) {
+            ship_name_value = getShipTranslation(kc_ship_data.get("name").getAsString(), false);
+        }
+
+        ship_name.setText(ship_name_value);
+        level_before.setText(data.get("current_lv").getAsString());
+        level_after.setText(data.get("target_lv").getAsString());
+        exp_left.setText(data.get("remain_exp").getAsString());
+        label_battle.setText(getStringWithLocale(R.string.expcalc_battle));
+        value_battle.setText(data.get("counter").getAsString());
+        stat_area.setText(data.get("map").getAsString());
+        stat_rank.setText(data.get("rank").getAsString());
+        stat_flagship.setText(getStringWithLocale(R.string.expcalc_flagship));
+        stat_mvp.setText(getStringWithLocale(R.string.expcalc_mvp));
+
+        if (data.get("is_flagship").getAsBoolean()) {
+            stat_flagship.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpCalcFlagship));
+        } else {
+            stat_flagship.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.lightgray));
+        }
+
+        if (data.get("is_mvp").getAsBoolean()) {
+            stat_mvp.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpCalcMVP));
+        } else {
+            stat_mvp.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.lightgray));
+        }
+
+        ImageView remove_btn = v.findViewById(R.id.ship_remove);
+        remove_btn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                R.color.colorBtnText), PorterDuff.Mode.SRC_ATOP);
+        remove_btn.setOnClickListener(view -> {
+            removeViewByTag(target);
+        });
+        listview.addView(v);
+    }
+
+    private void removeViewByTag(int tag) {
+        View target = listview.findViewWithTag(tag);
+        listview.removeView(target);
+        track_values.remove(tag);
+    }
+
+    private void setValueAndFinish() {
+        JsonArray data = new JsonArray();
+        for (int i = 0; i < track_values.size(); i++) {
+            int k = track_values.keyAt(i);
+            if (k <= count) {
+                JsonObject val = new JsonParser().parse(track_values.get(k)).getAsJsonObject();
+                data.add(val);
+            }
+        }
+        dbHelper.putValue(DB_KEY_EXPCALTRK, data.toString());
+    }
+
+
     private int setDefaultGameData() {
         return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
     }
 
     @Override
     protected void onDestroy() {
+        setValueAndFinish();
         super.onDestroy();
     }
 

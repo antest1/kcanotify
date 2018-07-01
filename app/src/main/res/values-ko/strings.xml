@@ -441,6 +441,7 @@
     <string name="expcalc_mvp">MVP</string>
     <string name="expcalc_mapexp">해역 경험치</string>
     <string name="expcalc_remainexp">남은 경험치</string>
+    <string name="expcalc_battle">전투</string>
 
     <string name="action_expdtable">원정 일람</string>
     <string name="expdtable_btn_w0">전체</string>
