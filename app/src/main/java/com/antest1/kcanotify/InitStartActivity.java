@@ -240,7 +240,7 @@ public class InitStartActivity extends Activity {
             }
         }
         setPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK, String.valueOf(System.currentTimeMillis()));
-        if (download_data.size() == 0) {
+        if (download_data.size() == 0 && fairy_flag == 0) {
             startMainActivity();
         } else {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(InitStartActivity.this);
@@ -456,6 +456,7 @@ public class InitStartActivity extends Activity {
         };
 
         private void startDownloadProgress() {
+            publishProgress(0);
             fetch.removeListener(fetchFairyListListener);
             fetch.addListener(fetchDownloadListener);
             totalFiles = download_data.size();
@@ -484,7 +485,7 @@ public class InitStartActivity extends Activity {
             mProgressDialog.setMax(totalFiles);
             mProgressDialog.setProgress(progress[0]);
 
-            if (progress[0] == totalFiles) {
+            if (totalFiles == 0 || progress[0] == totalFiles) {
                 workFinished();
             }
         }
