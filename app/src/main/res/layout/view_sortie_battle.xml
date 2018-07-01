@@ -347,12 +347,23 @@
 
                                 <TextView
                                     android:id="@+id/fm_1_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fm_1_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/colorExpCalcMVP"
                                     android:textSize="@dimen/battleview_text_c_medium" />
                             </LinearLayout>
 
@@ -474,13 +485,24 @@
 
                                 <TextView
                                     android:id="@+id/fm_2_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fm_2_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
-                                    android:textSize="@dimen/battleview_text_c_medium" />
+                                    android:textColor="@color/colorExpCalcMVP"
+                                    android:textSize="@dimen/battleview_text_c_medium"
+                                    android:textAlignment="textEnd" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -600,12 +622,23 @@
 
                                 <TextView
                                     android:id="@+id/fm_3_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fm_3_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/colorExpCalcMVP"
                                     android:textSize="@dimen/battleview_text_c_medium" />
                             </LinearLayout>
                         </LinearLayout>
@@ -727,12 +760,23 @@
 
                                 <TextView
                                     android:id="@+id/fm_4_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fm_4_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/colorExpCalcMVP"
                                     android:textSize="@dimen/battleview_text_c_medium" />
                             </LinearLayout>
                         </LinearLayout>
@@ -854,12 +898,23 @@
 
                                 <TextView
                                     android:id="@+id/fm_5_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fm_5_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/colorExpCalcMVP"
                                     android:textSize="@dimen/battleview_text_c_medium" />
                             </LinearLayout>
                         </LinearLayout>
@@ -981,12 +1036,23 @@
 
                                 <TextView
                                     android:id="@+id/fm_6_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fm_6_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/colorExpCalcMVP"
                                     android:textSize="@dimen/battleview_text_c_medium" />
                             </LinearLayout>
                         </LinearLayout>
@@ -1108,12 +1174,23 @@
 
                                 <TextView
                                     android:id="@+id/fm_7_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fm_7_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/colorExpCalcMVP"
                                     android:textSize="@dimen/battleview_text_c_medium" />
                             </LinearLayout>
                         </LinearLayout>
@@ -1326,12 +1403,23 @@
 
                                 <TextView
                                     android:id="@+id/fs_1_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fs_1_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/colorExpCalcMVP"
                                     android:textSize="@dimen/battleview_text_c_medium" />
                             </LinearLayout>
                         </LinearLayout>
@@ -1453,12 +1541,23 @@
 
                                 <TextView
                                     android:id="@+id/fs_2_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fs_2_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/colorExpCalcMVP"
                                     android:textSize="@dimen/battleview_text_c_medium" />
                             </LinearLayout>
                         </LinearLayout>
@@ -1580,12 +1679,23 @@
 
                                 <TextView
                                     android:id="@+id/fs_3_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fs_3_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/colorExpCalcMVP"
                                     android:textSize="@dimen/battleview_text_c_medium" />
                             </LinearLayout>
                         </LinearLayout>
@@ -1707,12 +1817,23 @@
 
                                 <TextView
                                     android:id="@+id/fs_4_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fs_4_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/colorExpCalcMVP"
                                     android:textSize="@dimen/battleview_text_c_medium" />
                             </LinearLayout>
                         </LinearLayout>
@@ -1834,12 +1955,23 @@
 
                                 <TextView
                                     android:id="@+id/fs_5_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fs_5_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/colorExpCalcMVP"
                                     android:textSize="@dimen/battleview_text_c_medium" />
                             </LinearLayout>
                         </LinearLayout>
@@ -1961,12 +2093,23 @@
 
                                 <TextView
                                     android:id="@+id/fs_6_hp_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="0"
+                                    android:minHeight="@dimen/battleview_text_c_large"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/battleview_text_c_medium" />
+
+                                <TextView
+                                    android:id="@+id/fs_6_exp_count"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
-                                    android:textColor="@android:color/white"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/colorExpCalcMVP"
                                     android:textSize="@dimen/battleview_text_c_medium" />
                             </LinearLayout>
                         </LinearLayout>

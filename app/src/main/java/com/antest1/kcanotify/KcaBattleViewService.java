@@ -123,6 +123,8 @@ public class KcaBattleViewService extends Service {
     private WindowManager mManager;
     KcaCustomToast customToast;
 
+    JsonArray deckData, portData;
+
     int displayWidth = 0;
 
     public static final int ERORR_INIT = 0;
@@ -262,6 +264,7 @@ public class KcaBattleViewService extends Service {
                 ((TextView) battleview.findViewById(R.id.battle_engagement)).setText("");
                 ((TextView) battleview.findViewById(R.id.battle_airpower)).setText("");
                 ((TextView) battleview.findViewById(R.id.battle_getitem)).setText("");
+
                 if (!getBooleanPreferences(contextWithLocale, PREF_SHOWDROP_SETTING)) {
                     battleview.findViewById(R.id.battle_getship_row).setVisibility(View.GONE);
                 } else {
@@ -351,6 +354,9 @@ public class KcaBattleViewService extends Service {
                             .setText(getAirForceResultString(contextWithLocale, api_disp_seiku));
                 }
 
+                for (int i = 0; i < 7; i++) ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_exp_count", i + 1), R.id.class))).setText("");
+                for (int i = 0; i < 6; i++) ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_exp_count", i + 1), R.id.class))).setText("");
+
                 battleview.findViewById(R.id.battle_node)
                         .setBackgroundColor(getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
             }
@@ -372,8 +378,8 @@ public class KcaBattleViewService extends Service {
 
                 deckportdata = api_data.getAsJsonObject("api_deck_port");
                 if (deckportdata != null) {
-                    JsonArray deckData = deckportdata.getAsJsonArray("api_deck_data");
-                    JsonArray portData = deckportdata.getAsJsonArray("api_ship_data");
+                    deckData = deckportdata.getAsJsonArray("api_deck_data");
+                    portData = deckportdata.getAsJsonArray("api_ship_data");
                     friendShipData = new JsonArray();
                     friendCombinedShipData = new JsonArray();
 
@@ -419,12 +425,16 @@ public class KcaBattleViewService extends Service {
                                             .setTextSize(TypedValue.COMPLEX_UNIT_PX, textsize_c_xsmall);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", j + 1), R.id.class)))
                                             .setTextSize(TypedValue.COMPLEX_UNIT_PX, textsize_c_medium);
+                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_exp_count", j + 1), R.id.class)))
+                                            .setTextSize(TypedValue.COMPLEX_UNIT_PX, textsize_c_medium);
                                 } else {
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_lv", j + 1), R.id.class)))
                                             .setTextSize(TypedValue.COMPLEX_UNIT_PX, textsize_n_medium);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_exp", j + 1), R.id.class)))
                                             .setTextSize(TypedValue.COMPLEX_UNIT_PX, textsize_n_small);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_hp_txt", j + 1), R.id.class)))
+                                            .setTextSize(TypedValue.COMPLEX_UNIT_PX, textsize_n_large);
+                                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_exp_count", j + 1), R.id.class)))
                                             .setTextSize(TypedValue.COMPLEX_UNIT_PX, textsize_n_large);
                                 }
 
@@ -1008,6 +1018,58 @@ public class KcaBattleViewService extends Service {
                     int useitem_id = api_data.getAsJsonObject("api_get_useitem").get("api_useitem_id").getAsInt();
                     ((TextView) battleview.findViewById(R.id.battle_getitem))
                             .setText(KcaUtils.format("%s (%d)", getUseitemTranslation(useitem_id), getUseitemCount(useitem_id)));
+                }
+
+                if (!is_practice) {
+                    JsonArray exp_data = api_data.getAsJsonArray("api_get_exp_lvup");
+                    JsonArray exp_add = api_data.getAsJsonArray("api_get_ship_exp");
+                    JsonArray exp_data_combined = new JsonArray();
+                    JsonArray exp_add_combined = new JsonArray();
+                    if (api_data.has("api_get_exp_lvup_combined") && api_data.get("api_get_exp_lvup_combined").isJsonArray()) {
+                        exp_data_combined = api_data.getAsJsonArray("api_get_exp_lvup_combined");
+                        exp_add_combined = api_data.getAsJsonArray("api_get_ship_exp_combined");
+                    }
+
+                    String map_text = KcaUtils.format("%d-%d", KcaBattle.currentMapArea, KcaBattle.currentMapNo);
+                    Toast.makeText(getApplicationContext(), map_text, Toast.LENGTH_LONG).show();
+                    JsonObject leveling_data = new JsonObject();
+                    JsonArray leveling_track = dbHelper.getJsonArrayValue(DB_KEY_EXPCALTRK);
+                    if (leveling_track != null) {
+                        for (int i = 0; i < leveling_track.size(); i++) {
+                            JsonObject item = leveling_track.get(i).getAsJsonObject();
+                            leveling_data.add(item.get("api_id").getAsString(), item);
+                        }
+                    }
+                    for (int i = 0; i < deckData.size(); i++) {
+                        JsonObject deck = deckData.get(i).getAsJsonObject();
+                        JsonArray ship_list = deck.getAsJsonArray("api_ship");
+                        String view_id_format = "";
+
+                        for (int j = 0; j < ship_list.size(); j++) {
+                            String ship_id = ship_list.get(j).getAsString();
+                            int current_exp = 0;
+                            if (i == 0) view_id_format = KcaUtils.format("fm_%d_exp_count", j+1);
+                            else if (i == 1) view_id_format = KcaUtils.format("fs_%d_exp_count", j+1);
+
+                            if (leveling_data.has(ship_id)) {
+                                JsonObject ship_data = leveling_data.getAsJsonObject(ship_id);
+                                int target_exp = ship_data.get("target_exp").getAsInt();
+                                int mapexp = ship_data.get("mapexp").getAsInt();
+                                if (i == 0) {
+                                    current_exp = exp_data.get(j).getAsJsonArray().get(0).getAsInt()
+                                            + Math.max(0, exp_add.get(j + 1).getAsInt());
+                                } else if (i == 1) {
+                                    current_exp = exp_data_combined.get(j).getAsJsonArray().get(0).getAsInt()
+                                            + Math.max(0, exp_add_combined.get(j + 1).getAsInt());
+                                }
+                                int remainexp = Math.max(0, target_exp - current_exp);
+                                int left_count = (int) Math.ceil((double) remainexp / mapexp);
+                                ((TextView) battleview.findViewById(getId(view_id_format, R.id.class))).setText(String.valueOf(left_count));
+                            } else {
+                                ((TextView) battleview.findViewById(getId(view_id_format, R.id.class))).setText("");
+                            }
+                        }
+                    }
                 }
             } else {
                 Log.e("KCA", api_data.entrySet().toString());

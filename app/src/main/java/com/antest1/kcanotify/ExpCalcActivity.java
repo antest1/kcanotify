@@ -151,8 +151,10 @@ public class ExpCalcActivity extends AppCompatActivity {
                     data.addProperty("rank", String.valueOf(value_rank.getSelectedItem()));
                     data.addProperty("is_flagship", chkbox_flagship.isChecked());
                     data.addProperty("is_mvp", chkbox_mvp.isChecked());
-                    data.addProperty("remain_exp", value_remainexp.getText().toString());
+                    data.addProperty("current_exp", value_current_exp.getText().toString());
+                    data.addProperty("target_exp", value_target_exp.getText().toString());
                     data.addProperty("counter", value_counter.getText().toString());
+                    data.addProperty("mapexp", getMapExp());
                     makeFilterItem(data);
                 }
             }
@@ -334,15 +336,36 @@ public class ExpCalcActivity extends AppCompatActivity {
             }
         });
 
+        JsonObject ship_index = new JsonObject();
+        for (int i = 0; i < ship_data.size(); i++) {
+            JsonObject item = ship_data.get(i).getAsJsonObject();
+            String key = item.get("api_id").getAsString();
+            ship_index.add(key, item);
+        }
+
         JsonArray saved_data = dbHelper.getJsonArrayValue(DB_KEY_EXPCALTRK);
         if (saved_data != null) {
             for (int i = 0; i < saved_data.size(); i++) {
-                makeFilterItem(saved_data.get(i).getAsJsonObject());
+                JsonObject item = saved_data.get(i).getAsJsonObject();
+                String key = item.get("api_id").getAsString();
+                if (ship_index.has(key)) {
+                    int mapexp = item.get("mapexp").getAsInt();
+                    int current_lv = ship_index.getAsJsonObject(key)
+                            .get("api_lv").getAsInt();
+                    int current_exp = ship_index.getAsJsonObject(key)
+                            .getAsJsonArray("api_exp").get(0).getAsInt();
+                    int target_exp = item.get("target_exp").getAsInt();
+                    int remainexp = Math.max(0, target_exp - current_exp);
+                    item.addProperty("current_lv", current_lv);
+                    item.addProperty("current_exp", current_exp);
+                    item.addProperty("counter", (int) Math.ceil((double) remainexp/ mapexp));
+                    makeFilterItem(item);
+                }
             }
         }
     }
 
-    private void setScreen() {
+    private int getMapExp() {
         int mapexp = sortie_val;
         if (is_mvp) mapexp *= 2;
         if (is_flagship) mapexp = (mapexp * 3) / 2;
@@ -359,6 +382,11 @@ public class ExpCalcActivity extends AppCompatActivity {
             default:
                 break;
         }
+        return mapexp;
+    }
+
+    private void setScreen() {
+        int mapexp = getMapExp();
         value_current_exp.setText(String.valueOf(current_exp));
         value_target_exp.setText(String.valueOf(target_exp));
 
@@ -399,7 +427,7 @@ public class ExpCalcActivity extends AppCompatActivity {
         ship_name.setText(ship_name_value);
         level_before.setText(data.get("current_lv").getAsString());
         level_after.setText(data.get("target_lv").getAsString());
-        exp_left.setText(data.get("remain_exp").getAsString());
+        exp_left.setText(String.valueOf(Math.max(0, data.get("target_exp").getAsInt() - data.get("current_exp").getAsInt())));
         label_battle.setText(getStringWithLocale(R.string.expcalc_battle));
         value_battle.setText(data.get("counter").getAsString());
         stat_area.setText(data.get("map").getAsString());
