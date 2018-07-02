@@ -585,4 +585,15 @@
 
     <string name="widget_timer_name">Kcanotifyタイマーウィジェット</string>
     <string name="widget_timer_fleetname">第%d艦隊</string>
+
+    <string name="download_title">アップデート利用可能</string>
+    <string name="download_description_head">データを更新していない場合、Kcanotifyが正常に動作しないことがあります。</string>
+    <string name="download_appdata">アプリデータ</string>
+    <string name="download_gamedata">ゲームデータ</string>
+    <string name="download_questinfo">任務情報</string>
+    <string name="download_shipinfo">艦船翻訳</string>
+    <string name="download_iteminfo">装備翻訳</string>
+    <string name="download_akashi">改修工廠</string>
+    <string name="download_fairy">妖精さん</string>
+    <string name="download_progress">ダウンロード中...</string>
 </resources>

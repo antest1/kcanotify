@@ -592,4 +592,15 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="widget_timer_name">Kcanotify計時Widget</string>
     <string name="widget_timer_fleetname">第%d艦隊</string>
 
+    <string name="download_title">Update Available</string>
+    <string name="download_description_head">Kcanotify may not work when you do not update the data.</string>
+    <string name="download_appdata">App Data</string>
+    <string name="download_gamedata">Game data</string>
+    <string name="download_questinfo">Quest information</string>
+    <string name="download_shipinfo">Ship translation</string>
+    <string name="download_iteminfo">Equipment translation</string>
+    <string name="download_akashi">Improvement arsenal chart</string>
+    <string name="download_fairy">Fairy-san</string>
+    <string name="download_progress">Downloading...</string>
+
 </resources>

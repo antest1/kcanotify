@@ -32,6 +32,8 @@ import com.tonyodev.fetch2.Request;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,6 +58,19 @@ public class InitStartActivity extends Activity {
     public final static int DELAY_TIME = 250;
     public final static String FAIRY_INFO_FILENAME = "icon_info.json";
     public static final int UPDATECHECK_INTERVAL_MS = 30000;
+
+    public final static String DOWNLOAD_TYPE_APPDATA = "appdata";
+    public final static String DOWNLOAD_TYPE_GAMEDATA = "gamedata";
+    public final static String DOWNLOAD_TYPE_QUESTINFO = "questinfo";
+    public final static String DOWNLOAD_TYPE_SHIPINFO = "shipinfo";
+    public final static String DOWNLOAD_TYPE_EQUIPINFO = "equipinfo";
+    public final static String DOWNLOAD_TYPE_AKASHI = "akashi";
+    public final static String DOWNLOAD_TYPE_FAIRY = "fairy";
+    public final static String[] DOWNLOAD_TYPE_LIST = {
+            DOWNLOAD_TYPE_APPDATA, DOWNLOAD_TYPE_GAMEDATA, DOWNLOAD_TYPE_QUESTINFO,
+            DOWNLOAD_TYPE_SHIPINFO, DOWNLOAD_TYPE_EQUIPINFO, DOWNLOAD_TYPE_AKASHI,
+            DOWNLOAD_TYPE_FAIRY
+    };
 
     boolean download_finished = false;
     Handler handler = new Handler();
@@ -85,7 +100,7 @@ public class InitStartActivity extends Activity {
         Log.e("KCA-DA", "created");
         // instantiate it within the onCreate method
         mProgressDialog = new ProgressDialog(InitStartActivity.this);
-        mProgressDialog.setMessage("Downloading..");
+        mProgressDialog.setMessage(getStringWithLocale(R.string.download_progress));
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setCancelable(false);
@@ -193,6 +208,7 @@ public class InitStartActivity extends Activity {
     }
 
     private void dataCheck(JsonObject response_data) {
+        List<String> update_text = new ArrayList<>();
         String lasttime = getStringPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK);
         if (lasttime != null) {
             long current_time = System.currentTimeMillis();
@@ -212,6 +228,7 @@ public class InitStartActivity extends Activity {
                 JsonObject info = new JsonObject();
                 info.addProperty("name", "api_start2");
                 info.addProperty("url", "");
+                if (!update_text.contains(DOWNLOAD_TYPE_GAMEDATA)) update_text.add(DOWNLOAD_TYPE_GAMEDATA);
                 download_data.add(info);
             }
         }
@@ -231,8 +248,27 @@ public class InitStartActivity extends Activity {
                         if (name.equals(FAIRY_INFO_FILENAME)) {
                             fairy_flag = 1;
                             fairy_info = item;
+                            update_text.add(DOWNLOAD_TYPE_FAIRY);
                         } else {
                             download_data.add(item);
+                            if (!update_text.contains(DOWNLOAD_TYPE_APPDATA) &&
+                                    (name.contains("edges") || name.contains("expedition") || name.contains("equip_count"))) {
+                                update_text.add(DOWNLOAD_TYPE_APPDATA);
+                            }
+                            if (!update_text.contains(DOWNLOAD_TYPE_QUESTINFO) &&
+                                    (name.contains("quests") || name.contains("quest_track"))) {
+                                update_text.add(DOWNLOAD_TYPE_QUESTINFO);
+                            }
+                            if (!update_text.contains(DOWNLOAD_TYPE_SHIPINFO) &&
+                                    (name.contains("ships") || name.contains("stype"))) {
+                                update_text.add(DOWNLOAD_TYPE_SHIPINFO);
+                            }
+                            if (!update_text.contains(DOWNLOAD_TYPE_AKASHI) && name.contains("akashi")) {
+                                update_text.add(DOWNLOAD_TYPE_AKASHI);
+                            }
+                            if (!update_text.contains(DOWNLOAD_TYPE_EQUIPINFO) && name.contains("items")) {
+                                update_text.add(DOWNLOAD_TYPE_EQUIPINFO);
+                            }
                         }
                     }
                 }
@@ -243,8 +279,13 @@ public class InitStartActivity extends Activity {
         if (download_data.size() == 0 && fairy_flag == 0) {
             startMainActivity();
         } else {
+            String message = getStringWithLocale(R.string.download_description_head) + "\n\n";
+            for (String s: DOWNLOAD_TYPE_LIST) {
+                if (update_text.contains(s)) message = message.concat("- ").concat(getTypeText(s)).concat("\n");
+            }
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(InitStartActivity.this);
-            alertDialog.setMessage(KcaUtils.format("Update data available\n(total %d)", download_data.size()));
+            alertDialog.setTitle(getStringWithLocale(R.string.download_title));
+            alertDialog.setMessage(message.trim());
             alertDialog.setCancelable(false);
             alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
                     (dialog, which) -> {
@@ -258,10 +299,29 @@ public class InitStartActivity extends Activity {
             handler.post(() -> {
                 AlertDialog alert = alertDialog.create();
                 alert.setIcon(R.mipmap.ic_launcher);
-                alert.setTitle(
-                        getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
                 alert.show();
             });
+        }
+    }
+
+    private String getTypeText(String s) {
+        switch (s) {
+            case DOWNLOAD_TYPE_GAMEDATA:
+                return getStringWithLocale(R.string.download_gamedata);
+            case DOWNLOAD_TYPE_APPDATA:
+                return getStringWithLocale(R.string.download_appdata);
+            case DOWNLOAD_TYPE_QUESTINFO:
+                return getStringWithLocale(R.string.download_questinfo);
+            case DOWNLOAD_TYPE_SHIPINFO:
+                return getStringWithLocale(R.string.download_shipinfo);
+            case DOWNLOAD_TYPE_EQUIPINFO:
+                return getStringWithLocale(R.string.download_iteminfo);
+            case DOWNLOAD_TYPE_AKASHI:
+                return getStringWithLocale(R.string.download_akashi);
+            case DOWNLOAD_TYPE_FAIRY:
+                return getStringWithLocale(R.string.download_fairy);
+            default:
+                return "";
         }
     }
 
