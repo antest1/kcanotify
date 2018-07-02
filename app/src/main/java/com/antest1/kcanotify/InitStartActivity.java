@@ -105,7 +105,7 @@ public class InitStartActivity extends Activity {
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setCancelable(false);
-        mProgressDialog.setProgressNumberFormat("%1d");
+        mProgressDialog.setProgressNumberFormat("%1d file(s)");
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
