@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Intent intent = new Intent(MainActivity.this, KcaService.class);
                 if (isChecked) {
-                    if (true || is_kca_installed) {
+                    if (is_kca_installed) {
                         if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
                             loadTranslationData(getApplicationContext());
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
