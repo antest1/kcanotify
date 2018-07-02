@@ -13,12 +13,12 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.antest1.kcanotify.KcaConstants.FAIRY_TOTAL_COUNT;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_FAIRY_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaUtils.getId;
@@ -48,8 +48,10 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getResources().getString(R.string.setting_menu_kand_title_fairy_select));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        JsonArray icon_info = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "icon_info.json");
+
         List<String> fairy_id = new ArrayList<>();
-        for(int i = 0; i<FAIRY_TOTAL_COUNT; i++) {
+        for (int i = 0; i < icon_info.size(); i++) {
             fairy_id.add("noti_icon_".concat(String.valueOf(i)));
         }
 

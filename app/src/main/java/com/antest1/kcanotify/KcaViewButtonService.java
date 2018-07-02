@@ -40,6 +40,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;
@@ -53,7 +54,6 @@ import java.util.concurrent.TimeUnit;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLEINFO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLENODE;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_FAIRYLOC;
-import static com.antest1.kcanotify.KcaConstants.FAIRY_REVERSE_LIST;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_FAIRY_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_FAIRY_HIDDEN;
@@ -112,6 +112,7 @@ public class KcaViewButtonService extends Service {
     private int screenWidth, screenHeight;
     private int buttonWidth, buttonHeight;
     private KcaDBHelper dbHelper;
+    private JsonArray icon_info;
     private boolean battleviewEnabled = false;
     private boolean questviewEnabled = false;
     public String viewBitmapId;
@@ -242,14 +243,19 @@ public class KcaViewButtonService extends Service {
             mView = mInflater.inflate(R.layout.view_button, null);
 
             // Button (Fairy) Settings
+            icon_info = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "icon_info.json");
             viewbutton = mView.findViewById(R.id.viewbutton);
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
             viewBitmapId = "noti_icon_".concat(fairyIdValue);
             setFairyImage();
-
-            int index = Arrays.binarySearch(FAIRY_REVERSE_LIST, Integer.parseInt(fairyIdValue));
-            if (index >= 0) viewbutton.setScaleX(-1.0f);
-            else viewbutton.setScaleX(1.0f);
+            if (icon_info.size() > 0) {
+                JsonObject fairy_info = icon_info.get(Integer.parseInt(fairyIdValue)).getAsJsonObject();
+                if (fairy_info.has("rev") && fairy_info.get("rev").getAsInt() == 1) {
+                    viewbutton.setScaleX(-1.0f);
+                } else {
+                    viewbutton.setScaleX(1.0f);
+                }
+            }
 
             viewbutton.setOnTouchListener(mViewTouchListener);
             viewbutton.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -346,12 +352,16 @@ public class KcaViewButtonService extends Service {
             }
             if (intent.getAction().equals(FAIRY_CHANGE)) {
                 String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
-                String fairyPath = "noti_icon_".concat(fairyIdValue);
                 viewBitmapId = "noti_icon_".concat(fairyIdValue);
                 setFairyImage();
-                int index = Arrays.binarySearch(FAIRY_REVERSE_LIST, Integer.parseInt(fairyIdValue));
-                if (index >= 0) viewbutton.setScaleX(-1.0f);
-                else viewbutton.setScaleX(1.0f);
+                if (icon_info.size() > 0) {
+                    JsonObject fairy_info = icon_info.get(Integer.parseInt(fairyIdValue)).getAsJsonObject();
+                    if (fairy_info.has("rev") && fairy_info.get("rev").getAsInt() == 1) {
+                        viewbutton.setScaleX(-1.0f);
+                    } else {
+                        viewbutton.setScaleX(1.0f);
+                    }
+                }
             }
             if (intent.getAction().equals(RESET_FAIRY_STATUS_ACTION)) {
                 taiha_status = false;
