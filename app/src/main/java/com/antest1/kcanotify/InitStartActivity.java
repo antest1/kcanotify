@@ -87,6 +87,7 @@ public class InitStartActivity extends Activity {
     JsonArray download_data = new JsonArray();
     int fairy_flag, new_resversion;
     JsonObject fairy_info = new JsonObject();
+    int fairy_list_version;
     Fetch fetch;
 
     public String getStringWithLocale(int id) {
@@ -248,6 +249,7 @@ public class InitStartActivity extends Activity {
                         if (name.equals(FAIRY_INFO_FILENAME)) {
                             fairy_flag = 1;
                             fairy_info = item;
+                            fairy_list_version = version;
                             update_text.add(DOWNLOAD_TYPE_FAIRY);
                         } else {
                             download_data.add(item);
@@ -256,17 +258,17 @@ public class InitStartActivity extends Activity {
                                 update_text.add(DOWNLOAD_TYPE_APPDATA);
                             }
                             if (!update_text.contains(DOWNLOAD_TYPE_QUESTINFO) &&
-                                    (name.contains("quests") || name.contains("quest_track"))) {
+                                    (name.contains("quests-") || name.contains("quest_track"))) {
                                 update_text.add(DOWNLOAD_TYPE_QUESTINFO);
                             }
                             if (!update_text.contains(DOWNLOAD_TYPE_SHIPINFO) &&
-                                    (name.contains("ships") || name.contains("stype"))) {
+                                    (name.contains("ships-") || name.contains("stype"))) {
                                 update_text.add(DOWNLOAD_TYPE_SHIPINFO);
                             }
                             if (!update_text.contains(DOWNLOAD_TYPE_AKASHI) && name.contains("akashi")) {
                                 update_text.add(DOWNLOAD_TYPE_AKASHI);
                             }
-                            if (!update_text.contains(DOWNLOAD_TYPE_EQUIPINFO) && name.contains("items")) {
+                            if (!update_text.contains(DOWNLOAD_TYPE_EQUIPINFO) && name.contains("items-")) {
                                 update_text.add(DOWNLOAD_TYPE_EQUIPINFO);
                             }
                         }
@@ -468,6 +470,7 @@ public class InitStartActivity extends Activity {
 
             @Override
             public void onCompleted(@NotNull Download download) {
+                dbHelper.putResVer(FAIRY_INFO_FILENAME, fairy_list_version);
                 JsonArray fairy_data = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), FAIRY_INFO_FILENAME);
                 for (int i = 0; i < fairy_data.size(); i++) {
                     JsonObject fairy_item = fairy_data.get(i).getAsJsonObject();
