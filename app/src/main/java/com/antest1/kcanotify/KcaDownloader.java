@@ -10,6 +10,7 @@ public interface KcaDownloader {
             "Accept: application/json",
             "X-Identify: app/kcanotify",
             "Referer: app:/KCA/",
+            "Cache-control: no-cache, no-store, must-revalidate",
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("/kcanotify/v.php")
