@@ -596,4 +596,6 @@
     <string name="download_akashi">개수공창</string>
     <string name="download_fairy">요정님</string>
     <string name="download_progress">다운로드 중...</string>
+    <string name="download_reset">리소스 초기화（다시 다운로드）</string>
+    <string name="download_reset_message">리소스를 다시 다운로드합니다.</string>
 </resources>

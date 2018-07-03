@@ -661,5 +661,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_akashi">Improvement arsenal chart</string>
     <string name="download_fairy">Fairy-san</string>
     <string name="download_progress">Downloading...</string>
-
+    <string name="download_reset">Initialize resources (download again)</string>
+    <string name="download_reset_message">Download app resource again.</string>
 </resources>

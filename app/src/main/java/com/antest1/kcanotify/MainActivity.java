@@ -9,6 +9,7 @@ import com.pixplicity.htmlcompat.HtmlCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -57,6 +59,7 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 
+import static com.antest1.kcanotify.InitStartActivity.ACTION_RESET;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaAlarmService.TYPE_UPDATE;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
@@ -96,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton kcafairybtn;
     public static Handler sHandler;
     TextView textDescription;
-    TextView textWarn, textSpecial;
+    TextView textWarn, textSpecial, textResourceReset;
     Gson gson = new Gson();
 
     SharedPreferences prefs;
@@ -256,6 +259,28 @@ public class MainActivity extends AppCompatActivity {
         textDescription.setMovementMethod(LinkMovementMethod.getInstance());
         textDescription.setText(fromHtml);
         //Linkify.addLinks(textDescription, Linkify.WEB_URLS);
+
+        textResourceReset = findViewById(R.id.textResourceReset);
+        textResourceReset.setOnClickListener(v -> {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+            alertDialog.setMessage(getString(R.string.download_reset_message));
+            alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
+                    (dialog, which) -> {
+                        dbHelper.clearResVer();
+                        setPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION, 0);
+                        Intent mainIntent = new Intent(this, InitStartActivity.class);
+                        mainIntent.putExtra(ACTION_RESET, true);
+                        startActivity(mainIntent);
+                        finish();
+                    });
+            alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
+                    (dialog, which) -> {
+                        dialog.dismiss();
+                    });
+            AlertDialog alert = alertDialog.create();
+            alert.setIcon(R.mipmap.ic_launcher);
+            alert.show();
+        });
 
         backPressCloseHandler = new BackPressCloseHandler(this);
 

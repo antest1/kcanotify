@@ -602,4 +602,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_akashi">改修工厂</string>
     <string name="download_fairy">妖精酱~</string>
     <string name="download_progress">正在下载中...</string>
+    <string name="download_reset">初始化资源（再次下载）</string>
+    <string name="download_reset_message">再次下载应用程序资源</string>
+
 </resources>

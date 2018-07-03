@@ -226,6 +226,20 @@
                     android:textSize="14dp"
                     android:visibility="gone" />
 
+                <TextView
+                    android:id="@+id/textResourceReset"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/textMainWarn"
+                    android:layout_alignParentBottom="false"
+                    android:layout_alignWithParentIfMissing="true"
+                    android:layout_marginBottom="2dp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="@string/download_reset"
+                    android:textAlignment="textEnd"
+                    android:textColor="?attr/colorAccent"
+                    android:textSize="14dp" />
+
             </RelativeLayout>
 
         </LinearLayout>

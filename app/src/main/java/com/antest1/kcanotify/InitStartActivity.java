@@ -58,6 +58,7 @@ public class InitStartActivity extends Activity {
     public final static int DELAY_TIME = 250;
     public final static String FAIRY_INFO_FILENAME = "icon_info.json";
     public static final int UPDATECHECK_INTERVAL_MS = 30000;
+    public static final String ACTION_RESET = "ACTION_RESET";
 
     public final static String DOWNLOAD_TYPE_APPDATA = "appdata";
     public final static String DOWNLOAD_TYPE_GAMEDATA = "gamedata";
@@ -88,6 +89,7 @@ public class InitStartActivity extends Activity {
     int fairy_flag, new_resversion;
     JsonObject fairy_info = new JsonObject();
     int fairy_list_version;
+    boolean reset_flag = false;
     Fetch fetch;
 
     public String getStringWithLocale(int id) {
@@ -99,6 +101,9 @@ public class InitStartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init_download);
         Log.e("KCA-DA", "created");
+
+        Intent mainIntent = getIntent();
+        reset_flag = mainIntent.getBooleanExtra(ACTION_RESET, false);
         // instantiate it within the onCreate method
         mProgressDialog = new ProgressDialog(InitStartActivity.this);
         mProgressDialog.setMessage(getStringWithLocale(R.string.download_progress));
@@ -208,10 +213,12 @@ public class InitStartActivity extends Activity {
         }
     }
 
+
+
     private void dataCheck(JsonObject response_data) {
         List<String> update_text = new ArrayList<>();
         String lasttime = getStringPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK);
-        if (lasttime != null) {
+        if (!reset_flag && lasttime != null) {
             long current_time = System.currentTimeMillis();
             long last_check_time = Long.parseLong(lasttime);
             if (current_time - last_check_time <= UPDATECHECK_INTERVAL_MS) {
@@ -245,7 +252,7 @@ public class InitStartActivity extends Activity {
                     JsonObject item = resource_list.get(i).getAsJsonObject();
                     String name = item.get("name").getAsString();
                     int version = item.get("version").getAsInt();
-                    if (dbHelper.getResVer(name) < version) {
+                    if (reset_flag || dbHelper.getResVer(name) < version) {
                         if (name.equals(FAIRY_INFO_FILENAME)) {
                             fairy_flag = 1;
                             fairy_info = item;
@@ -428,12 +435,14 @@ public class InitStartActivity extends Activity {
             startMainActivity();
         }
 
-        private void downloadFile(String folder, String url, String name) {
+        private void downloadFile(String folder, String url, String name, int version) {
             final File root_dir = cw.getDir(folder, Context.MODE_PRIVATE);
             final File data = new File(root_dir, name);
 
             final Request request = new Request(url, data.getPath());
-            fetch.enqueue(request, updatedRequest -> {}, error -> {
+            fetch.enqueue(request, updatedRequest -> {
+                dbHelper.putResVer(name, version);
+            }, error -> {
                 failedFiles += 1;
                 if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
             });
@@ -475,7 +484,8 @@ public class InitStartActivity extends Activity {
                 for (int i = 0; i < fairy_data.size(); i++) {
                     JsonObject fairy_item = fairy_data.get(i).getAsJsonObject();
                     fairy_item.addProperty("is_fairy", true);
-                    if (!KcaUtils.checkFairyImageInStorage(getApplicationContext(), fairy_item.get("name").getAsString())) {
+                    boolean reset = fairy_item.has("reset");
+                    if (reset_flag || reset || !KcaUtils.checkFairyImageInStorage(getApplicationContext(), fairy_item.get("name").getAsString())) {
                         download_data.add(fairy_item);
                     }
                 }
@@ -531,11 +541,10 @@ public class InitStartActivity extends Activity {
                 if (name.equals("api_start2")) {
                     downloadGameData();
                 } else if (item.has("is_fairy")) {
-                    downloadFile("fairy", url, name);
+                    downloadFile("fairy", url, name, 0);
                 } else {
-                    downloadFile("data", url, name);
                     int version = item.get("version").getAsInt();
-                    dbHelper.putResVer(name, version);
+                    downloadFile("data", url, name, version);
                 }
             }
         }
@@ -562,7 +571,11 @@ public class InitStartActivity extends Activity {
                 final File myImageFile = new File(root_dir, FAIRY_INFO_FILENAME);
                 final Request request = new Request(fairy_info.get("url").getAsString(), myImageFile.getPath());
                 fetch.addListener(fetchFairyListListener);
-                fetch.enqueue(request, updatedRequest -> {}, error -> {
+                fetch.enqueue(request, updatedRequest -> {
+                    String name = fairy_info.get("name").getAsString();
+                    int version = fairy_info.get("version").getAsInt();
+                    dbHelper.putResVer(name, version);
+                }, error -> {
                     startDownloadProgress();
                 });
             } else {

@@ -153,6 +153,11 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void clearResVer() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(resver_table_name, null, null);
+    }
+
     public void recordErrorLog(String type, String url, String request, String data, String error) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
