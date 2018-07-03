@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KcaItemAdapter extends BaseAdapter {
-    public static final int IMAGE_SIZE = 18;
+    public static final int IMAGE_SIZE = 128;
     Context context;
     int layout;
     int rescale = -1;
