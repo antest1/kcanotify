@@ -63,7 +63,8 @@
     <dimen name="popup_text_xxsmall">8dp</dimen>
     <dimen name="popup_item_icon_size">22dp</dimen>
     <dimen name="popup_t2_width">250dp</dimen>
-    <dimen name="popup_t3_width">350dp</dimen>
+    <dimen name="popup_t3_width">300dp</dimen>
+    <dimen name="popup_t4_width">350dp</dimen>
     <dimen name="popup_padding">6dp</dimen>
 
     <dimen name="aircombat_text_mid">11dp</dimen>

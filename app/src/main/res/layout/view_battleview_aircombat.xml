@@ -6,7 +6,7 @@
     android:alpha="0.8">
 
     <LinearLayout
-        android:layout_width="@dimen/popup_t3_width"
+        android:layout_width="@dimen/popup_t4_width"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:orientation="vertical"
