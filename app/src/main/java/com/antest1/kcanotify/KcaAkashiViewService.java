@@ -98,7 +98,7 @@ public class KcaAkashiViewService extends Service {
             ((TextView) akashiview.findViewById(R.id.akashiview_day))
                     .setText(getStringWithLocale(getId("akashi_term_day_".concat(String.valueOf(day)), R.string.class)));
             listViewItemList = new ArrayList<>();
-            int akashiDataLoadingFlag = getAkashiDataFromAssets();
+            int akashiDataLoadingFlag = getAkashiDataFromStorage();
             if (akashiDataLoadingFlag != 1) {
                 Toast.makeText(getApplicationContext(), "Error Loading Akashi Data", Toast.LENGTH_LONG).show();
             } else if (KcaApiData.getKcItemStatusById(2, "name") == null) {
@@ -238,33 +238,23 @@ public class KcaAkashiViewService extends Service {
         }
     };
 
-    private int getAkashiDataFromAssets() {
-        try {
-            AssetManager.AssetInputStream ais;
-            JsonElement data;
-
-            ais = (AssetManager.AssetInputStream) getAssets().open("akashi_data.json");
-            data = new JsonParser().parse(new String(ByteStreams.toByteArray(ais)));
-            ais.close();
-            if (data.isJsonObject()) {
-                akashiData = data.getAsJsonObject();
-            } else {
-                return -1;
-            }
-
-            ais = (AssetManager.AssetInputStream) getAssets().open("akashi_day.json");
-            data = new JsonParser().parse(new String(ByteStreams.toByteArray(ais)));
-            ais.close();
-            if (data.isJsonObject()) {
-                akashiDay = data.getAsJsonObject();
-            } else {
-                return -1;
-            }
-
-            return 1;
-        } catch (IOException e) {
-            return 0;
+    private int getAkashiDataFromStorage() {
+        JsonObject data;
+        data = KcaUtils.getJsonObjectFromStorage(getApplicationContext(), "akashi_data.json");
+        if (data != null) {
+            akashiData = data;
+        } else {
+            return -1;
         }
+
+        data = KcaUtils.getJsonObjectFromStorage(getApplicationContext(), "akashi_day.json");
+        if (data != null) {
+            akashiDay = data;
+        } else {
+            return -1;
+        }
+
+        return 1;
     }
 
     private void resetListView(boolean isTop) {
