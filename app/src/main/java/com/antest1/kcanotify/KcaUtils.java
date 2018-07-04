@@ -558,6 +558,7 @@ public class KcaUtils {
             bitmap = BitmapFactory.decodeStream(new FileInputStream(myImageFile), null, options);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.noti_icon_0);
         }
         return bitmap;
     }
