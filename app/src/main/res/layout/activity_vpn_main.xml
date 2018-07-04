@@ -33,7 +33,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="@dimen/activity_main_btn_size"
                 android:weightSum="1.0">
 
                 <ToggleButton
@@ -52,7 +52,7 @@
                     android:textColor="@drawable/togglebtn_text"
                     android:textOff="@string/ma_vpn_toggleoff"
                     android:textOn="@string/ma_vpn_toggleon"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/activity_main_btn_textsize" />
 
                 <ToggleButton
                     android:id="@+id/svcbtn"
@@ -70,13 +70,13 @@
                     android:textColor="@drawable/togglebtn_text"
                     android:textOff="@string/ma_svc_toggleoff"
                     android:textOn="@string/ma_svc_toggleon"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/activity_main_btn_textsize" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="@dimen/activity_main_btn_size"
                 android:weightSum="1.0">
 
                 <Button
@@ -89,7 +89,7 @@
                     android:stateListAnimator="@null"
                     android:text="GAME START"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/activity_main_btn_textsize" />
 
                 <ImageButton
                     android:id="@+id/kcafairybtn"
@@ -99,8 +99,8 @@
                     android:layout_weight="0.18"
                     android:background="@color/colorFairyBtn"
                     android:gravity="center"
-                    android:padding="4dp"
-                    android:scaleType="centerInside"
+                    android:padding="@dimen/activity_main_btn_fairy_padding"
+                    android:scaleType="fitCenter"
                     android:src="@mipmap/noti_icon_0"
                     android:stateListAnimator="@null">
 
@@ -115,6 +115,8 @@
                     android:layout_weight="0.18"
                     android:background="@color/colorToolsBtn"
                     android:gravity="center"
+                    android:padding="@dimen/activity_main_btn_tools_padding"
+                    android:scaleType="fitCenter"
                     android:src="@mipmap/ic_dashboard"
                     android:stateListAnimator="@null">
 
@@ -139,7 +141,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="TextView"
-                    android:textColor="@color/colorActivityText" />
+                    android:textColor="@color/colorActivityText"
+                    android:textSize="@dimen/activity_text_size" />
 
                 <TextView
                     android:id="@+id/textMainWarn"
