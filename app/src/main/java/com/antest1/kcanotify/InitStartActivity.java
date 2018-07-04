@@ -87,7 +87,7 @@ public class InitStartActivity extends Activity {
     PowerManager.WakeLock mWakeLock;
     TextView appname, appversion;
 
-    int requiredFiles = 0;
+    boolean is_first;
     JsonArray download_data = new JsonArray();
     int fairy_flag, new_resversion;
     JsonObject fairy_info = new JsonObject();
@@ -133,6 +133,8 @@ public class InitStartActivity extends Activity {
 
         appversion = findViewById(R.id.app_version);
         appversion.setText(getString(R.string.app_version));
+
+        is_first = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION)) == 0;
 
         int setDefaultGameDataResult = KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
         if (setDefaultGameDataResult != 1) {
@@ -221,7 +223,7 @@ public class InitStartActivity extends Activity {
     private void dataCheck(JsonObject response_data) {
         List<String> update_text = new ArrayList<>();
         String lasttime = getStringPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK);
-        if (!reset_flag && lasttime != null) {
+        if (!is_first && !reset_flag && lasttime != null) {
             long current_time = System.currentTimeMillis();
             long last_check_time = Long.parseLong(lasttime);
             if (current_time - last_check_time <= UPDATECHECK_INTERVAL_MS) {
@@ -304,8 +306,13 @@ public class InitStartActivity extends Activity {
                         final KcaResourceDownloader downloadTask = new KcaResourceDownloader();
                         downloadTask.execute(new_resversion, fairy_flag);
                     });
+
             alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel), (dialog, which) -> {
-                startMainActivity();
+                if (is_first) {
+                    finish();
+                } else {
+                    startMainActivity();
+                }
             });
 
             handler.post(() -> {
