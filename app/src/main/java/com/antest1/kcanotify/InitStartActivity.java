@@ -8,6 +8,8 @@ import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -44,6 +46,7 @@ import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
@@ -421,11 +424,20 @@ public class InitStartActivity extends Activity {
             mProgressDialog.dismiss();
 
             if (fairy_wait) {
+                String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
+                String filename = "noti_icon_".concat(fairyIdValue).concat(".png");
                 final File root_dir = cw.getDir("fairy", Context.MODE_PRIVATE);
-                final File data = new File(root_dir, "noti_icon_0.png");
+                final File data = new File(root_dir, filename);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
                 while(true) { // wait for first fairy be loaded
                     try {
-                        if (data.exists()) break;
+                        if (data.exists()) {
+                            Bitmap bitmap = BitmapFactory.decodeFile(data.getPath(), options);
+                            if (options.outWidth != -1 && options.outHeight != -1) {
+                                break;
+                            }
+                        }
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
