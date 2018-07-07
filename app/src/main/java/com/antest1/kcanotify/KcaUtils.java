@@ -334,7 +334,7 @@ public class KcaUtils {
                 mediaPlayer.stop();
                 mediaPlayer.reset();
             }
-            if (!uri.equals(Uri.EMPTY)) {
+            if (uri != null && !Uri.EMPTY.equals(uri)) {
                 mediaPlayer.setDataSource(context, uri);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     AudioAttributes attr = new AudioAttributes.Builder()
