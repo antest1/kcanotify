@@ -348,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        dbHelper.closeDatabase();
+        dbHelper.close();
         super.onDestroy();
     }
 
