@@ -246,16 +246,6 @@
             </intent-filter>
         </receiver>
 
-        <provider
-            android:name="com.commonsware.cwac.provider.StreamProvider"
-            android:authorities="com.antest1.kcanotify.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="com.commonsware.cwac.provider.STREAM_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
-        </provider>
-
     </application>
 
 </manifest>

@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -34,9 +35,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.commonsware.cwac.provider.StreamProvider;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -320,8 +318,7 @@ public class KcaUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (uri.toString().startsWith("file")) {
                 File file = new File(uri.getPath());
-                Uri content_uri = StreamProvider.getUriForFile("com.antest1.kcanotify.provider", file);
-                return content_uri;
+                return MediaStore.Audio.Media.getContentUriForPath(file.getAbsolutePath());
             } else {
                 return uri;
             }
