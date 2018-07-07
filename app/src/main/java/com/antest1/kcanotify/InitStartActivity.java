@@ -19,6 +19,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,7 +87,7 @@ public class InitStartActivity extends Activity {
     ProgressDialog mProgressDialog;
     PowerManager pm;
     PowerManager.WakeLock mWakeLock;
-    TextView appname, appversion;
+    TextView appname, appversion, skipcheck;
 
     boolean is_first;
     JsonArray download_data = new JsonArray();
@@ -94,6 +95,7 @@ public class InitStartActivity extends Activity {
     JsonObject fairy_info = new JsonObject();
     int fairy_list_version;
     boolean reset_flag = false;
+    boolean is_skipped = false;
     Fetch fetch;
 
     public String getStringWithLocale(int id) {
@@ -134,6 +136,13 @@ public class InitStartActivity extends Activity {
 
         appversion = findViewById(R.id.app_version);
         appversion.setText(getString(R.string.app_version));
+
+        skipcheck = findViewById(R.id.skip_main);
+        skipcheck.setText(getStringWithLocale(R.string.download_skip));
+        skipcheck.setOnClickListener(v -> {
+            ActivityTrans();
+            is_skipped = true;
+        });
 
         is_first = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION)) == 0;
 
@@ -348,13 +357,17 @@ public class InitStartActivity extends Activity {
     }
 
     private void startMainActivity() {
-        r = () -> {
+        r = this::ActivityTrans;
+        handler.postDelayed(r, DELAY_TIME);
+    }
+
+    private void ActivityTrans() {
+        if (!is_skipped) {
             Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(mainIntent);
             finish();
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        };
-        handler.postDelayed(r, DELAY_TIME);
+        }
     }
 
     @Override

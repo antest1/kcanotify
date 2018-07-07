@@ -595,6 +595,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_title">存在可用更新</string>
     <string name="download_description_head">若果不更新資料，Kcanotify可能無法正常運作。</string>
     <string name="download_appdata">應用資料</string>
+    <string name="download_skip">跳過</string>
     <string name="download_gamedata">遊戲資料</string>
     <string name="download_questinfo">任務資訊</string>
     <string name="download_shipinfo">船艦翻譯</string>

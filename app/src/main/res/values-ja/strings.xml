@@ -589,6 +589,7 @@
     <string name="download_title">アップデート利用可能</string>
     <string name="download_description_head">データを更新していない場合、Kcanotifyが正常に動作しないことがあります。</string>
     <string name="download_appdata">アプリデータ</string>
+    <string name="download_skip">スキップ</string>
     <string name="download_gamedata">ゲームデータ</string>
     <string name="download_questinfo">任務情報</string>
     <string name="download_shipinfo">艦船翻訳</string>
