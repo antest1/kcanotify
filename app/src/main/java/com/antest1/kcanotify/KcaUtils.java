@@ -29,6 +29,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.MalformedJsonException;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -41,6 +42,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 import org.apache.commons.httpclient.ChunkedInputStream;
 
@@ -527,7 +529,7 @@ public class KcaUtils {
         try {
             Reader reader = new FileReader(jsonFile);
             data = new JsonParser().parse(reader).getAsJsonObject();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | IllegalStateException | JsonSyntaxException e ) {
             e.printStackTrace();
             setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
             if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonObjectFromStorage", "0", getStringFromException(e));
@@ -553,7 +555,7 @@ public class KcaUtils {
         try {
             Reader reader = new FileReader(jsonFile);
             data = new JsonParser().parse(reader).getAsJsonArray();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | IllegalStateException | JsonSyntaxException e ) {
             e.printStackTrace();
             setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
             if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonArrayFromStorage", "0", getStringFromException(e));
