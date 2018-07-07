@@ -58,6 +58,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
+import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_DISABLE_CUSTOMTOAST;
 import static com.antest1.kcanotify.KcaConstants.PREF_EQUIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
@@ -675,6 +676,7 @@ public class SettingActivity extends AppCompatActivity {
             case PREF_FAIRY_AUTOHIDE:
             case PREF_KCA_NOTI_AKASHI:
             case PREF_SHOW_CONSTRSHIP_NAME:
+            case PREF_DATALOAD_ERROR_FLAG:
                 return "boolean_false";
             case PREF_KCA_EXP_VIEW:
             case PREF_KCA_NOTI_NOTIFYATSVCOFF:
