@@ -82,7 +82,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <!-- SettingActivity Strings -->
     <string name="sa_checkupdate_latest" formatted="false">目前已是最新版本。 (%s)</string>
-    <string name="sa_checkupdate_hasupdate" formatted="false">有可用的更新。 (%s)\nDo 請問你想下載嗎？</string>
+    <string name="sa_checkupdate_hasupdate" formatted="false">有可用的更新。 (%s)\n請問你想下載嗎？</string>
     <string name="sa_checkupdate_dialogtitle">檢查更新</string>
     <string name="sa_checkupdate_nodataerror">檢查更新時出現問題</string>
     <string name="sa_checkupdate_servererror">更新伺服器出現錯誤</string>
@@ -604,5 +604,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_progress">正在下載中...</string>
     <string name="download_reset">初始化資源 (再次下載)</string>
     <string name="download_reset_message">再次下載應用程序資源</string>
-    <string name="download_check_error">Error when loading from stroage (using default data)</string>
+    <string name="download_check_error">從裝置加載時出現錯誤(使用預設資料)</string>
 </resources>

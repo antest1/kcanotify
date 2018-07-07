@@ -604,5 +604,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_progress">正在下载中...</string>
     <string name="download_reset">初始化资源 (再次下载)</string>
     <string name="download_reset_message">再次下载应用程序资源</string>
-    <string name="download_check_error">데이터 로딩 중 오류 발생 (기본 데이터 사용)</string>
+    <string name="download_check_error">从装置加载时出现错误(使用预设资料)</string>
 </resources>
