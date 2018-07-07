@@ -435,28 +435,6 @@ public class InitStartActivity extends Activity {
 
             download_finished = true;
             mProgressDialog.dismiss();
-
-            if (fairy_wait) {
-                String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
-                String filename = "noti_icon_".concat(fairyIdValue).concat(".png");
-                final File root_dir = cw.getDir("fairy", Context.MODE_PRIVATE);
-                final File data = new File(root_dir, filename);
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
-                while(true) { // wait for first fairy be loaded
-                    try {
-                        if (data.exists()) {
-                            Bitmap bitmap = BitmapFactory.decodeFile(data.getPath(), options);
-                            if (options.outWidth != -1 && options.outHeight != -1) {
-                                break;
-                            }
-                        }
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
             startMainActivity();
         }
 
