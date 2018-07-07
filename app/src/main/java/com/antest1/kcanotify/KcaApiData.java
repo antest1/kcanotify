@@ -460,8 +460,16 @@ public class KcaApiData {
 
     public static int getItemSize() { return helper.getItemCount() + getItemCountInBattle; }
 
+    private static JsonObject getJsonObjectFromStorage(Context context, String name) {
+        return KcaUtils.getJsonObjectFromStorage(context, name, helper);
+    }
+    private static JsonArray getJsonArrayFromStorage(Context context, String name) {
+        return KcaUtils.getJsonArrayFromStorage(context, name, helper);
+    }
+
+
     public static int loadMapEdgeInfoFromStorage(Context context) {
-        JsonObject data = KcaUtils.getJsonObjectFromStorage(context, "edges.json");
+        JsonObject data = getJsonObjectFromStorage(context, "edges.json");
         if (data != null) {
             helper.putValue(DB_KEY_MAPEDGES, data.toString());
             return 1;
@@ -505,7 +513,7 @@ public class KcaApiData {
     public static int loadShipTranslationDataFromStorage(Context context, String locale) {
         try {
             locale = getLocaleCode(locale);
-            JsonObject data = KcaUtils.getJsonObjectFromStorage(context, KcaUtils.format("ships-%s.json", locale));
+            JsonObject data = getJsonObjectFromStorage(context, KcaUtils.format("ships-%s.json", locale));
             AssetManager.AssetInputStream ais_abbr =
                     (AssetManager.AssetInputStream) context.getResources().getAssets().open("en-abbr.json");
             byte[] bytes_abbr = ByteStreams.toByteArray(ais_abbr);
@@ -525,7 +533,7 @@ public class KcaApiData {
 
     public static int loadItemTranslationDataFromStorage(Context context, String locale) {
         locale = getLocaleCode(locale);
-        JsonObject data = KcaUtils.getJsonObjectFromStorage(context, KcaUtils.format("items-%s.json", locale));
+        JsonObject data = getJsonObjectFromStorage(context, KcaUtils.format("items-%s.json", locale));
         if (data != null) {
             kcItemTranslationData = data.getAsJsonObject();
             return 1;
@@ -536,7 +544,7 @@ public class KcaApiData {
 
     public static int loadStypeTranslationDataFromStorage(Context context, String locale) {
         locale = getLocaleCode(locale);
-        JsonArray data = KcaUtils.getJsonArrayFromStorage(context, KcaUtils.format("stype-%s.json", locale));
+        JsonArray data = getJsonArrayFromStorage(context, KcaUtils.format("stype-%s.json", locale));
         if (data != null) {
             kcStypeData = data;
             return 1;
@@ -547,7 +555,7 @@ public class KcaApiData {
 
     public static int loadQuestInfoDataFromStorage(Context context, String locale) {
         locale = getLocaleCode(locale);
-        JsonObject data = KcaUtils.getJsonObjectFromStorage(context, KcaUtils.format("quests-%s.json", locale));
+        JsonObject data = getJsonObjectFromStorage(context, KcaUtils.format("quests-%s.json", locale));
         if (data != null) {
             kcQuestInfoData = data.getAsJsonObject();
             return 1;
@@ -585,7 +593,7 @@ public class KcaApiData {
     }
 
     public static int loadSimpleExpeditionInfoFromStorage(Context context) {
-        JsonArray data = KcaUtils.getJsonArrayFromStorage(context, "expedition.json");
+        JsonArray data = getJsonArrayFromStorage(context, "expedition.json");
         if (data != null) {
             for (JsonElement item : data) {
                 JsonObject expdata = item.getAsJsonObject();
@@ -598,7 +606,7 @@ public class KcaApiData {
     }
 
     public static int loadShipInitEquipCountFromStorage(Context context) {
-        JsonObject data = KcaUtils.getJsonObjectFromStorage(context, "ships_init_equip_count.json");
+        JsonObject data = getJsonObjectFromStorage(context, "ships_init_equip_count.json");
         if (data != null) {
             kcShipInitEquipCount = data.getAsJsonObject();
             return 1;
@@ -608,7 +616,7 @@ public class KcaApiData {
     }
 
     public static int loadQuestTrackDataFromStorage(KcaDBHelper helper, Context context) {
-        JsonObject data = KcaUtils.getJsonObjectFromStorage(context, "quest_track.json");
+        JsonObject data = getJsonObjectFromStorage(context, "quest_track.json");
         if (data != null) {
             helper.putValue(DB_KEY_QUESTTRACK, data.toString());
             return 1;

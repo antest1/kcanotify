@@ -1,0 +1,822 @@
+[{
+	"no": "1",
+	"area": 1,
+	"name": {
+		"ko": "연습해역",
+		"en": "Practice Voyage",
+		"jp": "練習航海",
+		"scn": "练习航海",
+		"tcn": "練習航海"
+	},
+	"time": 15,
+	"resource": [0, 30, 0, 0],
+	"reward": [[0, 0], [0, 0]],
+	"exp": [10, 10],
+	"flag-lv": 1,
+	"total-num": 2
+}, {
+	"no": "2",
+	"area": 1,
+	"name": {
+		"ko": "장거리연습항해",
+		"en": "Long Distance Training Voyage",
+		"jp": "長距離練習航海",
+		"scn": "长距离练习航海",
+		"tcn": "長距離練習航海"
+	},
+	"time": 30,
+	"resource": [0, 100, 30, 0],
+	"reward": [[1, 1], [0, 0]],
+	"exp": [20, 15],
+	"flag-lv": 2,
+	"total-num": 4
+}, {
+	"no": "3",
+	"area": 1,
+	"name": {
+		"ko": "경비임무",
+		"en": "Security Tasks",
+		"jp": "警備任務",
+		"scn": "警备任务",
+		"tcn": "警備任務"
+	},
+	"time": 20,
+	"resource": [30, 30, 40, 0],
+	"reward": [[0, 0], [0, 0]],
+	"exp": [30, 30],
+	"flag-lv": 3,
+	"total-num": 3
+}, {
+	"no": "4",
+	"area": 1,
+	"name": {
+		"ko": "대잠경계임무",
+		"en": "Anti-Submarine Alert",
+		"jp": "対潜警戒任務",
+		"scn": "对潜警戒任务",
+		"tcn": "對潛警戒任務"
+	},
+	"time": 50,
+	"resource": [0, 60, 0, 0],
+	"reward": [[1, 1], [10, 1]],
+	"exp": [30, 40],
+	"flag-lv": 3,
+	"total-num": 3,
+	"total-cond": "3-1|2-2/3-1|1-2/2-1|1-3"
+}, {
+	"no": "5",
+	"area": 1,
+	"name": {
+		"ko": "해상호위임무",
+		"en": "Maritime Security Missions",
+		"jp": "海上護衛任務",
+		"scn": "海上护卫任务",
+		"tcn": "海上護衛任務"
+	},
+	"time": 90,
+	"resource": [200, 200, 20, 20],
+	"reward": [[0, 0], [0, 0]],
+	"exp": [40, 40],
+	"flag-lv": 3,
+	"total-num": 4,
+	"total-cond": "3-1|2-2/3-1|1-2/2-1|1-3"
+}, {
+	"no": "6",
+	"area": 1,
+	"name": {
+		"ko": "방공사격연습",
+		"en": "Anti-Air Exercises",
+		"jp": "防空射撃演習",
+		"scn": "防空射击演习",
+		"tcn": "防空射擊演習"
+	},
+	"time": 40,
+	"resource": [0, 0, 0, 80],
+	"reward": [[10, 1], [0, 0]],
+	"exp": [30, 50],
+	"flag-lv": 4,
+	"total-num": 4
+}, {
+	"no": "7",
+	"area": 1,
+	"name": {
+		"ko": "관함식연습",
+		"en": "Ceremonial Dress Rehearsal",
+		"jp": "観艦式予行",
+		"scn": "观舰式排演",
+		"tcn": "觀艦式排演"
+	},
+	"time": 60,
+	"resource": [0, 0, 50, 30],
+	"reward": [[2, 1], [0, 0]],
+	"exp": [60, 120],
+	"flag-lv": 5,
+	"total-num": 6
+}, {
+	"no": "8",
+	"area": 1,
+	"name": {
+		"ko": "관함식",
+		"en": "Naval Review",
+		"jp": "観艦式",
+		"scn": "观舰式",
+		"tcn": "觀艦式"
+	},
+	"time": 180,
+	"resource": [50, 100, 50, 50],
+	"reward": [[2, 2], [3, 1]],
+	"exp": [120, 140],
+	"flag-lv": 8,
+	"total-num": 6
+}, {
+	"no": "100",
+	"area": 1,
+	"name": {
+		"ko": "병참강화임무",
+		"en": "Logistics Reinforcement Missions",
+		"jp": "兵站強化任務",
+		"scn": "后勤强化任务",
+		"tcn": "後勤強化任務"
+	},
+	"time": 25,
+	"resource": [45, 45, 0, 0],
+	"reward": [[0, 0], [0, 0]],
+	"exp": [15, 10],
+	"flag-lv": 5,
+	"total-num": 4,
+	"total-lv": 10,
+	"total-cond": "1,2-3"
+}, {
+	"no": "101",
+	"area": 1,
+	"name": {
+		"ko": "해협경비행동",
+		"en": "Strait Security Action",
+		"jp": "海峡警備行動",
+		"scn": "海峡警备行动",
+		"tcn": "海峽警備行動"
+	},
+	"time": 55,
+	"resource": [70, 40, 0, 10],
+	"reward": [[3, 1], [1, 1]],
+	"exp": [40, 45],
+	"flag-lv": 20,
+	"total-num": 4,
+	"total-cond": "1,2-4",
+	"total-asw": 180,
+	"total-fp": 70
+}, {
+	"no": "102",
+	"area": 1,
+	"name": {
+		"ko": "장시간대잠경계",
+		"en": "Long Time Anti-Submarine Alert",
+		"jp": "長時間対潜警戒",
+		"scn": "长时间对潜警戒",
+		"tcn": "長時間對潛警戒"
+	},
+	"time": 135,
+	"resource": [120, 0, 60, 60],
+	"reward": [[1, 1], [3, 2]],
+	"exp": [55, 70],
+	"flag-lv": 50,
+	"total-num": 5,
+	"total-lv": 185,
+	"total-cond": "3-1|1,2-4/2-2|1-3/2-1|1-4",
+	"total-asw": 280,
+	"total-los": 60
+}, {
+	"no": "9",
+	"area": 2,
+	"name": {
+		"ko": "유조선호위임무",
+		"en": "Tanker Escort Duties",
+		"jp": "タンカー護衛任務",
+		"scn": "油轮护卫任务",
+		"tcn": "油輪護衛任務"
+	},
+	"time": 240,
+	"resource": [350, 0, 0, 0],
+	"reward": [[10, 1], [1, 2]],
+	"exp": [60, 60],
+	"flag-lv": 3,
+	"total-num": 4,
+	"total-cond": "3-1|2-2/3-1|1-2/2-1|1-3"
+}, {
+	"no": "10",
+	"area": 2,
+	"name": {
+		"ko": "강행정찰임무",
+		"en": "Attack Force Recon Missions",
+		"jp": "強行偵察任務",
+		"scn": "强行侦察任务",
+		"tcn": "強行偵察任務"
+	},
+	"time": 90,
+	"resource": [0, 50, 0, 30],
+	"reward": [[1, 1], [2, 1]],
+	"exp": [40, 50],
+	"flag-lv": 6,
+	"total-num": 3,
+	"total-cond": "3-2"
+}, {
+	"no": "11",
+	"area": 2,
+	"name": {
+		"ko": "보크사이트수송임무",
+		"en": "Bauxite Transport Missions",
+		"jp": "ボーキサイト輸送任務",
+		"scn": "铝土运送任务",
+		"tcn": "鋁土運送任務"
+	},
+	"time": 300,
+	"resource": [0, 0, 0, 250],
+	"reward": [[10, 1], [1, 1]],
+	"exp": [40, 40],
+	"flag-lv": 6,
+	"total-num": 4,
+	"total-cond": "2-2"
+}, {
+	"no": "12",
+	"area": 2,
+	"name": {
+		"ko": "자원수송임무",
+		"en": "Resource Transportation Missions",
+		"jp": "資源輸送任務",
+		"scn": "资源运送任务",
+		"tcn": "資源運送任務"
+	},
+	"time": 480,
+	"resource": [50, 250, 200, 50],
+	"reward": [[11, 1], [3, 1]],
+	"exp": [60, 50],
+	"flag-lv": 4,
+	"total-num": 4,
+	"total-cond": "2-2"
+}, {
+	"no": "13",
+	"area": 2,
+	"name": {
+		"ko": "쥐수송작전",
+		"en": "Rat Transportation Strategy",
+		"jp": "鼠輸送作戦",
+		"scn": "鼠输送作战",
+		"tcn": "鼠輸送作戰"
+	},
+	"time": 240,
+	"resource": [240, 300, 0, 0],
+	"reward": [[1, 2], [10, 1]],
+	"exp": [70, 60],
+	"flag-lv": 5,
+	"total-num": 6,
+	"total-cond": "3-1|2-4"
+}, {
+	"no": "14",
+	"area": 2,
+	"name": {
+		"ko": "포위육전대철수작전",
+		"en": "Siege-Corps Withdrawal Strategies",
+		"jp": "包囲陸戦隊撤収作戦",
+		"scn": "围困陆战队撤退运送任务",
+		"tcn": "圍困陸戰隊撤退運送任務"
+	},
+	"time": 360,
+	"resource": [0, 240, 200, 0],
+	"reward": [[1, 1], [3, 1]],
+	"exp": [90, 100],
+	"flag-lv": 6,
+	"total-num": 6,
+	"total-cond": "3-1|2-3"
+}, {
+	"no": "15",
+	"area": 2,
+	"name": {
+		"ko": "미끼기동부대지원작전",
+		"en": "Decoy Task Force Assistance Operations",
+		"jp": "囮機動部隊支援作戦",
+		"scn": "诱饵机动部队支援作战",
+		"tcn": "誘餌機動部隊支援作戰"
+	},
+	"time": 720,
+	"resource": [0, 0, 300, 400],
+	"reward": [[12, 1], [3, 1]],
+	"exp": [100, 160],
+	"flag-lv": 9,
+	"total-num": 6,
+	"total-cond": "7,11,16,18-2|2-2"
+}, {
+	"no": "16",
+	"area": 2,
+	"name": {
+		"ko": "함대결전지원작전",
+		"en": "Fleet Battle Support Strategy",
+		"jp": "艦隊決戦援護作戦",
+		"scn": "舰队决战护卫作战",
+		"tcn": "艦隊決戰護衛作戰"
+	},
+	"time": 900,
+	"resource": [500, 500, 200, 200],
+	"reward": [[2, 2], [3, 2]],
+	"exp": [120, 200],
+	"flag-lv": 11,
+	"total-num": 6,
+	"total-cond": "3-1|2-2"
+}, {
+	"no": "110",
+	"area": 2,
+	"name": {
+		"ko": "남서방면항공정찰작전",
+		"en": "Southwest Aerial Reconnaissance Operations",
+		"jp": "南西方面航空偵察作戦",
+		"scn": "南西方面航空侦察作战",
+		"tcn": "南西方面航空偵察作戰"
+	},
+	"time": 35,
+	"resource": [0, 0, 10, 30],
+	"reward": [[10, 1], [1, 1]],
+	"exp": [30, 40],
+	"flag-lv": 40,
+	"total-num": 6,
+	"total-lv": 150,
+	"total-cond": "16-1|3-1|2-2",
+	"total-los": 140,
+	"total-asw": 200,
+	"total-fp": 200
+
+}, {
+	"no": "111",
+	"area": 2,
+	"name": {
+		"ko": "적박지강습반격작전",
+		"en": "Enemy Anchorage Assault Counterattack Operations",
+		"jp": "敵泊地強襲反撃作戦	",
+		"scn": "敌方泊地强袭反击作战",
+		"tcn": "敵方泊地強襲反擊作戰"
+	},
+	"time": 520,
+	"resource": [300, 200, 100, 0],
+	"reward": [[3, 2], [1, 2]],
+	"exp": [70, 130],
+	"flag-lv": 45,
+	"total-num": 6,
+	"total-lv": 290,
+	"total-cond": "5-1|3-1|2-3",
+	"total-firepower": 360
+}, {
+	"no": "17",
+	"area": 3,
+	"name": {
+		"ko": "적지정찰작전",
+		"en": "Enemy Territory Reconnaissance Operations",
+		"jp": "敵地偵察作戦",
+		"scn": "敌基地侦察作战",
+		"tcn": "敵基地偵察作戰"
+	},
+	"time": 45,
+	"resource": [70, 70, 50, 0],
+	"reward": [[0, 0], [0, 0]],
+	"exp": [30, 40],
+	"flag-lv": 20,
+	"total-num": 6,
+	"total-cond": "3-1|2-3"
+}, {
+	"no": "18",
+	"area": 3,
+	"name": {
+		"ko": "항공기수송작전",
+		"en": "Aircraft Transport Strategy",
+		"jp": "航空機輸送作戦",
+		"scn": "舰载机运送作战",
+		"tcn": "艦載機運送作戰"
+	},
+	"time": 300,
+	"resource": [0, 0, 300, 100],
+	"reward": [[1, 1], [0, 0]],
+	"exp": [60, 60],
+	"flag-lv": 15,
+	"total-num": 6,
+	"total-cond": "7,11,16,18-3|2-2"
+}, {
+	"no": "19",
+	"area": 3,
+	"name": {
+		"ko": "북호작전",
+		"en": "Northern Offensive Operations",
+		"jp": "北号作戦",
+		"scn": "北号作战",
+		"tcn": "北號作戰"
+	},
+	"time": 360,
+	"resource": [400, 0, 50, 30],
+	"reward": [[10, 1], [3, 1]],
+	"exp": [60, 70],
+	"flag-lv": 20,
+	"total-num": 6,
+	"total-cond": "10-2|2-2"
+}, {
+	"no": "20",
+	"area": 3,
+	"name": {
+		"ko": "잠수함초계작전",
+		"en": "Submarine Patrol",
+		"jp": "潜水艦哨戒任務",
+		"scn": "潜水艇戒备任务",
+		"tcn": "潛水艇戒備任務"
+	},
+	"time": 120,
+	"resource": [0, 0, 150, 0],
+	"reward": [[3, 1], [10, 1]],
+	"exp": [40, 50],
+	"flag-lv": 1,
+	"total-num": 2,
+	"total-cond": "13,14-1|3-1"
+}, {
+	"no": "21",
+	"area": 3,
+	"name": {
+		"ko": "북방쥐수송작전",
+		"en": "Northern Rat Transportation Strategy",
+		"jp": "北方鼠輸送作戦",
+		"scn": "北方鼠输送作战",
+		"tcn": "北方鼠輸送作戰"
+	},
+	"time": 140,
+	"resource": [320, 270, 0, 0],
+	"reward": [[10, 1], [0, 0]],
+	"exp": [45, 55],
+	"flag-lv": 15,
+	"total-num": 5,
+	"total-lv": 30,
+	"total-cond": "3-1|2-4",
+	"drum-ship": 3
+}, {
+	"no": "22",
+	"area": 3,
+	"name": {
+		"ko": "함대연습",
+		"en": "Fleet Exercises",
+		"jp": "艦隊演習",
+		"scn": "舰队演习",
+		"tcn": "艦隊演習"
+	},
+	"time": 180,
+	"resource": [0, 10, 0, 0],
+	"reward": [[0, 0], [0, 0]],
+	"exp": [45, 400],
+	"flag-lv": 30,
+	"total-num": 6,
+	"total-lv": 45,
+	"total-cond": "5-1|3-1|2-2"
+}, {
+	"no": "23",
+	"area": 3,
+	"name": {
+		"ko": "항공전함운용연습",
+		"en": "Aviation Battleship Exercises",
+		"jp": "航空戦艦運用演習",
+		"scn": "航空战舰运用演习",
+		"tcn": "航空戰艦運用演習"
+	},
+	"time": 240,
+	"resource": [0, 20, 0, 100],
+	"reward": [[0, 0], [0, 0]],
+	"exp": [70, 420],
+	"flag-lv": 50,
+	"total-num": 6,
+	"total-lv": 200,
+	"total-cond": "10-2|2-2"
+}, {
+	"no": "24",
+	"area": 3,
+	"name": {
+		"ko": "북방항로해상호위",
+		"en": "Guard the North Sea Route",
+		"jp": "北方航路海上護衛",
+		"scn": "北方航路海上护卫",
+		"tcn": "北方航路海上護衛"
+	},
+	"time": 500,
+	"resource": [500, 0, 0, 150],
+	"reward": [[3, 2], [1, 1]],
+	"exp": [65, 80],
+	"flag-lv": 50,
+	"flag-cond": "3",
+	"total-num": 6,
+	"total-lv": 200,
+	"total-cond": "3-1|2-4",
+	"drum-num-optional": 4
+}, {
+	"no": "25",
+	"area": 4,
+	"name": {
+		"ko": "통상파괴작전",
+		"en": "Trade-Route Destruction Strategy",
+		"jp": "通商破壊作戦",
+		"scn": "通商破坏作战",
+		"tcn": "通商破壞作戰"
+	},
+	"time": 2400,
+	"resource": [900, 0, 500, 0],
+	"reward": [[0, 0], [0, 0]],
+	"exp": [80, 180],
+	"flag-lv": 25,
+	"total-num": 4,
+	"total-cond": "5-2|2-2"
+}, {
+	"no": "26",
+	"area": 4,
+	"name": {
+		"ko": "적모항공습작전",
+		"en": "Bombing Campaign on the Enemy Home-Port",
+		"jp": "敵母港空襲作戦",
+		"scn": "敌母港空袭作战",
+		"tcn": "敵母港空襲作戰"
+	},
+	"time": 4800,
+	"resource": [0, 0, 0, 900],
+	"reward": [[1, 3], [0, 0]],
+	"exp": [150, 200],
+	"flag-lv": 30,
+	"total-num": 4,
+	"total-cond": "7,11,16,18-1|3-1|2-2"
+}, {
+	"no": "27",
+	"area": 4,
+	"name": {
+		"ko": "잠수함통상파괴작전",
+		"en": "Submarine Commerce Destruction Strategy",
+		"jp": "潜水艦通商破壊作戦",
+		"scn": "潜水艇通商破坏作战",
+		"tcn": "潛水艇通商破壞作戰"
+	},
+	"time": 1200,
+	"resource": [0, 0, 800, 0],
+	"reward": [[3, 1], [10, 2]],
+	"exp": [80, 60],
+	"flag-lv": 10,
+	"total-num": 2,
+	"total-cond": "13,14-2"
+}, {
+	"no": "28",
+	"area": 4,
+	"name": {
+		"ko": "서방해역봉쇄작전",
+		"en": "Western Sea Blockade Operation",
+		"jp": "西方海域封鎖作戦",
+		"scn": "西方海域封锁作战",
+		"tcn": "西方海域封鎖作戰"
+	},
+	"time": 1500,
+	"resource": [0, 0, 900, 350],
+	"reward": [[3, 2], [11, 1]],
+	"exp": [100, 140],
+	"flag-lv": 30,
+	"total-num": 3,
+	"total-cond": "13,14-3"
+}, {
+	"no": "29",
+	"area": 4,
+	"name": {
+		"ko": "잠수함파견연습",
+		"en": "Submarine Dispatch Exercises",
+		"jp": "潜水艦派遣演習",
+		"scn": "潜水艇派遣演习",
+		"tcn": "潛水艇派遣演習"
+	},
+	"time": 1440,
+	"resource": [0, 0, 0, 100],
+	"reward": [[3, 1], [10, 1]],
+	"exp": [100, 100],
+	"flag-lv": 50,
+	"total-num": 3,
+	"total-cond": "13,14-3"
+}, {
+	"no": "30",
+	"area": 4,
+	"name": {
+		"ko": "잠수함파견작전",
+		"en": "Submarine Dispatch Operations",
+		"jp": "潜水艦派遣作戦",
+		"scn": "潜水艇派遣作战",
+		"tcn": "潛水艇派遣作戰"
+	},
+	"time": 2880,
+	"resource": [0, 0, 0, 100],
+	"reward": [[3, 3], [0, 0]],
+	"exp": [100, 510],
+	"flag-lv": 55,
+	"total-num": 4,
+	"total-cond": "13,14-4"	
+}, {
+	"no": "31",
+	"area": 4,
+	"name": {
+		"ko": "해외함과의접촉",
+		"en": "Contacting Foreign Vessels",
+		"jp": "海外艦との接触",
+		"scn": "和海外舰的接触",
+		"tcn": "和海外艦的接觸"
+	},
+	"time": 120,
+	"resource": [0, 30, 0, 0],
+	"reward": [[10, 1], [0, 0]],
+	"exp": [50, 50],
+	"flag-lv": 60,
+	"total-num": 4,
+	"total-lv": 200,
+	"total-cond": "13,14-4"
+}, {
+	"no": "32",
+	"area": 4,
+	"name": {
+		"ko": "원양연습항해",
+		"en": "Seafaring Training",
+		"jp": "遠洋練習航海",
+		"scn": "远洋练习航海",
+		"tcn": "遠洋練習航海"
+	},
+	"time": 1440,
+	"resource": [50, 50, 50, 50],
+	"reward": [[12, 1], [3, 3]],
+	"exp": [300, -2],
+	"flag-lv": 5,
+	"flag-cond": "21",
+	"total-num": 3,
+	"total-cond": "2-2"
+}, {
+	"no": "33",
+	"area": 5,
+	"name": {
+		"ko": "전방지원함대",
+		"en": "Vanguard Support Missions (1)",
+		"jp": "前衛支援任務",
+		"scn": "前线部队支援任务",
+		"tcn": "前線部隊支援任務"
+	},
+	"time": 15,
+	"resource": [0, 0, 0, 0],
+	"reward": [[0, 0], [0, 0]],
+	"exp": [0, 0],
+	"total-num": 2,
+	"total-cond": "2-2"
+}, {
+	"no": "34",
+	"area": 5,
+	"name": {
+		"ko": "함대결전지원임무",
+		"en": "Vangard Support Missions (2)",
+		"jp": "艦隊決戦支援任務",
+		"scn": "舰队决战支援任务",
+		"tcn": "艦隊決戰支援任務"
+	},
+	"time": 30,
+	"resource": [0, 0, 0, 0],
+	"reward": [[0, 0], [0, 0]],
+	"exp": [0, 0],
+	"total-num": 2,
+	"total-cond": "2-2"
+}, {
+	"no": "35",
+	"area": 5,
+	"name": {
+		"ko": "MO작전",
+		"en": "MO Operations",
+		"jp": "MO作戦",
+		"scn": "MO作战",
+		"tcn": "MO作戰"
+	},
+	"time": 420,
+	"resource": [0, 0, 240, 280],
+	"reward": [[10, 2], [3, 1]],
+	"exp": [100, 100],
+	"flag-lv": 40,
+	"total-num": 6,
+	"total-cond": "7,11,16,18-2|5-1|2-1"
+}, {
+	"no": "36",
+	"area": 5,
+	"name": {
+		"ko": "수상기지건설",
+		"en": "Water Base Construction",
+		"jp": "水上機基地建設",
+		"scn": "水上飞机基地建设",
+		"tcn": "水上飛機基地建設"
+	},
+	"time": 540,
+	"resource": [480, 0, 200, 200],
+	"reward": [[11, 2], [1, 1]],
+	"exp": [100, 100],
+	"flag-lv": 30,
+	"total-num": 6,
+	"total-cond": "16-2|3-1|2-1"
+}, {
+	"no": "37",
+	"area": 5,
+	"name": {
+		"ko": "도쿄급행1",
+		"en": "Tokyo Express (1)",
+		"jp": "東京急行",
+		"scn": "东京急行",
+		"tcn": "東京急行"
+	},
+	"time": 165,
+	"resource": [0, 380, 270, 0],
+	"reward": [[10, 1], [0, 0]],
+	"exp": [50, 65],
+	"flag-lv": 50,
+	"total-lv": 200,
+	"total-num": 6,
+	"total-cond": "3-1|2-5",
+	"drum-ship": 3,
+	"drum-num": 4
+}, {
+	"no": "38",
+	"area": 5,
+	"name": {
+		"ko": "도쿄급행2",
+		"en": "Tokyo Express (2)",
+		"jp": "東京急行(弐)",
+		"scn": "东京急行(二)",
+		"tcn": "東京急行(二)"
+	},
+	"time": 175,
+	"resource": [420, 0, 200, 0],
+	"reward": [[10, 1], [0, 0]],
+	"exp": [100, 70],
+	"flag-lv": 65,
+	"total-lv": 240,
+	"total-num": 6,
+	"total-cond": "2-5",
+	"drum-ship": 4,
+	"drum-num": 8
+}, {
+	"no": "39",
+	"area": 5,
+	"name": {
+		"ko": "원양잠수함작전",
+		"en": "Deep-Sea Submarine Warfare",
+		"jp": "遠洋潜水艦作戦",
+		"scn": "远洋潜水艇作战",
+		"tcn": "遠洋潛水艇作戰"
+	},
+	"time": 1800,
+	"resource": [0, 0, 360, 0],
+	"reward": [[1, 2], [11, 1]],
+	"exp": [130, 320],
+	"flag-lv": 3,
+	"total-lv": 180,
+	"total-num": 5,
+	"total-cond": "20-1|13,14-4"
+}, {
+	"no": "40",
+	"area": 5,
+	"name": {
+		"ko": "수상기전선운송",
+		"en": "Seaplane Delivery on the Front Lines",
+		"jp": "水上機前線輸送",
+		"scn": "水上机前线运输",
+		"tcn": "水上機前線運輸"
+	},
+	"time": 410,
+	"resource": [300, 300, 0, 100],
+	"reward": [[10, 3], [1, 1]],
+	"exp": [60, 70],
+	"flag-lv": 25,
+	"flag-cond": "3",
+	"total-lv": 150,
+	"total-num": 6,
+	"total-cond": "3-1|16-2|2-2",
+	"drum-num-optional": 4
+}, {
+	"no": "133",
+	"area": 99,
+	"name": {
+		"ko": "[E] 전방지원함대",
+		"en": "[E] Vanguard Support Missions (1)",
+		"jp": "[E] 前衛支援任務",
+		"scn": "[E] 前线部队支援任务",
+		"tcn": "[E] 前線部隊支援任務"
+	},
+	"time": 15,
+	"resource": [0, 0, 0, 0],
+	"reward": [[0, 0], [0, 0]],
+	"exp": [0, 0],
+	"total-num": 2,
+	"total-cond": "2-2"
+}, {
+	"no": "134",
+	"area": 99,
+	"name": {
+		"ko": "[E] 함대결전지원임무",
+		"en": "[E] Vangard Support Missions (2)",
+		"jp": "[E] 艦隊決戦支援任務",
+		"scn": "[E] 舰队决战支援任务",
+		"tcn": "[E] 艦隊決戰支援任務"
+	},
+	"time": 30,
+	"resource": [0, 0, 0, 0],
+	"reward": [[0, 0], [0, 0]],
+	"exp": [0, 0],
+	"total-num": 2,
+	"total-cond": "2-2"
+}]

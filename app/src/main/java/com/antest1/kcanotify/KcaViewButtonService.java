@@ -243,7 +243,7 @@ public class KcaViewButtonService extends Service {
             mView = mInflater.inflate(R.layout.view_button, null);
 
             // Button (Fairy) Settings
-            icon_info = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "icon_info.json");
+            icon_info = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "icon_info.json", dbHelper);
             viewbutton = mView.findViewById(R.id.viewbutton);
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
             viewBitmapId = "noti_icon_".concat(fairyIdValue);
@@ -403,7 +403,7 @@ public class KcaViewButtonService extends Service {
 
     private void setFairyImage() {
         boolean glow_available = fairy_glow_on && getBooleanPreferences(getApplicationContext(), PREF_KCA_NOTI_QUEST_FAIRY_GLOW);
-        Bitmap src = KcaUtils.getFairyImageFromStorage(getApplicationContext(), viewBitmapId);
+        Bitmap src = KcaUtils.getFairyImageFromStorage(getApplicationContext(), viewBitmapId, dbHelper);
         Bitmap alpha = src.extractAlpha();
         Bitmap bmp = Bitmap.createBitmap(src.getWidth() + margin,
                 src.getHeight() + margin, Bitmap.Config.ARGB_8888);

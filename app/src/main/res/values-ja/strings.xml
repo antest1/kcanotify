@@ -596,6 +596,7 @@
     <string name="download_akashi">改修工廠</string>
     <string name="download_fairy">妖精さん</string>
     <string name="download_progress">ダウンロード中...</string>
-    <string name="download_reset">リソース初期化（再ダウンロード）</string>
+    <string name="download_reset">リソース初期化 (再ダウンロード)</string>
     <string name="download_reset_message">リソースを再ダウンロードします。</string>
+    <string name="download_check_error">ストレージから読み込み中にエラーが発生しました（デフォルトデータを使用）</string>
 </resources>

@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
         sHandler = h;
     }
 
+    boolean is_updated = false;
+
     public MainActivity() {
         LocaleUtils.updateConfig(this);
     }
@@ -312,6 +314,8 @@ public class MainActivity extends AppCompatActivity {
         setVpnBtn();
         setCheckBtn();
 
+        is_updated = getBooleanPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG);
+
         kcafairybtn = findViewById(R.id.kcafairybtn);
         String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
         String fairyPath = "noti_icon_".concat(fairyIdValue);
@@ -329,6 +333,15 @@ public class MainActivity extends AppCompatActivity {
                 || getBooleanPreferences(getApplicationContext(), PREF_KCA_QUESTVIEW_USE)) {
             warnType[REQUEST_OVERLAY_PERMISSION] = !checkOverlayPermission();
         }
+
+        if (!is_updated) {
+            textResourceReset.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            textResourceReset.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHeavyDmgState));
+        } else {
+            textResourceReset.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+            textResourceReset.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+        }
+
         setWarning();
     }
 

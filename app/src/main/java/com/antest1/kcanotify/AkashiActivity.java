@@ -183,14 +183,14 @@ public class AkashiActivity extends AppCompatActivity {
 
     private int getAkashiDataFromStorage() {
         JsonObject data;
-        data = KcaUtils.getJsonObjectFromStorage(getApplicationContext(), "akashi_data.json");
+        data = KcaUtils.getJsonObjectFromStorage(getApplicationContext(), "akashi_data.json", dbHelper);
         if (data != null) {
             akashiData = data;
         } else {
             return -1;
         }
 
-        data = KcaUtils.getJsonObjectFromStorage(getApplicationContext(), "akashi_day.json");
+        data = KcaUtils.getJsonObjectFromStorage(getApplicationContext(), "akashi_day.json", dbHelper);
         if (data != null) {
             akashiDay = data;
         } else {

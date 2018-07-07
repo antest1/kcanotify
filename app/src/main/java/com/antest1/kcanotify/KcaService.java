@@ -79,7 +79,6 @@ import static com.antest1.kcanotify.KcaApiData.getAdmiralLevel;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
-import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadQuestTrackDataFromStorage;
@@ -418,7 +417,7 @@ public class KcaService extends Service {
         int type = KcaAlarmService.getAlarmCount() > 0 ? 1 : 0;
         String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
         int viewBitmapSmallId = getId("ic_stat_notify_".concat(String.valueOf(type)), R.mipmap.class);
-        Bitmap viewBitmap = KcaUtils.getFairyImageFromStorage(getApplicationContext(), fairyId);
+        Bitmap viewBitmap = KcaUtils.getFairyImageFromStorage(getApplicationContext(), fairyId, dbHelper);
 
         notifyBuilder.setContentTitle(title)
                 .setSmallIcon(viewBitmapSmallId)
@@ -842,7 +841,7 @@ public class KcaService extends Service {
                 if (jsonDataObj.has("api_data")) {
                     JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                     JsonArray slotitem = api_data.getAsJsonArray("api_slotitem");
-                    restartFlag = (slotitem.get(0).getAsInt() != helper.getItemCount());
+                    restartFlag = (slotitem.get(0).getAsInt() != dbHelper.getItemCount());
                 }
                 return;
             }
@@ -2186,7 +2185,7 @@ public class KcaService extends Service {
 
             if (url.startsWith(KCA_API_PREF_FAIRY_CHANGED)) {
                 String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
-                Bitmap viewBitmap = KcaUtils.getFairyImageFromStorage(getApplicationContext(), fairyId);
+                Bitmap viewBitmap = KcaUtils.getFairyImageFromStorage(getApplicationContext(), fairyId, dbHelper);
                 if (viewBitmap != null) notifyBuilder.setLargeIcon(viewBitmap);
                 updateNotification(false);
                 startService(new Intent(this, KcaViewButtonService.class)

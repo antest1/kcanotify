@@ -231,15 +231,20 @@
 
                 <TextView
                     android:id="@+id/textResourceReset"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/textMainWarn"
                     android:layout_alignParentBottom="false"
+                    android:layout_alignParentRight="true"
                     android:layout_alignWithParentIfMissing="true"
                     android:layout_marginBottom="2dp"
-                    android:gravity="center_vertical|center_horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="4dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingStart="4dp"
                     android:text="@string/download_reset"
-                    android:textAlignment="textEnd"
+                    android:textAlignment="center"
                     android:textColor="?attr/colorAccent"
                     android:textSize="14dp" />
 

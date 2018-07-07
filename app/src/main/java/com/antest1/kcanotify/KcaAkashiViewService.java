@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Build;
@@ -24,18 +23,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -62,7 +56,7 @@ public class KcaAkashiViewService extends Service {
     private static boolean isStarChecked = false;
     private static int currentPage = 1;
     private static final int maxPage = 2; // Max 6 quest at parallel
-    public KcaDBHelper helper;
+    public KcaDBHelper dbHelper;
 
     static boolean error_flag = false;
 
@@ -125,7 +119,7 @@ public class KcaAkashiViewService extends Service {
         }
         try {
             active = true;
-            helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+            dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
             //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mInflater = LayoutInflater.from(contextWithLocale);
@@ -240,14 +234,14 @@ public class KcaAkashiViewService extends Service {
 
     private int getAkashiDataFromStorage() {
         JsonObject data;
-        data = KcaUtils.getJsonObjectFromStorage(getApplicationContext(), "akashi_data.json");
+        data = KcaUtils.getJsonObjectFromStorage(getApplicationContext(), "akashi_data.json", dbHelper);
         if (data != null) {
             akashiData = data;
         } else {
             return -1;
         }
 
-        data = KcaUtils.getJsonObjectFromStorage(getApplicationContext(), "akashi_day.json");
+        data = KcaUtils.getJsonObjectFromStorage(getApplicationContext(), "akashi_day.json", dbHelper);
         if (data != null) {
             akashiDay = data;
         } else {

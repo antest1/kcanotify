@@ -46,6 +46,7 @@ import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
+import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
@@ -291,8 +292,10 @@ public class InitStartActivity extends Activity {
         }
         setPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK, String.valueOf(System.currentTimeMillis()));
         if (download_data.size() == 0 && fairy_flag == 0) {
+            setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, true);
             startMainActivity();
         } else {
+            setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
             String message = getStringWithLocale(R.string.download_description_head) + "\n\n";
             for (String s: DOWNLOAD_TYPE_LIST) {
                 if (update_text.contains(s)) message = message.concat("- ").concat(getTypeText(s)).concat("\n");
@@ -369,6 +372,7 @@ public class InitStartActivity extends Activity {
     @Override
     protected void onDestroy() {
         Log.e("KCA-DA", "destroy");
+        dbHelper.close();
         super.onDestroy();
     }
 
@@ -423,6 +427,7 @@ public class InitStartActivity extends Activity {
 
         private void workFinished()  {
             mWakeLock.release();
+            setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, totalFiles == successedFiles);
             if (totalFiles == successedFiles) {
                 setPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION, update_version);
             }
@@ -502,7 +507,7 @@ public class InitStartActivity extends Activity {
             @Override
             public void onCompleted(@NotNull Download download) {
                 dbHelper.putResVer(FAIRY_INFO_FILENAME, fairy_list_version);
-                JsonArray fairy_data = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), FAIRY_INFO_FILENAME);
+                JsonArray fairy_data = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), FAIRY_INFO_FILENAME, dbHelper);
                 for (int i = 0; i < fairy_data.size(); i++) {
                     JsonObject fairy_item = fairy_data.get(i).getAsJsonObject();
                     fairy_item.addProperty("is_fairy", true);

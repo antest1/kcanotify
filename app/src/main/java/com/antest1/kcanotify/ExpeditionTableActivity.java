@@ -118,7 +118,7 @@ public class ExpeditionTableActivity extends AppCompatActivity {
             }
         });
 
-        expeditionData = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "expedition.json");
+        expeditionData = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "expedition.json", dbHelper);
         adapter.setListViewItemList(expeditionData, world_idx);
         listview = findViewById(R.id.expeditiontable_listiview);
         listview.setAdapter(adapter);

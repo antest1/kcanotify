@@ -87,6 +87,7 @@ public final class KcaConstants {
     public static final String ERROR_TYPE_MAIN = "AM";
     public static final String ERROR_TYPE_SETTING = "AS";
     public static final String ERROR_TYPE_RESLOG = "RL";
+    public static final String ERROR_TYPE_DATALOAD = "DL";
 
     public static final String API_PORT = "/api_port/port";
     public static final String API_WORLD_GET_WORLDINFO = "/api_world/get_worldinfo";
@@ -446,6 +447,7 @@ public final class KcaConstants {
     public static final String PREF_VIEW_YLOC = "view_yloc";
     public static final String PREF_LAST_UPDATE_CHECK = "last_update_check";
     public static final String PREF_TIMER_WIDGET_STATE = "timer_widget_state";
+    public static final String PREF_DATALOAD_ERROR_FLAG = "dataload_error_flag";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -495,7 +497,8 @@ public final class KcaConstants {
             PREF_SHOW_CONSTRSHIP_NAME,
             PREF_VIEW_YLOC,
             PREF_LAST_UPDATE_CHECK,
-            PREF_TIMER_WIDGET_STATE
+            PREF_TIMER_WIDGET_STATE,
+            PREF_DATALOAD_ERROR_FLAG
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
@@ -520,7 +523,8 @@ public final class KcaConstants {
             PREF_KCA_NOTI_AKASHI,
             PREF_KCA_ACTIVATE_DROPLOG,
             PREF_KCA_ACTIVATE_RESLOG,
-            PREF_SHOW_CONSTRSHIP_NAME
+            PREF_SHOW_CONSTRSHIP_NAME,
+            PREF_DATALOAD_ERROR_FLAG
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

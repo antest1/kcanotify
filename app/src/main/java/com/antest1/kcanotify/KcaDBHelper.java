@@ -151,11 +151,13 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         if (u == 0) {
             db.insertWithOnConflict(resver_table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         }
+        db.close();
     }
 
     public void clearResVer() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(resver_table_name, null, null);
+        db.close();
     }
 
     public void recordErrorLog(String type, String url, String request, String data, String error) {
@@ -168,6 +170,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         values.put("data", data);
         values.put("error", error);
         db.insert(error_table_name, null, values);
+        db.close();
     }
 
     public List<String> getErrorLog(int limit, boolean full) {
@@ -201,12 +204,14 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             }
         }
         c.close();
+        db.close();
         return log_list;
     }
 
     public void clearErrorLog() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(error_table_name, null, null);
+        db.close();
     }
 
     // for kca_userdata
@@ -226,12 +231,14 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                 c.close();
             }
         }
+        db.close();
         return value;
     }
 
     public void deleteValue(String key) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(table_name, "KEY=?", new String[]{key});
+        db.close();
     }
 
     public int getLength(String key) {
@@ -276,6 +283,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         if (u == 0) {
             db.insertWithOnConflict(table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         }
+        db.close();
     }
 
     public int getShipCount() {
@@ -291,6 +299,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("SELECT KEY from ".concat(slotitem_table_name), null);
         result = c.getCount();
         c.close();
+        db.close();
         return result;
     }
 
@@ -301,6 +310,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("SELECT KEY from ".concat(slotitem_table_name).concat(" WHERE KCID=".concat(String.valueOf(id))), null);
         result = c.getCount();
         c.close();
+        db.close();
         return result;
     }
 
@@ -312,6 +322,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             set.add(c.getInt(c.getColumnIndex("KEY")));
         }
         c.close();
+        db.close();
         return set;
     }
 
@@ -327,6 +338,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             data.add(row);
         }
         c.close();
+        db.close();
         return data;
     }
 
@@ -339,6 +351,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             value = c.getString(c.getColumnIndex("VALUE"));
         }
         c.close();
+        db.close();
         return value;
     }
 
@@ -354,6 +367,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         if (u == 0) {
             db.insertWithOnConflict(slotitem_table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         }
+        db.close();
     }
 
     public void putBulkItemValue(JsonArray api_data) {
@@ -384,6 +398,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         } finally {
             if (db != null) {
                 db.endTransaction();
+                db.close();
             }
         }
     }
@@ -398,6 +413,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             }
         }
         int result = db.delete(slotitem_table_name, condition, null);
+        db.close();
         Log.e("KCA", condition + " " + String.valueOf(result));
     }
 
@@ -472,6 +488,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             }
         }
         c.close();
+        db.close();
         return data;
     }
 
@@ -550,6 +567,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
 
         }
+        db.close();
         test3();
     }
 
@@ -561,6 +579,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             value = c.getString(c.getColumnIndex("VALUE"));
         }
         c.close();
+        db.close();
         return value;
     }
 
@@ -573,6 +592,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             value = c.getString(c.getColumnIndex("TIME"));
         }
         c.close();
+        db.close();
         return value;
     }
 
@@ -592,12 +612,14 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         if (u == 0) {
             db.insertWithOnConflict(questlist_table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         }
+        db.close();
         qt.addQuestTrack(key);
     }
 
     public void removeQuest(int key) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(questlist_table_name, "KEY=?", new String[]{String.valueOf(key)});
+        db.close();
         qt.removeQuestTrack(key, false);
     }
 
@@ -616,8 +638,6 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     public float[] getExpScore() {
         float[] exp = new float[2];
-        SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues values = new ContentValues();
         String expCurrentText = getValue(DB_KEY_EXPCRNT);
         String expTodayText = getValue(DB_KEY_EXPTDAY);
         int currentExp = expCurrentText != null ? Integer.parseInt(expCurrentText) : 0;
@@ -682,6 +702,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             sb.append(KcaUtils.format("[%s] %s %s\n", key, value, time));
         }
         c.close();
+        db.close();
         return sb.toString().trim();
     }
 
@@ -703,6 +724,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         }
         */
         c.close();
+        db.close();
     }
 
     public void test2() {
@@ -717,6 +739,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         }
         Log.e("KCA", "Total: " + String.valueOf(count));
         c.close();
+        db.close();
     }
 
     public void test3() {
@@ -732,5 +755,6 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         }
         Log.e("KCA", "Total: " + String.valueOf(count));
         c.close();
+        db.close();
     }
 }

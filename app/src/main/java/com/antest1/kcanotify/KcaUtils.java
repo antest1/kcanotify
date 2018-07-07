@@ -31,6 +31,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -74,7 +75,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DATALOAD;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
+import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_DISABLE_CUSTOMTOAST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
@@ -518,35 +521,59 @@ public class KcaUtils {
         return image.exists();
     }
 
-    public static JsonObject getJsonObjectFromStorage(Context context, String name) {
+    public static JsonObject getJsonObjectFromStorage(Context context, String name, KcaDBHelper helper) {
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("data", Context.MODE_PRIVATE);
-        File jsonFile = new File(directory, KcaUtils.format("%s", name));
+        File jsonFile = new File(directory, name);
         JsonObject data = null;
         try {
             Reader reader = new FileReader(jsonFile);
             data = new JsonParser().parse(reader).getAsJsonObject();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
+            if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonObjectFromStorage", "0", getStringFromException(e));
+            AssetManager am = cw.getAssets();
+            try {
+                AssetManager.AssetInputStream ais =
+                (AssetManager.AssetInputStream) am.open(name);
+                    byte[] bytes = ByteStreams.toByteArray(ais);
+                    data = new JsonParser().parse(new String(bytes)).getAsJsonObject();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonObjectFromStorage", "1", getStringFromException(e1));
+            }
         }
         return data;
     }
 
-    public static JsonArray getJsonArrayFromStorage(Context context, String name) {
+    public static JsonArray getJsonArrayFromStorage(Context context, String name, KcaDBHelper helper) {
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("data", Context.MODE_PRIVATE);
-        File jsonFile = new File(directory, KcaUtils.format("%s", name));
+        File jsonFile = new File(directory, name);
         JsonArray data = new JsonArray();
         try {
             Reader reader = new FileReader(jsonFile);
             data = new JsonParser().parse(reader).getAsJsonArray();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
+            if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonArrayFromStorage", "0", getStringFromException(e));
+            AssetManager am = cw.getAssets();
+            try {
+                AssetManager.AssetInputStream ais =
+                        (AssetManager.AssetInputStream) am.open(name);
+                byte[] bytes = ByteStreams.toByteArray(ais);
+                data = new JsonParser().parse(new String(bytes)).getAsJsonArray();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonArrayFromStorage", "1", getStringFromException(e1));
+            }
         }
         return data;
     }
 
-    public static Bitmap getFairyImageFromStorage(Context context, String name) {
+    public static Bitmap getFairyImageFromStorage(Context context, String name, KcaDBHelper helper) {
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("fairy", Context.MODE_PRIVATE);
         File myImageFile = new File(directory, KcaUtils.format("%s.png", name));
@@ -558,6 +585,8 @@ public class KcaUtils {
             bitmap = BitmapFactory.decodeStream(new FileInputStream(myImageFile), null, options);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
+            if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getFairyImageFromStorage", "0", getStringFromException(e));
             bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.noti_icon_0);
         }
         return bitmap;
