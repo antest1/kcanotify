@@ -26,9 +26,12 @@ import static android.widget.Toast.makeText;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
 
 
@@ -119,6 +122,7 @@ public class ExpeditionTableActivity extends AppCompatActivity {
         });
 
         expeditionData = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "expedition.json", dbHelper);
+        showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
         adapter.setListViewItemList(expeditionData, world_idx);
         listview = findViewById(R.id.expeditiontable_listiview);
         listview.setAdapter(adapter);

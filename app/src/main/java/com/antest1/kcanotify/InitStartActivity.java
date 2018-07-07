@@ -143,7 +143,7 @@ public class InitStartActivity extends Activity {
         }
 
         if (!KcaUtils.checkOnline(getApplicationContext())) {
-            Toast.makeText(getApplicationContext(), "Cannot check the update", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Cannot check the update", Toast.LENGTH_SHORT).show();
             startMainActivity();
         } else {
             handler = new Handler();

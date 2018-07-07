@@ -39,6 +39,7 @@ import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
+import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 
 
 public class KcaAkashiViewService extends Service {
@@ -247,7 +248,7 @@ public class KcaAkashiViewService extends Service {
         } else {
             return -1;
         }
-
+        showDataLoadErrorToast(getApplicationContext(), getBaseContext(), getStringWithLocale(R.string.download_check_error));
         return 1;
     }
 

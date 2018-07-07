@@ -102,6 +102,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
+import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 import static com.antest1.kcanotify.KcaViewButtonService.REMOVE_FAIRY_ACTION;
 import static com.antest1.kcanotify.KcaViewButtonService.RETURN_FAIRY_ACTION;
 
@@ -258,6 +259,8 @@ public class KcaService extends Service {
         loadSimpleExpeditionInfoFromStorage(getApplicationContext());
         loadShipInitEquipCountFromStorage(getApplicationContext());
         loadQuestTrackDataFromStorage(dbHelper, getApplicationContext());
+
+        showDataLoadErrorToast(getApplicationContext(), getBaseContext(), getStringWithLocale(R.string.download_check_error));
 
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -2698,7 +2701,7 @@ public class KcaService extends Service {
 
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
         loadTranslationData(getApplicationContext());
-
+        showDataLoadErrorToast(getApplicationContext(), getBaseContext(), getStringWithLocale(R.string.download_check_error));
 
         super.onConfigurationChanged(newConfig);
     }

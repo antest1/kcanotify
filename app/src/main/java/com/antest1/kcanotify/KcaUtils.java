@@ -25,6 +25,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -598,12 +599,28 @@ public class KcaUtils {
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("fairy", Context.MODE_PRIVATE);
         File myImageFile = new File(directory, KcaUtils.format("%s.png", name));
-
-        if (px > 0) {
-            GlideApp.with(context).load(myImageFile.getPath())
-                    .dontAnimate().override(px, px).into(view);
+        if (myImageFile.exists()) {
+            if (px > 0) {
+                GlideApp.with(context).load(myImageFile.getPath())
+                        .dontAnimate().override(px, px).into(view);
+            } else {
+                GlideApp.with(context).load(myImageFile.getPath()).into(view);
+            }
         } else {
-            GlideApp.with(context).load(myImageFile.getPath()).into(view);
+            view.setImageResource(R.mipmap.noti_icon_0);
+        }
+    }
+
+    public static void showDataLoadErrorToast(Context ac, Context bc, String text) {
+        if (getBooleanPreferences(ac, PREF_DATALOAD_ERROR_FLAG)) {
+            KcaCustomToast customToast = new KcaCustomToast(ac);
+            showCustomToast(ac, bc, customToast, text, Toast.LENGTH_LONG, ContextCompat.getColor(ac, R.color.colorHeavyDmgStatePanel));
+        }
+    }
+
+    public static void showDataLoadErrorToast(Context context, String text) {
+        if (getBooleanPreferences(context, PREF_DATALOAD_ERROR_FLAG)) {
+            Toast.makeText(context, text, Toast.LENGTH_LONG).show();
         }
     }
 

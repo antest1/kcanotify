@@ -43,6 +43,7 @@ import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
+import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 
 
 public class AkashiActivity extends AppCompatActivity {
@@ -196,7 +197,7 @@ public class AkashiActivity extends AppCompatActivity {
         } else {
             return -1;
         }
-
+        showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
         return 1;
     }
 

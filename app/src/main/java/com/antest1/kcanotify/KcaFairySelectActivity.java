@@ -21,10 +21,13 @@ import java.util.List;
 
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_FAIRY_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
+import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
+import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 
 public class KcaFairySelectActivity extends AppCompatActivity {
     Toolbar toolbar;
@@ -41,6 +44,10 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         LocaleUtils.updateConfig(this);
     }
 
+    private String getStringWithLocale(int id) {
+        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +59,13 @@ public class KcaFairySelectActivity extends AppCompatActivity {
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         JsonArray icon_info = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "icon_info.json", dbHelper);
-
         List<String> fairy_id = new ArrayList<>();
-        for (int i = 0; i < icon_info.size(); i++) {
-            fairy_id.add("noti_icon_".concat(String.valueOf(i)));
+        if (getBooleanPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG)) {
+            fairy_id.add("noti_icon_0");
+        } else {
+            for (int i = 0; i < icon_info.size(); i++) {
+                fairy_id.add("noti_icon_".concat(String.valueOf(i)));
+            }
         }
 
         final KcaItemAdapter adapter = new KcaItemAdapter(getApplicationContext(),
@@ -86,6 +96,7 @@ public class KcaFairySelectActivity extends AppCompatActivity {
                 gv.invalidateViews();
             }
         });
+        showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
     }
 
     @Override
