@@ -437,7 +437,9 @@ public class KcaUtils {
     }
 
     public static Calendar getJapanCalendarInstance() {
-        return Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
+        c.setFirstDayOfWeek(Calendar.MONDAY);
+        return c;
     }
 
     public static SimpleDateFormat getJapanSimpleDataFormat(String format) {
