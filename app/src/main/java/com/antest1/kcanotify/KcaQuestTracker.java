@@ -194,12 +194,12 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     }
                     break;
                 case 2: // Weekly
-                    SimpleDateFormat dateFormat = getJapanSimpleDataFormat("yy MM dd");
+                    SimpleDateFormat dateFormat = getJapanSimpleDataFormat("yy MM dd HH");
                     try {
-                        JsonObject week_data = getCurrentWeekData();
+                        JsonObject week_data = KcaUtils.getCurrentWeekData();
                         long start_time = week_data.get("start").getAsLong();
                         long end_time = week_data.get("end").getAsLong();
-                        Date date1 = dateFormat.parse(KcaUtils.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
+                        Date date1 = dateFormat.parse(KcaUtils.format("%s %s %s %s", quest_time[0], quest_time[1], quest_time[2], quest_time[3]));
                         long quest_timestamp = date1.getTime();
                         if (quest_timestamp < start_time || quest_timestamp >= end_time) {
                             valid_flag = false;
@@ -724,22 +724,4 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         Log.e("KCA-QT", "Total: " + String.valueOf(count));
         c.close();
     }
-
-    public JsonObject getCurrentWeekData() {
-        JsonObject week_data = new JsonObject();
-        Calendar cal = getJapanCalendarInstance();
-        boolean is_passed = cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY && cal.get(Calendar.HOUR_OF_DAY) < 5;
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        cal.set(Calendar.HOUR_OF_DAY, 5);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        long start_timestamp = cal.getTimeInMillis();
-        if (is_passed) start_timestamp -= 604800000;
-        long end_timestamp = start_timestamp + 604800000;
-        week_data.addProperty("start", start_timestamp);
-        week_data.addProperty("end", end_timestamp);
-        return week_data;
-    }
-
 }

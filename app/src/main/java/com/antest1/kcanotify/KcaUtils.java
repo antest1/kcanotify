@@ -441,7 +441,7 @@ public class KcaUtils {
     }
 
     public static Calendar getJapanCalendarInstance() {
-        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"));
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"), Locale.JAPAN);
         c.setFirstDayOfWeek(Calendar.MONDAY);
         return c;
     }
@@ -706,5 +706,24 @@ public class KcaUtils {
             }
         }
         return count > 0;
+    }
+
+    public static JsonObject getCurrentWeekData() {
+        JsonObject week_data = new JsonObject();
+        Calendar cal = getJapanCalendarInstance();
+        boolean is_passed = (cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) && (cal.get(Calendar.HOUR_OF_DAY) < 5);
+        while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+            cal.add(Calendar.DAY_OF_WEEK, -1);
+        }
+        cal.set(Calendar.HOUR_OF_DAY, 5);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        long start_timestamp = cal.getTimeInMillis();
+        if (is_passed) start_timestamp -= 604800000;
+        long end_timestamp = start_timestamp + 604800000;
+        week_data.addProperty("start", start_timestamp);
+        week_data.addProperty("end", end_timestamp);
+        return week_data;
     }
 }

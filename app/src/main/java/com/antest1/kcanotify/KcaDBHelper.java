@@ -424,13 +424,14 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                         }
                         break;
                     case 2: // Weekly
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yy MM dd", Locale.US);
+                        SimpleDateFormat dateFormat = getJapanSimpleDataFormat("yy MM dd HH");
                         try {
-                            Date date1 = dateFormat.parse(KcaUtils.format("%s %s %s", quest_time[0], quest_time[1], quest_time[2]));
-                            Date date2 = dateFormat.parse(KcaUtils.format("%s %s %s", current_time[0], current_time[1], current_time[2]));
-                            long diff = date2.getTime() - date1.getTime();
-                            long datediff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                            if (datediff >= 7 && reset_passed) {
+                            JsonObject week_data = KcaUtils.getCurrentWeekData();
+                            long start_time = week_data.get("start").getAsLong();
+                            long end_time = week_data.get("end").getAsLong();
+                            Date date1 = dateFormat.parse(KcaUtils.format("%s %s %s %s", quest_time[0], quest_time[1], quest_time[2], quest_time[3]));
+                            long quest_timestamp = date1.getTime();
+                            if (quest_timestamp < start_time || quest_timestamp >= end_time) {
                                 valid_flag = false;
                             }
                         } catch (ParseException e) {
