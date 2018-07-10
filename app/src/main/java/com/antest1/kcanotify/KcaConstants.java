@@ -457,6 +457,7 @@ public final class KcaConstants {
             PREF_SNIFFER_MODE,
             PREF_KCA_SEEK_CN,
             PREF_OPENDB_API_USE,
+            PREF_POIDB_API_USE,
             PREF_KCA_EXP_VIEW,
             PREF_KCA_EXP_TYPE,
             PREF_KCA_BATTLEVIEW_USE,
@@ -503,6 +504,7 @@ public final class KcaConstants {
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
             PREF_OPENDB_API_USE,
+            PREF_POIDB_API_USE,
             PREF_AKASHI_STAR_CHECKED,
             PREF_KCA_SET_PRIORITY,
             PREF_DISABLE_CUSTOMTOAST,

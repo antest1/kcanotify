@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_ARRAY;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_BOOLEAN_LIST;
@@ -23,6 +24,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_ARRAY;
 import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
@@ -86,10 +88,14 @@ public class KcaInspectorActivity extends AppCompatActivity {
         listViewItemList.add(new AbstractMap.SimpleEntry<>(SPREF_PREFIX.concat(PREF_SVC_ENABLED), String.valueOf(prefs.getBoolean(PREF_SVC_ENABLED, false))));
         for (String pref_key: PREFS_LIST) {
             String pref_value = "";
-            if (PREFS_BOOLEAN_LIST.contains(pref_key)) {
-                pref_value = String.valueOf(getBooleanPreferences(getApplicationContext(), pref_key));
-            } else {
-                pref_value = getStringPreferences(getApplicationContext(), pref_key);
+            try {
+                if (PREFS_BOOLEAN_LIST.contains(pref_key)) {
+                    pref_value = String.valueOf(getBooleanPreferences(getApplicationContext(), pref_key));
+                } else {
+                    pref_value = getStringPreferences(getApplicationContext(), pref_key);
+                }
+            } catch (Exception e) {
+                dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "pref", "", "", getStringFromException(e));
             }
             listViewItemList.add(new AbstractMap.SimpleEntry<> (PREF_PREFIX.concat(pref_key), pref_value));
         }
