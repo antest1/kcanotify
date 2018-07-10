@@ -137,10 +137,18 @@ public class InitStartActivity extends Activity {
         appversion = findViewById(R.id.app_version);
         appversion.setText(getString(R.string.app_version));
 
+        boolean all_passed = KcaUtils.validateResourceFiles(getApplicationContext());
+        if (all_passed) {
+            findViewById(R.id.init_layout).setOnClickListener(v -> {
+                ActivityTrans(false);
+                is_skipped = true;
+            });
+        }
+
         skipcheck = findViewById(R.id.skip_main);
         skipcheck.setText(getStringWithLocale(R.string.download_skip));
         skipcheck.setOnClickListener(v -> {
-            ActivityTrans();
+            ActivityTrans(false);
             is_skipped = true;
         });
 
@@ -153,10 +161,11 @@ public class InitStartActivity extends Activity {
 
         if (!KcaUtils.checkOnline(getApplicationContext())) {
             Toast.makeText(getApplicationContext(), "Cannot check the update", Toast.LENGTH_SHORT).show();
-            startMainActivity();
+            startMainActivity(true);
         } else {
             handler = new Handler();
             Thread t = new Thread(() -> {
+                if (is_skipped) return;
                 String currentVersion = BuildConfig.VERSION_NAME;
 
                 final Call<String> rv_data = downloader.getRecentVersion();
@@ -213,11 +222,13 @@ public class InitStartActivity extends Activity {
                                 });
 
                         handler.post(() -> {
-                            AlertDialog alert = alertDialog.create();
-                            alert.setIcon(R.mipmap.ic_launcher);
-                            alert.setTitle(
-                                    getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
-                            alert.show();
+                            if (!is_skipped) {
+                                AlertDialog alert = alertDialog.create();
+                                alert.setIcon(R.mipmap.ic_launcher);
+                                alert.setTitle(
+                                        getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
+                                alert.show();
+                            }
                         });
                     } else {
                         dataCheck(response_data);
@@ -237,7 +248,7 @@ public class InitStartActivity extends Activity {
             long current_time = System.currentTimeMillis();
             long last_check_time = Long.parseLong(lasttime);
             if (current_time - last_check_time <= UPDATECHECK_INTERVAL_MS) {
-                startMainActivity();
+                startMainActivity(true);
                 return;
             }
         }
@@ -302,9 +313,8 @@ public class InitStartActivity extends Activity {
         setPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK, String.valueOf(System.currentTimeMillis()));
         if (download_data.size() == 0 && fairy_flag == 0) {
             setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
-            startMainActivity();
+            startMainActivity(true);
         } else {
-            setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, true);
             String message = getStringWithLocale(R.string.download_description_head) + "\n\n";
             for (String s: DOWNLOAD_TYPE_LIST) {
                 if (update_text.contains(s)) message = message.concat("- ").concat(getTypeText(s)).concat("\n");
@@ -315,6 +325,7 @@ public class InitStartActivity extends Activity {
             alertDialog.setCancelable(false);
             alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
                     (dialog, which) -> {
+                        setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, true);
                         final KcaResourceDownloader downloadTask = new KcaResourceDownloader();
                         downloadTask.execute(new_resversion, fairy_flag);
                     });
@@ -323,14 +334,16 @@ public class InitStartActivity extends Activity {
                 if (is_first) {
                     finish();
                 } else {
-                    startMainActivity();
+                    startMainActivity(true);
                 }
             });
 
             handler.post(() -> {
-                AlertDialog alert = alertDialog.create();
-                alert.setIcon(R.mipmap.ic_launcher);
-                alert.show();
+                if (!is_skipped) {
+                    AlertDialog alert = alertDialog.create();
+                    alert.setIcon(R.mipmap.ic_launcher);
+                    alert.show();
+                }
             });
         }
     }
@@ -356,17 +369,17 @@ public class InitStartActivity extends Activity {
         }
     }
 
-    private void startMainActivity() {
-        r = this::ActivityTrans;
+    private void startMainActivity(boolean transition) {
+        r = () -> ActivityTrans(transition);
         handler.postDelayed(r, DELAY_TIME);
     }
 
-    private void ActivityTrans() {
+    private void ActivityTrans(boolean transition) {
         if (!is_skipped) {
             Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(mainIntent);
             finish();
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            if(transition) overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
     }
 
@@ -448,7 +461,7 @@ public class InitStartActivity extends Activity {
 
             download_finished = true;
             mProgressDialog.dismiss();
-            startMainActivity();
+            startMainActivity(true);
         }
 
         private void downloadFile(String folder, String url, String name, int version) {

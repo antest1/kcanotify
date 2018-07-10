@@ -59,6 +59,9 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -68,6 +71,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -684,5 +688,23 @@ public class KcaUtils {
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    public static boolean validateResourceFiles(Context context) {
+        int count = 0;
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("data", Context.MODE_PRIVATE);
+        for (final File entry : directory.listFiles()) {
+            try {
+                Reader reader = new FileReader(entry);
+                new JsonParser().parse(reader);
+                count += 1;
+            } catch (FileNotFoundException | IllegalStateException | JsonSyntaxException e ) {
+                e.printStackTrace();
+                setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
+                return false;
+            }
+        }
+        return count > 0;
     }
 }
