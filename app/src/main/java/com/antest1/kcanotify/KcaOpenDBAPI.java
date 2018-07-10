@@ -28,10 +28,10 @@ public class KcaOpenDBAPI {
     public static final String TIMEOUT_CODE = "timeout";
     public static final String ERROR_CODE = "erroroccured";
 
-    public static final String REQ_EQUIP_DEV = "/opendb/report/equip_build.php";
-    public static final String REQ_SHIP_DEV = "/opendb/report/ship_build.php";
-    public static final String REQ_SHIP_DROP = "/opendb/report/ship_drop.php";
-    public static final String REQ_EQUIP_REMODEL = "/opendb/report/equip_remodel.php";
+    public static final String REQ_EQUIP_DEV = "/report/equip_build.php";
+    public static final String REQ_SHIP_DEV = "/report/ship_build.php";
+    public static final String REQ_SHIP_DROP = "/report/ship_drop.php";
+    public static final String REQ_EQUIP_REMODEL = "/report/equip_remodel.php";
 
     public static final String USER_AGENT = KcaUtils.format("Kcanotify/%s ", BuildConfig.VERSION_NAME);
 
@@ -131,7 +131,7 @@ public class KcaOpenDBAPI {
         }
 
         public String Request(String uri, String data) throws Exception {
-            String url = "http://swaytwig.com".concat(uri);
+            String url = "http://opendb.swaytwig.com".concat(uri);
 
             RequestBody body;
             try {

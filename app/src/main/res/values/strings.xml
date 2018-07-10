@@ -259,7 +259,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="setting_menu_stat_head">Statistic Report Settings</string>
     <string name="setting_menu_stat_title_opendb">Send game statistics to OpenDB</string>
-    <string name="setting_menu_stat_desc_opendb" translatable="false">http://swaytwig.com/opendb/</string>
+    <string name="setting_menu_stat_desc_opendb" translatable="false">http://opendb.swaytwig.com/</string>
     <string name="setting_menu_stat_title_poidb">Send game statistics to poi-statistics</string>
     <string name="setting_menu_stat_desc_poidb" translatable="false">https://db.kcwiki.org/</string>
 
