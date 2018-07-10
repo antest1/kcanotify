@@ -589,6 +589,11 @@ public class KcaUtils {
             if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getFairyImageFromStorage", "0", getStringFromException(e));
             bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.noti_icon_0);
         }
+        if (bitmap == null) {
+            setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
+            if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getFairyImageFromStorage", "0", "bitmap==null");
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.noti_icon_0);
+        }
         return bitmap;
     }
 
