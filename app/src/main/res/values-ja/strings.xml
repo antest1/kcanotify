@@ -509,6 +509,8 @@
     <string name="reslog_label_consumable">アイテム</string>
     <string name="reslog_clear_dialog_message">全体記録を削除しますか？</string>
 
+    <string name="action_datasync">データ同期</string>
+
     <string name="fleetview_title">艦隊情報</string>
     <string name="fleetview_combined">連合</string>
     <string name="fleetview_switch_1">第１艦隊</string>

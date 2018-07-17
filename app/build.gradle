@@ -71,5 +71,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
     implementation "com.tonyodev.fetch2:fetch2:2.1.0-RC10"
+    compile('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
+    compile 'com.google.zxing:core:3.3.0'
     // testCompile 'junit:junit:4.12'
 }

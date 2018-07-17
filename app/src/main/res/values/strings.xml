@@ -574,6 +574,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="reslog_label_consumable">Consumable</string>
     <string name="reslog_clear_dialog_message">Do you want to clear the whole resource log?</string>
 
+    <string name="action_datasync">Data Sync</string>
+
     <string name="fleetview_title">FleetView</string>
     <string name="fleetview_combined">CF</string>
     <string name="fleetview_switch_1">Fleet 1</string>

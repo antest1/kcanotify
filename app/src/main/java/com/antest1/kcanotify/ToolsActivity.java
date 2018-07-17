@@ -47,7 +47,7 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 public class ToolsActivity extends AppCompatActivity {
     Toolbar toolbar;
     static Gson gson = new Gson();
-    LinearLayout view_fleetlist, view_shiplist, view_equipment, view_droplog, view_reslog, view_akashi, view_expcalc, view_expdtable;
+    LinearLayout view_fleetlist, view_shiplist, view_equipment, view_droplog, view_reslog, view_akashi, view_expcalc, view_expdtable, view_datasync;
     public ToolsActivity() {
         LocaleUtils.updateConfig(this);
     }
@@ -72,69 +72,51 @@ public class ToolsActivity extends AppCompatActivity {
         view_akashi = findViewById(R.id.action_akashi);
         view_expcalc = findViewById(R.id.action_expcalc);
         view_expdtable = findViewById(R.id.action_expdtable);
+        view_datasync = findViewById(R.id.action_datasync);
 
-        view_fleetlist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ToolsActivity.this, FleetInfoActivity.class);
-                startActivity(intent);
-            }
+        view_fleetlist.setOnClickListener(view -> {
+            Intent intent = new Intent(ToolsActivity.this, FleetInfoActivity.class);
+            startActivity(intent);
         });
 
-        view_shiplist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ToolsActivity.this, ShipInfoActivity.class);
-                startActivity(intent);
-            }
+        view_shiplist.setOnClickListener(view -> {
+            Intent intent = new Intent(ToolsActivity.this, ShipInfoActivity.class);
+            startActivity(intent);
         });
 
-        view_equipment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ToolsActivity.this, EquipmentInfoActivity.class);
-                startActivity(intent);
-            }
+        view_equipment.setOnClickListener(view -> {
+            Intent intent = new Intent(ToolsActivity.this, EquipmentInfoActivity.class);
+            startActivity(intent);
         });
 
-        view_droplog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ToolsActivity.this, DropLogActivity.class);
-                startActivity(intent);
-            }
+        view_droplog.setOnClickListener(view -> {
+            Intent intent = new Intent(ToolsActivity.this, DropLogActivity.class);
+            startActivity(intent);
         });
 
-        view_reslog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ToolsActivity.this, ResourceLogActivity.class);
-                startActivity(intent);
-            }
+        view_reslog.setOnClickListener(view -> {
+            Intent intent = new Intent(ToolsActivity.this, ResourceLogActivity.class);
+            startActivity(intent);
         });
 
-        view_akashi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ToolsActivity.this, AkashiActivity.class);
-                startActivity(intent);
-            }
+        view_akashi.setOnClickListener(view -> {
+            Intent intent = new Intent(ToolsActivity.this, AkashiActivity.class);
+            startActivity(intent);
         });
 
-        view_expcalc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ToolsActivity.this, ExpCalcActivity.class);
-                startActivity(intent);
-            }
+        view_expcalc.setOnClickListener(view -> {
+            Intent intent = new Intent(ToolsActivity.this, ExpCalcActivity.class);
+            startActivity(intent);
         });
 
-        view_expdtable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ToolsActivity.this, ExpeditionTableActivity.class);
-                startActivity(intent);
-            }
+        view_expdtable.setOnClickListener(view -> {
+            Intent intent = new Intent(ToolsActivity.this, ExpeditionTableActivity.class);
+            startActivity(intent);
+        });
+
+        view_datasync.setOnClickListener(v -> {
+            Intent intent = new Intent(ToolsActivity.this, KcaDataSyncActivity.class);
+            startActivity(intent);
         });
     }
 

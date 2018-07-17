@@ -516,6 +516,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="reslog_label_consumable">消耗品</string>
     <string name="reslog_clear_dialog_message">你想清空所有資源紀錄嗎？</string>
 
+    <string name="action_datasync">數據同步</string>
+
     <string name="fleetview_title">艦隊信息</string>
     <string name="fleetview_combined">聯合</string>
     <string name="fleetview_switch_1">第１艦隊</string>

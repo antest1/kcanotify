@@ -84,6 +84,11 @@
     public static <fields>;
 }
 
+-dontwarn com.google.zxing.**
+-dontwarn com.journeyapps.**
+-keep class com.google.zxing.** { *; }
+-keep class com.google.journeyapps.** { *; }
+
 -assumenosideeffects class android.util.Log {
     public static *** d(...);
     public static *** v(...);
