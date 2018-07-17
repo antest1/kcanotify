@@ -1702,13 +1702,13 @@ public class KcaBattleViewService extends Service {
                         int status_change = y_direction > 0 ? 1 : -1;
                         view_status = Math.min(Math.max(view_status + status_change, -1), 1);
                         mParams.gravity = KcaUtils.getGravity(view_status);
+                        setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                         mManager.updateViewLayout(mView, mParams);
                     } else {
                         clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                         if (clickDuration < MAX_CLICK_DURATION) {
                             if (mView != null) mView.setVisibility(View.GONE);
                             if (itemView != null) itemView.setVisibility(View.GONE);
-                            setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                         }
                     }
                     break;

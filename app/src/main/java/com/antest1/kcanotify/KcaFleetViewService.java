@@ -533,13 +533,13 @@ public class KcaFleetViewService extends Service {
                         view_status = Math.min(Math.max(view_status + status_change, -1), 1);
                         mParams.gravity = KcaUtils.getGravity(view_status);
                         mManager.updateViewLayout(mView, mParams);
+                        setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                     }
 
                     if (clickDuration < MAX_CLICK_DURATION) {
                         if (id == mView.findViewById(R.id.fleetview_head).getId()) {
                             if (mView != null) mView.setVisibility(GONE);
                             if (itemView != null) itemView.setVisibility(GONE);
-                            setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                         } else if (id == mView.findViewById(R.id.fleetview_cn_change).getId()) {
                             changeInternalSeekCn();
                             fleetCnChangeBtn.setText(getSeekType());
