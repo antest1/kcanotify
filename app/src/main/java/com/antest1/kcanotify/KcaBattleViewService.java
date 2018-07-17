@@ -1690,6 +1690,7 @@ public class KcaBattleViewService extends Service {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            boolean view_fix = getBooleanPreferences(getApplicationContext(), PREF_FIX_VIEW_LOC);
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     mBeforeY = event.getRawY();
@@ -1698,7 +1699,7 @@ public class KcaBattleViewService extends Service {
                     break;
                 case MotionEvent.ACTION_UP:
                     int y_direction = (int) (mAfterY - mBeforeY);
-                    if (Math.abs(y_direction) > 400) {
+                    if (!view_fix && Math.abs(y_direction) > 400) {
                         int status_change = y_direction > 0 ? 1 : -1;
                         view_status = Math.min(Math.max(view_status + status_change, -1), 1);
                         mParams.gravity = KcaUtils.getGravity(view_status);

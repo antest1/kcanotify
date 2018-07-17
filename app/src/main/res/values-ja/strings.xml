@@ -172,6 +172,8 @@
     <string name="setting_menu_view_title_questview_use">任務情報を使う</string>
     <string name="setting_menu_view_title_show_constrship">建造中の艦娘の名前を表示</string>
     <string name="setting_menu_view_desc_show_constrship">艦隊情報で建造中の艦娘をネタバレする</string>
+    <string name="setting_menu_view_title_fix_view">艦隊情報/戦闘予報を固定</string>
+    <string name="setting_menu_view_desc_fix_view">現在縦位置で動かないようにする</string>
 
     <string name="setting_menu_noti_head">通知設定</string>
     <string name="setting_menu_noti_title_alarm_delay">タイマー調整（秒）</string>

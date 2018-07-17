@@ -176,6 +176,8 @@
     <string name="setting_menu_view_title_questview_use">임무번역 사용</string>
     <string name="setting_menu_view_title_show_constrship">건조 중인 칸무스 이름 표시</string>
     <string name="setting_menu_view_desc_show_constrship">함대정보에서 건조 독에 있는 칸무스를 표시</string>
+    <string name="setting_menu_view_title_fix_view">함대정보/전투예보 뷰 고정</string>
+    <string name="setting_menu_view_desc_fix_view">현재 세로 위치에서 움직이지 않도록 함</string>
 
     <string name="setting_menu_noti_head">알림 설정</string>
     <string name="setting_menu_noti_title_alarm_delay">타이머 여유 (초)</string>

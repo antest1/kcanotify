@@ -196,6 +196,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_view_desc_questview_use">顯示任務內容與翻譯</string>
     <string name="setting_menu_view_title_show_constrship">顯示建造中的船艦名稱</string>
     <string name="setting_menu_view_desc_show_constrship">於艦隊信息中顯示建造中的船艦名稱</string>
+    <string name="setting_menu_view_title_fix_view">FleetView/BattleView Drag Lock</string>
+    <string name="setting_menu_view_desc_fix_view">Fix the vertical position of view to current position</string>
 
     <string name="setting_menu_noti_head">通知設定</string>
     <string name="setting_menu_noti_title_exp">遠征</string>

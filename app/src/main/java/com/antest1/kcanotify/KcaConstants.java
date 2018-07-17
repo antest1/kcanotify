@@ -448,6 +448,7 @@ public final class KcaConstants {
     public static final String PREF_LAST_UPDATE_CHECK = "last_update_check";
     public static final String PREF_TIMER_WIDGET_STATE = "timer_widget_state";
     public static final String PREF_DATALOAD_ERROR_FLAG = "dataload_error_flag";
+    public static final String PREF_FIX_VIEW_LOC = "fix_view_loc";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -499,7 +500,8 @@ public final class KcaConstants {
             PREF_VIEW_YLOC,
             PREF_LAST_UPDATE_CHECK,
             PREF_TIMER_WIDGET_STATE,
-            PREF_DATALOAD_ERROR_FLAG
+            PREF_DATALOAD_ERROR_FLAG,
+            PREF_FIX_VIEW_LOC
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
@@ -526,7 +528,8 @@ public final class KcaConstants {
             PREF_KCA_ACTIVATE_DROPLOG,
             PREF_KCA_ACTIVATE_RESLOG,
             PREF_SHOW_CONSTRSHIP_NAME,
-            PREF_DATALOAD_ERROR_FLAG
+            PREF_DATALOAD_ERROR_FLAG,
+            PREF_FIX_VIEW_LOC
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

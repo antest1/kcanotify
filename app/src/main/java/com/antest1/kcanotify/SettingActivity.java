@@ -64,6 +64,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_EQUIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
+import static com.antest1.kcanotify.KcaConstants.PREF_FIX_VIEW_LOC;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_ACTIVATE_DROPLOG;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_ACTIVATE_RESLOG;
@@ -677,6 +678,7 @@ public class SettingActivity extends AppCompatActivity {
             case PREF_KCA_NOTI_AKASHI:
             case PREF_SHOW_CONSTRSHIP_NAME:
             case PREF_DATALOAD_ERROR_FLAG:
+            case PREF_FIX_VIEW_LOC:
                 return "boolean_false";
             case PREF_KCA_EXP_VIEW:
             case PREF_KCA_NOTI_NOTIFYATSVCOFF:

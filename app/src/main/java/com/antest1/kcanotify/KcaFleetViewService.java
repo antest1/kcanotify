@@ -56,11 +56,13 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_USEITEMS;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_FLEETVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_FIX_VIEW_LOC;
 import static com.antest1.kcanotify.KcaConstants.PREF_FV_MENU_ORDER;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_VIEW_YLOC;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
 import static com.antest1.kcanotify.KcaQuestViewService.SHOW_QUESTVIEW_ACTION_NEW;
+import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -455,6 +457,7 @@ public class KcaFleetViewService extends Service {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            boolean view_fix = getBooleanPreferences(getApplicationContext(), PREF_FIX_VIEW_LOC);
             WindowManager.LayoutParams itemViewParams;
             int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
 
@@ -528,7 +531,7 @@ public class KcaFleetViewService extends Service {
                     }
 
                     int y_direction = (int) (mAfterY - mBeforeY);
-                    if (Math.abs(y_direction) > 400) {
+                    if (!view_fix && Math.abs(y_direction) > 400) {
                         int status_change = y_direction > 0 ? 1 : -1;
                         view_status = Math.min(Math.max(view_status + status_change, -1), 1);
                         mParams.gravity = KcaUtils.getGravity(view_status);

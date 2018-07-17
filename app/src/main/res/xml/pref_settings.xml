@@ -163,6 +163,13 @@
             android:summary="@string/setting_menu_view_desc_show_constrship"
             android:title="@string/setting_menu_view_title_show_constrship" />
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="fix_view_loc"
+            android:summary="@string/setting_menu_view_desc_fix_view"
+            android:title="@string/setting_menu_view_title_fix_view" />
+
+
         <!--
         <CheckBoxPreference
             android:defaultValue="true"
