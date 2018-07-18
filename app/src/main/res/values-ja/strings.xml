@@ -510,6 +510,13 @@
     <string name="reslog_clear_dialog_message">全体記録を削除しますか？</string>
 
     <string name="action_datasync">データ同期</string>
+    <string name="datasync_quest_title">任務カウンター同期</string>
+    <string name="datasync_quest_code">コード</string>
+    <string name="datasync_mode_add">重ねる</string>
+    <string name="datasync_mode_overwrite">上書き</string>
+    <string name="datasync_quest_check">チェック</string>
+    <string name="datasync_quest_sync">同期</string>
+    <string name="datasync_quest_copy">コードコピー</string>
 
     <string name="fleetview_title">艦隊情報</string>
     <string name="fleetview_combined">連合</string>
@@ -537,7 +544,7 @@
     <string name="develop_failed_text">ペンギン (´;ω;｀)</string>
     <string name="action_errorlog">エラーログ</string>
     <string name="errlog_dialog_message">全体エラーログを削除しますか？</string>
-    <string name="errlog_cpy_to_clipboard">クリップボードにコピーされました。</string>
+    <string name="copied_to_clipboard">クリップボードにコピーされました。</string>
     <string name="excheckview_title">遠征チェック</string>
     <string name="excheckview_flag_info">旗艦</string>
     <string name="excheckview_total_info">編成</string>

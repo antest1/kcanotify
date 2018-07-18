@@ -1,9 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
@@ -29,7 +27,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.BufferedWriter;
@@ -44,7 +41,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static android.R.attr.id;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DROPLOG_VERSION;
@@ -288,7 +284,7 @@ public class DropLogActivity extends AppCompatActivity {
         protected void onPreExecute() {
             is_exporting = true;
             row_count.setText(getStringWithLocale(R.string.action_save_msg));
-            row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExportProcess));
+            row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPanelWarning));
         }
 
         @Override

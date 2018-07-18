@@ -510,6 +510,13 @@
     <string name="reslog_clear_dialog_message">자원 기록을 모두 삭제하시겠습니까?</string>
 
     <string name="action_datasync">데이터 동기화</string>
+    <string name="datasync_quest_title">임무 추적 동기화</string>
+    <string name="datasync_quest_code">코드</string>
+    <string name="datasync_mode_add">더하기</string>
+    <string name="datasync_mode_overwrite">덮어쓰기</string>
+    <string name="datasync_quest_check">확인</string>
+    <string name="datasync_quest_sync">동기화</string>
+    <string name="datasync_quest_copy">코드 복사</string>
 
     <string name="fleetview_title">함대정보</string>
     <string name="fleetview_combined">연합</string>
@@ -569,7 +576,7 @@
     <string name="labinfoview_dist_format" formatted="false">작전반경 %d</string>
     <string name="action_errorlog">오류 로그</string>
     <string name="errlog_dialog_message">전체 오류 로그를 지우시겠습니까?</string>
-    <string name="errlog_cpy_to_clipboard">내용이 클립보드에 복사되었습니다.</string>
+    <string name="copied_to_clipboard">내용이 클립보드에 복사되었습니다.</string>
     <string name="expedition_type_value_0">남은 시간</string>
     <string name="expedition_type_value_1">종료 시간</string>
     <string name="expedition_type_value_2">경과 시간</string>

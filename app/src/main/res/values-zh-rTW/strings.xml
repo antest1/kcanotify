@@ -517,6 +517,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="reslog_clear_dialog_message">你想清空所有資源紀錄嗎？</string>
 
     <string name="action_datasync">數據同步</string>
+    <string name="datasync_quest_title">任務計數器同步</string>
+    <string name="datasync_quest_code">編碼</string>
+    <string name="datasync_mode_add">加成</string>
+    <string name="datasync_mode_overwrite">覆蓋</string>
+    <string name="datasync_quest_check">檢查</string>
+    <string name="datasync_quest_sync">同步</string>
+    <string name="datasync_quest_copy">複製編碼</string>
 
     <string name="fleetview_title">艦隊信息</string>
     <string name="fleetview_combined">聯合</string>
@@ -575,7 +582,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="labinfoview_dist_format" formatted="false">作戰半徑 %d</string>
     <string name="action_errorlog">錯誤日誌</string>
     <string name="errlog_dialog_message">你想清空所有錯誤日誌嗎？</string>
-    <string name="errlog_cpy_to_clipboard">已複製文本到剪貼板</string>
+    <string name="copied_to_clipboard">已複製文本到剪貼板</string>
     <string name="expedition_type_value_0">剩下時間</string>
     <string name="expedition_type_value_1">結束時間</string>
     <string name="expedition_type_value_2">經過時間</string>

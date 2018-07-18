@@ -60,7 +60,7 @@ public class ErrorlogActivity extends AppCompatActivity{
                 ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 clip.setPrimaryClip(ClipData.newPlainText("text", ((TextView) v).getText()));
                 doVibrate(vibrator, 100);
-                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.errlog_cpy_to_clipboard), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
                 return false;
             }
         });
