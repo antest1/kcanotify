@@ -131,6 +131,8 @@ public class InitStartActivity extends Activity {
                 .build();
         fetch = Fetch.Impl.getInstance(fetchConfiguration);
 
+        KcaApiData.setDBHelper(dbHelper);
+
         appname = findViewById(R.id.app_title);
         appname.setText(getStringWithLocale(R.string.app_name));
 
