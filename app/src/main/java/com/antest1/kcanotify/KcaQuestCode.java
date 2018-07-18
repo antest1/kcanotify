@@ -29,14 +29,12 @@ public final class KcaQuestCode {
                     sb.append("=");
                 } else if (key == 221) {
                     sb.append("=");
-                    sb.append(chars.charAt(count.get(i).getAsInt() / chars.length()));
                     sb.append(chars.charAt(count.get(i).getAsInt() % chars.length()));
                 }
             } else {
                 sb.append(chars.charAt(count.get(i).getAsInt()));
             }
         }
-        sb = sb.reverse();
         String value = sb.toString();
         String size = String.valueOf(value.length());
         return size.concat(value);
@@ -52,7 +50,6 @@ public final class KcaQuestCode {
             for (int i = 0; i < size; i++) {
                 sb.append(code.charAt(key+i));
             }
-            sb = sb.reverse();
             char[] sb_result = sb.toString().trim().toCharArray();
             String quest_code = String.valueOf(chars.indexOf(sb_result[0]) * chars.length() + chars.indexOf(sb_result[1]));
             JsonArray quest_count = new JsonArray();
@@ -61,9 +58,8 @@ public final class KcaQuestCode {
                     if (quest_code.equals("214")) {
                         quest_count.add(chars.length());
                     } else if (quest_code.equals("221")) {
-                        int count_high = chars.indexOf(sb_result[i+1]);
-                        int count_low = chars.indexOf(sb_result[i+2]);
-                        quest_count.add(count_high * chars.length() + count_low);
+                        int count_low = chars.indexOf(sb_result[i+1]);
+                        quest_count.add(chars.length() + count_low);
                         break;
                     }
                 } else {
