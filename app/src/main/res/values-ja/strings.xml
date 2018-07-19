@@ -516,7 +516,8 @@
     <string name="datasync_mode_overwrite">上書き</string>
     <string name="datasync_quest_check">チェック</string>
     <string name="datasync_quest_sync">同期</string>
-    <string name="datasync_quest_copy">コードコピー</string>
+    <string name="datasync_quest_copy">コピー</string>
+    <string name="datasync_current_label">現在のコード</string>
 
     <string name="fleetview_title">艦隊情報</string>
     <string name="fleetview_combined">連合</string>

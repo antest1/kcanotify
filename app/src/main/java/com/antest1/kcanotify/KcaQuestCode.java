@@ -15,7 +15,11 @@ import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
 public final class KcaQuestCode {
     public final static String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    public static String convert_to_code(String key_, JsonArray count) {
+    public static String convert_to_code(String key) {
+        return convert_to_code(key, null, true);
+    }
+
+    public static String convert_to_code(String key_, JsonArray count, boolean active) {
         String text = "";
         int key = Integer.parseInt(key_);
         int key_high = key / chars.length();
@@ -25,19 +29,24 @@ public final class KcaQuestCode {
         sb.append(chars.charAt(key_high));
         sb.append(chars.charAt(key_low));
 
-        for (int i = 0; i < count.size(); i++) {
-            if (count.get(i).getAsInt() >= chars.length()) {
-                if (key == 214) {
-                    sb.append("=");
-                } else if (key == 221) {
-                    sb.append("=");
-                    sb.append(chars.charAt(count.get(i).getAsInt() % chars.length()));
+        if (count != null) {
+            for (int i = 0; i < count.size(); i++) {
+                if (count.get(i).getAsInt() >= chars.length()) {
+                    if (key == 214) {
+                        sb.append("=");
+                    } else if (key == 221) {
+                        sb.append("=");
+                        sb.append(chars.charAt(count.get(i).getAsInt() % chars.length()));
+                    }
+                } else {
+                    sb.append(chars.charAt(count.get(i).getAsInt()));
                 }
-            } else {
-                sb.append(chars.charAt(count.get(i).getAsInt()));
             }
         }
+
         String value = sb.toString();
+        String value_active = active ? "1" : "0";
+        value = value_active.concat(value);
         String size = String.valueOf(value.length());
         return size.concat(value);
     }
@@ -48,8 +57,9 @@ public final class KcaQuestCode {
         while (key < code.length()) {
             StringBuilder sb = new StringBuilder();
             int size = Integer.parseInt(code.substring(key, key+1));
-            key += 1;
-            for (int i = 0; i < size; i++) {
+            boolean active = Integer.parseInt(code.substring(key+1, key+2)) > 0;
+            key += 2;
+            for (int i = 0; i < size - 1; i++) {
                 sb.append(code.charAt(key+i));
             }
             char[] sb_result = sb.toString().trim().toCharArray();
@@ -71,8 +81,9 @@ public final class KcaQuestCode {
             JsonObject item = new JsonObject();
             item.addProperty("code", quest_code);
             item.add("cond", quest_count);
+            item.addProperty("active", active);
             code_list.add(item);
-            key += size;
+            key += (size - 1);
         }
         return code_list;
     }
@@ -99,28 +110,33 @@ public final class KcaQuestCode {
             for (int i = 0; i < decoded_result.size(); i++) {
                 JsonObject item = decoded_result.get(i).getAsJsonObject();
                 String key = item.get("code").getAsString();
+                boolean active = item.get("active").getAsBoolean();
                 JsonObject quest_data = kcQuestInfoData.getAsJsonObject(key);
                 String quest_code = quest_data.get("code").getAsString();
                 String quest_name = quest_data.get("name").getAsString();
                 JsonArray quest_cond = item.getAsJsonArray("cond");
-                List<String> quest_cond_list = new ArrayList<>();
-                JsonArray quest_trackinfo = qt.getQuestTrackInfo(key);
+                if (quest_cond.size() > 0) {
+                    List<String> quest_cond_list = new ArrayList<>();
+                    JsonArray quest_trackinfo = qt.getQuestTrackInfo(key);
 
-                for (int j = 0; j < quest_cond.size(); j++) {
-                    String v = quest_cond.get(j).getAsString();
-                    String u = "";
-                    if (!mode) {
-                        if (quest_trackinfo.size() > 0) {
-                            u = quest_trackinfo.get(j).getAsString() + "+";
-                        } else {
-                            u = "0+";
+                    for (int j = 0; j < quest_cond.size(); j++) {
+                        String v = quest_cond.get(j).getAsString();
+                        String u = "";
+                        if (!mode) {
+                            if (quest_trackinfo.size() > 0) {
+                                u = quest_trackinfo.get(j).getAsString() + "+";
+                            } else {
+                                u = "0+";
+                            }
                         }
+                        quest_cond_list.add(u + v);
                     }
-                    quest_cond_list.add(u + v);
+                    String active_str = active ? "" : "*";
+                    String quest_cond_str = KcaUtils.joinStr(quest_cond_list, ", ");
+                    data.append(KcaUtils.format("[%s%s] %s (%s)\n", quest_code, active_str, quest_name, quest_cond_str));
+                } else {
+                    data.append(KcaUtils.format("[%s] %s\n", quest_code, quest_name));
                 }
-
-                String quest_cond_str = KcaUtils.joinStr(quest_cond_list, ", ");
-                data.append(KcaUtils.format("[%s] %s (%s)\n", quest_code, quest_name, quest_cond_str));
             }
         }
         return data.toString().trim();

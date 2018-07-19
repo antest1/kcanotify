@@ -116,43 +116,83 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/questsync_button_check"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:padding="7dp"
-                android:text="@string/datasync_quest_check"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/colorAccent"
-                android:textSize="14dp" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/questsync_button_sync"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="7dp"
-                android:text="@string/datasync_quest_sync"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/colorAccent"
-                android:textSize="14dp" />
+                <TextView
+                    android:id="@+id/questsync_current_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="7dp"
+                    android:text="@string/datasync_current_label"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey"
+                    android:textSize="12dp" />
 
-            <TextView
-                android:id="@+id/questsync_button_copy"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                <TextView
+                    android:id="@+id/questsync_code"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:padding="7dp"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/questsync_button_copy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="7dp"
+                    android:text="@string/datasync_quest_copy"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="12dp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:padding="7dp"
-                android:text="@string/datasync_quest_copy"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/colorAccent"
-                android:textSize="14dp" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/questsync_button_check"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="7dp"
+                    android:text="@string/datasync_quest_check"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/questsync_button_sync"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="7dp"
+                    android:text="@string/datasync_quest_sync"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

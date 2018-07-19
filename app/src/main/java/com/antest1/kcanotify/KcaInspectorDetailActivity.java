@@ -14,26 +14,19 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static android.R.attr.key;
-import static android.R.attr.y;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_ARRAY;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_BOOLEAN_LIST;
-import static com.antest1.kcanotify.KcaConstants.PREF_ARRAY;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -184,7 +177,7 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
                 value_text = getStringPreferences(getApplicationContext(), key);
             }
         } else if (type_key.startsWith(QT_PREFIX)) {
-            value_text = questTracker.getQuestTrackerData();
+            value_text = questTracker.getQuestTrackerDump();
         } else if (type_key.startsWith(DQ_PREFIX)) {
             value_text = dbHelper.getQuestListData();
         }

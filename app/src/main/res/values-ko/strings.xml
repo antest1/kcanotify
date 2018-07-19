@@ -516,7 +516,8 @@
     <string name="datasync_mode_overwrite">덮어쓰기</string>
     <string name="datasync_quest_check">확인</string>
     <string name="datasync_quest_sync">동기화</string>
-    <string name="datasync_quest_copy">코드 복사</string>
+    <string name="datasync_quest_copy">복사</string>
+    <string name="datasync_current_label">현재 코드</string>
 
     <string name="fleetview_title">함대정보</string>
     <string name="fleetview_combined">연합</string>

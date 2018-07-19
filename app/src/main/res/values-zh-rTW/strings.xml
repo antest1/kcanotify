@@ -523,7 +523,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="datasync_mode_overwrite">覆蓋</string>
     <string name="datasync_quest_check">檢查</string>
     <string name="datasync_quest_sync">同步</string>
-    <string name="datasync_quest_copy">複製編碼</string>
+    <string name="datasync_quest_copy">複製</string>
+    <string name="datasync_current_label">現在編碼</string>
 
     <string name="fleetview_title">艦隊信息</string>
     <string name="fleetview_combined">聯合</string>

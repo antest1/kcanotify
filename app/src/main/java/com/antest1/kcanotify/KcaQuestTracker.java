@@ -690,7 +690,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         return result;
     }
 
-    public String getQuestTrackerData() {
+    public String getQuestTrackerDump() {
         SQLiteDatabase db = this.getReadableDatabase();
         StringBuilder sb = new StringBuilder();
         Cursor c = db.query(qt_table_name, null, null, null, null, null, null);
@@ -707,6 +707,45 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         }
         c.close();
         return sb.toString().trim();
+    }
+
+    public JsonArray getQuestTrackerData() {
+        JsonArray data = new JsonArray();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.query(qt_table_name, null, null, null, null, null, null);
+        while (c.moveToNext()) {
+            String key = c.getString(c.getColumnIndex("KEY"));
+            boolean active = c.getInt(c.getColumnIndex("ACTIVE")) == 1;
+            int cond0 = c.getInt(c.getColumnIndex("CND0"));
+            int cond1 = c.getInt(c.getColumnIndex("CND1"));
+            int cond2 = c.getInt(c.getColumnIndex("CND2"));
+            int cond3 = c.getInt(c.getColumnIndex("CND3"));
+            String time = c.getString(c.getColumnIndex("TIME"));
+            int[] cond_value = {cond0, cond1, cond2, cond3};
+            JsonObject questItem = new JsonObject();
+            questItem.addProperty("id", key);
+            questItem.addProperty("active", active);
+            JsonArray quest_count = new JsonArray();
+            JsonObject questTrackInfo = KcaApiData.getQuestTrackInfo(key);
+                if (questTrackInfo != null) {
+                    JsonArray cond_info = questTrackInfo.getAsJsonArray("cond");
+                    int type = questTrackInfo.get("type").getAsInt();
+                    for (int i = 0; i < cond_info.size(); i++) {
+                        if(cond_value[i] >= cond_info.get(i).getAsInt()) {
+                            if (!checkQuestValid(type, Integer.parseInt(key), time)) {
+                                db.delete(qt_table_name, "KEY=?", new String[]{String.valueOf(key)});
+                            } else {
+                                cond_value[i] = cond_info.get(i).getAsInt();
+                            }
+                        }
+                        quest_count.add(cond_value[i]);
+                    }
+            }
+            questItem.add("cond", quest_count);
+            data.add(questItem);
+        }
+        c.close();
+        return data;
     }
 
     public void test() {

@@ -581,7 +581,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="datasync_mode_overwrite">overwrite</string>
     <string name="datasync_quest_check">check</string>
     <string name="datasync_quest_sync">sync</string>
-    <string name="datasync_quest_copy">copy code</string>
+    <string name="datasync_quest_copy">copy</string>
+    <string name="datasync_current_label">Current Code</string>
 
     <string name="fleetview_title">FleetView</string>
     <string name="fleetview_combined">CF</string>

@@ -20,9 +20,14 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
 import static com.antest1.kcanotify.KcaApiData.loadQuestTrackDataFromStorage;
@@ -36,7 +41,7 @@ public class KcaDataSyncActivity extends AppCompatActivity {
     Toolbar toolbar;
     static Gson gson = new Gson();
     ImageView questCodeScanBtn, questCodeClearBtn;
-    TextView resultText, questSyncModeText;
+    TextView resultText, questCurrentCode, questCurrentCodeLabel, questSyncModeText;
     TextView questCheckBtn, questSyncBtn, questCopyBtn;
     KcaDBHelper dbHelper;
     KcaQuestTracker questTracker;
@@ -77,8 +82,14 @@ public class KcaDataSyncActivity extends AppCompatActivity {
         questCodeInput = findViewById(R.id.questsync_input);
         questSyncModeSwitch = findViewById(R.id.mode_switch);
         questSyncModeText = findViewById(R.id.mode_text);
+        questCurrentCodeLabel = findViewById(R.id.questsync_current_label);
+        questCurrentCode = findViewById(R.id.questsync_code);
 
         questSyncModeText.setText(getStringWithLocale(R.string.datasync_mode_add));
+        questCurrentCodeLabel.setText(getStringWithLocale(R.string.datasync_current_label));
+
+        String current_code = getCurrentQuestCode();
+        questCurrentCode.setText(current_code.length() > 0 ? current_code : "-");
 
         questCodeClearBtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.black), PorterDuff.Mode.SRC_ATOP);
@@ -115,13 +126,38 @@ public class KcaDataSyncActivity extends AppCompatActivity {
         });
 
         questCopyBtn.setOnClickListener(v -> {
-            String code = questCodeInput.getText().toString().toUpperCase();
+            String code = questCurrentCode.getText().toString();
             if (code.length() > 0) {
                 ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 clip.setPrimaryClip(ClipData.newPlainText("text", code));
                 Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private String getCurrentQuestCode() {
+        List<String> all_code = new ArrayList<>();
+        JsonArray api_list = dbHelper.getCurrentQuestList();
+        for (int i = 0; i < api_list.size(); i++) {
+            JsonObject api_list_item = api_list.get(i).getAsJsonObject();
+            String api_no = api_list_item.get("api_no").getAsString();
+            all_code.add(KcaQuestCode.convert_to_code(api_no));
+        }
+        JsonArray tracked_quest = questTracker.getQuestTrackerData();
+        for (int i = 0; i < tracked_quest.size(); i++) {
+            JsonObject item = tracked_quest.get(i).getAsJsonObject();
+            String id = item.get("id").getAsString();
+            boolean active = item.get("active").getAsBoolean();
+            JsonArray cond = item.getAsJsonArray("cond");
+            int id_index = all_code.indexOf(KcaQuestCode.convert_to_code(id));
+            String new_code =  KcaQuestCode.convert_to_code(id, cond, active);
+            if (id_index != -1) {
+                all_code.set(id_index, new_code);
+            } else {
+                all_code.add(new_code);
+            }
+        }
+        return KcaUtils.joinStr(all_code, "");
     }
 
     @Override

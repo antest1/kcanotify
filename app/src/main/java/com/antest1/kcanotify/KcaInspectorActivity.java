@@ -20,7 +20,6 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_BOOLEAN_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
-import static com.antest1.kcanotify.KcaConstants.PREF_ARRAY;
 import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
@@ -80,7 +79,7 @@ public class KcaInspectorActivity extends AppCompatActivity {
         }
         listViewItemList.add(new AbstractMap.SimpleEntry<> (DQ_PREFIX.concat("quest_data"), questlist_view));
 
-        String questtrack_data = questTracker.getQuestTrackerData();
+        String questtrack_data = questTracker.getQuestTrackerDump();
         listViewItemList.add(new AbstractMap.SimpleEntry<> (QT_PREFIX.concat("tracked_data"), questtrack_data));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
