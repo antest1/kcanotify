@@ -238,5 +238,12 @@ public class FleetInfoActivity extends AppCompatActivity {
         }
 
         super.onConfigurationChanged(newConfig);
+        is_portrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT;
+        if (is_portrait) {
+            fleetlist_ships.setNumColumns(1);
+        } else {
+            fleetlist_ships.setNumColumns(2);
+        }
+        fleetlist_ships.invalidateViews();
     }
 }
