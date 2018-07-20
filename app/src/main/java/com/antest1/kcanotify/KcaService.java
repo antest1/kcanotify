@@ -33,6 +33,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -167,7 +168,7 @@ public class KcaService extends Service {
     boolean api_start2_down_mode = false;
     boolean api_start2_init = false;
     boolean api_start2_loading_flag = false;
-    Gson gson = new Gson();
+    Gson gson = new GsonBuilder().setLenient().create();
 
     public static boolean getServiceStatus() {
         return isServiceOn;
@@ -636,7 +637,7 @@ public class KcaService extends Service {
             if (init.contains("svdata=")) {
                 data.skip("svdata=".length());
             }
-            if (raw.length > 0) jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
+            if (raw.length > 0) jsonDataObj = gson.fromJson(data, JsonObject.class);
             else jsonDataObj = new JsonObject();
 
             if (url.equals(KCA_API_RESOURCE_URL)) {
@@ -2608,16 +2609,6 @@ public class KcaService extends Service {
         Intent aIntent = new Intent(getApplicationContext(), KcaAlarmService.class);
         notifiManager.cancel(nid);
         setAkashiAlarm(aIntent);
-    }
-
-    public static boolean isJSONValid(String jsonInString) {
-        Gson gson = new Gson();
-        try {
-            gson.fromJson(jsonInString, Object.class);
-            return true;
-        } catch (com.google.gson.JsonSyntaxException ex) {
-            return false;
-        }
     }
 
     private boolean isCurrentPortDeckDataReady() {
