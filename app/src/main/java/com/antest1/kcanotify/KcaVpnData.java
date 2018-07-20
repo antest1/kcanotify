@@ -40,9 +40,8 @@ public class KcaVpnData {
     // Full Server List: http://kancolle.wikia.com/wiki/Servers
     // 2017.10.18: Truk and Ringga Server was moved.
     private static String[] kcaServerPrefixList = {
-            "203.104.209", // Yokosuka, Kure, Truk, Ringga, Kanoya, Iwagawa, Saikiman, Hashirajima, Android Server
+            "203.104.209", // Yokosuka, Kure, Maizuru, Oominato Truk, Ringga, Kanoya, Iwagawa, Saikiman, Hashirajima, Android Server
             "125.6.189", // Shortland, Buin, Tawi-Tawi, Palau, Brunel, Hittokappuman, Paramushir, Sukumoman
-            "125.6.187", // Maizuru, Ominato
             "125.6.184", // Sasebo
             "203.104.248"  // Rabaul
     };
