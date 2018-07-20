@@ -690,7 +690,7 @@ public class KcaUtils {
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
-    public static boolean validateResourceFiles(Context context) {
+    public static boolean validateResourceFiles(Context context, KcaDBHelper helper) {
         int count = 0;
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("data", Context.MODE_PRIVATE);
@@ -701,6 +701,7 @@ public class KcaUtils {
                 count += 1;
             } catch (FileNotFoundException | IllegalStateException | JsonSyntaxException e ) {
                 e.printStackTrace();
+                if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, entry.getName(), "validateResourceFiles", "2", getStringFromException(e));
                 setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
                 return false;
             }

@@ -139,8 +139,9 @@ public class InitStartActivity extends Activity {
         appversion = findViewById(R.id.app_version);
         appversion.setText(getString(R.string.app_version));
 
-        boolean all_passed = KcaUtils.validateResourceFiles(getApplicationContext());
+        boolean all_passed = KcaUtils.validateResourceFiles(getApplicationContext(), dbHelper);
         if (all_passed) {
+            setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
             findViewById(R.id.init_layout).setOnClickListener(v -> {
                 ActivityTrans(false);
                 is_skipped = true;
