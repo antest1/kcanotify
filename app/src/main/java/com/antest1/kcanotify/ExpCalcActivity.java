@@ -89,6 +89,8 @@ public class ExpCalcActivity extends AppCompatActivity {
     FloatingActionButton add_button;
     LinearLayout listview;
 
+    boolean load_flag = false;
+    JsonObject current_state = new JsonObject();
 
     public ExpCalcActivity() {
         LocaleUtils.updateConfig(this);
@@ -101,14 +103,6 @@ public class ExpCalcActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expcalc);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getStringWithLocale(R.string.action_expcalc));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        current_ship_data = null;
-        track_values = new SparseArray<>();
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
@@ -119,6 +113,18 @@ public class ExpCalcActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Error loading data.", Toast.LENGTH_LONG).show();
             finish();
         }
+        setUI();
+    }
+
+    private void setUI() {
+        setContentView(R.layout.activity_expcalc);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getStringWithLocale(R.string.action_expcalc));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        current_ship_data = null;
+        track_values = new SparseArray<>();
 
         cal_area = findViewById(R.id.cal_area);
         cal_hide_bar = findViewById(R.id.cal_hide_bar);
@@ -194,6 +200,7 @@ public class ExpCalcActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                         sortie_val = exp_sortie_data.get(sortie_map[position]).getAsInt();
+                        current_state.addProperty("map", position);
                         setScreen();
                     }
 
@@ -211,6 +218,7 @@ public class ExpCalcActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                         rank_val = position;
+                        current_state.addProperty("rank", position);
                         setScreen();
                     }
 
@@ -234,6 +242,7 @@ public class ExpCalcActivity extends AppCompatActivity {
                             String value = String.valueOf(position + 1);
                             JsonArray exp_data = exp_ship_data.getAsJsonArray(value);
                             current_exp = exp_data.get(1).getAsInt();
+                            current_state.addProperty("current_lv", position);
                             setScreen();
                         }
                         shipselect_current_flag = false;
@@ -255,6 +264,7 @@ public class ExpCalcActivity extends AppCompatActivity {
                             String value = String.valueOf(position + 1);
                             JsonArray exp_data = exp_ship_data.getAsJsonArray(value);
                             target_exp = exp_data.get(1).getAsInt();
+                            current_state.addProperty("target_lv", position);
                             setScreen();
                         }
                     }
@@ -303,15 +313,20 @@ public class ExpCalcActivity extends AppCompatActivity {
                         }
 
                         shipselect_current_flag = true;
-                        if (current_lv_adapter != null) {
-                            value_current_lv.setSelection(lv - 1);
-                        }
-                        if (target_lv_adapter != null) {
-                            if (ship_afterlv <= 0 || lv >= ship_afterlv) value_target_lv.setSelection(Math.min(lv, LEVEL_MAX - 1));
-                            else value_target_lv.setSelection(ship_afterlv - 1);
+                        if (!load_flag) {
+                            if (current_lv_adapter != null) {
+                                value_current_lv.setSelection(lv - 1);
+                            }
+                            if (target_lv_adapter != null) {
+                                if (ship_afterlv <= 0 || lv >= ship_afterlv) value_target_lv.setSelection(Math.min(lv, LEVEL_MAX - 1));
+                                else value_target_lv.setSelection(ship_afterlv - 1);
+                            }
+                        } else {
+                            load_flag = false;
                         }
 
                         current_exp = current_ship_data.getAsJsonArray("api_exp").get(0).getAsInt();
+                        current_state.addProperty("ship", position);
                         setScreen();
                     }
 
@@ -324,6 +339,7 @@ public class ExpCalcActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 is_flagship = b;
+                current_state.addProperty("flagship", b);
                 setScreen();
             }
         });
@@ -332,6 +348,7 @@ public class ExpCalcActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 is_mvp = b;
+                current_state.addProperty("mvp", b);
                 setScreen();
             }
         });
@@ -362,6 +379,34 @@ public class ExpCalcActivity extends AppCompatActivity {
                     makeFilterItem(item);
                 }
             }
+        }
+
+        loadCurrentState();
+    }
+
+    private void loadCurrentState() {
+        load_flag = current_state.has("current_lv") || current_state.has("target_lv");
+        if (current_state.has("ship")) {
+            value_ship.setSelection(current_state.get("ship").getAsInt());
+        }
+        if (current_state.has("current_lv")) {
+            value_current_lv.setSelection(current_state.get("current_lv").getAsInt());
+        }
+        if (current_state.has("target_lv")) {
+            value_target_lv.setSelection(current_state.get("target_lv").getAsInt());
+        }
+        if (current_state.has("map")) {
+            value_map.setSelection(current_state.get("map").getAsInt());
+        }
+        if (current_state.has("rank")) {
+            value_rank.setSelection(current_state.get("rank").getAsInt());
+        }
+        if (current_state.has("flagship")) {
+            chkbox_flagship.setChecked(current_state.get("flagship").getAsBoolean());
+        }
+        if (current_state.has("mvp")) {
+            chkbox_mvp.setChecked(current_state.get("mvp").getAsBoolean());
+
         }
     }
 
@@ -519,7 +564,9 @@ public class ExpCalcActivity extends AppCompatActivity {
             String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
             LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
         }
+
         super.onConfigurationChanged(newConfig);
+        setUI();
     }
 
     @Override
