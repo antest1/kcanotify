@@ -413,19 +413,25 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_sort_key_0">序号</string>
     <string name="ship_stat_sort_key_1">等级</string>
     <string name="ship_stat_sort_key_2">舰种</string>
-    <string name="ship_stat_sort_key_3">火力</string>
-    <string name="ship_stat_sort_key_4">雷装</string>
-    <string name="ship_stat_sort_key_5">对空</string>
-    <string name="ship_stat_sort_key_6">装甲</string>
-    <string name="ship_stat_sort_key_7">夜战</string>
-    <string name="ship_stat_sort_key_8">对潜</string>
-    <string name="ship_stat_sort_key_9">迴避</string>
-    <string name="ship_stat_sort_key_10">索敌</string>
-    <string name="ship_stat_sort_key_11">运</string>
-    <string name="ship_stat_sort_key_12">速度</string>
-    <string name="ship_stat_sort_key_13">士气</string>
-    <string name="ship_stat_sort_key_14">锁定</string>
-    <string name="ship_stat_sort_key_15">标贴</string>
+    <string name="ship_stat_sort_key_3">士气</string>
+    <string name="ship_stat_sort_key_4">锁定</string>
+    <string name="ship_stat_sort_key_5">舰队</string>
+    <string name="ship_stat_sort_key_6">入渠</string>
+    <string name="ship_stat_sort_key_7">损伤</string>
+    <string name="ship_stat_sort_key_8">修理</string>
+    <string name="ship_stat_sort_key_9">遠征</string>
+    <string name="ship_stat_sort_key_10">火力</string>
+    <string name="ship_stat_sort_key_11">雷装</string>
+    <string name="ship_stat_sort_key_12">对空</string>
+    <string name="ship_stat_sort_key_13">装甲</string>
+    <string name="ship_stat_sort_key_14">夜战</string>
+    <string name="ship_stat_sort_key_15">对潜</string>
+    <string name="ship_stat_sort_key_16">迴避</string>
+    <string name="ship_stat_sort_key_17">索敌</string>
+    <string name="ship_stat_sort_key_18">运</string>
+    <string name="ship_stat_sort_key_19">速度</string>
+    <string name="ship_stat_sort_key_20">标贴</string>
+
     <string name="shipinfo_filt_list_dialog_title">选择</string>
     <string name="shipinfo_criteria_count" formatted="false">已应用标签：%d</string>
 
@@ -435,6 +441,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_tag_3">西村舰队（黄）</string>
     <string name="ship_tag_4">小沢舰队（蓝）</string>
     <string name="ship_tag_5">志摩舰队（紫）</string>
+
+    <string name="ship_fleet_0">没有</string>
+
+    <string name="ship_hp_0">健在</string>
+    <string name="ship_hp_1">小破</string>
+    <string name="ship_hp_2">中破</string>
+    <string name="ship_hp_3">大破</string>
 
     <string name="action_equipmentinfo">装备目录</string>
     <string name="equipinfo_summary" formatted="false">合计 %d（%d 装备中, %d 閒置）</string>
@@ -602,7 +615,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="special_playstore_1st">一周年紀念！</string>
 
     <string name="widget_timer_name">Kcanotify计时Widget</string>
-    <string name="widget_timer_fleetname">第%d舰队</string>
+    <string name="fleet_format">第%d舰队</string>
 
     <string name="download_title">存在可用更新</string>
     <string name="download_description_head">若果不更新资料，Kcanotify可能无法正常运作。</string>

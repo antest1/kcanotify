@@ -472,19 +472,24 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_sort_key_0">ID</string>
     <string name="ship_stat_sort_key_1">Level</string>
     <string name="ship_stat_sort_key_2">Ship Type</string>
-    <string name="ship_stat_sort_key_3">Firepower</string>
-    <string name="ship_stat_sort_key_4">Torpedo</string>
-    <string name="ship_stat_sort_key_5">AA</string>
-    <string name="ship_stat_sort_key_6">Armor</string>
-    <string name="ship_stat_sort_key_7">Nightpower</string>
-    <string name="ship_stat_sort_key_8">ASW</string>
-    <string name="ship_stat_sort_key_9">Evasion</string>
-    <string name="ship_stat_sort_key_10">LoS</string>
-    <string name="ship_stat_sort_key_11">Luck</string>
-    <string name="ship_stat_sort_key_12">Speed</string>
-    <string name="ship_stat_sort_key_13">Morale</string>
-    <string name="ship_stat_sort_key_14">Locked</string>
-    <string name="ship_stat_sort_key_15">Tag</string>
+    <string name="ship_stat_sort_key_3">Morale</string>
+    <string name="ship_stat_sort_key_4">Locked</string>
+    <string name="ship_stat_sort_key_5">Fleet</string>
+    <string name="ship_stat_sort_key_6">Docking</string>
+    <string name="ship_stat_sort_key_7">Damaged</string>
+    <string name="ship_stat_sort_key_8">Repair</string>
+    <string name="ship_stat_sort_key_9">Expedition</string>
+    <string name="ship_stat_sort_key_10">Firepower</string>
+    <string name="ship_stat_sort_key_11">Torpedo</string>
+    <string name="ship_stat_sort_key_12">AA</string>
+    <string name="ship_stat_sort_key_13">Armor</string>
+    <string name="ship_stat_sort_key_14">Nightpower</string>
+    <string name="ship_stat_sort_key_15">ASW</string>
+    <string name="ship_stat_sort_key_16">Evasion</string>
+    <string name="ship_stat_sort_key_17">LoS</string>
+    <string name="ship_stat_sort_key_18">Luck</string>
+    <string name="ship_stat_sort_key_19">Speed</string>
+    <string name="ship_stat_sort_key_20">Tag</string>
     <string name="shipinfo_filt_list_dialog_title">Select</string>
     <string name="shipinfo_criteria_count" formatted="false">Applied criteria: %d</string>
 
@@ -494,6 +499,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_tag_3">Nishimura(Yellow)</string>
     <string name="ship_tag_4">Ozawa(Blue)</string>
     <string name="ship_tag_5">Shima(Purple)</string>
+
+    <string name="ship_fleet_0">None</string>
+
+    <string name="ship_hp_0">Normal</string>
+    <string name="ship_hp_1">Minor damage</string>
+    <string name="ship_hp_2">Moderate Damage</string>
+    <string name="ship_hp_3">Heavy Damage</string>
 
     <string name="action_equipmentinfo">Equipment List</string>
     <string name="equipinfo_summary" formatted="false">Total %d (%d Equipped, %d Equippable)</string>
@@ -661,7 +673,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="special_playstore_1st">1st Anniversary of Google Play release!</string>
 
     <string name="widget_timer_name">Kcanotify Timer Widget</string>
-    <string name="widget_timer_fleetname">Fleet %d</string>
+    <string name="fleet_format">Fleet %d</string>
 
     <string name="download_title">Update Available</string>
     <string name="download_description_head">Kcanotify may not work when you do not update the data.</string>

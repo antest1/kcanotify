@@ -165,6 +165,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 String data = sort_values.get(target);
                 JsonObject obj = ShipInfoFilterActivity.unpackPrefValue(data);
+                position = KcaShipListViewAdpater.getFilterKeyIndex(position);
                 int prev_position = obj.get("idx").getAsInt();
                 obj.addProperty("idx", position);
 
@@ -201,14 +202,12 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
             }
         });
 
-        cb_target.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                String data = sort_values.get(target);
-                JsonObject obj = ShipInfoFilterActivity.unpackPrefValue(data);
-                obj.addProperty("val", b ? 1 : 0);
-                sort_values.put(target, makeStatPrefValue(obj));
-            }
+        cb_target.setOnCheckedChangeListener((compoundButton, b) -> {
+            String data = sort_values.get(target);
+            JsonObject obj = ShipInfoFilterActivity.unpackPrefValue(data);
+            obj.addProperty("op", b ? 3 : 0);
+            obj.addProperty("val", 0);
+            sort_values.put(target, makeStatPrefValue(obj));
         });
 
         ArrayAdapter<CharSequence> adapter_op = ArrayAdapter.createFromResource(this,
@@ -251,11 +250,12 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
 
         listview.addView(v);
         listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
-        if (key != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_spinner)).setSelection(key);
+        if (key != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_spinner))
+                .setSelection(KcaShipListViewAdpater.getFilterIndexByKey(key));
         if (op != -1) ((Spinner) listview.findViewWithTag(target).findViewById(R.id.ship_stat_operator)).setSelection(op);
         if (value.length() > 0) {
             if (KcaShipListViewAdpater.isBoolean(key)) {
-                ((CheckBox) listview.findViewWithTag(target).findViewById(R.id.ship_stat_checked)).setChecked(Integer.parseInt(value) > 0);
+                ((CheckBox) listview.findViewWithTag(target).findViewById(R.id.ship_stat_checked)).setChecked(op > 0);
             } else if (KcaShipListViewAdpater.isList(key)) {
                 setupListSelect(((TextView) listview.findViewWithTag(target).findViewById(R.id.ship_stat_select)),
                         target, "val", key, value.split("_").length);
@@ -318,12 +318,17 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         if (position == 2) {
             adapter = getStypeArray();
             fnc = 1;
-        } else if (position == 14) {
+        } else if (position == 5) {
+            adapter = getFleetArray();
+        } else if (position == 7) {
+            adapter = getHPArray();
+        } else if (position == 19) {
             adapter = getSpeedArray();
             fnc = 2;
-        } else if (position == 15) {
+        } else if (position == 20) {
             adapter = getTagArray();
         }
+
         final AlertDialog dialog = makeDialog(sp_val, target, key, fnc, adapter);
         sp_val.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -424,6 +429,29 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         List<String> tag_list = new ArrayList<>();
         for (int i = 0; i <= TAG_COUNT; i++) {
             tag_list.add(getStringWithLocale(getId(KcaUtils.format("ship_tag_%d", i), R.string.class)));
+        }
+
+        String[] tag_arr = new String[tag_list.size()];
+        tag_arr = tag_list.toArray(tag_arr);
+        return tag_arr;
+    }
+
+    private String[] getFleetArray() {
+        List<String> tag_list = new ArrayList<>();
+        tag_list.add(getStringWithLocale(R.string.ship_fleet_0));
+        for (int i = 0; i < 4; i++) {
+            tag_list.add(KcaUtils.format(getStringWithLocale(R.string.fleet_format), i+1));
+        }
+
+        String[] tag_arr = new String[tag_list.size()];
+        tag_arr = tag_list.toArray(tag_arr);
+        return tag_arr;
+    }
+
+    private String[] getHPArray() {
+        List<String> tag_list = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            tag_list.add(getStringWithLocale(KcaUtils.getId(KcaUtils.format("ship_hp_%d", i), R.string.class)));
         }
 
         String[] tag_arr = new String[tag_list.size()];

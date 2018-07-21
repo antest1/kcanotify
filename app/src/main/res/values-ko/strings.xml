@@ -406,19 +406,25 @@
     <string name="ship_stat_sort_key_0">ID</string>
     <string name="ship_stat_sort_key_1">레벨</string>
     <string name="ship_stat_sort_key_2">함종</string>
-    <string name="ship_stat_sort_key_3">화력</string>
-    <string name="ship_stat_sort_key_4">뇌장</string>
-    <string name="ship_stat_sort_key_5">대공</string>
-    <string name="ship_stat_sort_key_6">장갑</string>
-    <string name="ship_stat_sort_key_7">야전</string>
-    <string name="ship_stat_sort_key_8">대잠</string>
-    <string name="ship_stat_sort_key_9">회피</string>
-    <string name="ship_stat_sort_key_10">색적</string>
-    <string name="ship_stat_sort_key_11">운</string>
-    <string name="ship_stat_sort_key_12">속도</string>
-    <string name="ship_stat_sort_key_13">피로도</string>
-    <string name="ship_stat_sort_key_14">잠금</string>
-    <string name="ship_stat_sort_key_15">딱지</string>
+    <string name="ship_stat_sort_key_3">피로도</string>
+    <string name="ship_stat_sort_key_4">잠금</string>
+    <string name="ship_stat_sort_key_5">함대</string>
+    <string name="ship_stat_sort_key_6">입거</string>
+    <string name="ship_stat_sort_key_7">손상</string>
+    <string name="ship_stat_sort_key_8">수리</string>
+    <string name="ship_stat_sort_key_9">원정</string>
+    <string name="ship_stat_sort_key_10">화력</string>
+    <string name="ship_stat_sort_key_11">뇌장</string>
+    <string name="ship_stat_sort_key_12">대공</string>
+    <string name="ship_stat_sort_key_13">장갑</string>
+    <string name="ship_stat_sort_key_14">야전</string>
+    <string name="ship_stat_sort_key_15">대잠</string>
+    <string name="ship_stat_sort_key_16">회피</string>
+    <string name="ship_stat_sort_key_17">색적</string>
+    <string name="ship_stat_sort_key_18">운</string>
+    <string name="ship_stat_sort_key_19">속도</string>
+    <string name="ship_stat_sort_key_20">딱지</string>
+
     <string name="shipinfo_filt_list_dialog_title">선택</string>
     <string name="shipinfo_criteria_count" formatted="false">적용된 기준: %d개</string>
 
@@ -428,6 +434,13 @@
     <string name="ship_tag_3">니시무라(노란색)</string>
     <string name="ship_tag_4">오자와(파란색)</string>
     <string name="ship_tag_5">시마(보라색)</string>
+
+    <string name="ship_fleet_0">없음</string>
+
+    <string name="ship_hp_0">건재</string>
+    <string name="ship_hp_1">소파</string>
+    <string name="ship_hp_2">중파</string>
+    <string name="ship_hp_3">대파</string>
 
     <string name="action_equipmentinfo">장비 리스트</string>
     <string name="equipinfo_summary" formatted="false">합계 %d (%d 장비중, %d 장비가능)</string>
@@ -596,7 +609,7 @@
     <string name="special_playstore_1st">구글 플레이 출시 1주년!</string>
 
     <string name="widget_timer_name">시제 깡들리티 타이머</string>
-    <string name="widget_timer_fleetname">제%d함대</string>
+    <string name="fleet_format">제%d함대</string>
 
     <string name="download_title">데이터 업데이트 가능</string>
     <string name="download_description_head">업데이트하지 않을 시 어플리케이션이 정상 동작하지 않을 수 있습니다.</string>

@@ -190,13 +190,6 @@ public class KcaBattleViewService extends Service {
         return i;
     }
 
-    public static int getStatus(int value) {
-        if (value > 75) return STATE_NORMAL;
-        else if (value > 50) return STATE_LIGHTDMG;
-        else if (value > 25) return STATE_MODERATEDMG;
-        else return STATE_HEAVYDMG;
-    }
-
     public Drawable getProgressDrawable(Context context, float value) {
         if (value > 75) {
             return ContextCompat.getDrawable(context, R.drawable.progress_bar_normal);

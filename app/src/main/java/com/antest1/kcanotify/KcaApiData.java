@@ -1092,6 +1092,13 @@ public class KcaApiData {
         }
     }
 
+    public static int getStatus(int value) {
+        if (value > 75) return STATE_NORMAL;
+        else if (value > 50) return STATE_LIGHTDMG;
+        else if (value > 25) return STATE_MODERATEDMG;
+        else return STATE_HEAVYDMG;
+    }
+
     public static String getNodeFullInfo(Context context, String currentNode, int id, int kind, boolean includeNormal) {
 
         String currentNodeInfo = "";

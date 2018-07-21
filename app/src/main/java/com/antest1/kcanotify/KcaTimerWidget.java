@@ -8,27 +8,18 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static com.antest1.kcanotify.KcaAlarmService.ALARM_DELAY;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
@@ -37,11 +28,9 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_KDOCKDATA;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_NDOCKDATA;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOW_CONSTRSHIP_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_TIMER_WIDGET_STATE;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
-import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getTimeStr;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
@@ -135,7 +124,7 @@ public class KcaTimerWidget extends AppWidgetProvider {
         List<AbstractMap.SimpleEntry<String, String>> entries = new ArrayList<>();
         switch (status) {
             case STATE_EXPD:
-                String name_format = getStringWithLocale(context, R.string.widget_timer_fleetname);
+                String name_format = getStringWithLocale(context, R.string.fleet_format);
                 if (!widgetData.has("deckport") || widgetData.get("deckport").isJsonNull()) {
                     for (int i = 0; i < 4; i++) entries.add(new AbstractMap.SimpleEntry<>("no data", ""));
                 } else {

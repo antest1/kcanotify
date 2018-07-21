@@ -185,16 +185,11 @@ public class KcaDockingPopupService extends Service {
                         if (kcdata != null && kcdata.has("stype")) {
                             String id = item.get("api_id").getAsString();
                             int level = item.get("api_lv").getAsInt();
-                            int repair_time = 0;
                             JsonObject repair_item = new JsonObject();
                             String name = getShipTranslation(kcdata.get("name").getAsString(), false);
                             String name_level = KcaUtils.format("%s (Lv %d)", name, level);
-                            double multiplier = getMultiplier(kcdata.get("stype").getAsInt());
-                            if (level <= 11) {
-                                repair_time = 30 + (int) (hp_loss * (level * 10) * multiplier);
-                            } else {
-                                repair_time = 30 + (int) (hp_loss * ((level * 5) + Math.floor(Math.sqrt(level - 11)) * 10 + 50) * multiplier);
-                            }
+                            int stype = kcdata.get("stype").getAsInt();
+                            int repair_time = KcaDocking.getDockingTime(hp_loss, level, stype);
                             repair_item.addProperty("name", name_level);
                             repair_item.addProperty("time_raw", repair_time);
                             repair_item.addProperty("time", KcaUtils.getTimeStr(repair_time));
@@ -388,12 +383,7 @@ public class KcaDockingPopupService extends Service {
         else return STATE_HEAVYDMG;
     }
 
-    private double getMultiplier(int type) {
-        if (type == STYPE_BB || type == STYPE_BBV || type == STYPE_CV || type == STYPE_CVB || type == STYPE_AR) return 2.0;
-        else if (type == STYPE_CA || type == STYPE_CAV || type == STYPE_FBB || type == STYPE_CVL || type == STYPE_AS ) return 1.5;
-        else if (type == STYPE_SS || type == STYPE_DE ) return 0.5;
-        else return 1.0;
-    }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

@@ -169,6 +169,9 @@
     <color name="colorStatEquipSlot">#212121</color>
     <color name="colorStatEquipSlotBack">#40f9f9f9</color>
     <color name="colorStatEquipReinforcement">#e0e0e0</color>
+    <color name="colorStatFleetNo">#009688</color>
+    <color name="colorStatInDock">#bbdefb</color>
+    <color name="colorStatInExpedition">#7fd1c4e9</color>
 
     <color name="colorStatNotLocked">#bdbdbd</color>
     <color name="colorStatLocked">#4e7bff</color>

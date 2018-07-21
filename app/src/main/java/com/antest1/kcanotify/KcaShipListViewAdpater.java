@@ -32,29 +32,43 @@ import static com.antest1.kcanotify.KcaUtils.getId;
 
 public class KcaShipListViewAdpater extends BaseAdapter {
     private long exp_sum = 0L;
+    private JsonArray deckInfo = new JsonArray();
     private List<JsonObject> listViewItemList = new ArrayList<>();
 
     private static final String[] total_key_list = {
             "api_id", "api_lv", "api_stype", "api_cond", "api_locked",
+            "api_deck_id", "api_docking", "api_damage", "api_repair", "api_mission",
             "api_karyoku", "api_raisou", "api_taiku", "api_soukou", "api_yasen",
             "api_taisen", "api_kaihi", "api_sakuteki", "api_lucky", "api_soku", "api_sally_area"};
 
     public long getTotalExp() { return exp_sum; }
 
-    public static int getKeyIndex(String key) {
-        for (int i = 0; i < total_key_list.length; i++) {
-            if (total_key_list[i].equals(key)) return i;
-        }
-        return -1;
+    private static int[] sort_table = {0, 1, 2, 3, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
+    private static int[] filt_table = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+
+    public static int getSortKeyIndex(int position) {
+        return sort_table[position];
+    }
+
+    public static int getSortIndexByKey(int key) {
+        return Arrays.binarySearch(sort_table, key);
+    }
+
+    public static int getFilterKeyIndex(int position) {
+        return filt_table[position];
+    }
+
+    public static int getFilterIndexByKey(int key) {
+        return Arrays.binarySearch(filt_table, key);
     }
 
     public static boolean isList(int idx) {
-        int[] list = {2, 14, 15};  // ship_filt_array
+        int[] list = {2, 5, 7, 19, 20};  // ship_filt_array
         return (Arrays.binarySearch(list, idx) >= 0);
     }
 
     public static boolean isBoolean(int idx) {
-        int[] list = {4}; // ship_filt_array
+        int[] list = {4, 6, 9}; // ship_filt_array
         return (Arrays.binarySearch(list, idx) >= 0);
     }
 
@@ -88,6 +102,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             v = inflater.inflate(R.layout.listview_shiplist_item, parent, false);
             ViewHolder holder = new ViewHolder();
 
+            holder.ship_back = v.findViewById(R.id.ship_back);
             holder.ship_stat_2_0 = v.findViewById(R.id.ship_stat_2_0);
             holder.ship_id = v.findViewById(R.id.ship_id);
             holder.ship_name = v.findViewById(R.id.ship_name);
@@ -98,6 +113,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             holder.ship_stype = v.findViewById(R.id.ship_stype);
             holder.ship_lv = v.findViewById(R.id.ship_lv);
             holder.ship_hp = v.findViewById(R.id.ship_hp);
+            holder.ship_fleet = v.findViewById(R.id.ship_fleet);
             holder.ship_cond = v.findViewById(R.id.ship_cond);
             holder.ship_exp = v.findViewById(R.id.ship_exp);
             holder.ship_kaihi = v.findViewById(R.id.ship_kaihi);
@@ -166,7 +182,26 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             slot_sum += ship_onslot.get(j).getAsInt();
         }
 
+        int in_docking = item.get("api_docking").getAsInt();
+        int in_expedition = item.get("api_mission").getAsInt();
+
         ViewHolder holder = (ViewHolder) v.getTag();
+        if (in_docking > 0) {
+            holder.ship_back.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatInDock));
+        } else if (in_expedition > 0) {
+            holder.ship_back.setBackgroundColor(ContextCompat.getColor(context, R.color.colorStatInExpedition));
+        } else {
+            holder.ship_back.setBackgroundColor(ContextCompat.getColor(context, R.color.colorListItemBack));
+        }
+
+        int fleet = item.get("api_deck_id").getAsInt();
+        if (fleet > 0 ) {
+            holder.ship_fleet.setText(String.valueOf(fleet));
+            holder.ship_fleet.setVisibility(View.VISIBLE);
+        } else {
+            holder.ship_fleet.setVisibility(View.GONE);
+        }
+
         holder.ship_id.setText(item.get("api_id").getAsString());
         if (ship_locked > 0) {
             holder.ship_id.setTextColor(ContextCompat.getColor(context, R.color.colorStatLocked));
@@ -360,8 +395,8 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     }
 
     static class ViewHolder {
-        LinearLayout ship_stat_2_0;
-        TextView ship_id, ship_stype, ship_name, ship_lv, ship_exp, ship_hp, ship_cond;
+        LinearLayout ship_back, ship_stat_2_0;
+        TextView ship_id, ship_stype, ship_name, ship_lv, ship_exp, ship_hp, ship_fleet, ship_cond;
         TextView ship_karyoku, ship_raisou, ship_taiku, ship_soukou;
         TextView ship_yasen, ship_taisen, ship_kaihi, ship_sakuteki, ship_luck;
         TextView[] ship_equip_slot;
@@ -371,16 +406,80 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         ImageView ship_sally_area;
     }
 
-    public void setListViewItemList(JsonArray ship_list, String sort_key) {
-        setListViewItemList(ship_list, sort_key, "|");
+    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key) {
+        setListViewItemList(ship_list, deck_list, sort_key, "|");
     }
 
-    public void setListViewItemList(JsonArray ship_list, String sort_key, final String filter) {
+
+    /*
+    *
+    * else if (key.equals("api_yasen")) {
+            return getintvalue(o, "api_karyoku") + getintvalue(o, "api_raisou");
+        } else {
+            int kc_ship_id = o.get("api_ship_id").getAsInt();
+            JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_stype");
+            if (kcShipData != null && kcShipData.has(key)) {
+                return kcShipData.get(key).getAsInt();
+            }
+        }
+    *
+    * */
+    private List<JsonObject> addShipInformation(List<JsonObject> data) {
+        JsonObject deck_ship_info = new JsonObject();
+        for (int i = 0; i < deckInfo.size(); i++) {
+            JsonObject fleet_item = deckInfo.get(i).getAsJsonObject();
+            int api_id = fleet_item.get("api_id").getAsInt();
+            JsonArray api_ship = fleet_item.getAsJsonArray("api_ship");
+            int api_mission = fleet_item.getAsJsonArray("api_mission").get(1).getAsInt();
+            for (int j = 0; j < api_ship.size(); j++) {
+                int ship_id = api_ship.get(j).getAsInt();
+                JsonObject ship_item = new JsonObject();
+                if (ship_id > 0) {
+                    ship_item.addProperty("deck_id", api_id);
+                    ship_item.addProperty("mission", api_mission);
+                }
+                deck_ship_info.add(String.valueOf(ship_id), ship_item);
+            }
+        }
+
+        for (int i = 0; i < data.size(); i++) {
+            JsonObject item  = data.get(i);
+            String ship_id = item.get("api_id").getAsString();
+            int kc_ship_id = item.get("api_ship_id").getAsInt();
+            item.addProperty("api_yasen",
+                    item.getAsJsonArray("api_karyoku").get(0).getAsInt() +
+                            item.getAsJsonArray("api_raisou").get(0).getAsInt());
+            JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_stype");
+            int stype = kcShipData.get("api_stype").getAsInt();
+            int max_hp = item.get("api_maxhp").getAsInt();
+            int now_hp = item.get("api_nowhp").getAsInt();
+
+            item.addProperty("api_stype", stype);
+            item.addProperty("api_docking", KcaDocking.checkShipInDock(Integer.parseInt(ship_id)) ? 1 : 0);
+            item.addProperty("api_damage", KcaApiData.getStatus(now_hp * 100 / max_hp));
+            item.addProperty("api_damage_value", (max_hp - now_hp) * 100 / max_hp);
+            item.addProperty("api_repair", KcaDocking.getDockingTime( max_hp - now_hp, item.get("api_lv").getAsInt(), stype));
+            if (deck_ship_info.has(ship_id)) {
+                JsonObject ship_deck_data = deck_ship_info.getAsJsonObject(ship_id);
+                item.addProperty("api_deck_id", ship_deck_data.get("deck_id").getAsInt());
+                item.addProperty("api_mission", ship_deck_data.get("mission").getAsInt());
+            } else {
+                item.addProperty("api_deck_id", 0);
+                item.addProperty("api_mission", 0);
+            }
+            data.set(i, item);
+        }
+        return data;
+    }
+
+    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, final String filter) {
         exp_sum = 0;
+        deckInfo = deck_list;
+
         Type listType = new TypeToken<List<JsonObject>>() {}.getType();
         listViewItemList = new Gson().fromJson(ship_list, listType);
         if (listViewItemList == null) listViewItemList = new ArrayList<>();
-
+        listViewItemList = addShipInformation(listViewItemList);
         if (!filter.equals("|") && listViewItemList.size() > 1) {
             listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, new Predicate<JsonObject>() {
                 @Override
@@ -485,14 +584,6 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             } else {
                 return o.get(key).getAsInt();
             }
-        } else if (key.equals("api_yasen")) {
-            return getintvalue(o, "api_karyoku") + getintvalue(o, "api_raisou");
-        } else {
-            int kc_ship_id = o.get("api_ship_id").getAsInt();
-            JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_stype");
-            if (kcShipData != null && kcShipData.has(key)) {
-                return kcShipData.get(key).getAsInt();
-            }
         }
         return 0;
     }
@@ -525,8 +616,13 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                     boolean is_desc = Boolean.valueOf(key_idx.split(",")[1]);
                     String key = total_key_list[idx];
                     if (key.equals("api_lv")) key = "api_exp";
+                    if (key.equals("api_damage")) key = "api_damage_value";
                     int val1 = KcaShipListViewAdpater.getintvalue(o1, key);
                     int val2 = KcaShipListViewAdpater.getintvalue(o2, key);
+                    if (key.equals("api_deck_id")) {
+                        if (val1 == 0) val1 = is_desc ? -10 : 10;
+                        if (val2 == 0) val2 = is_desc ? -10 : 10;
+                    }
                     if (val1 != val2) {
                         if (is_desc) return val2 - val1;
                         else return val1 - val2;

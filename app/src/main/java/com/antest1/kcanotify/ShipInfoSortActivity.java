@@ -116,6 +116,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                position = KcaShipListViewAdpater.getSortKeyIndex(position);
                 sort_values.put(target, makeStatPrefValue(position, desc_check.isChecked()));
             }
 
@@ -126,7 +127,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
         });
 
         if (key != -1) {
-            sp.setSelection(key);
+            sp.setSelection(KcaShipListViewAdpater.getSortIndexByKey(key));
         }
 
         desc_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -140,7 +141,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
                 if (sort_values.indexOfKey(target) >= 0) {
                     int value = Integer.valueOf(sort_values.get(target).split(",")[0]);
                     sort_values.put(target, makeStatPrefValue(value, checked));
-                    listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size()));
+                    listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
                 }
             }
         });

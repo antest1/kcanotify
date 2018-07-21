@@ -36,6 +36,7 @@ import java.util.Locale;
 import static android.widget.Toast.makeText;
 import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
@@ -115,11 +116,13 @@ public class ShipInfoActivity extends AppCompatActivity {
 
         JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
         if (data == null) data = new JsonArray();
+        JsonArray deckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+        if (deckdata == null) deckdata = new JsonArray();
 
         String sortkey = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY);
         String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
         setFilterButton(filtcond.length() > 1);
-        adapter.setListViewItemList(data, sortkey, filtcond);
+        adapter.setListViewItemList(data, deckdata, sortkey, filtcond);
         totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));
         totalexpview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
 
@@ -139,9 +142,12 @@ public class ShipInfoActivity extends AppCompatActivity {
                 adapter.resortListViewItem(sortkey);
             }
             if (requestCode == SHIPINFO_GET_FILTER_RESULT) {
+                JsonArray deckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
                 JsonArray shipdata = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
+                if (deckdata == null) deckdata = new JsonArray();
                 if (shipdata == null) shipdata = new JsonArray();
-                adapter.setListViewItemList(shipdata, sortkey, filtcond);
+
+                adapter.setListViewItemList(shipdata, deckdata, sortkey, filtcond);
                 setFilterButton(filtcond.length() > 1);
             }
             adapter.notifyDataSetChanged();

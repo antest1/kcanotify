@@ -360,6 +360,10 @@ public class KcaUtils {
         return n + 1000 * type;
     }
 
+    public static String getName(Context context, int resid) {
+        return context.getResources().getResourceEntryName(resid);
+    }
+
     public static int getId(String resourceName, Class<?> c) {
         try {
             Field idField = c.getDeclaredField(resourceName);

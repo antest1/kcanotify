@@ -406,19 +406,25 @@
     <string name="ship_stat_sort_key_0">ID</string>
     <string name="ship_stat_sort_key_1">レベル</string>
     <string name="ship_stat_sort_key_2">艦種</string>
-    <string name="ship_stat_sort_key_3">火力</string>
-    <string name="ship_stat_sort_key_4">雷装</string>
-    <string name="ship_stat_sort_key_5">対空</string>
-    <string name="ship_stat_sort_key_6">装甲</string>
-    <string name="ship_stat_sort_key_7">夜戦</string>
-    <string name="ship_stat_sort_key_8">対潜</string>
-    <string name="ship_stat_sort_key_9">回避</string>
-    <string name="ship_stat_sort_key_10">索敵</string>
-    <string name="ship_stat_sort_key_11">運</string>
-    <string name="ship_stat_sort_key_12">速度</string>
-    <string name="ship_stat_sort_key_13">疲労度</string>
-    <string name="ship_stat_sort_key_14">ロック</string>
-    <string name="ship_stat_sort_key_15">札</string>
+    <string name="ship_stat_sort_key_3">疲労度</string>
+    <string name="ship_stat_sort_key_4">ロック</string>
+    <string name="ship_stat_sort_key_5">艦隊</string>
+    <string name="ship_stat_sort_key_6">入渠</string>
+    <string name="ship_stat_sort_key_7">損傷</string>
+    <string name="ship_stat_sort_key_8">修理</string>
+    <string name="ship_stat_sort_key_9">遠征</string>
+    <string name="ship_stat_sort_key_10">火力</string>
+    <string name="ship_stat_sort_key_11">雷装</string>
+    <string name="ship_stat_sort_key_12">対空</string>
+    <string name="ship_stat_sort_key_13">装甲</string>
+    <string name="ship_stat_sort_key_14">夜戦</string>
+    <string name="ship_stat_sort_key_15">対潜</string>
+    <string name="ship_stat_sort_key_16">回避</string>
+    <string name="ship_stat_sort_key_17">索敵</string>
+    <string name="ship_stat_sort_key_18">運</string>
+    <string name="ship_stat_sort_key_19">速度</string>
+    <string name="ship_stat_sort_key_20">札</string>
+
     <string name="shipinfo_filt_list_dialog_title">選択</string>
     <string name="shipinfo_criteria_count" formatted="false">適用されている基準：%d</string>
 
@@ -428,6 +434,13 @@
     <string name="ship_tag_3">西村艦隊（黄）</string>
     <string name="ship_tag_4">小沢艦隊（青）</string>
     <string name="ship_tag_5">志摩艦隊（紫）</string>
+
+    <string name="ship_fleet_0">なし</string>
+
+    <string name="ship_hp_0">健在</string>
+    <string name="ship_hp_1">小破</string>
+    <string name="ship_hp_2">中破</string>
+    <string name="ship_hp_3">大破</string>
 
     <string name="action_equipmentinfo">装備リスト</string>
     <string name="equipinfo_summary" formatted="false">合計 %d（%d 装備中, %d 装備可能）</string>
@@ -596,7 +609,7 @@
     <string name="special_playstore_1st">一周年記念！</string>
 
     <string name="widget_timer_name">Kcanotifyタイマーウィジェット</string>
-    <string name="widget_timer_fleetname">第%d艦隊</string>
+    <string name="fleet_format">第%d艦隊</string>
 
     <string name="download_title">アップデート利用可能</string>
     <string name="download_description_head">データを更新していない場合、Kcanotifyが正常に動作しないことがあります。</string>

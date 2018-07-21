@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/ship_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorListItemBack"
@@ -52,19 +54,43 @@
                         android:textColor="@color/colorStatNotLocked"
                         android:textSize="10dp" />
 
-                    <TextView
-                        android:id="@+id/ship_name"
+                    <RelativeLayout
                         android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="0"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="2dp"
-                        android:paddingStart="2dp"
-                        android:singleLine="true"
-                        android:text="Saratoga Kai Ni A"
-                        android:textColor="@color/colorStatNormal"
-                        android:textSize="12dp" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="0">
+
+                        <TextView
+                            android:id="@+id/ship_name"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="0"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="2dp"
+                            android:paddingStart="2dp"
+                            android:singleLine="true"
+                            android:text="Saratoga Kai Ni A"
+                            android:textColor="@color/colorStatNormal"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/ship_fleet"
+                            android:layout_width="25dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="top"
+                            android:layout_weight="0"
+                            android:alpha="0.75"
+                            android:background="@color/colorStatFleetNo"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="1"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="10dp" />
+
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:id="@+id/ship_stat_1_1"
