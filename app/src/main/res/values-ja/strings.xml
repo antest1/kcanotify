@@ -4,6 +4,7 @@
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="action_settings">設定</string>
+    <string name="action_download">ダウンロード</string>
     <string name="backpress_msg">もう一度押すとアプリが終了します</string>
     <string name="notification_appinfo_title">Kcanotify通知</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>

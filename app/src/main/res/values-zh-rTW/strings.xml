@@ -12,6 +12,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="action_settings">設定</string>
+    <string name="action_download">下載</string>
     <string name="backpress_msg">再按一次返回鍵退出應用程序</string>
     <string name="notification_appinfo_title">Kcanotify通知</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>

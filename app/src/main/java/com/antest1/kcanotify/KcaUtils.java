@@ -27,6 +27,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -582,6 +583,25 @@ public class KcaUtils {
             }
         }
         return data;
+    }
+
+    public static boolean checkFairyImageFileFromStorage(Context context, String name) {
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("fairy", Context.MODE_PRIVATE);
+        File myImageFile = new File(directory, KcaUtils.format("%s", name));
+        Bitmap bitmap = null;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        try {
+            bitmap = BitmapFactory.decodeStream(new FileInputStream(myImageFile), null, options);
+        } catch (FileNotFoundException e) {
+            Log.e("KCA", getStringFromException(e));
+            return false;
+        }
+        if (bitmap == null) {
+            return false;
+        }
+        return true;
     }
 
     public static Bitmap getFairyImageFromStorage(Context context, String name, KcaDBHelper helper) {

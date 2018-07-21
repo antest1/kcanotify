@@ -328,7 +328,6 @@ public class InitStartActivity extends Activity {
             alertDialog.setCancelable(false);
             alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
                     (dialog, which) -> {
-                        setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, true);
                         final KcaResourceDownloader downloadTask = new KcaResourceDownloader();
                         downloadTask.execute(new_resversion, fairy_flag);
                     });
