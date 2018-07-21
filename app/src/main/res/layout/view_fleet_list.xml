@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fleetviewlayout"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="false"
     android:orientation="vertical"
@@ -12,7 +12,7 @@
 
     <LinearLayout
         android:id="@+id/fleetviewpanel"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:alpha="0.8"
         android:background="@color/colorPrimaryDark"
@@ -21,8 +21,8 @@
 
         <LinearLayout
             android:id="@+id/fleetview_head"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <TextView
@@ -321,7 +321,7 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="2dp"
@@ -421,24 +421,24 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:orientation="horizontal">
 
             <ScrollView
                 android:id="@+id/fleetview_shiparea"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0">
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
                         android:layout_marginTop="2dp"
@@ -446,15 +446,15 @@
 
                         <LinearLayout
                             android:id="@+id/fleet_list_main"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginRight="6dp"
                             android:layout_weight="1.0"
                             android:orientation="vertical">
 
                             <LinearLayout
                                 android:id="@+id/fleetview_item_1"
-                                android:layout_width="fill_parent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
@@ -466,13 +466,13 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -502,8 +502,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -543,7 +543,7 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
@@ -573,7 +573,7 @@
 
                             <LinearLayout
                                 android:id="@+id/fleetview_item_2"
-                                android:layout_width="fill_parent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
@@ -585,13 +585,13 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -621,8 +621,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -662,7 +662,7 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
@@ -692,7 +692,7 @@
 
                             <LinearLayout
                                 android:id="@+id/fleetview_item_3"
-                                android:layout_width="fill_parent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
@@ -704,13 +704,13 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -740,8 +740,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -781,7 +781,7 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
@@ -811,7 +811,7 @@
 
                             <LinearLayout
                                 android:id="@+id/fleetview_item_4"
-                                android:layout_width="fill_parent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
@@ -823,13 +823,13 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -859,8 +859,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -900,7 +900,7 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
@@ -930,7 +930,7 @@
 
                             <LinearLayout
                                 android:id="@+id/fleetview_item_5"
-                                android:layout_width="fill_parent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
@@ -942,13 +942,13 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -978,8 +978,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1019,7 +1019,7 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
@@ -1049,7 +1049,7 @@
 
                             <LinearLayout
                                 android:id="@+id/fleetview_item_6"
-                                android:layout_width="fill_parent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
@@ -1061,13 +1061,13 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1097,8 +1097,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1138,7 +1138,7 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
@@ -1169,15 +1169,15 @@
 
                         <LinearLayout
                             android:id="@+id/fleet_list_combined"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginRight="6dp"
                             android:layout_weight="1.0"
                             android:orientation="vertical">
 
                             <LinearLayout
                                 android:id="@+id/fleetview_item_7"
-                                android:layout_width="fill_parent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
@@ -1189,13 +1189,13 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1225,8 +1225,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1266,7 +1266,7 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
@@ -1296,7 +1296,7 @@
 
                             <LinearLayout
                                 android:id="@+id/fleetview_item_8"
-                                android:layout_width="fill_parent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
@@ -1308,13 +1308,13 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1344,8 +1344,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1385,7 +1385,7 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
@@ -1415,7 +1415,7 @@
 
                             <LinearLayout
                                 android:id="@+id/fleetview_item_9"
-                                android:layout_width="fill_parent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
@@ -1427,13 +1427,13 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1463,8 +1463,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1504,7 +1504,7 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
@@ -1534,7 +1534,7 @@
 
                             <LinearLayout
                                 android:id="@+id/fleetview_item_10"
-                                android:layout_width="fill_parent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
@@ -1546,13 +1546,13 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1582,8 +1582,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1623,7 +1623,7 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
@@ -1654,7 +1654,7 @@
 
                             <LinearLayout
                                 android:id="@+id/fleetview_item_11"
-                                android:layout_width="fill_parent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
@@ -1666,13 +1666,13 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1702,8 +1702,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1743,7 +1743,7 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
@@ -1773,7 +1773,7 @@
 
                             <LinearLayout
                                 android:id="@+id/fleetview_item_12"
-                                android:layout_width="fill_parent"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="bottom"
@@ -1785,13 +1785,13 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1.0"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1821,8 +1821,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:layout_weight="1.0"
                                         android:orientation="horizontal">
 
@@ -1862,7 +1862,7 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="6dp"
                                     android:gravity="center_vertical"
@@ -1903,7 +1903,7 @@
                 <ScrollView
                     android:id="@+id/fleetview_menu"
                     android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
+                    android:layout_height="match_parent"
                     android:paddingBottom="2dp"
                     android:paddingEnd="4dp"
                     android:paddingLeft="4dp"
@@ -1913,13 +1913,13 @@
 
                     <LinearLayout
                         android:id="@+id/viewbutton_area"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/viewbutton_quest"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginBottom="8dp"
@@ -1935,7 +1935,7 @@
 
                         <TextView
                             android:id="@+id/viewbutton_excheck"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginBottom="8dp"
@@ -1951,7 +1951,7 @@
 
                         <TextView
                             android:id="@+id/viewbutton_develop"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginBottom="8dp"
@@ -1967,7 +1967,7 @@
 
                         <TextView
                             android:id="@+id/viewbutton_construction"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginBottom="8dp"
@@ -2001,7 +2001,7 @@
 
                         <TextView
                             android:id="@+id/viewbutton_maphp"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginBottom="8dp"
@@ -2051,7 +2051,7 @@
 
                         <TextView
                             android:id="@+id/viewbutton_akashi"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginBottom="8dp"
