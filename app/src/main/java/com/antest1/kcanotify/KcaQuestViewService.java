@@ -293,7 +293,10 @@ public class KcaQuestViewService extends Service {
                 questnext.setVisibility(api_page_count == 0 || api_disp_page == api_page_count ? View.GONE : View.VISIBLE);
             }
             Log.e("KCA", api_list.toString());
-            if (checkValid) helper.checkValidQuest(api_disp_page, api_page_count, api_list, tab_id);
+            if (checkValid) {
+                questTracker.clearInvalidQuestTrack();
+                helper.checkValidQuest(api_disp_page, api_page_count, api_list, tab_id);
+            }
             setQuestView(api_disp_page, api_page_count, api_list, checkValid);
             return 0;
         } catch (Exception e) {

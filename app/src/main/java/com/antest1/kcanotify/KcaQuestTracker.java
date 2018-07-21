@@ -155,11 +155,11 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
     public void deleteQuestTrackWithRange(int startId, int endId, String type_cond) {
         SQLiteDatabase db = this.getWritableDatabase();
         if (startId == -1) {
-            db.delete(qt_table_name, "KEY < ?".concat(type_cond), new String[]{String.valueOf(endId)});
+            db.delete(qt_table_name, "KEY < ? AND ACTIVE=1".concat(type_cond), new String[]{String.valueOf(endId)});
         } else if (endId == -1) {
-            db.delete(qt_table_name, "KEY > ?".concat(type_cond), new String[]{String.valueOf(startId)});
+            db.delete(qt_table_name, "KEY > ? AND ACTIVE=1".concat(type_cond), new String[]{String.valueOf(startId)});
         } else {
-            db.delete(qt_table_name, "KEY > ? AND KEY < ?".concat(type_cond),
+            db.delete(qt_table_name, "KEY > ? AND KEY < ? AND ACTIVE=1".concat(type_cond),
                     new String[]{String.valueOf(startId), String.valueOf(endId)});
         }
     }
@@ -709,7 +709,24 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         return sb.toString().trim();
     }
 
+    public void clearInvalidQuestTrack() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.query(qt_table_name, null, null, null, null, null, null);
+        while (c.moveToNext()) {
+            String key = c.getString(c.getColumnIndex("KEY"));
+            String time = c.getString(c.getColumnIndex("TIME"));
+            JsonObject questTrackInfo = KcaApiData.getQuestTrackInfo(key);
+            if (questTrackInfo != null) {
+                int type = questTrackInfo.get("type").getAsInt();
+                if (!checkQuestValid(type, Integer.parseInt(key), time)) {
+                    db.delete(qt_table_name, "KEY=?", new String[]{String.valueOf(key)});
+                }
+            }
+        }
+    }
+
     public JsonArray getQuestTrackerData() {
+        clearInvalidQuestTrack();
         JsonArray data = new JsonArray();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(qt_table_name, null, null, null, null, null, null);
@@ -727,19 +744,15 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             questItem.addProperty("active", active);
             JsonArray quest_count = new JsonArray();
             JsonObject questTrackInfo = KcaApiData.getQuestTrackInfo(key);
-                if (questTrackInfo != null) {
-                    JsonArray cond_info = questTrackInfo.getAsJsonArray("cond");
-                    int type = questTrackInfo.get("type").getAsInt();
-                    for (int i = 0; i < cond_info.size(); i++) {
-                        if(cond_value[i] >= cond_info.get(i).getAsInt()) {
-                            if (!checkQuestValid(type, Integer.parseInt(key), time)) {
-                                db.delete(qt_table_name, "KEY=?", new String[]{String.valueOf(key)});
-                            } else {
-                                cond_value[i] = cond_info.get(i).getAsInt();
-                            }
-                        }
-                        quest_count.add(cond_value[i]);
+            if (questTrackInfo != null) {
+                JsonArray cond_info = questTrackInfo.getAsJsonArray("cond");
+                int type = questTrackInfo.get("type").getAsInt();
+                for (int i = 0; i < cond_info.size(); i++) {
+                    if(cond_value[i] >= cond_info.get(i).getAsInt()) {
+                        cond_value[i] = cond_info.get(i).getAsInt();
                     }
+                    quest_count.add(cond_value[i]);
+                }
             }
             questItem.add("cond", quest_count);
             data.add(questItem);
