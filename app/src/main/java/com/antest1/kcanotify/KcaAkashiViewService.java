@@ -125,6 +125,7 @@ public class KcaAkashiViewService extends Service {
             //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mInflater = LayoutInflater.from(contextWithLocale);
             mView = mInflater.inflate(R.layout.view_akashi_list, null);
+            KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
             mView.setVisibility(View.GONE);
 
             akashiview = mView.findViewById(R.id.akashiviewlayout);

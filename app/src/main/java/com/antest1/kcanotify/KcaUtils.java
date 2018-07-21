@@ -13,7 +13,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -28,10 +27,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.MalformedJsonException;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -52,16 +50,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -71,7 +65,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -79,6 +72,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DATALOAD;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
@@ -737,5 +731,19 @@ public class KcaUtils {
         week_data.addProperty("start", start_timestamp);
         week_data.addProperty("end", end_timestamp);
         return week_data;
+    }
+
+    // Fix width for specific device has notch design:
+    // currently LG G7 (LM-G710) now
+    public static void resizeFullWidthView(Context context, View v) {
+        String model = Build.MODEL;
+        if (v == null) return;
+        if (!model.contains("LM-G710")) return;
+        int orientation = context.getResources().getConfiguration().orientation;
+        if (orientation == ORIENTATION_LANDSCAPE) {
+            final float scale = context.getResources().getDisplayMetrics().density;
+            int padding_px_width = (int) (28 * scale + 0.5f);
+            v.setPadding(padding_px_width, 0, padding_px_width, 0);
+        }
     }
 }

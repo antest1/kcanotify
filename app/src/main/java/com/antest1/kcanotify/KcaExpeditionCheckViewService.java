@@ -145,6 +145,7 @@ public class KcaExpeditionCheckViewService extends Service {
             contextWithLocale = KcaUtils.getContextWithLocale(getApplicationContext(), getBaseContext());
             mInflater = LayoutInflater.from(contextWithLocale);
             mView = mInflater.inflate(R.layout.view_excheck_list, null);
+            KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
             mView.setVisibility(View.GONE);
             mView.findViewById(R.id.excheckview_head).setOnTouchListener(mViewTouchListener);
             for (int i = 1; i < 4; i++) {

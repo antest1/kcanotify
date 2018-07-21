@@ -1285,6 +1285,7 @@ public class KcaBattleViewService extends Service {
 
                 mInflater = LayoutInflater.from(contextWithLocale);
                 mView = mInflater.inflate(R.layout.view_sortie_battle, null);
+                KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
                 mView.setVisibility(View.GONE);
                 battleview = mView.findViewById(R.id.battleview);
                 battleview.setOnTouchListener(mViewTouchListener);

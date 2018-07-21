@@ -342,6 +342,7 @@ public class KcaFleetViewService extends Service {
     private void initView() {
         mView = mInflater.inflate(R.layout.view_fleet_list, null);
         mView.setVisibility(GONE);
+        KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
         mView.findViewById(R.id.fleetview_shiparea).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_head).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_cn_change).setOnTouchListener(mViewTouchListener);

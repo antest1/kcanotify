@@ -323,6 +323,7 @@ public class KcaQuestViewService extends Service {
                 //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 mInflater = LayoutInflater.from(contextWithLocale);
                 mView = mInflater.inflate(R.layout.view_quest_list, null);
+                KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
                 mView.setVisibility(View.GONE);
 
                 questview = (ScrollView) mView.findViewById(R.id.questview);
