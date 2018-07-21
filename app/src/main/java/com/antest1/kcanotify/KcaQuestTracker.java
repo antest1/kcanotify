@@ -149,7 +149,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         values.put("KEY", id);
         values.put("ACTIVE", active ? 1 : 0);
 
-        for (int i = 0; i < 4; i++) {
+        values.put("CND0", cond.get(0).getAsInt() + getInitialCondValue(id_str));
+        for (int i = 1; i < 4; i++) {
             if (i < cond.size()) values.put("CND".concat(String.valueOf(i)), cond.get(i).getAsInt());
             else values.put("CND".concat(String.valueOf(i)), 0);
         }
@@ -783,7 +784,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     if(cond_value[i] >= cond_info.get(i).getAsInt()) {
                         cond_value[i] = cond_info.get(i).getAsInt();
                     }
-                    quest_count.add(cond_value[i]);
+                    quest_count.add(cond_value[i] - getInitialCondValue(key));
                 }
             }
             questItem.add("cond", quest_count);
