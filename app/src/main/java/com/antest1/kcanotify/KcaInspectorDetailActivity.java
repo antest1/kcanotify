@@ -108,7 +108,9 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
                             dbHelper.deleteValue(key);
                         } else if (type_key.startsWith(QT_PREFIX)) {
                             questTracker.clearQuestTrack();
-                        } else if (type_key.startsWith(PREF_PREFIX)) {
+                        } else if (type_key.startsWith(DQ_PREFIX)) {
+                            dbHelper.clearQuest();
+                        } else  if (type_key.startsWith(PREF_PREFIX)) {
                             SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
                             SharedPreferences.Editor editor = pref.edit();
                             String value = SettingActivity.getDefaultValue(key);

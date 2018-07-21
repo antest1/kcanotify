@@ -78,6 +78,7 @@
     <color name="colorRetreated">#757575</color>
 
     <color name="colorQuestViewMemo">#64b5f6</color>
+    <color name="colorQuestCategory0">#616161</color>
     <color name="colorQuestCategory1">#388e3c</color>
     <color name="colorQuestCategory2">#d50000</color>
     <color name="colorQuestCategory3">#6bc613</color>
@@ -88,6 +89,7 @@
     <color name="colorQuestCategory8">#d50000</color>
     <color name="colorQuestCategory9">#757575</color>
 
+    <color name="colorQuestType0">#616161</color>
     <color name="colorQuestType1">#6ebbf6</color>
     <color name="colorQuestType2">#77dde9</color>
     <color name="colorQuestType3">#b5dd60</color>
@@ -97,6 +99,7 @@
     <color name="colorQuestProgress1">#6bc613</color>
     <color name="colorQuestProgress2">#31834c</color>
 
+    <color name="colorQuestState0">#e0e0e0</color>
     <color name="colorQuestState1">#ffffff</color>
     <color name="colorQuestState2">#f98c27</color>
     <color name="colorQuestState3">#4fc3f7</color>

@@ -5,14 +5,18 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -47,6 +52,7 @@ public class KcaDataSyncActivity extends AppCompatActivity {
     KcaQuestTracker questTracker;
     EditText questCodeInput;
     SwitchCompat questSyncModeSwitch;
+    boolean is_checked = false;
 
     public KcaDataSyncActivity() {
         LocaleUtils.updateConfig(this);
@@ -68,9 +74,16 @@ public class KcaDataSyncActivity extends AppCompatActivity {
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
 
+        KcaApiData.setDBHelper(dbHelper);
         loadTranslationData(getApplicationContext());
         loadQuestTrackDataFromStorage(dbHelper, getApplicationContext());
         ((TextView) findViewById(R.id.questsync_title)).setText(R.string.datasync_quest_title);
+
+        findViewById(R.id.questsync_url).setOnClickListener(v -> {
+            Uri uri = Uri.parse(getString(R.string.datasync_quest_url));
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        });
 
         questCodeScanBtn = findViewById(R.id.questsync_btn);
         questCodeClearBtn = findViewById(R.id.questsync_clear);
@@ -88,12 +101,15 @@ public class KcaDataSyncActivity extends AppCompatActivity {
         questSyncModeText.setText(getStringWithLocale(R.string.datasync_mode_add));
         questCurrentCodeLabel.setText(getStringWithLocale(R.string.datasync_current_label));
 
+        questCodeInput.addTextChangedListener(new KcaTextWatcher(questCodeInput));
+
         String current_code = getCurrentQuestCode();
         questCurrentCode.setText(current_code.length() > 0 ? current_code : "-");
 
         questCodeClearBtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.black), PorterDuff.Mode.SRC_ATOP);
         questCodeClearBtn.setOnClickListener(v -> {
+            resetCheck();
             questCodeInput.getText().clear();
         });
 
@@ -123,6 +139,8 @@ public class KcaDataSyncActivity extends AppCompatActivity {
         questCheckBtn.setOnClickListener(v -> {
             String code = questCodeInput.getText().toString().toUpperCase();
             setResultText(code);
+            resultText.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPanelWarning));
+            is_checked = true;
         });
 
         questCopyBtn.setOnClickListener(v -> {
@@ -133,6 +151,28 @@ public class KcaDataSyncActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
             }
         });
+
+        questSyncBtn.setOnClickListener(v -> {
+            if (!is_checked) return;
+            String code = questCodeInput.getText().toString().toUpperCase();
+            boolean result = false;
+            if (code.length() > 0) result = loadQuestDataFromCode(code, questSyncModeSwitch.isChecked());
+            if (result) {
+                String updated_code = getCurrentQuestCode();
+                questCurrentCode.setText(updated_code.length() > 0 ? updated_code : "-");
+                setResultText(updated_code);
+                questCodeInput.setText(updated_code, TextView.BufferType.EDITABLE);
+                resetCheck();
+                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.datasync_success), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.datasync_failed), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void resetCheck() {
+        resultText.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+        is_checked = false;
     }
 
     private String getCurrentQuestCode() {
@@ -177,7 +217,115 @@ public class KcaDataSyncActivity extends AppCompatActivity {
     }
 
     private void setResultText(String code) {
-        resultText.setText(KcaQuestCode.getFormattedCodeInfo(code, questSyncModeSwitch.isChecked(), questTracker));
+        resultText.setText(getFormattedCodeInfo(code, questSyncModeSwitch.isChecked()));
+    }
+
+    public boolean loadQuestDataFromCode(String code, boolean mode) {
+        if (KcaQuestCode.validate_code(code)) {
+            JsonObject data_dict = new JsonObject();
+            JsonArray data = dbHelper.getCurrentQuestList();
+            for (int i = 0; i < data.size(); i++) {
+                JsonObject item = data.get(i).getAsJsonObject();
+                String key = item.get("api_no").getAsString();
+                data_dict.add(key, item);
+            }
+
+            if (mode) {
+                dbHelper.clearQuest();
+                questTracker.clearQuestTrack();
+            }
+            JsonArray decoded_result = KcaQuestCode.decode_code(code);
+            for (int i = 0; i < decoded_result.size(); i++) {
+                JsonObject item = decoded_result.get(i).getAsJsonObject();
+                String key = item.get("code").getAsString();
+                boolean active = item.get("active").getAsBoolean();
+                JsonArray quest_cond = item.getAsJsonArray("cond");
+
+                if (active) {
+                    if (data_dict.has(key)) {
+                        JsonObject quest_item = data_dict.getAsJsonObject(key);
+                        dbHelper.putQuest(Integer.parseInt(key), quest_item.toString(),
+                                quest_item.get("api_type").getAsInt());
+                    } else {
+                        JsonObject dummy_value = new JsonObject();
+                        dummy_value.addProperty("api_no", key);
+                        dummy_value.addProperty("api_type", 0);
+                        dummy_value.addProperty("api_state", 0);
+                        dummy_value.addProperty("api_category", Integer.parseInt(key) / 100);
+                        dummy_value.addProperty("api_progress_flag", 0);
+                        dummy_value.addProperty("api_title", "unknown quest");
+                        dummy_value.addProperty("api_detail", "go to the quest page to see detail");
+
+                        if (kcQuestInfoData.has(key)) {
+                            String quest_code = kcQuestInfoData.getAsJsonObject(key).get("code").getAsString();
+                            quest_code = quest_code.replace("W", "");
+
+                        }
+
+                        dbHelper.putQuest(Integer.parseInt(key), dummy_value.toString(), 0);
+                    }
+                }
+                Log.e("KCA", quest_cond.toString());
+                if (quest_cond.size() > 0) {
+                    if (!mode) {
+                        JsonArray quest_trackinfo = questTracker.getQuestTrackInfo(key);
+                        if (quest_trackinfo.size() > 0) {
+                            for (int j = 0; j < quest_cond.size(); j++) {
+                                quest_cond.set(j, new JsonPrimitive(
+                                        quest_cond.get(j).getAsInt() + quest_trackinfo.get(j).getAsInt()));
+                            }
+                        }
+                    }
+                    questTracker.syncQuestTrack(Integer.parseInt(key), active, quest_cond, System.currentTimeMillis());
+                    questTracker.clearInvalidQuestTrack();
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String getFormattedCodeInfo(String code, boolean mode) {
+        StringBuilder data = new StringBuilder();
+        if (KcaQuestCode.validate_code(code)) {
+            JsonArray decoded_result = KcaQuestCode.decode_code(code);
+            if (decoded_result == null) return "ERROR";
+            for (int i = 0; i < decoded_result.size(); i++) {
+                JsonObject item = decoded_result.get(i).getAsJsonObject();
+                String key = item.get("code").getAsString();
+                boolean active = item.get("active").getAsBoolean();
+                JsonObject quest_data = kcQuestInfoData.getAsJsonObject(key);
+                String quest_code = quest_data.get("code").getAsString();
+                String quest_name = quest_data.get("name").getAsString();
+                JsonArray quest_cond = item.getAsJsonArray("cond");
+                if (quest_cond.size() > 0) {
+                    List<String> quest_cond_list = new ArrayList<>();
+                    JsonArray quest_trackinfo = questTracker.getQuestTrackInfo(key);
+
+                    for (int j = 0; j < quest_cond.size(); j++) {
+                        String v = quest_cond.get(j).getAsString();
+                        String u = "";
+                        if (!mode) {
+                            if (quest_trackinfo.size() > 0) {
+                                u = quest_trackinfo.get(j).getAsString() + "+";
+                            } else {
+                                u = "0+";
+                            }
+                        }
+                        quest_cond_list.add(u + v);
+                    }
+                    String active_str = active ? "" : "*";
+                    String quest_cond_str = KcaUtils.joinStr(quest_cond_list, ", ");
+                    data.append(KcaUtils.format("[%s%s] %s (%s)\n", quest_code, active_str, quest_name, quest_cond_str));
+                } else {
+                    data.append(KcaUtils.format("[%s] %s\n", quest_code, quest_name));
+                }
+            }
+            return data.toString().trim();
+        } else {
+            return "INVALID";
+        }
     }
 
     @Override
@@ -193,6 +341,23 @@ public class KcaDataSyncActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public class KcaTextWatcher implements TextWatcher {
+        private EditText mEditText;
+        public KcaTextWatcher(EditText editText) {
+            mEditText = editText;
+        }
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            resetCheck();
         }
     }
 }

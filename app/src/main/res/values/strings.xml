@@ -398,6 +398,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fairy_hidden_notification_action_remove">Remove</string>
     <string name="battleview_text_retreated">Retreated</string>
 
+    <string name="quest_category_0" formatted="false" translatable="false">\?</string>
     <string name="quest_category_1">A</string>
     <string name="quest_category_2">B</string>
     <string name="quest_category_3">C</string>
@@ -408,6 +409,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_category_8">SB</string>
     <string name="quest_category_9">N</string>
 
+    <string name="quest_type_0" formatted="false" translatable="false">\?</string>
     <string name="quest_type_1">D</string>
     <string name="quest_type_2">W</string>
     <string name="quest_type_3">M</string>
@@ -587,6 +589,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="reslog_clear_dialog_message">Do you want to clear the whole resource log?</string>
 
     <string name="action_datasync">Data Sync</string>
+    <string name="datasync_quest_url" formatted="false" translatable="false">https://antest1.github.io/kcaqsync/</string>
     <string name="datasync_quest_title">Quest Track Sync</string>
     <string name="datasync_quest_code">CODE</string>
     <string name="datasync_mode_add">addition</string>
@@ -595,6 +598,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="datasync_quest_sync">sync</string>
     <string name="datasync_quest_copy">copy</string>
     <string name="datasync_current_label">Current Code</string>
+    <string name="datasync_success">Sync Success</string>
+    <string name="datasync_failed">Sync Failed</string>
 
     <string name="fleetview_title">FleetView</string>
     <string name="fleetview_combined">CF</string>

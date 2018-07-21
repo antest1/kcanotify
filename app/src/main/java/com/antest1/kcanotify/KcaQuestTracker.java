@@ -17,9 +17,11 @@ import org.json.JSONArray;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -41,6 +43,7 @@ import static com.antest1.kcanotify.KcaApiData.STYPE_SS;
 import static com.antest1.kcanotify.KcaApiData.STYPE_SSV;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
+import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
 import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
 import static com.antest1.kcanotify.KcaUtils.getJapanSimpleDataFormat;
 
@@ -93,6 +96,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
     }
 
     public void addQuestTrack(int id) {
+        if (!KcaApiData.isQuestTrackable(String.valueOf(id))) return;
         Date currentTime = getJapanCalendarInstance().getTime();
         SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String time = df.format(currentTime);
@@ -127,6 +131,34 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         }
         c.close();
         test();
+    }
+
+    public void syncQuestTrack(int id, boolean active, JsonArray cond, long timestamp) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String id_str = String.valueOf(id);
+
+        Date currentTime = getJapanCalendarInstance(timestamp).getTime();
+        SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
+        String time = df.format(currentTime);
+        int quest_type = 0;
+
+        JsonObject questInfo = KcaApiData.getQuestTrackInfo(id_str);
+        if (questInfo != null) quest_type = questInfo.get("type").getAsInt();
+
+        ContentValues values = new ContentValues();
+        values.put("KEY", id);
+        values.put("ACTIVE", active ? 1 : 0);
+
+        for (int i = 0; i < 4; i++) {
+            if (i < cond.size()) values.put("CND".concat(String.valueOf(i)), cond.get(i).getAsInt());
+            else values.put("CND".concat(String.valueOf(i)), 0);
+        }
+        values.put("TIME", time);
+        values.put("TYPE", quest_type);
+        int u = db.update(qt_table_name, values, "KEY=?", new String[]{String.valueOf(id)});
+        if (u == 0) {
+            db.insertWithOnConflict(qt_table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        }
     }
 
     public void removeQuestTrack(int id, boolean hard) {

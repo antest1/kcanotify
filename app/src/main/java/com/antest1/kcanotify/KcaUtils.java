@@ -450,6 +450,13 @@ public class KcaUtils {
         return c;
     }
 
+    public static Calendar getJapanCalendarInstance(long timestamp) {
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"), Locale.JAPAN);
+        c.setFirstDayOfWeek(Calendar.MONDAY);
+        c.setTimeInMillis(timestamp);
+        return c;
+    }
+
     public static SimpleDateFormat getJapanSimpleDataFormat(String format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.US);
         dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));

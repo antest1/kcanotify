@@ -531,6 +531,8 @@
     <string name="datasync_quest_sync">동기화</string>
     <string name="datasync_quest_copy">복사</string>
     <string name="datasync_current_label">현재 코드</string>
+    <string name="datasync_success">동기화 성공</string>
+    <string name="datasync_failed">동기화 실패</string>
 
     <string name="fleetview_title">함대정보</string>
     <string name="fleetview_combined">연합</string>

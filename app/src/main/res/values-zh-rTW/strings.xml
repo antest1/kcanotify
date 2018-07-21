@@ -538,6 +538,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="datasync_quest_sync">同步</string>
     <string name="datasync_quest_copy">複製</string>
     <string name="datasync_current_label">現在編碼</string>
+    <string name="datasync_success">同步成功</string>
+    <string name="datasync_failed">同步失敗</string>
 
     <string name="fleetview_title">艦隊信息</string>
     <string name="fleetview_combined">聯合</string>
