@@ -295,31 +295,35 @@ public class KcaDataSyncActivity extends AppCompatActivity {
                 JsonObject item = decoded_result.get(i).getAsJsonObject();
                 String key = item.get("code").getAsString();
                 boolean active = item.get("active").getAsBoolean();
-                JsonObject quest_data = kcQuestInfoData.getAsJsonObject(key);
-                String quest_code = quest_data.get("code").getAsString();
-                String quest_name = quest_data.get("name").getAsString();
-                JsonArray quest_cond = item.getAsJsonArray("cond");
-                if (quest_cond.size() > 0) {
-                    List<String> quest_cond_list = new ArrayList<>();
-                    JsonArray quest_trackinfo = questTracker.getQuestTrackInfo(key);
+                if (kcQuestInfoData.has(key)) {
+                    JsonObject quest_data = kcQuestInfoData.getAsJsonObject(key);
+                    String quest_code = quest_data.get("code").getAsString();
+                    String quest_name = quest_data.get("name").getAsString();
+                    JsonArray quest_cond = item.getAsJsonArray("cond");
+                    if (quest_cond.size() > 0) {
+                        List<String> quest_cond_list = new ArrayList<>();
+                        JsonArray quest_trackinfo = questTracker.getQuestTrackInfo(key);
 
-                    for (int j = 0; j < quest_cond.size(); j++) {
-                        String v = quest_cond.get(j).getAsString();
-                        String u = "";
-                        if (!mode) {
-                            if (quest_trackinfo.size() > 0) {
-                                u = quest_trackinfo.get(j).getAsString() + "+";
-                            } else {
-                                u = "0+";
+                        for (int j = 0; j < quest_cond.size(); j++) {
+                            String v = quest_cond.get(j).getAsString();
+                            String u = "";
+                            if (!mode) {
+                                if (quest_trackinfo.size() > 0) {
+                                    u = quest_trackinfo.get(j).getAsString() + "+";
+                                } else {
+                                    u = "0+";
+                                }
                             }
+                            quest_cond_list.add(u + v);
                         }
-                        quest_cond_list.add(u + v);
+                        String active_str = active ? "" : "*";
+                        String quest_cond_str = KcaUtils.joinStr(quest_cond_list, ", ");
+                        data.append(KcaUtils.format("[%s%s] %s (%s)\n", quest_code, active_str, quest_name, quest_cond_str));
+                    } else {
+                        data.append(KcaUtils.format("[%s] %s\n", quest_code, quest_name));
                     }
-                    String active_str = active ? "" : "*";
-                    String quest_cond_str = KcaUtils.joinStr(quest_cond_list, ", ");
-                    data.append(KcaUtils.format("[%s%s] %s (%s)\n", quest_code, active_str, quest_name, quest_cond_str));
                 } else {
-                    data.append(KcaUtils.format("[%s] %s\n", quest_code, quest_name));
+                    data.append("quest data not available");
                 }
             }
             return data.toString().trim();
