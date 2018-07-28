@@ -422,20 +422,22 @@ public class SettingActivity extends AppCompatActivity {
         @TargetApi(Build.VERSION_CODES.M)
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == REQUEST_OVERLAY_PERMISSION) {
-                int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
-                new Handler().postDelayed(() -> {
-                    if (Settings.canDrawOverlays(getActivity())) {
-                        Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_overlay_ok), Toast.LENGTH_SHORT).show();
+            if (getActivity() != null) {
+                if (requestCode == REQUEST_OVERLAY_PERMISSION) {
+                    int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
+                    new Handler().postDelayed(() -> {
+                        if (Settings.canDrawOverlays(getActivity())) {
+                            Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_overlay_ok), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_overlay_no), Toast.LENGTH_SHORT).show();
+                        }
+                    }, delay);
+                } else if (requestCode == REQUEST_USAGESTAT_PERMISSION) {
+                    if(hasUsageStatPermission(getActivity().getApplicationContext())) {
+                        Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_overlay_no), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_usagestat_no), Toast.LENGTH_SHORT).show();
                     }
-                }, delay);
-            } else if (requestCode == REQUEST_USAGESTAT_PERMISSION) {
-                if(hasUsageStatPermission(getActivity().getApplicationContext())) {
-                    Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_usagestat_no), Toast.LENGTH_SHORT).show();
                 }
             }
         }
