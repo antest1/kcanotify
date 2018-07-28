@@ -60,7 +60,6 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class InitStartActivity extends Activity {
-    public final static int DELAY_TIME = 250;
     public final static String FAIRY_INFO_FILENAME = "icon_info.json";
     public static final int UPDATECHECK_INTERVAL_MS = 30000;
     public static final String ACTION_RESET = "ACTION_RESET";
@@ -80,7 +79,6 @@ public class InitStartActivity extends Activity {
 
     boolean download_finished = false;
     Handler handler = new Handler();
-    Runnable r;
 
     KcaDBHelper dbHelper;
     KcaDownloader downloader;
@@ -143,7 +141,7 @@ public class InitStartActivity extends Activity {
         if (all_passed) {
             setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
             findViewById(R.id.init_layout).setOnClickListener(v -> {
-                ActivityTrans(false);
+                startMainActivity(false);
                 is_skipped = true;
             });
         }
@@ -151,7 +149,7 @@ public class InitStartActivity extends Activity {
         skipcheck = findViewById(R.id.skip_main);
         skipcheck.setText(getStringWithLocale(R.string.download_skip));
         skipcheck.setOnClickListener(v -> {
-            ActivityTrans(false);
+            startMainActivity(false);
             is_skipped = true;
         });
 
@@ -372,29 +370,20 @@ public class InitStartActivity extends Activity {
     }
 
     private void startMainActivity(boolean transition) {
-        r = () -> ActivityTrans(transition);
-        handler.postDelayed(r, DELAY_TIME);
-    }
-
-    private void ActivityTrans(boolean transition) {
-        if (!is_skipped) {
-            Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(mainIntent);
-            finish();
-            if(transition) overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        }
+        Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(mainIntent);
+        finish();
+        if(transition) overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (download_finished && r != null) handler.postDelayed(r, DELAY_TIME);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (download_finished && r != null) handler.removeCallbacks(r);
     }
 
     @Override
@@ -462,7 +451,6 @@ public class InitStartActivity extends Activity {
             }
 
             download_finished = true;
-            mProgressDialog.dismiss();
             startMainActivity(true);
         }
 
@@ -590,6 +578,7 @@ public class InitStartActivity extends Activity {
             mProgressDialog.setProgress(progress[0]);
 
             if (totalFiles == 0 || progress[0] == totalFiles) {
+                if (mProgressDialog.isShowing()) mProgressDialog.dismiss();
                 workFinished();
             }
         }
