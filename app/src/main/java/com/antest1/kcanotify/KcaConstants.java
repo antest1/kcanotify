@@ -449,6 +449,7 @@ public final class KcaConstants {
     public static final String PREF_TIMER_WIDGET_STATE = "timer_widget_state";
     public static final String PREF_DATALOAD_ERROR_FLAG = "dataload_error_flag";
     public static final String PREF_FIX_VIEW_LOC = "fix_view_loc";
+    public static final String PREF_SCREEN_ADV_NETWORK = "adv_network_setting";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -479,6 +480,7 @@ public final class KcaConstants {
             PREF_FAIRY_ICON,
             PREF_FAIRY_AUTOHIDE,
             PREF_APK_DOWNLOAD_SITE,
+            PREF_SCREEN_ADV_NETWORK,
             PREF_VPN_BYPASS_ADDRESS,
             PREF_FULLMORALE_SETTING,
             PREF_KCA_DATA_VERSION,

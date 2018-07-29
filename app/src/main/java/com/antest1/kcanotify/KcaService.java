@@ -300,7 +300,7 @@ public class KcaService extends Service {
         KcaAlarmService.setHandler(nHandler);
         KcaOpenDBAPI.setHandler(nHandler);
         MainActivity.setHandler(nHandler);
-        SettingActivity.setHandler(nHandler);
+        MainPreferenceFragment.setHandler(nHandler);
         KcaFairySelectActivity.setHandler(nHandler);
         KcaViewButtonService.setHandler(nHandler);
         KcaAkashiRepairInfo.initAkashiTimer();
