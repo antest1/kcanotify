@@ -482,17 +482,18 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_sort_key_7">Damaged</string>
     <string name="ship_stat_sort_key_8">Repair</string>
     <string name="ship_stat_sort_key_9">Expedition</string>
-    <string name="ship_stat_sort_key_10">Firepower</string>
-    <string name="ship_stat_sort_key_11">Torpedo</string>
-    <string name="ship_stat_sort_key_12">AA</string>
-    <string name="ship_stat_sort_key_13">Armor</string>
-    <string name="ship_stat_sort_key_14">Nightpower</string>
-    <string name="ship_stat_sort_key_15">ASW</string>
-    <string name="ship_stat_sort_key_16">Evasion</string>
-    <string name="ship_stat_sort_key_17">LoS</string>
-    <string name="ship_stat_sort_key_18">Luck</string>
-    <string name="ship_stat_sort_key_19">Speed</string>
-    <string name="ship_stat_sort_key_20">Tag</string>
+    <string name="ship_stat_sort_key_10">Extra Slot</string>
+    <string name="ship_stat_sort_key_11">Firepower</string>
+    <string name="ship_stat_sort_key_12">Torpedo</string>
+    <string name="ship_stat_sort_key_13">AA</string>
+    <string name="ship_stat_sort_key_14">Armor</string>
+    <string name="ship_stat_sort_key_15">Nightpower</string>
+    <string name="ship_stat_sort_key_16">ASW</string>
+    <string name="ship_stat_sort_key_17">Evasion</string>
+    <string name="ship_stat_sort_key_18">LoS</string>
+    <string name="ship_stat_sort_key_19">Luck</string>
+    <string name="ship_stat_sort_key_20">Speed</string>
+    <string name="ship_stat_sort_key_21">Tag</string>
     <string name="shipinfo_filt_list_dialog_title">Select</string>
     <string name="shipinfo_criteria_count" formatted="false">Applied criteria: %d</string>
 

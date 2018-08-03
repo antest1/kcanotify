@@ -421,17 +421,18 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_sort_key_7">损伤</string>
     <string name="ship_stat_sort_key_8">修理</string>
     <string name="ship_stat_sort_key_9">遠征</string>
-    <string name="ship_stat_sort_key_10">火力</string>
-    <string name="ship_stat_sort_key_11">雷装</string>
-    <string name="ship_stat_sort_key_12">对空</string>
-    <string name="ship_stat_sort_key_13">装甲</string>
-    <string name="ship_stat_sort_key_14">夜战</string>
-    <string name="ship_stat_sort_key_15">对潜</string>
-    <string name="ship_stat_sort_key_16">迴避</string>
-    <string name="ship_stat_sort_key_17">索敌</string>
-    <string name="ship_stat_sort_key_18">运</string>
-    <string name="ship_stat_sort_key_19">速度</string>
-    <string name="ship_stat_sort_key_20">标贴</string>
+    <string name="ship_stat_sort_key_10">増設</string>
+    <string name="ship_stat_sort_key_11">火力</string>
+    <string name="ship_stat_sort_key_12">雷装</string>
+    <string name="ship_stat_sort_key_13">对空</string>
+    <string name="ship_stat_sort_key_14">装甲</string>
+    <string name="ship_stat_sort_key_15">夜战</string>
+    <string name="ship_stat_sort_key_16">对潜</string>
+    <string name="ship_stat_sort_key_17">迴避</string>
+    <string name="ship_stat_sort_key_18">索敌</string>
+    <string name="ship_stat_sort_key_19">运</string>
+    <string name="ship_stat_sort_key_20">速度</string>
+    <string name="ship_stat_sort_key_21">标贴</string>
 
     <string name="shipinfo_filt_list_dialog_title">选择</string>
     <string name="shipinfo_criteria_count" formatted="false">已应用标签：%d</string>

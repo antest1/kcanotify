@@ -37,14 +37,14 @@ public class KcaShipListViewAdpater extends BaseAdapter {
 
     private static final String[] total_key_list = {
             "api_id", "api_lv", "api_stype", "api_cond", "api_locked",
-            "api_deck_id", "api_docking", "api_damage", "api_repair", "api_mission",
+            "api_deck_id", "api_docking", "api_damage", "api_repair", "api_mission", "api_exslot",
             "api_karyoku", "api_raisou", "api_taiku", "api_soukou", "api_yasen",
             "api_taisen", "api_kaihi", "api_sakuteki", "api_lucky", "api_soku", "api_sally_area"};
 
     public long getTotalExp() { return exp_sum; }
 
-    private static int[] sort_table = {0, 1, 2, 3, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
-    private static int[] filt_table = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+    private static int[] sort_table = {0, 1, 2, 3, 5, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+    private static int[] filt_table = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
 
     public static int getSortKeyIndex(int position) {
         return sort_table[position];
@@ -68,7 +68,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     }
 
     public static boolean isBoolean(int idx) {
-        int[] list = {4, 6, 9}; // ship_filt_array
+        int[] list = {4, 6, 9, 10}; // ship_filt_array
         return (Arrays.binarySearch(list, idx) >= 0);
     }
 
@@ -453,7 +453,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             int stype = kcShipData.get("api_stype").getAsInt();
             int max_hp = item.get("api_maxhp").getAsInt();
             int now_hp = item.get("api_nowhp").getAsInt();
-
+            item.addProperty("api_exslot", item.get("api_slot_ex").getAsInt() != 0 ? 1 : 0);
             item.addProperty("api_stype", stype);
             item.addProperty("api_docking", KcaDocking.checkShipInDock(Integer.parseInt(ship_id)) ? 1 : 0);
             item.addProperty("api_damage", KcaApiData.getStatus(now_hp * 100 / max_hp));
