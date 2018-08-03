@@ -26,6 +26,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -56,7 +57,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPublicKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -68,6 +80,11 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -765,5 +782,39 @@ public class KcaUtils {
             int padding_px_width = (int) (28 * scale + 0.5f);
             v.setPadding(padding_px_width, 0, padding_px_width, 0);
         }
+    }
+
+    public static String getRSAEncodedString(Context context, String value) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, IOException, BadPaddingException, IllegalBlockSizeException {
+        /*
+        Example:
+        try {
+            JsonObject data = new JsonObject();
+            data.addProperty("userid", 20181234);
+            data.addProperty("data", "416D341GX141JI0318W");
+            String encoded = KcaUtils.getRSAEncodedString(getApplicationContext(), data.toString());
+            Log.e("KCA", encoded);
+            data.remove("data");
+            encoded = KcaUtils.getRSAEncodedString(getApplicationContext(), data.toString());
+            Log.e("KCA", data.toString());
+            Log.e("KCA", encoded);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        */
+        AssetManager am = context.getAssets();
+        AssetManager.AssetInputStream ais =
+                (AssetManager.AssetInputStream) am.open("kcaqsync_pubkey.txt");
+        byte[] bytes = ByteStreams.toByteArray(ais);
+        String publicKeyContent = new String(bytes)
+                .replaceAll("\\n", "")
+                .replace("-----BEGIN PUBLIC KEY-----", "")
+                .replace("-----END PUBLIC KEY-----", "").trim();
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(Base64.decode(publicKeyContent, Base64.DEFAULT));
+        Key encryptionKey = keyFactory.generatePublic(pubSpec);
+        Cipher rsa = Cipher.getInstance("RSA/None/PKCS1Padding");
+        rsa.init(Cipher.ENCRYPT_MODE, encryptionKey);
+        String result = Base64.encodeToString(rsa.doFinal(value.getBytes("utf-8")), Base64.DEFAULT).replace("\n", "");
+        return URLEncoder.encode(result, "utf-8");
     }
 }
