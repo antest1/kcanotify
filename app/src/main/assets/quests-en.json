@@ -1724,7 +1724,20 @@
         "desc": "Secure 4 victories in Exercises within the same day using Yuugumo Kai Ni, Naganami Kai Ni and up to 4 additional ships.",
         "memo": "\u27a3 Rewards: \u00B6First choice: Either three Irako OR two Type 2 Depth Charges \u00B6Second choice: Either a Reinforcement Expansion OR a Medal"
     },
-
+    "326": {
+        "code": "C24",
+        "name": "Mass Exercises for Summer",
+        "desc": "Secure 8 victories in Exercises within the same day.",
+        "memo": "\u27a3Rewards a Mamiya and a Present Box"
+    },
+    "327": {
+        "code": "C25",
+        "name": "Asashio-class, Assemble! Commence Intensive Training!",
+        "desc": "Secure 4 victories in Exercises within the same day using at least four of Asashio-class and up to 2 additional ships.",
+        "memo": "\u27a3Rewards 3 Buckets and either 4 Development Materials OR a Type 3 Depth Charge Projector OR a Furniture Fairy"
+    },
+    
+	
 	"401": {
 		"code": "D1",
 		"name": "The First Expedition!",
@@ -2453,6 +2466,12 @@
         "desc": "\u203bMass Wartime Production of the Type A Dual-Purpose Gun \u203bHave 30 Development Materials, 900 Steel and a New Model Artillery Armament Materials. Set a Fubuki-class as secretary and equip her with a \u2605max 12.7cm Twin Gun Mount Model A Kai 2 in her FIRST slot. Scrap four 10cm Twin High-angle Gun Mount and one Type 94 Anti-Aircraft Fire Director. \u2718Consumes the resources, items and equipment.",
 		"memo": "Make sure the equipment is unlocked! \u27a3Rewards a 12.7cm Twin Gun Mount Model A Kai 3 (Wartime Modification) + Anti-Aircraft Fire Director"
     },
+    "687": {
+        "code": "F78",
+        "name": "Wartime Modification 2 of Destroyer Main Guns",
+        "desc": "Set a Shigure Kai Ni or Yuudachi Kai Ni as secretary and equip her with a \u2605max 12.7cm Twin Gun Mount Model B Kai 2 in her FIRST slot. Scrap five 10cm Twin High-angle Gun Mount and one Type 94 Anti-Aircraft Fire Director.",
+        "memo": "\u2718Consumes the equipment. Make sure the equipment is unlocked! \u27a3Rewards a 12.7cm Twin Gun Mount Model B Kai 4 (Wartime Modification) + Anti-Aircraft Fire Director"
+    },
 	
 	"701": {
 		"code": "G1",
@@ -2551,7 +2570,13 @@
 		"desc": "Sortie Shiratsuyu Kai Ni and Shigure Kai Ni and 4 up to additional ships to [W2-3], [W4-1], [W5-5] and [W6-5]. S-Rank the boss nodes. Press F10 to clear the overlay.",
 		"memo": "\u27a3 Rewards a 12.7cm Twin Gun Mount Model B Kai 4 (Wartime Modification) + Anti-Aircraft Fire Director and either a Medal OR a New Model Artillery Armament Materials OR 8 Buckets"
 	},
-
+    "890": {
+        "code": "B122",
+        "name": "Elite CruDiv 4 2nd Platoon, Set Sail!",
+        "desc": "Sortie Choukai Kai Ni and Maya Kai Ni and 4 up to additional ships to [W1-4], [W2-3], [W3-3] and [W4-5]. S-Rank the boss nodes.",
+        "memo": "\u27a3Rewards furniture and either two 12.7cm Twin High-angle Gun Mount (Late Model) OR 8 Buckets OR a Medal"
+    },
+	
 	"188_old": {
 		"code": "Le1A1",
 		"name": "Fully Formed Nishimura Fleet, Prepare to Sortie!",
