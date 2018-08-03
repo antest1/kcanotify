@@ -50,7 +50,7 @@ import static com.antest1.kcanotify.KcaUtils.getJapanSimpleDataFormat;
 public class KcaQuestTracker extends SQLiteOpenHelper {
     private static final String qt_db_name = "quest_track_db";
     private static final String qt_table_name = "quest_track_table";
-    private final static int[] quarterly_quest_id = {426, 428, 637, 643, 663, 675, 678, 680, 822, 854, 861, 862, 873, 875};
+    private final static int[] quarterly_quest_id = {426, 428, 637, 643, 663, 675, 678, 680, 822, 854, 861, 862, 873, 875, 888};
     private final static int[] quest_cont_quest_id = {411, 607, 608};
     private static boolean ap_dup_flag = false;
 
@@ -551,12 +551,15 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "259": // 수상타격
                     requiredShip = 0;
+                    // required_bb: 나가토급, 야마토급, 이세급, 후소급
+                    int[] required_bb = {26, 27, 77, 80, 81, 82, 87, 88, 131, 136, 143, 148, 275, 276, 286, 287, 411, 412, 541, 546, 553};
                     for (int i = 0; i < fleet_data.size(); i++) {
                         int item = fleet_data.get(i).getAsInt();
                         if (item == -1) break;
                         int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
-                        if (kcShipType == STYPE_BB || kcShipType == STYPE_BBV) requiredShip += 10;
+                        JsonObject kcShipData = getKcShipDataById(shipId, "stype");
+                        int kcShipType = kcShipData.get("stype").getAsInt();
+                        if (Arrays.binarySearch(required_bb, shipId) >= 0) requiredShip += 10;
                         if (kcShipType == STYPE_CL) requiredShip += 1;
                     }
                     wflag = world == 5 && map == 1 && isboss && rank.equals("S") && requiredShip == 31;
@@ -581,7 +584,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         if (item == -1) break;
                         int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
                         int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
-                        if ((i == 0 && kcShipType != STYPE_DD) || (kcShipType != STYPE_DD || kcShipType != STYPE_CL || kcShipType != STYPE_CA)) {
+                        if ((i == 0 && kcShipType != STYPE_DD) || (kcShipType != STYPE_DD && kcShipType != STYPE_CL && kcShipType != STYPE_CA)) {
                             fleetflag = false;
                             break;
                         }
@@ -641,6 +644,29 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "875": // 5-4 분기퀘
                     wflag = world == 5 && map == 4 && isboss && isGoodRank(rank);
+                    break;
+                case "888": // 미카와 분기퀘: 쵸카이, 아오바, 키누가사, 카코, 후루타카, 텐류, 유바리 중 4택
+                    requiredShip = 0;
+                    int[] required_mikawa = {51, 59, 60, 61, 69, 115, 123, 142, 213, 262, 263, 264, 272, 293, 295, 416, 417, 427, 477};
+                    for (int i = 0; i < fleet_data.size(); i++) {
+                        int item = fleet_data.get(i).getAsInt();
+                        if (item == -1) break;
+                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
+                        if (Arrays.binarySearch(required_mikawa, shipId) >= 0) requiredShip += 4;
+                    }
+                    if (requiredShip >= 4) {
+                        targetData = new JsonArray();
+                        targetData.add(cond0);
+                        targetData.add(cond1);
+                        targetData.add(cond2);
+                        if (world == 5 && map == 1 && isboss && rank.equals("S"))
+                            targetData.set(0, new JsonPrimitive(1));
+                        if (world == 5 && map == 3 && isboss && rank.equals("S"))
+                            targetData.set(1, new JsonPrimitive(1));
+                        if (world == 5 && map == 4 && isboss && rank.equals("S"))
+                            targetData.set(2, new JsonPrimitive(1));
+                        updateTarget.add(key, targetData);
+                    }
                     break;
                 default:
                     break;
