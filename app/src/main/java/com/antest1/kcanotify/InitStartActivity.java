@@ -455,11 +455,12 @@ public class InitStartActivity extends Activity {
         }
 
         private void downloadFile(String folder, String url, String name, int version) {
+            long timestamp = System.currentTimeMillis() / 1000;
             final File root_dir = cw.getDir(folder, Context.MODE_PRIVATE);
             final File data = new File(root_dir, name);
             if (data.exists()) data.delete();
 
-            final Request request = new Request(url, data.getPath());
+            final Request request = new Request(KcaUtils.format("%s?t=%d", url, timestamp), data.getPath());
             fetch.enqueue(request, updatedRequest -> {
                 dbHelper.putResVer(name, version);
             }, error -> {
