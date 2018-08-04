@@ -27,6 +27,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.antest1.kcanotify.MainActivity"
+            android:launchMode="singleTask"
             android:configChanges="locale|layoutDirection">
         </activity>
         <activity
@@ -185,7 +186,8 @@
                 android:value="com.antest1.kcanotify.SettingActivity" />
         </activity>
         <activity
-            android:name="com.antest1.kcanotify.InitStartActivity">
+            android:name="com.antest1.kcanotify.InitStartActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

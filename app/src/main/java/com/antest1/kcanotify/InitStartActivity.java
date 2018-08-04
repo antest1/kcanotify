@@ -368,7 +368,7 @@ public class InitStartActivity extends Activity {
         Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(mainIntent);
         finish();
-        if(transition) overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        //if(transition) overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
