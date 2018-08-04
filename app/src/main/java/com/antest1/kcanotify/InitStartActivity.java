@@ -141,17 +141,12 @@ public class InitStartActivity extends Activity {
         if (all_passed) {
             setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
             findViewById(R.id.init_layout).setOnClickListener(v -> {
-                startMainActivity(false);
-                is_skipped = true;
+                if (!reset_flag) {
+                    startMainActivity(false);
+                    is_skipped = true;
+                }
             });
         }
-
-        skipcheck = findViewById(R.id.skip_main);
-        skipcheck.setText(getStringWithLocale(R.string.download_skip));
-        skipcheck.setOnClickListener(v -> {
-            startMainActivity(false);
-            is_skipped = true;
-        });
 
         is_first = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION)) == 0;
 
