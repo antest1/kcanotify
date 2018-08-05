@@ -63,7 +63,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     }
 
     public static boolean isList(int idx) {
-        int[] list = {2, 5, 7, 19, 20};  // ship_filt_array
+        int[] list = {2, 5, 7, 20, 21};  // ship_filt_array
         return (Arrays.binarySearch(list, idx) >= 0);
     }
 
