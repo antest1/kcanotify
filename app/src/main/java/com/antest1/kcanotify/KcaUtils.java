@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
+import com.google.common.primitives.Bytes;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -45,6 +46,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 import org.apache.commons.httpclient.ChunkedInputStream;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -71,11 +73,14 @@ import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
@@ -784,6 +789,34 @@ public class KcaUtils {
         }
     }
 
+    public static KcaQSyncAPI getQuestSync(Context context){
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(1, TimeUnit.MINUTES)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(context.getString(R.string.app_kcaqsync_link))
+                .client(okHttpClient)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        return retrofit.create(KcaQSyncAPI.class);
+    }
+
+    public static byte[] addAll(final byte[] array1, byte[] array2) {
+        byte[] joinedArray = Arrays.copyOf(array1, array1.length + array2.length);
+        System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+        return joinedArray;
+    }
+
+    public static Map<String, String> getKcaQSyncHeaderMap() {
+        Map<String, String> map = new HashMap<>();
+        map.put("Referer", "app:/KCA/");
+        map.put("Content-Type", "application/x-www-form-urlencoded");
+        map.put("User-Agent", KcaUtils.format("Kcanotify/%s ", BuildConfig.VERSION_NAME));
+        return map;
+    }
+
     public static String getRSAEncodedString(Context context, String value) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, IOException, BadPaddingException, IllegalBlockSizeException {
         /*
         Example:
@@ -801,6 +834,12 @@ public class KcaUtils {
             e.printStackTrace();
         }
         */
+
+        List<String> value_list = new ArrayList<>();
+        for (int i = 0; i < (int) Math.ceil(value.length() / 96.0); i++) {
+            value_list.add(value.substring(i*96, Math.min((i+1)*96, value.length()) ));
+        }
+
         AssetManager am = context.getAssets();
         AssetManager.AssetInputStream ais =
                 (AssetManager.AssetInputStream) am.open("kcaqsync_pubkey.txt");
@@ -814,7 +853,14 @@ public class KcaUtils {
         Key encryptionKey = keyFactory.generatePublic(pubSpec);
         Cipher rsa = Cipher.getInstance("RSA/None/PKCS1Padding");
         rsa.init(Cipher.ENCRYPT_MODE, encryptionKey);
+
+        byte[] data_all = {};
+        for (String item : value_list) {
+            byte[] item_byte = rsa.doFinal(item.getBytes("utf-8"));
+            data_all = addAll(data_all, item_byte);
+        }
+
         String result = Base64.encodeToString(rsa.doFinal(value.getBytes("utf-8")), Base64.DEFAULT).replace("\n", "");
-        return URLEncoder.encode(result, "utf-8");
+        return result;
     }
 }

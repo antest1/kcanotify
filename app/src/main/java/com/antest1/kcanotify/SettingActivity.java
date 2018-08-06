@@ -47,6 +47,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_NS;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_QUESTVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
+import static com.antest1.kcanotify.KcaConstants.PREF_LAST_QUEST_CHECK;
 import static com.antest1.kcanotify.KcaConstants.PREF_LAST_UPDATE_CHECK;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_POIDB_API_USE;
@@ -186,6 +187,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_LAST_UPDATE_CHECK:
             case PREF_SNIFFER_MODE:
             case PREF_KCARESOURCE_VERSION:
+            case PREF_LAST_QUEST_CHECK:
                 return "0";
             case PREF_ALARM_DELAY:
                 return "61";

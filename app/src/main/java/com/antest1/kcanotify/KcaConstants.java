@@ -47,6 +47,7 @@ public final class KcaConstants {
     public static final String DB_KEY_BASICIFNO = "key_basicinfo";
     public static final String DB_KEY_LATESTDEV = "key_latestdev";
     public static final String DB_KEY_EXPCALTRK = "key_expcaltrk";
+    public static final String DB_KEY_QUESTNCHK = "key_questnchk";
 
     public static final String[] DB_KEY_ARRAY = {
             DB_KEY_STARTDATA,
@@ -71,7 +72,8 @@ public final class KcaConstants {
             DB_KEY_EXPSORTIE,
             DB_KEY_BASICIFNO,
             DB_KEY_LATESTDEV,
-            DB_KEY_EXPCALTRK
+            DB_KEY_EXPCALTRK,
+            DB_KEY_QUESTNCHK
     };
 
     public static final String ERROR_TYPE_SERVICE = "S";
@@ -450,6 +452,7 @@ public final class KcaConstants {
     public static final String PREF_DATALOAD_ERROR_FLAG = "dataload_error_flag";
     public static final String PREF_FIX_VIEW_LOC = "fix_view_loc";
     public static final String PREF_SCREEN_ADV_NETWORK = "adv_network_setting";
+    public static final String PREF_LAST_QUEST_CHECK = "last_quest_check";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -503,7 +506,8 @@ public final class KcaConstants {
             PREF_LAST_UPDATE_CHECK,
             PREF_TIMER_WIDGET_STATE,
             PREF_DATALOAD_ERROR_FLAG,
-            PREF_FIX_VIEW_LOC
+            PREF_FIX_VIEW_LOC,
+            PREF_LAST_QUEST_CHECK
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

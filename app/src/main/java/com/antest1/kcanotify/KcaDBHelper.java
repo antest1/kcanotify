@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonReader;
 
 import java.io.StringReader;
@@ -35,6 +36,7 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPCRNT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTDAY;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTIME;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_QUESTNCHK;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DB;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_VPN;
@@ -601,6 +603,60 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         db.delete(questlist_table_name, "KEY=?", new String[]{String.valueOf(key)});
         qt.removeQuestTrack(key, false);
     }
+
+    public JsonObject initQuestCheck() {
+        JsonObject q_data = new JsonObject();
+        q_data.add("total", new JsonObject());
+        q_data.add("count", new JsonObject());
+        putValue(DB_KEY_QUESTNCHK, q_data.toString());
+        return q_data;
+    }
+
+    public void updateQuestCheck(int tab, JsonObject data) {
+        String tab_key = String.valueOf(tab);
+        JsonObject q_data = getJsonObjectValue(DB_KEY_QUESTNCHK);
+        if (q_data == null) q_data = initQuestCheck();
+        if (!q_data.getAsJsonObject("total").has(tab_key)) {
+            q_data.getAsJsonObject("total").addProperty(tab_key, 0);
+            q_data.getAsJsonObject("count").add(tab_key, new JsonArray());
+        }
+        int page_count = data.get("api_page_count").getAsInt();
+        int disp_page = data.get("api_disp_page").getAsInt();
+        q_data.getAsJsonObject("total").addProperty(tab_key, page_count);
+        JsonArray count_list = q_data.getAsJsonObject("count").getAsJsonArray(tab_key);
+        if (disp_page > page_count) {
+            count_list.remove(new JsonPrimitive(disp_page));
+        } else if (!count_list.contains(new JsonPrimitive(disp_page))) {
+            count_list.add(disp_page);
+        }
+        putValue(DB_KEY_QUESTNCHK, q_data.toString());
+    }
+
+    public boolean checkQuestListValid() {
+        String[] key_list = {"0", "9", "1", "2", "3", "4", "5"};
+        int all_total = 0;
+        int all_count = 0;
+        JsonObject q_data = getJsonObjectValue(DB_KEY_QUESTNCHK);
+        if (q_data == null) {
+            q_data = initQuestCheck();
+        } else {
+            for (String key: key_list) {
+                if (q_data.has(key)) {
+                    JsonObject data = q_data.getAsJsonObject(key);
+                    int total = data.get("total").getAsInt();
+                    int count = data.getAsJsonArray("count").size();
+                    if (total == count && (key.equals("0") || key.equals("9"))) {
+                        return true;
+                    } else {
+                        all_count += count;
+                        all_total += total;
+                    }
+                }
+            }
+        }
+        return all_count == all_total;
+    }
+
 
     public void initExpScore() {
         Date currentTime = getJapanCalendarInstance().getTime();

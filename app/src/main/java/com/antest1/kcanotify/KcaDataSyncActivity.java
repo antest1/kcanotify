@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
 import static com.antest1.kcanotify.KcaApiData.loadQuestTrackDataFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
@@ -103,7 +104,7 @@ public class KcaDataSyncActivity extends AppCompatActivity {
 
         questCodeInput.addTextChangedListener(new KcaTextWatcher(questCodeInput));
 
-        String current_code = getCurrentQuestCode();
+        String current_code = questTracker.getCurrentQuestCode(dbHelper);
         questCurrentCode.setText(current_code.length() > 0 ? current_code : "-");
 
         questCodeClearBtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
@@ -158,7 +159,7 @@ public class KcaDataSyncActivity extends AppCompatActivity {
             boolean result = false;
             if (code.length() > 0) result = loadQuestDataFromCode(code, questSyncModeSwitch.isChecked());
             if (result) {
-                String updated_code = getCurrentQuestCode();
+                String updated_code = questTracker.getCurrentQuestCode(dbHelper);
                 questCurrentCode.setText(updated_code.length() > 0 ? updated_code : "-");
                 setResultText(updated_code);
                 questCodeInput.setText(updated_code, TextView.BufferType.EDITABLE);
@@ -173,31 +174,6 @@ public class KcaDataSyncActivity extends AppCompatActivity {
     private void resetCheck() {
         resultText.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
         is_checked = false;
-    }
-
-    private String getCurrentQuestCode() {
-        List<String> all_code = new ArrayList<>();
-        JsonArray api_list = dbHelper.getCurrentQuestList();
-        for (int i = 0; i < api_list.size(); i++) {
-            JsonObject api_list_item = api_list.get(i).getAsJsonObject();
-            String api_no = api_list_item.get("api_no").getAsString();
-            all_code.add(KcaQuestCode.convert_to_code(api_no));
-        }
-        JsonArray tracked_quest = questTracker.getQuestTrackerData();
-        for (int i = 0; i < tracked_quest.size(); i++) {
-            JsonObject item = tracked_quest.get(i).getAsJsonObject();
-            String id = item.get("id").getAsString();
-            boolean active = item.get("active").getAsBoolean();
-            JsonArray cond = item.getAsJsonArray("cond");
-            int id_index = all_code.indexOf(KcaQuestCode.convert_to_code(id));
-            String new_code =  KcaQuestCode.convert_to_code(id, cond, active);
-            if (id_index != -1) {
-                all_code.set(id_index, new_code);
-            } else {
-                all_code.add(new_code);
-            }
-        }
-        return KcaUtils.joinStr(all_code, "");
     }
 
     @Override

@@ -57,6 +57,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
 import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_HIGH;
 import static android.widget.Toast.makeText;
@@ -138,6 +142,7 @@ public class KcaService extends Service {
     KcaDropLogger dropLogger;
     KcaResourceLogger resourceLogger;
     KcaDeckInfo deckInfoCalc;
+    KcaQSyncAPI kcaQSyncEndpoint;
 
     AlarmManager alarmManager;
     AudioManager mAudioManager;
@@ -244,6 +249,7 @@ public class KcaService extends Service {
         dropLogger = new KcaDropLogger(getApplicationContext(), null, KCANOTIFY_DROPLOG_VERSION);
         resourceLogger = new KcaResourceLogger(getApplicationContext(), null, KCANOTIFY_RESOURCELOG_VERSION);
         deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
+        kcaQSyncEndpoint = KcaUtils.getQuestSync(getApplicationContext());
         KcaApiData.setDBHelper(dbHelper);
 
         AssetManager assetManager = getResources().getAssets();
@@ -346,6 +352,7 @@ public class KcaService extends Service {
         };
         processExpeditionInfo(true);
         runTimer();
+        dbHelper.initQuestCheck();
         dbHelper.initExpScore();
         return START_STICKY;
     }
@@ -949,8 +956,47 @@ public class KcaService extends Service {
                 } else if (jsonDataObj.has("api_data")) {
                     JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                     KcaQuestViewService.setApiData(api_data);
+                    dbHelper.updateQuestCheck(api_tab_id, api_data);
                     startService(new Intent(getBaseContext(), KcaQuestViewService.class)
                             .setAction(REFRESH_QUESTVIEW_ACTION).putExtra("tab_id", api_tab_id));
+                }
+
+                if (dbHelper.checkQuestListValid()) {
+                    setPreferences(getApplicationContext(), PREF_LAST_QUEST_CHECK,
+                            String.valueOf(System.currentTimeMillis()));
+                    int userid = KcaApiData.getUserId();
+                    Toast.makeText(getApplicationContext(), String.valueOf(userid), Toast.LENGTH_LONG).show();
+                    if (userid > 0) {
+                        JsonObject quest_data = new JsonObject();
+                        quest_data.addProperty("userid", userid);
+                        quest_data.addProperty("data", questTracker.getCurrentQuestCode(dbHelper));
+                        quest_data.addProperty("pass", "asdfgh");
+                        Log.e("KCA", String.valueOf(quest_data.toString().length()));
+                        Toast.makeText(getApplicationContext(), quest_data.toString(), Toast.LENGTH_LONG).show();
+                        try {
+                            final Call<String> qsync_write = kcaQSyncEndpoint.write(KcaUtils.getKcaQSyncHeaderMap(),
+                                    KcaUtils.getRSAEncodedString(getApplicationContext(), quest_data.toString()));
+
+                            qsync_write.enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call, Response<String> response) {
+                                    JsonObject response_data = new JsonObject();
+                                    if (response.body() != null) {
+                                        response_data = new JsonParser().parse(response.body()).getAsJsonObject();
+                                        // TODO: loadQuestDataFromCode(code, true); in KcaDataSyncActivity
+                                        // Toast.makeText(getApplicationContext(), response_data.toString(), Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<String> call, Throwable t) {
+                                    dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "kcaqsync", "", "", t.getMessage());
+                                }
+                            });
+                        } catch (Exception e) {
+                            dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "kcaqsync", "", "", getStringFromException(e));
+                        }
+                    }
                 }
                 sendQuestCompletionInfo();
                 return;
