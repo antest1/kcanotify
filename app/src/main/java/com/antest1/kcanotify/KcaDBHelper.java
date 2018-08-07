@@ -17,6 +17,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonReader;
 
+import org.json.JSONObject;
+
 import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 import static android.R.attr.timeZone;
 import static android.R.attr.value;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPCRNT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTDAY;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPTIME;
@@ -633,28 +636,122 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public boolean checkQuestListValid() {
+        int flag = 0;
         String[] key_list = {"0", "9", "1", "2", "3", "4", "5"};
-        int all_total = 0;
-        int all_count = 0;
+        int[] count_1 = {0, 0};
+        int[] count_2 = {0, 0};
         JsonObject q_data = getJsonObjectValue(DB_KEY_QUESTNCHK);
-        if (q_data == null) {
-            q_data = initQuestCheck();
-        } else {
-            for (String key: key_list) {
-                if (q_data.has(key)) {
-                    JsonObject data = q_data.getAsJsonObject(key);
-                    int total = data.get("total").getAsInt();
-                    int count = data.getAsJsonArray("count").size();
-                    if (total == count && (key.equals("0") || key.equals("9"))) {
-                        return true;
-                    } else {
-                        all_count += count;
-                        all_total += total;
-                    }
+        if (q_data == null) q_data = initQuestCheck();
+        JsonObject q_total = q_data.getAsJsonObject("total");
+        JsonObject q_count = q_data.getAsJsonObject("count");
+
+        for (String key: key_list) {
+            if (q_total.has(key)) {
+                int total = q_total.get(key).getAsInt();
+                int count = q_count.getAsJsonArray(key).size();
+                if (key.equals("0") || key.equals("9")) {
+                    flag += 10;
+                    if (total == count) return true;
+                    count_1[0] += total;
+                    count_1[1] += count;
+                } else {
+                    flag += 1;
+                    count_2[0] += total;
+                    count_2[1] += count;
                 }
             }
         }
-        return all_count == all_total;
+        return flag % 5 == 0 && (count_1[0] == count_1[1]) && (count_2[0] == count_2[1]);
+    }
+
+    public String getCurrentQuestCode() {
+        List<String> all_code = new ArrayList<>();
+        JsonArray api_list = getCurrentQuestList();
+        for (int i = 0; i < api_list.size(); i++) {
+            JsonObject api_list_item = api_list.get(i).getAsJsonObject();
+            String api_no = api_list_item.get("api_no").getAsString();
+            all_code.add(KcaQuestCode.convert_to_code(api_no));
+        }
+        JsonArray tracked_quest = qt.getQuestTrackerData();
+        for (int i = 0; i < tracked_quest.size(); i++) {
+            JsonObject item = tracked_quest.get(i).getAsJsonObject();
+            String id = item.get("id").getAsString();
+            boolean active = item.get("active").getAsBoolean();
+            JsonArray cond = item.getAsJsonArray("cond");
+            int id_index = all_code.indexOf(KcaQuestCode.convert_to_code(id));
+            String new_code =  KcaQuestCode.convert_to_code(id, cond, active);
+            if (id_index != -1) {
+                all_code.set(id_index, new_code);
+            } else {
+                all_code.add(new_code);
+            }
+        }
+        return KcaUtils.joinStr(all_code, "");
+    }
+
+    public boolean loadQuestDataFromCode(String code, boolean mode) {
+        if (KcaQuestCode.validate_code(code)) {
+            JsonObject data_dict = new JsonObject();
+            JsonArray data = getCurrentQuestList();
+            for (int i = 0; i < data.size(); i++) {
+                JsonObject item = data.get(i).getAsJsonObject();
+                String key = item.get("api_no").getAsString();
+                data_dict.add(key, item);
+            }
+
+            if (mode) {
+                clearQuest();
+                qt.clearQuestTrack();
+            }
+            JsonArray decoded_result = KcaQuestCode.decode_code(code);
+            for (int i = 0; i < decoded_result.size(); i++) {
+                JsonObject item = decoded_result.get(i).getAsJsonObject();
+                String key = item.get("code").getAsString();
+                boolean active = item.get("active").getAsBoolean();
+                JsonArray quest_cond = item.getAsJsonArray("cond");
+
+                if (active) {
+                    if (data_dict.has(key)) {
+                        JsonObject quest_item = data_dict.getAsJsonObject(key);
+                        putQuest(Integer.parseInt(key), quest_item.toString(),
+                                quest_item.get("api_type").getAsInt());
+                    } else {
+                        JsonObject dummy_value = new JsonObject();
+                        dummy_value.addProperty("api_no", key);
+                        dummy_value.addProperty("api_type", 0);
+                        dummy_value.addProperty("api_state", 0);
+                        dummy_value.addProperty("api_category", Integer.parseInt(key) / 100);
+                        dummy_value.addProperty("api_progress_flag", 0);
+                        dummy_value.addProperty("api_title", "unknown quest");
+                        dummy_value.addProperty("api_detail", "go to the quest page to see detail");
+
+                        if (kcQuestInfoData.has(key)) {
+                            String quest_code = kcQuestInfoData.getAsJsonObject(key).get("code").getAsString();
+                            quest_code = quest_code.replace("W", "");
+                        }
+
+                        putQuest(Integer.parseInt(key), dummy_value.toString(), 0);
+                    }
+                }
+                Log.e("KCA", quest_cond.toString());
+                if (quest_cond.size() > 0) {
+                    if (!mode) {
+                        JsonArray quest_trackinfo = qt.getQuestTrackInfo(key);
+                        if (quest_trackinfo.size() > 0) {
+                            for (int j = 0; j < quest_cond.size(); j++) {
+                                quest_cond.set(j, new JsonPrimitive(
+                                        quest_cond.get(j).getAsInt() + quest_trackinfo.get(j).getAsInt()));
+                            }
+                        }
+                    }
+                    qt.syncQuestTrack(Integer.parseInt(key), active, quest_cond, System.currentTimeMillis());
+                    qt.clearInvalidQuestTrack();
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

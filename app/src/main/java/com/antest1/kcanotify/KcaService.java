@@ -266,6 +266,9 @@ public class KcaService extends Service {
         loadSimpleExpeditionInfoFromStorage(getApplicationContext());
         loadShipInitEquipCountFromStorage(getApplicationContext());
         loadQuestTrackDataFromStorage(dbHelper, getApplicationContext());
+        dbHelper.initQuestCheck();
+        dbHelper.initExpScore();
+        QSyncRead();
 
         showDataLoadErrorToast(getApplicationContext(), getBaseContext(), getStringWithLocale(R.string.download_check_error));
 
@@ -352,8 +355,6 @@ public class KcaService extends Service {
         };
         processExpeditionInfo(true);
         runTimer();
-        dbHelper.initQuestCheck();
-        dbHelper.initExpScore();
         return START_STICKY;
     }
 
@@ -961,43 +962,8 @@ public class KcaService extends Service {
                             .setAction(REFRESH_QUESTVIEW_ACTION).putExtra("tab_id", api_tab_id));
                 }
 
-                if (dbHelper.checkQuestListValid()) {
-                    setPreferences(getApplicationContext(), PREF_LAST_QUEST_CHECK,
-                            String.valueOf(System.currentTimeMillis()));
-                    int userid = KcaApiData.getUserId();
-                    Toast.makeText(getApplicationContext(), String.valueOf(userid), Toast.LENGTH_LONG).show();
-                    if (userid > 0) {
-                        JsonObject quest_data = new JsonObject();
-                        quest_data.addProperty("userid", userid);
-                        quest_data.addProperty("data", questTracker.getCurrentQuestCode(dbHelper));
-                        quest_data.addProperty("pass", "asdfgh");
-                        Log.e("KCA", String.valueOf(quest_data.toString().length()));
-                        Toast.makeText(getApplicationContext(), quest_data.toString(), Toast.LENGTH_LONG).show();
-                        try {
-                            final Call<String> qsync_write = kcaQSyncEndpoint.write(KcaUtils.getKcaQSyncHeaderMap(),
-                                    KcaUtils.getRSAEncodedString(getApplicationContext(), quest_data.toString()));
-
-                            qsync_write.enqueue(new Callback<String>() {
-                                @Override
-                                public void onResponse(Call<String> call, Response<String> response) {
-                                    JsonObject response_data = new JsonObject();
-                                    if (response.body() != null) {
-                                        response_data = new JsonParser().parse(response.body()).getAsJsonObject();
-                                        // TODO: loadQuestDataFromCode(code, true); in KcaDataSyncActivity
-                                        // Toast.makeText(getApplicationContext(), response_data.toString(), Toast.LENGTH_LONG).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<String> call, Throwable t) {
-                                    dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "kcaqsync", "", "", t.getMessage());
-                                }
-                            });
-                        } catch (Exception e) {
-                            dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "kcaqsync", "", "", getStringFromException(e));
-                        }
-                    }
-                }
+                Toast.makeText(getApplicationContext(), String.valueOf(dbHelper.checkQuestListValid()), Toast.LENGTH_LONG).show();
+                if (dbHelper.checkQuestListValid()) QSyncWrite();
                 sendQuestCompletionInfo();
                 return;
             }
@@ -2718,6 +2684,111 @@ public class KcaService extends Service {
 
     public void showCustomToast(KcaCustomToast toast, String body, int duration, int color) {
         KcaUtils.showCustomToast(getApplicationContext(), getBaseContext(), toast, body, duration, color);
+    }
+
+    public void QSyncRead() {
+        long recent_check = Long.parseLong(getStringPreferences(getApplicationContext(), PREF_LAST_QUEST_CHECK));
+        int userid = KcaApiData.getUserId();
+        final boolean[] error_flag = {false};
+        if (userid > 0) {
+            JsonObject quest_data = new JsonObject();
+            quest_data.addProperty("userid", userid);
+            quest_data.addProperty("pass", "asdfgh");
+            Log.e("KCA", String.valueOf(quest_data.toString().length()));
+            Toast.makeText(getApplicationContext(), quest_data.toString(), Toast.LENGTH_LONG).show();
+            try {
+                final Call<String> qsync_read = kcaQSyncEndpoint.read(KcaUtils.getKcaQSyncHeaderMap(),
+                        KcaUtils.getRSAEncodedString(getApplicationContext(), quest_data.toString()));
+
+                qsync_read.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        JsonObject response_data = new JsonObject();
+                        if (response.body() != null) {
+                            response_data = new JsonParser().parse(response.body()).getAsJsonObject();
+                            if (response_data.has("status")) {
+                                String result = response_data.get("status").getAsString();
+                                if (result.equals("done")) {
+                                    long recent_ts = response_data.get("timestamp").getAsLong() * 1000;
+                                    if (recent_ts > recent_check) {
+                                        String quest_code = response_data.get("data").getAsString();
+                                        dbHelper.loadQuestDataFromCode(quest_code, true);
+                                    } else {
+                                        error_flag[1] = true;
+                                    }
+                                } else { // error
+                                    String detail = response_data.get("detail").getAsString();
+                                    dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "qsync_read", "", quest_data.toString(), detail);
+                                    error_flag[0] = true;
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "qsync_read", "", "", t.getMessage());
+                        error_flag[0] = true;
+                    }
+                });
+            } catch (Exception e) {
+                dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "qsync_read", "", "", getStringFromException(e));
+                error_flag[0] = true;
+            }
+        }
+        if (error_flag[0]) {
+            makeToast("failed to sync quest data", Toast.LENGTH_LONG,
+                    ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+        }
+    }
+
+    public void QSyncWrite() {
+        setPreferences(getApplicationContext(), PREF_LAST_QUEST_CHECK,
+                String.valueOf(System.currentTimeMillis()));
+        int userid = KcaApiData.getUserId();
+        final boolean[] error_flag = {false};
+        if (userid > 0) {
+            JsonObject quest_data = new JsonObject();
+            quest_data.addProperty("userid", userid);
+            quest_data.addProperty("data", dbHelper.getCurrentQuestCode());
+            quest_data.addProperty("pass", "asdfgh");
+            Log.e("KCA", String.valueOf(quest_data.toString().length()));
+            try {
+                final Call<String> qsync_write = kcaQSyncEndpoint.write(KcaUtils.getKcaQSyncHeaderMap(),
+                        KcaUtils.getRSAEncodedString(getApplicationContext(), quest_data.toString()));
+
+                qsync_write.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        JsonObject response_data = new JsonObject();
+                        if (response.body() != null) {
+                            response_data = new JsonParser().parse(response.body()).getAsJsonObject();
+                            if (response_data.has("status")) {
+                                String result = response_data.get("status").getAsString();
+                                if (!result.equals("done")) {
+                                    String detail = response_data.get("detail").getAsString();
+                                    dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "qsync_write", "", quest_data.toString(), detail);
+                                    error_flag[0] = true;
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "qsync_write", "", "", t.getMessage());
+                        error_flag[0] = true;
+                    }
+                });
+            } catch (Exception e) {
+                dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "qsync_write", "", "", getStringFromException(e));
+                error_flag[0] = true;
+            }
+        }
+        if (error_flag[0]) {
+            makeToast("failed to sync quest data", Toast.LENGTH_LONG,
+                    ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+        }
     }
 
     @Override

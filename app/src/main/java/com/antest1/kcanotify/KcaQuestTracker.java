@@ -835,29 +835,4 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         Log.e("KCA-QT", "Total: " + String.valueOf(count));
         c.close();
     }
-
-    public String getCurrentQuestCode(KcaDBHelper helper) {
-        List<String> all_code = new ArrayList<>();
-        JsonArray api_list = helper.getCurrentQuestList();
-        for (int i = 0; i < api_list.size(); i++) {
-            JsonObject api_list_item = api_list.get(i).getAsJsonObject();
-            String api_no = api_list_item.get("api_no").getAsString();
-            all_code.add(KcaQuestCode.convert_to_code(api_no));
-        }
-        JsonArray tracked_quest = getQuestTrackerData();
-        for (int i = 0; i < tracked_quest.size(); i++) {
-            JsonObject item = tracked_quest.get(i).getAsJsonObject();
-            String id = item.get("id").getAsString();
-            boolean active = item.get("active").getAsBoolean();
-            JsonArray cond = item.getAsJsonArray("cond");
-            int id_index = all_code.indexOf(KcaQuestCode.convert_to_code(id));
-            String new_code =  KcaQuestCode.convert_to_code(id, cond, active);
-            if (id_index != -1) {
-                all_code.set(id_index, new_code);
-            } else {
-                all_code.add(new_code);
-            }
-        }
-        return KcaUtils.joinStr(all_code, "");
-    }
 }

@@ -104,7 +104,7 @@ public class KcaDataSyncActivity extends AppCompatActivity {
 
         questCodeInput.addTextChangedListener(new KcaTextWatcher(questCodeInput));
 
-        String current_code = questTracker.getCurrentQuestCode(dbHelper);
+        String current_code = dbHelper.getCurrentQuestCode();
         questCurrentCode.setText(current_code.length() > 0 ? current_code : "-");
 
         questCodeClearBtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
@@ -157,9 +157,9 @@ public class KcaDataSyncActivity extends AppCompatActivity {
             if (!is_checked) return;
             String code = questCodeInput.getText().toString().toUpperCase();
             boolean result = false;
-            if (code.length() > 0) result = loadQuestDataFromCode(code, questSyncModeSwitch.isChecked());
+            if (code.length() > 0) result = dbHelper.loadQuestDataFromCode(code, questSyncModeSwitch.isChecked());
             if (result) {
-                String updated_code = questTracker.getCurrentQuestCode(dbHelper);
+                String updated_code = dbHelper.getCurrentQuestCode();
                 questCurrentCode.setText(updated_code.length() > 0 ? updated_code : "-");
                 setResultText(updated_code);
                 questCodeInput.setText(updated_code, TextView.BufferType.EDITABLE);
@@ -196,71 +196,7 @@ public class KcaDataSyncActivity extends AppCompatActivity {
         resultText.setText(getFormattedCodeInfo(code, questSyncModeSwitch.isChecked()));
     }
 
-    public boolean loadQuestDataFromCode(String code, boolean mode) {
-        if (KcaQuestCode.validate_code(code)) {
-            JsonObject data_dict = new JsonObject();
-            JsonArray data = dbHelper.getCurrentQuestList();
-            for (int i = 0; i < data.size(); i++) {
-                JsonObject item = data.get(i).getAsJsonObject();
-                String key = item.get("api_no").getAsString();
-                data_dict.add(key, item);
-            }
 
-            if (mode) {
-                dbHelper.clearQuest();
-                questTracker.clearQuestTrack();
-            }
-            JsonArray decoded_result = KcaQuestCode.decode_code(code);
-            for (int i = 0; i < decoded_result.size(); i++) {
-                JsonObject item = decoded_result.get(i).getAsJsonObject();
-                String key = item.get("code").getAsString();
-                boolean active = item.get("active").getAsBoolean();
-                JsonArray quest_cond = item.getAsJsonArray("cond");
-
-                if (active) {
-                    if (data_dict.has(key)) {
-                        JsonObject quest_item = data_dict.getAsJsonObject(key);
-                        dbHelper.putQuest(Integer.parseInt(key), quest_item.toString(),
-                                quest_item.get("api_type").getAsInt());
-                    } else {
-                        JsonObject dummy_value = new JsonObject();
-                        dummy_value.addProperty("api_no", key);
-                        dummy_value.addProperty("api_type", 0);
-                        dummy_value.addProperty("api_state", 0);
-                        dummy_value.addProperty("api_category", Integer.parseInt(key) / 100);
-                        dummy_value.addProperty("api_progress_flag", 0);
-                        dummy_value.addProperty("api_title", "unknown quest");
-                        dummy_value.addProperty("api_detail", "go to the quest page to see detail");
-
-                        if (kcQuestInfoData.has(key)) {
-                            String quest_code = kcQuestInfoData.getAsJsonObject(key).get("code").getAsString();
-                            quest_code = quest_code.replace("W", "");
-
-                        }
-
-                        dbHelper.putQuest(Integer.parseInt(key), dummy_value.toString(), 0);
-                    }
-                }
-                Log.e("KCA", quest_cond.toString());
-                if (quest_cond.size() > 0) {
-                    if (!mode) {
-                        JsonArray quest_trackinfo = questTracker.getQuestTrackInfo(key);
-                        if (quest_trackinfo.size() > 0) {
-                            for (int j = 0; j < quest_cond.size(); j++) {
-                                quest_cond.set(j, new JsonPrimitive(
-                                        quest_cond.get(j).getAsInt() + quest_trackinfo.get(j).getAsInt()));
-                            }
-                        }
-                    }
-                    questTracker.syncQuestTrack(Integer.parseInt(key), active, quest_cond, System.currentTimeMillis());
-                    questTracker.clearInvalidQuestTrack();
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     public String getFormattedCodeInfo(String code, boolean mode) {
         StringBuilder data = new StringBuilder();
