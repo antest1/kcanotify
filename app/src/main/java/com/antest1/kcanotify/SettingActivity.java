@@ -24,6 +24,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
 import static com.antest1.kcanotify.KcaConstants.PREF_FIX_VIEW_LOC;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCAQSYNC_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_ACTIVATE_DROPLOG;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_ACTIVATE_RESLOG;
@@ -142,6 +143,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
                 return String.valueOf(SEEK_33CN1);
             case PREF_OPENDB_API_USE:
             case PREF_POIDB_API_USE:
+            case PREF_KCAQSYNC_USE:
             case PREF_AKASHI_STAR_CHECKED:
             case PREF_KCA_SET_PRIORITY:
             case PREF_DISABLE_CUSTOMTOAST:

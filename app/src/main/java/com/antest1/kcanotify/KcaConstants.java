@@ -453,6 +453,8 @@ public final class KcaConstants {
     public static final String PREF_FIX_VIEW_LOC = "fix_view_loc";
     public static final String PREF_SCREEN_ADV_NETWORK = "adv_network_setting";
     public static final String PREF_LAST_QUEST_CHECK = "last_quest_check";
+    public static final String PREF_KCAQSYNC_USE = "kcaqsync_use";
+    public static final String PREF_KCAQSYNC_PASS = "kcaqsync_pass";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -507,7 +509,9 @@ public final class KcaConstants {
             PREF_TIMER_WIDGET_STATE,
             PREF_DATALOAD_ERROR_FLAG,
             PREF_FIX_VIEW_LOC,
-            PREF_LAST_QUEST_CHECK
+            PREF_LAST_QUEST_CHECK,
+            PREF_KCAQSYNC_USE,
+            PREF_KCAQSYNC_PASS
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
@@ -535,7 +539,8 @@ public final class KcaConstants {
             PREF_KCA_ACTIVATE_RESLOG,
             PREF_SHOW_CONSTRSHIP_NAME,
             PREF_DATALOAD_ERROR_FLAG,
-            PREF_FIX_VIEW_LOC
+            PREF_FIX_VIEW_LOC,
+            PREF_KCAQSYNC_USE
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

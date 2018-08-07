@@ -261,7 +261,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_title_disable_customtoast">Use Custom Toast Service</string>
     <string name="setting_menu_noti_desc_disable_customtoast">Try to enable this when node prediction/heavy damage alert does not appear.</string>
 
-    <string name="setting_menu_stat_head">Statistic Report Settings</string>
+    <string name="setting_menu_stat_head">Plugin Settings</string>
+    <string name="setting_menu_stat_title_kcaqsync">Use KcaQSync (Quest Sync)</string>
+    <string name="setting_menu_stat_desc_kcaqsync" translatable="false">http://kcaqsync.swaytwig.com/</string>
+    <string name="setting_menu_stat_title_kcaqsync_pass">KcaQSync password</string>
+    <string name="setting_menu_stat_desc_kcaqsync_pass_emtpy">Will be activated after setting the password.</string>
+    <string name="setting_menu_stat_desc_kcaqsync_pass">WARNING: Never enter your real password used in DMM!</string>
     <string name="setting_menu_stat_title_opendb">Send game statistics to OpenDB</string>
     <string name="setting_menu_stat_desc_opendb" translatable="false">http://opendb.swaytwig.com/</string>
     <string name="setting_menu_stat_title_poidb">Send game statistics to poi-statistics</string>

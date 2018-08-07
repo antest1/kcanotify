@@ -2687,13 +2687,17 @@ public class KcaService extends Service {
     }
 
     public void QSyncRead() {
+        boolean is_available = getBooleanPreferences(getApplicationContext(), PREF_KCAQSYNC_USE);
+        String qsync_pass = getStringPreferences(getApplicationContext(), PREF_KCAQSYNC_PASS).trim();
+        if (!is_available || qsync_pass.length() == 0) return;
+
         long recent_check = Long.parseLong(getStringPreferences(getApplicationContext(), PREF_LAST_QUEST_CHECK));
         int userid = KcaApiData.getUserId();
         final boolean[] error_flag = {false};
         if (userid > 0) {
             JsonObject quest_data = new JsonObject();
             quest_data.addProperty("userid", userid);
-            quest_data.addProperty("pass", "asdfgh");
+            quest_data.addProperty("pass", qsync_pass);
             Log.e("KCA", String.valueOf(quest_data.toString().length()));
             Toast.makeText(getApplicationContext(), quest_data.toString(), Toast.LENGTH_LONG).show();
             try {
@@ -2743,6 +2747,10 @@ public class KcaService extends Service {
     }
 
     public void QSyncWrite() {
+        boolean is_available = getBooleanPreferences(getApplicationContext(), PREF_KCAQSYNC_USE);
+        String qsync_pass = getStringPreferences(getApplicationContext(), PREF_KCAQSYNC_PASS).trim();
+        if (!is_available || qsync_pass.length() == 0) return;
+
         setPreferences(getApplicationContext(), PREF_LAST_QUEST_CHECK,
                 String.valueOf(System.currentTimeMillis()));
         int userid = KcaApiData.getUserId();
@@ -2751,7 +2759,7 @@ public class KcaService extends Service {
             JsonObject quest_data = new JsonObject();
             quest_data.addProperty("userid", userid);
             quest_data.addProperty("data", dbHelper.getCurrentQuestCode());
-            quest_data.addProperty("pass", "asdfgh");
+            quest_data.addProperty("pass", qsync_pass);
             Log.e("KCA", String.valueOf(quest_data.toString().length()));
             try {
                 final Call<String> qsync_write = kcaQSyncEndpoint.write(KcaUtils.getKcaQSyncHeaderMap(),

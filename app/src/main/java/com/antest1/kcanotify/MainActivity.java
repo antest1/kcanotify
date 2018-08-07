@@ -297,35 +297,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         */
-
-        try {
-            KcaQSyncAPI kcaQSyncEndpoint = KcaUtils.getQuestSync(getApplicationContext());
-            JsonObject data = new JsonObject();
-            data.addProperty("userid", 15108389);
-            data.addProperty("pass", "asdfgh");
-            final Call<String> qsync_read = kcaQSyncEndpoint.read(KcaUtils.getKcaQSyncHeaderMap(),
-                KcaUtils.getRSAEncodedString(getApplicationContext(), data.toString()));
-            Log.e("KCA", KcaUtils.getRSAEncodedString(getApplicationContext(), data.toString()));
-            qsync_read.enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(Call<String> call, Response<String> response) {
-                    JsonObject response_data = new JsonObject();
-                    if (response.body() != null) {
-                        response_data = new JsonParser().parse(response.body()).getAsJsonObject();
-                        Toast.makeText(getApplicationContext(), response_data.toString(), Toast.LENGTH_LONG).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<String> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

@@ -221,7 +221,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_title_disable_customtoast">使用Custom Toast服務</string>
     <string name="setting_menu_noti_desc_disable_customtoast">當羅盤預知或大破警告不顯示時設置</string>
 
-    <string name="setting_menu_stat_head">統計插件設置</string>
+    <string name="setting_menu_stat_head">插件設置</string>
+    <string name="setting_menu_stat_title_kcaqsync">启用KcaQSync(自動同步任務)</string>
+    <string name="setting_menu_stat_title_kcaqsync_pass">KcaQSync密碼</string>
+    <string name="setting_menu_stat_desc_kcaqsync_pass_emtpy">將於設定密碼後启動。</string>
+    <string name="setting_menu_stat_desc_kcaqsync_pass">警告：切勿使用與DMM相同的密碼！</string>
     <string name="setting_menu_stat_title_opendb">向OpenDB傳送遊戲數據</string>
     <string name="setting_menu_stat_title_poidb">向poi-statistics傳送遊戲數據</string>
 

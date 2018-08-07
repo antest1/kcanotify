@@ -198,7 +198,11 @@
     <string name="setting_menu_noti_title_disable_customtoast">カスタムトーストサービスの使用</string>
     <string name="setting_menu_noti_desc_disable_customtoast">マス情報や大破通知が表示されないときに有効にしてください。</string>
 
-    <string name="setting_menu_stat_head">通計プラグイン設定</string>
+    <string name="setting_menu_stat_head">プラグイン設定</string>
+    <string name="setting_menu_stat_title_kcaqsync">KcaQSyncを使用（自動任務同期）</string>
+    <string name="setting_menu_stat_title_kcaqsync_pass">KcaQSyncパースワード</string>
+    <string name="setting_menu_stat_desc_kcaqsync_pass_emtpy">パスワードを設定した後、有効になります。</string>
+    <string name="setting_menu_stat_desc_kcaqsync_pass">警告：絶対DMMなどで使用される実際のパスワードを入力しないでください！</string>
     <string name="setting_menu_stat_title_opendb">OpenDBに統計を送信</string>
     <string name="setting_menu_stat_title_poidb">poi-statisticsに統計を送信</string>
 
