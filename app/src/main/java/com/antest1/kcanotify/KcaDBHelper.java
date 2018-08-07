@@ -637,6 +637,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     public boolean checkQuestListValid() {
         int flag = 0;
+        boolean checked = false;
+        boolean checked_part = false;
         String[] key_list = {"0", "9", "1", "2", "3", "4", "5"};
         int[] count_1 = {0, 0};
         int[] count_2 = {0, 0};
@@ -647,6 +649,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
         for (String key: key_list) {
             if (q_total.has(key)) {
+                checked = true;
                 int total = q_total.get(key).getAsInt();
                 int count = q_count.getAsJsonArray(key).size();
                 if (key.equals("0") || key.equals("9")) {
@@ -655,13 +658,14 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                     count_1[0] += total;
                     count_1[1] += count;
                 } else {
+                    checked_part = true;
                     flag += 1;
                     count_2[0] += total;
                     count_2[1] += count;
                 }
             }
         }
-        return flag % 5 == 0 && (count_1[0] == count_1[1]) && (count_2[0] == count_2[1]);
+        return checked && flag % 5 == 0 && ((count_1[0] == count_1[1]) || (checked_part && (count_2[0] == count_2[1])));
     }
 
     public String getCurrentQuestCode() {

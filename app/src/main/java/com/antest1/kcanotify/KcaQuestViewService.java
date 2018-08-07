@@ -40,6 +40,7 @@ import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_QUESTVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCAQSYNC_USE;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -266,6 +267,16 @@ public class KcaQuestViewService extends Service {
             int prevnextVisibility = isquestlist ? View.GONE : View.VISIBLE;
             questprev.setVisibility(prevnextVisibility);
             questnext.setVisibility(prevnextVisibility);
+            TextView page_title = questview.findViewById(R.id.quest_page);
+            if (KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_KCAQSYNC_USE)) {
+                if (helper.checkQuestListValid()) {
+                    page_title.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorQuestCheckedTrue));
+                } else {
+                    page_title.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorQuestCheckedFalse));
+                }
+            } else {
+                page_title.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            }
 
             int api_page_count, api_disp_page;
             JsonArray api_list = new JsonArray();

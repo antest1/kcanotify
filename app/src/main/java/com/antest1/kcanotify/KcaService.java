@@ -255,12 +255,12 @@ public class KcaService extends Service {
         AssetManager assetManager = getResources().getAssets();
         int loadMapEdgeInfoResult = loadMapEdgeInfoFromStorage(getApplicationContext());
         if (loadMapEdgeInfoResult != 1) {
-            makeText(this, "Error loading Map Edge Info", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error loading Map Edge Info", Toast.LENGTH_LONG).show();
         }
 
         int loadExpShipInfoResult = loadShipExpInfoFromAssets(assetManager);
         if (loadExpShipInfoResult != 1) {
-            makeText(this, "Error loading Exp Ship Info", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error loading Exp Ship Info", Toast.LENGTH_LONG).show();
         }
 
         loadSimpleExpeditionInfoFromStorage(getApplicationContext());
@@ -960,10 +960,9 @@ public class KcaService extends Service {
                     dbHelper.updateQuestCheck(api_tab_id, api_data);
                     startService(new Intent(getBaseContext(), KcaQuestViewService.class)
                             .setAction(REFRESH_QUESTVIEW_ACTION).putExtra("tab_id", api_tab_id));
+                    if (dbHelper.checkQuestListValid()) QSyncWrite();
                 }
 
-                Toast.makeText(getApplicationContext(), String.valueOf(dbHelper.checkQuestListValid()), Toast.LENGTH_LONG).show();
-                if (dbHelper.checkQuestListValid()) QSyncWrite();
                 sendQuestCompletionInfo();
                 return;
             }
@@ -2655,6 +2654,7 @@ public class KcaService extends Service {
     public void updateQuestView() {
         startService(new Intent(getBaseContext(), KcaQuestViewService.class)
                 .setAction(REFRESH_QUESTVIEW_ACTION));
+        if (dbHelper.checkQuestListValid()) QSyncWrite();
     }
 
     public void updateFleetView() {
@@ -2699,7 +2699,6 @@ public class KcaService extends Service {
             quest_data.addProperty("userid", userid);
             quest_data.addProperty("pass", qsync_pass);
             Log.e("KCA", String.valueOf(quest_data.toString().length()));
-            Toast.makeText(getApplicationContext(), quest_data.toString(), Toast.LENGTH_LONG).show();
             try {
                 final Call<String> qsync_read = kcaQSyncEndpoint.read(KcaUtils.getKcaQSyncHeaderMap(),
                         KcaUtils.getRSAEncodedString(getApplicationContext(), quest_data.toString()));
