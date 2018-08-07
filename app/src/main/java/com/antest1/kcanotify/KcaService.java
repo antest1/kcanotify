@@ -2716,7 +2716,7 @@ public class KcaService extends Service {
                                     long recent_ts = response_data.get("timestamp").getAsLong() * 1000;
                                     if (recent_ts > recent_check) {
                                         String quest_code = response_data.get("data").getAsString();
-                                        dbHelper.loadQuestDataFromCode(quest_code, true);
+                                        dbHelper.loadQuestDataFromCode(quest_code, true, recent_ts);
                                     } else {
                                         error_flag[1] = true;
                                     }

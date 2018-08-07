@@ -157,7 +157,7 @@ public class KcaDataSyncActivity extends AppCompatActivity {
             if (!is_checked) return;
             String code = questCodeInput.getText().toString().toUpperCase();
             boolean result = false;
-            if (code.length() > 0) result = dbHelper.loadQuestDataFromCode(code, questSyncModeSwitch.isChecked());
+            if (code.length() > 0) result = dbHelper.loadQuestDataFromCode(code, questSyncModeSwitch.isChecked(), System.currentTimeMillis());
             if (result) {
                 String updated_code = dbHelper.getCurrentQuestCode();
                 questCurrentCode.setText(updated_code.length() > 0 ? updated_code : "-");

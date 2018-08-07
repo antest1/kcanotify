@@ -689,7 +689,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         return KcaUtils.joinStr(all_code, "");
     }
 
-    public boolean loadQuestDataFromCode(String code, boolean mode) {
+    public boolean loadQuestDataFromCode(String code, boolean mode, long timestamp) {
         if (KcaQuestCode.validate_code(code)) {
             JsonObject data_dict = new JsonObject();
             JsonArray data = getCurrentQuestList();
@@ -744,7 +744,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                             }
                         }
                     }
-                    qt.syncQuestTrack(Integer.parseInt(key), active, quest_cond, System.currentTimeMillis());
+                    qt.syncQuestTrack(Integer.parseInt(key), active, quest_cond, timestamp);
                     qt.clearInvalidQuestTrack();
                 }
             }
