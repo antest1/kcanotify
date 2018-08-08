@@ -51,6 +51,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
 import static com.antest1.kcanotify.KcaConstants.PREF_LAST_QUEST_CHECK;
 import static com.antest1.kcanotify.KcaConstants.PREF_LAST_UPDATE_CHECK;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
+import static com.antest1.kcanotify.KcaConstants.PREF_PACKET_LOG;
 import static com.antest1.kcanotify.KcaConstants.PREF_POIDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
@@ -152,6 +153,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_SHOW_CONSTRSHIP_NAME:
             case PREF_DATALOAD_ERROR_FLAG:
             case PREF_FIX_VIEW_LOC:
+            case PREF_PACKET_LOG:
                 return "boolean_false";
             case PREF_KCA_EXP_VIEW:
             case PREF_KCA_NOTI_NOTIFYATSVCOFF:

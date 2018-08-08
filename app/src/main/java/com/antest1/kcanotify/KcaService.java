@@ -141,6 +141,8 @@ public class KcaService extends Service {
     KcaQuestTracker questTracker;
     KcaDropLogger dropLogger;
     KcaResourceLogger resourceLogger;
+    KcaPacketLogger packetLogger;
+
     KcaDeckInfo deckInfoCalc;
     KcaQSyncAPI kcaQSyncEndpoint;
 
@@ -248,6 +250,7 @@ public class KcaService extends Service {
         questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
         dropLogger = new KcaDropLogger(getApplicationContext(), null, KCANOTIFY_DROPLOG_VERSION);
         resourceLogger = new KcaResourceLogger(getApplicationContext(), null, KCANOTIFY_RESOURCELOG_VERSION);
+        packetLogger = new KcaPacketLogger(getApplicationContext(), null, KCANOTIFY_PACKETLOG_VERSION);
         deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
         kcaQSyncEndpoint = KcaUtils.getQuestSync(getApplicationContext());
         KcaApiData.setDBHelper(dbHelper);
@@ -647,10 +650,12 @@ public class KcaService extends Service {
             }
             if (raw.length > 0) jsonDataObj = gson.fromJson(data, JsonObject.class);
             else jsonDataObj = new JsonObject();
-
             if (url.equals(KCA_API_RESOURCE_URL)) {
                 dbHelper.recordErrorLog(ERROR_TYPE_VPN, KCA_API_RESOURCE_URL, "", "", request);
                 return;
+            }
+            if (getBooleanPreferences(getApplicationContext(), PREF_PACKET_LOG)) {
+                packetLogger.log(url, request, jsonDataObj.toString());
             }
 
             if (url.equals(KCA_API_VPN_DATA_ERROR)) { // VPN Data Dump Send

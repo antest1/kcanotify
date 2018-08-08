@@ -23,6 +23,7 @@ public final class KcaConstants {
     public static final int KCANOTIFY_QTDB_VERSION = 2;
     public static final int KCANOTIFY_DROPLOG_VERSION = 1;
     public static final int KCANOTIFY_RESOURCELOG_VERSION = 1;
+    public static final int KCANOTIFY_PACKETLOG_VERSION = 2;
 
     public static final String DB_KEY_STARTDATA = "key_startdata";
     public static final String DB_KEY_DECKPORT = "key_deckport";
@@ -455,6 +456,7 @@ public final class KcaConstants {
     public static final String PREF_LAST_QUEST_CHECK = "last_quest_check";
     public static final String PREF_KCAQSYNC_USE = "kcaqsync_use";
     public static final String PREF_KCAQSYNC_PASS = "kcaqsync_pass";
+    public static final String PREF_PACKET_LOG = "packet_log";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,

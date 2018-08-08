@@ -6,7 +6,12 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -17,9 +22,11 @@ import java.util.Map;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_ARRAY;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_PACKETLOG_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_QTDB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_BOOLEAN_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_PACKET_LOG;
 import static com.antest1.kcanotify.KcaConstants.PREF_SVC_ENABLED;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
@@ -41,6 +48,9 @@ public class KcaInspectorActivity extends AppCompatActivity {
     KcaQuestTracker questTracker;
     ArrayList<Map.Entry<String, String>> listViewItemList;
     KcaInspectViewAdpater adapter;
+    CheckBox packetlogEnable;
+    Button packletlogClear, packetlogDump;
+    KcaPacketLogger packetLogger;
 
     public KcaInspectorActivity() {
         LocaleUtils.updateConfig(this);
@@ -63,6 +73,7 @@ public class KcaInspectorActivity extends AppCompatActivity {
         adapter = new KcaInspectViewAdpater();
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
+        packetLogger = new KcaPacketLogger(getApplicationContext(), null, KCANOTIFY_PACKETLOG_VERSION);
         for (String db_key: DB_KEY_ARRAY) {
             String db_value = dbHelper.getValue(db_key);
             if (db_value == null) db_value = "<null>";
@@ -102,6 +113,32 @@ public class KcaInspectorActivity extends AppCompatActivity {
         adapter.setListViewItemList(listViewItemList);
         listview = findViewById(R.id.inspector_listview);
         listview.setAdapter(adapter);
+
+        packetlogEnable = findViewById(R.id.packetlog_enable);
+        packetlogEnable.setChecked(getBooleanPreferences(getApplicationContext(), PREF_PACKET_LOG));
+        packetlogEnable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                KcaUtils.setPreferences(getApplicationContext(), PREF_PACKET_LOG, isChecked);
+            }
+        });
+
+        packletlogClear = findViewById(R.id.packetlog_clear);
+        packletlogClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                packetLogger.clear();
+            }
+        });
+
+        packetlogDump = findViewById(R.id.packetlog_dump);
+        packetlogDump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean result = packetLogger.dump(getApplicationContext());
+                Toast.makeText(getApplicationContext(), String.valueOf(result), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
