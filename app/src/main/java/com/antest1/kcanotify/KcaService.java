@@ -2698,7 +2698,7 @@ public class KcaService extends Service {
 
         long recent_check = Long.parseLong(getStringPreferences(getApplicationContext(), PREF_LAST_QUEST_CHECK));
         int userid = KcaApiData.getUserId();
-        final boolean[] error_flag = {false};
+        final boolean[] error_flag = {false, false};
         if (userid > 0) {
             JsonObject quest_data = new JsonObject();
             quest_data.addProperty("userid", userid);
