@@ -109,7 +109,18 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
     }
 
     public Context getApplicationContext() {
-        return getActivity().getApplicationContext();
+        Context context = getActivity();
+        if (context != null) {
+            return getActivity().getApplicationContext();
+        } else {
+            return null;
+        }
+    }
+
+    public void showToast(Context context, String text, int length) {
+        if (context != null) {
+            Toast.makeText(context, text, length).show();
+        }
     }
 
     public static void setHandler(Handler h) {
@@ -210,7 +221,7 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         showObtainingPermissionOverlayWindow();
                     } else {
-                        Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT).show();
+                        showToast(getApplicationContext(), getStringWithLocale(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT);
                     }
                     return false;
                 });
@@ -249,7 +260,7 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                             sMsg.setData(bundle);
                             sHandler.sendMessage(sMsg);
                         }
-                        Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.sa_language_changed), Toast.LENGTH_LONG).show();
+                        showToast(getApplicationContext(), getStringWithLocale(R.string.sa_language_changed), Toast.LENGTH_LONG);
                         return true;
                     }
                 });
@@ -284,7 +295,7 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                         if (new_val.length() == 0) return false;
                         int value = Integer.parseInt(new_val);
                         if (value > 100) {
-                            Toast.makeText(getApplicationContext(), "value must be in 0~100", Toast.LENGTH_LONG).show();
+                            showToast(getApplicationContext(), "value must be in 0~100", Toast.LENGTH_LONG);
                             return false;
                         }
                         KcaMoraleInfo.setMinMorale(value);
@@ -309,9 +320,9 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                     getActivity().grantUriPermission(BuildConfig.APPLICATION_ID, ringtoneUri, FLAG_GRANT_READ_URI_PERMISSION);
                     Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
                     if (ringtone == null) {
-                        Toast.makeText(getApplicationContext(),
+                        showToast(getApplicationContext(),
                                 getStringWithLocale(R.string.ma_permission_external_denied),
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG);
                         pref.setSummary(silentText);
                     } else {
                         String name = ringtone.getTitle(getApplicationContext());
@@ -348,7 +359,7 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
             try {
                 startActivityForResult(new Intent(android.provider.Settings.ACTION_APPLICATION_SETTINGS), REQUEST_OVERLAY_PERMISSION);
             } finally {
-                Toast.makeText(getApplicationContext(), getStringWithLocale(R.string.sa_overlay_appearontop), Toast.LENGTH_LONG).show();
+                showToast(getApplicationContext(), getStringWithLocale(R.string.sa_overlay_appearontop), Toast.LENGTH_LONG);
             }
         }
     }
@@ -373,16 +384,16 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                 int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
                 new Handler().postDelayed(() -> {
                     if (Settings.canDrawOverlays(getActivity())) {
-                        Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_overlay_ok), Toast.LENGTH_SHORT).show();
+                        showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_ok), Toast.LENGTH_SHORT);
                     } else {
-                        Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_overlay_no), Toast.LENGTH_SHORT).show();
+                        showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_no), Toast.LENGTH_SHORT);
                     }
                 }, delay);
             } else if (requestCode == REQUEST_USAGESTAT_PERMISSION) {
                 if(hasUsageStatPermission(getActivity().getApplicationContext())) {
-                    Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT).show();
+                    showToast(getActivity(), getStringWithLocale(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT);
                 } else {
-                    Toast.makeText(getActivity(), getStringWithLocale(R.string.sa_usagestat_no), Toast.LENGTH_SHORT).show();
+                    showToast(getActivity(), getStringWithLocale(R.string.sa_usagestat_no), Toast.LENGTH_SHORT);
                 }
             }
         }
@@ -425,9 +436,9 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                 getActivity().grantUriPermission(BuildConfig.APPLICATION_ID, ringtoneUri, FLAG_GRANT_READ_URI_PERMISSION);
                 Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
                 if (ringtone == null) {
-                    Toast.makeText(getApplicationContext(),
+                    showToast(getApplicationContext(),
                             getStringWithLocale(R.string.ma_permission_external_denied),
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_LONG);
                     pref.setSummary(silentText);
                 } else {
                     String name = ringtone.getTitle(getApplicationContext());
@@ -468,39 +479,36 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                 if (response_data.has("version")) {
                     String recentVersion = response_data.get("version").getAsString();
                     if (compareVersion(currentVersion, recentVersion)) { // True if latest
-                        Toast.makeText(getApplicationContext(),
+                        showToast(getApplicationContext(),
                                 KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_latest), currentVersion),
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG);
                     } else if (!getActivity().isFinishing()) {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                         alertDialog.setMessage(KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
                         alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        String downloadUrl = getStringPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE);
-                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        if (intent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
-                                            startActivity(intent);
-                                        } else if (downloadUrl.contains(getStringWithLocale(R.string.app_download_link_playstore))) {
-                                            Toast.makeText(getApplicationContext(), "Google Play Store not found", Toast.LENGTH_LONG).show();
-                                            AlertDialog.Builder apkDownloadPathDialog = new AlertDialog.Builder(getActivity());
-                                            apkDownloadPathDialog.setIcon(R.mipmap.ic_launcher);
-                                            apkDownloadPathDialog.setTitle(getStringWithLocale(R.string.setting_menu_app_title_down));
-                                            apkDownloadPathDialog.setCancelable(true);
-                                            apkDownloadPathDialog.setItems(R.array.downloadSiteOptionWithoutPlayStore, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    String[] path_value = getResources().getStringArray(R.array.downloadSiteOptionWithoutPlayStoreValue);
-                                                    setPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE, path_value[i]);
-                                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(path_value[i]));
-                                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                    startActivity(intent);
-                                                }
-                                            });
-                                            apkDownloadPathDialog.show();
-                                        }
+                                (dialog, which) -> {
+                                    String downloadUrl = getStringPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE);
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    if (intent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
+                                        startActivity(intent);
+                                    } else if (downloadUrl.contains(getStringWithLocale(R.string.app_download_link_playstore))) {
+                                        showToast(getApplicationContext(), "Google Play Store not found", Toast.LENGTH_LONG);
+                                        AlertDialog.Builder apkDownloadPathDialog = new AlertDialog.Builder(getActivity());
+                                        apkDownloadPathDialog.setIcon(R.mipmap.ic_launcher);
+                                        apkDownloadPathDialog.setTitle(getStringWithLocale(R.string.setting_menu_app_title_down));
+                                        apkDownloadPathDialog.setCancelable(true);
+                                        apkDownloadPathDialog.setItems(R.array.downloadSiteOptionWithoutPlayStore, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                String[] path_value = getResources().getStringArray(R.array.downloadSiteOptionWithoutPlayStoreValue);
+                                                setPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE, path_value[i]);
+                                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(path_value[i]));
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                        apkDownloadPathDialog.show();
                                     }
                                 });
                         alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
@@ -516,18 +524,18 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                         alert.show();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(),
+                    showToast(getApplicationContext(),
                             getStringWithLocale(R.string.sa_checkupdate_servererror),
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_LONG);
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 if (KcaUtils.checkOnline(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(),
+                    showToast(getApplicationContext(),
                             getStringWithLocale(R.string.sa_checkupdate_servererror),
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_LONG);
                     dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "version_check", "", "", t.getMessage());
                 }
             }
@@ -551,19 +559,19 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                             KcaApiData.getKcGameData(response_data.getAsJsonObject("api_data"));
                             KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, server_kca_version);
                             KcaApiData.setDataLoadTriggered();
-                            Toast.makeText(getApplicationContext(),
+                            showToast(getApplicationContext(),
                                     getStringWithLocale(R.string.sa_getupdate_finished),
-                                    Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_LONG);
                         } else {
-                            Toast.makeText(getApplicationContext(),
+                            showToast(getApplicationContext(),
                                     getStringWithLocale(R.string.kca_toast_inconsistent_data),
-                                    Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_LONG);
                         }
                     }
                 } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(),
+                    showToast(getApplicationContext(),
                             "Error: not valid data.",
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_LONG);
                     dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "download_data", "", "", getStringFromException(e));
                 }
             }
@@ -571,9 +579,9 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 if (KcaUtils.checkOnline(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(),
+                    showToast(getApplicationContext(),
                             KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), t.getMessage()),
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_LONG);
                     dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "download_data", "", "", t.getMessage());
                 }
             }
