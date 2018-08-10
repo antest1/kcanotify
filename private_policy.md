@@ -1,6 +1,6 @@
 ## 개인정보처리방침
 
-**Updated: 2018.1.8** (통계 플러그인에 관한 항목 추가, 각 항목에 번호 및 제목 추가)
+**Updated: 2018.8.11** (OpenDB 웹사이트 주소 갱신, KcaQSync Cloud Service 항목 추가)
 
 1. **스니퍼에서의 정보 수집 범위** 시제 깡들리티(이하 깡들리티)에서는 칸코레 플레이 시 발생하는 정보 외의 사용자 정보(기기 정보 및 비밀번호 등의 계정 정보 등)를 저장하거나 어플리케이션 기능의 이외의 목적으로 활용하지 않습니다.
 
@@ -11,14 +11,17 @@
 4. **오류 로그의 저장** 깡들리티의 오류 정보에는 사용자의 플레이 기록이 포함되며, 이는 깡들리티의 개선을 위해서만 사용됩니다. 오류 정보는 사용자 기기 내에 저장되며 사용자는 이를 선택적으로 전송할 수 있습니다.
 
 5. **OpenDB 플러그인** 깡들리티에 포함되어 있는 OpenDB 플러그인은 사용자가 설정에서 활성화한 경우에만 데이터를 전송합니다. 전송되는 데이터는 OpenDB ReportAPI에서 요구되는 (1) 장비 개발 (2) 칸무스 건조 (3) 해역 드랍 결과 (4) 장비 개수 와 관련된 정보입니다.
-OpenDB에서의 정보 처리 방침 및 통계 데이터의 사용에 관한 문의는 해당 사이트 (http://swaytwig.com/opendb/) 의 관리자에게 문의하시기 바랍니다.
+OpenDB에서의 정보 처리 방침 및 통계 데이터의 사용에 관한 문의는 해당 사이트 (http://opendb.swaytwig.com/) 의 관리자에게 문의하시기 바랍니다.
 
 6. **poi-statistics 플러그인** 깡들리티에 포함되어 있는 poi-statistics 플러그인은 사용자가 설정에서 활성화한 경우에만 데이터를 전송합니다. 전송되는 데이터는 OpenDB ReportAPI에서 요구되는 (1) 장비 개발 (2) 칸무스 건조 (3) 해역 드랍 결과 와 관련된 정보입니다.
 poi-statistics에서의 정보 처리 방침 및 통계 데이터의 사용에 관한 문의는 해당 사이트 (https://db.kcwiki.org/) 의 관리자에게 문의하시기 바랍니다.
 
-7. **처리방침의 변경** 개인 정보와 관련하여 중요한 업데이트가 있는 경우에는 Github의 Release나 README를 통해 사용자에게 알립니다. (https://github.com/antest1/kcanotify)
+7. **KcaQSync Cloud 동기화 플러그인** 깡들리티에 포함되어 있는 KcaQSync 클라우드 서비스 동기화 플러그인은 사용자가 설정에서 활성화한 경우에만 데이터를 전송합니다. 전송되는 데이터는 동기화에 필요한 (1) 사용자 계정 고유 ID (2) 사용자가 깡들리티에서 직접 설정한 패스워드 (3) 임무 추적 데이터 와 관련한 정보입니다.
+KcaQSync 클라우드 서비스에서의 정보 차리 방침에 관해서는 해당 사이트 (http://kcaqsync.swaytwig.com)의 관리자에게 문의하시기 바랍니다.
 
-8. **문의 관련** 만약 개인정보 처리 정책와 관련하여 문의사항이 있는 경우에는 개발자에게 연락 바랍니다.
+8. **처리방침의 변경** 개인 정보와 관련하여 중요한 업데이트가 있는 경우에는 Github의 Release나 README를 통해 사용자에게 알립니다. (https://github.com/antest1/kcanotify)
+
+9. **문의 관련** 만약 개인정보 처리 정책와 관련하여 문의사항이 있는 경우에는 개발자에게 연락 바랍니다.
 
 antest1(IE10), E-mail: kcanotify@gmail.com
 
@@ -26,7 +29,7 @@ antest1(IE10), E-mail: kcanotify@gmail.com
 
 ## Privacy Policy
 
-**Updated: 2018.1.8** (add policy for statistics plugins, add number and title for each policy)
+**Updated: 2018.8.11** (add policy for KcaQSync cloud service plugin, update OpenDB website url)
 
 1. **Traffic Collection Range of Sniffer** Kcanotify captures kancolle's traffics for Kcanotify features when you playing kancolle, and DOES NOT collect or use personal information like device information, account information(like password).
 
@@ -37,13 +40,16 @@ antest1(IE10), E-mail: kcanotify@gmail.com
 4. **Error Log Collection** Error logs in Kcanotify contains some user play data, and it is only used for improving Kcanotify. Error logs are saved in users' device, and it can be sent by user selectively.
 
 5. **OpenDB Plugin** OpenDB Plugin in Kcanotify only sends statistics when user activates its functionality in the Settings. Data related with (1) Equipment Development (2) Ship Construction (3) Ship Drop Result (4) Equipment Improvement, which is required by OpenDB ReportAPI.
-About private policy and statistics usage in OpenDB, contact to the administrator of the site. (http://swaytwig.com/opendb/)
+About private policy and statistics usage in OpenDB, contact to the administrator of the site. (http://opendb.swaytwig.com/)
 
 6. **poi-statistics Plugin** poi-statistics Plugin in Kcanotify only sends statistics when user activates its functionality in the Settings. Data related with (1) Equipment Development (2) Ship Construction (3) Ship Drop Result, which is required by report API.
 About private policy and statistics usage in poi-statistics, contact to the administrator of the site. (https://db.kcwiki.org/)
 
-7. **Notification of Policy Changes** Important updates about user privacy will be noticed to user by Release Log or README in Github. (https://github.com/antest1/kcanotify)
+7. **KcaQSync Cloud Sync Plugin** KcaQSync Plugin in Kcanotify only sends required data when user activates its functionality in the Settings. Data related with (1) Internal User ID (Integer) (2) Password that user set in the Settings (3) Quest Track Data in Kcanotify, which is required by cloud service API.
+About private policy and statistics usage in KcaQSync Cloud Sync Service, contact to the administrator of the site. (http://kcaqsync.swaytwig.com)
 
-8. **Questions** If there are any concerns or questions about the private policy, feel free to contact to developer.
+8. **Notification of Policy Changes** Important updates about user privacy will be noticed to user by Release Log or README in Github. (https://github.com/antest1/kcanotify)
+
+9. **Questions** If there are any concerns or questions about the private policy, feel free to contact to developer.
 
 antest1(IE10), E-mail: kcanotify@gmail.com
