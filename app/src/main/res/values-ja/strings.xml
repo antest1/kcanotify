@@ -212,6 +212,7 @@
     <string name="setting_menu_app_title_updatecheckserver">アップデートサーバー</string>
     <string name="setting_menu_app_title_contact">提案/エラーレポート</string>
     <string name="setting_menu_app_desc_contact">開発者にメールを送信</string>
+    <string name="setting_menu_app_desc_inspector">내부 속성 및 데이터베이스 정보 보기</string>
     <string name="setting_menu_app_info">About Kcanotify</string>
 
     <!-- BattleView Strings -->

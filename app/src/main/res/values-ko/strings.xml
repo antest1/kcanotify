@@ -216,6 +216,7 @@
     <string name="setting_menu_app_title_updatecheckserver">업데이트 확인 서버 선택</string>
     <string name="setting_menu_app_title_contact">건의/오류 보고</string>
     <string name="setting_menu_app_desc_contact">개발자에게 메일 전송</string>
+    <string name="setting_menu_app_desc_inspector">내부 속성 및 데이터베이스 정보 값 보기</string>
     <string name="setting_menu_app_info">시제 깡들리티 정보</string>
 
     <!-- BattleView Strings -->
