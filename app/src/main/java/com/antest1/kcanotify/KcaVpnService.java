@@ -582,12 +582,14 @@ public class KcaVpnService extends VpnService {
         boolean enable = prefs.getBoolean("socks5_enable", false);
         String addr = prefs.getString("socks5_address", "");
         String portNum = prefs.getString("socks5_port", "0");
+        String username = prefs.getString("socks5_name", "");
+        String password = prefs.getString("socks5_pass", "");
         int port = 0;
         if (!portNum.equals(""))
             port = Integer.parseInt(portNum);
         if (enable && !(addr.equals("") || port == 0)) {
-            Log.i(TAG, String.format("Proxy enabled, with address %s and port %d", addr, port));
-            jni_socks5(addr, port, "", "");
+            Log.i(TAG, String.format("Proxy enabled, with address %s and port %d, Auth with %s %s", addr, port, username, password));
+            jni_socks5(addr, port, username, password);
         } else {
             Log.i(TAG, "Proxy disabled");
             jni_socks5("", 0, "", "");

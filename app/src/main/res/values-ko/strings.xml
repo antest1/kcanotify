@@ -391,6 +391,8 @@
     <string name="setting_menu_kand_title_socks5_onlykc">칸코레 관련 어플리케이션에만 적용</string>
     <string name="setting_menu_kand_title_socks5_port">SOCKS5 프록시 포트</string>
     <string name="setting_menu_kand_title_socks5_address">SOCKS5 프록시 주소</string>
+    <string name="setting_menu_kand_title_socks5_username">사용자명(선택)</string>
+    <string name="setting_menu_kand_title_socks5_password">비밀번호(선택)</string>
     <string name="setting_menu_kand_title_adv_network">고급 네트워크 설정</string>
     <string name="sa_bypass_list_invalid">설정된 예외 주소 목록이 올바른 형식이 아닙니다. 입력을 다시 확인하세요.</string>
     <string name="setting_menu_noti_title_notiatsvcoff">서비스가 꺼진 상태에서 알람 활성 여부</string>

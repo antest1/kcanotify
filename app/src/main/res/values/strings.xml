@@ -212,6 +212,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_socks5_onlykc">Apply for only Kancolle/DMM Login</string>
     <string name="setting_menu_kand_title_socks5_address">SOCKS5 Proxy Address</string>
     <string name="setting_menu_kand_title_socks5_port">SOCKS5 Proxy Port</string>
+    <string name="setting_menu_kand_title_socks5_username">Username (optional)</string>
+    <string name="setting_menu_kand_title_socks5_password">Password (optional)</string>
     <string name="settings_menu_kand_title_bypass_address">Bypass Addresses</string>
     <string name="setting_menu_kand_desc_bypass_address">Use CIDR to describe bypass addresses, separate each CIDR by a comma.</string>
     <string name="setting_menu_kand_title_record_droplog">Record Drop Log</string>

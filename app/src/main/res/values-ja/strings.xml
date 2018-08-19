@@ -391,6 +391,8 @@
     <string name="setting_menu_kand_title_socks5_onlykc">艦これ/DMMログイン関連アプリにのみ適用</string>
     <string name="setting_menu_kand_title_socks5_port">SOCKS5プロキシポート</string>
     <string name="setting_menu_kand_title_socks5_address">SOCKS5プロキシアドレス</string>
+    <string name="setting_menu_kand_title_socks5_username">ユーザー名（オプション）</string>
+    <string name="setting_menu_kand_title_socks5_password">パスワード（オプション）</string>
     <string name="setting_menu_kand_title_adv_network">高級ネットワーク設定</string>
     <string name="sa_bypass_list_invalid">設定された例外リストが正しい形式ではありません。入力を再確認してください。</string>
     <string name="setting_menu_noti_title_notiatsvcoff">通知を常に可能にする</string>

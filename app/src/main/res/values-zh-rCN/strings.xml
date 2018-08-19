@@ -172,6 +172,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_socks5_onlykc">只应用于舰队收藏/DMM登入</string>
     <string name="setting_menu_kand_title_socks5_address">SOCKS5代理服务器地址</string>
     <string name="setting_menu_kand_title_socks5_port">SOCKS5代理服务器端口</string>
+    <string name="setting_menu_kand_title_socks5_username">用户名（可选）</string>
+    <string name="setting_menu_kand_title_socks5_password">密码（可选）</string>
     <string name="settings_menu_kand_title_bypass_address">绕行地址（代理）</string>
     <string name="setting_menu_kand_desc_bypass_address">使用CIDR来叙述代理的地址，使用逗号来分隔各个CIDR。</string>
     <string name="setting_menu_kand_title_record_droplog">记录掉落日志</string>
