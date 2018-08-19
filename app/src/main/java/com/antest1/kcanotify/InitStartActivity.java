@@ -41,6 +41,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
+import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_MAIN;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
@@ -149,7 +150,7 @@ public class InitStartActivity extends Activity {
         }
 
         is_first = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION)) == 0;
-
+        loadTranslationData(getApplicationContext());
         int setDefaultGameDataResult = KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
         if (setDefaultGameDataResult != 1) {
             Toast.makeText(this, "error loading game data", Toast.LENGTH_LONG).show();
