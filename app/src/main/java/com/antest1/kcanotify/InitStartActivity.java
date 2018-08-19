@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tonyodev.fetch2.Download;
@@ -89,6 +90,7 @@ public class InitStartActivity extends Activity {
     TextView appname, appversion, skipcheck;
 
     boolean is_first;
+    boolean is_destroyed = false;
     JsonArray download_data = new JsonArray();
     int fairy_flag, new_resversion;
     JsonObject fairy_info = new JsonObject();
@@ -116,6 +118,7 @@ public class InitStartActivity extends Activity {
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setProgressNumberFormat("%1d file(s)");
+        is_destroyed = false;
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
@@ -270,36 +273,39 @@ public class InitStartActivity extends Activity {
                 JsonArray resource_list = new JsonArray();
                 final Call<String> load_resource = downloader.getResourceList();
                 String result = getResultFromCall(load_resource);
-                if (result.length() > 0) resource_list = new JsonParser().parse(result).getAsJsonArray();
-                for (int i = 0; i < resource_list.size(); i++) {
-                    JsonObject item = resource_list.get(i).getAsJsonObject();
-                    String name = item.get("name").getAsString();
-                    int version = item.get("version").getAsInt();
-                    if (reset_flag || dbHelper.getResVer(name) < version) {
-                        if (name.equals(FAIRY_INFO_FILENAME)) {
-                            fairy_flag = 1;
-                            fairy_info = item;
-                            fairy_list_version = version;
-                            update_text.add(DOWNLOAD_TYPE_FAIRY);
-                        } else {
-                            download_data.add(item);
-                            if (!update_text.contains(DOWNLOAD_TYPE_APPDATA) &&
-                                    (name.contains("edges") || name.contains("expedition") || name.contains("equip_count"))) {
-                                update_text.add(DOWNLOAD_TYPE_APPDATA);
-                            }
-                            if (!update_text.contains(DOWNLOAD_TYPE_QUESTINFO) &&
-                                    (name.contains("quests-") || name.contains("quest_track"))) {
-                                update_text.add(DOWNLOAD_TYPE_QUESTINFO);
-                            }
-                            if (!update_text.contains(DOWNLOAD_TYPE_SHIPINFO) &&
-                                    (name.contains("ships-") || name.contains("stype"))) {
-                                update_text.add(DOWNLOAD_TYPE_SHIPINFO);
-                            }
-                            if (!update_text.contains(DOWNLOAD_TYPE_AKASHI) && name.contains("akashi")) {
-                                update_text.add(DOWNLOAD_TYPE_AKASHI);
-                            }
-                            if (!update_text.contains(DOWNLOAD_TYPE_EQUIPINFO) && name.contains("items-")) {
-                                update_text.add(DOWNLOAD_TYPE_EQUIPINFO);
+                JsonElement raw_response = new JsonParser().parse(result);
+                if (result.length() > 0 && raw_response.isJsonArray()) {
+                    resource_list =  raw_response.getAsJsonArray();
+                    for (int i = 0; i < resource_list.size(); i++) {
+                        JsonObject item = resource_list.get(i).getAsJsonObject();
+                        String name = item.get("name").getAsString();
+                        int version = item.get("version").getAsInt();
+                        if (reset_flag || dbHelper.getResVer(name) < version) {
+                            if (name.equals(FAIRY_INFO_FILENAME)) {
+                                fairy_flag = 1;
+                                fairy_info = item;
+                                fairy_list_version = version;
+                                update_text.add(DOWNLOAD_TYPE_FAIRY);
+                            } else {
+                                download_data.add(item);
+                                if (!update_text.contains(DOWNLOAD_TYPE_APPDATA) &&
+                                        (name.contains("edges") || name.contains("expedition") || name.contains("equip_count"))) {
+                                    update_text.add(DOWNLOAD_TYPE_APPDATA);
+                                }
+                                if (!update_text.contains(DOWNLOAD_TYPE_QUESTINFO) &&
+                                        (name.contains("quests-") || name.contains("quest_track"))) {
+                                    update_text.add(DOWNLOAD_TYPE_QUESTINFO);
+                                }
+                                if (!update_text.contains(DOWNLOAD_TYPE_SHIPINFO) &&
+                                        (name.contains("ships-") || name.contains("stype"))) {
+                                    update_text.add(DOWNLOAD_TYPE_SHIPINFO);
+                                }
+                                if (!update_text.contains(DOWNLOAD_TYPE_AKASHI) && name.contains("akashi")) {
+                                    update_text.add(DOWNLOAD_TYPE_AKASHI);
+                                }
+                                if (!update_text.contains(DOWNLOAD_TYPE_EQUIPINFO) && name.contains("items-")) {
+                                    update_text.add(DOWNLOAD_TYPE_EQUIPINFO);
+                                }
                             }
                         }
                     }
@@ -385,7 +391,11 @@ public class InitStartActivity extends Activity {
     @Override
     protected void onDestroy() {
         Log.e("KCA-DA", "destroy");
+        is_destroyed = true;
         dbHelper.close();
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
         super.onDestroy();
     }
 
@@ -575,7 +585,7 @@ public class InitStartActivity extends Activity {
             mProgressDialog.setProgress(progress[0]);
 
             if (totalFiles == 0 || progress[0] == totalFiles) {
-                if (mProgressDialog.isShowing()) mProgressDialog.dismiss();
+                if (mProgressDialog.isShowing() && !is_destroyed) mProgressDialog.dismiss();
                 workFinished();
             }
         }
