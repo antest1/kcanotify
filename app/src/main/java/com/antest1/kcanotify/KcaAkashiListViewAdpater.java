@@ -77,7 +77,7 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
         holder.materialView.setText(item.getEquipMaterials());
         holder.screwView.setText(item.getEquipScrews());
         holder.supportView.setText(item.getEquipSupport());
-        holder.screwView.setTextColor(ContextCompat.getColor(context, getMaterialTextColor(isSafeChecked)));
+        holder.materialView.setTextColor(ContextCompat.getColor(context, getMaterialTextColor(isSafeChecked)));
         holder.screwView.setTextColor(ContextCompat.getColor(context, getScrewTextColor(isSafeChecked)));
         if (checkStarred(starlistData, itemId)) {
             holder.starView.setText(context.getString(R.string.aa_btn_star1));

@@ -56,26 +56,43 @@
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12dp" />
 
-                <TextView
-                    android:id="@+id/akashi_improv_material"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.15"
-                    android:paddingLeft="4dp"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/colorAkashiNormalMaterial"
-                    android:textSize="12dp" />
-
-                <TextView
-                    android:id="@+id/akashi_improv_screws"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.15"
-                    android:paddingLeft="4dp"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/colorAkashiNormalScrew"
-                    android:textSize="12dp" />
             </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/akashi_improv_mat"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginStart="2dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/akashi_improv_material"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.18"
+                android:gravity="center_vertical"
+                android:paddingLeft="4dp"
+                android:text="1/2/4"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorAkashiNormalMaterial"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/akashi_improv_screws"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.14"
+                android:gravity="center_vertical"
+                android:paddingLeft="4dp"
+                android:text="1/2/4"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorAkashiNormalScrew"
+                android:textSize="12dp" />
 
         </LinearLayout>
 
@@ -91,6 +108,7 @@
             android:layout_marginEnd="4dp"
             android:textSize="24dp"
             android:layout_width="32dp" />
+
 
     </LinearLayout>
 
