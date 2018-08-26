@@ -467,6 +467,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expcalc_currentlv">现在等级</string>
     <string name="expcalc_targetlv">目标等级</string>
     <string name="expcalc_map">海域</string>
+    <string name="expcalc_baseexp">基本经验值</string>
     <string name="expcalc_rank">评价</string>
     <string name="expcalc_flagship">旗舰</string>
     <string name="expcalc_mvp">MVP</string>

@@ -460,6 +460,7 @@
     <string name="expcalc_currentlv">현재 레벨</string>
     <string name="expcalc_targetlv">목표 레벨</string>
     <string name="expcalc_map">해역</string>
+    <string name="expcalc_baseexp">기본 경험치</string>
     <string name="expcalc_rank">랭크</string>
     <string name="expcalc_flagship">기함</string>
     <string name="expcalc_mvp">MVP</string>

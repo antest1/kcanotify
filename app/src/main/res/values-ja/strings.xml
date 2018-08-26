@@ -459,6 +459,7 @@
     <string name="expcalc_shipname">艦娘</string>
     <string name="expcalc_currentlv">現在レベル</string>
     <string name="expcalc_targetlv">目標レベル</string>
+    <string name="expcalc_baseexp">基本経験値</string>
     <string name="expcalc_map">海域</string>
     <string name="expcalc_rank">ランク</string>
     <string name="expcalc_flagship">旗艦</string>

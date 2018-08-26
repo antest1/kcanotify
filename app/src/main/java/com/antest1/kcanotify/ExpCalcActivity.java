@@ -10,6 +10,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -69,7 +72,6 @@ public class ExpCalcActivity extends AppCompatActivity {
     public int count;
     boolean is_flagship = false;
     boolean is_mvp = false;
-    int sortie_val = -1;
     int rank_val = RANK_S;
     int current_exp = 0;
     int target_exp = 0;
@@ -83,6 +85,7 @@ public class ExpCalcActivity extends AppCompatActivity {
     View cal_area;
     Spinner value_ship, value_current_lv, value_target_lv, value_map, value_rank;
     TextView value_current_exp, value_target_exp, value_mapexp, value_counter, value_remainexp;
+    EditText value_base_exp;
     CheckBox chkbox_flagship, chkbox_mvp;
     ArrayAdapter<String> ship_adapter, current_lv_adapter, target_lv_adapter, map_adapter, rank_adapter;
     ImageView cal_hide_bar;
@@ -174,6 +177,7 @@ public class ExpCalcActivity extends AppCompatActivity {
 
         value_current_exp = findViewById(R.id.value_current_exp);
         value_target_exp = findViewById(R.id.value_target_exp);
+        value_base_exp = findViewById(R.id.value_base_exp);
         value_mapexp = findViewById(R.id.value_mapexp);
         value_counter = findViewById(R.id.value_counter);
         value_remainexp = findViewById(R.id.value_remainexp);
@@ -190,7 +194,8 @@ public class ExpCalcActivity extends AppCompatActivity {
             sortie_map[m] = data.getKey();
             m += 1;
         }
-        sortie_val = exp_sortie_data.get(sortie_map[0]).getAsInt();
+
+        value_base_exp.setText("1");
 
         map_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sortie_map);
         map_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
@@ -199,9 +204,9 @@ public class ExpCalcActivity extends AppCompatActivity {
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        sortie_val = exp_sortie_data.get(sortie_map[position]).getAsInt();
+                        //value_base_exp.setText(exp_sortie_data.get(sortie_map[position]).getAsString());
                         current_state.addProperty("map", position);
-                        setScreen();
+                        //setScreen();
                     }
 
                     @Override
@@ -353,6 +358,19 @@ public class ExpCalcActivity extends AppCompatActivity {
             }
         });
 
+        value_base_exp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                setScreen();
+            }
+        });
+
         JsonObject ship_index = new JsonObject();
         for (int i = 0; i < ship_data.size(); i++) {
             JsonObject item = ship_data.get(i).getAsJsonObject();
@@ -411,7 +429,11 @@ public class ExpCalcActivity extends AppCompatActivity {
     }
 
     private int getMapExp() {
-        int mapexp = sortie_val;
+        String base_text = value_base_exp.getText().toString();
+        int mapexp = 1;
+        if (base_text.length() > 0) mapexp = Integer.parseInt(base_text);
+        if (mapexp == 0) mapexp = 1;
+
         if (is_mvp) mapexp *= 2;
         if (is_flagship) mapexp = (mapexp * 3) / 2;
         switch (rank_val) {
