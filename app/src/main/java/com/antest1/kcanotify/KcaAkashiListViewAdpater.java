@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
@@ -58,6 +60,7 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
             holder.itemView = (LinearLayout) v.findViewById(R.id.akashi_improv_item_area);
             holder.iconView = (ImageView) v.findViewById(R.id.akashi_improv_icon);
             holder.nameView = (TextView) v.findViewById(R.id.akashi_improv_name);
+            holder.materialView = (TextView) v.findViewById(R.id.akashi_improv_material);
             holder.screwView = (TextView) v.findViewById(R.id.akashi_improv_screws);
             holder.supportView = (TextView) v.findViewById(R.id.akashi_improv_support);
             holder.starView = (TextView) v.findViewById(R.id.akashi_improv_star);
@@ -71,8 +74,10 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
         ViewHolder holder = (ViewHolder) v.getTag();
         holder.iconView.setImageResource(item.getEquipIconMipmap());
         holder.nameView.setText(item.getEquipName());
+        holder.materialView.setText(item.getEquipMaterials());
         holder.screwView.setText(item.getEquipScrews());
         holder.supportView.setText(item.getEquipSupport());
+        holder.screwView.setTextColor(ContextCompat.getColor(context, getMaterialTextColor(isSafeChecked)));
         holder.screwView.setTextColor(ContextCompat.getColor(context, getScrewTextColor(isSafeChecked)));
         if (checkStarred(starlistData, itemId)) {
             holder.starView.setText(context.getString(R.string.aa_btn_star1));
@@ -116,6 +121,7 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
         LinearLayout itemView;
         ImageView iconView;
         TextView nameView;
+        TextView materialView;
         TextView screwView;
         TextView supportView;
         TextView starView;
@@ -132,6 +138,11 @@ public class KcaAkashiListViewAdpater extends BaseAdapter {
     private int getScrewTextColor(boolean checked) {
         if (checked) return R.color.colorAkashiGtdScrew;
         else return R.color.colorAkashiNormalScrew;
+    }
+
+    private int getMaterialTextColor(boolean checked) {
+        if (checked) return R.color.colorAkashiGtdMaterial;
+        else return R.color.colorAkashiNormalMaterial;
     }
 
     private boolean checkStarred(String data, int id) {

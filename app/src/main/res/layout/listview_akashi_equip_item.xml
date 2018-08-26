@@ -48,24 +48,32 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="TextView"
+                    android:id="@+id/akashi_improv_support"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/akashi_improv_support"
-                    android:layout_weight="0.8"
-                    android:textColor="@android:color/darker_gray"
+                    android:layout_weight="0.6"
                     android:paddingLeft="4dp"
+                    android:textColor="@android:color/darker_gray"
                     android:textSize="12dp" />
 
                 <TextView
-                    android:text="TextView"
+                    android:id="@+id/akashi_improv_material"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/akashi_improv_screws"
-                    android:layout_weight="0.2"
-                    android:textColor="@color/colorAkashiNormalScrew"
+                    android:layout_weight="0.15"
                     android:paddingLeft="4dp"
                     android:textAlignment="textEnd"
+                    android:textColor="@color/colorAkashiNormalMaterial"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/akashi_improv_screws"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.15"
+                    android:paddingLeft="4dp"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorAkashiNormalScrew"
                     android:textSize="12dp" />
             </LinearLayout>
 

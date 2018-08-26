@@ -109,6 +109,8 @@
 
     <color name="colorAkashiNormalScrew">#aaaaaa</color>
     <color name="colorAkashiGtdScrew">#ff5252</color>
+    <color name="colorAkashiNormalMaterial">#00acc1</color>
+    <color name="colorAkashiGtdMaterial">#b71c1c</color>
     <color name="colorAkashiTableBack">#f5f5f5</color>
     <color name="colorAkashiUpgradeEquip">#4e7bff</color>
 
