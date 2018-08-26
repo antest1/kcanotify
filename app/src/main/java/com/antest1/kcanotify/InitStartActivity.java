@@ -341,7 +341,7 @@ public class InitStartActivity extends Activity {
             });
 
             handler.post(() -> {
-                if (!is_skipped) {
+                if (!is_skipped || !is_destroyed) {
                     AlertDialog alert = alertDialog.create();
                     alert.setIcon(R.mipmap.ic_launcher);
                     alert.show();
@@ -449,7 +449,7 @@ public class InitStartActivity extends Activity {
         }
 
         private void workFinished()  {
-            mWakeLock.release();
+            if (mWakeLock.isHeld()) mWakeLock.release();
             Log.e("KCA-IS", KcaUtils.format("%d %d %d", totalFiles, successedFiles, failedFiles));
             setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, totalFiles != successedFiles);
             if (totalFiles == successedFiles) {
