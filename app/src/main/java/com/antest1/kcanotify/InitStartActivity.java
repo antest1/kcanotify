@@ -98,11 +98,8 @@ public class InitStartActivity extends Activity {
     ProgressDialog mProgressDialog;
     TextView appname, appversion, appmessage;
 
-    boolean is_first;
     boolean is_destroyed = false;
-    JsonArray download_data = new JsonArray();
     int fairy_flag, new_resversion;
-    JsonObject fairy_info = new JsonObject();
     int fairy_list_version;
     boolean reset_flag = false;
     boolean is_skipped = false;
@@ -154,6 +151,7 @@ public class InitStartActivity extends Activity {
         appmessage.setText("");
 
         // Initialize resources
+        setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
         if (Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION)) == 0) {
             AssetManager am = getAssets();
             try {
