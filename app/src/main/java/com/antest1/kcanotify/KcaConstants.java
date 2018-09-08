@@ -457,11 +457,16 @@ public final class KcaConstants {
     public static final String PREF_KCAQSYNC_USE = "kcaqsync_use";
     public static final String PREF_KCAQSYNC_PASS = "kcaqsync_pass";
     public static final String PREF_PACKET_LOG = "packet_log";
+    public static final String PREF_CHECK_UPDATE_START = "check_update_start";
+    public static final String PREF_FAIRY_DOWN_FLAG = "fairy_downloaded_flag";
+    public static final String PREF_RES_USELOCAL = "res_uselocal";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
             PREF_KCA_VERSION,
             PREF_KCARESOURCE_VERSION,
+            PREF_CHECK_UPDATE_START,
+            PREF_RES_USELOCAL,
             PREF_KCA_LANGUAGE,
             PREF_SNIFFER_MODE,
             PREF_KCA_SEEK_CN,
@@ -486,6 +491,7 @@ public final class KcaConstants {
             PREF_AKASHI_FILTERLIST,
             PREF_FAIRY_ICON,
             PREF_FAIRY_AUTOHIDE,
+            PREF_FAIRY_DOWN_FLAG,
             PREF_APK_DOWNLOAD_SITE,
             PREF_SCREEN_ADV_NETWORK,
             PREF_VPN_BYPASS_ADDRESS,
@@ -517,6 +523,8 @@ public final class KcaConstants {
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
+            PREF_CHECK_UPDATE_START,
+            PREF_RES_USELOCAL,
             PREF_OPENDB_API_USE,
             PREF_POIDB_API_USE,
             PREF_AKASHI_STAR_CHECKED,
@@ -531,6 +539,7 @@ public final class KcaConstants {
             PREF_KCA_QUESTVIEW_USE,
             PREF_KCA_NOTI_V_HD,
             PREF_KCA_NOTI_V_NS,
+            PREF_FAIRY_DOWN_FLAG,
             PREF_SHOWDROP_SETTING,
             PREF_FAIRY_NOTI_LONGCLICK,
             PREF_FAIRY_AUTOHIDE,

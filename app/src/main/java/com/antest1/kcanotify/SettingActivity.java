@@ -17,10 +17,12 @@ import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
+import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE_START;
 import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_DISABLE_CUSTOMTOAST;
 import static com.antest1.kcanotify.KcaConstants.PREF_EQUIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_DOWN_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
 import static com.antest1.kcanotify.KcaConstants.PREF_FIX_VIEW_LOC;
@@ -53,6 +55,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_LAST_UPDATE_CHECK;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_PACKET_LOG;
 import static com.antest1.kcanotify.KcaConstants.PREF_POIDB_API_USE;
+import static com.antest1.kcanotify.KcaConstants.PREF_RES_USELOCAL;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
@@ -154,6 +157,8 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_DATALOAD_ERROR_FLAG:
             case PREF_FIX_VIEW_LOC:
             case PREF_PACKET_LOG:
+            case PREF_RES_USELOCAL:
+            case PREF_FAIRY_DOWN_FLAG:
                 return "boolean_false";
             case PREF_KCA_EXP_VIEW:
             case PREF_KCA_NOTI_NOTIFYATSVCOFF:
@@ -170,6 +175,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_KCA_NOTI_QUEST_FAIRY_GLOW:
             case PREF_KCA_ACTIVATE_DROPLOG:
             case PREF_KCA_ACTIVATE_RESLOG:
+            case PREF_CHECK_UPDATE_START:
                 return "boolean_true";
             case PREF_KCA_LANGUAGE:
                 return "R.string.default_locale";

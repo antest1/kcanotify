@@ -5,6 +5,7 @@
     <string name="app_name">Kcanotify</string>
     <string name="action_settings">設定</string>
     <string name="action_download">ダウンロード</string>
+    <string name="action_check">チェック</string>
     <string name="backpress_msg">もう一度押すとアプリが終了します</string>
     <string name="notification_appinfo_title">Kcanotify通知</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>
@@ -149,7 +150,7 @@
     <string name="setting_menu_kand_title_exp_type">遠征時間の表示タイプ</string>
     <string name="setting_menu_kand_title_set_noti_priority">通知バーのプライオリティを高く設定</string>
     <string name="setting_menu_kand_desc_set_noti_priority">通知バーを常に上に表示する</string>
-    <string name="setting_menu_kand_title_game_data_down">ゲームデータをダウンロード</string>
+    <string name="setting_menu_kand_title_game_data_down">データ・リソースの更新</string>
     <string name="setting_menu_kand_desc_game_data_down">ゲームデータがロードされない場合に使用</string>
     <string name="setting_menu_kand_title_fleetview_button_order">艦隊情報メニュー順序</string>
     <string name="setting_menu_kand_desc_fleetview_button_order">右側ボタンの順序を設定する</string>
@@ -634,7 +635,7 @@
     <string name="download_akashi">改修工廠</string>
     <string name="download_fairy">妖精さん</string>
     <string name="download_progress">ダウンロード中...</string>
-    <string name="download_reset">リソース初期化 (再ダウンロード)</string>
-    <string name="download_reset_message">リソースを再ダウンロードします。</string>
+    <string name="download_reset">全てのリソースを初期化</string>
+    <string name="download_reset_message">リソースを初期化します。</string>
     <string name="download_check_error">ストレージから読み込み中にエラーが発生しました（デフォルトデータを使用）</string>
 </resources>

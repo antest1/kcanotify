@@ -14,7 +14,8 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:scaleX="1.5"
-        android:scaleY="1.5">
+        android:scaleY="1.5"
+        android:id="@+id/linearLayout">
 
         <ImageView
             android:id="@+id/app_icon"
@@ -33,17 +34,31 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/app_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/app_version"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="70dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textStyle="italic" />
+
+    <TextView
         android:id="@+id/app_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/skip_main"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="false"
+        android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
         android:gravity="center"
         android:padding="5dp"
-        android:text="@string/app_version" />
+        android:text="@string/app_version"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/skip_main"
@@ -56,6 +71,7 @@
         android:gravity="center"
         android:padding="5dp"
         android:text="SKIP"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@color/colorAccent"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -3,14 +3,11 @@ package com.antest1.kcanotify;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,7 +21,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.tonyodev.fetch2.Download;
 import com.tonyodev.fetch2.Fetch;
 import com.tonyodev.fetch2.FetchConfiguration;
@@ -37,25 +33,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_FAIRY_CHANGED;
-import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_DOWN_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
-import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
-import static com.antest1.kcanotify.KcaUtils.getId;
-import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
-import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 
 public class KcaFairySelectActivity extends AppCompatActivity {
     public final static String FAIRY_INFO_FILENAME = "icon_info.json";
@@ -112,7 +96,10 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         Log.e("KCA-FS", icon_info.toString());
         List<String> fairy_id = new ArrayList<>();
 
-        for (int i = 0; i < icon_info.size(); i++) {
+        boolean fairy_downloaded = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_DOWN_FLAG);
+        int fairy_size = fairy_downloaded ? icon_info.size() : 1;
+
+        for (int i = 0; i < fairy_size; i++) {
             fairy_id.add("noti_icon_".concat(String.valueOf(i)));
         }
 
@@ -144,7 +131,6 @@ public class KcaFairySelectActivity extends AppCompatActivity {
                 gv.invalidateViews();
             }
         });
-        showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
     }
 
     @Override
@@ -192,7 +178,7 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         private void workFinished()  {
             mWakeLock.release();
             Log.e("KCA-FS", KcaUtils.format("%d %d %d", totalFiles, successedFiles, failedFiles));
-            setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, totalFiles != successedFiles);
+            setPreferences(getApplicationContext(), PREF_FAIRY_DOWN_FLAG, true);
             mProgressDialog.dismiss();
             if (totalFiles == 0) {
                 Toast.makeText(getApplicationContext(), "no file to download", Toast.LENGTH_LONG).show();

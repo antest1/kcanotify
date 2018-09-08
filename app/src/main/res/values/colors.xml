@@ -226,6 +226,8 @@
     <color name="colorEventUmeboshi">#ffbcb7</color>
     <color name="colorEventTea">#d4ffd8</color>
 
+    <color name="colorItemBack">#eeeeee</color>
+
     <color name="colorWidgetAlert">#ff5252</color>
     <color name="colorFairyBtn">#009688</color>
 </resources>

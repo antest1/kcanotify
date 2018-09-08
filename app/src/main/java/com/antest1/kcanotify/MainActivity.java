@@ -106,8 +106,6 @@ public class MainActivity extends AppCompatActivity {
         sHandler = h;
     }
 
-    boolean resource_error_flag = false;
-
     public MainActivity() {
         LocaleUtils.updateConfig(this);
     }
@@ -254,28 +252,6 @@ public class MainActivity extends AppCompatActivity {
         textDescription.setText(fromHtml);
         //Linkify.addLinks(textDescription, Linkify.WEB_URLS);
 
-        textResourceReset = findViewById(R.id.textResourceReset);
-        textResourceReset.setOnClickListener(v -> {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-            alertDialog.setMessage(getString(R.string.download_reset_message));
-            alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
-                    (dialog, which) -> {
-                        dbHelper.clearResVer();
-                        setPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION, 0);
-                        Intent mainIntent = new Intent(this, InitStartActivity.class);
-                        mainIntent.putExtra(ACTION_RESET, true);
-                        startActivity(mainIntent);
-                        finish();
-                    });
-            alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
-                    (dialog, which) -> {
-                        dialog.dismiss();
-                    });
-            AlertDialog alert = alertDialog.create();
-            alert.setIcon(R.mipmap.ic_launcher);
-            alert.show();
-        });
-
         backPressCloseHandler = new BackPressCloseHandler(this);
 
         /*
@@ -305,8 +281,6 @@ public class MainActivity extends AppCompatActivity {
         setVpnBtn();
         setCheckBtn();
 
-        resource_error_flag = getBooleanPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG);
-
         kcafairybtn = findViewById(R.id.kcafairybtn);
         String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
         String fairyPath = "noti_icon_".concat(fairyIdValue);
@@ -325,15 +299,6 @@ public class MainActivity extends AppCompatActivity {
                 || getBooleanPreferences(getApplicationContext(), PREF_KCA_QUESTVIEW_USE)) {
             warnType[REQUEST_OVERLAY_PERMISSION] = !checkOverlayPermission();
         }
-
-        if (resource_error_flag) {
-            textResourceReset.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-            textResourceReset.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHeavyDmgState));
-        } else {
-            textResourceReset.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-            textResourceReset.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
-        }
-
         setWarning();
     }
 

@@ -16,6 +16,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_settings">Settings</string>
     <string name="action_errorlog">Error Log</string>
     <string name="action_download">Download</string>
+    <string name="action_check">CHECK</string>
     <string name="action_inspector" translatable="false">Inspector</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>
 
@@ -199,7 +200,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_exp_type">Expedition Time View Type</string>
     <string name="setting_menu_kand_title_set_noti_priority">Set Notification Priority to HIGH</string>
     <string name="setting_menu_kand_desc_set_noti_priority">When checked, the navbar will always be the top of notifications</string>
-    <string name="setting_menu_kand_title_game_data_down">Download Game Data</string>
+    <string name="setting_menu_kand_title_game_data_down">Data/Resource Update Check</string>
     <string name="setting_menu_kand_desc_game_data_down">Use if game data was not loaded automatically.</string>
     <string name="setting_menu_kand_title_fairy_select">Select Fairy</string>
     <string name="setting_menu_kand_desc_fairy_select">Select Fairy to bring with</string>
@@ -703,7 +704,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_akashi">Improvement arsenal chart</string>
     <string name="download_fairy">Fairy-san</string>
     <string name="download_progress">Downloading...</string>
-    <string name="download_reset">Initialize resources (download again)</string>
-    <string name="download_reset_message">Download app resource again.</string>
+    <string name="download_reset">Initialize all resources</string>
+    <string name="download_reset_message">Initializing app resource again.</string>
     <string name="download_check_error">Error when loading from storage (using default data)</string>
 </resources>

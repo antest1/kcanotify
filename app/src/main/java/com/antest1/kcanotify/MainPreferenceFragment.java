@@ -167,7 +167,7 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                     }
                 });
             }
-            if (key.equals(PREF_KCA_DOWNLOAD_DATA)) {
+            /*if (key.equals(PREF_KCA_DOWNLOAD_DATA)) {
                 pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
@@ -175,43 +175,40 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                         return false;
                     }
                 });
-            }
+            }*/
 
             if (key.equals(PREF_FAIRY_AUTOHIDE)) {
-                pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object o) {
-                        boolean new_value = (Boolean) o;
-                        if (new_value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                                !hasUsageStatPermission(getActivity().getApplicationContext())) {
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                            alertDialog.setTitle(getStringWithLocale(R.string.sa_usagestat_dialog_title))
-                                    .setMessage(getStringWithLocale(R.string.sa_usagestat_dialog_desc))
-                                    .setPositiveButton(getStringWithLocale(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            showObtainingUsageStatPermission();
-                                        }
-                                    })
-                                    .setNegativeButton(getStringWithLocale(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
+                pref.setOnPreferenceChangeListener((preference, o) -> {
+                    boolean new_value = (Boolean) o;
+                    if (new_value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+                            !hasUsageStatPermission(getActivity().getApplicationContext())) {
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                        alertDialog.setTitle(getStringWithLocale(R.string.sa_usagestat_dialog_title))
+                                .setMessage(getStringWithLocale(R.string.sa_usagestat_dialog_desc))
+                                .setPositiveButton(getStringWithLocale(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        showObtainingUsageStatPermission();
+                                    }
+                                })
+                                .setNegativeButton(getStringWithLocale(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                                        }
-                                    })
-                                    .setIcon(R.mipmap.ic_launcher)
-                                    .show();
-                            return false;
+                                    }
+                                })
+                                .setIcon(R.mipmap.ic_launcher)
+                                .show();
+                        return false;
+                    } else {
+                        Intent intent = new Intent(getActivity(), KcaViewButtonService.class);
+                        if (new_value) {
+                            intent.setAction(KcaViewButtonService.FAIRY_FORECHECK_ON);
                         } else {
-                            Intent intent = new Intent(getActivity(), KcaViewButtonService.class);
-                            if (new_value) {
-                                intent.setAction(KcaViewButtonService.FAIRY_FORECHECK_ON);
-                            } else {
-                                intent.setAction(KcaViewButtonService.FAIRY_FORECHECK_OFF);
-                            }
-                            getApplicationContext().startService(intent);
-                            return true;
+                            intent.setAction(KcaViewButtonService.FAIRY_FORECHECK_OFF);
                         }
+                        getApplicationContext().startService(intent);
+                        return true;
                     }
                 });
             }
@@ -572,7 +569,7 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                     showToast(getApplicationContext(),
                             "Error: not valid data.",
                             Toast.LENGTH_LONG);
-                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "download_data", "", "", getStringFromException(e));
+                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "fairy_queue", "", "", getStringFromException(e));
                 }
             }
 
@@ -582,7 +579,7 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                     showToast(getApplicationContext(),
                             KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), t.getMessage()),
                             Toast.LENGTH_LONG);
-                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "download_data", "", "", t.getMessage());
+                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "fairy_queue", "", "", t.getMessage());
                 }
             }
         });

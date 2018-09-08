@@ -548,6 +548,20 @@ public class KcaUtils {
         return retrofit.create(KcaDownloader.class);
     }
 
+    public static KcaDownloader getResDownloader(Context context){
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(1, TimeUnit.MINUTES)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/")
+                .client(okHttpClient)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        return retrofit.create(KcaDownloader.class);
+    }
+
     public static boolean checkFairyImageInStorage(Context context, String name) {
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("fairy", Context.MODE_PRIVATE);
@@ -617,7 +631,7 @@ public class KcaUtils {
         try {
             bitmap = BitmapFactory.decodeStream(new FileInputStream(myImageFile), null, options);
         } catch (FileNotFoundException e) {
-            Log.e("KCA", getStringFromException(e));
+            // Log.e("KCA", getStringFromException(e));
             return false;
         }
         if (bitmap == null) {

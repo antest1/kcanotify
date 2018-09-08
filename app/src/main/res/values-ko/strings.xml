@@ -5,6 +5,7 @@
     <string name="app_name">시제 깡들리티</string>
     <string name="action_settings">깡들리티 설정</string>
     <string name="action_download">다운로드</string>
+    <string name="action_check">확인</string>
     <string name="backpress_msg">\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.</string>
     <string name="notification_appinfo_title">깡들리티 알림</string>
     <string name="app_vpn_name">시제 깡들리티 스니퍼</string>
@@ -153,8 +154,8 @@
     <string name="setting_menu_kand_desc_fairy_select">함께 할 요정님을 선택</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">칸코레 화면에서만 요정 표시</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">요정을 표시하거나 숨길 때 약간의 지연이 있습니다.</string>
-    <string name="setting_menu_kand_title_game_data_down">게임 데이터 다운로드</string>
-    <string name="setting_menu_kand_desc_game_data_down">게임 데이터가 로딩되지 않을 때 사용</string>
+    <string name="setting_menu_kand_title_game_data_down">데이터/리소스 업데이트 확인</string>
+    <string name="setting_menu_kand_desc_game_data_down">게임 데이터 등이 로딩되지 않을 때 사용</string>
     <string name="setting_menu_kand_title_fleetview_button_order">함대정보 메뉴 순서</string>
     <string name="setting_menu_kand_desc_fleetview_button_order">우측 버튼의 순서를 변경</string>
     <string name="fleetview_button_order_change_when_restart">변경사항을 적용하려면 서비스를 재시작하세요.</string>
@@ -634,7 +635,7 @@
     <string name="download_akashi">개수공창</string>
     <string name="download_fairy">요정님</string>
     <string name="download_progress">다운로드 중...</string>
-    <string name="download_reset">리소스 초기화 (다시 다운로드)</string>
-    <string name="download_reset_message">리소스를 다시 다운로드합니다.</string>
+    <string name="download_reset">전체 리소스 초기화</string>
+    <string name="download_reset_message">리소스를 초기화합니다.</string>
     <string name="download_check_error">데이터 로딩 중 오류 발생 (기본 데이터 사용)</string>
 </resources>

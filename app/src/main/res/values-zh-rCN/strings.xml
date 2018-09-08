@@ -13,6 +13,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_name">Kcanotify</string>
     <string name="action_settings">设定</string>
     <string name="action_download">下载</string>
+    <string name="action_check">检查</string>
     <string name="backpress_msg">再按一次返回键退出应用程序</string>
     <string name="notification_appinfo_title">Kcanotify通知</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>
@@ -159,7 +160,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_exp_type">远征时间显示类型</string>
     <string name="setting_menu_kand_title_set_noti_priority">高优先度通知</string>
     <string name="setting_menu_kand_desc_set_noti_priority">选中时通知将始终位于通知栏顶部</string>
-    <string name="setting_menu_kand_title_game_data_down">下载游戏资料</string>
+    <string name="setting_menu_kand_title_game_data_down">下载游戏资料和资源</string>
     <string name="setting_menu_kand_desc_game_data_down">请于游戏资料未自动载入时使用</string>
     <string name="setting_menu_kand_desc_fairy_select">选择辅助妖精</string>
     <string name="setting_menu_kand_title_fairy_select">选择你想要携带的妖精</string>
@@ -640,7 +641,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_akashi">改修工厂</string>
     <string name="download_fairy">妖精酱~</string>
     <string name="download_progress">正在下载中...</string>
-    <string name="download_reset">初始化资源 (再次下载)</string>
-    <string name="download_reset_message">再次下载应用程序资源</string>
+    <string name="download_reset">初始化资源</string>
+    <string name="download_reset_message">初始化应用程序资源。</string>
     <string name="download_check_error">从装置加载时出现错误(使用预设资料)</string>
 </resources>
