@@ -439,11 +439,11 @@
     <string name="shipinfo_criteria_count" formatted="false">적용된 기준: %d개</string>
 
     <string name="ship_tag_0">없음</string>
-    <string name="ship_tag_1">경계부대(회색)</string>
-    <string name="ship_tag_2">구리다(연두색)</string>
-    <string name="ship_tag_3">니시무라(노란색)</string>
-    <string name="ship_tag_4">오자와(파란색)</string>
-    <string name="ship_tag_5">시마(보라색)</string>
+    <string name="ship_tag_1">제1딱지</string>
+    <string name="ship_tag_2">제2딱지</string>
+    <string name="ship_tag_3">제3딱지</string>
+    <string name="ship_tag_4">제4딱지</string>
+    <string name="ship_tag_5">제5딱지</string>
 
     <string name="ship_fleet_0">없음</string>
 

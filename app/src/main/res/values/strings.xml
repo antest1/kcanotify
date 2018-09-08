@@ -12,7 +12,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="app_brand" translatable="false" traslatable="false">시제 깡들리티</string> <!-- Do not translate here -->
-    <string name="app_version" translatable="false">2.6.2 rev2</string>
+    <string name="app_version" translatable="false">2.6.3</string>
     <string name="action_settings">Settings</string>
     <string name="action_errorlog">Error Log</string>
     <string name="action_download">Download</string>
@@ -508,11 +508,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_criteria_count" formatted="false">Applied criteria: %d</string>
 
     <string name="ship_tag_0">None</string>
-    <string name="ship_tag_1">Patrol(Gray)</string>
-    <string name="ship_tag_2">Kurita(Green)</string>
-    <string name="ship_tag_3">Nishimura(Yellow)</string>
-    <string name="ship_tag_4">Ozawa(Blue)</string>
-    <string name="ship_tag_5">Shima(Purple)</string>
+    <string name="ship_tag_1">Tag 1</string>
+    <string name="ship_tag_2">Tag 2</string>
+    <string name="ship_tag_3">Tag 3</string>
+    <string name="ship_tag_4">Tag 4</string>
+    <string name="ship_tag_5">Tag 5</string>
 
     <string name="ship_fleet_0">None</string>
 

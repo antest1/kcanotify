@@ -447,11 +447,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_criteria_count" formatted="false">已應用標籤：%d</string>
 
     <string name="ship_tag_0">沒有</string>
-    <string name="ship_tag_1">警戒部隊（銀）</string>
-    <string name="ship_tag_2">栗田艦隊（綠）</string>
-    <string name="ship_tag_3">西村艦隊（黃）</string>
-    <string name="ship_tag_4">小沢艦隊（藍）</string>
-    <string name="ship_tag_5">志摩艦隊（紫）</string>
+    <string name="ship_tag_1">第一部隊</string>
+    <string name="ship_tag_2">第二部隊</string>
+    <string name="ship_tag_3">第三部隊</string>
+    <string name="ship_tag_4">第四部隊</string>
+    <string name="ship_tag_5">第五部隊</string>
 
     <string name="ship_fleet_0">沒有</string>
 

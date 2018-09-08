@@ -439,11 +439,11 @@
     <string name="shipinfo_criteria_count" formatted="false">適用されている基準：%d</string>
 
     <string name="ship_tag_0">なし</string>
-    <string name="ship_tag_1">警戒部隊（銀）</string>
-    <string name="ship_tag_2">栗田艦隊（緑）</string>
-    <string name="ship_tag_3">西村艦隊（黄）</string>
-    <string name="ship_tag_4">小沢艦隊（青）</string>
-    <string name="ship_tag_5">志摩艦隊（紫）</string>
+    <string name="ship_tag_1">第一部隊</string>
+    <string name="ship_tag_2">第二部隊</string>
+    <string name="ship_tag_3">第三部隊</string>
+    <string name="ship_tag_4">第四部隊</string>
+    <string name="ship_tag_5">第五部隊</string>
 
     <string name="ship_fleet_0">なし</string>
 

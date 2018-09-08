@@ -446,11 +446,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_criteria_count" formatted="false">已应用标签：%d</string>
 
     <string name="ship_tag_0">没有</string>
-    <string name="ship_tag_1">警戒部队（银）</string>
-    <string name="ship_tag_2">栗田舰队（绿）</string>
-    <string name="ship_tag_3">西村舰队（黄）</string>
-    <string name="ship_tag_4">小沢舰队（蓝）</string>
-    <string name="ship_tag_5">志摩舰队（紫）</string>
+    <string name="ship_tag_1">第一部队</string>
+    <string name="ship_tag_2">第二部队</string>
+    <string name="ship_tag_3">第三部队</string>
+    <string name="ship_tag_4">第四部队</string>
+    <string name="ship_tag_5">第五部队</string>
 
     <string name="ship_fleet_0">没有</string>
 
