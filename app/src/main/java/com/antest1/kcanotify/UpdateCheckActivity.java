@@ -143,11 +143,13 @@ public class UpdateCheckActivity extends AppCompatActivity {
         resource_adapter.setHandler(handler);
 
         checkstart_chkbox = findViewById(R.id.reschk_checkatstart);
+        checkstart_chkbox.setText(getStringWithLocale(R.string.download_setting_checkatstart));
         checkstart_chkbox.setChecked(getBooleanPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START));
         checkstart_chkbox.setOnCheckedChangeListener((buttonView, isChecked)
                 -> setPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START, isChecked));
 
         localonly_chkbox = findViewById(R.id.reschk_local);
+        localonly_chkbox.setText(getStringWithLocale(R.string.download_use_internal_data));
         localonly_chkbox.setChecked(getBooleanPreferences(getApplicationContext(), PREF_RES_USELOCAL));
         localonly_chkbox.setOnCheckedChangeListener((buttonView, isChecked)
                 -> setPreferences(getApplicationContext(), PREF_RES_USELOCAL,isChecked));
@@ -177,7 +179,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
                 alert.show();
             }
         });
-
 
         data_list = findViewById(R.id.gamedata_list);
         resource_list = findViewById(R.id.resources_list);

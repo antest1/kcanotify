@@ -644,4 +644,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_reset">初始化资源</string>
     <string name="download_reset_message">初始化应用程序资源。</string>
     <string name="download_check_error">从装置加载时出现错误(使用预设资料)</string>
+    <string name="download_setting_checkatstart">检查应用程序启动时的更新</string>
+    <string name="download_use_internal_data">使用内置资源</string>
 </resources>

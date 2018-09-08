@@ -142,6 +142,25 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         return value;
     }
 
+    public int getTotalResVer() {
+        int value = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.query(resver_table_name, null, null, null, null, null, null);
+        try {
+            if (c != null && c.getCount() > 0) {
+                c.moveToFirst();
+                value = Math.max(value, c.getInt(c.getColumnIndex("version")));
+            }
+        } catch (Exception e) {
+            // do nothing
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return value;
+    }
+
     public void putResVer(String filename, int version) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

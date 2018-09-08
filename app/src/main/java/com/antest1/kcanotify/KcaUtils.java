@@ -104,6 +104,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_DISABLE_CUSTOMTOAST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_RES_USELOCAL;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 
 
@@ -570,53 +571,76 @@ public class KcaUtils {
     }
 
     public static JsonObject getJsonObjectFromStorage(Context context, String name, KcaDBHelper helper) {
-        ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir("data", Context.MODE_PRIVATE);
-        File jsonFile = new File(directory, name);
-        JsonObject data = null;
-        try {
-            Reader reader = new FileReader(jsonFile);
-            data = new JsonParser().parse(reader).getAsJsonObject();
-        } catch (FileNotFoundException | IllegalStateException | JsonSyntaxException e ) {
-            e.printStackTrace();
-            setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
-            if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonObjectFromStorage", "0", getStringFromException(e));
-            AssetManager am = cw.getAssets();
+        if (getBooleanPreferences(context, PREF_RES_USELOCAL)) {
+            return getJsonObjectFromAsset(context, name, helper);
+        } else {
+            ContextWrapper cw = new ContextWrapper(context);
+            File directory = cw.getDir("data", Context.MODE_PRIVATE);
+            File jsonFile = new File(directory, name);
+            JsonObject data = null;
             try {
-                AssetManager.AssetInputStream ais =
-                (AssetManager.AssetInputStream) am.open(name);
-                    byte[] bytes = ByteStreams.toByteArray(ais);
-                    data = new JsonParser().parse(new String(bytes)).getAsJsonObject();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-                if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonObjectFromStorage", "1", getStringFromException(e1));
+                Reader reader = new FileReader(jsonFile);
+                data = new JsonParser().parse(reader).getAsJsonObject();
+            } catch (FileNotFoundException | IllegalStateException | JsonSyntaxException e ) {
+                e.printStackTrace();
+                setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
+                if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonObjectFromStorage", "0", getStringFromException(e));
+                data = getJsonObjectFromAsset(context, name, helper);
             }
+            return data;
+        }
+    }
+
+    public static JsonObject getJsonObjectFromAsset(Context context, String name, KcaDBHelper helper) {
+        ContextWrapper cw = new ContextWrapper(context);
+        JsonObject data = null;
+        AssetManager am = cw.getAssets();
+        try {
+            AssetManager.AssetInputStream ais =
+                    (AssetManager.AssetInputStream) am.open(name);
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            data = new JsonParser().parse(new String(bytes)).getAsJsonObject();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonObjectFromStorage", "1", getStringFromException(e1));
         }
         return data;
     }
 
     public static JsonArray getJsonArrayFromStorage(Context context, String name, KcaDBHelper helper) {
-        ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir("data", Context.MODE_PRIVATE);
-        File jsonFile = new File(directory, name);
-        JsonArray data = new JsonArray();
-        try {
-            Reader reader = new FileReader(jsonFile);
-            data = new JsonParser().parse(reader).getAsJsonArray();
-        } catch (FileNotFoundException | IllegalStateException | JsonSyntaxException e ) {
-            e.printStackTrace();
-            setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
-            if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonArrayFromStorage", "0", getStringFromException(e));
-            AssetManager am = cw.getAssets();
+
+        if (getBooleanPreferences(context, PREF_RES_USELOCAL)) {
+            return getJsonArrayFromAsset(context, name, helper);
+        } else {
+            ContextWrapper cw = new ContextWrapper(context);
+            File directory = cw.getDir("data", Context.MODE_PRIVATE);
+            File jsonFile = new File(directory, name);
+            JsonArray data = new JsonArray();
             try {
-                AssetManager.AssetInputStream ais =
-                        (AssetManager.AssetInputStream) am.open(name);
-                byte[] bytes = ByteStreams.toByteArray(ais);
-                data = new JsonParser().parse(new String(bytes)).getAsJsonArray();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-                if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonArrayFromStorage", "1", getStringFromException(e1));
+                Reader reader = new FileReader(jsonFile);
+                data = new JsonParser().parse(reader).getAsJsonArray();
+            } catch (FileNotFoundException | IllegalStateException | JsonSyntaxException e ) {
+                e.printStackTrace();
+                setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
+                if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonArrayFromStorage", "0", getStringFromException(e));
+                data = getJsonArrayFromAsset(context, name, helper);
             }
+            return data;
+        }
+    }
+
+    public static JsonArray getJsonArrayFromAsset(Context context, String name, KcaDBHelper helper) {
+        ContextWrapper cw = new ContextWrapper(context);
+        JsonArray data = new JsonArray();
+        AssetManager am = cw.getAssets();
+        try {
+            AssetManager.AssetInputStream ais =
+                    (AssetManager.AssetInputStream) am.open(name);
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            data = new JsonParser().parse(new String(bytes)).getAsJsonArray();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonArrayFromStorage", "1", getStringFromException(e1));
         }
         return data;
     }

@@ -638,4 +638,6 @@
     <string name="download_reset">全てのリソースを初期化</string>
     <string name="download_reset_message">リソースを初期化します。</string>
     <string name="download_check_error">ストレージから読み込み中にエラーが発生しました（デフォルトデータを使用）</string>
+    <string name="download_setting_checkatstart">起動時にアップデートを確認</string>
+    <string name="download_use_internal_data">内蔵リソースを使用</string>
 </resources>

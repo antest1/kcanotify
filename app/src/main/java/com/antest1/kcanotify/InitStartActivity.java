@@ -295,7 +295,7 @@ public class InitStartActivity extends Activity {
         boolean new_flag = false;
         List<String> update_text = new ArrayList<>();
         String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
-        int currentKcaResVersion = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION));
+        int currentKcaResVersion = dbHelper.getTotalResVer();
 
         if (response_data.has("data_version")) {
             String recentVersion = response_data.get("data_version").getAsString();
