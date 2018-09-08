@@ -439,11 +439,12 @@
     <string name="shipinfo_criteria_count" formatted="false">적용된 기준: %d개</string>
 
     <string name="ship_tag_0">없음</string>
-    <string name="ship_tag_1">제1딱지</string>
-    <string name="ship_tag_2">제2딱지</string>
-    <string name="ship_tag_3">제3딱지</string>
-    <string name="ship_tag_4">제4딱지</string>
-    <string name="ship_tag_5">제5딱지</string>
+    <string name="ship_tag_1">경계부대</string>
+    <string name="ship_tag_2">해협파견부대</string>
+    <string name="ship_tag_3">서방작전부대</string>
+    <string name="ship_tag_4">구주특무부대</string>
+    <string name="ship_tag_5">Force H</string>
+    <string name="ship_tag_6">라인연습부대</string>
 
     <string name="ship_fleet_0">없음</string>
 

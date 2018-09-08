@@ -446,11 +446,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_criteria_count" formatted="false">已应用标签：%d</string>
 
     <string name="ship_tag_0">没有</string>
-    <string name="ship_tag_1">第一部队</string>
-    <string name="ship_tag_2">第二部队</string>
-    <string name="ship_tag_3">第三部队</string>
-    <string name="ship_tag_4">第四部队</string>
-    <string name="ship_tag_5">第五部队</string>
+    <string name="ship_tag_1">警戒部队</string>
+    <string name="ship_tag_2">海峡派遣舰队</string>
+    <string name="ship_tag_3">西方作戦部队</string>
+    <string name="ship_tag_4">欧洲特务舰队</string>
+    <string name="ship_tag_5">Force H</string>
+    <string name="ship_tag_6">莱茵演习作战部队</string>
 
     <string name="ship_fleet_0">没有</string>
 

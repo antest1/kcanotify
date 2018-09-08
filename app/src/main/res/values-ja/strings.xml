@@ -439,11 +439,12 @@
     <string name="shipinfo_criteria_count" formatted="false">適用されている基準：%d</string>
 
     <string name="ship_tag_0">なし</string>
-    <string name="ship_tag_1">第一部隊</string>
-    <string name="ship_tag_2">第二部隊</string>
-    <string name="ship_tag_3">第三部隊</string>
-    <string name="ship_tag_4">第四部隊</string>
-    <string name="ship_tag_5">第五部隊</string>
+    <string name="ship_tag_1">警戒部隊</string>
+    <string name="ship_tag_2">海峡派遣艦隊</string>
+    <string name="ship_tag_3">西方作戦部隊</string>
+    <string name="ship_tag_4">歐洲特務艦隊</string>
+    <string name="ship_tag_5">Force H</string>
+    <string name="ship_tag_6">ライン練習部隊</string>
 
     <string name="ship_fleet_0">なし</string>
 

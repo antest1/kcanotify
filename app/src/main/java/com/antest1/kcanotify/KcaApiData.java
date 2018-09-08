@@ -165,7 +165,7 @@ public class KcaApiData {
     public static final int[] FIGHTER_MASTERY_BONUS = {0, 0, 2, 5, 9, 14, 14, 22, 0, 0, 0};
     public static final int[] SEA_BOMBER_MASTERY_BONUS = {0, 0, 1, 1, 1, 3, 3, 6, 0, 0, 0};
 
-    public static final int TAG_COUNT = 5;
+    public static final int TAG_COUNT = 6;
 
     public static final int SPEED_NONE = 0;
     public static final int SPEED_SLOW = 5;
