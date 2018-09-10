@@ -12,7 +12,7 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/akashi_day.json"
 }, {
 	"name": "edges.json",
-	"version": 2018081901,
+	"version": 2018091101,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/edges.json"
 }, {
 	"name": "expedition.json",
@@ -20,19 +20,19 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/expedition.json"
 }, {
 	"name": "items-en.json",
-	"version": 2018090301,
+	"version": 2018091101,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/items-en.json"
 }, {
 	"name": "items-ko.json",
-	"version": 2018090301,
+	"version": 2018091101,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/items-ko.json"
 }, {
 	"name": "items-scn.json",
-	"version": 2018090301,
+	"version": 2018091101,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/items-scn.json"
 }, {
 	"name": "items-tcn.json",
-	"version": 2018090301,
+	"version": 2018091101,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/items-tcn.json"
 }, {
 	"name": "quest_track.json",
@@ -60,19 +60,19 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quests-tcn.json"
 }, {
 	"name": "ships-en.json",
-	"version": 2018070501,
+	"version": 2018091101,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/ships-en.json"
 }, {
 	"name": "ships-ko.json",
-	"version": 2018070501,
+	"version": 2018091101,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/ships-ko.json"
 }, {
 	"name": "ships-scn.json",
-	"version": 2018070501,
+	"version": 2018091101,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/ships-scn.json"
 }, {
 	"name": "ships-tcn.json",
-	"version": 2018070501,
+	"version": 2018091101,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/ships-tcn.json"
 }, {
 	"name": "ships_init_equip_count.json",
