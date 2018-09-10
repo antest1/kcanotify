@@ -10,6 +10,8 @@
 		" два"  : " dva",
 		" Mk.II": " Mk.II",
 		" Mk.II Mod.2": " Mk.II Mod.2",
+		" バカンスmode" : " Vacation Mode",
+		" バカンスmode-壊" : " V.M. - Damaged",
 		"改-壊": " Kai - Damaged",
 		"-壊": " - Damaged",
 		"改"      : " Kai"
@@ -433,6 +435,7 @@
 	"護衛棲水姫": "Escort Water Princess",
 	"護衛棲水姫-壊": "Escort Water Princess - Damaged",
 	"深海鶴棲姫": "Abyssal Crane Princess",
+	"護衛独還姫":"German Escort Princess",
 
 	"elite":" elite",
 	"flagship":" flagship"
