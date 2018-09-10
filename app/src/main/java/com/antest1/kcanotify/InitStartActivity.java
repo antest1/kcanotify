@@ -290,23 +290,25 @@ public class InitStartActivity extends Activity {
     }
 
     private void dataCheck(JsonObject response_data) {
-        boolean new_flag = false;
+        boolean latest_flag = true;
         List<String> update_text = new ArrayList<>();
         String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
         int currentKcaResVersion = dbHelper.getTotalResVer();
 
         if (response_data.has("data_version")) {
             String recentVersion = response_data.get("data_version").getAsString();
-            new_flag = !compareVersion(currentDataVersion, recentVersion);
+            latest_flag = compareVersion(currentDataVersion, recentVersion);
         }
 
         if (response_data.has("kcadata_version")) {
             new_resversion = response_data.get("kcadata_version").getAsInt();
-            new_flag = new_flag || new_resversion > currentKcaResVersion;
+            latest_flag = latest_flag && new_resversion <= currentKcaResVersion;
         }
 
+
+
         setPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK, String.valueOf(System.currentTimeMillis()));
-        if (!new_flag) {
+        if (!latest_flag) {
             startMainActivity(true);
         } else {
             String message = getStringWithLocale(R.string.download_description_head);
