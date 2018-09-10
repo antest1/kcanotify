@@ -183,6 +183,9 @@ public class UpdateCheckActivity extends AppCompatActivity {
         data_list = findViewById(R.id.gamedata_list);
         resource_list = findViewById(R.id.resources_list);
 
+        data_list.setAdapter(gamedata_adapter);
+        resource_list.setAdapter(resource_adapter);
+
         gamedata_load = findViewById(R.id.gamedata_loading);
         resource_load = findViewById(R.id.resources_loading);
 
@@ -245,7 +248,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
                     gamedata_info.add(gamedata);
                     gamedata_adapter.setContext(getApplicationContext());
                     gamedata_adapter.setListItem(gamedata_info);
-                    data_list.setAdapter(gamedata_adapter);
                     gamedata_adapter.notifyDataSetChanged();
 
                     gamedata_load.setVisibility(View.GONE);
@@ -287,7 +289,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
                     }
                     resource_adapter.setContext(getApplicationContext());
                     resource_adapter.setListItem(resource_info);
-                    resource_list.setAdapter(resource_adapter);
+
                     resource_adapter.notifyDataSetChanged();
 
                     resource_load.setVisibility(View.GONE);

@@ -111,7 +111,7 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
     public Context getApplicationContext() {
         Context context = getActivity();
         if (context != null) {
-            return getActivity().getApplicationContext();
+            return context.getApplicationContext();
         } else {
             return null;
         }
