@@ -305,10 +305,8 @@ public class InitStartActivity extends Activity {
             latest_flag = latest_flag && new_resversion <= currentKcaResVersion;
         }
 
-
-
         setPreferences(getApplicationContext(), PREF_LAST_UPDATE_CHECK, String.valueOf(System.currentTimeMillis()));
-        if (!latest_flag) {
+        if (latest_flag) {
             startMainActivity(true);
         } else {
             String message = getStringWithLocale(R.string.download_description_head);
