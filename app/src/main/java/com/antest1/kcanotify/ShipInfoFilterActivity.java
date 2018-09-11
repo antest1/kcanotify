@@ -322,10 +322,10 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
             adapter = getFleetArray();
         } else if (position == 7) {
             adapter = getHPArray();
-        } else if (position == 19) {
+        } else if (position == 20) {
             adapter = getSpeedArray();
             fnc = 2;
-        } else if (position == 20) {
+        } else if (position == 21) {
             adapter = getTagArray();
         }
 
