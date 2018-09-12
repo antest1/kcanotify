@@ -564,7 +564,7 @@ public class KcaDeckInfo {
                                     totalTP += 8.0;
                                     break;
                                 case T2_AMP_TANK:
-                                    totalTP += 22.0;
+                                    totalTP += 2.0;
                                     break;
                                 case T2_COMBAT_FOOD:
                                     totalTP += 1.0;
