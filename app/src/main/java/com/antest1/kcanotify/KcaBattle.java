@@ -1555,6 +1555,14 @@ public class KcaBattle {
                     calculateSupportDamage(support_info);
                 }
 
+                if (isKeyExist(api_data, "api_friendly_battle")) {
+                    JsonObject friend_battle = api_data.getAsJsonObject("api_friendly_battle");
+                    JsonObject friend_hougeki = friend_battle.getAsJsonObject("api_hougeki");
+                    if (isKeyExist(friend_hougeki, "api_df_list")) {
+                        calculateEnemyCombinedHougekiDamage(friend_hougeki, false, PHASE_3);
+                    }
+                }
+
                 if (isKeyExist(api_data, "api_hougeki")) {
                     JsonObject hougeki = api_data.getAsJsonObject("api_hougeki");
                     if (isKeyExist(hougeki, "api_df_list")) {
