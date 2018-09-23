@@ -37,7 +37,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 
@@ -2165,8 +2164,8 @@ public class KcaService extends Service {
 
         JsonObject jsonDataObj = null;
         try {
-            if (data.length() > 0) {
-                jsonDataObj = new JsonParser().parse(data).getAsJsonObject();
+            if (data != null && data.length() > 0) {
+                jsonDataObj = gson.fromJson(data, JsonObject.class);
             }
 
             if (url.startsWith(KCA_API_DATA_LOADED)) {
@@ -2713,7 +2712,7 @@ public class KcaService extends Service {
                     public void onResponse(Call<String> call, Response<String> response) {
                         JsonObject response_data = new JsonObject();
                         if (response.body() != null) {
-                            response_data = new JsonParser().parse(response.body()).getAsJsonObject();
+                            response_data = gson.fromJson(response.body(), JsonObject.class);
                             if (response_data.has("status")) {
                                 String result = response_data.get("status").getAsString();
                                 if (result.equals("done")) {
@@ -2774,7 +2773,7 @@ public class KcaService extends Service {
                     public void onResponse(Call<String> call, Response<String> response) {
                         JsonObject response_data = new JsonObject();
                         if (response.body() != null) {
-                            response_data = new JsonParser().parse(response.body()).getAsJsonObject();
+                            response_data = gson.fromJson(response.body(), JsonObject.class);
                             if (response_data.has("status")) {
                                 String result = response_data.get("status").getAsString();
                                 if (!result.equals("done")) {

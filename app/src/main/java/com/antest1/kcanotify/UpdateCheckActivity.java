@@ -277,6 +277,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     String res_result = response.body();
                     resource_info = gson.fromJson(res_result, listType);
+                    if (resource_info == null) return;
                     for (int i = 0; i < resource_info.size(); i++) {
                         JsonObject item = resource_info.get(i).getAsJsonObject();
                         String name = item.get("name").getAsString();
