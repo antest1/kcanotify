@@ -14,10 +14,7 @@ import com.google.gson.JsonPrimitive;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.max;
-import static android.R.attr.tag;
 import static android.media.CamcorderProfile.get;
-import static com.antest1.kcanotify.KcaApiData.T2_DAMECON;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
 import static com.antest1.kcanotify.KcaConstants.API_NODE_EVENT_ID_BOSS;
@@ -70,7 +67,6 @@ import static com.antest1.kcanotify.KcaConstants.PHASE_1;
 import static com.antest1.kcanotify.KcaConstants.PHASE_2;
 import static com.antest1.kcanotify.KcaConstants.PHASE_3;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
-import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaBattle {
     public static JsonObject deckportdata = null;
@@ -629,6 +625,27 @@ public class KcaBattle {
         }
     }
 
+    public static void calculateFriendSupportFleetHougekiDamage(JsonObject api_data) {
+        JsonArray at_eflag = api_data.getAsJsonArray("api_at_eflag");
+        JsonArray df_list = api_data.getAsJsonArray("api_df_list");
+        JsonArray df_damage = api_data.getAsJsonArray("api_damage");
+        for (int i = 0; i < df_list.size(); i++) {
+            int eflag = at_eflag.get(i).getAsInt();
+            JsonArray target = df_list.get(i).getAsJsonArray();
+            JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
+
+            boolean target_idx_cb = target.get(0).getAsInt() >= 6;
+            boolean target_idx_valid = target.get(0).getAsInt() != -1;
+            if (eflag == 0) {
+                if (target_idx_cb) reduce_value(false, enemyCbAfterHps, target, -6, target_dmg, true);
+                else if (target_idx_valid) reduce_value(false, enemyAfterHps, target, target_dmg, false);
+            } else { // Do not count damage for friend fleet
+                //if (isCombinedFleetInSortie() && target_idx_cb) reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
+                //else if (target_idx_valid) reduce_value(true, friendAfterHps, target, target_dmg, false);
+            }
+        }
+    }
+
     public static void calculateEnemyCombinedHougekiDamage(JsonObject api_data, boolean is_combined, int phase) {
         JsonArray at_eflag = api_data.getAsJsonArray("api_at_eflag");
         JsonArray df_list = api_data.getAsJsonArray("api_df_list");
@@ -644,19 +661,25 @@ public class KcaBattle {
                     else reduce_value(true, friendAfterHps, target, target_dmg, false);
                     break;
                 case PHASE_2:
-                    if (eflag == 0) reduce_value(false, enemyCbAfterHps, target, -6, target_dmg, true);
-                    else if (is_combined) reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
+                    if (eflag == 0)
+                        reduce_value(false, enemyCbAfterHps, target, -6, target_dmg, true);
+                    else if (is_combined)
+                        reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
                     else reduce_value(true, friendAfterHps, target, target_dmg, false);
                     break;
                 case PHASE_3:
                     boolean target_idx_cb = target.get(0).getAsInt() >= 6;
                     boolean target_idx_valid = target.get(0).getAsInt() != -1;
                     if (eflag == 0) {
-                        if (target_idx_cb) reduce_value(false, enemyCbAfterHps, target, -6, target_dmg, true);
-                        else if (target_idx_valid) reduce_value(false, enemyAfterHps, target, target_dmg, false);
+                        if (target_idx_cb)
+                            reduce_value(false, enemyCbAfterHps, target, -6, target_dmg, true);
+                        else if (target_idx_valid)
+                            reduce_value(false, enemyAfterHps, target, target_dmg, false);
                     } else {
-                        if (isCombinedFleetInSortie() && target_idx_cb) reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
-                        else if (target_idx_valid) reduce_value(true, friendAfterHps, target, target_dmg, false);
+                        if (isCombinedFleetInSortie() && target_idx_cb)
+                            reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
+                        else if (target_idx_valid)
+                            reduce_value(true, friendAfterHps, target, target_dmg, false);
                     }
                     break;
                 default:
@@ -664,6 +687,7 @@ public class KcaBattle {
             }
         }
     }
+
 
     public static void calculateEnemyCombinedNightDamage(JsonObject api_data, int[] activedeck) {
         JsonArray at_eflag = api_data.getAsJsonArray("api_at_eflag");
@@ -1559,7 +1583,7 @@ public class KcaBattle {
                     JsonObject friend_battle = api_data.getAsJsonObject("api_friendly_battle");
                     JsonObject friend_hougeki = friend_battle.getAsJsonObject("api_hougeki");
                     if (isKeyExist(friend_hougeki, "api_df_list")) {
-                        calculateEnemyCombinedHougekiDamage(friend_hougeki, false, PHASE_3);
+                        calculateFriendSupportFleetHougekiDamage(friend_hougeki);
                     }
                 }
 
