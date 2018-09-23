@@ -323,6 +323,7 @@
 	"Roma":"Roma",
 	"Italia":"Italia",
 	"Littorio":"Littorio",
+	"Maestrale":"Maestrale",
 	"Libeccio":"Libeccio",
 	"Graf Zeppelin":"Graf Zeppelin",
 	"Zara":"Zara",
@@ -339,6 +340,8 @@
 	"Gambier Bay": "Gambier Bay",
 	"Intrepid": "Intrepid",
 	"Samuel B.Roberts":"Samuel B.Roberts",
+	"Nelson": "Nelson",
+	"Gotland": "Gotland",
 
 	"防空棲姫":"Air Defense Princess",
 	"空母棲鬼":"Aircraft Carrier Demon",
@@ -437,6 +440,8 @@
 	"護衛棲水姫-壊": "Escort Water Princess - Damaged",
 	"深海鶴棲姫": "Abyssal Crane Princess",
 	"護衛独還姫":"German Escort Princess",
+	"船渠棲姫": "Dock Princess",
+	"欧州水姫": "European Water Princess",
 
 	"elite":" elite",
 	"flagship":" flagship"
