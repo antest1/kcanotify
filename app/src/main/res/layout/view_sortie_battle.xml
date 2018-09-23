@@ -342,6 +342,7 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
                                     android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
@@ -480,6 +481,7 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
                                     android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
@@ -617,6 +619,7 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
                                     android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
@@ -755,6 +758,7 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
                                     android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
@@ -893,6 +897,7 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
                                     android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
@@ -1031,6 +1036,7 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
                                     android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
@@ -1170,6 +1176,8 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
+                                    android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
                                 <TextView
@@ -1398,6 +1406,7 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
                                     android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
@@ -1536,6 +1545,7 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
                                     android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
@@ -1674,6 +1684,7 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
                                     android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
@@ -1812,6 +1823,7 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
                                     android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
@@ -1950,6 +1962,7 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
                                     android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
@@ -2088,6 +2101,7 @@
                                     android:layout_height="9dp"
                                     android:layout_weight="0"
                                     android:baselineAlignBottom="false"
+                                    android:src="@mipmap/item_14"
                                     android:visibility="gone"
                                     app:srcCompat="@mipmap/item_14" />
 
