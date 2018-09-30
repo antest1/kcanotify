@@ -1200,12 +1200,14 @@ public class KcaBattleViewService extends Service {
                     itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.GONE);
                 }
 
-                String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
-                int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
-                int typeres = KcaApiData.getTypeRes(type);
-                ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class))).setText(kcItemName);
-                ((ImageView) itemView.findViewById(getId(KcaUtils.format("item%d_icon", i + 1), R.id.class))).setImageResource(typeres);
-                itemView.findViewById(slotViewList[i]).setVisibility(View.VISIBLE);
+                if (kcItemData != null) {
+                    String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
+                    int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
+                    int typeres = KcaApiData.getTypeRes(type);
+                    ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class))).setText(kcItemName);
+                    ((ImageView) itemView.findViewById(getId(KcaUtils.format("item%d_icon", i + 1), R.id.class))).setImageResource(typeres);
+                    itemView.findViewById(slotViewList[i]).setVisibility(View.VISIBLE);
+                }
             }
         }
 
