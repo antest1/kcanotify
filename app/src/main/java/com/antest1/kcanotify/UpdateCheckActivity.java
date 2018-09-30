@@ -411,6 +411,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
         final Request request = new Request(KcaUtils.format("%s?t=%d", url, timestamp), data.getPath());
         fetch.enqueue(request, updatedRequest -> {
             dbHelper.putResVer(name, version);
+            loadTranslationData(getApplicationContext());
             if (name.equals("icon_info.json")) {
                 Toast.makeText(getApplicationContext(), "Download Completed: " + name + "\nRetrieving Fairy Images..", Toast.LENGTH_LONG).show();
                 final Handler handler = new Handler();
