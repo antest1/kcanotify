@@ -430,6 +430,7 @@ public class ExpCalcActivity extends AppCompatActivity {
 
     private int getMapExp() {
         String base_text = value_base_exp.getText().toString();
+        if (base_text.length() > 9) base_text = base_text.substring(0, 9);
         int mapexp = 1;
         if (base_text.length() > 0) mapexp = Integer.parseInt(base_text);
         if (mapexp == 0) mapexp = 1;
