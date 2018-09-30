@@ -96,6 +96,7 @@ public final class KcaConstants {
     public static final String API_WORLD_GET_WORLDINFO = "/api_world/get_worldinfo";
     public static final String API_WORLD_GET_ID = "/api_world/get_id";
     public static final String API_START2 = "/api_start2";
+    public static final String API_START2_NEW = "/api_start2/getData";
     public static final String API_REQ_MEMBER_GET_INCENTIVE = "/api_req_member/get_incentive";
     public static final String API_GET_MEMBER_REQUIRED_INFO = "/api_get_member/require_info";
     public static final String API_GET_MEMBER_RECORD = "/api_get_member/record";

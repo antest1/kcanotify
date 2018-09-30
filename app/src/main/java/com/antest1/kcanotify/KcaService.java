@@ -734,7 +734,7 @@ public class KcaService extends Service {
                 return;
             }
 
-            if (url.startsWith(API_START2)) {
+            if (url.equals(API_START2) || url.equals(API_START2_NEW)) {
                 //Log.e("KCA", "Load Kancolle Data");
                 //Toast.makeText(contextWithLocale, "API_START2", Toast.LENGTH_LONG).show();
 
