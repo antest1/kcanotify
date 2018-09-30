@@ -232,26 +232,30 @@ public class UpdateCheckActivity extends AppCompatActivity {
             load_version.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                    String ver_result = response.body();
-                    JsonObject ver_data = gson.fromJson(ver_result, JsonObject.class);
-                    latest_gamedata_version = ver_data.get("data_version").getAsString();
+                    try {
+                        String ver_result = response.body();
+                        JsonObject ver_data = gson.fromJson(ver_result, JsonObject.class);
+                        latest_gamedata_version = ver_data.get("data_version").getAsString();
 
-                    JsonObject gamedata = new JsonObject();
-                    gamedata.addProperty("name", "api_start2");
-                    gamedata.addProperty("desc", "kancolle game data for kcanotify");
-                    String current_gd_v = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
-                    String latest_gd_v = latest_gamedata_version;
-                    gamedata.addProperty("version", latest_gd_v);
-                    gamedata.addProperty("version_str", getVersionString(current_gd_v, latest_gd_v));
-                    gamedata.addProperty("highlight", !KcaUtils.compareVersion(current_gd_v, latest_gd_v));
-                    gamedata.addProperty("url", "call_kcadata_download");
-                    gamedata_info.add(gamedata);
-                    gamedata_adapter.setContext(getApplicationContext());
-                    gamedata_adapter.setListItem(gamedata_info);
-                    gamedata_adapter.notifyDataSetChanged();
+                        JsonObject gamedata = new JsonObject();
+                        gamedata.addProperty("name", "api_start2");
+                        gamedata.addProperty("desc", "kancolle game data for kcanotify");
+                        String current_gd_v = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
+                        String latest_gd_v = latest_gamedata_version;
+                        gamedata.addProperty("version", latest_gd_v);
+                        gamedata.addProperty("version_str", getVersionString(current_gd_v, latest_gd_v));
+                        gamedata.addProperty("highlight", !KcaUtils.compareVersion(current_gd_v, latest_gd_v));
+                        gamedata.addProperty("url", "call_kcadata_download");
+                        gamedata_info.add(gamedata);
+                        gamedata_adapter.setContext(getApplicationContext());
+                        gamedata_adapter.setListItem(gamedata_info);
+                        gamedata_adapter.notifyDataSetChanged();
 
-                    gamedata_load.setVisibility(View.GONE);
-                    data_list.setVisibility(View.VISIBLE);
+                        gamedata_load.setVisibility(View.GONE);
+                        data_list.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        gamedata_load.setText("Error: " + e.getMessage());
+                    }
                 }
 
                 @Override
@@ -276,25 +280,29 @@ public class UpdateCheckActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     String res_result = response.body();
-                    resource_info = gson.fromJson(res_result, listType);
-                    if (resource_info == null) return;
-                    for (int i = 0; i < resource_info.size(); i++) {
-                        JsonObject item = resource_info.get(i).getAsJsonObject();
-                        String name = item.get("name").getAsString();
-                        String desc = "download " + name;
-                        item.addProperty("desc", desc);
-                        int current_res_v = dbHelper.getResVer(name);
-                        int latest_res_v = item.get("version").getAsInt();
-                        item.addProperty("version_str", getVersionString(current_res_v, latest_res_v));
-                        item.addProperty("highlight", current_res_v < latest_res_v);
+                    try {
+                        resource_info = gson.fromJson(res_result, listType);
+                        if (resource_info == null) return;
+                        for (int i = 0; i < resource_info.size(); i++) {
+                            JsonObject item = resource_info.get(i).getAsJsonObject();
+                            String name = item.get("name").getAsString();
+                            String desc = "download " + name;
+                            item.addProperty("desc", desc);
+                            int current_res_v = dbHelper.getResVer(name);
+                            int latest_res_v = item.get("version").getAsInt();
+                            item.addProperty("version_str", getVersionString(current_res_v, latest_res_v));
+                            item.addProperty("highlight", current_res_v < latest_res_v);
+                        }
+                        resource_adapter.setContext(getApplicationContext());
+                        resource_adapter.setListItem(resource_info);
+
+                        resource_adapter.notifyDataSetChanged();
+
+                        resource_load.setVisibility(View.GONE);
+                        resource_list.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        resource_load.setText("Error: " + e.getMessage());
                     }
-                    resource_adapter.setContext(getApplicationContext());
-                    resource_adapter.setListItem(resource_info);
-
-                    resource_adapter.notifyDataSetChanged();
-
-                    resource_load.setVisibility(View.GONE);
-                    resource_list.setVisibility(View.VISIBLE);
                 }
 
                 @Override
