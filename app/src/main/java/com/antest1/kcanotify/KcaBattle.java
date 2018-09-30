@@ -189,23 +189,6 @@ public class KcaBattle {
         }
     }
 
-    public static void reduce_value(boolean is_friend, JsonArray target, JsonArray idx_list, JsonArray amount_list, boolean cb_flag) {
-        reduce_value(is_friend, target, idx_list, 0, amount_list, cb_flag);
-    }
-
-    public static void reduce_value(boolean is_friend, JsonArray target, JsonArray idx_list, int offset, JsonArray amount_list, boolean cb_flag) {
-        for (int t = 0; t < idx_list.size(); t++) {
-            int idx = cnv(idx_list.get(t)) + offset;
-            int amount = cnv(amount_list.get(t));
-            if (idx >= 0 && idx < target.size()) {
-                int before_value = target.get(idx).getAsInt();
-                int after_value = before_value - amount;
-                if (is_friend && after_value <= 0) after_value = damecon_calculate(idx, after_value, cb_flag);
-                target.set(idx, new JsonPrimitive(after_value));
-            }
-        }
-    }
-
     public static int damecon_calculate(int idx, int value, boolean cb_flag) {
         int max_hp = 1;
         JsonArray fleet_data;
@@ -600,8 +583,12 @@ public class KcaBattle {
             int eflag = at_eflag.get(i).getAsInt();
             JsonArray target = df_list.get(i).getAsJsonArray();
             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
-            if (eflag == 0) reduce_value(false, enemyAfterHps, target, target_dmg, false);
-            else reduce_value(true, friendAfterHps, target, target_dmg, false);
+            for (int j = 0; j < target.size(); j++) {
+                int target_val = cnv(target.get(j));
+                int dmg_val = cnv(target_dmg.get(j));
+                if (eflag == 0) reduce_value(false, enemyAfterHps, target_val, dmg_val, false);
+                else reduce_value(true, friendAfterHps, target_val, dmg_val, false);
+            }
         }
     }
 
@@ -614,14 +601,19 @@ public class KcaBattle {
             JsonArray target = df_list.get(i).getAsJsonArray();
             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
 
-            boolean friend_cb_target_flag = false;
-            if (combined_type == COMBINED_A && phase == 1) friend_cb_target_flag = true;
-            if (combined_type == COMBINED_W && phase == 3) friend_cb_target_flag = true;
-            if (combined_type == 0 && target.get(0).getAsInt() >= 6) friend_cb_target_flag = true;
+            boolean friend_cb_target_flag;
+            for (int j = 0; j < target.size(); j++) {
+                int target_val = cnv(target.get(j));
+                int dmg_val = cnv(target_dmg.get(j));
+                friend_cb_target_flag = false;
+                if (combined_type == COMBINED_A && phase == 1) friend_cb_target_flag = true;
+                if (combined_type == COMBINED_W && phase == 3) friend_cb_target_flag = true;
+                if (combined_type == 0 && target_val >= 6) friend_cb_target_flag = true;
 
-            if (eflag == 0) reduce_value(false, enemyAfterHps, target, target_dmg, false);
-            else if (friend_cb_target_flag) reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
-            else reduce_value(true, friendAfterHps, target, target_dmg, false);
+                if (eflag == 0) reduce_value(false, enemyAfterHps, target_val, dmg_val, false);
+                else if (friend_cb_target_flag) reduce_value(true, friendCbAfterHps, target_val - 6, dmg_val, true);
+                else reduce_value(true, friendAfterHps, target_val, dmg_val, false);
+            }
         }
     }
 
@@ -633,15 +625,18 @@ public class KcaBattle {
             int eflag = at_eflag.get(i).getAsInt();
             JsonArray target = df_list.get(i).getAsJsonArray();
             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
-
-            boolean target_idx_cb = target.get(0).getAsInt() >= 6;
-            boolean target_idx_valid = target.get(0).getAsInt() != -1;
-            if (eflag == 0) {
-                if (target_idx_cb) reduce_value(false, enemyCbAfterHps, target, -6, target_dmg, true);
-                else if (target_idx_valid) reduce_value(false, enemyAfterHps, target, target_dmg, false);
-            } else { // Do not count damage for friend fleet
-                //if (isCombinedFleetInSortie() && target_idx_cb) reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
-                //else if (target_idx_valid) reduce_value(true, friendAfterHps, target, target_dmg, false);
+            for (int j = 0; j < target.size(); j++) {
+                int target_val = cnv(target.get(j));
+                int dmg_val = cnv(target_dmg.get(j));
+                boolean target_idx_cb = target.get(0).getAsInt() >= 6;
+                boolean target_idx_valid = target.get(0).getAsInt() != -1;
+                if (eflag == 0) {
+                    if (target_idx_cb) reduce_value(false, enemyCbAfterHps, target_val - 6, dmg_val, true);
+                    else if (target_idx_valid) reduce_value(false, enemyAfterHps, target_val, dmg_val, false);
+                } else { // Do not count damage for friend fleet
+                    //if (isCombinedFleetInSortie() && target_idx_cb) reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
+                    //else if (target_idx_valid) reduce_value(true, friendAfterHps, target, target_dmg, false);
+                }
             }
         }
     }
@@ -655,35 +650,39 @@ public class KcaBattle {
             JsonArray target = df_list.get(i).getAsJsonArray();
             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
 
-            switch (phase) {
-                case PHASE_1:
-                    if (eflag == 0) reduce_value(false, enemyAfterHps, target, target_dmg, false);
-                    else reduce_value(true, friendAfterHps, target, target_dmg, false);
-                    break;
-                case PHASE_2:
-                    if (eflag == 0)
-                        reduce_value(false, enemyCbAfterHps, target, -6, target_dmg, true);
-                    else if (is_combined)
-                        reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
-                    else reduce_value(true, friendAfterHps, target, target_dmg, false);
-                    break;
-                case PHASE_3:
-                    boolean target_idx_cb = target.get(0).getAsInt() >= 6;
-                    boolean target_idx_valid = target.get(0).getAsInt() != -1;
-                    if (eflag == 0) {
-                        if (target_idx_cb)
-                            reduce_value(false, enemyCbAfterHps, target, -6, target_dmg, true);
-                        else if (target_idx_valid)
-                            reduce_value(false, enemyAfterHps, target, target_dmg, false);
-                    } else {
-                        if (isCombinedFleetInSortie() && target_idx_cb)
-                            reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
-                        else if (target_idx_valid)
-                            reduce_value(true, friendAfterHps, target, target_dmg, false);
-                    }
-                    break;
-                default:
-                    break;
+            for (int j = 0; j < target.size(); j++) {
+                int target_val = cnv(target.get(j));
+                int dmg_val = cnv(target_dmg.get(j));
+                switch (phase) {
+                    case PHASE_1:
+                        if (eflag == 0) reduce_value(false, enemyAfterHps, target_val, dmg_val, false);
+                        else reduce_value(true, friendAfterHps, target_val, dmg_val, false);
+                        break;
+                    case PHASE_2:
+                        if (eflag == 0)
+                            reduce_value(false, enemyCbAfterHps, target_val - 6, dmg_val, true);
+                        else if (is_combined)
+                            reduce_value(true, friendCbAfterHps, target_val - 6, dmg_val, true);
+                        else reduce_value(true, friendAfterHps, target_val, dmg_val, false);
+                        break;
+                    case PHASE_3:
+                        boolean target_idx_cb = target_val >= 6;
+                        boolean target_idx_valid = target_val != -1;
+                        if (eflag == 0) {
+                            if (target_idx_cb)
+                                reduce_value(false, enemyCbAfterHps, target_val - 6, dmg_val, true);
+                            else if (target_idx_valid)
+                                reduce_value(false, enemyAfterHps, target_val, dmg_val, false);
+                        } else {
+                            if (isCombinedFleetInSortie() && target_idx_cb)
+                                reduce_value(true, friendCbAfterHps, target_val - 6, dmg_val, true);
+                            else if (target_idx_valid)
+                                reduce_value(true, friendAfterHps, target_val, dmg_val, false);
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -697,12 +696,16 @@ public class KcaBattle {
             int eflag = at_eflag.get(i).getAsInt();
             JsonArray target = df_list.get(i).getAsJsonArray();
             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
-            if (eflag == 0) {
-                if (activedeck[1] == 1) reduce_value(false, enemyAfterHps, target, target_dmg, false);
-                else reduce_value(false, enemyCbAfterHps, target, -6, target_dmg, true);
-            } else {
-                if (!isCombinedFleetInSortie()) reduce_value(true, friendAfterHps, target, target_dmg, false);
-                else reduce_value(true, friendCbAfterHps, target, -6, target_dmg, true);
+            for (int j = 0; j < target.size(); j++) {
+                int target_val = cnv(target.get(j));
+                int dmg_val = cnv(target_dmg.get(j));
+                if (eflag == 0) {
+                    if (activedeck[1] == 1) reduce_value(false, enemyAfterHps, target_val, dmg_val, false);
+                    else reduce_value(false, enemyCbAfterHps, target_val - 6, dmg_val, true);
+                } else {
+                    if (!isCombinedFleetInSortie()) reduce_value(true, friendAfterHps, target_val, dmg_val, false);
+                    else reduce_value(true, friendCbAfterHps, target_val - 6, dmg_val, true);
+                }
             }
          }
     }
