@@ -255,6 +255,17 @@
         </service>
 
         <receiver
+            android:name=".KcaAutomationReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="Automation Receiver" >
+            <intent-filter>
+                <action android:name="sniffer_on" />
+                <action android:name="sniffer_off" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
             android:name=".KcaTimerWidget"
             android:label="@string/widget_timer_name">
             <meta-data
