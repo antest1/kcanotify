@@ -65,6 +65,8 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_LAST_UPDATE_CHECK;
+import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
+import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_PREFIX;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
@@ -150,6 +152,11 @@ public class InitStartActivity extends Activity {
         appmessage = findViewById(R.id.app_message);
         appmessage.setText("");
 
+        int fairy_id = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
+        if (!FAIRY_SPECIAL_FLAG && fairy_id >= FAIRY_SPECIAL_PREFIX) {
+            setPreferences(getApplicationContext(), PREF_FAIRY_ICON, 0);
+        }
+
         // Initialize resources
         setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
         if (Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION)) == 0) {
@@ -187,7 +194,6 @@ public class InitStartActivity extends Activity {
                 if (dbHelper != null) dbHelper.recordErrorLog(ERROR_TYPE_DATALOAD, "list.json", "init", "1", getStringFromException(e1));
             }
         }
-
 
         boolean all_passed = KcaUtils.validateResourceFiles(getApplicationContext(), dbHelper);
         if (all_passed) {

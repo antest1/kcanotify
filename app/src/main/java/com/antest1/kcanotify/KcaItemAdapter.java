@@ -15,6 +15,10 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
+import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_PREFIX;
+import static com.antest1.kcanotify.KcaUtils.getId;
+
 public class KcaItemAdapter extends BaseAdapter {
     public static final int IMAGE_SIZE = 128;
     Context context;

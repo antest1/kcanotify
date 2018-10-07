@@ -44,6 +44,9 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class KcaFairySelectActivity extends AppCompatActivity {
     public final static String FAIRY_INFO_FILENAME = "icon_info.json";
+    public final static boolean FAIRY_SPECIAL_FLAG = false;
+    public final static int FAIRY_SPECIAL_PREFIX = 900;
+    public final static int FAIRY_SPECIAL_COUNT = 0;
 
     Toolbar toolbar;
     private static Handler sHandler;
@@ -100,6 +103,12 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         boolean fairy_downloaded = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_DOWN_FLAG);
         int fairy_size = fairy_downloaded ? icon_info.size() : 1;
 
+        if (FAIRY_SPECIAL_FLAG) {
+            for (int i = 0; i < FAIRY_SPECIAL_COUNT; i++) {
+                fairy_id.add("noti_icon_".concat(String.valueOf(i + FAIRY_SPECIAL_PREFIX)));
+            }
+        }
+
         for (int i = 0; i < fairy_size; i++) {
             fairy_id.add("noti_icon_".concat(String.valueOf(i)));
         }
@@ -117,11 +126,12 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int value = Integer.parseInt(fairy_id.get(position).replace("noti_icon_", ""));
                 setPreferences(getApplicationContext(), PREF_FAIRY_REV, 0);
-                setPreferences(getApplicationContext(), PREF_FAIRY_ICON, String.valueOf(position));
+                setPreferences(getApplicationContext(), PREF_FAIRY_ICON, String.valueOf(value));
                 if (KcaService.getServiceStatus()) {
                     JsonObject data = new JsonObject();
-                    data.addProperty("id", position);
+                    data.addProperty("id", value);
                     Bundle bundle = new Bundle();
                     bundle.putString("url", KCA_API_PREF_FAIRY_CHANGED);
                     bundle.putString("data", data.toString());

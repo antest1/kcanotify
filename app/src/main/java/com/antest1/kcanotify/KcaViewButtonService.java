@@ -71,6 +71,8 @@ import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_REV;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_QUEST_FAIRY_GLOW;
+import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
+import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_PREFIX;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
@@ -251,8 +253,12 @@ public class KcaViewButtonService extends Service {
             viewBitmapId = "noti_icon_".concat(fairyIdValue);
             setFairyImage();
             if (icon_info.size() > 0) {
-                JsonObject fairy_info = icon_info.get(Integer.parseInt(fairyIdValue)).getAsJsonObject();
-                int rev_internal = fairy_info.has("rev") ? fairy_info.get("rev").getAsInt() : 0;
+                int fairy_id = Integer.parseInt(fairyIdValue);
+                int rev_internal = 0;
+                if (fairy_id < icon_info.size()) {
+                    JsonObject fairy_info = icon_info.get(fairy_id).getAsJsonObject();
+                    rev_internal = fairy_info.has("rev") ? fairy_info.get("rev").getAsInt() : 0;
+                }
                 int rev_setting = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_REV));
                 if ((rev_internal + rev_setting) % 2 == 1) {
                     viewbutton.setScaleX(-1.0f);
@@ -358,13 +364,19 @@ public class KcaViewButtonService extends Service {
                 String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
                 viewBitmapId = "noti_icon_".concat(fairyIdValue);
                 setFairyImage();
-                JsonObject fairy_info = icon_info.get(Integer.parseInt(fairyIdValue)).getAsJsonObject();
-                int rev_internal = fairy_info.has("rev") ? fairy_info.get("rev").getAsInt() : 0;
-                int rev_setting = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_REV));
-                if ((rev_internal + rev_setting) % 2 == 1) {
-                    viewbutton.setScaleX(-1.0f);
-                } else {
-                    viewbutton.setScaleX(1.0f);
+                if (icon_info.size() > 0) {
+                    int fairy_id = Integer.parseInt(fairyIdValue);
+                    int rev_internal = 0;
+                    if (fairy_id < icon_info.size()) {
+                        JsonObject fairy_info = icon_info.get(fairy_id).getAsJsonObject();
+                        rev_internal = fairy_info.has("rev") ? fairy_info.get("rev").getAsInt() : 0;
+                    }
+                    int rev_setting = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_REV));
+                    if ((rev_internal + rev_setting) % 2 == 1) {
+                        viewbutton.setScaleX(-1.0f);
+                    } else {
+                        viewbutton.setScaleX(1.0f);
+                    }
                 }
             }
             if (intent.getAction().equals(RESET_FAIRY_STATUS_ACTION)) {

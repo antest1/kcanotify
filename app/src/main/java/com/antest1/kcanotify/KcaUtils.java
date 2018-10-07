@@ -106,7 +106,8 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_RES_USELOCAL;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
-
+import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
+import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_PREFIX;
 
 
 public class KcaUtils {
@@ -672,24 +673,31 @@ public class KcaUtils {
         Bitmap bitmap = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        try {
-            bitmap = BitmapFactory.decodeStream(new FileInputStream(myImageFile), null, options);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
-            if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getFairyImageFromStorage", "0", getStringFromException(e));
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.noti_icon_0);
-        }
-        if (bitmap == null) {
-            setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
-            if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getFairyImageFromStorage", "0", "bitmap==null");
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.noti_icon_0);
+
+        int fairy_id = Integer.parseInt(name.replace("noti_icon_", ""));
+        if (FAIRY_SPECIAL_FLAG && fairy_id >= FAIRY_SPECIAL_PREFIX) {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), getId(name, R.mipmap.class));
+        } else {
+            try {
+                bitmap = BitmapFactory.decodeStream(new FileInputStream(myImageFile), null, options);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
+                if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getFairyImageFromStorage", "0", getStringFromException(e));
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.noti_icon_0);
+            }
+            if (bitmap == null) {
+                setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
+                if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getFairyImageFromStorage", "0", "bitmap==null");
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.noti_icon_0);
+            }
         }
         return bitmap;
     }
 
     public static void setFairyImageFromStorage(Context context, String name, ImageView view, int dp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        int fairy_id = Integer.parseInt(name.replace("noti_icon_", ""));
         int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("fairy", Context.MODE_PRIVATE);
@@ -701,6 +709,8 @@ public class KcaUtils {
             } else {
                 GlideApp.with(context).load(myImageFile.getPath()).into(view);
             }
+        } else if (FAIRY_SPECIAL_FLAG && fairy_id >= FAIRY_SPECIAL_PREFIX) {
+            view.setImageResource(getId(name, R.mipmap.class));
         } else {
             view.setImageResource(R.mipmap.noti_icon_0);
         }
