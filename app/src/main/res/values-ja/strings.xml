@@ -377,6 +377,7 @@
     <string name="setting_menu_kand_desc_fairy_select">共にする妖精さんを選択</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">妖精を艦これ画面でのみ表示する</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">妖精の表示/隠しに時間がかかります。</string>
+    <string name="action_fairy_rev">反転</string>
     <string name="current_fairy_changed_in_next">※現在戦闘予報/任務情報が終わった後に変更されます。</string>
     <string name="setting_menu_app_title_down">APKダウンロードサイトの設定</string>
     <string name="language_system">システム設定を使用</string>

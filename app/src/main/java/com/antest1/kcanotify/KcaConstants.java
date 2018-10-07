@@ -461,6 +461,7 @@ public final class KcaConstants {
     public static final String PREF_CHECK_UPDATE_START = "check_update_start";
     public static final String PREF_FAIRY_DOWN_FLAG = "fairy_downloaded_flag";
     public static final String PREF_RES_USELOCAL = "res_uselocal";
+    public static final String PREF_FAIRY_REV = "fairy_rev";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -520,7 +521,8 @@ public final class KcaConstants {
             PREF_FIX_VIEW_LOC,
             PREF_LAST_QUEST_CHECK,
             PREF_KCAQSYNC_USE,
-            PREF_KCAQSYNC_PASS
+            PREF_KCAQSYNC_PASS,
+            PREF_FAIRY_REV
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

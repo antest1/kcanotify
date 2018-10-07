@@ -25,6 +25,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_DOWN_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_REV;
 import static com.antest1.kcanotify.KcaConstants.PREF_FIX_VIEW_LOC;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCAQSYNC_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
@@ -198,6 +199,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_SNIFFER_MODE:
             case PREF_KCARESOURCE_VERSION:
             case PREF_LAST_QUEST_CHECK:
+            case PREF_FAIRY_REV:
                 return "0";
             case PREF_ALARM_DELAY:
                 return "61";

@@ -206,6 +206,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_fairy_select">Select Fairy to bring with</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">Show Fairy only in Kancolle Screen</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">There is a delay in showing/hiding fairy.</string>
+    <string name="action_fairy_rev">Reverse</string>
     <string name="current_fairy_changed_in_next">※ Fairy will be changed after current BattleView/QuestView ends.</string>
     <string name="setting_menu_kand_title_adv_network">Advanced Network Settings</string>
     <string name="setting_menu_kand_warn_adv_network">Warning: Setting these incorrectly may make VPN Service unusable. Don\'t change these options unless you know what you are doing! You need to restart VPN Service to make these options effective.</string>

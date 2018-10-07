@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.app.usage.UsageEvents;
@@ -67,6 +68,7 @@ import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_REV;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_QUEST_FAIRY_GLOW;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
@@ -250,7 +252,9 @@ public class KcaViewButtonService extends Service {
             setFairyImage();
             if (icon_info.size() > 0) {
                 JsonObject fairy_info = icon_info.get(Integer.parseInt(fairyIdValue)).getAsJsonObject();
-                if (fairy_info.has("rev") && fairy_info.get("rev").getAsInt() == 1) {
+                int rev_internal = fairy_info.has("rev") ? fairy_info.get("rev").getAsInt() : 0;
+                int rev_setting = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_REV));
+                if ((rev_internal + rev_setting) % 2 == 1) {
                     viewbutton.setScaleX(-1.0f);
                 } else {
                     viewbutton.setScaleX(1.0f);
@@ -354,13 +358,13 @@ public class KcaViewButtonService extends Service {
                 String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
                 viewBitmapId = "noti_icon_".concat(fairyIdValue);
                 setFairyImage();
-                if (icon_info.size() > 0) {
-                    JsonObject fairy_info = icon_info.get(Integer.parseInt(fairyIdValue)).getAsJsonObject();
-                    if (fairy_info.has("rev") && fairy_info.get("rev").getAsInt() == 1) {
-                        viewbutton.setScaleX(-1.0f);
-                    } else {
-                        viewbutton.setScaleX(1.0f);
-                    }
+                JsonObject fairy_info = icon_info.get(Integer.parseInt(fairyIdValue)).getAsJsonObject();
+                int rev_internal = fairy_info.has("rev") ? fairy_info.get("rev").getAsInt() : 0;
+                int rev_setting = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_REV));
+                if ((rev_internal + rev_setting) % 2 == 1) {
+                    viewbutton.setScaleX(-1.0f);
+                } else {
+                    viewbutton.setScaleX(1.0f);
                 }
             }
             if (intent.getAction().equals(RESET_FAIRY_STATUS_ACTION)) {
@@ -606,6 +610,7 @@ public class KcaViewButtonService extends Service {
         setFairyImage();
     }
 
+    @SuppressLint("WrongConstant")
     public String checkForegroundPackage() {
         String classByUsageStats = null;
         String packageNameByUsageStats = null;

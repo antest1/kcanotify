@@ -37,6 +37,7 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_FAIRY_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_DOWN_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_REV;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
@@ -116,6 +117,7 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                setPreferences(getApplicationContext(), PREF_FAIRY_REV, 0);
                 setPreferences(getApplicationContext(), PREF_FAIRY_ICON, String.valueOf(position));
                 if (KcaService.getServiceStatus()) {
                     JsonObject data = new JsonObject();
@@ -152,6 +154,21 @@ public class KcaFairySelectActivity extends AppCompatActivity {
                 return true;
             case R.id.action_fairy_down:
                 new KcaResourceDownloader().execute();
+                return true;
+            case R.id.action_fairy_rev:
+                int current_rev = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_REV));
+                setPreferences(getApplicationContext(), PREF_FAIRY_REV, 1 - current_rev);
+                if (KcaService.getServiceStatus()) {
+                    int current_id = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
+                    JsonObject data = new JsonObject();
+                    data.addProperty("id", current_id);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url", KCA_API_PREF_FAIRY_CHANGED);
+                    bundle.putString("data", data.toString());
+                    Message sMsg = sHandler.obtainMessage();
+                    sMsg.setData(bundle);
+                    sHandler.sendMessage(sMsg);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
