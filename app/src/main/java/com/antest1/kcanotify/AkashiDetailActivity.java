@@ -17,7 +17,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,17 +31,25 @@ import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaApiData.removeKai;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_MATERIALS;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_USEITEMS;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaUtils.getId;
+import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 
 public class AkashiDetailActivity extends AppCompatActivity {
     Toolbar toolbar;
+    KcaDBHelper dbHelper;
     static Gson gson = new Gson();
     TextView itemNameTextView, itemImprovDefaultShipTextView;
     JsonObject itemImprovementData;
+
+    TextView dmat_count, smat_count;
+    TextView current_date;
 
     public AkashiDetailActivity() {
         LocaleUtils.updateConfig(this);
@@ -56,6 +67,43 @@ public class AkashiDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.action_akashi_detail));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+
+        Calendar calendar = getJapanCalendarInstance();
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0(Sun) ~ 6(Sat)
+        Date date = calendar.getTime();
+        SimpleDateFormat date_format = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+        current_date = findViewById(R.id.current_date);
+        current_date.setText(KcaUtils.format("%s (%s)", date_format.format(date),
+                getStringWithLocale(getId("akashi_term_day_" + dayOfWeek, R.string.class))));
+
+        dmat_count = findViewById(R.id.count_dmat);
+        smat_count = findViewById(R.id.count_smat);
+        JsonArray material_data = dbHelper.getJsonArrayValue(DB_KEY_MATERIALS);
+        if (material_data != null) {
+            JsonElement dmat_value = material_data.get(6);
+            String dmat_str = dmat_value.isJsonPrimitive() ? dmat_value.getAsString() : dmat_value.getAsJsonObject().get("api_value").getAsString();
+            dmat_count.setText(String.valueOf(dmat_str));
+
+            JsonElement smat_value = material_data.get(7);
+            String smat_str = smat_value.isJsonPrimitive() ? smat_value.getAsString() : smat_value.getAsJsonObject().get("api_value").getAsString();
+            smat_count.setText(String.valueOf(smat_str));
+        }
+
+        /*
+        JsonArray useitem_data = dbHelper.getJsonArrayValue(DB_KEY_USEITEMS);
+        if (useitem_data != null) {
+            for (int i = 0; i < useitem_data.size(); i++) {
+                JsonObject item = useitem_data.get(i).getAsJsonObject();
+                int key = item.get("api_id").getAsInt();
+                if (key == 3) { // DEVMAT
+                    dmat_count.setText(String.valueOf(item.get("api_count").getAsInt()));
+                } else if (key == 4) { // SCREW
+                    smat_count.setText(String.valueOf(item.get("api_count").getAsInt()));
+                }
+            }
+        }*/
 
         if (!getIntent().hasExtra("item_id")) {
             finish();

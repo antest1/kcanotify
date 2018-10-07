@@ -897,6 +897,7 @@ public class KcaService extends Service {
 
                     if (reqPortApiData.has("api_material")) {
                         JsonArray material_data = reqPortApiData.getAsJsonArray("api_material");
+                        dbHelper.putValue(DB_KEY_MATERIALS, material_data.toString());
                         recordResourceLog(material_data, true);
                     }
                 }
@@ -928,6 +929,7 @@ public class KcaService extends Service {
             if (url.equals(API_GET_MEMBER_MATERIAL)) {
                 if (jsonDataObj.has("api_data")) {
                     JsonArray api_data = jsonDataObj.get("api_data").getAsJsonArray();
+                    dbHelper.putValue(DB_KEY_MATERIALS, api_data.toString());
                     recordResourceLog(api_data, true);
                 }
                 return;

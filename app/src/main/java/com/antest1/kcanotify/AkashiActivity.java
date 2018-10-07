@@ -27,19 +27,25 @@ import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_MATERIALS;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_USEITEMS;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_RESOURCELOG_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
+import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
@@ -54,11 +60,15 @@ public class AkashiActivity extends AppCompatActivity {
     ListView listview;
     int currentClicked = 0;
 
+    TextView dmat_count, smat_count;
+    TextView current_date;
+
     Button starButton, safeButton, filterButton;
     boolean isStarChecked, isSafeChecked = false;
     ArrayList<KcaAkashiListViewItem> listViewItemList;
 
     KcaDBHelper dbHelper;
+    KcaResourceLogger resourceLogger;
     KcaAkashiListViewAdpater adapter;
     UpdateHandler handler;
 
@@ -80,6 +90,7 @@ public class AkashiActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        resourceLogger = new KcaResourceLogger(getApplicationContext(), null, KCANOTIFY_RESOURCELOG_VERSION);
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
         loadTranslationData(getApplicationContext());
@@ -93,6 +104,38 @@ public class AkashiActivity extends AppCompatActivity {
         filterButton = (Button) findViewById(R.id.akashi_btn_filter);
         isStarChecked = getBooleanPreferences(getApplicationContext(), PREF_AKASHI_STAR_CHECKED);
         setStarButton();
+
+        Date date = calendar.getTime();
+        SimpleDateFormat date_format = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+        current_date = findViewById(R.id.current_date);
+        current_date.setText(KcaUtils.format("%s (%s)", date_format.format(date),
+                getStringWithLocale(getId("akashi_term_day_" + dayOfWeek, R.string.class))));
+
+        dmat_count = findViewById(R.id.count_dmat);
+        smat_count = findViewById(R.id.count_smat);
+        JsonArray material_data = dbHelper.getJsonArrayValue(DB_KEY_MATERIALS);
+        if (material_data != null) {
+            JsonElement dmat_value = material_data.get(6);
+            String dmat_str = dmat_value.isJsonPrimitive() ? dmat_value.getAsString() : dmat_value.getAsJsonObject().get("api_value").getAsString();
+            dmat_count.setText(String.valueOf(dmat_str));
+
+            JsonElement smat_value = material_data.get(7);
+            String smat_str = smat_value.isJsonPrimitive() ? smat_value.getAsString() : smat_value.getAsJsonObject().get("api_value").getAsString();
+            smat_count.setText(String.valueOf(smat_str));
+        }
+
+        /*
+        JsonArray useitem_data = dbHelper.getJsonArrayValue(DB_KEY_USEITEMS);
+        if (useitem_data != null) {
+            for (int i = 0; i < useitem_data.size(); i++) {
+                JsonObject item = useitem_data.get(i).getAsJsonObject();
+                int key = item.get("api_id").getAsInt();
+                if (key == 3) { // DEVMAT
+                } else if (key == 4) { // SCREW
+                    smat_count.setText(String.valueOf(item.get("api_count").getAsInt()));
+                }
+            }
+        }*/
 
         handler = new UpdateHandler(this);
         adapter = new KcaAkashiListViewAdpater();

@@ -90,6 +90,19 @@ public class KcaResourceLogger extends SQLiteOpenHelper {
     }
 
 
+    public JsonObject getLatestResourceLog() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * from "
+                .concat(resourcelog_table_name)
+                .concat(" ORDER BY timestamp DESC LIMIT 1"), null);
+        JsonObject result = new JsonObject();
+        while (c.moveToNext()) {
+            result = retrieveDataFromCursor(c);
+        }
+        c.close();
+        return result;
+    }
+
     public List<JsonObject> getResourceLogInRange(long start, long end) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<JsonObject> result = new ArrayList<>();

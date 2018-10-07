@@ -19,6 +19,95 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background"
+        android:fadingEdge="vertical"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginStart="4dp"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp">
+
+            <TextView
+                android:id="@+id/current_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0000/00/00 (Mon)" />
+
+            <ImageView
+                android:id="@+id/icon_dmat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentRight="false"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_toLeftOf="@+id/count_dmat"
+                android:src="@mipmap/icon_dmat"
+                app:srcCompat="@mipmap/icon_dmat" />
+
+            <TextView
+                android:id="@+id/count_dmat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/icon_smat"
+                android:layout_toStartOf="@+id/icon_smat"
+                android:text="0"
+                android:textColor="@color/colorConsumableDevmat"
+                android:textSize="14dp" />
+
+            <ImageView
+                android:id="@+id/icon_smat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentRight="false"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_toLeftOf="@+id/count_smat"
+                android:src="@mipmap/icon_smat"
+                app:srcCompat="@mipmap/icon_smat" />
+
+            <TextView
+                android:id="@+id/count_smat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:text="0"
+                android:textColor="@color/colorConsumableScrew"
+                android:textSize="14dp" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:srcCompat="@color/colorAccent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background"
         android:orientation="vertical"
@@ -26,14 +115,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/akashi_btn_star"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="2dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginLeft="4dp"
@@ -44,12 +133,12 @@
                 android:background="@color/colorBtn"
                 android:text="☆"
                 android:textColor="@color/colorBtnText"
-                android:textSize="20dp" />
+                android:textSize="16dp" />
 
             <Button
                 android:id="@+id/akashi_btn_safe"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="2dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginLeft="4dp"
@@ -60,12 +149,12 @@
                 android:background="@color/colorBtn"
                 android:text="@string/aa_btn_safe_state0"
                 android:textColor="@color/colorBtnText"
-                android:textSize="20dp" />
+                android:textSize="16dp" />
 
             <Button
                 android:id="@+id/akashi_btn_filter"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="2dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginLeft="4dp"
@@ -76,7 +165,7 @@
                 android:background="@color/colorBtn"
                 android:text="@string/aa_btn_filter"
                 android:textColor="@color/colorBtnText"
-                android:textSize="20dp" />
+                android:textSize="16dp" />
 
         </LinearLayout>
 
