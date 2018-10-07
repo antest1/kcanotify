@@ -278,12 +278,39 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:singleLine="true"
                         android:text="1500/1500"
                         android:textColor="@color/white"
                         android:textSize="@dimen/fleetview_text_tbutton" />
+
+                    <ImageView
+                        android:id="@+id/fleetview_cnt3_icon"
+                        android:layout_width="@dimen/fleetview_text_tbutton"
+                        android:layout_height="@dimen/fleetview_text_tbutton"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="1"
+                        android:src="@mipmap/ic_saury"
+                        app:srcCompat="@mipmap/ic_saury" />
+
+                    <TextView
+                        android:id="@+id/fleetview_cnt3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="10"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/fleetview_text_tbutton" />
+
                 </LinearLayout>
 
                 <TextView

@@ -235,7 +235,7 @@
 
 
     </LinearLayout>
-
+    <!--
     <ImageView
         android:id="@+id/special_image"
         android:layout_width="match_parent"
@@ -246,6 +246,6 @@
         android:padding="20dp"
         android:src="@mipmap/special_image"
         android:visibility="gone"
-        app:srcCompat="@mipmap/special_image" />
+        app:srcCompat="@mipmap/special_image" />-->
 
 </RelativeLayout>

@@ -177,7 +177,6 @@ public class KcaFleetViewService extends Service {
                 expview.setText(KcaUtils.format(
                         getStringWithLocale(R.string.fleetview_expview),
                         exp_score[0], exp_score[1]));
-
                 break;
             case HQINFO_SECOUNT:
                 TextView shipcntview = fleetHqInfoView.findViewById(R.id.fleetview_cnt1);
@@ -205,6 +204,24 @@ public class KcaFleetViewService extends Service {
                     equipcntview.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                     equipcntviewicon.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                             R.color.white), PorterDuff.Mode.MULTIPLY);
+                }
+
+                /* Saury Event */
+                ImageView saurycntviewicon = fleetHqInfoView.findViewById(R.id.fleetview_cnt3_icon);
+                TextView saurycntview = fleetHqInfoView.findViewById(R.id.fleetview_cnt3);
+                saurycntviewicon.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                        R.color.colorItemDrop), PorterDuff.Mode.MULTIPLY);
+                saurycntview.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItemDrop));
+                saurycntview.setText("0");
+                JsonArray useitem_data = dbHelper.getJsonArrayValue(DB_KEY_USEITEMS);
+                if (useitem_data != null) {
+                    for (int i = 0; i < useitem_data.size(); i++) {
+                        JsonObject item = useitem_data.get(i).getAsJsonObject();
+                        int key = item.get("api_id").getAsInt();
+                        if (key == 68) { // SAMMA
+                            saurycntview.setText(String.valueOf(item.get("api_count").getAsInt()));
+                        }
+                    }
                 }
                 break;
             /*

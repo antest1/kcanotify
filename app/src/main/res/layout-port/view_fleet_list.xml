@@ -327,12 +327,40 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginRight="4dp"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:singleLine="true"
                         android:text="1500/1500"
                         android:textColor="@color/white"
                         android:textSize="12dp" />
+
+                    <ImageView
+                        android:id="@+id/fleetview_cnt3_icon"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:paddingEnd="2dp"
+                        android:paddingRight="2dp"
+                        android:src="@mipmap/ic_saury"
+                        android:translationX="1dp"
+                        app:srcCompat="@mipmap/ic_saury" />
+
+                    <TextView
+                        android:id="@+id/fleetview_cnt3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="10"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+
                 </LinearLayout>
 
                 <TextView
