@@ -201,6 +201,9 @@ public class UpdateCheckActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
         super.onDestroy();
     }
 
@@ -468,7 +471,9 @@ public class UpdateCheckActivity extends AppCompatActivity {
         }
 
         private void workFinished()  {
-            mProgressDialog.dismiss();
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
+            }
             if (totalFiles == 0) {
                 Toast.makeText(getApplicationContext(), "No file to download", Toast.LENGTH_LONG).show();
             } else {
