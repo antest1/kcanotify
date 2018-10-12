@@ -22,6 +22,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -99,6 +100,7 @@ public class InitStartActivity extends Activity {
     KcaDownloader downloader;
     ProgressDialog mProgressDialog;
     TextView appname, appversion, appmessage;
+    ImageView appfront;
 
     boolean is_destroyed = false;
     int fairy_flag, new_resversion;
@@ -151,6 +153,10 @@ public class InitStartActivity extends Activity {
 
         appmessage = findViewById(R.id.app_message);
         appmessage.setText("");
+
+        appfront = findViewById(R.id.app_icon);
+        int img_id = (int) (Math.random() * 4);
+        appfront.setImageResource(getId(KcaUtils.format("saury_front_%d", img_id), R.mipmap.class));
 
         int fairy_id = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
         if (!FAIRY_SPECIAL_FLAG && fairy_id >= FAIRY_SPECIAL_PREFIX) {
