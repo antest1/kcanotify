@@ -1654,12 +1654,6 @@
 		"tracking": [[0, 4]],
 		"unlock": [636]
 	},
-	"313": {
-		"code": "C10",
-		"name": "Mass Exercises for Fall",
-		"desc": "Secure 8 victories in Exercises within the same day.",
-		"memo": "\u27a3 Rewards a Present Box"
-	},
 	"316": {
 		"code": "C13",
 		"name": "Strive to Improve the Transport Force's Level of Training!",
@@ -1736,6 +1730,12 @@
         "desc": "Secure 4 victories in Exercises within the same day using at least four of Asashio-class and up to 2 additional ships.",
         "memo": "\u27a3Rewards 3 Buckets and either 4 Development Materials OR a Type 3 Depth Charge Projector OR a Furniture Fairy"
     },
+	"313": {
+		"code": "C26",
+		"name": "Mass Exercises for Fall",
+		"desc": "Secure 8 victories in Exercises within the same day.",
+		"memo": "\u27a3 Rewards a Present Box"
+	},
     
 	
 	"401": {
@@ -2651,6 +2651,26 @@
 		"desc": "Sortie to [E-2]. A-Rank+ the boss node twice.",
 		"memo": "\u27a3 Rewards a Mamiya and either 2 Type 13 Air Radars OR 2 Type 22 Surface Radars OR an Action Report"
 	},
+	
+	"290": {
+		"code": "SB30",
+		"name": "Saury Fishing: This autumn's saury is exciting too, right?",
+		"desc": "Expand the fishing grounds and catch 3 sauries, ok? Let's sortie! Waters adjacent to the Base as well as Northern Sea Area and Central Sea Area are all great for saury fishing!",
+		"memo": "Collect a total of 3 Saury / \u27a3 Rewards: \u00B6First choice: Either x6 Development Materials OR x2 Searchlight OR x3 Battle Rations \u00B6Second choice: Either x1 Type 3 SONAR OR x1 Skilled Lookouts OR x3 Improvement Materials"
+	},
+	"291": {
+		"code": "SB31",
+		"name": "Pacific Saury Fishing: I will not yeild these important fishing grounds!",
+		"desc": "Saury Fishing: I see... We should secure the fishing grounds and ensure a catch of ten sauries, huh? Roger. Huh? Fishing in the same area for a while will cause overfishing effect? Heh, it's not a problem. We'll just switch the grounds.",
+		"memo": "Collect a total of 10 Saury / \u27a3 Rewards: \u00B6First choice: Either 1 Type 95 Depth Charge OR 2 Daihatsu-class Landing Crafts OR 1 Action Report \u00B6Second choice: Either 2 WG42s OR 2 Reinforcement Expansions OR 1 Night Operation Aviation Personnel"
+	},
+	"292": {
+		"code": "SB32",
+		"name": "Pacific Saury Fishing: Big Catch, huh? We'll help.",
+		"desc": "Saury Fishing: Thanks to everybody's hard work, we've managed to secure such a large amount of sauries this Autumn as well. We're really grateful. Could you find strength for one more time? Please bear with us a little longer.",
+		"memo": "Collect a total of 30 Saury / \u27a3 Rewards: x1 Type 18 Big Catch Flag, Either x1 GFCS Mk.37 OR x1 Type 17 Big Catch Flag OR x1 Type 16 Big Catch Flag"
+	},
+	
 	"801NY2018": {
 		"code": "SB26",
 		"name": "Happy New Year! Torpedo Squadron, Commence with the Sorties!",
