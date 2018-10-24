@@ -156,7 +156,7 @@ public class InitStartActivity extends Activity {
 
         appfront = findViewById(R.id.app_icon);
         int img_id = (int) (Math.random() * 4);
-        appfront.setImageResource(getId(KcaUtils.format("saury_front_%d", img_id), R.mipmap.class));
+        appfront.setImageResource(R.mipmap.main_image);
 
         int fairy_id = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
         if (!FAIRY_SPECIAL_FLAG && fairy_id >= FAIRY_SPECIAL_PREFIX) {
