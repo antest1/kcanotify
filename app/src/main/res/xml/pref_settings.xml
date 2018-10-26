@@ -12,16 +12,6 @@
             android:title="@string/setting_menu_kand_title_language" />
 
         <ListPreference
-            android:id="@+id/sniffer_mode_value"
-            android:defaultValue="0"
-            android:entries="@array/snifferOption"
-            android:entryValues="@array/snifferOptionValue"
-            android:key="kca_sniffer_mode"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            android:title="@string/setting_menu_kand_title_sniffer_type" />
-
-        <ListPreference
             android:id="@+id/seek_type_value"
             android:defaultValue="1"
             android:entries="@array/seekTypeOption"
@@ -113,13 +103,44 @@
         android:title="@string/setting_menu_kand_title_game_data_down" />
          </Preference>
         -->
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/setting_menu_sniffer_title_head">
+        <ListPreference
+            android:id="@+id/sniffer_mode_value"
+            android:defaultValue="0"
+            android:entries="@array/snifferOption"
+            android:entryValues="@array/snifferOptionValue"
+            android:key="kca_sniffer_mode"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/setting_menu_kand_title_sniffer_type" />
+
         <Preference
-        android:defaultValue=""
-        android:persistent="false"
-        android:key="adv_network_setting"
-        android:title="@string/setting_menu_kand_title_adv_network" />
+            android:defaultValue=""
+            android:key="kca_sniffer_allow"
+            android:title="@string/setting_menu_sniffer_title_package_allow"
+            android:summary="@string/setting_menu_sniffer_desc_package_allow">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.antest1.kcanotify"
+                android:targetClass="com.antest1.kcanotify.PackageFilterActivity" />
+        </Preference>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="allow_external_filter"
+            android:title="@string/setting_menu_sniffer_title_extfilter_use"
+            android:summary="@string/setting_menu_sniffer_desc_extfilter_use" />
+
+        <Preference
+            android:defaultValue=""
+            android:persistent="false"
+            android:key="adv_network_setting"
+            android:title="@string/setting_menu_kand_title_adv_network" />
 
     </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/setting_menu_view_head">
         <Preference
             android:defaultValue=""
@@ -267,6 +288,7 @@
             android:summary="@string/setting_menu_noti_desc_disable_customtoast"
             android:title="@string/setting_menu_noti_title_disable_customtoast" />
     </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/setting_menu_stat_head">
         <CheckBoxPreference
             android:defaultValue="false"

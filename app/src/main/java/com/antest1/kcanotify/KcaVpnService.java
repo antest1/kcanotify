@@ -26,6 +26,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.os.Process;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -47,6 +51,8 @@ import eu.faircode.netguard.Util;
 
 import static com.antest1.kcanotify.KcaConstants.DMMLOGIN_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
+import static com.antest1.kcanotify.KcaConstants.PREF_ALLOW_EXTFILTER;
+import static com.antest1.kcanotify.KcaConstants.PREF_PACKAGE_ALLOW;
 import static com.antest1.kcanotify.KcaConstants.VPN_STOP_REASON;
 
 public class KcaVpnService extends VpnService {
@@ -309,6 +315,9 @@ public class KcaVpnService extends VpnService {
         jni_init(Build.VERSION.SDK_INT);
         super.onCreate();
 
+        boolean allow_ext = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_ALLOW_EXTFILTER);
+        KcaVpnData.setExternalFilter(allow_ext);
+
         HandlerThread commandThread = new HandlerThread(getString(R.string.app_name) + " command");
         commandThread.start();
         commandLooper = commandThread.getLooper();
@@ -393,6 +402,9 @@ public class KcaVpnService extends VpnService {
         boolean socks5_enable = prefs.getBoolean("socks5_enable", false);
         boolean socks5_onlykc = prefs.getBoolean("socks5_onlykc", false);
 
+        JsonArray allowed_apps = new JsonParser().parse(KcaUtils.getStringPreferences(
+                getApplicationContext(), PREF_PACKAGE_ALLOW)).getAsJsonArray();
+
         // Build VPN service
         Builder builder = new Builder();
         builder.setSession(getString(R.string.app_vpn_name));
@@ -403,6 +415,9 @@ public class KcaVpnService extends VpnService {
                     builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
                 } else if (!socks5_enable) {
                     builder.addAllowedApplication(KC_PACKAGE_NAME);
+                }
+                for (JsonElement pkg: allowed_apps) {
+                    builder.addAllowedApplication(pkg.getAsString());
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();

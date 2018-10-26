@@ -464,6 +464,8 @@ public final class KcaConstants {
     public static final String PREF_FAIRY_DOWN_FLAG = "fairy_downloaded_flag";
     public static final String PREF_RES_USELOCAL = "res_uselocal";
     public static final String PREF_FAIRY_REV = "fairy_rev";
+    public static final String PREF_PACKAGE_ALLOW = "package_allow";
+    public static final String PREF_ALLOW_EXTFILTER = "allow_external_filter";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -524,7 +526,9 @@ public final class KcaConstants {
             PREF_LAST_QUEST_CHECK,
             PREF_KCAQSYNC_USE,
             PREF_KCAQSYNC_PASS,
-            PREF_FAIRY_REV
+            PREF_FAIRY_REV,
+            PREF_PACKAGE_ALLOW,
+            PREF_ALLOW_EXTFILTER
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
@@ -556,7 +560,8 @@ public final class KcaConstants {
             PREF_SHOW_CONSTRSHIP_NAME,
             PREF_DATALOAD_ERROR_FLAG,
             PREF_FIX_VIEW_LOC,
-            PREF_KCAQSYNC_USE
+            PREF_KCAQSYNC_USE,
+            PREF_ALLOW_EXTFILTER
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

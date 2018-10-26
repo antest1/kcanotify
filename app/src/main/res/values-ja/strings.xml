@@ -642,4 +642,12 @@
     <string name="download_check_error">ストレージから読み込み中にエラーが発生しました（デフォルトデータを使用）</string>
     <string name="download_setting_checkatstart">起動時にアップデートを確認</string>
     <string name="download_use_internal_data">内蔵リソースを使用</string>
+
+    <string name="packagefilter_count_format" formatted="false">総合：%d</string>
+    <string name="packagefilter_restart">設定を適用するためには、Sniffer(VPN)を再起動してください。</string>
+    <string name="setting_menu_sniffer_title_head">Sniffer設定</string>
+    <string name="setting_menu_sniffer_title_package_allow">他のアプリケーション</string>
+    <string name="setting_menu_sniffer_title_extfilter_use">拡張IPフィルタ</string>
+    <string name="setting_menu_sniffer_desc_package_allow">ブラウザなどを使って艦これをプレイしている場合</string>
+    <string name="setting_menu_sniffer_desc_extfilter_use">ooi.moeのようなWebプロキシサービスを使用している場合は、チェックしてください。</string>
 </resources>

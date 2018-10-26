@@ -642,4 +642,13 @@
     <string name="download_check_error">데이터 로딩 중 오류 발생 (기본 데이터 사용)</string>
     <string name="download_setting_checkatstart">어플리케이션 시작 시 업데이트 확인</string>
     <string name="download_use_internal_data">내장 리소스 사용</string>
+
+    <string name="packagefilter_count_format" formatted="false">합계: %d</string>
+    <string name="packagefilter_restart">해당 설정을 적용하기 위해서는 VPN을 재시작하여야 합니다.</string>
+    <string name="setting_menu_sniffer_title_head">스니퍼 설정</string>
+    <string name="setting_menu_sniffer_title_package_allow">다른 어플리케이션에 스니퍼 적용</string>
+    <string name="setting_menu_sniffer_title_extfilter_use">확장 IP 필터 사용</string>
+    <string name="setting_menu_sniffer_desc_package_allow">다른 브라우저로 칸코레를 플레이하는 경우</string>
+    <string name="setting_menu_sniffer_desc_extfilter_use">ooi.moe와 같은 웹 프록시를 사용하는 경우 선택</string>
+
 </resources>

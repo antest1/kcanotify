@@ -16,6 +16,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
+import static com.antest1.kcanotify.KcaConstants.PREF_ALLOW_EXTFILTER;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE_START;
 import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
@@ -54,6 +55,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
 import static com.antest1.kcanotify.KcaConstants.PREF_LAST_QUEST_CHECK;
 import static com.antest1.kcanotify.KcaConstants.PREF_LAST_UPDATE_CHECK;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
+import static com.antest1.kcanotify.KcaConstants.PREF_PACKAGE_ALLOW;
 import static com.antest1.kcanotify.KcaConstants.PREF_PACKET_LOG;
 import static com.antest1.kcanotify.KcaConstants.PREF_POIDB_API_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_RES_USELOCAL;
@@ -160,6 +162,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_PACKET_LOG:
             case PREF_RES_USELOCAL:
             case PREF_FAIRY_DOWN_FLAG:
+            case PREF_ALLOW_EXTFILTER:
                 return "boolean_false";
             case PREF_KCA_EXP_VIEW:
             case PREF_KCA_NOTI_NOTIFYATSVCOFF:
@@ -213,6 +216,8 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
                 return "R.string.server_nova";
             case PREF_TIMER_WIDGET_STATE:
                 return "{}";
+            case PREF_PACKAGE_ALLOW:
+                return "[]";
             default:
                 return "";
         }

@@ -25,6 +25,7 @@ import java.util.concurrent.Executors;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_RESOURCE_URL;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_VPN_DATA_ERROR;
 import static com.antest1.kcanotify.KcaUtils.byteArrayToHex;
+import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.gzipdecompress;
 import static com.antest1.kcanotify.KcaUtils.unchunkdata;
@@ -45,6 +46,14 @@ public class KcaVpnData {
             "125.6.184", // Sasebo
             "203.104.248"  // Rabaul
     };
+
+    private static String[] kcaExtServiceList = {
+            "104.27.146.101", // ooi moe (1)
+            "104.27.147.101"  // ooi moe (2)
+    };
+
+    private static String[] prefixCheckList = kcaServerPrefixList;
+
     public static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public static int state = NONE;
@@ -73,16 +82,25 @@ public class KcaVpnData {
         handler = h;
     }
 
+    public static void setExternalFilter(boolean use_ext) {
+        if (use_ext) {
+            prefixCheckList = Arrays.copyOf(kcaServerPrefixList, kcaServerPrefixList.length + kcaExtServiceList.length);
+            System.arraycopy(kcaExtServiceList, 0, prefixCheckList, kcaServerPrefixList.length, kcaExtServiceList.length);
+        } else {
+            prefixCheckList = kcaServerPrefixList;
+        }
+    }
+
     // Called from native code
     private static int containsKcaServer(int type, byte[] source, byte[] target) {
         String saddrstr = new String(source);
         String taddrstr = new String(target);
         if (type == REQUEST) {
-            for (String prefix: kcaServerPrefixList) {
+            for (String prefix: prefixCheckList) {
                 if (taddrstr.startsWith(prefix)) return 1;
             }
         } else if (type == RESPONSE) {
-            for (String prefix: kcaServerPrefixList) {
+            for (String prefix: prefixCheckList) {
                 if (saddrstr.startsWith(prefix)) return 1;
             }
         }
@@ -244,8 +262,9 @@ public class KcaVpnData {
         boolean isKcaRes = uri.contains("/kc") && uri.contains("/resources");
         boolean isKcsSound = uri.contains("/kcs/sound");
         boolean isKcsWorld = uri.contains("/api_world/get_id/");
+        boolean isKcs2Res = uri.contains("/kcs2/img/");
         //Log.e("KCA", uri + " " + String.valueOf(isKcaVer || isKcsApi));
-        return (isKcsSwf || isKcaRes || isKcsSound || isKcsWorld);
+        return (isKcsSwf || isKcaRes || isKcsSound || isKcsWorld | isKcs2Res);
     }
 
     private static byte[] unchunkAllData(byte[] data, boolean gzipped) throws IOException {
