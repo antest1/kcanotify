@@ -346,6 +346,7 @@
                         android:paddingRight="2dp"
                         android:src="@mipmap/ic_saury"
                         android:translationX="1dp"
+                        android:visibility="gone"
                         app:srcCompat="@mipmap/ic_saury" />
 
                     <TextView
@@ -359,7 +360,8 @@
                         android:singleLine="true"
                         android:text="10"
                         android:textColor="@color/white"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 

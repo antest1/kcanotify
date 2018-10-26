@@ -206,7 +206,8 @@ public class KcaFleetViewService extends Service {
                             R.color.white), PorterDuff.Mode.MULTIPLY);
                 }
 
-                /* Saury Event */
+                /*
+                // Saury Event Code
                 ImageView saurycntviewicon = fleetHqInfoView.findViewById(R.id.fleetview_cnt3_icon);
                 TextView saurycntview = fleetHqInfoView.findViewById(R.id.fleetview_cnt3);
                 saurycntviewicon.setColorFilter(ContextCompat.getColor(getApplicationContext(),
@@ -224,6 +225,7 @@ public class KcaFleetViewService extends Service {
                     }
                 }
                 break;
+                */
             /*
             case HQINFO_EVENT:
                 TextView spring_item_1 = fleetHqInfoView.findViewById(R.id.fleetview_18spring_1);

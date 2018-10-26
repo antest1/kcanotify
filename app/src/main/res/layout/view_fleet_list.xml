@@ -296,6 +296,7 @@
                         android:layout_marginRight="2dp"
                         android:layout_weight="1"
                         android:src="@mipmap/ic_saury"
+                        android:visibility="gone"
                         app:srcCompat="@mipmap/ic_saury" />
 
                     <TextView
@@ -309,7 +310,8 @@
                         android:singleLine="true"
                         android:text="10"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/fleetview_text_tbutton" />
+                        android:textSize="@dimen/fleetview_text_tbutton"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
