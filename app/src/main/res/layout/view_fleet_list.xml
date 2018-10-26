@@ -223,6 +223,7 @@
                         android:textSize="@dimen/fleetview_text_tbutton" />
                 </LinearLayout>
                 -->
+
                 <LinearLayout
                     android:id="@+id/fleetview_cnt"
                     android:layout_width="wrap_content"
@@ -337,6 +338,15 @@
                     android:visibility="gone" />
 
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/fleetview_tool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/ic_dashboard"
+                app:srcCompat="@mipmap/ic_dashboard" />
 
             <ImageView
                 android:id="@+id/fleetview_exit"

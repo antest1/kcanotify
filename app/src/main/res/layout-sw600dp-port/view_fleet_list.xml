@@ -37,96 +37,6 @@
                 android:textColor="@color/white"
                 android:textSize="24dp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:alwaysDrawnWithCache="true"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/fleet_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginRight="8dp"
-                    android:background="@color/colorAccent"
-                    android:gravity="top"
-                    android:paddingBottom="4dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="4dp"
-                    android:text="\#1"
-                    android:textColor="@color/white"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/fleet_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginRight="8dp"
-                    android:background="@color/colorFleetInfoBtn"
-                    android:gravity="top"
-                    android:paddingBottom="4dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="4dp"
-                    android:text="\#2"
-                    android:textColor="@color/white"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/fleet_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginRight="8dp"
-                    android:background="@color/colorFleetInfoBtn"
-                    android:gravity="top"
-                    android:paddingBottom="4dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="4dp"
-                    android:text="\#3"
-                    android:textColor="@color/white"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/fleet_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginRight="8dp"
-                    android:background="@color/colorFleetInfoBtn"
-                    android:gravity="top"
-                    android:paddingBottom="4dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="4dp"
-                    android:text="\#4"
-                    android:textColor="@color/white"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/fleet_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginRight="8dp"
-                    android:background="@color/colorFleetInfoBtn"
-                    android:gravity="top"
-                    android:paddingBottom="4dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="4dp"
-                    android:text="@string/fleetview_combined"
-                    android:textColor="@color/white"
-                    android:textSize="18dp" />
-            </LinearLayout>
-
             <TextView
                 android:id="@+id/pad"
                 android:layout_width="wrap_content"
@@ -135,10 +45,24 @@
                 android:singleLine="true" />
 
             <ImageView
-                android:id="@+id/akashi_exit"
-                android:layout_width="20dp"
+                android:id="@+id/fleetview_tool"
+                android:layout_width="24dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_weight="0"
+                android:src="@mipmap/ic_dashboard"
+                app:srcCompat="@mipmap/ic_dashboard" />
+
+            <ImageView
+                android:id="@+id/fleetview_exit"
+                android:layout_width="24dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_weight="0"
                 android:src="@mipmap/ic_cancel"
                 app:srcCompat="@mipmap/ic_cancel" />
         </LinearLayout>
@@ -146,7 +70,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="2dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
@@ -333,6 +257,100 @@
 
             </LinearLayout>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="4dp"
+            android:alwaysDrawnWithCache="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fleet_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_weight="1"
+                android:background="@color/colorAccent"
+                android:gravity="top"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:text="\#1"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/fleet_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_weight="1"
+                android:background="@color/colorFleetInfoBtn"
+                android:gravity="top"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:text="\#2"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/fleet_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_weight="1"
+                android:background="@color/colorFleetInfoBtn"
+                android:gravity="top"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:text="\#3"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/fleet_4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_weight="1"
+                android:background="@color/colorFleetInfoBtn"
+                android:gravity="top"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:text="\#4"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/fleet_5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_weight="1"
+                android:background="@color/colorFleetInfoBtn"
+                android:gravity="top"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:text="@string/fleetview_combined"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -2112,4 +2130,5 @@
 
         </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>

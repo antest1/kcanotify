@@ -363,6 +363,7 @@ public class KcaFleetViewService extends Service {
         mView.setVisibility(GONE);
         KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
         mView.findViewById(R.id.fleetview_shiparea).setOnTouchListener(mViewTouchListener);
+        mView.findViewById(R.id.fleetview_tool).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_head).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_cn_change).setOnTouchListener(mViewTouchListener);
         mView.findViewById(R.id.fleetview_fleetswitch).setOnTouchListener(mViewTouchListener);
@@ -563,6 +564,12 @@ public class KcaFleetViewService extends Service {
                         if (id == mView.findViewById(R.id.fleetview_head).getId()) {
                             if (mView != null) mView.setVisibility(GONE);
                             if (itemView != null) itemView.setVisibility(GONE);
+                        } else if (id == mView.findViewById(R.id.fleetview_tool).getId()) {
+                            if (mView != null) mView.setVisibility(GONE);
+                            if (itemView != null) itemView.setVisibility(GONE);
+                            Intent toolIntent = new Intent(KcaFleetViewService.this, ToolsActivity.class);
+                            toolIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(toolIntent);
                         } else if (id == mView.findViewById(R.id.fleetview_cn_change).getId()) {
                             changeInternalSeekCn();
                             fleetCnChangeBtn.setText(getSeekType());
