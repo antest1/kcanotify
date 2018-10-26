@@ -651,9 +651,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="packagefilter_count_format" formatted="false">总计：%d</string>
     <string name="packagefilter_restart">更改设定后你需要重新启用VPN来使设定生效</string>
-    <string name="setting_menu_sniffer_title_head">Sniffer Settings</string>
-    <string name="setting_menu_sniffer_title_package_allow">Use Sniffer for Other Applications</string>
-    <string name="setting_menu_sniffer_title_extfilter_use">Use extended IP Filter</string>
-    <string name="setting_menu_sniffer_desc_package_allow">For users playing the KanColle with browsers</string>
-    <string name="setting_menu_sniffer_desc_extfilter_use">Check this option if you are using web-proxy service like ooi.moe</string>
+    <string name="setting_menu_sniffer_title_head">Sniffer设定</string>
+    <string name="setting_menu_sniffer_title_package_allow">于其他应用程式中使用Sniffer</string>
+    <string name="setting_menu_sniffer_title_extfilter_use">启用进阶IP筛选</string>
+    <string name="setting_menu_sniffer_desc_package_allow">为使用其他浏览器游玩舰これ的提督而设</string>
+    <string name="setting_menu_sniffer_desc_extfilter_use">若有使用如ooi.moe的网络代理服务，请选取此选项</string>
 </resources>
