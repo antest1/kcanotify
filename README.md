@@ -1,5 +1,5 @@
 # Kcanotify (시제 깡들리티)
-<img src="https://upload.cc/i1/2018/07/03/W1oJnY.png" width=250/>
+<img src="https://upload.cc/i1/2018/10/27/cieDyM.png" width=250/>
 Viewer Application for KanColle Android
 
 About Project
@@ -52,7 +52,7 @@ Translations to other languages are welcomed. (please contact to developer to em
 Attribution
 -------
 - This project uses the modified source code of [NetGuard](https://github.com/M66B/NetGuard/) for capturing the traffic of Kancolle application. The license for NetGuard is [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt), therefore Kcanotify also has this license.
-- Icon and banner images are provided by [なむちん](https://www.pixiv.net/member.php?id=23154187).
+- Icon and banner images are provided by [SPICA](https://www.pixiv.net/member.php?id=9209813).
 - The fairy and equipment images are from the kancolle resources. I will take action immediately when there is a request from the copyright holder for correction.
 - Translation data for ships, equipments and quest are mainly from [kc3-translations](https://github.com/KC3Kai/kc3-translations).
   - License for kc3-translations: The MIT License [Text](https://github.com/KC3Kai/kc3-translations/blob/master/LICENSE)
