@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class KcaResCheckItemAdpater extends BaseAdapter {
@@ -83,7 +85,24 @@ public class KcaResCheckItemAdpater extends BaseAdapter {
         TextView reschk_name, reschk_desc, reschk_ver, reschk_download;
     }
 
-    public void setListItem(List<JsonObject> data) { this.data = data; }
+    public void setListItem(List<JsonObject> data) {
+        this.data = data;
+        ItemComparator cmp = new ItemComparator();
+        Collections.sort(this.data, cmp);
+    }
     public void setContext(Context context) { this.context = context; }
     public void setHandler(Handler handler) { this.handler = handler; }
+
+    private class ItemComparator implements Comparator<JsonObject> {
+        @Override
+        public int compare(JsonObject o1, JsonObject o2) {
+            String v1 = o1.get("version").getAsString();
+            String v2 = o2.get("version").getAsString();
+            String n1 = o1.get("name").getAsString();
+            String n2 = o2.get("name").getAsString();
+
+            if (v1.equals(v2)) return n1.compareTo(n2);
+            else return KcaUtils.compareVersion(v1, v2) ? -1 : 1;
+        }
+    }
 }
