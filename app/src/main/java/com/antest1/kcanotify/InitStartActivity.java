@@ -104,7 +104,6 @@ public class InitStartActivity extends Activity {
 
     boolean is_destroyed = false;
     int fairy_flag, new_resversion;
-    int fairy_list_version;
     boolean reset_flag = false;
     boolean is_skipped = false;
     Fetch fetch;
@@ -345,17 +344,21 @@ public class InitStartActivity extends Activity {
     }
 
     private void startMainActivity(boolean transition) {
-        Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(mainIntent);
-        finish();
+        if (!is_destroyed) {
+            Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+        }
         //if(transition) overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     private void startUpdateActivity() {
-        Intent updateIntent = new Intent(getApplicationContext(), UpdateCheckActivity.class);
-        updateIntent.putExtra("main_flag", true);
-        startActivity(updateIntent);
-        finish();
+        if (!is_destroyed) {
+            Intent updateIntent = new Intent(getApplicationContext(), UpdateCheckActivity.class);
+            updateIntent.putExtra("main_flag", true);
+            startActivity(updateIntent);
+            finish();
+        }
     }
 
     @Override
