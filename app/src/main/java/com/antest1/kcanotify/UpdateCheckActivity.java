@@ -1,12 +1,11 @@
 package com.antest1.kcanotify;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,7 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -39,7 +37,6 @@ import com.tonyodev.fetch2.Request;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -70,6 +67,8 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class UpdateCheckActivity extends AppCompatActivity {
+    public static final int LOAD_DELAY = 500;
+
     Toolbar toolbar;
     static Gson gson = new Gson();
     String latest_gamedata_version = "";
@@ -413,8 +412,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
 
         final Request request = new Request(KcaUtils.format("%s?t=%d", url, timestamp), data.getPath());
         fetch.enqueue(request, updatedRequest -> {
-            dbHelper.putResVer(name, version);
-            loadTranslationData(getApplicationContext());
+            new DataSaveTask(this).execute(name, String.valueOf(version));
             if (name.equals("icon_info.json")) {
                 Toast.makeText(getApplicationContext(), "Download Completed: " + name + "\nRetrieving Fairy Images..", Toast.LENGTH_LONG).show();
                 final Handler handler = new Handler();
@@ -423,9 +421,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
                     public void run() {
                         new KcaFairyDownloader().execute();
                     }
-                }, 500);
-            } else {
-                Toast.makeText(getApplicationContext(), "Download Completed: " + name, Toast.LENGTH_LONG).show();
+                }, LOAD_DELAY);
             }
             for (int i = 0; i < resource_info.size(); i++) {
                 JsonObject item = resource_info.get(i).getAsJsonObject();
@@ -598,4 +594,54 @@ public class UpdateCheckActivity extends AppCompatActivity {
         loadTranslationData(getApplicationContext());
         super.onConfigurationChanged(newConfig);
     }
+
+    static class DataSaveTask extends AsyncTask<String, Void, Boolean> {
+        private final WeakReference<Activity> weakReference;
+        String name = "";
+
+        DataSaveTask(Activity myActivity) {
+            this.weakReference = new WeakReference<>(myActivity);
+        }
+
+        @Override
+        public Boolean doInBackground(String... params) {
+            Activity activity = this.weakReference.get();
+            if (activity == null || activity.isFinishing()
+                    || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed())) {
+                // weakReference is no longer valid, don't do anything!
+                return false;
+            }
+            name = params[0];
+            KcaDBHelper dbHelper = new KcaDBHelper(activity.getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+            dbHelper.putResVer(params[0], Long.parseLong(params[1]));
+            dbHelper.close();
+            return true;
+        }
+
+        @Override
+        public void onPostExecute(Boolean result) {
+            // Re-acquire a strong reference to the weakReference, and verify
+            // that it still exists and is active.
+            Activity activity = this.weakReference.get();
+            if (activity == null || activity.isFinishing()
+                    || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed())) {
+                return;
+            }
+            Context context = activity.getApplicationContext();
+            if (result) {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadTranslationData(context, true);
+                        Toast.makeText(context, "Download Completed: " + name, Toast.LENGTH_LONG).show();
+                    }
+                }, LOAD_DELAY);
+            } else {
+                Toast.makeText(context, "failed to read data", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
 }

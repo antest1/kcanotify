@@ -565,11 +565,15 @@ public class KcaApiData {
     }
 
     public static void loadTranslationData(Context context) {
+        loadTranslationData(context, false);
+    }
+
+    public static void loadTranslationData(Context context, boolean force) {
         boolean isDataLoaded = (kcShipTranslationData.entrySet().size() != 0) &&
                 (kcItemTranslationData.entrySet().size() != 0) &&
                 (kcQuestInfoData.entrySet().size() != 0);
         String locale = getStringPreferences(context, PREF_KCA_LANGUAGE);
-        if (!isDataLoaded || !currentLocaleCode.equals(getLocaleCode(locale))) {
+        if (force || !isDataLoaded || !currentLocaleCode.equals(getLocaleCode(locale))) {
             currentLocaleCode = getLocaleCode(locale);
             if (!currentLocaleCode.equals("jp")) {
                 int loadShipTranslationDataResult = loadShipTranslationDataFromStorage(context, locale);

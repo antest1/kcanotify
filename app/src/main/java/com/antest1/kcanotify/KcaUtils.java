@@ -582,7 +582,7 @@ public class KcaUtils {
             try {
                 Reader reader = new FileReader(jsonFile);
                 data = new JsonParser().parse(reader).getAsJsonObject();
-            } catch (FileNotFoundException | IllegalStateException | JsonSyntaxException e ) {
+            } catch (IOException | IllegalStateException | JsonSyntaxException e) {
                 e.printStackTrace();
                 setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
                 if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonObjectFromStorage", "0", getStringFromException(e));
