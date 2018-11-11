@@ -67,7 +67,7 @@ public class PackageFilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_package_list);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Select Package to Allow");
+        getSupportActionBar().setTitle(getStringWithLocale(R.string.setting_menu_sniffer_title_package_allow));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TextView notice = findViewById(R.id.package_notice);
