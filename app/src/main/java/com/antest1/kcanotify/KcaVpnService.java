@@ -400,7 +400,7 @@ public class KcaVpnService extends VpnService {
         boolean system = prefs.getBoolean("manage_system", false);
 
         boolean socks5_enable = prefs.getBoolean("socks5_enable", false);
-        boolean socks5_onlykc = prefs.getBoolean("socks5_onlykc", false);
+        boolean socks5_allapps = prefs.getBoolean("socks5_allapps", false);
 
         JsonArray allowed_apps = new JsonParser().parse(KcaUtils.getStringPreferences(
                 getApplicationContext(), PREF_PACKAGE_ALLOW)).getAsJsonArray();
@@ -410,14 +410,12 @@ public class KcaVpnService extends VpnService {
         builder.setSession(getString(R.string.app_vpn_name));
         if (Build.VERSION.SDK_INT >= 21) {
             try {
-                if (socks5_enable && socks5_onlykc) {
+                if (!socks5_enable || !socks5_allapps) {
                     builder.addAllowedApplication(KC_PACKAGE_NAME);
-                    builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
-                } else if (!socks5_enable) {
-                    builder.addAllowedApplication(KC_PACKAGE_NAME);
-                }
-                for (JsonElement pkg: allowed_apps) {
-                    builder.addAllowedApplication(pkg.getAsString());
+                    if (socks5_enable) builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
+                    for (JsonElement pkg: allowed_apps) {
+                        builder.addAllowedApplication(pkg.getAsString());
+                    }
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
@@ -444,9 +442,9 @@ public class KcaVpnService extends VpnService {
             }
 
         // Subnet routing
+        List<IPUtil.CIDR> listExclude = new ArrayList<>();
         if (subnet) {
             // Exclude IP ranges
-            List<IPUtil.CIDR> listExclude = new ArrayList<>();
             listExclude.add(new IPUtil.CIDR("127.0.0.0", 8)); // localhost
 
             if (tethering) {
@@ -497,34 +495,40 @@ public class KcaVpnService extends VpnService {
                 listExclude.add(new IPUtil.CIDR("208.54.0.0", 16));
             }
             listExclude.add(new IPUtil.CIDR("224.0.0.0", 3)); // broadcast
+        }
 
-            Collections.sort(listExclude);
+        String addresses = prefs.getString("bypass_address", "");
+        if (!addresses.equals("")) {
+            for (String cidr : addresses.split(",")) {
+                String[] cidr_split = cidr.trim().split("/");
+                listExclude.add(new IPUtil.CIDR(cidr_split[0], Integer.parseInt(cidr_split[1])));
+            }
+        }
+        Collections.sort(listExclude);
 
-            try {
-                InetAddress start = InetAddress.getByName("0.0.0.0");
-                for (IPUtil.CIDR exclude : listExclude) {
-                    Log.i(TAG, "Exclude " + exclude.getStart().getHostAddress() + "..." + exclude.getEnd().getHostAddress());
-                    for (IPUtil.CIDR include : IPUtil.toCIDR(start, IPUtil.minus1(exclude.getStart())))
-                        try {
-                            builder.addRoute(include.address, include.prefix);
-                        } catch (Throwable ex) {
-                            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-                        }
-                    start = IPUtil.plus1(exclude.getEnd());
-                }
-                String end = (lan ? "255.255.255.254" : "255.255.255.255");
-                for (IPUtil.CIDR include : IPUtil.toCIDR("224.0.0.0", end))
+        try {
+            InetAddress start = InetAddress.getByName("0.0.0.0");
+            for (IPUtil.CIDR exclude : listExclude) {
+                Log.i(TAG, "Exclude " + exclude.getStart().getHostAddress() + "..." + exclude.getEnd().getHostAddress());
+                for (IPUtil.CIDR include : IPUtil.toCIDR(start, IPUtil.minus1(exclude.getStart())))
                     try {
                         builder.addRoute(include.address, include.prefix);
                     } catch (Throwable ex) {
                         Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
                     }
-            } catch (UnknownHostException ex) {
-                Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+                start = IPUtil.plus1(exclude.getEnd());
             }
-        } else {
-            builder.addRoute("0.0.0.0", 0);
+            String end = (lan ? "255.255.255.254" : "255.255.255.255");
+            for (IPUtil.CIDR include : IPUtil.toCIDR("224.0.0.0", end))
+                try {
+                    builder.addRoute(include.address, include.prefix);
+                } catch (Throwable ex) {
+                    Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+                }
+        } catch (UnknownHostException ex) {
+            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
         }
+        builder.addRoute("0.0.0.0", 0);
 
         Log.i(TAG, "IPv6=" + ip6);
         if (ip6)

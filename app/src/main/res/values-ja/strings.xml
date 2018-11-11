@@ -390,7 +390,7 @@
     <string name="settings_menu_kand_title_bypass_address">例外リスト</string>
     <string name="setting_menu_kand_warn_adv_network">警告：これらの設定を正しくしていない場合は、Snifferが動作しないことがあります。この設定が何をするかわからない場合は設定しないでください。設定を適用するためには、Sniffer(VPN)を再起動してください。</string>
     <string name="setting_menu_kand_title_socks5_enable">SOCKS5プロキシを使用</string>
-    <string name="setting_menu_kand_title_socks5_onlykc">艦これ/DMMログイン関連アプリにのみ適用</string>
+    <string name="setting_menu_kand_title_socks5_allapps">全てのアプリにプロキシを適用</string>
     <string name="setting_menu_kand_title_socks5_port">SOCKS5プロキシポート</string>
     <string name="setting_menu_kand_title_socks5_address">SOCKS5プロキシアドレス</string>
     <string name="setting_menu_kand_title_socks5_username">ユーザー名（オプション）</string>

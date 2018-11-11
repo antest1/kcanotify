@@ -211,7 +211,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_adv_network">Advanced Network Settings</string>
     <string name="setting_menu_kand_warn_adv_network">Warning: Setting these incorrectly may make VPN Service unusable. Don\'t change these options unless you know what you are doing! You need to restart VPN Service to make these options effective.</string>
     <string name="setting_menu_kand_title_socks5_enable">Enable SOCKS5 Proxy</string>
-    <string name="setting_menu_kand_title_socks5_onlykc">Apply for only Kancolle/DMM Login</string>
+    <string name="setting_menu_kand_title_socks5_allapps">Use proxy for all applications</string>
     <string name="setting_menu_kand_title_socks5_address">SOCKS5 Proxy Address</string>
     <string name="setting_menu_kand_title_socks5_port">SOCKS5 Proxy Port</string>
     <string name="setting_menu_kand_title_socks5_username">Username (optional)</string>

@@ -390,7 +390,7 @@
     <string name="settings_menu_kand_title_bypass_address">예외 주소</string>
     <string name="setting_menu_kand_warn_adv_network">경고: 해당 설정을 올바르게 하지 않은 경우 VPN이 작동하지 않을 수 있습니다. 이 설정이 무엇을 하는지 모르는 경우 설정하지 마십시오. 해당 설정을 적용하기 위해서는 VPN을 재시작하여야 합니다.</string>
     <string name="setting_menu_kand_title_socks5_enable">SOCKS5 프록시 사용</string>
-    <string name="setting_menu_kand_title_socks5_onlykc">칸코레 관련 어플리케이션에만 적용</string>
+    <string name="setting_menu_kand_title_socks5_allapps">모든 어플리케이션에 프록시 적용</string>
     <string name="setting_menu_kand_title_socks5_port">SOCKS5 프록시 포트</string>
     <string name="setting_menu_kand_title_socks5_address">SOCKS5 프록시 주소</string>
     <string name="setting_menu_kand_title_socks5_username">사용자명(선택)</string>
