@@ -675,7 +675,9 @@ public class KcaUtils {
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
         int fairy_id = Integer.parseInt(name.replace("noti_icon_", ""));
-        if (FAIRY_SPECIAL_FLAG && fairy_id >= FAIRY_SPECIAL_PREFIX) {
+        if (fairy_id == 0) {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.noti_icon_0);
+        } else if (FAIRY_SPECIAL_FLAG && fairy_id >= FAIRY_SPECIAL_PREFIX) {
             bitmap = BitmapFactory.decodeResource(context.getResources(), getId(name, R.mipmap.class));
         } else {
             try {
