@@ -185,8 +185,11 @@ public class KcaLandAirBasePopupService extends Service {
                         ((LinearLayout) v.findViewById(R.id.lab_row)).setOrientation(LinearLayout.HORIZONTAL);
                     }
 
+                    JsonObject distance_info = item.getAsJsonObject("api_distance");
+                    int distance_base = distance_info.get("api_base").getAsInt();
+                    int distance_bonus = distance_info.get("api_bonus").getAsInt();
                     ((TextView) v.findViewById(R.id.lab_dist)).setText(
-                            KcaUtils.format(getStringWithLocale(R.string.labinfoview_dist_format), item.get("api_distance").getAsInt()));
+                            KcaUtils.format(getStringWithLocale(R.string.labinfoview_dist_format), distance_base + distance_bonus));
 
                     TextView titleView = v.findViewById(R.id.lab_title);
                     titleView.setText(KcaUtils.format("[%d-%d] %s",
