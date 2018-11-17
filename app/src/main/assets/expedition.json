@@ -503,7 +503,7 @@
 	"flag-cond": "3",
 	"total-num": 6,
 	"total-lv": 200,
-	"total-cond": "3-1|2-4",
+	"total-cond": "3-1|1,2-4",
 	"drum-num-optional": 4
 }, {
 	"no": "25",
