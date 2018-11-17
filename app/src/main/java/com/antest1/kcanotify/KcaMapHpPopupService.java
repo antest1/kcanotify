@@ -44,8 +44,8 @@ public class KcaMapHpPopupService extends Service {
     public static final String MAPHP_SHOW_ACTION = "maphp_show_action";
     public static final String MAPHP_RESET_ACTION = "maphp_reset_action";
 
-    public static final String count_data_raw = "{\"15\":4,\"16\":7,\"25\":4,\"35\":4,\"44\":4,\"45\":5,\"52\":4,\"53\":5,\"54\":5,\"55\":5,\"62\":3,\"63\":4,\"64\":5,\"65\":6,\"71\":3}";
-    public static final JsonObject count_data = new JsonParser().parse(count_data_raw).getAsJsonObject();
+    // public static final String count_data_raw = "{\"15\":4,\"16\":7,\"25\":4,\"35\":4,\"44\":4,\"45\":5,\"52\":4,\"53\":5,\"54\":5,\"55\":5,\"62\":3,\"63\":4,\"64\":5,\"65\":6,\"71\":3}";
+    // public static final JsonObject count_data = new JsonParser().parse(count_data_raw).getAsJsonObject();
     public static final String maphp_format = "[%s] %s %d/%d";
     private LocalBroadcastManager broadcaster;
     private BroadcastReceiver data_receiver;
@@ -159,17 +159,23 @@ public class KcaMapHpPopupService extends Service {
                             JsonObject eventitem = item.getAsJsonObject("api_eventmap");
                             if (eventitem.has("api_state") && eventitem.get("api_state").getAsInt() != 2) {
                                 int gauge_type = 0;
+                                int gauge_num = 0;
                                 if (eventitem.has("api_gauge_type")) {
                                     gauge_type = eventitem.get("api_gauge_type").getAsInt();
                                 }
+                                if (eventitem.has("api_gauge_num")) {
+                                    gauge_num = eventitem.get("api_gauge_num").getAsInt();
+                                }
                                 int now_maphp = eventitem.get("api_now_maphp").getAsInt();
                                 int max_maphp = eventitem.get("api_max_maphp").getAsInt();
-                                eventhp_list.add(getMapHpStr(gauge_type, id, now_maphp, max_maphp));
+                                eventhp_list.add(getMapHpStr(gauge_type, gauge_num, id, now_maphp, max_maphp));
                             }
                         } else if (item.has("api_defeat_count")) {
+                            int gauge_type = item.get("api_gauge_type").getAsInt();
+                            int gauge_num = item.get("api_gauge_num").getAsInt();
                             int defeat_count = item.get("api_defeat_count").getAsInt();
-                            int total_count = count_data.get(String.valueOf(id)).getAsInt();
-                            maphp_list.add(getMapHpStr(0, id, total_count - defeat_count, total_count));
+                            int total_count = item.get("api_required_defeat_count").getAsInt();
+                            maphp_list.add(getMapHpStr(gauge_type, gauge_num, id, total_count - defeat_count, total_count));
                         }
                     }
                     for (String item : eventhp_list) {
@@ -209,11 +215,13 @@ public class KcaMapHpPopupService extends Service {
         }
     }
 
-    private String getMapHpStr(int type, int id, int current, int total) {
+    private String getMapHpStr(int type, int num, int id, int current, int total) {
+        String num_text = "";
+        if (id == 72 || id > 100) num_text = KcaUtils.format("(#%d)", num);
         if (type == 3) {
-            return KcaUtils.format(maphp_format, getMapString(id), "TP", current, total);
+            return KcaUtils.format(maphp_format, getMapString(id), "TP".concat(num_text), current, total);
         } else {
-            return KcaUtils.format(maphp_format, getMapString(id), "HP", current, total);
+            return KcaUtils.format(maphp_format, getMapString(id), "HP".concat(num_text), current, total);
         }
     }
 
