@@ -37,27 +37,19 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Locale;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 
-import static com.antest1.kcanotify.InitStartActivity.ACTION_RESET;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.*;
@@ -66,7 +58,6 @@ import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
-import static com.antest1.kcanotify.KcaUtils.setPreferences;
 import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
 
@@ -250,25 +241,14 @@ public class MainActivity extends AppCompatActivity {
 
         backPressCloseHandler = new BackPressCloseHandler(this);
 
-        /*
+
         ImageView specialImage = findViewById(R.id.special_image);
         specialImage.setVisibility(View.GONE);
-        specialImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.setVisibility(View.GONE);
-            }
-        });
+        specialImage.setOnClickListener(v -> v.setVisibility(View.GONE));
 
         textSpecial = findViewById(R.id.textSpecial);
-        textSpecial.setText(getStringWithLocale(R.string.special_playstore_1st));
-        textSpecial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                specialImage.setVisibility(View.VISIBLE);
-            }
-        });
-        */
+        textSpecial.setText(getStringWithLocale(R.string.special_message));
+        textSpecial.setOnClickListener(v -> specialImage.setVisibility(View.VISIBLE));
     }
 
     @Override

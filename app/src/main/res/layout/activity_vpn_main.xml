@@ -33,96 +33,115 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/activity_main_btn_size"
-                android:weightSum="1.0">
+                android:layout_height="wrap_content"
+                android:alpha="0.9"
+                android:background="@color/white"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:padding="6dp">
 
-                <ToggleButton
-                    android:id="@+id/vpnbtn"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_weight=".5"
-                    android:background="@drawable/togglebtn"
-                    android:stateListAnimator="@null"
-                    android:text="VPN BTN"
-                    android:textColor="@drawable/togglebtn_text"
-                    android:textOff="@string/ma_vpn_toggleoff"
-                    android:textOn="@string/ma_vpn_toggleon"
-                    android:textSize="@dimen/activity_main_btn_textsize" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/activity_main_btn_size_top"
+                    android:layout_marginBottom="6dp"
+                    android:weightSum="1.0">
 
-                <ToggleButton
-                    android:id="@+id/svcbtn"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_weight=".5"
-                    android:background="@drawable/togglebtn"
-                    android:stateListAnimator="@null"
-                    android:text="SERVICE BTN"
-                    android:textColor="@drawable/togglebtn_text"
-                    android:textOff="@string/ma_svc_toggleoff"
-                    android:textOn="@string/ma_svc_toggleon"
-                    android:textSize="@dimen/activity_main_btn_textsize" />
+                    <ToggleButton
+                        android:id="@+id/vpnbtn"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_weight=".5"
+                        android:background="@drawable/togglebtn"
+                        android:stateListAnimator="@null"
+                        android:text="VPN BTN"
+                        android:textColor="@drawable/togglebtn_text"
+                        android:textOff="@string/ma_vpn_toggleoff"
+                        android:textOn="@string/ma_vpn_toggleon"
+                        android:textSize="@dimen/activity_main_btn_textsize" />
 
-            </LinearLayout>
+                    <ToggleButton
+                        android:id="@+id/svcbtn"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_weight=".5"
+                        android:background="@drawable/togglebtn"
+                        android:stateListAnimator="@null"
+                        android:text="SERVICE BTN"
+                        android:textColor="@drawable/togglebtn_text"
+                        android:textOff="@string/ma_svc_toggleoff"
+                        android:textOn="@string/ma_svc_toggleon"
+                        android:textSize="@dimen/activity_main_btn_textsize" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/activity_main_btn_size"
-                android:weightSum="1.0">
+                </LinearLayout>
 
-                <Button
-                    android:id="@+id/kcbtn"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/activity_main_btn_size_botton"
+                    android:weightSum="1.0">
 
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.64"
-                    android:background="@color/colorGameStartBtn"
-                    android:stateListAnimator="@null"
-                    android:text="GAME START"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/activity_main_btn_textsize" />
+                    <Button
+                        android:id="@+id/kcbtn"
 
-                <ImageButton
-                    android:id="@+id/kcafairybtn"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="6dp"
+                        android:layout_weight="0.64"
+                        android:background="@color/colorGameStartBtn"
+                        android:padding="@dimen/activity_main_btn_fairy_padding"
+                        android:stateListAnimator="@null"
+                        android:text="GAME START"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/activity_main_btn_textsize" />
 
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.18"
-                    android:background="@color/colorFairyBtn"
-                    android:gravity="center"
-                    android:padding="@dimen/activity_main_btn_fairy_padding"
-                    android:scaleType="fitCenter"
-                    android:src="@mipmap/noti_icon_0"
-                    android:stateListAnimator="@null">
+                    <ImageButton
+                        android:id="@+id/kcafairybtn"
 
-
-                </ImageButton>
-
-                <ImageButton
-                    android:id="@+id/kcatoolbtn"
-
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.18"
-                    android:background="@color/colorToolsBtn"
-                    android:gravity="center"
-                    android:padding="@dimen/activity_main_btn_tools_padding"
-                    android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_dashboard"
-                    android:stateListAnimator="@null">
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="6dp"
+                        android:layout_weight="0.18"
+                        android:background="@color/colorFairyShowBtn"
+                        android:gravity="center"
+                        android:padding="@dimen/activity_main_btn_fairy_padding"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/noti_icon_0"
+                        android:stateListAnimator="@null">
 
 
-                </ImageButton>
+                    </ImageButton>
 
+                    <ImageButton
+                        android:id="@+id/kcatoolbtn"
+
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.18"
+                        android:background="@color/colorToolsBtn"
+                        android:gravity="center"
+                        android:padding="@dimen/activity_main_btn_tools_padding"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/ic_dashboard"
+                        android:stateListAnimator="@null">
+
+
+                    </ImageButton>
+
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -226,8 +245,7 @@
                     android:text="플레이 스토어 출시 1주년!"
                     android:textAlignment="center"
                     android:textColor="@color/colorSpecialText"
-                    android:textSize="14dp"
-                    android:visibility="gone" />
+                    android:textSize="14dp" />
 
             </RelativeLayout>
 
@@ -235,7 +253,7 @@
 
 
     </LinearLayout>
-    <!--
+
     <ImageView
         android:id="@+id/special_image"
         android:layout_width="match_parent"
@@ -246,6 +264,6 @@
         android:padding="20dp"
         android:src="@mipmap/special_image"
         android:visibility="gone"
-        app:srcCompat="@mipmap/special_image" />-->
+        app:srcCompat="@mipmap/special_image" />
 
 </RelativeLayout>

@@ -33,7 +33,7 @@
                 android:id="@+id/action_fleetlist"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@color/colorMenuBack"
                 android:orientation="horizontal"
                 android:padding="8dp">
@@ -64,7 +64,7 @@
                 android:id="@+id/action_shiplist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@color/colorMenuBack"
                 android:orientation="horizontal"
                 android:padding="8dp">
@@ -95,7 +95,7 @@
                 android:id="@+id/action_equipment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@color/colorMenuBack"
                 android:orientation="horizontal"
                 android:padding="8dp">
@@ -126,7 +126,7 @@
                 android:id="@+id/action_droplog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@color/colorMenuBack"
                 android:orientation="horizontal"
                 android:padding="8dp">
@@ -157,7 +157,7 @@
                 android:id="@+id/action_reslog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@color/colorMenuBack"
                 android:orientation="horizontal"
                 android:padding="8dp">
@@ -188,7 +188,7 @@
                 android:id="@+id/action_akashi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@color/colorMenuBack"
                 android:orientation="horizontal"
                 android:padding="8dp">
@@ -219,7 +219,7 @@
                 android:id="@+id/action_expcalc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@color/colorMenuBack"
                 android:orientation="horizontal"
                 android:padding="8dp">
@@ -250,7 +250,7 @@
                 android:id="@+id/action_expdtable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@color/colorMenuBack"
                 android:orientation="horizontal"
                 android:padding="8dp">
@@ -281,7 +281,7 @@
                 android:id="@+id/action_datasync"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@color/colorMenuBack"
                 android:orientation="horizontal"
                 android:padding="8dp">

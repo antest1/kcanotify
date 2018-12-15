@@ -698,8 +698,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_18spring_nori" formatted="false">N %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">T %02d</string>
 
-    <string name="special_playstore_1st">1st Anniversary of Google Play release!</string>
-
     <string name="widget_timer_name">Kcanotify Timer Widget</string>
     <string name="fleet_format">Fleet %d</string>
 
@@ -722,5 +720,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="packagefilter_count_format" formatted="false">Total Count: %d</string>
     <string name="packagefilter_restart">You need to restart VPN Service to make these options effective.</string>
+    <string name="special_message">Merry Christmas!</string>
 
 </resources>

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2c3e50</color>
-    <color name="colorPrimaryDark">#1d2935</color>
-    <color name="colorAccent">#03a9f4</color>
+    <color name="colorPrimary">#003e4d</color>
+    <color name="colorPrimaryDark">#001728</color>
+    <color name="colorAccent">#ca1a43</color>
     <color name="colorActivityBack">#ffffff</color>
-    <color name="colorActivityText">#888888</color>
+    <color name="colorActivityText">#203346</color>
     <color name="colorToolbarText">#ffffff</color>
     <color name="colorBtn">#d6d6d6</color>
     <color name="colorBtnText">#000000</color>
     <color name="colorBtnTextAccent">#ffffff</color>
     <color name="colorFleetInfoBtn">#2c3e50</color>
 
-    <color name="colorGameStartBtn">#2a5aac</color>
-    <color name="colorFairyShowBtn">#009688</color>
-    <color name="colorToolsBtn">#5c6bc0</color>
+    <color name="colorGameStartBtn">#b71c1c</color>
+    <color name="colorFairyShowBtn">#C5A436</color>
+    <color name="colorToolsBtn">#9fa1a9</color>
 
     <color name="colorUpdate">#e8f5e9</color>
     <color name="colorUpdateText">#1b5e20</color>

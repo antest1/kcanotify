@@ -1,4 +1,9 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<!--<shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/colorActivityBack" />
+</shape>-->
 
-</shape>
+<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+
+android:src="@drawable/flakes3"
+android:alpha="0.5"
+android:tileMode="repeat"/>

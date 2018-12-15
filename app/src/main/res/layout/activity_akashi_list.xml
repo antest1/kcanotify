@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -15,18 +16,17 @@
         app:contentInsetStartWithNavigation="0dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="@color/colorToolbarText"/>
+        app:titleTextColor="@color/colorToolbarText" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background"
+        android:layout_height="24dp"
         android:fadingEdge="vertical"
         android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
@@ -38,7 +38,8 @@
                 android:id="@+id/current_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0000/00/00 (Mon)" />
+                android:text="0000/00/00 (Mon)"
+                android:textSize="14dp" />
 
             <ImageView
                 android:id="@+id/icon_dmat"
@@ -109,7 +110,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background"
         android:orientation="vertical"
         android:padding="5dp">
 
