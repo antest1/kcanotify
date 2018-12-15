@@ -77,7 +77,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
     ListView data_list, resource_list;
     KcaResCheckItemAdpater gamedata_adapter = new KcaResCheckItemAdpater();
     KcaResCheckItemAdpater resource_adapter = new KcaResCheckItemAdpater();
-    TextView gamedata_chk, resource_chk;
+    TextView gamedata_chk, resource_chk, resource_downall;
     TextView gamedata_load, resource_load;
     CheckBox checkstart_chkbox, localonly_chkbox, resource_reset;
     ProgressDialog mProgressDialog;
@@ -190,9 +190,12 @@ public class UpdateCheckActivity extends AppCompatActivity {
 
         gamedata_chk = findViewById(R.id.gamedata_updatecheck);
         resource_chk = findViewById(R.id.resources_updatecheck);
+        resource_downall = findViewById(R.id.resources_downloadall);
 
         gamedata_chk.setOnClickListener(v -> checkVersionUpdate());
         resource_chk.setOnClickListener(v -> checkResourceUpdate());
+        resource_downall.setOnClickListener(v -> downloadAllResources());
+        resource_downall.setVisibility(View.GONE);
 
         checkVersionUpdate();
         checkResourceUpdate();
@@ -281,6 +284,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
             load_resource.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    int num_count = 0;
                     String res_result = response.body();
                     try {
                         resource_info = gson.fromJson(res_result, listType);
@@ -294,6 +298,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
                             int latest_res_v = item.get("version").getAsInt();
                             item.addProperty("version_str", getVersionString(current_res_v, latest_res_v));
                             item.addProperty("highlight", current_res_v < latest_res_v);
+                            if (current_res_v < latest_res_v) num_count += 1;
                         }
                         resource_adapter.setContext(getApplicationContext());
                         resource_adapter.setListItem(resource_info);
@@ -304,6 +309,8 @@ public class UpdateCheckActivity extends AppCompatActivity {
                         resource_list.setVisibility(View.VISIBLE);
                     } catch (Exception e) {
                         resource_load.setText("Error: " + e.getMessage());
+                    } finally {
+                        resource_downall.setVisibility(num_count > 0 ? View.VISIBLE : View.GONE);
                     }
                 }
 
@@ -314,8 +321,19 @@ public class UpdateCheckActivity extends AppCompatActivity {
             });
 
         }
+    }
 
-
+    private void downloadAllResources() {
+        for (int i = 0; i < resource_info.size(); i++) {
+            JsonObject item = resource_info.get(i);
+            boolean highlight = item.get("highlight").getAsBoolean();
+            if (highlight) {
+                String url = item.get("url").getAsString();
+                String name = item.get("name").getAsString();
+                int version = item.get("version").getAsInt();
+                downloadFile(url, name, version);
+            }
+        }
     }
 
 
@@ -423,16 +441,19 @@ public class UpdateCheckActivity extends AppCompatActivity {
                     }
                 }, LOAD_DELAY);
             }
+            int num_count = 0;
             for (int i = 0; i < resource_info.size(); i++) {
                 JsonObject item = resource_info.get(i).getAsJsonObject();
                 if (item.get("name").getAsString().equals(name)) {
                     int latest_res_v = item.get("version").getAsInt();
                     item.addProperty("version_str", getVersionString(version, latest_res_v));
                     item.addProperty("highlight", version < latest_res_v);
+                    if (version < latest_res_v) num_count += 1;
                 }
             }
             resource_adapter.setListItem(resource_info);
             resource_adapter.notifyDataSetChanged();
+            resource_downall.setVisibility(num_count > 0 ? View.VISIBLE : View.GONE);
         }, error -> {
             Toast.makeText(getApplicationContext(), "Error when downloading " + name, Toast.LENGTH_LONG).show();
         });

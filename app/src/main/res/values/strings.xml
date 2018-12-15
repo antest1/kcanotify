@@ -17,6 +17,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_errorlog">Error Log</string>
     <string name="action_download">Download</string>
     <string name="action_check">CHECK</string>
+    <string name="action_downloadall">DL ALL</string>
     <string name="action_inspector" translatable="false">Inspector</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>
 
