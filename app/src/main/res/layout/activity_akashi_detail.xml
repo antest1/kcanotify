@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -16,12 +17,11 @@
         app:contentInsetStartWithNavigation="0dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="@color/colorToolbarText"/>
+        app:titleTextColor="@color/colorToolbarText" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background"
         android:fadingEdge="vertical"
         android:orientation="vertical">
 
@@ -110,7 +110,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background"
         android:orientation="vertical"
         android:padding="5dp">
 
@@ -258,8 +257,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.44"
                         android:gravity="center_vertical|center_horizontal"
+                        android:padding="2dp"
                         android:text="영식함전 21형 x 2"
-                        android:textAlignment="gravity"
+                        android:textAlignment="textStart"
                         android:textColor="@color/black"
                         android:textSize="10dp" />
                 </LinearLayout>
@@ -308,8 +308,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.44"
                         android:gravity="center_vertical|center_horizontal"
+                        android:padding="2dp"
                         android:text="영식함전 21형 x 2"
-                        android:textAlignment="gravity"
+                        android:textAlignment="textStart"
                         android:textColor="@color/black"
                         android:textSize="10dp" />
                 </LinearLayout>
@@ -373,8 +374,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.44"
                                 android:gravity="center_vertical|center_horizontal"
+                                android:padding="2dp"
                                 android:text="영식함전 21형 x 2"
-                                android:textAlignment="gravity"
+                                android:textAlignment="textStart"
                                 android:textColor="@color/black"
                                 android:textSize="10dp" />
                         </LinearLayout>
@@ -588,9 +590,10 @@
                         android:layout_weight="0.44"
                         android:gravity="center_vertical|center_horizontal"
                         android:text="영식함전 21형 x 2"
-                        android:textAlignment="gravity"
+                        android:textAlignment="textStart"
                         android:textColor="@color/black"
-                        android:textSize="10dp" />
+                        android:textSize="10dp"
+                        android:padding="2dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -637,8 +640,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.44"
                         android:gravity="center_vertical|center_horizontal"
+                        android:padding="2dp"
                         android:text="영식함전 21형 x 2"
-                        android:textAlignment="gravity"
+                        android:textAlignment="textStart"
                         android:textColor="@color/black"
                         android:textSize="10dp" />
                 </LinearLayout>
@@ -702,8 +706,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.44"
                                 android:gravity="center_vertical|center_horizontal"
+                                android:padding="2dp"
                                 android:text="영식함전 21형 x 2"
-                                android:textAlignment="center"
+                                android:textAlignment="textStart"
                                 android:textColor="@color/black"
                                 android:textSize="10dp" />
                         </LinearLayout>
@@ -787,6 +792,31 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/akashi_improv_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/akashi_improv_status_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/akashi_term_status"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/akashi_improv_status_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="12dp" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/akashi_improv_default"

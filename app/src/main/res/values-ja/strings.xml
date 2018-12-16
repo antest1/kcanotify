@@ -362,6 +362,7 @@
     <string name="akashi_term_resource">消費資源</string>
     <string name="akashi_term_support">秘書艦</string>
     <string name="akashi_term_default">初期装備艦</string>
+    <string name="akashi_term_status">現在改修状態</string>
     <string name="akashi_term_day_6">土</string>
     <string name="akashi_term_day_5">金</string>
     <string name="akashi_term_day_0">日</string>

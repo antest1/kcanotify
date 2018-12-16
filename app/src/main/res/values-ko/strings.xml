@@ -366,6 +366,7 @@
     <string name="akashi_term_resource">소모자원</string>
     <string name="akashi_term_support">2번함</string>
     <string name="akashi_term_default">초기 장비 함선</string>
+    <string name="akashi_term_status">현재 개수 상태</string>
     <string name="akashi_term_day_6">토</string>
     <string name="akashi_term_day_5">금</string>
     <string name="akashi_term_day_0">일</string>

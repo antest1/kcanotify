@@ -388,6 +388,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_term_detail1">改修詳情(1)</string>
     <string name="akashi_term_detail2">改修詳情(2)</string>
     <string name="akashi_term_default">初始裝備艦娘</string>
+    <string name="akashi_term_status">現在改修狀況</string>
     <string name="akashi_term_day_0">週日</string>
     <string name="akashi_term_day_1">週一</string>
     <string name="akashi_term_day_2">週二</string>
