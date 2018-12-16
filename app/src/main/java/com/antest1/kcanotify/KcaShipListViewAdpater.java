@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
@@ -22,7 +24,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.R.id.list;
 import static android.media.CamcorderProfile.get;
@@ -410,6 +415,61 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         setListViewItemList(ship_list, deck_list, sort_key, "|");
     }
 
+    public String getKanmusuListText() {
+        JsonObject data = KcaApiData.buildShipUpdateData();
+        JsonObject frombefore = data.getAsJsonObject("frombefore");
+        JsonObject fromafter = data.getAsJsonObject("fromafter");
+        JsonObject afterlv = data.getAsJsonObject("afterlv");
+
+        List<String> items = new ArrayList<>();
+        Map<String, List<String>> ship_base = new LinkedHashMap<>();
+        items.add(".2");
+        if (listViewItemList != null) {
+            for (JsonObject v: listViewItemList) {
+                String lv = v.get("api_lv").getAsString();
+                String shipId = v.get("api_ship_id").getAsString();
+
+                String targetId = shipId;
+                String baseId = shipId;
+                int minlv = 100;
+                int k = 0;
+                while (fromafter.has(targetId)) {
+                    baseId = fromafter.get(targetId).getAsString();
+                    String key = KcaUtils.format("%s->%s", baseId, targetId);
+                    minlv = afterlv.get(key).getAsInt();
+                    targetId = baseId;
+                    k += 1;
+                }
+
+                targetId = baseId;
+                String afterId = baseId;
+                int l = 0;
+                while (frombefore.has(targetId)) {
+                    afterId = frombefore.get(targetId).getAsString();
+                    String key = KcaUtils.format("%s->%s", targetId, afterId);
+                    if (Integer.parseInt(lv) < afterlv.get(key).getAsInt()) break;
+                    targetId = afterId;
+                    l += 1;
+                }
+
+                String postfix = (k != l) ? "." + String.valueOf(k+1) : "";
+                if (!ship_base.containsKey(baseId)) ship_base.put(baseId, new ArrayList<>());
+                ship_base.get(baseId).add(lv + postfix);
+            }
+        }
+
+        Map<String, String> result = new HashMap<>();
+        for (Map.Entry<String, List<String>> item: ship_base.entrySet()) {
+            result.put(item.getKey(), KcaUtils.joinStr(item.getValue(), ","));
+        }
+        List<Map.Entry<String, String>> list = new ArrayList<>(result.entrySet());
+        Collections.sort(list, (o1, o2) -> o1.getKey().equals(o2.getKey()) ? 0 :
+                Integer.parseInt(o1.getKey()) < Integer.parseInt(o2.getKey()) ? -1 : 1);
+        for (Map.Entry<String, String> item: list) {
+            items.add(item.getKey() + ":" + item.getValue());
+        }
+        return KcaUtils.joinStr(items, "|");
+    }
 
     /*
     *

@@ -913,4 +913,70 @@ public class KcaUtils {
         String result = Base64.encodeToString(rsa.doFinal(value.getBytes("utf-8")), Base64.DEFAULT).replace("\n", "");
         return result;
     }
+
+
+    // Customized base64 encoding: http://kancolle-calc.net/data/share.js
+    static String BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
+    static String[] CODE = { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",
+            "1000", "1001", "1010", "1011", "1100", "1101" };
+
+
+    public static String encode64(String dataString) {
+        StringBuilder buff = new StringBuilder();
+        StringBuilder outputString = new StringBuilder();
+        for (int j = 0; j < dataString.length(); j++) {
+            char c = dataString.charAt(j);
+            int pos;
+            if (c == ',') pos = 10;
+            else if (c == '|') pos = 11;
+            else if (c == '.') pos = 12;
+            else if (c == ':') pos = 13;
+            else pos = Integer.parseInt(String.valueOf(c));
+
+            buff.append(CODE[pos]);
+            if (buff.length() >= 6) {
+                String seg = buff.substring(0, 6);
+                outputString.append(BASE64.charAt(Integer.parseInt(seg, 2)));
+                buff = new StringBuilder(buff.substring(6));
+            }
+        }
+        if (buff.length() > 0) {
+            while (buff.length() < 6) {
+                buff.append('1');
+            }
+            outputString.append(BASE64.charAt(Integer.parseInt(buff.toString(), 2)));
+        }
+        return outputString.toString();
+    }
+
+    public static String decode64(String inputString) {
+        List<String> codeList = new ArrayList<String>(Arrays.asList(CODE));
+        StringBuilder dataString = new StringBuilder();
+        StringBuilder buff = new StringBuilder();
+        for (int j = 0; j < inputString.length(); j++) {
+            StringBuilder inp = new StringBuilder(Integer.toBinaryString(BASE64.indexOf(inputString.charAt(j))));
+            while (inp.length() < 6) {
+                inp.insert(0, '0');
+            }
+            buff.append(inp);
+            while (buff.length() >= 4) {
+                String seg = buff.substring(0, 4);
+                int pos = codeList.indexOf(seg);
+                if (pos == -1); // Padding, do nothing
+                else if (pos == 10) {
+                    dataString.append(',');
+                } else if (pos == 11) {
+                    dataString.append('|');
+                } else if (pos == 12) {
+                    dataString.append('.');
+                } else if (pos == 13) {
+                    dataString.append(':');
+                } else {
+                    dataString.append(pos);
+                }
+                buff = new StringBuilder(buff.substring(4));
+            }
+        }
+        return dataString.toString();
+    }
 }

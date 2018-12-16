@@ -20,12 +20,15 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -1355,6 +1358,38 @@ public class KcaApiData {
             if (target.length == 0) break;
         }
         return result;
+    }
+
+    public static JsonObject buildShipUpdateData() {
+        List<Map.Entry<Integer, JsonObject>> list = new ArrayList<>(kcShipData.entrySet());
+        Collections.sort(list, (o1, o2) -> o1.getKey().compareTo(o2.getKey()));
+
+        JsonObject frombefore = new JsonObject();
+        JsonObject fromafter = new JsonObject();
+        JsonObject afterlv_data = new JsonObject();
+        Set<String> checked = new HashSet<>();
+        for (Map.Entry<Integer, JsonObject> entry : list) {
+            JsonObject data = entry.getValue();
+            String api_id = data.get("api_id").getAsString();
+            if (data.has("api_aftershipid")) {
+                String after_id = data.get("api_aftershipid").getAsString();
+                String key = KcaUtils.format("%s->%s", api_id, after_id);
+                String revkey = KcaUtils.format("%s->%s", after_id, api_id);
+                if (!after_id.equals("0")) checked.add(api_id);
+                int afterlv = data.get("api_afterlv").getAsInt();
+                checked.add(key);
+                if (!checked.contains(revkey) && !after_id.equals("0")) {
+                    afterlv_data.addProperty(key, afterlv);
+                    frombefore.addProperty(api_id, after_id);
+                    fromafter.addProperty(after_id, api_id);
+                }
+            }
+        }
+        JsonObject sdata = new JsonObject();
+        sdata.add("afterlv", afterlv_data);
+        sdata.add("frombefore", frombefore);
+        sdata.add("fromafter", fromafter);
+        return sdata;
     }
 
     public static int findAfterShipId(int startid, int level) {

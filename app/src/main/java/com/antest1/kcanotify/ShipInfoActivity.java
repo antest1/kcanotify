@@ -1,36 +1,32 @@
 package com.antest1.kcanotify;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 
 import static android.widget.Toast.makeText;
@@ -39,15 +35,11 @@ import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
-import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
-import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
-import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
+import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
-import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 
 public class ShipInfoActivity extends AppCompatActivity {
@@ -62,6 +54,11 @@ public class ShipInfoActivity extends AppCompatActivity {
     KcaDBHelper dbHelper;
     Button sortButton, filterButton;
     KcaShipListViewAdpater adapter;
+    Vibrator vibrator;
+
+    boolean is_popup_on;
+    View export_popup, export_exit;
+    TextView export_clipboard, export_openpage;
 
     public ShipInfoActivity() {
         LocaleUtils.updateConfig(this);
@@ -79,6 +76,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.action_shipinfo));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         KcaApiData.setDBHelper(dbHelper);
@@ -101,16 +99,20 @@ public class ShipInfoActivity extends AppCompatActivity {
         sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent aIntent = new Intent(ShipInfoActivity.this, ShipInfoSortActivity.class);
-                startActivityForResult(aIntent, SHIPINFO_GET_SORT_KEY);
+                if (!is_popup_on) {
+                    Intent aIntent = new Intent(ShipInfoActivity.this, ShipInfoSortActivity.class);
+                    startActivityForResult(aIntent, SHIPINFO_GET_SORT_KEY);
+                }
             }
         });
 
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent aIntent = new Intent(ShipInfoActivity.this, ShipInfoFilterActivity.class);
-                startActivityForResult(aIntent, SHIPINFO_GET_FILTER_RESULT);
+                if (!is_popup_on) {
+                    Intent aIntent = new Intent(ShipInfoActivity.this, ShipInfoFilterActivity.class);
+                    startActivityForResult(aIntent, SHIPINFO_GET_FILTER_RESULT);
+                }
             }
         });
 
@@ -126,6 +128,44 @@ public class ShipInfoActivity extends AppCompatActivity {
         totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));
         totalexpview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
 
+        export_popup = findViewById(R.id.export_popup);
+        ((TextView) export_popup.findViewById(R.id.export_title))
+                .setText(getStringWithLocale(R.string.shipinfo_export_title));
+        export_popup.setVisibility(View.GONE);
+        is_popup_on = false;
+
+        export_exit = export_popup.findViewById(R.id.export_exit);
+        export_exit.setOnClickListener(v -> {
+            is_popup_on = false;
+            export_popup.setVisibility(View.GONE);
+        });
+        ((ImageView) export_exit).setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+
+        export_clipboard = export_popup.findViewById(R.id.export_clipboard);
+        export_clipboard.setText(getStringWithLocale(R.string.shipinfo_export_clipboard));
+        export_clipboard.setOnClickListener(v -> {
+            CharSequence text = ((TextView) findViewById(R.id.export_content)).getText();
+            ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            clip.setPrimaryClip(ClipData.newPlainText("text", text));
+            doVibrate(vibrator, 100);
+            Toast.makeText(getApplicationContext(),
+                    getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
+        });
+
+        export_openpage = export_popup.findViewById(R.id.export_openpage);
+        export_openpage.setText(getStringWithLocale(R.string.shipinfo_export_openpage));
+        export_openpage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String data = ((TextView) findViewById(R.id.export_content)).getText().toString();
+                String encoded = KcaUtils.encode64(data);
+                Intent bIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://kancolle-calc.net/kanmusu_list.html?data=".concat(encoded)));
+                startActivity(bIntent);
+            }
+        });
+        
         listview = findViewById(R.id.shipinfo_listview);
         listview.setAdapter(adapter);
 
@@ -138,6 +178,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
 
         if (resultCode == RESULT_OK && adapter != null && requestCode > 0) {
+            export_popup.setVisibility(View.GONE);
             if (requestCode == SHIPINFO_GET_SORT_KEY) {
                 adapter.resortListViewItem(sortkey);
             }
@@ -168,6 +209,12 @@ public class ShipInfoActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.shipinfo, menu);
+        return true;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
     }
@@ -175,6 +222,13 @@ public class ShipInfoActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_ship_export:
+                String data = adapter.getKanmusuListText();
+                String encoded_data = KcaUtils.encode64(data);
+                ((TextView) export_popup.findViewById(R.id.export_content)).setText(data);
+                is_popup_on = true;
+                export_popup.setVisibility(View.VISIBLE);
+                return true;
             case android.R.id.home:
                 finish();
                 return true;
