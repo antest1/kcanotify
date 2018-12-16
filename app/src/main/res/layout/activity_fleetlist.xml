@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -17,100 +18,191 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:titleTextColor="@color/colorToolbarText"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/background"
-        android:orientation="vertical"
-        android:padding="5dp">
-
-
-        <TextView
-            android:id="@+id/fleetlist_raw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:visibility="gone" />
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/fleetlist_info_area"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorListItemBack"
-            android:orientation="vertical">
+            android:background="@drawable/background"
+            android:orientation="vertical"
+            android:padding="5dp">
 
-            <LinearLayout
-                android:id="@+id/fleetlist_infoline"
+
+            <TextView
+                android:id="@+id/fleetlist_raw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:text="TextView"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/fleetlist_info_area"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorListItemBack"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/fleetlist_infoline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/fleetlist_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:ellipsize="end"
+                        android:textColor="@color/black"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/fleetlist_select"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        app:srcCompat="@mipmap/ic_arrow_down" />
+
+                    <TextView
+                        android:id="@+id/fleetlist_fp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="0"
+                        android:textColor="@color/colorStatFighterPower"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/fleetlist_seek"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="0"
+                        android:textColor="@color/colorStatSakuteki"
+                        android:textSize="14dp" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <GridView
+                        android:id="@+id/fleetlist_ships"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/fleetlist_loading"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.5"
+                        android:background="@color/darkgray"
+                        android:gravity="center_vertical|center"
+                        android:text="@string/fleetlist_loading"
+                        android:textColor="@color/white"
+                        android:textSize="40dp" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/export_popup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:background="@color/colorActivityBack"
+            android:elevation="3dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/fleetlist_name"
+                    android:id="@+id/export_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:ellipsize="end"
-                    android:textColor="@color/black"
+                    android:paddingBottom="2dp"
+                    android:text="@string/fleetinfo_export_title"
+                    android:textColor="@color/colorAccent"
                     android:textSize="18dp"
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/fleetlist_select"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/export_exit"
+                    android:layout_width="24dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    app:srcCompat="@mipmap/ic_arrow_down" />
-
-                <TextView
-                    android:id="@+id/fleetlist_fp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="0"
-                    android:textColor="@color/colorStatFighterPower"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/fleetlist_seek"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="0"
-                    android:textColor="@color/colorStatSakuteki"
-                    android:textSize="14dp" />
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <GridView
-                    android:id="@+id/fleetlist_ships"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <TextView
-                    android:id="@+id/fleetlist_loading"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:alpha="0.5"
-                    android:background="@color/darkgray"
-                    android:gravity="center_vertical|center"
-                    android:text="@string/fleetlist_loading"
-                    android:textColor="@color/white"
-                    android:textSize="40dp" />
-
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:src="@mipmap/ic_cancel" />
             </RelativeLayout>
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:srcCompat="@color/colorAccent" />
 
-    </LinearLayout>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/export_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="4dp"
+                        android:text="data" />
+                </LinearLayout>
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/export_clipboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@color/colorAccent"
+                android:padding="6dp"
+                android:text="@string/fleetinfo_export_clipboard"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/export_openpage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@color/colorAccent"
+                android:padding="6dp"
+                android:text="@string/fleetinfo_export_openpage"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+        </LinearLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

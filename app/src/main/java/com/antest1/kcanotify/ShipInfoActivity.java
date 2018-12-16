@@ -155,15 +155,12 @@ public class ShipInfoActivity extends AppCompatActivity {
 
         export_openpage = export_popup.findViewById(R.id.export_openpage);
         export_openpage.setText(getStringWithLocale(R.string.shipinfo_export_openpage));
-        export_openpage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String data = ((TextView) findViewById(R.id.export_content)).getText().toString();
-                String encoded = KcaUtils.encode64(data);
-                Intent bIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://kancolle-calc.net/kanmusu_list.html?data=".concat(encoded)));
-                startActivity(bIntent);
-            }
+        export_openpage.setOnClickListener(v -> {
+            String data1 = ((TextView) findViewById(R.id.export_content)).getText().toString();
+            String encoded = KcaUtils.encode64(data1);
+            Intent bIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://kancolle-calc.net/kanmusu_list.html?data=".concat(encoded)));
+            startActivity(bIntent);
         });
         
         listview = findViewById(R.id.shipinfo_listview);

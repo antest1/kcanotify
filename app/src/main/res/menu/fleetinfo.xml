@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.antest1.kcanofity.KcaFairySelectActivity" >
+
+    <item
+        android:id="@+id/action_fleet_export"
+        android:orderInCategory="1"
+        android:title="@string/action_export_deckbuilder"
+        app:showAsAction="always" />
+
+</menu>

@@ -1,17 +1,23 @@
 package com.antest1.kcanotify;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -26,18 +32,22 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import static android.R.attr.orientation;
 import static android.media.CamcorderProfile.get;
+import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
+import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -58,6 +68,11 @@ public class FleetInfoActivity extends AppCompatActivity {
     GridView fleetlist_ships;
     KcaFleetInfoItemAdapter adapter;
     KcaDeckInfo deckInfoCalc;
+    Vibrator vibrator;
+
+    boolean is_popup_on;
+    View export_popup, export_exit;
+    TextView export_clipboard, export_openpage;
 
     public FleetInfoActivity() {
         LocaleUtils.updateConfig(this);
@@ -75,6 +90,7 @@ public class FleetInfoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getStringWithLocale(R.string.action_fleetlist));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
         deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
@@ -124,7 +140,47 @@ public class FleetInfoActivity extends AppCompatActivity {
             fleetlist_ships.setNumColumns(2);
         }
 
+        export_popup = findViewById(R.id.export_popup);
+        ((TextView) export_popup.findViewById(R.id.export_title))
+                .setText(getStringWithLocale(R.string.fleetinfo_export_title));
+        export_popup.setVisibility(View.GONE);
+        is_popup_on = false;
+
+        export_exit = export_popup.findViewById(R.id.export_exit);
+        export_exit.setOnClickListener(v -> {
+            is_popup_on = false;
+            export_popup.setVisibility(View.GONE);
+        });
+        ((ImageView) export_exit).setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+
+        export_clipboard = export_popup.findViewById(R.id.export_clipboard);
+        export_clipboard.setText(getStringWithLocale(R.string.fleetinfo_export_clipboard));
+        export_clipboard.setOnClickListener(v -> {
+            CharSequence text = ((TextView) findViewById(R.id.export_content)).getText();
+            ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            clip.setPrimaryClip(ClipData.newPlainText("text", text));
+            doVibrate(vibrator, 100);
+            Toast.makeText(getApplicationContext(),
+                    getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
+        });
+
+        export_openpage = export_popup.findViewById(R.id.export_openpage);
+        export_openpage.setText(getStringWithLocale(R.string.fleetinfo_export_openpage));
+        export_openpage.setOnClickListener(v -> {
+            String data = ((TextView) findViewById(R.id.export_content)).getText().toString();
+            try {
+                String encoded =  URLEncoder.encode(data, "utf-8");
+                Intent bIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://kancolle-calc.net/deckbuilder.html?predeck=".concat(encoded)));
+                startActivity(bIntent);
+            } catch (UnsupportedEncodingException e) {
+                Toast.makeText(getApplicationContext(), "parsing error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         new ShipItemLoadTask().execute();
+        // Toast.makeText(getApplicationContext(), deckBuilderData(), Toast.LENGTH_LONG).show();
     }
 
     private int setDefaultGameData() {
@@ -205,6 +261,82 @@ public class FleetInfoActivity extends AppCompatActivity {
         }
     }
 
+    public String deckBuilderData() {
+        JsonObject deckbuilder = new JsonObject();
+        deckbuilder.addProperty("version", 4);
+        deckbuilder.addProperty("hqlv", KcaApiData.getAdmiralLevel());
+        JsonArray deck_data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+        if (deck_data != null) {
+            for (int i = 0; i < deck_data.size(); i++) {
+                JsonObject fleet = new JsonObject();
+                JsonArray item = deckInfoCalc.getDeckListInfo(deck_data, i, "all", KC_REQ_LIST);
+                for (int j = 0; j < item.size(); j++) {
+                    JsonObject sitem = new JsonObject();
+
+                    JsonObject ship = item.get(j).getAsJsonObject();
+                    JsonObject user = ship.getAsJsonObject("user");
+                    sitem.addProperty("id", user.get("api_ship_id").getAsString());
+                    sitem.addProperty("lv", user.get("api_lv").getAsInt());
+                    sitem.addProperty("luck", user.getAsJsonArray("api_lucky").get(0).getAsInt());
+                    sitem.addProperty("hp", user.get("api_nowhp").getAsInt());
+                    sitem.addProperty("asw", user.getAsJsonArray("api_taisen").get(0).getAsInt());
+                    JsonObject items = new JsonObject();
+
+                    JsonArray api_slot = user.getAsJsonArray("api_slot");
+                    for (int k = 0; k < api_slot.size(); k++) {
+                        JsonObject item_s = new JsonObject();
+                        int slotid = api_slot.get(k).getAsInt();
+                        if (slotid <= 0) continue;
+                        JsonObject item_data = getUserItemStatusById(slotid, "slotitem_id,level,alv", "");
+                        if (item_data != null) {
+                            int slotitme_id = item_data.get("slotitem_id").getAsInt();
+                            item_s.addProperty("id", slotitme_id);
+                            if (item_data.has("level")) {
+                                int level = item_data.get("level").getAsInt();
+                                if (level > 0) item_s.addProperty("rf", level);
+                            }
+                            if (item_data.has("alv")) {
+                                int alv = item_data.get("alv").getAsInt();
+                                if (alv > 0) item_s.addProperty("mas", alv);
+                            }
+                            items.add(KcaUtils.format("i%d", k + 1), item_s);
+                        }
+                    }
+
+                    int ship_slot_ex = user.get("api_slot_ex").getAsInt();
+                    if (ship_slot_ex > 0) {
+                        JsonObject item_s = new JsonObject();
+                        JsonObject ex_item_data = getUserItemStatusById(ship_slot_ex, "slotitem_id,level,alv", "");
+                        if (ex_item_data != null) {
+                            int slotitme_id = ex_item_data.get("slotitem_id").getAsInt();
+                            item_s.addProperty("id", slotitme_id);
+                            if (ex_item_data.has("level")) {
+                                int level = ex_item_data.get("level").getAsInt();
+                                if (level > 0) item_s.addProperty("rf", level);
+                            }
+                            if (ex_item_data.has("alv")) {
+                                int alv = ex_item_data.get("alv").getAsInt();
+                                if (alv > 0) item_s.addProperty("mas", alv);
+                            }
+                            items.add("ix", item_s);
+                        }
+                    }
+
+                    sitem.add("items", items);
+                    fleet.add(KcaUtils.format("s%d", j + 1), sitem);
+                }
+                deckbuilder.add(KcaUtils.format("f%d", i + 1), fleet);
+            }
+        }
+        return deckbuilder.toString();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.fleetinfo, menu);
+        return true;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -213,6 +345,12 @@ public class FleetInfoActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_fleet_export:
+                String data = deckBuilderData();
+                ((TextView) export_popup.findViewById(R.id.export_content)).setText(data);
+                is_popup_on = true;
+                export_popup.setVisibility(View.VISIBLE);
+                return true;
             case android.R.id.home:
                 finish();
                 return true;

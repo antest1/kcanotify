@@ -175,8 +175,8 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
 
         int taisen_value = ship_ts.get(0).getAsInt();
         if (taisen_value >= 100 || (ship_stype == 1 && taisen_value >= 60) ||
-                kc_ship_id == 141 || (kc_ship_id == 529 && taisen_value >= 65) ||
-                ((kc_ship_id == 380 || kc_ship_id == 526) && taisen_value >= 65 && flag_931)) {
+                kc_ship_id == 141 || ((kc_ship_id == 529 || kc_ship_id == 536) && taisen_value >= 65) ||
+                ((kc_ship_id == 380 || kc_ship_id == 526 || kc_ship_id == 381 || kc_ship_id == 534) && taisen_value >= 65 && flag_931)) {
             holder.ship_taisen.setTextColor(ContextCompat.getColor(context, R.color.colorStatTaisen));
         } else {
             holder.ship_taisen.setTextColor(ContextCompat.getColor(context, R.color.grey));

@@ -655,5 +655,9 @@
     <string name="shipinfo_export_title">함선목록 내보내기</string>
     <string name="shipinfo_export_clipboard">클립보드에 복사</string>
     <string name="shipinfo_export_openpage">kanmusu_list 페이지 열기</string>
+    <string name="action_export_deckbuilder">DeckBuilder</string>
+    <string name="fleetinfo_export_title">DeckBuilder 내보내기</string>
+    <string name="fleetinfo_export_clipboard">클립보드에 복사</string>
+    <string name="fleetinfo_export_openpage">함대시뮬레이터 열기</string>
 
 </resources>

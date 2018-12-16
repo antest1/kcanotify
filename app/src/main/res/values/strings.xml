@@ -721,9 +721,16 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="packagefilter_count_format" formatted="false">Total Count: %d</string>
     <string name="packagefilter_restart">You need to restart VPN Service to make these options effective.</string>
     <string name="special_message">Merry Christmas!</string>
-    <string name="action_export_kanmusu_list">kanmusu_list</string>
+
+    <string name="action_export_kanmusu_list">Export to kanmusu_list</string>
     <string name="shipinfo_export_title">Export to kanmusu_list</string>
     <string name="shipinfo_export_clipboard">Copy to Clipboard</string>
     <string name="shipinfo_export_openpage">Open kanmusu_list Page</string>
+
+    <string name="action_export_deckbuilder">DeckBuilder</string>
+    <string name="fleetinfo_export_title">Export to Deckbuilder</string>
+    <string name="fleetinfo_export_clipboard">Copy to Clipboard</string>
+    <string name="fleetinfo_export_openpage">Open Kantai Simulator</string>
+
 
 </resources>
