@@ -5,6 +5,8 @@
     <color name="colorAccent">#ca1a43</color>
     <color name="colorActivityBack">#ffffff</color>
     <color name="colorActivityText">#203346</color>
+    <color name="colorMainBtn">#00695c</color>
+    <color name="colorMainBtnText">#ffffff</color>
     <color name="colorToolbarText">#ffffff</color>
     <color name="colorBtn">#d6d6d6</color>
     <color name="colorBtnText">#000000</color>
