@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -30,11 +31,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -111,6 +116,7 @@ public class KcaFleetViewService extends Service {
     private ImageView fleetMenuArrowUp, fleetMenuArrowDown;
     private static boolean isReady;
     private static int hqinfoState = 0;
+    private JsonObject gunfitData;
 
     int displayWidth = 0;
 
@@ -290,6 +296,7 @@ public class KcaFleetViewService extends Service {
 
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
             deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
+            gunfitData = loadGunfitData(getAssets());
 
             //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mInflater = LayoutInflater.from(contextWithLocale);
@@ -513,13 +520,15 @@ public class KcaFleetViewService extends Service {
                                 kcdata = data.get(i).getAsJsonObject().getAsJsonObject("kc");
                             }
 
+                            String ship_id = udata.get("ship_id").getAsString();
+                            int ship_married = udata.get("lv").getAsInt() >= 100 ? 1 : 0;
                             JsonObject itemdata = new JsonObject();
                             itemdata.add("api_slot", udata.get("slot"));
                             itemdata.add("api_slot_ex", udata.get("slot_ex"));
                             itemdata.add("api_onslot", udata.get("onslot"));
                             itemdata.add("api_maxslot", kcdata.get("maxeq"));
 
-                            setItemViewLayout(itemdata);
+                            setItemViewLayout(itemdata, ship_id, ship_married);
                             itemViewParams = new WindowManager.LayoutParams(
                                     WindowManager.LayoutParams.WRAP_CONTENT,
                                     WindowManager.LayoutParams.WRAP_CONTENT,
@@ -1014,8 +1023,12 @@ public class KcaFleetViewService extends Service {
     }
 
 
-    public void setItemViewLayout(JsonObject data) {
+    public void setItemViewLayout(JsonObject data, String ship_id, int married) {
         Log.e("KCA", data.toString());
+        JsonObject item_fit = gunfitData.getAsJsonObject("e_idx");
+        JsonObject ship_fit = gunfitData.getAsJsonObject("s_idx");
+        JsonObject fit_data = gunfitData.getAsJsonObject("f_idx");
+
         JsonArray slot = data.getAsJsonArray("api_slot");
         JsonArray onslot = null;
         JsonArray maxslot = null;
@@ -1041,7 +1054,7 @@ public class KcaFleetViewService extends Service {
                 int alv = -1;
                 if (onslot != null) {
                     Log.e("KCA", "item_id: " + String.valueOf(item_id));
-                    kcItemData = getUserItemStatusById(item_id, "level,alv", "type,name");
+                    kcItemData = getUserItemStatusById(item_id, "level,alv", "id,type,name");
                     if (kcItemData == null) continue;
                     Log.e("KCA", kcItemData.toString());
                     lv = kcItemData.get("level").getAsInt();
@@ -1081,15 +1094,26 @@ public class KcaFleetViewService extends Service {
                         itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.INVISIBLE);
                     }
                 } else {
-                    kcItemData = getKcItemStatusById(item_id, "type,name");
+                    kcItemData = getKcItemStatusById(item_id, "id,type,name");
                     itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(GONE);
                     itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)).setVisibility(GONE);
                     itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(GONE);
                 }
 
+                String kcItemId = kcItemData.get("id").getAsString();
                 String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
-                int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
 
+                int fit_state = -1;
+                if (item_fit.has(kcItemId) && ship_fit.has(ship_id)) {
+                    int ship_idx = ship_fit.get(ship_id).getAsInt();
+                    int item_idx = item_fit.get(kcItemId).getAsInt();
+                    String key = KcaUtils.format("%d_%d", item_idx, ship_idx);
+                    if (fit_data.has(key)) {
+                        fit_state = fit_data.getAsJsonArray(key).get(married).getAsInt() + 2;
+                    }
+                }
+
+                int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
                 int typeres = 0;
                 try {
                     typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
@@ -1097,6 +1121,14 @@ public class KcaFleetViewService extends Service {
                     typeres = R.mipmap.item_0;
                 }
                 ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class))).setText(kcItemName);
+                if (fit_state == -1) {
+                    ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class)))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                } else {
+                    ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class)))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), KcaUtils.getId(KcaUtils.format("colorGunfit%d", fit_state), R.color.class)));
+                }
+
                 ((ImageView) itemView.findViewById(getId(KcaUtils.format("item%d_icon", i + 1), R.id.class))).setImageResource(typeres);
                 itemView.findViewById(getId("item".concat(String.valueOf(i + 1)), R.id.class)).setVisibility(View.VISIBLE);
             }
@@ -1216,6 +1248,17 @@ public class KcaFleetViewService extends Service {
                             ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
                 }
             }
+        }
+    }
+
+
+    public static JsonObject loadGunfitData(AssetManager am) {
+        try {
+            AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("gunfit.json");
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            return new JsonParser().parse(new String(bytes)).getAsJsonObject();
+        } catch (IOException e) {
+            return new JsonObject();
         }
     }
 

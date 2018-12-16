@@ -233,4 +233,12 @@
 
     <color name="colorWidgetAlert">#ff5252</color>
     <color name="colorFairyBtn">#009688</color>
+
+    <color name="colorGunfit0">#e57373</color>
+    <color name="colorGunfit1">#ffcdd2</color>
+    <color name="colorGunfit2">#f5f5f5</color>
+    <color name="colorGunfit3">#a7ffeb</color>
+    <color name="colorGunfit4">#1de9b6</color>
+
+
 </resources>
