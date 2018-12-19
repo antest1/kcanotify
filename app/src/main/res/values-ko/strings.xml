@@ -661,4 +661,25 @@
     <string name="fleetinfo_export_clipboard">클립보드에 복사</string>
     <string name="fleetinfo_export_openpage">함대시뮬레이터 열기</string>
 
+    <string name="text_api_houg">화력</string>
+    <string name="text_api_raig">뇌장</string>
+    <string name="text_api_tyku">대공</string>
+    <string name="text_api_souk">장갑</string>
+    <string name="text_api_tais">대잠</string>
+    <string name="text_api_houk">회피</string>
+    <string name="text_api_saku">색적</string>
+    <string name="text_api_houm">명중</string>
+    <string name="text_api_baku">폭장</string>
+    <string name="text_api_leng">사거리</string>
+
+    <string name="text_api_leng_1">단</string>
+    <string name="text_api_leng_2">중</string>
+    <string name="text_api_leng_3">장</string>
+    <string name="text_api_leng_4">초장</string>
+
+    <string name="text_api_houm2">대폭</string>
+    <string name="text_api_houk2">영격</string>
+    <string name="text_api_cost">배치비용</string>
+    <string name="text_api_distance">행동반경</string>
+
 </resources>

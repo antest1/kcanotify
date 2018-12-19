@@ -733,5 +733,25 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetinfo_export_clipboard">Copy to Clipboard</string>
     <string name="fleetinfo_export_openpage">Open Kantai Simulator</string>
 
+    <string name="text_api_houg">FP</string>
+    <string name="text_api_raig">TP</string>
+    <string name="text_api_tyku">AA</string>
+    <string name="text_api_souk">AM</string>
+    <string name="text_api_tais">ASW</string>
+    <string name="text_api_houk">EVS</string>
+    <string name="text_api_saku">LOS</string>
+    <string name="text_api_houm">ACC</string>
+    <string name="text_api_baku">BOM</string>
+    <string name="text_api_leng">RNG</string>
+
+    <string name="text_api_leng_1">S</string>
+    <string name="text_api_leng_2">M</string>
+    <string name="text_api_leng_3">L</string>
+    <string name="text_api_leng_4">VL</string>
+
+    <string name="text_api_houm2">ABM</string>
+    <string name="text_api_houk2">INT</string>
+    <string name="text_api_cost">COST</string>
+    <string name="text_api_distance">DIST</string>
 
 </resources>

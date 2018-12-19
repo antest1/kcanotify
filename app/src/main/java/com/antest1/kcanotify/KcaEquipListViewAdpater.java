@@ -18,8 +18,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
-import org.w3c.dom.Text;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,15 +27,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static android.R.attr.key;
 import static android.media.CamcorderProfile.get;
+import static com.antest1.kcanotify.KcaApiData.T2_ITCP_FIGHTER;
 
 public class KcaEquipListViewAdpater extends BaseAdapter {
+    public static final String[] STAT_KEYS = {"api_houg", "api_raig", "api_tyku", "api_souk", "api_tais",  "api_baku", "api_houk", "api_saku", "api_houm", "api_leng", "api_cost", "api_distance"};
     private List<JsonObject> listViewItemList = new ArrayList<>();
     private JsonObject shipEquipInfo = new JsonObject();
     private Map<String, AtomicInteger> countInfo = new HashMap<>();
     private List<Integer> active = new ArrayList<>();
     private String summary_format = "";
+    private JsonObject shipStatTranslation = new JsonObject();
 
     @Override
     public int getCount() {
@@ -52,6 +52,10 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public void setStatTranslation(JsonObject data) {
+        shipStatTranslation = data;
     }
 
     @Override
@@ -73,6 +77,10 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
             holder.equipment_item_detail_list = v.findViewById(R.id.equipment_item_detail_list);
             holder.equipment_item_detail_summary = v.findViewById(R.id.equipment_item_detail_summary);
             holder.equipment_item_detail_line = v.findViewById(R.id.equipment_item_detail_line);
+            holder.equipment_stat = v.findViewById(R.id.equipment_stat);
+            holder.equipment_labs_info = v.findViewById(R.id.equipment_labs_area);
+            holder.equipment_cost = v.findViewById(R.id.equipment_cost);
+            holder.equipment_dist = v.findViewById(R.id.equipment_dist);
             v.setTag(holder);
         }
 
@@ -135,6 +143,33 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
                 holder.equipment_item_detail.setVisibility(View.GONE);
             }
         });
+
+        List<String> stat_list = new ArrayList<>();
+        for (String key: STAT_KEYS) {
+            if (key.equals("api_cost") || key.equals("api_distance")) continue;
+            if (item.has(key) && item.get(key).getAsInt() != 0) {
+                int value = item.get(key).getAsInt();
+                if (item_type_2 == T2_ITCP_FIGHTER && (key.equals("api_houm") || key.equals("api_houk"))) {
+                    stat_list.add(KcaUtils.format("%s %d", shipStatTranslation.get(key.concat("2")).getAsString(), value));
+                } else if (key.equals("api_leng")) {
+                    stat_list.add(KcaUtils.format("%s %s", shipStatTranslation.get(key).getAsString(),
+                            shipStatTranslation.get(key+value).getAsString()));
+                } else {
+                    stat_list.add(KcaUtils.format("%s %d", shipStatTranslation.get(key).getAsString(), value));
+                }
+            }
+        }
+        holder.equipment_stat.setText(KcaUtils.joinStr(stat_list, " | "));
+
+        if (item.has("api_distance")) {
+            holder.equipment_cost.setText(item.get("api_cost").getAsString());
+            holder.equipment_dist.setText(item.get("api_distance").getAsString());
+            holder.equipment_labs_info.setVisibility(View.VISIBLE);
+        } else {
+            holder.equipment_cost.setText("");
+            holder.equipment_dist.setText("");
+            holder.equipment_labs_info.setVisibility(View.GONE);
+        }
 
         return v;
     }
@@ -219,7 +254,8 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
     static class ViewHolder {
         ImageView equipment_icon, equipment_item_detail_line;
         TextView equipment_id, equipment_name, equipment_count, equipment_item_detail_summary;
-        LinearLayout equipment_item, equipment_item_detail, equipment_item_detail_list;
+        TextView equipment_stat, equipment_cost, equipment_dist;
+        LinearLayout equipment_item, equipment_item_detail, equipment_item_detail_list, equipment_labs_info;
     }
 
     public void setSummaryFormat(String value) {

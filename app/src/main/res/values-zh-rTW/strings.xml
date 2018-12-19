@@ -666,4 +666,26 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetinfo_export_clipboard">複製到剪貼板</string>
     <string name="fleetinfo_export_openpage">開啟艦隊模擬器網站</string>
     <string name="fleetinfo_export_title">匯出到 DeckBuilder</string>
+
+
+    <string name="text_api_houg">火力</string>
+    <string name="text_api_raig">雷裝</string>
+    <string name="text_api_tyku">對空</string>
+    <string name="text_api_souk">裝甲</string>
+    <string name="text_api_tais">對潛</string>
+    <string name="text_api_houk">迴避</string>
+    <string name="text_api_saku">索敵</string>
+    <string name="text_api_houm">命中</string>
+    <string name="text_api_baku">爆裝</string>
+    <string name="text_api_leng">射程</string>
+
+    <string name="text_api_leng_1">短</string>
+    <string name="text_api_leng_2">中</string>
+    <string name="text_api_leng_3">長</string>
+    <string name="text_api_leng_4">超長</string>
+
+    <string name="text_api_houm2">對爆</string>
+    <string name="text_api_houk2">迎擊</string>
+    <string name="text_api_cost">配置費用</string>
+    <string name="text_api_distance">行動半徑</string>
 </resources>

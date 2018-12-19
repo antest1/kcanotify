@@ -34,6 +34,8 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_EQUIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaEquipListViewAdpater.STAT_KEYS;
+import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
@@ -137,8 +139,19 @@ public class EquipmentInfoActivity extends AppCompatActivity {
             }
         }
 
+        JsonObject itemStatTranslation = new JsonObject();
+        for (String key: KcaEquipListViewAdpater.STAT_KEYS) {
+            itemStatTranslation.addProperty(key, getStringWithLocale(getId("text_"+key, R.string.class)));
+        }
+        itemStatTranslation.addProperty("api_houm2", getStringWithLocale(R.string.text_api_houm2));
+        itemStatTranslation.addProperty("api_houk2", getStringWithLocale(R.string.text_api_houk2));
+        for (int i = 1; i <= 4; i++) {
+            itemStatTranslation.addProperty("api_leng"+i, getStringWithLocale(getId("text_api_leng_"+i, R.string.class)));
+        }
+
         adapter = new KcaEquipListViewAdpater();
         adapter.setSummaryFormat(getStringWithLocale(R.string.equipinfo_summary));
+        adapter.setStatTranslation(itemStatTranslation);
         adapter.setListViewItemList(equipment_data, counter, ship_equip_info, filtcond);
         listview = findViewById(R.id.equipment_listview);
         listview.setAdapter(adapter);

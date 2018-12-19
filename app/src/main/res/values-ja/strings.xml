@@ -660,4 +660,26 @@
     <string name="fleetinfo_export_title">デッキビルダー出力</string>
     <string name="fleetinfo_export_openpage">艦隊シミュレーター</string>
     <string name="fleetinfo_export_clipboard">クリップボードにコピー</string>
+
+    <string name="text_api_houg">火力</string>
+    <string name="text_api_raig">雷装</string>
+    <string name="text_api_tyku">対空</string>
+    <string name="text_api_souk">装甲</string>
+    <string name="text_api_tais">対潜</string>
+    <string name="text_api_houk">回避</string>
+    <string name="text_api_saku">索敵</string>
+    <string name="text_api_houm">命中</string>
+    <string name="text_api_baku">爆装</string>
+    <string name="text_api_leng">射程</string>
+
+    <string name="text_api_leng_1">短</string>
+    <string name="text_api_leng_2">中</string>
+    <string name="text_api_leng_3">長</string>
+    <string name="text_api_leng_4">超長</string>
+
+    <string name="text_api_houm2">対爆</string>
+    <string name="text_api_houk2">迎擊</string>
+    <string name="text_api_cost">配置コスト</string>
+    <string name="text_api_distance">行動半径</string>
+
 </resources>
