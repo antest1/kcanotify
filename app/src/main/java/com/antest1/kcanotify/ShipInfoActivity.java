@@ -135,12 +135,13 @@ public class ShipInfoActivity extends AppCompatActivity {
         is_popup_on = false;
 
         export_exit = export_popup.findViewById(R.id.export_exit);
-        export_exit.setOnClickListener(v -> {
+        ((ImageView) export_exit).setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+
+        export_popup.findViewById(R.id.export_bar).setOnClickListener(v -> {
             is_popup_on = false;
             export_popup.setVisibility(View.GONE);
         });
-        ((ImageView) export_exit).setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
 
         export_clipboard = export_popup.findViewById(R.id.export_clipboard);
         export_clipboard.setText(getStringWithLocale(R.string.shipinfo_export_clipboard));

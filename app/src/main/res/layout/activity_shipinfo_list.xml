@@ -130,6 +130,7 @@
             android:padding="10dp">
 
             <RelativeLayout
+                android:id="@+id/export_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

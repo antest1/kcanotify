@@ -31,6 +31,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -51,6 +52,7 @@ import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
 import static com.antest1.kcanotify.R.id.fleetlist_raw;
 
 
@@ -72,7 +74,7 @@ public class FleetInfoActivity extends AppCompatActivity {
 
     boolean is_popup_on;
     View export_popup, export_exit;
-    TextView export_clipboard, export_openpage;
+    TextView export_clipboard, export_openpage, export_openpage2;
 
     public FleetInfoActivity() {
         LocaleUtils.updateConfig(this);
@@ -147,17 +149,20 @@ public class FleetInfoActivity extends AppCompatActivity {
         is_popup_on = false;
 
         export_exit = export_popup.findViewById(R.id.export_exit);
-        export_exit.setOnClickListener(v -> {
+        ((ImageView) export_exit).setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+
+        export_popup.findViewById(R.id.export_bar).setOnClickListener(v -> {
             is_popup_on = false;
             export_popup.setVisibility(View.GONE);
         });
-        ((ImageView) export_exit).setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+
+        TextView content = findViewById(R.id.export_content);
 
         export_clipboard = export_popup.findViewById(R.id.export_clipboard);
         export_clipboard.setText(getStringWithLocale(R.string.fleetinfo_export_clipboard));
         export_clipboard.setOnClickListener(v -> {
-            CharSequence text = ((TextView) findViewById(R.id.export_content)).getText();
+            CharSequence text = content.getText();
             ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             clip.setPrimaryClip(ClipData.newPlainText("text", text));
             doVibrate(vibrator, 100);
@@ -166,13 +171,39 @@ public class FleetInfoActivity extends AppCompatActivity {
         });
 
         export_openpage = export_popup.findViewById(R.id.export_openpage);
-        export_openpage.setText(getStringWithLocale(R.string.fleetinfo_export_openpage));
+        export_openpage.setText(getStringWithLocale(R.string.fleetinfo_export_openpage1));
         export_openpage.setOnClickListener(v -> {
-            String data = ((TextView) findViewById(R.id.export_content)).getText().toString();
+            String data = content.getText().toString();
             try {
                 String encoded =  URLEncoder.encode(data, "utf-8");
                 Intent bIntent = new Intent(Intent.ACTION_VIEW,
                         Uri.parse("http://kancolle-calc.net/deckbuilder.html?predeck=".concat(encoded)));
+                startActivity(bIntent);
+            } catch (UnsupportedEncodingException e) {
+                Toast.makeText(getApplicationContext(), "parsing error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        export_openpage2 = export_popup.findViewById(R.id.export_openpage2);
+        export_openpage2.setText(getStringWithLocale(R.string.fleetinfo_export_openpage2));
+        export_openpage2.setOnClickListener(v -> {
+            String data = content.getText().toString();
+            String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
+            String locale_code = getLocaleCode(locale).replace("jp", "ja");
+            try {
+                JsonObject add_data = new JsonParser().parse(data).getAsJsonObject();
+                add_data.addProperty("version", 4.1);
+                add_data.addProperty("lang", locale_code);
+                data = add_data.toString();
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "json parsing error", Toast.LENGTH_SHORT).show();
+
+            }
+
+            try {
+                String encoded =  URLEncoder.encode(data, "utf-8");
+                Intent bIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://nishisonic.xsrv.jp/app/ImgKCbuilder/?predeck=".concat(encoded)));
                 startActivity(bIntent);
             } catch (UnsupportedEncodingException e) {
                 Toast.makeText(getApplicationContext(), "parsing error", Toast.LENGTH_SHORT).show();

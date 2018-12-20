@@ -664,7 +664,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_export_openpage">开启拥有舰队展示页网站</string>
     <string name="action_export_deckbuilder">DeckBuilder</string>
     <string name="fleetinfo_export_clipboard">复制到剪贴板</string>
-    <string name="fleetinfo_export_openpage">开启舰队模拟器网站</string>
+    <string name="fleetinfo_export_openpage1">开启舰队模拟器网站</string>
+    <string name="fleetinfo_export_openpage2">舰队编成图像输出</string>
     <string name="fleetinfo_export_title">汇出到 DeckBuilder</string>
 
 

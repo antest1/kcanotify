@@ -658,7 +658,8 @@
     <string name="shipinfo_export_openpage">艦隊晒し用ページを開く</string>
     <string name="action_export_deckbuilder">デッキビルダー</string>
     <string name="fleetinfo_export_title">デッキビルダー出力</string>
-    <string name="fleetinfo_export_openpage">艦隊シミュレーター</string>
+    <string name="fleetinfo_export_openpage1">艦隊シミュレーター</string>
+    <string name="fleetinfo_export_openpage2">艦これ編成画像出力</string>
     <string name="fleetinfo_export_clipboard">クリップボードにコピー</string>
 
     <string name="text_api_houg">火力</string>
