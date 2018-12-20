@@ -189,7 +189,7 @@ public class FleetInfoActivity extends AppCompatActivity {
         export_openpage2.setOnClickListener(v -> {
             String data = content.getText().toString();
             String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
-            String locale_code = getLocaleCode(locale).replace("jp", "ja");
+            String locale_code = getLocaleCode(locale);
             try {
                 JsonObject add_data = new JsonParser().parse(data).getAsJsonObject();
                 add_data.addProperty("version", 4.1);
@@ -203,7 +203,7 @@ public class FleetInfoActivity extends AppCompatActivity {
             try {
                 String encoded =  URLEncoder.encode(data, "utf-8");
                 Intent bIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://nishisonic.xsrv.jp/app/ImgKCbuilder/?predeck=".concat(encoded)));
+                        Uri.parse("http://www.nishikuma.net/ImgKCbuilder/?predeck=".concat(encoded)));
                 startActivity(bIntent);
             } catch (UnsupportedEncodingException e) {
                 Toast.makeText(getApplicationContext(), "parsing error", Toast.LENGTH_SHORT).show();
