@@ -198,12 +198,12 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mWakeLock.acquire();
+            mWakeLock.acquire(10*60*1000L /*10 minutes*/);
             mProgressDialog.show();
         }
 
         private void workFinished()  {
-            mWakeLock.release();
+            if (mWakeLock.isHeld()) mWakeLock.release();
             Log.e("KCA-FS", KcaUtils.format("%d %d %d", totalFiles, successedFiles, failedFiles));
             setPreferences(getApplicationContext(), PREF_FAIRY_DOWN_FLAG, true);
             mProgressDialog.dismiss();

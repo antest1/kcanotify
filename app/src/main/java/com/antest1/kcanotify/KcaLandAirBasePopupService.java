@@ -173,119 +173,125 @@ public class KcaLandAirBasePopupService extends Service {
             view_list.removeAllViews();
             JsonArray api_air_base = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
             String value = "";
-            if (api_air_base != null && api_air_base.size() > 0) {
-                for (int i = 0; i < api_air_base.size(); i++) {
-                    JsonObject item = api_air_base.get(i).getAsJsonObject();
-                    View v = vi.inflate(R.layout.listivew_lab, null);
+            try {
+                if (api_air_base != null && api_air_base.size() > 0) {
+                    for (int i = 0; i < api_air_base.size(); i++) {
+                        JsonObject item = api_air_base.get(i).getAsJsonObject();
+                        View v = vi.inflate(R.layout.listivew_lab, null);
 
-                    int ori_info = getResources().getConfiguration().orientation;
-                    if (ori_info == Configuration.ORIENTATION_PORTRAIT) {
-                        ((LinearLayout) v.findViewById(R.id.lab_row)).setOrientation(LinearLayout.VERTICAL);
-                    } else {
-                        ((LinearLayout) v.findViewById(R.id.lab_row)).setOrientation(LinearLayout.HORIZONTAL);
-                    }
-
-                    JsonObject distance_info = item.getAsJsonObject("api_distance");
-                    int distance_base = distance_info.get("api_base").getAsInt();
-                    int distance_bonus = distance_info.get("api_bonus").getAsInt();
-                    ((TextView) v.findViewById(R.id.lab_dist)).setText(
-                            KcaUtils.format(getStringWithLocale(R.string.labinfoview_dist_format), distance_base + distance_bonus));
-
-                    TextView titleView = v.findViewById(R.id.lab_title);
-                    titleView.setText(KcaUtils.format("[%d-%d] %s",
-                            item.get("api_area_id").getAsInt(), item.get("api_rid").getAsInt(), item.get("api_name").getAsString()));
-
-                    TextView statusView = v.findViewById(R.id.lab_status);
-                    TextView fpView = v.findViewById(R.id.lab_fp);
-                    int fp_value = 0;
-                    int action_status = item.get("api_action_kind").getAsInt();
-                    switch (action_status) {
-                        case LAB_STATUS_STANDBY:
-                            statusView.setText(getStringWithLocale(R.string.labinfoview_status_standby));
-                            statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusStandby));
-                            fpView.setText("");
-                            fpView.setVisibility(View.GONE);
-                            break;
-                        case LAB_STATUS_SORTIE:
-                            statusView.setText(getStringWithLocale(R.string.labinfoview_status_sortie));
-                            statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusSortie));
-                            fp_value = deckInfoCalc.getAirPowerInAirBase(LAB_STATUS_SORTIE, item.getAsJsonArray("api_plane_info"));
-                            fpView.setText(KcaUtils.format(getStringWithLocale(R.string.labinfoview_fp_format), fp_value));
-                            fpView.setVisibility(View.VISIBLE);
-                            break;
-                        case LAB_STATUS_DEFENSE:
-                            statusView.setText(getStringWithLocale(R.string.labinfoview_status_defense));
-                            statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusDefense));
-                            fp_value = deckInfoCalc.getAirPowerInAirBase(LAB_STATUS_DEFENSE, item.getAsJsonArray("api_plane_info"));
-                            fpView.setText(KcaUtils.format(getStringWithLocale(R.string.labinfoview_fp_format), fp_value));
-                            fpView.setVisibility(View.VISIBLE);
-                            break;
-                        case LAB_STATUS_RETREAT:
-                            statusView.setText(getStringWithLocale(R.string.labinfoview_status_retreat));
-                            statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusRetreat));
-                            fpView.setText("");
-                            fpView.setVisibility(View.GONE);
-                            break;
-                        case LAB_STATUS_REST:
-                            statusView.setText(getStringWithLocale(R.string.labinfoview_status_rest));
-                            statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusRest));
-                            fpView.setText("");
-                            fpView.setVisibility(View.GONE);
-                            break;
-                        default:
-                            statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
-                            fpView.setText("");
-                            fpView.setVisibility(View.GONE);
-                            statusView.setText("");
-                    }
-                    int empty_count = 0;
-                    JsonArray plane_info = item.getAsJsonArray("api_plane_info");
-                    for (int j = 0; j < plane_info.size(); j++) {
-                        JsonObject plane = plane_info.get(j).getAsJsonObject();
-                        int state = plane.get("api_state").getAsInt();
-                        ImageView iconView = v.findViewById(getId(KcaUtils.format("lab_icon%d", j + 1), R.id.class));
-                        if (state > 0) {
-                            int typeres = 0;
-                            int cond = 1;
-                            if (plane.has("api_cond")) plane.get("api_cond").getAsInt();
-                            int slotid = plane.get("api_slotid").getAsInt();
-                            JsonObject itemData = getUserItemStatusById(slotid, "id", "type");
-                            int itemType = itemData.get("type").getAsJsonArray().get(3).getAsInt();
-                            try {
-                                typeres = getId(KcaUtils.format("item_%d", itemType), R.mipmap.class);
-                            } catch (Exception e) {
-                                typeres = R.mipmap.item_0;
-                            }
-                            iconView.setImageResource(typeres);
-                            if (state == 2) {
-                                iconView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsPlaneInChange), PorterDuff.Mode.OVERLAY);
-                            } else if (cond == 3) {
-                                iconView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2), PorterDuff.Mode.OVERLAY);
-                            } else if (cond == 2) {
-                                iconView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue1), PorterDuff.Mode.OVERLAY);
-                            } else {
-                                iconView.clearColorFilter();
-                            }
+                        int ori_info = getResources().getConfiguration().orientation;
+                        if (ori_info == Configuration.ORIENTATION_PORTRAIT) {
+                            ((LinearLayout) v.findViewById(R.id.lab_row)).setOrientation(LinearLayout.VERTICAL);
                         } else {
-                            empty_count += 1;
-                            iconView.clearColorFilter();
-                            iconView.setImageResource(R.mipmap.item_0);
+                            ((LinearLayout) v.findViewById(R.id.lab_row)).setOrientation(LinearLayout.HORIZONTAL);
                         }
+
+                        JsonObject distance_info = item.getAsJsonObject("api_distance");
+                        int distance_base = distance_info.get("api_base").getAsInt();
+                        int distance_bonus = distance_info.get("api_bonus").getAsInt();
+                        ((TextView) v.findViewById(R.id.lab_dist)).setText(
+                                KcaUtils.format(getStringWithLocale(R.string.labinfoview_dist_format), distance_base + distance_bonus));
+
+                        TextView titleView = v.findViewById(R.id.lab_title);
+                        titleView.setText(KcaUtils.format("[%d-%d] %s",
+                                item.get("api_area_id").getAsInt(), item.get("api_rid").getAsInt(), item.get("api_name").getAsString()));
+
+                        TextView statusView = v.findViewById(R.id.lab_status);
+                        TextView fpView = v.findViewById(R.id.lab_fp);
+                        int fp_value = 0;
+                        int action_status = item.get("api_action_kind").getAsInt();
+                        switch (action_status) {
+                            case LAB_STATUS_STANDBY:
+                                statusView.setText(getStringWithLocale(R.string.labinfoview_status_standby));
+                                statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusStandby));
+                                fpView.setText("");
+                                fpView.setVisibility(View.GONE);
+                                break;
+                            case LAB_STATUS_SORTIE:
+                                statusView.setText(getStringWithLocale(R.string.labinfoview_status_sortie));
+                                statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusSortie));
+                                fp_value = deckInfoCalc.getAirPowerInAirBase(LAB_STATUS_SORTIE, item.getAsJsonArray("api_plane_info"));
+                                fpView.setText(KcaUtils.format(getStringWithLocale(R.string.labinfoview_fp_format), fp_value));
+                                fpView.setVisibility(View.VISIBLE);
+                                break;
+                            case LAB_STATUS_DEFENSE:
+                                statusView.setText(getStringWithLocale(R.string.labinfoview_status_defense));
+                                statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusDefense));
+                                fp_value = deckInfoCalc.getAirPowerInAirBase(LAB_STATUS_DEFENSE, item.getAsJsonArray("api_plane_info"));
+                                fpView.setText(KcaUtils.format(getStringWithLocale(R.string.labinfoview_fp_format), fp_value));
+                                fpView.setVisibility(View.VISIBLE);
+                                break;
+                            case LAB_STATUS_RETREAT:
+                                statusView.setText(getStringWithLocale(R.string.labinfoview_status_retreat));
+                                statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusRetreat));
+                                fpView.setText("");
+                                fpView.setVisibility(View.GONE);
+                                break;
+                            case LAB_STATUS_REST:
+                                statusView.setText(getStringWithLocale(R.string.labinfoview_status_rest));
+                                statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsStatusRest));
+                                fpView.setText("");
+                                fpView.setVisibility(View.GONE);
+                                break;
+                            default:
+                                statusView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+                                fpView.setText("");
+                                fpView.setVisibility(View.GONE);
+                                statusView.setText("");
+                        }
+                        int empty_count = 0;
+                        JsonArray plane_info = item.getAsJsonArray("api_plane_info");
+                        for (int j = 0; j < plane_info.size(); j++) {
+                            JsonObject plane = plane_info.get(j).getAsJsonObject();
+                            int state = plane.get("api_state").getAsInt();
+                            ImageView iconView = v.findViewById(getId(KcaUtils.format("lab_icon%d", j + 1), R.id.class));
+                            if (state > 0) {
+                                int typeres = 0;
+                                int cond = 1;
+                                if (plane.has("api_cond")) plane.get("api_cond").getAsInt();
+                                int slotid = plane.get("api_slotid").getAsInt();
+                                JsonObject itemData = getUserItemStatusById(slotid, "id", "type");
+                                int itemType = itemData.get("type").getAsJsonArray().get(3).getAsInt();
+                                try {
+                                    typeres = getId(KcaUtils.format("item_%d", itemType), R.mipmap.class);
+                                } catch (Exception e) {
+                                    typeres = R.mipmap.item_0;
+                                }
+                                iconView.setImageResource(typeres);
+                                if (state == 2) {
+                                    iconView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsPlaneInChange), PorterDuff.Mode.OVERLAY);
+                                } else if (cond == 3) {
+                                    iconView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2), PorterDuff.Mode.OVERLAY);
+                                } else if (cond == 2) {
+                                    iconView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue1), PorterDuff.Mode.OVERLAY);
+                                } else {
+                                    iconView.clearColorFilter();
+                                }
+                            } else {
+                                empty_count += 1;
+                                iconView.clearColorFilter();
+                                iconView.setImageResource(R.mipmap.item_0);
+                            }
+                        }
+                        LinearLayout lab_plane_layout = v.findViewById(R.id.lab_plane);
+                        lab_plane_layout.setTag(i);
+                        if (empty_count < 4) {
+                            lab_plane_layout.setOnTouchListener(mViewTouchListener);
+                            lab_plane_layout.setVisibility(View.VISIBLE);
+                        } else {
+                            lab_plane_layout.setVisibility(View.GONE);
+                        }
+                        view_list.addView(v);
                     }
-                    LinearLayout lab_plane_layout = v.findViewById(R.id.lab_plane);
-                    lab_plane_layout.setTag(i);
-                    if (empty_count < 4) {
-                        lab_plane_layout.setOnTouchListener(mViewTouchListener);
-                        lab_plane_layout.setVisibility(View.VISIBLE);
-                    } else {
-                        lab_plane_layout.setVisibility(View.GONE);
-                    }
-                    view_list.addView(v);
+                    mView.findViewById(R.id.view_lab_test).setVisibility(View.GONE);
+                } else {
+                    mView.findViewById(R.id.view_lab_test).setVisibility(View.VISIBLE);
+                    ((TextView) mView.findViewById(R.id.view_lab_test)).setText("No Data");
                 }
-                ((TextView) mView.findViewById(R.id.view_lab_test)).setVisibility(View.GONE);
-            } else {
-                ((TextView) mView.findViewById(R.id.view_lab_test)).setVisibility(View.VISIBLE);
-                ((TextView) mView.findViewById(R.id.view_lab_test)).setText("No Data");
+            } catch (Exception e) {
+                mView.findViewById(R.id.view_lab_test).setVisibility(View.VISIBLE);
+                ((TextView) mView.findViewById(R.id.view_lab_test)).setText("Error while processing data");
+                dbHelper.putValue(DB_KEY_LABSIFNO, (new JsonArray()).toString());
             }
 
             mView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);

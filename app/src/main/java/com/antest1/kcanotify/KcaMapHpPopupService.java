@@ -146,47 +146,52 @@ public class KcaMapHpPopupService extends Service {
                 hp_info.setText("data not loaded");
             }
             if (intent.getAction().equals(MAPHP_SHOW_ACTION)) {
-                JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_APIMAPINFO);
-                if (data != null) {
-                    String content = "";
-                    List<String> eventhp_list = new ArrayList<>();
-                    List<String> maphp_list = new ArrayList<>();
-                    for (int i = 0; i < data.size(); i++) {
-                        JsonObject item = data.get(i).getAsJsonObject();
-                        int id = item.get("api_id").getAsInt();
-                        String map_id_str = getMapString(id);
-                        if (item.has("api_eventmap")) {
-                            JsonObject eventitem = item.getAsJsonObject("api_eventmap");
-                            if (eventitem.has("api_state") && eventitem.get("api_state").getAsInt() != 2) {
-                                int gauge_type = 0;
-                                int gauge_num = 0;
-                                if (eventitem.has("api_gauge_type")) {
-                                    gauge_type = eventitem.get("api_gauge_type").getAsInt();
+                try {
+                    JsonArray data = dbHelper.getJsonArrayValue(DB_KEY_APIMAPINFO);
+                    if (data != null) {
+                        String content = "";
+                        List<String> eventhp_list = new ArrayList<>();
+                        List<String> maphp_list = new ArrayList<>();
+                        for (int i = 0; i < data.size(); i++) {
+                            JsonObject item = data.get(i).getAsJsonObject();
+                            int id = item.get("api_id").getAsInt();
+                            String map_id_str = getMapString(id);
+                            if (item.has("api_eventmap")) {
+                                JsonObject eventitem = item.getAsJsonObject("api_eventmap");
+                                if (eventitem.has("api_state") && eventitem.get("api_state").getAsInt() != 2) {
+                                    int gauge_type = 0;
+                                    int gauge_num = 0;
+                                    if (eventitem.has("api_gauge_type")) {
+                                        gauge_type = eventitem.get("api_gauge_type").getAsInt();
+                                    }
+                                    if (eventitem.has("api_gauge_num")) {
+                                        gauge_num = eventitem.get("api_gauge_num").getAsInt();
+                                    }
+                                    int now_maphp = eventitem.get("api_now_maphp").getAsInt();
+                                    int max_maphp = eventitem.get("api_max_maphp").getAsInt();
+                                    eventhp_list.add(getMapHpStr(gauge_type, gauge_num, id, now_maphp, max_maphp));
                                 }
-                                if (eventitem.has("api_gauge_num")) {
-                                    gauge_num = eventitem.get("api_gauge_num").getAsInt();
-                                }
-                                int now_maphp = eventitem.get("api_now_maphp").getAsInt();
-                                int max_maphp = eventitem.get("api_max_maphp").getAsInt();
-                                eventhp_list.add(getMapHpStr(gauge_type, gauge_num, id, now_maphp, max_maphp));
+                            } else if (item.has("api_defeat_count")) {
+                                int gauge_type = item.get("api_gauge_type").getAsInt();
+                                int gauge_num = item.get("api_gauge_num").getAsInt();
+                                int defeat_count = item.get("api_defeat_count").getAsInt();
+                                int total_count = item.get("api_required_defeat_count").getAsInt();
+                                maphp_list.add(getMapHpStr(gauge_type, gauge_num, id, total_count - defeat_count, total_count));
                             }
-                        } else if (item.has("api_defeat_count")) {
-                            int gauge_type = item.get("api_gauge_type").getAsInt();
-                            int gauge_num = item.get("api_gauge_num").getAsInt();
-                            int defeat_count = item.get("api_defeat_count").getAsInt();
-                            int total_count = item.get("api_required_defeat_count").getAsInt();
-                            maphp_list.add(getMapHpStr(gauge_type, gauge_num, id, total_count - defeat_count, total_count));
                         }
+                        for (String item : eventhp_list) {
+                            content = content.concat(item).concat("\n");
+                        }
+                        for (String item : maphp_list) {
+                            content = content.concat(item).concat("\n");
+                        }
+                        hp_info.setText(content.trim());
+                    } else {
+                        hp_info.setText("data not loaded");
                     }
-                    for (String item : eventhp_list) {
-                        content = content.concat(item).concat("\n");
-                    }
-                    for (String item : maphp_list) {
-                        content = content.concat(item).concat("\n");
-                    }
-                    hp_info.setText(content.trim());
-                } else {
-                    hp_info.setText("data not loaded");
+                } catch (Exception e) {
+                    hp_info.setText("error while processing");
+                    dbHelper.putValue(DB_KEY_APIMAPINFO, (new JsonArray()).toString());
                 }
             }
         }
