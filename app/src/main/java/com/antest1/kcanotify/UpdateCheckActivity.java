@@ -210,6 +210,12 @@ public class UpdateCheckActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        loadTranslationData(getApplicationContext(), true);
+        super.onPause();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -654,7 +660,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        loadTranslationData(context, true);
                         Toast.makeText(context, "Download Completed: " + name, Toast.LENGTH_LONG).show();
                     }
                 }, LOAD_DELAY);
