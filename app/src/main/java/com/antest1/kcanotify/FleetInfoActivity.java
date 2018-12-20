@@ -310,16 +310,17 @@ public class FleetInfoActivity extends AppCompatActivity {
                     sitem.addProperty("lv", user.get("api_lv").getAsInt());
                     sitem.addProperty("luck", user.getAsJsonArray("api_lucky").get(0).getAsInt());
                     sitem.addProperty("hp", user.get("api_nowhp").getAsInt());
-                    sitem.addProperty("asw", user.getAsJsonArray("api_taisen").get(0).getAsInt());
                     JsonObject items = new JsonObject();
 
+                    int taisen_equip = 0;
                     JsonArray api_slot = user.getAsJsonArray("api_slot");
                     for (int k = 0; k < api_slot.size(); k++) {
                         JsonObject item_s = new JsonObject();
                         int slotid = api_slot.get(k).getAsInt();
                         if (slotid <= 0) continue;
-                        JsonObject item_data = getUserItemStatusById(slotid, "slotitem_id,level,alv", "");
+                        JsonObject item_data = getUserItemStatusById(slotid, "slotitem_id,level,alv", "tais");
                         if (item_data != null) {
+                            taisen_equip += item_data.get("tais").getAsInt();
                             int slotitme_id = item_data.get("slotitem_id").getAsInt();
                             item_s.addProperty("id", slotitme_id);
                             if (item_data.has("level")) {
@@ -337,8 +338,9 @@ public class FleetInfoActivity extends AppCompatActivity {
                     int ship_slot_ex = user.get("api_slot_ex").getAsInt();
                     if (ship_slot_ex > 0) {
                         JsonObject item_s = new JsonObject();
-                        JsonObject ex_item_data = getUserItemStatusById(ship_slot_ex, "slotitem_id,level,alv", "");
+                        JsonObject ex_item_data = getUserItemStatusById(ship_slot_ex, "slotitem_id,level,alv", "tais");
                         if (ex_item_data != null) {
+                            taisen_equip += ex_item_data.get("tais").getAsInt();
                             int slotitme_id = ex_item_data.get("slotitem_id").getAsInt();
                             item_s.addProperty("id", slotitme_id);
                             if (ex_item_data.has("level")) {
@@ -353,6 +355,8 @@ public class FleetInfoActivity extends AppCompatActivity {
                         }
                     }
 
+
+                    sitem.addProperty("asw", user.getAsJsonArray("api_taisen").get(0).getAsInt() - taisen_equip);
                     sitem.add("items", items);
                     fleet.add(KcaUtils.format("s%d", j + 1), sitem);
                 }
