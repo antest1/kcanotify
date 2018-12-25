@@ -51,6 +51,23 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="16sp" />
 
+                <TextView
+                    android:id="@+id/gamedata_server"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoText="false"
+                    android:background="@color/colorAccent"
+                    android:paddingBottom="2dp"
+                    android:paddingEnd="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingStart="8dp"
+                    android:paddingTop="2dp"
+                    android:text="@string/action_server"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
             </LinearLayout>
 
             <CheckBox

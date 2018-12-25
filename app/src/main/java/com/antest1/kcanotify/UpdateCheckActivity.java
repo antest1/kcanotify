@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +61,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_RES_USELOCAL;
+import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaResCheckItemAdpater.RESCHK_KEY;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
@@ -77,12 +80,13 @@ public class UpdateCheckActivity extends AppCompatActivity {
     ListView data_list, resource_list;
     KcaResCheckItemAdpater gamedata_adapter = new KcaResCheckItemAdpater();
     KcaResCheckItemAdpater resource_adapter = new KcaResCheckItemAdpater();
-    TextView gamedata_chk, resource_chk, resource_downall;
+    TextView gamedata_chk, resource_chk, gamedata_server, resource_downall;
     TextView gamedata_load, resource_load;
     CheckBox checkstart_chkbox, localonly_chkbox, resource_reset;
     ProgressDialog mProgressDialog;
     JsonArray fairy_queue = new JsonArray();
     boolean main_flag = false;
+    int checked = -1;
 
     KcaDBHelper dbHelper;
     UpdateHandler handler;
@@ -196,6 +200,42 @@ public class UpdateCheckActivity extends AppCompatActivity {
         resource_chk.setOnClickListener(v -> checkResourceUpdate());
         resource_downall.setOnClickListener(v -> downloadAllResources());
         resource_downall.setVisibility(View.GONE);
+
+
+        gamedata_server = findViewById(R.id.gamedata_server);
+        gamedata_server.setText(getStringWithLocale(R.string.action_server));
+        gamedata_server.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final int initValue = checked;
+                String[] listItems = getResources().getStringArray(R.array.ServerLocation);
+                String[] listEntry = getResources().getStringArray(R.array.ServerLocationValue);
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(UpdateCheckActivity.this);
+                mBuilder.setTitle(getStringWithLocale(R.string.setting_menu_app_title_updatecheckserver));
+                String currentServer = getStringPreferences(getApplicationContext(), PREF_UPDATE_SERVER);
+                for (int i = 0; i < listEntry.length; i++) if (currentServer.equals(listEntry[i])) {
+                    checked = i;
+                    break;
+                }
+
+                mBuilder.setSingleChoiceItems(listItems, checked, (dialog, which) -> {
+                    checked = which;
+                });
+                mBuilder.setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog, which) -> {
+                    Log.e("KCA", "selected: " + checked);
+                    if (checked != -1) {
+                        String selectedServer = listEntry[checked];
+                        setPreferences(getApplicationContext(), PREF_UPDATE_SERVER, selectedServer);
+                    }
+                });
+                mBuilder.setNegativeButton(getStringWithLocale(R.string.dialog_cancel), ((dialog, which) -> {
+                    checked = initValue;
+                }));
+
+                AlertDialog mDialog = mBuilder.create();
+                mDialog.show();
+            }
+        });
 
         checkVersionUpdate();
         checkResourceUpdate();
