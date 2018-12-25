@@ -3,10 +3,11 @@
     <dimen name="activity_horizontal_margin">18dp</dimen>
     <dimen name="activity_vertical_margin">18dp</dimen>
 
-    <dimen name="activity_main_btn_size">72dp</dimen>
+    <dimen name="activity_main_btn_size_top">64dp</dimen>
+    <dimen name="activity_main_btn_size_botton">64dp</dimen>
     <dimen name="activity_main_btn_textsize">22dp</dimen>
-    <dimen name="activity_main_btn_fairy_padding">16dp</dimen>
-    <dimen name="activity_main_btn_tools_padding">18dp</dimen>
+    <dimen name="activity_main_btn_fairy_padding">12dp</dimen>
+    <dimen name="activity_main_btn_tools_padding">14dp</dimen>
     <dimen name="activity_text_size">22sp</dimen>
 
     <dimen name="view_text_title">22dp</dimen>
