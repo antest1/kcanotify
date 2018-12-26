@@ -913,7 +913,7 @@ public class KcaBattleViewService extends Service {
 
                 String api_url = api_data.get("api_url").getAsString();
                 JsonObject rankData;
-                if (api_url.equals(API_REQ_SORTIE_LDAIRBATTLE) || api_url.equals(API_REQ_COMBINED_LDAIRBATTLE)) {
+                if (api_url.equals(API_REQ_SORTIE_LDAIRBATTLE) || api_url.equals(API_REQ_COMBINED_LDAIRBATTLE) || api_url.equals(API_REQ_SORTIE_LDSHOOTING)) {
                     rankData = KcaBattle.calculateLdaRank(fleetcheckdata);
                 } else {
                     rankData = KcaBattle.calculateRank(fleetcheckdata);

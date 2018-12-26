@@ -402,11 +402,17 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         int node = data.get("node").getAsInt();
         boolean isboss = data.get("isboss").getAsBoolean();
         String rank = data.get("result").getAsString();
-        JsonArray ship_ke = data.getAsJsonArray("ship_ke");
+
+        JsonElement ship_ke_data = data.get("ship_ke");
+        JsonArray ship_ke = new JsonArray();
+        JsonArray afterhps_e = new JsonArray();
+        if (!ship_ke_data.isJsonNull()) {
+            ship_ke = data.getAsJsonArray("ship_ke");
+            afterhps_e = data.getAsJsonArray("afterhps_e");
+        }
         JsonArray deck_data = data.getAsJsonObject("deck_port").getAsJsonArray("api_deck_data");
         JsonArray fleet_data = deck_data.get(0).getAsJsonObject().getAsJsonArray("api_ship");
 
-        JsonArray afterhps_e = data.getAsJsonArray("afterhps_e");
         JsonArray ship_ke_combined = null;
         JsonArray aftercbhps_e = null;
 
