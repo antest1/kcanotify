@@ -222,7 +222,7 @@ public class KcaMapHpPopupService extends Service {
 
     private String getMapHpStr(int type, int num, int id, int current, int total) {
         String num_text = "";
-        if (id == 72 || id > 100) num_text = KcaUtils.format("(#%d)", num);
+        if (num > 0 && (id == 72 || id > 100)) num_text = KcaUtils.format("(#%d)", num);
         if (type == 3) {
             return KcaUtils.format(maphp_format, getMapString(id), "TP".concat(num_text), current, total);
         } else {
