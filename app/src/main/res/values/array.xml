@@ -95,11 +95,13 @@
     </string-array>
 
     <string-array name="ServerLocation" translatable="false">
+        <item>WolfgangKurz Artworks</item>
         <item>NOVA Server</item>
         <item>LIZA Server</item>
     </string-array>
 
     <string-array name="ServerLocationValue" translatable="false">
+        <item>@string/server_swaytwig</item>
         <item>@string/server_nova</item>
         <item>@string/server_liza</item>
     </string-array>

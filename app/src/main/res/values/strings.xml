@@ -42,7 +42,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_kcaqsync_link" translatable="false">http://kcaqsync.swaytwig.com</string>
 
     <!-- Link Information -->
-    <!--<string name="server_swaytwig" translatable="false">http://swaytwig.com/</string>-->
+    <string name="server_swaytwig" translatable="false">http://swaytwig.com/</string>
     <string name="server_nova" translatable="false">https://nh7l0ukr44.execute-api.us-east-1.amazonaws.com/</string>
     <string name="server_liza" translatable="false">http://52.55.91.44/</string>
     <string name="kcanotify_checkversion_link" translatable="false" formatted="false">kcanotify/v.php</string>
