@@ -188,9 +188,9 @@
 
     <color name="colorStatSallyArea0">#FFFFFF</color>
     <color name="colorStatSallyArea1">#bdbdbd</color>
-    <color name="colorStatSallyArea2">#aed581</color>
-    <color name="colorStatSallyArea3">#388e3c</color>
-    <color name="colorStatSallyArea4">#f9a825</color>
+    <color name="colorStatSallyArea2">#4caf50</color>
+    <color name="colorStatSallyArea3">#1976d2</color>
+    <color name="colorStatSallyArea4">#fdd835</color>
     <color name="colorStatSallyArea5">#00acc1</color>
     <color name="colorStatSallyArea6">#673AB7</color>
 

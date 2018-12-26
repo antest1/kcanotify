@@ -524,8 +524,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_tag_2">Straits Dispatch(Lime)</string>
     <string name="ship_tag_3">Western Mission(Green)</string>
     <string name="ship_tag_4">Europe Special(Orange)</string>
-    <string name="ship_tag_5">Force H(Blue)</string>
-    <string name="ship_tag_6">Line Practice(Purple)</string>
+    <string name="ship_tag_5">X</string>
+    <string name="ship_tag_6">X</string>
 
     <string name="ship_fleet_0">None</string>
 
