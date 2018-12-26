@@ -104,6 +104,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="node_info_airbattle" formatted="false">%s (Aerial Battle)</string>
     <string name="node_info_airsearch" formatted="false">%s (Recon)</string>
     <string name="node_info_ldairbattle" formatted="false">%s (Enemy Raid)</string>
+    <string name="node_info_ldshooting" formatted="false">%s (Radar Shooting)</string>
     <string name="node_info_nightbattle" formatted="false">%s (Night Battle)</string>
     <string name="node_info_nightdaybattle" formatted="false">%s (Night->Day)</string>
     <string name="node_info_tpoint" formatted="false">%s (TP Load)</string>

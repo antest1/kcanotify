@@ -60,6 +60,7 @@
     <string name="node_info_airbattle" formatted="false">%s (아웃레인지)</string>
     <string name="node_info_airsearch" formatted="false">%s (항공정찰)</string>
     <string name="node_info_ldairbattle" formatted="false">%s (공습전)</string>
+    <string name="node_info_ldshooting" formatted="false">%s (레이더사격)</string>
     <string name="node_info_nightbattle" formatted="false">%s (야간전)</string>
     <string name="node_info_nightdaybattle" formatted="false">%s (야간전->주간전)</string>
     <string name="node_info_tpoint" formatted="false">%s (수송포인트)</string>

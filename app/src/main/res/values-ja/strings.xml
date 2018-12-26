@@ -60,6 +60,7 @@
     <string name="node_info_airbattle" formatted="false">%s (航空戦)</string>
     <string name="node_info_airsearch" formatted="false">%s (航空偵察)</string>
     <string name="node_info_ldairbattle" formatted="false">%s (空襲戦)</string>
+    <string name="node_info_ldshooting" formatted="false">%s (レーダー射撃)</string>
     <string name="node_info_nightbattle" formatted="false">%s (夜戦)</string>
     <string name="node_info_nightdaybattle" formatted="false">%s (夜->昼)</string>
     <string name="node_info_tpoint" formatted="false">%s (揚陸地点)</string>

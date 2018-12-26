@@ -66,6 +66,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="node_info_airbattle" formatted="false">%s (航空戰)</string>
     <string name="node_info_airsearch" formatted="false">%s (偵查)</string>
     <string name="node_info_ldairbattle" formatted="false">%s (敵襲)</string>
+    <string name="node_info_ldshooting" formatted="false">%s (雷達射擊)</string>
     <string name="node_info_nightbattle" formatted="false">%s (夜戰)</string>
     <string name="node_info_nightdaybattle" formatted="false">%s (夜轉日)</string>
     <string name="node_info_tpoint" formatted="false">%s (運輸點)</string>

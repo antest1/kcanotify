@@ -1133,6 +1133,8 @@ public class KcaApiData {
                     currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_ecbattle), currentNode);
                 } else if (kind == API_NODE_EVENT_KIND_LDAIRBATTLE) {
                     currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_ldairbattle), currentNode);
+                } else if (kind == API_NODE_EVENT_KIND_LDSHOOTING) {
+                    currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_ldshooting), currentNode);
                 }
                 break;
             case API_NODE_EVENT_ID_BOSS:
@@ -1194,7 +1196,7 @@ public class KcaApiData {
                     }
                 } else if (api_event_kind == API_NODE_EVENT_KIND_NIGHTBATTLE) {
                     return ContextCompat.getColor(context, R.color.colorNightBattle);
-                } else{
+                } else {
                     return ContextCompat.getColor(context, R.color.colorBattle);
                 }
             case 5:
@@ -1207,6 +1209,8 @@ public class KcaApiData {
             case 11:
             case 12:
                 return ContextCompat.getColor(context, R.color.colorNightBattle);
+            case 13:
+                return ContextCompat.getColor(context, R.color.colorLdShooting);
             default:
                 return ContextCompat.getColor(context, R.color.colorPrimaryDark);
         }
