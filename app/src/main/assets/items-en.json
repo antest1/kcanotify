@@ -308,6 +308,10 @@
   "甲標的 丙型": "Kouhyouteki Model C",
   "14cm連装砲改": "14cm Twin Gun Mount Kai",
   "二式陸上偵察機": "Type 2 Land-based Reconnaissance Aircraft",
+  "533mm五連装魚雷(初期型)": "533mm Quintuple Torpedo Mount (Initial Model)",
+  "SG レーダー(初期型)": "SG Radar (Initial Model)",
+  "5inch単装砲 Mk.30改": "5inch Single Gun Mount Mk.30 Kai",
+  "二式陸上偵察機(熟練)": "Type 2 Land-based Reconnaissance Aircraft (Skilled)",
   
   "プレゼント箱": "Present Box",
   "秋刀魚": "Saury",
@@ -401,5 +405,9 @@
   "深海14inch連装砲改": "Abyssal 14inch Twin Gun Mount Kai",
   "深海16inch三連装砲改": "Abyssal 16inch Triple Gun Mount Kai",
   "深海攻撃哨戒鷹改二": "Abyssal Patrolling Attack Hawk Kai Ni",
-  "深海16inch三連装砲改二": "Abyssal 16inch Triple Gun Mount Kai Ni"
+  "深海16inch三連装砲改二": "Abyssal 16inch Triple Gun Mount Kai Ni",
+  "深海5inch連装砲C型": "Abyssal 5inch Twin Gun Mount Model C",
+  "深海5.5inch連装砲改": "Abyssal 5.5inch Twin Gun Mount Kai",
+  "深海標的": "Abyssal Hyouteki",
+  "深海5inch単装砲 Mk.30": "Abyssal 5inch单装炮 Mk.30"
 }

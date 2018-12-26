@@ -25,7 +25,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="backpress_msg">Press back one more time to exit</string>
     <string name="notification_appinfo_title">Kcanotify Notification</string>
     <string name="developer_email" translatable="false">kcanotify@gmail.com</string>
-    <string name="default_gamedata_version" translatable="false">4.2.4.4</string>
+    <string name="default_gamedata_version" translatable="false">4.3.0.0</string>
 
     <string name="app_download_link_playstore_label" translatable="false">Google Play Store</string>
     <string name="app_download_link_googledrive_label" translatable="false">Google Drive</string>
@@ -520,10 +520,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_criteria_count" formatted="false">Applied criteria: %d</string>
 
     <string name="ship_tag_0">None</string>
-    <string name="ship_tag_1">Patrol(Gray)</string>
-    <string name="ship_tag_2">Straits Dispatch(Lime)</string>
-    <string name="ship_tag_3">Western Mission(Green)</string>
-    <string name="ship_tag_4">Europe Special(Orange)</string>
+    <string name="ship_tag_1">Tokyo Express(Gray)</string>
+    <string name="ship_tag_2">Rabaul(Green)</string>
+    <string name="ship_tag_3">Combined(Blue)</string>
+    <string name="ship_tag_4">Buin Dispatch(Yellow)</string>
     <string name="ship_tag_5">X</string>
     <string name="ship_tag_6">X</string>
 

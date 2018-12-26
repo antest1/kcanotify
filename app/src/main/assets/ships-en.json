@@ -14,7 +14,8 @@
 		" バカンスmode-壊" : " V.M. - Damaged",
 		"改-壊": " Kai - Damaged",
 		"-壊": " - Damaged",
-		"改"      : " Kai"
+		"甲": " A",
+		"改": " Kai"
 	},
 	"金剛":"Kongou",
 	"比叡":"Hiei",
@@ -42,10 +43,8 @@
 	"祥鳳":"Shouhou",
 	"瑞鳳":"Zuihou",
 	"千歳":"Chitose",
-	"千歳甲":"Chitose A",
 	"千歳航":"Chitose Kou",
 	"千代田":"Chiyoda",
-	"千代田甲": "Chiyoda A",
 	"千代田航":"Chiyoda Kou",
 	"古鷹":"Furutaka",
 	"加古":"Kako",
@@ -292,6 +291,7 @@
 	"あきつ丸":"Akitsumaru",
 	"秋津洲":"Akitsushima",
 	"瑞穂":"Mizuho",
+	"日進": "Nisshin",
 	"速吸":"Hayasui",
 
 	"神威": "Kamoi",
@@ -340,6 +340,7 @@
 	"Gambier Bay": "Gambier Bay",
 	"Intrepid": "Intrepid",
 	"Samuel B.Roberts":"Samuel B.Roberts",
+	"Johnston": "Johnston",
 	"Nelson": "Nelson",
 	"Gotland": "Gotland",
 
@@ -442,6 +443,8 @@
 	"護衛独還姫":"German Escort Princess",
 	"船渠棲姫": "Dock Princess",
 	"欧州水姫": "European Water Princess",
+	"深海雨雲姫": "Abyssal Rain Cloud Princess",
+	"深海日棲姫": "Abyssal Sun Princess",
 
 	"elite":" elite",
 	"flagship":" flagship"

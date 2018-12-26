@@ -4,7 +4,7 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/icon_info.json"
 }, {
 	"name": "akashi_data.json",
-	"version": 2018121501,
+	"version": 2018122701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/akashi_data.json"
 }, {
 	"name": "akashi_day.json",
@@ -20,19 +20,19 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/expedition.json"
 }, {
 	"name": "items-en.json",
-	"version": 2018122001,
+	"version": 2018122701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/items-en.json"
 }, {
 	"name": "items-ko.json",
-	"version": 2018112901,
+	"version": 2018122701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/items-ko.json"
 }, {
 	"name": "items-scn.json",
-	"version": 2018112901,
+	"version": 2018122701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/items-scn.json"
 }, {
 	"name": "items-tcn.json",
-	"version": 2018112901,
+	"version": 2018122701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/items-tcn.json"
 }, {
 	"name": "quest_track.json",
@@ -60,19 +60,19 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quests-tcn.json"
 }, {
 	"name": "ships-en.json",
-	"version": 2018092301,
+	"version": 2018122701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/ships-en.json"
 }, {
 	"name": "ships-ko.json",
-	"version": 2018092301,
+	"version": 2018122701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/ships-ko.json"
 }, {
 	"name": "ships-scn.json",
-	"version": 2018092301,
+	"version": 2018122701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/ships-scn.json"
 }, {
 	"name": "ships-tcn.json",
-	"version": 2018092301,
+	"version": 2018122701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/ships-tcn.json"
 }, {
 	"name": "ships_init_equip_count.json",
@@ -84,7 +84,7 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/stype-en.json"
 }, {
 	"name": "stype-jp.json",
-	"version": 2018070501,
+	"version": 2018122701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/stype-jp.json"
 }, {
 	"name": "stype-ko.json",
