@@ -241,14 +241,13 @@ public class MainActivity extends AppCompatActivity {
 
         backPressCloseHandler = new BackPressCloseHandler(this);
 
+        //ImageView specialImage = findViewById(R.id.special_image);
+        //specialImage.setVisibility(View.GONE);
+        //specialImage.setOnClickListener(v -> v.setVisibility(View.GONE));
 
-        ImageView specialImage = findViewById(R.id.special_image);
-        specialImage.setVisibility(View.GONE);
-        specialImage.setOnClickListener(v -> v.setVisibility(View.GONE));
-
-        textSpecial = findViewById(R.id.textSpecial);
-        textSpecial.setText(getStringWithLocale(R.string.special_message));
-        textSpecial.setOnClickListener(v -> specialImage.setVisibility(View.VISIBLE));
+        //textSpecial = findViewById(R.id.textSpecial);
+        //textSpecial.setText(getStringWithLocale(R.string.special_message));
+        //textSpecial.setOnClickListener(v -> specialImage.setVisibility(View.VISIBLE));
     }
 
     @Override

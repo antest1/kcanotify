@@ -225,7 +225,7 @@
                     android:textColor="@color/colorDataUpdateText"
                     android:textSize="14dp"
                     android:visibility="gone" />
-
+                <!--
                 <TextView
                     android:id="@+id/textSpecial"
                     android:layout_width="match_parent"
@@ -246,7 +246,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/colorSpecialText"
                     android:textSize="14dp" />
-
+                    -->
             </RelativeLayout>
 
         </LinearLayout>
