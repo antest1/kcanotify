@@ -20,7 +20,7 @@ public final class KcaConstants {
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
     public static final String KCANOTIFY_USERITEM_CACHE_FILENAME = "kca_userslotitem";
     public static final int KCANOTIFY_DB_VERSION = 5;
-    public static final int KCANOTIFY_QTDB_VERSION = 2;
+    public static final int KCANOTIFY_QTDB_VERSION = 3;
     public static final int KCANOTIFY_DROPLOG_VERSION = 1;
     public static final int KCANOTIFY_RESOURCELOG_VERSION = 1;
     public static final int KCANOTIFY_PACKETLOG_VERSION = 2;

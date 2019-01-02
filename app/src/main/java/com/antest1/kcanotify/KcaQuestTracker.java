@@ -84,6 +84,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         sb.append(" CND1 INTEGER, ");
         sb.append(" CND2 INTEGER, ");
         sb.append(" CND3 INTEGER, ");
+        sb.append(" CND4 INTEGER, ");
+        sb.append(" CND5 INTEGER, ");
         sb.append(" TYPE INTEGER, ");
         sb.append(" TIME TEXT ) ");
         db.execSQL(sb.toString());
@@ -91,8 +93,13 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("drop table if exists " + qt_table_name);
-        onCreate(db);
+        if (oldVersion == 2) {
+            db.execSQL("alter table ".concat(qt_table_name).concat(" add column CND4 INTEGER"));
+            db.execSQL("alter table ".concat(qt_table_name).concat(" add column CND5 INTEGER"));
+        } else {
+            db.execSQL("drop table if exists " + qt_table_name);
+            onCreate(db);
+        }
     }
 
     public void addQuestTrack(int id) {
@@ -277,7 +284,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
     public JsonArray getQuestTrackInfo(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
         JsonArray info = new JsonArray();
-        Cursor c = db.rawQuery("SELECT KEY, CND0, CND1, CND2, CND3 from "
+        Cursor c = db.rawQuery("SELECT KEY, CND0, CND1, CND2, CND3, CND4, CND5 from "
                 .concat(qt_table_name)
                 .concat(" WHERE KEY=?"), new String[]{id});
         if (c.moveToFirst()) {
@@ -319,7 +326,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         JsonArray deck_data = data.getAsJsonObject("deck_port").getAsJsonArray("api_deck_data");
         JsonArray fleet_data = deck_data.get(0).getAsJsonObject().getAsJsonArray("api_ship");
 
-        Cursor c = db.rawQuery("SELECT KEY, CND0, CND1, CND2, CND3 from "
+        Cursor c = db.rawQuery("SELECT KEY, CND0, CND1, CND2, CND3, CND4, CND5 from "
                 .concat(qt_table_name).concat(" WHERE ACTIVE=1 ORDER BY KEY"), null);
 
         int requiredShip = 0;
@@ -332,6 +339,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             int cond1 = c.getInt(c.getColumnIndex("CND1"));
             int cond2 = c.getInt(c.getColumnIndex("CND2"));
             int cond3 = c.getInt(c.getColumnIndex("CND3"));
+            int cond4 = c.getInt(c.getColumnIndex("CND4"));
+            int cond5 = c.getInt(c.getColumnIndex("CND5"));
             JsonArray targetData;
             switch (key) {
                 case "214": // 아호
@@ -448,7 +457,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             }
         }
 
-        Cursor c = db.rawQuery("SELECT KEY, CND0, CND1, CND2, CND3 from "
+        Cursor c = db.rawQuery("SELECT KEY, CND0, CND1, CND2, CND3, CND4, CND5 from "
                 .concat(qt_table_name).concat(" WHERE ACTIVE=1 ORDER BY KEY"), null);
 
         int requiredShip = 0;
@@ -461,6 +470,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             int cond1 = c.getInt(c.getColumnIndex("CND1"));
             int cond2 = c.getInt(c.getColumnIndex("CND2"));
             int cond3 = c.getInt(c.getColumnIndex("CND3"));
+            int cond4 = c.getInt(c.getColumnIndex("CND4"));
+            int cond5 = c.getInt(c.getColumnIndex("CND5"));
             JsonArray targetData;
             switch (key) {
                 case "210": // 출격10회
@@ -730,8 +741,10 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             String cond1 = c.getString(c.getColumnIndex("CND1"));
             String cond2 = c.getString(c.getColumnIndex("CND2"));
             String cond3 = c.getString(c.getColumnIndex("CND3"));
+            String cond4 = c.getString(c.getColumnIndex("CND4"));
+            String cond5 = c.getString(c.getColumnIndex("CND5"));
             String time = c.getString(c.getColumnIndex("TIME"));
-            String[] cond_value = {cond0, cond1, cond2, cond3};
+            String[] cond_value = {cond0, cond1, cond2, cond3, cond4, cond5};
             JsonObject questTrackInfo = KcaApiData.getQuestTrackInfo(key);
             if (questTrackInfo != null) {
                 int counter = 0;
@@ -766,9 +779,12 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             int cond1 = c.getInt(c.getColumnIndex("CND1"));
             int cond2 = c.getInt(c.getColumnIndex("CND2"));
             int cond3 = c.getInt(c.getColumnIndex("CND3"));
+            int cond4 = c.getInt(c.getColumnIndex("CND4"));
+            int cond5 = c.getInt(c.getColumnIndex("CND5"));
             int type = c.getInt(c.getColumnIndex("TYPE"));
             String time = c.getString(c.getColumnIndex("TIME"));
-            sb.append(KcaUtils.format("[%s] A:%s C:%02d,%02d,%02d,%02d K:%d T:%s\n", key, active, cond0, cond1, cond2, cond3, type, time));
+            sb.append(KcaUtils.format("[%s] A:%s C:%02d,%02d,%02d,%02d,%02d,%02d K:%d T:%s\n",
+                    key, active, cond0, cond1, cond2, cond3, cond4, cond5, type, time));
         }
         c.close();
         return sb.toString().trim();
@@ -802,8 +818,11 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             int cond1 = c.getInt(c.getColumnIndex("CND1"));
             int cond2 = c.getInt(c.getColumnIndex("CND2"));
             int cond3 = c.getInt(c.getColumnIndex("CND3"));
+            int cond4 = c.getInt(c.getColumnIndex("CND4"));
+            int cond5 = c.getInt(c.getColumnIndex("CND5"));
+
             String time = c.getString(c.getColumnIndex("TIME"));
-            int[] cond_value = {cond0, cond1, cond2, cond3};
+            int[] cond_value = {cond0, cond1, cond2, cond3, cond4, cond5};
             JsonObject questItem = new JsonObject();
             questItem.addProperty("id", key);
             questItem.addProperty("active", active);
