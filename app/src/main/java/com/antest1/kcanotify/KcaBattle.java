@@ -1066,6 +1066,19 @@ public class KcaBattle {
                 enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
                 enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
+                // 기항대분식항공전 Stage 3
+                if (isKeyExist(api_data, "api_air_base_injection")) {
+                    calculateAirBattle(api_data.getAsJsonObject("api_air_base_injection"));
+                }
+
+                // 기지항공대 Stage 3
+                if (isKeyExist(api_data, "api_air_base_attack")) {
+                    JsonArray airbase_attack = api_data.getAsJsonArray("api_air_base_attack");
+                    for (int i = 0; i < airbase_attack.size(); i++) {
+                        calculateAirBattle(airbase_attack.get(i).getAsJsonObject());
+                    }
+                }
+
                 for (int n = 1; n <= 3; n++) {
                     String api_name = KcaUtils.format("api_hougeki%d", n);
                     if (isKeyExist(api_data, api_name)) {
