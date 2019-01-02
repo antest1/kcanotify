@@ -1372,11 +1372,12 @@ public class KcaService extends Service {
                     }
 
                     int new_distance = -1;
+                    JsonObject distance_data = new JsonObject();
                     JsonArray api_plane_info = new JsonArray();
                     if (jsonDataObj.has("api_data")) {
                         JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                         api_plane_info = api_data.getAsJsonArray("api_plane_info");
-                        new_distance = api_data.get("api_distance").getAsInt();
+                        distance_data = api_data.getAsJsonObject("api_distance");
                     }
 
                     JsonArray airbase_data = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
@@ -1387,7 +1388,7 @@ public class KcaService extends Service {
                             int area_id = airbase_item.get("api_area_id").getAsInt();
                             int rid = airbase_item.get("api_rid").getAsInt();
                             if (area_id == target_area_id && rid == target_base_id) {
-                                airbase_item.addProperty("api_distance", new_distance);
+                                airbase_item.add("api_distance", distance_data);
                                 JsonArray airbase_plane_info = airbase_item.getAsJsonArray("api_plane_info");
                                 for (int j = 0; j < api_plane_info.size(); j++) {
                                     JsonObject plane_item = api_plane_info.get(j).getAsJsonObject();
