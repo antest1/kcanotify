@@ -529,10 +529,9 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                if (KcaUtils.checkOnline(getApplicationContext())) {
-                    showToast(getApplicationContext(),
-                            getStringWithLocale(R.string.sa_checkupdate_servererror),
-                            Toast.LENGTH_LONG);
+                Context context = getApplicationContext();
+                if (context != null && KcaUtils.checkOnline(context)) {
+                    showToast(context, getStringWithLocale(R.string.sa_checkupdate_servererror), Toast.LENGTH_LONG);
                     dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "version_check", "", "", t.getMessage());
                 }
             }
