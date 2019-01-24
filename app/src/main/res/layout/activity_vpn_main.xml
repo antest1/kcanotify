@@ -225,7 +225,7 @@
                     android:textColor="@color/colorDataUpdateText"
                     android:textSize="14dp"
                     android:visibility="gone" />
-                <!--
+
                 <TextView
                     android:id="@+id/textSpecial"
                     android:layout_width="match_parent"
@@ -246,7 +246,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/colorSpecialText"
                     android:textSize="14dp" />
-                    -->
+
             </RelativeLayout>
 
         </LinearLayout>
@@ -258,12 +258,11 @@
         android:id="@+id/special_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
         android:background="#A0000000"
         android:padding="20dp"
         android:src="@mipmap/special_image"
-        android:visibility="gone"
+        android:visibility="visible"
         app:srcCompat="@mipmap/special_image" />
 
 </RelativeLayout>

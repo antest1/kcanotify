@@ -625,7 +625,7 @@
     <string name="fleetview_18spring_nori" formatted="false">苔 %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">茶 %02d</string>
 
-    <string name="special_message">メリークリスマス！</string>
+    <string name="special_message">せっつぶーん！</string>
 
     <string name="widget_timer_name">Kcanotifyタイマーウィジェット</string>
     <string name="fleet_format">第%d艦隊</string>

@@ -54,6 +54,7 @@ import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
+import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -241,13 +242,15 @@ public class MainActivity extends AppCompatActivity {
 
         backPressCloseHandler = new BackPressCloseHandler(this);
 
-        //ImageView specialImage = findViewById(R.id.special_image);
-        //specialImage.setVisibility(View.GONE);
-        //specialImage.setOnClickListener(v -> v.setVisibility(View.GONE));
+        String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
+        ImageView specialImage = findViewById(R.id.special_image);
+        specialImage.setImageResource(getId("setsubun_".concat(getLocaleCode(locale)), R.mipmap.class));
+        specialImage.setVisibility(View.GONE);
+        specialImage.setOnClickListener(v -> v.setVisibility(View.GONE));
 
-        //textSpecial = findViewById(R.id.textSpecial);
-        //textSpecial.setText(getStringWithLocale(R.string.special_message));
-        //textSpecial.setOnClickListener(v -> specialImage.setVisibility(View.VISIBLE));
+        textSpecial = findViewById(R.id.textSpecial);
+        textSpecial.setText(getStringWithLocale(R.string.special_message));
+        textSpecial.setOnClickListener(v -> specialImage.setVisibility(View.VISIBLE));
     }
 
     @Override
