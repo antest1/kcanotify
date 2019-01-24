@@ -520,12 +520,6 @@ public class KcaService extends Service {
         notifiManager.notify(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
     }
 
-    private void updateNotificationClearFairyButton() {
-        // updateViewNotificationBuilder(notifyTitle, notifyContent);
-        notifyBuilder.mActions.clear();
-        notifiManager.notify(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
-    }
-
     private void setExpeditionAlarm(int idx, int mission_no, String deck_name, long arrive_time, boolean cancel_flag, boolean ca_flag, Intent aIntent) {
         if (!getReturnFlag(mission_no) && !cancel_flag) return;
 
@@ -2715,26 +2709,30 @@ public class KcaService extends Service {
                     public void onResponse(Call<String> call, Response<String> response) {
                         JsonObject response_data = new JsonObject();
                         if (response.body() != null) {
-                            response_data = gson.fromJson(response.body(), JsonObject.class);
-                            if (response_data.has("status")) {
-                                String result = response_data.get("status").getAsString();
-                                if (result.equals("done")) {
-                                    long recent_ts = response_data.get("timestamp").getAsLong() * 1000;
-                                    if (recent_ts > recent_check) {
-                                        String quest_code = response_data.get("data").getAsString();
-                                        dbHelper.loadQuestDataFromCode(quest_code, true, recent_ts);
-                                    } else {
-                                        error_flag[1] = true;
+                            try {
+                                response_data = gson.fromJson(response.body(), JsonObject.class);
+                                if (response_data.has("status")) {
+                                    String result = response_data.get("status").getAsString();
+                                    if (result.equals("done")) {
+                                        long recent_ts = response_data.get("timestamp").getAsLong() * 1000;
+                                        if (recent_ts > recent_check) {
+                                            String quest_code = response_data.get("data").getAsString();
+                                            dbHelper.loadQuestDataFromCode(quest_code, true, recent_ts);
+                                        } else {
+                                            error_flag[1] = true;
+                                        }
+                                    } else { // error
+                                        String detail = response_data.get("detail").getAsString();
+                                        dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "qsync_read", "", quest_data.toString(), detail);
+                                        error_flag[0] = true;
                                     }
-                                } else { // error
-                                    String detail = response_data.get("detail").getAsString();
-                                    dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "qsync_read", "", quest_data.toString(), detail);
-                                    error_flag[0] = true;
                                 }
+                            } catch (Exception e) {
+                                makeToast("failed to sync quest data: " + getStringFromException(e), Toast.LENGTH_LONG,
+                                        ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                             }
                         }
                     }
-
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
                         dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "qsync_read", "", "", t.getMessage());
@@ -2776,14 +2774,19 @@ public class KcaService extends Service {
                     public void onResponse(Call<String> call, Response<String> response) {
                         JsonObject response_data = new JsonObject();
                         if (response.body() != null) {
-                            response_data = gson.fromJson(response.body(), JsonObject.class);
-                            if (response_data.has("status")) {
-                                String result = response_data.get("status").getAsString();
-                                if (!result.equals("done")) {
-                                    String detail = response_data.get("detail").getAsString();
-                                    dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "qsync_write", "", quest_data.toString(), detail);
-                                    error_flag[0] = true;
+                            try {
+                                response_data = gson.fromJson(response.body(), JsonObject.class);
+                                if (response_data.has("status")) {
+                                    String result = response_data.get("status").getAsString();
+                                    if (!result.equals("done")) {
+                                        String detail = response_data.get("detail").getAsString();
+                                        dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "qsync_write", "", quest_data.toString(), detail);
+                                        error_flag[0] = true;
+                                    }
                                 }
+                            } catch (Exception e) {
+                                makeToast("failed to sync quest data: " + getStringFromException(e), Toast.LENGTH_LONG,
+                                        ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                             }
                         }
                     }
