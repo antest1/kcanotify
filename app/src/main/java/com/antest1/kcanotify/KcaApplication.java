@@ -14,7 +14,10 @@ import java.util.Locale;
 
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 
-@AcraCore(buildConfigClass = BuildConfig.class)
+@AcraCore(
+        buildConfigClass = BuildConfig.class,
+        sharedPreferencesName = "pref"
+)
 @AcraMailSender(
         mailTo = "kcanotify@gmail.com",
         reportAsFile = false

@@ -286,6 +286,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_app_title_down">APK Download Site</string>
     <string name="setting_menu_app_title_contact">Submit a Suggestion or Error Report</string>
     <string name="setting_menu_app_desc_updatecheck" translatable="false">https://github.com/antest1/kcanotify/releases</string>
+    <string name="setting_menu_app_title_enable_acra">Use Crash Report System (ACRA)</string>
+    <string name="setting_menu_app_desc_enable_acra">Mail client will be open when crash occurs</string>
     <string name="setting_menu_app_desc_contact">Send an E-mail to the developer</string>
     <string name="setting_menu_app_desc_inspector">データベース/設定値を表示/初期化</string>
     <string name="setting_menu_app_info">About kcanotify</string>

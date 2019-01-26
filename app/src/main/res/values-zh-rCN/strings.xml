@@ -242,6 +242,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_app_title_down">APK下载来源</string>
     <string name="setting_menu_app_title_contact">提交建议/回报错误</string>
     <string name="setting_menu_app_desc_contact">传送邮件给开发人员</string>
+    <string name="setting_menu_app_title_enable_acra">启用崩溃报错系统(ACRA)</string>
+    <string name="setting_menu_app_desc_enable_acra">当应用崩溃时将会打开报错用电邮</string>
     <string name="setting_menu_app_desc_inspector">查询资料库及选项数据</string>
     <string name="setting_menu_app_info">关于Kcanotify</string>
 

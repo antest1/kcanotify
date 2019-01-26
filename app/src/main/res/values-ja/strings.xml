@@ -216,7 +216,9 @@
     <string name="setting_menu_app_title_updatecheckserver">アップデートサーバー</string>
     <string name="setting_menu_app_title_contact">提案/エラーレポート</string>
     <string name="setting_menu_app_desc_contact">開発者にメールを送信</string>
-    <string name="setting_menu_app_desc_inspector">내부 속성 및 데이터베이스 정보 보기</string>
+    <string name="setting_menu_app_title_enable_acra">Crashレポートシステムの使用（ACRA）</string>
+    <string name="setting_menu_app_desc_enable_acra">Crash発生時メールクライアントが開きます</string>
+    <string name="setting_menu_app_desc_inspector">内部プロパティ、データベース情報</string>
     <string name="setting_menu_app_info">About Kcanotify</string>
 
     <!-- BattleView Strings -->
@@ -625,7 +627,7 @@
     <string name="fleetview_18spring_nori" formatted="false">苔 %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">茶 %02d</string>
 
-    <string name="special_message">せっつぶーん！</string>
+    <string name="special_message">せっつぶーんㅇ！</string>
 
     <string name="widget_timer_name">Kcanotifyタイマーウィジェット</string>
     <string name="fleet_format">第%d艦隊</string>
