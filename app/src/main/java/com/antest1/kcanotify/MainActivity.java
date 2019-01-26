@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         kcbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (is_kca_installed) {
+                if (is_kca_installed && kcIntent != null) {
                     startActivity(kcIntent);
                     finish();
                 } else {
