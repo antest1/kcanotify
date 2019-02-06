@@ -447,7 +447,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_sort_key_18">索敌</string>
     <string name="ship_stat_sort_key_19">运</string>
     <string name="ship_stat_sort_key_20">速度</string>
-    <string name="ship_stat_sort_key_21">标贴</string>
+    <string name="ship_stat_sort_key_21">舰型</string>
+    <string name="ship_stat_sort_key_22">标贴</string>
 
     <string name="shipinfo_filt_list_dialog_title">选择</string>
     <string name="shipinfo_criteria_count" formatted="false">已应用标签：%d</string>

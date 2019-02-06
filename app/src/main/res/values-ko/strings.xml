@@ -440,7 +440,8 @@
     <string name="ship_stat_sort_key_18">색적</string>
     <string name="ship_stat_sort_key_19">운</string>
     <string name="ship_stat_sort_key_20">속도</string>
-    <string name="ship_stat_sort_key_21">딱지</string>
+    <string name="ship_stat_sort_key_21">함급</string>
+    <string name="ship_stat_sort_key_22">딱지</string>
 
     <string name="shipinfo_filt_list_dialog_title">선택</string>
     <string name="shipinfo_criteria_count" formatted="false">적용된 기준: %d개</string>

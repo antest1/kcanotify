@@ -44,12 +44,12 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             "api_id", "api_lv", "api_stype", "api_cond", "api_locked",
             "api_deck_id", "api_docking", "api_damage", "api_repair", "api_mission", "api_exslot",
             "api_karyoku", "api_raisou", "api_taiku", "api_soukou", "api_yasen",
-            "api_taisen", "api_kaihi", "api_sakuteki", "api_lucky", "api_soku", "api_sally_area"};
+            "api_taisen", "api_kaihi", "api_sakuteki", "api_lucky", "api_soku", "api_sort_id", "api_sally_area"};
 
     public long getTotalExp() { return exp_sum; }
 
-    private static int[] sort_table = {0, 1, 2, 3, 5, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
-    private static int[] filt_table = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
+    private static int[] sort_table = {0, 1, 2, 3, 5, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
+    private static int[] filt_table = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22};
 
     public static int getSortKeyIndex(int position) {
         return sort_table[position];
@@ -68,7 +68,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     }
 
     public static boolean isList(int idx) {
-        int[] list = {2, 5, 7, 20, 21};  // ship_filt_array
+        int[] list = {2, 5, 7, 20, 22};  // ship_filt_array
         return (Arrays.binarySearch(list, idx) >= 0);
     }
 
@@ -509,7 +509,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             item.addProperty("api_yasen",
                     item.getAsJsonArray("api_karyoku").get(0).getAsInt() +
                             item.getAsJsonArray("api_raisou").get(0).getAsInt());
-            JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_stype");
+            JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_stype,api_sort_id");
             int stype = kcShipData.get("api_stype").getAsInt();
             int max_hp = item.get("api_maxhp").getAsInt();
             int now_hp = item.get("api_nowhp").getAsInt();
@@ -527,6 +527,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                 item.addProperty("api_deck_id", 0);
                 item.addProperty("api_mission", 0);
             }
+            item.addProperty("api_sort_id", kcShipData.get("api_sort_id").getAsInt());
             data.set(i, item);
         }
         return data;
