@@ -2006,7 +2006,10 @@ public class KcaService extends Service {
                         }
                         if (userShipId != -1 && jsonDataObj.has("api_data")) {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
-                            KcaApiData.updateUserShipSlot(userShipId, api_data);
+                            if (api_data.has("api_ship_data")) {
+                                JsonObject ship_data = api_data.getAsJsonObject("api_ship_data");
+                                KcaApiData.updateUserShipSlot(userShipId, ship_data);
+                            }
                         }
                         updateFleetView();
                         //toastInfo();
