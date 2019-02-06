@@ -803,6 +803,10 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     }
 
     public void updateExpScore(int exp) {
+        updateExpScore(exp, false);
+    }
+
+    public void updateExpScore(int exp, boolean only_total) {
         Date currentTime = getJapanCalendarInstance().getTime();
         SimpleDateFormat df = getJapanSimpleDataFormat("yy-MM-dd-HH");
         String time = df.format(currentTime);
@@ -840,7 +844,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
                 prevCrnt = 0;
             }
 
-            putValue(DB_KEY_EXPCRNT, String.valueOf(prevCrnt + exp));
+            putValue(DB_KEY_EXPCRNT, String.valueOf(only_total ? prevCrnt : prevCrnt + exp));
             putValue(DB_KEY_EXPTDAY, String.valueOf(prevTday + exp));
             putValue(DB_KEY_EXPTIME, time);
         }

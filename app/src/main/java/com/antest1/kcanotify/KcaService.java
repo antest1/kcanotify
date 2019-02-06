@@ -116,7 +116,7 @@ public class KcaService extends Service {
     public static final String SERVICE_CHANNEL_NAME = "Kcanotify Service";
 
     public static String currentLocale;
-    public static boolean isInitState;
+    public static boolean isInitState = false;
     public static boolean isFirstState;
     public static boolean isPassiveMode = false;
     public static boolean restartFlag = false;
@@ -238,7 +238,7 @@ public class KcaService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("KCA-S", "onStartCommand Called");
         isServiceOn = true;
-        isInitState = true;
+
         isFirstState = true;
         restartFlag = true;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -677,7 +677,7 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_VERSION)) {
-                isInitState = false;
+
                 isPortAccessed = false;
                 isInBattle = false;
                 api_start2_init = false;
@@ -747,7 +747,7 @@ public class KcaService extends Service {
 
             if (url.startsWith(API_GET_MEMBER_REQUIRED_INFO)) {
                 //Log.e("KCA", "Load Item Data");
-
+                isInitState = true;
                 if (jsonDataObj.has("api_data")) {
                     //dbHelper.putValue(DB_KEY_USEREQUIP, jsonDataObj.getAsJsonObject("api_data").getAsJsonArray("api_slot_item").toString());
                     JsonObject requiredInfoApiData = jsonDataObj.getAsJsonObject("api_data");
@@ -867,6 +867,21 @@ public class KcaService extends Service {
 
                 if (jsonDataObj.has("api_data")) {
                     JsonObject reqPortApiData = jsonDataObj.getAsJsonObject("api_data");
+                    if (reqPortApiData.has("api_basic")) {
+                        JsonObject prev_basic = dbHelper.getJsonObjectValue(DB_KEY_BASICIFNO);
+                        JsonObject current_basic = reqPortApiData.getAsJsonObject("api_basic");
+                        if (prev_basic != null && isInitState) {
+                            long prev_ts = prev_basic.get("api_starttime").getAsLong();
+                            long current_ts = current_basic.get("api_starttime").getAsLong();
+                            if (current_ts - prev_ts < 43200000L) { // in 12h
+                                int prev_exp = prev_basic.get("api_experience").getAsInt();
+                                int current_exp = current_basic.get("api_experience").getAsInt();
+                                int diff = current_exp - prev_exp;
+                                if (diff >= 0) dbHelper.updateExpScore(current_exp - prev_exp, true);
+                            }
+                        }
+                        isInitState = false;
+                    }
                     KcaApiData.getPortData(reqPortApiData);
                     if (reqPortApiData.has("api_deck_port")) {
                         dbHelper.putValue(DB_KEY_DECKPORT, reqPortApiData.getAsJsonArray("api_deck_port").toString());
