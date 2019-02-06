@@ -627,8 +627,6 @@
     <string name="fleetview_18spring_nori" formatted="false">苔 %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">茶 %02d</string>
 
-    <string name="special_message">せっつぶーんㅇ！</string>
-
     <string name="widget_timer_name">Kcanotifyタイマーウィジェット</string>
     <string name="fleet_format">第%d艦隊</string>
 
@@ -686,5 +684,6 @@
     <string name="text_api_houk2">迎擊</string>
     <string name="text_api_cost">配置コスト</string>
     <string name="text_api_distance">行動半径</string>
+    <string name="special_message">バレンタインプレゼント！</string>
 
 </resources>

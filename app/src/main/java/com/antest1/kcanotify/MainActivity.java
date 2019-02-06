@@ -244,7 +244,8 @@ public class MainActivity extends AppCompatActivity {
 
         String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
         ImageView specialImage = findViewById(R.id.special_image);
-        specialImage.setImageResource(getId("setsubun_".concat(getLocaleCode(locale)), R.mipmap.class));
+        // specialImage.setImageResource(getId("setsubun_".concat(getLocaleCode(locale)), R.mipmap.class));
+        specialImage.setImageResource(R.mipmap.special_image);
         specialImage.setVisibility(View.GONE);
         specialImage.setOnClickListener(v -> v.setVisibility(View.GONE));
 
