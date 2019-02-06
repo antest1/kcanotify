@@ -57,27 +57,28 @@ public class KcaResCheckItemAdpater extends BaseAdapter {
         }
 
         final ViewHolder holder = (ViewHolder) v.getTag();
-        JsonObject item = data.get(pos);
-        holder.reschk_name.setText(item.get("name").getAsString());
-        holder.reschk_desc.setText(item.get("desc").getAsString());
-        holder.reschk_ver.setText(item.get("version_str").getAsString());
-        holder.reschk_download.setText("Download");
-        holder.reschk_download.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Message msg = handler.obtainMessage();
-                Bundle bundle = new Bundle();
-                bundle.putString(RESCHK_KEY, item.toString());
-                msg.setData(bundle);
-                handler.sendMessage(msg);
+        if (pos < data.size()) {
+            JsonObject item = data.get(pos);
+            holder.reschk_name.setText(item.get("name").getAsString());
+            holder.reschk_desc.setText(item.get("desc").getAsString());
+            holder.reschk_ver.setText(item.get("version_str").getAsString());
+            holder.reschk_download.setText("Download");
+            holder.reschk_download.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Message msg = handler.obtainMessage();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(RESCHK_KEY, item.toString());
+                    msg.setData(bundle);
+                    handler.sendMessage(msg);
+                }
+            });
+            if (item.get("highlight").getAsBoolean()) {
+                holder.reschk_ver.setTextColor(ContextCompat.getColor(context, R.color.colorPanelWarning));
+            } else {
+                holder.reschk_ver.setTextColor(ContextCompat.getColor(context, R.color.grey));
             }
-        });
-        if (item.get("highlight").getAsBoolean()) {
-            holder.reschk_ver.setTextColor(ContextCompat.getColor(context, R.color.colorPanelWarning));
-        } else {
-            holder.reschk_ver.setTextColor(ContextCompat.getColor(context, R.color.grey));
         }
-
         return v;
     }
 
