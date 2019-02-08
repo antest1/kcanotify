@@ -48,9 +48,20 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginBottom="8dp"
-                    android:orientation="vertical"
-                    android:paddingBottom="4dp"
-                    android:paddingTop="4dp">
+                    android:orientation="horizontal"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp">
+
+                    <TextView
+                        android:id="@+id/battle_node_ss"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorSubmarineNode"
+                        android:paddingLeft="@dimen/battleview_padding"
+                        android:paddingRight="@dimen/battleview_padding"
+                        android:text="!"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/battle_node"
@@ -60,10 +71,10 @@
                         android:layout_centerVertical="true"
                         android:layout_weight="1"
                         android:minWidth="@dimen/battleview_nodeinfo_minwidth"
-                        android:paddingEnd="@dimen/battleview_padding"
-                        android:paddingLeft="@dimen/battleview_padding"
-                        android:paddingRight="@dimen/battleview_padding"
                         android:paddingStart="8dp"
+                        android:paddingLeft="@dimen/battleview_padding"
+                        android:paddingEnd="@dimen/battleview_padding"
+                        android:paddingRight="@dimen/battleview_padding"
                         android:textAlignment="center"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/battleview_text_label_medium" />

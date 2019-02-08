@@ -354,13 +354,7 @@ public class KcaBattleViewService extends Service {
 
                 battleview.findViewById(R.id.battle_node)
                         .setBackgroundColor(getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
-                if (sub_exist) {
-                    ((TextView) battleview.findViewById(R.id.battle_node))
-                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorSubmarineNode));
-                } else {
-                    ((TextView) battleview.findViewById(R.id.battle_node))
-                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-                }
+                battleview.findViewById(R.id.battle_node_ss).setVisibility(sub_exist ? View.VISIBLE : View.GONE);
             }
 
             if (api_data.has("api_deck_port")) { // common sortie, practice
