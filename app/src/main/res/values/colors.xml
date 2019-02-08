@@ -45,6 +45,7 @@
     <color name="colorAirBattle">#4e342e</color>
     <color name="colorLdShooting">#ffa000</color>
     <color name="colorPlaneWipedText">#ff5252</color>
+    <color name="colorSubmarineNode">#60c1d4</color>
 
     <color name="colorProgressBack">#d6d6d6</color>
     <color name="colorNormalState">#64dd17</color>

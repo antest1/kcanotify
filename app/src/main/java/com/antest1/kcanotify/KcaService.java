@@ -89,6 +89,7 @@ import static com.antest1.kcanotify.KcaApiData.loadQuestTrackDataFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStorage;
+import static com.antest1.kcanotify.KcaApiData.loadSubMapInfoFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaApiData.updateUserShip;
 import static com.antest1.kcanotify.KcaConstants.*;
@@ -258,6 +259,11 @@ public class KcaService extends Service {
         int loadMapEdgeInfoResult = loadMapEdgeInfoFromStorage(getApplicationContext());
         if (loadMapEdgeInfoResult != 1) {
             Toast.makeText(this, "Error loading Map Edge Info", Toast.LENGTH_LONG).show();
+        }
+
+        int loadSubMapInfoResult = loadSubMapInfoFromStorage(getApplicationContext());
+        if (loadSubMapInfoResult != 1) {
+            Toast.makeText(this, "Error loading Map Sub Info", Toast.LENGTH_LONG).show();
         }
 
         int loadExpShipInfoResult = loadShipExpInfoFromAssets(assetManager);

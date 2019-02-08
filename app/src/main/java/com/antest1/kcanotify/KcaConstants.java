@@ -29,6 +29,7 @@ public final class KcaConstants {
     public static final String DB_KEY_DECKPORT = "key_deckport";
     public static final String DB_KEY_USEITEMS = "key_useitems";
     public static final String DB_KEY_MAPEDGES = "key_mapedges";
+    public static final String DB_KEY_MAPSUBDT = "key_mapsubdt";
     public static final String DB_KEY_EXPDINFO = "key_expdinfo";
     public static final String DB_KEY_QUESTTRACK = "key_questtrack";
     public static final String DB_KEY_BATTLEINFO = "key_battleinfo";

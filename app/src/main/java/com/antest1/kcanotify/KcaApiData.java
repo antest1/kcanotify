@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -481,6 +482,16 @@ public class KcaApiData {
         }
     }
 
+    public static int loadSubMapInfoFromStorage(Context context) {
+        JsonObject data = getJsonObjectFromStorage(context, "map_sub.json");
+        if (data != null) {
+            helper.putValue(DB_KEY_MAPSUBDT, data.toString());
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
     public static int loadShipExpInfoFromAssets(AssetManager am) {
         try {
             AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("exp_ship.json");
@@ -686,8 +697,8 @@ public class KcaApiData {
         String currentMapString = KcaUtils.format("%d-%d", maparea, mapno);
         String no_str = String.valueOf(no);
         if (helper != null) {
-            JsonObject mapEdgeInfo = new JsonParser().parse(helper.getValue(DB_KEY_MAPEDGES)).getAsJsonObject();
-            if (mapEdgeInfo.has(currentMapString)) {
+            JsonObject mapEdgeInfo = helper.getJsonObjectValue(DB_KEY_MAPEDGES);
+            if (mapEdgeInfo != null && mapEdgeInfo.has(currentMapString)) {
                 JsonObject currentMapInfo = mapEdgeInfo.getAsJsonObject(currentMapString);
                 if (currentMapInfo.has(no_str)) {
                     JsonArray nodeInfo = currentMapInfo.getAsJsonArray(no_str);
@@ -696,6 +707,18 @@ public class KcaApiData {
             }
         }
         return no_str;
+    }
+
+    public static boolean getCurrentNodeSubExist(int maparea, int mapno, int no) {
+        String currentMapString = KcaUtils.format("%d-%d", maparea, mapno);
+        if (helper != null) {
+            JsonObject subEdgeInfo = helper.getJsonObjectValue(DB_KEY_MAPSUBDT);
+            if (subEdgeInfo != null && subEdgeInfo.has(currentMapString)) {
+                JsonArray sub_edges = subEdgeInfo.getAsJsonArray(currentMapString);
+                return sub_edges.contains(new JsonPrimitive(no));
+            }
+        }
+        return false;
     }
 
     public static boolean isExpeditionDataLoaded() {

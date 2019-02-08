@@ -41,6 +41,7 @@ import java.util.List;
 import static com.antest1.kcanotify.KcaApiData.checkUserPortEnough;
 import static com.antest1.kcanotify.KcaApiData.getAirForceResultString;
 import static com.antest1.kcanotify.KcaApiData.getCurrentNodeAlphabet;
+import static com.antest1.kcanotify.KcaApiData.getCurrentNodeSubExist;
 import static com.antest1.kcanotify.KcaApiData.getEngagementString;
 import static com.antest1.kcanotify.KcaApiData.getFormationString;
 import static com.antest1.kcanotify.KcaApiData.getItemString;
@@ -229,11 +230,12 @@ public class KcaBattleViewService extends Service {
                 int api_maparea_id = api_data.get("api_maparea_id").getAsInt();
                 int api_mapinfo_no = api_data.get("api_mapinfo_no").getAsInt();
                 int api_no = api_data.get("api_no").getAsInt();
-                String currentNode = getCurrentNodeAlphabet(api_maparea_id, api_mapinfo_no, api_no);
+                String current_node = getCurrentNodeAlphabet(api_maparea_id, api_mapinfo_no, api_no);
+                boolean sub_exist = getCurrentNodeSubExist(api_maparea_id, api_mapinfo_no, api_no);
                 int api_event_id = api_data.get("api_event_id").getAsInt();
                 int api_event_kind = api_data.get("api_event_kind").getAsInt();
                 int api_color_no = api_data.get("api_color_no").getAsInt();
-                currentNodeInfo = getNodeFullInfo(contextWithLocale, currentNode, api_event_id, api_event_kind, true);
+                currentNodeInfo = getNodeFullInfo(contextWithLocale, current_node, api_event_id, api_event_kind, true);
                 currentNodeInfo = currentNodeInfo.replaceAll("[()]", "");
 
                 // View Settings
@@ -352,6 +354,13 @@ public class KcaBattleViewService extends Service {
 
                 battleview.findViewById(R.id.battle_node)
                         .setBackgroundColor(getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
+                if (sub_exist) {
+                    ((TextView) battleview.findViewById(R.id.battle_node))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorSubmarineNode));
+                } else {
+                    ((TextView) battleview.findViewById(R.id.battle_node))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                }
             }
 
             if (api_data.has("api_deck_port")) { // common sortie, practice
