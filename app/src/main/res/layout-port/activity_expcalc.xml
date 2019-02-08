@@ -17,170 +17,43 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:titleTextColor="@color/colorToolbarText"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="true"
-        android:clickable="true"
-        android:focusableInTouchMode="true"
-        android:background="@drawable/background"
-        android:orientation="vertical">
-
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/cal_area"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPanelBack"
-            android:orientation="vertical"
-            android:paddingBottom="5dp"
-            android:paddingEnd="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingStart="10dp"
-            android:paddingTop="5dp">
+            android:layout_height="match_parent"
+            android:background="@drawable/background"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
 
             <LinearLayout
+                android:id="@+id/cal_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal"
-                android:paddingBottom="2dp"
-                android:paddingTop="2dp">
-
-                <TextView
-                    android:id="@+id/label_ship"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:gravity="center_vertical"
-                    android:padding="4dp"
-                    android:text="@string/expcalc_shipname"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-
-                <Spinner
-                    android:id="@+id/value_ship"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="3" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal"
-                android:paddingBottom="2dp"
-                android:paddingTop="2dp">
-
-                <TextView
-                    android:id="@+id/label_current_lv"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:gravity="center_vertical"
-                    android:padding="4dp"
-                    android:text="@string/expcalc_currentlv"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-
-                <Spinner
-                    android:id="@+id/value_current_lv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1.5" />
-
-                <TextView
-                    android:id="@+id/value_current_exp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1.2"
-                    android:background="@color/colorDataArea"
-                    android:minWidth="60dp"
-                    android:padding="5dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/grey"
-                    android:textSize="16dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal"
-                android:paddingBottom="2dp"
-                android:paddingTop="2dp">
-
-                <TextView
-                    android:id="@+id/label_target_lv"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:gravity="center_vertical"
-                    android:padding="4dp"
-                    android:text="@string/expcalc_targetlv"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-
-                <Spinner
-                    android:id="@+id/value_target_lv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1.5" />
-
-                <TextView
-                    android:id="@+id/value_target_exp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1.2"
-                    android:background="@color/colorDataArea"
-                    android:minWidth="60dp"
-                    android:padding="5dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/grey"
-                    android:textSize="16dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal"
-                android:paddingBottom="2dp"
-                android:paddingTop="2dp">
+                android:background="@color/colorPanelBack"
+                android:orientation="vertical"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp">
 
                     <TextView
-                        android:id="@+id/label_map"
+                        android:id="@+id/label_ship"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -188,322 +61,472 @@
                         android:layout_marginRight="8dp"
                         android:gravity="center_vertical"
                         android:padding="4dp"
-                        android:text="@string/expcalc_map"
+                        android:text="@string/expcalc_shipname"
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
                         android:textSize="18dp" />
 
                     <Spinner
-                        android:id="@+id/value_map"
+                        android:id="@+id/value_ship"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="1" />
+                        android:layout_weight="3" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp">
+
+                    <TextView
+                        android:id="@+id/label_current_lv"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:gravity="center_vertical"
+                        android:padding="4dp"
+                        android:text="@string/expcalc_currentlv"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <Spinner
+                        android:id="@+id/value_current_lv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1.5" />
+
+                    <TextView
+                        android:id="@+id/value_current_exp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1.2"
+                        android:background="@color/colorDataArea"
+                        android:minWidth="60dp"
+                        android:padding="5dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/grey"
+                        android:textSize="16dp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp">
 
                     <TextView
-                        android:id="@+id/label_rank"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/label_target_lv"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:gravity="center_vertical"
                         android:padding="4dp"
-                        android:text="@string/expcalc_rank"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="18dp" />
-
-                    <Spinner
-                        android:id="@+id/value_rank"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal"
-                android:paddingBottom="2dp"
-                android:paddingTop="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/label_base_exp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
-                        android:gravity="center_vertical"
-                        android:padding="4dp"
-                        android:text="@string/expcalc_baseexp"
+                        android:text="@string/expcalc_targetlv"
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
                         android:textSize="18dp" />
 
-                    <EditText
-                        android:id="@+id/value_base_exp"
-                        android:layout_width="wrap_content"
+                    <Spinner
+                        android:id="@+id/value_target_lv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1.5" />
+
+                    <TextView
+                        android:id="@+id/value_target_exp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1.2"
+                        android:background="@color/colorDataArea"
+                        android:minWidth="60dp"
+                        android:padding="5dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/grey"
+                        android:textSize="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="number"
-                        android:textAlignment="center" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/label_map"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:gravity="center_vertical"
+                            android:padding="4dp"
+                            android:text="@string/expcalc_map"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+                        <Spinner
+                            android:id="@+id/value_map"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/label_rank"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:gravity="center_vertical"
+                            android:padding="4dp"
+                            android:text="@string/expcalc_rank"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+                        <Spinner
+                            android:id="@+id/value_rank"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/label_base_exp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:gravity="center_vertical"
+                            android:padding="4dp"
+                            android:text="@string/expcalc_baseexp"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/value_base_exp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:textAlignment="center" />
+
+                        <ImageView
+                            android:id="@+id/btn_base_exp_help"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:src="@mipmap/ic_help"
+                            app:srcCompat="@mipmap/ic_help" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/chkbox_flagship"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:scaleX="0.75"
+                        android:scaleY="0.75"
+                        android:text="@string/expcalc_flagship"
+                        android:textSize="20dp"
+                        android:translationX="-16dp" />
+
+                    <CheckBox
+                        android:id="@+id/chkbox_mvp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:scaleX="0.75"
+                        android:scaleY="0.75"
+                        android:text="@string/expcalc_mvp"
+                        android:textSize="20dp"
+                        android:translationX="-16dp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:alpha="0.5"
+                    android:background="@color/grey"
+                    android:padding="1dp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+
+                    <LinearLayout
+                        android:id="@+id/mapexp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/label_mapexp"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                android:gravity="center_vertical"
+                                android:text="@string/expcalc_mapexp"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:textSize="18dp" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/value_mapexp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:background="@color/colorDataArea"
+                                    android:minWidth="60dp"
+                                    android:padding="5dp"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/grey"
+                                    android:textSize="16dp" />
+
+                                <TextView
+                                    android:id="@+id/textView11"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:text="×"
+                                    android:textColor="@color/black" />
+
+                                <TextView
+                                    android:id="@+id/value_counter"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:background="@color/colorDataArea"
+                                    android:minWidth="60dp"
+                                    android:padding="5dp"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="16dp" />
+
+                                <TextView
+                                    android:id="@+id/textView12"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:textAlignment="center" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/reaminexp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/mapexp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/label_remainexp"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="2"
+                                android:gravity="center_vertical"
+                                android:text="@string/expcalc_remainexp"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:textSize="18dp" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/value_remainexp"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1.5"
+                                    android:background="@color/colorDataArea"
+                                    android:minWidth="60dp"
+                                    android:padding="5dp"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/grey"
+                                    android:textSize="16dp" />
+
+                                <TextView
+                                    android:id="@+id/textView10"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/add_exp_track"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/reaminexp"
+                        android:layout_alignParentStart="false"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+
+                        android:layout_marginRight="1dp"
+                        android:background="@color/colorAccent"
+                        android:baselineAlignBottom="false"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8"
+                        android:src="@mipmap/ic_add"
+                        app:elevation="0dp" />
+
+                </RelativeLayout>
+
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:id="@+id/chkbox_flagship"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:scaleX="0.75"
-                    android:scaleY="0.75"
-                    android:text="@string/expcalc_flagship"
-                    android:textSize="20dp"
-                    android:translationX="-16dp" />
-
-                <CheckBox
-                    android:id="@+id/chkbox_mvp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:scaleX="0.75"
-                    android:scaleY="0.75"
-                    android:text="@string/expcalc_mvp"
-                    android:textSize="20dp"
-                    android:translationX="-16dp" />
-
-            </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/cal_hide_bar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:alpha="0.5"
-                android:background="@color/grey"
-                android:padding="1dp" />
+                android:layout_height="20dp"
+                android:background="@color/colorDataArea"
+                android:src="@mipmap/ic_arrow_up"
+                app:srcCompat="@mipmap/ic_arrow_up" />
 
-            <RelativeLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="4dp">
+                android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:id="@+id/mapexp"
+                    android:id="@+id/ship_leveling_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/label_mapexp"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            android:gravity="center_vertical"
-                            android:text="@string/expcalc_mapexp"
-                            android:textAlignment="textStart"
-                            android:textColor="@color/black"
-                            android:textSize="18dp" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="3"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/value_mapexp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:background="@color/colorDataArea"
-                                android:minWidth="60dp"
-                                android:padding="5dp"
-                                android:textAlignment="center"
-                                android:textColor="@color/grey"
-                                android:textSize="16dp" />
-
-                            <TextView
-                                android:id="@+id/textView11"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginEnd="10dp"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginStart="10dp"
-                                android:text="×"
-                                android:textColor="@color/black" />
-
-                            <TextView
-                                android:id="@+id/value_counter"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:background="@color/colorDataArea"
-                                android:minWidth="60dp"
-                                android:padding="5dp"
-                                android:textAlignment="center"
-                                android:textColor="@color/black"
-                                android:textSize="16dp" />
-
-                            <TextView
-                                android:id="@+id/textView12"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="1"
-                                android:textAlignment="center" />
-                        </LinearLayout>
-
-                    </LinearLayout>
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
                 </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/reaminexp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/mapexp"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/label_remainexp"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
-                            android:gravity="center_vertical"
-                            android:text="@string/expcalc_remainexp"
-                            android:textAlignment="textStart"
-                            android:textColor="@color/black"
-                            android:textSize="18dp" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="3"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/value_remainexp"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="1.5"
-                                android:background="@color/colorDataArea"
-                                android:minWidth="60dp"
-                                android:padding="5dp"
-                                android:textAlignment="center"
-                                android:textColor="@color/grey"
-                                android:textSize="16dp" />
-
-                            <TextView
-                                android:id="@+id/textView10"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="1" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/add_exp_track"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/reaminexp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentLeft="false"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentStart="false"
-
-                    android:layout_marginRight="1dp"
-                    android:background="@color/colorAccent"
-                    android:baselineAlignBottom="false"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"
-                    android:src="@mipmap/ic_add"
-                    app:elevation="0dp" />
-
-            </RelativeLayout>
+            </ScrollView>
 
         </LinearLayout>
 
-
         <ImageView
-            android:id="@+id/cal_hide_bar"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:background="@color/colorDataArea"
-            android:src="@mipmap/ic_arrow_up"
-            app:srcCompat="@mipmap/ic_arrow_up" />
+            android:id="@+id/map_base_exp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_margin="15dp"
+            app:srcCompat="@mipmap/map_base_exp" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/ship_leveling_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-            </LinearLayout>
-        </ScrollView>
-
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

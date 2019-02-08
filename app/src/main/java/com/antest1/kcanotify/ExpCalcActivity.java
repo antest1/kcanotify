@@ -88,7 +88,7 @@ public class ExpCalcActivity extends AppCompatActivity {
     EditText value_base_exp;
     CheckBox chkbox_flagship, chkbox_mvp;
     ArrayAdapter<String> ship_adapter, current_lv_adapter, target_lv_adapter, map_adapter, rank_adapter;
-    ImageView cal_hide_bar;
+    ImageView cal_hide_bar, map_base_exp, btn_base_exp_help;
     FloatingActionButton add_button;
     LinearLayout listview;
 
@@ -146,6 +146,15 @@ public class ExpCalcActivity extends AppCompatActivity {
                 cal_visible = !cal_visible;
             }
         });
+
+        map_base_exp = findViewById(R.id.map_base_exp);
+        map_base_exp.setVisibility(View.GONE);
+        map_base_exp.setOnClickListener(v -> map_base_exp.setVisibility(View.GONE));
+
+        btn_base_exp_help = findViewById(R.id.btn_base_exp_help);
+        btn_base_exp_help.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                R.color.black), PorterDuff.Mode.SRC_ATOP);
+        btn_base_exp_help.setOnClickListener(v -> map_base_exp.setVisibility(View.VISIBLE));
 
         listview = findViewById(R.id.ship_leveling_list);
         add_button = findViewById(R.id.add_exp_track);
