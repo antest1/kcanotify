@@ -38,6 +38,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
@@ -52,6 +53,7 @@ import eu.faircode.netguard.Util;
 import static com.antest1.kcanotify.KcaConstants.DMMLOGIN_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_ALLOW_EXTFILTER;
+import static com.antest1.kcanotify.KcaConstants.PREF_DNS_NAMESERVERS;
 import static com.antest1.kcanotify.KcaConstants.PREF_PACKAGE_ALLOW;
 import static com.antest1.kcanotify.KcaConstants.VPN_STOP_REASON;
 
@@ -433,7 +435,7 @@ public class KcaVpnService extends VpnService {
         }
 
         // DNS address
-        if (filter)
+        //if (filter)
             for (InetAddress dns : getDns(KcaVpnService.this)) {
                 if (ip6 || dns instanceof Inet4Address) {
                     Log.i(TAG, "dns=" + dns);
@@ -542,33 +544,17 @@ public class KcaVpnService extends VpnService {
         return builder;
     }
 
-
     public static List<InetAddress> getDns(Context context) {
         List<InetAddress> listDns = new ArrayList<>();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         List<String> sysDns = Util.getDefaultDNS(context);
-        String vpnDns1 = prefs.getString("dns", null);
-        String vpnDns2 = prefs.getString("dns2", null);
-        Log.i(TAG, "DNS system=" + TextUtils.join(",", sysDns) + " VPN1=" + vpnDns1 + " VPN2=" + vpnDns2);
 
-        if (vpnDns1 != null)
-            try {
-                InetAddress dns = InetAddress.getByName(vpnDns1);
-                if (!(dns.isLoopbackAddress() || dns.isAnyLocalAddress()))
-                    listDns.add(dns);
-            } catch (Throwable ignored) {
-            }
+        String pref_dns = KcaUtils.getStringPreferences(context, PREF_DNS_NAMESERVERS);
+        String[] pref_dns_list = pref_dns.split("\n");
+        Log.i(TAG, "DNS system=" + TextUtils.join(",", sysDns) + " VPN=" + TextUtils.join(",", pref_dns_list));
 
-        if (vpnDns2 != null)
-            try {
-                InetAddress dns = InetAddress.getByName(vpnDns2);
-                if (!(dns.isLoopbackAddress() || dns.isAnyLocalAddress()))
-                    listDns.add(dns);
-            } catch (Throwable ignored) {
-            }
-
-        if (listDns.size() <= 1)
+        if (pref_dns.trim().length() == 0) {
             for (String def_dns : sysDns)
                 try {
                     InetAddress ddns = InetAddress.getByName(def_dns);
@@ -577,6 +563,40 @@ public class KcaVpnService extends VpnService {
                         listDns.add(ddns);
                 } catch (Throwable ignored) {
                 }
+        } else {
+            for (String server: pref_dns_list) {
+                if (server != null && server.trim().length() > 0)
+                    try {
+                        InetAddress dns = InetAddress.getByName(server);
+                        if (!(dns.isLoopbackAddress() || dns.isAnyLocalAddress()))
+                            listDns.add(dns);
+                    } catch (Throwable ignored) {
+                    }
+            }
+        }
+
+        /*
+        String vpnDns1 = prefs.getString("dns", null);
+        String vpnDns2 = prefs.getString("dns2", null);
+        Log.i(TAG, "DNS system=" + TextUtils.join(",", sysDns) + " VPN1=" + vpnDns1 + " VPN2=" + vpnDns2);
+
+        if (vpnDns1 != null && vpnDns1.trim().length() > 0)
+            try {
+                InetAddress dns = InetAddress.getByName(vpnDns1);
+                if (!(dns.isLoopbackAddress() || dns.isAnyLocalAddress()))
+                    listDns.add(dns);
+            } catch (Throwable ignored) {
+            }
+
+        if (vpnDns2 != null && vpnDns2.trim().length() > 0)
+            try {
+                InetAddress dns = InetAddress.getByName(vpnDns2);
+                if (!(dns.isLoopbackAddress() || dns.isAnyLocalAddress()))
+                    listDns.add(dns);
+            } catch (Throwable ignored) {
+            }
+        */
+
 
         return listDns;
     }

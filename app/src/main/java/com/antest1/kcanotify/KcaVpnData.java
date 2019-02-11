@@ -49,8 +49,9 @@ public class KcaVpnData {
 
     private static String[] kcaExtServiceList = {
             "104.27.146.101", // ooi moe (1)
-            "104.27.147.101"  // ooi moe (2)
+            "104.27.147.101",  // ooi moe (2)
     };
+    private static String kcaDmmLoginServer = "202.6"; // DMM prefix
 
     private static String[] prefixCheckList = kcaServerPrefixList;
 
@@ -89,6 +90,7 @@ public class KcaVpnData {
         } else {
             prefixCheckList = kcaServerPrefixList;
         }
+        Log.e("KCA", Arrays.toString(prefixCheckList));
     }
 
     // Called from native code

@@ -133,6 +133,12 @@
             android:title="@string/setting_menu_sniffer_title_extfilter_use"
             android:summary="@string/setting_menu_sniffer_desc_extfilter_use" />
 
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="dns_nameservers"
+            android:summary="max 2 lines"
+            android:title="DNS_NAMESERVERS" />
+
         <Preference
             android:defaultValue=""
             android:persistent="false"
