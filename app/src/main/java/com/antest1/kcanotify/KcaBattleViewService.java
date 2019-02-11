@@ -354,7 +354,8 @@ public class KcaBattleViewService extends Service {
 
                 battleview.findViewById(R.id.battle_node)
                         .setBackgroundColor(getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
-                battleview.findViewById(R.id.battle_node_ss).setVisibility(sub_exist ? View.VISIBLE : View.GONE);
+                if (is_practice) battleview.findViewById(R.id.battle_node_ss).setVisibility(View.GONE);
+                else battleview.findViewById(R.id.battle_node_ss).setVisibility(sub_exist ? View.VISIBLE : View.GONE);
             }
 
             if (api_data.has("api_deck_port")) { // common sortie, practice
