@@ -1,0 +1,694 @@
+<resources>
+    <string name="locale_code">es-UY</string>
+
+    <!-- Application Information -->
+    <string name="app_name">Kcanotify</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="action_download">Descargar</string>
+    <string name="action_check">COMPROBAR</string>
+    <string name="action_server">CAMBIAR SERVIDOR</string>
+    <string name="action_errorlog">Informe de Errores</string>
+    <string name="action_downloadall">Descargar Todo</string>
+    <string name="backpress_msg">Presionar nuevamente para cerrar</string>
+    <string name="notification_appinfo_title">Kcanotify Notificaciones</string>
+    <string name="app_vpn_name">Kcanotify Sniffer</string>
+
+    <!-- Link Information, Do Not Translate Here -->
+
+    <!-- Common Text -->
+    <string name="dialog_ok">Confirmar</string>
+    <string name="dialog_cancel">Cancelar</string>
+
+    <string name="error_text">Un error ha ocurrido. Por favor contacte al desarrollador.</string>
+
+    <string name="heavy_damaged">Un barco sufrió daños graves!</string>
+    <string name="heavy_damaged_damecon">Un barco sufrió daños graves! (Damecon disponible)</string>
+    <string name="goback_left">Presiona el boton IZQUIERDO para escoltar al barco</string>
+
+    <string name="seek_type_0">Sum</string>
+    <string name="seek_type_1">F33/1</string>
+    <string name="seek_type_3">F33/3</string>
+    <string name="seek_type_4">F33/4</string>
+
+    <string name="seek_type_0_detail">Total Sum</string>
+    <string name="seek_type_1_detail">Fórmula 33/Cn=1 (2&#45;5)</string>
+    <string name="seek_type_3_detail">Fórmula 33/Cn=3 (6&#45;2,6&#45;3)</string>
+    <string name="seek_type_4_detail">Fórmula 33/Cn=4 (3&#45;5,6&#45;1)</string>
+
+    <string name="speed_superfast"></string>
+    <string name="speed_fastplus">Rápido+</string>
+    <string name="speed_fast">Rápido</string>
+    <string name="speed_slow">Lento</string>
+    <string name="speed_mixed_normal">Mezclado(L)</string>
+    <string name="speed_mixed_fast">Mezclado(R)</string>
+    <string name="speed_mixed_fastplus">Mezclado(R+)</string>
+    <string name="speed_none">\?\?</string>
+    <string name="speed_postfix">P&#160</string>
+
+    <string name="opendb_failed_msg">Un error ocurrió al enviar datos a OpenDB.</string>
+    <string name="process_battle_failed_msg">Un error ocurrió al procesar datos de batalla.</string>
+    <string name="service_failed_msg">Un error ocurrió al procesar datos. \nSe recomienda reinicar kcanotify</string>
+
+    <string name="node_info_noevent" formatted="false">%s (Batalla Evitada)</string>
+    <string name="node_info_obtain" formatted="false">%s (Recursos Encontrados)</string>
+    <string name="node_info_loss" formatted="false">%s (Tormenta)</string>
+    <string name="node_info_normal" formatted="false">%s</string>
+    <string name="node_info_normal_battle" formatted="false">%s (Enemigo)</string>
+    <string name="node_info_boss" formatted="false">%s (Jefe)</string>
+    <string name="node_info_boss_nightbattle" formatted="false">%s (Jefe/Noche)</string>
+    <string name="node_info_boss_nightdaybattle" formatted="false">%s (Jefe/Noche->Día)</string>
+    <string name="node_info_boss_ecbattle" formatted="false">%s (Jefe/Enemigo Combinado)</string>
+    <string name="node_info_airbattle" formatted="false">%s (Batalla Aérea)</string>
+    <string name="node_info_airsearch" formatted="false">%s (Reconocimiento)</string>
+    <string name="node_info_ldairbattle" formatted="false">%s (Redada Enemiga)</string>
+    <string name="node_info_ldshooting" formatted="false">%s (Fuego por Radar)</string>
+    <string name="node_info_nightbattle" formatted="false">%s (Batalla Nocturna)</string>
+    <string name="node_info_nightdaybattle" formatted="false">%s (Noche->Día)</string>
+    <string name="node_info_tpoint" formatted="false">%s (Carga Transporte)</string>
+    <string name="node_info_selectable" formatted="false">%s (Elegir Nodo)</string>
+    <string name="node_info_sendan" formatted="false">%s (Gran Punto de Recursos 끝)</string>
+    <string name="node_info_ecbattle" formatted="false">%s (Enemigo Combinado)</string>
+    <string name="node_info_practice" formatted="false">PVP</string>
+    <!-- MainActivity Strings -->
+    <string name="ma_vpn_toggleon">Sniffer Activado</string>
+    <string name="ma_vpn_toggleoff">Sniffer Desactivado</string>
+    <string name="ma_svc_toggleon">Servicio Activado</string>
+    <string name="ma_svc_toggleoff">Servicio Desactivado</string>
+    <string name="ma_toast_kancolle_not_installed">Kancolle para Android no está instalado.</string>
+    <string name="ma_toast_overay_diabled">Permiso de superposición de pantalla necesario para Predicción de Batalla. Activable en Ajustes.</string>
+    <string name="ma_hasupdate" formatted="false">Actualización disponible. (%s)</string>
+    <string name="ma_hasdataupdate" formatted="false">Nuevos datos del juego disponibles. (%s)</string>
+    <string name="description"><b>Help</b>\nActivar ambos botones (Sniffer y Servicio) y luego iniciar Kancolle\n\n※ La VPN es necesaria para detectar datos del juego. \n\n<b>Características Principales</b>\n - Notificaciones de Expediciones/Reparaciones\n - Alerta de Daños Graves (Antes y durante el combate)\n - LoS/FP/Indicadores de Fatiga\n - Rastreo de nodo durante combate\n - Predicción de Batalla / Visualizador de Misiones\n - Tabla de Arsenal de Mejoras\n - Envia estadisticas a OpenDB (opcional)\n \nVisita http://swaytwig.com/kcanotify para detalles. (coreano)</string>
+
+    <!-- SettingActivity Strings -->
+    <string name="sa_checkupdate_latest" formatted="false">Tiene la última versión. (%s)</string>
+    <string name="sa_checkupdate_hasupdate" formatted="false">Actualización disponible. (%s)\nDesea descargarla?</string>
+    <string name="sa_checkupdate_dialogtitle">Comprobar actualizaciones disponibles.</string>
+    <string name="sa_checkupdate_nodataerror">Hubo un problema comprobando actualizaciones disponibles.</string>
+    <string name="sa_checkupdate_servererror">Error del servidor de actualizaciones.</string>
+
+    <string name="sa_getupdate_finished">Descarga de datos del juego completada</string>
+    <string name="sa_getupdate_started">Descargando datos del juego&#8230;</string>
+    <string name="sa_getupdate_servererror" formatted="false">Ocurrió un error del servidor: %s</string>
+    <string name="sa_getupdate_ioexceptionerror">Ocurrió un error mientras se guardaban datos.</string>
+
+    <string name="sa_overlay_under_m">Este ajuste no es necesario para versiones de Android anteriores a 6.0.</string>
+    <string name="sa_overlay_appearontop">En Ajustes-Aplicaciones, activar [Kcanotify] en "Mostrar sobre otras Aplicaciones".</string>
+    <string name="sa_overlay_ok">Permitir Superposición en pantalla: Activado.</string>
+    <string name="sa_overlay_no">Permitir Superposición en pantalla: Desactivado. (Predicción de batalla será desactivada)</string>
+    <string name="sa_usagestat_ok">Acceso a Estadísticas de Uso Permitido</string>
+    <string name="sa_usagestat_no">Acceso a Estadísticas de Uso No Permitido</string>
+    <string name="sa_usagestat_dialog_title">Permiso de Acceso a Estadísticas de Uso</string>
+    <string name="sa_usagestat_dialog_desc">En Android 5.0+, debes dar el permiso para usar esta caracteristica. Este permiso es necesitado para comprobar que Kancolle está en pantalla.</string>
+
+    <!-- InfoActivity Strings -->
+
+    <!-- KcaService Strings -->
+    <string name="kca_init_title" formatted="false">%s Funcionando</string>
+    <string name="kca_init_content">Por favor abra el juego desde kcanotify</string>
+
+    <string name="kca_noti_title_exp_canceled" formatted="false">La Expedición %s (%s) ha sido cancelada.</string>
+    <string name="kca_noti_content_exp_canceled" formatted="false">&lt;%s&gt; fue llamado de la Expedición %s.</string>
+    <string name="kca_noti_title_exp_finished" formatted="false">La Expedición %s (%s) fue completada.</string>
+    <string name="kca_noti_content_exp_finished_normal" formatted="false">&lt;%s&gt; ha regresado de la Expedición %s.</string>
+    <string name="kca_noti_content_exp_finished_canceled" formatted="false">&lt;%s&gt; ha regresado de la Expedición %s. (cancelada)</string>
+
+    <string name="kca_noti_title_dock_finished" formatted="false">Dique %d: reparaciones completadas.</string>
+    <string name="kca_noti_content_dock_finished" formatted="false">Dique %d: %s fue reparada.</string>
+    <string name="kca_noti_content_dock_finished_nodata" formatted="false">Dique %d: barco reparado</string>
+
+    <string name="kca_noti_title_morale_recovered" formatted="false">Moral Recuperada.</string>
+    <string name="kca_noti_content_morale_recovered" formatted="false">Todas en &lt;%s&gt; han recuperado su moral.</string>
+    <string name="kca_noti_title_akashirepair_recovered">Akashi ha comenzado a reparar.</string>
+    <string name="kca_noti_content_akashirepair_recovered">La flota está siendo reparada.</string>
+
+    <string name="kca_toast_airpower" formatted="false">FP: %d-%d</string>
+    <string name="kca_toast_seekvalue_d" formatted="false">LoS(%s): %d</string>
+    <string name="kca_toast_seekvalue_f" formatted="false">LoS(%s): %.2f</string>
+    <string name="kca_toast_tpvalue" formatted="false">TP: S%d/A%d</string>
+
+    <string name="kca_toast_restart_at_kcanotify">Por favor reinicie el juego usando kcanotify.</string>
+    <string name="kca_toast_renew_currentportdeck">Vaya al puerto principal(母港) dentro del juego para renovar datos de puerto.</string>
+    <string name="kca_toast_get_data_at_settings">Los datos del juego no han sido totalmente cargados.\\nSi los datos no son cargados pronto, vaya a los ajustes de kcanotify para descargarlos manualmente.</string>
+    <string name="kca_toast_get_data_at_settings_2">Se detectó un problema en los datos del juego.\\\\nPor favor descargue los datos de juego usando los ajustes de kcanotify manualmente.</string>
+    <string name="kca_toast_loading_data">Cargando datos de juego</string>
+    <string name="kca_toast_inconsistent_data">No hay datos para la versión de la api actual en el servidor de kcanotify.\nPor favor reinicie kcanotify más tarde (alrededor de 10~20 minutos).</string>
+    <string name="kca_toast_ioexceptionerror">Un error ocurrió mientras se transcribian datos.</string>
+    <string name="kca_toast_server_select">Elegir servidor de juego. (Consejo: Cuanto más arriba y a la izquierda mejor. Evitar los dos servidores de más abajo)</string>
+
+    <string name="kca_view_activate_vpn"Por favor activar Servicio de VPN</string>
+    <string name="kca_view_condition" formatted="false">Moral: %s</string>
+    <string name="kca_view_condition_nformat" formatted="false">Moral #%d: %s</string>
+    <string name="kca_view_hdmg_damecon_format" formatted="false">[Gravemente dañada!! (con Damecon)] %s Funcionando %s</string>
+    <string name="kca_view_hdmg_format" formatted="false">[Gravemente dañada!!] %s Funcionando %s</string>
+    <string name="kca_view_normal_format" formatted="false">%s Listo %s</string>
+
+    <string name="kca_view_noexpedition">No hay expediciones en camino.</string>
+    <string name="kca_view_expedition_header">Tiempo Restante:</string>
+
+    <!-- Setting Strings -->
+    <string name="setting_menu_kand_head">Ajustes de kcanotify</string>
+    <string name="setting_menu_kand_title_language">Ajustes de Idioma</string>
+    <string name="setting_menu_kand_title_saku_cal">Seleccionar fórmula de LoS</string>
+    <string name="setting_menu_kand_title_sniffer_type">Modo Sniffer</string>
+    <string name="setting_menu_kand_title_exp_realtime_show">Rastrear Expedición</string>
+    <string name="setting_menu_kand_desc_exp_realtime_show">Mostrar tiempo restante para Expediciones en la barra de navegación</string>
+    <string name="setting_menu_kand_title_exp_type">Estilo de Tiempo de Expedición</string>
+    <string name="setting_menu_kand_title_set_noti_priority">Establecer Prioridad de Notificaciones</string>
+    <string name="setting_menu_kand_desc_set_noti_priority">Al elegirse, la barra de kcanotify siempre estará arriba de otras notificacones</string>
+    <string name="setting_menu_kand_title_fairy_select">Elegir Ayudante</string>
+    <string name="setting_menu_kand_desc_fairy_select">Elegir el Ayudante que será mostrado en pantalla</string>
+    <string name="setting_menu_kand_title_fairy_auto_hide">Mostrar Ayudante solo en Kancolle</string>
+    <string name="setting_menu_kand_desc_fairy_auto_hide">Hay un pequeño retraso en mostrar/ocultar el ayudante.</string>
+    <string name="setting_menu_kand_title_game_data_down">Comprobar Actualizaciones de Datos/Recursos</string>
+    <string name="setting_menu_kand_desc_game_data_down">Usar si los datos de juego no fueron cargados automaticamente.</string>
+    <string name="setting_menu_kand_title_fleetview_button_order">Orden Menú de Flota</string>
+    <string name="setting_menu_kand_desc_fleetview_button_order">Determinar orden de los botones a la derecha</string>
+    <string name="fleetview_button_order_change_when_restart">Reinicie servicio para aplicar los cambios.</string>
+    <string name="setting_menu_kand_title_record_droplog">Guardar vitácora de drops</string>
+    <string name="setting_menu_kand_title_record_resourcelog">Guardar vitácora de recursos</string>
+    <string name="record_storage_warning">Ocupa algo de espacio dentro del dispositivo.</string>
+
+    <string name="setting_menu_view_head">Ajustes de Permisos/Funciones</string>
+    <string name="setting_menu_view_title_accessibility_setting">Ajustes de Accesibilidad</string>
+    <string name="setting_menu_view_desc_accessibility_setting">Selecciona kcanotify de Servicios. (Requerido para detectar la aplicación de Kancolle)</string>
+    <string name="setting_menu_view_title_overlay_setting">Ajustes de Superposición de Pantalla</string>
+    <string name="setting_menu_view_desc_overlay_setting">Establecer Permiso de Superposición de Pantalla (Requerido para Predicción de Batalla)</string>
+    <string name="setting_menu_view_title_battlenode_use">Usar Predicción de Nodo</string>
+    <string name="setting_menu_view_desc_battlenode_use">Mostrar información del próximo nodo durante combate.</string>
+    <string name="setting_menu_view_title_battleview_use">Usar Predicción de Batalla</string>
+    <string name="setting_menu_view_desc_battleview_use">Muestra resultados de batalla durante combate</string>
+    <string name="setting_menu_view_title_drop_visible">Mostrar Info de Drop</string>
+    <string name="setting_menu_view_desc_drop_visible">Mostrar nombre del barco dropeado en Predicción de Batalla</string>
+    <string name="setting_menu_view_desc_questview_use">Usar Visualizador de Misiones</string>
+    <string name="setting_menu_view_title_questview_use">Muestra traducción e información de misiones.</string>
+    <string name="setting_menu_view_title_show_constrship">Mostrar Nombre de Barco en Construcción</string>
+    <string name="setting_menu_view_desc_show_constrship">Muestra en Visualización de Flota el nombre de los barcos siendo construidos.</string>
+    <string name="setting_menu_view_title_fix_view">No fijar la posición vertical</string>
+    <string name="setting_menu_view_desc_fix_view">Fijar la posición vertical a la posición actual</string>
+
+    <string name="setting_menu_noti_head">Ajustes de Notificación</string>
+    <string name="setting_menu_noti_title_alarm_delay">Retraso de Alarma (segundos)</string>
+    <string name="setting_menu_noti_title_exp">Expedición</string>
+    <string name="setting_menu_noti_desc_exp">Notificación en pantalla de retorno de expedición</string>
+    <string name="setting_menu_noti_title_dock">Reparaciones</string>
+    <string name="setting_menu_noti_desc_dock">Notificación en pantalla al finalizar reparaciones</string>
+    <string name="setting_menu_noti_title_morale">Moral</string>
+    <string name="setting_menu_noti_desc_morale">Notificación en pantalla cuando una flota recupere moral mínima.</string>
+    <string name="setting_menu_noti_title_morale_min">Moral Mínima</string>
+    <string name="setting_menu_noti_title_akashirepair">Reparaciones por Akashi</string>
+    <string name="setting_menu_noti_desc_akashirepair">Notificación en pantalla cuando Akashi comienza a reparar.</string>
+    <string name="setting_menu_noti_title_hdmg_vib">Alerta por Daños Graves</string>
+    <string name="setting_menu_noti_desc_hdmg_vib">Sonido/Vibración cuando un barco está gravemente dañado.</string>
+    <string name="setting_menu_noti_title_nspl_vib">Alerta por Suministros Insuficientes</string>
+    <string name="setting_menu_noti_desc_nspl_vib">Sonido/Vibración cuando una flota no ha recibido suministros</string>
+    <string name="setting_menu_noti_title_fairy_vib">Vibrar cuando se oculta al Asistente</string>
+    <string name="setting_menu_noti_desc_fairy_vib">Vibrar cuando se eculta al Asistente tras mantenerlo apretado</string>
+    <string name="setting_menu_noti_title_fairy_glow">Avisar cuando se complete una misión mediante el Asistente</string>
+    <string name="setting_menu_noti_desc_fairy_glow">El Asistente brillará intensamente cuando una misión sea completada.</string>
+    <string name="setting_menu_noti_title_disable_customtoast">Usar Servicio "Toast" Personalizado</string>
+    <string name="setting_menu_noti_desc_disable_customtoast">Habilitar cuando predicción de nodo / alerta por daños graves no aparezca.</string>
+
+    <string name="setting_menu_stat_head">Ajustes de Plugin</string>
+    <string name="setting_menu_stat_title_kcaqsync">Usar KcaQSync (sincronizar misiones)</string>
+    <string name="setting_menu_stat_title_kcaqsync_pass">Contraseña de KcaQSync</string>
+    <string name="setting_menu_stat_desc_kcaqsync_pass_emtpy">Será activado después de poner una contraseña.</string>
+    <string name="setting_menu_stat_desc_kcaqsync_pass">Advertencia: nunca usar tu contraseña real de DMM!</string>
+    <string name="setting_menu_stat_title_opendb">Enviar estadísticas a OpenDB</string>
+    <string name="setting_menu_stat_title_poidb">Enviar estadísticas a poi-statistics</string>
+
+    <string name="setting_menu_app_head">Información de Aplicación</string>
+    <string name="setting_menu_app_title_current">Versión Actual</string>
+    <string name="setting_menu_app_title_updatecheck">Seleccionar Servidor de Comprobación de Actualización</string>
+    <string name="setting_menu_app_title_updatecheckserver">Comprobar Actualizaciones</string>
+    <string name="setting_menu_app_title_down">Sitio de Descarga de APK</string>
+    <string name="setting_menu_app_title_contact">Enviar Sugerencia o Reporte de Error</string>
+    <string name="setting_menu_app_desc_contact">Enviar E-Mail al desarrollador</string>
+    <string name="setting_menu_app_title_enable_acra">Usar Sistema de Reporte (ACRA)</string>
+    <string name="setting_menu_app_desc_enable_acra">Mail será abierto cuando ocurra un error que cierre la aplicación</string>
+    <string name="setting_menu_app_desc_inspector">データベース/設定値を表示/初期化</string>
+    <string name="setting_menu_app_info">Sobre kcanotify</string>
+
+    <!-- BattleView Strings -->
+    <string name="battleview_error">Un error ocurrió mientras se procesaban datos de batalla.</string>
+    <string name="battleview_menu_head">Menú</string>
+    <string name="battleview_menu0">Información de Combate Aéreo</string>
+    <string name="battleview_menu1">Lista de Misiones Actuales</string>
+    <string name="battleview_menu2">Abrir Visualización de Flota</string>
+    <string name="battleview_expview" formatted="false">Exp: %.2f/%.2f</string>
+
+    <string name="formation_lineahead">Línea Adelante</string>
+    <string name="formation_doubleline">Doble Línea</string>
+    <string name="formation_diamond">Diamante</string>
+    <string name="formation_echelon">Escalonada</string>
+    <string name="formation_lineabreast">Línea Horizontal</string>
+    <string name="formation_defensive">Defensiva</string>
+    <string name="formation_c1">FC1(Anti-Sub)</string>
+    <string name="formation_c2">FC2(Adelante)</string>
+    <string name="formation_c3">FC3(Anillo)</string>
+    <string name="formation_c4">FC4(Batalla)</string>
+    <string name="formation_c1_short">Anti-Sub</string>
+    <string name="formation_c2_short">Adelante</string>
+    <string name="formation_c3_short">Anillo</string>
+    <string name="formation_c4_short">Batalla</string>
+
+    <string name="engagement_label">Combate</string>
+    <string name="engagement_t_advantage">T Verde</string>
+    <string name="engagement_parallel">Paralelo</string>
+    <string name="engagement_headon">Cara a Cara</string>
+    <string name="engagement_t_disadvantage">T Roja</string>
+
+    <string name="air_label">Resultados Aéreos</string>
+    <string name="air_supermacy">AS+</string>
+    <string name="air_superiority">AS</string>
+    <string name="air_parity">AP</string>
+    <string name="air_denial">AD</string>
+    <string name="air_incapability">AI</string>
+
+    <string name="air_supermacy_abbr">AS+</string>
+    <string name="air_superiority_abbr">AS</string>
+
+    <string name="enemy_fleet_name">Flota Enemiga</string>
+    <string name="enemy_main_fleet_name">Flota Principal Enemiga</string>
+    <string name="enemy_combined_fleet_name">Flota de Soporte Enemiga</string>
+
+    <string name="yomi_flagship">insignia</string>
+    <string name="yomi_elite">elite</string>
+    <string name="yomi_flagship_short">I</string>
+    <string name="yomi_elite_short">E</string>
+
+    <string name="rank_ss">SS</string>
+    <string name="rank_s">S</string>
+    <string name="rank_a">A</string>
+    <string name="rank_b">B</string>
+    <string name="rank_c">C</string>
+    <string name="rank_d">D</string>
+    <string name="rank_e">E</string>
+
+    <string name="maprank_1">C</string>
+    <string name="maprank_2">E</string>
+    <string name="maprank_3">N</string>
+    <string name="maprank_4">H</string>
+
+    <string name="item_fuel">Combustible</string>
+    <string name="item_ammo">Munición</string>
+    <string name="item_stel">Acero</string>
+    <string name="item_baux">Bauxita</string>
+    <string name="item_brnr">Soplete</string>
+    <string name="item_bgtz">Balde/Cubeta</string>
+    <string name="item_mmat">Tuerca</string>
+    <string name="item_kmat">Tornillo</string>
+    <string name="item_boxs">Caja de Muebles(P)</string>
+    <string name="item_boxm">Caja de Muebles(M)</string>
+    <string name="item_boxl">Caja de Muebles(G)</string>
+    <string name="sa_language_changed">Por favor reinicie kcanotify para aplicar nuevos ajustes de idioma. (Please restart kcanotify)</string>
+    <string name="setting_menu_kand_title_language">Ajustes de Idioma</string>
+    <string name="setting_menu_noti_title_ringtone">Tonos</string>
+    <string name="setting_menu_noti_desc_ringtone">Elige un tono </string>
+    <string name="settings_string_silent">Silencioso</string>
+    <string name="setting_menu_noti_title_kind">Modo de Sonido</string>
+    <string name="sound_kind_vibrate">Vibración</string>
+    <string name="sound_kind_normal">Sonido</string>
+    <string name="sound_kind_mute">Silenciado</string>
+    <string name="ma_permission_external_confirmed">Permitir Guardado Externo: Permitido</string>
+    <string name="ma_permission_external_denied">Permitir Guardado Externo: No Permitido. (No se pueden importar tonos personalizados.)</string>
+    <string name="airbase_term">LBAS</string>
+    <string name="contact_term">Contacto</string>
+    <string name="contact_dm" formatted="false">Modificador de Daño: %d%%</string>
+    <string name="contact_none">(Nada)</string>
+    <string name="phase_term" formatted="false">Fase %d</string>
+    <string name="injection_term">Asalto de Jets</string>
+    <string name="raid_type1">Pérdida de Recursos</string>
+    <string name="raid_type2">Pérdida de Recursos/Base Dañada</string>
+    <string name="raid_type3">Base Dañada</string>
+    <string name="raid_type4">Defensa Perfecta</string>
+    <string name="getship_label">Drop</string>
+    <string name="getship_none">(Nada)</string>
+    <string name="getship_max">(Lugares Llenos)</string>
+    <string name="kca_view_tpvalue" formatted="false" >TP: %d~%d</string>
+    <string name="ship_name_class">Clase</string>
+    <string name="slot_empty">(Sin Equipamiento)</string>
+    <string name="kca_view_condition_1" formatted="false">Moral #1: %s</string>
+    <string name="kca_view_condition_2" formatted="false">Moral #2: %s</string>
+    <string name="not_supplied" formatted="false">Flota %d necesita suministros!</string>
+    <string name="sound_kind_mixed">Sonido+Vibración</string>
+    <string name="viewbutton_hide">Asistente: Adiós!</string>
+    <string name="fairy_hidden_notification_action_remove">Remover</string>
+    <string name="fairy_hidden_notification_action_return">Mostrar Nuevamente</string>
+    <string name="fairy_hidden_notification_title">Asistente Escondido</string>
+    <string name="fairy_hidden_notification_text">Deslizar abajo para seleccionar acción</string>
+    <string name="fairy_hidden_notification_bigtext">Seleccionar Acción</string>
+    <string name="kca_view_context_expand">Deslizar abajo para ver el texto</string>
+    <string name="battleview_text_retreated">Retirada</string>
+
+    <string name="quest_category_1">A</string>
+    <string name="quest_category_2">B</string>
+    <string name="quest_category_3">C</string>
+    <string name="quest_category_4">D</string>
+    <string name="quest_category_5">E</string>
+    <string name="quest_category_6">F</string>
+    <string name="quest_category_7">G</string>
+    <string name="quest_category_8">SB</string>
+    <string name="quest_category_9">N</string>
+
+    <string name="quest_type_1">D</string>
+    <string name="quest_type_2">S</string>
+    <string name="quest_type_3">M</string>
+    <string name="quest_type_4">E</string>
+    <string name="quest_type_5">U</string>
+
+    <string name="questview_page" formatted="favlse">Página %d/%d</string>
+
+    <string name="action_tools">Herramientas</string>
+    <string name="action_save_msg">Procesando...</string>
+
+    <string name="action_akashi">Arsenal de Akashi</string>
+    <string name="aa_btn_safe_state0">GTD</string>
+    <string name="aa_btn_safe_state1">Normal</string>
+    <string name="aa_btn_filter">Filtro</string>
+    <string name="recon_failed">Reconocimiento Fallido</string>
+    <string name="action_akashi_detail">Detalles de Mejora de Equipamiento</string>
+    <string name="akashi_term_detail1">Detalles de Mejora (1)</string>
+    <string name="akashi_term_detail2">Detalles de Mejora (2)</string>
+    <string name="akashi_term_equip">Equipamiento</string>
+    <string name="akashi_term_resource">C/M/A/B</string>
+    <string name="akashi_term_support">Soporte</string>
+    <string name="akashi_term_default">Quien tiene el equipamiento de serie</string>
+    <string name="akashi_term_status">Estatus Actual de Mejora</string>
+    <string name="akashi_term_day_6">Sab</string>
+    <string name="akashi_term_day_5">Vie</string>
+    <string name="akashi_term_day_0">Dom</string>
+    <string name="akashi_term_day_1">Lun</string>
+    <string name="akashi_term_day_2">Mar</string>
+    <string name="akashi_term_day_3">Mie</string>
+    <string name="akashi_term_day_4">Jue</string>
+    <string name="filter_equip_title">Filtrar por Tipo de Equipamiento</string>
+    <string name="action_akashi_filter">Ajustes de Filtro</string>
+    <string name="filter_equip_rev">REVERTIR</string>
+    <string name="filter_equip_none">LIMPIAR</string>
+    <string name="filter_equip_all">TODO</string>
+    <string name="current_fairy_changed_in_next">※ 현재 전투예보/임무번역이 끝난 후 변경됩니다.</string>
+    <string name="action_fairy_rev">반전</string>
+    <string name="setting_menu_app_title_down">APK 다운로드 사이트 설정</string>
+    <string name="language_system">Seguir Ajustes de Sistema</string>
+    <string name="item_engine">Motor de Tipo Ne</string>
+    <string name="item_gmi_material">Material de Mejora de Cañones de Nuevo Modelo</string>
+    <string name="item_skilled_crew">Tripulación Calificada </string>
+    <string name="item_kouku_material">Materiales de Armamento Aéreo de Nuevo Modelo</string>
+    <string name="item_action_report">Reporte de Acción</string>
+    <string name="setting_menu_kand_desc_bypass_address">Usar CIDR para describir direcciones de bypass, separar cada CIDR con una coma.</string>
+    <string name="settings_menu_kand_title_bypass_address">Direcciones de Bypass</string>
+    <string name="setting_menu_kand_warn_adv_network">Advertencia: modificar esto de forma incorrecta puede volver el servicio VPN inutilizable. No cambie estas ocpiones si no sabe lo que hace. Debe reiniciar el servicio VPN para que las opciones entren en efecto.</string>
+    <string name="setting_menu_kand_title_socks5_enable">Habilitar SOCKS5 Proxy</string>
+    <string name="setting_menu_kand_title_socks5_allapps">Usar proxy para todas las aplicaciones</string>
+    <string name="setting_menu_kand_title_socks5_port">Puerto SOCKS5 Proxy</string>
+    <string name="setting_menu_kand_title_socks5_address">Dirección SOCKS5 Proxy</string>
+    <string name="setting_menu_kand_title_socks5_username">Usuario (opcional)</string>
+    <string name="setting_menu_kand_title_socks5_password">Contraseña (opcional)</string>
+    <string name="setting_menu_kand_title_adv_network">Ajustes Avanzados de Red</string>
+    <string name="sa_bypass_list_invalid">La lista de dirección de bypass es inválida. Revizar que lo ingresado es correcto.</string>
+    <string name="setting_menu_noti_title_notiatsvcoff">Habilitar notificaciones cuando el servicio esté desactivado</string>
+    <string name="setting_menu_noti_desc_notiatsvcoff">Hacer disponibles las notificaciones de expediciones/reparaciones aunque el servicio esté desactivado</string>
+    <string name="questview_nopage">Sin Misión</string>
+
+    <string name="action_fleetlist">Información de la Flota</string>
+    <string name="fleetlist_combined_fleet">Flota Combinada</string>
+    <string name="fleetlist_loading">Cargando..</string>
+
+    <string name="action_shipinfo">Lista de barcos</string>
+    <string name="shipinfo_btn_sort">Ordenar</string>
+    <string name="shipinfo_btn_filter">Filtrar</string>
+    <string name="shipinfo_btn_total_format" formatted="false">Total: %d</string>
+    <string name="shipinfo_btn_total_exp_format" formatted="false">Experiencia total: %,d</string>
+    <string name="shipinfo_sort_asc">Ascendente</string>
+    <string name="shipinfo_sort_desc">Descendiente</string>
+    <string name="ship_stat_sort_key_0">ID</string>
+    <string name="ship_stat_sort_key_1">Nivel</string>
+    <string name="ship_stat_sort_key_2">Tipo</string>
+    <string name="ship_stat_sort_key_3">Moral</string>
+    <string name="ship_stat_sort_key_4">Bloqueadas</string>
+    <string name="ship_stat_sort_key_5">Flota</string>
+    <string name="ship_stat_sort_key_6">Dique</string>
+    <string name="ship_stat_sort_key_7">Dañada</string>
+    <string name="ship_stat_sort_key_8">Reparación</string>
+    <string name="ship_stat_sort_key_9">Expedición</string>
+    <string name="ship_stat_sort_key_10">Espacio Extra</string>
+    <string name="ship_stat_sort_key_11">Poder de Fuego</string>
+    <string name="ship_stat_sort_key_12">Torpedo</string>
+    <string name="ship_stat_sort_key_13">AA</string>
+    <string name="ship_stat_sort_key_14">Blindaje</string>
+    <string name="ship_stat_sort_key_15">Combate Nocturno</string>
+    <string name="ship_stat_sort_key_16">Anti-Sub</string>
+    <string name="ship_stat_sort_key_17">Evasión</string>
+    <string name="ship_stat_sort_key_18">LoS</string>
+    <string name="ship_stat_sort_key_19">Suerte</string>
+    <string name="ship_stat_sort_key_20">Velocidad</string>
+    <string name="ship_stat_sort_key_21">Clase</string>
+    <string name="ship_stat_sort_key_22">Etiqueta</string>
+
+    <string name="shipinfo_filt_list_dialog_title">Seleccionar</string>
+    <string name="shipinfo_criteria_count" formatted="false">Criterios aplicados: %d개</string>
+
+    <string name="ship_tag_0">Ninguna</string>
+    <string name="ship_tag_1">Expreso de Tokio (gris)</string>
+    <string name="ship_tag_2">Rabaul (verde)</string>
+    <string name="ship_tag_3">Combinada (azul)</string>
+    <string name="ship_tag_4">Despacho de Buin (Amarillo)</string>
+    <string name="ship_tag_5">X</string>
+    <string name="ship_tag_6">X</string>
+
+    <string name="ship_fleet_0">Ninguno</string>
+
+    <string name="ship_hp_0">Normal</string>
+    <string name="ship_hp_1">Daños Leves</string>
+    <string name="ship_hp_2">Daños Moderados</string>
+    <string name="ship_hp_3">Daños Graves</string>
+
+    <string name="action_equipmentinfo">Lista de Equipamiento</string>
+    <string name="equipinfo_summary" formatted="false">Total %d (%d Equipado, %d Equipable)</string>
+    <string name="equipinfo_filter">Filtro</string>
+
+    <string name="action_expcalc">Calculadora de EXP</string>
+    <string name="expcalc_shipname">Barco</string>
+    <string name="expcalc_currentlv">Nivel Actual</string>
+    <string name="expcalc_targetlv">Nivel Objetivo</string>
+    <string name="expcalc_map">Mapa</string>
+    <string name="expcalc_baseexp">EXP Base</string>
+    <string name="expcalc_rank">Rango</string>
+    <string name="expcalc_flagship">Insignia</string>
+    <string name="expcalc_mvp">MVP</string>
+    <string name="expcalc_mapexp">EXP de Mapa</string>
+    <string name="expcalc_remainexp">EXP Restante</string>
+    <string name="expcalc_battle">Batalla</string>
+
+    <string name="action_expdtable">Tabla de Expediciones</string>
+    <string name="expdtable_btn_w0">TODO</string>
+    <string name="expdtable_btn_w1">Mundo 1</string>
+    <string name="expdtable_btn_w2">Mundo 2</string>
+    <string name="expdtable_btn_w3">Mundo 3</string>
+    <string name="expdtable_btn_w4">Mundo 4</string>
+    <string name="expdtable_btn_w5">Mundo 6</string>
+    <string name="expdtable_btn_s1">Normal</string>
+    <string name="expdtable_btn_s2">Gran</string>
+
+    <string name="expdtable_label_no">No</string>
+    <string name="expdtable_label_name">Nombre</string>
+    <string name="expdtable_label_time">Tiempo</string>
+    <string name="expdtable_label_item">Objeto</string>
+    <string name="expdtable_label_item1">Objeto1</string>
+    <string name="expdtable_label_item2">Objeto2</string>
+    <string name="expdtable_label_hq_exp">HQ</string>
+    <string name="expdtable_label_ship_exp">Barco</string>
+    <string name="expdtable_label_condition">Condición de Éxito</string>
+
+    <string name="action_droplog">Vitácora de Drops</string>
+    <string name="droplog_search">Buscar</string>
+    <string name="droplog_clear">Vitácora limpia de drops</string>
+    <string name="droplog_export">Exportar datos como CSV</string>
+    <string name="droplog_label_date">Fecha</string>
+    <string name="droplog_label_area">Área</string>
+    <string name="droplog_label_level">Diff.</string>
+    <string name="droplog_label_isboss">Jefe</string>
+    <string name="droplog_label_rank">Rango</string>
+    <string name="droplog_item_label_no">No</string>
+    <string name="droplog_item_label_time">Tiempo</string>
+    <string name="droplog_item_label_area">Área</string>
+    <string name="droplog_item_label_isboss">B</string>
+    <string name="droplog_item_label_rank">R</string>
+    <string name="droplog_item_label_name">Nombre</string>
+    <string name="droplog_ship_none">(Nada)</string>
+    <string name="droplog_ship_full">(Lleno)</string>
+    <string name="droplog_total_format" formatted="false">Total: %d</string>
+    <string name="droplog_clear_dialog_message">Quiere limpiar toda la vitácora de drops?</string>
+    <string name="droplog_sort_asc">ASC</string>
+    <string name="droplog_sort_desc">DESC</string>
+
+    <string name="action_reslog">Vitácora de Recursos</string>
+    <string name="reslog_clear">Limpiar vitácora de recursos</string>
+    <string name="reslog_export">Exportar datos como CSV</string>
+    <string name="reslog_label_date">Fecha</string>
+    <string name="reslog_label_time">Tiempo</string>
+    <string name="reslog_label_interval">Intervalo</string>
+    <string name="reslog_interval_1hour">1 Hora</string>
+    <string name="reslog_interval_3hour">3 Horas</string>
+    <string name="reslog_interval_6hour">6 Horas</string>
+    <string name="reslog_interval_12hour">12 Horas</string>
+    <string name="reslog_interval_1day">1 Día</string>
+    <string name="reslog_interval_3day">3 Días</string>
+    <string name="reslog_interval_1week">1 Semana</string>
+    <string name="reslog_interval_2week">2 Semanas</string>
+    <string name="reslog_interval_1month">1 Mes</string>
+    <string name="reslog_interval_day">Día</string>
+    <string name="reslog_interval_week">Semana</string>
+    <string name="reslog_interval_month">Mes</string>
+    <string name="reslog_label_resource">Recurso</string>
+    <string name="reslog_label_consumable">Consumible</string>
+    <string name="reslog_clear_dialog_message">Quiere limpiar toda la vitácora de recursos?</string>
+
+    <string name="action_datasync">Sincronizar Datos</string>
+    <string name="datasync_quest_title">Sincronizar Seguidor de Misiones</string>
+    <string name="datasync_quest_code">Código</string>
+    <string name="datasync_mode_add">adición</string>
+    <string name="datasync_mode_overwrite">sobreescribir</string>
+    <string name="datasync_quest_check">revizar</string>
+    <string name="datasync_quest_sync">sincronizar</string>
+    <string name="datasync_quest_copy">copiar</string>
+    <string name="datasync_current_label">código</string>
+    <string name="datasync_success">Éxito de Sincronización</string>
+    <string name="datasync_failed">Falla de Sincronización</string>
+
+    <string name="fleetview_title">VisualizaciónDeFlota</string>
+    <string name="fleetview_combined">FC</string>
+    <string name="fleetview_switch_1">Flota 1</string>
+    <string name="fleetview_switch_2">Flota 2</string>
+    <string name="fleetview_expview" formatted="false">[Ahora] %.2f / [Hoy] %.2f</string>
+    <string name="fleetview_seekvalue_d" formatted="false">LoS: %d</string>
+    <string name="fleetview_seekvalue_f" formatted="false">LoS: %.2f</string>
+    <string name="fleetview_contactvalue" formatted="false">T%s/S%s</string>
+    <string name="viewmenu_battle">Batalla</string>
+    <string name="viewmenu_quest">Misión</string>
+    <string name="viewmenu_excheck">Exped.</string>
+    <string name="viewmenu_akashi">Akashi</string>
+    <string name="viewmenu_develop">Desarrollo</string>
+    <string name="viewmenu_construction">Construcción</string>
+    <string name="viewmenu_docking">Diques</string>
+    <string name="viewmenu_labinfo">Base Aérea</string>
+    <string name="viewmenu_maphp">HP Mapa</string>
+    <string name="viewmenu_fchk">Detalles</string>
+    <string name="viewmenu_develop_title">Desarrollo Info</string>
+    <string name="viewmenu_construction_title">Construcción Info</string>
+    <string name="viewmenu_docking_title">Diques Info</string>
+    <string name="viewmenu_docking_list">Lista</string>
+    <string name="viewmenu_airbase_title">Base Aérea Info</string>
+    <string name="viewmenu_maphp_title">HP Mapa Info</string>
+    <string name="develop_failed_text">Pingüino en Caja</string>
+    <string name="excheckview_title">Expediciones</string>
+    <string name="excheckview_flag_info">Insignia</string>
+    <string name="excheckview_total_info">Flota</string>
+    <string name="excheckview_drum_info">Tambores</string>
+    <string name="excheckview_asw_info">Anti-Sub</string>
+    <string name="excheckview_fp_info">FP</string>
+    <string name="excheckview_los_info">LoS</string>
+    <string name="excheckview_firepower_info">Poder de Fuego</string>
+    <string name="excheckview_flag_lv_format" formatted="false">Nivel %d+</string>
+    <string name="excheckview_total_num_format" formatted="false">Total %d척</string>
+    <string name="excheckview_total_lv_format" formatted="false">Suma Niveles 합계 %d+</string>
+    <string name="excheckview_drum_ship_format" formatted="false">%d barcos con tambores</string>
+    <string name="excheckview_drum_num_format" formatted="false">%d tambores en total</string>
+    <string name="excheckview_total_format" formatted="false">Total %d+</string>
+    <string name="excheckview_bonus_asw" formatted="false">Anti-Sub: %d</string>
+    <string name="excheckview_bonus_los" formatted="false">LoS: %d</string>
+    <string name="excheckview_bonus_kinu">Kinu Kai Ni</string>
+    <string name="excheckview_bonus_drum" formatted="false">Tambores: %d</string>
+    <string name="excheckview_bonus_dlc" formatted="false">DLC: %d</string>
+    <string name="excheckview_bonus_tank" formatted="false">DLC(89Tank): %d</string>
+    <string name="excheckview_bonus_amp" formatted="false">ALC: %d</string>
+    <string name="excheckview_bonus_toku" formatted="false">TokuDLC: %d</string>
+    <string name="excheckview_bonus_result" formatted="false">（Bonus: %.1f%%）</string>
+    <string name="excheckview_ship_cvs">CV*</string>
+    <string name="labinfoview_status_standby">Esperando</string>
+    <string name="labinfoview_status_sortie">Ataque</string>
+    <string name="labinfoview_status_defense">Defensa</string>
+    <string name="labinfoview_status_retreat">Retirada</string>
+    <string name="labinfoview_status_rest">Descanso</string>
+    <string name="labinfoview_fp_format" formatted="false">FP %d</string>
+    <string name="labinfoview_dist_format" formatted="false">Distancia %d</string>
+    <string name="action_errorlog">Vitácora de Errores</string>
+    <string name="errlog_dialog_message">Quiere limpiar toda la vitácora de errores?</string>
+    <string name="copied_to_clipboard">Texto copiado</string>
+    <string name="expedition_type_value_0">Tiempo Restante</string>
+    <string name="expedition_type_value_1">Tiempo de Llegada</string>
+    <string name="expedition_type_value_2">Tiempo Transcurrido</string>
+    <string name="fleetcheckview_title">Detalles de Flota</string>
+    <string name="fleetcheckview_btn_seeklos">LoS/TP</string>
+    <string name="fleetcheckview_content_seeklos" formatted="false">LoS Total de la Flota: %d\nFórmula 33: %.2f (2&#45;5, 33+)\nF33/3: %.2f (6&#45;2, 6&#45;3)\nF33/4: %.2f (3&#45;5, 6&#45;1)\n───────────────\nBarra TP:\n%d(S)/%d(A)</string>
+    <string name="fleetcheckview_btn_airbattle">Combate Aéreo</string>
+    <string name="fleetcheckview_content_airbattle" formatted="false">Poder de Ataque Aéreo Total: %d ~ %d\n───────────────\nChance de Éxito de Contacto:\n[AS+] Chance: %.1f%%, Chance de Selección: %.1f%%\n[AS] Chance: %.1f%%, Chance de Selección: %.1f%%</string>
+    <string name="fleetcheckview_btn_fuelbull">Consumo</string>
+
+    <string name="fleetview_18spring_rice" formatted="false">R %02d</string>
+    <string name="fleetview_18spring_umeboshi" formatted="false">U %02d</string>
+    <string name="fleetview_18spring_nori" formatted="false">N %02d</string>
+    <string name="fleetview_18spring_tea" formatted="false">T %02d</string>
+
+    <string name="special_message">Regalo del Día de San Valentín!</string>
+
+    <string name="widget_timer_name">Kcanotify Temporizador</string>
+    <string name="fleet_format">Flota %d</string>
+
+    <string name="download_title">Actualización Disponible</string>
+    <string name="download_description_head">Kcanotify puede no funcionar si no lo actualiza.</string>
+    <string name="download_appdata">Datos de Aplicación</string>
+    <string name="download_skip">Omitir</string>
+    <string name="download_gamedata">Datos de Juego</string>
+    <string name="download_questinfo">Información de Misiones</string>
+    <string name="download_shipinfo">Traducción de Barcos</string>
+    <string name="download_iteminfo">Traducción de Equipamiento</string>
+    <string name="download_akashi">Tabla de Arsenal de Mejoras</string>
+    <string name="download_fairy">Asistente</string>
+    <string name="download_progress">Descargando...</string>
+    <string name="download_reset">Inicializar todos los recursos</string>
+    <string name="download_reset_message">Inicializando recursos de la aplicación nuevamente.</string>
+    <string name="download_check_error">Error al cargar desde almacenamiento (usando datos predeterminados)</string>
+    <string name="download_setting_checkatstart">Revizar por actualizaciones al inicar</string>
+    <string name="download_use_internal_data">usar recursos internos</string>
+
+    <string name="packagefilter_count_format" formatted="false">Total: %d</string>
+    <string name="packagefilter_restart">Debe reinicar el servicio VPN para hacer estas opciones efectivas.</string>
+    <string name="setting_menu_sniffer_title_head">Ajustes del Sniffer</string>
+    <string name="setting_menu_sniffer_title_package_allow">Usar Sniffer para otras aplicaciones</string>
+    <string name="setting_menu_sniffer_title_extfilter_use">Usar Filtro de IP extendida</string>
+    <string name="setting_menu_sniffer_desc_package_allow">Para usuarios jugando KanColle con otros navegadores</string>
+    <string name="setting_menu_sniffer_desc_extfilter_use">Seleccionar esta opción si está usando un servicio web-proxy como ooi.moe</string>
+    <string name="action_export_kanmusu_list">Exportar a kanmusu_list</string>
+    <string name="shipinfo_export_title">Exportar a kanmusu_list</string>
+    <string name="shipinfo_export_clipboard">Copiar</string>
+    <string name="shipinfo_export_openpage">Abrir página kanmusu_list</string>
+    <string name="action_export_deckbuilder">DeckBuilder</string>
+    <string name="fleetinfo_export_title">Exportar información de flota</string>
+    <string name="fleetinfo_export_clipboard">Copiar</string>
+    <string name="fleetinfo_export_openpage1">Exportar a Deckbuilder</string>
+    <string name="fleetinfo_export_openpage2">Exportar a ImgKCbuilder</string>
+
+    <string name="text_api_houg">FP</string>
+    <string name="text_api_raig">TP</string>
+    <string name="text_api_tyku">AA</string>
+    <string name="text_api_souk">AM</string>
+    <string name="text_api_tais">ASW</string>
+    <string name="text_api_houk">EVS</string>
+    <string name="text_api_saku">LOS</string>
+    <string name="text_api_houm">ACC</string>
+    <string name="text_api_baku">BOM</string>
+    <string name="text_api_leng">RNG</string>
+
+    <string name="text_api_leng_1">S</string>
+    <string name="text_api_leng_2">M</string>
+    <string name="text_api_leng_3">L</string>
+    <string name="text_api_leng_4">VL</string>
+
+    <string name="text_api_houm2">ABM</string>
+    <string name="text_api_houk2">INT</string>
+    <string name="text_api_cost">COST</string>
+    <string name="text_api_distance">DIST</string>
+
+</resources>
