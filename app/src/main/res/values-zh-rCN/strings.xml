@@ -165,8 +165,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_set_noti_priority">选中时通知将始终位于通知栏顶部</string>
     <string name="setting_menu_kand_title_game_data_down">下载游戏资料和资源</string>
     <string name="setting_menu_kand_desc_game_data_down">请于游戏资料未自动载入时使用</string>
-    <string name="setting_menu_kand_desc_fairy_select">选择辅助妖精</string>
-    <string name="setting_menu_kand_title_fairy_select">选择你想要携带的妖精</string>
+    <string name="setting_menu_kand_desc_fairy_select">选择你想要携带的妖精</string>
+    <string name="setting_menu_kand_title_fairy_select">选择辅助妖精</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">使妖精只显示在舰これ屏幕上</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">在显示/隐藏妖精时有短暂的延迟</string>
     <string name="current_fairy_changed_in_next">※妖精会于战斗剧透/任务浏览结束后更换</string>
