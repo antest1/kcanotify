@@ -187,7 +187,7 @@ public class KcaAlarmService extends Service {
             } else if (getBooleanPreferences(getApplication(), PREF_KCA_NOTI_NOTIFYATSVCOFF) || KcaService.getServiceStatus()) {
                 loadTranslationData(getApplicationContext());
                 if (intent.getStringExtra("data") != null) {
-                    String locale = LocaleUtils.getLocaleCode(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
+                    String locale = LocaleUtils.getResourceLocaleCode(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
                     if (type == TYPE_EXPEDITION) {
                         int idx = data.get("idx").getAsInt();
                         KcaExpedition2.clearMissionData(idx);

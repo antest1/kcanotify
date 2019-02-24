@@ -61,4 +61,10 @@ public class LocaleUtils {
             return "en";
         }
     }
+
+    public static String getResourceLocaleCode(String pref) {
+        String locale = getLocaleCode(pref);
+        if (locale.equals("es")) locale = "en";
+        return locale;
+    }
 }

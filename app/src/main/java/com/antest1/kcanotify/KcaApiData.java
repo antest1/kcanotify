@@ -35,7 +35,7 @@ import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
-import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
+import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
 public class KcaApiData {
     public static JsonObject kcGameData = null;
@@ -526,7 +526,7 @@ public class KcaApiData {
 
     public static int loadShipTranslationDataFromStorage(Context context, String locale) {
         try {
-            locale = getLocaleCode(locale);
+            locale = getResourceLocaleCode(locale);
             JsonObject data = getJsonObjectFromStorage(context, KcaUtils.format("ships-%s.json", locale));
             AssetManager.AssetInputStream ais_abbr =
                     (AssetManager.AssetInputStream) context.getResources().getAssets().open("en-abbr.json");
@@ -546,7 +546,7 @@ public class KcaApiData {
     }
 
     public static int loadItemTranslationDataFromStorage(Context context, String locale) {
-        locale = getLocaleCode(locale);
+        locale = getResourceLocaleCode(locale);
         JsonObject data = getJsonObjectFromStorage(context, KcaUtils.format("items-%s.json", locale));
         if (data != null) {
             kcItemTranslationData = data.getAsJsonObject();
@@ -557,7 +557,7 @@ public class KcaApiData {
     }
 
     public static int loadStypeTranslationDataFromStorage(Context context, String locale) {
-        locale = getLocaleCode(locale);
+        locale = getResourceLocaleCode(locale);
         JsonArray data = getJsonArrayFromStorage(context, KcaUtils.format("stype-%s.json", locale));
         if (data != null) {
             kcStypeData = data;
@@ -568,7 +568,7 @@ public class KcaApiData {
     }
 
     public static int loadQuestInfoDataFromStorage(Context context, String locale) {
-        locale = getLocaleCode(locale);
+        locale = getResourceLocaleCode(locale);
         JsonObject data = getJsonObjectFromStorage(context, KcaUtils.format("quests-%s.json", locale));
         if (data != null) {
             kcQuestInfoData = data.getAsJsonObject();
@@ -587,8 +587,8 @@ public class KcaApiData {
                 (kcItemTranslationData.entrySet().size() != 0) &&
                 (kcQuestInfoData.entrySet().size() != 0);
         String locale = getStringPreferences(context, PREF_KCA_LANGUAGE);
-        if (force || !isDataLoaded || !currentLocaleCode.equals(getLocaleCode(locale))) {
-            currentLocaleCode = getLocaleCode(locale);
+        if (force || !isDataLoaded || !currentLocaleCode.equals(getResourceLocaleCode(locale))) {
+            currentLocaleCode = getResourceLocaleCode(locale);
             if (!currentLocaleCode.equals("jp")) {
                 int loadShipTranslationDataResult = loadShipTranslationDataFromStorage(context, locale);
                 if (loadShipTranslationDataResult != 1) {

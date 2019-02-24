@@ -21,6 +21,7 @@
         <item>@string/language_jp</item>
         <item>@string/language_scn</item>
         <item>@string/language_tcn</item>
+        <item>@string/language_es</item>
     </string-array>
 
     <string-array name="languageOptionValue" translatable="false">
@@ -30,6 +31,7 @@
         <item>ja-JP</item>
         <item>zh-CN</item>
         <item>zh-TW</item>
+        <item>es-UY</item>
     </string-array>
 
     <string-array name="soundOption">

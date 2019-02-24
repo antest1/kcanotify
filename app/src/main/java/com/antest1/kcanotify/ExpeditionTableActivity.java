@@ -26,13 +26,11 @@ import static android.widget.Toast.makeText;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
-import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
+import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
 
 public class ExpeditionTableActivity extends AppCompatActivity {
@@ -79,7 +77,7 @@ public class ExpeditionTableActivity extends AppCompatActivity {
         AssetManager assetManager = getAssets();
 
         String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
-        adapter = new KcaExpeditionTableViewAdpater(getApplicationContext(), getBaseContext(), getLocaleCode(locale));
+        adapter = new KcaExpeditionTableViewAdpater(getApplicationContext(), getBaseContext(), getResourceLocaleCode(locale));
 
         for (int i = 0; i <= 5; i++) {
             final int target = i;

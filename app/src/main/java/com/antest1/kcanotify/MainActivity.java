@@ -60,7 +60,7 @@ import static com.antest1.kcanotify.KcaUtils.getNotificationId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
-import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
+import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "KCAV";
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         String main_html = "";
         try {
             String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
-            InputStream ais = assetManager.open("main-".concat(getLocaleCode(locale)).concat(".html"));
+            InputStream ais = assetManager.open("main-".concat(getResourceLocaleCode(locale)).concat(".html"));
             byte[] bytes = ByteStreams.toByteArray(ais);
             main_html = new String(bytes);
         } catch (IOException e) {

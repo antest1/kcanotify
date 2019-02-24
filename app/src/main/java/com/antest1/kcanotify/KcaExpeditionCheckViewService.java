@@ -138,7 +138,7 @@ public class KcaExpeditionCheckViewService extends Service {
 
         try {
             active = true;
-            locale = LocaleUtils.getLocaleCode(KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
+            locale = LocaleUtils.getResourceLocaleCode(KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
             ship_data = new ArrayList<>();
             checkdata = new HashMap<>();
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);

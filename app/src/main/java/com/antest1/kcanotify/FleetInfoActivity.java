@@ -52,9 +52,7 @@ import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
-import static com.antest1.kcanotify.LocaleUtils.getLocaleCode;
-import static com.antest1.kcanotify.R.id.fleetlist_raw;
-
+import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
 public class FleetInfoActivity extends AppCompatActivity {
     static final String KC_REQ_LIST = "name,stype,houg,raig,tyku,souk,tais,luck,afterlv,slot_num";
@@ -189,7 +187,7 @@ public class FleetInfoActivity extends AppCompatActivity {
         export_openpage2.setOnClickListener(v -> {
             String data = content.getText().toString();
             String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
-            String locale_code = getLocaleCode(locale);
+            String locale_code = getResourceLocaleCode(locale);
             try {
                 JsonObject add_data = new JsonParser().parse(data).getAsJsonObject();
                 add_data.addProperty("version", 4.1);
