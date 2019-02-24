@@ -72,10 +72,10 @@
     <string name="node_info_ecbattle" formatted="false">%s (Enemigo Combinado)</string>
     <string name="node_info_practice" formatted="false">PVP</string>
     <!-- MainActivity Strings -->
-    <string name="ma_vpn_toggleon">Sniffer Activado</string>
-    <string name="ma_vpn_toggleoff">Sniffer Desactivado</string>
-    <string name="ma_svc_toggleon">Servicio Activado</string>
-    <string name="ma_svc_toggleoff">Servicio Desactivado</string>
+    <string name="ma_vpn_toggleon">Sniffer ON</string>
+    <string name="ma_vpn_toggleoff">Sniffer OFF</string>
+    <string name="ma_svc_toggleon">Servicio ON</string>
+    <string name="ma_svc_toggleoff">Servicio OFF</string>
     <string name="ma_toast_kancolle_not_installed">Kancolle para Android no está instalado.</string>
     <string name="ma_toast_overay_diabled">Permiso de superposición de pantalla necesario para Predicción de Batalla. Activable en Ajustes.</string>
     <string name="ma_hasupdate" formatted="false">Actualización disponible. (%s)</string>
@@ -228,7 +228,7 @@
     <string name="setting_menu_app_desc_contact">Enviar E-Mail al desarrollador</string>
     <string name="setting_menu_app_title_enable_acra">Usar Sistema de Reporte (ACRA)</string>
     <string name="setting_menu_app_desc_enable_acra">Mail será abierto cuando ocurra un error que cierre la aplicación</string>
-    <string name="setting_menu_app_desc_inspector">データベース/設定値を表示/初期化</string>
+    <string name="setting_menu_app_desc_inspector">Mostrar / inicializar base de datos / valor de configuración</string>
     <string name="setting_menu_app_info">Sobre kcanotify</string>
 
     <!-- BattleView Strings -->
@@ -557,7 +557,7 @@
     <string name="datasync_success">Éxito de Sincronización</string>
     <string name="datasync_failed">Falla de Sincronización</string>
 
-    <string name="fleetview_title">VisualizaciónDeFlota</string>
+    <string name="fleetview_title">Flota</string>
     <string name="fleetview_combined">FC</string>
     <string name="fleetview_switch_1">Flota 1</string>
     <string name="fleetview_switch_2">Flota 2</string>
@@ -569,10 +569,10 @@
     <string name="viewmenu_quest">Misión</string>
     <string name="viewmenu_excheck">Exped.</string>
     <string name="viewmenu_akashi">Akashi</string>
-    <string name="viewmenu_develop">Desarrollo</string>
-    <string name="viewmenu_construction">Construcción</string>
+    <string name="viewmenu_develop">Desarr.</string>
+    <string name="viewmenu_construction">Const.</string>
     <string name="viewmenu_docking">Diques</string>
-    <string name="viewmenu_labinfo">Base Aérea</string>
+    <string name="viewmenu_labinfo">Base</string>
     <string name="viewmenu_maphp">HP Mapa</string>
     <string name="viewmenu_fchk">Detalles</string>
     <string name="viewmenu_develop_title">Desarrollo Info</string>
@@ -591,8 +591,8 @@
     <string name="excheckview_los_info">LoS</string>
     <string name="excheckview_firepower_info">Poder de Fuego</string>
     <string name="excheckview_flag_lv_format" formatted="false">Nivel %d+</string>
-    <string name="excheckview_total_num_format" formatted="false">Total %d척</string>
-    <string name="excheckview_total_lv_format" formatted="false">Suma Niveles 합계 %d+</string>
+    <string name="excheckview_total_num_format" formatted="false">Total %d</string>
+    <string name="excheckview_total_lv_format" formatted="false">Suma Niveles %d+</string>
     <string name="excheckview_drum_ship_format" formatted="false">%d barcos con tambores</string>
     <string name="excheckview_drum_num_format" formatted="false">%d tambores en total</string>
     <string name="excheckview_total_format" formatted="false">Total %d+</string>
