@@ -26,11 +26,13 @@
 
     <string name="seek_type_0">단순합</string>
     <string name="seek_type_1">33식/1</string>
+    <string name="seek_type_2">33식/2</string>
     <string name="seek_type_3">33식/3</string>
     <string name="seek_type_4">33식/4</string>
 
     <string name="seek_type_0_detail">단순합산</string>
     <string name="seek_type_1_detail">33식/Cn=1 (2&#45;5)</string>
+    <string name="seek_type_2_detail">33식/Cn=2 (5&#45;2,4&#45;4)</string>
     <string name="seek_type_3_detail">33식/Cn=3 (6&#45;2,6&#45;3)</string>
     <string name="seek_type_4_detail">33식/Cn=4 (3&#45;5,6&#45;1)</string>
 

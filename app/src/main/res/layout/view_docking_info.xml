@@ -107,7 +107,7 @@
                 <LinearLayout
                     android:id="@+id/dock_list_1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
@@ -132,7 +132,7 @@
                 <LinearLayout
                     android:id="@+id/dock_list_2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
@@ -157,7 +157,7 @@
                 <LinearLayout
                     android:id="@+id/dock_list_3"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
@@ -182,7 +182,7 @@
                 <LinearLayout
                     android:id="@+id/dock_list_4"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView

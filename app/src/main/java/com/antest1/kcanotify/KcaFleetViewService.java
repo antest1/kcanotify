@@ -1192,6 +1192,9 @@ public class KcaFleetViewService extends Service {
             case 1:
                 seekType = getStringWithLocale(R.string.seek_type_1);
                 break;
+            case 2:
+                seekType = getStringWithLocale(R.string.seek_type_2);
+                break;
             case 3:
                 seekType = getStringWithLocale(R.string.seek_type_3);
                 break;
@@ -1206,24 +1209,8 @@ public class KcaFleetViewService extends Service {
     }
 
     private void changeInternalSeekCn() {
-        int new_value = seekcn_internal;
-        switch (seekcn_internal) {
-            case 0:
-                new_value = 1;
-                break;
-            case 1:
-                new_value = 3;
-                break;
-            case 3:
-                new_value = 4;
-                break;
-            case 4:
-                new_value = 0;
-                break;
-            default:
-                break;
-        }
-        seekcn_internal = new_value;
+        seekcn_internal += 1;
+        seekcn_internal %= 5;
     }
 
     private void updateSelectedView(int idx) {

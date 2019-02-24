@@ -3,6 +3,7 @@
     <string-array name="seekTypeOption">
         <item>@string/seek_type_0_detail</item>
         <item>@string/seek_type_1_detail</item>
+        <item>@string/seek_type_2_detail</item>
         <item>@string/seek_type_3_detail</item>
         <item>@string/seek_type_4_detail</item>
     </string-array>
@@ -10,6 +11,7 @@
     <string-array name="seekTypeOptionValue" translatable="false">
         <item >0</item>
         <item >1</item>
+        <item >2</item>
         <item >3</item>
         <item >4</item>
     </string-array>

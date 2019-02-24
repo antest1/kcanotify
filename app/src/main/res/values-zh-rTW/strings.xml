@@ -32,11 +32,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="seek_type_0">加總</string>
     <string name="seek_type_1">33式/1</string>
+    <string name="seek_type_2">33式/2</string>
     <string name="seek_type_3">33式/3</string>
     <string name="seek_type_4">33式/4</string>
 
     <string name="seek_type_0_detail">總和</string>
     <string name="seek_type_1_detail">33式/分歧係數1 (2&#45;5)</string>
+    <string name="seek_type_2_detail">33式/分歧係數2 (5&#45;2,5&#45;4)</string>
     <string name="seek_type_3_detail">33式/分歧係數3 (6&#45;2,6&#45;3)</string>
     <string name="seek_type_4_detail">33式/分歧係數4 (3&#45;5,6&#45;1)</string>
 
