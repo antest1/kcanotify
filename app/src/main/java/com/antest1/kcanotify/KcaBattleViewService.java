@@ -705,6 +705,8 @@ public class KcaBattleViewService extends Service {
                     }
                 }
 
+                if (is_practice) battleview.findViewById(R.id.battle_node_ss).setVisibility(View.GONE);
+
                 api_f_maxhps = api_data.getAsJsonArray("api_f_maxhps");
                 api_f_nowhps = api_data.getAsJsonArray("api_f_nowhps");
                 api_f_afterhps = api_data.getAsJsonArray("api_f_afterhps");
