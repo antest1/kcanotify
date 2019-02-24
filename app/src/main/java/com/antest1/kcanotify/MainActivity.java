@@ -179,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (is_kca_installed && kcIntent != null) {
+                    kcIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(kcIntent);
                     finish();
                 } else {

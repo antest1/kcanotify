@@ -153,6 +153,7 @@ public class KcaAlarmService extends Service {
                 if (action.startsWith(CLICK_ACTION)) {
                     Intent kcintent = getKcIntent(getApplicationContext());
                     if (kcintent != null) {
+                        kcintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         PendingIntent pintent = PendingIntent.getActivity(getApplicationContext(), 0, kcintent, 0);
                         try {
                             pintent.send();

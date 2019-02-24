@@ -264,14 +264,8 @@ public class KcaUtils {
     }
 
     public static Intent getKcIntent(Context context) {
-        Intent kcIntent;
-        if (isPackageExist(context, KC_PACKAGE_NAME)) {
-            kcIntent = context.getPackageManager().getLaunchIntentForPackage(KC_PACKAGE_NAME);
-            kcIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            return kcIntent;
-        } else {
-            return null;
-        }
+        Intent kcIntent = context.getPackageManager().getLaunchIntentForPackage(KC_PACKAGE_NAME);
+        return kcIntent;
     }
 
     public static Context getContextWithLocale(Context ac, Context bc) {
