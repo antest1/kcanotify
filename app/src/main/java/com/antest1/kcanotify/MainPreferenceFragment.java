@@ -443,10 +443,12 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                 }
             }
             Log.e("KCA-S", "sdf");
-            Intent aIntent = new Intent(getActivity(), KcaAlarmService.class);
-            aIntent.setAction(REFRESH_CHANNEL);
-            aIntent.putExtra("uri", uri);
-            getApplicationContext().startService(aIntent);
+            if (getActivity() != null && !getActivity().isFinishing()) {
+                Intent aIntent = new Intent(getActivity(), KcaAlarmService.class);
+                aIntent.setAction(REFRESH_CHANNEL);
+                aIntent.putExtra("uri", uri);
+                getApplicationContext().startService(aIntent);
+            }
         } else if (pref instanceof ListPreference) {
             ListPreference etp = (ListPreference) pref;
             pref.setSummary(etp.getEntry());
