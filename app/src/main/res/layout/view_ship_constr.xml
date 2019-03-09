@@ -28,13 +28,38 @@
 
                 <TextView
                     android:id="@+id/view_sc_title"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
+                    android:layout_marginRight="4dp"
                     android:text="@string/viewmenu_construction_title"
                     android:textColor="@color/white"
                     android:textSize="@dimen/popup_text_large" />
+
+                <TextView
+                    android:id="@+id/view_sc_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="6dp"
+                    android:background="@color/grey"
+                    android:paddingStart="6dp"
+                    android:paddingLeft="12dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="6dp"
+                    android:paddingRight="12dp"
+                    android:paddingBottom="2dp"
+                    android:text="！"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/popup_text_small"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:id="@+id/view_cancel"
@@ -69,7 +94,7 @@
                 <LinearLayout
                     android:id="@+id/sc_list_1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
@@ -94,7 +119,7 @@
                 <LinearLayout
                     android:id="@+id/sc_list_2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
@@ -119,7 +144,7 @@
                 <LinearLayout
                     android:id="@+id/sc_list_3"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
@@ -144,7 +169,7 @@
                 <LinearLayout
                     android:id="@+id/sc_list_4"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
