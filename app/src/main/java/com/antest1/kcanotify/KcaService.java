@@ -382,7 +382,8 @@ public class KcaService extends Service {
         if (receiver != null) unregisterReceiver(receiver);
         receiver = null;
 
-        notifiManager.cancelAll();
+        if (notifiManager != null) notifiManager.cancelAll();
+        notifiManager = null;
         isServiceOn = false;
     }
 
