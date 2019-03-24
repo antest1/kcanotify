@@ -158,6 +158,16 @@
                     android:src="@mipmap/item_11" />
 
                 <ImageView
+                    android:id="@+id/akashi_filter_equip_btn_12"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/imagebtn_on"
+                    android:padding="5dp"
+                    android:src="@mipmap/item_12" />
+
+                <ImageView
                     android:id="@+id/akashi_filter_equip_btn_13"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -207,6 +217,14 @@
                     android:padding="5dp"
                     android:src="@mipmap/item_18" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
                 <ImageView
                     android:id="@+id/akashi_filter_equip_btn_19"
                     android:layout_width="30dp"
@@ -216,13 +234,6 @@
                     android:background="@drawable/imagebtn_off"
                     android:padding="5dp"
                     android:src="@mipmap/item_19" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/akashi_filter_equip_btn_20"
@@ -295,6 +306,14 @@
                     android:padding="5dp"
                     android:src="@mipmap/item_38" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
                 <ImageView
                     android:id="@+id/akashi_filter_equip_btn_42"
                     android:layout_width="30dp"
@@ -304,13 +323,6 @@
                     android:background="@drawable/imagebtn_on"
                     android:padding="5dp"
                     android:src="@mipmap/item_42" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/akashi_filter_equip_btn_43"
@@ -332,17 +344,6 @@
                     android:background="@drawable/imagebtn_on"
                     android:padding="5dp"
                     android:src="@mipmap/item_44" />
-
-                <ImageView
-                    android:id="@+id/akashi_filter_equip_btn_94"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="5dp"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/imagebtn_off"
-                    android:padding="5dp"
-                    android:src="@mipmap/item_0"
-                    android:visibility="invisible" />
 
                 <ImageView
                     android:id="@+id/akashi_filter_equip_btn_95"
