@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import java.util.Locale;
 
+import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
@@ -52,6 +53,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_NS;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_QUESTVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
+import static com.antest1.kcanotify.KcaConstants.PREF_KC_PACKAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_LAST_QUEST_CHECK;
 import static com.antest1.kcanotify.KcaConstants.PREF_LAST_UPDATE_CHECK;
 import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
@@ -218,6 +220,8 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
                 return "{}";
             case PREF_PACKAGE_ALLOW:
                 return "[]";
+            case PREF_KC_PACKAGE:
+                return KC_PACKAGE_NAME;
             default:
                 return "";
         }

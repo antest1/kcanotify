@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean running = false;
     private AlertDialog dialogVpn = null;
     Context ctx;
-    Intent kcIntent;
     ToggleButton vpnbtn, svcbtn;
     Button kcbtn;
     ImageButton kctoolbtn;
@@ -91,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
     Gson gson = new Gson();
 
     SharedPreferences prefs;
-    Boolean is_kca_installed = true;
     private WindowManager windowManager;
     private BackPressCloseHandler backPressCloseHandler;
     public static void setHandler(Handler h) {
@@ -116,9 +114,6 @@ public class MainActivity extends AppCompatActivity {
         prefs.edit().putBoolean(PREF_VPN_ENABLED, KcaVpnService.checkOn()).apply();
 
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
-        kcIntent = getKcIntent(getApplicationContext());
-        if (!BuildConfig.DEBUG) is_kca_installed = (kcIntent != null);
-
         int sniffer_mode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
 
         vpnbtn = findViewById(R.id.vpnbtn);
@@ -175,26 +170,32 @@ public class MainActivity extends AppCompatActivity {
         });
 
         kcbtn = findViewById(R.id.kcbtn);
-        kcbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (is_kca_installed && kcIntent != null) {
-                    kcIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(kcIntent);
-                    finish();
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.ma_toast_kancolle_not_installed), Toast.LENGTH_LONG).show();
+        kcbtn.setOnClickListener(v -> {
+            String kcApp = getStringPreferences(getApplicationContext(), PREF_KC_PACKAGE);
+            Intent kcIntent = getKcIntent(getApplicationContext());
+            boolean is_kca_installed = false;
+            if (!BuildConfig.DEBUG) is_kca_installed = (kcIntent != null);
+            if (is_kca_installed) {
+                kcIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(kcIntent);
+                finish();
+            } else {
+                if (kcApp.equals(KC_PACKAGE_NAME)) {
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.ma_toast_kancolle_not_installed),
+                            Toast.LENGTH_LONG).show();
+                } else if (kcApp.equals(GOTO_PACKAGE_NAME)) {
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.ma_toast_gotobrowser_not_installed),
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
 
         kctoolbtn = findViewById(R.id.kcatoolbtn);
-        kctoolbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ToolsActivity.class);
-                startActivity(intent);
-            }
+        kctoolbtn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ToolsActivity.class);
+            startActivity(intent);
         });
         kctoolbtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.white), PorterDuff.Mode.SRC_ATOP);

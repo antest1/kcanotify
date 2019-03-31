@@ -12,6 +12,8 @@
     <string name="backpress_msg">Presionar nuevamente para cerrar</string>
     <string name="notification_appinfo_title">Kcanotify Notificaciones</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>
+    <string name="app_name_kancolle">KanColle Android (Oficial)</string>
+    <string name="app_name_gotobrowser">GotoBrowser</string>
 
     <!-- Link Information, Do Not Translate Here -->
 
@@ -77,6 +79,7 @@
     <string name="ma_svc_toggleon">Servicio ON</string>
     <string name="ma_svc_toggleoff">Servicio OFF</string>
     <string name="ma_toast_kancolle_not_installed">Kancolle para Android no está instalado.</string>
+    <string name="ma_toast_gotobrowser_not_installed">GotoBrowser no está instalado.</string>
     <string name="ma_toast_overay_diabled">Permiso de superposición de pantalla necesario para Predicción de Batalla. Activable en Ajustes.</string>
     <string name="ma_hasupdate" formatted="false">Actualización disponible. (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">Nuevos datos del juego disponibles. (%s)</string>
@@ -152,6 +155,7 @@
     <string name="setting_menu_kand_head">Ajustes de kcanotify</string>
     <string name="setting_menu_kand_title_language">Ajustes de Idioma</string>
     <string name="setting_menu_kand_title_saku_cal">Seleccionar fórmula de LoS</string>
+    <string name="setting_menu_kand_title_kancolle_app">Seleccione la aplicación KanColle</string>
     <string name="setting_menu_kand_title_sniffer_type">Modo Sniffer</string>
     <string name="setting_menu_kand_title_exp_realtime_show">Rastrear Expedición</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">Mostrar tiempo restante para Expediciones en la barra de navegación</string>

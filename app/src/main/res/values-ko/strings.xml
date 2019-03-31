@@ -11,6 +11,8 @@
     <string name="backpress_msg">\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.</string>
     <string name="notification_appinfo_title">깡들리티 알림</string>
     <string name="app_vpn_name">시제 깡들리티 스니퍼</string>
+    <string name="app_name_kancolle">안드로이드판 칸코레 (공식)</string>
+    <string name="app_name_gotobrowser">고토브라우저</string>
 
     <!-- Link Information, Do Not Translate Here -->
 
@@ -76,6 +78,7 @@
     <string name="ma_svc_toggleon">서비스 On</string>
     <string name="ma_svc_toggleoff">서비스 Off</string>
     <string name="ma_toast_kancolle_not_installed">칸코레가 설치되어 있지 않습니다.</string>
+    <string name="ma_toast_gotobrowser_not_installed">고토브라우저가 설치되어 있지 않습니다.</string>
     <string name="ma_toast_overay_diabled">전투예보에 필요한 화면 오버레이 권한이 설정되지 않았습니다. 설정 > 화면 오버레이 설정에서 권한을 설정하세요.</string>
     <string name="ma_hasupdate" formatted="false">업데이트가 있습니다. (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">새 게임 데이터가 있습니다. (%s)</string>
@@ -149,6 +152,7 @@
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">깡들리티 설정</string>
     <string name="setting_menu_kand_title_saku_cal">색적 계산방식 선택</string>
+    <string name="setting_menu_kand_title_kancolle_app">칸코레 어플리케이션 선택</string>
     <string name="setting_menu_kand_title_sniffer_type">스니퍼 모드</string>
     <string name="setting_menu_kand_title_exp_realtime_show">원정 남은 시간 실시간 표시</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">상단의 원정 시간 표시 여부</string>

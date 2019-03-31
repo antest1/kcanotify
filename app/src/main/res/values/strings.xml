@@ -21,6 +21,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_downloadall">DL ALL</string>
     <string name="action_inspector" translatable="false">Inspector</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>
+    <string name="app_name_kancolle">KanColle Android (Official)</string>
+    <string name="app_name_gotobrowser">GotoBrowser</string>
 
     <string name="backpress_msg">Press back one more time to exit</string>
     <string name="notification_appinfo_title">Kcanotify Notification</string>
@@ -119,6 +121,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_svc_toggleon">Service On</string>
     <string name="ma_svc_toggleoff">Service Off</string>
     <string name="ma_toast_kancolle_not_installed">Kancolle For Android is not installed.</string>
+    <string name="ma_toast_gotobrowser_not_installed">GotoBrowser is not installed.</string>
     <string name="ma_toast_overay_diabled">Screen Overlay Permission is required for BattleView. Enable Screen Overlay at Settings > Screen Overlay Settings.</string>
     <string name="ma_hasupdate" formatted="false">An update is available. (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">New game data is available. (%s)</string>
@@ -200,6 +203,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_head">Kcanotify Settings</string>
     <string name="setting_menu_kand_title_language">Language Settings</string>
     <string name="setting_menu_kand_title_saku_cal">Select LoS formula</string>
+    <string name="setting_menu_kand_title_kancolle_app">Select KanColle Application</string>
     <string name="setting_menu_kand_title_sniffer_type">Sniffer Mode</string>
     <string name="setting_menu_kand_title_exp_realtime_show">Track Expedition Time</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">Display remaining/left time for Expeditions on the navbar</string>

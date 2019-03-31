@@ -104,6 +104,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_DISABLE_CUSTOMTOAST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_KC_PACKAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_RES_USELOCAL;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
@@ -264,7 +265,8 @@ public class KcaUtils {
     }
 
     public static Intent getKcIntent(Context context) {
-        Intent kcIntent = context.getPackageManager().getLaunchIntentForPackage(KC_PACKAGE_NAME);
+        String package_name = getStringPreferences(context, PREF_KC_PACKAGE);
+        Intent kcIntent = context.getPackageManager().getLaunchIntentForPackage(package_name);
         return kcIntent;
     }
 

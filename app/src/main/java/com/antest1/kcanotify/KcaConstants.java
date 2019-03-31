@@ -474,6 +474,7 @@ public final class KcaConstants {
     public static final String PREF_PACKAGE_ALLOW = "package_allow";
     public static final String PREF_ALLOW_EXTFILTER = "allow_external_filter";
     public static final String PREF_DNS_NAMESERVERS = "dns_nameservers";
+    public static final String PREF_KC_PACKAGE = "kc_package";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -537,7 +538,8 @@ public final class KcaConstants {
             PREF_FAIRY_REV,
             PREF_PACKAGE_ALLOW,
             PREF_ALLOW_EXTFILTER,
-            PREF_DNS_NAMESERVERS
+            PREF_DNS_NAMESERVERS,
+            PREF_KC_PACKAGE
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
