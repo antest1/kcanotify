@@ -161,7 +161,7 @@ public class KcaApiData {
             T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER};
 
     public static final int T3_COUNT = 47;
-    public static final int[] T3LIST_IMPROVABLE = {1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 23, 24, 30, 34, 36, 38, 42, 43, 44};
+    public static final int[] T3LIST_IMPROVABLE = {1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 23, 24, 30, 34, 36, 38, 42, 43, 44};
 
     public static final int[] BASIC_MASTERY_MIN_BONUS = {0, 10, 25, 40, 55, 70, 85, 100};
     public static final int[] BASIC_MASTERY_MAX_BONUS = {9, 24, 39, 54, 69, 84, 99, 120};
