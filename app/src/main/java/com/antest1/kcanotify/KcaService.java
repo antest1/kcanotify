@@ -403,7 +403,7 @@ public class KcaService extends Service {
         setServiceDown();
         KcaAlarmService.clearAlarmCount();
         stopForeground(true);
-        dbHelper.close();
+        if (dbHelper != null) dbHelper.close();
         super.onDestroy();
     }
 

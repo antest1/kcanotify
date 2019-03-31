@@ -527,7 +527,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                 item.addProperty("api_deck_id", 0);
                 item.addProperty("api_mission", 0);
             }
-            item.addProperty("api_sort_id", kcShipData.get("api_sort_id").getAsInt());
+            item.addProperty("api_sort_id", kcShipData != null ? kcShipData.get("api_sort_id").getAsInt() : 0);
             data.set(i, item);
         }
         return data;
