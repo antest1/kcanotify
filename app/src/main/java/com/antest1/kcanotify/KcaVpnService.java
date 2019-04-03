@@ -630,6 +630,14 @@ public class KcaVpnService extends VpnService {
             port = Integer.parseInt(portNum);
         if (enable && !(addr.equals("") || port == 0)) {
             Log.i(TAG, String.format("Proxy enabled, with address %s and port %d, Auth with %s %s", addr, port, username, password));
+            // Resolve proxy address
+            try {
+                addr = InetAddress.getByName( addr ).getHostAddress();
+                Log.i(TAG, "Proxy resolved: " + addr);
+            }
+            catch (UnknownHostException e) {
+                Log.w(TAG, "Unknown proxy hostname: " + addr);
+            }
             jni_socks5(addr, port, username, password);
         } else {
             Log.i(TAG, "Proxy disabled");
