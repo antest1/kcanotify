@@ -19,6 +19,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="backpress_msg">再按一次返回键退出应用程序</string>
     <string name="notification_appinfo_title">Kcanotify通知</string>
     <string name="app_vpn_name">Kcanotify Sniffer</string>
+    <string name="app_name_kancolle">Android版本的舰これ (公式)</string>
+    <string name="app_name_gotobrowser">GotoBrowser</string>
 
     <!-- Common Text -->
     <string name="dialog_ok">确认</string>
@@ -82,6 +84,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_svc_toggleon">Service ON</string>
     <string name="ma_svc_toggleoff">Service OFF</string>
     <string name="ma_toast_kancolle_not_installed">Android版本的舰これ尚未安装</string>
+    <string name="ma_toast_gotobrowser_not_installed">GotoBrowser尚未安装</string>
     <string name="ma_toast_overay_diabled">战斗剧透需要取得悬浮视窗权限  请至设定 > 允许悬浮视窗的相关设定</string>
     <string name="ma_hasupdate" formatted="false">有可用的更新。 (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">有可用的游戏资料更新。 (%s)</string>
@@ -159,6 +162,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_noti_title_alarm_delay">通知时间提前值（秒）</string>
     <string name="setting_menu_kand_title_language">语言设定</string>
     <string name="setting_menu_kand_title_saku_cal">选择索敌公式</string>
+    <string name="setting_menu_kand_title_kancolle_app">选择要运行的应用程序</string>
     <string name="setting_menu_kand_title_sniffer_type">Sniffer模式</string>
     <string name="setting_menu_kand_title_exp_realtime_show">展示远征时间</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">于装置的通知栏显示远征时间</string>

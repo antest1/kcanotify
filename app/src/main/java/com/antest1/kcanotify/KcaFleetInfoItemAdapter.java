@@ -85,7 +85,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
 
         ViewHolder holder = (ViewHolder) v.getTag();
         JsonObject data = item.get(position).getAsJsonObject();
-        if (!data.has("kc")) {
+        if (!data.has("kc") || data.get("kc") == null) {
             holder.ship_layout.setVisibility(View.INVISIBLE);
             return v;
         }

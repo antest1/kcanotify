@@ -230,14 +230,14 @@
                     android:id="@+id/textSpecial"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:layout_alignWithParentIfMissing="true"
                     android:layout_above="@id/textMainDataUpdate"
                     android:layout_alignParentBottom="false"
-                    android:layout_alignWithParentIfMissing="true"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp"
                     android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="6dp"
                     android:background="@color/colorSpecial"
                     android:gravity="center_vertical|center_horizontal"
                     android:minLines="4"
@@ -245,7 +245,8 @@
                     android:text="Special Text"
                     android:textAlignment="center"
                     android:textColor="@color/colorSpecialText"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 

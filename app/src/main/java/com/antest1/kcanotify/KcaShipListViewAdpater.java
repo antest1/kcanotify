@@ -510,7 +510,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                     item.getAsJsonArray("api_karyoku").get(0).getAsInt() +
                             item.getAsJsonArray("api_raisou").get(0).getAsInt());
             JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_stype,api_sort_id");
-            int stype = kcShipData.get("api_stype").getAsInt();
+            int stype = kcShipData != null ? kcShipData.get("api_stype").getAsInt() : 0;
             int max_hp = item.get("api_maxhp").getAsInt();
             int now_hp = item.get("api_nowhp").getAsInt();
             item.addProperty("api_exslot", item.get("api_slot_ex").getAsInt() != 0 ? 1 : 0);
@@ -527,7 +527,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                 item.addProperty("api_deck_id", 0);
                 item.addProperty("api_mission", 0);
             }
-            item.addProperty("api_sort_id", kcShipData.get("api_sort_id").getAsInt());
+            item.addProperty("api_sort_id", kcShipData != null ? kcShipData.get("api_sort_id").getAsInt() : 0);
             data.set(i, item);
         }
         return data;

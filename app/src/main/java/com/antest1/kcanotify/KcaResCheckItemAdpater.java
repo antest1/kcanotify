@@ -74,8 +74,10 @@ public class KcaResCheckItemAdpater extends BaseAdapter {
                 }
             });
             if (item.get("highlight").getAsBoolean()) {
-                holder.reschk_ver.setTextColor(ContextCompat.getColor(context, R.color.colorPanelWarning));
+                holder.reschk_ver.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPanelWarning));
+                holder.reschk_ver.setTextColor(ContextCompat.getColor(context, R.color.white));
             } else {
+                holder.reschk_ver.setBackground(null);
                 holder.reschk_ver.setTextColor(ContextCompat.getColor(context, R.color.grey));
             }
         }

@@ -39,7 +39,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -383,7 +382,8 @@ public class KcaService extends Service {
         if (receiver != null) unregisterReceiver(receiver);
         receiver = null;
 
-        notifiManager.cancelAll();
+        if (notifiManager != null) notifiManager.cancelAll();
+        notifiManager = null;
         isServiceOn = false;
     }
 
@@ -403,7 +403,7 @@ public class KcaService extends Service {
         setServiceDown();
         KcaAlarmService.clearAlarmCount();
         stopForeground(true);
-        dbHelper.close();
+        if (dbHelper != null) dbHelper.close();
         super.onDestroy();
     }
 
@@ -690,7 +690,8 @@ public class KcaService extends Service {
                 api_start2_loading_flag = true;
                 KcaFleetViewService.setReadyFlag(false);
                 //Toast.makeText(contextWithLocale, "KCA_VERSION", Toast.LENGTH_LONG).show();
-                JsonObject api_version = jsonDataObj.get("api").getAsJsonObject();
+                String version_data = new String(raw);
+                JsonObject api_version = gson.fromJson(version_data, JsonObject.class).getAsJsonObject("api");
                 kca_version = api_version.get("api_start2").getAsString();
                 Log.e("KCA", kca_version);
 
@@ -2148,7 +2149,7 @@ public class KcaService extends Service {
                 e1.printStackTrace();
             }
 
-            String process_data = raw.toString();
+            String process_data = new String(raw);
             if (url.contains(API_PORT)) {
                 process_data = "PORT DATA OMITTED";
             }

@@ -430,16 +430,18 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                 pref.setSummary(silentText);
             } else {
                 Uri ringtoneUri = Uri.parse(uri);
-                getActivity().grantUriPermission(BuildConfig.APPLICATION_ID, ringtoneUri, FLAG_GRANT_READ_URI_PERMISSION);
-                Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
-                if (ringtone == null) {
-                    showToast(getApplicationContext(),
-                            getStringWithLocale(R.string.ma_permission_external_denied),
-                            Toast.LENGTH_LONG);
-                    pref.setSummary(silentText);
-                } else {
-                    String name = ringtone.getTitle(getApplicationContext());
-                    pref.setSummary(name);
+                if (getActivity() != null) {
+                    getActivity().grantUriPermission(BuildConfig.APPLICATION_ID, ringtoneUri, FLAG_GRANT_READ_URI_PERMISSION);
+                    Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
+                    if (ringtone == null) {
+                        showToast(getApplicationContext(),
+                                getStringWithLocale(R.string.ma_permission_external_denied),
+                                Toast.LENGTH_LONG);
+                        pref.setSummary(silentText);
+                    } else {
+                        String name = ringtone.getTitle(getApplicationContext());
+                        pref.setSummary(name);
+                    }
                 }
             }
             Log.e("KCA-S", "sdf");

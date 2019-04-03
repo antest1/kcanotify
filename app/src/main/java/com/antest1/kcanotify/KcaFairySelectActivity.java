@@ -206,7 +206,9 @@ public class KcaFairySelectActivity extends AppCompatActivity {
             if (mWakeLock.isHeld()) mWakeLock.release();
             Log.e("KCA-FS", KcaUtils.format("%d %d %d", totalFiles, successedFiles, failedFiles));
             setPreferences(getApplicationContext(), PREF_FAIRY_DOWN_FLAG, true);
-            mProgressDialog.dismiss();
+            if (!KcaFairySelectActivity.this.isFinishing() && mProgressDialog != null) {
+                mProgressDialog.dismiss();
+            }
             if (totalFiles == 0) {
                 Toast.makeText(getApplicationContext(), "no file to download", Toast.LENGTH_LONG).show();
             } else {

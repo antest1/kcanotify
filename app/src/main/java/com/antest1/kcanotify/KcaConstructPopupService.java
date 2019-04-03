@@ -15,6 +15,7 @@ import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Display;
@@ -58,6 +59,8 @@ public class KcaConstructPopupService extends Service {
     private int screenWidth, screenHeight;
     private int popupWidth, popupHeight;
     private KcaDBHelper dbHelper;
+    private boolean spoilerStatus = true;
+    TextView constructionViewButton;
 
     WindowManager.LayoutParams mParams;
 
@@ -121,18 +124,27 @@ public class KcaConstructPopupService extends Service {
             mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             mManager.addView(mView, mParams);
 
-            constructTimer = new Runnable() {
-                @Override
-                public void run() {
-                    Log.e("KCA-CPS", "constructTimer");
-                    try {
-                        updatePopup();
-                    } catch (Exception e) {
-                        Log.e("KCA-CPS", getStringFromException(e));
-                    }
+            constructTimer = () -> {
+                Log.e("KCA-CPS", "constructTimer");
+                try {
+                    updatePopup();
+                } catch (Exception e) {
+                    Log.e("KCA-CPS", getStringFromException(e));
                 }
             };
 
+            spoilerStatus = getBooleanPreferences(getApplicationContext(), PREF_SHOW_CONSTRSHIP_NAME);
+            constructionViewButton = mView.findViewById(R.id.view_sc_btn);
+            constructionViewButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    spoilerStatus = !spoilerStatus;
+                    updateSpoilerButton();
+                    updatePopup();
+                }
+            });
+
+            updateSpoilerButton();
             constructTimeScheduler = Executors.newSingleThreadScheduledExecutor();
             constructTimeScheduler.scheduleAtFixedRate(constructTimer, 0, 1, TimeUnit.SECONDS);
         }
@@ -166,7 +178,7 @@ public class KcaConstructPopupService extends Service {
 
     final Handler handler = new Handler()  {
         public void handleMessage(Message msg) {
-            boolean show_shipname = getBooleanPreferences(getApplicationContext(), PREF_SHOW_CONSTRSHIP_NAME);
+            //boolean show_shipname = getBooleanPreferences(getApplicationContext(), PREF_SHOW_CONSTRSHIP_NAME);
             JsonArray api_kdock = dbHelper.getJsonArrayValue(DB_KEY_KDOCKDATA);
             if (api_kdock != null) {
                 for (int i = 0; i<api_kdock.size(); i++) {
@@ -178,7 +190,7 @@ public class KcaConstructPopupService extends Service {
                         int ship_id = item.get("api_created_ship_id").getAsInt();
                         if (ship_id > 0) {
                             JsonObject shipdata = KcaApiData.getKcShipDataById(item.get("api_created_ship_id").getAsInt(), "name");
-                            if (show_shipname) {
+                            if (spoilerStatus) {
                                 nameview.setText(KcaApiData.getShipTranslation(shipdata.get("name").getAsString(), false));
                             } else {
                                 nameview.setText("？？？");
@@ -196,6 +208,14 @@ public class KcaConstructPopupService extends Service {
             }
         }
     };
+
+    private void updateSpoilerButton() {
+        if (spoilerStatus) {
+            constructionViewButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+        } else {
+            constructionViewButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+        }
+    }
 
     private void updatePopup() {
         Log.e("KCA-CPS", "updatePopup");

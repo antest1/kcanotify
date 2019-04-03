@@ -36,6 +36,16 @@
         <item>es-UY</item>
     </string-array>
 
+    <string-array name="gameAppOption">
+        <item>@string/app_name_kancolle</item>
+        <item>@string/app_name_gotobrowser</item>
+    </string-array>
+
+    <string-array name="gameAppOptionValue" translatable="false">
+        <item>com.dmm.dmmlabo.kancolle</item>
+        <item>com.antest1.gotobrowser</item>
+    </string-array>
+
     <string-array name="soundOption">
         <item>@string/sound_kind_mixed</item>
         <item>@string/sound_kind_normal</item>
