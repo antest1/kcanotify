@@ -264,40 +264,34 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
             }
 
             if (key.equals(PREF_ALARM_DELAY)) {
-                pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        String new_val = ((String) newValue);
-                        if (new_val.length() == 0) return false;
-                        int value = Integer.parseInt(new_val);
-                        KcaAlarmService.setAlarmDelay(value);
-                        if (sHandler != null) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString("url", KCA_API_PREF_ALARMDELAY_CHANGED);
-                            bundle.putString("data", "");
-                            Message sMsg = sHandler.obtainMessage();
-                            sMsg.setData(bundle);
-                            sHandler.sendMessage(sMsg);
-                        }
-                        return true;
+                pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                    String new_val = ((String) newValue);
+                    if (new_val.length() == 0) return false;
+                    int value = Integer.parseInt(new_val);
+                    KcaAlarmService.setAlarmDelay(value);
+                    if (sHandler != null) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("url", KCA_API_PREF_ALARMDELAY_CHANGED);
+                        bundle.putString("data", "");
+                        Message sMsg = sHandler.obtainMessage();
+                        sMsg.setData(bundle);
+                        sHandler.sendMessage(sMsg);
                     }
+                    return true;
                 });
             }
 
             if (key.equals(PREF_KCA_MORALE_MIN)) {
-                pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        String new_val = ((String) newValue);
-                        if (new_val.length() == 0) return false;
-                        int value = Integer.parseInt(new_val);
-                        if (value > 100) {
-                            showToast(getApplicationContext(), "value must be in 0~100", Toast.LENGTH_LONG);
-                            return false;
-                        }
-                        KcaMoraleInfo.setMinMorale(value);
-                        return true;
+                pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                    String new_val = ((String) newValue);
+                    if (new_val.length() == 0) return false;
+                    int value = Integer.parseInt(new_val);
+                    if (value > 100) {
+                        showToast(getApplicationContext(), "value must be in 0~100", Toast.LENGTH_LONG);
+                        return false;
                     }
+                    KcaMoraleInfo.setMinMorale(value);
+                    return true;
                 });
             }
 
@@ -376,18 +370,18 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
     @TargetApi(Build.VERSION_CODES.M)
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (getActivity() != null) {
+        if (getActivity() != null && getApplicationContext() != null) {
             if (requestCode == REQUEST_OVERLAY_PERMISSION) {
                 int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
                 new Handler().postDelayed(() -> {
-                    if (Settings.canDrawOverlays(getActivity())) {
+                    if (Settings.canDrawOverlays(getApplicationContext())) {
                         showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_ok), Toast.LENGTH_SHORT);
                     } else {
                         showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_no), Toast.LENGTH_SHORT);
                     }
                 }, delay);
             } else if (requestCode == REQUEST_USAGESTAT_PERMISSION) {
-                if(hasUsageStatPermission(getActivity().getApplicationContext())) {
+                if(hasUsageStatPermission(getApplicationContext())) {
                     showToast(getActivity(), getStringWithLocale(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT);
                 } else {
                     showToast(getActivity(), getStringWithLocale(R.string.sa_usagestat_no), Toast.LENGTH_SHORT);
