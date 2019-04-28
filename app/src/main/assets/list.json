@@ -44,39 +44,39 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quest_track.json"
 }, {
 	"name": "quests-en.json",
-	"version": 2019033101,
+	"version": 2019042401,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quests-en.json"
 }, {
 	"name": "quests-jp.json",
-	"version": 2019033101,
+	"version": 2019042401,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quests-jp.json"
 }, {
 	"name": "quests-ko.json",
-	"version": 2019033101,
+	"version": 2019042401,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quests-ko.json"
 }, {
 	"name": "quests-scn.json",
-	"version": 2019033101,
+	"version": 2019042401,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quests-scn.json"
 }, {
 	"name": "quests-tcn.json",
-	"version": 2019033101,
+	"version": 2019042401,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quests-tcn.json"
 }, {
 	"name": "ships-en.json",
-	"version": 2019010201,
+	"version": 2019042401,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/ships-en.json"
 }, {
 	"name": "ships-ko.json",
-	"version": 2019010201,
+	"version": 2019042401,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/ships-ko.json"
 }, {
 	"name": "ships-scn.json",
-	"version": 2019010201,
+	"version": 2019042401,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/ships-scn.json"
 }, {
 	"name": "ships-tcn.json",
-	"version": 2019010201,
+	"version": 2019042401,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/ships-tcn.json"
 }, {
 	"name": "ships_init_equip_count.json",
