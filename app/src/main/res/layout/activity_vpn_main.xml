@@ -185,15 +185,15 @@
                 <TextView
                     android:id="@+id/textMainUpdate"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignWithParentIfMissing="true"
                     android:layout_above="@+id/textMainWarn"
                     android:layout_alignParentBottom="false"
-                    android:layout_alignWithParentIfMissing="true"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp"
                     android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="6dp"
                     android:background="@color/colorUpdate"
                     android:gravity="center_vertical|center_horizontal"
                     android:minLines="4"
@@ -205,33 +205,32 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/textMainDataUpdate"
+                    android:id="@+id/textMaintenance"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignWithParentIfMissing="true"
                     android:layout_above="@+id/textMainUpdate"
                     android:layout_alignParentBottom="false"
-                    android:layout_alignWithParentIfMissing="true"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp"
                     android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="6dp"
                     android:background="@color/colorDataUpdate"
                     android:gravity="center_vertical|center_horizontal"
-                    android:minLines="4"
+                    android:minLines="2"
                     android:padding="4dp"
-                    android:text="데이터 업데이트 가능"
+                    android:text="Next Maintenance:\n%s"
                     android:textAlignment="center"
                     android:textColor="@color/colorDataUpdateText"
-                    android:textSize="14dp"
-                    android:visibility="gone" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/textSpecial"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@id/textMainDataUpdate"
+                    android:layout_above="@id/textMaintenance"
                     android:layout_alignParentBottom="false"
                     android:layout_marginStart="6dp"
                     android:layout_marginLeft="6dp"
@@ -245,8 +244,7 @@
                     android:text="Special Text"
                     android:textAlignment="center"
                     android:textColor="@color/colorSpecialText"
-                    android:textSize="14dp"
-                    android:visibility="gone" />
+                    android:textSize="14dp" />
 
             </RelativeLayout>
 
@@ -263,7 +261,7 @@
         android:background="#A0000000"
         android:padding="20dp"
         android:src="@mipmap/special_image"
-        android:visibility="visible"
+        android:visibility="gone"
         app:srcCompat="@mipmap/special_image" />
 
 </RelativeLayout>

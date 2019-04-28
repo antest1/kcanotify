@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.pixplicity.htmlcompat.HtmlCompat;
@@ -14,11 +15,13 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
+import android.media.AudioManager;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -28,6 +31,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
+import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -44,7 +48,10 @@ import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -73,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
+    AudioManager audioManager;
     AssetManager assetManager;
     KcaDBHelper dbHelper;
     Toolbar toolbar;
@@ -85,8 +93,9 @@ public class MainActivity extends AppCompatActivity {
     ImageButton kctoolbtn;
     public ImageButton kcafairybtn;
     public static Handler sHandler;
+    public Vibrator vibrator;
     TextView textDescription;
-    TextView textWarn, textSpecial, textResourceReset;
+    TextView textWarn, textSpecial, textMaintenance;
     Gson gson = new Gson();
 
     SharedPreferences prefs;
@@ -113,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
         prefs.edit().putBoolean(PREF_SVC_ENABLED, KcaService.getServiceStatus()).apply();
         prefs.edit().putBoolean(PREF_VPN_ENABLED, KcaVpnService.checkOn()).apply();
 
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
         int sniffer_mode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
 
@@ -244,10 +255,55 @@ public class MainActivity extends AppCompatActivity {
 
         backPressCloseHandler = new BackPressCloseHandler(this);
 
+        textMaintenance = findViewById(R.id.textMaintenance);
+        String maintenanceInfo = dbHelper.getValue(DB_KEY_KCMAINTNC);
+        if (maintenanceInfo != null && maintenanceInfo.trim().length() > 0) {
+            try {
+                JsonArray maintenance_data = (new JsonParser().parse(maintenanceInfo)).getAsJsonArray();
+                String mt_start = maintenance_data.get(0).getAsString();
+                String mt_end = maintenance_data.get(1).getAsString();
+                if (!mt_start.equals("")) {
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z", Locale.US);
+                    Date start_date =  df.parse(mt_start);
+                    Date end_date = df.parse(mt_end);
+
+                    SimpleDateFormat out_df = df;
+                    if (Build.VERSION.SDK_INT >= 18) {
+                        out_df = new SimpleDateFormat(DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEE, dd MMM yyyy HH:mm Z"), Locale.getDefault());
+                    }
+
+                    boolean is_passed = end_date.getTime() < System.currentTimeMillis();
+                    boolean before_maintenance = System.currentTimeMillis() < start_date.getTime();
+
+                    if (before_maintenance) {
+                        textMaintenance.setText(KcaUtils.format(getStringWithLocale(R.string.ma_nextmaintenance), out_df.format(start_date)));
+                        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
+                        boolean is_muted = audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT;
+                        if (!is_muted && !soundKind.equals(getString(R.string.sound_kind_value_mute))) {
+                            long[] mVibratePattern = new long[]{0, 400, 200, 400};
+                            if (vibrator != null && vibrator.hasVibrator()) {
+                                vibrator.vibrate(mVibratePattern, -1);
+                            }
+                        }
+                    } else if (!is_passed) {
+                        textMaintenance.setText(KcaUtils.format(getStringWithLocale(R.string.ma_endmaintenance), out_df.format(end_date)));
+                    }
+                    textMaintenance.setVisibility(View.VISIBLE);
+                } else {
+                    textMaintenance.setVisibility(View.GONE);
+                }
+            } catch (ParseException e) {
+                textMaintenance.setText(getStringFromException(e));
+                textMaintenance.setVisibility(View.VISIBLE);
+            }
+        } else {
+            textMaintenance.setVisibility(View.GONE);
+        }
+
         String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
         ImageView specialImage = findViewById(R.id.special_image);
-        // specialImage.setImageResource(getId("setsubun_".concat(getLocaleCode(locale)), R.mipmap.class));
-        specialImage.setImageResource(R.mipmap.special_image);
+        specialImage.setImageResource(getId("gw2019_".concat(getResourceLocaleCode(locale)), R.mipmap.class));
+        // specialImage.setImageResource(R.mipmap.special_image);
         specialImage.setVisibility(View.GONE);
         specialImage.setOnClickListener(v -> v.setVisibility(View.GONE));
 

@@ -83,6 +83,8 @@
     <string name="ma_toast_overay_diabled">Permiso de superposición de pantalla necesario para Predicción de Batalla. Activable en Ajustes.</string>
     <string name="ma_hasupdate" formatted="false">Actualización disponible. (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">Nuevos datos del juego disponibles. (%s)</string>
+    <string name="ma_nextmaintenance" formatted="false">Siguiente mantenimiento:\n%s</string>
+    <string name="ma_endmaintenance" formatted="false">Tiempo de finalización de mantenimiento:\n%s</string>
     <string name="description"><b>Help</b>\nActivar ambos botones (Sniffer y Servicio) y luego iniciar Kancolle\n\n※ La VPN es necesaria para detectar datos del juego. \n\n<b>Características Principales</b>\n - Notificaciones de Expediciones/Reparaciones\n - Alerta de Daños Graves (Antes y durante el combate)\n - LoS/FP/Indicadores de Fatiga\n - Rastreo de nodo durante combate\n - Predicción de Batalla / Visualizador de Misiones\n - Tabla de Arsenal de Mejoras\n - Envia estadisticas a OpenDB (opcional)\n \nVisita http://swaytwig.com/kcanotify para detalles. (coreano)</string>
 
     <!-- SettingActivity Strings -->
@@ -635,7 +637,7 @@
     <string name="fleetview_18spring_nori" formatted="false">N %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">T %02d</string>
 
-    <string name="special_message">Regalo del Día de San Valentín!</string>
+    <string name="special_message">Golden Week!</string>
 
     <string name="widget_timer_name">Kcanotify Temporizador</string>
     <string name="fleet_format">Flota %d</string>
