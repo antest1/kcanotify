@@ -56,6 +56,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
@@ -578,6 +579,7 @@ public class KcaUtils {
             try {
                 Reader reader = new FileReader(jsonFile);
                 data = new JsonParser().parse(reader).getAsJsonObject();
+                reader.close();
             } catch (IOException | IllegalStateException | JsonSyntaxException e) {
                 e.printStackTrace();
                 setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
@@ -597,6 +599,7 @@ public class KcaUtils {
                     (AssetManager.AssetInputStream) am.open(name);
             byte[] bytes = ByteStreams.toByteArray(ais);
             data = new JsonParser().parse(new String(bytes)).getAsJsonObject();
+            ais.close();
         } catch (IOException e1) {
             e1.printStackTrace();
             if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonObjectFromStorage", "1", getStringFromException(e1));
@@ -616,7 +619,8 @@ public class KcaUtils {
             try {
                 Reader reader = new FileReader(jsonFile);
                 data = new JsonParser().parse(reader).getAsJsonArray();
-            } catch (FileNotFoundException | IllegalStateException | JsonSyntaxException e ) {
+                reader.close();
+            } catch (IOException | IllegalStateException | JsonSyntaxException e ) {
                 e.printStackTrace();
                 setPreferences(context, PREF_DATALOAD_ERROR_FLAG, true);
                 if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonArrayFromStorage", "0", getStringFromException(e));
@@ -635,6 +639,7 @@ public class KcaUtils {
                     (AssetManager.AssetInputStream) am.open(name);
             byte[] bytes = ByteStreams.toByteArray(ais);
             data = new JsonParser().parse(new String(bytes)).getAsJsonArray();
+            ais.close();
         } catch (IOException e1) {
             e1.printStackTrace();
             if (helper != null) helper.recordErrorLog(ERROR_TYPE_DATALOAD, name, "getJsonArrayFromStorage", "1", getStringFromException(e1));
@@ -650,8 +655,10 @@ public class KcaUtils {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         try {
-            bitmap = BitmapFactory.decodeStream(new FileInputStream(myImageFile), null, options);
-        } catch (FileNotFoundException e) {
+            InputStream is = new FileInputStream(myImageFile);
+            bitmap = BitmapFactory.decodeStream(is, null, options);
+            is.close();
+        } catch (IOException e) {
             // Log.e("KCA", getStringFromException(e));
             return false;
         }
