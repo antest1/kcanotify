@@ -20,6 +20,7 @@ public interface KcaDownloader {
             "Accept: application/json",
             "X-Identify: app/kcanotify",
             "Referer: app:/KCA/",
+            "Cache-Control: no-cache, no-store, must-revalidate",
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("/kcanotify/list.php")
@@ -29,6 +30,7 @@ public interface KcaDownloader {
             "Accept: application/octet-stream",
             "X-Identify: app/kcanotify",
             "Referer: app:/KCA/",
+            "Cache-Control: no-cache, no-store, must-revalidate",
             "Content-Type: application/x-www-form-urlencoded"
     })
     @GET("/kcanotify/kca_api_start2.php?")
