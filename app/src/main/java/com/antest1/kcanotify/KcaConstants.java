@@ -476,6 +476,9 @@ public final class KcaConstants {
     public static final String PREF_ALLOW_EXTFILTER = "allow_external_filter";
     public static final String PREF_DNS_NAMESERVERS = "dns_nameservers";
     public static final String PREF_KC_PACKAGE = "kc_package";
+    public static final String PREF_HDNOTI_LOCKED = "hdnoti_locked";
+    public static final String PREF_HDNOTI_MINLEVEL = "hdnoti_minlevel";
+
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -540,7 +543,9 @@ public final class KcaConstants {
             PREF_PACKAGE_ALLOW,
             PREF_ALLOW_EXTFILTER,
             PREF_DNS_NAMESERVERS,
-            PREF_KC_PACKAGE
+            PREF_KC_PACKAGE,
+            PREF_HDNOTI_LOCKED,
+            PREF_HDNOTI_MINLEVEL
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
@@ -574,6 +579,7 @@ public final class KcaConstants {
             PREF_FIX_VIEW_LOC,
             PREF_KCAQSYNC_USE,
             PREF_ALLOW_EXTFILTER,
+            PREF_HDNOTI_LOCKED
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

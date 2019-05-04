@@ -248,6 +248,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_view_desc_battleview_use">Display battle results during sortie.</string>
     <string name="setting_menu_view_title_drop_visible">Show Drop Info</string>
     <string name="setting_menu_view_desc_drop_visible">Show dropped ship name in BattleView</string>
+    <string name="setting_menu_view_title_hdmg_locked">Check heavy damaged status ONLY for locked ships</string>
+    <string name="setting_menu_view_desc_hdmg_locked">Warning: heavy damaged alert will not work for unlocked ships!</string>
+    <string name="setting_menu_view_title_hdmg_minlevel">Minimal level for heavy damaged status alert</string>
+    <string name="setting_menu_view_desc_hdmg_minlevel">Set 0 for all ships regardless of the level</string>
     <string name="setting_menu_view_title_questview_use">Use QuestView</string>
     <string name="setting_menu_view_desc_questview_use">Display quest translation and information.</string>
     <string name="setting_menu_view_title_show_constrship">Show Name of Ship in Construction</string>

@@ -12,64 +12,7 @@ import android.view.MenuItem;
 
 import java.util.Locale;
 
-import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
-import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
-import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
-import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
-import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
-import static com.antest1.kcanotify.KcaConstants.PREF_ALLOW_EXTFILTER;
-import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
-import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE_START;
-import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
-import static com.antest1.kcanotify.KcaConstants.PREF_DISABLE_CUSTOMTOAST;
-import static com.antest1.kcanotify.KcaConstants.PREF_EQUIPINFO_FILTCOND;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_DOWN_FLAG;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_REV;
-import static com.antest1.kcanotify.KcaConstants.PREF_FIX_VIEW_LOC;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCAQSYNC_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_ACTIVATE_DROPLOG;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_ACTIVATE_RESLOG;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLENODE_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_TYPE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_MORALE_MIN;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_AKASHI;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_MORALE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_NOTIFYATSVCOFF;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_QUEST_FAIRY_GLOW;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_HD;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_V_NS;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_QUESTVIEW_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
-import static com.antest1.kcanotify.KcaConstants.PREF_KC_PACKAGE;
-import static com.antest1.kcanotify.KcaConstants.PREF_LAST_QUEST_CHECK;
-import static com.antest1.kcanotify.KcaConstants.PREF_LAST_UPDATE_CHECK;
-import static com.antest1.kcanotify.KcaConstants.PREF_OPENDB_API_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_PACKAGE_ALLOW;
-import static com.antest1.kcanotify.KcaConstants.PREF_PACKET_LOG;
-import static com.antest1.kcanotify.KcaConstants.PREF_POIDB_API_USE;
-import static com.antest1.kcanotify.KcaConstants.PREF_RES_USELOCAL;
-import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
-import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
-import static com.antest1.kcanotify.KcaConstants.PREF_SHOWDROP_SETTING;
-import static com.antest1.kcanotify.KcaConstants.PREF_SHOW_CONSTRSHIP_NAME;
-import static com.antest1.kcanotify.KcaConstants.PREF_SNIFFER_MODE;
-import static com.antest1.kcanotify.KcaConstants.PREF_TIMER_WIDGET_STATE;
-import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
-import static com.antest1.kcanotify.KcaConstants.PREF_VIEW_YLOC;
-import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
+import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.NestedPreferenceFragment.NESTED_TAG;
 
@@ -165,6 +108,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_RES_USELOCAL:
             case PREF_FAIRY_DOWN_FLAG:
             case PREF_ALLOW_EXTFILTER:
+            case PREF_HDNOTI_LOCKED:
                 return "boolean_false";
             case PREF_KCA_EXP_VIEW:
             case PREF_KCA_NOTI_NOTIFYATSVCOFF:
@@ -205,6 +149,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_KCARESOURCE_VERSION:
             case PREF_LAST_QUEST_CHECK:
             case PREF_FAIRY_REV:
+            case PREF_HDNOTI_MINLEVEL:
                 return "0";
             case PREF_ALARM_DELAY:
                 return "61";

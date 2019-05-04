@@ -1244,6 +1244,9 @@ public class KcaService extends Service {
                                     if (ship_id != -1)
                                         api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
                                 }
+
+                                KcaBattle.checkhdmgflag = deckInfoCalc.getHeavyDmgCheckStatus(api_deck_data, 0);
+                                KcaBattle.checkhdmgcbflag = deckInfoCalc.getHeavyDmgCheckStatus(api_deck_data, 1);
                                 KcaBattle.dameconflag = deckInfoCalc.getDameconStatus(api_deck_data, 0);
                                 KcaBattle.dameconcbflag = deckInfoCalc.getDameconStatus(api_deck_data, 1);
 
@@ -1264,7 +1267,8 @@ public class KcaService extends Service {
                                     if (ship_id != -1)
                                         api_ship_data.add(KcaApiData.getUserShipDataById(ship_id, "all"));
                                 }
-                                KcaBattle.dameconflag = deckInfoCalc.getDameconStatus(api_deck_data, 0);
+                                KcaBattle.checkhdmgflag = deckInfoCalc.getHeavyDmgCheckStatus(api_deck_data, deck_id);
+                                KcaBattle.dameconflag = deckInfoCalc.getDameconStatus(api_deck_data, deck_id);
                             }
                             api_data.add("api_deck_data", api_deck_data);
                             api_data.add("api_ship_data", api_ship_data);

@@ -181,6 +181,10 @@
     <string name="setting_menu_view_desc_battleview_use">出撃や練習での戦闘結果を見る</string>
     <string name="setting_menu_view_title_drop_visible">艦娘ドロップをスポイラーする</string>
     <string name="setting_menu_view_desc_drop_visible">戦闘予報でドロップされた艦娘の名前を見る</string>
+    <string name="setting_menu_view_title_hdmg_locked">ロックされた艦娘にのみ大破警告を使用</string>
+    <string name="setting_menu_view_desc_hdmg_locked">注意：設定時にロックされていない艦娘には警告が発生しません！</string>
+    <string name="setting_menu_view_title_hdmg_minlevel">大破警告を使用する艦娘の最小レベル</string>
+    <string name="setting_menu_view_desc_hdmg_minlevel">すべての艦娘に対して使用する場合は0に設定</string>
     <string name="setting_menu_view_desc_questview_use">任務画面で任務の翻訳や攻略情報を表示する</string>
     <string name="setting_menu_view_title_questview_use">任務情報を使う</string>
     <string name="setting_menu_view_title_show_constrship">建造中の艦娘の名前を表示</string>

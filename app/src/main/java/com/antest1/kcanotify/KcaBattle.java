@@ -90,6 +90,8 @@ public class KcaBattle {
     public static JsonArray escapecblist = new JsonArray();
     public static JsonArray damecon_used = new JsonArray();
 
+    public static boolean[] checkhdmgflag = new boolean[7];
+    public static boolean[] checkhdmgcbflag = new boolean[7];
     public static boolean[] dameconflag = new boolean[7];
     public static boolean[] dameconcbflag = new boolean[7];
 
@@ -131,6 +133,7 @@ public class KcaBattle {
     public static int checkHeavyDamagedExist() {
         int status = HD_NONE;
         for (int i = 0; i < friendMaxHps.size(); i++) {
+            if (!checkhdmgflag[i]) continue;
             if (friendNowHps.get(i).getAsInt() * 4 <= friendMaxHps.get(i).getAsInt()
                     && !escapelist.contains(new JsonPrimitive(i + 1))) {
                 if (dameconflag[i]) {
@@ -149,6 +152,7 @@ public class KcaBattle {
     public static int checkCombinedHeavyDamagedExist() {
         int status = HD_NONE;
         for (int i = 0; i < friendMaxHps.size(); i++) {
+            if (!checkhdmgflag[i]) continue;
             if (friendNowHps.get(i).getAsInt() * 4 <= friendMaxHps.get(i).getAsInt()
                     && !escapelist.contains(new JsonPrimitive(i + 1))) {
                 if (dameconflag[i]) {
@@ -162,6 +166,7 @@ public class KcaBattle {
             }
         }
         for (int i = 1; i < friendCbMaxHps.size(); i++) {
+            if (!checkhdmgcbflag[i]) continue;
             if (friendCbNowHps.get(i).getAsInt() * 4 <= friendCbMaxHps.get(i).getAsInt() &&
                     !escapecblist.contains(new JsonPrimitive(i + 1))) {
                 if (dameconcbflag[i]) {

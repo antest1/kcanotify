@@ -185,6 +185,10 @@
     <string name="setting_menu_view_desc_battleview_use">출격 및 연습전에서의 전투예보 사용 여부</string>
     <string name="setting_menu_view_title_drop_visible">함선 드랍 정보 표시</string>
     <string name="setting_menu_view_desc_drop_visible">전투예보에서 드랍된 칸무스 이름 표시</string>
+    <string name="setting_menu_view_title_hdmg_locked">잠금된 함선에 대해서만 대파 경고 사용</string>
+    <string name="setting_menu_view_desc_hdmg_locked">주의: 잠금되지 않은 함선에 대해서는 경고가 발생하지 않습니다!</string>
+    <string name="setting_menu_view_title_hdmg_minlevel">대파 경고를 사용할 최소 함선 레벨</string>
+    <string name="setting_menu_view_desc_hdmg_minlevel">모든 함선에 대해서 사용할 경우 0으로 설정</string>
     <string name="setting_menu_view_desc_questview_use">임무 화면에서 임무 번역 및 정보 표시</string>
     <string name="setting_menu_view_title_questview_use">임무번역 사용</string>
     <string name="setting_menu_view_title_show_constrship">건조 중인 칸무스 이름 표시</string>

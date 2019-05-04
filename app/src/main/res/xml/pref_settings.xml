@@ -185,6 +185,19 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="hdnoti_locked"
+            android:summary="@string/setting_menu_view_desc_hdmg_locked"
+            android:title="@string/setting_menu_view_title_hdmg_locked" />
+
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="hdnoti_minlevel"
+            android:numeric="integer"
+            android:summary="@string/setting_menu_view_desc_hdmg_minlevel"
+            android:title="@string/setting_menu_view_title_hdmg_minlevel" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="show_constrship_name"
             android:summary="@string/setting_menu_view_desc_show_constrship"
             android:title="@string/setting_menu_view_title_show_constrship" />

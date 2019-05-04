@@ -207,6 +207,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_view_desc_battleview_use">战斗时显示最终结果</string>
     <string name="setting_menu_view_title_drop_visible">显示掉落舰娘</string>
     <string name="setting_menu_view_desc_drop_visible">于预知战报中显示掉落舰娘的名称</string>
+    <string name="setting_menu_view_title_hdmg_locked">仅侦测上锁船舰的大破状态</string>
+    <string name="setting_menu_view_desc_hdmg_locked">注意:未上锁的船舰不会触发大破警告！ </string>
+    <string name="setting_menu_view_title_hdmg_minlevel">船舰触发大破警告的最低等级要求</string>
+    <string name="setting_menu_view_desc_hdmg_minlevel">不论等级皆显示大破警告需将数值设为0</string>
     <string name="setting_menu_view_title_questview_use">任务浏览</string>
     <string name="setting_menu_view_desc_questview_use">显示任务内容与翻译</string>
     <string name="setting_menu_view_title_show_constrship">显示建造中的船舰名称</string>

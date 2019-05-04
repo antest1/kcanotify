@@ -62,6 +62,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
+import static com.antest1.kcanotify.KcaConstants.PREF_HDNOTI_MINLEVEL;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCAQSYNC_PASS;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DOWNLOAD_DATA;
@@ -326,6 +327,12 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
             } else if (pref instanceof EditTextPreference) {
                 EditTextPreference etp = (EditTextPreference) pref;
                 pref.setSummary(etp.getText());
+                if (key.equals(PREF_HDNOTI_MINLEVEL)) {
+                    if (etp.getText().equals("0")) {
+                        String current = etp.getText();
+                        pref.setSummary(KcaUtils.format("%s (%s)", current, getStringWithLocale(R.string.setting_menu_view_desc_hdmg_minlevel)));
+                    }
+                }
                 if (key.equals(PREF_KCAQSYNC_PASS)) {
                     if (etp.getText().trim().length() == 0) {
                         pref.setSummary(getStringWithLocale(R.string.setting_menu_stat_desc_kcaqsync_pass_emtpy));

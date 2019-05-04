@@ -27,7 +27,11 @@ import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.LAB_STATUS_DEFENSE;
 import static com.antest1.kcanotify.KcaConstants.LAB_STATUS_SORTIE;
+import static com.antest1.kcanotify.KcaConstants.PREF_HDNOTI_LOCKED;
+import static com.antest1.kcanotify.KcaConstants.PREF_HDNOTI_MINLEVEL;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
+import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
+import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.setDefaultGameData;
 
@@ -663,13 +667,22 @@ public class KcaDeckInfo {
 
     public int checkHeavyDamageExist(JsonArray deckPortData, int deckid) {
         int[] status = {0, 0, 0, 0, 0, 0, 0};
+        boolean check_locked = getBooleanPreferences(ac, PREF_HDNOTI_LOCKED);
+        int min_level = Integer.parseInt(getStringPreferences(ac, PREF_HDNOTI_MINLEVEL));
         JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 if (KcaDocking.checkShipInDock(shipId)) continue;
 
-                JsonObject shipData = getUserShipDataById(shipId, "nowhp,maxhp,slot,slot_ex");
+                JsonObject shipData = getUserShipDataById(shipId, "nowhp,maxhp,slot,slot_ex,lv,locked,locked_equip");
+                int level = shipData.get("lv").getAsInt();
+                int locked = shipData.get("locked").getAsInt();
+                int locked_eq = shipData.get("locked_equip").getAsInt();
+
+                if (check_locked && (locked == 0 && locked_eq == 0)) continue;
+                if (min_level >= level && locked_eq == 0) continue;
+
                 int shipNowHp = shipData.get("nowhp").getAsInt();
                 int shipMaxHp = shipData.get("maxhp").getAsInt();
                 if (shipNowHp * 4 <= shipMaxHp) {
@@ -706,6 +719,26 @@ public class KcaDeckInfo {
             heavyExist = Math.max(heavyExist, status[i]);
         }
         return heavyExist;
+    }
+
+    public boolean[] getHeavyDmgCheckStatus(JsonArray deckPortData, int deckid) {
+        boolean check_locked = getBooleanPreferences(ac, PREF_HDNOTI_LOCKED);
+        int min_level = Integer.parseInt(getStringPreferences(ac, PREF_HDNOTI_MINLEVEL));
+        boolean[] heavyDmgCheckStatus = {true, true, true, true, true, true, true};
+        JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().getAsJsonArray("api_ship");
+        for (int i = 0; i < deckShipIdList.size(); i++) {
+            int shipId = deckShipIdList.get(i).getAsInt();
+            if (shipId != -1) {
+                JsonObject shipData = getUserShipDataById(shipId, "lv,locked,locked_equip");
+                int level = shipData.get("lv").getAsInt();
+                int locked = shipData.get("locked").getAsInt();
+                int locked_eq = shipData.get("locked_equip").getAsInt();
+
+                if (check_locked && (locked == 0 && locked_eq == 0)) heavyDmgCheckStatus[i] = false;
+                if (min_level >= level && locked_eq == 0) heavyDmgCheckStatus[i] = false;
+            }
+        }
+        return heavyDmgCheckStatus;
     }
 
     public boolean[] getDameconStatus(JsonArray deckPortData, int deckid) {
