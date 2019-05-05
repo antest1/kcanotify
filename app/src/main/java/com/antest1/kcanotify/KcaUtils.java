@@ -833,7 +833,7 @@ public class KcaUtils {
     public static void resizeFullWidthView(Context context, View v) {
         String model = Build.MODEL;
         if (v == null) return;
-        if (!model.contains("LM-G710")) return;
+        if (!model.contains("LM-G710") || !model.contains("LM-V409")) return;
         int orientation = context.getResources().getConfiguration().orientation;
         if (orientation == ORIENTATION_LANDSCAPE) {
             final float scale = context.getResources().getDisplayMetrics().density;
