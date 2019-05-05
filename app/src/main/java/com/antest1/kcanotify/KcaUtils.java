@@ -30,6 +30,7 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.DisplayCutout;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -828,17 +829,30 @@ public class KcaUtils {
         return week_data;
     }
 
+    public static int convertDpToPixel (float dp) {
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        float px = dp * (metrics.densityDpi / 160f);
+        return Math.round(px);
+    }
+
     // Fix width for specific device has notch design:
-    // currently LG G7 (LM-G710) now
+    // Reference: https://stackoverflow.com/questions/53579164/check-if-device-has-notch-in-service
     public static void resizeFullWidthView(Context context, View v) {
-        String model = Build.MODEL;
         if (v == null) return;
-        if (!model.contains("LM-G710") || !model.contains("LM-V409")) return;
-        int orientation = context.getResources().getConfiguration().orientation;
-        if (orientation == ORIENTATION_LANDSCAPE) {
-            final float scale = context.getResources().getDisplayMetrics().density;
-            int padding_px_width = (int) (28 * scale + 0.5f);
-            v.setPadding(padding_px_width, 0, padding_px_width, 0);
+        int statusBarHeight = 0;
+        int defaultHeight = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? 24 : 25;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+            Log.e("KCA", "" + statusBarHeight + " " + convertDpToPixel(defaultHeight));
+            if (statusBarHeight > convertDpToPixel(defaultHeight)) {
+                int orientation = context.getResources().getConfiguration().orientation;
+                if (orientation == ORIENTATION_LANDSCAPE) {
+                    final float scale = context.getResources().getDisplayMetrics().density;
+                    int padding_px_width = (int) (28 * scale + 0.5f);
+                    v.setPadding(padding_px_width, 0, padding_px_width, 0);
+                }
+            }
         }
     }
 
