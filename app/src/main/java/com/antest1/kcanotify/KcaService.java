@@ -691,15 +691,20 @@ public class KcaService extends Service {
                 KcaFleetViewService.setReadyFlag(false);
                 //Toast.makeText(contextWithLocale, "KCA_VERSION", Toast.LENGTH_LONG).show();
                 String version_data = new String(raw);
-                JsonObject api_version = gson.fromJson(version_data, JsonObject.class).getAsJsonObject("api");
-                kca_version = api_version.get("api_start2").getAsString();
-                Log.e("KCA", kca_version);
+                JsonObject api_data = gson.fromJson(version_data, JsonObject.class);
 
-                setPreferences(getApplicationContext(), PREF_KCA_VERSION, kca_version);
-                if (!getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION).equals(kca_version)) {
-                    makeToast("new game data detected: " + String.valueOf(kca_version), Toast.LENGTH_LONG,
-                            ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                if (api_data != null && api_data.has("api")) {
+                    JsonObject api_version = api_data.getAsJsonObject("api");
+                    kca_version = api_version.get("api_start2").getAsString();
+                    Log.e("KCA", kca_version);
+
+                    setPreferences(getApplicationContext(), PREF_KCA_VERSION, kca_version);
+                    if (!getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION).equals(kca_version)) {
+                        makeToast("new game data detected: " + String.valueOf(kca_version), Toast.LENGTH_LONG,
+                                ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                    }
                 }
+
                 JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
                 //Log.e("KCA", kcDataObj.toJSONString());
                 if (kcDataObj != null && kcDataObj.has("api_data")) {
@@ -736,13 +741,9 @@ public class KcaService extends Service {
             }
 
             if (url.equals(API_START2) || url.equals(API_START2_NEW)) {
-                //Log.e("KCA", "Load Kancolle Data");
-                //Toast.makeText(contextWithLocale, "API_START2", Toast.LENGTH_LONG).show();
-
-                api_start2_data = jsonDataObj.toString();
-                dbHelper.putValue(DB_KEY_STARTDATA, api_start2_data);
-
                 if (jsonDataObj.has("api_data")) {
+                    api_start2_data = jsonDataObj.toString();
+                    dbHelper.putValue(DB_KEY_STARTDATA, api_start2_data);
                     //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
                     KcaApiData.getKcGameData(jsonDataObj.getAsJsonObject("api_data"));
                     if (kca_version != null) {
