@@ -261,7 +261,7 @@
         android:background="#A0000000"
         android:padding="20dp"
         android:src="@mipmap/special_image"
-        android:visibility="gone"
+        android:visibility="visible"
         app:srcCompat="@mipmap/special_image" />
 
 </RelativeLayout>
