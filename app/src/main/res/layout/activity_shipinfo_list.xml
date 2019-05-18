@@ -43,7 +43,7 @@
                     <Button
                         android:id="@+id/shipinfo_btn_sort"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="36dp"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginTop="2dp"
@@ -54,12 +54,12 @@
                         android:background="@color/colorBtn"
                         android:text="@string/shipinfo_btn_sort"
                         android:textColor="@color/colorBtnText"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
 
                     <Button
                         android:id="@+id/shipinfo_btn_filter"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="36dp"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginTop="2dp"
@@ -70,12 +70,12 @@
                         android:background="@color/colorBtn"
                         android:text="@string/shipinfo_btn_filter"
                         android:textColor="@color/colorBtnText"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
 
                     <Button
                         android:id="@+id/shipinfo_btn_search"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="36dp"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginTop="2dp"
@@ -86,7 +86,7 @@
                         android:background="@color/colorBtn"
                         android:text="@string/shipinfo_btn_search"
                         android:textColor="@color/colorBtnText"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
                 </LinearLayout>
 
                 <LinearLayout
