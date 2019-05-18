@@ -93,7 +93,10 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
@@ -535,10 +538,18 @@ public class KcaUtils {
     }
 
     public static KcaDownloader getInfoDownloader(Context context){
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(1, TimeUnit.MINUTES)
-                .build();
+                .readTimeout(1, TimeUnit.MINUTES);
+        builder.addInterceptor(chain -> {
+            Request original = chain.request();
+            Request request = original.newBuilder()
+                    .header("User-Agent", "Kcanotify/".concat(BuildConfig.VERSION_NAME).replace("r", "."))
+                    .method(original.method(), original.body()).build();
+            return chain.proceed(request);
+        });
+
+        OkHttpClient okHttpClient = builder.build();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(KcaUtils.getUpdateServer(context))
@@ -549,15 +560,22 @@ public class KcaUtils {
     }
 
     public static KcaDownloader getResDownloader(Context context){
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(1, TimeUnit.MINUTES)
-                .build();
+                .readTimeout(1, TimeUnit.MINUTES);
+        builder.addInterceptor(chain -> {
+            Request original = chain.request();
+            Request request = original.newBuilder()
+                    .header("User-Agent", "Kcanotify/".concat(BuildConfig.VERSION_NAME).replace("r", "."))
+                    .method(original.method(), original.body()).build();
+            return chain.proceed(request);
+        });
 
+        OkHttpClient okHttpClient = builder.build();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/")
-                .client(okHttpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
+                .client(okHttpClient)
                 .build();
         return retrofit.create(KcaDownloader.class);
     }
