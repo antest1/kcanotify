@@ -28,12 +28,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,14 +41,18 @@ import static com.antest1.kcanotify.KcaApiData.TAG_COUNT;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
+import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SPEQUIPS;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 
 public class ShipInfoFilterActivity extends AppCompatActivity {
+    public final static int SPECIAL_EQUIPMENT_COUNT = 5;
+
     Toolbar toolbar;
     static Gson gson = new Gson();
+    List<CheckBox> filterSpecialEquipment = new ArrayList<>();
     TextView listcounter;
     LinearLayout listview;
     public int count;
@@ -102,11 +103,33 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadTranslationData(getApplicationContext());
-        setContentView(R.layout.activity_shipinfo_sort_filter);
+        setContentView(R.layout.activity_shipinfo_filter);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getStringWithLocale(R.string.shipinfo_btn_filter));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        String pref_special_equips = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SPEQUIPS);
+        List<String> specialEquipsFilterList = new ArrayList<String>(Arrays.asList(pref_special_equips.split(",")));
+
+        for (int i = 0; i < SPECIAL_EQUIPMENT_COUNT; i++) {
+            final String key = KcaUtils.format("stype%d", i+1);
+            Log.e("KCA", KcaUtils.format("equip_%s", key));
+            filterSpecialEquipment.add(findViewById(
+                    KcaUtils.getId(KcaUtils.format("equip_%s", key), R.id.class)
+            ));
+            CheckBox item = filterSpecialEquipment.get(i);
+            item.setText(getStringWithLocale(
+                    KcaUtils.getId(KcaUtils.format("ship_stat_equip_%s", key), R.string.class)
+            ));
+            item.setChecked(specialEquipsFilterList.contains(key));
+            item.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) specialEquipsFilterList.add(key);
+                else specialEquipsFilterList.remove(key);
+                setPreferences(getApplicationContext(), PREF_SHIPINFO_SPEQUIPS,
+                        KcaUtils.joinStr(specialEquipsFilterList, ","));
+            });
+        }
 
         listview = findViewById(R.id.ship_stat_sort_list);
         listcounter = findViewById(R.id.ship_stat_count);

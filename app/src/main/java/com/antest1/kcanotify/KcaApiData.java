@@ -643,6 +643,21 @@ public class KcaApiData {
         }
     }
 
+    public static JsonObject loadSpecialEquipmentShipInfo(AssetManager am) {
+        try {
+            AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("equip_special.json");
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            JsonElement data = new JsonParser().parse(new String(bytes));
+            if (data.isJsonObject()) {
+                return data.getAsJsonObject();
+            } else {
+                return null;
+            }
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
     public static boolean isQuestTrackable(String id) {
         JsonObject kcQuestTrackData = helper.getJsonObjectValue(DB_KEY_QUESTTRACK);
         int id_int = Integer.parseInt(id);

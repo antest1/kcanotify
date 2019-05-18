@@ -16,6 +16,7 @@ import com.google.common.collect.Collections2;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -39,6 +40,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     private JsonArray deckInfo = new JsonArray();
     private List<JsonObject> listViewItemList = new ArrayList<>();
     private String searchQuery = "";
+    private JsonObject specialEquipment = new JsonObject();
 
     private static final String[] total_key_list = {
             "api_id", "api_lv", "api_stype", "api_cond", "api_locked",
@@ -99,6 +101,8 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     public void setSearchQuery(String query) {
         searchQuery = query;
     }
+
+    public void setSpecialEquipment(JsonObject data) { specialEquipment = data; }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -415,8 +419,8 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         ImageView ship_sally_area;
     }
 
-    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key) {
-        setListViewItemList(ship_list, deck_list, sort_key, "|");
+    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, String special_equip) {
+        setListViewItemList(ship_list, deck_list, sort_key, "|", special_equip);
     }
 
     public String getKanmusuListText() {
@@ -489,7 +493,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     *
     * */
 
-    private List<JsonObject> addShipInformation(List<JsonObject> data) {
+    private List<JsonObject> addShipInformation(List<JsonObject> data, String sp_eqlist) {
         List<JsonObject> filteredShipInformation = new ArrayList<>();
         JsonObject deck_ship_info = new JsonObject();
         for (int i = 0; i < deckInfo.size(); i++) {
@@ -519,13 +523,29 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             String name = kcShipData != null ? kcShipData.get("api_name").getAsString() : "";
             name = KcaApiData.getShipTranslation(name, false);
             String yomi = kcShipData != null ? kcShipData.get("api_yomi").getAsString() : "";
+            int stype = kcShipData != null ? kcShipData.get("api_stype").getAsInt() : 0;
 
             boolean name_matched = searchStringFromStart(name, searchQuery, false);
             boolean yomi_matched = searchStringFromStart(yomi, searchQuery, false);
-
             if (!name_matched && !yomi_matched) continue;
 
-            int stype = kcShipData != null ? kcShipData.get("api_stype").getAsInt() : 0;
+            if (sp_eqlist.trim().length() > 0) {
+                String[] special_eq_list = sp_eqlist.split(",");
+                boolean found_flag = false;
+                for (String key: special_eq_list) {
+                    if (specialEquipment.has(key)) {
+                        JsonObject se_item = specialEquipment.getAsJsonObject(key);
+                        boolean match_stype = se_item.getAsJsonArray("stype").contains(new JsonPrimitive(stype));
+                        boolean match_special = se_item.getAsJsonArray("special").contains(new JsonPrimitive(kc_ship_id));
+                        if (match_stype || match_special) {
+                            found_flag = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found_flag) continue;
+            }
+
             int max_hp = item.get("api_maxhp").getAsInt();
             int now_hp = item.get("api_nowhp").getAsInt();
             item.addProperty("api_exslot", item.get("api_slot_ex").getAsInt() != 0 ? 1 : 0);
@@ -548,101 +568,97 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         return filteredShipInformation;
     }
 
-    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, final String filter) {
+    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, final String filter, String special_equip) {
         exp_sum = 0;
         deckInfo = deck_list;
-
         Type listType = new TypeToken<List<JsonObject>>() {}.getType();
         listViewItemList = new Gson().fromJson(ship_list, listType);
         if (listViewItemList == null) listViewItemList = new ArrayList<>();
-        listViewItemList = addShipInformation(listViewItemList);
+        listViewItemList = addShipInformation(listViewItemList, special_equip);
         if (!filter.equals("|") && listViewItemList.size() > 1) {
-            listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, new Predicate<JsonObject>() {
-                @Override
-                public boolean apply(JsonObject input) {
-                    String[] filter_list = filter.split("\\|");
-                    for (String key_op_val: filter_list) {
-                        if (key_op_val.length() != 0) {
-                            String[] kov_split = key_op_val.split(",");
-                            int idx = Integer.valueOf(kov_split[0]);
-                            String key = total_key_list[idx];
-                            int op = Integer.valueOf(kov_split[1]);
+            listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, input -> {
+                String[] filter_list = filter.split("\\|");
+                for (String key_op_val: filter_list) {
+                    if (key_op_val.length() != 0) {
+                        String[] kov_split = key_op_val.split(",");
+                        int idx = Integer.valueOf(kov_split[0]);
+                        String key = total_key_list[idx];
+                        int op = Integer.valueOf(kov_split[1]);
 
-                            String v1 = KcaShipListViewAdpater.getstrvalue(input, key);
-                            String v2 = kov_split[2].trim();
-                            String[] v2_list = v2.split("_");
+                        String v1 = KcaShipListViewAdpater.getstrvalue(input, key);
+                        String v2 = kov_split[2].trim();
+                        String[] v2_list = v2.split("_");
 
-                            int v1_int = KcaShipListViewAdpater.getintvalue(input, key);
+                        int v1_int = KcaShipListViewAdpater.getintvalue(input, key);
 
-                            boolean flag = false;
-                            switch (op) {
-                                case 0:
-                                    for (String v2_val: v2_list) {
-                                        int v2_int = Integer.valueOf(v2_val);
-                                        if (v1_int == v2_int) {
-                                            flag = true;
-                                            break;
-                                        }
+                        boolean flag = false;
+                        switch (op) {
+                            case 0:
+                                for (String v2_val: v2_list) {
+                                    int v2_int = Integer.valueOf(v2_val);
+                                    if (v1_int == v2_int) {
+                                        flag = true;
+                                        break;
                                     }
-                                    if (!flag) return false;
-                                    break;
-                                case 1:
-                                    for (String v2_val: v2_list) {
-                                        int v2_int = Integer.valueOf(v2_val);
-                                        if (v1_int != v2_int) {
-                                            flag = true;
-                                            break;
-                                        }
+                                }
+                                if (!flag) return false;
+                                break;
+                            case 1:
+                                for (String v2_val: v2_list) {
+                                    int v2_int = Integer.valueOf(v2_val);
+                                    if (v1_int != v2_int) {
+                                        flag = true;
+                                        break;
                                     }
-                                    if (!flag) return false;
-                                    break;
-                                case 2:
-                                    for (String v2_val: v2_list) {
-                                        int v2_int = Integer.valueOf(v2_val);
-                                        if (v1_int < v2_int) {
-                                            flag = true;
-                                            break;
-                                        }
+                                }
+                                if (!flag) return false;
+                                break;
+                            case 2:
+                                for (String v2_val: v2_list) {
+                                    int v2_int = Integer.valueOf(v2_val);
+                                    if (v1_int < v2_int) {
+                                        flag = true;
+                                        break;
                                     }
-                                    if (!flag) return false;
-                                    break;
-                                case 3:
-                                    for (String v2_val: v2_list) {
-                                        int v2_int = Integer.valueOf(v2_val);
-                                        if (v1_int > v2_int) {
-                                            flag = true;
-                                            break;
-                                        }
+                                }
+                                if (!flag) return false;
+                                break;
+                            case 3:
+                                for (String v2_val: v2_list) {
+                                    int v2_int = Integer.valueOf(v2_val);
+                                    if (v1_int > v2_int) {
+                                        flag = true;
+                                        break;
                                     }
-                                    if (!flag) return false;
-                                    break;
-                                case 4:
-                                    for (String v2_val: v2_list) {
-                                        int v2_int = Integer.valueOf(v2_val);
-                                        if (v1_int <= v2_int) {
-                                            flag = true;
-                                            break;
-                                        }
+                                }
+                                if (!flag) return false;
+                                break;
+                            case 4:
+                                for (String v2_val: v2_list) {
+                                    int v2_int = Integer.valueOf(v2_val);
+                                    if (v1_int <= v2_int) {
+                                        flag = true;
+                                        break;
                                     }
-                                    if (!flag) return false;
-                                    break;
-                                case 5:
-                                    for (String v2_val: v2_list) {
-                                        int v2_int = Integer.valueOf(v2_val);
-                                        if (v1_int >= v2_int) {
-                                            flag = true;
-                                            break;
-                                        }
+                                }
+                                if (!flag) return false;
+                                break;
+                            case 5:
+                                for (String v2_val: v2_list) {
+                                    int v2_int = Integer.valueOf(v2_val);
+                                    if (v1_int >= v2_int) {
+                                        flag = true;
+                                        break;
                                     }
-                                    if (!flag) return false;
-                                    break;
-                                default:
-                                    break;
-                            }
+                                }
+                                if (!flag) return false;
+                                break;
+                            default:
+                                break;
                         }
                     }
-                    return true;
                 }
+                return true;
             }));
         }
 

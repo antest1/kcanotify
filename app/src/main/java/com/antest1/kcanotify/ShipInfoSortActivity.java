@@ -74,7 +74,7 @@ public class ShipInfoSortActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shipinfo_sort_filter);
+        setContentView(R.layout.activity_shipinfo_sort);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getStringWithLocale(R.string.shipinfo_btn_sort));

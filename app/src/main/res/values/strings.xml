@@ -536,6 +536,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_filt_list_dialog_title">Select</string>
     <string name="shipinfo_criteria_count" formatted="false">Applied criteria: %d</string>
 
+    <string name="ship_stat_equip_stype_label">Special Equipment Filter</string>
+    <string name="ship_stat_equip_stype1">Taihatsu</string>
+    <string name="ship_stat_equip_stype2">Amphibious Tank</string>
+    <string name="ship_stat_equip_stype3">Bulge (M)</string>
+    <string name="ship_stat_equip_stype4">Command Facility</string>
+    <string name="ship_stat_equip_stype5">Searchlight (L)</string>
+
     <string name="ship_tag_0">None</string>
     <string name="ship_tag_1">Tokyo Express(Gray)</string>
     <string name="ship_tag_2">Rabaul(Green)</string>
