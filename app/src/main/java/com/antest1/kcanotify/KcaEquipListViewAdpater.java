@@ -37,6 +37,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
     private Map<String, AtomicInteger> countInfo = new HashMap<>();
     private List<Integer> active = new ArrayList<>();
     private String summary_format = "";
+    private String searchQuery = "";
     private JsonObject shipStatTranslation = new JsonObject();
 
     @Override
@@ -52,6 +53,10 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public void setSearchQuery(String query) {
+        searchQuery = query;
     }
 
     public void setStatTranslation(JsonObject data) {
@@ -272,6 +277,8 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
                 @Override
                 public boolean apply(JsonObject input) {
                     int key = input.get("api_id").getAsInt();
+                    String item_name = KcaApiData.getItemTranslation(input.get("api_name").getAsString());
+                    if (!item_name.contains(searchQuery)) return false;
                     if (filtcond.equals("all")) {
                         return checkCountExist(countInfo, key);
                     } else {

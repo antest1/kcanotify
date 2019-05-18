@@ -485,6 +485,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_equipmentinfo">装备目录</string>
     <string name="equipinfo_summary" formatted="false">合计 %d（%d 装备中, %d 閒置）</string>
     <string name="equipinfo_filter">过滤</string>
+    <string name="equipinfo_search">检索</string>
+    <string name="equipinfo_search_hint">按名稱搜索</string>
 
     <string name="action_expcalc">经验值计算器</string>
     <string name="expcalc_shipname">舰娘</string>

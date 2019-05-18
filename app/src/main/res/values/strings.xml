@@ -505,7 +505,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_btn_sort">Sort</string>
     <string name="shipinfo_btn_filter">Filter</string>
     <string name="shipinfo_btn_search">Search</string>
-    <string name="shipinfo_btn_search_hint">Search with the ship name</string>
+    <string name="shipinfo_btn_search_hint">Search with the name</string>
     <string name="shipinfo_btn_total_format" formatted="false">Total Count: %d</string>
     <string name="shipinfo_btn_total_exp_format" formatted="false">Total Exp: %,d</string>
     <string name="shipinfo_sort_asc">Ascending</string>
@@ -554,6 +554,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_equipmentinfo">Equipment List</string>
     <string name="equipinfo_summary" formatted="false">Total %d (%d Equipped, %d Equippable)</string>
     <string name="equipinfo_filter">Filter</string>
+    <string name="equipinfo_search">Search</string>
+    <string name="equipinfo_search_hint">Search with the name</string>
 
     <string name="action_expcalc">EXP Calculator</string>
     <string name="expcalc_shipname">Ship</string>

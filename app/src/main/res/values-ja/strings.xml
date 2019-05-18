@@ -478,6 +478,8 @@
     <string name="action_equipmentinfo">装備リスト</string>
     <string name="equipinfo_summary" formatted="false">合計 %d（%d 装備中, %d 装備可能）</string>
     <string name="equipinfo_filter">フィルタ</string>
+    <string name="equipinfo_search">検索</string>
+    <string name="equipinfo_search_hint">名前で検索</string>
 
     <string name="action_expcalc">経験値計算機</string>
     <string name="expcalc_shipname">艦娘</string>

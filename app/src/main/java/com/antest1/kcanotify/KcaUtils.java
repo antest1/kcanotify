@@ -552,6 +552,19 @@ public class KcaUtils {
         }
     }
 
+    public static boolean searchStringContains(String name, String query, boolean match_case) {
+        if (name == null) return false;
+        if (query.trim().length() == 0) return true;
+        // katakana to hiragana
+        name = KanaConverter.convertKana(name, OP_ZEN_KATA_TO_ZEN_HIRA);
+        query = KanaConverter.convertKana(query, OP_ZEN_KATA_TO_ZEN_HIRA);
+        if (match_case) {
+            return name.trim().contains(query.trim());
+        } else {
+            return name.trim().toLowerCase().contains(query.trim().toLowerCase());
+        }
+    }
+
     public static KcaDownloader getInfoDownloader(Context context){
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)

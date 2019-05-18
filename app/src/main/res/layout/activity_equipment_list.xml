@@ -24,30 +24,38 @@
         android:orientation="vertical"
         android:padding="5dp">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
+            <EditText
+                android:id="@+id/equipinfo_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/shipinfo_btn_search_hint"
+                android:textSize="14sp" />
+
             <Button
                 android:id="@+id/equipment_btn_filter"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
                 android:layout_marginTop="2dp"
-                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="0"
                 android:background="@color/colorBtn"
                 android:text="@string/equipinfo_filter"
                 android:textColor="@color/colorBtnText"
-                android:textSize="20dp" />
+                android:textSize="14dp" />
 
         </LinearLayout>
-
 
         <ListView
             android:id="@+id/equipment_listview"

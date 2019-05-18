@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -47,6 +50,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
     static Gson gson = new Gson();
     ListView listview;
     Button filterBtn;
+    EditText searchEditText;
 
     KcaDBHelper dbHelper;
     KcaEquipListViewAdpater adapter;
@@ -153,6 +157,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
         adapter.setSummaryFormat(getStringWithLocale(R.string.equipinfo_summary));
         adapter.setStatTranslation(itemStatTranslation);
         adapter.setListViewItemList(equipment_data, counter, ship_equip_info, filtcond);
+
         listview = findViewById(R.id.equipment_listview);
         listview.setAdapter(adapter);
 
@@ -164,8 +169,31 @@ public class EquipmentInfoActivity extends AppCompatActivity {
                 startActivityForResult(aIntent, EQUIPINFO_GET_FILTER_RESULT);
             }
         });
-
         setfilterBtn(!filtcond.equals("all"));
+
+        searchEditText = findViewById(R.id.equipinfo_search);
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String filtcond = getStringPreferences(getApplicationContext(), PREF_EQUIPINFO_FILTCOND);
+                adapter.setSearchQuery(s.toString());
+                adapter.setListViewItemList(equipment_data, counter, ship_equip_info, filtcond);
+                adapter.notifyDataSetChanged();
+                listview.setAdapter(adapter);
+                listview.invalidateViews();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
     private String getItemKey(JsonObject item) {

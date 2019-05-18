@@ -478,6 +478,8 @@
     <string name="action_equipmentinfo">장비 리스트</string>
     <string name="equipinfo_summary" formatted="false">합계 %d (%d 장비중, %d 장비가능)</string>
     <string name="equipinfo_filter">필터</string>
+    <string name="equipinfo_search">검색</string>
+    <string name="equipinfo_search_hint">이름으로 검색</string>
 
     <string name="action_expcalc">경험치 계산기</string>
     <string name="expcalc_shipname">함선</string>

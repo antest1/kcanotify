@@ -479,6 +479,8 @@
     <string name="action_equipmentinfo">Lista de Equipamiento</string>
     <string name="equipinfo_summary" formatted="false">Total %d (%d Equipado, %d Equipable)</string>
     <string name="equipinfo_filter">Filtro</string>
+    <string name="equipinfo_search">Buscar</string>
+    <string name="equipinfo_search_hint">Búsqueda por nombre</string>
 
     <string name="action_expcalc">Calculadora de EXP</string>
     <string name="expcalc_shipname">Barco</string>
