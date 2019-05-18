@@ -302,8 +302,7 @@ public class MainActivity extends AppCompatActivity {
 
         String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
         ImageView specialImage = findViewById(R.id.special_image);
-        specialImage.setImageResource(getId("gw2019_".concat(getResourceLocaleCode(locale)), R.mipmap.class));
-        // specialImage.setImageResource(R.mipmap.special_image);
+        specialImage.setImageResource(R.mipmap.special_image);
         specialImage.setVisibility(View.GONE);
         specialImage.setOnClickListener(v -> v.setVisibility(View.GONE));
 
