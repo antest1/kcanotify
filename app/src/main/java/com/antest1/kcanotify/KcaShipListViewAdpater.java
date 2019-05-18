@@ -15,7 +15,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
@@ -29,16 +28,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.R.id.list;
 import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
+import static com.antest1.kcanotify.KcaUtils.searchStringFromStart;
 import static com.antest1.kcanotify.KcaUtils.getId;
 
 public class KcaShipListViewAdpater extends BaseAdapter {
     private long exp_sum = 0L;
     private JsonArray deckInfo = new JsonArray();
     private List<JsonObject> listViewItemList = new ArrayList<>();
+    private String searchQuery = "";
 
     private static final String[] total_key_list = {
             "api_id", "api_lv", "api_stype", "api_cond", "api_locked",
@@ -94,6 +94,10 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public void setSearchQuery(String query) {
+        searchQuery = query;
     }
 
     @Override
@@ -484,7 +488,9 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         }
     *
     * */
+
     private List<JsonObject> addShipInformation(List<JsonObject> data) {
+        List<JsonObject> filteredShipInformation = new ArrayList<>();
         JsonObject deck_ship_info = new JsonObject();
         for (int i = 0; i < deckInfo.size(); i++) {
             JsonObject fleet_item = deckInfo.get(i).getAsJsonObject();
@@ -509,7 +515,16 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             item.addProperty("api_yasen",
                     item.getAsJsonArray("api_karyoku").get(0).getAsInt() +
                             item.getAsJsonArray("api_raisou").get(0).getAsInt());
-            JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_stype,api_sort_id");
+            JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_yomi,api_stype,api_sort_id");
+            String name = kcShipData != null ? kcShipData.get("api_name").getAsString() : "";
+            name = KcaApiData.getShipTranslation(name, false);
+            String yomi = kcShipData != null ? kcShipData.get("api_yomi").getAsString() : "";
+
+            boolean name_matched = searchStringFromStart(name, searchQuery, false);
+            boolean yomi_matched = searchStringFromStart(yomi, searchQuery, false);
+
+            if (!name_matched && !yomi_matched) continue;
+
             int stype = kcShipData != null ? kcShipData.get("api_stype").getAsInt() : 0;
             int max_hp = item.get("api_maxhp").getAsInt();
             int now_hp = item.get("api_nowhp").getAsInt();
@@ -528,9 +543,9 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                 item.addProperty("api_mission", 0);
             }
             item.addProperty("api_sort_id", kcShipData != null ? kcShipData.get("api_sort_id").getAsInt() : 0);
-            data.set(i, item);
+            filteredShipInformation.add(item);
         }
-        return data;
+        return filteredShipInformation;
     }
 
     public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, final String filter) {
@@ -633,6 +648,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
 
         StatComparator cmp = new StatComparator(sort_key);
         Collections.sort(listViewItemList, cmp);
+        Log.e("KCA", "list size: " + listViewItemList.size());
         for (int i = 0; i < listViewItemList.size(); i++) {
             exp_sum += listViewItemList.get(i).getAsJsonArray("api_exp").get(0).getAsLong();
         }

@@ -14,11 +14,14 @@ import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,6 +48,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 public class ShipInfoActivity extends AppCompatActivity {
     static final int SHIPINFO_GET_SORT_KEY = 1;
     static final int SHIPINFO_GET_FILTER_RESULT = 2;
+    static final int SHIPINFO_SET_QUERY = 3;
 
     Toolbar toolbar;
     static Gson gson = new Gson();
@@ -52,11 +56,13 @@ public class ShipInfoActivity extends AppCompatActivity {
     TextView totalcountview, totalexpview;
 
     KcaDBHelper dbHelper;
-    Button sortButton, filterButton;
+    Button sortButton, filterButton, searchButton;
     KcaShipListViewAdpater adapter;
+    EditText searchEditText;
     Vibrator vibrator;
 
     boolean is_popup_on;
+    boolean is_search_on;
     View export_popup, export_exit;
     TextView export_clipboard, export_openpage;
 
@@ -95,24 +101,50 @@ public class ShipInfoActivity extends AppCompatActivity {
         totalexpview = findViewById(R.id.shipinfo_total_exp);
         sortButton = findViewById(R.id.shipinfo_btn_sort);
         filterButton = findViewById(R.id.shipinfo_btn_filter);
+        searchButton = findViewById(R.id.shipinfo_btn_search);
+        searchEditText = findViewById(R.id.shipinfo_search);
 
-        sortButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!is_popup_on) {
-                    Intent aIntent = new Intent(ShipInfoActivity.this, ShipInfoSortActivity.class);
-                    startActivityForResult(aIntent, SHIPINFO_GET_SORT_KEY);
-                }
+        is_popup_on = false;
+        is_search_on = false;
+
+        sortButton.setOnClickListener(view -> {
+            if (!is_popup_on) {
+                Intent aIntent = new Intent(ShipInfoActivity.this, ShipInfoSortActivity.class);
+                startActivityForResult(aIntent, SHIPINFO_GET_SORT_KEY);
             }
         });
 
-        filterButton.setOnClickListener(new View.OnClickListener() {
+        filterButton.setOnClickListener(view -> {
+            if (!is_popup_on) {
+                Intent aIntent = new Intent(ShipInfoActivity.this, ShipInfoFilterActivity.class);
+                startActivityForResult(aIntent, SHIPINFO_GET_FILTER_RESULT);
+            }
+        });
+
+        searchButton.setOnClickListener(view -> {
+            is_search_on = !is_search_on;
+            setButtonStyle(searchButton, is_search_on);
+            if (is_search_on) {
+                findViewById(R.id.shipinfo_search_area).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.shipinfo_search_area).setVisibility(View.GONE);
+            }
+        });
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                if (!is_popup_on) {
-                    Intent aIntent = new Intent(ShipInfoActivity.this, ShipInfoFilterActivity.class);
-                    startActivityForResult(aIntent, SHIPINFO_GET_FILTER_RESULT);
-                }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                setSearchResult(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -123,16 +155,17 @@ public class ShipInfoActivity extends AppCompatActivity {
 
         String sortkey = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY);
         String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
-        setFilterButton(filtcond.length() > 1);
+        setButtonStyle(filterButton, filtcond.length() > 1);
         adapter.setListViewItemList(data, deckdata, sortkey, filtcond);
         totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));
         totalexpview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
+        setButtonStyle(searchButton, is_search_on);
+        findViewById(R.id.shipinfo_search_area).setVisibility(View.GONE);
 
         export_popup = findViewById(R.id.export_popup);
         ((TextView) export_popup.findViewById(R.id.export_title))
                 .setText(getStringWithLocale(R.string.shipinfo_export_title));
         export_popup.setVisibility(View.GONE);
-        is_popup_on = false;
 
         export_exit = export_popup.findViewById(R.id.export_exit);
         ((ImageView) export_exit).setColorFilter(ContextCompat.getColor(getApplicationContext(),
@@ -172,37 +205,48 @@ public class ShipInfoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String sortkey = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY);
-        String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
 
         if (resultCode == RESULT_OK && adapter != null && requestCode > 0) {
-            export_popup.setVisibility(View.GONE);
-            if (requestCode == SHIPINFO_GET_SORT_KEY) {
-                adapter.resortListViewItem(sortkey);
-            }
-            if (requestCode == SHIPINFO_GET_FILTER_RESULT) {
-                JsonArray deckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-                JsonArray shipdata = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
-                if (deckdata == null) deckdata = new JsonArray();
-                if (shipdata == null) shipdata = new JsonArray();
-
-                adapter.setListViewItemList(shipdata, deckdata, sortkey, filtcond);
-                setFilterButton(filtcond.length() > 1);
-            }
-            adapter.notifyDataSetChanged();
-            listview.setAdapter(adapter);
-            totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));
-            totalexpview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
+            setList(requestCode);
         }
     }
 
-    private void setFilterButton(boolean is_active) {
+    private void setList(int requestCode) {
+        String sortkey = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY);
+        String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
+        export_popup.setVisibility(View.GONE);
+        if (requestCode == SHIPINFO_GET_SORT_KEY) {
+            adapter.resortListViewItem(sortkey);
+        }
+        else {
+            JsonArray deckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+            JsonArray shipdata = dbHelper.getJsonArrayValue(DB_KEY_SHIPIFNO);
+            if (deckdata == null) deckdata = new JsonArray();
+            if (shipdata == null) shipdata = new JsonArray();
+
+            adapter.setListViewItemList(shipdata, deckdata, sortkey, filtcond);
+            if (requestCode == SHIPINFO_GET_FILTER_RESULT) {
+                setButtonStyle(filterButton, filtcond.length() > 1);
+            }
+        }
+        adapter.notifyDataSetChanged();
+        listview.setAdapter(adapter);
+        totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));
+        totalexpview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
+    }
+
+    private void setSearchResult(String query) {
+        adapter.setSearchQuery(query);
+        setList(SHIPINFO_SET_QUERY);
+    }
+
+    private void setButtonStyle(Button button, boolean is_active) {
         if (is_active) {
-            filterButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
-            filterButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+            button.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
+            button.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
         } else {
-            filterButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnText));
-            filterButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
+            button.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnText));
+            button.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
         }
     }
 

@@ -427,6 +427,8 @@
     <string name="action_shipinfo">艦船リスト</string>
     <string name="shipinfo_btn_sort">ソート</string>
     <string name="shipinfo_btn_filter">フィルター</string>
+    <string name="shipinfo_btn_search">検索</string>
+    <string name="shipinfo_btn_search_hint">名前で検索</string>
     <string name="shipinfo_btn_total_format" formatted="false">総合：%d</string>
     <string name="shipinfo_btn_total_exp_format" formatted="false">累積経験値：%,d</string>
     <string name="shipinfo_sort_asc">昇順</string>

@@ -45,6 +45,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.mariten.kanatools.KanaConverter;
 
 import org.apache.commons.httpclient.ChunkedInputStream;
 import org.apache.commons.lang3.ArrayUtils;
@@ -114,6 +115,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_RES_USELOCAL;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_PREFIX;
+import static com.mariten.kanatools.KanaConverter.OP_ZEN_KATA_TO_ZEN_HIRA;
 
 
 public class KcaUtils {
@@ -534,6 +536,19 @@ public class KcaUtils {
             return "ori_v_";
         } else {
             return "ori_h_";
+        }
+    }
+
+    public static boolean searchStringFromStart(String name, String query, boolean match_case) {
+        if (name == null) return false;
+        if (query.trim().length() == 0) return true;
+        // katakana to hiragana
+        name = KanaConverter.convertKana(name, OP_ZEN_KATA_TO_ZEN_HIRA);
+        query = KanaConverter.convertKana(query, OP_ZEN_KATA_TO_ZEN_HIRA);
+        if (match_case) {
+            return name.trim().startsWith(query.trim());
+        } else {
+            return name.trim().toLowerCase().startsWith(query.trim().toLowerCase());
         }
     }
 

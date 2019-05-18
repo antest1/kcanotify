@@ -427,6 +427,8 @@
     <string name="action_shipinfo">함선 리스트</string>
     <string name="shipinfo_btn_sort">정렬</string>
     <string name="shipinfo_btn_filter">필터</string>
+    <string name="shipinfo_btn_search">검색</string>
+    <string name="shipinfo_btn_search_hint">이름으로 검색</string>
     <string name="shipinfo_btn_total_format" formatted="false">합계: %d</string>
     <string name="shipinfo_btn_total_exp_format" formatted="false">누적경험치: %,d</string>
     <string name="shipinfo_sort_asc">오름차순</string>

@@ -428,6 +428,8 @@
     <string name="action_shipinfo">Lista de barcos</string>
     <string name="shipinfo_btn_sort">Ordenar</string>
     <string name="shipinfo_btn_filter">Filtrar</string>
+    <string name="shipinfo_btn_search">Buscar</string>
+    <string name="shipinfo_btn_search_hint">Búsqueda por nombre</string>
     <string name="shipinfo_btn_total_format" formatted="false">Total: %d</string>
     <string name="shipinfo_btn_total_exp_format" formatted="false">Experiencia total: %,d</string>
     <string name="shipinfo_sort_asc">Ascendente</string>

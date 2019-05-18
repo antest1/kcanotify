@@ -434,6 +434,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="action_shipinfo">舰船目录</string>
     <string name="shipinfo_btn_sort">排序</string>
     <string name="shipinfo_btn_filter">过滤</string>
+    <string name="shipinfo_btn_search">检索</string>
+    <string name="shipinfo_btn_search_hint">按名稱搜索</string>
     <string name="shipinfo_btn_total_format" formatted="false">总计船舰数目：%d</string>
     <string name="shipinfo_btn_total_exp_format" formatted="false">总计经验：%,d</string>
     <string name="shipinfo_sort_asc">升序</string>
