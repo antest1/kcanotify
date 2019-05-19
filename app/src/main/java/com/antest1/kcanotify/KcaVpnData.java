@@ -51,7 +51,7 @@ public class KcaVpnData {
     private static String[] kcaExtServiceList = {
             "104.27.146.101",
             "104.27.147.101",
-            "120.194.81.119",
+            "120.194.85.200",
             "104.31.72.227",
             "104.31.73.227"
     };
