@@ -1,10 +1,11 @@
 {
 	"suffixes": {
-		"改二"  : " Kai Ni",
-		"改二甲"  : " Kai Ni A",
-		"改二乙"  : " Kai Ni B",
-		"改二丙"  : " Kai Ni C",
-		"改二丁"  : " Kai Ni D",
+		"改二": " Kai Ni",
+		"改二甲": " Kai Ni A",
+		"改二乙": " Kai Ni B",
+		"改二丙": " Kai Ni C",
+		"改二丁": " Kai Ni D",
+		"改二戊": " Kai Ni E",
 		"乙改": " B Kai",
 		"丁改": "D Kai",
 		"改母": " Kai Bo",
@@ -298,6 +299,8 @@
 	"神威": "Kamoi",
 	"占守": "Shimushu",
 	"国後": "Kunashiri",
+	"八丈": "Hachijou",
+	"石垣": "Ishigaki",
 	"春日丸": "Kasugamaru",
 	"択捉": "Etorofu",
 	"松輪":"Matsuwa",
@@ -344,6 +347,7 @@
 	"Johnston": "Johnston",
 	"Nelson": "Nelson",
 	"Gotland": "Gotland",
+	"G.Garibaldi":"G. Garibaldi",
 
 	"防空棲姫":"Air Defense Princess",
 	"空母棲鬼":"Aircraft Carrier Demon",
@@ -447,6 +451,7 @@
 	"駆逐ニ級改後期型":"Destroyer Ni-Class Kai LM",
 	"深海雨雲姫": "Abyssal Rain Cloud Princess",
 	"深海日棲姫": "Abyssal Sun Princess",
+	"北方棲妹": "Northern Little Sister",
 
 	"elite":" elite",
 	"flagship":" flagship"
