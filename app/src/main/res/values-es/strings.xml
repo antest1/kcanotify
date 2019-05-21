@@ -469,11 +469,11 @@
     <string name="ship_stat_equip_stype5">Searchlight(L)</string>
 
     <string name="ship_tag_0">Ninguna</string>
-    <string name="ship_tag_1">Expreso de Tokio (gris)</string>
-    <string name="ship_tag_2">Rabaul (verde)</string>
-    <string name="ship_tag_3">Combinada (azul)</string>
-    <string name="ship_tag_4">Despacho de Buin (Amarillo)</string>
-    <string name="ship_tag_5">X</string>
+    <string name="ship_tag_1">104º Escuadrón (Gris)</string>
+    <string name="ship_tag_2">2ª flota (amarilla)</string>
+    <string name="ship_tag_3">Unidad norte (azul)</string>
+    <string name="ship_tag_4">Desconocido</string>
+    <string name="ship_tag_5">Desconocido</string>
     <string name="ship_tag_6">X</string>
 
     <string name="ship_fleet_0">Ninguno</string>
