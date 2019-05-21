@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     textMaintenance.setVisibility(View.GONE);
                 }
-            } catch (ParseException e) {
+            } catch (ParseException | IllegalStateException e) {
                 textMaintenance.setText(getStringFromException(e));
                 textMaintenance.setVisibility(View.VISIBLE);
             }
