@@ -545,11 +545,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="ship_tag_0">None</string>
     <string name="ship_tag_1">104th Squadron (Gray)</string>
-    <string name="ship_tag_2">2nd Fleet (Yellow)</string>
+    <string name="ship_tag_2">2nd Fleet (Gold)</string>
     <string name="ship_tag_3">Northern Force (Blue)</string>
-    <string name="ship_tag_4">Unknown</string>
-    <string name="ship_tag_5">Unknown</string>
-    <string name="ship_tag_6">X</string>
+    <string name="ship_tag_4">Task Force (Green)</string>
+    <string name="ship_tag_5">Targeting Force (Yellowish Green)</string>
+    <string name="ship_tag_6">Hawaii Detached Unit (Mint)</string>
 
     <string name="ship_fleet_0">None</string>
 

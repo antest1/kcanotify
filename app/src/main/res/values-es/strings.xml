@@ -470,11 +470,11 @@
 
     <string name="ship_tag_0">Ninguna</string>
     <string name="ship_tag_1">104º Escuadrón (Gris)</string>
-    <string name="ship_tag_2">2ª flota (amarilla)</string>
-    <string name="ship_tag_3">Unidad norte (azul)</string>
-    <string name="ship_tag_4">Desconocido</string>
-    <string name="ship_tag_5">Desconocido</string>
-    <string name="ship_tag_6">X</string>
+    <string name="ship_tag_2">2ª flota (Guldfärg)</string>
+    <string name="ship_tag_3">Unidad norte (Azul)</string>
+    <string name="ship_tag_4">Fuerza de tarea (Verde)</string>
+    <string name="ship_tag_5">Fuerza de ataque (Gulgrön)</string>
+    <string name="ship_tag_6">Unidad Separada de Hawaii (Menta)</string>
 
     <string name="ship_fleet_0">Ninguno</string>
 

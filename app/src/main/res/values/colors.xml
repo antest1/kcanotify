@@ -190,11 +190,11 @@
 
     <color name="colorStatSallyArea0">#FFFFFF</color>
     <color name="colorStatSallyArea1">#bdbdbd</color>
-    <color name="colorStatSallyArea2">#4caf50</color>
-    <color name="colorStatSallyArea3">#1976d2</color>
-    <color name="colorStatSallyArea4">#fdd835</color>
-    <color name="colorStatSallyArea5">#00acc1</color>
-    <color name="colorStatSallyArea6">#673AB7</color>
+    <color name="colorStatSallyArea2">#DBB414</color>
+    <color name="colorStatSallyArea3">#72B8FD</color>
+    <color name="colorStatSallyArea4">#AFD633</color>
+    <color name="colorStatSallyArea5">#F1EC17</color>
+    <color name="colorStatSallyArea6">#B1E6B5</color>
 
     <color name="colorStatFighterPower">#16a085</color>
     <color name="colorStatSortCurrentBack">#c0bdbdbd</color>

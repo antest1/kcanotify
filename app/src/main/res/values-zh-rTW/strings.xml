@@ -475,12 +475,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_equip_stype5">探照灯(大)</string>
 
     <string name="ship_tag_0">沒有</string>
-    <string name="ship_tag_1">第百四戰隊</string>
-    <string name="ship_tag_2">第二艦隊</string>
-    <string name="ship_tag_3">北方部隊</string>
-    <string name="ship_tag_4">未知</string>
-    <string name="ship_tag_5">未知</string>
-    <string name="ship_tag_6">X</string>
+    <string name="ship_tag_1">第百四戰隊(灰色)</string>
+    <string name="ship_tag_2">第二艦隊(金色)</string>
+    <string name="ship_tag_3">北方部隊(藍色)</string>
+    <string name="ship_tag_4">機動部隊(綠色)</string>
+    <string name="ship_tag_5">攻略部隊(黃綠色)</string>
+    <string name="ship_tag_6">夏威夷派遣部隊(薄荷色)</string>
 
     <string name="ship_fleet_0">沒有</string>
 
