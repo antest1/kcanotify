@@ -44,9 +44,12 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,6 +77,7 @@ import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.gzipdecompress;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class InitStartActivity extends Activity {
@@ -165,41 +169,7 @@ public class InitStartActivity extends Activity {
 
         // Initialize resources
         setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
-        if (Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION)) == 0) {
-            AssetManager am = getAssets();
-            try {
-                int latest_version = -1;
-                AssetManager.AssetInputStream ais =
-                        (AssetManager.AssetInputStream) am.open("list.json");
-                byte[] bytes = ByteStreams.toByteArray(ais);
-                List<JsonObject> data_list = gson.fromJson(new String(bytes), listType);
-                for (int i = 0; i < data_list.size(); i++) {
-                    String name = data_list.get(i).get("name").getAsString();
-                    int version = data_list.get(i).get("version").getAsInt();
-                    if (dbHelper.getResVer(name) == -1) {
-                        appmessage.setText("Loading Resources from Assets...");
-                        final File root_dir = getDir("data", Context.MODE_PRIVATE);
-                        final File data = new File(root_dir, name);
-                        if (data.exists()) data.delete();
-                        FileOutputStream stream = new FileOutputStream(data);
-                        try {
-                            AssetManager.AssetInputStream ais_item =
-                                    (AssetManager.AssetInputStream) am.open(name);
-                            byte[] data_bytes = ByteStreams.toByteArray(ais_item);
-                            stream.write(data_bytes);
-                            dbHelper.putResVer(name, version);
-                            if (version > latest_version) latest_version = version;
-                        } finally {
-                            stream.close();
-                        }
-                    }
-                    setPreferences(getApplicationContext(), PREF_KCARESOURCE_VERSION, latest_version);
-                }
-            } catch (IOException e1) {
-                e1.printStackTrace();
-                if (dbHelper != null) dbHelper.recordErrorLog(ERROR_TYPE_DATALOAD, "list.json", "init", "1", getStringFromException(e1));
-            }
-        }
+        loadDefaultAsset();
 
         boolean all_passed = KcaUtils.validateResourceFiles(getApplicationContext(), dbHelper);
         if (all_passed) {
@@ -363,6 +333,53 @@ public class InitStartActivity extends Activity {
             updateIntent.putExtra("main_flag", true);
             startActivity(updateIntent);
             finish();
+        }
+    }
+
+    private void loadDefaultAsset() {
+        AssetManager am = getAssets();
+        byte[] bytes;
+        String kca_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
+        String internal_kca_version = getString(R.string.default_gamedata_version);
+        int currentKcaResVersion = dbHelper.getTotalResVer();
+        try {
+            if (kca_version == null || compareVersion(internal_kca_version, kca_version)) {
+                InputStream api_ais = am.open("api_start2");
+                bytes = gzipdecompress(ByteStreams.toByteArray(api_ais));
+                String asset_start2_data = new String(bytes);
+                dbHelper.putValue(DB_KEY_STARTDATA, asset_start2_data);
+                KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_VERSION, internal_kca_version);
+                KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, internal_kca_version);
+            }
+
+            AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("list.json");
+            bytes = ByteStreams.toByteArray(ais);
+            JsonArray data = new JsonParser().parse(new String(bytes)).getAsJsonArray();
+
+            for (JsonElement item: data) {
+                JsonObject res_info = item.getAsJsonObject();
+                String name = res_info.get("name").getAsString();
+                int version = res_info.get("version").getAsInt();
+                if (currentKcaResVersion < version) {
+                    final File root_dir = getDir("data", Context.MODE_PRIVATE);
+                    final File new_data = new File(root_dir, name);
+                    if (new_data.exists()) new_data.delete();
+                    InputStream file_is = am.open(name);
+                    OutputStream file_out = new FileOutputStream(new_data);
+
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = file_is.read(buffer)) != -1) {
+                        file_out.write(buffer, 0, bytesRead);
+                    }
+                    file_is.close();
+                    file_out.close();
+                    dbHelper.putResVer(name, version);
+                }
+            }
+            ais.close();
+        } catch (IOException e) {
+
         }
     }
 
