@@ -35,6 +35,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
@@ -46,6 +48,7 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class ToolsActivity extends AppCompatActivity {
     Toolbar toolbar;
+    KcaDBHelper dbHelper;
     static Gson gson = new Gson();
     LinearLayout view_fleetlist, view_shiplist, view_equipment, view_droplog, view_reslog, view_akashi, view_expcalc, view_expdtable, view_datasync;
     public ToolsActivity() {
@@ -73,6 +76,12 @@ public class ToolsActivity extends AppCompatActivity {
         view_expcalc = findViewById(R.id.action_expcalc);
         view_expdtable = findViewById(R.id.action_expdtable);
         view_datasync = findViewById(R.id.action_datasync);
+
+        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+        JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
+        if (kcDataObj != null && kcDataObj.has("api_data")) {
+            KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
+        }
 
         view_fleetlist.setOnClickListener(view -> {
             Intent intent = new Intent(ToolsActivity.this, FleetInfoActivity.class);
