@@ -90,6 +90,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
             return v;
         }
         holder.ship_layout.setVisibility(View.VISIBLE);
+        if (data == null || data.isJsonNull()) return v;
         JsonObject kcdata = data.getAsJsonObject("kc");
         JsonObject userdata = data.getAsJsonObject("user");
 

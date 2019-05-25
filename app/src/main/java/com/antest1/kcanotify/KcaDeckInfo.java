@@ -512,6 +512,10 @@ public class KcaDeckInfo {
                     if (nowhp * 4 <= maxhp) continue;
 
                     JsonObject kcShipData = getKcShipDataById(kcShipId, "stype");
+                    if (kcShipData == null) {
+                        int[] dummy = {-1, -1};
+                        return dummy;
+                    }
                     int stype = kcShipData.get("stype").getAsInt();
 
                     switch (stype) {

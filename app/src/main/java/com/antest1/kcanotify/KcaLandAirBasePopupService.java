@@ -431,19 +431,21 @@ public class KcaLandAirBasePopupService extends Service {
                     }
                     if (tag != -1) {
                         JsonArray api_air_base = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
-                        JsonObject item = api_air_base.get(tag).getAsJsonObject();
-                        setItemViewLayout(item);
-                        itemView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                        itemViewWidth = itemView.getMeasuredWidth();
-                        itemViewHeight = itemView.getMeasuredHeight();
+                        if (tag < api_air_base.size()) {
+                            JsonObject item = api_air_base.get(tag).getAsJsonObject();
+                            setItemViewLayout(item);
+                            itemView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                            itemViewWidth = itemView.getMeasuredWidth();
+                            itemViewHeight = itemView.getMeasuredHeight();
 
-                        itemViewParams.x = (int) (event.getRawX() - xMargin - itemViewWidth);
-                        itemViewParams.y = (int) (event.getRawY() - itemViewHeight / 2);
-                        itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
-                        if (itemView.getParent() != null) {
-                            mManager.removeViewImmediate(itemView);
+                            itemViewParams.x = (int) (event.getRawX() - xMargin - itemViewWidth);
+                            itemViewParams.y = (int) (event.getRawY() - itemViewHeight / 2);
+                            itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
+                            if (itemView.getParent() != null) {
+                                mManager.removeViewImmediate(itemView);
+                            }
+                            mManager.addView(itemView, itemViewParams);
                         }
-                        mManager.addView(itemView, itemViewParams);
                     }
                     break;
 

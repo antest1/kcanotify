@@ -151,6 +151,8 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         JsonObject item = listViewItemList.get(position);
         int kc_ship_id = item.get("api_ship_id").getAsInt();
         JsonObject kcShipData = getKcShipDataById(kc_ship_id, "name,stype,houg,raig,tyku,souk,tais,luck,afterlv,slot_num");
+        if (kcShipData == null) return v;
+
         String ship_name = kcShipData.get("name").getAsString();
         int ship_stype = kcShipData.get("stype").getAsInt();
         int ship_init_ka = kcShipData.getAsJsonArray("houg").get(0).getAsInt();
