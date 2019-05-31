@@ -339,11 +339,11 @@ public class InitStartActivity extends Activity {
     private void loadDefaultAsset() {
         AssetManager am = getAssets();
         byte[] bytes;
-        String kca_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
+        String kca_data_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
         String internal_kca_version = getString(R.string.default_gamedata_version);
         int currentKcaResVersion = dbHelper.getTotalResVer();
         try {
-            if (kca_version == null || compareVersion(internal_kca_version, kca_version)) {
+            if (kca_data_version == null || compareVersion(internal_kca_version, kca_data_version)) {
                 InputStream api_ais = am.open("api_start2");
                 bytes = gzipdecompress(ByteStreams.toByteArray(api_ais));
                 String asset_start2_data = new String(bytes);
