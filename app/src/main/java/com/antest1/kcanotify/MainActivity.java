@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
     ImageButton kctoolbtn;
     public ImageButton kcafairybtn;
     public static Handler sHandler;
-    public Vibrator vibrator;
     TextView textDescription;
     TextView textWarn, textSpecial, textMaintenance;
     Gson gson = new Gson();
@@ -123,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
         prefs.edit().putBoolean(PREF_VPN_ENABLED, KcaVpnService.checkOn()).apply();
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
         int sniffer_mode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
 
@@ -277,14 +275,6 @@ public class MainActivity extends AppCompatActivity {
 
                     if (before_maintenance) {
                         textMaintenance.setText(KcaUtils.format(getStringWithLocale(R.string.ma_nextmaintenance), out_df.format(start_date)));
-                        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-                        boolean is_muted = audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT;
-                        if (!is_muted && !soundKind.equals(getString(R.string.sound_kind_value_mute))) {
-                            long[] mVibratePattern = new long[]{0, 400, 200, 400};
-                            if (vibrator != null && vibrator.hasVibrator()) {
-                                vibrator.vibrate(mVibratePattern, -1);
-                            }
-                        }
                     } else if (!is_passed) {
                         textMaintenance.setText(KcaUtils.format(getStringWithLocale(R.string.ma_endmaintenance), out_df.format(end_date)));
                     }
