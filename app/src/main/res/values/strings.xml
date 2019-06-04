@@ -537,7 +537,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="shipinfo_criteria_count" formatted="false">Applied criteria: %d</string>
 
     <string name="ship_stat_equip_stype_label">Special Equipment Filter</string>
-    <string name="ship_stat_equip_stype1">Taihatsu</string>
+    <string name="ship_stat_equip_stype1">Daihatsu</string>
     <string name="ship_stat_equip_stype2">Amphibious Tank</string>
     <string name="ship_stat_equip_stype3">Bulge (M)</string>
     <string name="ship_stat_equip_stype4">Command Facility</string>
