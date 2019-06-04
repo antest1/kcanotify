@@ -711,4 +711,5 @@
     <string name="text_api_houk2">INT</string>
     <string name="text_api_cost">COST</string>
     <string name="text_api_distance">DIST</string>
+    <string name="ask_to_dev">Fråga mig vad som helst!</string>
 </resources>

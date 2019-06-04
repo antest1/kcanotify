@@ -710,5 +710,6 @@
     <string name="text_api_houk2">영격</string>
     <string name="text_api_cost">배치비용</string>
     <string name="text_api_distance">행동반경</string>
+    <string name="ask_to_dev">질문받습니다</string>
 
 </resources>

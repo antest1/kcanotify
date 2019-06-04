@@ -716,4 +716,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="text_api_houk2">迎击</string>
     <string name="text_api_cost">配置费用</string>
     <string name="text_api_distance">行动半径</string>
+    <string name="ask_to_dev">问我什么！</string>
 </resources>

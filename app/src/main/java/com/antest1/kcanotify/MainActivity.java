@@ -16,6 +16,7 @@ import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
     public static Handler sHandler;
     TextView textDescription;
     TextView textWarn, textSpecial, textMaintenance;
+    TextView textSpecial2;
     Gson gson = new Gson();
 
     SharedPreferences prefs;
@@ -299,6 +301,19 @@ public class MainActivity extends AppCompatActivity {
         textSpecial = findViewById(R.id.textSpecial);
         textSpecial.setText(getStringWithLocale(R.string.special_message));
         textSpecial.setOnClickListener(v -> specialImage.setVisibility(View.VISIBLE));
+
+        textSpecial2 = findViewById(R.id.textSpecial2);
+        textSpecial2.setText(getStringWithLocale(R.string.ask_to_dev));
+        textSpecial2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
+                String locale_code = getResourceLocaleCode(locale);
+                String url = KcaUtils.format("http://52.55.91.44/kcanotify/asktodev/index_%s.html", locale_code);
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
+            }
+        });
     }
 
     @Override
