@@ -245,7 +245,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/colorSpecialText"
                     android:textSize="14dp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
             </RelativeLayout>
 
