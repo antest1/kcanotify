@@ -212,11 +212,11 @@ public class KcaVpnData {
                         //Log.e("KCA", String.valueOf(responseData.length));
                         //Log.e("KCA", String.valueOf(portToResponseHeaderPart.get(tport).length()));
                         //Log.e("KCA", "====================================");
-                        if (chunkflag) {
+                        if (chunkflag && responseBody.length > 0) {
                             //Log.e("KCA", byteArrayToHex(Arrays.copyOfRange(responseBody, 0, 15)));
                             //Log.e("KCA", byteArrayToHex(Arrays.copyOfRange(responseBody, responseBody.length - 15, responseBody.length)));
                             responseBody = unchunkAllData(responseBody, gzipflag);
-                        } else if (gzipflag) {
+                        } else if (gzipflag && responseBody.length > 0) {
                             //Log.e("KCA", "Ungzip " + String.valueOf(tport));
                             responseBody = gzipdecompress(responseBody);
                         }
