@@ -77,7 +77,7 @@ I can speak Korean and English, and I can understand Japanese (but not good at w
 E-mail: kcanotify@gmail.com
 
 
-#Backers
+Backers
 -------
 You can support the project via Open Collective. (one-time/monthly)
 Thank you to all our backers! [[Become a backer](https://opencollective.com/kcanotify)]
