@@ -76,6 +76,14 @@ I can speak Korean and English, and I can understand Japanese (but not good at w
 
 E-mail: kcanotify@gmail.com
 
+
+#Backers
+-------
+You can support the project via Open Collective. (one-time/monthly)
+Thank you to all our backers! [[Become a backer](https://opencollective.com/kcanotify)]
+
+<a href="https://opencollective.com/kcanotify" target="_blank"><img src="https://opencollective.com/kcanotify/backers.svg?width=890"></a>
+
 License
 -------
 [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt)
