@@ -245,21 +245,21 @@
                     android:textAlignment="center"
                     android:textColor="@color/colorSpecialText"
                     android:textSize="14dp"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/textSpecial2"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@+id/textSpecial"
+                    android:layout_above="@id/textMaintenance"
                     android:layout_alignParentBottom="false"
                     android:layout_marginStart="6dp"
                     android:layout_marginLeft="6dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="6dp"
                     android:layout_marginRight="6dp"
-                    android:background="@color/colorFairyShowBtn"
+                    android:background="@color/colorAccent"
                     android:gravity="center_vertical|center_horizontal"
                     android:minLines="4"
                     android:padding="4dp"
