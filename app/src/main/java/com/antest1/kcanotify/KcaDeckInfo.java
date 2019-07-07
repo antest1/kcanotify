@@ -223,6 +223,7 @@ public class KcaDeckInfo {
         switch (type) {
             case T2_FIGHTER:
             case T2_SEA_FIGHTER:
+            case T2_ITCP_FIGHTER:
                 return aac + 0.2 * reinforce;
             case T2_BOMBER:
             case T2_JET_BOMBER:
@@ -840,6 +841,7 @@ public class KcaDeckInfo {
     // Reference: http://kancolle.wikia.com/wiki/Land_Base_Aerial_Support#Fighter_Power_Calculations
     public int getAirPowerInAirBase(int status, JsonArray plane_info) {
         int air_power = 0;
+        double reconBonus = 1;
         if (status == LAB_STATUS_SORTIE) {
             for (int i = 0; i < plane_info.size(); i++) {
                 JsonObject item = plane_info.get(i).getAsJsonObject();
@@ -848,8 +850,9 @@ public class KcaDeckInfo {
 
                 int count = item.get("api_count").getAsInt();
                 int slotid = item.get("api_slotid").getAsInt();
-                JsonObject itemData = getUserItemStatusById(slotid, "level,alv", "type,tyku,houk");
+                JsonObject itemData = getUserItemStatusById(slotid, "level,alv", "id,type,tyku,houk");
                 if (itemData == null) continue;
+                int itemId = itemData.get("id").getAsInt();
                 int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                 int itemLevel = itemData.get("level").getAsInt();
                 int itemMastery = 0;
@@ -857,11 +860,15 @@ public class KcaDeckInfo {
                     itemMastery = itemData.get("alv").getAsInt();
                 }
                 double profiencyBonus = calcSlotAACFromMastery(itemType, itemMastery, 0)[0];
+
                 int itemAAC = itemData.get("tyku").getAsInt();
-                int itemITC = itemData.get("houk").getAsInt();
-                int realAAC = (int) Math.floor(Math.sqrt(count) * (1.5 * itemITC + calcReinforcedAAC(itemType, itemAAC, itemLevel)) + profiencyBonus);
+                int itemITC = itemType == T2_ITCP_FIGHTER ? itemData.get("houk").getAsInt() : 0;
+                if (itemId == 311) reconBonus = Math.max(reconBonus, 1.15);
+                if (itemId == 312) reconBonus = Math.max(reconBonus, 1.18);
+                int realAAC = (int) Math.floor(Math.sqrt(count) * (itemITC * 1.5 + calcReinforcedAAC(itemType, itemAAC, itemLevel)) + profiencyBonus);
                 air_power += realAAC;
             }
+            air_power = (int) Math.floor(air_power * reconBonus);
         } else if (status == LAB_STATUS_DEFENSE) {
             for (int i = 0; i < plane_info.size(); i++) {
                 JsonObject item = plane_info.get(i).getAsJsonObject();
@@ -870,8 +877,9 @@ public class KcaDeckInfo {
 
                 int count = item.get("api_count").getAsInt();
                 int slotid = item.get("api_slotid").getAsInt();
-                JsonObject itemData = getUserItemStatusById(slotid, "level,alv", "type,tyku,houk,houm,saku");
+                JsonObject itemData = getUserItemStatusById(slotid, "level,alv", "id,type,tyku,houk,houm,saku");
                 if (itemData == null) continue;
+                int itemId = itemData.get("id").getAsInt();
                 int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                 int itemLevel = itemData.get("level").getAsInt();
                 int itemMastery = 0;
@@ -880,23 +888,30 @@ public class KcaDeckInfo {
                 }
                 double profiencyBonus = calcSlotAACFromMastery(itemType, itemMastery, 0)[0];
                 int itemAAC = itemData.get("tyku").getAsInt();
-                int itemITC = itemData.get("houk").getAsInt();
+                int itemITC = 0;
                 int itemAB = 0;
-                if (itemType == T2_ITCP_FIGHTER) itemAB += itemData.get("houm").getAsInt();
+                if (itemType == T2_ITCP_FIGHTER) {
+                    itemITC = itemData.get("houk").getAsInt();
+                    itemAB = itemData.get("houm").getAsInt();
+                }
                 int itemSeek = itemData.get("saku").getAsInt();
                 int realAAC = (int) Math.floor(Math.sqrt(count) * (itemITC + itemAB * 2.0 + calcReinforcedAAC(itemType, itemAAC, itemLevel)) + profiencyBonus);
 
-                double recon_bonus = 1.0;
                 if (itemType == T2_SCOUT || itemType == T2_SCOUT_II) {
-                    if(itemSeek >= 9) recon_bonus = 1.3;
-                    else recon_bonus = 1.2;
+                    if(itemSeek >= 9) reconBonus = Math.max(reconBonus, 1.3);
+                    else reconBonus = Math.max(reconBonus, 1.2);
                 } else if (itemType == T2_SEA_SCOUT) {
-                    if (itemSeek >= 9) recon_bonus = 1.16;
-                    else if (itemSeek == 8) recon_bonus = 1.13;
-                    else recon_bonus = 1.1;
+                    if (itemSeek >= 9) reconBonus = Math.max(reconBonus, 1.16);
+                    else if (itemSeek == 8) reconBonus = 1.13;
+                    else reconBonus = Math.max(reconBonus, 1.1);
+                } else if (itemId == 311) {
+                    reconBonus = Math.max(reconBonus, 1.18);
+                } else if (itemId == 312) {
+                    reconBonus = Math.max(reconBonus, 1.24);
                 }
-                air_power += (int) Math.floor(realAAC * recon_bonus);
+                air_power += realAAC;
             }
+            air_power = (int) Math.floor(air_power * reconBonus);
         }
         return air_power;
     }

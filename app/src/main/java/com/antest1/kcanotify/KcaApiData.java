@@ -142,6 +142,7 @@ public class KcaApiData {
     public static final int T2_AMP_TANK = 46;
     public static final int T2_LBA_AIRCRAFT = 47;
     public static final int T2_ITCP_FIGHTER = 48;
+    public static final int T2_LAND_SCOUT = 49;
 
     public static final int T2_SAIUN_PART = 50;
     public static final int T2_SUBMARINE_RADER = 51;
@@ -155,10 +156,12 @@ public class KcaApiData {
     public static final int T2_SCOUT_II = 94;
 
     public static final int[] T2LIST_AIRCRAFTS = {T2_FIGHTER, T2_BOMBER, T2_TORPEDO_BOMBER, T2_SCOUT, T2_SEA_SCOUT, T2_SEA_BOMBER, T2_FLYING_BOAT,
-            T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER, T2_JET_SCOUT};
+            T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER, T2_JET_SCOUT, T2_LAND_SCOUT};
 
     public static final int[] T2LIST_FIGHT_AIRCRAFTS = {T2_FIGHTER, T2_BOMBER, T2_TORPEDO_BOMBER, T2_SEA_BOMBER,
             T2_SEA_FIGHTER, T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_JET_FIGHTER, T2_JET_BOMBER, T2_JET_TORPEDO_BOMBER};
+
+    public static final int[] T2LIST_LANDBASE = {T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_LAND_SCOUT};
 
     public static final int T3_COUNT = 47;
     public static final int[] T3LIST_IMPROVABLE = {1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 23, 24, 30, 34, 36, 38, 42, 43, 44};
