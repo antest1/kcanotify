@@ -324,8 +324,8 @@ public class KcaService extends Service {
         isPassiveMode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE)) == SNIFFER_PASSIVE;
         if (isPassiveMode) {
             receiver = new KcaReceiver();
-            IntentFilter filter = new IntentFilter(BROADCAST_ACTION);
-            registerReceiver(receiver, filter);
+            registerReceiver(receiver, new IntentFilter(BROADCAST_ACTION));
+            registerReceiver(receiver, new IntentFilter(GOTO_BROADCAST_ACTION));
         }
 
         notifyFirstTime = true;

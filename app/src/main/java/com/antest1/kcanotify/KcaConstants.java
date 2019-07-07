@@ -11,11 +11,15 @@ public final class KcaConstants {
     public final static String MAINACTIVITY_NAME = "com.antest1.kcanotify.MainActivity";
     public final static String GOTO_PACKAGE_NAME = "com.antest1.gotobrowser";
 
-    public static final String AUTHORITY = "com.antest1.kcasniffer.contentprovider";
-    public static final String PATH  = "/request";
+    public static final String REQUEST_PATH = "/request";
 
-    public static final Uri CONTENT_URI = Uri.parse("content://".concat(AUTHORITY).concat(PATH));
+    public static final String AUTHORITY = "com.antest1.kcasniffer.contentprovider";
+    public static final Uri CONTENT_URI = Uri.parse("content://".concat(AUTHORITY).concat(REQUEST_PATH));
     public static final String BROADCAST_ACTION = "com.antest1.kcasniffer.broadcast";
+
+    public static final String GOTO_AUTHORITY = "com.antest1.gotobrowser.contentprovider";
+    public static final Uri GOTO_CONTENT_URI = Uri.parse("content://".concat(GOTO_AUTHORITY).concat(REQUEST_PATH));
+    public static final String GOTO_BROADCAST_ACTION = "com.antest1.gotobrowser.broadcast";
 
     public static final String KCA_VERSION = "/kca/version.json";
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";

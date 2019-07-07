@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="com.antest1.kcasniffer.contentprovider.READ_DATA"/>
+    <uses-permission android:name="com.antest1.gotobrowser.contentprovider.READ_DATA"/>
     <uses-permission
         xmlns:tools="http://schemas.android.com/tools"
         android:name="android.permission.PACKAGE_USAGE_STATS"
@@ -225,6 +226,7 @@
             android:configChanges="locale|layoutDirection" >
             <intent-filter>
                 <action android:name="com.antest1.kcasniffer.broadcast"/>
+                <action android:name="com.antest1.gotobrowser.broadcast"/>
             </intent-filter>
         </service>
         <service
