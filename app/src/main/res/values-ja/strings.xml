@@ -179,7 +179,7 @@
     <string name="setting_menu_view_desc_battlenode_use">出撃中トーストで次のマス情報を表示する</string>
     <string name="setting_menu_view_title_battleview_use">戦闘予報を使う</string>
     <string name="setting_menu_view_desc_battleview_use">出撃や練習での戦闘結果を見る</string>
-    <string name="setting_menu_view_title_drop_visible">艦娘ドロップをスポイラーする</string>
+    <string name="setting_menu_view_title_drop_visible">艦娘ドロップをネタバレする</string>
     <string name="setting_menu_view_desc_drop_visible">戦闘予報でドロップされた艦娘の名前を見る</string>
     <string name="setting_menu_view_title_hdmg_locked">ロックされた艦娘にのみ大破警告を使用</string>
     <string name="setting_menu_view_desc_hdmg_locked">注意：設定時にロックされていない艦娘には警告が発生しません！</string>
