@@ -681,15 +681,23 @@
     <string name="setting_menu_sniffer_title_extfilter_use">Usar Filtro de IP extendida</string>
     <string name="setting_menu_sniffer_desc_package_allow">Para usuarios jugando KanColle con otros navegadores</string>
     <string name="setting_menu_sniffer_desc_extfilter_use">Seleccionar esta opción si está usando un servicio web-proxy como ooi.moe</string>
-    <string name="action_export_kanmusu_list">Exportar a kanmusu_list</string>
+
+    <string name="action_export_kanmusu_list">kanmusu_list</string>
     <string name="shipinfo_export_title">Exportar a kanmusu_list</string>
     <string name="shipinfo_export_clipboard">Copiar</string>
     <string name="shipinfo_export_openpage">Abrir página kanmusu_list</string>
+    <string name="shipinfo_export_openfa">Abrir página fleetanalysis</string>
+
     <string name="action_export_deckbuilder">DeckBuilder</string>
     <string name="fleetinfo_export_title">Exportar información de flota</string>
     <string name="fleetinfo_export_clipboard">Copiar</string>
     <string name="fleetinfo_export_openpage1">Exportar a Deckbuilder</string>
     <string name="fleetinfo_export_openpage2">Exportar a ImgKCbuilder</string>
+
+    <string name="action_export_fleetanalysis">fleetanalysis</string>
+    <string name="equipinfo_export_title">Exportar a fleetanalysis</string>
+    <string name="equipinfo_export_clipboard">Copiar</string>
+    <string name="equipinfo_export_openpage">Abrir página fleetanalysis</string>
 
     <string name="text_api_houg">FP</string>
     <string name="text_api_raig">TP</string>

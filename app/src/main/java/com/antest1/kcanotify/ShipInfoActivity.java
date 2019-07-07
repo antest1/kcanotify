@@ -65,7 +65,7 @@ public class ShipInfoActivity extends AppCompatActivity {
     boolean is_popup_on;
     boolean is_search_on;
     View export_popup, export_exit;
-    TextView export_clipboard, export_openpage;
+    TextView export_clipboard, export_openpage, export_openfa;
 
     public ShipInfoActivity() {
         LocaleUtils.updateConfig(this);
@@ -200,7 +200,15 @@ public class ShipInfoActivity extends AppCompatActivity {
                     Uri.parse("http://kancolle-calc.net/kanmusu_list.html?data=".concat(encoded)));
             startActivity(bIntent);
         });
-        
+
+        export_openfa = export_popup.findViewById(R.id.export_openfa);
+        export_openfa.setText(getStringWithLocale(R.string.shipinfo_export_openfa));
+        export_openfa.setOnClickListener(v -> {
+            Intent bIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://kancolle-fleetanalysis.firebaseapp.com/#/"));
+            startActivity(bIntent);
+        });
+
         listview = findViewById(R.id.shipinfo_listview);
         listview.setAdapter(adapter);
 

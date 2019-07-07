@@ -681,11 +681,18 @@
     <string name="shipinfo_export_title">艦隊晒しへのコード変換</string>
     <string name="shipinfo_export_clipboard">クリップボードにコピー</string>
     <string name="shipinfo_export_openpage">艦隊晒し用ページを開く</string>
+    <string name="shipinfo_export_openfa">艦隊分析ページを開く</string>
+
     <string name="action_export_deckbuilder">デッキビルダー</string>
     <string name="fleetinfo_export_title">デッキビルダー出力</string>
     <string name="fleetinfo_export_openpage1">艦隊シミュレーター</string>
     <string name="fleetinfo_export_openpage2">艦これ編成画像出力</string>
     <string name="fleetinfo_export_clipboard">クリップボードにコピー</string>
+
+    <string name="action_export_fleetanalysis">艦隊分析</string>
+    <string name="equipinfo_export_title">艦隊分析へのコード変換</string>
+    <string name="equipinfo_export_clipboard">クリップボードにコピー</string>
+    <string name="equipinfo_export_openpage">艦隊分析ページを開く</string>
 
     <string name="text_api_houg">火力</string>
     <string name="text_api_raig">雷装</string>

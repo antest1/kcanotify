@@ -751,16 +751,22 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="packagefilter_restart">You need to restart VPN Service to make these options effective.</string>
     <string name="special_message">2nd Anniversary!</string>
 
-    <string name="action_export_kanmusu_list">Export to kanmusu_list</string>
+    <string name="action_export_kanmusu_list">kanmusu_list</string>
     <string name="shipinfo_export_title">Export to kanmusu_list</string>
     <string name="shipinfo_export_clipboard">Copy to Clipboard</string>
     <string name="shipinfo_export_openpage">Open kanmusu_list Page</string>
+    <string name="shipinfo_export_openfa">Open fleetanalysis Page</string>
 
     <string name="action_export_deckbuilder">DeckBuilder</string>
     <string name="fleetinfo_export_title">Export Fleet Information</string>
     <string name="fleetinfo_export_clipboard">Copy to Clipboard</string>
     <string name="fleetinfo_export_openpage1">Export to DeckBuilder</string>
     <string name="fleetinfo_export_openpage2">Export to ImgKCbuilder</string>
+
+    <string name="action_export_fleetanalysis">fleetanalysis</string>
+    <string name="equipinfo_export_title">Export to fleetanalysis</string>
+    <string name="equipinfo_export_clipboard">Copy to Clipboard</string>
+    <string name="equipinfo_export_openpage">Open fleetanalysis Page</string>
 
     <string name="text_api_houg">FP</string>
     <string name="text_api_raig">TP</string>

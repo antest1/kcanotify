@@ -252,6 +252,18 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/export_openfa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@color/colorAccent"
+                android:padding="6dp"
+                android:text="@string/shipinfo_export_openfa"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
         </LinearLayout>
 
     </RelativeLayout>
