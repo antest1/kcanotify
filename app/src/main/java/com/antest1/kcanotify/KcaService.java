@@ -647,7 +647,14 @@ public class KcaService extends Service {
             if (init.contains("svdata=")) {
                 data.skip("svdata=".length());
             }
-            if (raw.length > 0) jsonDataObj = gson.fromJson(data, JsonObject.class);
+            if (raw.length > 0) {
+                JsonElement jsonData = gson.fromJson(data, JsonElement.class);
+                if (jsonData.isJsonObject()) {
+                    jsonDataObj = jsonData.getAsJsonObject();
+                } else {
+                    jsonDataObj = new JsonObject();
+                }
+            }
             else jsonDataObj = new JsonObject();
             if (url.equals(KCA_API_RESOURCE_URL)) {
                 dbHelper.recordErrorLog(ERROR_TYPE_VPN, KCA_API_RESOURCE_URL, "", "", request);
