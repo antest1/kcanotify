@@ -58,9 +58,8 @@ public class KcaVpnData {
     };
     private static String kcaDmmLoginServer = "202.6"; // DMM prefix
 
-    private static String[] prefixCheckList = kcaServerPrefixList;
-
-    public static ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private static List<String> prefixCheckList = new ArrayList<>(Arrays.asList(kcaServerPrefixList));
+    private static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public static int state = NONE;
     public static byte[] requestData = {};
@@ -89,13 +88,25 @@ public class KcaVpnData {
     }
 
     public static void setExternalFilter(boolean use_ext) {
-        if (use_ext) {
-            prefixCheckList = Arrays.copyOf(kcaServerPrefixList, kcaServerPrefixList.length + kcaExtServiceList.length);
-            System.arraycopy(kcaExtServiceList, 0, prefixCheckList, kcaServerPrefixList.length, kcaExtServiceList.length);
-        } else {
-            prefixCheckList = kcaServerPrefixList;
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                if (use_ext) {
+                    String[] ooi_addresses = {"ooi.moe", "cn.kcwiki.org", "kancolle.su"};
+                    for (String ooi: ooi_addresses) {
+                        String[] ooi_ip = KcaUtils.getIpAddress(ooi);
+                        prefixCheckList.addAll(Arrays.asList(ooi_ip));
+                    }
+                }
+                Log.e("KCA", prefixCheckList.toString());
+            }
+        };
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        Log.e("KCA", Arrays.toString(prefixCheckList));
     }
 
     // Called from native code

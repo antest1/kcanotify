@@ -64,7 +64,9 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -901,6 +903,22 @@ public class KcaUtils {
             }
         }
     }
+
+
+    public static String[] getIpAddress(String host) {
+        List<String> addresses = new ArrayList<>();
+        InetAddress[] machines;
+        try {
+            machines = InetAddress.getAllByName(host);
+            for(InetAddress address : machines){
+                addresses.add(address.getHostAddress());
+            }
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return addresses.toArray(new String[0]);
+    }
+
 
     public static KcaQSyncAPI getQuestSync(Context context){
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
