@@ -92,10 +92,17 @@ public class KcaVpnData {
             @Override
             public void run() {
                 if (use_ext) {
-                    String[] ooi_addresses = {"ooi.moe", "cn.kcwiki.org", "kancolle.su"};
-                    for (String ooi: ooi_addresses) {
-                        String[] ooi_ip = KcaUtils.getIpAddress(ooi);
-                        prefixCheckList.addAll(Arrays.asList(ooi_ip));
+                    try {
+                        String[] ooi_addresses = {"ooi.moe", "cn.kcwiki.org", "kancolle.su"};
+                        for (String ooi: ooi_addresses) {
+                            String[] ooi_ip = KcaUtils.getIpAddress(ooi);
+                            prefixCheckList.addAll(Arrays.asList(ooi_ip));
+                        }
+                    } catch (Exception e) {
+                        for (String ooi: kcaExtServiceList) {
+                            String[] ooi_ip = KcaUtils.getIpAddress(ooi);
+                            prefixCheckList.addAll(Arrays.asList(ooi_ip));
+                        }
                     }
                 }
                 Log.e("KCA", prefixCheckList.toString());
