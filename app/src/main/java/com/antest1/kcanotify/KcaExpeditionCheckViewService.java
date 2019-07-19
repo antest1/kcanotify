@@ -14,7 +14,6 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -26,7 +25,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,45 +71,39 @@ public class KcaExpeditionCheckViewService extends Service {
 
     String locale;
     int selected = 1;
+    int world = 1;
     JsonArray deckdata;
     List<JsonObject> ship_data;
+    List<Integer> expedition_data = new ArrayList<>();
     Map<String, JsonObject> checkdata;
 
     public String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }
 
-    private void showInfoView(MotionEvent paramMotionEvent, int selected) {
-        setItemViewLayout(KcaApiData.getExpeditionInfo(selected, locale));
-        itemView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int width = itemView.getMeasuredWidth();
-        int height = itemView.getMeasuredHeight();
-
-        WindowManager.LayoutParams localLayoutParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                getWindowLayoutType(),
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT);
-
-        localLayoutParams.x = ((int) (125.0F + paramMotionEvent.getRawX()));
-        localLayoutParams.y = ((int) paramMotionEvent.getRawY());
-        if (selected >= 100) {
-            if (selected >= 111) localLayoutParams.x -= (125 + width);
-            localLayoutParams.y -= (height + 25);
-        } else {
-            if ((selected - 1) % 8 >= 4) localLayoutParams.x -= (125 + width);
-            if (selected > 24) localLayoutParams.y -= (height + 25);
+    private void updateSelectedView(int idx, int world) {
+        for (int i = 0; i < 15; i++) {
+            int view_id = getId("expd_btn_".concat(String.valueOf(i)), R.id.class);
+            if (i < expedition_data.size()) {
+                int value = expedition_data.get(i);
+                ((TextView) mView.findViewById(view_id)).setText(KcaExpedition2.getExpeditionStr(value));
+                mView.findViewById(view_id).setVisibility(View.VISIBLE);
+            } else {
+                mView.findViewById(view_id).setVisibility(View.INVISIBLE);
+            }
         }
 
-        localLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-        if (itemView.getParent() != null) {
-            mManager.removeViewImmediate(itemView);
+        for (int i = 1; i <= 7; i++) {
+            int view_id = getId("expd_world_".concat(String.valueOf(i)), R.id.class);
+            if (world == i) {
+                mView.findViewById(view_id).setBackgroundColor(
+                        ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+            } else {
+                mView.findViewById(view_id).setBackgroundColor(
+                        ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+            }
         }
-        mManager.addView(itemView, localLayoutParams);
-    }
 
-    private void updateSelectedView(int idx) {
         for (int i = 1; i < 4; i++) {
             int view_id = getId("fleet_".concat(String.valueOf(i + 1)), R.id.class);
             if (idx == i) {
@@ -147,16 +139,19 @@ public class KcaExpeditionCheckViewService extends Service {
             mView = mInflater.inflate(R.layout.view_excheck_list, null);
             KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
             mView.setVisibility(View.GONE);
-            mView.findViewById(R.id.excheckview_head).setOnTouchListener(mViewTouchListener);
+            mView.findViewById(R.id.excheckview_head).setOnClickListener(mViewClickListener);
             for (int i = 1; i < 4; i++) {
-                mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
+                mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnClickListener(mViewClickListener);
+            }
+            for (int i = 1; i <= 7; i++) {
+                mView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
             }
 
-            for (int no: expedition_list) {
-                mView.findViewById(KcaUtils.getId("expedition_btn_".concat(String.valueOf(no)), R.id.class)).setOnTouchListener(mViewTouchListener);
+            for (int i = 0; i < 15; i++) {
+                mView.findViewById(KcaUtils.getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
             }
 
-            itemView = mInflater.inflate(R.layout.view_excheck_detail, null);
+            itemView = mView.findViewById(R.id.view_excheck_detail);
             mParams = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
@@ -173,6 +168,7 @@ public class KcaExpeditionCheckViewService extends Service {
             display.getSize(size);
             displayWidth = size.x;
         } catch (Exception e) {
+            e.printStackTrace();
             active = false;
             error_flag = true;
             stopSelf();
@@ -184,9 +180,6 @@ public class KcaExpeditionCheckViewService extends Service {
         active = false;
         if (mView != null) {
             if (mView.getParent() != null) mManager.removeViewImmediate(mView);
-        }
-        if (itemView != null) {
-            if (itemView.getParent() != null) mManager.removeViewImmediate(itemView);
         }
         super.onDestroy();
     }
@@ -578,7 +571,11 @@ public class KcaExpeditionCheckViewService extends Service {
         return views;
     }
 
-    public void setItemViewLayout(JsonObject data) {
+    public void setItemViewLayout(int index) {
+        int expd_value = expedition_data.get(index);
+        Log.e("KCA", String.valueOf(index) + " " + expd_value);
+        JsonObject data = KcaApiData.getExpeditionInfo(expd_value, locale);
+
         String no = data.get("no").getAsString();
         String name = data.get("name").getAsString();
         int no_value = Integer.parseInt(no);
@@ -719,6 +716,7 @@ public class KcaExpeditionCheckViewService extends Service {
 
     public int setView() {
         try {
+            expedition_data = KcaApiData.getExpeditionNumByWorld(world);
             JsonArray api_ship = deckdata.get(selected)
                     .getAsJsonObject().getAsJsonArray("api_ship");
             ship_data.clear();
@@ -749,22 +747,28 @@ public class KcaExpeditionCheckViewService extends Service {
                         ship_data.add(data);
                     }
                 }
-                for (int i: expedition_list) {
-                    String key = String.valueOf(i);
-                    checkdata.put(key, checkCondition(i));
-                    if (checkdata.get(key).get("pass").getAsBoolean()) {
-                        mView.findViewById(getId("expedition_btn_".concat(String.valueOf(i)), R.id.class))
-                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodBack));
-                        ((TextView) mView.findViewById(getId("expedition_btn_".concat(String.valueOf(i)), R.id.class)))
-                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodText));
-                    } else {
-                        mView.findViewById(getId("expedition_btn_".concat(String.valueOf(i)), R.id.class))
-                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailBack));
-                        ((TextView) mView.findViewById(getId("expedition_btn_".concat(String.valueOf(i)), R.id.class)))
-                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailText));
+
+                checkdata = new HashMap<>();
+                for (int i = 0; i < 15; i++) {
+                    if (i < expedition_data.size()) {
+                        int expd = expedition_data.get(i);
+                        String key = String.valueOf(expd);
+                        checkdata.put(key, checkCondition(expd));
+                        if (checkdata.get(key).get("pass").getAsBoolean()) {
+                            mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
+                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodBack));
+                            ((TextView) mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
+                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodText));
+                        } else {
+                            mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
+                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailBack));
+                            ((TextView) mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
+                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailText));
+                        }
                     }
                 }
-                updateSelectedView(selected);
+
+                updateSelectedView(selected, world);
 
                 JsonObject bonus_info = getBonusInfo();
                 List<String> bonus_info_text = new ArrayList<>();
@@ -815,51 +819,34 @@ public class KcaExpeditionCheckViewService extends Service {
         }
     }
 
-    private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
-        private static final int MAX_CLICK_DURATION = 200;
-        private long startClickTime = -1;
-        private long clickDuration;
-
+    private View.OnClickListener mViewClickListener = new View.OnClickListener() {
         @Override
-        public boolean onTouch(View v, MotionEvent event) {
+        public void onClick(View v) {
             int id = v.getId();
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    Log.e("KCA-FV", "ACTION_DOWN");
-                    startClickTime = Calendar.getInstance().getTimeInMillis();
-                    if (checkUserShipDataLoaded()) {
-                        for (int no: expedition_list) {
-                            if (id == mView.findViewById(getId("expedition_btn_".concat(String.valueOf(no)), R.id.class)).getId()) {
-                                setItemViewLayout(KcaApiData.getExpeditionInfo(no, locale));
-                                showInfoView(event, no);
-                                break;
-                            }
-                        }
+            if (id == mView.findViewById(R.id.excheckview_head).getId()) {
+                stopSelf();
+            } else if (checkUserShipDataLoaded()) {
+                for (int i = 1; i <= 7; i++) {
+                    if (id == mView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).getId()) {
+                        world = i;
+                        setView();
+                        return;
                     }
-                    break;
-                case MotionEvent.ACTION_UP:
-                    Log.e("KCA-FV", "ACTION_UP");
-                    clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                    itemView.setVisibility(View.GONE);
-
-                    if (clickDuration < MAX_CLICK_DURATION) {
-                        if (id == mView.findViewById(R.id.excheckview_head).getId()) {
-                            stopSelf();
-                        } else {
-                            for (int i = 1; i < 4; i++) {
-                                if (id == mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
-                                    if (i < deckdata.size()) {
-                                        selected = i;
-                                    }
-                                    setView();
-                                    break;
-                                }
-                            }
-                        }
+                }
+                for (int i = 1; i < 4; i++) {
+                    if (id == mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
+                        if (i < deckdata.size()) { selected = i; }
+                        setView();
+                        return;
                     }
-                    break;
+                }
+                for (int i = 0; i < 15; i++) {
+                    if (id == mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).getId()) {
+                        setItemViewLayout(i);
+                        break;
+                    }
+                }
             }
-            return true;
         }
     };
 }

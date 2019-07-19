@@ -508,6 +508,8 @@
     <string name="expdtable_btn_w3">3해역</string>
     <string name="expdtable_btn_w4">4해역</string>
     <string name="expdtable_btn_w5">5해역</string>
+    <string name="expdtable_btn_w6">6해역</string>
+    <string name="expdtable_btn_w7">7해역</string>
     <string name="expdtable_btn_s1">일반</string>
     <string name="expdtable_btn_s2">대성공</string>
 

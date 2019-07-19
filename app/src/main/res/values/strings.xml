@@ -584,6 +584,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expdtable_btn_w3">World 3</string>
     <string name="expdtable_btn_w4">World 4</string>
     <string name="expdtable_btn_w5">World 5</string>
+    <string name="expdtable_btn_w6">World 6</string>
+    <string name="expdtable_btn_w7">World 7</string>
     <string name="expdtable_btn_s1">Normal</string>
     <string name="expdtable_btn_s2">Great</string>
     <string name="expdtable_label_no">No</string>

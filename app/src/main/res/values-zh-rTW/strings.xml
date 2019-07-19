@@ -515,6 +515,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expdtable_btn_w3">北方</string>
     <string name="expdtable_btn_w4">西方</string>
     <string name="expdtable_btn_w5">南方</string>
+    <string name="expdtable_btn_w6">中部</string>
+    <string name="expdtable_btn_w7">南西</string>
     <string name="expdtable_btn_s1">一般</string>
     <string name="expdtable_btn_s2">大成功</string>
     <string name="expdtable_label_no">編號</string>

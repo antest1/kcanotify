@@ -743,6 +743,21 @@ public class KcaApiData {
         return kcExpeditionData.entrySet().size() > 0;
     }
 
+    public static List<Integer> getExpeditionNumByWorld(int world) {
+        List<Integer> list = new ArrayList<>();
+        if (isExpeditionDataLoaded()) {
+            for (String key: kcExpeditionData.keySet()) {
+                JsonObject rawdata = kcExpeditionData.getAsJsonObject(String.valueOf(key));
+                int w = rawdata.get("area").getAsInt();
+                if (world == w) {
+                    list.add(Integer.parseInt(key));
+                }
+            }
+        }
+        return list;
+    }
+
+
     public static JsonObject getExpeditionInfo(int mission_no, String locale) {
         int mission_key = mission_no;
         if (mission_no >= 130) {

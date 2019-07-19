@@ -508,7 +508,9 @@
     <string name="expdtable_btn_w2">Mundo 2</string>
     <string name="expdtable_btn_w3">Mundo 3</string>
     <string name="expdtable_btn_w4">Mundo 4</string>
-    <string name="expdtable_btn_w5">Mundo 6</string>
+    <string name="expdtable_btn_w5">Mundo 5</string>
+    <string name="expdtable_btn_w6">Mundo 6</string>
+    <string name="expdtable_btn_w7">Mundo 7</string>
     <string name="expdtable_btn_s1">Normal</string>
     <string name="expdtable_btn_s2">Gran</string>
 
