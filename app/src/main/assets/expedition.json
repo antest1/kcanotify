@@ -186,6 +186,25 @@
 	"total-asw": 280,
 	"total-los": 60
 }, {
+	"no": "103",
+	"area": 1,
+	"name": {
+		"ko": "남서방면연락선초계",
+		"en": "Southwestern Communication Line Patrol",
+		"jp": "南西方面連絡線哨戒",
+		"scn": "南西方面连络线哨戒",
+		"tcn": "南西方面連絡線哨戒"
+	},
+	"time": 110,
+	"resource": [80, 120, 0, 100],
+	"reward": [[1, 2], [2, 2]],	
+	"exp": [45, 55],
+	"flag-lv": 50,
+	"total-num": 5,
+	"total-lv": 185,
+	"total-cond": "7-1|2-4",
+	"total-firepower": 300
+}, {
 	"no": "9",
 	"area": 2,
 	"name": {
@@ -349,7 +368,7 @@
 	"name": {
 		"ko": "적박지강습반격작전",
 		"en": "Enemy Anchorage Assault Counterattack Operations",
-		"jp": "敵泊地強襲反撃作戦	",
+		"jp": "敵泊地強襲反撃作戦",
 		"scn": "敌方泊地强袭反击作战",
 		"tcn": "敵方泊地強襲反擊作戰"
 	},
@@ -362,6 +381,44 @@
 	"total-lv": 290,
 	"total-cond": "5-1|3-1|2-3",
 	"total-firepower": 360
+}, {
+	"no": "112",
+	"area": 2,
+	"name": {
+		"ko": "남서제도이도초계작전",
+		"en": "Southwestern Islands Remote Island Patrol Operation",
+		"jp": "南西諸島離島哨戒作戦",
+		"scn": "南西诸岛离岛哨戒作戦",
+		"tcn": "南西諸島離島哨戒作戦"
+	},
+	"time": 170,
+	"resource": [0, 100, 100, 180],
+	"reward": [[12, 1], [1, 2]],
+	"exp": [50, 80],
+	"flag-lv": 45,
+	"total-num": 6,
+	"total-lv": 290,
+	"total-cond": "16-1|3-1|2-4",
+	"total-firepower": 400
+}, {
+	"no": "113",
+	"area": 2,
+	"name": {
+		"ko": "남서제도이도방위작전",
+		"en": "Southwestern Islands Remote Island Defense Operation",
+		"jp": "南西諸島離島防衛作戦",
+		"scn": "南西诸岛离岛防卫作戦",
+		"tcn": "南西諸島離島防衛作戦"
+	},
+	"time": 450,
+	"resource": [0, 0, 1200, 650],
+	"reward": [[3, 4], [1, 1]],
+	"exp": [60, 100],
+	"flag-lv": 50,
+	"total-num": 6,
+	"total-lv": 340,
+	"total-cond": "5-1|3-1|2-3",
+	"total-firepower": 450
 }, {
 	"no": "17",
 	"area": 3,
@@ -787,6 +844,81 @@
 	"total-num": 6,
 	"total-cond": "3-1|16-2|2-2",
 	"drum-num-optional": 4
+}, {
+	"no": "41",
+	"area": 7,
+	"name": {
+		"ko": "브루네이정박지호위",
+		"en": "Brunei Anchorage Patrol",
+		"jp": "ブルネイ泊地沖哨戒",
+		"scn": "文莱泊地近海巡逻",
+		"tcn": "文萊泊地近海巡邏"
+	},
+	"time": 60,
+	"resource": [100, 0, 0, 20],
+	"reward": [[3, 1], [1, 1]],
+	"exp": [30, 100],
+	"flag-lv": 30,
+	"total-num": 3,
+	"total-asw": 210,
+	"total-cond": "1-2|2-1"
+},{
+	"no": "42",
+	"area": 7,
+	"name": {
+		"ko": "미선단호위(1호선단)",
+		"en": "Mi-convoy Escort (1st convoy)",
+		"jp": "ミ船団護衛(一号船団)",
+		"scn": "MI船団护卫(一号船団)",
+		"tcn": "MI船団護衛(一號船団)"
+	},
+	"time": 480,
+	"resource": [800, 0, 0, 200],
+	"reward": [[12, 1], [2, 3]],
+	"exp": [60, 70],
+	"flag-lv": 40,
+	"total-lv": 150,
+	"total-num": 4,
+	"total-asw": 300,
+	"total-cond": "7-1|2-1|1-2"
+	
+},{
+	"no": "43",
+	"area": 7,
+	"name": {
+		"ko": "미선단호위(2호선단)",
+		"en": "Mi-convoy Escort (2nd convoy)",
+		"jp": "ミ船団護衛(二号船団)",
+		"scn": "MI船団护卫(二号船団)",
+		"tcn": "MI船団護衛(二號船団)"
+	},
+	"time": 720,
+	"resource": [2000, 0, 0, 400],
+	"reward": [[3, 3], [4, 1]],
+	"exp": [150, 180],
+	"flag-lv": 60,
+	"total-lv": 150,
+	"total-num": 6,
+	"total-firepower": 550,
+	"total-cond": "7-1|5-2|2-3/7-1|2-3|1-2"
+},{
+	"no": "44",
+	"area": 7,
+	"name": {
+		"ko": "항공장비운송임무",
+		"en": "Aviation Equipment Delivery Mission",
+		"jp": "航空装備輸送任務",
+		"scn": "航空装备输送任务",
+		"tcn": "航空裝備輸送任務"
+	},
+	"time": 600,
+	"resource": [0, 200, 0, 800],
+	"reward": [[3, 4], [12, 2]],
+	"exp": [60, 70],
+	"flag-lv": 25,
+	"total-lv": 150,
+	"total-num": 6,
+	"total-cond": "7-2|16-1|3-1|2-2"
 }, {
 	"no": "133",
 	"area": 99,
