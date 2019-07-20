@@ -79,17 +79,14 @@ public class ExpeditionTableActivity extends AppCompatActivity {
         String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
         adapter = new KcaExpeditionTableViewAdpater(getApplicationContext(), getBaseContext(), getResourceLocaleCode(locale));
 
-        for (int i = 0; i <= 5; i++) {
+        for (int i = 0; i <= 7; i++) {
             final int target = i;
             TextView w_btn = findViewById(getId(KcaUtils.format("btn_w%d", i), R.id.class));
-            w_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    world_idx = target;
-                    adapter.setListViewItemList(expeditionData, world_idx);
-                    listview = findViewById(R.id.expeditiontable_listiview);
-                    listview.setAdapter(adapter);
-                }
+            w_btn.setOnClickListener(view -> {
+                world_idx = target;
+                adapter.setListViewItemList(expeditionData, world_idx);
+                listview = findViewById(R.id.expeditiontable_listiview);
+                listview.setAdapter(adapter);
             });
         }
 

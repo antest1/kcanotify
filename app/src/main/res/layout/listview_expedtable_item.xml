@@ -188,7 +188,7 @@
                                 android:paddingBottom="2dp"
                                 android:paddingTop="2dp"
                                 android:visibility="visible"
-                                app:srcCompat="@mipmap/icon_development_material" />
+                                app:srcCompat="@mipmap/common_itemicons_id_3" />
 
                             <ImageView
                                 android:id="@+id/value_spitem2_abs"
@@ -199,7 +199,7 @@
                                 android:paddingBottom="2dp"
                                 android:paddingTop="2dp"
                                 android:visibility="visible"
-                                app:srcCompat="@mipmap/icon_instant_repair" />
+                                app:srcCompat="@mipmap/common_itemicons_id_1" />
 
                         </LinearLayout>
 
@@ -553,7 +553,7 @@
                                     android:layout_weight="1"
                                     android:paddingBottom="2dp"
                                     android:paddingTop="2dp"
-                                    app:srcCompat="@mipmap/icon_development_material" />
+                                    app:srcCompat="@mipmap/common_itemicons_id_3" />
 
                                 <TextView
                                     android:id="@+id/value_spitem1_count"
@@ -581,7 +581,7 @@
                                     android:layout_weight="1"
                                     android:paddingBottom="2dp"
                                     android:paddingTop="2dp"
-                                    app:srcCompat="@mipmap/icon_instant_repair" />
+                                    app:srcCompat="@mipmap/common_itemicons_id_1" />
 
                                 <TextView
                                     android:id="@+id/value_spitem2_count"

@@ -239,30 +239,12 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
 
     private void setRewardData(ImageView type_view, int type, TextView count_view, int count) {
         type_view.setVisibility(type > 0 ? View.VISIBLE : View.INVISIBLE);
-        switch(type) {
-            case 1:
-                type_view.setImageResource(R.mipmap.icon_instant_repair);
-                break;
-            case 2:
-                type_view.setImageResource(R.mipmap.icon_instant_construction);
-                break;
-            case 3:
-                type_view.setImageResource(R.mipmap.icon_development_material);
-                break;
-            case 10:
-                type_view.setImageResource(R.mipmap.icon_furniture_box_small);
-                break;
-            case 11:
-                type_view.setImageResource(R.mipmap.icon_furniture_box_medium);
-                break;
-            case 12:
-                type_view.setImageResource(R.mipmap.icon_furniture_box_large);
-                break;
-            default:
-                type_view.setImageResource(R.color.transparent);
-                break;
+        if (type == 0) {
+            type_view.setImageResource(R.color.transparent);
+        } else {
+            int item_id = KcaUtils.getId("common_itemicons_id_" + type, R.mipmap.class);
+            type_view.setImageResource(item_id);
         }
-
         if (count_view != null) {
             count_view.setText(KcaUtils.format("x%d", count));
             count_view.setVisibility(type > 0 ? View.VISIBLE : View.GONE);
@@ -435,7 +417,7 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
     }
 
     public int getAreaColor(int area) {
-        if (area < 1 || area > 5) area = 99;
+        if (area < 1 || area > 7) area = 99;
         return KcaUtils.getId(KcaUtils.format("colorExpeditionTable%d", area), R.color.class);
     }
 

@@ -28,10 +28,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
                 android:orientation="vertical">
@@ -100,6 +100,19 @@
                         android:textSize="15dp" />
 
                     <TextView
+                        android:id="@+id/btn_w7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:layout_weight="1"
+                        android:background="@color/colorExpeditionTable7"
+                        android:padding="5dp"
+                        android:text="@string/expdtable_btn_w7"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="15dp" />
+
+                    <TextView
                         android:id="@+id/btn_w4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -112,70 +125,92 @@
                         android:textColor="@color/white"
                         android:textSize="15dp" />
 
-                    <TextView
-                        android:id="@+id/btn_w5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1"
-                        android:background="@color/colorExpeditionTable5"
-                        android:padding="5dp"
-                        android:text="@string/expdtable_btn_w5"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="15dp" />
-
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.2"
-                android:background="@color/colorExpeditionItemBack"
-                android:orientation="vertical">
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/btn_success_type"
+                    android:id="@+id/btn_w5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
                     android:layout_weight="1"
-                    android:background="@color/colorBtn"
+                    android:background="@color/colorExpeditionTable5"
                     android:padding="5dp"
-                    android:text="@string/expdtable_btn_s2"
+                    android:text="@string/expdtable_btn_w5"
                     android:textAlignment="center"
-                    android:textColor="@color/colorBtnText"
+                    android:textColor="@color/white"
                     android:textSize="15dp" />
 
-                <LinearLayout
-                    android:id="@+id/btn_daihatsu"
+                <TextView
+                    android:id="@+id/btn_w6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
                     android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
+                    android:background="@color/colorExpeditionTable6"
+                    android:padding="5dp"
+                    android:text="@string/expdtable_btn_w6"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:visibility="visible" />
 
-                    <ImageView
-                        android:id="@+id/btn_daihatsu_img"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        app:srcCompat="@mipmap/item_20" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right|end"
+                    android:layout_weight="1"
+                    android:background="@color/colorExpeditionItemBack"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/btn_daihatsu_value"
-                        android:layout_width="0dp"
+                        android:id="@+id/btn_success_type"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_margin="3dp"
                         android:layout_weight="1"
-                        android:text="x0"
-                        android:textAlignment="textStart"
-                        android:textColor="@color/black" />
-                </LinearLayout>
+                        android:background="@color/colorBtn"
+                        android:padding="5dp"
+                        android:text="@string/expdtable_btn_s2"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBtnText"
+                        android:textSize="15dp" />
 
+                    <LinearLayout
+                        android:id="@+id/btn_daihatsu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:id="@+id/btn_daihatsu_img"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            app:srcCompat="@mipmap/item_20" />
+
+                        <TextView
+                            android:id="@+id/btn_daihatsu_value"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="x0"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
