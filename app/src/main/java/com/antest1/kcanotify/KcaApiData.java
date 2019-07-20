@@ -764,13 +764,17 @@ public class KcaApiData {
             if (mission_no % 2 == 1) mission_key = 133;
             else mission_key = 134;
         }
-        JsonObject rawdata = kcExpeditionData.getAsJsonObject(String.valueOf(mission_key));
-        JsonObject data = new JsonParser().parse(rawdata.toString()).getAsJsonObject();
-        JsonObject name = data.getAsJsonObject("name");
-        if (name.has(locale)) {
-            data.addProperty("name", name.get(locale).getAsString());
-        } else {
-            data.addProperty("name", name.get("en").getAsString());
+        JsonObject data = null;
+        String key = String.valueOf(mission_key);
+        if (kcExpeditionData.has(key)) {
+            JsonObject rawdata = kcExpeditionData.getAsJsonObject(String.valueOf(mission_key));
+            data = new JsonParser().parse(rawdata.toString()).getAsJsonObject();
+            JsonObject name = data.getAsJsonObject("name");
+            if (name.has(locale)) {
+                data.addProperty("name", name.get(locale).getAsString());
+            } else {
+                data.addProperty("name", name.get("en").getAsString());
+            }
         }
         return data;
     }
@@ -781,13 +785,17 @@ public class KcaApiData {
             if (mission_no % 2 == 1) mission_key = 133;
             else mission_key = 134;
         }
-        JsonObject data = kcExpeditionData.getAsJsonObject(String.valueOf(mission_key));
-        JsonObject name = data.getAsJsonObject("name");
-        if (name.has(locale)) {
-            return name.get(locale).getAsString();
-        } else {
-            return name.get("en").getAsString();
+        String key = String.valueOf(mission_key);
+        if (kcExpeditionData.has(key)) {
+            JsonObject data = kcExpeditionData.getAsJsonObject(String.valueOf(mission_key));
+            JsonObject name = data.getAsJsonObject("name");
+            if (name.has(locale)) {
+                return name.get(locale).getAsString();
+            } else {
+                return name.get("en").getAsString();
+            }
         }
+        return "";
     }
 
     public static long getExpeditionDuration(int mission_no) {

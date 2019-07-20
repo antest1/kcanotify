@@ -260,6 +260,7 @@ public class KcaExpeditionCheckViewService extends Service {
         JsonObject result = new JsonObject();
 
         JsonObject data = KcaApiData.getExpeditionInfo(exp_no, locale);
+        if (data == null) return null;
 
         boolean has_flag_lv = data.has("flag-lv");
         boolean has_flag_cond = data.has("flag-cond");
@@ -754,16 +755,19 @@ public class KcaExpeditionCheckViewService extends Service {
                         int expd = expedition_data.get(i);
                         String key = String.valueOf(expd);
                         checkdata.put(key, checkCondition(expd));
-                        if (checkdata.get(key).get("pass").getAsBoolean()) {
-                            mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
-                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodBack));
-                            ((TextView) mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
-                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodText));
-                        } else {
-                            mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
-                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailBack));
-                            ((TextView) mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
-                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailText));
+                        JsonObject check_item = checkdata.get(key);
+                        if (check_item != null) {
+                            if (check_item.get("pass").getAsBoolean()) {
+                                mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
+                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodBack));
+                                ((TextView) mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
+                                        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodText));
+                            } else {
+                                mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
+                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailBack));
+                                ((TextView) mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
+                                        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailText));
+                            }
                         }
                     }
                 }

@@ -252,6 +252,8 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
     }
 
     private void setConditionContent(View root_view, JsonObject data) {
+        if (data == null) return;
+
         int total_num = data.get("total-num").getAsInt();
         boolean has_flag_lv = data.has("flag-lv");
         boolean has_flag_cond = data.has("flag-cond");
