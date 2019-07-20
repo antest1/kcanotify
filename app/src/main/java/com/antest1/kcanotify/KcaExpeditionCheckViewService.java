@@ -72,6 +72,7 @@ public class KcaExpeditionCheckViewService extends Service {
     String locale;
     int selected = 1;
     int world = 1;
+    int button = 0;
     JsonArray deckdata;
     List<JsonObject> ship_data;
     List<Integer> expedition_data = new ArrayList<>();
@@ -196,6 +197,7 @@ public class KcaExpeditionCheckViewService extends Service {
                     if (selected_new < deckdata.size()) {
                         selected = selected_new;
                     }
+                    clearItemViewLayout();
                     int setViewResult = setView();
                     if (setViewResult == 0) {
                         if (mView.getParent() != null) {
@@ -572,6 +574,24 @@ public class KcaExpeditionCheckViewService extends Service {
         return views;
     }
 
+    private void clearItemViewLayout() {
+        ((TextView) itemView.findViewById(R.id.view_excheck_title)).setText("");
+        ((TextView) itemView.findViewById(R.id.view_excheck_time)).setText("");
+        setItemViewVisibilityById(R.id.view_excheck_flagship, false);
+        setItemViewVisibilityById(R.id.view_excheck_flagship_lv, false);
+        setItemViewVisibilityById(R.id.view_excheck_flagship_cond, false);
+        setItemViewVisibilityById(R.id.view_excheck_fleet, false);
+        setItemViewVisibilityById(R.id.view_excheck_fleet_total_lv, false);
+        setItemViewVisibilityById(R.id.view_excheck_fleet_condition, false);
+        setItemViewVisibilityById(R.id.view_excheck_drum, false);
+        setItemViewVisibilityById(R.id.view_excheck_drum_ship, false);
+        setItemViewVisibilityById(R.id.view_excheck_drum_count, false);
+        setItemViewVisibilityById(R.id.view_excheck_asw, false);
+        setItemViewVisibilityById(R.id.view_excheck_fp, false);
+        setItemViewVisibilityById(R.id.view_excheck_los, false);
+        setItemViewVisibilityById(R.id.view_excheck_firepower, false);
+    }
+
     public void setItemViewLayout(int index) {
         int expd_value = expedition_data.get(index);
         Log.e("KCA", String.valueOf(index) + " " + expd_value);
@@ -633,6 +653,7 @@ public class KcaExpeditionCheckViewService extends Service {
             }
         }
 
+        setItemViewVisibilityById(R.id.view_excheck_fleet, true);
         setItemViewVisibilityById(R.id.view_excheck_fleet_total_lv, has_total_lv);
         if (has_total_lv) {
             int total_lv = data.get("total-lv").getAsInt();
@@ -685,7 +706,7 @@ public class KcaExpeditionCheckViewService extends Service {
                     check.get("total-asw").getAsBoolean(), false);
         }
 
-        setItemViewVisibilityById(R.id.view_excheck_fp, has_total_asw);
+        setItemViewVisibilityById(R.id.view_excheck_fp, has_total_fp);
         if (has_total_fp) {
             int total_fp = data.get("total-fp").getAsInt();
             setItemTextViewById(R.id.view_excheck_total_fp,
@@ -811,6 +832,7 @@ public class KcaExpeditionCheckViewService extends Service {
                 ((TextView) mView.findViewById(R.id.excheck_info)).setText(bonus_info_content);
                 mView.findViewById(R.id.excheck_info).setBackgroundColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpedition));
+                setItemViewLayout(button);
             } else {
                 ((TextView) mView.findViewById(R.id.excheck_info)).setText(getStringWithLocale(R.string.kca_init_content));
                 mView.findViewById(R.id.excheck_info).setBackgroundColor(
@@ -833,6 +855,8 @@ public class KcaExpeditionCheckViewService extends Service {
                 for (int i = 1; i <= 7; i++) {
                     if (id == mView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).getId()) {
                         world = i;
+                        button = 0;
+                        clearItemViewLayout();
                         setView();
                         return;
                     }
@@ -846,7 +870,8 @@ public class KcaExpeditionCheckViewService extends Service {
                 }
                 for (int i = 0; i < 15; i++) {
                     if (id == mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).getId()) {
-                        setItemViewLayout(i);
+                        button = i;
+                        setItemViewLayout(button);
                         break;
                     }
                 }
