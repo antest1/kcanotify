@@ -331,7 +331,7 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
                     KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_asw));
         }
 
-        setItemViewVisibilityById(root_view, R.id.view_excheck_fp, has_total_asw);
+        setItemViewVisibilityById(root_view, R.id.view_excheck_fp, has_total_fp);
         if (has_total_fp) {
             int total_fp = data.get("total-fp").getAsInt();
             setItemTextViewById(root_view, R.id.view_excheck_total_fp,

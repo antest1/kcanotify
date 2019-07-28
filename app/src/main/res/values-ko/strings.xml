@@ -618,6 +618,7 @@
     <string name="excheckview_drum_ship_format" formatted="false">%d척 이상 장비</string>
     <string name="excheckview_drum_num_format" formatted="false">총 %d개 이상</string>
     <string name="excheckview_total_format" formatted="false">합계 %d+</string>
+    <string name="excheckview_bonus_firepower" formatted="false">화력: %d</string>
     <string name="excheckview_bonus_asw" formatted="false">대잠: %d</string>
     <string name="excheckview_bonus_los" formatted="false">색적: %d</string>
     <string name="excheckview_bonus_kinu">키누改2</string>

@@ -623,6 +623,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_drum_ship_format" formatted="false">至少裝備於%d個艦娘上</string>
     <string name="excheckview_drum_num_format" formatted="false">總數%d個以上</string>
     <string name="excheckview_total_format" formatted="false">總合：%d+</string>
+    <string name="excheckview_bonus_firepower" formatted="false">火力: %d</string>
     <string name="excheckview_bonus_asw" formatted="false">對潛：%d</string>
     <string name="excheckview_bonus_los" formatted="false">索敵：%d</string>
     <string name="excheckview_bonus_kinu">鬼怒改二</string>

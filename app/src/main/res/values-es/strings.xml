@@ -610,7 +610,7 @@
     <string name="excheckview_total_info">Flota</string>
     <string name="excheckview_drum_info">Tambores</string>
     <string name="excheckview_asw_info">Anti-Sub</string>
-    <string name="excheckview_fp_info">FP</string>
+    <string name="excheckview_fp_info">Anti-Air</string>
     <string name="excheckview_los_info">LoS</string>
     <string name="excheckview_firepower_info">Poder de Fuego</string>
     <string name="excheckview_flag_lv_format" formatted="false">Nivel %d+</string>
@@ -619,6 +619,7 @@
     <string name="excheckview_drum_ship_format" formatted="false">%d barcos con tambores</string>
     <string name="excheckview_drum_num_format" formatted="false">%d tambores en total</string>
     <string name="excheckview_total_format" formatted="false">Total %d+</string>
+    <string name="excheckview_bonus_firepower" formatted="false">Firepower: %d</string>
     <string name="excheckview_bonus_asw" formatted="false">Anti-Sub: %d</string>
     <string name="excheckview_bonus_los" formatted="false">LoS: %d</string>
     <string name="excheckview_bonus_kinu">Kinu Kai Ni</string>
