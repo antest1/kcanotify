@@ -201,9 +201,10 @@
 	"exp": [45, 55],
 	"flag-lv": 50,
 	"total-num": 5,
-	"total-lv": 185,
-	"total-cond": "7-1|2-4",
-	"total-firepower": 300
+	"total-lv": 210,
+	"total-cond": "3-1|2-4/27-1|2-4",
+	"total-firepower": 300,
+	"total-asw": 200
 }, {
 	"no": "9",
 	"area": 2,
@@ -395,11 +396,12 @@
 	"resource": [0, 100, 100, 180],
 	"reward": [[12, 1], [1, 2]],
 	"exp": [50, 80],
-	"flag-lv": 45,
+	"flag-lv": 50,
 	"total-num": 6,
 	"total-lv": 290,
 	"total-cond": "16-1|3-1|2-4",
-	"total-firepower": 400
+	"total-firepower": 400,
+	"total-asw": 240
 }, {
 	"no": "113",
 	"area": 2,
@@ -414,11 +416,93 @@
 	"resource": [0, 0, 1200, 650],
 	"reward": [[3, 4], [1, 1]],
 	"exp": [60, 100],
-	"flag-lv": 50,
+	"flag-lv": 55,
 	"total-num": 6,
 	"total-lv": 340,
-	"total-cond": "5-1|3-1|2-3",
-	"total-firepower": 450
+	"total-cond": "5-2|3-1|2-2|13,14-1",
+	"total-firepower": 500,
+	"total-asw": 280
+}, {
+	"no": "41",
+	"area": 7,
+	"name": {
+		"ko": "브루네이정박지호위",
+		"en": "Brunei Anchorage Patrol",
+		"jp": "ブルネイ泊地沖哨戒",
+		"scn": "文莱泊地近海巡逻",
+		"tcn": "文萊泊地近海巡邏"
+	},
+	"time": 60,
+	"resource": [100, 0, 0, 20],
+	"reward": [[3, 1], [1, 1]],
+	"exp": [30, 100],
+	"flag-lv": 30,
+	"total-lv": 115,
+	"total-num": 3,
+	"total-asw": 210,
+	"total-fp": 80,
+	"total-cond": "1-2|2-1"
+}, {
+	"no": "42",
+	"area": 7,
+	"name": {
+		"ko": "미선단호위(1호선단)",
+		"en": "Mi-convoy Escort (1st convoy)",
+		"jp": "ミ船団護衛(一号船団)",
+		"scn": "MI船団护卫(一号船団)",
+		"tcn": "MI船団護衛(一號船団)"
+	},
+	"time": 480,
+	"resource": [800, 0, 0, 200],
+	"reward": [[12, 1], [2, 3]],
+	"exp": [60, 70],
+	"flag-lv": 45,
+	"total-lv": 200,
+	"total-num": 4,
+	"total-asw": 190,
+	"total-cond": "27-1|2-1|1-2/27-1|2-3/3-1|2-3"
+	
+}, {
+	"no": "43",
+	"area": 7,
+	"name": {
+		"ko": "미선단호위(2호선단)",
+		"en": "Mi-convoy Escort (2nd convoy)",
+		"jp": "ミ船団護衛(二号船団)",
+		"scn": "MI船団护卫(二号船団)",
+		"tcn": "MI船団護衛(二號船団)"
+	},
+	"time": 720,
+	"resource": [2000, 0, 0, 400],
+	"reward": [[3, 3], [4, 1]],
+	"exp": [150, 180],
+	"flag-lv": 60,
+	"total-lv": 240,
+	"total-num": 6,
+	"total-firepower": 500,
+	"total-asw": 280,
+	"total-cond": "7-1|2-3"
+}, {
+	"no": "44",
+	"area": 7,
+	"name": {
+		"ko": "항공장비운송임무",
+		"en": "Aviation Equipment Delivery Mission",
+		"jp": "航空装備輸送任務",
+		"scn": "航空装备输送任务",
+		"tcn": "航空裝備輸送任務"
+	},
+	"time": 600,
+	"resource": [0, 200, 0, 800],
+	"reward": [[3, 4], [12, 2]],
+	"exp": [60, 70],
+	"flag-lv": 63,
+	"total-lv": 280,
+	"total-num": 6,
+	"total-cond": "7,11,16,18-2|16-1|3-1|2-2",
+	"total-asw": 200,
+	"drum-ship": 3,
+	"drum-num": 6
 }, {
 	"no": "17",
 	"area": 3,
@@ -844,81 +928,6 @@
 	"total-num": 6,
 	"total-cond": "3-1|16-2|2-2",
 	"drum-num-optional": 4
-}, {
-	"no": "41",
-	"area": 7,
-	"name": {
-		"ko": "브루네이정박지호위",
-		"en": "Brunei Anchorage Patrol",
-		"jp": "ブルネイ泊地沖哨戒",
-		"scn": "文莱泊地近海巡逻",
-		"tcn": "文萊泊地近海巡邏"
-	},
-	"time": 60,
-	"resource": [100, 0, 0, 20],
-	"reward": [[3, 1], [1, 1]],
-	"exp": [30, 100],
-	"flag-lv": 30,
-	"total-num": 3,
-	"total-asw": 210,
-	"total-cond": "1-2|2-1"
-},{
-	"no": "42",
-	"area": 7,
-	"name": {
-		"ko": "미선단호위(1호선단)",
-		"en": "Mi-convoy Escort (1st convoy)",
-		"jp": "ミ船団護衛(一号船団)",
-		"scn": "MI船団护卫(一号船団)",
-		"tcn": "MI船団護衛(一號船団)"
-	},
-	"time": 480,
-	"resource": [800, 0, 0, 200],
-	"reward": [[12, 1], [2, 3]],
-	"exp": [60, 70],
-	"flag-lv": 40,
-	"total-lv": 150,
-	"total-num": 4,
-	"total-asw": 300,
-	"total-cond": "7-1|2-1|1-2"
-	
-},{
-	"no": "43",
-	"area": 7,
-	"name": {
-		"ko": "미선단호위(2호선단)",
-		"en": "Mi-convoy Escort (2nd convoy)",
-		"jp": "ミ船団護衛(二号船団)",
-		"scn": "MI船団护卫(二号船団)",
-		"tcn": "MI船団護衛(二號船団)"
-	},
-	"time": 720,
-	"resource": [2000, 0, 0, 400],
-	"reward": [[3, 3], [4, 1]],
-	"exp": [150, 180],
-	"flag-lv": 60,
-	"total-lv": 150,
-	"total-num": 6,
-	"total-firepower": 550,
-	"total-cond": "7-1|5-2|2-3/7-1|2-3|1-2"
-},{
-	"no": "44",
-	"area": 7,
-	"name": {
-		"ko": "항공장비운송임무",
-		"en": "Aviation Equipment Delivery Mission",
-		"jp": "航空装備輸送任務",
-		"scn": "航空装备输送任务",
-		"tcn": "航空裝備輸送任務"
-	},
-	"time": 600,
-	"resource": [0, 200, 0, 800],
-	"reward": [[3, 4], [12, 2]],
-	"exp": [60, 70],
-	"flag-lv": 25,
-	"total-lv": 150,
-	"total-num": 6,
-	"total-cond": "7-2|16-1|3-1|2-2"
 }, {
 	"no": "133",
 	"area": 99,
