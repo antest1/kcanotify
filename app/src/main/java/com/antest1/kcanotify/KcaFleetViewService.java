@@ -1276,13 +1276,6 @@ public class KcaFleetViewService extends Service {
             if (mManager != null) {
                 if (mView.getParent() != null) mManager.removeViewImmediate(mView);
                 initView();
-                mParams = new WindowManager.LayoutParams(
-                        WindowManager.LayoutParams.MATCH_PARENT,
-                        WindowManager.LayoutParams.WRAP_CONTENT,
-                        getWindowLayoutType(),
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                        PixelFormat.TRANSLUCENT);
-                mParams.gravity = Gravity.CENTER;
                 mManager.addView(mView, mParams);
 
                 int setViewResult = setView();
