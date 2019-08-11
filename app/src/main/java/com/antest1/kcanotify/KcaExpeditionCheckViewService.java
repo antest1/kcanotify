@@ -435,8 +435,7 @@ public class KcaExpeditionCheckViewService extends Service {
                 for (JsonElement itemobj : obj.getAsJsonArray("item")) {
                     int level = itemobj.getAsJsonObject().get("level").getAsInt();
                     int type_t2 = itemobj.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
-                    if (type_t2 == T2_GUN_SMALL || type_t2 == T2_GUN_MEDIUM ||
-                            type_t2 == T2_GUN_LARGE || type_t2 == T2_GUN_LARGE_II) {
+                    if (type_t2 == T2_GUN_MEDIUM || type_t2 == T2_GUN_LARGE || type_t2 == T2_GUN_LARGE_II) {
                         total_firepower_value += Math.sqrt(level);
                     }
                 }
@@ -483,8 +482,7 @@ public class KcaExpeditionCheckViewService extends Service {
                 int slotitem_id = itemobj.getAsJsonObject().get("slotitem_id").getAsInt();
                 int level = itemobj.getAsJsonObject().get("level").getAsInt();
 
-                if (type_t2 == T2_GUN_SMALL || type_t2 == T2_GUN_MEDIUM ||
-                        type_t2 == T2_GUN_LARGE || type_t2 == T2_GUN_LARGE_II) {
+                if (type_t2 == T2_GUN_MEDIUM || type_t2 == T2_GUN_LARGE || type_t2 == T2_GUN_LARGE_II) {
                     total_firepower += Math.sqrt(level);
                 }
 
