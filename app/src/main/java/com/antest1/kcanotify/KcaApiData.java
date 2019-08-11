@@ -860,6 +860,16 @@ public class KcaApiData {
         return userShipData.size();
     }
 
+    public static void updateShipHpOnBattle(int api_id, int hp_value) {
+        if (userShipData != null && userShipData.containsKey(api_id)) {
+            JsonObject data = userShipData.get(api_id);
+            if (data != null) {
+                data.addProperty("api_nowhp", hp_value);
+                userShipData.put(api_id, data);
+            }
+        }
+    }
+
     public static int updatePortDataOnBattle(JsonObject api_data) {
         if (api_data.has("api_ship_data")) {
             JsonArray shipDataArray = (JsonArray) api_data.get("api_ship_data");

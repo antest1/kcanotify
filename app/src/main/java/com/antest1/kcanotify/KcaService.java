@@ -1314,7 +1314,6 @@ public class KcaService extends Service {
                             }
                         }
                         KcaBattle.setDeckPortData(api_data);
-
                         updateFleetView();
                     }
                 }
@@ -2286,20 +2285,51 @@ public class KcaService extends Service {
             if (url.startsWith(KCA_API_NOTI_BATTLE_INFO)) {
                 // jsonDataObj = dbHelper.getJsonObjectValue(DB_KEY_BATTLEINFO);
                 String api_url = jsonDataObj.get("api_url").getAsString();
-                if (api_url.startsWith(API_REQ_SORTIE_BATTLE_RESULT) || url.startsWith(API_REQ_COMBINED_BATTLERESULT)) {
-                    JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
-                    questTracker.updateBattleTracker(questTrackData);
-                    updateQuestView();
-                } else if (api_url.startsWith(API_REQ_PRACTICE_BATTLE_RESULT)) {
-                    JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
-                    String rank = questTrackData.get("result").getAsString();
-                    questTracker.updateIdCountTracker("303");
-                    if (rank.equals("S") || rank.equals("A") || rank.equals("B")) {
-                        questTracker.updateIdCountTracker("304");
-                        questTracker.updateIdCountTracker("302");
-                        questTracker.updateIdCountTracker("311");
+                JsonObject battleInfoData = dbHelper.getJsonObjectValue(DB_KEY_BATTLEINFO);
+                if (battleInfoData.has("is_result")) {
+                    JsonArray deck_data = battleInfoData.getAsJsonObject("deck_port").getAsJsonArray("api_deck_data");
+                    if (battleInfoData.has("api_f_afterhps")) {
+                        JsonObject main_fleet = deck_data.get(0).getAsJsonObject();
+                        JsonArray api_ship = main_fleet.getAsJsonArray("api_ship");
+                        JsonArray api_f_afterhps = battleInfoData.getAsJsonArray("api_f_afterhps");
+                        for (int i = 0; i < api_ship.size(); i++) {
+                            int ship_id = api_ship.get(i).getAsInt();
+                            if (ship_id != -1) {
+                                int now_hp = api_f_afterhps.get(i).getAsInt();
+                                KcaApiData.updateShipHpOnBattle(ship_id, now_hp);
+                            }
+                        }
                     }
-                    updateQuestView();
+
+                    if (battleInfoData.has("api_f_afterhps_combined")) {
+                        JsonObject combined_fleet = deck_data.get(1).getAsJsonObject();
+                        JsonArray api_ship = combined_fleet.getAsJsonArray("api_ship");
+                        JsonArray api_f_afterhps_combined = battleInfoData.getAsJsonArray("api_f_afterhps_combined");
+                        for (int i = 0; i < api_ship.size(); i++) {
+                            int ship_id = api_ship.get(i).getAsInt();
+                            if (ship_id != -1) {
+                                int now_hp = api_f_afterhps_combined.get(i).getAsInt();
+                                KcaApiData.updateShipHpOnBattle(ship_id, now_hp);
+                            }
+                        }
+                    }
+                    updateFleetView();
+
+                    if (api_url.startsWith(API_REQ_SORTIE_BATTLE_RESULT) || url.startsWith(API_REQ_COMBINED_BATTLERESULT)) {
+                        JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
+                        questTracker.updateBattleTracker(questTrackData);
+                        updateQuestView();
+                    } else if (api_url.startsWith(API_REQ_PRACTICE_BATTLE_RESULT)) {
+                        JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
+                        String rank = questTrackData.get("result").getAsString();
+                        questTracker.updateIdCountTracker("303");
+                        if (rank.equals("S") || rank.equals("A") || rank.equals("B")) {
+                            questTracker.updateIdCountTracker("304");
+                            questTracker.updateIdCountTracker("302");
+                            questTracker.updateIdCountTracker("311");
+                        }
+                        updateQuestView();
+                    }
                 }
                 Intent intent = new Intent(KCA_MSG_BATTLE_INFO);
                 broadcaster.sendBroadcast(intent);

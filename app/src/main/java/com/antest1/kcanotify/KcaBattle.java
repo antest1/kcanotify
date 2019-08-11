@@ -1215,7 +1215,10 @@ public class KcaBattle {
                 if (url.equals(API_REQ_PRACTICE_BATTLE_RESULT)) {
                     battleResultInfo.addProperty("api_practice_flag", true);
                 }
+                battleResultInfo.addProperty("is_result", true);
                 battleResultInfo.addProperty("api_heavy_damaged", checkresult);
+                battleResultInfo.add("deck_port", deckportdata);
+                battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
 
@@ -1911,9 +1914,13 @@ public class KcaBattle {
                 helper.updateExpScore(api_data.get("api_get_exp").getAsInt());
 
                 JsonObject battleResultInfo = api_data;
+                battleResultInfo.addProperty("is_result", true);
                 battleResultInfo.addProperty("api_url", url);
                 battleResultInfo.add("api_dc_used", damecon_used);
                 battleResultInfo.addProperty("api_heavy_damaged", checkresult);
+                battleResultInfo.add("deck_port", deckportdata);
+                battleResultInfo.add("api_f_afterhps", friendAfterHps);
+                battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
 
