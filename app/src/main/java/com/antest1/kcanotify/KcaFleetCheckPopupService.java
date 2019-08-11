@@ -210,12 +210,13 @@ public class KcaFleetCheckPopupService extends Service {
                     case FCHK_FUNC_SEEKTP:
                         int seekValue_0 = (int) deckInfoCalc.getSeekValue(portdeckdata, target_str, SEEK_PURE, KcaBattle.getEscapeFlag());
                         double seekValue_1 = deckInfoCalc.getSeekValue(portdeckdata, target_str, 1, KcaBattle.getEscapeFlag());
+                        double seekValue_2 = deckInfoCalc.getSeekValue(portdeckdata, target_str, 2, KcaBattle.getEscapeFlag());
                         double seekValue_3 = deckInfoCalc.getSeekValue(portdeckdata, target_str, 3, KcaBattle.getEscapeFlag());
                         double seekValue_4 = deckInfoCalc.getSeekValue(portdeckdata, target_str, 4, KcaBattle.getEscapeFlag());
 
                         int[] tp = deckInfoCalc.getTPValue(portdeckdata, target_str, KcaBattle.getEscapeFlag());
                         fchk_info.setText(KcaUtils.format(getStringWithLocale(R.string.fleetcheckview_content_seeklos),
-                                seekValue_0, seekValue_1, seekValue_3, seekValue_4, tp[0], tp[1]));
+                                seekValue_0, seekValue_1, seekValue_2, seekValue_3, seekValue_4, tp[0], tp[1]));
                         break;
                     case FCHK_FUNC_AIRBATTLE:
                         int[] airPowerRange = deckInfoCalc.getAirPowerRange(portdeckdata, target, KcaBattle.getEscapeFlag());
