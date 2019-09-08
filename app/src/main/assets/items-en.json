@@ -350,6 +350,9 @@
   "試製 秋水": "Prototype Shusui",
   "秋水": "Shusui",
   "M4A1 DD": "M4A1 DD",
+  "Fw190 A-5改(熟練)": "Fw 190 A-5 Kai (Skilled)",
+  "Fw190 D-9": "Fw 190 D-9",
+  
   
   "プレゼント箱": "Present Box",
   "秋刀魚": "Saury",
@@ -450,7 +453,10 @@
   "深海5inch単装砲 Mk.30": "Abyssal 5inch Single Gun Mount Mk.30",
   "深海16inch Mk.VIII連装砲改": "Abyssal 16inch Mk.VIII Twin Gun Mount Kai",
   "高速深海魚雷 mod.3": "High-speed Abyssal Torpedo mod.3",
-  "深海空要塞": "Abyssal Sky Fortress",
-  "深海空要塞Ace": "Abyssal Sky Fortress Ace",
-  "深海6inch三連装新型速射砲": "Abyssal New Model 6inch Triple Rapid Fire Gun Mount"
+  "深海空要塞(偵察型)": "Abyssal Sky Fortress (Reconnaissance Model)",
+  "深海空要塞Ace(偵察型)": "Abyssal Sky Fortress Ace (Reconnaissance Model)",
+  "深海空要塞(重爆型)": "Abyssal Sky Fortress (Heavy Bomber Model)",
+  "深海空要塞Ace(重爆型)": "Abyssal Sky Fortress Ace (Heavy Bomber Model)",
+  "深海6inch三連装新型速射砲": "Abyssal New Model 6inch Triple Rapid Fire Gun Mount",
+  "深海4.7inch砲 Mk.XII": "Abyssal 4.7inch Gun Mk.XII"
 }
