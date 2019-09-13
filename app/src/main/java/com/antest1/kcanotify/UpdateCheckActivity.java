@@ -270,6 +270,17 @@ public class UpdateCheckActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (main_flag) {
+            Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+        }  else {
+            super.onBackPressed();
+        }
+    }
+
     private void checkVersionUpdate() {
         gamedata_load.setVisibility(View.VISIBLE);
         data_list.setVisibility(View.GONE);
