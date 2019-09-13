@@ -921,15 +921,17 @@ public class KcaBattle {
                 }
 
                 JsonObject battleResultInfo = api_data;
+                if (url.equals(API_REQ_PRACTICE_BATTLE)) {
+                    battleResultInfo.addProperty("api_practice_flag", true);
+                    damecon_used = new JsonArray();
+                }
+
                 battleResultInfo.addProperty("api_url", url);
                 battleResultInfo.add("api_dc_used", damecon_used);
                 battleResultInfo.add("api_deck_port", deckportdata);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
 
-                if (url.equals(API_REQ_PRACTICE_BATTLE)) {
-                    battleResultInfo.addProperty("api_practice_flag", true);
-                }
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
 
