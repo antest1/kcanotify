@@ -544,12 +544,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_equip_stype5">Searchlight (L)</string>
 
     <string name="ship_tag_0">None</string>
-    <string name="ship_tag_1">104th Squadron (Gray)</string>
-    <string name="ship_tag_2">2nd Fleet (Gold)</string>
-    <string name="ship_tag_3">Northern Force (Blue)</string>
-    <string name="ship_tag_4">Task Force (Green)</string>
-    <string name="ship_tag_5">Targeting Force (Yellowish Green)</string>
-    <string name="ship_tag_6">Hawaii Detached Unit (Mint)</string>
+    <string name="ship_tag_1">Europe Defence Fleet (Blue)</string>
+    <string name="ship_tag_2">Combined Fleet (Green)</string>
+    <string name="ship_tag_3">Mediterranean Sea Force (Yellow)</string>
+    <string name="ship_tag_4"> </string>
+    <string name="ship_tag_5"> </string>
+    <string name="ship_tag_6"> </string>
 
     <string name="ship_fleet_0">None</string>
 

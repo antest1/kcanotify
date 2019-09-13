@@ -468,12 +468,12 @@
     <string name="ship_stat_equip_stype5">대형탐조등</string>
 
     <string name="ship_tag_0">없음</string>
-    <string name="ship_tag_1">제104전대 (회색)</string>
-    <string name="ship_tag_2">제2함대 (금색)</string>
-    <string name="ship_tag_3">북방부대 (청색)</string>
-    <string name="ship_tag_4">기동부대 (녹색)</string>
-    <string name="ship_tag_5">공략부대 (황록색)</string>
-    <string name="ship_tag_6">하와이파견부대 (청록색)</string>
+    <string name="ship_tag_1">구주방위함대 (청색)</string>
+    <string name="ship_tag_2">연합함대 (녹색)</string>
+    <string name="ship_tag_3">지중해함대 (황색)</string>
+    <string name="ship_tag_4"> </string>
+    <string name="ship_tag_5"> </string>
+    <string name="ship_tag_6"> </string>
 
     <string name="ship_fleet_0">없음</string>
 
