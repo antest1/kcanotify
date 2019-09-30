@@ -61,18 +61,20 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/ed_item1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <ImageView
-                        android:id="@+id/ed_icon"
+                        android:id="@+id/ed_icon1"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_gravity="center_vertical"
@@ -80,7 +82,7 @@
                         android:scaleType="fitXY" />
 
                     <TextView
-                        android:id="@+id/ed_name"
+                        android:id="@+id/ed_name1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -90,7 +92,77 @@
                         android:textSize="@dimen/popup_text_normal" />
 
                     <TextView
-                        android:id="@+id/ed_count"
+                        android:id="@+id/ed_count1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_normal" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ed_item2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ed_icon2"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="4dp"
+                        android:scaleType="fitXY" />
+
+                    <TextView
+                        android:id="@+id/ed_name2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_normal" />
+
+                    <TextView
+                        android:id="@+id/ed_count2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_normal" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ed_item3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ed_icon3"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="4dp"
+                        android:scaleType="fitXY" />
+
+                    <TextView
+                        android:id="@+id/ed_name3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/popup_text_normal" />
+
+                    <TextView
+                        android:id="@+id/ed_count3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"

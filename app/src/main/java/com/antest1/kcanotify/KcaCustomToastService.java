@@ -42,7 +42,6 @@ import static com.antest1.kcanotify.KcaUtils.adjustAlpha;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
-import static com.antest1.kcanotify.R.id.ed_icon;
 
 public class KcaCustomToastService extends Service {
     public static final String TOAST_SHOW_ACTION = "toast_show_action";

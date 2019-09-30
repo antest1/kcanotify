@@ -1589,37 +1589,29 @@ public class KcaService extends Service {
 
                         if (jsonDataObj.has("api_data")) {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
-                            boolean createFlag = api_data.get("api_create_flag").getAsInt() == 1;
-                            int itemKcId = KcaApiData.updateSlotItemData(api_data);
-                            int itemFailKcId = -1;
-                            if (api_data.has("api_fdata")) {
-                                String[] fdata = api_data.get("api_fdata").getAsString().split(",");
-                                itemFailKcId = Integer.parseInt(fdata[1]);
+
+                            // int itemKcId = KcaApiData.updateSlotItemData(api_data);
+                            JsonArray devInfo = KcaApiData.updateDevelopItemData(api_data);
+                            makeToast(devInfo.toString(), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+
+                            for (int i = 0; i < devInfo.size(); i++) {
+                                questTracker.updateIdCountTracker("605");
+                                questTracker.updateIdCountTracker("607");
+                                JsonObject dev_instance = devInfo.get(i).getAsJsonObject();
+                                boolean createFlag = dev_instance.get("api_id").getAsInt() > 0;
+                                int itemKcId = dev_instance.get("api_slotitem_id").getAsInt();
+                                int itemFailKcId = -1;
+                                if (dev_instance.has("api_fdata")) {
+                                    String[] fdata = dev_instance.get("api_fdata").getAsString().split(",");
+                                    itemFailKcId = Integer.parseInt(fdata[1]);
+                                }
+                                if (isOpenDBEnabled()) KcaOpenDBAPI.sendEquipDevData(flagship, materials[0], materials[1], materials[2], materials[3], itemKcId);
+                                if (isPoiDBEnabled()) KcaPoiDBAPI.sendEquipDevData(Arrays.toString(materials), flagship, createFlag ? itemKcId : itemFailKcId, getAdmiralLevel(), createFlag);
                             }
-
-                            if (isOpenDBEnabled()) KcaOpenDBAPI.sendEquipDevData(flagship, materials[0], materials[1], materials[2], materials[3], itemKcId);
-                            if (isPoiDBEnabled()) KcaPoiDBAPI.sendEquipDevData(Arrays.toString(materials), flagship, createFlag ? itemKcId : itemFailKcId, getAdmiralLevel(), createFlag);
-
-                            questTracker.updateIdCountTracker("605");
-                            questTracker.updateIdCountTracker("607");
                             updateQuestView();
 
                             JsonArray material_data = api_data.getAsJsonArray("api_material");
                             recordResourceLog(material_data, false);
-
-                            String itemname = "";
-                            int itemtype = 0;
-                            String itemcount = "";
-
-                            if (createFlag) {
-                                JsonObject itemData = KcaApiData.getKcItemStatusById(itemKcId, "name,type");
-                                itemname = itemData.get("name").getAsString();
-                                itemtype = itemData.get("type").getAsJsonArray().get(3).getAsInt();
-                                itemcount = KcaUtils.format("(%d)", KcaApiData.getItemCountByKcId(itemKcId));
-                            } else {
-                                itemname = "item_fail";
-                                itemtype = 999;
-                            }
 
                             JsonObject shipData = KcaApiData.getKcShipDataById(flagship, "name");
                             String shipname = shipData.get("name").getAsString();
@@ -1629,11 +1621,31 @@ public class KcaService extends Service {
 
                             JsonObject equipdevdata = new JsonObject();
                             equipdevdata.addProperty("flagship", shipname);
-                            equipdevdata.addProperty("name", itemname);
-                            equipdevdata.addProperty("type", itemtype);
-                            equipdevdata.addProperty("count", itemcount);
                             equipdevdata.addProperty("time", timetext);
+                            equipdevdata.add("items", new JsonArray());
 
+                            for (int i = 0; i < devInfo.size(); i++) {
+                                String itemname = "";
+                                int itemtype = 0;
+                                String itemcount = "";
+
+                                JsonObject dev_instance = devInfo.get(i).getAsJsonObject();
+                                int itemKcId = dev_instance.get("api_slotitem_id").getAsInt();
+                                boolean createFlag = dev_instance.get("api_id").getAsInt() > 0;
+                                if (createFlag) {
+                                    JsonObject itemData = KcaApiData.getKcItemStatusById(itemKcId, "name,type");
+                                    itemname = itemData.get("name").getAsString();
+                                    itemtype = itemData.get("type").getAsJsonArray().get(3).getAsInt();
+                                    itemcount = KcaUtils.format("(%d)", KcaApiData.getItemCountByKcId(itemKcId));
+                                } else {
+                                    itemname = "item_fail";
+                                    itemtype = 999;
+                                }
+                                dev_instance.addProperty("name", itemname);
+                                dev_instance.addProperty("type", itemtype);
+                                dev_instance.addProperty("count", itemcount);
+                                equipdevdata.getAsJsonArray("items").add(dev_instance);
+                            }
                             dbHelper.putValue(DB_KEY_LATESTDEV, equipdevdata.toString());
 
                             if (KcaDevelopPopupService.isActive()) {

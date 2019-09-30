@@ -898,12 +898,23 @@ public class KcaApiData {
         helper.removeItemValue(requestList);
     }
 
+    public static JsonArray updateDevelopItemData(JsonObject api_data) {
+        JsonArray get_items = null;
+        if (api_data.has("api_get_items")) {
+            get_items = api_data.getAsJsonArray("api_get_items");
+            for (int i = 0; i < get_items.size(); i++) {
+                JsonObject item = get_items.get(i).getAsJsonObject();
+                int item_id = item.get("api_id").getAsInt();
+                if (item_id > 0) updateSlotItemData(item);
+            }
+        }
+        return get_items;
+    }
+
     public static int updateSlotItemData(JsonObject api_data) {
         if (helper == null) return -1;
         JsonObject item = null;
-        if (api_data.has("api_create_flag") && api_data.get("api_create_flag").getAsInt() == 1) {
-            item = (JsonObject) api_data.get("api_slot_item");
-        } else if (api_data.has("api_slotitem_id")) {
+        if (api_data.has("api_slotitem_id")) {
             item = api_data;
         }
         if (item != null) {
