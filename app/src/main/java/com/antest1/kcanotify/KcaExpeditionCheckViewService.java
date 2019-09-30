@@ -316,10 +316,17 @@ public class KcaExpeditionCheckViewService extends Service {
         result.addProperty("flag-cond", true);
         if (has_flag_cond) {
             if (ship_data.size() > 0) {
+                boolean is_flag_passed = false;
                 int flag_conv_value = ship_data.get(0).get("stype").getAsInt();
-                int flag_cond = data.get("flag-cond").getAsInt();
-                result.addProperty("flag-cond", flag_conv_value == flag_cond);
-                total_pass = total_pass && (flag_conv_value == flag_cond);
+                String[] flag_cond = data.get("flag-cond").getAsString().split("/");
+                for (int i = 0; i < flag_cond.length; i++) {
+                    if (flag_conv_value == Integer.parseInt(flag_cond[i])) {
+                        is_flag_passed = true;
+                        break;
+                    }
+                }
+                result.addProperty("flag-cond", is_flag_passed);
+                total_pass = total_pass && is_flag_passed;
             } else {
                 result.addProperty("flag-cond", false);
                 total_pass = false;
@@ -691,9 +698,12 @@ public class KcaExpeditionCheckViewService extends Service {
             }
             setItemViewVisibilityById(R.id.view_excheck_flagship_cond, has_flag_cond);
             if (has_flag_cond) {
-                int flag_cond = data.get("flag-cond").getAsInt();
-                setItemTextViewById(R.id.view_excheck_flagship_cond,
-                        getShipTypeAbbr(flag_cond));
+                String[] flag_cond = data.get("flag-cond").getAsString().split("/");
+                List<String> abbr_text_list = new ArrayList<>();
+                for (int i = 0; i < flag_cond.length; i++) {
+                    abbr_text_list.add(getShipTypeAbbr(Integer.parseInt(flag_cond[i])));
+                }
+                setItemTextViewById(R.id.view_excheck_flagship_cond, KcaUtils.joinStr(abbr_text_list, "/"));
                 setItemTextViewColorById(R.id.view_excheck_flagship_cond,
                         check.get("flag-cond").getAsBoolean(), false);
             }

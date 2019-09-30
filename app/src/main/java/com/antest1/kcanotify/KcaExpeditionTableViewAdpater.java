@@ -282,9 +282,12 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
             }
             setItemViewVisibilityById(root_view, R.id.view_excheck_flagship_cond, has_flag_cond);
             if (has_flag_cond) {
-                int flag_cond = data.get("flag-cond").getAsInt();
-                setItemTextViewById(root_view, R.id.view_excheck_flagship_cond,
-                        getShipTypeAbbr(flag_cond));
+                String[] flag_cond = data.get("flag-cond").getAsString().split("/");
+                List<String> abbr_text_list = new ArrayList<>();
+                for (int i = 0; i < flag_cond.length; i++) {
+                    abbr_text_list.add(getShipTypeAbbr(Integer.parseInt(flag_cond[i])));
+                }
+                setItemTextViewById(root_view, R.id.view_excheck_flagship_cond, KcaUtils.joinStr(abbr_text_list, "/"));
             }
         }
 
