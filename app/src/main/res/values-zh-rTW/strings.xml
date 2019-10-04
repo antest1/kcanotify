@@ -723,5 +723,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="text_api_houk2">迎擊</string>
     <string name="text_api_cost">配置費用</string>
     <string name="text_api_distance">行動半徑</string>
-    <string name="ask_to_dev">看到回答</string>
+    <string name="ask_to_dev">艦これ 装備王</string>
 </resources>

@@ -722,5 +722,5 @@
     <string name="text_api_houk2">INT</string>
     <string name="text_api_cost">COST</string>
     <string name="text_api_distance">DIST</string>
-    <string name="ask_to_dev">Mostrar la respuesta</string>
+    <string name="ask_to_dev">Maestro de equipos de KanColle</string>
 </resources>

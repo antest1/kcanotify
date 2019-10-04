@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
@@ -26,6 +27,7 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -53,6 +55,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -309,9 +312,21 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
                 String locale_code = getResourceLocaleCode(locale);
-                String url = KcaUtils.format("http://52.55.91.44/kcanotify/asktodev/index_%s.html", locale_code);
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(browserIntent);
+                String url = KcaUtils.format("http://antest1.cf:12345?lang=%s", locale_code);
+
+                CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+                intentBuilder.setShowTitle(true);
+                intentBuilder.setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                intentBuilder.enableUrlBarHiding();
+
+                final CustomTabsIntent customTabsIntent = intentBuilder.build();
+                final List<ResolveInfo> customTabsApps = getPackageManager().queryIntentActivities(customTabsIntent.intent, 0);
+                if (customTabsApps.size() > 0) {
+                    customTabsIntent.launchUrl(MainActivity.this, Uri.parse(url));
+                } else {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(browserIntent);
+                }
             }
         });
     }

@@ -792,5 +792,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="text_api_cost">COST</string>
     <string name="text_api_distance">DIST</string>
 
-    <string name="ask_to_dev">Show the answer</string>
+    <string name="ask_to_dev">KanColle Equipment Master</string>
 </resources>
