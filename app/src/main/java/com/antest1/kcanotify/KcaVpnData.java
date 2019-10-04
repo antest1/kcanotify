@@ -87,7 +87,8 @@ public class KcaVpnData {
         handler = h;
     }
 
-    public static void setExternalFilter(boolean use_ext) {
+    public static List<String> setExternalFilter(boolean use_ext) {
+        prefixCheckList = new ArrayList<>(Arrays.asList(kcaServerPrefixList));
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -114,6 +115,7 @@ public class KcaVpnData {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return prefixCheckList;
     }
 
     // Called from native code

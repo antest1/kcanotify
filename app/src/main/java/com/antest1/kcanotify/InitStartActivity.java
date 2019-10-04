@@ -62,6 +62,7 @@ import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_MAIN;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
+import static com.antest1.kcanotify.KcaConstants.PREF_ALLOW_EXTFILTER;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE_START;
 import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
@@ -190,6 +191,10 @@ public class InitStartActivity extends Activity {
         if (setDefaultGameDataResult != 1) {
             Toast.makeText(this, "error loading game data", Toast.LENGTH_LONG).show();
         }
+
+        appmessage.setText("Checking External Filter...");
+        boolean allow_ext = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_ALLOW_EXTFILTER);
+        List<String> result = KcaVpnData.setExternalFilter(allow_ext);
 
         if (!KcaUtils.checkOnline(getApplicationContext()) || !getBooleanPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START)) {
             startMainActivity(true);

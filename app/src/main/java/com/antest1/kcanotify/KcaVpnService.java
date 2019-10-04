@@ -318,8 +318,8 @@ public class KcaVpnService extends VpnService {
         jni_init(Build.VERSION.SDK_INT);
         super.onCreate();
 
-        boolean allow_ext = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_ALLOW_EXTFILTER);
-        KcaVpnData.setExternalFilter(allow_ext);
+        //boolean allow_ext = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_ALLOW_EXTFILTER);
+        //KcaVpnData.setExternalFilter(allow_ext);
 
         HandlerThread commandThread = new HandlerThread(getString(R.string.app_name) + " command");
         commandThread.start();
