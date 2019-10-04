@@ -1592,7 +1592,6 @@ public class KcaService extends Service {
 
                             // int itemKcId = KcaApiData.updateSlotItemData(api_data);
                             JsonArray devInfo = KcaApiData.updateDevelopItemData(api_data);
-                            makeToast(devInfo.toString(), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
 
                             for (int i = 0; i < devInfo.size(); i++) {
                                 questTracker.updateIdCountTracker("605");
