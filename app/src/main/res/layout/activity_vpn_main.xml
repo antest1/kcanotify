@@ -245,14 +245,14 @@
                     android:textAlignment="center"
                     android:textColor="@color/colorSpecialText"
                     android:textSize="14dp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/textSpecial2"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@id/textMaintenance"
+                    android:layout_above="@id/textSpecial"
                     android:layout_alignParentBottom="false"
                     android:layout_marginStart="6dp"
                     android:layout_marginLeft="6dp"
