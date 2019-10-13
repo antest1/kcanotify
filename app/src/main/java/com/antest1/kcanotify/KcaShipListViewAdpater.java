@@ -30,8 +30,10 @@ import java.util.List;
 import java.util.Map;
 
 import static android.media.CamcorderProfile.get;
+import static com.antest1.kcanotify.KcaApiData.STYPE_CVE;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
+import static com.antest1.kcanotify.KcaApiData.isShipCVE;
 import static com.antest1.kcanotify.KcaUtils.searchStringFromStart;
 import static com.antest1.kcanotify.KcaUtils.getId;
 
@@ -598,9 +600,17 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                             case 0:
                                 for (String v2_val: v2_list) {
                                     int v2_int = Integer.valueOf(v2_val);
-                                    if (v1_int == v2_int) {
-                                        flag = true;
-                                        break;
+                                    if (key.equals("api_stype") && v2_int == STYPE_CVE) {
+                                        int shipid = KcaShipListViewAdpater.getintvalue(input, "api_ship_id");
+                                        if (isShipCVE(shipid)) {
+                                            flag = true;
+                                            break;
+                                        }
+                                    } else {
+                                        if (v1_int == v2_int) {
+                                            flag = true;
+                                            break;
+                                        }
                                     }
                                 }
                                 if (!flag) return false;

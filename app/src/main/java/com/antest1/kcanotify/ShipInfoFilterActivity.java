@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import static com.antest1.kcanotify.KcaApiData.STYPE_CVE;
 import static com.antest1.kcanotify.KcaApiData.TAG_COUNT;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
@@ -353,18 +354,13 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         }
 
         final AlertDialog dialog = makeDialog(sp_val, target, key, fnc, adapter);
-        sp_val.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.show();
-            }
-        });
+        sp_val.setOnClickListener(view -> dialog.show());
         if (value != null) {
             sp_val.setText(KcaUtils.format("%d/%d", value, adapter.length));
         }
     }
 
-        private AlertDialog makeDialog(final TextView sp_val, final int target, final String key, final int fnc, final String[] arr) {
+    private AlertDialog makeDialog(final TextView sp_val, final int target, final String key, final int fnc, final String[] arr) {
         final List<Integer> selectedItems = new ArrayList<>();
         boolean[] selected_arr = new boolean[arr.length];
         Arrays.fill(selected_arr, false);
@@ -384,44 +380,39 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(getStringWithLocale(R.string.shipinfo_filt_list_dialog_title))
-                .setMultiChoiceItems(arr, selected_arr, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                        if (isChecked) {
-                            // If the user checked the item, add it to the selected items
-                            selectedItems.add(indexSelected);
-                        } else if (selectedItems.contains(indexSelected)) {
-                            // Else, if the item is already in the array, remove it
-                            selectedItems.remove(Integer.valueOf(indexSelected));
-                        }
+                .setMultiChoiceItems(arr, selected_arr, (dialog13, indexSelected, isChecked) -> {
+                    if (isChecked) {
+                        // If the user checked the item, add it to the selected items
+                        selectedItems.add(indexSelected);
+                    } else if (selectedItems.contains(indexSelected)) {
+                        // Else, if the item is already in the array, remove it
+                        selectedItems.remove(Integer.valueOf(indexSelected));
                     }
-                }).setPositiveButton(getStringWithLocale(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        sp_val.setText(KcaUtils.format("%d/%d", selectedItems.size(), arr.length));
+                }).setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog12, id) -> {
+                    sp_val.setText(KcaUtils.format("%d/%d", selectedItems.size(), arr.length));
 
-                        List<String> vals = new ArrayList<String>();
-                        for (int selected: selectedItems) {
-                            switch (fnc) {
-                                case 1:
+                    List<String> vals = new ArrayList<>();
+                    for (int selected: selectedItems) {
+                        switch (fnc) {
+                            case 1:
+                                if (selected == 22) {
+                                    vals.add(String.valueOf(STYPE_CVE));
+                                } else {
                                     vals.add(String.valueOf(selected + 1));
-                                    break;
-                                case 2:
-                                    vals.add(String.valueOf((selected + 1) * 5));
-                                    break;
-                                default:
-                                    vals.add(String.valueOf(selected));
-                                    break;
-                            }
+                                }
+                                break;
+                            case 2:
+                                vals.add(String.valueOf((selected + 1) * 5));
+                                break;
+                            default:
+                                vals.add(String.valueOf(selected));
+                                break;
                         }
-                        obj.addProperty(key, KcaUtils.joinStr(vals, "_"));
-                        sort_values.put(target, makeStatPrefValue(obj));
                     }
-                }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
+                    obj.addProperty(key, KcaUtils.joinStr(vals, "_"));
+                    sort_values.put(target, makeStatPrefValue(obj));
+                }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), (dialog1, id) -> {
 
-                    }
                 }).create();
         return dialog;
     }
@@ -429,7 +420,8 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
     private String[] getStypeArray() {
         List<String> stype_list = new ArrayList<>();
         for (int i = 1; i < KcaApiData.getShipTypeSize(); i++) {
-            stype_list.add(KcaApiData.getShipTypeAbbr(i));
+            String value = KcaApiData.getShipTypeAbbr(i);
+            if (value.length() > 0) stype_list.add(value);
         }
         String[] stype_arr = new String[stype_list.size()];
         stype_arr = stype_list.toArray(stype_arr);
@@ -482,7 +474,13 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         return tag_arr;
     }
 
-    private int getStypePosition(int i) { return i - 1; }
+    private int getStypePosition(int i) {
+        if (i == STYPE_CVE) {
+            return 22;
+        } else {
+            return i - 1;
+        }
+    }
     private int getSpeedPosition(int i) { return (i - 1) / 5; }
     private int getRealPosition(int fnc, int i) {
         switch (fnc) {
