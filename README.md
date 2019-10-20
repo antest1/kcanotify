@@ -95,4 +95,4 @@ All rights reserved
 
 Privacy Policy
 -------
-You can check the privacy policy [HERE](private_policy.md). (Updated: 2018.1.8)
+You can check the privacy policy [HERE](private_policy.md). **(Updated: 2019.10.21)**
