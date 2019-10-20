@@ -6,6 +6,10 @@ import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
+
 import org.acra.ACRA;
 import org.acra.annotation.AcraCore;
 import org.acra.annotation.AcraMailSender;
@@ -55,6 +59,8 @@ public class KcaApplication extends MultiDexApplication {
         }
 
         LocaleUtils.updateConfig(this, getBaseContext().getResources().getConfiguration());
+        AppCenter.start(this, BuildConfig.AppCenterSecret,
+                Analytics.class, Crashes.class);
         ACRA.init(this);
     }
 }
