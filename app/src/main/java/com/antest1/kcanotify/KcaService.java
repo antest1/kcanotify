@@ -335,25 +335,18 @@ public class KcaService extends Service {
         startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
 
         notificationTimeCounter = -1;
-        timer = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (isMissionTimerViewEnabled()) {
-                        notificationTimeCounter += 1;
-                        if (notificationTimeCounter == 120) {
-                            notificationTimeCounter = 0;
-                        }
-                        updateExpViewNotification();
-                    }
-                    if (KcaAkashiRepairInfo.getAkashiTimerValue() > 0) {
-                        int second = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
-                        if (second >= AKASHI_TIMER_20MIN && isAkashiTimerNotiWait) {
-                            isAkashiTimerNotiWait = false;
-                        }
-                    }
-                } catch (Exception e) {
-                    dbHelper.recordErrorLog(ERROR_TYPE_SERVICE, "tmer", "", "", getStringFromException(e));
+        timer = () -> {
+            if (isMissionTimerViewEnabled()) {
+                notificationTimeCounter += 1;
+                if (notificationTimeCounter == 120) {
+                    notificationTimeCounter = 0;
+                }
+                updateExpViewNotification();
+            }
+            if (KcaAkashiRepairInfo.getAkashiTimerValue() > 0) {
+                int second = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
+                if (second >= AKASHI_TIMER_20MIN && isAkashiTimerNotiWait) {
+                    isAkashiTimerNotiWait = false;
                 }
             }
         };

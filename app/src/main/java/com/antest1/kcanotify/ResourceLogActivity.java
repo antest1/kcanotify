@@ -468,41 +468,37 @@ public class ResourceLogActivity extends AppCompatActivity {
     View.OnClickListener dateViewListener = new View.OnClickListener() {
         @Override
         public void onClick(final View view) {
-            DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
-
-                @Override
-                public void onDateSet(DatePicker v, int year, int monthOfYear, int dayOfMonth) {
-                    boolean valid_flag = true;
-                    String text = KcaUtils.format("%02d-%02d-%04d", monthOfYear + 1, dayOfMonth, year);
-                    try {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
-                        long timestamp = dateFormat.parse(text).getTime();
-                        long new_value = timestamp;
-                        if (view.getId() == R.id.reslog_date_start) {
-                            if (new_value < end_timestamp) {
-                                start_timestamp = new_value;
-                            } else {
-                                valid_flag = false;
-                            }
-                        } else if (view.getId() == R.id.reslog_date_end) {
-                            new_value = timestamp + (DAY_MILLISECOND - 1);
-                            long time_limit = KcaUtils.getCurrentDateTimestamp(System.currentTimeMillis()) + DAY_MILLISECOND;
-                            if (new_value > start_timestamp && new_value < time_limit) {
-                                end_timestamp = new_value;
-                            } else {
-                                valid_flag = false;
-                            }
+            DatePickerDialog.OnDateSetListener listener = (v, year, monthOfYear, dayOfMonth) -> {
+                boolean valid_flag = true;
+                String text = KcaUtils.format("%02d-%02d-%04d", monthOfYear + 1, dayOfMonth, year);
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+                    long timestamp = dateFormat.parse(text).getTime();
+                    long new_value = timestamp;
+                    if (view.getId() == R.id.reslog_date_start) {
+                        if (new_value < end_timestamp) {
+                            start_timestamp = new_value;
+                        } else {
+                            valid_flag = false;
                         }
-                        if (valid_flag) {
-                            ((TextView) view).setText(convertMillsToDate(timestamp));
-                            resourceLog = resourceLogger.getResourceLogInRange(start_timestamp, end_timestamp);
-                            KcaResourcelogItemAdpater.setListViewItemList(convertData(resourceLog));
-                            pageAdapter.notifyDataSetChanged();
+                    } else if (view.getId() == R.id.reslog_date_end) {
+                        new_value = timestamp + (DAY_MILLISECOND - 1);
+                        long time_limit = KcaUtils.getCurrentDateTimestamp(System.currentTimeMillis()) + DAY_MILLISECOND;
+                        if (new_value > start_timestamp && new_value < time_limit) {
+                            end_timestamp = new_value;
+                        } else {
+                            valid_flag = false;
                         }
-                    } catch (ParseException e) {
-                        dbHelper.recordErrorLog(ERROR_TYPE_RESLOG, "", "", "", KcaUtils.getStringFromException(e));
-                        e.printStackTrace();
                     }
+                    if (valid_flag) {
+                        ((TextView) view).setText(convertMillsToDate(timestamp));
+                        resourceLog = resourceLogger.getResourceLogInRange(start_timestamp, end_timestamp);
+                        KcaResourcelogItemAdpater.setListViewItemList(convertData(resourceLog));
+                        pageAdapter.notifyDataSetChanged();
+                    }
+                } catch (ParseException e) {
+                    dbHelper.recordErrorLog(ERROR_TYPE_RESLOG, "", "", "", KcaUtils.getStringFromException(e));
+                    e.printStackTrace();
                 }
             };
 
