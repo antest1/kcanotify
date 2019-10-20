@@ -64,12 +64,22 @@ import retrofit2.Callback;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaUseStatConstant.END_APP;
+import static com.antest1.kcanotify.KcaUseStatConstant.END_SERVICE;
+import static com.antest1.kcanotify.KcaUseStatConstant.END_SNIFFER;
+import static com.antest1.kcanotify.KcaUseStatConstant.ENTER_MAIN;
+import static com.antest1.kcanotify.KcaUseStatConstant.OPEN_PIC;
+import static com.antest1.kcanotify.KcaUseStatConstant.OPEN_QUIZ;
+import static com.antest1.kcanotify.KcaUseStatConstant.RUN_KANCOLLE;
+import static com.antest1.kcanotify.KcaUseStatConstant.START_SERVICE;
+import static com.antest1.kcanotify.KcaUseStatConstant.START_SNIFFER;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
@@ -138,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    JsonObject statProperties = new JsonObject();
                     try {
                         final Intent prepare = VpnService.prepare(MainActivity.this);
                         if (prepare == null) {
@@ -146,13 +157,17 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             startActivityForResult(prepare, REQUEST_VPN);
                         }
+                        statProperties.addProperty("is_success", true);
                     } catch (Throwable ex) {
                         // Prepare failed
+                        statProperties.addProperty("is_success", false);
                         Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
                     }
+                    sendUserAnalytics(START_SNIFFER, statProperties);
                 } else {
                     KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
                     prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                    sendUserAnalytics(END_SNIFFER, null);
                 }
             }
         });
@@ -173,11 +188,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, KcaService.class);
                 if (isChecked) {
                     if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
+                        sendUserAnalytics(START_SERVICE, null);
                         loadTranslationData(getApplicationContext());
                         startService(intent);
                     }
                 } else {
                     stopService(intent);
+                    sendUserAnalytics(END_SERVICE, null);
                     prefs.edit().putBoolean(PREF_SVC_ENABLED, false).apply();
                 }
             }
@@ -187,8 +204,16 @@ public class MainActivity extends AppCompatActivity {
         kcbtn.setOnClickListener(v -> {
             String kcApp = getStringPreferences(getApplicationContext(), PREF_KC_PACKAGE);
             Intent kcIntent = getKcIntent(getApplicationContext());
+
             boolean is_kca_installed = false;
             if (!BuildConfig.DEBUG) is_kca_installed = (kcIntent != null);
+
+            JsonObject statProperties = new JsonObject();
+            statProperties.addProperty("browser", kcApp);
+            statProperties.addProperty("sniffer", sniffer_mode);
+            statProperties.addProperty("enabled", is_kca_installed ? 1 : 0);
+
+            sendUserAnalytics(RUN_KANCOLLE, statProperties);
             if (is_kca_installed) {
                 kcIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(kcIntent);
@@ -303,13 +328,17 @@ public class MainActivity extends AppCompatActivity {
 
         textSpecial = findViewById(R.id.textSpecial);
         textSpecial.setText(getStringWithLocale(R.string.special_message));
-        textSpecial.setOnClickListener(v -> specialImage.setVisibility(View.VISIBLE));
+        textSpecial.setOnClickListener(v -> {
+            specialImage.setVisibility(View.VISIBLE);
+            sendUserAnalytics(OPEN_PIC, null);
+        });
 
         textSpecial2 = findViewById(R.id.textSpecial2);
         textSpecial2.setText(getStringWithLocale(R.string.ask_to_dev));
         textSpecial2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendUserAnalytics(OPEN_QUIZ, null);
                 String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
                 String locale_code = getResourceLocaleCode(locale);
                 String url = KcaUtils.format("http://antest1.cf:12345?lang=%s", locale_code);
@@ -334,6 +363,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        sendUserAnalytics(ENTER_MAIN, null);
+
         setVpnBtn();
         setCheckBtn();
 
@@ -372,6 +403,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        sendUserAnalytics(END_APP, null);
         dbHelper.close();
         super.onDestroy();
     }

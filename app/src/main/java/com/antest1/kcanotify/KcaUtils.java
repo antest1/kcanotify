@@ -30,7 +30,6 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.DisplayCutout;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -38,7 +37,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
-import com.google.common.primitives.Bytes;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -46,9 +44,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.mariten.kanatools.KanaConverter;
+import com.microsoft.appcenter.Flags;
+import com.microsoft.appcenter.analytics.Analytics;
 
 import org.apache.commons.httpclient.ChunkedInputStream;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -62,19 +61,14 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
-import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
-import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -96,17 +90,14 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DATALOAD;
-import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_DISABLE_CUSTOMTOAST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
@@ -1044,5 +1035,15 @@ public class KcaUtils {
             }
         }
         return dataString.toString();
+    }
+
+    public static void sendUserAnalytics(String event, JsonObject value) {
+        Map<String, String> properties = new HashMap<>();
+        if (value != null) {
+            for (String key: value.keySet()) {
+                properties.put(key, value.get(key).getAsString());
+            }
+        }
+        Analytics.trackEvent(event, properties, Flags.NORMAL);
     }
 }

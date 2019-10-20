@@ -73,12 +73,14 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_LAST_UPDATE_CHECK;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_PREFIX;
+import static com.antest1.kcanotify.KcaUseStatConstant.START_APP;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.gzipdecompress;
+import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class InitStartActivity extends Activity {
@@ -126,6 +128,8 @@ public class InitStartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init_download);
         Log.e("KCA-DA", "created");
+
+        sendUserAnalytics(START_APP, null);
 
         Intent mainIntent = getIntent();
         reset_flag = mainIntent.getBooleanExtra(ACTION_RESET, false);

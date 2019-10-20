@@ -41,8 +41,11 @@ import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaUseStatConstant.END_SNIFFER;
+import static com.antest1.kcanotify.KcaUseStatConstant.OPEN_TOOL;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 
@@ -83,41 +86,49 @@ public class ToolsActivity extends AppCompatActivity {
         }
 
         view_fleetlist.setOnClickListener(view -> {
+            sendUserAnalytics(OPEN_TOOL.concat("FleetInfo"), null);
             Intent intent = new Intent(ToolsActivity.this, FleetInfoActivity.class);
             startActivity(intent);
         });
 
         view_shiplist.setOnClickListener(view -> {
+            sendUserAnalytics(OPEN_TOOL.concat("ShipList"), null);
             Intent intent = new Intent(ToolsActivity.this, ShipInfoActivity.class);
             startActivity(intent);
         });
 
         view_equipment.setOnClickListener(view -> {
+            sendUserAnalytics(OPEN_TOOL.concat("EquipList"), null);
             Intent intent = new Intent(ToolsActivity.this, EquipmentInfoActivity.class);
             startActivity(intent);
         });
 
         view_droplog.setOnClickListener(view -> {
+            sendUserAnalytics(OPEN_TOOL.concat("DropLog"), null);
             Intent intent = new Intent(ToolsActivity.this, DropLogActivity.class);
             startActivity(intent);
         });
 
         view_reslog.setOnClickListener(view -> {
+            sendUserAnalytics(OPEN_TOOL.concat("ResourceLog"), null);
             Intent intent = new Intent(ToolsActivity.this, ResourceLogActivity.class);
             startActivity(intent);
         });
 
         view_akashi.setOnClickListener(view -> {
+            sendUserAnalytics(OPEN_TOOL.concat("AkashiList"), null);
             Intent intent = new Intent(ToolsActivity.this, AkashiActivity.class);
             startActivity(intent);
         });
 
         view_expcalc.setOnClickListener(view -> {
+            sendUserAnalytics(OPEN_TOOL.concat("ExperienceCalc"), null);
             Intent intent = new Intent(ToolsActivity.this, ExpCalcActivity.class);
             startActivity(intent);
         });
 
         view_expdtable.setOnClickListener(view -> {
+            sendUserAnalytics(OPEN_TOOL.concat("ExpeditionTable"), null);
             Intent intent = new Intent(ToolsActivity.this, ExpeditionTableActivity.class);
             startActivity(intent);
         });

@@ -38,8 +38,10 @@ import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_FAIRY_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_DOWN_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_REV;
+import static com.antest1.kcanotify.KcaUseStatConstant.SELECT_FAIRY;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class KcaFairySelectActivity extends AppCompatActivity {
@@ -172,6 +174,8 @@ public class KcaFairySelectActivity extends AppCompatActivity {
                     int current_id = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
                     JsonObject data = new JsonObject();
                     data.addProperty("id", current_id);
+                    sendUserAnalytics(SELECT_FAIRY, data);
+
                     Bundle bundle = new Bundle();
                     bundle.putString("url", KCA_API_PREF_FAIRY_CHANGED);
                     bundle.putString("data", data.toString());
