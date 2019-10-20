@@ -7,8 +7,8 @@ android {
         applicationId "com.antest1.kcanotify"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 2721
-        versionName "2.7.2r1"
+        versionCode 2800
+        versionName "2.8"
 
         multiDexEnabled true
         externalNativeBuild {
@@ -39,7 +39,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            useProguard = true
+            //useProguard = true
             shrinkResources true
             proguardFiles.add(file('proguard-rules.pro'))
         }
