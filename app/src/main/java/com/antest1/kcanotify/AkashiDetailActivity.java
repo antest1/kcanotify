@@ -213,6 +213,10 @@ public class AkashiDetailActivity extends AppCompatActivity {
                                         require_item_name = getStringWithLocale(R.string.item_action_report);
                                         useritem_id = 78;
                                         break;
+                                    case 6:
+                                        require_item_name = getStringWithLocale(R.string.item_rocket_material);
+                                        useritem_id = 92;
+                                        break;
                                     default:
                                         require_item_name = "";
                                         useritem_id = -1;

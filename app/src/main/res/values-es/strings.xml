@@ -406,6 +406,7 @@
     <string name="item_skilled_crew">Tripulación Calificada </string>
     <string name="item_kouku_material">Materiales de Armamento Aéreo de Nuevo Modelo</string>
     <string name="item_action_report">Reporte de Acción</string>
+    <string name="item_rocket_material">Materiales de Desarrollo para Nuevos Equipos a Reacción</string>
     <string name="setting_menu_kand_desc_bypass_address">Usar CIDR para describir direcciones de bypass, separar cada CIDR con una coma.</string>
     <string name="settings_menu_kand_title_bypass_address">Direcciones de Bypass</string>
     <string name="setting_menu_kand_warn_adv_network">Advertencia: modificar esto de forma incorrecta puede volver el servicio VPN inutilizable. No cambie estas ocpiones si no sabe lo que hace. Debe reiniciar el servicio VPN para que las opciones entren en efecto.</string>
