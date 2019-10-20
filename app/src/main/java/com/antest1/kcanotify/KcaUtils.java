@@ -919,21 +919,6 @@ public class KcaUtils {
         return addresses.toArray(new String[0]);
     }
 
-
-    public static KcaQSyncAPI getQuestSync(Context context){
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(1, TimeUnit.MINUTES)
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(context.getString(R.string.app_kcaqsync_link))
-                .client(okHttpClient)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-        return retrofit.create(KcaQSyncAPI.class);
-    }
-
     public static byte[] addAll(final byte[] array1, byte[] array2) {
         byte[] joinedArray = Arrays.copyOf(array1, array1.length + array2.length);
         System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);

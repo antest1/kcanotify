@@ -50,7 +50,7 @@ public class ToolsActivity extends AppCompatActivity {
     Toolbar toolbar;
     KcaDBHelper dbHelper;
     static Gson gson = new Gson();
-    LinearLayout view_fleetlist, view_shiplist, view_equipment, view_droplog, view_reslog, view_akashi, view_expcalc, view_expdtable, view_datasync;
+    LinearLayout view_fleetlist, view_shiplist, view_equipment, view_droplog, view_reslog, view_akashi, view_expcalc, view_expdtable;
     public ToolsActivity() {
         LocaleUtils.updateConfig(this);
     }
@@ -75,7 +75,6 @@ public class ToolsActivity extends AppCompatActivity {
         view_akashi = findViewById(R.id.action_akashi);
         view_expcalc = findViewById(R.id.action_expcalc);
         view_expdtable = findViewById(R.id.action_expdtable);
-        view_datasync = findViewById(R.id.action_datasync);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
@@ -120,11 +119,6 @@ public class ToolsActivity extends AppCompatActivity {
 
         view_expdtable.setOnClickListener(view -> {
             Intent intent = new Intent(ToolsActivity.this, ExpeditionTableActivity.class);
-            startActivity(intent);
-        });
-
-        view_datasync.setOnClickListener(v -> {
-            Intent intent = new Intent(ToolsActivity.this, KcaDataSyncActivity.class);
             startActivity(intent);
         });
     }

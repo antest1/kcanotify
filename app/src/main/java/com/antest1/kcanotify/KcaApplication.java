@@ -10,22 +10,9 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
-import org.acra.ACRA;
-import org.acra.annotation.AcraCore;
-import org.acra.annotation.AcraMailSender;
-
 import java.util.Locale;
 
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-
-@AcraCore(
-        buildConfigClass = BuildConfig.class,
-        sharedPreferencesName = "pref"
-)
-@AcraMailSender(
-        mailTo = "kcanotify@gmail.com",
-        reportAsFile = false
-)
 
 public class KcaApplication extends MultiDexApplication {
     public static Locale defaultLocale;
@@ -34,7 +21,6 @@ public class KcaApplication extends MultiDexApplication {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
-        ACRA.init(this);
     }
 
     @Override
@@ -61,6 +47,5 @@ public class KcaApplication extends MultiDexApplication {
         LocaleUtils.updateConfig(this, getBaseContext().getResources().getConfiguration());
         AppCenter.start(this, BuildConfig.AppCenterSecret,
                 Analytics.class, Crashes.class);
-        ACRA.init(this);
     }
 }

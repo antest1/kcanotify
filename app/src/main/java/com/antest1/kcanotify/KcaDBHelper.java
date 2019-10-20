@@ -693,7 +693,6 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         for (int i = 0; i < api_list.size(); i++) {
             JsonObject api_list_item = api_list.get(i).getAsJsonObject();
             String api_no = api_list_item.get("api_no").getAsString();
-            all_code.add(KcaQuestCode.convert_to_code(api_no));
         }
         JsonArray tracked_quest = qt.getQuestTrackerData();
         for (int i = 0; i < tracked_quest.size(); i++) {
@@ -701,82 +700,9 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             String id = item.get("id").getAsString();
             boolean active = item.get("active").getAsBoolean();
             JsonArray cond = item.getAsJsonArray("cond");
-            int id_index = all_code.indexOf(KcaQuestCode.convert_to_code(id));
-            String new_code =  KcaQuestCode.convert_to_code(id, cond, active);
-            if (id_index != -1) {
-                all_code.set(id_index, new_code);
-            } else {
-                all_code.add(new_code);
-            }
         }
         return KcaUtils.joinStr(all_code, "");
     }
-
-    public boolean loadQuestDataFromCode(String code, boolean mode, long timestamp) {
-        if (KcaQuestCode.validate_code(code)) {
-            JsonObject data_dict = new JsonObject();
-            JsonArray data = getCurrentQuestList();
-            for (int i = 0; i < data.size(); i++) {
-                JsonObject item = data.get(i).getAsJsonObject();
-                String key = item.get("api_no").getAsString();
-                data_dict.add(key, item);
-            }
-
-            if (mode) {
-                clearQuest();
-                qt.clearQuestTrack();
-            }
-            JsonArray decoded_result = KcaQuestCode.decode_code(code);
-            for (int i = 0; i < decoded_result.size(); i++) {
-                JsonObject item = decoded_result.get(i).getAsJsonObject();
-                String key = item.get("code").getAsString();
-                boolean active = item.get("active").getAsBoolean();
-                JsonArray quest_cond = item.getAsJsonArray("cond");
-
-                if (active) {
-                    if (data_dict.has(key)) {
-                        JsonObject quest_item = data_dict.getAsJsonObject(key);
-                        putQuest(Integer.parseInt(key), quest_item.toString(),
-                                quest_item.get("api_type").getAsInt());
-                    } else {
-                        JsonObject dummy_value = new JsonObject();
-                        dummy_value.addProperty("api_no", key);
-                        dummy_value.addProperty("api_type", 0);
-                        dummy_value.addProperty("api_state", 0);
-                        dummy_value.addProperty("api_category", Integer.parseInt(key) / 100);
-                        dummy_value.addProperty("api_progress_flag", 0);
-                        dummy_value.addProperty("api_title", "unknown quest");
-                        dummy_value.addProperty("api_detail", "go to the quest page to see detail");
-
-                        if (kcQuestInfoData.has(key)) {
-                            String quest_code = kcQuestInfoData.getAsJsonObject(key).get("code").getAsString();
-                            quest_code = quest_code.replace("W", "");
-                        }
-
-                        putQuest(Integer.parseInt(key), dummy_value.toString(), 0);
-                    }
-                }
-                Log.e("KCA", quest_cond.toString());
-                if (quest_cond.size() > 0) {
-                    if (!mode) {
-                        JsonArray quest_trackinfo = qt.getQuestTrackInfo(key);
-                        if (quest_trackinfo.size() > 0) {
-                            for (int j = 0; j < quest_cond.size(); j++) {
-                                quest_cond.set(j, new JsonPrimitive(
-                                        quest_cond.get(j).getAsInt() + quest_trackinfo.get(j).getAsInt()));
-                            }
-                        }
-                    }
-                    qt.syncQuestTrack(Integer.parseInt(key), active, quest_cond, timestamp);
-                    qt.clearInvalidQuestTrack();
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 
     public void initExpScore() {
         Date currentTime = getJapanCalendarInstance().getTime();

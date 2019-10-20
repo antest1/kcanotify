@@ -55,7 +55,6 @@
 -keep class com.github.mikephil.charting.** { *; }
 
 -keepattributes SourceFile,LineNumberTable
--keep class org.acra.** { *; }
 
 -dontwarn android.test.**
 -dontwarn java.lang.invoke.**
@@ -84,10 +83,6 @@
     public static <fields>;
 }
 
--dontwarn com.google.zxing.**
--dontwarn com.journeyapps.**
--keep class com.google.zxing.** { *; }
--keep class com.google.journeyapps.** { *; }
 
 -assumenosideeffects class android.util.Log {
     public static *** d(...);

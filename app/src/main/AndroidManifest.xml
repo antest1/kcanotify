@@ -148,13 +148,6 @@
                 android:value="com.antest1.kcanotify.ToolsActivity" />
         </activity>
         <activity
-            android:name="com.antest1.kcanotify.KcaDataSyncActivity"
-            android:configChanges="locale|layoutDirection|orientation|screenSize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.antest1.kcanotify.ToolsActivity" />
-        </activity>
-        <activity
             android:name="com.antest1.kcanotify.KcaFairySelectActivity"
             android:configChanges="locale|layoutDirection|orientation|screenSize">
             <meta-data
@@ -214,12 +207,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ZxingActivity"
-            android:screenOrientation="fullSensor"
-            android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme"
-            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <service
             android:name=".KcaService"
