@@ -46,9 +46,9 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class KcaFairySelectActivity extends AppCompatActivity {
     public final static String FAIRY_INFO_FILENAME = "icon_info.json";
-    public final static boolean FAIRY_SPECIAL_FLAG = false;
+    public final static boolean FAIRY_SPECIAL_FLAG = true;
     public final static int FAIRY_SPECIAL_PREFIX = 900;
-    public final static int FAIRY_SPECIAL_COUNT = 8;
+    public final static int FAIRY_SPECIAL_COUNT = 16;
 
     Toolbar toolbar;
     private static Handler sHandler;

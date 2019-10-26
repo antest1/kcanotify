@@ -326,9 +326,19 @@ public class MainActivity extends AppCompatActivity {
         specialImage.setVisibility(View.GONE);
         specialImage.setOnClickListener(v -> v.setVisibility(View.GONE));
 
+        ImageView saury2019 = findViewById(R.id.img2019saury);
+        saury2019.setOnClickListener(v -> {
+            specialImage.setImageResource(R.mipmap.saury2019);
+            specialImage.setVisibility(View.VISIBLE);
+            JsonObject statProperties = new JsonObject();
+            statProperties.addProperty("special", "saury2019");
+            sendUserAnalytics(OPEN_PIC, statProperties);
+        });
+
         textSpecial = findViewById(R.id.textSpecial);
         textSpecial.setText(getStringWithLocale(R.string.special_message));
         textSpecial.setOnClickListener(v -> {
+            specialImage.setImageResource(R.mipmap.special_image);
             specialImage.setVisibility(View.VISIBLE);
             sendUserAnalytics(OPEN_PIC, null);
         });
