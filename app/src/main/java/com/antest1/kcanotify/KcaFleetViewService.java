@@ -56,6 +56,7 @@ import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_USEITEMS;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_FLEETVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_FIX_VIEW_LOC;
@@ -89,10 +90,10 @@ public class KcaFleetViewService extends Service {
     public static final int FLEET_COMBINED_ID = 4;
     final int fleetview_menu_margin = 40;
 
-    private static final int HQINFO_TOTAL = 2;
+    private static final int HQINFO_TOTAL = 3;
     private static final int HQINFO_EXPVIEW = 0;
     private static final int HQINFO_SECOUNT = 1;
-    private static final int HQINFO_EVENT = 2;
+    private static final int HQINFO_EVENT = 4;
 
     Context contextWithLocale;
     LayoutInflater mInflater;
@@ -172,7 +173,7 @@ public class KcaFleetViewService extends Service {
     }
 
     private void setHqInfo() {
-        int[] view_id = {R.id.fleetview_exp, R.id.fleetview_cnt};
+        int[] view_id = {R.id.fleetview_exp, R.id.fleetview_cnt, R.id.fleetview_fish};
         for (int i = 0; i < view_id.length; i++) {
             fleetHqInfoView.findViewById(view_id[i]).setVisibility((i == hqinfoState) ? View.VISIBLE : View.GONE);
         }
@@ -213,26 +214,28 @@ public class KcaFleetViewService extends Service {
                             R.color.white), PorterDuff.Mode.MULTIPLY);
                 }
 
-                /*
+            case HQINFO_EVENT:
                 // Saury Event Code
-                ImageView saurycntviewicon = fleetHqInfoView.findViewById(R.id.fleetview_cnt3_icon);
-                TextView saurycntview = fleetHqInfoView.findViewById(R.id.fleetview_cnt3);
-                saurycntviewicon.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                        R.color.colorItemDrop), PorterDuff.Mode.MULTIPLY);
+                TextView saurycntview = fleetHqInfoView.findViewById(R.id.fleetview_fish);
                 saurycntview.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItemDrop));
-                saurycntview.setText("0");
+                saurycntview.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_fish_text), 0, 0));
                 JsonArray useitem_data = dbHelper.getJsonArrayValue(DB_KEY_USEITEMS);
+                int sanma_count = 0;
+                int sardine_count = 0;
                 if (useitem_data != null) {
                     for (int i = 0; i < useitem_data.size(); i++) {
                         JsonObject item = useitem_data.get(i).getAsJsonObject();
                         int key = item.get("api_id").getAsInt();
                         if (key == 68) { // SAMMA
-                            saurycntview.setText(String.valueOf(item.get("api_count").getAsInt()));
+                            sanma_count = item.get("api_count").getAsInt();
+                        } else if (key == 93) {// SARDINE
+                            sardine_count = item.get("api_count").getAsInt();
                         }
                     }
+                    saurycntview.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_fish_text), sanma_count, sardine_count));
                 }
                 break;
-                */
+
             /*
             case HQINFO_EVENT:
                 TextView spring_item_1 = fleetHqInfoView.findViewById(R.id.fleetview_18spring_1);

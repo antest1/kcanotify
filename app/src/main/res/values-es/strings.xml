@@ -724,4 +724,5 @@
     <string name="text_api_cost">COST</string>
     <string name="text_api_distance">DIST</string>
     <string name="ask_to_dev">Maestro de equipos de KanColle</string>
+    <string name="fleetview_fish_text" formatted="false">[Saury] %03d [Sardina] %03d</string>
 </resources>

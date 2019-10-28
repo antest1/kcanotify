@@ -233,12 +233,13 @@
                     android:background="@color/colorPrimary"
                     android:gravity="right"
                     android:orientation="horizontal"
-                    android:paddingBottom="4dp"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
                     android:paddingStart="8dp"
-                    android:paddingTop="4dp">
+                    android:paddingLeft="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="4dp"
+                    android:visibility="visible">
 
                     <ImageView
                         android:id="@+id/fleetview_cnt1_icon"
@@ -334,6 +335,27 @@
                     android:singleLine="true"
                     android:text="[이번] 12.42 / [오늘] 54.23"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/fleetview_text_tbutton"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/fleetview_fish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:ellipsize="end"
+                    android:gravity="right"
+                    android:paddingStart="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="4dp"
+                    android:singleLine="true"
+                    android:text="[꽁치] 003 [정어리] 015"
+                    android:textColor="@color/colorSubmarineNode"
                     android:textSize="@dimen/fleetview_text_tbutton"
                     android:visibility="gone" />
 

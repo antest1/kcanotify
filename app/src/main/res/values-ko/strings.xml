@@ -720,5 +720,5 @@
     <string name="text_api_cost">배치비용</string>
     <string name="text_api_distance">행동반경</string>
     <string name="ask_to_dev">칸코레 장비왕</string>
-
+    <string name="fleetview_fish_text" formatted="false">[꽁치] %03d [정어리] %03d</string>
 </resources>

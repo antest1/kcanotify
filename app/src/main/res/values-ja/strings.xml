@@ -720,5 +720,5 @@
     <string name="text_api_distance">行動半径</string>
     <string name="special_message">秋のJervisとJanus</string>
     <string name="ask_to_dev">艦これ 装備王</string>
-
+    <string name="fleetview_fish_text" formatted="false">[秋刀魚] %03d [鰯] %03d</string>
 </resources>
