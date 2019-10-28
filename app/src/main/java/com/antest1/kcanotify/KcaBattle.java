@@ -1922,7 +1922,9 @@ public class KcaBattle {
                 battleResultInfo.addProperty("api_heavy_damaged", checkresult);
                 battleResultInfo.add("deck_port", deckportdata);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
-                battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
+                if (isCombinedFleetInSortie()) {
+                    battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
+                }
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
 

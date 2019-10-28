@@ -2301,7 +2301,8 @@ public class KcaService extends Service {
                         }
                     }
 
-                    if (battleInfoData.has("api_f_afterhps_combined")) {
+                    if (battleInfoData.has("api_f_afterhps_combined") &&
+                        battleInfoData.get("api_f_afterhps_combined") != null) {
                         JsonObject combined_fleet = deck_data.get(1).getAsJsonObject();
                         JsonArray api_ship = combined_fleet.getAsJsonArray("api_ship");
                         JsonArray api_f_afterhps_combined = battleInfoData.getAsJsonArray("api_f_afterhps_combined");
