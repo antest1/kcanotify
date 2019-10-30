@@ -213,7 +213,7 @@ public class KcaFleetViewService extends Service {
                     equipcntviewicon.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                             R.color.white), PorterDuff.Mode.MULTIPLY);
                 }
-
+                break;
             case HQINFO_EVENT:
                 // Saury Event Code
                 TextView saurycntview = fleetHqInfoView.findViewById(R.id.fleetview_fish);
