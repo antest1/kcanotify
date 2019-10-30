@@ -93,7 +93,7 @@ public class KcaFleetViewService extends Service {
     private static final int HQINFO_TOTAL = 3;
     private static final int HQINFO_EXPVIEW = 0;
     private static final int HQINFO_SECOUNT = 1;
-    private static final int HQINFO_EVENT = 4;
+    private static final int HQINFO_EVENT = 2;
 
     Context contextWithLocale;
     LayoutInflater mInflater;
