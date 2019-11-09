@@ -229,13 +229,18 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
 
             if (key.equals(PREF_SNIFFER_MODE)) {
                 pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                    String val = (String) newValue;
-                    if (Integer.parseInt(val) == SNIFFER_PASSIVE && prefs.getBoolean(PREF_VPN_ENABLED, false)) {
-                        KcaVpnService.stop(VPN_STOP_REASON, getActivity());
-                        prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                    if (KcaService.getServiceStatus()) {
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                        String val = (String) newValue;
+                        if (Integer.parseInt(val) == SNIFFER_PASSIVE && prefs.getBoolean(PREF_VPN_ENABLED, false)) {
+                            KcaVpnService.stop(VPN_STOP_REASON, getActivity());
+                            prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                        }
+                        return true;
+                    } else {
+                        showToast(getApplicationContext(), "Cannot change while service is running.", Toast.LENGTH_SHORT);
+                        return false;
                     }
-                    return true;
                 });
             }
 
