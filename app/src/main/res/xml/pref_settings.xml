@@ -331,19 +331,6 @@
             android:summary="@string/setting_menu_stat_desc_poidb"
             android:title="@string/setting_menu_stat_title_poidb" />
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="kcaqsync_use"
-            android:summary="@string/setting_menu_stat_desc_kcaqsync"
-            android:title="@string/setting_menu_stat_title_kcaqsync" />
-
-        <EditTextPreference
-            android:defaultValue=""
-            android:dependency="kcaqsync_use"
-            android:key="kcaqsync_pass"
-            android:summary="@string/setting_menu_stat_desc_kcaqsync_pass"
-            android:title="@string/setting_menu_stat_title_kcaqsync_pass" />
-
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/setting_menu_app_head">
         <Preference
