@@ -229,7 +229,7 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
 
             if (key.equals(PREF_SNIFFER_MODE)) {
                 pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    if (KcaService.getServiceStatus()) {
+                    if (!KcaService.getServiceStatus()) {
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
                         String val = (String) newValue;
                         if (Integer.parseInt(val) == SNIFFER_PASSIVE && prefs.getBoolean(PREF_VPN_ENABLED, false)) {
