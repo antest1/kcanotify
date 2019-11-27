@@ -23,7 +23,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -74,7 +73,6 @@ import static com.antest1.kcanotify.KcaUseStatConstant.RUN_KANCOLLE;
 import static com.antest1.kcanotify.KcaUseStatConstant.START_SERVICE;
 import static com.antest1.kcanotify.KcaUseStatConstant.START_SNIFFER;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
-import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -326,12 +324,16 @@ public class MainActivity extends AppCompatActivity {
         specialImage.setVisibility(View.GONE);
         specialImage.setOnClickListener(v -> v.setVisibility(View.GONE));
 
-        ImageView saury2019 = findViewById(R.id.img2019saury);
-        saury2019.setOnClickListener(v -> {
-            specialImage.setImageResource(R.mipmap.saury2019);
+        ImageView hoguk2019 = findViewById(R.id.img2019hoguk);
+        hoguk2019.setOnClickListener(v -> {
+            if (locale.contains("ko")) {
+                specialImage.setImageResource(R.mipmap.nonsan);
+            } else {
+                specialImage.setImageResource(R.mipmap.nonsan_en);
+            }
             specialImage.setVisibility(View.VISIBLE);
             JsonObject statProperties = new JsonObject();
-            statProperties.addProperty("special", "saury2019");
+            statProperties.addProperty("special", "nonsan2019");
             sendUserAnalytics(OPEN_PIC, statProperties);
         });
 

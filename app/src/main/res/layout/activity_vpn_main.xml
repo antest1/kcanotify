@@ -270,13 +270,13 @@
                     android:visibility="visible" />
 
                 <ImageView
-                    android:id="@+id/img2019saury"
+                    android:id="@+id/img2019hoguk"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_above="@id/textSpecial2"
                     android:layout_alignParentRight="true"
-                    android:src="@mipmap/sardine"
-                    app:srcCompat="@mipmap/sardine" />
+                    android:src="@mipmap/hoguk"
+                    app:srcCompat="@mipmap/hoguk" />
 
             </RelativeLayout>
 
