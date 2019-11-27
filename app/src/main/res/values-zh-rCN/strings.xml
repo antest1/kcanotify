@@ -660,7 +660,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_18spring_nori" formatted="false">苔 %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">茶 %02d</string>
 
-    <string name="special_message">杰维斯和雅努斯在秋天</string>
+    <string name="special_message">杰维斯，圣诞快乐！</string>
 
     <string name="widget_timer_name">Kcanotify计时Widget</string>
     <string name="fleet_format">第%d舰队</string>

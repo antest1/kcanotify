@@ -286,7 +286,7 @@
 
     <string name="yomi_flagship">insignia</string>
     <string name="yomi_elite">elite</string>
-    <string name="yomi_flagship_short">I</string>
+    <string name="yomi_flagship_short">ジャービス、メリークリスマス！</string>
     <string name="yomi_elite_short">E</string>
 
     <string name="rank_ss">SS</string>
@@ -656,7 +656,7 @@
     <string name="fleetview_18spring_nori" formatted="false">N %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">T %02d</string>
 
-    <string name="special_message">Jervis y Janus en otoño</string>
+    <string name="special_message">Feliz Navidad con Jervis!</string>
 
     <string name="widget_timer_name">Kcanotify Temporizador</string>
     <string name="fleet_format">Flota %d</string>
