@@ -170,8 +170,10 @@ public class KcaUtils {
         editor.commit();
     }
 
+    // 2019.11.27: force update server to LIZA (can only be updated)
     public static String getUpdateServer(Context ctx) {
-        return getStringPreferences(ctx, PREF_UPDATE_SERVER);
+        return "http://52.55.91.44/";
+        //return getStringPreferences(ctx, PREF_UPDATE_SERVER);
     }
 
     public static byte[] gzipcompress(String value) throws IOException {
