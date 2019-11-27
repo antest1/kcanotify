@@ -475,12 +475,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_equip_stype5">探照灯(大)</string>
 
     <string name="ship_tag_0">没有</string>
-    <string name="ship_tag_1">欧洲防卫舰队(蓝色)</string>
-    <string name="ship_tag_2">联合舰队(绿色)</string>
-    <string name="ship_tag_3">地中海舰队(金色)</string>
-    <string name="ship_tag_4"> </string>
-    <string name="ship_tag_5"> </string>
-    <string name="ship_tag_6"> </string>
+    <string name="ship_tag_1">标贴#1</string>
+    <string name="ship_tag_2">标贴#2</string>
+    <string name="ship_tag_3">标贴#3</string>
+    <string name="ship_tag_4">标贴#4</string>
+    <string name="ship_tag_5">标贴#5</string>
+    <string name="ship_tag_6">标贴#6</string>
 
     <string name="ship_fleet_0">没有</string>
 

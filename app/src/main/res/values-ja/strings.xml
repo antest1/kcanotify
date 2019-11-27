@@ -468,12 +468,12 @@
     <string name="ship_stat_equip_stype5">探照灯(大)</string>
 
     <string name="ship_tag_0">なし</string>
-    <string name="ship_tag_1">欧州防衛艦隊 (青)</string>
-    <string name="ship_tag_2">連合艦隊 (緑)</string>
-    <string name="ship_tag_3">地中海艦隊 (黄)</string>
-    <string name="ship_tag_4"> </string>
-    <string name="ship_tag_5"> </string>
-    <string name="ship_tag_6"> </string>
+    <string name="ship_tag_1">札#1</string>
+    <string name="ship_tag_2">札#2</string>
+    <string name="ship_tag_3">札#3</string>
+    <string name="ship_tag_4">札#4</string>
+    <string name="ship_tag_5">札#5</string>
+    <string name="ship_tag_6">札#6</string>
 
     <string name="ship_fleet_0">なし</string>
 
