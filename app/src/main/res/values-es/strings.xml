@@ -470,12 +470,12 @@
     <string name="ship_stat_equip_stype5">Searchlight(L)</string>
 
     <string name="ship_tag_0">Ninguna</string>
-    <string name="ship_tag_1">Flota #1</string>
-    <string name="ship_tag_2">Flota #2</string>
-    <string name="ship_tag_3">Flota #3</string>
-    <string name="ship_tag_4">Flota #4</string>
-    <string name="ship_tag_5">Flota #5</string>
-    <string name="ship_tag_6">Flota #6</string>
+    <string name="ship_tag_1">Etiqueta rosa</string>
+    <string name="ship_tag_2">Etiqueta cian</string>
+    <string name="ship_tag_3">Etiqueta azul</string>
+    <string name="ship_tag_4">Etiqueta verde</string>
+    <string name="ship_tag_5">Etiqueta blanca</string>
+    <string name="ship_tag_6">Etiqueta naranja</string>
 
     <string name="ship_fleet_0">Ninguno</string>
 

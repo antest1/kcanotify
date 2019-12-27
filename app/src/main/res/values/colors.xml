@@ -189,12 +189,12 @@
     <color name="colorStatLocked">#4e7bff</color>
 
     <color name="colorStatSallyArea0">#00FFFFFF</color>
-    <color name="colorStatSallyArea1">#64B5F6</color>
-    <color name="colorStatSallyArea2">#4DB6AC</color>
-    <color name="colorStatSallyArea3">#AED581</color>
-    <color name="colorStatSallyArea4">#FFD54F</color>
-    <color name="colorStatSallyArea5">#F06292</color>
-    <color name="colorStatSallyArea6">#9575CD</color>
+    <color name="colorStatSallyArea1">#FFA4BC</color>
+    <color name="colorStatSallyArea2">#48CAFF</color>
+    <color name="colorStatSallyArea3">#3D63FF</color>
+    <color name="colorStatSallyArea4">#66BB6A</color>
+    <color name="colorStatSallyArea5">#B6B6B6</color>
+    <color name="colorStatSallyArea6">#FFAB40</color>
 
     <color name="colorStatFighterPower">#16a085</color>
     <color name="colorStatSortCurrentBack">#c0bdbdbd</color>
