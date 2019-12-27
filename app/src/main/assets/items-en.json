@@ -356,6 +356,11 @@
   "四式20cm対地噴進砲 集中配備": "Type 4 20cm Anti-ground Rocket Launcher (Concentrated Deployment)",
   "8inch三連装砲 Mk.9 mod.2": "8inch Triple Gun Mount Mk.9 mod.2",
   "5inch 単装高角砲群": "5inch Single High-angle Gun Mount Battery",
+  "6inch 連装速射砲 Mk.XXI": "6inch Twin Rapid Fire Gun Mount Mk.XXI",
+  "Bofors 15cm連装速射砲 Mk.9 Model 1938": "Bofors 15cm Twin Rapid Fire Gun Mount Mk.9 Model 1938",
+  "Bofors 15cm連装速射砲 Mk.9改+単装速射砲 Mk.10改 Model 1938": "Bofors 15cm Twin Rapid Fire Gun Mount Mk.9 Kai + Single Rapid Fire Gun Mount Mk.10 Kai Model 1938",
+  "5inch連装両用砲(集中配備)": "5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)",
+  "GFCS Mk.37+5inch連装両用砲(集中配備)": "GFCS Mk.37 + 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)",
   
   "プレゼント箱": "Present Box",
   "秋刀魚": "Saury",
@@ -462,5 +467,9 @@
   "深海空要塞(重爆型)": "Abyssal Sky Fortress (Heavy Bomber Model)",
   "深海空要塞Ace(重爆型)": "Abyssal Sky Fortress Ace (Heavy Bomber Model)",
   "深海6inch三連装新型速射砲": "Abyssal New Model 6inch Triple Rapid Fire Gun Mount",
-  "深海4.7inch砲 Mk.XII": "Abyssal 4.7inch Gun Mk.XII"
+  "深海4.7inch砲 Mk.XII": "Abyssal 4.7inch Gun Mk.XII",
+  "深海8inch連装速射砲": "Abyssal 8inch Twin Rapid Fire Gun Mount",
+  "深海8inch三連装砲 Mk.9": "Abyssal 8inch Triple Gun Mount Mk.9",
+  "深海5inch連装両用砲(集中配備)": "Abyssal 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)",
+  "深海対空レーダーMark.III+FCS": "Abyssal Air Radar Mark.III + FCS"
 }

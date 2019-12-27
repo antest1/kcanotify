@@ -356,6 +356,11 @@
   "四式20cm対地噴進砲 集中配備": "四式20cm対地噴進炮 集中配備",
   "8inch三連装砲 Mk.9 mod.2": "8inch三連裝砲 Mk.9 mod.2",
   "5inch 単装高角砲群": "5inch 單裝高角砲群",
+  "6inch 連装速射砲 Mk.XXI": "6inch連裝速射砲 Mk.XXI",
+  "Bofors 15cm連装速射砲 Mk.9 Model 1938": "Bofors 15cm連裝速射砲 Mk.9 Model 1938",
+  "Bofors 15cm連装速射砲 Mk.9改+単装速射砲 Mk.10改 Model 1938": "Bofors 15cm連裝速射砲 Mk.9改+單裝速射砲 Mk.10改 Model 1938",
+  "5inch連装両用砲(集中配備)": "5inch連裝兩用砲(集中配備)",
+  "GFCS Mk.37+5inch連装両用砲(集中配備)": "GFCS MK.37+5inch連裝兩用砲(集中配備)",
   
   "プレゼント箱": "禮物箱",
   "秋刀魚": "秋刀魚",
@@ -462,5 +467,9 @@
   "深海空要塞(重爆型)": "深海空要塞(重爆型)",
   "深海空要塞Ace(重爆型)": "深海空要塞Ace(重爆型)",
   "深海6inch三連装新型速射砲": "深海6inch三連裝新型速射砲",
-  "深海4.7inch砲 Mk.XII": "深海4.7inch炮 Mk.XII改"
+  "深海4.7inch砲 Mk.XII": "深海4.7inch炮 Mk.XII改",
+  "深海8inch連装速射砲": "深海8inch連裝速射砲",
+  "深海8inch三連装砲 Mk.9": "深海8inch連裝速射砲 Mk.9",
+  "深海5inch連装両用砲(集中配備)": "深海5inch連裝兩用砲(集中配備)",
+  "深海対空レーダーMark.III+FCS": "水上雷達 Mark.III+FCS"
 }

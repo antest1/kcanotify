@@ -290,7 +290,8 @@
 	"花月":"Hanazuki",
 
 	"明石":"Akashi",
-	"あきつ丸":"Akitsumaru",
+	"あきつ丸":"Akitsu Maru",
+	"神州丸": "Shinshuu Maru",
 	"秋津洲":"Akitsushima",
 	"瑞穂":"Mizuho",
 	"日進": "Nisshin",
@@ -307,6 +308,7 @@
 	"佐渡":"Sado",
 	"対馬":"Tsushima",
 	"福江": "Fukae",
+	"平戸": "Hirato",
 	"日振": "Hiburi",
 	"大東": "Daitou",
 	"御蔵": "Mikura",
@@ -354,6 +356,10 @@
 	"Grecale" : "Grecale",
 	"L.d.S.D.d.Abruzzi": "L.d.S.D.d.Abruzzi",
 	"Janus": "Janus",
+	"De Ruyter": "De Ruyter",
+	"Perth": "Perth",
+	"Houston": "Houston",
+	"Atlanta": "Atlanta",
 
 	"防空棲姫":"Air Defense Princess",
 	"空母棲鬼":"Aircraft Carrier Demon",
@@ -461,6 +467,8 @@
 	"太平洋深海棲姫": "Abyssal Pacific Princess",
 	"深海地中海棲姫": "Abyssal Mediterranean Princess",
 	"アンツィオ沖棲姫": "Anzio Princess",
+	"バタビア沖棲姫": "Batavia Princess",
+	"防空巡棲姫": "Anti-Air Cruiser Princess",
 
 	"elite":" elite",
 	"flagship":" flagship"
