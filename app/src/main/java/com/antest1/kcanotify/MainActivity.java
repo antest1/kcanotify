@@ -324,19 +324,6 @@ public class MainActivity extends AppCompatActivity {
         specialImage.setVisibility(View.GONE);
         specialImage.setOnClickListener(v -> v.setVisibility(View.GONE));
 
-        ImageView hoguk2019 = findViewById(R.id.img2019hoguk);
-        hoguk2019.setOnClickListener(v -> {
-            if (locale.contains("ko")) {
-                specialImage.setImageResource(R.mipmap.nonsan);
-            } else {
-                specialImage.setImageResource(R.mipmap.nonsan_en);
-            }
-            specialImage.setVisibility(View.VISIBLE);
-            JsonObject statProperties = new JsonObject();
-            statProperties.addProperty("special", "nonsan2019");
-            sendUserAnalytics(OPEN_PIC, statProperties);
-        });
-
         textSpecial = findViewById(R.id.textSpecial);
         textSpecial.setText(getStringWithLocale(R.string.special_message));
         textSpecial.setOnClickListener(v -> {
