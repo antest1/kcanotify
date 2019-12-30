@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/layout_logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -36,16 +36,34 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/app_message"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/layout_progress"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="70dp"
+        android:layout_below="@id/layout_logo"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:padding="5dp"
-        android:textStyle="italic" />
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateBehavior="repeat" />
+
+        <TextView
+            android:id="@+id/app_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textStyle="italic" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/app_version"
