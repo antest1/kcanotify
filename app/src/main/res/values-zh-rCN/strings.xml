@@ -77,6 +77,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="node_info_selectable" formatted="false">%s (能动分歧)</string>
     <string name="node_info_sendan" formatted="false">%s (大型资源点)</string>
     <string name="node_info_ecbattle" formatted="false">%s (深海联合舰队)</string>
+    <string name="node_info_anchorage" formatted="false">%s (泊地修理)</string>
     <string name="node_info_practice" formatted="false">演习</string>
     <!-- MainActivity Strings -->
     <string name="ma_vpn_toggleon">Sniffer ON</string>

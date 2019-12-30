@@ -256,8 +256,7 @@ public final class KcaConstants {
     public static final int API_NODE_EVENT_ID_AIR = 7;
     public static final int API_NODE_EVENT_ID_SENDAN = 8;
     public static final int API_NODE_EVENT_ID_TPOINT = 9;
-    public static final int API_NODE_EVENT_ID_LDAIRBATTLE = 10;
-
+    public static final int API_NODE_EVENT_ID_ANCHORAGE = 10;
 
     public static final int API_NODE_EVENT_KIND_NOBATTLE = 0;
     public static final int API_NODE_EVENT_KIND_BATTLE = 1;

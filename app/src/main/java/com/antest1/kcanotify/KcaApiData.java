@@ -1259,8 +1259,8 @@ public class KcaApiData {
             case API_NODE_EVENT_ID_SENDAN:
                 currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_sendan), currentNode);
                 break;
-            case API_NODE_EVENT_ID_LDAIRBATTLE:
-                currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_ldairbattle), currentNode);
+            case API_NODE_EVENT_ID_ANCHORAGE:
+                currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_anchorage), currentNode);
                 break;
             default:
                 currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_normal), currentNode);
@@ -1302,6 +1302,8 @@ public class KcaApiData {
                 return ContextCompat.getColor(context, R.color.colorNightBattle);
             case 13:
                 return ContextCompat.getColor(context, R.color.colorLdShooting);
+            case 14:
+                return ContextCompat.getColor(context, R.color.colorAnchorage);
             default:
                 return ContextCompat.getColor(context, R.color.colorPrimaryDark);
         }

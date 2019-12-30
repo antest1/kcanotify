@@ -71,6 +71,7 @@
     <string name="node_info_selectable" formatted="false">%s (能動分岐)</string>
     <string name="node_info_sendan" formatted="false">%s (船団護衛成功)</string>
     <string name="node_info_ecbattle" formatted="false">%s (敵連合艦隊)</string>
+    <string name="node_info_anchorage" formatted="false">%s (泊地修理)</string>
     <string name="node_info_practice" formatted="false">練習</string>
     <!-- MainActivity Strings -->
     <string name="ma_vpn_toggleon">Sniffer On</string>
