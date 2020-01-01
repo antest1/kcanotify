@@ -252,6 +252,13 @@ public class KcaService extends Service {
         deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
         KcaApiData.setDBHelper(dbHelper);
 
+        JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
+        //Log.e("KCA", kcDataObj.toJSONString());
+        if (kcDataObj != null && kcDataObj.has("api_data")) {
+            //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
+            KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
+        }
+
         AssetManager assetManager = getResources().getAssets();
         int loadMapEdgeInfoResult = loadMapEdgeInfoFromStorage(getApplicationContext());
         if (loadMapEdgeInfoResult != 1) {
@@ -702,13 +709,6 @@ public class KcaService extends Service {
                         makeToast("new game data detected: " + String.valueOf(kca_version), Toast.LENGTH_LONG,
                                 ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                     }
-                }
-
-                JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
-                //Log.e("KCA", kcDataObj.toJSONString());
-                if (kcDataObj != null && kcDataObj.has("api_data")) {
-                    //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
-                    KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

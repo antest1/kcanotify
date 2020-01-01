@@ -47,6 +47,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_ALLOW_EXTFILTER;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE_START;
 import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
+import static com.antest1.kcanotify.KcaConstants.PREF_DEFAULT_APIVER;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
@@ -151,6 +152,23 @@ public class InitStartActivity extends Activity {
             runOnUiThread(() -> appmessage.setText("Checking External Filter..."));
             boolean allow_ext = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_ALLOW_EXTFILTER);
             List<String> result = KcaVpnData.setExternalFilter(allow_ext);
+
+            boolean is_default_written = KcaUtils.getStringPreferences(getApplicationContext(), PREF_DEFAULT_APIVER).equals(BuildConfig.VERSION_NAME);
+            if (!is_default_written) {
+                runOnUiThread(() -> appmessage.setText("Writing Default Data..."));
+                String internal_kca_version = getString(R.string.default_gamedata_version);
+                try {
+                    InputStream api_ais = getAssets().open("api_start2");
+                    byte[] bytes = gzipdecompress(ByteStreams.toByteArray(api_ais));
+                    String asset_start2_data = new String(bytes);
+                    dbHelper.putValue(DB_KEY_STARTDATA, asset_start2_data);
+                    KcaUtils.setPreferences(getApplicationContext(), PREF_DEFAULT_APIVER, BuildConfig.VERSION_NAME);
+                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_VERSION, internal_kca_version);
+                    KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, internal_kca_version);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             // main update check
             if (!KcaUtils.checkOnline(getApplicationContext()) || !getBooleanPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START)) {

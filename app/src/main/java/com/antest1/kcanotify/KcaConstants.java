@@ -482,7 +482,7 @@ public final class KcaConstants {
     public static final String PREF_KC_PACKAGE = "kc_package";
     public static final String PREF_HDNOTI_LOCKED = "hdnoti_locked";
     public static final String PREF_HDNOTI_MINLEVEL = "hdnoti_minlevel";
-
+    public static final String PREF_DEFAULT_APIVER = "default_apiver";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -550,7 +550,8 @@ public final class KcaConstants {
             PREF_DNS_NAMESERVERS,
             PREF_KC_PACKAGE,
             PREF_HDNOTI_LOCKED,
-            PREF_HDNOTI_MINLEVEL
+            PREF_HDNOTI_MINLEVEL,
+            PREF_DEFAULT_APIVER
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
