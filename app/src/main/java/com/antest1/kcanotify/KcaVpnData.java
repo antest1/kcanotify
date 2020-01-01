@@ -89,32 +89,21 @@ public class KcaVpnData {
 
     public static List<String> setExternalFilter(boolean use_ext) {
         prefixCheckList = new ArrayList<>(Arrays.asList(kcaServerPrefixList));
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                if (use_ext) {
-                    try {
-                        String[] ooi_addresses = {"ooi.moe", "cn.kcwiki.org", "kancolle.su"};
-                        for (String ooi: ooi_addresses) {
-                            String[] ooi_ip = KcaUtils.getIpAddress(ooi);
-                            prefixCheckList.addAll(Arrays.asList(ooi_ip));
-                        }
-                    } catch (Exception e) {
-                        for (String ooi: kcaExtServiceList) {
-                            String[] ooi_ip = KcaUtils.getIpAddress(ooi);
-                            prefixCheckList.addAll(Arrays.asList(ooi_ip));
-                        }
-                    }
+        if (use_ext) {
+            try {
+                String[] ooi_addresses = {"ooi.moe", "cn.kcwiki.org", "kancolle.su"};
+                for (String ooi: ooi_addresses) {
+                    String[] ooi_ip = KcaUtils.getIpAddress(ooi);
+                    prefixCheckList.addAll(Arrays.asList(ooi_ip));
                 }
-                Log.e("KCA", prefixCheckList.toString());
+            } catch (Exception e) {
+                for (String ooi: kcaExtServiceList) {
+                    String[] ooi_ip = KcaUtils.getIpAddress(ooi);
+                    prefixCheckList.addAll(Arrays.asList(ooi_ip));
+                }
             }
-        };
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
+        Log.e("KCA", prefixCheckList.toString());
         return prefixCheckList;
     }
 
