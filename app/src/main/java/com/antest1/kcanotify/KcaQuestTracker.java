@@ -39,6 +39,7 @@ import static com.antest1.kcanotify.KcaApiData.STYPE_CV;
 import static com.antest1.kcanotify.KcaApiData.STYPE_CVB;
 import static com.antest1.kcanotify.KcaApiData.STYPE_CVL;
 import static com.antest1.kcanotify.KcaApiData.STYPE_DD;
+import static com.antest1.kcanotify.KcaApiData.STYPE_DE;
 import static com.antest1.kcanotify.KcaApiData.STYPE_SS;
 import static com.antest1.kcanotify.KcaApiData.STYPE_SSV;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
@@ -50,7 +51,7 @@ import static com.antest1.kcanotify.KcaUtils.getJapanSimpleDataFormat;
 public class KcaQuestTracker extends SQLiteOpenHelper {
     private static final String qt_db_name = "quest_track_db";
     private static final String qt_table_name = "quest_track_table";
-    private final static int[] quarterly_quest_id = {426, 428, 637, 643, 663, 675, 678, 680, 822, 854, 861, 862, 873, 875, 888};
+    private final static int[] quarterly_quest_id = {284, 426, 428, 637, 643, 663, 675, 678, 680, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894};
     private final static int[] quest_cont_quest_id = {411, 607, 608};
     private static boolean ap_dup_flag = false;
 
@@ -254,7 +255,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     }
                     break;
                 case 5: // Quarterly, Else
-                    if (Arrays.binarySearch(quarterly_quest_id, id) >= 0) { // Bq1 ~ Bq6, D24, D26, F35, F39 (Quarterly)
+                    if (Arrays.binarySearch(quarterly_quest_id, id) >= 0) { // Bq1 ~ Bq12, D24, D26, F35, F39 (Quarterly)
                         int quest_month = Integer.parseInt(quest_time[1]);
                         int quest_quarter = quest_month - quest_month % 3;
                         int current_month = Integer.parseInt(current_time[1]);
@@ -630,6 +631,22 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         targetData.set(3, new JsonPrimitive(1));
                     updateTarget.add(key, targetData);
                     break;
+                case "872": // Z후단
+                    targetData = new JsonArray();
+                    targetData.add(cond0);
+                    targetData.add(cond1);
+                    targetData.add(cond2);
+                    targetData.add(cond3);
+                    if (world == 7 && map == 2 && node == 15 && rank.equals("S"))
+                        targetData.set(0, new JsonPrimitive(1));
+                    if (world == 5 && map == 5 && isboss && rank.equals("S"))
+                        targetData.set(1, new JsonPrimitive(1));
+                    if (world == 6 && map == 2 && isboss && rank.equals("S"))
+                        targetData.set(2, new JsonPrimitive(1));
+                    if (world == 6 && map == 5 && isboss && rank.equals("S"))
+                        targetData.set(3, new JsonPrimitive(1));
+                    updateTarget.add(key, targetData);
+                    break;
                 case "862": // 6-3 분기퀘
                     requiredShip = 0;
                     int requiredCL = 0;
@@ -659,8 +676,103 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                         targetData.set(2, new JsonPrimitive(1));
                     updateTarget.add(key, targetData);
                     break;
+                case "845": // 4해역 분기퀘
+                    targetData = new JsonArray();
+                    targetData.add(cond0);
+                    targetData.add(cond1);
+                    targetData.add(cond2);
+                    targetData.add(cond3);
+                    targetData.add(cond4);
+                    if (world == 4 && map == 1 && isboss && rank.equals("S"))
+                        targetData.set(0, new JsonPrimitive(1));
+                    if (world == 4 && map == 2 && isboss && rank.equals("S"))
+                        targetData.set(1, new JsonPrimitive(1));
+                    if (world == 4 && map == 3 && isboss && rank.equals("S"))
+                        targetData.set(2, new JsonPrimitive(1));
+                    if (world == 4 && map == 4 && isboss && rank.equals("S"))
+                        targetData.set(3, new JsonPrimitive(1));
+                    if (world == 4 && map == 5 && isboss && rank.equals("S"))
+                        targetData.set(4, new JsonPrimitive(1));
+                    updateTarget.add(key, targetData);
+                    break;
                 case "875": // 5-4 분기퀘
                     wflag = world == 5 && map == 4 && isboss && isGoodRank(rank);
+                    break;
+                case "893": // 정박지 전과퀘 (1-5, 7-1, 7-2-1, 7-2-2)
+                    targetData = new JsonArray();
+                    targetData.add(cond0);
+                    targetData.add(cond1);
+                    targetData.add(cond2);
+                    targetData.add(cond3);
+                    if (world == 1 && map == 5 && isboss && rank.equals("S"))
+                        targetData.set(0, new JsonPrimitive(1));
+                    if (world == 7 && map == 1 && isboss && rank.equals("S"))
+                        targetData.set(1, new JsonPrimitive(1));
+                    if (world == 7 && map == 2 && node == 7 && rank.equals("S"))
+                        targetData.set(2, new JsonPrimitive(1));
+                    if (world == 7 && map == 2 && node == 15 && rank.equals("S"))
+                        targetData.set(3, new JsonPrimitive(1));
+                    updateTarget.add(key, targetData);
+                    break;
+                case "894": // 항모병참선 분기퀘 (1-3, 1-4, 2-1, 2-2, 2-3)
+                    requiredShip = 0;
+                    for (int i = 0; i < fleet_data.size(); i++) {
+                        int item = fleet_data.get(i).getAsInt();
+                        if (item == -1) break;
+                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
+                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
+                        if (kcShipType == STYPE_CV) requiredShip += 1;
+                        if (kcShipType == STYPE_CVL) requiredShip += 1;
+                        if (kcShipType == STYPE_CVB) requiredShip += 1;
+                    }
+                    if (requiredShip > 0) {
+                        targetData = new JsonArray();
+                        targetData.add(cond0);
+                        targetData.add(cond1);
+                        targetData.add(cond2);
+                        targetData.add(cond3);
+                        targetData.add(cond4);
+                        if (world == 1 && map == 3 && isboss && rank.equals("S"))
+                            targetData.set(0, new JsonPrimitive(1));
+                        if (world == 1 && map == 4 && isboss && rank.equals("S"))
+                            targetData.set(1, new JsonPrimitive(1));
+                        if (world == 2 && map == 1 && isboss && rank.equals("S"))
+                            targetData.set(2, new JsonPrimitive(1));
+                        if (world == 2 && map == 2 && isboss && rank.equals("S"))
+                            targetData.set(3, new JsonPrimitive(1));
+                        if (world == 2 && map == 3 && isboss && rank.equals("S"))
+                            targetData.set(4, new JsonPrimitive(1));
+                        updateTarget.add(key, targetData);
+                    }
+                    break;
+                case "284": // 남서제도 분기퀘 (1-4, 2-1, 2-2, 2-3)
+                    requiredShip = 0;
+                    for (int i = 0; i < fleet_data.size(); i++) {
+                        int item = fleet_data.get(i).getAsInt();
+                        if (item == -1) break;
+                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
+                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
+                        if (kcShipType == STYPE_CL) requiredShip += 10;
+                        if (kcShipType == STYPE_CVL) requiredShip += 10;
+                        if (kcShipType == STYPE_DD) requiredShip += 1;
+                        if (kcShipType == STYPE_DE) requiredShip += 1;
+                    }
+                    if (requiredShip / 10 == 1 && requiredShip % 10 >= 3) { // 경순or경항모 1척, 구축or해방 3척 이상
+                        targetData = new JsonArray();
+                        targetData.add(cond0);
+                        targetData.add(cond1);
+                        targetData.add(cond2);
+                        targetData.add(cond3);
+                        if (world == 1 && map == 4 && isboss && rank.equals("S"))
+                            targetData.set(0, new JsonPrimitive(1));
+                        if (world == 2 && map == 1 && isboss && rank.equals("S"))
+                            targetData.set(1, new JsonPrimitive(1));
+                        if (world == 2 && map == 2 && isboss && rank.equals("S"))
+                            targetData.set(2, new JsonPrimitive(1));
+                        if (world == 2 && map == 3 && isboss && rank.equals("S"))
+                            targetData.set(3, new JsonPrimitive(1));
+                        updateTarget.add(key, targetData);
+                    }
                     break;
                 case "888": // 미카와 분기퀘: 쵸카이, 아오바, 키누가사, 카코, 후루타카, 텐류, 유바리 중 4택
                     requiredShip = 0;
