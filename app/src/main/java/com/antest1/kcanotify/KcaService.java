@@ -172,7 +172,6 @@ public class KcaService extends Service {
     String api_start2_data = null;
     boolean api_start2_down_mode = false;
     boolean api_start2_init = false;
-    boolean api_start2_loading_flag = false;
     Gson gson = new GsonBuilder().setLenient().create();
 
     public static boolean getServiceStatus() {
@@ -693,7 +692,6 @@ public class KcaService extends Service {
                 isPortAccessed = false;
                 isInBattle = false;
                 api_start2_init = false;
-                api_start2_loading_flag = true;
                 KcaFleetViewService.setReadyFlag(false);
                 //Toast.makeText(contextWithLocale, "KCA_VERSION", Toast.LENGTH_LONG).show();
                 String version_data = new String(raw);
@@ -1016,12 +1014,8 @@ public class KcaService extends Service {
             if (restartFlag) {
                 makeToast(getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
             } else if (!checkDataLoadTriggered()) {
-                if (!api_start2_loading_flag) {
-                    makeToast(getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-                    //new retrieveApiStartData().execute("", "down", "");
-                }
-            } else if (api_start2_loading_flag) {
-                makeToast(getStringWithLocale(R.string.kca_toast_loading_data), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                makeToast(getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                //new retrieveApiStartData().execute("", "down", "");
             } else {
                 if (url.startsWith(API_PORT)) {
                     KcaFleetViewService.setReadyFlag(true);
@@ -2209,7 +2203,6 @@ public class KcaService extends Service {
                     Log.e("KCA", KcaUtils.format("Item: %d", jsonDataObj.get("item").getAsInt()));
                     restartFlag = false;
                 }
-                api_start2_loading_flag = false;
                 updateFleetView();
             }
 
