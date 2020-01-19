@@ -14,6 +14,8 @@ import com.google.gson.Gson;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
+
 public class KcaInfoActivity extends AppCompatActivity {
     Toolbar toolbar;
     TextView app_gpl, app_source;
@@ -33,6 +35,10 @@ public class KcaInfoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         app_gpl = (TextView) findViewById(R.id.app_gpl);
+
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        TextView app_license = findViewById(R.id.AppLicense);
+        app_license.setText(KcaUtils.format(getString(R.string.ia_license), year));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             app_gpl.setText(Html.fromHtml(KcaUtils.format(getString(R.string.ia_gpl), getString(R.string.app_brand)), Html.FROM_HTML_MODE_LEGACY));

@@ -156,7 +156,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_bypass_list_invalid">The bypass address list is invalid. Please double-check your input.</string>
 
     <!-- InfoActivity Strings -->
-    <string name="ia_license" formatted="false" translatable="false">Copyright &#169; 2016-2018 by antest1(IE10)</string>
+    <string name="ia_license" formatted="false" translatable="false">Copyright &#169; 2016-%d by antest1(IE10)</string>
     <string name="ia_gpl" formatted="false" translatable="false">By using %s, you agree to the &lt;a href="http://www.gnu.org/licenses/gpl.txt"&gt;GNU General Public License 3.0&lt;/a&gt;. The whole source code is available on &lt;a href="https://github.com/antest1/kcanotify/"&gt;github repository&lt;/a&gt;.</string>
 
     <!-- KcaService Strings -->
