@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton kcafairybtn;
     public static Handler sHandler;
     TextView textDescription;
-    TextView textWarn, textSpecial, textMaintenance;
+    TextView textWarn, textMainUpdate, textSpecial, textMaintenance;
     TextView textSpecial2;
     Gson gson = new Gson();
 
@@ -272,6 +272,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             main_html = "Error loading html file.";
         }
+
+        textMainUpdate = findViewById(R.id.textMainUpdate);
+        textMainUpdate.setOnClickListener(v -> {
+            startActivity(new Intent(this, UpdateCheckActivity.class));
+        });
 
         textDescription = findViewById(R.id.textDescription);
         Spanned fromHtml = HtmlCompat.fromHtml(getApplicationContext(), main_html, 0);

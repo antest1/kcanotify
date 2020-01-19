@@ -158,50 +158,50 @@
                 <TextView
                     android:id="@+id/textMainWarn"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="84dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp"
                     android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_marginTop="4dp"
-                    android:background="@color/colorWarn"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="6dp"
+                    android:background="@color/colorPanelWarning"
                     android:maxLines="8"
                     android:padding="4dp"
                     android:scrollbars="vertical"
                     android:text="화면 오버레이가 설정되지 않았습니다."
                     android:textAlignment="viewStart"
-                    android:textColor="@color/colorWarnText"
-                    android:textSize="12sp" />
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/textMainUpdate"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@+id/textMainWarn"
+                    android:layout_above="@id/textMainWarn"
                     android:layout_alignParentBottom="false"
                     android:layout_marginStart="6dp"
                     android:layout_marginLeft="6dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="6dp"
                     android:layout_marginRight="6dp"
-                    android:background="@color/colorUpdate"
+                    android:background="@color/colorMainBtn"
                     android:gravity="center_vertical|center_horizontal"
                     android:minLines="4"
                     android:padding="4dp"
-                    android:text="업데이트 가능"
+                    android:text="@string/setting_menu_kand_title_game_data_down"
                     android:textAlignment="center"
-                    android:textColor="@color/colorUpdateText"
+                    android:textColor="@color/white"
                     android:textSize="14dp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/textMaintenance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@+id/textMainUpdate"
+                    android:layout_above="@id/textMainUpdate"
                     android:layout_alignParentBottom="false"
                     android:layout_marginStart="6dp"
                     android:layout_marginLeft="6dp"
@@ -244,7 +244,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@id/textSpecial"
+                    android:layout_above="@id/textMainUpdate"
                     android:layout_alignParentBottom="false"
                     android:layout_marginStart="6dp"
                     android:layout_marginLeft="6dp"
@@ -259,7 +259,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="14dp"
-                    android:visibility="visible" />
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/textDescription"
