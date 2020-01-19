@@ -2059,6 +2059,7 @@ public class KcaService extends Service {
                         String[] requestData = request.split("&");
                         int targetId = -1;
                         String itemIds = "";
+                        int slotDestFlag = -1;
                         for (int i = 0; i < requestData.length; i++) {
                             String decodedData = URLDecoder.decode(requestData[i], "utf-8");
                             if (decodedData.startsWith("api_id=")) {
@@ -2067,13 +2068,16 @@ public class KcaService extends Service {
                             if (decodedData.startsWith("api_id_items=")) {
                                 itemIds = decodedData.replace("api_id_items=", "");
                             }
+                            if (decodedData.startsWith("api_slot_dest_flag=")) {
+                                slotDestFlag = Integer.valueOf(decodedData.replace("api_slot_dest_flag=", ""));
+                            }
                         }
                         if (jsonDataObj.has("api_data")) {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                             dbHelper.putValue(DB_KEY_DECKPORT, api_data.getAsJsonArray("api_deck").toString());
                             dbHelper.test();
                             updateUserShip(api_data.getAsJsonObject("api_ship"));
-                            KcaApiData.deleteUserShip(itemIds, 1);
+                            KcaApiData.deleteUserShip(itemIds, slotDestFlag);
                             if (api_data.has("api_powerup_flag") && api_data.get("api_powerup_flag").getAsInt() == 1) {
                                 questTracker.updateIdCountTracker("702");
                                 questTracker.updateIdCountTracker("703");
