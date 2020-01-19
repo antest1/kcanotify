@@ -337,6 +337,16 @@ public class MainActivity extends AppCompatActivity {
             sendUserAnalytics(OPEN_PIC, null);
         });
 
+        ImageView setsubunIcon = findViewById(R.id.setsubunIcon);
+        setsubunIcon.setOnClickListener(v -> {
+            specialImage.setImageResource(KcaUtils.getId("setsubun_".concat(LocaleUtils.getLocaleCode(locale)), R.mipmap.class));
+            specialImage.setVisibility(View.VISIBLE);
+            JsonObject statProperties = new JsonObject();
+            statProperties.addProperty("event_type", "setsubun2020");
+            sendUserAnalytics(OPEN_PIC, statProperties);
+        });
+
+        /*
         textSpecial2 = findViewById(R.id.textSpecial2);
         textSpecial2.setText(getStringWithLocale(R.string.ask_to_dev));
         textSpecial2.setOnClickListener(new View.OnClickListener() {
@@ -362,6 +372,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        */
     }
 
     @Override
