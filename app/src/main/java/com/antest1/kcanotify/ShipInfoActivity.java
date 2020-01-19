@@ -279,7 +279,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_ship_export:
                 String data = adapter.getKanmusuListText();
-                String encoded_data = KcaUtils.encode64(data);
+                // String encoded_data = KcaUtils.encode64(data);
                 ((TextView) export_popup.findViewById(R.id.export_content)).setText(data);
                 is_popup_on = true;
                 export_popup.setVisibility(View.VISIBLE);
