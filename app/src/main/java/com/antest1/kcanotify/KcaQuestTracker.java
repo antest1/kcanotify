@@ -51,7 +51,7 @@ import static com.antest1.kcanotify.KcaUtils.getJapanSimpleDataFormat;
 public class KcaQuestTracker extends SQLiteOpenHelper {
     private static final String qt_db_name = "quest_track_db";
     private static final String qt_table_name = "quest_track_table";
-    private final static int[] quarterly_quest_id = {284, 426, 428, 637, 643, 663, 675, 678, 680, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894};
+    private final static int[] quarterly_quest_id = {284, 426, 428, 637, 643, 663, 675, 678, 680, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894, 903};
     private final static int[] quest_cont_quest_id = {411, 607, 608};
     private static boolean ap_dup_flag = false;
 
@@ -794,6 +794,38 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                             targetData.set(1, new JsonPrimitive(1));
                         if (world == 5 && map == 4 && isboss && rank.equals("S"))
                             targetData.set(2, new JsonPrimitive(1));
+                        updateTarget.add(key, targetData);
+                    }
+                    break;
+                case "903": // 6수전 분기퀘 (유바리개2 기함, 유라개2 혹은 6수뢰구축 2척 이상)
+                    requiredShip = 0;
+                    int[] yuubari_kaini = {622, 623, 624};
+                    int[] rokusuisen_dd = {1, 2, 30, 31, 164, 254, 255, 259, 261, 308, 434, 435};
+                    for (int i = 0; i < fleet_data.size(); i++) {
+                        int item = fleet_data.get(i).getAsInt();
+                        if (item == -1) break;
+                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
+                        if (i == 0) {
+                            if (Arrays.binarySearch(yuubari_kaini, shipId) >= 0) requiredShip += 10;
+                        } else {
+                            if (shipId == 488) requiredShip += 2; // 유라 개2
+                            else if (Arrays.binarySearch(rokusuisen_dd, shipId) >= 0) requiredShip += 1; // 6수전
+                        }
+                    }
+                    if (requiredShip >= 12) {
+                        targetData = new JsonArray();
+                        targetData.add(cond0);
+                        targetData.add(cond1);
+                        targetData.add(cond2);
+                        targetData.add(cond3);
+                        if (world == 5 && map == 1 && isboss && rank.equals("S"))
+                            targetData.set(0, new JsonPrimitive(1));
+                        if (world == 5 && map == 4 && isboss && rank.equals("S"))
+                            targetData.set(1, new JsonPrimitive(1));
+                        if (world == 6 && map == 4 && isboss && rank.equals("S"))
+                            targetData.set(2, new JsonPrimitive(1));
+                        if (world == 6 && map == 5 && isboss && rank.equals("S"))
+                            targetData.set(3, new JsonPrimitive(1));
                         updateTarget.add(key, targetData);
                     }
                     break;
