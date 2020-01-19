@@ -156,14 +156,6 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin">
 
                 <TextView
-                    android:id="@+id/textDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    android:textColor="@color/colorActivityText"
-                    android:textSize="@dimen/activity_text_size" />
-
-                <TextView
                     android:id="@+id/textMainWarn"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
@@ -268,6 +260,15 @@
                     android:textColor="@color/white"
                     android:textSize="14dp"
                     android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/textDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@id/textSpecial2"
+                    android:text="TextView"
+                    android:textColor="@color/colorActivityText"
+                    android:textSize="@dimen/activity_text_size" />
 
             </RelativeLayout>
 
