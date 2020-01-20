@@ -217,6 +217,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_game_data_down">Use if game data was not loaded automatically.</string>
     <string name="setting_menu_kand_title_fairy_select">Select Fairy</string>
     <string name="setting_menu_kand_desc_fairy_select">Select Fairy to bring with</string>
+    <string name="setting_menu_kand_title_fairy_size">Fairy Size</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">Show Fairy only in Kancolle Screen</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">There is a delay in showing/hiding fairy.</string>
     <string name="action_fairy_rev">Reverse</string>
@@ -796,4 +797,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="ask_to_dev">KanColle Equipment Master</string>
     <string name="fleetview_fish_text" formatted="false">[Saury] %03d [Sardine] %03d</string>
+
+    <string name="fairy_size_value_1">Very Small</string>
+    <string name="fairy_size_value_2">Small</string>
+    <string name="fairy_size_value_3">Normal</string>
+    <string name="fairy_size_value_4">Large</string>
+    <string name="fairy_size_value_5">Very Large</string>
+
 </resources>

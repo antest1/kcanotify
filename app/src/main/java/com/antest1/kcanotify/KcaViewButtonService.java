@@ -32,11 +32,13 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -70,6 +72,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_REV;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_SIZE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_QUEST_FAIRY_GLOW;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
@@ -94,6 +97,7 @@ public class KcaViewButtonService extends Service {
     public static final String FAIRY_CHANGE = "fairy_change";
     public static final String FAIRY_FORECHECK_ON = "fairy_forecheck_on";
     public static final String FAIRY_FORECHECK_OFF = "fairy_forecheck_off";
+    public static final String FAIRY_SIZE_CHANGE = "fairy_size_change";
     public static final String RETURN_FAIRY_ACTION = "return_fairy_action";
     public static final String RESET_FAIRY_STATUS_ACTION = "reset_fairy_status_action";
     public static final String REMOVE_FAIRY_ACTION = "remove_fairy_action";
@@ -250,6 +254,7 @@ public class KcaViewButtonService extends Service {
             // Button (Fairy) Settings
             icon_info = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "icon_info.json", dbHelper);
             viewbutton = mView.findViewById(R.id.viewbutton);
+            setFairySize();
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
             viewBitmapId = "noti_icon_".concat(fairyIdValue);
             setFairyImage();
@@ -355,6 +360,9 @@ public class KcaViewButtonService extends Service {
                     recentVisibility = View.GONE;
                 }
             }
+            if (intent.getAction().equals(FAIRY_SIZE_CHANGE)) {
+                setFairySize();
+            }
             if (intent.getAction().equals(FAIRY_FORECHECK_ON)) {
                 runForegroundCheck();
             }
@@ -410,6 +418,38 @@ public class KcaViewButtonService extends Service {
 
     private boolean isBattleViewEnabled() {
         return getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE);
+    }
+
+    private void setFairySize() {
+        int fairy_size_id = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_SIZE));
+        int size_dp;
+        switch (fairy_size_id) {
+            case 1:
+                size_dp = getResources().getDimensionPixelSize(R.dimen.button_size_xsmall);
+                break;
+            case 2:
+                size_dp = getResources().getDimensionPixelSize(R.dimen.button_size_small);
+                break;
+            case 3:
+                size_dp = getResources().getDimensionPixelSize(R.dimen.button_size_normal);
+                break;
+            case 4:
+                size_dp = getResources().getDimensionPixelSize(R.dimen.button_size_large);
+                break;
+            case 5:
+                size_dp = getResources().getDimensionPixelSize(R.dimen.button_size_xlarge);
+                break;
+            default:
+                size_dp = getResources().getDimensionPixelSize(R.dimen.button_size_normal);
+                break;
+        }
+
+        if (viewbutton != null) {
+            ViewGroup.LayoutParams params = viewbutton.getLayoutParams();
+            params.width = size_dp;
+            params.height = size_dp;
+            viewbutton.setLayoutParams(params);
+        }
     }
 
     private final int margin = 14;

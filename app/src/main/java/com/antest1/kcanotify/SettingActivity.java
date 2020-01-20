@@ -155,6 +155,8 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
                 return "61";
             case PREF_KCA_MORALE_MIN:
                 return "40";
+            case PREF_FAIRY_SIZE:
+                return "3";
             case PREF_EQUIPINFO_FILTCOND:
                 return "all";
             case PREF_KCA_DATA_VERSION:

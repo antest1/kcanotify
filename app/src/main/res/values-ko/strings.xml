@@ -164,6 +164,7 @@
     <string name="setting_menu_kand_desc_set_noti_priority">체크 시 상태 바가 항상 위에 표시됨</string>
     <string name="setting_menu_kand_title_fairy_select">요정 선택</string>
     <string name="setting_menu_kand_desc_fairy_select">함께 할 요정님을 선택</string>
+    <string name="setting_menu_kand_title_fairy_size">요정 크기 선택</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">칸코레 화면에서만 요정 표시</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">요정을 표시하거나 숨길 때 약간의 지연이 있습니다.</string>
     <string name="setting_menu_kand_title_game_data_down">데이터/리소스 업데이트 확인</string>
@@ -722,4 +723,9 @@
     <string name="text_api_distance">행동반경</string>
     <string name="ask_to_dev">칸코레 장비왕</string>
     <string name="fleetview_fish_text" formatted="false">[꽁치] %03d [정어리] %03d</string>
+    <string name="fairy_size_value_4">크게</string>
+    <string name="fairy_size_value_5">매우 크게</string>
+    <string name="fairy_size_value_3">보통</string>
+    <string name="fairy_size_value_2">작게</string>
+    <string name="fairy_size_value_1">매우 작게</string>
 </resources>

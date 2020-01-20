@@ -394,6 +394,7 @@
     <string name="filter_equip_all">全選択</string>
     <string name="setting_menu_kand_title_fairy_select">妖精選択</string>
     <string name="setting_menu_kand_desc_fairy_select">共にする妖精さんを選択</string>
+    <string name="setting_menu_kand_title_fairy_size">妖精サイズ</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">妖精を艦これ画面でのみ表示する</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">妖精の表示/隠しに時間がかかります。</string>
     <string name="action_fairy_rev">反転</string>
@@ -722,4 +723,9 @@
     <string name="special_message">メリークリスマス with Jervis!</string>
     <string name="ask_to_dev">艦これ 装備王</string>
     <string name="fleetview_fish_text" formatted="false">[秋刀魚] %03d [鰯] %03d</string>
+    <string name="fairy_size_value_4">大</string>
+    <string name="fairy_size_value_3">中</string>
+    <string name="fairy_size_value_2">小</string>
+    <string name="fairy_size_value_5">最大</string>
+    <string name="fairy_size_value_1">最小</string>
 </resources>

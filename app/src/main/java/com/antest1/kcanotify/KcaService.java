@@ -2417,6 +2417,11 @@ public class KcaService extends Service {
                 }
             }
 
+            if (url.startsWith(KCA_API_PREF_FAIRYSIZE_CHANGED)) {
+                startService(new Intent(this, KcaViewButtonService.class)
+                        .setAction(KcaViewButtonService.FAIRY_SIZE_CHANGE));
+            }
+
             if (url.startsWith(KCA_API_OPENDB_FAILED)) {
                 makeToast(getStringWithLocale(R.string.opendb_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
                 dbHelper.recordErrorLog(ERROR_TYPE_OPENDB, url, "opendb", data, "failed");

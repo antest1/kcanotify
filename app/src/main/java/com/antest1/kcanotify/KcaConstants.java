@@ -294,6 +294,7 @@ public final class KcaConstants {
     public static final String KCA_API_PREF_NOTICOUNT_CHANGED = "/kca_api/pref_noticount_changed";
     public static final String KCA_API_PREF_LANGUAGE_CHANGED = "/kca_api/pref_language_changed";
     public static final String KCA_API_PREF_ALARMDELAY_CHANGED = "/kca_api/pref_alarmdelay_changed";
+    public static final String KCA_API_PREF_FAIRYSIZE_CHANGED = "/kca_api/pref_fairysize_changed";
 
     public static final String KCA_MSG_FAIRY_CHANGED = "com.antest1.kcanotify.KcaFairySelectActivity.KCA_MSG_FAIRY_CHANGED";
     public static final String KCA_MSG_BATTLE_NODE = "com.antest1.kcanotify.KcaService.KCA_MSG_BATTLE_NODE";
@@ -483,6 +484,7 @@ public final class KcaConstants {
     public static final String PREF_HDNOTI_LOCKED = "hdnoti_locked";
     public static final String PREF_HDNOTI_MINLEVEL = "hdnoti_minlevel";
     public static final String PREF_DEFAULT_APIVER = "default_apiver";
+    public static final String PREF_FAIRY_SIZE = "fairy_size";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -551,7 +553,8 @@ public final class KcaConstants {
             PREF_KC_PACKAGE,
             PREF_HDNOTI_LOCKED,
             PREF_HDNOTI_MINLEVEL,
-            PREF_DEFAULT_APIVER
+            PREF_DEFAULT_APIVER,
+            PREF_FAIRY_SIZE
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

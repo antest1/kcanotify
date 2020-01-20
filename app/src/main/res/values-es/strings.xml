@@ -167,6 +167,7 @@
     <string name="setting_menu_kand_desc_set_noti_priority">Al elegirse, la barra de kcanotify siempre estará arriba de otras notificacones</string>
     <string name="setting_menu_kand_title_fairy_select">Elegir Ayudante</string>
     <string name="setting_menu_kand_desc_fairy_select">Elegir el Ayudante que será mostrado en pantalla</string>
+    <string name="setting_menu_kand_title_fairy_size">Tamaño Ayudante</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">Mostrar Ayudante solo en Kancolle</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">Hay un pequeño retraso en mostrar/ocultar el ayudante.</string>
     <string name="setting_menu_kand_title_game_data_down">Comprobar Actualizaciones de Datos/Recursos</string>
@@ -726,4 +727,9 @@
     <string name="text_api_distance">DIST</string>
     <string name="ask_to_dev">Maestro de equipos de KanColle</string>
     <string name="fleetview_fish_text" formatted="false">[Saury] %03d [Sardina] %03d</string>
+    <string name="fairy_size_value_4">grande</string>
+    <string name="fairy_size_value_5">muy grande</string>
+    <string name="fairy_size_value_1">"pequeñito "</string>
+    <string name="fairy_size_value_3">medio</string>
+    <string name="fairy_size_value_2">pequeño</string>
 </resources>

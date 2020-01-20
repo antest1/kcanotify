@@ -56,12 +56,14 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_ALARMDELAY_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
+import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_FAIRYSIZE_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_LANGUAGE_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_PRIORITY_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_SIZE;
 import static com.antest1.kcanotify.KcaConstants.PREF_HDNOTI_MINLEVEL;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCAQSYNC_PASS;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
@@ -417,6 +419,8 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                     break;
                 case PREF_KCA_SET_PRIORITY:
                     kca_url = KCA_API_PREF_PRIORITY_CHANGED;
+                case PREF_FAIRY_SIZE:
+                    kca_url = KCA_API_PREF_FAIRYSIZE_CHANGED;
                 default:
                     break;
             }

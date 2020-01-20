@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/viewbutton"
-        android:layout_width="@dimen/button_size"
-        android:layout_height="@dimen/button_size"
+        android:layout_width="@dimen/button_size_normal"
+        android:layout_height="@dimen/button_size_normal"
         android:layout_centerInParent="true"
         android:layout_gravity="center_vertical"
         android:src="@mipmap/noti_icon_0" />

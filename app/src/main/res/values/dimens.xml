@@ -50,7 +50,11 @@
     <dimen name="item_popup_text_size_small">10dp</dimen>
     <dimen name="item_popup_xmargin">72dp</dimen>
 
-    <dimen name="button_size">72dp</dimen>
+    <dimen name="button_size_xsmall">32dp</dimen>
+    <dimen name="button_size_small">48dp</dimen>
+    <dimen name="button_size_normal">72dp</dimen>
+    <dimen name="button_size_large">96dp</dimen>
+    <dimen name="button_size_xlarge">128dp</dimen>
     <dimen name="button_select_size">48dp</dimen>
 
     <dimen name="text_description_medium">15dp</dimen>
