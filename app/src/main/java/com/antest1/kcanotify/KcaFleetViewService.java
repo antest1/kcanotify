@@ -90,7 +90,7 @@ public class KcaFleetViewService extends Service {
     public static final int FLEET_COMBINED_ID = 4;
     final int fleetview_menu_margin = 40;
 
-    private static final int HQINFO_TOTAL = 3;
+    private static final int HQINFO_TOTAL = 2;
     private static final int HQINFO_EXPVIEW = 0;
     private static final int HQINFO_SECOUNT = 1;
     private static final int HQINFO_EVENT = 2;
