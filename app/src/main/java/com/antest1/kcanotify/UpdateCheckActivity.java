@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -20,7 +19,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -486,31 +484,9 @@ public class UpdateCheckActivity extends AppCompatActivity {
         if (data.exists()) data.delete();
 
         final Request request = new Request(KcaUtils.format("%s?t=%d", url, timestamp), data.getPath());
+        fetch.addListener(getFetchListener(url, name, version));
         fetch.enqueue(request, updatedRequest -> {
-            new DataSaveTask(this).execute(name, String.valueOf(version));
-            if (name.equals("icon_info.json")) {
-                Toast.makeText(getApplicationContext(), "Download Completed: " + name + "\nRetrieving Fairy Images..", Toast.LENGTH_LONG).show();
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        new KcaFairyDownloader().execute();
-                    }
-                }, LOAD_DELAY);
-            }
-            int num_count = 0;
-            for (int i = 0; i < resource_info.size(); i++) {
-                JsonObject item = resource_info.get(i).getAsJsonObject();
-                if (item.get("name").getAsString().equals(name)) {
-                    int latest_res_v = item.get("version").getAsInt();
-                    item.addProperty("version_str", getVersionString(version, latest_res_v));
-                    item.addProperty("highlight", version < latest_res_v);
-                    if (version < latest_res_v) num_count += 1;
-                }
-            }
-            resource_adapter.setListItem(resource_info);
-            resource_adapter.notifyDataSetChanged();
-            resource_downall.setVisibility(num_count > 0 ? View.VISIBLE : View.GONE);
+            // do nothing
         }, error -> {
             Toast.makeText(getApplicationContext(), "Error when downloading " + name, Toast.LENGTH_LONG).show();
         });
@@ -525,6 +501,59 @@ public class UpdateCheckActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return thread.getResult();
+    }
+
+    private FetchListener getFetchListener(String url, String name, int version) {
+        return new FetchListener() {
+            @Override
+            public void onDeleted(Download download) {}
+
+            @Override
+            public void onRemoved(Download download) {}
+
+            @Override
+            public void onResumed(Download download) {}
+
+            @Override
+            public void onPaused(Download download) {}
+
+            @Override
+            public void onProgress(Download download, long l, long l1) {}
+
+            @Override
+            public void onQueued(Download download, boolean b) {}
+
+            @Override
+            public void onCancelled(Download download) {}
+
+            @Override
+            public void onError(Download download) {}
+
+            @Override
+            public void onCompleted(@NotNull Download download) {
+                File jsonFile = new File(download.getFile());
+                new DataSaveTask(UpdateCheckActivity.this).execute(name, String.valueOf(version));
+                if (name.equals("icon_info.json")) {
+                    Toast.makeText(getApplicationContext(), "Download Completed: " + name + "\nRetrieving Fairy Images..", Toast.LENGTH_LONG).show();
+                    final Handler handler1 = new Handler();
+                    handler1.postDelayed(() -> new KcaFairyDownloader().execute(), LOAD_DELAY);
+                }
+                int num_count = 0;
+                for (int i = 0; i < resource_info.size(); i++) {
+                    JsonObject item = resource_info.get(i).getAsJsonObject();
+                    if (item.get("name").getAsString().equals(name)) {
+                        int latest_res_v = item.get("version").getAsInt();
+                        item.addProperty("version_str", getVersionString(version, latest_res_v));
+                        item.addProperty("highlight", version < latest_res_v);
+                        if (version < latest_res_v) num_count += 1;
+                    }
+                }
+                resource_adapter.setListItem(resource_info);
+                resource_adapter.notifyDataSetChanged();
+                resource_downall.setVisibility(num_count > 0 ? View.VISIBLE : View.GONE);
+                fetch.removeListener(this);
+            }
+        };
     }
 
 
