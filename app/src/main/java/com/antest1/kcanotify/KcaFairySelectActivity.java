@@ -167,25 +167,36 @@ public class KcaFairySelectActivity extends AppCompatActivity {
             case R.id.action_fairy_down:
                 new KcaResourceDownloader().execute();
                 return true;
+            case R.id.action_fairy_init:
+                setPreferences(getApplicationContext(), PREF_FAIRY_DOWN_FLAG, false);
+                setPreferences(getApplicationContext(), PREF_FAIRY_ICON, "0");
+                changeFairyInService(false);
+                KcaUtils.clearFairyImageFileFromStorage(getApplicationContext());
+                Toast.makeText(getApplicationContext(), "cleared", Toast.LENGTH_LONG).show();
+                return true;
             case R.id.action_fairy_rev:
                 int current_rev = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_REV));
                 setPreferences(getApplicationContext(), PREF_FAIRY_REV, 1 - current_rev);
-                if (KcaService.getServiceStatus()) {
-                    int current_id = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
-                    JsonObject data = new JsonObject();
-                    data.addProperty("id", current_id);
-                    sendUserAnalytics(SELECT_FAIRY, data);
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString("url", KCA_API_PREF_FAIRY_CHANGED);
-                    bundle.putString("data", data.toString());
-                    Message sMsg = sHandler.obtainMessage();
-                    sMsg.setData(bundle);
-                    sHandler.sendMessage(sMsg);
-                }
+                changeFairyInService(true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void changeFairyInService(boolean send_analytics) {
+        if (KcaService.getServiceStatus()) {
+            int current_id = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
+            JsonObject data = new JsonObject();
+            data.addProperty("id", current_id);
+            sendUserAnalytics(SELECT_FAIRY, data);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("url", KCA_API_PREF_FAIRY_CHANGED);
+            bundle.putString("data", data.toString());
+            Message sMsg = sHandler.obtainMessage();
+            sMsg.setData(bundle);
+            sHandler.sendMessage(sMsg);
         }
     }
 

@@ -402,6 +402,7 @@
     <string name="filter_equip_all">TODO</string>
     <string name="current_fairy_changed_in_next">※ El pronóstico / misión de batalla actual cambiará después de que finalice la traducción.</string>
     <string name="action_fairy_rev">Inverso</string>
+    <string name="action_fairy_init">Reiniciar</string>
     <string name="language_system">Seguir Ajustes de Sistema</string>
     <string name="item_engine">Motor de Tipo Ne</string>
     <string name="item_gmi_material">Material de Mejora de Cañones de Nuevo Modelo</string>

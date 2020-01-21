@@ -687,6 +687,16 @@ public class KcaUtils {
         return data;
     }
 
+    public static boolean clearFairyImageFileFromStorage(Context context) {
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("fairy", Context.MODE_PRIVATE);
+        for (File file: directory.listFiles()) {
+            if (!file.isDirectory())
+                file.delete();
+        }
+        return true;
+    }
+
     public static boolean checkFairyImageFileFromStorage(Context context, String name) {
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("fairy", Context.MODE_PRIVATE);
