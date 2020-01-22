@@ -46,14 +46,14 @@ public class KcaShipListViewAdpater extends BaseAdapter {
 
     private static final String[] total_key_list = {
             "api_id", "api_lv", "api_stype", "api_cond", "api_locked",
-            "api_deck_id", "api_docking", "api_damage", "api_repair", "api_mission", "api_exslot",
+            "api_deck_id", "api_docking", "api_damage", "api_repair", "api_mission", "api_exslot", "api_maxhp",
             "api_karyoku", "api_raisou", "api_taiku", "api_soukou", "api_yasen",
             "api_taisen", "api_kaihi", "api_sakuteki", "api_lucky", "api_soku", "api_sort_id", "api_sally_area"};
 
     public long getTotalExp() { return exp_sum; }
 
-    private static int[] sort_table = {0, 1, 2, 3, 5, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
-    private static int[] filt_table = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22};
+    private static int[] sort_table = {0, 1, 2, 3, 5, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
+    private static int[] filt_table = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23};
 
     public static int getSortKeyIndex(int position) {
         return sort_table[position];
@@ -72,7 +72,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     }
 
     public static boolean isList(int idx) {
-        int[] list = {2, 5, 7, 20, 22};  // ship_filt_array
+        int[] list = {2, 5, 7, 21, 23};  // ship_filt_array
         return (Arrays.binarySearch(list, idx) >= 0);
     }
 

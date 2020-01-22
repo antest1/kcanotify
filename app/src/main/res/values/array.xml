@@ -135,6 +135,7 @@
         <item>@string/ship_stat_sort_key_19</item>
         <item>@string/ship_stat_sort_key_20</item>
         <item>@string/ship_stat_sort_key_21</item>
+        <item>@string/ship_stat_sort_key_22</item>
     </string-array>
 
     <string-array name="ship_filt_array">
@@ -159,7 +160,8 @@
         <item>@string/ship_stat_sort_key_18</item>
         <item>@string/ship_stat_sort_key_19</item>
         <item>@string/ship_stat_sort_key_20</item>
-        <item>@string/ship_stat_sort_key_22</item>
+        <item>@string/ship_stat_sort_key_21</item>
+        <item>@string/ship_stat_sort_key_23</item>
     </string-array>
 
     <string-array name="ship_operations" translatable="false">

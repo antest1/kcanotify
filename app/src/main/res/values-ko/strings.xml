@@ -448,18 +448,19 @@
     <string name="ship_stat_sort_key_8">수리</string>
     <string name="ship_stat_sort_key_9">원정</string>
     <string name="ship_stat_sort_key_10">증설</string>
-    <string name="ship_stat_sort_key_11">화력</string>
-    <string name="ship_stat_sort_key_12">뇌장</string>
-    <string name="ship_stat_sort_key_13">대공</string>
-    <string name="ship_stat_sort_key_14">장갑</string>
-    <string name="ship_stat_sort_key_15">야전</string>
-    <string name="ship_stat_sort_key_16">대잠</string>
-    <string name="ship_stat_sort_key_17">회피</string>
-    <string name="ship_stat_sort_key_18">색적</string>
-    <string name="ship_stat_sort_key_19">운</string>
-    <string name="ship_stat_sort_key_20">속도</string>
-    <string name="ship_stat_sort_key_21">함급</string>
-    <string name="ship_stat_sort_key_22">딱지</string>
+    <string name="ship_stat_sort_key_11">내구</string>
+    <string name="ship_stat_sort_key_12">화력</string>
+    <string name="ship_stat_sort_key_13">뇌장</string>
+    <string name="ship_stat_sort_key_14">대공</string>
+    <string name="ship_stat_sort_key_15">장갑</string>
+    <string name="ship_stat_sort_key_16">야전</string>
+    <string name="ship_stat_sort_key_17">대잠</string>
+    <string name="ship_stat_sort_key_18">회피</string>
+    <string name="ship_stat_sort_key_19">색적</string>
+    <string name="ship_stat_sort_key_20">운</string>
+    <string name="ship_stat_sort_key_21">속도</string>
+    <string name="ship_stat_sort_key_22">함급</string>
+    <string name="ship_stat_sort_key_23">딱지</string>
 
     <string name="shipinfo_filt_list_dialog_title">선택</string>
     <string name="shipinfo_criteria_count" formatted="false">적용된 기준: %d개</string>

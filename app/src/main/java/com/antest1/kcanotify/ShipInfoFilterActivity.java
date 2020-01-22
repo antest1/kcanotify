@@ -370,10 +370,10 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
             adapter = getFleetArray();
         } else if (position == 7) {
             adapter = getHPArray();
-        } else if (position == 20) {
+        } else if (position == 21) {
             adapter = getSpeedArray();
             fnc = 2;
-        } else if (position == 22) {
+        } else if (position == 23) {
             adapter = getTagArray();
         }
 

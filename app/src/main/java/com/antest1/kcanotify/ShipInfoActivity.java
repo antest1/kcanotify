@@ -159,7 +159,9 @@ public class ShipInfoActivity extends AppCompatActivity {
         String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
         String special_equip = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SPEQUIPS);
         String ship_status = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPSTAT);
-        setButtonStyle(filterButton, filtcond.length() > 1);
+        setButtonStyle(filterButton, filtcond.length() > 1
+                || special_equip.trim().length() > 0
+                || ship_status.trim().length() > 0);
         adapter.setSpecialEquipment(KcaApiData.loadSpecialEquipmentShipInfo(getAssets()));
         adapter.setListViewItemList(data, deckdata, sortkey, filtcond, special_equip, ship_status);
 

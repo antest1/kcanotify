@@ -449,18 +449,20 @@
     <string name="ship_stat_sort_key_8">Reparación</string>
     <string name="ship_stat_sort_key_9">Expedición</string>
     <string name="ship_stat_sort_key_10">Espacio Extra</string>
-    <string name="ship_stat_sort_key_11">Poder de Fuego</string>
-    <string name="ship_stat_sort_key_12">Torpedo</string>
-    <string name="ship_stat_sort_key_13">AA</string>
-    <string name="ship_stat_sort_key_14">Blindaje</string>
-    <string name="ship_stat_sort_key_15">Combate Nocturno</string>
-    <string name="ship_stat_sort_key_16">Anti-Sub</string>
-    <string name="ship_stat_sort_key_17">Evasión</string>
-    <string name="ship_stat_sort_key_18">LoS</string>
-    <string name="ship_stat_sort_key_19">Suerte</string>
-    <string name="ship_stat_sort_key_20">Velocidad</string>
-    <string name="ship_stat_sort_key_21">Clase</string>
-    <string name="ship_stat_sort_key_22">Etiqueta</string>
+    <string name="ship_stat_sort_key_11">HP</string>
+    <string name="ship_stat_sort_key_12">Poder de Fuego</string>
+    <string name="ship_stat_sort_key_13">Torpedo</string>
+    <string name="ship_stat_sort_key_14">AA</string>
+    <string name="ship_stat_sort_key_15">Blindaje</string>
+    <string name="ship_stat_sort_key_16">Combate Nocturno</string>
+    <string name="ship_stat_sort_key_17">Anti-Sub</string>
+    <string name="ship_stat_sort_key_18">Evasión</string>
+    <string name="ship_stat_sort_key_19">LoS</string>
+    <string name="ship_stat_sort_key_20">Suerte</string>
+    <string name="ship_stat_sort_key_21">Velocidad</string>
+    <string name="ship_stat_sort_key_22">Clase</string>
+    <string name="ship_stat_sort_key_23">Etiqueta</string>
+
 
     <string name="shipinfo_filt_list_dialog_title">Seleccionar</string>
     <string name="shipinfo_criteria_count" formatted="false">Criterios aplicados: %d개</string>
