@@ -423,8 +423,8 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         ImageView ship_sally_area;
     }
 
-    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, String special_equip) {
-        setListViewItemList(ship_list, deck_list, sort_key, "|", special_equip);
+    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, String special_equip, String ship_status) {
+        setListViewItemList(ship_list, deck_list, sort_key, "|", special_equip, ship_status);
     }
 
     public String getKanmusuListText() {
@@ -497,7 +497,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     *
     * */
 
-    private List<JsonObject> addShipInformation(List<JsonObject> data, String sp_eqlist) {
+    private List<JsonObject> addShipInformation(List<JsonObject> data, String sp_eqlist, String ship_status) {
         List<JsonObject> filteredShipInformation = new ArrayList<>();
         JsonObject deck_ship_info = new JsonObject();
         for (int i = 0; i < deckInfo.size(); i++) {
@@ -532,6 +532,22 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             boolean name_matched = searchStringFromStart(name, searchQuery, false);
             boolean yomi_matched = searchStringFromStart(yomi, searchQuery, false);
             if (!name_matched && !yomi_matched) continue;
+
+
+            if (ship_status.trim().length() > 0) {
+                String[] ship_status_list = ship_status.split(",");
+                boolean match_flag = false;
+                for (String key: ship_status_list) {
+                    if (key.equals("type1")) { // expedition
+                        match_flag |= deck_ship_info.has(ship_id) &&
+                                deck_ship_info.getAsJsonObject(ship_id).get("mission").getAsInt() != 0;
+                    }
+                    if (key.equals("type2")) { // docking
+                        match_flag |= KcaDocking.checkShipInDock(Integer.parseInt(ship_id));
+                    }
+                }
+                if (match_flag) continue;
+            }
 
             if (sp_eqlist.trim().length() > 0) {
                 String[] special_eq_list = sp_eqlist.split(",");
@@ -572,13 +588,13 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         return filteredShipInformation;
     }
 
-    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, final String filter, String special_equip) {
+    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, final String filter, String special_equip, String ship_status) {
         exp_sum = 0;
         deckInfo = deck_list;
         Type listType = new TypeToken<List<JsonObject>>() {}.getType();
         listViewItemList = new Gson().fromJson(ship_list, listType);
         if (listViewItemList == null) listViewItemList = new ArrayList<>();
-        listViewItemList = addShipInformation(listViewItemList, special_equip);
+        listViewItemList = addShipInformation(listViewItemList, special_equip, ship_status);
         if (!filter.equals("|") && listViewItemList.size() > 1) {
             listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, input -> {
                 String[] filter_list = filter.split("\\|");

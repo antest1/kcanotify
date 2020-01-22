@@ -40,6 +40,7 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
+import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SHIPSTAT;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SPEQUIPS;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
@@ -157,9 +158,10 @@ public class ShipInfoActivity extends AppCompatActivity {
         String sortkey = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY);
         String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
         String special_equip = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SPEQUIPS);
+        String ship_status = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPSTAT);
         setButtonStyle(filterButton, filtcond.length() > 1);
         adapter.setSpecialEquipment(KcaApiData.loadSpecialEquipmentShipInfo(getAssets()));
-        adapter.setListViewItemList(data, deckdata, sortkey, filtcond, special_equip);
+        adapter.setListViewItemList(data, deckdata, sortkey, filtcond, special_equip, ship_status);
 
         totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));
         totalexpview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
@@ -227,6 +229,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         String sortkey = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SORTKEY);
         String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
         String special_equip = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SPEQUIPS);
+        String ship_status = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPSTAT);
         export_popup.setVisibility(View.GONE);
         if (requestCode == SHIPINFO_GET_SORT_KEY) {
             adapter.resortListViewItem(sortkey);
@@ -237,7 +240,7 @@ public class ShipInfoActivity extends AppCompatActivity {
             if (deckdata == null) deckdata = new JsonArray();
             if (shipdata == null) shipdata = new JsonArray();
 
-            adapter.setListViewItemList(shipdata, deckdata, sortkey, filtcond, special_equip);
+            adapter.setListViewItemList(shipdata, deckdata, sortkey, filtcond, special_equip, ship_status);
             if (requestCode == SHIPINFO_GET_FILTER_RESULT) {
                 setButtonStyle(filterButton, filtcond.length() > 1);
             }

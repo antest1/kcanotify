@@ -463,6 +463,9 @@
 
     <string name="shipinfo_filt_list_dialog_title">選択</string>
     <string name="shipinfo_criteria_count" formatted="false">適用されている基準：%d</string>
+    <string name="ship_exclude_label">艦娘状態フィルタ</string>
+    <string name="ship_exclude_type1">遠征中の艦娘を除外する</string>
+    <string name="ship_exclude_type2">修理中の艦娘を除外する</string>
     <string name="ship_stat_equip_stype_label">特殊装備フィルター</string>
     <string name="ship_stat_equip_stype1">大発系</string>
     <string name="ship_stat_equip_stype2">内火艇</string>

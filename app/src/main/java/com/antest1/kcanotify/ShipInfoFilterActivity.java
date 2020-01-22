@@ -42,6 +42,7 @@ import static com.antest1.kcanotify.KcaApiData.TAG_COUNT;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
+import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SHIPSTAT;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SPEQUIPS;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -50,10 +51,12 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class ShipInfoFilterActivity extends AppCompatActivity {
     public final static int SPECIAL_EQUIPMENT_COUNT = 5;
+    public final static int SHIP_STATUS_COUNT = 2;
 
     Toolbar toolbar;
     static Gson gson = new Gson();
     List<CheckBox> filterSpecialEquipment = new ArrayList<>();
+    List<CheckBox> filterShipStatus = new ArrayList<>();
     TextView listcounter;
     LinearLayout listview;
     public int count;
@@ -129,6 +132,27 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
                 else specialEquipsFilterList.remove(key);
                 setPreferences(getApplicationContext(), PREF_SHIPINFO_SPEQUIPS,
                         KcaUtils.joinStr(specialEquipsFilterList, ","));
+            });
+        }
+
+        String pref_ship_stat = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPSTAT);
+        List<String> shipStatusFilterList = new ArrayList<String>(Arrays.asList(pref_ship_stat.split(",")));
+
+        for (int i = 0; i < SHIP_STATUS_COUNT; i++) {
+            final String key = KcaUtils.format("type%d", i+1);
+            filterShipStatus.add(findViewById(
+                    KcaUtils.getId(KcaUtils.format("exclude_%s", key), R.id.class)
+            ));
+            CheckBox item = filterShipStatus.get(i);
+            item.setText(getStringWithLocale(
+                    KcaUtils.getId(KcaUtils.format("ship_exclude_%s", key), R.string.class)
+            ));
+            item.setChecked(shipStatusFilterList.contains(key));
+            item.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) shipStatusFilterList.add(key);
+                else shipStatusFilterList.remove(key);
+                setPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPSTAT,
+                        KcaUtils.joinStr(shipStatusFilterList, ","));
             });
         }
 

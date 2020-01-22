@@ -465,6 +465,10 @@
     <string name="shipinfo_filt_list_dialog_title">Seleccionar</string>
     <string name="shipinfo_criteria_count" formatted="false">Criterios aplicados: %d개</string>
 
+    <string name="ship_exclude_label">Filtro de estado del barco</string>
+    <string name="ship_exclude_type1">Exclude ships in expedition</string>
+    <string name="ship_exclude_type2">Exclude ships in repair</string>
+
     <string name="ship_stat_equip_stype_label">Filtro de Equipo Especial</string>
     <string name="ship_stat_equip_stype1">Taihatsu</string>
     <string name="ship_stat_equip_stype2">Tanque anfibio</string>

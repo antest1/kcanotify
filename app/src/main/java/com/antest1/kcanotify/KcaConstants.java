@@ -455,6 +455,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_NOTI_AKASHI = "notify_akashi";
     public static final String PREF_SHIPINFO_SORTKEY = "shipinfo_sortkey";
     public static final String PREF_SHIPINFO_FILTCOND = "shipinfo_filtcond";
+    public static final String PREF_SHIPINFO_SHIPSTAT = "shipinfo_shipstat";
     public static final String PREF_SHIPINFO_SPEQUIPS = "shipinfo_spequips";
     public static final String PREF_EQUIPINFO_SORTKEY = "equipinfo_sortkey";
     public static final String PREF_EQUIPINFO_FILTCOND = "equipinfo_filtcond";
@@ -531,6 +532,7 @@ public final class KcaConstants {
             PREF_KCA_NOTI_AKASHI,
             PREF_SHIPINFO_SORTKEY,
             PREF_SHIPINFO_FILTCOND,
+            PREF_SHIPINFO_SHIPSTAT,
             PREF_SHIPINFO_SPEQUIPS,
             PREF_EQUIPINFO_SORTKEY,
             PREF_EQUIPINFO_FILTCOND,
