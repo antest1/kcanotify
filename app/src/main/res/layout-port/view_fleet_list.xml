@@ -647,10 +647,10 @@
 
                                     <TextView
                                         android:id="@+id/fleetview_item_1_cond"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
-                                        android:gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="12dp" />
@@ -766,10 +766,10 @@
 
                                     <TextView
                                         android:id="@+id/fleetview_item_2_cond"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
-                                        android:gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="12dp" />
@@ -885,10 +885,10 @@
 
                                     <TextView
                                         android:id="@+id/fleetview_item_3_cond"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
-                                        android:gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="12dp" />
@@ -1004,10 +1004,10 @@
 
                                     <TextView
                                         android:id="@+id/fleetview_item_4_cond"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
-                                        android:gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="12dp" />
@@ -1123,10 +1123,10 @@
 
                                     <TextView
                                         android:id="@+id/fleetview_item_5_cond"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
-                                        android:gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="12dp" />
@@ -1242,10 +1242,10 @@
 
                                     <TextView
                                         android:id="@+id/fleetview_item_6_cond"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
-                                        android:gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="12dp" />
@@ -1370,10 +1370,10 @@
 
                                     <TextView
                                         android:id="@+id/fleetview_item_7_cond"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
-                                        android:gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="12dp" />
@@ -1489,10 +1489,10 @@
 
                                     <TextView
                                         android:id="@+id/fleetview_item_8_cond"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
-                                        android:gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="12dp" />
@@ -1608,10 +1608,10 @@
 
                                     <TextView
                                         android:id="@+id/fleetview_item_9_cond"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
-                                        android:gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="12dp" />
@@ -1727,10 +1727,10 @@
 
                                     <TextView
                                         android:id="@+id/fleetview_item_10_cond"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
-                                        android:gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="12dp" />
@@ -1846,10 +1846,10 @@
 
                                     <TextView
                                         android:id="@+id/fleetview_item_11_cond"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
-                                        android:gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="12dp" />
@@ -1965,10 +1965,10 @@
 
                                     <TextView
                                         android:id="@+id/fleetview_item_12_cond"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
-                                        android:gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="12dp" />

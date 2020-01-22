@@ -818,21 +818,30 @@ public class KcaFleetViewService extends Service {
                                 .setText(makeExpString(userData.getAsJsonArray("exp").get(1).getAsInt()));
                         ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_hp", v), R.id.class)))
                                 .setText(makeHpString(userData.get("nowhp").getAsInt(), userData.get("maxhp").getAsInt()));
+
                         ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class)))
                                 .setText(userData.get("cond").getAsString());
                         int condition = userData.get("cond").getAsInt();
                         if (condition > 49) {
-                            ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_condmark", v), R.id.class)))
-                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipKira));
+                            mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class))
+                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipKira));
+                            ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class)))
+                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                         } else if (condition / 10 >= 3) {
-                            ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_condmark", v), R.id.class)))
-                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+                            mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class))
+                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+                            ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class)))
+                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                         } else if (condition / 10 == 2) {
-                            ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_condmark", v), R.id.class)))
-                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue1));
+                            mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class))
+                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue1));
+                            ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class)))
+                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                         } else {
-                            ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_condmark", v), R.id.class)))
-                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2));
+                            mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class))
+                                    .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2));
+                            ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class)))
+                                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                         }
 
                         if (userData.get("nowhp").getAsInt() * 4 <= userData.get("maxhp").getAsInt()) {
@@ -919,17 +928,25 @@ public class KcaFleetViewService extends Service {
                             .setText(userData.get("cond").getAsString());
                     int condition = userData.get("cond").getAsInt();
                     if (condition > 49) {
-                        ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_condmark", v), R.id.class)))
-                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipKira));
+                        mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipKira));
+                        ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class)))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                     } else if (condition / 10 >= 3) {
-                        ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_condmark", v), R.id.class)))
-                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+                        mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+                        ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class)))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                     } else if (condition / 10 == 2) {
-                        ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_condmark", v), R.id.class)))
-                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue1));
+                        mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue1));
+                        ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class)))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                     } else {
-                        ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_condmark", v), R.id.class)))
-                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2));
+                        mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetShipFatigue2));
+                        ((TextView) mView.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", v), R.id.class)))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                     }
 
                     if (userData.get("nowhp").getAsInt() * 4 <= userData.get("maxhp").getAsInt()) {
