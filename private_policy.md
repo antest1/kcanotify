@@ -34,7 +34,7 @@ antest1(IE10), E-mail: kcanotify@gmail.com
 
 3. **Kcanotify Functionality** Kcanotify does not modify any incoming/outcoming packet when communicate with kancolle/DMM server, and it does not provide any cheat or macro tools that affects gameplay.
 
-4. **Processing User Statistics and Error Log ** To figure out and resolve the crucial issue, Kcanotify collects user device and usage data or error reports. Kcanotify does not collect information that can be used to specify the user profile.
+4. **Processing User Statistics and Error Log** To figure out and resolve the crucial issue, Kcanotify collects user device and usage data or error reports. Kcanotify does not collect information that can be used to specify the user profile.
 
 5. **OpenDB Plugin** OpenDB Plugin in Kcanotify only sends statistics when user activates its functionality in the Settings. Data related with (1) Equipment Development (2) Ship Construction (3) Ship Drop Result (4) Equipment Improvement, which is required by OpenDB ReportAPI.
 About private policy and statistics usage in OpenDB, contact to the administrator of the site. (http://opendb.swaytwig.com/)
