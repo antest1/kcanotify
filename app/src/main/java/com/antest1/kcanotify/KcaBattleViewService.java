@@ -885,7 +885,18 @@ public class KcaBattleViewService extends Service {
                     api_e_afterhps_combined = new JsonArray();
                 }
 
-
+                boolean api_touch_occurred = api_data.get("api_at_touch").getAsBoolean();
+                if (api_touch_occurred) {
+                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
+                            .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorMVP));
+                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                } else {
+                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
+                            .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                }
 
                 // Rank Data
                 if (start_flag) {
@@ -1000,11 +1011,15 @@ public class KcaBattleViewService extends Service {
                 int mvp_idx = api_data.get("api_mvp").getAsInt();
                 if (mvp_idx != -1) {
                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_name", mvp_idx), R.id.class) ))
+                            .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_name", mvp_idx), R.id.class) ))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorMVP));
                 }
                 if (api_data.has("api_mvp_combined") && !api_data.get("api_mvp_combined").isJsonNull()) {
                     int mvp_idx_combined = api_data.get("api_mvp_combined").getAsInt();
                     if (mvp_idx_combined != -1) {
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_name", mvp_idx), R.id.class) ))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_name", mvp_idx_combined), R.id.class)))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorMVP));
                     }
