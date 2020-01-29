@@ -108,6 +108,7 @@ public class KcaBattle {
     public static boolean isCombined = false;
     public static boolean isEndReached = false;
     public static boolean isBossReached = false;
+    public static boolean isTouchOccurred = false;
     public static int startHeavyDamageExist;
 
     public static void setHandler(Handler h) {
@@ -586,8 +587,16 @@ public class KcaBattle {
         JsonArray at_eflag = api_data.getAsJsonArray("api_at_eflag");
         JsonArray df_list = api_data.getAsJsonArray("api_df_list");
         JsonArray df_damage = api_data.getAsJsonArray("api_damage");
+        JsonArray at_type;
+        if (api_data.has("api_at_type")) {
+            at_type = api_data.getAsJsonArray("api_at_type");
+        } else {
+            at_type = api_data.getAsJsonArray("api_sp_list");
+        }
         for (int i = 0; i < df_list.size(); i++) {
             int eflag = at_eflag.get(i).getAsInt();
+            int atype = at_type.get(i).getAsInt();
+            if (atype == 100 || atype == 101 || atype == 102) isTouchOccurred = true;
             JsonArray target = df_list.get(i).getAsJsonArray();
             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
             for (int j = 0; j < target.size(); j++) {
@@ -603,11 +612,18 @@ public class KcaBattle {
         JsonArray at_eflag = api_data.getAsJsonArray("api_at_eflag");
         JsonArray df_list = api_data.getAsJsonArray("api_df_list");
         JsonArray df_damage = api_data.getAsJsonArray("api_damage");
+        JsonArray at_type;
+        if (api_data.has("api_at_type")) {
+            at_type = api_data.getAsJsonArray("api_at_type");
+        } else {
+            at_type = api_data.getAsJsonArray("api_sp_list");
+        }
         for (int i = 0; i < df_list.size(); i++) {
+            int atype = at_type.get(i).getAsInt();
             int eflag = at_eflag.get(i).getAsInt();
             JsonArray target = df_list.get(i).getAsJsonArray();
             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
-
+            if (atype == 100 || atype == 101 || atype == 102) isTouchOccurred = true;
             boolean friend_cb_target_flag;
             for (int j = 0; j < target.size(); j++) {
                 int target_val = cnv(target.get(j));
@@ -652,11 +668,18 @@ public class KcaBattle {
         JsonArray at_eflag = api_data.getAsJsonArray("api_at_eflag");
         JsonArray df_list = api_data.getAsJsonArray("api_df_list");
         JsonArray df_damage = api_data.getAsJsonArray("api_damage");
+        JsonArray at_type;
+        if (api_data.has("api_at_type")) {
+            at_type = api_data.getAsJsonArray("api_at_type");
+        } else {
+            at_type = api_data.getAsJsonArray("api_sp_list");
+        }
         for (int i = 0; i < df_list.size(); i++) {
+            int atype = at_type.get(i).getAsInt();
             int eflag = at_eflag.get(i).getAsInt();
             JsonArray target = df_list.get(i).getAsJsonArray();
             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
-
+            if (atype == 100 || atype == 101 || atype == 102) isTouchOccurred = true;
             for (int j = 0; j < target.size(); j++) {
                 int target_val = cnv(target.get(j));
                 int dmg_val = cnv(target_dmg.get(j));
@@ -699,10 +722,18 @@ public class KcaBattle {
         JsonArray at_eflag = api_data.getAsJsonArray("api_at_eflag");
         JsonArray df_list = api_data.getAsJsonArray("api_df_list");
         JsonArray df_damage = api_data.getAsJsonArray("api_damage");
+        JsonArray at_type;
+        if (api_data.has("api_at_type")) {
+            at_type = api_data.getAsJsonArray("api_at_type");
+        } else {
+            at_type = api_data.getAsJsonArray("api_sp_list");
+        }
         for (int i = 0; i < df_list.size(); i++) {
+            int atype = at_type.get(i).getAsInt();
             int eflag = at_eflag.get(i).getAsInt();
             JsonArray target = df_list.get(i).getAsJsonArray();
             JsonArray target_dmg = df_damage.get(i).getAsJsonArray();
+            if (atype == 100 || atype == 101 || atype == 102) isTouchOccurred = true;
             for (int j = 0; j < target.size(); j++) {
                 int target_val = cnv(target.get(j));
                 int dmg_val = cnv(target_dmg.get(j));
@@ -737,6 +768,7 @@ public class KcaBattle {
                 currentNode = api_data.get("api_no").getAsInt();
                 isBossReached = false;
                 isEndReached = false;
+                isTouchOccurred = false;
                 currentEnemyDeckName = "";
                 currentEnemyFormation = -1;
 
@@ -806,6 +838,7 @@ public class KcaBattle {
                     isBossReached = true;
                 }
                 isEndReached = (api_data.get("api_next").getAsInt() == 0);
+                isTouchOccurred = false;
                 String currentNodeAlphabet = KcaApiData.getCurrentNodeAlphabet(currentMapArea, currentMapNo, currentNode);
                 currentEnemyFormation = -1;
 
@@ -924,6 +957,7 @@ public class KcaBattle {
                 if (url.equals(API_REQ_PRACTICE_BATTLE)) {
                     battleResultInfo.addProperty("api_practice_flag", true);
                     damecon_used = new JsonArray();
+                    isTouchOccurred = false;
                 }
 
                 battleResultInfo.addProperty("api_url", url);
