@@ -264,6 +264,21 @@ public class KcaBattleViewService extends Service {
                 ((TextView) battleview.findViewById(R.id.battle_airpower)).setText("");
                 ((TextView) battleview.findViewById(R.id.battle_getitem)).setText("");
 
+                battleview.findViewById(R.id.fm_mid_item1).setVisibility(View.GONE);
+                battleview.findViewById(R.id.fm_mid_item2).setVisibility(View.GONE);
+                battleview.findViewById(R.id.fm_mid_item3).setVisibility(View.GONE);
+                battleview.findViewById(R.id.fs_mid_item1).setVisibility(View.GONE);
+                battleview.findViewById(R.id.fs_mid_item2).setVisibility(View.GONE);
+                battleview.findViewById(R.id.fs_mid_item3).setVisibility(View.GONE);
+                battleview.findViewById(R.id.em_mid_item1).setVisibility(View.GONE);
+                battleview.findViewById(R.id.em_mid_item2).setVisibility(View.GONE);
+                battleview.findViewById(R.id.em_mid_item3).setVisibility(View.GONE);
+
+                ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
+                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+                ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
+                        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+
                 if (!getBooleanPreferences(contextWithLocale, PREF_SHOWDROP_SETTING)) {
                     battleview.findViewById(R.id.battle_getship_row).setVisibility(View.GONE);
                 } else {
@@ -372,6 +387,10 @@ public class KcaBattleViewService extends Service {
                     ((TextView) battleview.findViewById(R.id.battle_engagement)).setText("");
                     ((TextView) battleview.findViewById(R.id.enemy_fleet_name)).setText("");
                     ((TextView) battleview.findViewById(R.id.battle_airpower)).setText("");
+                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
+                            .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
+                            .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
                     battleview.findViewById(R.id.battle_getship_row).setVisibility(View.GONE);
                     battleview.findViewById(R.id.battle_node)
                             .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItem));
@@ -885,7 +904,77 @@ public class KcaBattleViewService extends Service {
                     api_e_afterhps_combined = new JsonArray();
                 }
 
+                if (api_data.has("api_at_touch")) {
+                    if (api_data.get("api_at_touch").getAsBoolean()) {
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorMVP));
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                    } else {
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
+                                .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                    }
+                }
 
+                if (api_data.has("api_searchlight")) {
+                    JsonArray api_searchlight = api_data.getAsJsonArray("api_searchlight");
+                    if (api_searchlight.get(0).getAsBoolean()) {
+                        if (fc_flag) {
+                            battleview.findViewById(R.id.fs_mid_item1).setVisibility(View.VISIBLE);
+                        } else {
+                            battleview.findViewById(R.id.fm_mid_item1).setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        battleview.findViewById(R.id.fm_mid_item1).setVisibility(View.GONE);
+                        battleview.findViewById(R.id.fs_mid_item1).setVisibility(View.GONE);
+                    }
+                    if (api_searchlight.get(1).getAsBoolean()) {
+                        battleview.findViewById(R.id.em_mid_item1).setVisibility(View.VISIBLE);
+                    } else {
+                        battleview.findViewById(R.id.em_mid_item1).setVisibility(View.GONE);
+                    }
+                }
+
+                if (api_data.has("api_flare_pos")) {
+                    JsonArray api_flare = api_data.getAsJsonArray("api_flare_pos");
+                    if (api_flare.get(0).getAsInt() > -1) {
+                        if (fc_flag) {
+                            battleview.findViewById(R.id.fs_mid_item2).setVisibility(View.VISIBLE);
+                        } else {
+                            battleview.findViewById(R.id.fm_mid_item2).setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        battleview.findViewById(R.id.fm_mid_item2).setVisibility(View.GONE);
+                        battleview.findViewById(R.id.fs_mid_item2).setVisibility(View.GONE);
+                    }
+                    if (api_flare.get(1).getAsInt() > -1) {
+                        battleview.findViewById(R.id.em_mid_item2).setVisibility(View.VISIBLE);
+                    } else {
+                        battleview.findViewById(R.id.em_mid_item2).setVisibility(View.GONE);
+                    }
+
+                }
+
+                if (api_data.has("api_touch_plane")) {
+                    JsonArray api_touch_plane = api_data.getAsJsonArray("api_touch_plane");
+                    if (api_touch_plane.get(0).getAsInt() > -1) {
+                        if (fc_flag) {
+                            battleview.findViewById(R.id.fs_mid_item3).setVisibility(View.VISIBLE);
+                        } else {
+                            battleview.findViewById(R.id.fm_mid_item3).setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        battleview.findViewById(R.id.fm_mid_item3).setVisibility(View.GONE);
+                        battleview.findViewById(R.id.fs_mid_item3).setVisibility(View.GONE);
+                    }
+                    if (api_touch_plane.get(1).getAsInt() > -1) {
+                        battleview.findViewById(R.id.em_mid_item3).setVisibility(View.VISIBLE);
+                    } else {
+                        battleview.findViewById(R.id.em_mid_item3).setVisibility(View.GONE);
+                    }
+                }
 
                 // Rank Data
                 if (start_flag) {
@@ -1000,11 +1089,15 @@ public class KcaBattleViewService extends Service {
                 int mvp_idx = api_data.get("api_mvp").getAsInt();
                 if (mvp_idx != -1) {
                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_name", mvp_idx), R.id.class) ))
+                            .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+                    ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_name", mvp_idx), R.id.class) ))
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorMVP));
                 }
                 if (api_data.has("api_mvp_combined") && !api_data.get("api_mvp_combined").isJsonNull()) {
                     int mvp_idx_combined = api_data.get("api_mvp_combined").getAsInt();
                     if (mvp_idx_combined != -1) {
+                        ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_name", mvp_idx), R.id.class) ))
+                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.transparent));
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_name", mvp_idx_combined), R.id.class)))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorMVP));
                     }
