@@ -904,8 +904,8 @@ public class KcaBattleViewService extends Service {
                     api_e_afterhps_combined = new JsonArray();
                 }
 
-                if (api_data.has("api_at_touch")) {
-                    if (api_data.get("api_at_touch").getAsBoolean()) {
+                if (api_data.has("api_touch_check")) {
+                    if (api_data.get("api_touch_check").getAsBoolean()) {
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))
                                 .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorMVP));
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_1_name"), R.id.class) ))

@@ -965,6 +965,7 @@ public class KcaBattle {
                 battleResultInfo.add("api_deck_port", deckportdata);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
+                battleResultInfo.addProperty("api_touch_check", isTouchOccurred);
 
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
@@ -1027,6 +1028,7 @@ public class KcaBattle {
                 battleResultInfo.add("api_deck_port", deckportdata);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
+                battleResultInfo.addProperty("api_touch_check", isTouchOccurred);
                 if (url.equals(API_REQ_PRACTICE_MIDNIGHT_BATTLE)) {
                     battleResultInfo.addProperty("api_practice_flag", true);
                 }
@@ -1387,6 +1389,7 @@ public class KcaBattle {
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
                 battleResultInfo.add("api_e_afterhps_combined", enemyCbAfterHps);
+                battleResultInfo.addProperty("api_touch_check", isTouchOccurred);
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
 
@@ -1522,6 +1525,7 @@ public class KcaBattle {
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
                 battleResultInfo.add("api_e_afterhps_combined", enemyCbAfterHps);
+                battleResultInfo.addProperty("api_touch_check", isTouchOccurred);
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
 
@@ -1652,6 +1656,7 @@ public class KcaBattle {
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
                 battleResultInfo.add("api_e_afterhps_combined", enemyCbAfterHps);
+                battleResultInfo.addProperty("api_touch_check", isTouchOccurred);
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
 
@@ -1721,6 +1726,7 @@ public class KcaBattle {
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
                 battleResultInfo.add("api_e_afterhps_combined", enemyCbAfterHps);
+                battleResultInfo.addProperty("api_touch_check", isTouchOccurred);
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
 
@@ -1850,6 +1856,7 @@ public class KcaBattle {
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
                 battleResultInfo.add("api_e_afterhps_combined", enemyCbAfterHps);
+                battleResultInfo.addProperty("api_touch_check", isTouchOccurred);
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
 
