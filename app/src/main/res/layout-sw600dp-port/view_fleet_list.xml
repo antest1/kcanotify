@@ -544,14 +544,6 @@
                                             android:textColor="@color/white"
                                             android:textSize="18dp" />
 
-                                        <TextView
-                                            android:id="@+id/fleetview_item_1_condmark"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="2dp"
-                                            android:text="@string/fleetview_condmark"
-                                            android:textColor="@android:color/transparent"
-                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -617,6 +609,7 @@
                                         android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="14dp" />
@@ -662,14 +655,6 @@
                                             android:textColor="@color/white"
                                             android:textSize="18dp" />
 
-                                        <TextView
-                                            android:id="@+id/fleetview_item_2_condmark"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="2dp"
-                                            android:text="@string/fleetview_condmark"
-                                            android:textColor="@android:color/transparent"
-                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -735,6 +720,7 @@
                                         android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="14dp" />
@@ -780,14 +766,6 @@
                                             android:textColor="@color/white"
                                             android:textSize="18dp" />
 
-                                        <TextView
-                                            android:id="@+id/fleetview_item_3_condmark"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="2dp"
-                                            android:text="@string/fleetview_condmark"
-                                            android:textColor="@android:color/transparent"
-                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -853,6 +831,7 @@
                                         android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="14dp" />
@@ -898,14 +877,6 @@
                                             android:textColor="@color/white"
                                             android:textSize="18dp" />
 
-                                        <TextView
-                                            android:id="@+id/fleetview_item_4_condmark"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="2dp"
-                                            android:text="@string/fleetview_condmark"
-                                            android:textColor="@android:color/transparent"
-                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -971,6 +942,7 @@
                                         android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="14dp" />
@@ -1016,14 +988,6 @@
                                             android:textColor="@color/white"
                                             android:textSize="18dp" />
 
-                                        <TextView
-                                            android:id="@+id/fleetview_item_5_condmark"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="2dp"
-                                            android:text="@string/fleetview_condmark"
-                                            android:textColor="@android:color/transparent"
-                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1089,6 +1053,7 @@
                                         android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="14dp" />
@@ -1134,14 +1099,6 @@
                                             android:textColor="@color/white"
                                             android:textSize="18dp" />
 
-                                        <TextView
-                                            android:id="@+id/fleetview_item_6_condmark"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="2dp"
-                                            android:text="@string/fleetview_condmark"
-                                            android:textColor="@android:color/transparent"
-                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1207,6 +1164,7 @@
                                         android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="14dp" />
@@ -1261,14 +1219,6 @@
                                             android:textColor="@color/white"
                                             android:textSize="18dp" />
 
-                                        <TextView
-                                            android:id="@+id/fleetview_item_7_condmark"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="2dp"
-                                            android:text="@string/fleetview_condmark"
-                                            android:textColor="@android:color/transparent"
-                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1334,6 +1284,7 @@
                                         android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="14dp" />
@@ -1379,14 +1330,6 @@
                                             android:textColor="@color/white"
                                             android:textSize="18dp" />
 
-                                        <TextView
-                                            android:id="@+id/fleetview_item_8_condmark"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="2dp"
-                                            android:text="@string/fleetview_condmark"
-                                            android:textColor="@android:color/transparent"
-                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1452,6 +1395,7 @@
                                         android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="14dp" />
@@ -1497,14 +1441,6 @@
                                             android:textColor="@color/white"
                                             android:textSize="18dp" />
 
-                                        <TextView
-                                            android:id="@+id/fleetview_item_9_condmark"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="2dp"
-                                            android:text="@string/fleetview_condmark"
-                                            android:textColor="@android:color/transparent"
-                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1570,6 +1506,7 @@
                                         android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="14dp" />
@@ -1615,14 +1552,6 @@
                                             android:textColor="@color/white"
                                             android:textSize="18dp" />
 
-                                        <TextView
-                                            android:id="@+id/fleetview_item_10_condmark"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="2dp"
-                                            android:text="@string/fleetview_condmark"
-                                            android:textColor="@android:color/transparent"
-                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1688,6 +1617,7 @@
                                         android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="14dp" />
@@ -1733,14 +1663,6 @@
                                             android:textColor="@color/white"
                                             android:textSize="18dp" />
 
-                                        <TextView
-                                            android:id="@+id/fleetview_item_11_condmark"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="2dp"
-                                            android:text="@string/fleetview_condmark"
-                                            android:textColor="@android:color/transparent"
-                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1806,6 +1728,7 @@
                                         android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="14dp" />
@@ -1851,14 +1774,6 @@
                                             android:textColor="@color/white"
                                             android:textSize="18dp" />
 
-                                        <TextView
-                                            android:id="@+id/fleetview_item_12_condmark"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="2dp"
-                                            android:text="@string/fleetview_condmark"
-                                            android:textColor="@android:color/transparent"
-                                            android:textSize="18dp" />
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -1924,6 +1839,7 @@
                                         android:layout_width="@dimen/fleetview_text_moralearea"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="right"
+                                        android:gravity="center"
                                         android:maxLines="1"
                                         android:textColor="@color/white"
                                         android:textSize="14dp" />

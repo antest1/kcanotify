@@ -627,8 +627,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="center"
                                         android:maxLines="1"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/fleetview_text_ship_medium" />
                                 </LinearLayout>
@@ -748,8 +748,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="center"
                                         android:maxLines="1"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/fleetview_text_ship_medium" />
                                 </LinearLayout>
@@ -869,8 +869,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="center"
                                         android:maxLines="1"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/fleetview_text_ship_medium" />
                                 </LinearLayout>
@@ -990,8 +990,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="center"
                                         android:maxLines="1"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/fleetview_text_ship_medium" />
                                 </LinearLayout>
@@ -1111,8 +1111,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="center"
                                         android:maxLines="1"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/fleetview_text_ship_medium" />
                                 </LinearLayout>
@@ -1232,8 +1232,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="center"
                                         android:maxLines="1"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/fleetview_text_ship_medium" />
                                 </LinearLayout>
@@ -1362,8 +1362,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="center"
                                         android:maxLines="1"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/fleetview_text_ship_medium" />
                                 </LinearLayout>
@@ -1483,8 +1483,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="center"
                                         android:maxLines="1"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/fleetview_text_ship_medium" />
                                 </LinearLayout>
@@ -1604,8 +1604,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="center"
                                         android:maxLines="1"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/fleetview_text_ship_medium" />
                                 </LinearLayout>
@@ -1725,8 +1725,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="center"
                                         android:maxLines="1"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/fleetview_text_ship_medium" />
 
@@ -1847,8 +1847,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="center"
                                         android:maxLines="1"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/fleetview_text_ship_medium" />
                                 </LinearLayout>
@@ -1968,8 +1968,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="center"
                                         android:maxLines="1"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/fleetview_text_ship_medium" />
                                 </LinearLayout>

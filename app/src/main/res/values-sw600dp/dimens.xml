@@ -14,7 +14,7 @@
     <dimen name="view_padding">12dp</dimen>
 
     <dimen name="fleetview_text_statusarea">16dp</dimen>
-    <dimen name="fleetview_text_moralearea">40dp</dimen>
+    <dimen name="fleetview_text_moralearea">44dp</dimen>
     <dimen name="fleetview_text_tbutton">18dp</dimen>
     <dimen name="fleetview_text_rbutton">22dp</dimen>
     <dimen name="fleetview_text_ship_large">16dp</dimen>
