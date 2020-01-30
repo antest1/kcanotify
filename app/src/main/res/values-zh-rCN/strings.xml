@@ -380,7 +380,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_category_6">工</string>
     <string name="quest_category_7">改</string>
     <string name="quest_category_8">出</string>
-    <string name="quest_category_9">他</string>
+    <string name="quest_category_9">出</string>
+    <string name="quest_category_10">他</string>
 
     <string name="quest_type_1">日</string>
     <string name="quest_type_2">周</string>

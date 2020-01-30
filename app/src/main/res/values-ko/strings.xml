@@ -359,7 +359,8 @@
     <string name="quest_category_6">공</string>
     <string name="quest_category_7">개</string>
     <string name="quest_category_8">출</string>
-    <string name="quest_category_9">타</string>
+    <string name="quest_category_9">출</string>
+    <string name="quest_category_10">타</string>
 
     <string name="quest_type_1">일</string>
     <string name="quest_type_2">주</string>
