@@ -1226,6 +1226,7 @@ public class KcaFleetViewService extends Service {
 
         if (slot_count == 0) {
             ((TextView) itemView.findViewById(R.id.item1_name)).setText(getStringWithLocale(R.string.slot_empty));
+            ((TextView) itemView.findViewById(R.id.item1_name)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
             ((ImageView) itemView.findViewById(R.id.item1_icon)).setImageResource(R.mipmap.item_0);
             itemView.findViewById(R.id.item1_level).setVisibility(GONE);
             itemView.findViewById(R.id.item1_alv).setVisibility(GONE);
