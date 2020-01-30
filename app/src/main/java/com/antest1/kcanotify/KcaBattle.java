@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.media.CamcorderProfile.get;
+import static com.antest1.kcanotify.KcaApiData.T2_SEARCHLIGHT;
+import static com.antest1.kcanotify.KcaApiData.T2_SEARCHLIGHT_LARGE;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
 import static com.antest1.kcanotify.KcaApiData.helper;
@@ -76,6 +78,8 @@ public class KcaBattle {
 
     public static JsonArray ship_ke = null;
     public static JsonArray ship_ke_combined = null;
+    public static JsonArray ship_eslot = null;
+    public static JsonArray ship_eslot_combined = null;
 
     public static JsonArray friendMaxHps, friendCbMaxHps;
     public static JsonArray friendNowHps, friendCbNowHps;
@@ -195,6 +199,58 @@ public class KcaBattle {
             if (is_friend && after_value <= 0) after_value = damecon_calculate(idx, after_value, cb_flag);
             target.set(idx, new JsonPrimitive(after_value));
         }
+    }
+
+    public static boolean searchlight_check(boolean cb_flag) {
+        int max_hp = 1;
+        JsonArray fleet_data;
+        JsonArray currentHP;
+        if (deckportdata != null) {
+            JsonArray deck_data = deckportdata.getAsJsonArray("api_deck_data");
+            if (cb_flag) {
+                fleet_data = deck_data.get(1).getAsJsonObject().getAsJsonArray("api_ship");
+                currentHP = friendCbNowHps;
+            } else {
+                fleet_data = deck_data.get(0).getAsJsonObject().getAsJsonArray("api_ship");
+                currentHP = friendNowHps;
+            }
+            for (int i = 0; i < fleet_data.size(); i++) {
+                int ship_id = fleet_data.get(i).getAsInt();
+                if (ship_id > 0) {
+                    int shipHP = currentHP.get(i).getAsInt();
+                    if (shipHP == 1) continue;
+                    JsonObject shipData = getUserShipDataById(ship_id, "slot");
+                    JsonArray shipItem = shipData.getAsJsonArray("slot");
+                    for (int j = 0; j < shipItem.size(); j++) {
+                        int item_id = shipItem.get(j).getAsInt();
+                        if (item_id != -1) {
+                            JsonObject itemData = getUserItemStatusById(item_id, "slotitem_id", "type");
+                            if (itemData != null) {
+                                int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                                if (itemType == T2_SEARCHLIGHT || itemType == T2_SEARCHLIGHT_LARGE) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean enemy_searchlight_check(JsonArray ship_ke, JsonArray currentHP, JsonArray eslot) {
+        for (int i = 0; i < ship_ke.size(); i++) {
+            int shipId = ship_ke.get(i).getAsInt();
+            if (shipId > 0) {
+                if (currentHP.get(i).getAsInt() <= 1) continue;
+                JsonArray slot = eslot.get(i).getAsJsonArray();
+                for (int j = 0; j < slot.size(); j++) {
+                    if (slot.get(j).getAsInt() == 560) return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static int damecon_calculate(int idx, int value, boolean cb_flag) {
@@ -758,6 +814,8 @@ public class KcaBattle {
 
                 ship_ke = null;
                 ship_ke_combined = null;
+                ship_eslot = null;
+                ship_eslot_combined = null;
                 KcaApiData.resetShipCountInBattle();
                 KcaApiData.resetItemCountInBattle();
                 cleanEscapeList();
@@ -824,6 +882,8 @@ public class KcaBattle {
 
                 ship_ke = null;
                 ship_ke_combined = null;
+                ship_eslot = null;
+                ship_eslot_combined = null;
 
                 int checkcbresult = checkCombinedHeavyDamagedExist();
                 Log.e("KCA", "hd: " + String.valueOf(checkcbresult));
@@ -880,6 +940,7 @@ public class KcaBattle {
 
             if (url.equals(API_REQ_SORTIE_BATTLE) || url.equals(API_REQ_PRACTICE_BATTLE)) {
                 ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                ship_eslot = api_data.getAsJsonArray("api_eSlot");
                 String friendMaxHpsData = api_data.getAsJsonArray("api_f_maxhps").toString();
                 String friendNowHpsData = api_data.getAsJsonArray("api_f_nowhps").toString();
                 String enemyMaxHpsData = api_data.getAsJsonArray("api_e_maxhps").toString();
@@ -984,6 +1045,7 @@ public class KcaBattle {
 
                 if (url.equals(API_REQ_SORTIE_BATTLE_MIDNIGHT_SP)) {
                     ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                    ship_eslot = api_data.getAsJsonArray("api_eSlot");
                     currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
                     String friendMaxHpsData = api_data.getAsJsonArray("api_f_maxhps").toString();
@@ -1015,6 +1077,12 @@ public class KcaBattle {
                     }
                 }
 
+                boolean friend_searchlight = searchlight_check(false);
+                boolean enemy_searchlight = enemy_searchlight_check(ship_ke, enemyNowHps, ship_eslot);
+                JsonArray searchlight_flag = new JsonArray();
+                searchlight_flag.add(friend_searchlight);
+                searchlight_flag.add(enemy_searchlight);
+
                 if (isKeyExist(api_data, "api_hougeki")) {
                     JsonObject hougeki = api_data.getAsJsonObject("api_hougeki");
                     if (isKeyExist(hougeki, "api_df_list")) {
@@ -1028,6 +1096,7 @@ public class KcaBattle {
                 battleResultInfo.add("api_deck_port", deckportdata);
                 battleResultInfo.add("api_f_afterhps", friendAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
+                battleResultInfo.add("api_searchlight", searchlight_flag);
                 battleResultInfo.addProperty("api_touch_check", isTouchOccurred);
                 if (url.equals(API_REQ_PRACTICE_MIDNIGHT_BATTLE)) {
                     battleResultInfo.addProperty("api_practice_flag", true);
@@ -1046,6 +1115,7 @@ public class KcaBattle {
             // 아웃레인지, 공습
             if (url.equals(API_REQ_SORTIE_AIRBATTLE) || url.equals(API_REQ_SORTIE_LDAIRBATTLE)) {
                 ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                ship_eslot = api_data.getAsJsonArray("api_eSlot");
                 currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
                 String friendMaxHpsData = api_data.getAsJsonArray("api_f_maxhps").toString();
@@ -1102,6 +1172,7 @@ public class KcaBattle {
             // 레이더사격
             if (url.equals(API_REQ_SORTIE_LDSHOOTING)) {
                 ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                ship_eslot = api_data.getAsJsonArray("api_eSlot");
                 currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
                 String friendMaxHpsData = api_data.getAsJsonArray("api_f_maxhps").toString();
@@ -1295,6 +1366,7 @@ public class KcaBattle {
 
             if (url.equals(API_REQ_COMBINED_BATTLE) || url.equals(API_REQ_COMBINED_BATTLE_WATER)) {
                 ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                ship_eslot = api_data.getAsJsonArray("api_eSlot");
                 int combined_type = 0;
                 if (url.equals(API_REQ_COMBINED_BATTLE)) combined_type = COMBINED_A;
                 else if (url.equals(API_REQ_COMBINED_BATTLE_WATER)) combined_type = COMBINED_W;
@@ -1408,6 +1480,8 @@ public class KcaBattle {
                 int combined_type = 0;
                 ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 ship_ke_combined = api_data.getAsJsonArray("api_ship_ke_combined");
+                ship_eslot = api_data.getAsJsonArray("api_eSlot");
+                ship_eslot_combined = api_data.getAsJsonArray("api_eSlot_combined");
 
                 if (url.equals(API_REQ_COMBINED_BATTLE_EACH)) combined_type = COMBINED_A;
                 else if (url.equals(API_REQ_COMBINED_BATTLE_EACH_WATER)) combined_type = COMBINED_W;
@@ -1540,6 +1614,7 @@ public class KcaBattle {
             // 아웃레인지, 공습
             if (url.equals(API_REQ_COMBINED_AIRBATTLE) || url.equals(API_REQ_COMBINED_LDAIRBATTLE)) {
                 ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                ship_eslot = api_data.getAsJsonArray("api_eSlot");
                 currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
                 String friendMaxHpsData = api_data.getAsJsonArray("api_f_maxhps").toString();
@@ -1602,6 +1677,7 @@ public class KcaBattle {
             if (url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT) || url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT_SP)) {
                 if (url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT_SP)) {
                     ship_ke = api_data.getAsJsonArray("api_ship_ke");
+                    ship_eslot = api_data.getAsJsonArray("api_eSlot");
 
                     String friendMaxHpsData = api_data.getAsJsonArray("api_f_maxhps").toString();
                     String enemyMaxHpsData = api_data.getAsJsonArray("api_e_maxhps").toString();
@@ -1642,6 +1718,12 @@ public class KcaBattle {
                     }
                 }
 
+                boolean friend_searchlight = searchlight_check(true);
+                boolean enemy_searchlight = enemy_searchlight_check(ship_ke, enemyNowHps, ship_eslot);
+                JsonArray searchlight_flag = new JsonArray();
+                searchlight_flag.add(friend_searchlight);
+                searchlight_flag.add(enemy_searchlight);
+
                 if (isKeyExist(api_data, "api_hougeki")) {
                     JsonObject hougeki = api_data.getAsJsonObject("api_hougeki");
                     if (isKeyExist(hougeki, "api_df_list")) {
@@ -1656,6 +1738,7 @@ public class KcaBattle {
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
                 battleResultInfo.add("api_e_afterhps_combined", enemyCbAfterHps);
+                battleResultInfo.add("api_searchlight", searchlight_flag);
                 battleResultInfo.addProperty("api_touch_check", isTouchOccurred);
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
@@ -1671,6 +1754,8 @@ public class KcaBattle {
             if (url.equals(API_REQ_COMBINED_BATTLE_MIDNIGHT_EC)) {
                 ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 ship_ke_combined = api_data.getAsJsonArray("api_ship_ke_combined");
+                ship_eslot = api_data.getAsJsonArray("api_eSlot");
+                ship_eslot_combined = api_data.getAsJsonArray("api_eSlot_combined");
                 currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
                 JsonArray activeDeckData = api_data.getAsJsonArray("api_active_deck");
@@ -1688,21 +1773,19 @@ public class KcaBattle {
                 enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
                 enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
+                boolean friend_searchlight;
                 if (isKeyExist(api_data, "api_f_nowhps_combined")) {
                     String friendCbNowHpsData = api_data.getAsJsonArray("api_f_nowhps_combined").toString();
                     friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
                     friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
+                    friend_searchlight = searchlight_check(true);
+                } else {
+                    friend_searchlight = searchlight_check(false);
                 }
 
                 String enemyCbNowHpsData = api_data.getAsJsonArray("api_e_nowhps_combined").toString();
                 enemyCbNowHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
                 enemyCbAfterHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
-
-                // 야간지원함대
-                if (isKeyExist(api_data, "api_n_support_info")) {
-                    JsonObject support_info = api_data.getAsJsonObject("api_n_support_info");
-                    calculateSupportDamage(support_info);
-                }
 
                 if (isKeyExist(api_data, "api_friendly_battle")) {
                     JsonObject friend_battle = api_data.getAsJsonObject("api_friendly_battle");
@@ -1710,6 +1793,17 @@ public class KcaBattle {
                     if (isKeyExist(friend_hougeki, "api_df_list")) {
                         calculateFriendSupportFleetHougekiDamage(friend_hougeki);
                     }
+                }
+
+                boolean enemy_searchlight = enemy_searchlight_check(ship_ke, enemyNowHps, ship_eslot);
+                JsonArray searchlight_flag = new JsonArray();
+                searchlight_flag.add(friend_searchlight);
+                searchlight_flag.add(enemy_searchlight);
+
+                // 야간지원함대
+                if (isKeyExist(api_data, "api_n_support_info")) {
+                    JsonObject support_info = api_data.getAsJsonObject("api_n_support_info");
+                    calculateSupportDamage(support_info);
                 }
 
                 if (isKeyExist(api_data, "api_hougeki")) {
@@ -1726,6 +1820,7 @@ public class KcaBattle {
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
                 battleResultInfo.add("api_e_afterhps_combined", enemyCbAfterHps);
+                battleResultInfo.add("api_searchlight", searchlight_flag);
                 battleResultInfo.addProperty("api_touch_check", isTouchOccurred);
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
@@ -1741,6 +1836,10 @@ public class KcaBattle {
             if (url.equals(API_REQ_COMBINED_BATTLE_EC_NIGHTTODAY)) {
                 ship_ke = api_data.getAsJsonArray("api_ship_ke");
                 ship_ke_combined = api_data.getAsJsonArray("api_ship_ke_combined");
+                ship_eslot = api_data.getAsJsonArray("api_eSlot");
+                if (api_data.has("api_eSlot_combined")) {
+                    ship_eslot_combined = api_data.getAsJsonArray("api_eSlot_combined");
+                }
 
                 currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
 
@@ -1757,6 +1856,7 @@ public class KcaBattle {
                 enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
                 enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
+                boolean friend_searchlight;
                 if (isKeyExist(api_data, "api_f_maxhps_combined")) {
                     String friendCbMaxHpsData = api_data.getAsJsonArray("api_f_maxhps_combined").toString();
                     String friendCbNowHpsData = api_data.getAsJsonArray("api_f_nowhps_combined").toString();
@@ -1764,14 +1864,28 @@ public class KcaBattle {
                     friendCbMaxHps = KcaUtils.parseJson(friendCbMaxHpsData).getAsJsonArray();
                     friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
                     friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
+                    friend_searchlight = searchlight_check(true);
+                } else {
+                    friend_searchlight = searchlight_check(false);
                 }
 
-                String enemyCbMaxHpsData = api_data.getAsJsonArray("api_e_maxhps_combined").toString();
-                String enemyCbNowHpsData = api_data.getAsJsonArray("api_e_nowhps_combined").toString();
+                boolean enemy_combined = isKeyExist(api_data, "api_e_maxhps_combined");
+                boolean enemy_searchlight;
+                if (enemy_combined) {
+                    String enemyCbMaxHpsData = api_data.getAsJsonArray("api_e_maxhps_combined").toString();
+                    String enemyCbNowHpsData = api_data.getAsJsonArray("api_e_nowhps_combined").toString();
 
-                enemyCbMaxHps = KcaUtils.parseJson(enemyCbMaxHpsData).getAsJsonArray();
-                enemyCbNowHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
-                enemyCbAfterHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
+                    enemyCbMaxHps = KcaUtils.parseJson(enemyCbMaxHpsData).getAsJsonArray();
+                    enemyCbNowHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
+                    enemyCbAfterHps = KcaUtils.parseJson(enemyCbNowHpsData).getAsJsonArray();
+                    enemy_searchlight = enemy_searchlight_check(ship_ke_combined, enemyCbNowHps, ship_eslot_combined);
+                } else {
+                    enemy_searchlight = enemy_searchlight_check(ship_ke, enemyNowHps, ship_eslot);
+                }
+
+                JsonArray searchlight_flag = new JsonArray();
+                searchlight_flag.add(friend_searchlight);
+                searchlight_flag.add(enemy_searchlight);
 
                 if (isKeyExist(api_data, "api_n_support_info")) {
                     JsonObject support_info = api_data.getAsJsonObject("api_n_support_info");
@@ -1856,6 +1970,7 @@ public class KcaBattle {
                 battleResultInfo.add("api_f_afterhps_combined", friendCbAfterHps);
                 battleResultInfo.add("api_e_afterhps", enemyAfterHps);
                 battleResultInfo.add("api_e_afterhps_combined", enemyCbAfterHps);
+                battleResultInfo.add("api_searchlight", searchlight_flag);
                 battleResultInfo.addProperty("api_touch_check", isTouchOccurred);
                 setCurrentApiData(battleResultInfo);
                 helper.putValue(DB_KEY_BATTLEINFO, battleResultInfo.toString());
