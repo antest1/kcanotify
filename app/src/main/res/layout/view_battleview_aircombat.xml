@@ -99,7 +99,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -119,7 +119,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -136,7 +136,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -156,7 +156,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -193,7 +193,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -213,7 +213,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -230,7 +230,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -250,7 +250,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -293,7 +293,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -303,7 +303,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:minWidth="60dp"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -313,7 +313,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -330,7 +330,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -340,7 +340,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:minWidth="60dp"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -350,7 +350,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -384,7 +384,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -394,7 +394,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:minWidth="60dp"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -404,7 +404,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -421,7 +421,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -431,7 +431,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:minWidth="60dp"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -441,7 +441,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -475,7 +475,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -485,7 +485,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:minWidth="60dp"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -495,7 +495,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -512,7 +512,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -522,7 +522,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:minWidth="60dp"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -532,7 +532,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -566,7 +566,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -576,7 +576,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:minWidth="60dp"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -586,7 +586,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -603,7 +603,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -613,7 +613,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:minWidth="60dp"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -623,7 +623,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -657,7 +657,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -667,7 +667,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:minWidth="60dp"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -677,7 +677,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -694,7 +694,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -704,7 +704,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:minWidth="60dp"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -714,7 +714,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -748,7 +748,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -758,7 +758,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:minWidth="60dp"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -768,7 +768,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -785,7 +785,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -795,7 +795,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
                                     android:minWidth="60dp"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -805,7 +805,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="TextView"
+                                    
                                     android:textAlignment="viewStart"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/popup_text_small" />
@@ -861,7 +861,7 @@
                                         android:gravity="right"
                                         android:maxLines="1"
                                         android:singleLine="true"
-                                        android:text="TextView"
+                                        
                                         android:textAlignment="textEnd"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/popup_text_xsmall" />
@@ -874,8 +874,8 @@
                                         android:layout_marginLeft="2dp"
                                         android:layout_marginStart="2dp"
                                         android:layout_weight="0"
-                                        android:src="@mipmap/item_8"
-                                        app:srcCompat="@mipmap/item_8" />
+                                        
+                                        />
 
                                 </LinearLayout>
 
@@ -889,7 +889,7 @@
                                     android:ellipsize="end"
                                     android:maxLines="1"
                                     android:singleLine="true"
-                                    android:text="Damage Modifier: 112%"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/lightgray"
                                     android:textSize="@dimen/popup_text_xsmall" />
@@ -902,7 +902,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:minWidth="60dp"
-                                android:text="TextView"
+                                
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/aircombat_text_mid" />
@@ -928,8 +928,8 @@
                                         android:layout_marginEnd="2dp"
                                         android:layout_marginRight="2dp"
                                         android:layout_weight="0"
-                                        android:src="@mipmap/item_8"
-                                        app:srcCompat="@mipmap/item_8" />
+                                        
+                                        />
 
                                     <TextView
                                         android:id="@+id/view_ac_phase1_0_e"
@@ -940,7 +940,7 @@
                                         android:ellipsize="end"
                                         android:maxLines="1"
                                         android:singleLine="true"
-                                        android:text="TextView"
+                                        
                                         android:textAlignment="textStart"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/popup_text_xsmall" />
@@ -956,7 +956,7 @@
                                     android:ellipsize="end"
                                     android:maxLines="1"
                                     android:singleLine="true"
-                                    android:text="Damage Modifier: 112%"
+                                    
                                     android:textAlignment="textStart"
                                     android:textColor="@color/lightgray"
                                     android:textSize="@dimen/popup_text_xsmall" />
@@ -976,7 +976,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -986,7 +986,7 @@
                                 android:layout_width="100dp"
                                 android:layout_height="wrap_content"
                                 android:minWidth="60dp"
-                                android:text="TextView"
+                                
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -996,7 +996,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -1013,7 +1013,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -1023,7 +1023,7 @@
                                 android:layout_width="100dp"
                                 android:layout_height="wrap_content"
                                 android:minWidth="60dp"
-                                android:text="TextView"
+                                
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -1033,7 +1033,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -1088,7 +1088,7 @@
                                         android:maxLines="1"
                                         android:maxWidth="80dp"
                                         android:singleLine="true"
-                                        android:text="TextView"
+                                        
                                         android:textAlignment="textEnd"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/popup_text_xsmall" />
@@ -1101,8 +1101,8 @@
                                         android:layout_marginLeft="2dp"
                                         android:layout_marginStart="2dp"
                                         android:layout_weight="0"
-                                        android:src="@mipmap/item_8"
-                                        app:srcCompat="@mipmap/item_8" />
+                                        
+                                        />
 
                                 </LinearLayout>
 
@@ -1117,7 +1117,7 @@
                                     android:gravity="right"
                                     android:maxLines="1"
                                     android:singleLine="true"
-                                    android:text="Damage Modifier: 112%"
+                                    
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/lightgray"
                                     android:textSize="@dimen/popup_text_xsmall" />
@@ -1130,7 +1130,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:minWidth="60dp"
-                                android:text="TextView"
+                                
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/aircombat_text_mid" />
@@ -1156,8 +1156,8 @@
                                         android:layout_marginEnd="2dp"
                                         android:layout_marginRight="2dp"
                                         android:layout_weight="0"
-                                        android:src="@mipmap/item_8"
-                                        app:srcCompat="@mipmap/item_8" />
+                                        
+                                        />
 
                                     <TextView
                                         android:id="@+id/view_ac_phase2_0_e"
@@ -1169,7 +1169,7 @@
                                         android:maxLines="1"
                                         android:maxWidth="80dp"
                                         android:singleLine="true"
-                                        android:text="TextView"
+                                        
                                         android:textAlignment="textStart"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/popup_text_xsmall" />
@@ -1186,7 +1186,7 @@
                                     android:gravity="right"
                                     android:maxLines="1"
                                     android:singleLine="true"
-                                    android:text="Damage Modifier: 112%"
+                                    
                                     android:textAlignment="textStart"
                                     android:textColor="@color/lightgray"
                                     android:textSize="@dimen/popup_text_xsmall" />
@@ -1206,7 +1206,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -1216,7 +1216,7 @@
                                 android:layout_width="100dp"
                                 android:layout_height="wrap_content"
                                 android:minWidth="60dp"
-                                android:text="TextView"
+                                
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -1226,7 +1226,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -1243,7 +1243,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="textEnd"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -1253,7 +1253,7 @@
                                 android:layout_width="100dp"
                                 android:layout_height="wrap_content"
                                 android:minWidth="60dp"
-                                android:text="TextView"
+                                
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
@@ -1263,7 +1263,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                
                                 android:textAlignment="viewStart"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/popup_text_small" />
