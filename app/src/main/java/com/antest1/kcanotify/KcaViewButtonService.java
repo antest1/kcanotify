@@ -665,6 +665,15 @@ public class KcaViewButtonService extends Service {
         setFairyImage();
     }
 
+    private static boolean isForeGroundEvent(UsageEvents.Event event) {
+        if(event == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return event.getEventType() == UsageEvents.Event.ACTIVITY_RESUMED;
+        } else {
+            return event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND;
+        }
+    }
+
     @SuppressLint("WrongConstant")
     public String checkForegroundPackage() {
         String classByUsageStats = null;
@@ -686,7 +695,7 @@ public class KcaViewButtonService extends Service {
             while (usageEvents.hasNextEvent()) {
                 UsageEvents.Event event = new UsageEvents.Event();
                 usageEvents.getNextEvent(event);
-                if (event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                if (isForeGroundEvent(event)) {
                     packageNameByUsageStats = event.getPackageName();
                     Date d = new Date(event.getTimeStamp());
                     classByUsageStats = event.getClassName() + " " + d.toString();
