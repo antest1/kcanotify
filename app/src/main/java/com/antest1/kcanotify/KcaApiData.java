@@ -760,22 +760,20 @@ public class KcaApiData {
 
 
     public static JsonObject getExpeditionInfo(int mission_no, String locale) {
-        int mission_key = mission_no;
-        if (mission_no >= 130) {
-            if (mission_no % 2 == 1) mission_key = 133;
-            else mission_key = 134;
-        }
         JsonObject data = null;
+        int mission_key = mission_no;
         String key = String.valueOf(mission_key);
-        if (kcExpeditionData.has(key)) {
-            JsonObject rawdata = kcExpeditionData.getAsJsonObject(String.valueOf(mission_key));
-            data = new JsonParser().parse(rawdata.toString()).getAsJsonObject();
-            JsonObject name = data.getAsJsonObject("name");
-            if (name.has(locale)) {
-                data.addProperty("name", name.get(locale).getAsString());
-            } else {
-                data.addProperty("name", name.get("en").getAsString());
-            }
+        if (!kcExpeditionData.has(key)) {
+            if (mission_no % 2 == 1) key = "203";
+            else key = "204";
+        }
+        JsonObject rawdata = kcExpeditionData.getAsJsonObject(key);
+        data = new JsonParser().parse(rawdata.toString()).getAsJsonObject();
+        JsonObject name = data.getAsJsonObject("name");
+        if (name.has(locale)) {
+            data.addProperty("name", name.get(locale).getAsString());
+        } else {
+            data.addProperty("name", name.get("en").getAsString());
         }
         return data;
     }

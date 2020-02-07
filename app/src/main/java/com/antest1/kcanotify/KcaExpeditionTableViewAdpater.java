@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,6 +131,7 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
         }
 
         JsonObject item = listViewItemList.get(position);
+        Log.e("KCA", String.valueOf(position) + " " + item.toString() );
         final ViewHolder holder = (ViewHolder) v.getTag();
 
         int no = item.get("no").getAsInt();
@@ -252,6 +254,7 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
     }
 
     private void setConditionContent(View root_view, JsonObject data) {
+        Log.e("KCA", data.toString());
         if (data == null) return;
 
         int total_num = data.get("total-num").getAsInt();
@@ -366,6 +369,7 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
     }
 
     private List<View> generateConditionView(String data) {
+        Log.e("KCA", data);
         List<View> views = new ArrayList<>();
         String[] conds = data.split("/");
         for (String cond : conds) {
