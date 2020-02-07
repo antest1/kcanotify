@@ -505,6 +505,28 @@
 	"drum-ship": 3,
 	"drum-num": 6
 }, {
+	"no": "45",
+	"area": 7,
+	"name": {
+		"ko": "보크사이트선단호위",
+		"en": "Bauxite Escort",
+		"jp": "ボーキサイト船団護衛",
+		"scn": "铝土船団护卫",
+		"tcn": "鋁土船団護衛"
+	},
+	"time": 200,
+	"resource": [0, 0, 0, 0],
+	"reward": [[11, 1], [0, 0]],
+	"exp": [60, 70],
+	"flag-lv": 40,
+	"flag-cond": "27",
+	"total-lv": 290,
+	"total-num": 6,
+	"total-cond": "27-1|2-1",
+	"total-asw": 200,
+	"drum-ship": 3,
+	"drum-num": 6
+}, {
 	"no": "17",
 	"area": 3,
 	"name": {
@@ -786,6 +808,42 @@
 	"total-num": 3,
 	"total-cond": "2-2"
 }, {
+	"no": "131",
+	"area": 4,
+	"name": {
+		"ko": "서방해역정찰작전",
+		"en": "Western Sea Recon Operation",
+		"jp": "西方海域偵察作戦",
+		"scn": "西方海域侦察作战",
+		"tcn": "西方海域偵察作戰"
+	},
+	"time": 120,
+	"resource": [0, 0, 0, 0],
+	"reward": [[1, 1], [0, 0]],
+	"exp": [0, 0],
+	"flag-lv": 30,
+	"flag-cond": "16",
+	"total-num": 5,
+	"total-cond": "16-1|2-4"
+}, {
+	"no": "132",
+	"area": 4,
+	"name": {
+		"ko": "서방잠수함작전",
+		"en": "Western Sea Submarine Operation",
+		"jp": "西方潜水艦作戦",
+		"scn": "西方潜水艇作战",
+		"tcn": "西方潛水艇作戰"
+	},
+	"time": 600,
+	"resource": [0, 0, 0, 0],
+	"reward": [[59, 1], [12, 1]],
+	"exp": [0, 0],
+	"flag-lv": 30,
+	"flag-cond": "20",
+	"total-num": 5,
+	"total-cond": "20-1|13,14-3|2-1"
+}, {
 	"no": "33",
 	"area": 5,
 	"name": {
@@ -930,7 +988,7 @@
 	"total-cond": "3-1|16-2|2-2",
 	"drum-num-optional": 4
 }, {
-	"no": "133",
+	"no": "203",
 	"area": 99,
 	"name": {
 		"ko": "[E] 전방지원함대",
@@ -946,7 +1004,7 @@
 	"total-num": 2,
 	"total-cond": "2-2"
 }, {
-	"no": "134",
+	"no": "204",
 	"area": 99,
 	"name": {
 		"ko": "[E] 함대결전지원임무",

@@ -1,6 +1,6 @@
 [{
 	"name": "icon_info.json",
-	"version": 2020012203,
+	"version": 2020020501,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/icon_info.json"
 }, {
 	"name": "akashi_data.json",
@@ -20,23 +20,23 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/map_sub.json"
 }, {
 	"name": "expedition.json",
-	"version": 2019093002,
+	"version": 2020020701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/expedition.json"
 }, {
 	"name": "items-en.json",
-	"version": 2020011901,
+	"version": 2020020201,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/items-en.json"
 }, {
 	"name": "items-ko.json",
-	"version": 2020011901,
+	"version": 2020020201,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/items-ko.json"
 }, {
 	"name": "items-scn.json",
-	"version": 2020011901,
+	"version": 2020020201,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/items-scn.json"
 }, {
 	"name": "items-tcn.json",
-	"version": 2020011901,
+	"version": 2020020201,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/items-tcn.json"
 }, {
 	"name": "quest_track.json",
