@@ -818,9 +818,9 @@
 		"tcn": "西方海域偵察作戰"
 	},
 	"time": 120,
-	"resource": [0, 0, 0, 0],
+	"resource": [0, 20, 20, 100],
 	"reward": [[1, 1], [0, 0]],
-	"exp": [0, 0],
+	"exp": [35, 90],
 	"flag-lv": 30,
 	"flag-cond": "16",
 	"total-num": 5,
