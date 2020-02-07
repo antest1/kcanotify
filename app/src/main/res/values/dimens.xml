@@ -21,7 +21,7 @@
     <dimen name="fleetview_text_ship_medium">12dp</dimen>
     <dimen name="fleetview_text_ship_small">10dp</dimen>
 
-    <dimen name="questview_tag_size">30dp</dimen>
+    <dimen name="questview_tag_size">36dp</dimen>
     <dimen name="questview_desc_height">32dp</dimen>
     <dimen name="questview_text_top">16dp</dimen>
     <dimen name="questview_button_top">18dp</dimen>

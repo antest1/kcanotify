@@ -134,7 +134,7 @@ public class KcaQuestViewService extends Service {
                     String api_no = item.get("api_no").getAsString();
                     int api_category = item.get("api_category").getAsInt();
                     int api_type = item.get("api_type").getAsInt();
-
+                    int api_label_type = item.get("api_label_type").getAsInt();
                     int api_progress = item.get("api_progress_flag").getAsInt();
                     int api_state = item.get("api_state").getAsInt();
 
@@ -158,10 +158,10 @@ public class KcaQuestViewService extends Service {
                                     getId(KcaUtils.format("colorQuestCategory%d", api_category), R.color.class)));
 
                     ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_type", index), R.id.class)))
-                            .setText(getStringWithLocale(getId(KcaUtils.format("quest_type_%d", api_type), R.string.class)));
+                            .setText(getStringWithLocale(getId(KcaUtils.format("quest_label_type_%d", api_label_type), R.string.class)));
                     questview.findViewById(getId(KcaUtils.format("quest%d_type", index), R.id.class))
                             .setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
-                                    getId(KcaUtils.format("colorQuestType%d", api_type), R.color.class)));
+                                    getId(KcaUtils.format("colorQuestType%d", api_label_type), R.color.class)));
 
                     ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_name", index), R.id.class))).setText(api_title);
                     ((TextView) questview.findViewById(getId(KcaUtils.format("quest%d_desc", index), R.id.class))).setText(api_detail);

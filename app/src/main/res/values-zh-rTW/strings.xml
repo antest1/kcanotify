@@ -384,11 +384,14 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_category_9">出</string>
     <string name="quest_category_10">他</string>
 
-    <string name="quest_type_1">日</string>
-    <string name="quest_type_2">周</string>
-    <string name="quest_type_3">月</string>
-    <string name="quest_type_4">單</string>
-    <string name="quest_type_5">他</string>
+    <string name="quest_label_type_1">單</string>
+    <string name="quest_label_type_2">日</string>
+    <string name="quest_label_type_3">周</string>
+    <string name="quest_label_type_4">_</string>
+    <string name="quest_label_type_5">月</string>
+    <string name="quest_label_type_6">M</string>
+    <string name="quest_label_type_7">他</string>
+    <string name="quest_label_type_8">年2</string>
 
     <string name="questview_page" formatted="false">第 %d/%d 頁</string>
 

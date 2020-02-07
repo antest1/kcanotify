@@ -449,12 +449,15 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_category_9">B</string>
     <string name="quest_category_10">N</string>
 
-    <string name="quest_type_0" formatted="false" translatable="false">\?</string>
-    <string name="quest_type_1">D</string>
-    <string name="quest_type_2">W</string>
-    <string name="quest_type_3">M</string>
-    <string name="quest_type_4">S</string>
-    <string name="quest_type_5">O</string>
+    <string name="quest_label_type_0" formatted="false" translatable="false">\?</string>
+    <string name="quest_label_type_1">O</string>
+    <string name="quest_label_type_2">D</string>
+    <string name="quest_label_type_3">W</string>
+    <string name="quest_label_type_4">_</string>
+    <string name="quest_label_type_5">_</string>
+    <string name="quest_label_type_6">M</string>
+    <string name="quest_label_type_7">S</string>
+    <string name="quest_label_type_8">Y2</string>
 
     <string name="quest_progress_1" translatable="false">50%</string>
     <string name="quest_progress_2" translatable="false">80%</string>

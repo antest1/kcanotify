@@ -96,11 +96,14 @@
     <color name="colorQuestCategory10">#757575</color>
 
     <color name="colorQuestType0">#616161</color>
-    <color name="colorQuestType1">#6ebbf6</color>
-    <color name="colorQuestType2">#77dde9</color>
-    <color name="colorQuestType3">#b5dd60</color>
-    <color name="colorQuestType4">#fbc02e</color>
-    <color name="colorQuestType5">#f98c27</color>
+    <color name="colorQuestType1">#fbc02e</color>
+    <color name="colorQuestType2">#6ebbf6</color>
+    <color name="colorQuestType3">#77dde9</color>
+    <color name="colorQuestType4">#616161</color>
+    <color name="colorQuestType5">#616161</color>
+    <color name="colorQuestType6">#b5dd60</color>
+    <color name="colorQuestType7">#f98c27</color>
+    <color name="colorQuestType8">#3F51B5</color>
 
     <color name="colorQuestProgress1">#6bc613</color>
     <color name="colorQuestProgress2">#31834c</color>
