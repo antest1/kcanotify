@@ -270,20 +270,6 @@
                     android:textColor="@color/colorActivityText"
                     android:textSize="@dimen/activity_text_size" />
 
-                <ImageView
-                    android:id="@+id/setsubunIcon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_above="@id/textSpecial"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginRight="6dp"
-                    android:src="@mipmap/setsubun_icon"
-                    app:srcCompat="@mipmap/setsubun_icon" />
-
             </RelativeLayout>
 
         </LinearLayout>
