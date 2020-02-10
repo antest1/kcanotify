@@ -2,20 +2,20 @@
 <resources>
     <color name="colorPrimary">#313447</color>
     <color name="colorPrimaryDark">#2B2B30</color>
-    <color name="colorAccent">#03A9F4</color>
-    <color name="colorActivityBack">#ffffff</color>
-    <color name="colorActivityText">#888888</color>
-    <color name="colorMainBtn">#374461</color>
+    <color name="colorAccent">#E67E95</color>
+    <color name="colorActivityBack">#F8F7F3</color>
+    <color name="colorActivityText">#4d3434</color>
+    <color name="colorMainBtn">#E67E95</color>
     <color name="colorMainBtnText">#ffffff</color>
-    <color name="colorToolbarText">#ffffff</color>
-    <color name="colorBtn">#d6d6d6</color>
-    <color name="colorBtnText">#000000</color>
-    <color name="colorBtnTextAccent">#ffffff</color>
+    <color name="colorToolbarText">#FBFAF8</color>
+    <color name="colorBtn">#E2DBD4</color>
+    <color name="colorBtnText">#52280b</color>
+    <color name="colorBtnTextAccent">#FBFAF8</color>
     <color name="colorFleetInfoBtn">#313447</color>
 
-    <color name="colorGameStartBtn">#638B92</color>
-    <color name="colorFairyShowBtn">#B3756B</color>
-    <color name="colorToolsBtn">#8C946A</color>
+    <color name="colorGameStartBtn">#4D3434</color>
+    <color name="colorFairyShowBtn">#A18072</color>
+    <color name="colorToolsBtn">#F4D6A7</color>
 
     <color name="colorUpdate">#e8f5e9</color>
     <color name="colorUpdateText">#1b5e20</color>
@@ -25,7 +25,7 @@
     <color name="colorSpecialText">#a76400</color>
     <color name="colorWarn">#ffcdd2</color>
     <color name="colorWarnText">#68000a</color>
-    <color name="colorMenuBack">#80ffffff</color>
+    <color name="colorMenuBack">#40FFFFFF</color>
     <color name="black">#000000</color>
     <color name="lightgray">#d6d6d6</color>
     <color name="grey">#888888</color>
