@@ -20,7 +20,7 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/map_sub.json"
 }, {
 	"name": "expedition.json",
-	"version": 2020020801,
+	"version": 2020021001,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/expedition.json"
 }, {
 	"name": "items-en.json",
@@ -44,23 +44,23 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quest_track.json"
 }, {
 	"name": "quests-en.json",
-	"version": 2020011901,
+	"version": 2020021001,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quests-en.json"
 }, {
 	"name": "quests-jp.json",
-	"version": 2020011901,
+	"version": 2020021001,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quests-jp.json"
 }, {
 	"name": "quests-ko.json",
-	"version": 2020011901,
+	"version": 2020021001,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quests-ko.json"
 }, {
 	"name": "quests-scn.json",
-	"version": 2020011901,
+	"version": 2020021001,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quests-scn.json"
 }, {
 	"name": "quests-tcn.json",
-	"version": 2020011901,
+	"version": 2020021001,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/quests-tcn.json"
 }, {
 	"name": "ships-en.json",

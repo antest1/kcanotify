@@ -517,15 +517,15 @@
 	"time": 200,
 	"resource": [40, 0, 0, 220],
 	"reward": [[11, 1], [0, 0]],
-	"exp": [60, 70],
-	"flag-lv": 40,
+	"exp": [35, 40],
+	"flag-lv": 50,
 	"flag-cond": "27",
 	"total-lv": 290,
 	"total-num": 5,
-	"total-cond": "27-1|2-1",
-	"total-asw": 430,
-	"drum-ship": 3,
-	"drum-num": 6
+	"total-cond": "27-1|1,2-4",
+	"total-los": 180,
+	"total-fp": 240,
+	"total-asw": 300
 }, {
 	"no": "17",
 	"area": 3,
@@ -820,11 +820,13 @@
 	"time": 120,
 	"resource": [0, 20, 20, 100],
 	"reward": [[1, 1], [0, 0]],
-	"exp": [35, 90],
-	"flag-lv": 30,
+	"exp": [35, 45],
+	"flag-lv": 50,
 	"flag-cond": "16",
 	"total-num": 5,
-	"total-cond": "16-1|2-4"
+	"total-cond": "16-1|2-4",
+	"total-asw": 240,
+	"total-los": 300
 }, {
 	"no": "132",
 	"area": 4,
@@ -836,10 +838,10 @@
 		"tcn": "西方潛水艇作戰"
 	},
 	"time": 600,
-	"resource": [0, 0, 0, 0],
+	"resource": [0, 0, 400, 800],
 	"reward": [[59, 1], [12, 1]],
-	"exp": [0, 0],
-	"flag-lv": 30,
+	"exp": [70, 180],
+	"flag-lv": 55,
 	"flag-cond": "20",
 	"total-num": 5,
 	"total-cond": "20-1|13,14-3|2-1"
