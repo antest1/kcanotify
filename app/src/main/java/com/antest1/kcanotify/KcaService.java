@@ -51,6 +51,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -1584,12 +1586,15 @@ public class KcaService extends Service {
                                 JsonObject dev_instance = devInfo.get(i).getAsJsonObject();
                                 boolean createFlag = dev_instance.get("api_id").getAsInt() > 0;
                                 int itemKcId = dev_instance.get("api_slotitem_id").getAsInt();
-                                int itemFailKcId = -1;
-                                if (dev_instance.has("api_fdata")) {
-                                    String[] fdata = dev_instance.get("api_fdata").getAsString().split(",");
-                                    itemFailKcId = Integer.parseInt(fdata[1]);
+                                int itemFailKcId = 0;
+                                if (isOpenDBEnabled()) {
+                                    new Timer().schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            KcaOpenDBAPI.sendEquipDevData(flagship, materials[0], materials[1], materials[2], materials[3], createFlag ? itemKcId : itemFailKcId);
+                                        }
+                                    }, 100*i);
                                 }
-                                if (isOpenDBEnabled()) KcaOpenDBAPI.sendEquipDevData(flagship, materials[0], materials[1], materials[2], materials[3], itemKcId);
                                 if (isPoiDBEnabled()) KcaPoiDBAPI.sendEquipDevData(Arrays.toString(materials), flagship, createFlag ? itemKcId : itemFailKcId, getAdmiralLevel(), createFlag);
                             }
                             updateQuestView();
