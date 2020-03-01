@@ -2320,7 +2320,7 @@ public class KcaService extends Service {
                     }
                     updateFleetView();
 
-                    if (api_url.startsWith(API_REQ_SORTIE_BATTLE_RESULT) || url.startsWith(API_REQ_COMBINED_BATTLERESULT)) {
+                    if (api_url.startsWith(API_REQ_SORTIE_BATTLE_RESULT) || api_url.startsWith(API_REQ_COMBINED_BATTLERESULT)) {
                         JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
                         questTracker.updateBattleTracker(questTrackData);
                         updateQuestView();
