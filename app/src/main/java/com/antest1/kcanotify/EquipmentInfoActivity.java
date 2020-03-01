@@ -72,7 +72,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
 
     boolean is_popup_on;
     View export_popup, export_exit;
-    TextView export_clipboard, export_openpage;
+    TextView export_clipboard, export_openpage, export_openpage2;
     Vibrator vibrator;
 
     public EquipmentInfoActivity() {
@@ -244,6 +244,14 @@ public class EquipmentInfoActivity extends AppCompatActivity {
         export_openpage.setOnClickListener(v -> {
             Intent bIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://kancolle-fleetanalysis.firebaseapp.com/#/equipInput"));
+            startActivity(bIntent);
+        });
+
+        export_openpage2 = export_popup.findViewById(R.id.export_openpage2);
+        export_openpage2.setText(getStringWithLocale(R.string.equipinfo_export_openpage2));
+        export_openpage2.setOnClickListener(v -> {
+            Intent bIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://noro6.github.io/kcTools/#input_equipment_json"));
             startActivity(bIntent);
         });
 

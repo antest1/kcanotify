@@ -709,6 +709,7 @@
     <string name="equipinfo_export_title">艦隊分析へのコード変換</string>
     <string name="equipinfo_export_clipboard">クリップボードにコピー</string>
     <string name="equipinfo_export_openpage">艦隊分析ページを開く</string>
+    <string name="equipinfo_export_openpage2">制空権シミュレータを開く</string>
 
     <string name="text_api_houg">火力</string>
     <string name="text_api_raig">雷装</string>

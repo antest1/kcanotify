@@ -178,7 +178,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_fairy_select">選擇你想要攜帶的妖精</string>
     <string name="setting_menu_kand_title_fairy_select">選擇輔助妖精</string>
     <string name="setting_menu_kand_title_fairy_size">選擇妖精大小</string>
-    <string name="setting_menu_kand_title_fairy_random">시작 시 요정을 랜덤하게 선택</string>
+    <string name="setting_menu_kand_title_fairy_random">使用隨機妖精</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">使妖精只顯示在艦これ屏幕上</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">在顯示/隱藏妖精時有短暫的延遲</string>
     <string name="current_fairy_changed_in_next">※妖精會於戰鬥劇透/任務瀏覽結束後更換</string>
@@ -715,6 +715,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="equipinfo_export_title">匯出到 艦隊分析</string>
     <string name="equipinfo_export_clipboard">复制到剪贴板</string>
     <string name="equipinfo_export_openpage">開啟擁有艦隊分析頁網站</string>
+    <string name="equipinfo_export_openpage2">開啟制空權模擬器</string>
 
     <string name="text_api_houg">火力</string>
     <string name="text_api_raig">雷裝</string>

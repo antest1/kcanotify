@@ -716,6 +716,7 @@
     <string name="equipinfo_export_title">Exportar a fleetanalysis</string>
     <string name="equipinfo_export_clipboard">Copiar</string>
     <string name="equipinfo_export_openpage">Abrir página fleetanalysis</string>
+    <string name="equipinfo_export_openpage2">Abrir página SeikuukenSimulator</string>
 
     <string name="text_api_houg">FP</string>
     <string name="text_api_raig">TP</string>
