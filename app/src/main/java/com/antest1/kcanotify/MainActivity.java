@@ -238,9 +238,14 @@ public class MainActivity extends AppCompatActivity {
                 R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         kcafairybtn = findViewById(R.id.kcafairybtn);
-        String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
-        String fairyPath = "noti_icon_".concat(fairyIdValue);
-        KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
+        boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
+        if (is_random_fairy) {
+            kcafairybtn.setImageResource(R.mipmap.ic_help);
+        } else {
+            String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
+            String fairyPath = "noti_icon_".concat(fairyIdValue);
+            KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
+        }
         kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.white), PorterDuff.Mode.SRC_ATOP);
         kcafairybtn.setOnClickListener(new View.OnClickListener() {
@@ -374,10 +379,15 @@ public class MainActivity extends AppCompatActivity {
         setCheckBtn();
 
         kcafairybtn = findViewById(R.id.kcafairybtn);
-        String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
-        String fairyPath = "noti_icon_".concat(fairyIdValue);
-        KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
-        showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
+        boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
+        if (is_random_fairy) {
+            kcafairybtn.setImageResource(R.mipmap.ic_help);
+        } else {
+            String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
+            String fairyPath = "noti_icon_".concat(fairyIdValue);
+            KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
+            showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
+        }
         kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.white), PorterDuff.Mode.SRC_ATOP);
 

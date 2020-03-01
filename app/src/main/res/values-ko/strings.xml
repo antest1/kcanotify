@@ -165,6 +165,7 @@
     <string name="setting_menu_kand_title_fairy_select">요정 선택</string>
     <string name="setting_menu_kand_desc_fairy_select">함께 할 요정님을 선택</string>
     <string name="setting_menu_kand_title_fairy_size">요정 크기 선택</string>
+    <string name="setting_menu_kand_title_fairy_random">시작 시 요정을 랜덤하게 선택</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">칸코레 화면에서만 요정 표시</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">요정을 표시하거나 숨길 때 약간의 지연이 있습니다.</string>
     <string name="setting_menu_kand_title_game_data_down">데이터/리소스 업데이트 확인</string>

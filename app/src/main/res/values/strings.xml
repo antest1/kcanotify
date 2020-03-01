@@ -215,9 +215,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_desc_set_noti_priority">When checked, the navbar will always be the top of notifications</string>
     <string name="setting_menu_kand_title_game_data_down">Data/Resource Update Check</string>
     <string name="setting_menu_kand_desc_game_data_down">Use if game data was not loaded automatically.</string>
-    <string name="setting_menu_kand_title_fairy_select">Select Fairy</string>
-    <string name="setting_menu_kand_desc_fairy_select">Select Fairy to bring with</string>
-    <string name="setting_menu_kand_title_fairy_size">Fairy Size</string>
+    <string name="setting_menu_kand_title_fairy_select">Select fairy</string>
+    <string name="setting_menu_kand_desc_fairy_select">Select fairy to bring with</string>
+    <string name="setting_menu_kand_title_fairy_size">Fairy size</string>
+    <string name="setting_menu_kand_title_fairy_random">Select fairy randomly</string>
     <string name="setting_menu_kand_title_fairy_auto_hide">Show Fairy only in Kancolle Screen</string>
     <string name="setting_menu_kand_desc_fairy_auto_hide">There is a delay in showing/hiding fairy.</string>
     <string name="action_fairy_rev">Reverse</string>

@@ -109,6 +109,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_FAIRY_DOWN_FLAG:
             case PREF_ALLOW_EXTFILTER:
             case PREF_HDNOTI_LOCKED:
+            case PREF_FAIRY_RANDOM:
                 return "boolean_false";
             case PREF_KCA_EXP_VIEW:
             case PREF_KCA_NOTI_NOTIFYATSVCOFF:

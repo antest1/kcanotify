@@ -75,6 +75,11 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="fairy_random"
+            android:title="@string/setting_menu_kand_title_fairy_random" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="fairy_auto_hide"
             android:summary="@string/setting_menu_kand_desc_fairy_auto_hide"
             android:title="@string/setting_menu_kand_title_fairy_auto_hide" />

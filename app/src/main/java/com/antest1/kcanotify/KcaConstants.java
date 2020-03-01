@@ -486,6 +486,7 @@ public final class KcaConstants {
     public static final String PREF_HDNOTI_MINLEVEL = "hdnoti_minlevel";
     public static final String PREF_DEFAULT_APIVER = "default_apiver";
     public static final String PREF_FAIRY_SIZE = "fairy_size";
+    public static final String PREF_FAIRY_RANDOM = "fairy_random";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -556,7 +557,8 @@ public final class KcaConstants {
             PREF_HDNOTI_LOCKED,
             PREF_HDNOTI_MINLEVEL,
             PREF_DEFAULT_APIVER,
-            PREF_FAIRY_SIZE
+            PREF_FAIRY_SIZE,
+            PREF_FAIRY_RANDOM
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
@@ -590,7 +592,8 @@ public final class KcaConstants {
             PREF_FIX_VIEW_LOC,
             PREF_KCAQSYNC_USE,
             PREF_ALLOW_EXTFILTER,
-            PREF_HDNOTI_LOCKED
+            PREF_HDNOTI_LOCKED,
+            PREF_FAIRY_RANDOM
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

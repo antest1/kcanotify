@@ -46,6 +46,7 @@ import android.widget.Toast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -69,8 +70,10 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_COMPLETE;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_DOWN_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
+import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_RANDOM;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_REV;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_SIZE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
@@ -255,7 +258,16 @@ public class KcaViewButtonService extends Service {
             icon_info = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "icon_info.json", dbHelper);
             viewbutton = mView.findViewById(R.id.viewbutton);
             setFairySize();
-            String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
+
+            String fairyIdValue;
+            boolean random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
+            if (random_fairy) {
+                int fairy_size = icon_info.size();
+                int random_value = (int)(Math.random() * (fairy_size + 1));
+                fairyIdValue = String.valueOf(random_value);
+            } else {
+                fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
+            }
             viewBitmapId = "noti_icon_".concat(fairyIdValue);
             setFairyImage();
             if (icon_info.size() > 0) {
