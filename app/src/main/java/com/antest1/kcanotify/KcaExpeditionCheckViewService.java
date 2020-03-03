@@ -37,6 +37,9 @@ import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_MEDIUM;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_SMALL;
+import static com.antest1.kcanotify.KcaApiData.T2_RADAR_LARGE;
+import static com.antest1.kcanotify.KcaApiData.T2_RADAR_SMALL;
+import static com.antest1.kcanotify.KcaApiData.T2_RADER_LARGE_II;
 import static com.antest1.kcanotify.KcaApiData.T2_SCOUT;
 import static com.antest1.kcanotify.KcaApiData.T2_SCOUT_II;
 import static com.antest1.kcanotify.KcaApiData.T2_SEA_BOMBER;
@@ -44,6 +47,7 @@ import static com.antest1.kcanotify.KcaApiData.T2_SEA_FIGHTER;
 import static com.antest1.kcanotify.KcaApiData.T2_SEA_SCOUT;
 import static com.antest1.kcanotify.KcaApiData.T2_SONAR;
 import static com.antest1.kcanotify.KcaApiData.T2_SONAR_LARGE;
+import static com.antest1.kcanotify.KcaApiData.T2_SUB_GUN;
 import static com.antest1.kcanotify.KcaApiData.checkUserShipDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
@@ -417,6 +421,12 @@ public class KcaExpeditionCheckViewService extends Service {
             int total_fp_value = 0;
             for (JsonObject obj : ship_data) {
                 total_fp_value += (obj.get("taiku").getAsInt());
+                for (JsonElement itemobj : obj.getAsJsonArray("item")) {
+                    int level = itemobj.getAsJsonObject().get("level").getAsInt();
+                    int type_t3 = itemobj.getAsJsonObject().getAsJsonArray("type").get(3).getAsInt();
+                    if (type_t3 == 15) total_fp_value += Math.sqrt(level);
+                    if (type_t3 == 16) total_fp_value += 0.3 * Math.sqrt(level);
+                }
             }
             int total_fp = data.get("total-fp").getAsInt();
             result.addProperty("total-fp", total_fp_value >= total_fp);
@@ -428,6 +438,13 @@ public class KcaExpeditionCheckViewService extends Service {
             int total_los_value = 0;
             for (JsonObject obj : ship_data) {
                 total_los_value += obj.get("sakuteki").getAsInt();
+                for (JsonElement itemobj : obj.getAsJsonArray("item")) {
+                    int level = itemobj.getAsJsonObject().get("level").getAsInt();
+                    int type_t2 = itemobj.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
+                    if (type_t2 == T2_RADAR_SMALL || type_t2 == T2_RADAR_LARGE || type_t2 == T2_RADER_LARGE_II ) {
+                        total_los_value += Math.sqrt(level);
+                    }
+                }
             }
             int total_los = data.get("total-los").getAsInt();
             result.addProperty("total-los", total_los_value >= total_los);
@@ -444,6 +461,10 @@ public class KcaExpeditionCheckViewService extends Service {
                     int type_t2 = itemobj.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
                     if (type_t2 == T2_GUN_MEDIUM || type_t2 == T2_GUN_LARGE || type_t2 == T2_GUN_LARGE_II) {
                         total_firepower_value += Math.sqrt(level);
+                    } else if (type_t2 == T2_GUN_SMALL) {
+                        total_firepower_value += 0.5 * Math.sqrt(level);
+                    } else if (type_t2 == T2_SUB_GUN) {
+                        total_firepower_value += 0.15 * Math.sqrt(level);
                     }
                 }
             }
