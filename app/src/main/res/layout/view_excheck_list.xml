@@ -508,16 +508,17 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/view_excheck_detail"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:minWidth="@dimen/excheckview_popup_width"
                     android:orientation="vertical"
                     android:padding="2dp">
 
                     <LinearLayout
+                        android:id="@+id/excheck_detail_head"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -544,12 +545,13 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:id="@+id/imageView4"
+                        android:id="@+id/excheck_detail_line"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:layout_below="@id/excheck_detail_head"
                         android:layout_gravity="left|clip_vertical"
                         android:layout_marginTop="1dp"
-                        android:layout_marginBottom="5dp"
+                        android:layout_marginBottom="1dp"
                         android:layout_weight="0"
                         android:background="@color/grey"
                         android:paddingLeft="5dp"
@@ -561,12 +563,14 @@
 
                     <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/excheck_detail_line"
+                        android:layout_marginTop="4dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical" >
+                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:id="@+id/view_excheck_flagship"
@@ -867,9 +871,48 @@
                         </LinearLayout>
                     </ScrollView>
 
+                    <LinearLayout
+                        android:id="@+id/excheck_detail_reward"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/excheck_detail_line"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/colorFleetInfoBtn"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="4dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="4dp">
+
+                        <TextView
+                            android:id="@+id/excheck_reward_res"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="0/0/0/0"
+                            android:textColor="@color/white"
+                            android:textSize="12dp" />
+
+                        <ImageView
+                            android:id="@+id/excheck_reward_item1"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_marginLeft="8dp"
+                            android:background="@color/colorPrimaryDark" />
+
+                        <ImageView
+                            android:id="@+id/excheck_reward_item2"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_weight="1"
+                            android:background="@color/colorPrimaryDark" />
+                    </LinearLayout>
 
 
-                </LinearLayout>
+                </RelativeLayout>
 
             </LinearLayout>
 

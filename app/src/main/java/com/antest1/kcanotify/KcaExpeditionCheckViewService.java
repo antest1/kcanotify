@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -89,6 +90,7 @@ public class KcaExpeditionCheckViewService extends Service {
     int selected = 1;
     int world = 1;
     int button = 0;
+    boolean isGreatSuccess = false;
     JsonArray deckdata;
     List<JsonObject> ship_data;
     List<Integer> expedition_data = new ArrayList<>();
@@ -157,6 +159,7 @@ public class KcaExpeditionCheckViewService extends Service {
             KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
             mView.setVisibility(View.GONE);
             mView.findViewById(R.id.excheckview_head).setOnClickListener(mViewClickListener);
+            mView.findViewById(R.id.excheck_detail_reward).setOnClickListener(mViewClickListener);
             for (int i = 1; i < 4; i++) {
                 mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnClickListener(mViewClickListener);
             }
@@ -482,6 +485,8 @@ public class KcaExpeditionCheckViewService extends Service {
     private JsonObject getBonusInfo() {
         double bonus = 0.0;
         boolean kinu_exist = false;
+
+        int bonus_default = 0;
         int drum_count = 0;
         int bonus_count = 0;
         int daihatsu_count = 0;
@@ -498,7 +503,6 @@ public class KcaExpeditionCheckViewService extends Service {
 
         for (JsonObject obj : ship_data) {
             if (obj.get("ship_id").getAsInt() == 487) { // Kinu Kai Ni
-                bonus += 5.0;
                 kinu_exist = true;
             }
 
@@ -512,6 +516,10 @@ public class KcaExpeditionCheckViewService extends Service {
 
                 if (type_t2 == T2_GUN_MEDIUM || type_t2 == T2_GUN_LARGE || type_t2 == T2_GUN_LARGE_II) {
                     total_firepower += Math.sqrt(level);
+                } else if (type_t2 == T2_GUN_SMALL) {
+                    total_firepower += 0.5 * Math.sqrt(level);
+                } else if (type_t2 == T2_SUB_GUN) {
+                    total_firepower += 0.15 * Math.sqrt(level);
                 }
 
                 if (type_t2 == T2_SONAR || type_t2 == T2_SONAR_LARGE || type_t2 == T2_DEPTH_CHARGE ) {
@@ -523,25 +531,21 @@ public class KcaExpeditionCheckViewService extends Service {
                         drum_count += 1;
                         break;
                     case 68:
-                        bonus += 5.0;
                         bonus_level += level;
                         bonus_count += 1.0;
                         daihatsu_count += 1;
                         break;
                     case 166:
-                        bonus += 2.0;
                         bonus_level += level;
                         bonus_count += 1.0;
                         tank_count += 1;
                         break;
                     case 167:
-                        bonus += 1.0;
                         bonus_level += level;
                         bonus_count += 1.0;
                         amp_count += 1;
                         break;
                     case 193:
-                        bonus += 5.0;
                         bonus_level += level;
                         bonus_count += 1.0;
                         toku_count += 1;
@@ -552,27 +556,47 @@ public class KcaExpeditionCheckViewService extends Service {
             }
         }
         if (bonus_count > 0) bonus_level /= bonus_count;
-        int left_count = bonus_count - toku_count;
-        if (left_count > 4) left_count = 4;
-        if (bonus > 20) bonus = 20.0;
-        bonus += (100.0 + 0.2 * bonus_level);
-        if (toku_count > 0) {
-            int toku_idx;
-            if (toku_count > 4) toku_idx = 3;
-            else toku_idx = toku_count - 1;
-            bonus += toku_bonus[toku_idx][left_count];
-        }
+
         result.addProperty("kinu", kinu_exist);
         result.addProperty("drum", drum_count);
         result.addProperty("daihatsu", daihatsu_count);
         result.addProperty("tank", tank_count);
         result.addProperty("amp", amp_count);
         result.addProperty("toku", toku_count);
-        result.addProperty("bonus", bonus);
+        result.addProperty("level", bonus_level);
         result.addProperty("firepower", (int) total_firepower);
         result.addProperty("asw", (int) (total_asw + total_asw_bonus * 2 / 3) );
         result.addProperty("los", total_los);
         return result;
+    }
+
+    private int calculateBonusValue(int value, JsonObject bonus_info, boolean is_gs) {
+        int kinu_count = bonus_info.get("kinu").getAsBoolean() ? 1 : 0;
+        int daihatsu_count = bonus_info.get("daihatsu").getAsInt();
+        int tank_count = bonus_info.get("tank").getAsInt();
+        int amp_count = bonus_info.get("amp").getAsInt();
+        int toku_count = bonus_info.get("toku").getAsInt();
+        double bonus_level = bonus_info.get("level").getAsDouble();
+
+        int dlc_count = kinu_count + daihatsu_count + toku_count;
+        int ntoku_count = Math.min(4, daihatsu_count + tank_count + amp_count);
+        double bonus_default = Math.min(dlc_count * 0.05 + tank_count * 0.02 + amp_count * 0.01, 0.2);
+        bonus_default += 0.002 * bonus_level;
+        double bonus_toku = 0.0;
+        if (toku_count > 0) {
+            int toku_idx;
+            if (toku_count > 4) toku_idx = 3;
+            else toku_idx = toku_count - 1;
+            bonus_toku = toku_bonus[toku_idx][ntoku_count] * 0.01;
+        }
+
+        int value_bonus = 0;
+        if (is_gs) {
+            value_bonus = (int)(value * 3 * (1 + bonus_default) / 2) + (int)(value * 3 * bonus_toku / 2);
+        } else {
+            value_bonus = (int)(value * (1 + bonus_default)) + (int)(value * bonus_toku);
+        }
+        return value_bonus;
     }
 
     private void setItemViewVisibilityById(int id, boolean visible) {
@@ -666,7 +690,8 @@ public class KcaExpeditionCheckViewService extends Service {
         setItemViewVisibilityById(R.id.view_excheck_firepower, false);
     }
 
-    public void setItemViewLayout(int index) {
+    public void setItemViewLayout(int index, JsonObject bonus_info) {
+        double gs_ratio = isGreatSuccess ? 1.5 : 1.0;
         int expd_value = expedition_data.get(index);
         Log.e("KCA", String.valueOf(index) + " " + expd_value);
         JsonObject data = KcaApiData.getExpeditionInfo(expd_value, locale);
@@ -677,6 +702,44 @@ public class KcaExpeditionCheckViewService extends Service {
         String title = getExpeditionHeader(no_value).concat(name);
         int time = data.get("time").getAsInt() * 60;
         int total_num = data.get("total-num").getAsInt();
+        JsonArray resource = data.getAsJsonArray("resource");
+        int fuel = calculateBonusValue(resource.get(0).getAsInt(), bonus_info, isGreatSuccess);
+        int ammo = calculateBonusValue(resource.get(1).getAsInt(), bonus_info, isGreatSuccess);
+        int steel = calculateBonusValue(resource.get(2).getAsInt(), bonus_info, isGreatSuccess);
+        int bauxite = calculateBonusValue(resource.get(3).getAsInt(), bonus_info, isGreatSuccess);
+        String resource_text = KcaUtils.format("%d/%d/%d/%d", fuel, ammo, steel, bauxite);
+        ((TextView) itemView.findViewById(R.id.excheck_reward_res)).setText(resource_text);
+        if (isGreatSuccess) {
+            ((TextView) itemView.findViewById(R.id.excheck_reward_res))
+                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionGreatSuccess));
+        } else {
+            ((TextView) itemView.findViewById(R.id.excheck_reward_res))
+                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+        }
+
+        JsonArray reward = data.getAsJsonArray("reward");
+        int reward1 = reward.get(0).getAsJsonArray().get(0).getAsInt();
+        int reward2 = reward.get(1).getAsJsonArray().get(0).getAsInt();
+        try {
+            if (reward1 > 0) {
+                ((ImageView) itemView.findViewById(R.id.excheck_reward_item1))
+                        .setImageResource(getId("common_itemicons_id_" + reward1, R.mipmap.class));
+            } else {
+                ((ImageView) itemView.findViewById(R.id.excheck_reward_item1)).setImageDrawable(null);
+            }
+        } catch (Exception e) {
+            ((ImageView) itemView.findViewById(R.id.excheck_reward_item1)).setImageDrawable(null);
+        }
+        try {
+            if (reward2 > 0) {
+                ((ImageView) itemView.findViewById(R.id.excheck_reward_item2))
+                        .setImageResource(getId("common_itemicons_id_" + reward2, R.mipmap.class));
+            } else {
+                ((ImageView) itemView.findViewById(R.id.excheck_reward_item2)).setImageDrawable(null);
+            }
+        } catch (Exception e) {
+            ((ImageView) itemView.findViewById(R.id.excheck_reward_item2)).setImageDrawable(null);
+        }
 
         JsonObject check = checkdata.get(no);
         if (check == null) return;
@@ -905,14 +968,14 @@ public class KcaExpeditionCheckViewService extends Service {
                 if (toku_count > 0)
                     bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_toku), toku_count));
                 String bonus_info_content = joinStr(bonus_info_text, " / ");
-                double bonus_value = bonus_info.get("bonus").getAsDouble() - 100.0;
-                if (bonus_value > 0.0) {
-                    bonus_info_content = bonus_info_content.concat(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_result), bonus_value));
+                double bonus_value = (double) calculateBonusValue(100, bonus_info, false);
+                if (bonus_value > 100.0) {
+                    bonus_info_content = bonus_info_content.concat(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_result), bonus_value - 100.0));
                 }
                 ((TextView) mView.findViewById(R.id.excheck_info)).setText(bonus_info_content);
                 mView.findViewById(R.id.excheck_info).setBackgroundColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpedition));
-                setItemViewLayout(button);
+                setItemViewLayout(button, bonus_info);
             } else {
                 ((TextView) mView.findViewById(R.id.excheck_info)).setText(getStringWithLocale(R.string.kca_init_content));
                 mView.findViewById(R.id.excheck_info).setBackgroundColor(
@@ -932,6 +995,13 @@ public class KcaExpeditionCheckViewService extends Service {
             if (id == mView.findViewById(R.id.excheckview_head).getId()) {
                 stopSelf();
             } else if (checkUserShipDataLoaded()) {
+                JsonObject bonus_info = getBonusInfo();
+                if (id == mView.findViewById(R.id.excheck_detail_reward).getId()) {
+                    isGreatSuccess = !isGreatSuccess;
+                    setItemViewLayout(button, bonus_info);
+                    return;
+                }
+
                 for (int i = 1; i <= 7; i++) {
                     if (id == mView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).getId()) {
                         world = i;
@@ -951,7 +1021,7 @@ public class KcaExpeditionCheckViewService extends Service {
                 for (int i = 0; i < 15; i++) {
                     if (id == mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).getId()) {
                         button = i;
-                        setItemViewLayout(button);
+                        setItemViewLayout(button, bonus_info);
                         break;
                     }
                 }
