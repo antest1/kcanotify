@@ -13,8 +13,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -31,11 +31,8 @@ import com.google.gson.JsonObject;
 
 import java.util.Calendar;
 
-import static android.R.attr.value;
 import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
-import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
-import static com.antest1.kcanotify.KcaApiData.kcItemData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_LABSIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.LAB_STATUS_DEFENSE;

@@ -1,7 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.content.Context;
-import android.support.annotation.IntegerRes;
+import androidx.annotation.IntegerRes;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -11,19 +11,12 @@ import com.google.gson.JsonPrimitive;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
-import java.util.SortedSet;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.*;
-import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.LAB_STATUS_DEFENSE;
 import static com.antest1.kcanotify.KcaConstants.LAB_STATUS_SORTIE;

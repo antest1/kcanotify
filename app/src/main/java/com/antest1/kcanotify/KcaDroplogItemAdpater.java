@@ -1,38 +1,24 @@
 package com.antest1.kcanotify;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.util.SparseArray;
+import androidx.core.content.ContextCompat;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.antest1.kcanotify.KcaApiData.getCurrentNodeAlphabet;
 import static com.antest1.kcanotify.R.id.droplog_item;
-import static com.antest1.kcanotify.R.id.ship_id;
 
 public class KcaDroplogItemAdpater extends BaseAdapter {
     private List<JsonObject> listViewItemList = new ArrayList<>();

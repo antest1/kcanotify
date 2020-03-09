@@ -1,22 +1,18 @@
 package com.antest1.kcanotify;
 
-import android.support.v4.util.LogWriter;
-import android.support.v4.util.Pair;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.util.LogWriter;
+import androidx.core.util.Pair;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import static android.R.id.list;
 import static com.antest1.kcanotify.KcaFleetViewService.fleetview_menu_keys;
 
 public class KcaFleetViewMenuOrderAdpater extends DragItemAdapter<JsonObject, KcaFleetViewMenuOrderAdpater.ViewHolder> {

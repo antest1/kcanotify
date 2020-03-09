@@ -1,16 +1,9 @@
 package com.antest1.kcanotify;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-
-import com.google.gson.JsonObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.antest1.kcanotify.KcaResourcelogItemAdpater.resourceData;
 

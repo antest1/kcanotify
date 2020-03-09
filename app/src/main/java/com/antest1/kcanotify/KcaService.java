@@ -26,9 +26,9 @@ import android.os.Message;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -57,12 +57,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
-import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_HIGH;
+import static androidx.core.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
+import static androidx.core.app.NotificationManagerCompat.IMPORTANCE_HIGH;
 import static android.widget.Toast.makeText;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaApiData.AKASHI_TIMER_20MIN;

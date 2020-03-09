@@ -2,17 +2,13 @@ package com.antest1.kcanotify;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.widget.TextView;
-
-import com.google.gson.Gson;
-
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 

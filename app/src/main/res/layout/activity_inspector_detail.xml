@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         app:titleTextColor="@color/colorToolbarText"
         android:id="@+id/toolbar"
         android:background="@color/colorPrimary"
@@ -18,7 +18,7 @@
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         >
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/inspect_data_container"

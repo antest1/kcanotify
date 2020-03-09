@@ -1,11 +1,8 @@
 package com.antest1.kcanotify;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +11,6 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
-import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_PREFIX;
-import static com.antest1.kcanotify.KcaUtils.getId;
 
 public class KcaItemAdapter extends BaseAdapter {
     public static final int IMAGE_SIZE = 128;

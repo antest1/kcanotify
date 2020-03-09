@@ -1,13 +1,12 @@
 package com.antest1.kcanotify;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,13 +18,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
-import org.w3c.dom.Text;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.name;
 import static com.antest1.kcanotify.KcaApiData.getExpeditionInfo;
 import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaUtils.joinStr;

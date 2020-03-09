@@ -1,10 +1,9 @@
 package com.antest1.kcanotify;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
+import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
 
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;

@@ -1,7 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

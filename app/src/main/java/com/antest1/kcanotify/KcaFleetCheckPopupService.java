@@ -9,10 +9,10 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
+
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -21,29 +21,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
-import static android.R.attr.id;
-import static com.antest1.kcanotify.KcaApiData.checkUserShipDataLoaded;
-import static com.antest1.kcanotify.KcaApiData.getCurrentNodeAlphabet;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_APIMAPINFO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
-import static com.antest1.kcanotify.KcaMapHpPopupService.MAPHP_RESET_ACTION;
-import static com.antest1.kcanotify.KcaMapHpPopupService.MAPHP_SHOW_ACTION;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
-import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaFleetCheckPopupService extends Service {
     public static final String FCHK_SHOW_ACTION = "fchk_show_action";
