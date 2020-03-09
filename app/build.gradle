@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 29
@@ -45,10 +47,6 @@ android {
         }
     }
 
-    buildTypes.each {
-        it.buildConfigField 'String', 'AppCenterSecret', AppCenterSecret
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -81,8 +79,7 @@ dependencies {
     implementation "com.tonyodev.fetch2:fetch2:2.1.0-RC10"
     implementation 'com.mariten:kanatools:1.3.0'
     implementation 'androidx.browser:browser:1.2.0'
-    // testCompile 'junit:junit:4.12'
 
-    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
-    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
+    implementation 'com.google.firebase:firebase-analytics:17.2.3'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
 }

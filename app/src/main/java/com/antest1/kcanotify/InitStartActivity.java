@@ -94,7 +94,7 @@ public class InitStartActivity extends Activity {
         setContentView(R.layout.activity_init_download);
         Log.e("KCA-DA", "created");
 
-        sendUserAnalytics(START_APP, null);
+        sendUserAnalytics(getApplicationContext(), START_APP, null);
 
         Intent mainIntent = getIntent();
         reset_flag = mainIntent.getBooleanExtra(ACTION_RESET, false);

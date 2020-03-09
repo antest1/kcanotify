@@ -424,19 +424,19 @@ public class KcaQuestViewService extends Service {
                 updateView(setView(isquestlist, false, 0), false);
                 mView.setVisibility(View.VISIBLE);
                 statProperties.addProperty("type", "no_reset");
-                sendUserAnalytics(OPEN_QUESTVIEW, statProperties);
+                sendUserAnalytics(getApplicationContext(), OPEN_QUESTVIEW, statProperties);
             } else if (intent.getAction().equals(SHOW_QUESTVIEW_ACTION_NEW)) {
                 currentPage = 1;
                 updateView(setView(isquestlist, false, 0), true);
                 mView.setVisibility(View.VISIBLE);
                 statProperties.addProperty("type", "new");
-                sendUserAnalytics(OPEN_QUESTVIEW, statProperties);
+                sendUserAnalytics(getApplicationContext(), OPEN_QUESTVIEW, statProperties);
             } else if (intent.getAction().equals(CLOSE_QUESTVIEW_ACTION)) {
                 if (mView.getParent() != null) {
                     mView.setVisibility(View.GONE);
                     mManager.removeViewImmediate(mView);
                     statProperties.addProperty("manual", false);
-                    sendUserAnalytics(OPEN_QUESTVIEW, statProperties);
+                    sendUserAnalytics(getApplicationContext(), OPEN_QUESTVIEW, statProperties);
                 }
             }
         }
@@ -464,7 +464,7 @@ public class KcaQuestViewService extends Service {
                         if (id == questview.findViewById(R.id.quest_head).getId()) {
                             mView.setVisibility(View.GONE);
                             mManager.removeViewImmediate(mView);
-                            sendUserAnalytics(OPEN_QUESTVIEW, statProperties);
+                            sendUserAnalytics(getApplicationContext(), OPEN_QUESTVIEW, statProperties);
                         } else if (id == questamenubtn.getId()) {
                             if (isamenuvisible) {
                                 questview.findViewById(R.id.quest_amenu).setVisibility(View.GONE);

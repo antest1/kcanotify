@@ -18,11 +18,15 @@
 
 -dontobfuscate
 -dontskipnonpubliclibraryclasses
--keepattributes SoureFile,LineNumberTable
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
 
 -keepattributes Signature
 -keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
+
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
 
 -dontwarn okhttp3.**
 -dontwarn okio.**

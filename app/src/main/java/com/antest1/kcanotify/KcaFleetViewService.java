@@ -454,7 +454,7 @@ public class KcaFleetViewService extends Service {
                         }
                         mManager.addView(mView, mParams);
                     }
-                    sendUserAnalytics(OPEN_FLEETVIEW, null);
+                    sendUserAnalytics(getApplicationContext(), OPEN_FLEETVIEW, null);
                 }
             }
             if (intent.getAction().equals(REFRESH_FLEETVIEW_ACTION)) {
@@ -478,7 +478,7 @@ public class KcaFleetViewService extends Service {
                     }
                     JsonObject statProperties = new JsonObject();
                     statProperties.addProperty("manual", false);
-                    sendUserAnalytics(CLOSE_FLEETVIEW, statProperties);
+                    sendUserAnalytics(getApplicationContext(), CLOSE_FLEETVIEW, statProperties);
                 }
             }
         }
@@ -581,23 +581,22 @@ public class KcaFleetViewService extends Service {
                         if (id == mView.findViewById(R.id.fleetview_head).getId()) {
                             JsonObject statProperties = new JsonObject();
                             statProperties.addProperty("manual", true);
-                            sendUserAnalytics(CLOSE_FLEETVIEW, statProperties);
                             if (mView != null) mView.setVisibility(GONE);
                             if (itemView != null) itemView.setVisibility(GONE);
                         } else if (id == mView.findViewById(R.id.fleetview_tool).getId()) {
-                            sendUserAnalytics(FV_BTN_PRESS.concat("Tools"), null);
+                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Tools"), null);
                             if (mView != null) mView.setVisibility(GONE);
                             if (itemView != null) itemView.setVisibility(GONE);
                             Intent toolIntent = new Intent(KcaFleetViewService.this, ToolsActivity.class);
                             toolIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(toolIntent);
                         } else if (id == mView.findViewById(R.id.fleetview_cn_change).getId()) {
-                            sendUserAnalytics(FV_BTN_PRESS.concat("CnChange"), null);
+                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("CnChange"), null);
                             changeInternalSeekCn();
                             fleetCnChangeBtn.setText(getSeekType());
                             processDeckInfo(selected, isCombinedFlag(selected));
                         } else if (id == mView.findViewById(R.id.fleetview_fleetswitch).getId()) {
-                            sendUserAnalytics(FV_BTN_PRESS.concat("FleetChange"), null);
+                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("FleetChange"), null);
                             if (switch_status == 1) {
                                 switch_status = 2;
                                 mView.findViewById(R.id.fleet_list_main).setVisibility(View.GONE);
@@ -613,55 +612,55 @@ public class KcaFleetViewService extends Service {
                             hqinfoState = (hqinfoState + 1) % HQINFO_TOTAL;
                             JsonObject statProperties = new JsonObject();
                             statProperties.addProperty("state", hqinfoState);
-                            sendUserAnalytics(FV_BTN_PRESS.concat("HqInfo"), statProperties);
+                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("HqInfo"), statProperties);
                             setHqInfo();
                         } else if (id == mView.findViewById(R.id.viewbutton_quest).getId()) {
-                            sendUserAnalytics(FV_BTN_PRESS.concat("Quest"), null);
+                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Quest"), null);
                             qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
                             qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
                             startService(qintent);
                         } else if (id == mView.findViewById(R.id.viewbutton_akashi).getId()) {
-                            sendUserAnalytics(FV_BTN_PRESS.concat("Akashi"), null);
+                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Akashi"), null);
                             qintent = new Intent(getBaseContext(), KcaAkashiViewService.class);
                             qintent.setAction(SHOW_AKASHIVIEW_ACTION);
                             startService(qintent);
                         } else if (id == mView.findViewById(R.id.viewbutton_develop).getId()) {
                             if (isGameDataLoaded()) {
-                                sendUserAnalytics(FV_BTN_PRESS.concat("Develop"), null);
+                                sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Develop"), null);
                                 qintent = new Intent(getBaseContext(), KcaDevelopPopupService.class);
                                 startService(qintent);
                             }
                         } else if (id == mView.findViewById(R.id.viewbutton_construction).getId()) {
                             if (isGameDataLoaded()) {
-                                sendUserAnalytics(FV_BTN_PRESS.concat("Constr"), null);
+                                sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Constr"), null);
                                 qintent = new Intent(getBaseContext(), KcaConstructPopupService.class);
                                 qintent.setAction(KcaConstructPopupService.CONSTR_DATA_ACTION);
                                 startService(qintent);
                             }
                         } else if (id == mView.findViewById(R.id.viewbutton_docking).getId()) {
                             if (isGameDataLoaded()) {
-                                sendUserAnalytics(FV_BTN_PRESS.concat("Docking"), null);
+                                sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Docking"), null);
                                 qintent = new Intent(getBaseContext(), KcaDockingPopupService.class);
                                 qintent.setAction(KcaDockingPopupService.DOCKING_DATA_ACTION);
                                 startService(qintent);
                             }
                         } else if (id == mView.findViewById(R.id.viewbutton_maphp).getId()) {
-                            sendUserAnalytics(FV_BTN_PRESS.concat("MapHP"), null);
+                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("MapHP"), null);
                             qintent = new Intent(getBaseContext(), KcaMapHpPopupService.class);
                             qintent.setAction(KcaMapHpPopupService.MAPHP_SHOW_ACTION);
                             startService(qintent);
                         } else if (id == mView.findViewById(R.id.viewbutton_fchk).getId()) {
-                            sendUserAnalytics(FV_BTN_PRESS.concat("FleetCheck"), null);
+                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("FleetCheck"), null);
                             qintent = new Intent(getBaseContext(), KcaFleetCheckPopupService.class);
                             qintent.setAction(KcaFleetCheckPopupService.FCHK_SHOW_ACTION);
                             startService(qintent);
                         } else if (id == mView.findViewById(R.id.viewbutton_labinfo).getId()) {
-                            sendUserAnalytics(FV_BTN_PRESS.concat("LandAirBaseInfo"), null);
+                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("LandAirBaseInfo"), null);
                             qintent = new Intent(getBaseContext(), KcaLandAirBasePopupService.class);
                             qintent.setAction(KcaLandAirBasePopupService.LAB_DATA_ACTION);
                             startService(qintent);
                         } else if (id == mView.findViewById(R.id.viewbutton_excheck).getId()) {
-                            sendUserAnalytics(FV_BTN_PRESS.concat("ExpeditionCheck"), null);
+                            sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("ExpeditionCheck"), null);
                             qintent = new Intent(getBaseContext(), KcaExpeditionCheckViewService.class);
                             qintent.setAction(KcaExpeditionCheckViewService.SHOW_EXCHECKVIEW_ACTION.concat("/").concat(String.valueOf(selected)));
                             startService(qintent);

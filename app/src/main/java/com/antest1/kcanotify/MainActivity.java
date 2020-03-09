@@ -157,11 +157,11 @@ public class MainActivity extends AppCompatActivity {
                         statProperties.addProperty("is_success", false);
                         Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
                     }
-                    sendUserAnalytics(START_SNIFFER, statProperties);
+                    sendUserAnalytics(getApplicationContext(), START_SNIFFER, statProperties);
                 } else {
                     KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
                     prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
-                    sendUserAnalytics(END_SNIFFER, null);
+                    sendUserAnalytics(getApplicationContext(), END_SNIFFER, null);
                 }
             }
         });
@@ -182,13 +182,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, KcaService.class);
                 if (isChecked) {
                     if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
-                        sendUserAnalytics(START_SERVICE, null);
+                        sendUserAnalytics(getApplicationContext(), START_SERVICE, null);
                         loadTranslationData(getApplicationContext());
                         startService(intent);
                     }
                 } else {
                     stopService(intent);
-                    sendUserAnalytics(END_SERVICE, null);
+                    sendUserAnalytics(getApplicationContext(), END_SERVICE, null);
                     prefs.edit().putBoolean(PREF_SVC_ENABLED, false).apply();
                 }
             }
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
             statProperties.addProperty("sniffer", sniffer_mode);
             statProperties.addProperty("enabled", is_kca_installed ? 1 : 0);
 
-            sendUserAnalytics(RUN_KANCOLLE, statProperties);
+            sendUserAnalytics(getApplicationContext(), RUN_KANCOLLE, statProperties);
             if (is_kca_installed) {
                 kcIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(kcIntent);
@@ -335,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
         textSpecial.setOnClickListener(v -> {
             specialImage.setImageResource(R.mipmap.special_image);
             specialImage.setVisibility(View.VISIBLE);
-            sendUserAnalytics(OPEN_PIC, null);
+            sendUserAnalytics(getApplicationContext(), OPEN_PIC, null);
         });
         /*
         textSpecial2 = findViewById(R.id.textSpecial2);
@@ -343,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
         textSpecial2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendUserAnalytics(OPEN_QUIZ, null);
+                sendUserAnalytics(getApplicationContext(), OPEN_QUIZ, null);
                 String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
                 String locale_code = getResourceLocaleCode(locale);
                 String url = KcaUtils.format("http://antest1.cf:12345?lang=%s", locale_code);
@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        sendUserAnalytics(ENTER_MAIN, null);
+        sendUserAnalytics(getApplicationContext(), ENTER_MAIN, null);
 
         setVpnBtn();
         setCheckBtn();
@@ -414,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        sendUserAnalytics(END_APP, null);
+        sendUserAnalytics(getApplicationContext(), END_APP, null);
         dbHelper.close();
         super.onDestroy();
     }

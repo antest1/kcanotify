@@ -20,6 +20,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.MediaStore;
@@ -37,6 +38,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -44,8 +46,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.mariten.kanatools.KanaConverter;
-import com.microsoft.appcenter.Flags;
-import com.microsoft.appcenter.analytics.Analytics;
 
 import org.apache.commons.httpclient.ChunkedInputStream;
 
@@ -1047,13 +1047,14 @@ public class KcaUtils {
         return dataString.toString();
     }
 
-    public static void sendUserAnalytics(String event, JsonObject value) {
-        Map<String, String> properties = new HashMap<>();
+    public static void sendUserAnalytics(Context context, String event, JsonObject value) {
+        Bundle params = new Bundle();
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         if (value != null) {
             for (String key: value.keySet()) {
-                properties.put(key, value.get(key).getAsString());
+                params.putString(key, value.get(key).getAsString());
             }
         }
-        Analytics.trackEvent(event, properties, Flags.NORMAL);
+        mFirebaseAnalytics.logEvent(event, params);
     }
 }

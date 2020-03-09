@@ -5,9 +5,7 @@ import android.content.SharedPreferences;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Locale;
 
@@ -44,7 +42,6 @@ public class KcaApplication extends MultiDexApplication {
         }
 
         LocaleUtils.updateConfig(this, getBaseContext().getResources().getConfiguration());
-        AppCenter.start(this, BuildConfig.AppCenterSecret,
-                Analytics.class, Crashes.class);
+        FirebaseAnalytics.getInstance(this);
     }
 }

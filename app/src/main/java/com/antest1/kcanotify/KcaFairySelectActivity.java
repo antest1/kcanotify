@@ -189,7 +189,7 @@ public class KcaFairySelectActivity extends AppCompatActivity {
             int current_id = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
             JsonObject data = new JsonObject();
             data.addProperty("id", current_id);
-            sendUserAnalytics(SELECT_FAIRY, data);
+            sendUserAnalytics(getApplicationContext(), SELECT_FAIRY, data);
 
             Bundle bundle = new Bundle();
             bundle.putString("url", KCA_API_PREF_FAIRY_CHANGED);

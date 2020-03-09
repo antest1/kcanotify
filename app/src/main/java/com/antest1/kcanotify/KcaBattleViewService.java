@@ -1518,7 +1518,7 @@ public class KcaBattleViewService extends Service {
         }
         infoList.add(tpValue);
         ((TextView) menuView.findViewById(R.id.view_menu_fleetinfo)).setText(joinStr(infoList, "\n"));
-        sendUserAnalytics(BV_BTN_PRESS, null);
+        sendUserAnalytics(getApplicationContext(), BV_BTN_PRESS, null);
     }
 
     private void setAirCombatContact(String prefix, JsonObject data) {
@@ -1772,7 +1772,7 @@ public class KcaBattleViewService extends Service {
                     battleview.findViewById(getId(KcaUtils.format("fm_%d_lv", 7), R.id.class)).setOnTouchListener(shipViewTouchListener);
                     battleview.findViewById(getId(KcaUtils.format("fm_%d_exp", 7), R.id.class)).setOnTouchListener(shipViewTouchListener);
                     if (mView != null) mView.setVisibility(View.VISIBLE);
-                    sendUserAnalytics(OPEN_BATTEVIEW, null);
+                    sendUserAnalytics(getApplicationContext(), OPEN_BATTEVIEW, null);
                 }
             }
             if (intent.getAction().equals(HIDE_BATTLEVIEW_ACTION)) {
@@ -1780,7 +1780,7 @@ public class KcaBattleViewService extends Service {
                 if (itemView != null) itemView.setVisibility(View.GONE);
                 JsonObject statProperties = new JsonObject();
                 statProperties.addProperty("manual", true);
-                sendUserAnalytics(CLOSE_BATTEVIEW, statProperties);
+                sendUserAnalytics(getApplicationContext(), CLOSE_BATTEVIEW, statProperties);
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -1816,7 +1816,7 @@ public class KcaBattleViewService extends Service {
                             if (itemView != null) itemView.setVisibility(View.GONE);
                             JsonObject statProperties = new JsonObject();
                             statProperties.addProperty("manual", false);
-                            sendUserAnalytics(CLOSE_BATTEVIEW, statProperties);
+                            sendUserAnalytics(getApplicationContext(), CLOSE_BATTEVIEW, statProperties);
                         }
                     }
                     break;
@@ -2000,7 +2000,7 @@ public class KcaBattleViewService extends Service {
             switch (v.getId()) {
                 case R.id.view_item0:
                     statProperties.addProperty("type", "air_calulation");
-                    sendUserAnalytics(BV_BTN_PRESS.concat("Menu"), statProperties);
+                    sendUserAnalytics(getApplicationContext(), BV_BTN_PRESS.concat("Menu"), statProperties);
                     initAcViewParams();
                     if (acView != null && acView.getParent() != null) {
                         mManager.updateViewLayout(acView, acViewParams);
@@ -2011,14 +2011,14 @@ public class KcaBattleViewService extends Service {
                     break;
                 case R.id.view_item1:
                     statProperties.addProperty("type", "quest_view");
-                    sendUserAnalytics(BV_BTN_PRESS.concat("Menu"), statProperties);
+                    sendUserAnalytics(getApplicationContext(), BV_BTN_PRESS.concat("Menu"), statProperties);
                     qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
                     qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
                     startService(qintent);
                     break;
                 case R.id.view_item2:
                     statProperties.addProperty("type", "enter_fleetview");
-                    sendUserAnalytics(BV_BTN_PRESS.concat("Menu"), statProperties);
+                    sendUserAnalytics(getApplicationContext(), BV_BTN_PRESS.concat("Menu"), statProperties);
                     qintent = new Intent(getBaseContext(), KcaFleetViewService.class);
                     qintent.setAction(SHOW_FLEETVIEW_ACTION);
                     startService(qintent);
