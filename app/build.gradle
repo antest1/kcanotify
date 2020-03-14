@@ -82,4 +82,5 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-analytics:17.2.3'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

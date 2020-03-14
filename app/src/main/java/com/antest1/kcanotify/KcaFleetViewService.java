@@ -46,6 +46,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
 import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
@@ -704,8 +705,8 @@ public class KcaFleetViewService extends Service {
             fleetCalcInfoText = "";
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
             fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
-            mView.findViewById(R.id.fleet_list_main).setVisibility(View.INVISIBLE);
-            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape? View.INVISIBLE : View.GONE);
+            mView.findViewById(R.id.fleet_list_main).setVisibility(INVISIBLE);
+            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape? INVISIBLE : View.GONE);
             fleetSwitchBtn.setVisibility(View.GONE);
             return;
         }
@@ -714,8 +715,8 @@ public class KcaFleetViewService extends Service {
             fleetCalcInfoText = "Not Opened";
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
             fleetInfoLine.setText(fleetCalcInfoText);
-            mView.findViewById(R.id.fleet_list_main).setVisibility(View.INVISIBLE);
-            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape? View.INVISIBLE : View.GONE);
+            mView.findViewById(R.id.fleet_list_main).setVisibility(INVISIBLE);
+            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_landscape? INVISIBLE : View.GONE);
             fleetSwitchBtn.setVisibility(View.GONE);
             return;
         }
@@ -723,7 +724,7 @@ public class KcaFleetViewService extends Service {
         if(is_landscape) {
             fleetSwitchBtn.setVisibility(View.GONE);
             mView.findViewById(R.id.fleet_list_main).setVisibility(View.VISIBLE);
-            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_combined ? View.VISIBLE : View.INVISIBLE);
+            mView.findViewById(R.id.fleet_list_combined).setVisibility(is_combined ? View.VISIBLE : INVISIBLE);
         } else {
             boolean switch_is_one = switch_status == 1;
             fleetSwitchBtn.setVisibility(is_combined ? View.VISIBLE : View.GONE);
@@ -732,7 +733,7 @@ public class KcaFleetViewService extends Service {
         }
 
         for (int i = 1; i <= 12; i++) {
-            mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", i), R.id.class)).setVisibility(View.INVISIBLE);
+            mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", i), R.id.class)).setVisibility(INVISIBLE);
         }
 
         int cn = seekcn_internal;
@@ -785,7 +786,7 @@ public class KcaFleetViewService extends Service {
                 for (int i = 0; i < 6; i++) {
                     int v = n * 6 + i + 1;
                     if (i >= maindata.size()) {
-                        mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", v), R.id.class)).setVisibility(View.INVISIBLE);
+                        mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", v), R.id.class)).setVisibility(INVISIBLE);
                     } else {
                         JsonObject userData = maindata.get(i).getAsJsonObject().getAsJsonObject("user");
                         JsonObject kcData = maindata.get(i).getAsJsonObject().getAsJsonObject("kc");
@@ -896,7 +897,7 @@ public class KcaFleetViewService extends Service {
             for (int i = 0; i < max_count; i++) {
                 int v = i + 1;
                 if (i >= maindata.size()) {
-                    mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", v), R.id.class)).setVisibility(View.INVISIBLE);
+                    mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", v), R.id.class)).setVisibility(INVISIBLE);
                 } else {
                     JsonObject userData = maindata.get(i).getAsJsonObject().getAsJsonObject("user");
                     JsonObject kcData = maindata.get(i).getAsJsonObject().getAsJsonObject("kc");
@@ -1143,7 +1144,7 @@ public class KcaFleetViewService extends Service {
                                 .setText(KcaUtils.format("[%02d/%02d]", nowSlotValue, maxSlotValue));
                         itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.VISIBLE);
                     } else {
-                        itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.INVISIBLE);
+                        itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(INVISIBLE);
                     }
                 } else {
                     kcItemData = getKcItemStatusById(item_id, "id,type,name");
@@ -1186,41 +1187,53 @@ public class KcaFleetViewService extends Service {
             }
         }
 
+        if (slot_ex != 0) {
+            // EX_SLOT
+            if (slot_ex > 0) {
+                slot_count += 1;
+                JsonObject kcItemData = getUserItemStatusById(slot_ex, "level", "type,name");
+                if (kcItemData != null) {
+                    String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
+                    int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
+                    int lv = kcItemData.get("level").getAsInt();
+                    int typeres = 0;
+                    try {
+                        typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
+                    } catch (Exception e) {
+                        typeres = R.mipmap.item_0;
+                    }
+                    ((TextView) itemView.findViewById(R.id.item_ex_name)).setText(kcItemName);
+                    ((ImageView) itemView.findViewById(R.id.item_ex_icon)).setImageResource(typeres);
+                    itemView.findViewById(R.id.item_ex_icon).setVisibility(View.VISIBLE);
+                    if (lv > 0) {
+                        ((TextView) itemView.findViewById(R.id.item_ex_level))
+                                .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
+                        itemView.findViewById(R.id.item_ex_level).setVisibility(View.VISIBLE);
+                    } else {
+                        itemView.findViewById(R.id.item_ex_level).setVisibility(GONE);
+                    }
+                } else {
+                    ((TextView) itemView.findViewById(R.id.item_ex_name)).setText("???");
+                    itemView.findViewById(R.id.view_slot_ex).setVisibility(INVISIBLE);
+                }
+            } else {
+                ((TextView) itemView.findViewById(R.id.item_ex_name)).setText(getStringWithLocale(R.string.slot_empty));
+                ((ImageView) itemView.findViewById(R.id.item_ex_icon)).setImageResource(R.mipmap.item_0);
+                itemView.findViewById(R.id.item_ex_slot_list).setVisibility(INVISIBLE);
+            }
+            itemView.findViewById(R.id.view_slot_ex).setVisibility(View.VISIBLE);
+        } else {
+            itemView.findViewById(R.id.view_slot_ex).setVisibility(GONE);
+        }
+
         if (onslot_count == 0) {
             for (int i = 0; i < slot.size(); i++) {
                 itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(GONE);
             }
-        }
-
-        if (slot_ex > 0) {
-            // EX_SLOT
-            slot_count += 1;
-            JsonObject kcItemData = getUserItemStatusById(slot_ex, "level", "type,name");
-            if (kcItemData != null) {
-                String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
-                int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
-                int lv = kcItemData.get("level").getAsInt();
-                int typeres = 0;
-                try {
-                    typeres = getId(KcaUtils.format("item_%d", type), R.mipmap.class);
-                } catch (Exception e) {
-                    typeres = R.mipmap.item_0;
-                }
-                ((TextView) itemView.findViewById(R.id.item_ex_name)).setText(kcItemName);
-                ((ImageView) itemView.findViewById(R.id.item_ex_icon)).setImageResource(typeres);
-                if (lv > 0) {
-                    ((TextView) itemView.findViewById(R.id.item_ex_level))
-                            .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
-                    itemView.findViewById(R.id.item_ex_level).setVisibility(View.VISIBLE);
-                } else {
-                    itemView.findViewById(R.id.item_ex_level).setVisibility(GONE);
-                }
-                itemView.findViewById(R.id.view_slot_ex).setVisibility(View.VISIBLE);
-            } else {
-                itemView.findViewById(R.id.view_slot_ex).setVisibility(View.INVISIBLE);
-            }
+            itemView.findViewById(R.id.item_slot_list).setVisibility(GONE);
+            itemView.findViewById(R.id.item_ex_slot_list).setVisibility(GONE);
         } else {
-            itemView.findViewById(R.id.view_slot_ex).setVisibility(GONE);
+            itemView.findViewById(R.id.item_slot_list).setVisibility(View.VISIBLE);
         }
 
         if (slot_count == 0) {

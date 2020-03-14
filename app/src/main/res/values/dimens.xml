@@ -46,7 +46,7 @@
     <dimen name="battleview_nodeinfo_minwidth">72dp</dimen>
     <dimen name="battleview_nodeinfo_margin">20dp</dimen>
 
-    <dimen name="item_popup_icon_size">15dp</dimen>
+    <dimen name="item_popup_icon_size">14dp</dimen>
     <dimen name="item_popup_text_size_large">11dp</dimen>
     <dimen name="item_popup_text_size_small">10dp</dimen>
     <dimen name="item_popup_xmargin">72dp</dimen>
