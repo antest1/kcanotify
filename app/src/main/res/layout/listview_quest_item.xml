@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -108,15 +109,34 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/quest_desc"
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/questview_desc_height"
-                android:layout_marginLeft="5dp"
-                android:maxLines="2"
-                android:scrollbars="vertical"
-                android:textColor="@color/white"
-                android:textSize="@dimen/questview_text_medium" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/quest_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/questview_desc_height"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toLeftOf="@id/quest_desc_full"
+                    android:maxLines="2"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/questview_text_medium" />
+
+                <ImageView
+                    android:id="@+id/quest_desc_full"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:alpha="0.75"
+                    android:src="@mipmap/ic_add_circle"
+                    app:srcCompat="@mipmap/ic_add_circle" />
+            </RelativeLayout>
 
         </LinearLayout>
     </LinearLayout>

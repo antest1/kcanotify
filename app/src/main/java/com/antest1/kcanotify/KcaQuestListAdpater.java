@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.content.Context;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +21,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.antest1.kcanotify.KcaApiData.getExpeditionInfo;
@@ -34,19 +34,20 @@ import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaQuestListAdpater extends BaseAdapter {
     private List<JsonObject> listViewItemList = new ArrayList<>();
-    private Context application_context, base_context;
+    private KcaQuestViewService service;
+    private Context application_context;
     private KcaQuestTracker questTracker;
     public static final float PROGRESS_1 = 0.5f;
     public static final float PROGRESS_2 = 0.8f;
 
-    public KcaQuestListAdpater(Context ac, Context bc, KcaQuestTracker qt) {
-        application_context = ac;
-        base_context = bc;
+    public KcaQuestListAdpater(KcaQuestViewService svc, KcaQuestTracker qt) {
+        service = svc;
+        application_context = svc.getApplicationContext();
         questTracker = qt;
     }
 
     public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(application_context, base_context, id);
+        return KcaUtils.getStringWithLocale(application_context, service.getBaseContext(), id);
     }
 
     @Override
@@ -81,6 +82,7 @@ public class KcaQuestListAdpater extends BaseAdapter {
             holder.quest_desc = v.findViewById(R.id.quest_desc);
             holder.quest_progress = v.findViewById(R.id.quest_progress);
             holder.quest_progress_track = v.findViewById(R.id.quest_progress_track);
+            holder.quest_desc_full = v.findViewById(R.id.quest_desc_full);
             v.setTag(holder);
         }
 
@@ -117,7 +119,11 @@ public class KcaQuestListAdpater extends BaseAdapter {
 
         holder.quest_name.setText(api_title);
         holder.quest_desc.setText(api_detail);
-        holder.quest_desc.setMovementMethod(new ScrollingMovementMethod());
+
+        String finalApiTitle = api_title;
+        String finalApiDetail = api_detail;
+        holder.quest_desc_full.setOnClickListener(v1 ->
+                service.setAndShowPopup(finalApiTitle, finalApiDetail));
 
         if (api_progress != 0) {
             holder.quest_progress
@@ -190,18 +196,27 @@ public class KcaQuestListAdpater extends BaseAdapter {
         TextView quest_category, quest_type;
         TextView quest_name, quest_progress, quest_progress_track;
         TextView quest_desc;
+        ImageView quest_desc_full;
     }
 
-    public void setListViewItemList(JsonArray ship_list) {
+    public void setListViewItemList(JsonArray ship_list, int filter) {
         Type listType = new TypeToken<List<JsonObject>>() {}.getType();
         listViewItemList = new Gson().fromJson(ship_list, listType);
-        /*
-        listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, new Predicate<JsonObject>() {
-            @Override
-            public boolean apply(JsonObject input) {
-                return (area_no == 0 || input.get("area").getAsInt() == area_no);
-            }
-        }));*/
+        if (filter != 0) {
+            listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, new Predicate<JsonObject>() {
+                @Override
+                public boolean apply(JsonObject input) {
+                    int category = input.get("api_category").getAsInt();
+                    if (filter == 7) {
+                        return (category == 1 || category == 5 || category == 7);
+                    } else if (filter == 2) {
+                        return (category == 2 || category == 8 || category == 9);
+                    } else {
+                        return (category == filter);
+                    }
+                }
+            }));
+        }
     }
 
     public int getQuestCategoryColor(int category) {

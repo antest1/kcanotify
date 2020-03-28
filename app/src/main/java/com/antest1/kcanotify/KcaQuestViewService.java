@@ -49,9 +49,6 @@ public class KcaQuestViewService extends Service {
     public static final String SHOW_QUESTVIEW_ACTION_NEW = "show_questview_new";
     public static final String CLOSE_QUESTVIEW_ACTION = "close_questview";
 
-    public static final float PROGRESS_1 = 0.5f;
-    public static final float PROGRESS_2 = 0.8f;
-
     Context contextWithLocale;
     LayoutInflater mInflater;
     private LocalBroadcastManager broadcaster;
@@ -61,22 +58,25 @@ public class KcaQuestViewService extends Service {
     private static boolean isamenuvisible = false;
     private static boolean isquestlist = false;
     private int currentPage = 1;
+    static boolean error_flag = false;
+    final int[] pageIndexList = {R.id.quest_page_1, R.id.quest_page_2, R.id.quest_page_3, R.id.quest_page_4, R.id.quest_page_5};
+    final int[] filterCategoryList = {2, 3, 4, 6, 7};
+    int currentFilterState = -1;
+    JsonArray currentQuestList = new JsonArray();
+
     public KcaDBHelper helper;
     private KcaQuestTracker questTracker;
-
-    static boolean error_flag = false;
-
     private View mView;
     private WindowManager mManager;
 
     int displayWidth = 0;
 
     WindowManager.LayoutParams mParams;
-    ScrollView questview;
+    ScrollView questView;
+    View questDescPopupView;
     ListView questList;
     KcaQuestListAdpater adapter;
-    ImageView questamenubtn, questclear;
-    int[] pageIndexList = {R.id.quest_page_1, R.id.quest_page_2, R.id.quest_page_3, R.id.quest_page_4, R.id.quest_page_5};
+    ImageView questMenuButton;
 
     @Nullable
     @Override
@@ -105,8 +105,9 @@ public class KcaQuestViewService extends Service {
     }
 
     @SuppressLint("DefaultLocale")
-    public void setQuestView(JsonArray api_list, int api_count, boolean checkValid) {
-        adapter.setListViewItemList(api_list);
+    public void setQuestView(JsonArray api_list, boolean checkValid, int filter) {
+        questDescPopupView.setVisibility(View.GONE);
+        adapter.setListViewItemList(api_list, filter);
         adapter.notifyDataSetChanged();
         questList.setAdapter(adapter);
         scrollListView(0);
@@ -114,28 +115,31 @@ public class KcaQuestViewService extends Service {
     }
 
     public int setView(boolean isquestlist, boolean checkValid, int tab_id) {
+        return setView(isquestlist, checkValid, tab_id, 0);
+    }
+
+    public int setView(boolean isquestlist, boolean checkValid, int tab_id, int filter_id) {
         try {
             Log.e("KCA", "QuestView setView " + String.valueOf(isquestlist));
             error_flag = false;
 
             int api_count = 0;
-            JsonArray api_list = new JsonArray();
             if (isquestlist && api_data != null) {
                 Log.e("KCA-Q", api_data.toString());
                 if(api_data.has("api_list") && api_data.get("api_list").isJsonArray()) {
-                    api_list = api_data.getAsJsonArray("api_list");
+                    currentQuestList = api_data.getAsJsonArray("api_list");
                     api_count = api_data.get("api_count").getAsInt();
                 }
             } else {
-                api_list = helper.getCurrentQuestList();
-                api_count = api_list.size();
+                currentQuestList = helper.getCurrentQuestList();
+                api_count = currentQuestList.size();
             }
-            Log.e("KCA", api_list.toString());
+            Log.e("KCA", currentQuestList.toString());
             if (checkValid) {
                 questTracker.clearInvalidQuestTrack();
                 // helper.checkValidQuest(api_disp_page, api_page_count, api_list, tab_id);
             }
-            setQuestView(api_list, api_count, checkValid);
+            setQuestView(currentQuestList, checkValid, filter_id);
             return 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,15 +168,18 @@ public class KcaQuestViewService extends Service {
                 KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
                 mView.setVisibility(View.GONE);
 
-                questview = mView.findViewById(R.id.questview);
-                questview.findViewById(R.id.quest_head).setOnTouchListener(mViewTouchListener);
+                questView = mView.findViewById(R.id.questview);
+                questView.findViewById(R.id.quest_head).setOnTouchListener(mViewTouchListener);
+                questDescPopupView = mView.findViewById(R.id.quest_desc_popup);
+                questDescPopupView.setVisibility(View.GONE);
+                questDescPopupView.findViewById(R.id.view_qd_head).setOnTouchListener(popupViewTouchListener);
 
-                adapter = new KcaQuestListAdpater(getApplicationContext(), getBaseContext(), questTracker);
+                adapter = new KcaQuestListAdpater(KcaQuestViewService.this, questTracker);
                 questList = mView.findViewById(R.id.quest_list);
                 questList.setOnScrollListener(new AbsListView.OnScrollListener() {
                     @Override
                     public void onScrollStateChanged(AbsListView view, int scrollState) {
-                        TextView page_title = questview.findViewById(R.id.quest_page);
+                        TextView page_title = questView.findViewById(R.id.quest_page);
                         page_title.setText(getStringWithLocale(R.string.questview_page)
                                 .replace("%d/%d", "???"));
                     }
@@ -184,22 +191,23 @@ public class KcaQuestViewService extends Service {
                 });
 
                 isamenuvisible = false;
-                questview.findViewById(R.id.quest_amenu).setVisibility(View.GONE);
-                questamenubtn = questview.findViewById(R.id.quest_amenu_btn);
-                questamenubtn.setOnTouchListener(mViewTouchListener);
-                questamenubtn.setImageResource(R.mipmap.ic_arrow_up);
+                questView.findViewById(R.id.quest_amenu).setVisibility(View.GONE);
+                questMenuButton = questView.findViewById(R.id.quest_amenu_btn);
+                questMenuButton.setOnTouchListener(mViewTouchListener);
+                questMenuButton.setImageResource(R.mipmap.ic_arrow_up);
 
-                questview.findViewById(R.id.quest_page_top).setOnTouchListener(mViewTouchListener);
-                questview.findViewById(R.id.quest_page_bottom).setOnTouchListener(mViewTouchListener);
+                questView.findViewById(R.id.quest_page_top).setOnTouchListener(mViewTouchListener);
+                questView.findViewById(R.id.quest_page_bottom).setOnTouchListener(mViewTouchListener);
                 for (int i = 0; i < pageIndexList.length; i++) {
-                    TextView view = questview.findViewById(pageIndexList[i]);
+                    TextView view = questView.findViewById(pageIndexList[i]);
                     view.setText(String.valueOf(i + 1));
                     view.setOnTouchListener(mViewTouchListener);
                 }
 
                 for (int i = 1; i <= 5; i++) {
-                    TextView view = questview.findViewById(getId(KcaUtils.format("quest_class_%d", i), R.id.class));
+                    TextView view = questView.findViewById(getId(KcaUtils.format("quest_class_%d", i), R.id.class));
                     view.setText(getStringWithLocale(getId(KcaUtils.format("quest_class_%d", i), R.string.class)));
+                    view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
                     view.setOnTouchListener(mViewTouchListener);
                 }
 
@@ -287,6 +295,32 @@ public class KcaQuestViewService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    private View.OnTouchListener popupViewTouchListener = new View.OnTouchListener() {
+        private static final int MAX_CLICK_DURATION = 200;
+        private long startClickTime = -1;
+        private long clickDuration;
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            JsonObject statProperties = new JsonObject();
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    startClickTime = Calendar.getInstance().getTimeInMillis();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                    if (clickDuration < MAX_CLICK_DURATION) {
+                        int id = v.getId();
+                        if (id == R.id.view_qd_head) {
+                            questDescPopupView.setVisibility(View.GONE);
+                        }
+                    }
+                    break;
+            }
+            return true;
+        }
+    };
+
     private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
         private long startClickTime = -1;
@@ -305,39 +339,58 @@ public class KcaQuestViewService extends Service {
                     clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                     if (clickDuration < MAX_CLICK_DURATION) {
                         int id = v.getId();
-                        if (id == questview.findViewById(R.id.quest_head).getId()) {
+                        if (id == questView.findViewById(R.id.quest_head).getId()) {
                             mView.setVisibility(View.GONE);
                             mManager.removeViewImmediate(mView);
                             sendUserAnalytics(getApplicationContext(), OPEN_QUESTVIEW, statProperties);
-                        } else if (id == questamenubtn.getId()) {
+                        } else if (id == questMenuButton.getId()) {
                             if (isamenuvisible) {
-                                questview.findViewById(R.id.quest_amenu).setVisibility(View.GONE);
-                                questamenubtn.setImageResource(R.mipmap.ic_arrow_up);
+                                questView.findViewById(R.id.quest_amenu).setVisibility(View.GONE);
+                                questMenuButton.setImageResource(R.mipmap.ic_arrow_up);
                             } else {
-                                questview.findViewById(R.id.quest_amenu).setVisibility(View.VISIBLE);
-                                questamenubtn.setImageResource(R.mipmap.ic_arrow_down);
+                                questView.findViewById(R.id.quest_amenu).setVisibility(View.VISIBLE);
+                                questMenuButton.setImageResource(R.mipmap.ic_arrow_down);
                             }
                             isamenuvisible = !isamenuvisible;
-                        } else if (id ==  questview.findViewById(R.id.quest_clear).getId()) {
+                        } else if (id ==  questView.findViewById(R.id.quest_clear).getId()) {
                             questTracker.clearQuestTrack();
                         } else {
                             int total_size = adapter.getCount();
-                            for (int i = 0; i< pageIndexList.length; i++) {
-                                if (id == questview.findViewById(pageIndexList[i]).getId()) {
+                            for (int i = 0; i < pageIndexList.length; i++) {
+                                if (id == questView.findViewById(pageIndexList[i]).getId()) {
                                     int current_page = Integer.parseInt(((TextView) v).getText().toString());
                                     int pos = (current_page - 1) * 5;
                                     scrollListView(pos);
                                     setTopBottomNavigation(current_page, total_size);
                                 }
                             }
-                            if (id == questview.findViewById(R.id.quest_page_top).getId()) {
+                            if (id == questView.findViewById(R.id.quest_page_top).getId()) {
                                 scrollListView(0);
                                 setTopBottomNavigation(1, total_size);
-                            } else if (id == questview.findViewById(R.id.quest_page_bottom).getId()) {
+                            } else if (id == questView.findViewById(R.id.quest_page_bottom).getId()) {
                                 int total_page = (total_size - 1) / 5 + 1;
                                 int last_idx = Math.max(total_size - 5, 0);
                                 setTopBottomNavigation(total_page, total_size);
                                 scrollListView(last_idx);
+                            }
+
+
+                            for (int i = 0; i < 5; i++) {
+                                if (id == KcaUtils.getId("quest_class_" + (i+1), R.id.class)) {
+                                    for (int j = 0; j < 5; j++) {
+                                        questView.findViewById(KcaUtils.getId("quest_class_" + (j+1), R.id.class))
+                                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+                                    }
+                                    if (currentFilterState != i) {
+                                        v.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
+                                                KcaUtils.getId(KcaUtils.format("colorQuestCategory%d", filterCategoryList[i]), R.color.class)));
+                                        setQuestView(currentQuestList, false, filterCategoryList[i]);
+                                        currentFilterState = i;
+                                    } else {
+                                        setQuestView(currentQuestList, false, 0);
+                                        currentFilterState = -1;
+                                    }
+                                }
                             }
                         }
                     }
@@ -356,25 +409,33 @@ public class KcaQuestViewService extends Service {
     private void setTopBottomNavigation(int centerPage, int totalItemSize) {
         int totalPage = (totalItemSize - 1) / 5 + 1;
         int startPage = centerPage - 2;
-        if (centerPage < 3) startPage = 1;
+        if (centerPage <= 3) startPage = 1;
         else if (centerPage > totalPage - 4) startPage = totalPage - 4;
 
-        TextView page_title = questview.findViewById(R.id.quest_page);
+        TextView page_title = questView.findViewById(R.id.quest_page);
         page_title.setText(KcaUtils.format(getStringWithLocale(R.string.questview_page), centerPage, totalPage));
 
         for (int i = 0; i < 5; i++) {
-            questview.findViewById(pageIndexList[i])
+            questView.findViewById(pageIndexList[i])
                     .setVisibility(totalPage > i ? View.VISIBLE : View.INVISIBLE);
-            ((TextView) questview.findViewById(pageIndexList[i]))
+            ((TextView) questView.findViewById(pageIndexList[i]))
                     .setText(String.valueOf(startPage + i));
             if (startPage + i == centerPage) {
-                ((TextView) questview.findViewById(pageIndexList[i])).setTextColor(
+                ((TextView) questView.findViewById(pageIndexList[i])).setTextColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
             } else {
-                ((TextView) questview.findViewById(pageIndexList[i])).setTextColor(
+                ((TextView) questView.findViewById(pageIndexList[i])).setTextColor(
                         ContextCompat.getColor(getApplicationContext(), R.color.white));
             }
         }
+    }
+
+    public void setAndShowPopup(String title, String content) {
+        TextView qdTitle = questDescPopupView.findViewById(R.id.view_qd_title);
+        TextView qdContent = questDescPopupView.findViewById(R.id.view_qd_text);
+        qdTitle.setText(title);
+        qdContent.setText(content);
+        questDescPopupView.setVisibility(View.VISIBLE);
     }
 
     private void sendReport(Exception e, int type) {
