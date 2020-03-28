@@ -223,7 +223,7 @@
                 <ImageView
                     android:id="@+id/quest_page_top"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="20dp"
                     android:layout_weight="1"
                     android:src="@android:drawable/ic_media_previous"
                     app:srcCompat="@android:drawable/ic_media_previous" />
@@ -286,7 +286,7 @@
                 <ImageView
                     android:id="@+id/quest_page_bottom"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="20dp"
                     android:layout_weight="1"
                     android:src="@android:drawable/ic_media_next"
                     app:srcCompat="@android:drawable/ic_media_next" />
