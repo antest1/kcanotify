@@ -125,9 +125,9 @@ public class KcaExpedition2 {
             else if ( mission_no_value < 120) mission_no_str = KcaUtils.format("B%d", (mission_no_value + 1) - 110);
             else if ( mission_no_value < 130) mission_no_str = KcaUtils.format("C%d", (mission_no_value + 1) - 120);
             else if ( mission_no_value < 140) mission_no_str = KcaUtils.format("D%d", mission_no_value - 130);
-            else if ( mission_no_value < 150) mission_no_str = KcaUtils.format("E%d", (mission_no_value + 1) - 140);
-            else if ( mission_no_value < 160) mission_no_str = KcaUtils.format("F%d", (mission_no_value + 1) - 150);
-            else if ( mission_no_value < 170) mission_no_str = KcaUtils.format("G%d", (mission_no_value + 1) - 160);
+            else if ( mission_no_value < 150) mission_no_str = KcaUtils.format("E%d", mission_no_value - 140);
+            else if ( mission_no_value < 160) mission_no_str = KcaUtils.format("F%d", mission_no_value - 150);
+            else if ( mission_no_value < 170) mission_no_str = KcaUtils.format("G%d", mission_no_value - 160);
             else if (mission_no_value % 2 == 1) mission_no_str = "S1";
             else mission_no_str = "S2";
         } else {
