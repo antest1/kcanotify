@@ -90,6 +90,13 @@ public class KcaQuestListAdpater extends BaseAdapter {
         Log.e("KCA", String.valueOf(position) + " " + item.toString() );
         final ViewHolder holder = (ViewHolder) v.getTag();
 
+        if (!item.has("api_no")) {
+            v.setVisibility(View.INVISIBLE);
+            return v;
+        } else {
+            v.setVisibility(View.VISIBLE);
+        }
+
         String api_no = item.get("api_no").getAsString();
         int api_category = item.get("api_category").getAsInt();
         int api_type = item.get("api_type").getAsInt();
@@ -202,7 +209,7 @@ public class KcaQuestListAdpater extends BaseAdapter {
     public void setListViewItemList(JsonArray ship_list, int filter) {
         Type listType = new TypeToken<List<JsonObject>>() {}.getType();
         listViewItemList = new Gson().fromJson(ship_list, listType);
-        if (filter != 0) {
+        if (filter != -1) {
             listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, new Predicate<JsonObject>() {
                 @Override
                 public boolean apply(JsonObject input) {
@@ -216,6 +223,12 @@ public class KcaQuestListAdpater extends BaseAdapter {
                     }
                 }
             }));
+        }
+        if (listViewItemList.size() > 5 && listViewItemList.size() % 5 != 0) {
+            int dummyCount = 5 - listViewItemList.size() % 5;
+            for (int i = 0 ; i < dummyCount; i++) {
+                listViewItemList.add(new JsonObject());
+            }
         }
     }
 

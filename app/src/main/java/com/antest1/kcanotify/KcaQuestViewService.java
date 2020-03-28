@@ -106,16 +106,11 @@ public class KcaQuestViewService extends Service {
 
     @SuppressLint("DefaultLocale")
     public void setQuestView(JsonArray api_list, boolean checkValid, int filter) {
-        questDescPopupView.setVisibility(View.GONE);
         adapter.setListViewItemList(api_list, filter);
         adapter.notifyDataSetChanged();
         questList.setAdapter(adapter);
         scrollListView(0);
         setTopBottomNavigation(1, adapter.getCount());
-    }
-
-    public int setView(boolean isquestlist, boolean checkValid, int tab_id) {
-        return setView(isquestlist, checkValid, tab_id, 0);
     }
 
     public int setView(boolean isquestlist, boolean checkValid, int tab_id, int filter_id) {
@@ -137,9 +132,12 @@ public class KcaQuestViewService extends Service {
             Log.e("KCA", currentQuestList.toString());
             if (checkValid) {
                 questTracker.clearInvalidQuestTrack();
-                // helper.checkValidQuest(api_disp_page, api_page_count, api_list, tab_id);
+                helper.checkValidQuest(currentQuestList, tab_id);
+                int filter = -1;
+                if (filter_id > -1) filter = filterCategoryList[filter_id];
+                setQuestView(currentQuestList, true, filter);
             }
-            setQuestView(currentQuestList, checkValid, filter_id);
+            questDescPopupView.setVisibility(View.GONE);
             return 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -270,16 +268,16 @@ public class KcaQuestViewService extends Service {
         if (intent != null && intent.getAction() != null && mView != null) {
             if (intent.getAction().equals(REFRESH_QUESTVIEW_ACTION)) {
                 int extra = intent.getIntExtra("tab_id", -1);
-                updateView(setView(isquestlist, true, extra), false);
+                updateView(setView(isquestlist, true, extra, currentFilterState), false);
             } else if (intent.getAction().equals(SHOW_QUESTVIEW_ACTION)) {
                 currentPage = 1;
-                updateView(setView(isquestlist, false, 0), false);
+                updateView(setView(isquestlist, false, 0, currentFilterState), false);
                 mView.setVisibility(View.VISIBLE);
                 statProperties.addProperty("type", "no_reset");
                 sendUserAnalytics(getApplicationContext(), OPEN_QUESTVIEW, statProperties);
             } else if (intent.getAction().equals(SHOW_QUESTVIEW_ACTION_NEW)) {
                 currentPage = 1;
-                updateView(setView(isquestlist, false, 0), true);
+                updateView(setView(isquestlist, false, 0, currentFilterState), true);
                 mView.setVisibility(View.VISIBLE);
                 statProperties.addProperty("type", "new");
                 sendUserAnalytics(getApplicationContext(), OPEN_QUESTVIEW, statProperties);
@@ -387,7 +385,7 @@ public class KcaQuestViewService extends Service {
                                         setQuestView(currentQuestList, false, filterCategoryList[i]);
                                         currentFilterState = i;
                                     } else {
-                                        setQuestView(currentQuestList, false, 0);
+                                        setQuestView(currentQuestList, false, -1);
                                         currentFilterState = -1;
                                     }
                                 }
