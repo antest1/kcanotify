@@ -392,8 +392,8 @@
 		"ko": "남서제도이도초계작전",
 		"en": "Southwestern Islands Remote Island Patrol Operation",
 		"jp": "南西諸島離島哨戒作戦",
-		"scn": "南西诸岛离岛哨戒作戦",
-		"tcn": "南西諸島離島哨戒作戦"
+		"scn": "南西诸岛离岛哨戒作战",
+		"tcn": "南西諸島離島哨戒作戰"
 	},
 	"time": 170,
 	"resource": [0, 100, 100, 180],
@@ -413,8 +413,8 @@
 		"ko": "남서제도이도방위작전",
 		"en": "Southwestern Islands Remote Island Defense Operation",
 		"jp": "南西諸島離島防衛作戦",
-		"scn": "南西诸岛离岛防卫作戦",
-		"tcn": "南西諸島離島防衛作戦"
+		"scn": "南西诸岛离岛防卫作战",
+		"tcn": "南西諸島離島防衛作戰"
 	},
 	"time": 450,
 	"resource": [0, 0, 1200, 650],
@@ -424,6 +424,24 @@
 	"total-num": 6,
 	"total-lv": 350,
 	"total-cond": "5-2|3-1|2-2|13,14-1",
+	"total-firepower": 500,
+	"total-asw": 280
+}, {
+	"no": "114",
+	"area": 2,
+	"name": {
+		"ko": "남서제도수색격멸전",
+		"en": "Southwestern Islands Seek and Destroy Battle",
+		"jp": "南西諸島捜索撃滅戦",
+		"scn": "南西诸岛搜索歼灭战",
+		"tcn": "南西諸島搜索殲滅戰"
+	},
+	"time": 390,
+	"resource": [900, 1200, 600, 600],
+	"reward": [[1, 4], [4, 1]],
+	"exp": [100, 150],
+	"total-num": 6,
+	"total-cond": "16-1|3-1|2-2",
 	"total-firepower": 500,
 	"total-asw": 280
 }, {
@@ -999,6 +1017,25 @@
 	"total-num": 6,
 	"total-cond": "3-1|16-2|2-2",
 	"drum-num-optional": 4
+}, {
+	"no": "141",
+	"area": 5,
+	"name": {
+		"ko": "라바울방면함대진출",
+		"en": "Advances to Fleet in Rabaul",
+		"jp": "ラバウル方面艦隊進出",
+		"scn": "拉包尔方面舰队进出",
+		"tcn": "拉包爾方面艦隊進出"
+	},
+	"time": 450,
+	"resource": [0, 600, 600, 1000],
+	"reward": [[12, 2], [4, 1]],
+	"exp": [100, 150],
+	"flag-cond": "5",
+	"flag-lv": 50,
+	"total-lv": 350,
+	"total-num": 6,
+	"total-cond": "5-1|3-1|2-3"
 }, {
 	"no": "203",
 	"area": 99,
