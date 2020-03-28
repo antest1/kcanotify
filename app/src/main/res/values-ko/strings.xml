@@ -370,7 +370,13 @@
     <string name="quest_label_type_5">_</string>
     <string name="quest_label_type_6">월</string>
     <string name="quest_label_type_7">타</string>
-    <string name="quest_label_type_8">연2</string>
+    <string name="quest_label_type_100" formatted="false">연%d</string>
+
+    <string name="quest_class_1">출격</string>
+    <string name="quest_class_2">연습</string>
+    <string name="quest_class_3">원정</string>
+    <string name="quest_class_4">공창</string>
+    <string name="quest_class_5">기타</string>
 
     <string name="questview_page" formatted="false">페이지 %d/%d</string>
 

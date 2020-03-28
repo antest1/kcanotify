@@ -388,10 +388,16 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_label_type_2">日</string>
     <string name="quest_label_type_3">周</string>
     <string name="quest_label_type_4">_</string>
-    <string name="quest_label_type_5">月</string>
-    <string name="quest_label_type_6">M</string>
+    <string name="quest_label_type_5">_</string>
+    <string name="quest_label_type_6">月</string>
     <string name="quest_label_type_7">他</string>
-    <string name="quest_label_type_8">年2</string>
+    <string name="quest_label_type_100" formatted="false">年%d</string>
+
+    <string name="quest_class_1">出撃</string>
+    <string name="quest_class_2">演习</string>
+    <string name="quest_class_3">远征</string>
+    <string name="quest_class_4">工厂</string>
+    <string name="quest_class_5">其他</string>
 
     <string name="questview_page" formatted="false">第 %d/%d 页</string>
 

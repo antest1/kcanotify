@@ -364,7 +364,13 @@
     <string name="quest_label_type_5">_</string>
     <string name="quest_label_type_6">月</string>
     <string name="quest_label_type_7">他</string>
-    <string name="quest_label_type_8">年2</string>
+    <string name="quest_label_type_100" formatted="false">年%d</string>
+
+    <string name="quest_class_1">出撃</string>
+    <string name="quest_class_2">演習</string>
+    <string name="quest_class_3">遠征</string>
+    <string name="quest_class_4">工廠</string>
+    <string name="quest_class_5">その他</string>
 
     <string name="questview_page" formatted="false">ページ %d/%d</string>
 

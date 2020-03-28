@@ -95,15 +95,15 @@
     <color name="colorQuestCategory9">#d50000</color>
     <color name="colorQuestCategory10">#757575</color>
 
-    <color name="colorQuestType0">#616161</color>
-    <color name="colorQuestType1">#fbc02e</color>
-    <color name="colorQuestType2">#6ebbf6</color>
-    <color name="colorQuestType3">#77dde9</color>
-    <color name="colorQuestType4">#616161</color>
-    <color name="colorQuestType5">#616161</color>
-    <color name="colorQuestType6">#b5dd60</color>
-    <color name="colorQuestType7">#f98c27</color>
-    <color name="colorQuestType8">#3F51B5</color>
+    <color name="colorQuestLabel0">#616161</color>
+    <color name="colorQuestLabel1">#fbc02e</color>
+    <color name="colorQuestLabel2">#6ebbf6</color>
+    <color name="colorQuestLabel3">#77dde9</color>
+    <color name="colorQuestLabel4">#616161</color>
+    <color name="colorQuestLabel5">#616161</color>
+    <color name="colorQuestLabel6">#b5dd60</color>
+    <color name="colorQuestLabel7">#f98c27</color>
+    <color name="colorQuestLabel100">#3F51B5</color>
 
     <color name="colorQuestProgress1">#6bc613</color>
     <color name="colorQuestProgress2">#31834c</color>

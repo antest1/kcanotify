@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/quest"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal"
+        android:padding="2dp">
+
+        <LinearLayout
+            android:id="@+id/quest_info"
+            android:layout_width="@dimen/questview_tag_size"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="0dp">
+
+            <TextView
+                android:id="@+id/quest_category"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="1dp"
+                android:layout_weight="0.5"
+                android:background="@color/colorRankA"
+                android:gravity="center"
+                android:text="출"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/questview_text_large" />
+
+            <TextView
+                android:id="@+id/quest_type"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="1dp"
+                android:layout_weight="0.5"
+                android:background="@color/colorQuestCategory1"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:text="출"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/questview_text_large" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/quest_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/quest_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/quest_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/questview_text_large" />
+
+                <TextView
+                    android:id="@+id/quest_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:background="@color/colorQuestProgress2"
+                    android:paddingStart="3dp"
+                    android:paddingLeft="3dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="3dp"
+                    android:paddingRight="3dp"
+                    android:paddingBottom="1dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/questview_text_small" />
+
+                <TextView
+                    android:id="@+id/quest_progress_track"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:background="@color/colorQuestTrackProgress"
+                    android:paddingStart="3dp"
+                    android:paddingLeft="3dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="3dp"
+                    android:paddingRight="3dp"
+                    android:paddingBottom="1dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/questview_text_small" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/quest_desc"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/questview_desc_height"
+                android:layout_marginLeft="5dp"
+                android:maxLines="2"
+                android:scrollbars="vertical"
+                android:textColor="@color/white"
+                android:textSize="@dimen/questview_text_medium" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

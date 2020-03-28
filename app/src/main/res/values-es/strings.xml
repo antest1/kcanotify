@@ -373,7 +373,13 @@
     <string name="quest_label_type_5">_</string>
     <string name="quest_label_type_6">M</string>
     <string name="quest_label_type_7">S</string>
-    <string name="quest_label_type_8">Y2</string>
+    <string name="quest_label_type_100" formatted="false">Y%d</string>
+
+    <string name="quest_class_1">SRTI</string>
+    <string name="quest_class_2">EXER</string>
+    <string name="quest_class_3">EXPD</string>
+    <string name="quest_class_4">ARSN</string>
+    <string name="quest_class_5">ETC</string>
 
     <string name="questview_page" formatted="false">Página %d/%d</string>
 
