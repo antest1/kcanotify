@@ -220,7 +220,11 @@
             android:name=".KcaAlarmService" />
         <service
             android:name=".KcaViewButtonService"
-            android:configChanges="locale|layoutDirection" />
+            android:configChanges="locale|layoutDirection">
+            <intent-filter>
+                <action android:name="com.antest1.gotobrowser.foreground"/>
+            </intent-filter>
+        </service>
         <service
             android:name=".KcaBattleViewService" />
         <service

@@ -20,6 +20,7 @@ public final class KcaConstants {
     public static final String GOTO_AUTHORITY = "com.antest1.gotobrowser.contentprovider";
     public static final Uri GOTO_CONTENT_URI = Uri.parse("content://".concat(GOTO_AUTHORITY).concat(REQUEST_PATH));
     public static final String GOTO_BROADCAST_ACTION = "com.antest1.gotobrowser.broadcast";
+    public static final String GOTO_FOREGROUND_ACTION = "com.antest1.gotobrowser.foreground";
 
     public static final String KCA_VERSION = "/kca/version.json";
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";

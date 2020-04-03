@@ -26,10 +26,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Vibrator;
 import android.provider.Settings;
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -40,6 +36,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -54,6 +55,7 @@ import java.util.concurrent.TimeUnit;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLEINFO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLENODE;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_FAIRYLOC;
+import static com.antest1.kcanotify.KcaConstants.GOTO_FOREGROUND_ACTION;
 import static com.antest1.kcanotify.KcaConstants.GOTO_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_FAIRY_CHECKED;
@@ -73,6 +75,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_REV;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_SIZE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_BATTLEVIEW_USE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_QUEST_FAIRY_GLOW;
+import static com.antest1.kcanotify.KcaConstants.PREF_KC_PACKAGE;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getOrientationPrefix;
@@ -133,6 +136,7 @@ public class KcaViewButtonService extends Service {
     private boolean fairy_glow_mode = false;
     ScheduledExecutorService checkForegroundScheduler;
     private boolean is_kc_foreground = true;
+    private GotoForegroundReceiver gotoFgReceiver;
 
     public static void setHandler(Handler h) {
         sHandler = h;
@@ -242,6 +246,12 @@ public class KcaViewButtonService extends Service {
             LocalBroadcastManager.getInstance(this).registerReceiver((battlenode_receiver), new IntentFilter(KCA_MSG_BATTLE_NODE));
             LocalBroadcastManager.getInstance(this).registerReceiver((battlehdmg_receiver), new IntentFilter(KCA_MSG_BATTLE_HDMG));
             LocalBroadcastManager.getInstance(this).registerReceiver((questcmpl_receiver), new IntentFilter(KCA_MSG_QUEST_COMPLETE));
+
+            gotoFgReceiver = new GotoForegroundReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(GOTO_FOREGROUND_ACTION);
+            registerReceiver(gotoFgReceiver, filter);
+
             LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
             mView = mInflater.inflate(R.layout.view_button, null);
@@ -492,6 +502,7 @@ public class KcaViewButtonService extends Service {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlenode_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlehdmg_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(questcmpl_receiver);
+        unregisterReceiver(gotoFgReceiver);
         if (mManager != null) mManager.removeView(mView);
         super.onDestroy();
     }
@@ -614,15 +625,23 @@ public class KcaViewButtonService extends Service {
         public void run() {
             try {
                 boolean current_foreground_status = false;
-                String foregroundPackage = checkForegroundPackage();
-                if (foregroundPackage.trim().length() > 0) {
-                    if (foregroundPackage.contains(KC_PACKAGE_NAME)) {
-                        current_foreground_status = true;
-                    } else if (foregroundPackage.contains(GOTO_PACKAGE_NAME)) {
-                        current_foreground_status = true;
-                    }
+                String kcApp = getStringPreferences(getApplicationContext(), PREF_KC_PACKAGE);
+                String foregroundPackage = "";
+
+                if (kcApp.equals(GOTO_PACKAGE_NAME)) {
+                    foregroundPackage = "<gotobrowser>";
+                    current_foreground_status = gotoFgReceiver.checkForeground();
                 } else {
-                    current_foreground_status = is_kc_foreground;
+                    foregroundPackage = checkForegroundPackage();
+                    if (foregroundPackage.trim().length() > 0) {
+                        if (foregroundPackage.contains(KC_PACKAGE_NAME)) {
+                            current_foreground_status = true;
+                        } else if (foregroundPackage.contains(GOTO_PACKAGE_NAME)) {
+                            current_foreground_status = true;
+                        }
+                    } else {
+                        current_foreground_status = is_kc_foreground;
+                    }
                 }
 
                 if (current_foreground_status != is_kc_foreground) {
@@ -763,5 +782,19 @@ public class KcaViewButtonService extends Service {
             dbHelper.putValue(DB_KEY_FAIRYLOC, locdata.toString());
         }
         super.onConfigurationChanged(newConfig);
+    }
+
+    private class GotoForegroundReceiver extends BroadcastReceiver {
+        boolean is_front = true;
+
+        public boolean checkForeground() {
+            return is_front;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            is_front = bundle.getBoolean("is_front", false);
+        }
     }
 }
