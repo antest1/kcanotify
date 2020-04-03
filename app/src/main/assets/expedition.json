@@ -437,13 +437,17 @@
 		"tcn": "南西諸島搜索殲滅戰"
 	},
 	"time": 390,
-	"resource": [900, 1200, 600, 600],
+	"resource": [500, 500, 1000, 750],
 	"reward": [[1, 4], [4, 1]],
 	"exp": [100, 150],
+	"flag-lv": 65,
+	"total-lv": 380,
 	"total-num": 6,
 	"total-cond": "16-1|3-1|2-2",
-	"total-firepower": 500,
-	"total-asw": 280
+	"total-firepower": 510,
+	"total-fp": 440,
+	"total-asw": 285,
+	"total-los": 385
 }, {
 	"no": "41",
 	"area": 7,
@@ -1032,9 +1036,13 @@
 	"reward": [[12, 2], [4, 1]],
 	"exp": [100, 150],
 	"flag-cond": "5",
-	"flag-lv": 50,
-	"total-lv": 350,
+	"flag-lv": 66,
+	"total-lv": 351,
 	"total-num": 6,
+	"total-firepower": 450,
+	"total-fp": 420,
+	"total-asw": 330,
+	"total-los": 270,
 	"total-cond": "5-1|3-1|2-3"
 }, {
 	"no": "203",

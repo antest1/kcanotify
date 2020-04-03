@@ -364,8 +364,11 @@
   "甲標的 丁型改(蛟龍改)": "Type D Kouhyouteki Kai (Kouryuu Kai)",
   "一式徹甲弾改": "Type 1 AP Shell Kai",
   "12.7cm連装砲D型改三": "12.7cm Twin Gun Mount Model D Kai 3",
-  "Swordfish(水上機型)": "Swordfish (Seaplane Type)",
-  "Swordfish Mk.III改(水上機型)": "Swordfish Mk.III Kai (Seaplane Type)",
+  "Swordfish(水上機型)": "Swordfish (Seaplane Model)",
+  "Swordfish Mk.III改(水上機型)": "Swordfish Mk.III Kai (Seaplane Model)",
+  "Swordfish Mk.III改(水上機型/熟練)": "Swordfish Mk.III Kai (Seaplane Model/Skilled)",
+  "Swordfish Mk.II改(水偵型)": "Swordfish Mk.II Kai (Reconnaissance Seaplane Model)",
+  "Fairey Seafox改": "Fairey Seafox Kai",
   
   "プレゼント箱": "Present Box",
   "秋刀魚": "Saury",
