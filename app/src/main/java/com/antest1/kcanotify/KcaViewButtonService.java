@@ -503,6 +503,9 @@ public class KcaViewButtonService extends Service {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(battlehdmg_receiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(questcmpl_receiver);
         unregisterReceiver(gotoFgReceiver);
+        if (checkForegroundScheduler != null && !checkForegroundScheduler.isShutdown()) {
+            checkForegroundScheduler.shutdown();
+        }
         if (mManager != null) mManager.removeView(mView);
         super.onDestroy();
     }
