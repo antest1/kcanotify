@@ -314,7 +314,6 @@ public class KcaService extends Service {
         KcaBattle.setHandler(nHandler);
         KcaApiData.setHandler(nHandler);
         KcaAlarmService.setHandler(nHandler);
-        KcaOpenDBAPI.setHandler(nHandler);
         MainActivity.setHandler(nHandler);
         MainPreferenceFragment.setHandler(nHandler);
         KcaFairySelectActivity.setHandler(nHandler);
@@ -1580,14 +1579,6 @@ public class KcaService extends Service {
                                 boolean createFlag = dev_instance.get("api_id").getAsInt() > 0;
                                 int itemKcId = dev_instance.get("api_slotitem_id").getAsInt();
                                 int itemFailKcId = 0;
-                                if (isOpenDBEnabled()) {
-                                    new Timer().schedule(new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            KcaOpenDBAPI.sendEquipDevData(flagship, materials[0], materials[1], materials[2], materials[3], createFlag ? itemKcId : itemFailKcId);
-                                        }
-                                    }, 100*i);
-                                }
                                 if (isPoiDBEnabled()) KcaPoiDBAPI.sendEquipDevData(Arrays.toString(materials), flagship, createFlag ? itemKcId : itemFailKcId, getAdmiralLevel(), createFlag);
                             }
                             updateQuestView();
@@ -1786,7 +1777,6 @@ public class KcaService extends Service {
                                     materials[i] = api_kdock_item.get(KcaUtils.format("api_item%d", i + 1)).getAsInt();
                                 }
                                 int created_ship_id = api_kdock_item.get("api_created_ship_id").getAsInt();
-                                if (isOpenDBEnabled()) KcaOpenDBAPI.sendShipDevData(flagship, materials[0], materials[1], materials[2], materials[3], materials[4], created_ship_id);
                                 if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDevData(Arrays.toString(materials), checkKdockId, flagship, created_ship_id, checkHighSpeed, getAdmiralLevel(), checkLargeFlag);
 
                                 checkKdockId = -1;
@@ -2131,9 +2121,6 @@ public class KcaService extends Service {
                                     KcaApiData.removeSlotItemData(joinStr(use_slot_id_list, ","));
                                 }
                             }
-                            if (certainFlag != 1 && isOpenDBEnabled()) {
-                                KcaOpenDBAPI.sendRemodelData(flagship, assistant, itemKcId, level, api_remodel_flag);
-                            }
                             questTracker.updateIdCountTracker("619");
                             updateQuestView();
                         }
@@ -2345,7 +2332,6 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(KCA_API_NOTI_BATTLE_DROPINFO)) {
-                Log.e("KCA", KCA_API_NOTI_BATTLE_DROPINFO + " " + String.valueOf(isOpenDBEnabled()));
                 int world = jsonDataObj.get("world").getAsInt();
                 int map = jsonDataObj.get("map").getAsInt();
                 int node = jsonDataObj.get("node").getAsInt();
@@ -2355,13 +2341,9 @@ public class KcaService extends Service {
                 boolean isboss = jsonDataObj.get("isboss").getAsBoolean();
                 String quest_name = jsonDataObj.get("quest_name").getAsString();
                 String enemy_name = jsonDataObj.get("enemy_name").getAsString();
-                int inventory = jsonDataObj.get("inventory").getAsInt();
                 int result = jsonDataObj.get("result").getAsInt();
 
-                if (KcaApiData.checkUserPortEnough()) {
-                    if (isOpenDBEnabled()) KcaOpenDBAPI.sendShipDropData(world, map, node, rank, maprank, enemy, inventory, result);
-                    if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDropData(result, world * 10 + map, quest_name, node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
-                }
+                if (isPoiDBEnabled()) KcaPoiDBAPI.sendShipDropData(result, world * 10 + map, quest_name, node, enemy_name, rank, isboss, getAdmiralLevel(), maprank, enemy);
                 recordDropLog(jsonDataObj, !KcaApiData.checkUserPortEnough());
                 if (result > 0) {
                     KcaApiData.addShipCountInBattle();
@@ -2420,11 +2402,6 @@ public class KcaService extends Service {
                         .setAction(KcaViewButtonService.FAIRY_SIZE_CHANGE));
             }
 
-            if (url.startsWith(KCA_API_OPENDB_FAILED)) {
-                makeToast(getStringWithLocale(R.string.opendb_failed_msg), Toast.LENGTH_SHORT, ContextCompat.getColor(this, R.color.colorPrimaryDark));
-                dbHelper.recordErrorLog(ERROR_TYPE_OPENDB, url, "opendb", data, "failed");
-            }
-
             if (url.startsWith(KCA_API_PROCESS_BATTLE_FAILED)) {
                 String api_data = jsonDataObj.get("api_data").getAsString();
                 String api_url = jsonDataObj.get("api_url").getAsString();
@@ -2460,10 +2437,6 @@ public class KcaService extends Service {
 
     private int getExpeditionType() {
         return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_EXP_TYPE));
-    }
-
-    private boolean isOpenDBEnabled() {
-        return getBooleanPreferences(getApplicationContext(), PREF_OPENDB_API_USE);
     }
 
     private boolean isPoiDBEnabled() {

@@ -335,12 +335,6 @@
     <PreferenceCategory android:title="@string/setting_menu_stat_head">
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="opendb_api_use"
-            android:summary="@string/setting_menu_stat_desc_opendb"
-            android:title="@string/setting_menu_stat_title_opendb" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
             android:key="poidb_api_use"
             android:summary="@string/setting_menu_stat_desc_poidb"
             android:title="@string/setting_menu_stat_title_poidb" />

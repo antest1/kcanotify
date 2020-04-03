@@ -48,7 +48,6 @@
     <string name="speed_none">\?\?</string>
     <string name="speed_postfix">艦隊</string>
 
-    <string name="opendb_failed_msg">OpenDBデータ処理エラー</string>
     <string name="process_battle_failed_msg">戦闘データ処理エラー</string>
     <string name="service_failed_msg">データ処理エラー\nKcanotifyを再起動してください</string>
 
@@ -220,7 +219,6 @@
     <string name="setting_menu_stat_title_kcaqsync_pass">KcaQSyncパースワード</string>
     <string name="setting_menu_stat_desc_kcaqsync_pass_emtpy">パスワードを設定した後、有効になります。</string>
     <string name="setting_menu_stat_desc_kcaqsync_pass">警告：絶対DMMなどで使用される実際のパスワードを入力しないでください！</string>
-    <string name="setting_menu_stat_title_opendb">OpenDBに統計を送信</string>
     <string name="setting_menu_stat_title_poidb">poi-statisticsに統計を送信</string>
 
     <string name="setting_menu_app_head">アプリケーション情報</string>

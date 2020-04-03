@@ -54,7 +54,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_none">\?\?</string>
     <string name="speed_postfix">&#160;艦隊</string>
 
-    <string name="opendb_failed_msg">向OpenDB網站傳送資料時出現錯誤。</string>
     <string name="process_battle_failed_msg">處理戰鬥數據時出現錯誤。</string>
     <string name="service_failed_msg">處理數據時出現錯誤。\n建議重新啟動Kcanotify</string>
 
@@ -91,7 +90,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_hasdataupdate" formatted="false">有可用的遊戲資料更新。 (%s)</string>
     <string name="ma_nextmaintenance" formatted="false">次服務器維護還有:\n%s</string>
     <string name="ma_endmaintenance" formatted="false">服務器維護預定的結束時間:\n%s</string>
-    <string name="description"><b>Help</b>\n請啟用VPN與SVC服務後再開啟艦これ\n\n※ VPN是為了監測遊戲數據 \n\n<b>主要功能</b>\n - 遠征/入渠通知 \n - 大破警告\n - 索敵/制空/士氣值顯示\n - 羅盤預測\n - 戰鬥劇透 / 任務翻譯\n - 裝備改修表\n - 傳送數據至OpenDB（可選）\n \n可至官網 http://swaytwig.com/kcanotify 了解詳細資料（韓文）</string>
+    <string name="description"><b>Help</b>\n請啟用VPN與SVC服務後再開啟艦これ\n\n※ VPN是為了監測遊戲數據 \n\n<b>主要功能</b>\n - 遠征/入渠通知 \n - 大破警告\n - 索敵/制空/士氣值顯示\n - 羅盤預測\n - 戰鬥劇透 / 任務翻譯\n - 裝備改修表</string>
 
     <!-- SettingActivity Strings -->
     <string name="sa_checkupdate_latest" formatted="false">目前已是最新版本。 (%s)</string>
@@ -249,7 +248,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_stat_title_kcaqsync_pass">KcaQSync密碼</string>
     <string name="setting_menu_stat_desc_kcaqsync_pass_emtpy">將於設定密碼後启動。</string>
     <string name="setting_menu_stat_desc_kcaqsync_pass">警告：切勿使用與DMM相同的密碼！</string>
-    <string name="setting_menu_stat_title_opendb">向OpenDB傳送遊戲數據</string>
     <string name="setting_menu_stat_title_poidb">向poi-statistics傳送遊戲數據</string>
 
     <string name="setting_menu_app_head">應用程式資訊</string>

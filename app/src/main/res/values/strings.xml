@@ -91,7 +91,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="speed_none">\?\?</string>
     <string name="speed_postfix">&#160;Fleet</string>
 
-    <string name="opendb_failed_msg">An error occurred while sending data to OpenDB.</string>
     <string name="process_battle_failed_msg">An error occurred while processing battle data.</string>
     <string name="service_failed_msg">An error occurred while processing data. \nIt is recommended that you restart kcanotify.</string>
 
@@ -128,7 +127,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_hasdataupdate" formatted="false">New game data is available. (%s)</string>
     <string name="ma_nextmaintenance" formatted="false">Next Maintenance:\n%s</string>
     <string name="ma_endmaintenance" formatted="false">Maintenance End Time:\n%s</string>
-    <string name="description"><b>Help</b>\nTurn on VPN and SVC then run Kancolle\n\n※ VPN is required for detecting game data. \n\n<b>Main Features</b>\n - Expedition/Docking notifications \n - Heavy Damage Alert (prior to/during combat)\n - LoS/FP/Fatigue indicators\n - Node tracking during sorties\n - BattleView / QuestView\n - Improvement Arsenal Chart\n - Send statistics to OpenDB (optional)\n \nVisit http://swaytwig.com/kcanotify for detail. (Korean)</string>
+    <string name="description"><b>Help</b>\nTurn on VPN and SVC then run Kancolle\n\n※ VPN is required for detecting game data. \n\n<b>Main Features</b>\n - Expedition/Docking notifications \n - Heavy Damage Alert (prior to/during combat)\n - LoS/FP/Fatigue indicators\n - Node tracking during sorties\n - BattleView / QuestView\n - Improvement Arsenal Chart\n - Send statistics to poi-statistics (optional)</string>
 
     <!-- SettingActivity Strings -->
     <string name="sa_checkupdate_latest" formatted="false">You have the latest version. (%s)</string>
@@ -290,8 +289,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_stat_title_kcaqsync_pass">KcaQSync password</string>
     <string name="setting_menu_stat_desc_kcaqsync_pass_emtpy">Will be activated after setting the password.</string>
     <string name="setting_menu_stat_desc_kcaqsync_pass">WARNING: Never enter your real password used in DMM!</string>
-    <string name="setting_menu_stat_title_opendb">Send game statistics to OpenDB</string>
-    <string name="setting_menu_stat_desc_opendb" translatable="false">http://opendb.swaytwig.com/</string>
     <string name="setting_menu_stat_title_poidb">Send game statistics to poi-statistics</string>
     <string name="setting_menu_stat_desc_poidb" translatable="false">https://db.kcwiki.org/</string>
 

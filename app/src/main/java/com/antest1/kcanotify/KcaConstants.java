@@ -94,7 +94,6 @@ public final class KcaConstants {
     public static final String ERROR_TYPE_FLEETVIEW = "F";
     public static final String ERROR_TYPE_NOTI = "N";
     public static final String ERROR_TYPE_VPN = "V";
-    public static final String ERROR_TYPE_OPENDB = "O";
     public static final String ERROR_TYPE_DB = "D";
     public static final String ERROR_TYPE_MAIN = "AM";
     public static final String ERROR_TYPE_SETTING = "AS";
@@ -311,7 +310,6 @@ public final class KcaConstants {
     public static final String KCA_API_PROCESS_BATTLE_FAILED = "/kca_api/process_battle_failed";
     public static final String KCA_API_PROCESS_BATTLEVIEW_FAILED = "/kca_api/process_battleview_failed";
     public static final String KCA_API_PROCESS_QUESTVIEW_FAILED = "/kca_api/process_questview_failed";
-    public static final String KCA_API_OPENDB_FAILED = "/kca_api/opendb_failed";
     public static final String KCA_API_POIDB_FAILED = "/kca_api/poidb_failed";
 
     public static final String KCA_API_VPN_DATA_ERROR = "/kca_api/vpn_data_error";
@@ -418,7 +416,6 @@ public final class KcaConstants {
     public static final String PREF_KCA_LANGUAGE = "kca_language";
     public static final String PREF_SNIFFER_MODE = "kca_sniffer_mode";
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
-    public static final String PREF_OPENDB_API_USE = "opendb_api_use";
     public static final String PREF_POIDB_API_USE = "poidb_api_use";
     public static final String PREF_KCA_EXP_VIEW = "expedition_view";
     public static final String PREF_KCA_EXP_TYPE = "expedition_type";
@@ -497,7 +494,6 @@ public final class KcaConstants {
             PREF_KCA_LANGUAGE,
             PREF_SNIFFER_MODE,
             PREF_KCA_SEEK_CN,
-            PREF_OPENDB_API_USE,
             PREF_POIDB_API_USE,
             PREF_KCA_EXP_VIEW,
             PREF_KCA_EXP_TYPE,
@@ -564,7 +560,6 @@ public final class KcaConstants {
     public static final String[] PREF_BOOLEAN_ARRAY = {
             PREF_CHECK_UPDATE_START,
             PREF_RES_USELOCAL,
-            PREF_OPENDB_API_USE,
             PREF_POIDB_API_USE,
             PREF_AKASHI_STAR_CHECKED,
             PREF_KCA_SET_PRIORITY,

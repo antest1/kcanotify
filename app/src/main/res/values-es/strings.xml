@@ -49,7 +49,6 @@
     <string name="speed_none">\?\?</string>
     <string name="speed_postfix"></string>
 
-    <string name="opendb_failed_msg">Un error ocurrió al enviar datos a OpenDB.</string>
     <string name="process_battle_failed_msg">Un error ocurrió al procesar datos de batalla.</string>
     <string name="service_failed_msg">Un error ocurrió al procesar datos. \nSe recomienda reinicar kcanotify</string>
 
@@ -86,7 +85,7 @@
     <string name="ma_hasdataupdate" formatted="false">Nuevos datos del juego disponibles. (%s)</string>
     <string name="ma_nextmaintenance" formatted="false">Siguiente mantenimiento:\n%s</string>
     <string name="ma_endmaintenance" formatted="false">Tiempo de finalización de mantenimiento:\n%s</string>
-    <string name="description"><b>Help</b>\nActivar ambos botones (Sniffer y Servicio) y luego iniciar Kancolle\n\n※ La VPN es necesaria para detectar datos del juego. \n\n<b>Características Principales</b>\n - Notificaciones de Expediciones/Reparaciones\n - Alerta de Daños Graves (Antes y durante el combate)\n - LoS/FP/Indicadores de Fatiga\n - Rastreo de nodo durante combate\n - Predicción de Batalla / Visualizador de Misiones\n - Tabla de Arsenal de Mejoras\n - Envia estadisticas a OpenDB (opcional)\n \nVisita http://swaytwig.com/kcanotify para detalles. (coreano)</string>
+    <string name="description"><b>Help</b>\nActivar ambos botones (Sniffer y Servicio) y luego iniciar Kancolle\n\n※ La VPN es necesaria para detectar datos del juego. \n\n<b>Características Principales</b>\n - Notificaciones de Expediciones/Reparaciones\n - Alerta de Daños Graves (Antes y durante el combate)\n - LoS/FP/Indicadores de Fatiga\n - Rastreo de nodo durante combate\n - Predicción de Batalla / Visualizador de Misiones\n - Tabla de Arsenal de Mejoras</string>
 
     <!-- SettingActivity Strings -->
     <string name="sa_checkupdate_latest" formatted="false">Tiene la última versión. (%s)</string>
@@ -229,7 +228,6 @@
     <string name="setting_menu_stat_title_kcaqsync_pass">Contraseña de KcaQSync</string>
     <string name="setting_menu_stat_desc_kcaqsync_pass_emtpy">Será activado después de poner una contraseña.</string>
     <string name="setting_menu_stat_desc_kcaqsync_pass">Advertencia: nunca usar tu contraseña real de DMM!</string>
-    <string name="setting_menu_stat_title_opendb">Enviar estadísticas a OpenDB</string>
     <string name="setting_menu_stat_title_poidb">Enviar estadísticas a poi-statistics</string>
 
     <string name="setting_menu_app_head">Información de Aplicación</string>

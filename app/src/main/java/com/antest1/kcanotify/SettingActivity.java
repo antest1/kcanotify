@@ -93,7 +93,6 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
         switch (prefKey) {
             case PREF_KCA_SEEK_CN:
                 return String.valueOf(SEEK_33CN1);
-            case PREF_OPENDB_API_USE:
             case PREF_POIDB_API_USE:
             case PREF_KCAQSYNC_USE:
             case PREF_AKASHI_STAR_CHECKED:
