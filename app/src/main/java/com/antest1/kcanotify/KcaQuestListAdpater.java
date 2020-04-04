@@ -209,6 +209,10 @@ public class KcaQuestListAdpater extends BaseAdapter {
     public void setListViewItemList(JsonArray ship_list, int filter) {
         Type listType = new TypeToken<List<JsonObject>>() {}.getType();
         listViewItemList = new Gson().fromJson(ship_list, listType);
+        if (listViewItemList.size() > 0) {
+            JsonObject test = listViewItemList.get(0);
+            if (!test.has("api_label_type")) listViewItemList.clear();
+        }
         if (filter != -1) {
             listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, new Predicate<JsonObject>() {
                 @Override

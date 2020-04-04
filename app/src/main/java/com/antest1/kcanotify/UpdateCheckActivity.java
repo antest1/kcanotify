@@ -343,25 +343,29 @@ public class UpdateCheckActivity extends AppCompatActivity {
                     String res_result = response.body();
                     try {
                         resource_info = gson.fromJson(res_result, listType);
-                        if (resource_info == null) return;
-                        for (int i = 0; i < resource_info.size(); i++) {
-                            JsonObject item = resource_info.get(i).getAsJsonObject();
-                            String name = item.get("name").getAsString();
-                            String desc = "download " + name;
-                            item.addProperty("desc", desc);
-                            int current_res_v = dbHelper.getResVer(name);
-                            int latest_res_v = item.get("version").getAsInt();
-                            item.addProperty("version_str", getVersionString(current_res_v, latest_res_v));
-                            item.addProperty("highlight", current_res_v < latest_res_v);
-                            if (current_res_v < latest_res_v) num_count += 1;
+                        if (resource_info == null) {
+                            resource_info = new ArrayList<>();
+                            return;
+                        } else {
+                            for (int i = 0; i < resource_info.size(); i++) {
+                                JsonObject item = resource_info.get(i).getAsJsonObject();
+                                String name = item.get("name").getAsString();
+                                String desc = "download " + name;
+                                item.addProperty("desc", desc);
+                                int current_res_v = dbHelper.getResVer(name);
+                                int latest_res_v = item.get("version").getAsInt();
+                                item.addProperty("version_str", getVersionString(current_res_v, latest_res_v));
+                                item.addProperty("highlight", current_res_v < latest_res_v);
+                                if (current_res_v < latest_res_v) num_count += 1;
+                            }
+                            resource_adapter.setContext(getApplicationContext());
+                            resource_adapter.setListItem(resource_info);
+
+                            resource_adapter.notifyDataSetChanged();
+
+                            resource_load.setVisibility(View.GONE);
+                            resource_list.setVisibility(View.VISIBLE);
                         }
-                        resource_adapter.setContext(getApplicationContext());
-                        resource_adapter.setListItem(resource_info);
-
-                        resource_adapter.notifyDataSetChanged();
-
-                        resource_load.setVisibility(View.GONE);
-                        resource_list.setVisibility(View.VISIBLE);
                     } catch (Exception e) {
                         resource_load.setText("Error: " + e.getMessage());
                     } finally {

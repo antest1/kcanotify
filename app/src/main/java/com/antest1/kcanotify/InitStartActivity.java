@@ -202,13 +202,15 @@ public class InitStartActivity extends Activity {
                     if (!compareVersion(currentVersion, recentVersion)) { // True if latest
                         JsonObject data = response_data;
                         if (!is_skipped) {
-                        runOnUiThread(() -> {
-                                AlertDialog.Builder alertDialog = getUpdateAlertDialog(recentVersion, data);
-                                AlertDialog alert = alertDialog.create();
-                                alert.setIcon(R.mipmap.ic_launcher);
-                                alert.setTitle(
-                                        getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
-                                alert.show();
+                            runOnUiThread(() -> {
+                                if (!InitStartActivity.this.isFinishing()) {
+                                    AlertDialog.Builder alertDialog = getUpdateAlertDialog(recentVersion, data);
+                                    AlertDialog alert = alertDialog.create();
+                                    alert.setIcon(R.mipmap.ic_launcher);
+                                    alert.setTitle(
+                                            getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
+                                    alert.show();
+                                }
                             });
                         }
                     } else {
@@ -290,7 +292,7 @@ public class InitStartActivity extends Activity {
             });
 
             handler.post(() -> {
-                if (!is_destroyed) {
+                if (!is_destroyed && !InitStartActivity.this.isFinishing()) {
                     AlertDialog alert = alertDialog.create();
                     alert.setIcon(R.mipmap.ic_launcher);
                     alert.show();

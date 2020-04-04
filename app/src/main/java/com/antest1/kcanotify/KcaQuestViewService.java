@@ -121,9 +121,14 @@ public class KcaQuestViewService extends Service {
             int api_count = 0;
             if (isquestlist && api_data != null) {
                 Log.e("KCA-Q", api_data.toString());
-                if(api_data.has("api_list") && api_data.get("api_list").isJsonArray()) {
-                    currentQuestList = api_data.getAsJsonArray("api_list");
-                    api_count = api_data.get("api_count").getAsInt();
+                if(api_data.has("api_list")) {
+                    if (api_data.get("api_list").isJsonArray()) {
+                        currentQuestList = api_data.getAsJsonArray("api_list");
+                        api_count = api_data.get("api_count").getAsInt();
+                    } else {
+                        currentQuestList = new JsonArray();
+                        api_count = 0;
+                    }
                 }
             } else {
                 currentQuestList = helper.getCurrentQuestList();
