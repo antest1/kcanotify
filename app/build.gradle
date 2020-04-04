@@ -59,6 +59,8 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation "androidx.fragment:fragment:1.2.4"
+    implementation "androidx.preference:preference:1.1.0"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.1.0'
     api 'com.google.guava:guava:27.0.1-android'
@@ -81,6 +83,6 @@ dependencies {
     implementation 'androidx.browser:browser:1.2.0'
 
     implementation 'com.google.firebase:firebase-analytics:17.2.3'
-    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta02'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

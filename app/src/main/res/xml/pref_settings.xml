@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/setting_menu_kand_head">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:title="@string/setting_menu_kand_head"
+        app:iconSpaceReserved="false"
+        >
         <ListPreference
             android:id="@+id/language_value"
+            app:iconSpaceReserved="false"
             android:defaultValue="@string/default_locale"
             android:entries="@array/languageOption"
             android:entryValues="@array/languageOptionValue"
@@ -13,6 +18,7 @@
 
         <ListPreference
             android:id="@+id/game_app_value"
+            app:iconSpaceReserved="false"
             android:defaultValue="com.dmm.dmmlabo.kancolle"
             android:entries="@array/gameAppOption"
             android:entryValues="@array/gameAppOptionValue"
@@ -23,6 +29,7 @@
 
         <ListPreference
             android:id="@+id/seek_type_value"
+            app:iconSpaceReserved="false"
             android:defaultValue="1"
             android:entries="@array/seekTypeOption"
             android:entryValues="@array/seekTypeOptionValue"
@@ -33,12 +40,14 @@
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="expedition_view"
             android:summary="@string/setting_menu_kand_desc_exp_realtime_show"
             android:title="@string/setting_menu_kand_title_exp_realtime_show" />
 
         <ListPreference
             android:id="@+id/expedition_type_value"
+            app:iconSpaceReserved="false"
             android:defaultValue="0"
             android:entries="@array/expeditionTypeOption"
             android:entryValues="@array/expeditionTypeOptionValue"
@@ -49,12 +58,14 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
+            app:iconSpaceReserved="false"
             android:key="set_priority"
             android:summary="@string/setting_menu_kand_desc_set_noti_priority"
             android:title="@string/setting_menu_kand_title_set_noti_priority" />
 
         <Preference
             android:defaultValue=""
+            app:iconSpaceReserved="false"
             android:key="fairy_select"
             android:summary="@string/setting_menu_kand_desc_fairy_select"
             android:title="@string/setting_menu_kand_title_fairy_select">
@@ -66,6 +77,7 @@
 
         <ListPreference
             android:defaultValue="3"
+            app:iconSpaceReserved="false"
             android:entries="@array/fairySizeOption"
             android:entryValues="@array/fairySizeOptionValue"
             android:key="fairy_size"
@@ -75,17 +87,20 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
+            app:iconSpaceReserved="false"
             android:key="fairy_random"
             android:title="@string/setting_menu_kand_title_fairy_random" />
 
         <CheckBoxPreference
             android:defaultValue="false"
+            app:iconSpaceReserved="false"
             android:key="fairy_auto_hide"
             android:summary="@string/setting_menu_kand_desc_fairy_auto_hide"
             android:title="@string/setting_menu_kand_title_fairy_auto_hide" />
 
         <Preference
             android:defaultValue=""
+            app:iconSpaceReserved="false"
             android:key="fleetview_menu_order"
             android:summary="@string/setting_menu_kand_desc_fleetview_button_order"
             android:title="@string/setting_menu_kand_title_fleetview_button_order">
@@ -97,18 +112,21 @@
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="activate_droplog"
             android:summary="@string/record_storage_warning"
             android:title="@string/setting_menu_kand_title_record_droplog" />
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="activate_resourcelog"
             android:summary="@string/record_storage_warning"
             android:title="@string/setting_menu_kand_title_record_resourcelog" />
 
         <Preference
             android:defaultValue=""
+            app:iconSpaceReserved="false"
             android:key="data_update_check"
             android:summary="@string/setting_menu_kand_desc_game_data_down"
             android:title="@string/setting_menu_kand_title_game_data_down">
@@ -129,9 +147,12 @@
         -->
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/setting_menu_sniffer_title_head">
+    <PreferenceCategory
+        android:title="@string/setting_menu_sniffer_title_head"
+        app:iconSpaceReserved="false">
         <ListPreference
             android:id="@+id/sniffer_mode_value"
+            app:iconSpaceReserved="false"
             android:defaultValue="0"
             android:entries="@array/snifferOption"
             android:entryValues="@array/snifferOptionValue"
@@ -142,6 +163,7 @@
 
         <Preference
             android:defaultValue=""
+            app:iconSpaceReserved="false"
             android:key="kca_sniffer_allow"
             android:title="@string/setting_menu_sniffer_title_package_allow"
             android:summary="@string/setting_menu_sniffer_desc_package_allow">
@@ -153,6 +175,7 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
+            app:iconSpaceReserved="false"
             android:key="allow_external_filter"
             android:title="@string/setting_menu_sniffer_title_extfilter_use"
             android:summary="@string/setting_menu_sniffer_desc_extfilter_use" />
@@ -165,33 +188,40 @@
         -->
         <Preference
             android:defaultValue=""
+            app:iconSpaceReserved="false"
             android:persistent="false"
             android:key="adv_network_setting"
             android:title="@string/setting_menu_kand_title_adv_network" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/setting_menu_view_head">
+    <PreferenceCategory
+        android:title="@string/setting_menu_view_head"
+        app:iconSpaceReserved="false">
         <Preference
             android:defaultValue=""
+            app:iconSpaceReserved="false"
             android:key="overlay_setting"
             android:summary="@string/setting_menu_view_desc_overlay_setting"
             android:title="@string/setting_menu_view_title_overlay_setting" />
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="battlenode_use"
             android:summary="@string/setting_menu_view_desc_battlenode_use"
             android:title="@string/setting_menu_view_title_battlenode_use" />
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="battleview_use"
             android:summary="@string/setting_menu_view_desc_battleview_use"
             android:title="@string/setting_menu_view_title_battleview_use" />
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:dependency="battleview_use"
             android:key="showdrop_setting"
             android:summary="@string/setting_menu_view_desc_drop_visible"
@@ -199,12 +229,14 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
+            app:iconSpaceReserved="false"
             android:key="hdnoti_locked"
             android:summary="@string/setting_menu_view_desc_hdmg_locked"
             android:title="@string/setting_menu_view_title_hdmg_locked" />
 
         <EditTextPreference
             android:defaultValue="0"
+            app:iconSpaceReserved="false"
             android:key="hdnoti_minlevel"
             android:numeric="integer"
             android:summary="@string/setting_menu_view_desc_hdmg_minlevel"
@@ -212,12 +244,14 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
+            app:iconSpaceReserved="false"
             android:key="show_constrship_name"
             android:summary="@string/setting_menu_view_desc_show_constrship"
             android:title="@string/setting_menu_view_title_show_constrship" />
 
         <CheckBoxPreference
             android:defaultValue="false"
+            app:iconSpaceReserved="false"
             android:key="fix_view_loc"
             android:summary="@string/setting_menu_view_desc_fix_view"
             android:title="@string/setting_menu_view_title_fix_view" />
@@ -239,9 +273,11 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:key="pref_noti_category"
-        android:title="@string/setting_menu_noti_head">
+        android:title="@string/setting_menu_noti_head"
+        app:iconSpaceReserved="false">
         <ListPreference
             android:defaultValue="@string/sound_kind_value_vibrate"
+            app:iconSpaceReserved="false"
             android:entries="@array/soundOption"
             android:entryValues="@array/soundOptionValue"
             android:key="notify_sound_kind"
@@ -249,105 +285,122 @@
             android:positiveButtonText="@null"
             android:title="@string/setting_menu_noti_title_kind" />
 
-        <RingtonePreference
+        <Preference
+            app:iconSpaceReserved="false"
             android:summary="@string/setting_menu_noti_desc_ringtone"
             android:title="@string/setting_menu_noti_title_ringtone"
             android:key="notify_ringtone"
-            android:ringtoneType="notification"
-            android:showDefault="true"
-            android:showSilent="true"
             android:defaultValue="DEFAULT_NOTIFICATION_URI"/>
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="notify_at_svc_off"
             android:summary="@string/setting_menu_noti_desc_notiatsvcoff"
             android:title="@string/setting_menu_noti_title_notiatsvcoff" />
 
         <EditTextPreference
             android:defaultValue="61"
+            app:iconSpaceReserved="false"
             android:key="alarm_delay"
-            android:numeric="integer|signed"
+            android:inputType="number"
             android:title="@string/setting_menu_noti_title_alarm_delay" />
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="notify_expedition"
             android:summary="@string/setting_menu_noti_desc_exp"
             android:title="@string/setting_menu_noti_title_exp" />
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="notify_docking"
             android:summary="@string/setting_menu_noti_desc_dock"
             android:title="@string/setting_menu_noti_title_dock" />
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="notify_morale"
             android:summary="@string/setting_menu_noti_desc_morale"
             android:title="@string/setting_menu_noti_title_morale" />
 
         <EditTextPreference
             android:defaultValue="40"
+            app:iconSpaceReserved="false"
             android:dependency="notify_morale"
             android:key="morale_min"
-            android:numeric="integer"
+            android:inputType="number"
             android:title="@string/setting_menu_noti_title_morale_min" />
 
         <CheckBoxPreference
             android:defaultValue="false"
+            app:iconSpaceReserved="false"
             android:key="notify_akashi"
             android:summary="@string/setting_menu_noti_desc_akashirepair"
             android:title="@string/setting_menu_noti_title_akashirepair" />
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="notify_vibrate_heavydamaged"
             android:summary="@string/setting_menu_noti_desc_hdmg_vib"
             android:title="@string/setting_menu_noti_title_hdmg_vib" />
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="notify_vibrate_notsupplied"
             android:summary="@string/setting_menu_noti_desc_nspl_vib"
             android:title="@string/setting_menu_noti_title_nspl_vib" />
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="noti_quest_fairy_glow"
             android:summary="@string/setting_menu_noti_desc_fairy_glow"
             android:title="@string/setting_menu_noti_title_fairy_glow" />
 
         <CheckBoxPreference
             android:defaultValue="true"
+            app:iconSpaceReserved="false"
             android:key="notify_fairy_longclick"
             android:summary="@string/setting_menu_noti_desc_fairy_vib"
             android:title="@string/setting_menu_noti_title_fairy_vib" />
 
         <CheckBoxPreference
             android:defaultValue="false"
+            app:iconSpaceReserved="false"
             android:key="disable_customtoast"
             android:summary="@string/setting_menu_noti_desc_disable_customtoast"
             android:title="@string/setting_menu_noti_title_disable_customtoast" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/setting_menu_stat_head">
+    <PreferenceCategory
+        android:title="@string/setting_menu_stat_head"
+        app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:defaultValue="false"
+            app:iconSpaceReserved="false"
             android:key="poidb_api_use"
             android:summary="@string/setting_menu_stat_desc_poidb"
             android:title="@string/setting_menu_stat_title_poidb" />
 
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/setting_menu_app_head">
+    <PreferenceCategory
+        android:title="@string/setting_menu_app_head"
+        app:iconSpaceReserved="false">
         <Preference
             android:defaultValue=" "
+            app:iconSpaceReserved="false"
             android:key="kca_version"
             android:summary="@string/app_version"
             android:title="@string/setting_menu_app_title_current" />
         <ListPreference
             android:id="@+id/updateserver_value"
+            app:iconSpaceReserved="false"
             android:defaultValue="@string/default_locale"
             android:entries="@array/ServerLocation"
             android:entryValues="@array/ServerLocationValue"
@@ -357,11 +410,13 @@
             android:title="@string/setting_menu_app_title_updatecheckserver" />
         <Preference
             android:defaultValue=""
+            app:iconSpaceReserved="false"
             android:key="check_update"
             android:summary="@string/setting_menu_app_desc_updatecheck"
             android:title="@string/setting_menu_app_title_updatecheck" />
         <ListPreference
             android:defaultValue="0"
+            app:iconSpaceReserved="false"
             android:entries="@array/downloadSiteOption"
             android:entryValues="@array/downloadSiteOptionValue"
             android:key="apk_download_site"
@@ -371,6 +426,7 @@
 
         <Preference
             android:defaultValue=""
+            app:iconSpaceReserved="false"
             android:key="app_inspector"
             android:summary="@string/setting_menu_app_desc_inspector"
             android:title="@string/action_inspector">
@@ -381,6 +437,7 @@
         </Preference>
         <Preference
             android:defaultValue=""
+            app:iconSpaceReserved="false"
             android:key="app_information"
             android:title="@string/setting_menu_app_info">
             <intent

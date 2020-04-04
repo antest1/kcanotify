@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,17 +15,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
 import android.provider.Settings;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -36,8 +38,7 @@ import java.util.Map;
 import retrofit2.Call;
 
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
-import static com.antest1.kcanotify.KcaAlarmService.REFRESH_CHANNEL;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
+import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_MAIN;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -53,14 +54,12 @@ import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_SIZE;
 import static com.antest1.kcanotify.KcaConstants.PREF_HDNOTI_MINLEVEL;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCAQSYNC_PASS;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_MORALE_MIN;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_SCREEN_ADV_NETWORK;
 import static com.antest1.kcanotify.KcaConstants.PREF_SNIFFER_MODE;
@@ -71,294 +70,153 @@ import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
+import static com.antest1.kcanotify.KcaViewButtonService.FAIRY_FORECHECK_OFF;
+import static com.antest1.kcanotify.KcaViewButtonService.FAIRY_FORECHECK_ON;
+import static com.antest1.kcanotify.SettingActivity.REQUEST_ALERT_RINGTONE;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_OVERLAY_PERMISSION;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_USAGESTAT_PERMISSION;
 
-public class MainPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainPreferenceFragment extends PreferenceFragmentCompat implements
+        SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceChangeListener {
+
     KcaDBHelper dbHelper;
+    private boolean isActivitySet = false;
     public KcaDownloader downloader;
-    public static RingtoneManager ringtoneManager;
-    public static String silentText;
     public static Handler sHandler;
+    private SharedPreferences sharedPref = null;
     static Gson gson = new Gson();
-
     private Callback mCallback;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof Callback) {
-            mCallback = (Callback) activity;
-        } else {
-            throw new IllegalStateException("callback interface not implemented");
-        }
-    }
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getActivity().getApplicationContext(), getActivity().getBaseContext(), id);
-    }
-
-    public Context getApplicationContext() {
-        Context context = getActivity();
-        if (context != null) {
-            return context.getApplicationContext();
-        } else {
-            return null;
-        }
-    }
-
-    public void showToast(Context context, String text, int length) {
-        if (context != null) {
-            Toast.makeText(context, text, length).show();
-        }
-    }
-
-    public static void setHandler(Handler h) {
-        sHandler = h;
-    }
 
     public interface Callback {
         public void onNestedPreferenceSelected(int key);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        ((AppCompatActivity) getActivity()).getSupportActionBar()
-                .setTitle(getStringWithLocale(R.string.action_settings));
-    }
-
-    @Override
-    public void onDestroy() {
-        dbHelper.close();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-        downloader = KcaUtils.getInfoDownloader(getApplicationContext());
-        silentText = getString(R.string.settings_string_silent);
+    }
 
-        getPreferenceManager().setSharedPreferencesName("pref");
-        //SharedPreferences prefs = this.getActivity().getSharedPreferences("pref", MODE_PRIVATE);
-        addPreferencesFromResource(R.xml.pref_settings);
-        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-        Map<String, ?> allEntries = getPreferenceManager().getSharedPreferences().getAll();
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        dbHelper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
+        downloader = KcaUtils.getInfoDownloader(context);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        isActivitySet = true;
+        Activity activity = getActivity();
+        if (activity instanceof Callback) mCallback = (Callback) activity;
+
+        Map<String, ?> allEntries = sharedPref.getAll();
         for (String key : allEntries.keySet()) {
-            Preference pref = findPreference(key);
-            if (key.equals(PREF_CHECK_UPDATE)) {
-                pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        checkRecentVersion();
-                        return false;
-                    }
-                });
-            }
-            /*if (key.equals(PREF_KCA_DOWNLOAD_DATA)) {
-                pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        downloadGameData();
-                        return false;
-                    }
-                });
-            }*/
-
-            if (key.equals(PREF_FAIRY_AUTOHIDE)) {
-                pref.setOnPreferenceChangeListener((preference, o) -> {
-                    boolean new_value = (Boolean) o;
-                    if (new_value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                            !hasUsageStatPermission(getActivity().getApplicationContext())) {
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                        alertDialog.setTitle(getStringWithLocale(R.string.sa_usagestat_dialog_title))
-                                .setMessage(getStringWithLocale(R.string.sa_usagestat_dialog_desc))
-                                .setPositiveButton(getStringWithLocale(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        showObtainingUsageStatPermission();
-                                    }
-                                })
-                                .setNegativeButton(getStringWithLocale(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    }
-                                })
-                                .setIcon(R.mipmap.ic_launcher)
-                                .show();
-                        return false;
-                    } else {
-                        Intent intent = new Intent(getActivity(), KcaViewButtonService.class);
-                        if (new_value) {
-                            intent.setAction(KcaViewButtonService.FAIRY_FORECHECK_ON);
-                        } else {
-                            intent.setAction(KcaViewButtonService.FAIRY_FORECHECK_OFF);
-                        }
-                        getApplicationContext().startService(intent);
-                        return true;
-                    }
-                });
-            }
-
-            if (key.equals(PREF_OVERLAY_SETTING)) {
-                pref.setOnPreferenceClickListener(preference -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        showObtainingPermissionOverlayWindow();
-                    } else {
-                        showToast(getApplicationContext(), getStringWithLocale(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT);
-                    }
-                    return false;
-                });
-            }
-
-
-
-            if (key.equals(PREF_SNIFFER_MODE)) {
-                pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    if (!KcaService.getServiceStatus()) {
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                        String val = (String) newValue;
-                        if (Integer.parseInt(val) == SNIFFER_PASSIVE && prefs.getBoolean(PREF_VPN_ENABLED, false)) {
-                            KcaVpnService.stop(VPN_STOP_REASON, getActivity());
-                            prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
-                        }
-                        return true;
-                    } else {
-                        showToast(getApplicationContext(), "Cannot change while service is running.", Toast.LENGTH_SHORT);
-                        return false;
-                    }
-                });
-            }
-
-            if (key.equals(PREF_KCA_LANGUAGE)) {
-                pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        String pref = (String) newValue;
-                        if (pref.startsWith("default")) {
-                            LocaleUtils.setLocale(Locale.getDefault());
-                        } else {
-                            String[] locale = ((String) newValue).split("-");
-                            LocaleUtils.setLocale(new Locale(locale[0], locale[1]));
-                        }
-                        if (sHandler != null) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString("url", KCA_API_PREF_LANGUAGE_CHANGED);
-                            bundle.putString("data", "");
-                            Message sMsg = sHandler.obtainMessage();
-                            sMsg.setData(bundle);
-                            sHandler.sendMessage(sMsg);
-                        }
-                        showToast(getApplicationContext(), getStringWithLocale(R.string.sa_language_changed), Toast.LENGTH_LONG);
-                        return true;
-                    }
-                });
-            }
-
-            if (key.equals(PREF_ALARM_DELAY)) {
-                pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    String new_val = ((String) newValue);
-                    if (new_val.length() == 0) return false;
-                    int value = Integer.parseInt(new_val);
-                    KcaAlarmService.setAlarmDelay(value);
-                    if (sHandler != null) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("url", KCA_API_PREF_ALARMDELAY_CHANGED);
-                        bundle.putString("data", "");
-                        Message sMsg = sHandler.obtainMessage();
-                        sMsg.setData(bundle);
-                        sHandler.sendMessage(sMsg);
-                    }
-                    return true;
-                });
-            }
-
-            if (key.equals(PREF_KCA_MORALE_MIN)) {
-                pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    String new_val = ((String) newValue);
-                    if (new_val.length() == 0) return false;
-                    int value = Integer.parseInt(new_val);
-                    if (value > 100) {
-                        showToast(getApplicationContext(), "value must be in 0~100", Toast.LENGTH_LONG);
-                        return false;
-                    }
-                    KcaMoraleInfo.setMinMorale(value);
-                    return true;
-                });
-            }
-
-            if (key.equals(PREF_SCREEN_ADV_NETWORK)) {
-                pref.setOnPreferenceClickListener(preference -> {
-                    mCallback.onNestedPreferenceSelected(NestedPreferenceFragment.FRAGMENT_ADV_NETWORK);
-                    return false;
-                });
-            }
-
-            if (pref instanceof RingtonePreference) {
-                String uri = pref.getSharedPreferences().getString(key, "");
-                if (uri.length() == 0) {
-                    pref.setSummary(silentText);
-                } else {
-                    Uri ringtoneUri = Uri.parse(uri);
-                    getActivity().grantUriPermission(BuildConfig.APPLICATION_ID, ringtoneUri, FLAG_GRANT_READ_URI_PERMISSION);
-                    Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
-                    if (ringtone == null) {
-                        showToast(getApplicationContext(),
-                                getStringWithLocale(R.string.ma_permission_external_denied),
-                                Toast.LENGTH_LONG);
-                        pref.setSummary(silentText);
-                    } else {
-                        String name = ringtone.getTitle(getApplicationContext());
-                        pref.setSummary(name);
-                    }
+            Preference preference = findPreference(key);
+            if (preference == null) continue;
+            if (preference instanceof ListPreference) {
+                ListPreference etp = (ListPreference) preference;
+                preference.setSummary(etp.getEntry());
+            } else if (preference instanceof EditTextPreference) {
+                EditTextPreference etp = (EditTextPreference) preference;
+                preference.setSummary(getEditTextSummary(key, etp.getText()));
+            } else if (PREF_KCA_NOTI_RINGTONE.equals(preference.getKey())) {
+                String uri = sharedPref.getString(PREF_KCA_NOTI_RINGTONE, "");
+                Uri ringtoneUri = Uri.parse(uri);
+                String ringtoneTitle = getStringWithLocale(R.string.settings_string_silent);
+                if (uri.length() > 0) {
+                    ringtoneTitle = getRingtoneTitle(ringtoneUri);
                 }
-            } else if (pref instanceof ListPreference) {
-                ListPreference etp = (ListPreference) pref;
-                pref.setSummary(etp.getEntry());
-            } else if (pref instanceof EditTextPreference) {
-                EditTextPreference etp = (EditTextPreference) pref;
-                pref.setSummary(etp.getText());
-                if (key.equals(PREF_HDNOTI_MINLEVEL)) {
-                    if (etp.getText().equals("0")) {
-                        String current = etp.getText();
-                        pref.setSummary(KcaUtils.format("%s (%s)", current, getStringWithLocale(R.string.setting_menu_view_desc_hdmg_minlevel)));
-                    }
-                }
-                if (key.equals(PREF_KCAQSYNC_PASS)) {
-                    if (etp.getText().trim().length() == 0) {
-                        pref.setSummary(getStringWithLocale(R.string.setting_menu_stat_desc_kcaqsync_pass_emtpy));
-                    }
-                    etp.setDialogMessage(getStringWithLocale(R.string.setting_menu_stat_desc_kcaqsync_pass));
-                }
+                preference.setSummary(ringtoneTitle);
             }
+            preference.setOnPreferenceChangeListener(this);
         }
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        getPreferenceManager().setSharedPreferencesName("pref");
+        setPreferencesFromResource(R.xml.pref_settings, rootKey);
+        sharedPref = getPreferenceManager().getSharedPreferences();
+        sharedPref.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(Preference preference) {
+        Log.e("KCA", "onPreferenceTreeClick " + preference.getKey());
+        String key = preference.getKey();
+        if (!isActivitySet) return false;
+
+        if (PREF_OVERLAY_SETTING.equals(key)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                showObtainingPermissionOverlayWindow();
+            } else {
+                showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT);
+            }
+        }
+
+        if (PREF_SCREEN_ADV_NETWORK.equals(key)) {
+            mCallback.onNestedPreferenceSelected(NestedPreferenceFragment.FRAGMENT_ADV_NETWORK);
+            return false;
+        }
+
+        if (PREF_KCA_NOTI_RINGTONE.equals(key)) {
+            Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, DEFAULT_NOTIFICATION_URI);
+            String existingValue = sharedPref.getString(key, null);
+            if (existingValue != null) {
+                if (existingValue.length() == 0) {
+                    // Select "Silent"
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+                } else {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(existingValue));
+                }
+            } else {
+                // No ringtone has been selected, set to the default
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
+            }
+            startActivityForResult(intent, REQUEST_ALERT_RINGTONE);
+        }
+
+        if (PREF_CHECK_UPDATE.equals(key)) {
+            checkRecentVersion();
+        }
+
+        return super.onPreferenceTreeClick(preference);
+    }
+
+    public static void setHandler(Handler h) {
+        sHandler = h;
+    }
+
+    public String getStringWithLocale(int id) {
+        return KcaUtils.getStringWithLocale(getActivity().getApplicationContext(), getActivity().getBaseContext(), id);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     public void showObtainingPermissionOverlayWindow() {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
-        if(intent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
+        if(intent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION);
         } else {
             try {
                 startActivityForResult(new Intent(android.provider.Settings.ACTION_APPLICATION_SETTINGS), REQUEST_OVERLAY_PERMISSION);
             } finally {
-                showToast(getApplicationContext(), getStringWithLocale(R.string.sa_overlay_appearontop), Toast.LENGTH_LONG);
+                showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_appearontop), Toast.LENGTH_LONG);
             }
         }
     }
 
-    public void showObtainingPermissionAccessibility() {
-        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-        startActivity(intent);
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private static boolean hasUsageStatPermission(Context context) {
+        AppOpsManager appOps = (AppOpsManager)
+                context.getSystemService(Context.APP_OPS_SERVICE);
+        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+                android.os.Process.myUid(), context.getPackageName());
+        return mode == AppOpsManager.MODE_ALLOWED;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -371,23 +229,39 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
     @TargetApi(Build.VERSION_CODES.M)
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (getActivity() != null && getApplicationContext() != null) {
+        if (checkActivityValid()) {
             if (requestCode == REQUEST_OVERLAY_PERMISSION) {
                 int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
                 new Handler().postDelayed(() -> {
-                    if (Settings.canDrawOverlays(getApplicationContext())) {
+                    if (Settings.canDrawOverlays(getContext())) {
                         showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_ok), Toast.LENGTH_SHORT);
                     } else {
                         showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_no), Toast.LENGTH_SHORT);
                     }
                 }, delay);
             } else if (requestCode == REQUEST_USAGESTAT_PERMISSION) {
-                if(hasUsageStatPermission(getApplicationContext())) {
+                if(hasUsageStatPermission(getContext())) {
                     showToast(getActivity(), getStringWithLocale(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT);
                 } else {
                     showToast(getActivity(), getStringWithLocale(R.string.sa_usagestat_no), Toast.LENGTH_SHORT);
                 }
+            } else if (requestCode == REQUEST_ALERT_RINGTONE && data != null) {
+                Preference pref = findPreference(PREF_KCA_NOTI_RINGTONE);
+                Uri ringtoneUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                String ringtoneTitle = getRingtoneTitle(ringtoneUri);
+                pref.setSummary(ringtoneTitle);
+                if (ringtoneUri != null) {
+                    sharedPref.edit().putString(PREF_KCA_NOTI_RINGTONE, ringtoneUri.toString()).apply();
+                } else {
+                    sharedPref.edit().putString(PREF_KCA_NOTI_RINGTONE, "").apply();
+                }
             }
+        }
+    }
+
+    public void showToast(Context context, String text, int length) {
+        if (checkActivityValid() && !getActivity().isFinishing()) {
+            Toast.makeText(context, text, length).show();
         }
     }
 
@@ -406,12 +280,14 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                     break;
                 case PREF_KCA_SET_PRIORITY:
                     kca_url = KCA_API_PREF_PRIORITY_CHANGED;
+                    break;
                 case PREF_FAIRY_SIZE:
                     kca_url = KCA_API_PREF_FAIRYSIZE_CHANGED;
+                    break;
                 default:
                     break;
             }
-            if (kca_url.length() != 0) {
+            if (kca_url.length() > 0) {
                 bundle.putString("url", kca_url);
                 bundle.putString("data", gson.toJson(dmpData));
                 Message sMsg = sHandler.obtainMessage();
@@ -419,42 +295,132 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                 sHandler.sendMessage(sMsg);
             }
         }
-        Preference pref = findPreference(key);
 
-        if (pref instanceof RingtonePreference) {
-            String uri = sharedPreferences.getString(key, "null");
-            if (uri.length() == 0) {
-                pref.setSummary(silentText);
-            } else {
-                Uri ringtoneUri = Uri.parse(uri);
-                if (getActivity() != null) {
-                    getActivity().grantUriPermission(BuildConfig.APPLICATION_ID, ringtoneUri, FLAG_GRANT_READ_URI_PERMISSION);
-                    Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
-                    if (ringtone == null) {
-                        showToast(getApplicationContext(),
-                                getStringWithLocale(R.string.ma_permission_external_denied),
-                                Toast.LENGTH_LONG);
-                        pref.setSummary(silentText);
-                    } else {
-                        String name = ringtone.getTitle(getApplicationContext());
-                        pref.setSummary(name);
-                    }
-                }
-            }
-            Log.e("KCA-S", "sdf");
-            if (getActivity() != null && !getActivity().isFinishing()) {
-                Intent aIntent = new Intent(getActivity(), KcaAlarmService.class);
-                aIntent.setAction(REFRESH_CHANNEL);
-                aIntent.putExtra("uri", uri);
-                getApplicationContext().startService(aIntent);
-            }
-        } else if (pref instanceof ListPreference) {
-            ListPreference etp = (ListPreference) pref;
-            pref.setSummary(etp.getEntry());
-        } else if (pref instanceof EditTextPreference) {
-            EditTextPreference etp = (EditTextPreference) pref;
-            pref.setSummary(etp.getText());
+        Preference preference = findPreference(key);
+        if (preference instanceof ListPreference) {
+            ListPreference lp = (ListPreference) preference;
+            preference.setSummary(lp.getEntry());
         }
+
+        if (preference instanceof EditTextPreference) {
+            EditTextPreference etp = (EditTextPreference) preference;
+            preference.setSummary(getEditTextSummary(key, etp.getText()));
+        }
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (!checkActivityValid()) return false;
+        String key = preference.getKey();
+        Log.e("KCA", "onPreferenceChange " + key);
+
+        if (PREF_KCA_LANGUAGE.equals(key)) {
+            String pref = (String) newValue;
+            if (pref.startsWith("default")) {
+                LocaleUtils.setLocale(Locale.getDefault());
+            } else {
+                String[] locale = ((String) newValue).split("-");
+                LocaleUtils.setLocale(new Locale(locale[0], locale[1]));
+            }
+            if (sHandler != null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("url", KCA_API_PREF_LANGUAGE_CHANGED);
+                bundle.putString("data", "");
+                Message sMsg = sHandler.obtainMessage();
+                sMsg.setData(bundle);
+                sHandler.sendMessage(sMsg);
+            }
+            showToast(getActivity(), getStringWithLocale(R.string.sa_language_changed), Toast.LENGTH_LONG);
+        }
+
+        if (PREF_SNIFFER_MODE.equals(key)) {
+            if (!KcaService.getServiceStatus()) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                String val = (String) newValue;
+                if (Integer.parseInt(val) == SNIFFER_PASSIVE && prefs.getBoolean(PREF_VPN_ENABLED, false)) {
+                    KcaVpnService.stop(VPN_STOP_REASON, getActivity());
+                    prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                }
+            } else {
+                showToast(getActivity(), "Cannot change while service is running.", Toast.LENGTH_SHORT);
+                return false;
+            }
+        }
+
+        if (PREF_FAIRY_AUTOHIDE.equals(key)) {
+            boolean isTrue = (Boolean) newValue;
+            if (isTrue && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+                    !hasUsageStatPermission(getContext())) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                alertDialog.setTitle(getStringWithLocale(R.string.sa_usagestat_dialog_title))
+                    .setMessage(getStringWithLocale(R.string.sa_usagestat_dialog_desc))
+                    .setPositiveButton(getStringWithLocale(R.string.dialog_ok),
+                            (dialogInterface, i) -> showObtainingUsageStatPermission())
+                    .setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
+                            (dialogInterface, i) -> {
+                    })
+                    .setIcon(R.mipmap.ic_launcher);
+                if (!getActivity().isFinishing()) alertDialog.show();
+                return false;
+            } else {
+                Intent intent = new Intent(getActivity(), KcaViewButtonService.class);
+                intent.setAction(isTrue ? FAIRY_FORECHECK_ON : FAIRY_FORECHECK_OFF);
+                getActivity().startService(intent);
+            }
+        }
+
+        if (PREF_ALARM_DELAY.equals(key)) {
+            String valueString = ((String) newValue);
+            if (valueString.length() == 0) return false;
+            int value = Integer.parseInt(valueString);
+            KcaAlarmService.setAlarmDelay(value);
+            if (sHandler != null) {
+                Bundle bundle = new Bundle();
+                bundle.putString("url", KCA_API_PREF_ALARMDELAY_CHANGED);
+                bundle.putString("data", "");
+                Message sMsg = sHandler.obtainMessage();
+                sMsg.setData(bundle);
+                sHandler.sendMessage(sMsg);
+            }
+        }
+
+        if (PREF_KCA_MORALE_MIN.equals(key)) {
+            String valueString = ((String) newValue);
+            if (valueString.length() == 0) return false;
+            int value = Integer.parseInt(valueString);
+            if (value > 100) {
+                showToast(getActivity(), "value must be in 0~100", Toast.LENGTH_LONG);
+                return false;
+            }
+            KcaMoraleInfo.setMinMorale(value);
+        }
+        return true;
+    }
+
+    private String getEditTextSummary(String key, String value) {
+        if (PREF_HDNOTI_MINLEVEL.equals(key)) {
+            if (value.equals("0")) {
+                return KcaUtils.format("%s (%s)", value,
+                        getStringWithLocale(R.string.setting_menu_view_desc_hdmg_minlevel));
+            }
+        }
+        return value;
+    }
+
+    private String getRingtoneTitle(Uri ringtoneUri) {
+        Log.e("KCA", "uri: " + (ringtoneUri != null ? ringtoneUri.toString() : ""));
+        Log.e("KCA", "valid: " + checkActivityValid());
+        if (ringtoneUri != null && checkActivityValid()) {
+            getActivity().grantUriPermission(BuildConfig.APPLICATION_ID, ringtoneUri, FLAG_GRANT_READ_URI_PERMISSION);
+            Ringtone ringtone = RingtoneManager.getRingtone(getContext(), ringtoneUri);
+            return ringtone.getTitle(getContext());
+        } else {
+            return getStringWithLocale(R.string.settings_string_silent);
+        }
+    }
+
+    private boolean checkActivityValid() {
+        return isActivitySet && getContext() != null && getActivity() != null;
     }
 
     private void checkRecentVersion() {
@@ -477,7 +443,7 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                 if (response_data.has("version")) {
                     String recentVersion = response_data.get("version").getAsString();
                     if (compareVersion(currentVersion, recentVersion)) { // True if latest
-                        showToast(getApplicationContext(),
+                        showToast(getActivity(),
                                 KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_latest), currentVersion),
                                 Toast.LENGTH_LONG);
                     } else if (!getActivity().isFinishing()) {
@@ -485,13 +451,13 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                         alertDialog.setMessage(KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
                         alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
                                 (dialog, which) -> {
-                                    String downloadUrl = getStringPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE);
+                                    String downloadUrl = getStringPreferences(getContext(), PREF_APK_DOWNLOAD_SITE);
                                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    if (intent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
+                                    if (intent.resolveActivity(getContext().getPackageManager()) != null) {
                                         startActivity(intent);
                                     } else if (downloadUrl.contains(getStringWithLocale(R.string.app_download_link_playstore))) {
-                                        showToast(getApplicationContext(), "Google Play Store not found", Toast.LENGTH_LONG);
+                                        showToast(getContext(), "Google Play Store not found", Toast.LENGTH_LONG);
                                         AlertDialog.Builder apkDownloadPathDialog = new AlertDialog.Builder(getActivity());
                                         apkDownloadPathDialog.setIcon(R.mipmap.ic_launcher);
                                         apkDownloadPathDialog.setTitle(getStringWithLocale(R.string.setting_menu_app_title_down));
@@ -500,7 +466,7 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 String[] path_value = getResources().getStringArray(R.array.downloadSiteOptionWithoutPlayStoreValue);
-                                                setPreferences(getApplicationContext(), PREF_APK_DOWNLOAD_SITE, path_value[i]);
+                                                setPreferences(getContext(), PREF_APK_DOWNLOAD_SITE, path_value[i]);
                                                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(path_value[i]));
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                 startActivity(intent);
@@ -510,11 +476,8 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                                     }
                                 });
                         alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // None
-                                    }
+                                (dialog, which) -> {
+                                    // None
                                 });
                         AlertDialog alert = alertDialog.create();
                         alert.setIcon(R.mipmap.ic_launcher);
@@ -522,7 +485,7 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
                         alert.show();
                     }
                 } else {
-                    showToast(getApplicationContext(),
+                    showToast(getActivity(),
                             getStringWithLocale(R.string.sa_checkupdate_servererror),
                             Toast.LENGTH_LONG);
                 }
@@ -530,68 +493,12 @@ public class MainPreferenceFragment extends PreferenceFragment implements Shared
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Context context = getApplicationContext();
-                if (context != null && KcaUtils.checkOnline(context)) {
-                    showToast(context, getStringWithLocale(R.string.sa_checkupdate_servererror), Toast.LENGTH_LONG);
+                Activity activity = getActivity();
+                if (activity != null && KcaUtils.checkOnline(activity)) {
+                    showToast(activity, getStringWithLocale(R.string.sa_checkupdate_servererror), Toast.LENGTH_LONG);
                     dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "version_check", "", "", t.getMessage());
                 }
             }
         });
     }
-
-    private void downloadGameData() {
-        final Call<String> down_gamedata = downloader.getGameData("recent");
-        down_gamedata.enqueue(new retrofit2.Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                JsonObject response_data = new JsonObject();
-                try {
-                    if (response.body() != null) {
-                        response_data = new JsonParser().parse(response.body()).getAsJsonObject();
-                        String kca_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
-                        String server_kca_version = response.headers().get("X-Api-Version");
-                        Log.e("KCA", "api_version: " + server_kca_version);
-                        if (kca_version == null || compareVersion(server_kca_version, kca_version)) {
-                            dbHelper.putValue(DB_KEY_STARTDATA, response_data.toString());
-                            KcaApiData.getKcGameData(response_data.getAsJsonObject("api_data"));
-                            KcaUtils.setPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION, server_kca_version);
-                            KcaApiData.setDataLoadTriggered();
-                            showToast(getApplicationContext(),
-                                    getStringWithLocale(R.string.sa_getupdate_finished),
-                                    Toast.LENGTH_LONG);
-                        } else {
-                            showToast(getApplicationContext(),
-                                    getStringWithLocale(R.string.kca_toast_inconsistent_data),
-                                    Toast.LENGTH_LONG);
-                        }
-                    }
-                } catch (Exception e) {
-                    showToast(getApplicationContext(),
-                            "Error: not valid data.",
-                            Toast.LENGTH_LONG);
-                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "fairy_queue", "", "", getStringFromException(e));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                if (KcaUtils.checkOnline(getApplicationContext())) {
-                    showToast(getApplicationContext(),
-                            KcaUtils.format(getStringWithLocale(R.string.sa_getupdate_servererror), t.getMessage()),
-                            Toast.LENGTH_LONG);
-                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "fairy_queue", "", "", t.getMessage());
-                }
-            }
-        });
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static boolean hasUsageStatPermission(Context context) {
-        AppOpsManager appOps = (AppOpsManager)
-                context.getSystemService(Context.APP_OPS_SERVICE);
-        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
-                android.os.Process.myUid(), context.getPackageName());
-        return mode == AppOpsManager.MODE_ALLOWED;
-    }
-
 }

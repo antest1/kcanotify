@@ -1,38 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-        android:title="@string/setting_menu_kand_title_adv_network">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/setting_menu_kand_title_adv_network">
         <Preference
             android:selectable="false"
             android:persistent="false"
+            app:iconSpaceReserved="false"
             android:title=""
             android:summary="@string/setting_menu_kand_warn_adv_network" />
         <CheckBoxPreference
             android:key="socks5_enable"
+            app:iconSpaceReserved="false"
             android:title="@string/setting_menu_kand_title_socks5_enable" />
         <CheckBoxPreference
             android:key="socks5_allapps"
+            app:iconSpaceReserved="false"
             android:dependency="socks5_enable"
             android:title="@string/setting_menu_kand_title_socks5_allapps" />
         <EditTextPreference
             android:key="socks5_address"
+            app:iconSpaceReserved="false"
             android:dependency="socks5_enable"
             android:title="@string/setting_menu_kand_title_socks5_address" />
         <EditTextPreference
             android:key="socks5_port"
+            app:iconSpaceReserved="false"
             android:dependency="socks5_enable"
             android:inputType="numberDecimal"
             android:title="@string/setting_menu_kand_title_socks5_port" />
         <EditTextPreference
             android:key="socks5_name"
+            app:iconSpaceReserved="false"
             android:dependency="socks5_enable"
             android:title="@string/setting_menu_kand_title_socks5_username" />
         <EditTextPreference
+            android:key="socks5_pass"
+            app:iconSpaceReserved="false"
             android:dependency="socks5_enable"
             android:inputType="textPassword"
-            android:key="socks5_pass"
             android:title="@string/setting_menu_kand_title_socks5_password" />
         <EditTextPreference
             android:key="bypass_address"
+            app:iconSpaceReserved="false"
             android:dependency="socks5_enable"
             android:title="@string/settings_menu_kand_title_bypass_address"
             android:summary="@string/setting_menu_kand_desc_bypass_address" />

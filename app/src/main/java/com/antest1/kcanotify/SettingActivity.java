@@ -1,12 +1,13 @@
 package com.antest1.kcanotify;
 
-import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -20,6 +21,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
     public static String currentVersion = BuildConfig.VERSION_NAME;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_USAGESTAT_PERMISSION = 3;
+    public static final int REQUEST_ALERT_RINGTONE = 4;
 
     Toolbar toolbar;
     public SettingActivity() {
@@ -40,7 +42,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
         getSupportActionBar().setTitle(getString(R.string.action_settings));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (savedInstanceState == null) {
-            FragmentManager fm = getFragmentManager();
+            FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction()
                     .replace(R.id.fragment_container, new MainPreferenceFragment()).commit();
         }
@@ -65,7 +67,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
     @Override
     public void onNestedPreferenceSelected(int key) {
         Log.e("KCA", "onNestedPreferenceSelected");
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.fragment_container, NestedPreferenceFragment.newInstance(key), NESTED_TAG)
                 .addToBackStack(NESTED_TAG).commit();
