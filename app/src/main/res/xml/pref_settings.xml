@@ -303,7 +303,8 @@
             android:defaultValue="61"
             app:iconSpaceReserved="false"
             android:key="alarm_delay"
-            android:inputType="number"
+            android:inputType="phone"
+            android:digits="0123456789"
             android:title="@string/setting_menu_noti_title_alarm_delay" />
 
         <CheckBoxPreference
@@ -332,7 +333,8 @@
             app:iconSpaceReserved="false"
             android:dependency="notify_morale"
             android:key="morale_min"
-            android:inputType="number"
+            android:inputType="phone"
+            android:digits="0123456789"
             android:title="@string/setting_menu_noti_title_morale_min" />
 
         <CheckBoxPreference

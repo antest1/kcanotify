@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -371,7 +372,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
         if (PREF_ALARM_DELAY.equals(key)) {
             String valueString = ((String) newValue);
-            if (valueString.length() == 0) return false;
+            if (valueString.length() == 0 || !TextUtils.isDigitsOnly(valueString)) return false;
             int value = Integer.parseInt(valueString);
             KcaAlarmService.setAlarmDelay(value);
             if (sHandler != null) {
@@ -386,7 +387,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
         if (PREF_KCA_MORALE_MIN.equals(key)) {
             String valueString = ((String) newValue);
-            if (valueString.length() == 0) return false;
+            if (valueString.length() == 0 || !TextUtils.isDigitsOnly(valueString)) return false;
             int value = Integer.parseInt(valueString);
             if (value > 100) {
                 showToast(getActivity(), "value must be in 0~100", Toast.LENGTH_LONG);
