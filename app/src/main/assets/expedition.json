@@ -441,11 +441,11 @@
 	"reward": [[1, 4], [4, 1]],
 	"exp": [100, 150],
 	"flag-lv": 65,
-	"total-lv": 380,
+	"total-lv": 440,
 	"total-num": 6,
 	"total-cond": "16-1|3-1|2-2",
 	"total-firepower": 510,
-	"total-fp": 440,
+	"total-fp": 400,
 	"total-asw": 285,
 	"total-los": 385
 }, {
@@ -528,7 +528,7 @@
 	"flag-lv": 35,
 	"total-lv": 210,
 	"total-num": 6,
-	"total-cond": "7,11,16,18-2|16-1|3-1|1,2-2",
+	"total-cond": "7,11,16,18-2|16-1|3-1|2-2",
 	"total-asw": 200,
 	"drum-ship": 3,
 	"drum-num": 6
@@ -872,6 +872,7 @@
 	"reward": [[59, 1], [12, 1]],
 	"exp": [70, 180],
 	"flag-lv": 55,
+	"total-lv": 270,
 	"flag-cond": "20",
 	"total-num": 5,
 	"total-cond": "20-1|13,14-3",
@@ -1036,13 +1037,13 @@
 	"reward": [[12, 2], [4, 1]],
 	"exp": [100, 150],
 	"flag-cond": "5",
-	"flag-lv": 66,
-	"total-lv": 351,
+	"flag-lv": 60,
+	"total-lv": 460,
 	"total-num": 6,
 	"total-firepower": 450,
-	"total-fp": 420,
+	"total-fp": 350,
 	"total-asw": 330,
-	"total-los": 270,
+	"total-los": 250,
 	"total-cond": "5-1|3-1|2-3"
 }, {
 	"no": "203",
