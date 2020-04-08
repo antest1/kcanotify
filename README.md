@@ -18,11 +18,11 @@ Requirement
 Download
 -------
 <a href='https://play.google.com/store/apps/details?id=com.antest1.kcanotify&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200px"/></a>
+- [Direct Download](http://luckyjervis.com/kcanotify/apk/) 
 - [Github Releases](https://github.com/antest1/kcanotify/releases) (All versions)
 - [kcwiki mirror](https://mirrors.kcwiki.org/kcanotify/) (All versions)
 - [Google Drive](http://bit.ly/kcanotifydown) (Latest Version)
 - [MEGA](https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw) (All versions)
-- [百度云](http://pan.baidu.com/s/1i5f37Rv) (Password: c2in)
 
 Demo
 -------
