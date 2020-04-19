@@ -171,7 +171,18 @@ public class KcaUtils {
     }
 
     public static String getUpdateServer(Context ctx) {
-        return getStringPreferences(ctx, PREF_UPDATE_SERVER);
+        String currentUpdateServer = getStringPreferences(ctx, PREF_UPDATE_SERVER);
+        boolean isServerFound = false;
+        String[] listEntry = ctx.getResources().getStringArray(R.array.ServerLocationValue);
+        for (int i = 0; i < listEntry.length; i++) if (currentUpdateServer.equals(listEntry[i])) {
+            isServerFound = true;
+            break;
+        }
+        if (!isServerFound) {
+            currentUpdateServer = ctx.getString(R.string.server_liza);
+            setPreferences(ctx, PREF_UPDATE_SERVER, currentUpdateServer);
+        }
+        return currentUpdateServer;
     }
 
     public static byte[] gzipcompress(String value) throws IOException {

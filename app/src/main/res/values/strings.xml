@@ -44,7 +44,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- Link Information -->
     <string name="server_swaytwig" translatable="false">http://swaytwig.com/</string>
     <string name="server_nova" translatable="false">https://nh7l0ukr44.execute-api.us-east-1.amazonaws.com/</string>
-    <string name="server_liza" translatable="false">http://18.176.189.52/</string>
+    <string name="server_liza" translatable="false">http://luckyjervis.com/</string>
     <string name="kcanotify_checkversion_link" translatable="false" formatted="false">kcanotify/v.php</string>
     <string name="api_start2_recent_version_link" translatable="false" formatted="false">kcanotify/kca_api_start2.php?v=recent</string>
 

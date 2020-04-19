@@ -164,7 +164,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_KCA_DATA_VERSION:
                 return "R.string.default_gamedata_version";
             case PREF_UPDATE_SERVER:
-                return "R.string.server_nova";
+                return "R.string.server_liza";
             case PREF_TIMER_WIDGET_STATE:
                 return "{}";
             case PREF_PACKAGE_ALLOW:
