@@ -73,7 +73,7 @@ public class KcaDeckInfo {
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 noShipCount -= 1;
-                JsonObject shipData = getUserShipDataById(shipId, "slot,sakuteki");
+                JsonObject shipData = getUserShipDataById(shipId, "slot,slot_ex,sakuteki");
                 int shipSeek = shipData.get("sakuteki").getAsJsonArray().get(0).getAsInt();
                 pureTotalSeek += shipSeek;
                 if (Cn != SEEK_PURE) {
@@ -88,35 +88,22 @@ public class KcaDeckInfo {
                             int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                             int itemSeek = itemData.get("saku").getAsInt();
                             shipSeek -= itemSeek;
+                            totalEquipSeek += getEquipSeek(itemType, itemSeek, itemLevel);
 
-                            switch (itemType) {
-                                case T2_TORPEDO_BOMBER:
-                                    totalEquipSeek += 0.8 * itemSeek;
-                                    break;
-                                case T2_SCOUT:
-                                    totalEquipSeek += itemSeek + 1.2 * Math.sqrt(itemLevel);
-                                    break;
-                                case T2_SCOUT_II:
-                                    totalEquipSeek += itemSeek + 1.2 * Math.sqrt(itemLevel);
-                                    break;
-                                case T2_SEA_SCOUT:
-                                    totalEquipSeek += 1.2 * (itemSeek + 1.2 * Math.sqrt(itemLevel));
-                                    break;
-                                case T2_SEA_BOMBER:
-                                    totalEquipSeek += 1.1 * (itemSeek + 1.15 * Math.sqrt(itemLevel));
-                                    break;
-                                case T2_RADAR_LARGE:
-                                    totalEquipSeek += 0.6 * (itemSeek + 1.4 * Math.sqrt(itemLevel));
-                                    break;
-                                case T2_RADAR_SMALL:
-                                    totalEquipSeek += 0.6 * (itemSeek + 1.25 * Math.sqrt(itemLevel));
-                                    break;
-                                default:
-                                    totalEquipSeek += 0.6 * itemSeek;
-                                    break;
-                            }
                         }
                     }
+
+                    int ex_item_id = shipData.get("slot_ex").getAsInt();
+                    if (ex_item_id != 0 && ex_item_id != -1) {
+                        JsonObject itemData = getUserItemStatusById(ex_item_id, "level,alv", "type,saku");
+                        if (itemData == null) continue;
+                        int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                        int itemLevel = itemData.get("level").getAsInt();
+                        int itemSeek = itemData.get("saku").getAsInt();
+                        shipSeek -= itemSeek;
+                        totalEquipSeek += getEquipSeek(itemType, itemSeek, itemLevel);
+                    }
+
                     totalShipSeek += Math.sqrt(shipSeek);
                 }
             }
@@ -126,6 +113,26 @@ public class KcaDeckInfo {
         data.addProperty("pure", pureTotalSeek);
         data.addProperty("nscount", noShipCount);
         return data;
+    }
+
+    public double getEquipSeek(int itemType, int itemSeek, int itemLevel) {
+        switch (itemType) {
+            case T2_TORPEDO_BOMBER:
+                return 0.8 * itemSeek;
+            case T2_SCOUT:
+            case T2_SCOUT_II:
+                return itemSeek + 1.2 * Math.sqrt(itemLevel);
+            case T2_SEA_SCOUT:
+                return 1.2 * (itemSeek + 1.2 * Math.sqrt(itemLevel));
+            case T2_SEA_BOMBER:
+                return 1.1 * (itemSeek + 1.15 * Math.sqrt(itemLevel));
+            case T2_RADAR_LARGE:
+                return 0.6 * (itemSeek + 1.4 * Math.sqrt(itemLevel));
+            case T2_RADAR_SMALL:
+                return 0.6 * (itemSeek + 1.25 * Math.sqrt(itemLevel));
+            default:
+                return 0.6 * itemSeek;
+        }
     }
 
     public double getSeekValue(JsonArray deckPortData, String deckid_list, int Cn, JsonObject exclude_flag) {
