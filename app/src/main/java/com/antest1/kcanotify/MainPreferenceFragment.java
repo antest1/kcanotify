@@ -234,10 +234,13 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             if (requestCode == REQUEST_OVERLAY_PERMISSION) {
                 int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
                 new Handler().postDelayed(() -> {
-                    if (Settings.canDrawOverlays(getContext())) {
-                        showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_ok), Toast.LENGTH_SHORT);
-                    } else {
-                        showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_no), Toast.LENGTH_SHORT);
+                    Context context = getContext();
+                    if (context != null) {
+                        if (Settings.canDrawOverlays(getContext())) {
+                            showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_ok), Toast.LENGTH_SHORT);
+                        } else {
+                            showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_no), Toast.LENGTH_SHORT);
+                        }
                     }
                 }, delay);
             } else if (requestCode == REQUEST_USAGESTAT_PERMISSION) {
