@@ -68,6 +68,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center_vertical"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/questview_text_large" />
 
@@ -79,12 +81,14 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginLeft="4dp"
                     android:background="@color/colorQuestProgress2"
+                    android:ellipsize="none"
                     android:paddingStart="3dp"
                     android:paddingLeft="3dp"
                     android:paddingTop="1dp"
                     android:paddingEnd="3dp"
                     android:paddingRight="3dp"
                     android:paddingBottom="1dp"
+                    android:singleLine="true"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="@dimen/questview_text_small" />
@@ -97,12 +101,14 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginLeft="4dp"
                     android:background="@color/colorQuestTrackProgress"
+                    android:ellipsize="none"
                     android:paddingStart="3dp"
                     android:paddingLeft="3dp"
                     android:paddingTop="1dp"
                     android:paddingEnd="3dp"
                     android:paddingRight="3dp"
                     android:paddingBottom="1dp"
+                    android:singleLine="true"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="@dimen/questview_text_small" />
