@@ -574,6 +574,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_hp_3">Heavy Damage</string>
 
     <string name="action_equipmentinfo">Equipment List</string>
+    <string name="equipinfo_btn_total_format" formatted="false">Total Count: %,d</string>
+    <string name="equipinfo_btn_total_star_format" formatted="false">Total ★: %,d</string>
     <string name="equipinfo_summary" formatted="false">Total %d (%d Equipped, %d Equippable)</string>
     <string name="equipinfo_filter">Filter</string>
     <string name="equipinfo_search">Search</string>

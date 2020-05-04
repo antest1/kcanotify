@@ -507,6 +507,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_hp_3">大破</string>
 
     <string name="action_equipmentinfo">装备目录</string>
+    <string name="equipinfo_btn_total_format" formatted="false">总计装备数目：%,d</string>
+    <string name="equipinfo_btn_total_star_format" formatted="false">总星数：%,d</string>
     <string name="equipinfo_summary" formatted="false">合计 %d（%d 装备中, %d 閒置）</string>
     <string name="equipinfo_filter">过滤</string>
     <string name="equipinfo_search">检索</string>

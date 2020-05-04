@@ -2,6 +2,8 @@ package com.antest1.kcanotify;
 
 import android.content.Context;
 import androidx.core.content.ContextCompat;
+
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -23,8 +24,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.media.CamcorderProfile.get;
@@ -38,6 +41,9 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
     private List<Integer> active = new ArrayList<>();
     private String summary_format = "";
     private String searchQuery = "";
+    private int totalEquipment = 0;
+    private int totalStars = 0;
+
     private JsonObject shipStatTranslation = new JsonObject();
 
     @Override
@@ -54,6 +60,10 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+
+    public int getTotalCount() { return totalEquipment; }
+
+    public int getStarCount() { return totalStars; }
 
     public void setSearchQuery(String query) {
         searchQuery = query;
@@ -270,30 +280,30 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
     public void setListViewItemList(JsonArray total_equip_list, Map<String, AtomicInteger> counter, JsonObject ship_equip_info, final String filtcond) {
         shipEquipInfo = ship_equip_info;
         countInfo = counter;
+        totalEquipment = 0;
+        totalStars = 0;
         if (filtcond.length() > 0) {
             Type listType = new TypeToken<List<JsonObject>>() {}.getType();
             listViewItemList = new Gson().fromJson(total_equip_list, listType);
-            listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, new Predicate<JsonObject>() {
-                @Override
-                public boolean apply(JsonObject input) {
-                    int key = input.get("api_id").getAsInt();
-                    String item_name = KcaApiData.getItemTranslation(input.get("api_name").getAsString());
-                    if (!item_name.contains(searchQuery)) return false;
-                    if (filtcond.equals("all")) {
-                        return checkCountExist(countInfo, key);
-                    } else {
-                        Integer type_3 = input.getAsJsonArray("api_type").get(3).getAsInt();
-                        String[] position_list = filtcond.split(",");
-                        List<Integer> filt_list = new ArrayList<Integer>();
-                        for (String p: position_list) {
-                            filt_list.add(Integer.valueOf(p) + 1);
-                        }
-                        return filt_list.contains(type_3) && checkCountExist(countInfo, key);
+            listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, input -> {
+                int key = input.get("api_id").getAsInt();
+                String item_name = KcaApiData.getItemTranslation(input.get("api_name").getAsString());
+                if (!item_name.contains(searchQuery)) return false;
+                if (filtcond.equals("all")) {
+                    return checkCountExist(countInfo, key);
+                } else {
+                    Integer type_3 = input.getAsJsonArray("api_type").get(3).getAsInt();
+                    String[] position_list = filtcond.split(",");
+                    List<Integer> filt_list = new ArrayList<Integer>();
+                    for (String p: position_list) {
+                        filt_list.add(Integer.valueOf(p) + 1);
                     }
-                }}));
-
+                    return filt_list.contains(type_3) && checkCountExist(countInfo, key);
+                }
+            }));
             StatComparator cmp = new StatComparator();
             Collections.sort(listViewItemList, cmp);
+            calculateStats(listViewItemList);
         } else {
             listViewItemList.clear();
         }
@@ -321,6 +331,25 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
             if (target_equip_id == equip_id) cnt += count.get(key).get();
         }
         return cnt;
+    }
+
+    private void calculateStats(List<JsonObject> list) {
+        Set<String> check = new HashSet<>();
+        for (JsonObject item: list) {
+            String id = item.get("api_id").getAsString();
+            check.add(id);
+        }
+
+        for (String key: countInfo.keySet()) {
+            String[] key_split = key.split("_");
+            String id = key_split[0];
+            if (check.contains(id)) {
+                int star = Integer.parseInt(key_split[1]);
+                int count = countInfo.get(key).get();
+                totalEquipment += count;
+                totalStars += (star * count);
+            }
+        }
     }
 
     private boolean checkCountExist(Map<String, AtomicInteger> count, int equip_id) {

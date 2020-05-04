@@ -503,6 +503,8 @@
     <string name="ship_hp_3">Daños Graves</string>
 
     <string name="action_equipmentinfo">Lista de Equipamiento</string>
+    <string name="equipinfo_btn_total_format" formatted="false">Total: %,d</string>
+    <string name="equipinfo_btn_total_star_format" formatted="false">Estrella total: %,d</string>
     <string name="equipinfo_summary" formatted="false">Total %d (%d Equipado, %d Equipable)</string>
     <string name="equipinfo_filter">Filtro</string>
     <string name="equipinfo_search">Buscar</string>

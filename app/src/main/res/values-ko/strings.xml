@@ -500,6 +500,8 @@
     <string name="ship_hp_3">대파</string>
 
     <string name="action_equipmentinfo">장비 리스트</string>
+    <string name="equipinfo_btn_total_format" formatted="false">합계: %,d</string>
+    <string name="equipinfo_btn_total_star_format" formatted="false">누적★: %,d</string>
     <string name="equipinfo_summary" formatted="false">합계 %d (%d 장비중, %d 장비가능)</string>
     <string name="equipinfo_filter">필터</string>
     <string name="equipinfo_search">검색</string>

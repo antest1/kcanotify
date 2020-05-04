@@ -499,6 +499,8 @@
     <string name="ship_hp_3">大破</string>
 
     <string name="action_equipmentinfo">装備リスト</string>
+    <string name="equipinfo_btn_total_format" formatted="false">総合：%,d</string>
+    <string name="equipinfo_btn_total_star_format" formatted="false">累積★：%,d</string>
     <string name="equipinfo_summary" formatted="false">合計 %d（%d 装備中, %d 装備可能）</string>
     <string name="equipinfo_filter">フィルタ</string>
     <string name="equipinfo_search">検索</string>

@@ -61,6 +61,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
     ListView listview;
     Button filterBtn;
     EditText searchEditText;
+    TextView totalcountview, totalstarview;
 
     KcaDBHelper dbHelper;
     KcaEquipListViewAdpater adapter;
@@ -173,6 +174,9 @@ public class EquipmentInfoActivity extends AppCompatActivity {
             itemStatTranslation.addProperty("api_leng"+i, getStringWithLocale(getId("text_api_leng_"+i, R.string.class)));
         }
 
+        totalcountview = findViewById(R.id.equipinfo_count);
+        totalstarview = findViewById(R.id.equipinfo_total_star);
+
         adapter = new KcaEquipListViewAdpater();
         adapter.setSummaryFormat(getStringWithLocale(R.string.equipinfo_summary));
         adapter.setStatTranslation(itemStatTranslation);
@@ -180,6 +184,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
 
         listview = findViewById(R.id.equipment_listview);
         listview.setAdapter(adapter);
+        setSummary();
 
         filterBtn = findViewById(R.id.equipment_btn_filter);
         filterBtn.setOnClickListener(new View.OnClickListener() {
@@ -206,6 +211,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 listview.setAdapter(adapter);
                 listview.invalidateViews();
+                setSummary();
             }
 
             @Override
@@ -257,6 +263,11 @@ public class EquipmentInfoActivity extends AppCompatActivity {
 
     }
 
+    private void setSummary() {
+        totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.equipinfo_btn_total_format), adapter.getTotalCount()));
+        totalstarview.setText(KcaUtils.format(getStringWithLocale(R.string.equipinfo_btn_total_star_format), adapter.getStarCount()));
+    }
+
     private String getItemKey(JsonObject item) {
         if (item.has("api_alv")) {
             return KcaUtils.format("%d_%d_%d", item.get("api_slotitem_id").getAsInt(),
@@ -295,6 +306,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
             }
             adapter.notifyDataSetChanged();
             listview.setAdapter(adapter);
+            setSummary();
         }
     }
 
