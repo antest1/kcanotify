@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.antest1.kcanotify.KcaApiData.STYPE_CVE;
+import static com.antest1.kcanotify.KcaApiData.T2_ANTISUB_PATROL;
+import static com.antest1.kcanotify.KcaApiData.T2_AUTOGYRO;
 import static com.antest1.kcanotify.KcaApiData.T2_DEPTH_CHARGE;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
 import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
@@ -317,7 +319,9 @@ public class KcaExpeditionCheckViewService extends Service {
         if (has_flag_cond) {
             if (ship_data.size() > 0) {
                 boolean is_flag_passed = false;
+                int flag_ship_id = ship_data.get(0).get("ship_id").getAsInt();
                 int flag_conv_value = ship_data.get(0).get("stype").getAsInt();
+                if (KcaApiData.isShipCVE(flag_conv_value)) flag_conv_value = STYPE_CVE;
                 String[] flag_cond = data.get("flag-cond").getAsString().split("/");
                 for (int i = 0; i < flag_cond.length; i++) {
                     if (flag_conv_value == Integer.parseInt(flag_cond[i])) {
@@ -363,7 +367,7 @@ public class KcaExpeditionCheckViewService extends Service {
                 int level = itemobj.getAsJsonObject().get("level").getAsInt();
                 int type_t2 = itemobj.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
                 int tais = itemobj.getAsJsonObject().get("tais").getAsInt();
-                if (KcaApiData.isItemAircraft(type_t2)) {
+                if (KcaApiData.isItemAircraft(type_t2) || type_t2 == T2_AUTOGYRO || type_t2 == T2_ANTISUB_PATROL) {
                     plane_tais_value += tais;
                 }
                 if (slotitem_id == 75) {
@@ -489,8 +493,9 @@ public class KcaExpeditionCheckViewService extends Service {
         double bonus_level = 0.0;
 
         float total_firepower = 0;
-        float total_asw = 0;
+        float total_asw_value = 0;
         float total_asw_bonus = 0;
+        float plane_tais_value = 0;
         int total_los = 0;
         JsonObject result = new JsonObject();
 
@@ -500,12 +505,14 @@ public class KcaExpeditionCheckViewService extends Service {
             }
 
             total_firepower += obj.get("karyoku").getAsInt();
-            total_asw += obj.get("taisen").getAsInt();
+            total_asw_value += obj.get("taisen").getAsInt();
             total_los += obj.get("sakuteki").getAsInt();
             for (JsonElement itemobj : obj.getAsJsonArray("item")) {
                 int type_t2 = itemobj.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
                 int slotitem_id = itemobj.getAsJsonObject().get("slotitem_id").getAsInt();
                 int level = itemobj.getAsJsonObject().get("level").getAsInt();
+                int tais = itemobj.getAsJsonObject().get("tais").getAsInt();
+                if (KcaApiData.isItemAircraft(type_t2) || type_t2 == T2_AUTOGYRO || type_t2 == T2_ANTISUB_PATROL) plane_tais_value += tais;
 
                 if (type_t2 == T2_GUN_MEDIUM || type_t2 == T2_GUN_LARGE || type_t2 == T2_GUN_LARGE_II) {
                     total_firepower += Math.sqrt(level);
@@ -558,7 +565,7 @@ public class KcaExpeditionCheckViewService extends Service {
         result.addProperty("toku", toku_count);
         result.addProperty("level", bonus_level);
         result.addProperty("firepower", (int) total_firepower);
-        result.addProperty("asw", (int) (total_asw + total_asw_bonus * 2 / 3) );
+        result.addProperty("asw", Math.floor(total_asw_value - plane_tais_value + total_asw_bonus * 2 / 3) );
         result.addProperty("los", total_los);
         return result;
     }

@@ -1075,7 +1075,7 @@ public class KcaApiData {
     }
 
     public static boolean isShipCVE(int id) {
-        int[] ship_cve = {396, 380, 381, 526, 529, 534, 536, 544, 560};
+        int[] ship_cve = {380, 381, 396, 526, 529, 534, 536, 544, 560};
         return Arrays.binarySearch(ship_cve, id) >= 0;
     }
 
