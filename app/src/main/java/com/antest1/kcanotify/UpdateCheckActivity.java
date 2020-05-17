@@ -81,7 +81,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
     TextView gamedata_chk, resource_chk, gamedata_server, resource_downall;
     TextView gamedata_load, resource_load;
     CheckBox checkstart_chkbox, localonly_chkbox, resource_reset;
-    ProgressDialog mProgressDialog;
+
     JsonArray fairy_queue = new JsonArray();
     boolean main_flag = false;
     int checked = -1;
@@ -131,13 +131,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
                 .setDownloadConcurrentLimit(80)
                 .build();
         fetch = Fetch.Impl.getInstance(fetchConfiguration);
-
-        mProgressDialog = new ProgressDialog(UpdateCheckActivity.this);
-        mProgressDialog.setMessage(getStringWithLocale(R.string.download_progress));
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setProgressNumberFormat("%1d file(s)");
 
         handler = new UpdateHandler(this);
         gamedata_adapter.setHandler(handler);
@@ -241,9 +234,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
         super.onDestroy();
     }
 
@@ -562,6 +552,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
 
 
     private class KcaFairyDownloader extends AsyncTask<Integer, Integer, Integer> {
+        boolean is_finishing = false;
         boolean fairy_wait = false;
         int update_version = 0;
         int totalFiles = 0;
@@ -570,14 +561,26 @@ public class UpdateCheckActivity extends AppCompatActivity {
         int download_result = 0;
 
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        ProgressDialog mProgressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressDialog.show();
+            is_finishing = isFinishing();
+            mProgressDialog = new ProgressDialog(UpdateCheckActivity.this);
+            mProgressDialog.setMessage(getStringWithLocale(R.string.download_progress));
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setProgressNumberFormat("%1d file(s)");
+
+            if (!is_finishing) {
+                mProgressDialog.show();
+            }
         }
 
         private void workFinished()  {
+            if (is_finishing) return;
             if (mProgressDialog != null && mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }

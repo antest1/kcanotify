@@ -203,12 +203,12 @@ public class InitStartActivity extends Activity {
                         JsonObject data = response_data;
                         if (!is_skipped) {
                             runOnUiThread(() -> {
+                                AlertDialog.Builder alertDialog = getUpdateAlertDialog(recentVersion, data);
+                                AlertDialog alert = alertDialog.create();
+                                alert.setIcon(R.mipmap.ic_launcher);
+                                alert.setTitle(
+                                        getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
                                 if (!InitStartActivity.this.isFinishing()) {
-                                    AlertDialog.Builder alertDialog = getUpdateAlertDialog(recentVersion, data);
-                                    AlertDialog alert = alertDialog.create();
-                                    alert.setIcon(R.mipmap.ic_launcher);
-                                    alert.setTitle(
-                                            getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
                                     alert.show();
                                 }
                             });
