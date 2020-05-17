@@ -321,7 +321,7 @@ public class KcaExpeditionCheckViewService extends Service {
                 boolean is_flag_passed = false;
                 int flag_ship_id = ship_data.get(0).get("ship_id").getAsInt();
                 int flag_conv_value = ship_data.get(0).get("stype").getAsInt();
-                if (KcaApiData.isShipCVE(flag_conv_value)) flag_conv_value = STYPE_CVE;
+                if (KcaApiData.isShipCVE(flag_ship_id)) flag_conv_value = STYPE_CVE;
                 String[] flag_cond = data.get("flag-cond").getAsString().split("/");
                 for (int i = 0; i < flag_cond.length; i++) {
                     if (flag_conv_value == Integer.parseInt(flag_cond[i])) {
