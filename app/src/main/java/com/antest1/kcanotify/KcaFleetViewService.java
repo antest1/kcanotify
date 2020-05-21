@@ -163,7 +163,6 @@ public class KcaFleetViewService extends Service {
             setHqInfo();
             fleetInfoTitle.setVisibility(View.VISIBLE);
             updateSelectedView(selected);
-            if (seekcn_internal == -1) seekcn_internal = getSeekCn();
             processDeckInfo(selected, isCombinedFlag(selected));
             return 0;
         } catch (Exception e) {
@@ -447,6 +446,8 @@ public class KcaFleetViewService extends Service {
         if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(SHOW_FLEETVIEW_ACTION)) {
                 if (mView != null && mView.getVisibility() != View.VISIBLE) {
+                    if (seekcn_internal == -1) seekcn_internal = getSeekCn();
+                    fleetCnChangeBtn.setText(getSeekType());
                     int setViewResult = setView();
                     if (setViewResult == 0) {
                         mView.setVisibility(View.VISIBLE);
@@ -1249,7 +1250,7 @@ public class KcaFleetViewService extends Service {
     }
 
     private int getSeekCn() {
-        return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
+        return Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
     }
 
     private String getSeekType() {
