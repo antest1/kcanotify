@@ -762,6 +762,14 @@ public class KcaExpeditionCheckViewService extends Service {
 
         ((TextView) itemView.findViewById(R.id.view_excheck_title))
                 .setText(title);
+        if (check.get("pass").getAsBoolean()) {
+            ((TextView) itemView.findViewById(R.id.view_excheck_title))
+                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodBack));
+        } else {
+            ((TextView) itemView.findViewById(R.id.view_excheck_title))
+                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailBack));
+        }
+
         ((TextView) itemView.findViewById(R.id.view_excheck_time))
                 .setText(getTimeStr(time));
 
