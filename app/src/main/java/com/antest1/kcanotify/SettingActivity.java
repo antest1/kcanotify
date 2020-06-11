@@ -136,7 +136,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_KCA_NOTI_RINGTONE:
                 return RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString();
             case PREF_APK_DOWNLOAD_SITE:
-                return "R.string.app_download_link_playstore";
+                return "R.string.app_download_link_luckyjervis";
             case PREF_AKASHI_STARLIST:
             case PREF_AKASHI_FILTERLIST:
             case PREF_SHIPINFO_FILTCOND:
