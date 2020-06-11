@@ -8,9 +8,10 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -19,7 +20,11 @@ import com.google.gson.JsonSyntaxException;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static com.antest1.kcanotify.KcaAlarmService.ALARM_DELAY;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
@@ -42,14 +47,11 @@ public class KcaTimerWidget extends AppWidgetProvider {
     public static final int STATE_DOCK = 2;
     public static final int STATE_CONSTR = 3;
 
-
     public static final String WIDGET_MENU_CHANGE_FORMAT = "com.antest1.kcanotify.widget.menuchange";
     public static final String WIDGET_DATA_UPDATE = "com.antest1.kcanotify.widget.dataupdate";
 
-    private static AlarmManager alarmManager;
-    private static PendingIntent updateIntent;
-    private static PendingIntent dataUpdateIntent;
     private static JsonObject widgetData = new JsonObject();
+    private static ScheduledExecutorService executor;
 
     @Override
     public void onEnabled(Context context) {
@@ -63,12 +65,9 @@ public class KcaTimerWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-
-        int layout_id = R.layout.widget_timer;
-        for (int i = 0; i < appWidgetIds.length; i++) {
-            int widgetId = appWidgetIds[i];
-            RemoteViews views = new RemoteViews(context.getPackageName(), layout_id);
-            appWidgetManager.updateAppWidget(widgetId, views);
+        int[] currentAppWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, getClass()));
+        if (currentAppWidgetIds.length > 0 && executor == null) {
+            setExecutor(context, appWidgetManager);
         }
     }
 
@@ -80,6 +79,10 @@ public class KcaTimerWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
+        if (executor != null) {
+            executor.shutdown();
+            executor = null;
+        }
     }
 
     public void setWidget(Context context, AppWidgetManager manager, int widgetId, int status) {
@@ -216,9 +219,7 @@ public class KcaTimerWidget extends AppWidgetProvider {
         String action = intent.getAction();
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
 
-        Log.e("KCA", String.valueOf(action));
         int[] appWidgetIds =  manager.getAppWidgetIds(new ComponentName(context, getClass()));
-
         JsonObject state;
 
         try {
@@ -238,15 +239,38 @@ public class KcaTimerWidget extends AppWidgetProvider {
         }
 
         if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {
-            clearAlarm();
-            long firstTime = System.currentTimeMillis() + UPDATE_INTERVAL;
-            updateIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC, firstTime, updateIntent);
-
             if (!widgetData.has("deckport")) {
                 updateData(context);
             }
+
+            if (appWidgetIds.length > 0 && executor == null) {
+                setExecutor(context, manager);
+            }
+        }
+
+        if (WIDGET_DATA_UPDATE.equals(action)) {
+            updateData(context);
+            if (appWidgetIds.length > 0 && executor == null) {
+                setExecutor(context, manager);
+            }
+        }
+    }
+
+    private void setExecutor(Context context, AppWidgetManager manager) {
+        executor = Executors.newSingleThreadScheduledExecutor();
+        executor.scheduleAtFixedRate(() -> {
+            if (!widgetData.has("deckport")) {
+                updateData(context);
+            }
+
+            int[] appWidgetIds =  manager.getAppWidgetIds(new ComponentName(context, getClass()));
+            JsonObject state;
+            try {
+                state = new JsonParser().parse(getStringPreferences(context, PREF_TIMER_WIDGET_STATE)).getAsJsonObject();
+            } catch (JsonSyntaxException | IllegalStateException e) {
+                state = new JsonObject();
+            }
+            Log.e("KCA", Arrays.toString(appWidgetIds));
 
             for (int id: appWidgetIds) {
                 String key = String.valueOf(id);
@@ -255,29 +279,7 @@ public class KcaTimerWidget extends AppWidgetProvider {
                 else state.addProperty(key, menu);
                 setWidget(context, manager, id, menu);
             }
-
-            /*
-            Set<Map.Entry<String, JsonElement>> entry_set = state.entrySet();
-            for(Map.Entry<String, JsonElement> entry: entry_set) {
-                if(!ArrayUtils.contains(appWidgetIds, Integer.parseInt(entry.getKey()))) {
-                    state.remove(entry.getKey());
-                }
-            }
-            setPreferences(context, PREF_TIMER_WIDGET_STATE, state.toString());
-            */
-        }
-
-        if (WIDGET_DATA_UPDATE.equals(action)) {
-            updateData(context);
-        }
-
-
-        if (AppWidgetManager.ACTION_APPWIDGET_DISABLED.equals(action)) {
-            for (int i = 1; i <= 2; i++) {
-                updateIntent = PendingIntent.getBroadcast(context, i, intent, 0);
-                clearAlarm();
-            }
-        }
+        }, 0, 1, TimeUnit.SECONDS);
     }
 
     public static String getLeftTimeStr(long target_time) {
@@ -306,24 +308,12 @@ public class KcaTimerWidget extends AppWidgetProvider {
         }
     }
 
-    public void updateData(Context context) {
+    private void updateData(Context context) {
         KcaDBHelper dbHelper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
-        KcaUtils.setDefaultGameData(context, dbHelper);
-        KcaApiData.setDBHelper(dbHelper);
-
         widgetData = new JsonObject();
         widgetData.add("deckport", dbHelper.getJsonArrayValue(DB_KEY_DECKPORT));
         widgetData.add("ndock", dbHelper.getJsonArrayValue(DB_KEY_NDOCKDATA));
         widgetData.add("kdock", dbHelper.getJsonArrayValue(DB_KEY_KDOCKDATA));
-
         dbHelper.close();
     }
-
-    public void clearAlarm()  {
-        if(alarmManager != null && updateIntent != null) {
-            updateIntent.cancel();
-            alarmManager.cancel(updateIntent);
-        }
-    }
-
 }

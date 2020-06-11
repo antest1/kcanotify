@@ -998,19 +998,15 @@ public class KcaService extends Service {
                 return;
             }
 
-            if (API_WIDGET_TU_REQS.contains(url)) {
-                Intent widgetUpdateIndent = new Intent(getApplicationContext(), KcaTimerWidget.class);
-                widgetUpdateIndent.setAction(WIDGET_DATA_UPDATE);
-                sendBroadcast(widgetUpdateIndent);
-            }
-
             // Game Data Dependent Tasks
             if (restartFlag) {
                 makeToast(getStringWithLocale(R.string.kca_toast_restart_at_kcanotify), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-            } else if (!checkDataLoadTriggered()) {
+            }
+            else if (!checkDataLoadTriggered()) {
                 makeToast(getStringWithLocale(R.string.kca_toast_get_data_at_settings), Toast.LENGTH_LONG, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
                 //new retrieveApiStartData().execute("", "down", "");
-            } else {
+            }
+            else {
                 if (url.startsWith(API_PORT)) {
                     KcaFleetViewService.setReadyFlag(true);
                     heavyDamagedMode = HD_NONE;
@@ -2126,6 +2122,12 @@ public class KcaService extends Service {
                         }
                     }
                 }
+            }
+
+            if (API_WIDGET_TU_REQS.contains(url)) {
+                Intent widgetUpdateIndent = new Intent(getApplicationContext(), KcaTimerWidget.class);
+                widgetUpdateIndent.setAction(WIDGET_DATA_UPDATE);
+                sendBroadcast(widgetUpdateIndent);
             }
             sendQuestCompletionInfo();
         } catch (Exception e) {
