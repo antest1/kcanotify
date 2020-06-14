@@ -559,12 +559,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ship_stat_equip_stype5">Searchlight (L)</string>
 
     <string name="ship_tag_0">None</string>
-    <string name="ship_tag_1">Pink Tag</string>
-    <string name="ship_tag_2">Cyan Tag</string>
-    <string name="ship_tag_3">Blue Tag</string>
-    <string name="ship_tag_4">Green Tag</string>
-    <string name="ship_tag_5">White Tag</string>
-    <string name="ship_tag_6">Orange Tag</string>
+    <string name="ship_tag_1">Tag_1</string>
+    <string name="ship_tag_2">Tag_2</string>
+    <string name="ship_tag_3">Tag_3</string>
+    <string name="ship_tag_4">Tag_4</string>
+    <string name="ship_tag_5">Tag_5</string>
+    <string name="ship_tag_6">Tag_6</string>
 
     <string name="ship_fleet_0">None</string>
 

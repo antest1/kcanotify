@@ -484,12 +484,12 @@
     <string name="ship_stat_equip_stype5">探照灯(大)</string>
 
     <string name="ship_tag_0">なし</string>
-    <string name="ship_tag_1">攻略護衛隊</string>
-    <string name="ship_tag_2">空襲部隊</string>
-    <string name="ship_tag_3">蘭印部隊</string>
-    <string name="ship_tag_4">馬来部隊</string>
-    <string name="ship_tag_5">哨戒部隊</string>
-    <string name="ship_tag_6">決戦部隊</string>
+    <string name="ship_tag_1">Tag_1</string>
+    <string name="ship_tag_2">Tag_2</string>
+    <string name="ship_tag_3">Tag_3</string>
+    <string name="ship_tag_4">Tag_4</string>
+    <string name="ship_tag_5">Tag_5</string>
+    <string name="ship_tag_6">Tag_6</string>
 
     <string name="ship_fleet_0">なし</string>
 

@@ -488,12 +488,12 @@
     <string name="ship_stat_equip_stype5">Searchlight(L)</string>
 
     <string name="ship_tag_0">Ninguna</string>
-    <string name="ship_tag_1">Etiqueta rosa</string>
-    <string name="ship_tag_2">Etiqueta cian</string>
-    <string name="ship_tag_3">Etiqueta azul</string>
-    <string name="ship_tag_4">Etiqueta verde</string>
-    <string name="ship_tag_5">Etiqueta blanca</string>
-    <string name="ship_tag_6">Etiqueta naranja</string>
+    <string name="ship_tag_1">Tag_1</string>
+    <string name="ship_tag_2">Tag_2</string>
+    <string name="ship_tag_3">Tag_3</string>
+    <string name="ship_tag_4">Tag_4</string>
+    <string name="ship_tag_5">Tag_5</string>
+    <string name="ship_tag_6">Tag_6</string>
 
     <string name="ship_fleet_0">Ninguno</string>
 
@@ -747,7 +747,7 @@
     <string name="ask_to_dev">Maestro de equipos de KanColle</string>
     <string name="fleetview_fish_text" formatted="false">[Saury] %03d [Sardina] %03d</string>
     <string name="fairy_size_value_4">grande</string>
-    <string name="fairy_size_value_5">muy grande</string>
+    <string name="fairy_size_value_5">Tag_2</string>
     <string name="fairy_size_value_1">"pequeñito "</string>
     <string name="fairy_size_value_3">medio</string>
     <string name="fairy_size_value_2">pequeño</string>
