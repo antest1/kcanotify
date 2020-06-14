@@ -679,7 +679,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_18spring_nori" formatted="false">苔 %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">茶 %02d</string>
 
-    <string name="special_message">情人节礼物！</string>
+    <string name="special_message">两只青蛙在雨天</string>
 
     <string name="widget_timer_name">Kcanotify计时Widget</string>
     <string name="fleet_format">第%d舰队</string>
