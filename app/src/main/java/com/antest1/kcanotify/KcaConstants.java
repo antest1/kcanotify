@@ -485,6 +485,7 @@ public final class KcaConstants {
     public static final String PREF_DEFAULT_APIVER = "default_apiver";
     public static final String PREF_FAIRY_SIZE = "fairy_size";
     public static final String PREF_FAIRY_RANDOM = "fairy_random";
+    public static final String PREF_KR_NOTICE_CHK = "kr_notice_chk";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -555,7 +556,8 @@ public final class KcaConstants {
             PREF_HDNOTI_MINLEVEL,
             PREF_DEFAULT_APIVER,
             PREF_FAIRY_SIZE,
-            PREF_FAIRY_RANDOM
+            PREF_FAIRY_RANDOM,
+            PREF_KR_NOTICE_CHK
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

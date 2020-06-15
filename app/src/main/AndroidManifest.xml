@@ -207,7 +207,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name="com.antest1.kcanotify.KcaKrNoticeActivity"
+            android:configChanges="locale|layoutDirection">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.antest1.kcanotify.MainActivity" />
+        </activity>
         <service
             android:name=".KcaService"
             android:configChanges="locale|layoutDirection" >

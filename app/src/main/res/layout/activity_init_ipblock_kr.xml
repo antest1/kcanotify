@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        app:titleTextColor="@color/colorToolbarText"
+        android:id="@+id/toolbar"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:contentInsetStartWithNavigation="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        >
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/ipblock_kr_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:padding="4dp"
+            android:text="칸코레 해외 차단 우회 관련"
+            android:textAlignment="textStart"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ipblock_kr_title"
+            android:layout_marginBottom="16dp"
+            android:text="현재 칸코레 운영진 (C2기관) 측에서 디도스 공격 등을 이유로 칸코레 로그인 서버에 대하여 해외 IP를 차단한 상태입니다. 따라서 현재 시점 기준으로 Android에서 정상적으로 칸코레를 플레이하기 위해서는 위의 차단을 우회할 필요가 있습니다. 하단의 링크를 참고하여 어플리케이션을 설정하시기 바랍니다."
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/ipblock_kr_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView16"
+            android:layout_centerHorizontal="true"
+            android:autoLink="web"
+            android:text="http://luckyjervis.com/kcanotify/ip_block_kr/"
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp" />
+
+        <CheckBox
+            android:id="@+id/ipblock_kr_noshow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/kr_ipblock_confirmed"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:text="다시 보지 않기" />
+
+        <TextView
+            android:id="@+id/kr_ipblock_confirmed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="확인"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

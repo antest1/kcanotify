@@ -50,7 +50,9 @@ import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_DEFAULT_APIVER;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_KR_NOTICE_CHK;
 import static com.antest1.kcanotify.KcaConstants.PREF_LAST_UPDATE_CHECK;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_PREFIX;
@@ -304,7 +306,15 @@ public class InitStartActivity extends Activity {
     private void startMainActivity(boolean transition) {
         if (!is_destroyed) {
             runOnUiThread(() -> {
-                Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent mainIntent;
+                String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
+                String checked = getStringPreferences(getApplicationContext(), PREF_KR_NOTICE_CHK);
+                String locale_code = LocaleUtils.getLocaleCode(locale);
+                if ("ko".equals(locale_code) && "".equals(checked)) {
+                    mainIntent = new Intent(getApplicationContext(), KcaKrNoticeActivity.class);
+                } else {
+                    mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+                }
                 startActivity(mainIntent);
                 finish();
             });
