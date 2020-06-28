@@ -488,10 +488,10 @@
     <string name="ship_stat_equip_stype5">Searchlight(L)</string>
 
     <string name="ship_tag_0">Ninguna</string>
-    <string name="ship_tag_1">Tag_1</string>
-    <string name="ship_tag_2">Tag_2</string>
-    <string name="ship_tag_3">Tag_3</string>
-    <string name="ship_tag_4">Tag_4</string>
+    <string name="ship_tag_1">Tag Skyblue</string>
+    <string name="ship_tag_2">Tag Orange</string>
+    <string name="ship_tag_3">Tag Blue</string>
+    <string name="ship_tag_4">Tag Green</string>
     <string name="ship_tag_5">Tag_5</string>
     <string name="ship_tag_6">Tag_6</string>
 
