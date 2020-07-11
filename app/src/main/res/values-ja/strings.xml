@@ -740,4 +740,5 @@
     <string name="fairy_size_value_2">小</string>
     <string name="fairy_size_value_5">最大</string>
     <string name="fairy_size_value_1">最小</string>
+    <string name="notice_donotsee">再び見ない</string>
 </resources>

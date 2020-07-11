@@ -26,54 +26,64 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/ipblock_kr_title"
+            android:id="@+id/notice_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:padding="4dp"
-            android:text="칸코레 해외 차단 우회 관련"
+            android:text="Future Direction for Maintaining kancolle-related Services"
             android:textAlignment="textStart"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ipblock_kr_title"
+            android:layout_below="@id/notice_link"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:text="현재 칸코레 운영진 (C2기관) 측에서 디도스 공격 등을 이유로 칸코레 로그인 서버에 대하여 해외 IP를 차단한 상태입니다. 따라서 현재 시점 기준으로 Android에서 정상적으로 칸코레를 플레이하기 위해서는 위의 차단을 우회할 필요가 있습니다. 하단의 링크를 참고하여 어플리케이션을 설정하시기 바랍니다."
+            android:text="As the main developer of kcanotify/GotoBrowser retired from kancolle from 2020/07/11, we will inform you about changes related to the operation of the service currently being developed and maintained. To minimize confusion in playing kancolle, most services will be provided as before. Check above link for the detail information."
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/ipblock_kr_link"
-            android:layout_width="wrap_content"
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/textView16"
+            android:layout_marginBottom="16dp"
+            android:text="kcanotify / GotoBrowserの開発者が2020/07/11から艦これを引退したため、現在配布しているアプリケーションの運営方針の変更についてのお知らせです。アプリを使用して艦これをプレイする際の混乱を抑えるために、ほとんどのサービスは以前と同様に提供されます。上記のリンクで詳細情報を確認してください。"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/notice_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/notice_title"
             android:layout_centerHorizontal="true"
             android:autoLink="web"
-            android:text="http://luckyjervis.com/kcanotify/ip_block_kr/"
+            android:text="http://luckyjervis.com/notice/notice_200711.html"
             android:textColor="@color/colorAccent"
             android:textSize="14sp" />
 
         <CheckBox
-            android:id="@+id/ipblock_kr_noshow"
+            android:id="@+id/notice_noshow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/kr_ipblock_confirmed"
+            android:layout_above="@id/notice_confirmed"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="8dp"
-            android:text="다시 보지 않기" />
+            android:text="@string/notice_donotsee" />
 
         <TextView
-            android:id="@+id/kr_ipblock_confirmed"
+            android:id="@+id/notice_confirmed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/colorAccent"
             android:gravity="center"
             android:padding="8dp"
-            android:text="확인"
+            android:text="@string/dialog_ok"
             android:textColor="@color/white" />
 
     </RelativeLayout>

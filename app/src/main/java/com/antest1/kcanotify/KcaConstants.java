@@ -409,6 +409,8 @@ public final class KcaConstants {
     public static final String PREF_SVC_ENABLED = "svcenabled";
     public static final String VPN_STOP_REASON = "vpn_stop_from_main";
 
+    public static final String NOTICE_CHK_CODE = "chk002";
+
     public static final int SNIFFER_ACTIVE = 0;
     public static final int SNIFFER_PASSIVE = 1;
 
@@ -485,7 +487,7 @@ public final class KcaConstants {
     public static final String PREF_DEFAULT_APIVER = "default_apiver";
     public static final String PREF_FAIRY_SIZE = "fairy_size";
     public static final String PREF_FAIRY_RANDOM = "fairy_random";
-    public static final String PREF_KR_NOTICE_CHK = "kr_notice_chk";
+    public static final String PREF_NOTICE_CHK_FLAG = "kr_notice_chk";
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -557,7 +559,7 @@ public final class KcaConstants {
             PREF_DEFAULT_APIVER,
             PREF_FAIRY_SIZE,
             PREF_FAIRY_RANDOM,
-            PREF_KR_NOTICE_CHK
+            PREF_NOTICE_CHK_FLAG
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

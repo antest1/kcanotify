@@ -208,7 +208,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.antest1.kcanotify.KcaKrNoticeActivity"
+            android:name="com.antest1.kcanotify.KcaNoticeActivity"
             android:configChanges="locale|layoutDirection">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"

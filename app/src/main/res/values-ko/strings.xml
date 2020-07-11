@@ -740,4 +740,5 @@
     <string name="fairy_size_value_3">보통</string>
     <string name="fairy_size_value_2">작게</string>
     <string name="fairy_size_value_1">매우 작게</string>
+    <string name="notice_donotsee">다시 보지 않기</string>
 </resources>

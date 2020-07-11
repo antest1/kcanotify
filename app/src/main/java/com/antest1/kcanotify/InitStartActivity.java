@@ -42,6 +42,7 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_KCMAINTNC;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_MAIN;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.NOTICE_CHK_CODE;
 import static com.antest1.kcanotify.KcaConstants.PREFS_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_ALLOW_EXTFILTER;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
@@ -52,7 +53,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KR_NOTICE_CHK;
+import static com.antest1.kcanotify.KcaConstants.PREF_NOTICE_CHK_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_LAST_UPDATE_CHECK;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_FLAG;
 import static com.antest1.kcanotify.KcaFairySelectActivity.FAIRY_SPECIAL_PREFIX;
@@ -308,10 +309,10 @@ public class InitStartActivity extends Activity {
             runOnUiThread(() -> {
                 Intent mainIntent;
                 String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
-                String checked = getStringPreferences(getApplicationContext(), PREF_KR_NOTICE_CHK);
+                String checked = getStringPreferences(getApplicationContext(), PREF_NOTICE_CHK_FLAG);
                 String locale_code = LocaleUtils.getLocaleCode(locale);
-                if ("ko".equals(locale_code) && "".equals(checked)) {
-                    mainIntent = new Intent(getApplicationContext(), KcaKrNoticeActivity.class);
+                if (!NOTICE_CHK_CODE.equals(checked)) {
+                    mainIntent = new Intent(getApplicationContext(), KcaNoticeActivity.class);
                 } else {
                     mainIntent = new Intent(getApplicationContext(), MainActivity.class);
                 }

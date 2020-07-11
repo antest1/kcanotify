@@ -746,4 +746,5 @@
     <string name="fairy_size_value_1">"pequeñito "</string>
     <string name="fairy_size_value_3">medio</string>
     <string name="fairy_size_value_2">pequeño</string>
+    <string name="notice_donotsee">Nunca ver de nuevo</string>
 </resources>
