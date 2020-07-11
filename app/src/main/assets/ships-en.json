@@ -16,8 +16,11 @@
 		" Mk.II Mod.2": " Mk.II Mod.2",
 		" Mod.2": " Mod.2",
 		" Mk.II": " Mk.II",
+		"II": "II",
 		" バカンスmode" : " Vacation Mode",
 		" バカンスmode-壊" : " V.M. - Damaged",
+		" 夏季上陸mode" : " Summer Landing Mode",
+		" 夏季上陸mode-壊" : " S.L.M - Damaged",
 		"改-壊": " Kai - Damaged",
 		"-壊": " - Damaged",
 		"甲": " A",
@@ -319,6 +322,7 @@
 	"大東": "Daitou",
 	"御蔵": "Mikura",
 	"第四号海防艦": "Kaiboukan No.4",
+	"屋代": "Yashiro",
 
 	"Верный":"Verniy",
 	"Гангут": "Gangut",
@@ -367,6 +371,9 @@
 	"Perth": "Perth",
 	"Houston": "Houston",
 	"Atlanta": "Atlanta",
+	"Helena": "Helena",
+    "South Dakota": "South Dakota",
+    "Hornet": "Hornet",
 
 	"防空棲姫":"Air Defense Princess",
 	"空母棲鬼":"Aircraft Carrier Demon",
@@ -476,6 +483,11 @@
 	"アンツィオ沖棲姫": "Anzio Princess",
 	"バタビア沖棲姫": "Batavia Princess",
 	"防空巡棲姫": "Anti-Air Cruiser Princess",
+	"深海千島棲姫":"Abyssal Kuriles Princess",
+	"五島沖海底姫":"Gotou Islands Seabed Princess",
+	"駆逐林棲姫":"Destroyer Forest Princess",
+	"南方戦艦新棲姫": "New Southern Battelship Princesss",
+	"南太平洋空母棲姫": "South Pacific Aircraft Carrier Princess",
 
 	"elite":" elite",
 	"flagship":" flagship"

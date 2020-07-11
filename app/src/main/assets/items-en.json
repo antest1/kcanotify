@@ -381,6 +381,9 @@
   "16inch三連装砲 Mk.6": "16inch Triple Gun Mount Mk.6",
   "後期型53cm艦首魚雷(8門)": "Late Model 53cm Bow Torpedo Mount (8 tubes)",
   "後期型潜水艦搭載電探&逆探": "Late Model Submarine Radar & Passive Radiolocator",
+  "16inch三連装砲 Mk.6 mod.2": "16inch Triple Gun Mount Mk.6 mod.2",
+  "6inch三連装速射砲 Mk.16": "6inch Triple Rapid Fire Gun Mount Mk.16",
+  "6inch三連装速射砲 Mk.16 mod.2": "6inch Triple Rapid Fire Gun Mount Mk.16 mod.2",
   
   "プレゼント箱": "Present Box",
   "秋刀魚": "Saury",
@@ -495,5 +498,7 @@
   "深海5inch連装砲A型": "Abyssal 5inch Twin Gun Mount Model A",
   "深海潜水艦搭載電子兵装": "Abyssal Submarine Electronic Armament",
   "深海5inch単装高角砲改二": "Abyssal 5inch Single High-angle Gun Mount Kai Ni",
-  "深海5inch連装高角砲改二": "Abyssal 5inch Twin High-angle Gun Mount Kai Ni"
+  "深海5inch連装高角砲改二": "Abyssal 5inch Twin High-angle Gun Mount Kai Ni",
+  "深海夜間航空作戦装備": "Abyssal Night Aviation Operation Equipment",
+  "深海16inch三連装砲 Mk6": "Abyssal 16inch Triple Gun Mount Mk.6"
 }
