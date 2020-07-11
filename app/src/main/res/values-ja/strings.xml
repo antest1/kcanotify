@@ -483,13 +483,8 @@
     <string name="ship_stat_equip_stype4">司令部</string>
     <string name="ship_stat_equip_stype5">探照灯(大)</string>
 
-    <string name="ship_tag_0">なし</string>
-    <string name="ship_tag_1">千島方面部隊(水色)</string>
-    <string name="ship_tag_2">沖縄方面部隊(オレンジ)</string>
-    <string name="ship_tag_3">第二遊撃部隊(青)</string>
-    <string name="ship_tag_4">小笠原方面部隊(緑)</string>
-    <string name="ship_tag_5">Tag_5</string>
-    <string name="ship_tag_6">Tag_6</string>
+    <string name="ship_tag_none">なし</string>
+    <string name="ship_tag_prefix">札 #</string>
 
     <string name="ship_fleet_0">なし</string>
 

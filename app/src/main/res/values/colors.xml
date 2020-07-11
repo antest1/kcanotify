@@ -194,13 +194,16 @@
     <color name="colorStatLocked">#4e7bff</color>
 
     <color name="colorStatSallyArea0">#00FFFFFF</color>
-    <color name="colorStatSallyArea1">#9CB6C9</color>
-    <color name="colorStatSallyArea2">#FFAB40</color>
-    <color name="colorStatSallyArea3">#3D63FF</color>
-    <color name="colorStatSallyArea4">#66BB6A</color>
-    <color name="colorStatSallyArea5">#FFEB3B</color>
-    <color name="colorStatSallyArea6">#9C27B0</color>
-    <color name="colorStatSallyArea7">#CDDC39</color>
+    <color name="colorStatSallyArea1">#FF8A80</color>
+    <color name="colorStatSallyArea2">#EA80FC</color>
+    <color name="colorStatSallyArea3">#8C9EFF</color>
+    <color name="colorStatSallyArea4">#80D8FF</color>
+    <color name="colorStatSallyArea5">#B9F6CA</color>
+    <color name="colorStatSallyArea6">#CCFF90</color>
+    <color name="colorStatSallyArea7">#F4FF81</color>
+    <color name="colorStatSallyArea8">#FFD180</color>
+    <color name="colorStatSallyArea9">#FF9E80</color>
+    <color name="colorStatSallyArea10">#B6B6B6</color>
 
     <color name="colorStatFighterPower">#16a085</color>
     <color name="colorStatSortCurrentBack">#c0bdbdbd</color>

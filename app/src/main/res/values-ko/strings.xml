@@ -484,13 +484,8 @@
     <string name="ship_stat_equip_stype4">함대사령부</string>
     <string name="ship_stat_equip_stype5">대형탐조등</string>
 
-    <string name="ship_tag_0">없음</string>
-    <string name="ship_tag_1">쿠릴제도(하늘색)</string>
-    <string name="ship_tag_2">오키나와(주황색)</string>
-    <string name="ship_tag_3">제2유격부대(청색)</string>
-    <string name="ship_tag_4">오사가라와(녹색)</string>
-    <string name="ship_tag_5">Tag_5</string>
-    <string name="ship_tag_6">Tag_6</string>
+    <string name="ship_tag_none">없음</string>
+    <string name="ship_tag_prefix">딱지 #</string>
 
     <string name="ship_fleet_0">없음</string>
 

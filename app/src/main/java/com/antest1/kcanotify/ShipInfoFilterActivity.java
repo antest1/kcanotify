@@ -464,8 +464,9 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
 
     private String[] getTagArray() {
         List<String> tag_list = new ArrayList<>();
-        for (int i = 0; i <= TAG_COUNT; i++) {
-            tag_list.add(getStringWithLocale(getId(KcaUtils.format("ship_tag_%d", i), R.string.class)));
+        tag_list.add(getStringWithLocale(R.string.ship_tag_none));
+        for (int i = 1; i <= TAG_COUNT; i++) {
+            tag_list.add(getStringWithLocale(R.string.ship_tag_prefix).concat(String.valueOf(i)));
         }
 
         String[] tag_arr = new String[tag_list.size()];
