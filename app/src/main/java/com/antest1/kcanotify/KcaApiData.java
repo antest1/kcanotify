@@ -1464,8 +1464,9 @@ public class KcaApiData {
         for (Map.Entry<Integer, JsonObject> entry : list) {
             JsonObject data = entry.getValue();
             String api_id = data.get("api_id").getAsString();
-            // Exception: Yuubari Kai Ni Convert (prevent loop)
+            // Exception: Yuubari Kai Ni, Kaga Kai Ni Convert (prevent loop)
             if (api_id.equals("624")) continue;
+            if (api_id.equals("646")) continue;
 
             if (data.has("api_aftershipid")) {
                 String after_id = data.get("api_aftershipid").getAsString();
