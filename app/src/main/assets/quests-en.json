@@ -1409,8 +1409,7 @@
         "code": "B147",
         "name": "Nansei Island Region Coalition Patrol",
         "desc": "Sortie 2 American ships and up to 4 additional ships to [W2-2], [W2-3] and [W2-4]. S-Rank each boss node.",
-        "memo": "\u27a3Rewards: \u00B6First choice: Either two Screws or two Emergency Repair Materials or four Buckets \u00B6Second choice: Either three Tenzans OR an OS2U",
-        "unlock": [ 920, 923 ]
+        "memo": "\u27a3Rewards: \u00B6First choice: Either two Screws or two Emergency Repair Materials or four Buckets \u00B6Second choice: Either three Tenzans OR an OS2U"
     },
     "920": {
         "code": "B148",
@@ -1437,6 +1436,24 @@
         "name": "Coalition Carrier Task Force, Sortie!",
         "desc": "Sortie an American or British CV(L/B) and up to 5 additional ships to [W3-4], [W4-3], [W5-2] and [W7-2M]. S-Rank each boss node.",
         "memo": "\u27a3 Rewards: \u00B6First choice: Either four Buckets or five Development Materials \u00B6Second choice: Either a SK Radar OR two New Model Aviation Armament Materials"
+	},
+	"924": {
+        "code": "B152",
+        "name": "Aircraft Carrier Special Mission: The Incomparable Air Flotilla!",
+        "desc": "Sortie 2 CV(B) and up to 4 additional ships to [W2-4], [W2-5] and [W4-3]. S-Rank each boss node.",
+        "memo": "\u27a3 Rewards a Medal and either 88 Development Materials OR a Prototype Flight Deck Catapult OR a +4 TBF"
+    },
+    "925": {
+        "code": "B153",
+        "name": "Revised Kaga-class Aircraft Carrier, Kaga Kai Ni, Setting Sail!",
+        "desc": "Sortie Kaga Kai Ni+ as flagship, 1 CV(B) and up to 4 additional ships to [W3-4], [W4-4], [W4-5] and [W5-2]. S-Rank each boss node.",
+        "memo": "\u27a3 Rewards a Ryuusei Kai (CarDiv 1) and either a Prototype Shuusui OR a +2 Type 1 Land-based Attack Aircraft Model 22A OR three +3 Ka Type Observation Autogyros"
+    },
+    "926": {
+        "code": "B154",
+        "name": "Supreme CarDiv 1, Sortie! It Will End in One Strike!",
+        "desc": "Sortie Kaga Kai Ni+, Akagi Kai Ni+ and up to 4 additional ships to [W7-2-M], [W5-5], [W6-2] and [W6-5]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either a Prototype Flight Deck Catapult OR two Tenzans Model 12A Kai (w/ Type 6 Airborne Radar Kai) OR a +2 Type 1 Land-based Attack Aircraft Model 34\n\u00B6Second choice: Either two Action Reports OR a Blueprint OR a Ryuusei Kai (CarDiv 1 / Skilled)"
     },
 
 	"201": {
@@ -2015,6 +2032,13 @@
         "name": "Annual Small Ship Exercises",
         "desc": "Secure 4 A-Rank+ victories in Exercises within the same day using 4 DD/DE or 1 CL 3 DD/DE and up to 2 additional ships.",
         "memo": "This quest resets on the first quest reset of May. \u203b Small Ship Strengthining Exercise \u27a3Rewards: \u00B6First choice: Either four Development Materials OR a Type 95 Depth Charge \u00B6Second choice: Either two Type 0 Reconnaissance Seaplanes OR three 25mm Single Autocannons OR four Buckets"
+	},
+	"343": {
+        "code": "C46",
+        "name": "Aircraft Carrier Exercises",
+        "desc": "Secure 4 victories in Exercises within the same day using a CV(B) as flagship, 1 other CV(B), 2 DD and up to 2 additional ships.",
+        "memo": "\u27a3 Rewards furniture and either a New Model Aviation Armament Materials OR a Skilled Crew Member",
+        "unlock": [ 698 ]
     },
 
 	"401": {
@@ -2251,9 +2275,15 @@
 	},
 	"437": {
         "code": "D34",
-        "name": "Annual Expeditions 3",
+        "name": "Annual Expeditions (May)",
         "desc": "Complete Expeditions 4, A5, A6 and B1",
         "memo": "This quest resets on the first quest reset of May. \u203bStrengthen the Ogasawara Coastal Patrol Line! \u27a3Rewards: \u00B6First choice: Either a Mamiya OR a Furniture Fairy \u00B6Second choice: Either a Daihatsu Landing Craft OR three Screws OR seven Development Materials"
+	},
+	"438": {
+        "code": "D35",
+        "name": "Annual Expeditions (August)",
+        "desc": "Complete Expeditions A1, 4, 9 and B5.",
+        "memo": "This quest resets on the first quest reset of August. \u203bReinforce Maritime Escorts in the Nansei Islands Region! \u27a3Rewards: \u00B6First choice: Either a Mamiya OR five Development Materials OR a Furniture Fairy \u00B6Second choice: Either three Underway Replenishments OR four Screws OR New Model Aviation Armament Materials"
     },
 
 	"501": {
@@ -2890,6 +2920,12 @@
 		"desc": "Have 1700 Ammo, 30 Devel. Materials and 10 Flamethrowers. Set CL(T)/CT as secretary with a 7.7mm Machine Gun in her 1st slot. Scrap 2 25mm Single Autocannon, 2 Drum Canister and a 12cm 30-tube Rocket Launcher.",
 		"memo": "\u2718 Consumes the resources, items and equipment. Make sure the equipment is unlocked! \u27a3 Rewards a Type 2 12cm Mortar Kai"
 	},
+	"698": {
+        "code": "F91",
+        "name": "The Introduction of a New Anti-Submarine Patrol Air Force",
+        "desc": "Have 1840 Ammo, 6200 Bauxite, 2 New Model Aviation Armament Materials, and a Skilled Crew Member. Set Kaga Kai Ni Go as secretary with a TBM-3D in slot 1. Scrap 2 TBFs, 1 Ryuusei and 1 Ryuusei Kai.",
+        "memo": "\u2718 Consumes the resources, items and equipment. Make sure the equipment is unlocked! \u27a3Rewards a TBM-3W+3S"
+    },
 
 	"701": {
 		"code": "G1",
