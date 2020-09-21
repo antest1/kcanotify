@@ -127,7 +127,7 @@ public class KcaPoiDBAPI {
         }
 
         public String Request(String uri, String data) throws Exception {
-            String url = "http://poi.0u0.moe".concat(uri);
+            String url = "http://api.poi.moe".concat(uri);
 
             RequestBody body;
             try {
