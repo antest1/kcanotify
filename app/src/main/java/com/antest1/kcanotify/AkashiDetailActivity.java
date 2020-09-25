@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -47,10 +46,9 @@ import static com.antest1.kcanotify.KcaUtils.joinStr;
 public class AkashiDetailActivity extends AppCompatActivity {
     Toolbar toolbar;
     KcaDBHelper dbHelper;
-    static Gson gson = new Gson();
     TextView itemNameTextView, itemImprovDefaultShipTextView, getItemImprovStat;
     JsonObject itemImprovementData;
-
+    static JsonArray requiredItemTranslation;
     TextView dmat_count, smat_count;
     TextView current_date;
 
@@ -60,6 +58,10 @@ public class AkashiDetailActivity extends AppCompatActivity {
 
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
+    }
+
+    public static void setRequiredItemTranslation(JsonArray data) {
+        requiredItemTranslation = data;
     }
 
     @Override
@@ -72,7 +74,6 @@ public class AkashiDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-
         Calendar calendar = getJapanCalendarInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0(Sun) ~ 6(Sat)
         Date date = calendar.getTime();
@@ -93,20 +94,6 @@ public class AkashiDetailActivity extends AppCompatActivity {
             String smat_str = smat_value.isJsonPrimitive() ? smat_value.getAsString() : smat_value.getAsJsonObject().get("api_value").getAsString();
             smat_count.setText(String.valueOf(smat_str));
         }
-
-        /*
-        JsonArray useitem_data = dbHelper.getJsonArrayValue(DB_KEY_USEITEMS);
-        if (useitem_data != null) {
-            for (int i = 0; i < useitem_data.size(); i++) {
-                JsonObject item = useitem_data.get(i).getAsJsonObject();
-                int key = item.get("api_id").getAsInt();
-                if (key == 3) { // DEVMAT
-                    dmat_count.setText(String.valueOf(item.get("api_count").getAsInt()));
-                } else if (key == 4) { // SCREW
-                    smat_count.setText(String.valueOf(item.get("api_count").getAsInt()));
-                }
-            }
-        }*/
 
         if (!getIntent().hasExtra("item_id")) {
             finish();
@@ -187,54 +174,22 @@ public class AkashiDetailActivity extends AppCompatActivity {
                             require_items_str.add(e3);
                             for (int k = 0; k < require_items.size(); k++) {
                                 JsonArray r_item = require_items.get(k).getAsJsonArray();
-                                String require_item_name;
-                                int useritem_id = 0;
                                 int require_item_count = r_item.get(1).getAsInt();
-                                switch (r_item.get(0).getAsInt()) {
-                                    case 1:
-                                        require_item_name = getStringWithLocale(R.string.item_engine);
-                                        useritem_id = 72;
-                                        break;
-                                    case 2:
-                                        require_item_name = getStringWithLocale(R.string.item_gmi_material);
-                                        useritem_id = 75;
-                                        break;
-                                    case 3:
-                                        require_item_name = getStringWithLocale(R.string.item_skilled_crew);
-                                        useritem_id = 70;
-                                        break;
-                                    case 4:
-                                        require_item_name = getStringWithLocale(R.string.item_kouku_material);
-                                        useritem_id = 77;
-                                        break;
-                                    case 5:
-                                        require_item_name = getStringWithLocale(R.string.item_action_report);
-                                        useritem_id = 78;
-                                        break;
-                                    case 6:
-                                        require_item_name = getStringWithLocale(R.string.item_rocket_material);
-                                        useritem_id = 92;
-                                        break;
-                                    default:
-                                        require_item_name = "";
-                                        useritem_id = -1;
-                                        break;
-                                }
-                                String useritem_id_str = String.valueOf(useritem_id);
+                                JsonObject item_info = getRequiredItemData(r_item.get(0).getAsInt());
+                                String require_item_name = getRequiredItemName(item_info.getAsJsonObject("name"));
+                                String useitem_id = item_info.get("useitem_id").getAsString();
                                 int useritem_count_view = 0;
-                                if (useritem_count.has(useritem_id_str)) {
-                                    useritem_count_view = useritem_count.get(useritem_id_str).getAsInt();
+                                if (useritem_count.has(useitem_id)) {
+                                    useritem_count_view = useritem_count.get(useitem_id).getAsInt();
                                 }
                                 require_items_str.add(KcaUtils.format("%sx%d (%d)",
                                         require_item_name, require_item_count, useritem_count_view));
                             }
                             e3 = KcaUtils.joinStr(require_items_str, "\n");
-                            ((TextView) findViewById(getId("akashi_improv_detail_e".concat(String.valueOf(j))
-                                    .concat("_").concat(String.valueOf(i + 1)), R.id.class)))
+                            ((TextView) findViewById(getId(KcaUtils.format("akashi_improv_detail_e%d_%d", j, i+1), R.id.class)))
                                     .setText(e3);
                         } else {
-                            ((TextView) findViewById(getId("akashi_improv_detail_e".concat(String.valueOf(j))
-                                    .concat("_").concat(String.valueOf(i + 1)), R.id.class)))
+                            ((TextView) findViewById(getId(KcaUtils.format("akashi_improv_detail_e%d_%d", j, i+1), R.id.class)))
                                     .setText(mse_string[2]);
                         }
 
@@ -303,6 +258,23 @@ public class AkashiDetailActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    private JsonObject getRequiredItemData(int index) {
+        if (index >= requiredItemTranslation.size()) {
+            return requiredItemTranslation.get(0).getAsJsonObject();
+        } else {
+            return requiredItemTranslation.get(index).getAsJsonObject();
+        }
+    }
+
+    private String getRequiredItemName(JsonObject data) {
+        String locale = LocaleUtils.getResourceLocaleCode(KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
+        if (data.has(locale)) {
+            return data.get(locale).getAsString();
+        } else {
+            return data.get("jp").getAsString();
+        }
     }
 
     @Override

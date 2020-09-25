@@ -235,6 +235,14 @@ public class AkashiActivity extends AppCompatActivity {
         } else {
             return -1;
         }
+
+        JsonArray itemData = KcaUtils.getJsonArrayFromStorage(getApplicationContext(), "akashi_reqitems.json", dbHelper);
+        if (itemData != null) {
+            AkashiDetailActivity.setRequiredItemTranslation(itemData);
+        } else {
+            return -1;
+        }
+
         showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
         return 1;
     }
