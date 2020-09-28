@@ -1453,7 +1453,13 @@
         "code": "B154",
         "name": "Supreme CarDiv 1, Sortie! It Will End in One Strike!",
         "desc": "Sortie Kaga Kai Ni+, Akagi Kai Ni+ and up to 4 additional ships to [W7-2-M], [W5-5], [W6-2] and [W6-5]. S-Rank each boss node.",
-        "memo": "\u27a3Rewards: \u00B6First choice: Either a Prototype Flight Deck Catapult OR two Tenzans Model 12A Kai (w/ Type 6 Airborne Radar Kai) OR a +2 Type 1 Land-based Attack Aircraft Model 34\n\u00B6Second choice: Either two Action Reports OR a Blueprint OR a Ryuusei Kai (CarDiv 1 / Skilled)"
+        "memo": "\u27a3Rewards: \u00B6First choice: Either a Prototype Flight Deck Catapult OR two Tenzans Model 12A Kai (w/ Type 6 Airborne Radar Kai) OR a +2 Type 1 Land-based Attack Aircraft Model 34 \u00B6Second choice: Either two Action Reports OR a Blueprint OR a Ryuusei Kai (CarDiv 1 / Skilled)"
+	},
+	"927": {
+        "code": "B155",
+        "name": "Sortie, Heavy Cruiser Haguro! The Battle of the Malacca Strait",
+        "desc": "Sortie Haguro as flagship and up to 4 additional ships to [W7-3-E]. A-Rank+ boss node 4 times. Overlay:F10",
+        "memo": "Your fleet cannot exceed 5 ships for this quest. \u27a3Rewards a +6 20.3cm (No.3) Twin Gun Mount and either an Action Report OR a New Model Armament Materials"
     },
 
 	"201": {
@@ -1795,6 +1801,12 @@
         "name": "Annual Heavy Crusier Fleet",
         "desc": "Sortie 3 CA (not CAV), 1 DD and up to 2 additional ships to [W4-1], [W4-2], [W4-3] and [W4-4]. A-Rank+ the boss nodes of each.",
         "memo": "Resets on the first quest reset of March. / \u203bHeavy Cruiser Squadron, To the West! / \u27a3Rewards: \u00B6First choice: Either Instant Repair x5 OR New Type Artillery Armament Material x1 OR Anti-torpedo Bulge (Large) x1 / \u00B6Second choice: Either 20.3cm(no.2) Twin Gun Mount x2 OR Improvement Materials x4"
+	},
+	"928": {
+        "code": "By5",
+        "name": "Annual 10th Area Fleet",
+        "desc": "Sortie any 2 of Haguro, Ashigara, Myoukou, Takao or Kamikaze, and up to 4 additional ships to [W7-3-P], [W7-2-M] and [W4-2]. S-Rank each boss node twice.",
+        "memo": "Resets on the first quest reset of September. / \u203bVeteran 10th Area Fleet, Sortie at Full Force! / \u27a3Rewards: \u00B6First choice: Either a New Model Artillery Armament Materials OR a New Model Aviation Armament Materials OR ten Development Materials \u00B6Second choice: two Zuiuns Model 12 OR two New Model Armament Materials OR eight Screws"
     },
 
 	"301": {
@@ -1865,7 +1877,7 @@
         "unlock": [ 330, 636 ]
     },
     "313": {
-        "code": "C40",
+        "code": "C47",
         "name": "Mass Exercises for Fall",
         "desc": "Secure 8 victories in Exercises within the same day.",
         "memo": "\u27a3Rewards a Mamiya and a Present Box",
@@ -2039,6 +2051,12 @@
         "desc": "Secure 4 victories in Exercises within the same day using a CV(B) as flagship, 1 other CV(B), 2 DD and up to 2 additional ships.",
         "memo": "\u27a3 Rewards furniture and either a New Model Aviation Armament Materials OR a Skilled Crew Member",
         "unlock": [ 698 ]
+	},
+    "344": {
+        "code": "C48",
+        "name": "10th Area Fleet Exercises!",
+        "desc": "Secure 4 A-Rank+ victories in Exercises within the same day using any 2 of Haguro, Ashigara or Kamikaze and up to 4 additional ships. Overlay:F10",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either two Screws OR four Buckets \u00B6Second choice: Either two 25mm Triple Autocannon Mounts OR a New Model Armament Materials"
     },
 
 	"401": {
@@ -2284,6 +2302,18 @@
         "name": "Annual Expeditions (August)",
         "desc": "Complete Expeditions A1, 4, 9 and B5.",
         "memo": "This quest resets on the first quest reset of August. \u203bReinforce Maritime Escorts in the Nansei Islands Region! \u27a3Rewards: \u00B6First choice: Either a Mamiya OR five Development Materials OR a Furniture Fairy \u00B6Second choice: Either three Underway Replenishments OR four Screws OR New Model Aviation Armament Materials"
+	},
+	"439": {
+        "code": "D36",
+        "name": "Annual Expeditions 1 - September",
+        "desc": "Complete Expeditions 5, A1, 11 and B1.",
+        "memo": "This quest resets on the first quest reset of September. \u203bExpeditionary Supply Line Reinforcement Mission - Initial Operation \u27a3Rewards: \u00B6First choice: Either four Development Materials OR an Irako \u00B6Second choice: Either six Buckets OR a New Model Armament Materials"
+    },
+    "440": {
+        "code": "D37",
+        "name": "Annual Expeditions 2 - September",
+        "desc": "Complete Expeditions 41, 5, 40, E2 and 46.",
+        "memo": "This quest resets on the first quest reset of September. \u203bExpeditionary Supply Line Reinforcement Mission - Extra Operation \u27a3Rewards: \u00B6First choice: Either a Mamiya OR four Screws \u00B6Second choice: two New Model Artillery Armament Materials OR two New Model Aviation Armament Materials"
     },
 
 	"501": {
@@ -2674,12 +2704,6 @@
 		"desc": "Have I-401 or I-13 or I-14 as your secretary and arm them with a Prototype Seiran in the first slot and a Zuiun (631 Air Group) in the second slot.",
 		"memo": "\u2718 Consumes the items. Make sure the equipment is unlocked! \u27a3 Rewards an Seiran (631 Air Group)"
 	},
-	"657": {
-		"code": "SF3",
-		"name": "Spring Preparation Mission: Hina Matsuri Preparations!",
-		"desc": "Have 5000 furniture coins, two Type 99 Dive Bombers and two 61cm Triple Torpedo Mounts in your inventory. Scrap two 14cm Single Gun Mounts.",
-		"memo": "\u2718 Consumes the items. Make sure the equipment is unlocked!  \u27a3 Rewards 1 Furniture Fairy and 1 Hishimochi"
-	},
 	"658": {
 		"code": "F50",
 		"name": "Enhance Submarine Armaments",
@@ -2925,6 +2949,12 @@
         "name": "The Introduction of a New Anti-Submarine Patrol Air Force",
         "desc": "Have 1840 Ammo, 6200 Bauxite, 2 New Model Aviation Armament Materials, and a Skilled Crew Member. Set Kaga Kai Ni Go as secretary with a TBM-3D in slot 1. Scrap 2 TBFs, 1 Ryuusei and 1 Ryuusei Kai.",
         "memo": "\u2718 Consumes the resources, items and equipment. Make sure the equipment is unlocked! \u27a3Rewards a TBM-3W+3S"
+	},
+	"657": {
+        "code": "F92",
+        "name": "Annual Arsenal - September",
+        "desc": "Have 4000 Steel. Scrap 6 Small Caliber Main Guns, 5 Medium Caliber Main Guns and 4 Torpedoes.",
+        "memo": "This quest resets on the first quest reset of September. \u203bSupplemental Consolidation for New Model Armament Development \u2718Consumes the resources. \u27a3Rewards ten Development Materials and either five Screws OR two New Model Armament Materials"
     },
 
 	"701": {
