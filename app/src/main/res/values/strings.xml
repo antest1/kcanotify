@@ -12,7 +12,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="app_brand" translatable="false" traslatable="false">시제 깡들리티</string> <!-- Do not translate here -->
-    <string name="app_version" translatable="false">2.8.1</string>
+    <string name="app_version" translatable="false">2.8.1 rev1</string>
     <string name="action_settings">Settings</string>
     <string name="action_errorlog">Error Log</string>
     <string name="action_download">Download</string>
@@ -39,7 +39,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_download_link_playstore" translatable="false">market://details?id=com.antest1.kcanotify</string>
     <string name="app_download_link_luckyjervis" translatable="false">http://luckyjervis.com/kcanotify/apk/latest.apk</string>
     <string name="app_download_link_kcwiki" translatable="false">https://mirrors.kcwiki.org/kcanotify/</string>
-    <string name="app_kcaqsync_link" translatable="false">http://kcaqsync.swaytwig.com</string>
 
     <!-- Link Information -->
     <string name="server_swaytwig" translatable="false">http://swaytwig.com/</string>
