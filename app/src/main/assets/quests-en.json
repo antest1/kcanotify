@@ -592,6 +592,12 @@
 		"desc": "Have Nagato Kai Ni as Fleet 1 flagship with Mutsu Kai Ni as second ship.",
 		"memo": "\u27a3 Rewards a Type 3 Shell Kai and either two 41cm Twin Gun Mounts OR a New Model Artillery Armament Materials OR 8 Development Materials"
 	},
+	"197": {
+        "code": "A93",
+        "name": "The Powerful DesDiv 10, Mainstay of Mainstays\u2014Sortie Preparations Complete!",
+        "desc": "Have ONLY Yuugumo Kai Ni, Makigumo Kai Ni, Kazagumo Kai Ni and Akigumo Kai Ni in your fleet.",
+        "memo": "\u27a3 Rewards a +2 12.7cm Twin Gun Mount Model D Kai Ni and either six Buckets OR a Furniture Fairy"
+    },
 
 	"202": {
 		"code": "B1",
@@ -1460,6 +1466,24 @@
         "name": "Sortie, Heavy Cruiser Haguro! The Battle of the Malacca Strait",
         "desc": "Sortie Haguro as flagship and up to 4 additional ships to [W7-3-E]. A-Rank+ boss node 4 times. Overlay:F10",
         "memo": "Your fleet cannot exceed 5 ships for this quest. \u27a3Rewards a +6 20.3cm (No.3) Twin Gun Mount and either an Action Report OR a New Model Armament Materials"
+	},
+	"929": {
+        "code": "B156",
+        "name": "To Protect the Peaceful Sea, the Whale Stirs!",
+        "desc": "Sortie Taigei or Jingei as flagship, 2 SS(V) and up to 3 additional ships to [W1-2], [W1-3], [W2-1] and [W2-3]. S-Rank the boss nodes of each.",
+        "memo": "\u27a3Rewards furniture and either a New Model Armament Materials OR a +2 Late Model Bow Torpedo Mount (6 tubes) OR an Action Report"
+    },
+    "930": {
+        "code": "B157",
+        "name": "Mainstay of Mainstays, Run Wild!",
+        "desc": "Sortie Yuugumo Kai Ni, Makigumo Kai Ni, Kazagumo Kai Ni, Akigumo Kai Ni and up to 2 additional ships to [W1-4], [W2-2], [W3-2], [W4-1] and [W7-3-P]. S-Rank the boss nodes of each.",
+        "memo": "\u27a3Rewards a +5 61cm Quadruple (Oxygen) Torpedo Mount Late Model and either ten Development Materials OR an Action Report OR five Screws"
+    },
+    "931": {
+        "code": "B158",
+        "name": "Elite DesDiv 27, Carefully Perform Evasive Maneuvers!",
+        "desc": "Sortie Shiratsuyu Kai Ni, Shigure Kai Ni and up to 4 additional ships to [W1-5], [W2-5], [W7-1], [W5-5] and [W6-3]. S-Rank the boss nodes of each.",
+        "memo": "\u27a3Rewards furniture and either two Underway Replenishments OR a Repair Goddess OR two Canned Saury"
     },
 
 	"201": {
@@ -2057,6 +2081,18 @@
         "name": "10th Area Fleet Exercises!",
         "desc": "Secure 4 A-Rank+ victories in Exercises within the same day using any 2 of Haguro, Ashigara or Kamikaze and up to 4 additional ships. Overlay:F10",
         "memo": "\u27a3Rewards: \u00B6First choice: Either two Screws OR four Buckets \u00B6Second choice: Either two 25mm Triple Autocannon Mounts OR a New Model Armament Materials"
+	},
+	"345": {
+        "code": "C49",
+        "name": "Annual Tea Time Exercises - October",
+        "desc": "Secure 4 A-Rank+ victories in Exercises within the same day using at least 4 of Warspite, Kongou, Ark Royal, Nelson or the J-class DDs.",
+        "memo": "J-class DDs include: Jervis, Janus This quest resets on the first quest reset of October. \u203bTea Time Exercises! \u27a3Rewards: \u00B6First choice: Either a Swordfish OR a Fulmar OR four Development Materials \u00B6Second choice: Either a New Model Aviation Armament Materials OR five Buckets"
+    },
+    "346": {
+        "code": "C50",
+        "name": "Annual DesDiv 10 Exercises - October",
+        "desc": "Secure 4 S-Rank victories in Exercises within the same day using Yuugumo Kai Ni, Makigumo Kai Ni, Kazagumo Kai Ni and Akigumo Kai Ni.",
+        "memo": "This quest resets on the first quest reset of October. \u203bSupreme! Mainstay of Mainstays, Commence Exercises! \u27a3Rewards: \u00B6First choice: Either six Development Materials OR four Buckets \u00B6Second choice: Either a Medal OR a New Model Aviation Armament Materials OR a Mamiya"
     },
 
 	"401": {
@@ -2955,6 +2991,12 @@
         "name": "Annual Arsenal - September",
         "desc": "Have 4000 Steel. Scrap 6 Small Caliber Main Guns, 5 Medium Caliber Main Guns and 4 Torpedoes.",
         "memo": "This quest resets on the first quest reset of September. \u203bSupplemental Consolidation for New Model Armament Development \u2718Consumes the resources. \u27a3Rewards ten Development Materials and either five Screws OR two New Model Armament Materials"
+	},
+	"654": {
+        "code": "F93",
+        "name": "Annual Swordfish - October",
+        "desc": "Have a Skilled Crew Member, 1500 Ammo and 1500 Bauxite. Set Ark Royal as secretary with a \u2605max Swordfish in slot 1. Scrap a Swordfish and 2 Fulmars.",
+        "memo": "This quest resets on the first quest reset of October. \u203bThe Formation of an Elite Biplane Squadron \u2718Consumes the item and resources. \u27a3Rewards a Swordfish Mk.II (Skilled)"
     },
 
 	"701": {
@@ -3112,6 +3154,13 @@
 		"desc": "Have Gotland as your Secretary Ship, equip the maxed modified Swordfish (Seaplane Model) in the first slot, then proceed to scrap 3 Zuiun, 3 Type 0 Recon Seaplane, 1 Type 13 Air RADAR Kai, prepare 2,500 ammo, 4000 bauxite, 1 New Type Aviation Armament Materials and 1 Skilled Pilot.",
 		"memo": "\u27a3 Reward: Swordfish Mk.III Kai (Seaplane Model)"
 	},
+	"932": {
+        "code": "2010LQ1",
+        "name": "[Fall-Limited] Nowaki's Great Adventure!",
+        "desc": "Sortie Nowaki as flagship, Maikaze as second ship and up to 3 additional ships to [W1-4], [W1-6-N], [W2-2] and [W3-1] twice each. A-Rank+ all relevant boss nodes twice.",
+        "memo": "\u2623This quest is still being verified. Report any problems to the KC3 team. Your fleet may not exceed 5 ships. \u27a3Rewards: \u00B6First choice: Either three Irako OR a Medal \u00B6Second choice: Either two Type 2 12cm Mortars Kai OR a Reinforcement Expansion OR a New Model Artillery Armament Materials",
+        "hash": -1159559460
+    },
 	"831": {
         "code": "SB43",
         "name": "Spring Naval Defense Action! Fleet, Set Sail!",
