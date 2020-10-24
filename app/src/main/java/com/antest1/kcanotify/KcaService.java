@@ -752,6 +752,11 @@ public class KcaService extends Service {
                 if (jsonDataObj.has("api_data")) {
                     //dbHelper.putValue(DB_KEY_USEREQUIP, jsonDataObj.getAsJsonObject("api_data").getAsJsonArray("api_slot_item").toString());
                     JsonObject requiredInfoApiData = jsonDataObj.getAsJsonObject("api_data");
+                    if (requiredInfoApiData.has("api_useitem")) {
+                        dbHelper.putValue(DB_KEY_USEITEMS, requiredInfoApiData.getAsJsonArray("api_useitem").toString());
+                    } else {
+                        dbHelper.putValue(DB_KEY_USEITEMS, new JsonArray().toString());
+                    }
                     dbHelper.putValue(DB_KEY_KDOCKDATA, requiredInfoApiData.getAsJsonArray("api_kdock").toString());
                     JsonArray slotitem_data = requiredInfoApiData.getAsJsonArray("api_slot_item");
                     int size2 = KcaApiData.putSlotItemDataToDB(slotitem_data);
@@ -764,6 +769,8 @@ public class KcaService extends Service {
             if (url.startsWith(API_GET_MEMBER_USEITEM)) {
                 if (jsonDataObj.has("api_data")) {
                     dbHelper.putValue(DB_KEY_USEITEMS, jsonDataObj.getAsJsonArray("api_data").toString());
+                } else {
+                    dbHelper.putValue(DB_KEY_USEITEMS, new JsonArray().toString());
                 }
             }
 
