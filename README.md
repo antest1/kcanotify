@@ -61,7 +61,7 @@ Attribution
 - The data of the map node data and experience are from [KC3Kai](https://github.com/KC3Kai/KC3Kai)'s resources. 
   - License for KC3Kai: The MIT License [Text](https://github.com/KC3Kai/KC3Kai/blob/master/LICENSE)
 - The code for line of seek(索敵) & fighter power(制空権) calculation are written with reference to [艦隊シミュレーター＆デッキビルダー](http://kancolle-calc.net/deckbuilder.html)
-- Akashi's arsenal improvement data is written with reference to [KC3Kai](https://github.com/KC3Kai/KC3Kai) and [明石の改修工廠早見表](http://akashi-list.me).
+- Akashi's arsenal improvement data is written with reference to [KC3Kai](https://github.com/KC3Kai/KC3Kai), [WhoCallsTheFleet](https://github.com/TeamFleet/WhoCallsTheFleet-DB) and [明石の改修工廠早見表](http://akashi-list.me).
 - Reference sites: [艦これ 攻略 Wiki*](http://wikiwiki.jp/kancolle/), [Kancolle Wikia](http://kancolle.wikia.com), [kcwiki舰娘百科](https://zh.kcwiki.org)
 
 Contact
