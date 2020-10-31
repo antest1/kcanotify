@@ -52,8 +52,12 @@ public class EquipmentListFilterActivity extends AppCompatActivity {
 
         List<Integer> equipment_id = new ArrayList<>();
         for(int i = 0; i<T3_COUNT; i++) {
-            int btnId = getId("item_".concat(String.valueOf(i+1)), R.mipmap.class);
-            equipment_id.add(btnId);
+            try {
+                int btnId = getId("item_".concat(String.valueOf(i+1)), R.mipmap.class);
+                equipment_id.add(btnId);
+            } catch (RuntimeException e){
+                equipment_id.add(-1);
+            }
         }
 
 

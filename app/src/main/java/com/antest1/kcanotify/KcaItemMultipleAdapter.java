@@ -104,12 +104,18 @@ public class KcaItemMultipleAdapter extends BaseAdapter {
         if (convertView==null)
             convertView = inf.inflate(layout, null);
         ImageView iv = (ImageView) convertView.findViewById(R.id.setting_image_pic);
-        iv.setImageResource(item.get(position));
-        if (selected.contains(position)) iv.setBackground(ContextCompat.getDrawable(context, R.drawable.imagebtn_on));
-        else iv.setBackground(ContextCompat.getDrawable(context, R.drawable.imagebtn_off));
-        if (rescale > 0) {
-            iv.getLayoutParams().width = rescale;
-            iv.getLayoutParams().height = rescale;
+        int img = item.get(position);
+        if (img != -1) {
+            iv.setImageResource(item.get(position));
+            if (selected.contains(position)) iv.setBackground(ContextCompat.getDrawable(context, R.drawable.imagebtn_on));
+            else iv.setBackground(ContextCompat.getDrawable(context, R.drawable.imagebtn_off));
+            if (rescale > 0) {
+                iv.getLayoutParams().width = rescale;
+                iv.getLayoutParams().height = rescale;
+            }
+        } else {
+            iv.getLayoutParams().width = 0;
+            iv.getLayoutParams().height = 0;
         }
         return convertView;
     }
