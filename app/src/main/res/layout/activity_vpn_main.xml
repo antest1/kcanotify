@@ -215,7 +215,8 @@
                     android:text="Next Maintenance:\n%s"
                     android:textAlignment="center"
                     android:textColor="@color/colorDataUpdateText"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/textSpecial"
@@ -244,22 +245,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@id/textMainUpdate"
+                    android:layout_above="@id/textSpecial"
                     android:layout_alignParentBottom="false"
                     android:layout_marginStart="6dp"
                     android:layout_marginLeft="6dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="6dp"
                     android:layout_marginRight="6dp"
-                    android:background="@color/colorAccent"
+                    android:background="@color/colorUpdate"
                     android:gravity="center_vertical|center_horizontal"
                     android:minLines="4"
                     android:padding="4dp"
-                    android:text="@string/ask_to_dev"
+                    android:text="@string/notification_message"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/colorUpdateText"
                     android:textSize="14dp"
-                    android:visibility="invisible" />
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/textDescription"

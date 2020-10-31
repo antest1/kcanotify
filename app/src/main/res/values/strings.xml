@@ -758,6 +758,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="packagefilter_count_format" formatted="false">Total Count: %d</string>
     <string name="packagefilter_restart">You need to restart VPN Service to make these options effective.</string>
     <string name="special_message">Jervis and Janus in Autumn</string>
+    <string name="notification_message">Notification and Information</string>
 
     <string name="action_export_kanmusu_list">kanmusu_list</string>
     <string name="shipinfo_export_title">Export to kanmusu_list</string>

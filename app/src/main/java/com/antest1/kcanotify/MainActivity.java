@@ -12,10 +12,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,6 +54,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -337,33 +340,28 @@ public class MainActivity extends AppCompatActivity {
             specialImage.setVisibility(View.VISIBLE);
             sendUserAnalytics(getApplicationContext(), OPEN_PIC, null);
         });
-        /*
+
         textSpecial2 = findViewById(R.id.textSpecial2);
-        textSpecial2.setText(getStringWithLocale(R.string.ask_to_dev));
-        textSpecial2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendUserAnalytics(getApplicationContext(), OPEN_QUIZ, null);
-                String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
-                String locale_code = getResourceLocaleCode(locale);
-                String url = KcaUtils.format("http://antest1.cf:12345?lang=%s", locale_code);
+        textSpecial2.setText(getStringWithLocale(R.string.notification_message));
+        textSpecial2.setOnClickListener(v -> {
+            String locale1 = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
+            String locale_code = getResourceLocaleCode(locale1);
+            String url = KcaUtils.format("http://luckyjervis.com/noti.html", locale_code);
 
-                CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
-                intentBuilder.setShowTitle(true);
-                intentBuilder.setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
-                intentBuilder.enableUrlBarHiding();
+            CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+            intentBuilder.setShowTitle(true);
+            intentBuilder.setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+            intentBuilder.enableUrlBarHiding();
 
-                final CustomTabsIntent customTabsIntent = intentBuilder.build();
-                final List<ResolveInfo> customTabsApps = getPackageManager().queryIntentActivities(customTabsIntent.intent, 0);
-                if (customTabsApps.size() > 0) {
-                    customTabsIntent.launchUrl(MainActivity.this, Uri.parse(url));
-                } else {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(browserIntent);
-                }
+            final CustomTabsIntent customTabsIntent = intentBuilder.build();
+            final List<ResolveInfo> customTabsApps = getPackageManager().queryIntentActivities(customTabsIntent.intent, 0);
+            if (customTabsApps.size() > 0) {
+                customTabsIntent.launchUrl(MainActivity.this, Uri.parse(url));
+            } else {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
             }
         });
-        */
     }
 
     @Override
