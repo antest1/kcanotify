@@ -51,7 +51,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 public class DropLogActivity extends AppCompatActivity {
     private final String FILE_PATH = "/export_data";
     public static final long DAY_MILLISECOND = 86400000;
-    public static final String[] world_list = {"*", "1", "2", "3", "4", "5", "6", "7", "41", "42", "43", "44", "45", "46", "47", "48"};
+    public static final String[] world_list = {"*", "1", "2", "3", "4", "5", "6", "7", "41", "42", "43", "44", "45", "46", "47", "48", "49"};
 
     public static final int RANK_S = 32;
     public static final int RANK_A = 16;
