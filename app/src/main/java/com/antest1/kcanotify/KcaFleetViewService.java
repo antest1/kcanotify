@@ -1220,6 +1220,7 @@ public class KcaFleetViewService extends Service {
             } else {
                 ((TextView) itemView.findViewById(R.id.item_ex_name)).setText(getStringWithLocale(R.string.slot_empty));
                 ((ImageView) itemView.findViewById(R.id.item_ex_icon)).setImageResource(R.mipmap.item_0);
+                itemView.findViewById(R.id.item_ex_level).setVisibility(GONE);
                 itemView.findViewById(R.id.item_ex_slot_list).setVisibility(INVISIBLE);
             }
             itemView.findViewById(R.id.view_slot_ex).setVisibility(View.VISIBLE);
