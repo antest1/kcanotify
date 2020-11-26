@@ -1464,7 +1464,7 @@
 	"927": {
         "code": "B155",
         "name": "Sortie, Heavy Cruiser Haguro! The Battle of the Malacca Strait",
-        "desc": "Sortie Haguro as flagship and up to 4 additional ships to [W7-3-E]. A-Rank+ boss node 4 times. Overlay:F10",
+        "desc": "Sortie Haguro as flagship and up to 4 additional ships to [W7-3-E]. A-Rank+ boss node 4 times.",
         "memo": "Your fleet cannot exceed 5 ships for this quest. \u27a3Rewards a +6 20.3cm (No.3) Twin Gun Mount and either an Action Report OR a New Model Armament Materials"
 	},
 	"929": {
@@ -1484,6 +1484,24 @@
         "name": "Elite DesDiv 27, Carefully Perform Evasive Maneuvers!",
         "desc": "Sortie Shiratsuyu Kai Ni, Shigure Kai Ni and up to 4 additional ships to [W1-5], [W2-5], [W7-1], [W5-5] and [W6-3]. S-Rank the boss nodes of each.",
         "memo": "\u27a3Rewards furniture and either two Underway Replenishments OR a Repair Goddess OR two Canned Saury"
+	},
+	"933": {
+        "code": "B159",
+        "name": "Solidification of Fleet Command: Fleet Flagship, Sortieing!",
+        "desc": "Sortie Ooyodo or Tan Yang as Fleet 1 flagship, 3 DD/DE and up to 2 additional ships to [W1-3], [W1-4], [W2-1] and [W2-2]. S-Rank each boss node twice.",
+        "memo": "\u27a3 Rewards a Headquarters Personnel and either a Repair Goddess OR a New Model Armament Materials OR two Underway Replenishments"
+    },
+    "934": {
+        "code": "B160",
+        "name": "Yukikaze, The Miracle Destroyer, Sorties Once Again!",
+        "desc": "Sortie Tan Yang or Yukikaze Kai Ni as flagship and up to 5 additional ships to [W2-3], [W2-4], [W2-5], [W3-3] and [W7-3-P]. S-Rank the boss nodes of each.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either a Medal OR a Reinforcement Expansion \u00B6Second choice: Either a +4 Locally Modified 12.7cm Twin High-angle Gun Mount OR a Locally Modified 10cm Twin High-angle Gun Mount OR two New Model Armament Materials"
+    },
+    "935": {
+        "code": "B161",
+        "name": "The Strongest! Yukikaze of Kure and Shigure of Sasebo",
+        "desc": "Sortie Yukikaze Kai Ni, Shigure Kai Ni and up to 4 additional ships to [W4-5], [W5-3], [W5-5], [W6-4] and [W6-5]. S-Rank the boss nodes of each.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either an Action Report OR six Screws \u00B6Second choice: Either a +4 5inch Single Gun Mount Mk.30 Kai OR a +4 Type 22 Surface Radar Kai 4 (Calibrated Late Model) OR a +4 61cm Quadruple (Oxygen) Torpedo Mount Late Model"
     },
 
 	"201": {
@@ -1922,7 +1940,7 @@
     "316": {
         "code": "C13",
         "name": "Strive to Improve the Transport Force's Level of Training!",
-        "desc": "Secure 4 victories in Exercises within the same day. Press F10 to clear the overlay.",
+        "desc": "Secure 4 victories in Exercises within the same day.",
         "memo": "\u27a3Rewards 2 Screws and either a Furniture Fairy OR a Daihatsu Landing Craft."
     },
     "317": {
@@ -1934,7 +1952,7 @@
     "318": {
         "code": "C16",
         "name": "Monthly Exercises 2",
-        "desc": "Secure 3 victories in Exercises using at least 2 CLs in Fleet 1. Afterwards, equip a secretary with 2 Combat Rations. Press F10 to clear the overlay.",
+        "desc": "Secure 3 victories in Exercises using at least 2 CLs in Fleet 1. Afterwards, equip a secretary with 2 Combat Rations. ",
         "memo": "You must use fleet 1. \u2718Consumes the equipment. Make sure the equipment is unlocked! \u203bThe Supply Ship Irako's Support \u27a3Rewards an Irako and either 2 Development Materials OR 2 Buckets",
         "tracking": [ [0,3] ]
     },
@@ -2079,7 +2097,7 @@
     "344": {
         "code": "C48",
         "name": "10th Area Fleet Exercises!",
-        "desc": "Secure 4 A-Rank+ victories in Exercises within the same day using any 2 of Haguro, Ashigara or Kamikaze and up to 4 additional ships. Overlay:F10",
+        "desc": "Secure 4 A-Rank+ victories in Exercises within the same day using any 2 of Haguro, Ashigara or Kamikaze and up to 4 additional ships.",
         "memo": "\u27a3Rewards: \u00B6First choice: Either two Screws OR four Buckets \u00B6Second choice: Either two 25mm Triple Autocannon Mounts OR a New Model Armament Materials"
 	},
 	"345": {
@@ -2093,6 +2111,12 @@
         "name": "Annual DesDiv 10 Exercises - October",
         "desc": "Secure 4 S-Rank victories in Exercises within the same day using Yuugumo Kai Ni, Makigumo Kai Ni, Kazagumo Kai Ni and Akigumo Kai Ni.",
         "memo": "This quest resets on the first quest reset of October. \u203bSupreme! Mainstay of Mainstays, Commence Exercises! \u27a3Rewards: \u00B6First choice: Either six Development Materials OR four Buckets \u00B6Second choice: Either a Medal OR a New Model Aviation Armament Materials OR a Mamiya"
+	},
+	"347": {
+        "code": "C51",
+        "name": "The Miracle Destroyer",
+        "desc": "Secure 4 S-Rank victories in Exercises within the same day Yukikaze as flagship, 3 DD and up to 2 additional ships.",
+        "memo": "\u27a3 Rewards: \u00B6First choice: Either a Mamiya OR five Buckets \u00B6Second choice: Either eight Development Materials OR a New Model Armament Materials OR four Screws"
     },
 
 	"401": {
@@ -2997,6 +3021,12 @@
         "name": "Annual Swordfish - October",
         "desc": "Have a Skilled Crew Member, 1500 Ammo and 1500 Bauxite. Set Ark Royal as secretary with a \u2605max Swordfish in slot 1. Scrap a Swordfish and 2 Fulmars.",
         "memo": "This quest resets on the first quest reset of October. \u203bThe Formation of an Elite Biplane Squadron \u2718Consumes the item and resources. \u27a3Rewards a Swordfish Mk.II (Skilled)"
+	},
+	"655": {
+        "code": "F94",
+        "name": "Annual Arsenal - November",
+        "desc": "Have 1500 Steel, Fuel and Bauxite. Scrap 5 Small Cal. Main Guns, 5 Medium Cal. Main Guns, 5 Large Cal. Main Guns, 5 Recon Seaplanes and 5 Torpedo Bombers.",
+        "memo": "\u2718 Consumes the resources. \u203bThe Arsenal in Full Operation! A Development of New Model Armaments! \u27a3Rewards: \u00B6First choice: Either ten Development Materials OR a New Model Artillery Armament Materials OR a New Model Aviation Armament Materials \u00B6Second choice: Either five Screws OR New Model Armament Materials"
     },
 
 	"701": {
@@ -3034,6 +3064,18 @@
 		"desc": "Have 5500 steel and 2500 bauxite. Modernize a CV(B) using 5 CV(L) twice.",
 		"memo": "\u2718 Consumes the resources. \u27a3 Rewards a New Model Aircraft Blueprint"
 	},
+	"714": {
+        "code": "G6",
+        "name": "Annual Mod. - November",
+        "desc": "Have 600 Steel and 300 Bauxite. Modernize a DD using at least 3 DD twice.",
+        "memo": "\u203b Execute Destroyer Modernizations! \u2718Consumes the resources. \u27a3Rewards: \u00B6First choice: Either a Bucket OR two Development Materials \u00B6Second choice: Either two Combat Rations OR an Irako"
+    },
+    "715": {
+        "code": "G7",
+        "name": "Annual Mod. 2 - November",
+        "desc": "Have 900 Steel and 500 Bauxite. Modernize a DD using at least 3 CL twice.",
+        "memo": "\u203b Part 2: Execute Destroyer Modernizations! \u2718Consumes the resources. \u27a3Rewards: \u00B6First choice: Either two Buckets OR three Development Materials \u00B6Second choice: Either two 25mm Single Autocannon Mounts OR two Screws"
+    },
 
 	"884": {
 		"code": "B117",
