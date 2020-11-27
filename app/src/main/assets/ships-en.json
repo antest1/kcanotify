@@ -376,6 +376,9 @@
 	"Helena": "Helena",
     "South Dakota": "South Dakota",
     "Hornet": "Hornet",
+	"Scirocco": "Scirocco",
+	"Sheffield": "Sheffield",
+	"Washington": "Washington",
 
 	"防空棲姫":"Air Defense Princess",
 	"空母棲鬼":"Aircraft Carrier Demon",
@@ -490,6 +493,8 @@
 	"駆逐林棲姫":"Destroyer Forest Princess",
 	"南方戦艦新棲姫": "New Southern Battelship Princesss",
 	"南太平洋空母棲姫": "South Pacific Aircraft Carrier Princess",
+	"戦艦新棲姫": "New Battleship Princess",
+	"戦艦新棲姫-壊": "New Battleship Princess - Damaged",
 
 	"elite":" elite",
 	"flagship":" flagship"
