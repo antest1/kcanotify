@@ -652,7 +652,7 @@
     <string name="expedition_type_value_2">경과 시간</string>
     <string name="fleetcheckview_title">함대상세</string>
     <string name="fleetcheckview_btn_seeklos">색적/수송</string>
-    <string name="fleetcheckview_content_seeklos" formatted="false">함대 색적 총합: %d\n33식: %.2f (2&#45;5, 33 이상)\n33식/2: %.2f (5&#45;2, 4&#45;4)\n33식/3: %.2f (6&#45;2, 6&#45;3)\n33식/4: %.2f (3&#45;5, 6&#45;1)\n───────────────\n수송 게이지:\n%d(S승)/%d(A승)</string>
+    <string name="fleetcheckview_content_seeklos" formatted="false">함대 색적 총합: %d\n33식: %.2f (2&#45;5, 34 이상)\n33식/2: %.2f (5&#45;2, 4&#45;4)\n33식/3: %.2f (6&#45;2, 6&#45;3)\n33식/4: %.2f (3&#45;5, 6&#45;1)\n───────────────\n수송 게이지:\n%d(S승)/%d(A승)</string>
     <string name="fleetcheckview_btn_airbattle">항공전</string>
     <string name="fleetcheckview_content_airbattle" formatted="false">총 제공치: %d ~ %d\n───────────────\n촉접률:\n[확보] 개시 확률: %.1f%%, 선택 확률: %.1f%%\n[우세] 개시 확률: %.1f%%, 선택 확률: %.1f%%</string>
     <string name="fleetcheckview_btn_fuelbull">연비</string>
