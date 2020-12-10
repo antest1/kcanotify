@@ -153,18 +153,6 @@ public class KcaExpeditionCheckViewService extends Service {
             mView = mInflater.inflate(R.layout.view_excheck_list, null);
             KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
             mView.setVisibility(View.GONE);
-            mView.findViewById(R.id.excheckview_head).setOnClickListener(mViewClickListener);
-            mView.findViewById(R.id.excheck_detail_reward).setOnClickListener(mViewClickListener);
-            for (int i = 1; i < 4; i++) {
-                mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnClickListener(mViewClickListener);
-            }
-            for (int i = 1; i <= 7; i++) {
-                mView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
-            }
-
-            for (int i = 0; i < 15; i++) {
-                mView.findViewById(KcaUtils.getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
-            }
 
             itemView = mView.findViewById(R.id.view_excheck_detail);
             mParams = new WindowManager.LayoutParams(
@@ -204,7 +192,7 @@ public class KcaExpeditionCheckViewService extends Service {
         if (intent != null && intent.getAction() != null) {
             if (intent.getAction().startsWith(SHOW_EXCHECKVIEW_ACTION)) {
                 deckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-                if (deckdata != null) {
+                if (deckdata != null && deckdata.size() >= 2) {
                     int selected_new = Integer.parseInt(intent.getAction().split("/")[1]);
                     if (selected_new < 1) selected_new = 1;
                     else if (selected_new > 3) selected_new = 2;
@@ -220,6 +208,17 @@ public class KcaExpeditionCheckViewService extends Service {
                         mManager.addView(mView, mParams);
                     }
                     Log.e("KCA", "show_excheckview_action " + String.valueOf(setViewResult));
+                    mView.findViewById(R.id.excheckview_head).setOnClickListener(mViewClickListener);
+                    mView.findViewById(R.id.excheck_detail_reward).setOnClickListener(mViewClickListener);
+                    for (int i = 1; i < 4; i++) {
+                        mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnClickListener(mViewClickListener);
+                    }
+                    for (int i = 1; i <= 7; i++) {
+                        mView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
+                    }
+                    for (int i = 0; i < 15; i++) {
+                        mView.findViewById(KcaUtils.getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
+                    }
                     mView.setVisibility(View.VISIBLE);
                 } else {
                     stopSelf();
