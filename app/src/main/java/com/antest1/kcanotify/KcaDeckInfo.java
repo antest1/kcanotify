@@ -151,6 +151,7 @@ public class KcaDeckInfo {
         String[] decklist = deckid_list.split(",");
         for (int n = 0; n < decklist.length; n++) {
             int deckid = Integer.parseInt(decklist[n]);
+            if (deckid >= deckPortData.size()) continue;
             JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
             JsonObject seekData = getEachSeekValue(deckShipIdList, deckid, Cn, exclude_flag);
             pureTotalSeek += seekData.get("pure").getAsDouble();
@@ -281,6 +282,7 @@ public class KcaDeckInfo {
             if (deckid == 1) excludeflagdata = exclude_flag.getAsJsonArray("escapecb");
         }
 
+        if (deckid >= deckPortData.size()) return totalRangeAAC;
         JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
                 if (excludeflagdata != null && excludeflagdata.contains(new JsonPrimitive(i + 1)))
@@ -349,6 +351,7 @@ public class KcaDeckInfo {
                 if (deckid == 0) excludeflagdata = exclude_flag.getAsJsonArray("escape");
                 if (deckid == 1) excludeflagdata = exclude_flag.getAsJsonArray("escapecb");
             }
+            if (deckid >= deckPortData.size()) continue;
             JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().get("api_ship").getAsJsonArray();
             for (int i = 0; i < deckShipIdList.size(); i++) {
                 if (excludeflagdata != null && excludeflagdata.contains(new JsonPrimitive(i + 1)))
@@ -435,6 +438,7 @@ public class KcaDeckInfo {
                 if (deckid == 0) excludeflagdata = exclude_flag.getAsJsonArray("escape");
                 if (deckid == 1) excludeflagdata = exclude_flag.getAsJsonArray("escapecb");
             }
+            if (deckid >= deckPortData.size()) continue;
             JsonArray deckShipIdList = deckPortData.get(deckid).getAsJsonObject().get("api_ship").getAsJsonArray();
 
             // Retrieve Speed (soku) Information
@@ -498,7 +502,7 @@ public class KcaDeckInfo {
                 if (deckid == 0) excludeflagdata = exclude_flag.getAsJsonArray("escape");
                 if (deckid == 1) excludeflagdata = exclude_flag.getAsJsonArray("escapecb");
             }
-
+            if (deckid >= deckPortData.size()) continue;
             JsonArray deckShipIdList = ((JsonObject) deckPortData.get(deckid)).getAsJsonArray("api_ship");
             for (int i = 0; i < deckShipIdList.size(); i++) {
                 if (excludeflagdata != null && excludeflagdata.contains(new JsonPrimitive(i + 1)))
