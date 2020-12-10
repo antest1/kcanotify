@@ -9,8 +9,8 @@ android {
         applicationId "com.antest1.kcanotify"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 208103
-        versionName "2.8.1r3"
+        versionCode 208104
+        versionName "2.8.1r4"
 
         multiDexEnabled true
         externalNativeBuild {
