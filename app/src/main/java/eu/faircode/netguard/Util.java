@@ -28,6 +28,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -52,6 +53,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.URL;
@@ -242,11 +244,31 @@ public class Util {
     }
 
     public static List<String> getDefaultDNS(Context context) {
-        String dns1 = jni_getprop("net.dns1");
-        String dns2 = jni_getprop("net.dns2");
         List<String> listDns = new ArrayList<>();
-        listDns.add(TextUtils.isEmpty(dns1) ? "8.8.8.8" : dns1);
-        listDns.add(TextUtils.isEmpty(dns2) ? "8.8.4.4" : dns2);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            Network an = cm.getActiveNetwork();
+            if (an != null) {
+                LinkProperties lp = cm.getLinkProperties(an);
+                if (lp != null) {
+                    List<InetAddress> dns = lp.getDnsServers();
+                    if (dns != null)
+                        for (InetAddress d : dns) {
+                            Log.i(TAG, "DNS from LP: " + d.getHostAddress());
+                            listDns.add(d.getHostAddress().split("%")[0]);
+                        }
+                }
+            }
+        } else {
+            String dns1 = jni_getprop("net.dns1");
+            String dns2 = jni_getprop("net.dns2");
+            if (dns1 != null)
+                listDns.add(dns1.split("%")[0]);
+            if (dns2 != null)
+                listDns.add(dns2.split("%")[0]);
+        }
+
         return listDns;
     }
 
