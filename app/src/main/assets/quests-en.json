@@ -1495,13 +1495,19 @@
         "code": "B160",
         "name": "Yukikaze, The Miracle Destroyer, Sorties Once Again!",
         "desc": "Sortie Tan Yang or Yukikaze Kai Ni as flagship and up to 5 additional ships to [W2-3], [W2-4], [W2-5], [W3-3] and [W7-3-P]. S-Rank the boss nodes of each.",
-        "memo": "\u27a3Rewards: \u00B6First choice: Either a Medal OR a Reinforcement Expansion \u00B6Second choice: Either a +4 Locally Modified 12.7cm Twin High-angle Gun Mount OR a Locally Modified 10cm Twin High-angle Gun Mount OR two New Model Armament Materials"
+        "memo": "\u27a3 Rewards: \u00B6First choice: Either a Medal OR a Reinforcement Expansion \u00B6Second choice: Either a +4 Locally Modified 12.7cm Twin High-angle Gun Mount OR a Locally Modified 10cm Twin High-angle Gun Mount OR two New Model Armament Materials"
     },
     "935": {
         "code": "B161",
         "name": "The Strongest! Yukikaze of Kure and Shigure of Sasebo",
         "desc": "Sortie Yukikaze Kai Ni, Shigure Kai Ni and up to 4 additional ships to [W4-5], [W5-3], [W5-5], [W6-4] and [W6-5]. S-Rank the boss nodes of each.",
-        "memo": "\u27a3Rewards: \u00B6First choice: Either an Action Report OR six Screws \u00B6Second choice: Either a +4 5inch Single Gun Mount Mk.30 Kai OR a +4 Type 22 Surface Radar Kai 4 (Calibrated Late Model) OR a +4 61cm Quadruple (Oxygen) Torpedo Mount Late Model"
+        "memo": "\u27a3 Rewards: \u00B6First choice: Either an Action Report OR six Screws \u00B6Second choice: Either a +4 5inch Single Gun Mount Mk.30 Kai OR a +4 Type 22 Surface Radar Kai 4 (Calibrated Late Model) OR a +4 61cm Quadruple (Oxygen) Torpedo Mount Late Model"
+    },
+	"898": {
+        "code": "B162",
+        "name": "From the Northen Sea, With Love",
+        "desc": "Sortie to [W3-1], [W3-2], [W3-3], [W3-4] and [W3-5]. A-Rank+ the boss nodes of each.",
+        "memo": "\u27a3 Rewards furniture and either five Buckets or a Furniture Fairy"
     },
 
 	"201": {
