@@ -56,10 +56,9 @@ public class EquipmentListFilterActivity extends AppCompatActivity {
                 int btnId = getId("item_".concat(String.valueOf(i+1)), R.mipmap.class);
                 equipment_id.add(btnId);
             } catch (RuntimeException e){
-                equipment_id.add(-1);
+                equipment_id.add(0);
             }
         }
-
 
         final float scale = getResources().getDisplayMetrics().density;
         int dp_size  = (int) (IMG_SIZE_DP * scale);
@@ -73,12 +72,9 @@ public class EquipmentListFilterActivity extends AppCompatActivity {
         gv = findViewById(R.id.equipment_gridview);
         gv.setColumnWidth(dp_size);
         gv.setAdapter(adapter);
-        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                adapter.reverseSelected(position);
-                gv.invalidateViews();
-            }
+        gv.setOnItemClickListener((parent, view, position, id) -> {
+            adapter.reverseSelected(position);
+            gv.invalidateViews();
         });
 
         btnAll = findViewById(R.id.equipment_filter_btn_all);
