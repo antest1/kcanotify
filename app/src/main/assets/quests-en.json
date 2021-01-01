@@ -3190,25 +3190,6 @@
 		"unlock": [620]
 	},
 	
-	"915": {
-		"code": "LQ1",
-		"name": "(Limited time Spring Quest) Fly! Seaplane Swordfish!",
-		"desc": "Organize a fleet with 1 AV as flagship, 2 DD, 3 XX , then score an A rank on the boss nodes of 1-4, 2-3 and 2-4.",
-		"memo": "\u27a3 Rewards: \u00B6First choice: Either Swordfish (Seaplane Model) x1 OR Action Report x1 \u00B6Second choice: Either a New Type Aviation Armament Materials x1 OR Improvement Materials x4"
-	},	
-	"697": {
-		"code": "LQ2",
-		"name": "(Limited time Spring Quest) Remodeling of the Seaplane Swordfish!",
-		"desc": "Have Gotland as your Secretary Ship, equip the maxed modified Swordfish (Seaplane Model) in the first slot, then proceed to scrap 3 Zuiun, 3 Type 0 Recon Seaplane, 1 Type 13 Air RADAR Kai, prepare 2,500 ammo, 4000 bauxite, 1 New Type Aviation Armament Materials and 1 Skilled Pilot.",
-		"memo": "\u27a3 Reward: Swordfish Mk.III Kai (Seaplane Model)"
-	},
-	"932": {
-        "code": "2010LQ1",
-        "name": "[Fall-Limited] Nowaki's Great Adventure!",
-        "desc": "Sortie Nowaki as flagship, Maikaze as second ship and up to 3 additional ships to [W1-4], [W1-6-N], [W2-2] and [W3-1] twice each. A-Rank+ all relevant boss nodes twice.",
-        "memo": "\u2623This quest is still being verified. Report any problems to the KC3 team. Your fleet may not exceed 5 ships. \u27a3Rewards: \u00B6First choice: Either three Irako OR a Medal \u00B6Second choice: Either two Type 2 12cm Mortars Kai OR a Reinforcement Expansion OR a New Model Artillery Armament Materials",
-        "hash": -1159559460
-    },
 	"831": {
         "code": "SB43",
         "name": "Spring Naval Defense Action! Fleet, Set Sail!",
@@ -3221,29 +3202,29 @@
         "desc": "Sortie Naganami as flagship, any 3 of DesDiv31 and up to 2 additional ships to [W2-1] and [W2-2]. S-Rank each boss node twice. Sortie to [W5-4]. A-Rank+ the boss node.",
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
 	},
-	
-	"341": {
-        "code": "7AC1",
-        "name": "7th Anniversary Mission: DesDiv 7 Exercise",
-        "desc": "Secure 3 A-Rank+ victiories in Exercises within the same day using any two of Sazanami, Oboro, Akebono or Ushio and up to four additional ships.",
-        "memo": "\u27a3 Rewards a Mamiya and a 7th Anniversary Hanging Scroll"
+
+	"801": {
+		"code": "2101LQ1",
+		"name": "Happy New Year! Reiwa 3 Torpedo Squadron, begin Sortie!",
+		"desc": "Sortie a CL/CT/CLT as flagship and up to 5 DD to [W1-2], [W1-3], [W1-5], [W1-6] and [W7-1]. [W1-6] node N once and A-Rank+ the boss nodes of each.",
+		"memo": "\u27a3 Rewards a Repair Goddess and either two Type 2 Depth Charges OR two Furniture Fairies OR an Action Report."
 	},
-	"882": {
-		"code": "7AB1",
-		"name": "7th Anniversary Mission: Initial Operation",
-		"desc": "Sortie 3 DD/DE and up to 3 additional ships to [W1-2], [W1-3], [W1-4], [W1-5], [W2-1] and [W2-2]. S-Rank the boss nodes. Overlay: F10",
-		"memo": "\u27a3 Rewards: \u00B6 First choice: Either a Furniture Fairy OR three Screws / \u00B6Second choice: Either a Daihatsu OR a Reinforcement Expansion or 7 Development Materials"
+	"802": {
+		"code": "2101LQ2",
+		"name": "Happy New Year! Heavy Crusier Fleet, Deploy to the Southwestern Sea!",
+		"desc": "Sorite two CA/CAV (including flagship) and up to 4 additional ships to [W1-4], [W2-2], [W2-3], [W2-4], [W2-5]. S-Rank each boss node once.",
+		"memo": "\u27a3 Rewards: \u00B6First choice: Either 10 Development Materials OR 8 Buckets OR 4 Improvement Materials \u00B6Second choice: Either a 20.3cm (No.3) Twin Gun Mount \u26058 OR a 61cm Quadruple (Oxygen) Torpedo Mount Late Model OR two Medals"
 	},
-	"883": {
-		"code": "7AB2",
-		"name": "7th Anniversary Mission: Final Operation",
-		"desc": "Sortie 1 CL, 2 DD and up to 3 additional ships to [W2-3], [W3-1], [W3-2], [W3-3], [W3-4], [W3-5] and [W7-2M]. S-Rank the boss nodes. Overlay: F10",
-		"memo": "\u27a3 Rewards: \u00B6 First choice: Either 7 Buckets OR a 61cm Triple (Oxygen) Torpedo Mount Late Model OR a Swordfish (Seaplane Model) / \u00B6Second choice: Either a Medal OR a New Model Aviation Armament Material or an Action Report"
+	"803": {
+		"code": "2101LQ3",
+		"name": "Happy New Year! Special Mission Fleet, Sortie to North Sea of the New Year!",
+		"desc": "Sortie 3 ships from CV(B/L)/AV/AS/AO and up to 3 additional ships to [W3-4], [E-2-2], and [E-3-3]. A-Rank+ each boss node twice.",
+		"memo": "\u27a3 Rewards: Furniture (Yakimochi Set), Either 4 New Model Aviation Armament Materials OR 3 Skilled Crew Members OR a Blueprint"
 	},
-	"910": {
-		"code": "7AB3",
-		"name": "7th Anniversary Mission: Extra Operation",
-		"desc": "Sortie to [W6-1], [W6-2], [W6-3], [W6-4] and [W6-5]. S-Rank the boss nodes. Overlay: F10",
-		"memo": "\u27a3 Rewards: \u00B6 First choice: Either AV Mizuho, AO Kamoi, AO Hayasui, AV Commandant Teste OR CL Gotland / \u00B6Second choice: Either 7 Underway Replenishments OR 7 Screws or a New Model Aviation Armament Material"
+	"804": {
+		"code": "2101LQ4",
+		"name": "New Year Mission [Extra Operation] 1st Fleet, Sortie!",
+		"desc": "Sorite to [W3-5], [W4-5], [W7-2-2], and [W7-3-2]. S-Rank each boss node once.",
+		"memo": "\u27a3 Rewards: Furnitue (New Year's scrolls toward the 8th anniversary), Either two Blueprints OR a Prototype Flight Deck Catapult OR Type 4 Heavy Bomber Hiryuu"
 	}
 }
