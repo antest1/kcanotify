@@ -381,7 +381,7 @@
     <string name="aa_btn_filter">フィルタ</string>
     <string name="recon_failed">偵察失敗</string>
     <string name="action_akashi_detail">装備改修詳細</string>
-    <string name="akashi_term_detail1">改修詳細情報(1)</string>
+    <string name="akashi_term_detail1">改修詳細情報</string>
     <string name="akashi_term_detail2">改修詳細情報(2)</string>
     <string name="akashi_term_equip">消費装備</string>
     <string name="akashi_term_resource">消費資源</string>

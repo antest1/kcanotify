@@ -338,6 +338,17 @@
                     android:src="@mipmap/item_36" />
 
                 <ImageView
+                    android:id="@+id/akashi_filter_equip_btn_37"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/imagebtn_on"
+                    android:padding="5dp"
+                    android:src="@mipmap/item_37" />
+
+                <ImageView
                     android:id="@+id/akashi_filter_equip_btn_38"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -389,17 +400,6 @@
                     android:padding="5dp"
                     android:src="@mipmap/item_46"
                     android:visibility="visible" />
-
-                <ImageView
-                    android:id="@+id/akashi_filter_equip_btn_96"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="5dp"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/imagebtn_off"
-                    android:padding="5dp"
-                    android:src="@mipmap/item_0"
-                    android:visibility="invisible" />
 
             </LinearLayout>
 

@@ -413,7 +413,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_term_equip">裝備</string>
     <string name="akashi_term_resource">F/A/S/B</string>
     <string name="akashi_term_support">支持</string>
-    <string name="akashi_term_detail1">改修詳情(1)</string>
+    <string name="akashi_term_detail1">改修詳情</string>
     <string name="akashi_term_detail2">改修詳情(2)</string>
     <string name="akashi_term_default">初始裝備艦娘</string>
     <string name="akashi_term_status">現在改修狀況</string>

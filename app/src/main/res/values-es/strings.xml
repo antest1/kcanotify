@@ -390,7 +390,7 @@
     <string name="aa_btn_filter">Filtro</string>
     <string name="recon_failed">Reconocimiento Fallido</string>
     <string name="action_akashi_detail">Detalles de Mejora de Equipamiento</string>
-    <string name="akashi_term_detail1">Detalles de Mejora (1)</string>
+    <string name="akashi_term_detail1">Detalles de Mejora</string>
     <string name="akashi_term_detail2">Detalles de Mejora (2)</string>
     <string name="akashi_term_equip">Equipamiento</string>
     <string name="akashi_term_resource">C/M/A/B</string>

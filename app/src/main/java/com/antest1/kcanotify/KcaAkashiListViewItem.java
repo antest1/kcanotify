@@ -75,12 +75,12 @@ public class KcaAkashiListViewItem {
     public void setEquipImprovementElement(int day, boolean checked) {
         JsonArray data = equipImprovementData.getAsJsonArray("improvement");
         boolean convert_exception = equipImprovementData.has("convert_exception");
-        String[] material1 = new String[2];
-        String[] material2 = new String[2];
-        String[] material3 = new String[2];
-        String[] screw1 = new String[2];
-        String[] screw2 = new String[2];
-        String[] screw3 = new String[2];
+        String[] material1 = new String[4];
+        String[] material2 = new String[4];
+        String[] material3 = new String[4];
+        String[] screw1 = new String[4];
+        String[] screw2 = new String[4];
+        String[] screw3 = new String[4];
 
         int count = 0;
         List<String> screw = new ArrayList<String>();

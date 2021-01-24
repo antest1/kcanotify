@@ -132,9 +132,16 @@ public class AkashiDetailActivity extends AppCompatActivity {
                 JsonArray itemImprovementDetail = itemImprovementData.getAsJsonArray("improvement");
                 JsonArray itemDefaultEquippedOn = itemImprovementData.getAsJsonArray("default_equipped_on");
                 boolean itemConvertException = itemImprovementData.has("convert_exception");
-                if (itemImprovementDetail.size() < 2) {
-                    findViewById(R.id.akashi_improv_detail_2).setVisibility(View.GONE);
+
+                for (int i = 0; i < 3; i++) {
+                    int detail_id = getId("akashi_improv_detail_" + (i+1), R.id.class);
+                    if (i < itemImprovementDetail.size()) {
+                        findViewById(detail_id).setVisibility(View.VISIBLE);
+                    } else {
+                        findViewById(detail_id).setVisibility(View.GONE);
+                    }
                 }
+
                 for (int i = 0; i < itemImprovementDetail.size(); i++) {
                     JsonObject data = itemImprovementDetail.get(i).getAsJsonObject();
                     JsonArray resources = data.getAsJsonArray("resource");

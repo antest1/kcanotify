@@ -481,7 +481,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="akashi_term_equip">Equipment</string>
     <string name="akashi_term_resource">F/A/S/B</string>
     <string name="akashi_term_support">Support</string>
-    <string name="akashi_term_detail1">Improvement Detail (1)</string>
+    <string name="akashi_term_detail1">Improvement Detail</string>
     <string name="akashi_term_detail2">Improvement Detail (2)</string>
     <string name="akashi_term_default">Who have as stock equipment</string>
     <string name="akashi_term_status">Current Improvement Status</string>
