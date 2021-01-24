@@ -33,7 +33,7 @@ public class KcaPoiDBAPI {
     public static final String REQ_SHIP_DROP = "/api/report/v2/drop_ship";
     //public static final String REQ_EQUIP_REMODEL = "/api/report/v2/remodel_recipe";
 
-    public static final String USER_AGENT = KcaUtils.format("Kcanotify/%s ", BuildConfig.VERSION_NAME);
+    public static final String USER_AGENT = KcaUtils.format("Kcanotify/%s", BuildConfig.VERSION_NAME);
 
     public static Handler sHandler;
     private static Gson gson = new Gson();
@@ -45,53 +45,62 @@ public class KcaPoiDBAPI {
     public static void sendEquipDevData(String items, int secretary, int itemId, int teitokuLv, boolean successful) {
         if (teitokuLv < 1 || secretary < 0 || itemId < 0) return;
 
-        JsonObject response = new JsonObject();
-        response.add("items", gson.fromJson(items, JsonArray.class));
-        response.addProperty("secretary", secretary);
-        response.addProperty("itemId", itemId);
-        response.addProperty("teitokuLv", teitokuLv);
-        response.addProperty("successful", successful);
-        response.addProperty("origin", USER_AGENT);
-        new poiDbRequest().execute(REQ_EQUIP_DEV, KcaUtils.format("data=%s", response.toString()));
+        JsonObject payload = new JsonObject();
+        payload.add("items", gson.fromJson(items, JsonArray.class));
+        payload.addProperty("secretary", secretary);
+        payload.addProperty("itemId", itemId);
+        payload.addProperty("teitokuLv", teitokuLv);
+        payload.addProperty("successful", successful);
+        payload.addProperty("origin", USER_AGENT);
+
+        JsonObject body = new JsonObject();
+        body.add("data", payload);
+        new poiDbRequest().execute(REQ_EQUIP_DEV, body.toString());
     }
 
     public static void sendShipDevData(String items, int kdockId, int secretary, int shipId, int highpeed, int teitokuLv, int largeFlag) {
         if (teitokuLv < 1 || kdockId < 0 || secretary < 0 || shipId < 0 || highpeed < 0 || largeFlag < 0) return;
 
-        JsonObject response = new JsonObject();
-        response.add("items", gson.fromJson(items, JsonArray.class));
-        response.addProperty("kdockId", kdockId);
-        response.addProperty("secretary", secretary);
-        response.addProperty("shipId", shipId);
-        response.addProperty("highspeed", highpeed);
-        response.addProperty("teitokuLv", teitokuLv);
-        response.addProperty("largeFlag", largeFlag);
-        response.addProperty("origin", USER_AGENT);
-        new poiDbRequest().execute(REQ_SHIP_DEV, KcaUtils.format("data=%s", response.toString()));
+        JsonObject payload = new JsonObject();
+        payload.add("items", gson.fromJson(items, JsonArray.class));
+        payload.addProperty("kdockId", kdockId);
+        payload.addProperty("secretary", secretary);
+        payload.addProperty("shipId", shipId);
+        payload.addProperty("highspeed", highpeed);
+        payload.addProperty("teitokuLv", teitokuLv);
+        payload.addProperty("largeFlag", largeFlag);
+        payload.addProperty("origin", USER_AGENT);
+
+        JsonObject body = new JsonObject();
+        body.add("data", payload);
+        new poiDbRequest().execute(REQ_SHIP_DEV, body.toString());
     }
 
     public static void sendShipDropData(int shipId, int mapId, String quest, int cellId, String enemy, String rank, boolean isBoss, int teitokuLv, int mapLv, JsonObject enemyInfo) {
         if (teitokuLv < 1 || mapId < 0 || cellId < 0 || mapLv < 0) return;
 
-        JsonObject response = new JsonObject();
-        response.addProperty("shipId", shipId);
-        response.addProperty("mapId", mapId);
-        response.addProperty("quest", quest);
-        response.addProperty("cellId", cellId);
-        response.addProperty("enemy", enemy);
-        response.addProperty("rank", rank);
-        response.addProperty("isBoss", isBoss);
-        response.addProperty("teitokuLv", teitokuLv);
-        response.addProperty("mapLv", mapLv);
-        response.add("enemyShips1", enemyInfo.has("ships") ? enemyInfo.getAsJsonArray("ships") : new JsonArray());
-        response.add("enemyShips2", enemyInfo.has("ships2") ? enemyInfo.getAsJsonArray("ships2") : new JsonArray());
-        response.addProperty("enemyFormation", enemyInfo.get("formation").getAsInt());
-        response.addProperty("origin", USER_AGENT);
-        new poiDbRequest().execute(REQ_SHIP_DROP, KcaUtils.format("data=%s", response.toString()));
+        JsonObject payload = new JsonObject();
+        payload.addProperty("shipId", shipId);
+        payload.addProperty("mapId", mapId);
+        payload.addProperty("quest", quest);
+        payload.addProperty("cellId", cellId);
+        payload.addProperty("enemy", enemy);
+        payload.addProperty("rank", rank);
+        payload.addProperty("isBoss", isBoss);
+        payload.addProperty("teitokuLv", teitokuLv);
+        payload.addProperty("mapLv", mapLv);
+        payload.add("enemyShips1", enemyInfo.has("ships") ? enemyInfo.getAsJsonArray("ships") : new JsonArray());
+        payload.add("enemyShips2", enemyInfo.has("ships2") ? enemyInfo.getAsJsonArray("ships2") : new JsonArray());
+        payload.addProperty("enemyFormation", enemyInfo.get("formation").getAsInt());
+        payload.addProperty("origin", USER_AGENT);
+
+        JsonObject body = new JsonObject();
+        body.add("data", payload);
+        new poiDbRequest().execute(REQ_SHIP_DROP, body.toString());
     }
 
     public static class poiDbRequest extends AsyncTask<String, Void, String> {
-        final MediaType FORM_DATA = MediaType.parse("application/x-www-form-urlencoded");
+        final MediaType MEDIA_TYPE = MediaType.parse("application/json");
         OkHttpClient client = new OkHttpClient.Builder().build();
 
         @Override
@@ -106,7 +115,7 @@ public class KcaPoiDBAPI {
             if (content.equals(ERROR_CODE)) {
                 Log.e("KCA", "KcaRequest Error: "+params[0]);
             } else {
-                Log.e("KCA", "KcaRequest Responsed "+String.valueOf(content.length()));
+                Log.e("KCA", "KcaRequest Responsed " + content);
             }
             return content;
         }
@@ -127,15 +136,16 @@ public class KcaPoiDBAPI {
         }
 
         public String Request(String uri, String data) throws Exception {
-            String url = "http://api.poi.moe".concat(uri);
+            String url = "https://api.poi.moe".concat(uri);
 
             RequestBody body;
             try {
-                body = RequestBody.create(FORM_DATA, data);
+                body = RequestBody.create(MEDIA_TYPE, data);
                 Request.Builder builder = new Request.Builder().url(url).post(body);
                 builder.addHeader("User-Agent", USER_AGENT);
                 builder.addHeader("Referer", "app:/KCA/");
-                builder.addHeader("Content-Type", "application/x-www-form-urlencoded");
+                builder.addHeader("X-Reporter", USER_AGENT);
+                builder.addHeader("Content-Type", "application/json");
                 Request request = builder.build();
 
                 Response response = client.newCall(request).execute();
