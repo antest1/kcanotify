@@ -412,7 +412,9 @@ public class KcaQuestViewService extends Service {
     private void setTopBottomNavigation(int centerPage, int totalItemSize) {
         int totalPage = (totalItemSize - 1) / 5 + 1;
         int startPage = centerPage - 2;
-        if (centerPage <= 3) startPage = 1;
+
+        if (totalPage <= 5) startPage = 1;
+        else if (centerPage <= 3) startPage = 1;
         else if (centerPage > totalPage - 4) startPage = totalPage - 4;
 
         TextView page_title = questView.findViewById(R.id.quest_page);
