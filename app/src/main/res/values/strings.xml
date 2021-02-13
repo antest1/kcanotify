@@ -770,7 +770,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetinfo_export_title">Export Fleet Information</string>
     <string name="fleetinfo_export_clipboard">Copy to Clipboard</string>
     <string name="fleetinfo_export_openpage1">Export to DeckBuilder</string>
-    <string name="fleetinfo_export_openpage2">Export to ImgKCbuilder</string>
+    <string name="fleetinfo_export_openpage2">Export to KanColleImgBuilder</string>
 
     <string name="action_export_fleetanalysis">fleetanalysis</string>
     <string name="equipinfo_export_title">Export to fleetanalysis</string>

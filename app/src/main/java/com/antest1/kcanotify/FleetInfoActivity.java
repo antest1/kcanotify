@@ -97,20 +97,17 @@ public class FleetInfoActivity extends AppCompatActivity {
         fleetlist_select.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.black), PorterDuff.Mode.MULTIPLY);
 
-        fleetlist_select.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(FleetInfoActivity.this);
-                dialog.setSingleChoiceItems(deck_list, -1, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int n) {
-                        current_fleet = n;
-                        new ShipItemLoadTask().execute();
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-            }
+        fleetlist_select.setOnClickListener(v -> {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(FleetInfoActivity.this);
+            dialog.setSingleChoiceItems(deck_list, -1, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int n) {
+                    current_fleet = n;
+                    new ShipItemLoadTask().execute();
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
         });
 
         fleetlist_name = findViewById(R.id.fleetlist_name);
@@ -177,23 +174,24 @@ public class FleetInfoActivity extends AppCompatActivity {
         export_openpage2 = export_popup.findViewById(R.id.export_openpage2);
         export_openpage2.setText(getStringWithLocale(R.string.fleetinfo_export_openpage2));
         export_openpage2.setOnClickListener(v -> {
-            String data = content.getText().toString();
+            String data = imageBuilderData();
             String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
             String locale_code = getResourceLocaleCode(locale);
+            if (locale_code.equals("ko")) locale_code = "kr";
+            if (locale_code.equals("tcn")) locale_code = "jp";
             try {
                 JsonObject add_data = new JsonParser().parse(data).getAsJsonObject();
-                add_data.addProperty("version", 4.1);
                 add_data.addProperty("lang", locale_code);
+                add_data.addProperty("theme", "dark");
                 data = add_data.toString();
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "json parsing error", Toast.LENGTH_SHORT).show();
-
             }
 
             try {
                 String encoded =  URLEncoder.encode(data, "utf-8");
                 Intent bIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://www.nishikuma.net/ImgKCbuilder/?predeck=".concat(encoded)));
+                        Uri.parse("https://kancolleimgbuilder.web.app/builder?deck=".concat(encoded)));
                 startActivity(bIntent);
             } catch (UnsupportedEncodingException e) {
                 Toast.makeText(getApplicationContext(), "parsing error", Toast.LENGTH_SHORT).show();
@@ -354,6 +352,82 @@ public class FleetInfoActivity extends AppCompatActivity {
             }
         }
         return deckbuilder.toString();
+    }
+
+    public String imageBuilderData() {
+        JsonObject builder = new JsonObject();
+        builder.addProperty("hqlv", KcaApiData.getAdmiralLevel());
+
+        JsonArray deck_data = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
+        if (deck_data != null) {
+            for (int i = 0; i < deck_data.size(); i++) {
+                JsonObject fleet = new JsonObject();
+                JsonArray item = deckInfoCalc.getDeckListInfo(deck_data, i, "all", KC_REQ_LIST);
+                for (int j = 0; j < item.size(); j++) {
+                    JsonObject sitem = new JsonObject();
+
+                    JsonObject ship = item.get(j).getAsJsonObject();
+                    JsonObject user = ship.getAsJsonObject("user");
+                    sitem.addProperty("id", user.get("api_ship_id").getAsString());
+                    sitem.addProperty("lv", user.get("api_lv").getAsInt());
+                    sitem.addProperty("luck", user.getAsJsonArray("api_lucky").get(0).getAsInt());
+                    sitem.addProperty("hp", user.get("api_nowhp").getAsInt());
+                    JsonObject items = new JsonObject();
+
+                    JsonArray api_slot = user.getAsJsonArray("api_slot");
+                    for (int k = 0; k < api_slot.size(); k++) {
+                        JsonObject item_s = new JsonObject();
+                        int slotid = api_slot.get(k).getAsInt();
+                        if (slotid <= 0) continue;
+                        JsonObject item_data = getUserItemStatusById(slotid, "slotitem_id,level,alv", "");
+                        if (item_data != null) {
+                            int slotitme_id = item_data.get("slotitem_id").getAsInt();
+                            item_s.addProperty("id", slotitme_id);
+                            if (item_data.has("level")) {
+                                int level = item_data.get("level").getAsInt();
+                                if (level > 0) item_s.addProperty("rf", level);
+                            }
+                            if (item_data.has("alv")) {
+                                int alv = item_data.get("alv").getAsInt();
+                                if (alv > 0) item_s.addProperty("mas", alv);
+                            }
+                            items.add(KcaUtils.format("i%d", k + 1), item_s);
+                        }
+                    }
+
+                    int ship_slot_ex = user.get("api_slot_ex").getAsInt();
+                    if (ship_slot_ex > 0) {
+                        JsonObject item_s = new JsonObject();
+                        JsonObject ex_item_data = getUserItemStatusById(ship_slot_ex, "slotitem_id,level,alv", "");
+                        if (ex_item_data != null) {
+                            int slotitme_id = ex_item_data.get("slotitem_id").getAsInt();
+                            item_s.addProperty("id", slotitme_id);
+                            if (ex_item_data.has("level")) {
+                                int level = ex_item_data.get("level").getAsInt();
+                                if (level > 0) item_s.addProperty("rf", level);
+                            }
+                            if (ex_item_data.has("alv")) {
+                                int alv = ex_item_data.get("alv").getAsInt();
+                                if (alv > 0) item_s.addProperty("mas", alv);
+                            }
+                            items.add("ix", item_s);
+                        }
+                    }
+
+                    sitem.addProperty("asw", user.getAsJsonArray("api_taisen").get(0).getAsInt());
+                    sitem.add("items", items);
+                    sitem.addProperty("fp", user.getAsJsonArray("api_karyoku").get(0).getAsInt());
+                    sitem.addProperty("tp", user.getAsJsonArray("api_raisou").get(0).getAsInt());
+                    sitem.addProperty("aa", user.getAsJsonArray("api_taiku").get(0).getAsInt());
+                    sitem.addProperty("ar", user.getAsJsonArray("api_soukou").get(0).getAsInt());
+                    sitem.addProperty("ev", user.getAsJsonArray("api_kaihi").get(0).getAsInt());
+                    sitem.addProperty("los", user.getAsJsonArray("api_sakuteki").get(0).getAsInt());
+                    fleet.add(KcaUtils.format("s%d", j + 1), sitem);
+                }
+                builder.add(KcaUtils.format("f%d", i + 1), fleet);
+            }
+        }
+        return builder.toString();
     }
 
     @Override
