@@ -665,7 +665,7 @@
     <string name="fleetview_18spring_nori" formatted="false">N %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">T %02d</string>
 
-    <string name="special_message">Feliz Navidad con Jervis!</string>
+    <string name="special_message">feliz día de san valentin ~</string>
     <string name="notification_message">Notificación e información</string>
 
     <string name="widget_timer_name">Kcanotify Temporizador</string>
