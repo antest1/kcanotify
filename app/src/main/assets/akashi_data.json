@@ -232,7 +232,7 @@
 				"resource": [[10, 0, 30, 30], [4, 5, 2, 3, 28, 1], [7, 10, 3, 5, 28, 2], [10, 20, 8, 14, 28, 3]]
 			}
 		],
-		"default_equipped_on": [145, 489, 312, 302, 324, 325, 50, 141, 305, 306, 319, 194, 130, 149, 136, 148, 345, 349, 351, 359, 476, 373, 680, 687, 695]
+		"default_equipped_on": [145, 489, 312, 302, 324, 325, 50, 141, 305, 306, 319, 194, 130, 149, 136, 148, 345, 349, 351, 359, 476, 373, 680, 687, 695, 662]
 	},
 	"29": {
 		"improvement": [{
@@ -850,11 +850,13 @@
 	},
 	"139": {
 		"improvement": [{
-				"upgrade": false,
-				"req": [[[false, false, false, true, true, true, true], [139, 307]], [[true, true, true, false, false, false, true], [140, 314]]],
-				"resource": [[20, 80, 100, 30], [3, 4, 2, 3, 65, 1], [4, 6, 3, 6, 65, 1], [0, 0, 0, 0, 0, 0]]
+				"upgrade": [407, 0],
+				"req": [[[true, true, true, true, true, true, true], [138, 306, 662]], [[false, false, false, true, true, true, true], [139, 307]], [[true, true, true, false, false, false, true], [140, 314]]],
+				"require_item": [[2, 1]],
+				"resource": [[20, 80, 100, 30], [3, 4, 2, 3, 65, 1], [4, 6, 3, 6, 65, 1], [8, 11, 5, 11, 88, 1]]
 			}
-		]
+		],
+		"default_equipped_on": [662]
 	},
 	"140": {
 		"improvement": [{
@@ -1340,6 +1342,14 @@
 		],
 		"default_equipped_on": [515, 393]
 	},
+	"243": {
+		"improvement": [{
+				"upgrade": false,
+				"req": [[[true, false, false, false, false, true, true], [515, 393]]],
+				"resource": [[120, 290, 0, 250], [6, 7, 3, 4, 17, 1], [8, 10, 4, 5, 18, 1], [0, 0, 0, 0, 0, 0]]
+			}
+		]
+	},
 	"245": {
 		"improvement": [{
 				"upgrade": [246, 0],
@@ -1809,6 +1819,14 @@
 				"req": [[[true, false, false, false, true, true, true], [621, 626]]],
 				"require_item": [[3, 3], [4, 3]],
 				"resource": [[400, 440, 20, 540], [10, 12, 5, 6, 17, 1], [14, 18, 6, 8, 169, 1], [28, 35, 8, 12, 180, 1]]
+			}
+		]
+	},
+	"407": {
+		"improvement": [{
+				"upgrade": false,
+				"req": [[[true, false, false, false, true, true, true], [662]]],
+				"resource": [[30, 100, 110, 50], [5, 6, 3, 4, 28, 1], [7, 9, 4, 6, 65, 2], [0, 0, 0, 0, 0, 0]]
 			}
 		]
 	}

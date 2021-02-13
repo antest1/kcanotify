@@ -1505,9 +1505,21 @@
     },
 	"898": {
         "code": "B162",
-        "name": "From the Northen Sea, With Love",
+        "name": "From the Northern Sea, With Love",
         "desc": "Sortie to [W3-1], [W3-2], [W3-3], [W3-4] and [W3-5]. A-Rank+ the boss nodes of each.",
         "memo": "\u27a3 Rewards furniture and either five Buckets or a Furniture Fairy"
+	},
+	"847": {
+        "code": "B163",
+        "name": "Name Ship of the Kuma-class Light Cruisers, Sortieing, Kuma!",
+        "desc": "Sortie Kuma Kai Ni+ as flagship to [W1-6-N], [W2-2], [W3-2] and [W7-3-P]. S-Rank all relevant boss nodes.",
+        "memo": "\u27a3 Rewards a Reinforcement Expansion and either two 25mm Triple Autocannon Mounts OR a Daihatsu Landing Craft OR three Screws"
+	},
+	"936": {
+        "code": "B164",
+        "name": "Remodeled Cutting-Edge CL, Noshiro, Sortieing!",
+        "desc": "Sortie Noshiro Kai Ni as flagship, 3 DD and up to 2 additional ships to [W2-4], [W3-2], [W5-3], [W7-1] and [W7-2-M]. S-Rank all relevant boss nodes.",
+        "memo": "\u27a3 Rewards a 15.2cm Twin Gun Mount Kai Ni and either two 15.2cm Twin Gun Mounts Kai OR two 8cm High-angle Guns OR two 25mm Triple Autocannon Mounts"
     },
 
 	"201": {
@@ -1932,7 +1944,7 @@
         "unlock": [ 644 ]
     },
     "314": {
-        "code": "C41",
+        "code": "C52",
         "name": "Mass Exercises for Winter",
         "desc": "Secure 8 victories in Exercises within the same day.",
         "memo": "\u27a3Rewards a Mamiya"
@@ -2123,6 +2135,12 @@
         "name": "The Miracle Destroyer",
         "desc": "Secure 4 S-Rank victories in Exercises within the same day Yukikaze as flagship, 3 DD and up to 2 additional ships.",
         "memo": "\u27a3 Rewards: \u00B6First choice: Either a Mamiya OR five Buckets \u00B6Second choice: Either eight Development Materials OR a New Model Armament Materials OR four Screws"
+	},
+	"348": {
+        "code": "C53",
+        "name": "Annual CL Exercises - February",
+        "desc": "Secure 4 A-Rank+ victories in Exercises within the same day using a CL/CT (not CLT) as flagship, 2 additional CL(T)/CT, 2 DD and up to 1 additional ship.",
+        "memo": "\u203b Elite Light Cruiser Exercises! \u27a3Rewards: \u00B6First choice: Either an Irako OR three Buckets \u00B6Second choice: Either two 14cm Twin Gun Mounts OR two 15.2cm Twin Gun Mounts OR three Screws"
     },
 
 	"401": {
@@ -2380,7 +2398,13 @@
         "name": "Annual Expeditions 2 - September",
         "desc": "Complete Expeditions 41, 5, 40, E2 and 46.",
         "memo": "This quest resets on the first quest reset of September. \u203bExpeditionary Supply Line Reinforcement Mission - Extra Operation \u27a3Rewards: \u00B6First choice: Either a Mamiya OR four Screws \u00B6Second choice: two New Model Artillery Armament Materials OR two New Model Aviation Armament Materials"
-    },
+	},
+	"442": {
+        "code": "D38",
+        "name": "Annual Expeditions 2 - February",
+        "desc": "Complete Expeditions D1, 29, 30 and D3.",
+        "memo": "This quest resets on the first quest reset of February. \u203bConduct Western Liaison Operation Preparations! \u27a3Rewards: \u00B6First choice: Either two Irako OR six Development Materials OR three Screws \u00B6Second choice: Either a New Model Artillery Armament Materials OR two Underway Replenishments OR a New Model Armament Materials"
+	},
 
 	"501": {
 		"code": "E1",
@@ -2989,13 +3013,13 @@
 	"695": {
 		"code": "F86",
 		"name": "New Operations Research on the Suisei Dive Bomber",
-		"desc": "Due to the lengthy requirements, please refer to the panel mouseover description. The main requirement is Ise Kai Ni or Hyuuga Kai Ni equipped with a Suisei Model 12A.",
+		"desc": "The main requirement is Ise Kai Ni or Hyuuga Kai Ni equipped with a Suisei Model 12A.",
 		"memo": "Have 2500 Ammo, 5000 Bauxite and 1 New Model Aviation Armament Materials. Set Ise Kai Ni or Hyuuga Kai Ni as flagship. Equip an unlocked Suisei Model 12A in her first slot. Scrap 4 Suisei, 3 Type 99 Dive Bombers and 2 Zuiun. \u2718 Consumes the resources, items and equipment. \u27a3 Rewards a Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)"
 	},
 	"696": {
 		"code": "F87",
 		"name": "Formation of the Supreme Zuiun Squadron",
-		"desc": "Due to the lengthy requirements, please refer to the panel mouseover description. The main requirement is Ise Kai Ni or Hyuuga Kai Ni equipped with a \u2605max Zuiun Kai Ni (634 Air Group).",
+		"desc": "The main requirement is Ise Kai Ni or Hyuuga Kai Ni equipped with a \u2605max Zuiun Kai Ni (634 Air Group).",
 		"memo": "Have 2000 Ammo, 8000 Bauxite, 1 New Model Aviation Armament Materials and 2 Skill Crew Members. Set Ise Kai Ni or Hyuuga Kai Ni as flagship. Equip an unlocked \u2605max Zuiun Kai Ni (634 Air Group) in her first slot. Scrap 6 Zuiun, 3 Suisei and 1 Prototype Reppuu Late Model. \u2718 Consumes the resources, items and equipment. \u27a3 Rewards a Zuiun Kai Ni (634 Air Group / Skilled)"
 	},
 	"620": {
@@ -3033,7 +3057,14 @@
         "name": "Annual Arsenal - November",
         "desc": "Have 1500 Steel, Fuel and Bauxite. Scrap 5 Small Cal. Main Guns, 5 Medium Cal. Main Guns, 5 Large Cal. Main Guns, 5 Recon Seaplanes and 5 Torpedo Bombers.",
         "memo": "\u2718 Consumes the resources. \u203bThe Arsenal in Full Operation! A Development of New Model Armaments! \u27a3Rewards: \u00B6First choice: Either ten Development Materials OR a New Model Artillery Armament Materials OR a New Model Aviation Armament Materials \u00B6Second choice: Either five Screws OR New Model Armament Materials"
+	},
+	"681": {
+        "code": "F95",
+        "name": "Annual Arsenal - January",
+        "desc": "Have 1600 Bauxite and 20 Development Materials. Scrap 4 Dive Bombers and 4 Torpedo Bombers.",
+        "memo": "\u2718Consumes the resources. \u203bAir Force Modernization and Reorganization Allocation / \u27a3Rewards: \u00B6First choice: Either three Type 96 Land-based Attack Aircraft OR a Type 1 Land-based Attack Aircraft Model 22A OR two New Model Aviation Armament Materials \u00B6Second choice: Either a Skilled Crew Member OR four Screws"
     },
+
 
 	"701": {
 		"code": "G1",
@@ -3081,6 +3112,18 @@
         "name": "Annual Mod. 2 - November",
         "desc": "Have 900 Steel and 500 Bauxite. Modernize a DD using at least 3 CL twice.",
         "memo": "\u203b Part 2: Execute Destroyer Modernizations! \u2718Consumes the resources. \u27a3Rewards: \u00B6First choice: Either two Buckets OR three Development Materials \u00B6Second choice: Either two 25mm Single Autocannon Mounts OR two Screws"
+	},
+	"716": {
+        "code": "G8",
+        "name": "Annual CL Mod. - February",
+        "desc": "Have 800 Steel and 400 Bauxite. Modernize a CL(T) using at least 3 CL(T) twice.",
+        "memo": "This quest resets on the first quest reset of February. \u203bExecute Light Cruiser Modernizations! \u2718Consumes the resources. \u27a3Rewards: \u00B6First choice: Either two Buckets OR three Development Materials \u00B6Second choice: Either two 25mm Single Autocannon Mounts OR an Irako"
+    },
+    "717": {
+        "code": "G9",
+        "name": "Annual CL Mod. 2 - February",
+        "desc": "Have 900 Steel and 900 Ammo. Modernize a CL(T) using at least 3 CA(V) twice.",
+        "memo": "This quest resets on the first quest reset of February. \u203bPart 2: Execute Light Cruiser Modernizations! \u2718Consumes the resources. \u27a3Rewards: \u00B6First choice: Either four Development Materials OR a 15.2cm Twin Gun Mount \u00B6Second choice: Either two Type 22 Surface Radars OR two Screws"
     },
 
 	"884": {
@@ -3203,28 +3246,22 @@
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
 	},
 
-	"801": {
-		"code": "2101LQ1",
-		"name": "Happy New Year! Reiwa 3 Torpedo Squadron, begin Sortie!",
-		"desc": "Sortie a CL/CT/CLT as flagship and up to 5 DD to [W1-2], [W1-3], [W1-5], [W1-6] and [W7-1]. [W1-6] node N once and A-Rank+ the boss nodes of each.",
-		"memo": "\u27a3 Rewards a Repair Goddess and either two Type 2 Depth Charges OR two Furniture Fairies OR an Action Report."
-	},
-	"802": {
-		"code": "2101LQ2",
-		"name": "Happy New Year! Heavy Crusier Fleet, Deploy to the Southwestern Sea!",
-		"desc": "Sorite two CA/CAV (including flagship) and up to 4 additional ships to [W1-4], [W2-2], [W2-3], [W2-4], [W2-5]. S-Rank each boss node once.",
-		"memo": "\u27a3 Rewards: \u00B6First choice: Either 10 Development Materials OR 8 Buckets OR 4 Improvement Materials \u00B6Second choice: Either a 20.3cm (No.3) Twin Gun Mount \u26058 OR a 61cm Quadruple (Oxygen) Torpedo Mount Late Model OR two Medals"
-	},
-	"803": {
-		"code": "2101LQ3",
-		"name": "Happy New Year! Special Mission Fleet, Sortie to North Sea of the New Year!",
-		"desc": "Sortie 3 ships from CV(B/L)/AV/AS/AO and up to 3 additional ships to [W3-4], [E-2-2], and [E-3-3]. A-Rank+ each boss node twice.",
-		"memo": "\u27a3 Rewards: Furniture (Yakimochi Set), Either 4 New Model Aviation Armament Materials OR 3 Skilled Crew Members OR a Blueprint"
-	},
-	"804": {
-		"code": "2101LQ4",
-		"name": "New Year Mission [Extra Operation] 1st Fleet, Sortie!",
-		"desc": "Sorite to [W3-5], [W4-5], [W7-2-2], and [W7-3-2]. S-Rank each boss node once.",
-		"memo": "\u27a3 Rewards: Furnitue (New Year's scrolls toward the 8th anniversary), Either two Blueprints OR a Prototype Flight Deck Catapult OR Type 4 Heavy Bomber Hiryuu"
-	}
+	"234": {
+        "code": "2102LQ1",
+        "name": "Time-Limited Valentine's Day Quest: First Operation",
+        "desc": "Sortie a CL, 2 DD and up to 3 additional ships to [W1-4], [W2-1], [W2-2] and [W2-3]. A-Rank+ the boss nodes.",
+        "memo": "\u27a3 Rewards a Mamiya and either four Development Materials OR two 25mm Twin Autocannon Mounts OR a Furniture Fairy"
+    },
+    "238": {
+        "code": "2102LQ2",
+        "name": "Time-Limited Valentine's Day Quest: Second Operation",
+        "desc": "Sortie a CL(T)/CA(V)/CT as flagship and up to 5 additional ships to [W1-3], [W2-4], [W3-1], [W3-3] and [W4-2]. S-Rank the boss nodes.",
+        "memo": "\u27a3 Rewards Valentine's Day Chocolate and either a Medal OR a Reinforcement Expansion OR an Action Report"
+    },
+    "349": {
+        "code": "2102LQ3",
+        "name": "Time-Limited Valentine's Day Quest: Special Exercises",
+        "desc": "Secure 4 S-Rank victories in Exercises within the same day using 1 AV, 1 CA(V), 1 CL(T)/CT, 2 DD and up to 1 additional ship.",
+        "memo": "\u27a3 Rewards: \u00B6 First choice: Either a New Model Artillery Armament Materials OR a New Model Aviation Armament Materials OR five Development Materials \u00B6 Second choice: Either a Medal OR a Mamiya"
+    }
 }

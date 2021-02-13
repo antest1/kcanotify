@@ -497,6 +497,29 @@
 	"total-asw": 285,
 	"total-los": 385
 }, {
+	"no": "115",
+	"area": 2,
+	"name": {
+		"ko": "정예수뢰전대야습",
+		"en": "Night Attack by the Elite Torpedo Squadron",
+		"jp": "精鋭水雷戦隊夜襲",
+		"scn": "精锐水雷战队夜袭",
+		"tcn": "精銳水雷戰隊夜襲"
+	},
+	"time": 350,
+	"resource": [600, 1000, 600, 600],
+	"reward": [[3, 5], [4, 1]],
+	"exp": [120, 150],
+	"flag-lv": 75,
+	"total-lv": 495,
+	"total-num": 6,
+	"flag-cond": "3",
+	"total-cond": "3-1|2-5",
+	"total-firepower": 410,
+	"total-fp": 390,
+	"total-asw": 410,
+	"total-los": 340
+}, {
 	"no": "17",
 	"area": 3,
 	"name": {
@@ -953,6 +976,29 @@
 	"total-firepower": 60,
 	"total-fp": 80,
 	"total-asw": 50
+}, {
+	"no": "133",
+	"area": 4,
+	"name": {
+		"ko": "유럽방면우군과의접촉",
+		"en": "Contact with European Friend Fleet",
+		"jp": "欧州方面友軍との接触",
+		"scn": "和欧洲方面友軍的接触",
+		"tcn": "和歐洲方面友軍的接觸"
+	},
+	"time": 720,
+	"resource": [0, 800, 500, 400],
+	"reward": [[1, 3], [4, 1]],
+	"exp": [100, 125],
+	"flag-lv": 65,
+	"total-lv": 350,
+	"flag-cond": "20",
+	"total-num": 5,
+	"total-cond": "20-1|13,14-3",
+	"total-firepower": 120,
+	"total-fp": 110,
+	"total-asw": 75,
+	"total-los": 145
 }, {
 	"no": "33",
 	"area": 5,
