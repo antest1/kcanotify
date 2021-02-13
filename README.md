@@ -10,10 +10,10 @@ This application does not modify any incoming/outcoming packet when communicate 
 
 Requirement
 -------
-- Android 4.1(JellyBean) or later
-- [Kancolle Android](http://kancolle.wikia.com/wiki/KanColle_Android) must be installed
-- Supporting Android VPN service
-- Warning: Kcanotify may not work for specific devices(vendor-dependent issue) and old devices(Android 4.x).
+- Android 4.1 (JellyBean) or later
+- [Kancolle Android](http://kancolle.wikia.com/wiki/KanColle_Android) or [GotoBrowser](http://luckyjervis.com/GotoBrowser/) must be installed
+- Supporting Android VPN service (when using official app)
+- Warning: Kcanotify may not work for specific devices (vendor-dependent issue) and old devices (Android 4.x).
 
 Download
 -------
@@ -40,7 +40,7 @@ Main Features
 - QuestView (quest translation, show quest progress)
 - Akashi's improvement arsenal
 - Ship list, Equipment list, EXP calculator, Expedition list, ...
-- Sending statistics to OpenDB and poi-statistics (optional)
+- Sending statistics to poi-statistics (optional)
 
 Language
 -------
