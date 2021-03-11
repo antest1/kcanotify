@@ -1521,6 +1521,12 @@
         "desc": "Sortie Noshiro Kai Ni as flagship, 3 DD and up to 2 additional ships to [W2-4], [W3-2], [W5-3], [W7-1] and [W7-2-M]. S-Rank all relevant boss nodes.",
         "memo": "\u27a3 Rewards a 15.2cm Twin Gun Mount Kai Ni and either two 15.2cm Twin Gun Mounts Kai OR two 8cm High-angle Guns OR two 25mm Triple Autocannon Mounts"
     },
+	"937": {
+        "code": "B165",
+        "name": "Elite Seventh Destroyer Division, Sortieing!",
+        "desc": "Sortie Akebono Kai Ni, Ushio Kai Ni and up to 4 additional ships to [W2-3], [W3-2], [W4-4] and [W5-4]. S-Rank all relevant boss nodes.",
+        "memo": "\u27a3 Rewards a 12.7cm Twin High-angle Gun Mount Kai Ni and either two Reinforcement Expansions OR a Bomb-carrying Type 1 Fighter Hayabusa Model III Kai (65th Squadron)"
+    },
 
 	"201": {
 		"code": "Bd1",
@@ -1936,25 +1942,6 @@
         "desc": "Secure 4 victories in Exercises within the same day.",
         "unlock": [ 330, 636 ]
     },
-    "313": {
-        "code": "C47",
-        "name": "Mass Exercises for Fall",
-        "desc": "Secure 8 victories in Exercises within the same day.",
-        "memo": "\u27a3Rewards a Mamiya and a Present Box",
-        "unlock": [ 644 ]
-    },
-    "314": {
-        "code": "C52",
-        "name": "Mass Exercises for Winter",
-        "desc": "Secure 8 victories in Exercises within the same day.",
-        "memo": "\u27a3Rewards a Mamiya"
-    },
-    "315": {
-        "code": "C43",
-        "name": "Mass Exercises for Spring",
-        "desc": "Secure 8 victories in Exercises within the same day.",
-        "memo": "\u27a3Rewards a Mamiya and a Present Box"
-    },
     "316": {
         "code": "C13",
         "name": "Strive to Improve the Transport Force's Level of Training!",
@@ -2013,13 +2000,7 @@
         "desc": "Secure 4 victories in Exercises within the same day using Yuugumo Kai Ni, Naganami Kai Ni and up to 4 additional ships.",
         "memo": "\u27a3Rewards: \u00B6First choice: Either three Irako OR two Type 2 Depth Charges \u00B6Second choice: Either a Reinforcement Expansion OR a Medal"
     },
-    "326": {
-        "code": "C36",
-        "name": "Mass Exercises for Summer",
-        "desc": "Secure 8 victories in Exercises within the same day.",
-        "memo": "\u27a3Rewards a Mamiya and a Present Box"
-    },
-    "327": {
+	"327": {
         "code": "C25",
         "name": "Asashio-class, Assemble! Commence Intensive Training!",
         "desc": "Secure 4 victories in Exercises within the same day using at least four of Asashio-class and up to 2 additional ships.",
@@ -2141,6 +2122,37 @@
         "name": "Annual CL Exercises - February",
         "desc": "Secure 4 A-Rank+ victories in Exercises within the same day using a CL/CT (not CLT) as flagship, 2 additional CL(T)/CT, 2 DD and up to 1 additional ship.",
         "memo": "\u203b Elite Light Cruiser Exercises! \u27a3Rewards: \u00B6First choice: Either an Irako OR three Buckets \u00B6Second choice: Either two 14cm Twin Gun Mounts OR two 15.2cm Twin Gun Mounts OR three Screws"
+    },
+	"350": {
+        "code": "C55",
+        "name": "Annual DesDiv 7 Exercises - March",
+        "desc": "Secure 3 A-Rank+ victories in Exercises within the same day using Akebono, Oboro, Sazanami, Ushio and up to 2 additional ships.",
+        "memo": "This quest resets on the first quest reset of March. \u203bElite DesDiv 7, Commence Exercises! \u27a3Rewards a Mamiya and either two Irako OR a New Model Armament Materials OR four Buckets"
+    },
+
+	"313": {
+        "code": "C47",
+        "name": "Mass Exercises for Fall",
+        "desc": "Secure 8 victories in Exercises within the same day.",
+        "memo": "\u27a3Rewards a Mamiya and a Present Box"
+    },
+    "314": {
+        "code": "C52",
+        "name": "Mass Exercises for Winter",
+        "desc": "Secure 8 victories in Exercises within the same day.",
+        "memo": "\u27a3Rewards a Mamiya and a Present Box"
+    },
+    "315": {
+        "code": "C54",
+        "name": "Mass Exercises for Spring",
+        "desc": "Secure 8 victories in Exercises within the same day.",
+        "memo": "\u27a3Rewards a Mamiya and a Present Box"
+    },
+    "326": {
+        "code": "C36",
+        "name": "Mass Exercises for Summer",
+        "desc": "Secure 8 victories in Exercises within the same day.",
+        "memo": "\u27a3Rewards a Mamiya and a Present Box"
     },
 
 	"401": {
@@ -2405,6 +2417,12 @@
         "desc": "Complete Expeditions D1, 29, 30 and D3.",
         "memo": "This quest resets on the first quest reset of February. \u203bConduct Western Liaison Operation Preparations! \u27a3Rewards: \u00B6First choice: Either two Irako OR six Development Materials OR three Screws \u00B6Second choice: Either a New Model Artillery Armament Materials OR two Underway Replenishments OR a New Model Armament Materials"
 	},
+	"443": {
+        "code": "D39",
+        "name": "Acquisition of Aviation Technology via Western Liaison Operations",
+        "desc": "Complete Expedition 30 two times.",
+        "memo": "\u27a3Rewards: \u00B6 First choice: Either a Bf 109T Kai OR Do 17 Z-2 \u00B6 Second choice: Either a New Model Armament Material OR two New Model Gun Mount Improvement Materials OR 4 screws"
+    },
 
 	"501": {
 		"code": "E1",
@@ -3246,22 +3264,58 @@
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
 	},
 
-	"234": {
-        "code": "2102LQ1",
-        "name": "Time-Limited Valentine's Day Quest: First Operation",
-        "desc": "Sortie a CL, 2 DD and up to 3 additional ships to [W1-4], [W2-1], [W2-2] and [W2-3]. A-Rank+ the boss nodes.",
-        "memo": "\u27a3 Rewards a Mamiya and either four Development Materials OR two 25mm Twin Autocannon Mounts OR a Furniture Fairy"
+	"906": {
+        "code": "2103B1",
+        "name": "[Hinamatsuri] Weekly W1",
+        "desc": "Sortie 3 DD/DE and up to 3 additional ships to [W1-2], [W1-3], [W1-5] and [W1-6-N]. A-Rank+ all relevant boss nodes.",
+        "memo": "Hinamatsuri: A Springtime of Safeguarding the Naval Base's Coastal Waters \u27a3Rewards Hishimochi and either two 25mm Single Autocannon Mounts OR five Development Materials OR a Type 2 12cm Mortar Kai"
     },
-    "238": {
-        "code": "2102LQ2",
-        "name": "Time-Limited Valentine's Day Quest: Second Operation",
-        "desc": "Sortie a CL(T)/CA(V)/CT as flagship and up to 5 additional ships to [W1-3], [W2-4], [W3-1], [W3-3] and [W4-2]. S-Rank the boss nodes.",
-        "memo": "\u27a3 Rewards Valentine's Day Chocolate and either a Medal OR a Reinforcement Expansion OR an Action Report"
+    "907": {
+        "code": "2103B2",
+        "name": "[Hinamatsuri] Weekly W2",
+        "desc": "Sortie 4 DD/DE and up to 2 additional ships to [W2-1], [W2-2] and [W2-3]. S-Rank each boss node twice.",
+        "memo": "Hinamatsuri: A Springtime of Nansei Region Combat Patrols! \u27a3Rewards two Hishimochi and either five Buckets OR a Mamiya OR two Type 3 Depth Charge Projectors"
     },
-    "349": {
-        "code": "2102LQ3",
-        "name": "Time-Limited Valentine's Day Quest: Special Exercises",
-        "desc": "Secure 4 S-Rank victories in Exercises within the same day using 1 AV, 1 CA(V), 1 CL(T)/CT, 2 DD and up to 1 additional ship.",
-        "memo": "\u27a3 Rewards: \u00B6 First choice: Either a New Model Artillery Armament Materials OR a New Model Aviation Armament Materials OR five Development Materials \u00B6 Second choice: Either a Medal OR a Mamiya"
+    "908": {
+        "code": "2103B3",
+        "name": "[Hinamatsuri] A Springtime of Decisive Battles! Strike Down the Enemy Task Force!",
+        "desc": "Sortie a CV(L/B), a CA(V), a CL and up to 3 additional ships to [W2-4], [W2-5] and [W7-2-M]. S-Rank each boss node twice.",
+        "memo": "\u27a3Rewards four Hishimochi and either ten Development Materials OR a Reinforcement Expansion OR a Medal"
+    },
+    "909": {
+        "code": "2103B4",
+        "name": "[Hinamatsuri] Weekly EOs",
+        "desc": "Sortie to [W3-5], [W4-5] and [W6-4]. S-Rank the boss nodes of each.",
+        "memo": "Hinamatsuri: A Springtime of Offensive Operations! \u27a3Rewards four Hishimochi and one of DE Matsuwa, Sado, Tsushima, Fukae or Hirato"
+    },
+    "710": {
+        "code": "2103G1",
+        "name": "[Hinamatsuri] Hishimochi Modernization: 2021 Beginnings",
+        "desc": "Have 2 Hishimochi. Modernize a DD using at least 4 Mutsuki-class DD.",
+        "memo": "\u2718Consumes the Hishimochi. \u27a3Rewards either six Buckets OR three Screws OR three Irako."
+    },
+    "711": {
+        "code": "2103G2",
+        "name": "[Hinamatsuri] Hishimochi Modernization: 2021 Intermission",
+        "desc": "Have 5 Hishimochi. Modernize an Ayanami-class DD using 5 Fubuki-class DD twice.",
+        "memo": "\u2718Consumes the Hishimochi. \u27a3Rewards either a Blueprint OR two Action Reports OR three New Model Armament Materials"
+    },
+    "712": {
+        "code": "2103G3",
+        "name": "[Hinamatsuri] Weekly Cruiser Modernization",
+        "desc": "Have 3 Hishimochi, 20 Development Materials, 2400 Steel and 2400 Ammo. Modernize a CA using at least 4 CL twice.",
+        "memo": "\u2718Consumes the resources and items. \u27a3Rewards: \u00B6First choice: Either seven Development Materials OR three Screws OR two Anti-Torpedo Bulges (Medium) \u00B6Second choice: Either a New Model Artillery Armament Materials OR a New Model Aviation Armament Materials OR a New Model Rocket Development Materials"
+    },
+    "713": {
+        "code": "2103G4",
+        "name": "[Hinamatsuri] Hishimochi Modernization: 2021 Sky",
+        "desc": "Have 7 Hishimochi, 90 Development Materials, 9000 Fuel and 9000 Bauxite. Modernize a CV using 5 CVL twice.",
+        "memo": "\u2718Consumes the Hishimochi. \u27a3 Rewards either a Prototype Flight Deck Catapult OR two Ne-Type Engines OR 4 New Technology Aircraft Blueprints"
+    },
+	"932": {
+        "code": "2103LQ1",
+        "name": "[Spring-Limited] The Springtime of Amatsukaze!",
+        "desc": "Sortie Amatsukaze as flagship, one of Tokitsukaze, Yukikaze or Hatsukaze as second ship, and up to 4 additional ships to [W2-2], [W2-3] and [W7-3-P]. A-Rank+ each boss node twice.",
+        "memo": "\u27a3Rewards a Furniture Fairy and either six Buckets OR three Type 3 Depth Charge Projectors OR three Underway Replenishments"
     }
 }
