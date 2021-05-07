@@ -109,6 +109,9 @@ import static com.antest1.kcanotify.KcaViewButtonService.REMOVE_FAIRY_ACTION;
 import static com.antest1.kcanotify.KcaViewButtonService.RETURN_FAIRY_ACTION;
 
 public class KcaService extends Service {
+    public static final String KCASERVICE_START = "kcaservice_start";
+    public static final String KCASERVICE_STOP = "kcaservice_stop";
+
     public static final String SERVICE_CHANNEL_ID = "kcaservice_noti_channel_";
     public static final String SERVICE_CHANNEL_ID_OLD = "noti_service_channel";
     public static final String SERVICE_CHANNEL_NAME = "Kcanotify Service";
@@ -232,130 +235,149 @@ public class KcaService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e("KCA-S", "onStartCommand Called");
-        isServiceOn = true;
-
-        isFirstState = true;
-        restartFlag = true;
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().putBoolean(PREF_SVC_ENABLED, true).apply();
-
-        contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-        dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-        questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
-        dropLogger = new KcaDropLogger(getApplicationContext(), null, KCANOTIFY_DROPLOG_VERSION);
-        resourceLogger = new KcaResourceLogger(getApplicationContext(), null, KCANOTIFY_RESOURCELOG_VERSION);
-        packetLogger = new KcaPacketLogger(getApplicationContext(), null, KCANOTIFY_PACKETLOG_VERSION);
-        deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
-        KcaApiData.setDBHelper(dbHelper);
-
-        JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
-        //Log.e("KCA", kcDataObj.toJSONString());
-        if (kcDataObj != null && kcDataObj.has("api_data")) {
-            //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
-            KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
+        if (intent != null && intent.getAction() != null) {
+            Log.e("KCA-S", intent.getAction());
         }
 
-        AssetManager assetManager = getResources().getAssets();
-        int loadMapEdgeInfoResult = loadMapEdgeInfoFromStorage(getApplicationContext());
-        if (loadMapEdgeInfoResult != 1) {
-            Toast.makeText(this, "Error loading Map Edge Info", Toast.LENGTH_LONG).show();
-        }
+        if (KCASERVICE_START.equals(intent.getAction())) {
+            isServiceOn = true;
+            isFirstState = true;
+            restartFlag = true;
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            prefs.edit().putBoolean(PREF_SVC_ENABLED, true).apply();
 
-        int loadSubMapInfoResult = loadSubMapInfoFromStorage(getApplicationContext());
-        if (loadSubMapInfoResult != 1) {
-            Toast.makeText(this, "Error loading Map Sub Info", Toast.LENGTH_LONG).show();
-        }
+            contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+            dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
+            questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
+            dropLogger = new KcaDropLogger(getApplicationContext(), null, KCANOTIFY_DROPLOG_VERSION);
+            resourceLogger = new KcaResourceLogger(getApplicationContext(), null, KCANOTIFY_RESOURCELOG_VERSION);
+            packetLogger = new KcaPacketLogger(getApplicationContext(), null, KCANOTIFY_PACKETLOG_VERSION);
+            deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
+            KcaApiData.setDBHelper(dbHelper);
 
-        int loadExpShipInfoResult = loadShipExpInfoFromAssets(assetManager);
-        if (loadExpShipInfoResult != 1) {
-            Toast.makeText(this, "Error loading Exp Ship Info", Toast.LENGTH_LONG).show();
-        }
+            JsonObject kcDataObj = dbHelper.getJsonObjectValue(DB_KEY_STARTDATA);
+            //Log.e("KCA", kcDataObj.toJSONString());
+            if (kcDataObj != null && kcDataObj.has("api_data")) {
+                //Toast.makeText(contextWithLocale, "Load Kancolle Data", Toast.LENGTH_LONG).show();
+                KcaApiData.getKcGameData(kcDataObj.getAsJsonObject("api_data"));
+            }
 
-        loadSimpleExpeditionInfoFromStorage(getApplicationContext());
-        loadShipInitEquipCountFromStorage(getApplicationContext());
-        loadQuestTrackDataFromStorage(dbHelper, getApplicationContext());
-        dbHelper.initExpScore();
+            AssetManager assetManager = getResources().getAssets();
+            int loadMapEdgeInfoResult = loadMapEdgeInfoFromStorage(getApplicationContext());
+            if (loadMapEdgeInfoResult != 1) {
+                Toast.makeText(this, "Error loading Map Edge Info", Toast.LENGTH_LONG).show();
+            }
 
-        showDataLoadErrorToast(getApplicationContext(), getBaseContext(), getStringWithLocale(R.string.download_check_error));
+            int loadSubMapInfoResult = loadSubMapInfoFromStorage(getApplicationContext());
+            if (loadSubMapInfoResult != 1) {
+                Toast.makeText(this, "Error loading Map Sub Info", Toast.LENGTH_LONG).show();
+            }
 
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mp) {
-                Log.i("Completion Listener", "Song Complete");
+            int loadExpShipInfoResult = loadShipExpInfoFromAssets(assetManager);
+            if (loadExpShipInfoResult != 1) {
+                Toast.makeText(this, "Error loading Exp Ship Info", Toast.LENGTH_LONG).show();
+            }
+
+            loadSimpleExpeditionInfoFromStorage(getApplicationContext());
+            loadShipInitEquipCountFromStorage(getApplicationContext());
+            loadQuestTrackDataFromStorage(dbHelper, getApplicationContext());
+            dbHelper.initExpScore();
+
+            showDataLoadErrorToast(getApplicationContext(), getBaseContext(), getStringWithLocale(R.string.download_check_error));
+
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setOnCompletionListener(mp -> {
                 mp.stop();
                 mp.reset();
+            });
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+            alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            createServiceChannel();
+
+            handler = new kcaServiceHandler(this);
+            nHandler = new kcaNotificationHandler(this);
+            broadcaster = LocalBroadcastManager.getInstance(this);
+
+            int sniffer_mode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
+            Log.e("KCA-S", String.valueOf(sniffer_mode));
+            switch (sniffer_mode) {
+                case SNIFFER_ACTIVE:
+                    KcaVpnData.setHandler(handler);
+                    break;
+                case SNIFFER_PASSIVE:
+                    KcaReceiver.setHandler(handler);
+                    break;
+                default:
+                    stopSelf();
             }
-        });
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        notifiManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        createServiceChannel();
+            KcaBattle.setHandler(nHandler);
+            KcaApiData.setHandler(nHandler);
+            KcaAlarmService.setHandler(nHandler);
+            MainActivity.setHandler(nHandler);
+            MainPreferenceFragment.setHandler(nHandler);
+            KcaFairySelectActivity.setHandler(nHandler);
+            KcaViewButtonService.setHandler(nHandler);
+            KcaAkashiRepairInfo.initAkashiTimer();
 
-        handler = new kcaServiceHandler(this);
-        nHandler = new kcaNotificationHandler(this);
-        broadcaster = LocalBroadcastManager.getInstance(this);
+            isPassiveMode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE)) == SNIFFER_PASSIVE;
+            if (isPassiveMode) {
+                receiver = new KcaReceiver();
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(GOTO_BROADCAST_ACTION);
+                filter.addAction(BROADCAST_ACTION);
+                registerReceiver(receiver, filter);
+            }
 
-        int sniffer_mode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
-        Log.e("KCA-S", String.valueOf(sniffer_mode));
-        switch (sniffer_mode) {
-            case SNIFFER_ACTIVE:
-                KcaVpnData.setHandler(handler);
-                break;
-            case SNIFFER_PASSIVE:
-                KcaReceiver.setHandler(handler);
-                break;
-            default:
-                stopSelf();
-        }
+            notifyFirstTime = true;
+            notifyBuilder = createBuilder(contextWithLocale, getServiceChannelId());
+            notifyTitle = KcaUtils.format(getStringWithLocale(R.string.kca_init_title), getStringWithLocale(R.string.app_name));
+            notifyContent = getStringWithLocale(R.string.kca_init_content);
+            // String initSubContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
+            kcaFirstDeckInfo = getStringWithLocale(R.string.kca_init_content);
+            initViewNotificationBuilder(notifyTitle, notifyContent);
+            startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
 
-        KcaBattle.setHandler(nHandler);
-        KcaApiData.setHandler(nHandler);
-        KcaAlarmService.setHandler(nHandler);
-        MainActivity.setHandler(nHandler);
-        MainPreferenceFragment.setHandler(nHandler);
-        KcaFairySelectActivity.setHandler(nHandler);
-        KcaViewButtonService.setHandler(nHandler);
-        KcaAkashiRepairInfo.initAkashiTimer();
-
-        isPassiveMode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE)) == SNIFFER_PASSIVE;
-        if (isPassiveMode) {
-            receiver = new KcaReceiver();
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(GOTO_BROADCAST_ACTION);
-            filter.addAction(BROADCAST_ACTION);
-            registerReceiver(receiver, filter);
-        }
-
-        notifyFirstTime = true;
-        notifyBuilder = createBuilder(contextWithLocale, getServiceChannelId());
-        notifyTitle = KcaUtils.format(getStringWithLocale(R.string.kca_init_title), getStringWithLocale(R.string.app_name));
-        notifyContent = getStringWithLocale(R.string.kca_init_content);
-        // String initSubContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
-        kcaFirstDeckInfo = getStringWithLocale(R.string.kca_init_content);
-        initViewNotificationBuilder(notifyTitle, notifyContent);
-        startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
-
-        notificationTimeCounter = -1;
-        timer = () -> {
-            if (isMissionTimerViewEnabled()) {
-                notificationTimeCounter += 1;
-                if (notificationTimeCounter == 120) {
-                    notificationTimeCounter = 0;
+            notificationTimeCounter = -1;
+            timer = () -> {
+                if (isMissionTimerViewEnabled()) {
+                    notificationTimeCounter += 1;
+                    if (notificationTimeCounter == 120) {
+                        notificationTimeCounter = 0;
+                    }
+                    updateExpViewNotification();
                 }
-                updateExpViewNotification();
-            }
-            if (KcaAkashiRepairInfo.getAkashiTimerValue() > 0) {
-                int second = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
-                if (second >= AKASHI_TIMER_20MIN && isAkashiTimerNotiWait) {
-                    isAkashiTimerNotiWait = false;
+                if (KcaAkashiRepairInfo.getAkashiTimerValue() > 0) {
+                    int second = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
+                    if (second >= AKASHI_TIMER_20MIN && isAkashiTimerNotiWait) {
+                        isAkashiTimerNotiWait = false;
+                    }
                 }
-            }
-        };
-        processExpeditionInfo(true);
-        runTimer();
+            };
+            processExpeditionInfo(true);
+            runTimer();
+
+        } else if (KCASERVICE_STOP.equals(intent.getAction())) {
+            if (dbHelper != null) dbHelper.close();
+            stopService(new Intent(this, KcaBattleViewService.class));
+            stopService(new Intent(this, KcaQuestViewService.class));
+            stopService(new Intent(this, KcaFleetViewService.class));
+            stopService(new Intent(this, KcaAkashiViewService.class));
+            stopService(new Intent(this, KcaMapHpPopupService.class));
+            stopService(new Intent(this, KcaConstructPopupService.class));
+            stopService(new Intent(this, KcaDevelopPopupService.class));
+            stopService(new Intent(this, KcaLandAirBasePopupService.class));
+            stopService(new Intent(this, KcaViewButtonService.class));
+            stopService(new Intent(this, KcaExpeditionCheckViewService.class));
+            stopService(new Intent(this, KcaCustomToastService.class));
+            setServiceDown();
+            KcaAlarmService.clearAlarmCount();
+            stopForeground(true);
+            stopSelfResult(startId);
+        }
         return START_STICKY;
     }
 
@@ -383,21 +405,6 @@ public class KcaService extends Service {
 
     public void onDestroy() {
         Log.e("KCA-S", "onDestroy Called");
-        stopService(new Intent(this, KcaBattleViewService.class));
-        stopService(new Intent(this, KcaQuestViewService.class));
-        stopService(new Intent(this, KcaFleetViewService.class));
-        stopService(new Intent(this, KcaAkashiViewService.class));
-        stopService(new Intent(this, KcaMapHpPopupService.class));
-        stopService(new Intent(this, KcaConstructPopupService.class));
-        stopService(new Intent(this, KcaDevelopPopupService.class));
-        stopService(new Intent(this, KcaLandAirBasePopupService.class));
-        stopService(new Intent(this, KcaViewButtonService.class));
-        stopService(new Intent(this, KcaExpeditionCheckViewService.class));
-        stopService(new Intent(this, KcaCustomToastService.class));
-        setServiceDown();
-        KcaAlarmService.clearAlarmCount();
-        stopForeground(true);
-        if (dbHelper != null) dbHelper.close();
         super.onDestroy();
     }
 

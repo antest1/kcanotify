@@ -176,24 +176,29 @@ public class MainActivity extends AppCompatActivity {
             vpnbtn.setEnabled(false);
         }
 
+        Intent serviceIntent = new Intent(MainActivity.this, KcaService.class);
+
         svcbtn = findViewById(R.id.svcbtn);
         svcbtn.setTextOff(getStringWithLocale(R.string.ma_svc_toggleoff));
         svcbtn.setTextOn(getStringWithLocale(R.string.ma_svc_toggleon));
-        svcbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Intent intent = new Intent(MainActivity.this, KcaService.class);
-                if (isChecked) {
-                    if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
-                        sendUserAnalytics(getApplicationContext(), START_SERVICE, null);
-                        loadTranslationData(getApplicationContext());
-                        startService(intent);
+        svcbtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
+                    sendUserAnalytics(getApplicationContext(), START_SERVICE, null);
+                    loadTranslationData(getApplicationContext());
+                    serviceIntent.setAction(KcaService.KCASERVICE_START);
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        startForegroundService(serviceIntent);
                     }
-                } else {
-                    stopService(intent);
-                    sendUserAnalytics(getApplicationContext(), END_SERVICE, null);
-                    prefs.edit().putBoolean(PREF_SVC_ENABLED, false).apply();
+                    else {
+                        startService(serviceIntent);
+                    }
                 }
+            } else {
+                serviceIntent.setAction(KcaService.KCASERVICE_STOP);
+                startService(serviceIntent);
+                sendUserAnalytics(getApplicationContext(), END_SERVICE, null);
+                prefs.edit().putBoolean(PREF_SVC_ENABLED, false).apply();
             }
         });
 
@@ -483,6 +488,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Log.i(TAG, "onActivityResult request=" + requestCode + " result=" + resultCode + " ok=" + (resultCode == RESULT_OK));
         if (requestCode == REQUEST_VPN) {
