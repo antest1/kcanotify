@@ -360,6 +360,19 @@ public class KcaUtils {
         return uri;
     }
 
+    public static boolean checkContentUri(ContentResolver cr, Uri contentUri)  {
+        String[] projection = {MediaStore.MediaColumns.DATA};
+        try {
+            Cursor cur = cr.query(contentUri, projection, null, null, null);
+            if (cur != null) {
+                cur.close();
+            }
+        } catch (SecurityException e) {
+            return false;
+        }
+        return true;
+    }
+
     public static void playNotificationSound(MediaPlayer mediaPlayer, Context context, Uri uri) {
         try {
             if (mediaPlayer.isPlaying()) {

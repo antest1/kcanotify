@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_MORALE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_NOTIFYATSVCOFF;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
+import static com.antest1.kcanotify.KcaUtils.checkContentUri;
 import static com.antest1.kcanotify.KcaUtils.createBuilder;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getContentUri;
@@ -491,7 +493,12 @@ public class KcaAlarmService extends Service {
                 }
                 Uri content_uri = getContentUri(getApplicationContext(),
                         Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
-                builder.setSound(content_uri);
+                if (checkContentUri(getContentResolver(), content_uri)) {
+                    builder.setSound(content_uri);
+                } else {
+                    builder.setSound(RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(),
+                            RingtoneManager.TYPE_NOTIFICATION));
+                }
             } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                 builder.setDefaults(Notification.DEFAULT_VIBRATE);
             } else {
