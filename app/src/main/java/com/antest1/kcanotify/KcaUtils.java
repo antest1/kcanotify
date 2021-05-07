@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.app.ActivityManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -520,7 +522,7 @@ public class KcaUtils {
     }
 
     public static void showCustomToast(Context a, Context b, KcaCustomToast toast, String body, int duration, int color) {
-        if (getBooleanPreferences(a, PREF_DISABLE_CUSTOMTOAST)) {
+        if (Build.VERSION.SDK_INT >= 30 || getBooleanPreferences(a, PREF_DISABLE_CUSTOMTOAST)) {
             JsonObject data = new JsonObject();
             data.addProperty("text", body);
             data.addProperty("duration", duration);

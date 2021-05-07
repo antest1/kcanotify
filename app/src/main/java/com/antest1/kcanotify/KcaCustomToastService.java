@@ -1,5 +1,7 @@
 package com.antest1.kcanotify;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -118,7 +120,13 @@ public class KcaCustomToastService extends Service {
                 mParams.x = (screenWidth - popupWidth) / 2;
                 mParams.y = (int)((screenHeight - popupHeight) * 0.8);
                 mManager.updateViewLayout(mView, mParams);
+                mView.setAlpha(0f);
                 mView.setVisibility(View.VISIBLE);
+                mView.animate()
+                        .alpha(1f)
+                        .setDuration(CUSTOM_FADE_DURATION)
+                        .setListener(null);
+
                 if (duration == 1) duration = CUSTOM_LENGTH_LONG;
                 else duration = CUSTOM_LENGTH_SHORT;
                 mHandler.postDelayed(mRunnable, duration);
@@ -136,13 +144,10 @@ public class KcaCustomToastService extends Service {
     private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            mView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mView.setVisibility(View.GONE);
-                }
-            }, CUSTOM_FADE_DURATION);
-            mHandler.removeCallbacks(mRunnable);
+            if (view.getId() == R.id.toast_text) {
+                mView.postDelayed(() -> mView.setVisibility(View.GONE), CUSTOM_FADE_DURATION);
+                mHandler.removeCallbacks(mRunnable);
+            }
             return false;
         }
     };
@@ -150,7 +155,15 @@ public class KcaCustomToastService extends Service {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            mView.setVisibility(View.GONE);
+            mView.animate()
+            .alpha(0f)
+            .setDuration(CUSTOM_FADE_DURATION)
+            .setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mView.setVisibility(View.GONE);
+                }
+            });
         }
     };
 
