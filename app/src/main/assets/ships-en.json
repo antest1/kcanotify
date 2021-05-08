@@ -148,6 +148,7 @@
 	"伊13":"I-13",
 	"伊14":"I-14",
 	"伊47":"I-47",
+	"伊203":"I-203",
 	"まるゆ":"Maruyu",
 	"潮":"Ushio",
 	"響":"Hibiki",
@@ -379,6 +380,7 @@
 	"Scirocco": "Scirocco",
 	"Sheffield": "Sheffield",
 	"Washington": "Washington",
+	"Northampton": "Northampton",
 
 	"防空棲姫":"Air Defense Princess",
 	"空母棲鬼":"Aircraft Carrier Demon",
@@ -496,7 +498,9 @@
 	"戦艦新棲姫": "New Battleship Princess",
 	"戦艦新棲姫-壊": "New Battleship Princess - Damaged",
 	"駆逐竹棲姫":"Destroyer Bamboo Princess",
-	"駆逐竹棲姫":"Destroyer Bamboo Princess - Damaged",
+	"駆逐竹棲姫-壊":"Destroyer Bamboo Princess - Damaged",
+	"ルンガ沖重巡棲姫": "Lunga Heavy Cruiser Princess",
+	"ルンガ沖重巡棲姫-壊": "Lunga Heavy Cruiser Princess - Damaged",
 
 	"elite":" elite",
 	"flagship":" flagship"

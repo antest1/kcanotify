@@ -407,6 +407,12 @@
   "15.2cm連装砲改二": "15.2cm Twin Gun Mount Kai 2",
   "装甲艇(AB艇)": "Armored Boat (AB-tei)",
   "武装大発": "Armed Daihatsu",
+  "21号対空電探改二" : "Type 21 Air Radar Kai 2",
+  "42号対空電探改二" : "Type 42 Air Radar Kai 2",
+  "水雷戦隊 熟練見張員" : "Torpedo Squadron Skilled Lookouts",
+  "SOC Seagull" : "SOC Seagull",
+  "精鋭水雷戦隊 司令部": "Elite Torpedo Squadron Command Facility",
+  "SO3C Seamew改": "SO3C Seamew Kai",
   
   "プレゼント箱": "Present Box",
   "秋刀魚": "Saury",
@@ -523,5 +529,6 @@
   "深海5inch単装高角砲改二": "Abyssal 5inch Single High-angle Gun Mount Kai Ni",
   "深海5inch連装高角砲改二": "Abyssal 5inch Twin High-angle Gun Mount Kai Ni",
   "深海夜間航空作戦装備": "Abyssal Night Aviation Operation Equipment",
-  "深海16inch三連装砲 Mk6": "Abyssal 16inch Triple Gun Mount Mk.6"
+  "深海16inch三連装砲 Mk6": "Abyssal 16inch Triple Gun Mount Mk.6",
+  "深海カモメ水偵": "Abyssal Seamew Reconnaissance Seaplane"
 }
