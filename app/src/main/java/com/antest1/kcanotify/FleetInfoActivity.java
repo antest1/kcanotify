@@ -191,7 +191,7 @@ public class FleetInfoActivity extends AppCompatActivity {
             try {
                 String encoded =  URLEncoder.encode(data, "utf-8");
                 Intent bIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://kancolleimgbuilder.web.app/builder?deck=".concat(encoded)));
+                        Uri.parse("https://kancolleimgbuilder.web.app/builder#".concat(encoded)));
                 startActivity(bIntent);
             } catch (UnsupportedEncodingException e) {
                 Toast.makeText(getApplicationContext(), "parsing error", Toast.LENGTH_SHORT).show();
