@@ -371,13 +371,6 @@
             android:key="notify_fairy_longclick"
             android:summary="@string/setting_menu_noti_desc_fairy_vib"
             android:title="@string/setting_menu_noti_title_fairy_vib" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            app:iconSpaceReserved="false"
-            android:key="disable_customtoast"
-            android:summary="@string/setting_menu_noti_desc_disable_customtoast"
-            android:title="@string/setting_menu_noti_title_disable_customtoast" />
     </PreferenceCategory>
 
     <PreferenceCategory
