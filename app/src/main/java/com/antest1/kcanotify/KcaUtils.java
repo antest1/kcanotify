@@ -23,6 +23,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.MediaStore;
@@ -55,6 +56,7 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -361,13 +363,17 @@ public class KcaUtils {
     }
 
     public static boolean checkContentUri(ContentResolver cr, Uri contentUri)  {
-        String[] projection = {MediaStore.MediaColumns.DATA};
         try {
-            Cursor cur = cr.query(contentUri, projection, null, null, null);
-            if (cur != null) {
-                cur.close();
+            ParcelFileDescriptor parcelFileDescriptor = cr.openFileDescriptor(contentUri,"r");
+            if (parcelFileDescriptor != null) {
+                FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+                if (fileDescriptor != null) {
+                    Log.e("KCA", "valid: " + fileDescriptor.valid());
+                }
+                parcelFileDescriptor.close();
             }
-        } catch (SecurityException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;
