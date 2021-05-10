@@ -372,7 +372,6 @@ public class KcaService extends Service {
                 stopService(new Intent(this, KcaCustomToastService.class));
                 setServiceDown();
                 KcaAlarmService.clearAlarmCount();
-                stopForeground(true);
                 stopSelfResult(startId);
             }
         }
@@ -384,6 +383,7 @@ public class KcaService extends Service {
     public void setServiceDown() {
         isPortAccessed = false;
         stopTimer();
+        stopForeground(true);
 
         handler = null;
         nHandler = null;
@@ -393,16 +393,19 @@ public class KcaService extends Service {
             mediaPlayer = null;
         }
 
-        if (receiver != null) unregisterReceiver(receiver);
-        receiver = null;
-
-        if (notifiManager != null) notifiManager.cancelAll();
-        notifiManager = null;
         isServiceOn = false;
     }
 
     public void onDestroy() {
-        Log.e("KCA-S", "onDestroy Called");
+        if (receiver != null) unregisterReceiver(receiver);
+        receiver = null;
+        if (notifiManager != null) {
+            notifiManager.cancelAll();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                notifiManager.deleteNotificationChannel(getServiceChannelId());
+            }
+        }
+        notifiManager = null;
         super.onDestroy();
     }
 
