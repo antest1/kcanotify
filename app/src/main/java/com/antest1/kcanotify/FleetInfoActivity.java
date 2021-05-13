@@ -260,16 +260,18 @@ public class FleetInfoActivity extends AppCompatActivity {
         protected void onPostExecute(JsonArray deck_data) {
             fleetlist_name.setText(fleet_name);
             if (deck_data == null) {
-                findViewById(R.id.fleetlist_info_area).setVisibility(View.GONE);
+                findViewById(R.id.fleetlist_content).setVisibility(View.GONE);
+                fleetlist_fp.setText("");
+                fleetlist_seek.setText("");
             } else {
                 if (current_fleet == 4) {
-                    findViewById(R.id.fleetlist_info_area).setVisibility(View.VISIBLE);
+                    findViewById(R.id.fleetlist_content).setVisibility(View.VISIBLE);
                     fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, 0, null));
                     fleetlist_seek.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_f),
                             deckInfoCalc.getSeekValue(deck_data, "0,1", SEEK_33CN1, null)));
 
                 } else {
-                    findViewById(R.id.fleetlist_info_area).setVisibility(View.VISIBLE);
+                    findViewById(R.id.fleetlist_content).setVisibility(View.VISIBLE);
                     fleetlist_fp.setText(deckInfoCalc.getAirPowerRangeString(deck_data, current_fleet, null));
                     fleetlist_seek.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_seekvalue_f),
                             deckInfoCalc.getSeekValue(deck_data, String.valueOf(current_fleet), SEEK_33CN1, null)));

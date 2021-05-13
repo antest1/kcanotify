@@ -92,6 +92,7 @@
                 </LinearLayout>
 
                 <RelativeLayout
+                    android:id="@+id/fleetlist_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -121,11 +122,17 @@
             android:id="@+id/export_popup"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
             android:background="@color/colorActivityBack"
             android:elevation="3dp"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="10dp"
+            android:visibility="gone">
 
             <RelativeLayout
                 android:id="@+id/export_bar"

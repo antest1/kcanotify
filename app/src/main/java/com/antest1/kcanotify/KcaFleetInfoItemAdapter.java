@@ -82,12 +82,12 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
 
         ViewHolder holder = (ViewHolder) v.getTag();
         JsonObject data = item.get(position).getAsJsonObject();
-        if (!data.has("kc") || data.get("kc") == null) {
+        if (!data.has("kc") || data.get("kc") == null || data.get("kc").isJsonNull()) {
             holder.ship_layout.setVisibility(View.INVISIBLE);
             return v;
         }
         holder.ship_layout.setVisibility(View.VISIBLE);
-        if (data == null || data.isJsonNull()) return v;
+        if (data.isJsonNull()) return v;
         JsonObject kcdata = data.getAsJsonObject("kc");
         JsonObject userdata = data.getAsJsonObject("user");
 
