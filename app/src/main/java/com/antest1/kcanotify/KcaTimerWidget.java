@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -147,6 +146,10 @@ public class KcaTimerWidget extends AppWidgetProvider {
                                 entries.add(new AbstractMap.SimpleEntry<>(expedition_name, "-"));
                             }
                         }
+                        int prev_size = entries.size();
+                        for (int i = 0; i < 3 - prev_size; i++) {
+                            entries.add(new AbstractMap.SimpleEntry<>("CLOSED", ""));
+                        }
                         entries.add(new AbstractMap.SimpleEntry<>("", ""));
                     }
                 }
@@ -208,7 +211,6 @@ public class KcaTimerWidget extends AppWidgetProvider {
             default:
                 break;
         }
-
         return entries;
     }
 
@@ -310,10 +312,11 @@ public class KcaTimerWidget extends AppWidgetProvider {
 
     private void updateData(Context context) {
         KcaDBHelper dbHelper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
-        widgetData = new JsonObject();
-        widgetData.add("deckport", dbHelper.getJsonArrayValue(DB_KEY_DECKPORT));
-        widgetData.add("ndock", dbHelper.getJsonArrayValue(DB_KEY_NDOCKDATA));
-        widgetData.add("kdock", dbHelper.getJsonArrayValue(DB_KEY_KDOCKDATA));
+        JsonObject new_data = new JsonObject();
+        new_data.add("deckport", dbHelper.getJsonArrayValue(DB_KEY_DECKPORT));
+        new_data.add("ndock", dbHelper.getJsonArrayValue(DB_KEY_NDOCKDATA));
+        new_data.add("kdock", dbHelper.getJsonArrayValue(DB_KEY_KDOCKDATA));
+        widgetData = new_data;
         dbHelper.close();
     }
 }
