@@ -413,6 +413,10 @@
   "SOC Seagull" : "SOC Seagull",
   "精鋭水雷戦隊 司令部": "Elite Torpedo Squadron Command Facility",
   "SO3C Seamew改": "SO3C Seamew Kai",
+  "零式艦戦21型(台南空)": "Type 0 Fighter Model 21 (Tainan Air Group)",
+  "零式艦戦32型(台南空)": "Type 0 Fighter Model 32 (Tainan Air Group)",
+  "零式艦戦22型(251空)": "Type 0 Fighter Model 22 (251 Air Group)",
+  "SBD-5": "SBD-5",
   
   "プレゼント箱": "Present Box",
   "秋刀魚": "Saury",
@@ -530,5 +534,7 @@
   "深海5inch連装高角砲改二": "Abyssal 5inch Twin High-angle Gun Mount Kai Ni",
   "深海夜間航空作戦装備": "Abyssal Night Aviation Operation Equipment",
   "深海16inch三連装砲 Mk6": "Abyssal 16inch Triple Gun Mount Mk.6",
-  "深海カモメ水偵": "Abyssal Seamew Reconnaissance Seaplane"
+	"深海カモメ水偵" : "Abyssal Seagull Reconnaissance Seaplane",
+	"深海海猫水偵" : "Abyssal Seamew Reconnaissance Seaplane",
+	"深海6inch三連装主砲 Mk.16" : "Abyssal 6inch Triple Main Gun Mount Mk.16"
 }
