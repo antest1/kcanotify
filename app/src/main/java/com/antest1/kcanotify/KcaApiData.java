@@ -1468,7 +1468,7 @@ public class KcaApiData {
             // Exception: Yuubari Kai Ni, Kaga Kai Ni, Souya Convert (prevent loop)
             if (api_id.equals("624")) continue;
             if (api_id.equals("646")) continue;
-            if (api_id.equals("699")) continue;
+            if (api_id.equals("650")) continue;
 
             if (data.has("api_aftershipid")) {
                 String after_id = data.get("api_aftershipid").getAsString();
