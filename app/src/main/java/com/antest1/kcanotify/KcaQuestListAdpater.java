@@ -30,6 +30,7 @@ import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaApiData.isQuestTrackable;
 import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
 import static com.antest1.kcanotify.KcaUtils.getId;
+import static com.antest1.kcanotify.KcaUtils.getIdWithFallback;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaQuestListAdpater extends BaseAdapter {
@@ -118,7 +119,7 @@ public class KcaQuestListAdpater extends BaseAdapter {
             }
         }
 
-        holder.quest_category.setText(getStringWithLocale(getId(KcaUtils.format("quest_category_%d", api_category), R.string.class)));
+        holder.quest_category.setText(getStringWithLocale(getIdWithFallback(KcaUtils.format("quest_category_%d", api_category), "quest_category_10",  R.string.class)));
         holder.quest_category.setBackgroundColor(getQuestCategoryColor(api_category));
 
         holder.quest_type.setText(getQuestLabelString(api_label_type));
@@ -222,6 +223,8 @@ public class KcaQuestListAdpater extends BaseAdapter {
                         return (category == 1 || category == 5 || category == 7);
                     } else if (filter == 2) {
                         return (category == 2 || category == 8 || category == 9);
+                    } else if (filter == 6) {
+                        return (category == 6 || category == 11);
                     } else {
                         return (category == filter);
                     }
@@ -237,7 +240,7 @@ public class KcaQuestListAdpater extends BaseAdapter {
     }
 
     public int getQuestCategoryColor(int category) {
-        return ContextCompat.getColor(application_context, KcaUtils.getId(KcaUtils.format("colorQuestCategory%d", category), R.color.class));
+        return ContextCompat.getColor(application_context, KcaUtils.getIdWithFallback(KcaUtils.format("colorQuestCategory%d", category), "colorQuestCategory10", R.color.class));
     }
 
     public String getQuestLabelString(int label) {
@@ -245,12 +248,12 @@ public class KcaQuestListAdpater extends BaseAdapter {
             String format = getStringWithLocale(R.string.quest_label_type_100);
             return KcaUtils.format(format, label % 100);
         } else {
-            return getStringWithLocale(getId(KcaUtils.format("quest_label_type_%d", label), R.string.class));
+            return getStringWithLocale(getIdWithFallback(KcaUtils.format("quest_label_type_%d", label), "quest_label_type_07", R.string.class));
         }
     }
 
     public int getQuestLabelColor(int label) {
         if (label > 100 && label < 120) label = 100;
-        return ContextCompat.getColor(application_context, KcaUtils.getId(KcaUtils.format("colorQuestLabel%d", label), R.color.class));
+        return ContextCompat.getColor(application_context, KcaUtils.getIdWithFallback(KcaUtils.format("colorQuestLabel%d", label), "colorQuestLabel7", R.color.class));
     }
 }
