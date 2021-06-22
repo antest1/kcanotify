@@ -248,7 +248,7 @@ public class KcaQuestListAdpater extends BaseAdapter {
             String format = getStringWithLocale(R.string.quest_label_type_100);
             return KcaUtils.format(format, label % 100);
         } else {
-            return getStringWithLocale(getIdWithFallback(KcaUtils.format("quest_label_type_%d", label), "quest_label_type_07", R.string.class));
+            return getStringWithLocale(getIdWithFallback(KcaUtils.format("quest_label_type_%d", label), "quest_label_type_7", R.string.class));
         }
     }
 
