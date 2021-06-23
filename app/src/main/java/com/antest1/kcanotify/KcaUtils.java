@@ -411,6 +411,15 @@ public class KcaUtils {
         return context.getResources().getResourceEntryName(resid);
     }
 
+    public static int getIdWithFallback(String resourceName, String fallbackResourceName, Class<?> c) {
+        try {
+            Field idField = c.getDeclaredField(resourceName);
+            return idField.getInt(idField);
+        } catch (Exception e) {
+            return getId(fallbackResourceName, c);
+        }
+    }
+
     public static int getId(String resourceName, Class<?> c) {
         try {
             Field idField = c.getDeclaredField(resourceName);
