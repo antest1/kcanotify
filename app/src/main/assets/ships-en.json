@@ -172,6 +172,7 @@
 	"浦風":"Urakaze",
 	"大鯨":"Taigei",
 	"迅鯨":"Jingei",
+	"長鯨":"Chougei",
 	"龍鳳":"Ryuuhou",
 	"雲龍":"Unryuu",
 	"天城":"Amagi",
@@ -329,6 +330,7 @@
 	"大東": "Daitou",
 	"御蔵": "Mikura",
 	"第四号海防艦": "Kaiboukan No.4",
+	"第三〇号海防艦": "Kaiboukan No.30",
 	"屋代": "Yashiro",
 	"丹陽": "Dan Yang",
 
@@ -387,6 +389,8 @@
 	"Washington": "Washington",
 	"Northampton": "Northampton",
 	"Honolulu": "Honolulu",
+	"Conte di Cavour": "Conte di Cavour",
+	"Victorious": "Victorious",
 
 	"防空棲姫":"Air Defense Princess",
 	"空母棲鬼":"Aircraft Carrier Demon",
@@ -497,6 +501,8 @@
 	"駆逐竹棲姫":"Destroyer Bamboo Princess",
 	"ルンガ沖重巡棲姫": "Lunga Heavy Cruiser Princess",
 	"軽巡新棲姫":"New Light Cruiser Princess",
+	"地中海弩級水姫": "Mediterranean Dreadnought Water Princess",
+	"欧州装甲空母棲姫": "European Armored Carrier Princess",
 
 	"elite":" elite",
 	"flagship":" flagship"
