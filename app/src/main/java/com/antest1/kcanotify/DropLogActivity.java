@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.BufferedWriter;
@@ -51,8 +52,6 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 public class DropLogActivity extends AppCompatActivity {
     private final String FILE_PATH = "/export_data";
     public static final long DAY_MILLISECOND = 86400000;
-    public static final String[] world_list = {"*", "1", "2", "3", "4", "5", "6", "7",
-            "41", "42", "43", "44", "45", "46", "47", "48", "49", "50"};
 
     public static final int RANK_S = 32;
     public static final int RANK_A = 16;
@@ -80,6 +79,7 @@ public class DropLogActivity extends AppCompatActivity {
     int current_world, current_map, current_node;
     Button btn_search;
     ListView droplog_listview;
+    String[] world_list = {"*", "1", "2", "3", "4", "5", "6", "7"};
 
     public DropLogActivity() {
         LocaleUtils.updateConfig(this);
@@ -104,27 +104,32 @@ public class DropLogActivity extends AppCompatActivity {
         setDefaultGameData();
         loadTranslationData(getApplicationContext());
 
+        JsonArray appWorldListData = KcaUtils.getJsonArrayFromAsset(getApplicationContext(), "world_list.json", dbHelper);
+        if (appWorldListData != null) {
+            world_list = new String[appWorldListData.size()];
+            for (int i = 0; i < world_list.length; i++) {
+                world_list[i] = appWorldListData.get(i).getAsString();
+            }
+        }
+
         showhide_btn = findViewById(R.id.droplog_showhide);
         showhide_btn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.black), PorterDuff.Mode.MULTIPLY);
         showhide_btn.setImageResource(R.mipmap.ic_arrow_up);
-        showhide_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                is_hidden = !is_hidden;
-                if (is_hidden) {
-                    showhide_btn.setImageResource(R.mipmap.ic_arrow_down);
-                    findViewById(R.id.droplog_filter_area).setVisibility(View.GONE);
-                } else {
-                    showhide_btn.setImageResource(R.mipmap.ic_arrow_up);
-                    findViewById(R.id.droplog_filter_area).setVisibility(View.VISIBLE);
-                }
+        showhide_btn.setOnClickListener(view -> {
+            is_hidden = !is_hidden;
+            if (is_hidden) {
+                showhide_btn.setImageResource(R.mipmap.ic_arrow_down);
+                findViewById(R.id.droplog_filter_area).setVisibility(View.GONE);
+            } else {
+                showhide_btn.setImageResource(R.mipmap.ic_arrow_up);
+                findViewById(R.id.droplog_filter_area).setVisibility(View.VISIBLE);
             }
         });
 
         maprank_info[0] = "-";
         for (int i = 1; i < maprank_info.length; i++) {
-            maprank_info[i] = getStringWithLocale(KcaUtils.getId("maprank_" + String.valueOf(i), R.string.class));
+            maprank_info[i] = getStringWithLocale(KcaUtils.getId("maprank_" + i, R.string.class));
         }
         KcaDropLogger.maprank_info = maprank_info;
         KcaDropLogger.ship_none = getStringWithLocale(R.string.droplog_ship_none);
@@ -147,7 +152,7 @@ public class DropLogActivity extends AppCompatActivity {
         sp_node = findViewById(R.id.droplog_node);
 
         ArrayAdapter<CharSequence> sp_world_adapter =
-                new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, world_list);
+                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, world_list);
         sp_world_adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         sp_world.setAdapter(sp_world_adapter);
 
@@ -178,12 +183,7 @@ public class DropLogActivity extends AppCompatActivity {
         adapter = new KcaDroplogItemAdpater();
 
         btn_search = findViewById(R.id.droplog_search);
-        btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setListView();
-            }
-        });
+        btn_search.setOnClickListener(view -> setListView());
 
         chkbox_s = findViewById(R.id.droplog_rank_s);
         chkbox_s.setOnCheckedChangeListener(chkboxListener);
@@ -194,19 +194,11 @@ public class DropLogActivity extends AppCompatActivity {
         chkbox_x = findViewById(R.id.droplog_rank_x);
         chkbox_x.setOnCheckedChangeListener(chkboxListener);
         chkbox_boss = findViewById(R.id.droplog_isboss);
-        chkbox_boss.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                setConditionData("isboss", b ? 1 : 0);
-            }
-        });
+        chkbox_boss.setOnCheckedChangeListener((compoundButton, b) -> setConditionData("isboss", b ? 1 : 0));
         chkbox_desc = findViewById(R.id.droplog_isdesc);
-        chkbox_desc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                setConditionData("isdesc", b ? 1 : 0);
-                chkbox_desc.setText(getStringWithLocale(b ? R.string.droplog_sort_desc : R.string.droplog_sort_asc));
-            }
+        chkbox_desc.setOnCheckedChangeListener((compoundButton, b) -> {
+            setConditionData("isdesc", b ? 1 : 0);
+            chkbox_desc.setText(getStringWithLocale(b ? R.string.droplog_sort_desc : R.string.droplog_sort_asc));
         });
         chkbox_desc.setChecked(true);
 
@@ -254,19 +246,11 @@ public class DropLogActivity extends AppCompatActivity {
                 return true;
             case R.id.action_droplog_clear:
                 AlertDialog.Builder alert = new AlertDialog.Builder(DropLogActivity.this);
-                alert.setPositiveButton(getStringWithLocale(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dropLogger.clearDropLog();
-                        setListView();
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                alert.setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog, which) -> {
+                    dropLogger.clearDropLog();
+                    setListView();
+                    dialog.dismiss();
+                }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), (dialog, which) -> dialog.cancel());
                 alert.setMessage(getStringWithLocale(R.string.droplog_clear_dialog_message));
                 alert.show();
                 return true;
