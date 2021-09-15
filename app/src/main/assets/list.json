@@ -106,4 +106,8 @@
 	"name": "stype-tcn.json",
 	"version": 2019072801,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/stype-tcn.json"
+}, {
+	"name": "world_list.json",
+	"version": 2021091501,
+	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/world_list.json"
 }]
