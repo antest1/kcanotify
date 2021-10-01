@@ -34,7 +34,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_download_link_mega_label" translatable="false">MEGA</string>
     <string name="app_download_link_luckyjervis_label" translatable="false">luckyjervis.com</string>
     <string name="app_download_link_kcwiki_label" translatable="false">kcwiki mirror</string>
-    <string name="app_download_link_googledrive" translatable="false">http://bit.ly/kcanotifydown</string>
+    <string name="app_download_link_googledrive" translatable="false">https://bit.ly/kcanotify_gdrive</string>
     <string name="app_download_link_mega" translatable="false">https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw</string>
     <string name="app_download_link_playstore" translatable="false">market://details?id=com.antest1.kcanotify</string>
     <string name="app_download_link_luckyjervis" translatable="false">http://luckyjervis.com/kcanotify/apk/latest.apk</string>
