@@ -1563,6 +1563,18 @@
         "desc": "Sortie 3 DD and up to three additional ships to [W1-3], [W1-4], [w2-1] and [W2-2]. S-Rank the boss nodes.",
         "memo": "\u27a3Rewards: \u00B6First choice: Either two Type 3 Shells OR three 12cm 20-tube Rocket Launchers OR two Shipborne Type 4 20cm Anti-ground Rocket Launchers \u00B6Second choice: Either two Daihatsu Landing Craft OR two 25mm Triple Machine Gun OR a Repair Goddess"
 	},
+	"957": {
+        "code": "B172",
+        "name": "Yamakaze Kai Ni, Weigh Anchor!",
+        "desc": "Sortie Yamakaze Kai Ni (D), 3DD or DE and up to 2 additional ships to [W1-2], [W1-3], [W1-4] and [W1-5]. S-Rank all relevant boss nodes.",
+        "memo": "\u27a3Rewards a Type 3 Active Sonar Kai and either eight Development Materials OR six Buckets OR a Reinforcement Expansion"
+    },
+    "958": {
+        "code": "B173",
+        "name": "Remodeled Shiratsuyu-class Destroyer Yamakaze Kai Ni, Fight Hard!",
+        "desc": "Sortie two of Yamakaze Kai Ni (D), Kawakaze Kai Ni and Umikaze Kai Ni and up to 4 additional ships to [W2-2], [W7-2-M], [W5-1] and [W6-4]. S-Rank all relevant boss nodes.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either five Screws OR three Daihatsu Landing Crafts OR two New Model Armament Materials \u00B6Second choice: Either an Action Report OR a 12.7cm Twin Gun Mount Model C Kai Ni OR a 61cm Quadruple (Oxygen) Torpedo Mount Late Model"
+    },
 
 	"201": {
 		"code": "Bd1",
@@ -2221,7 +2233,7 @@
     },
 
 	"313": {
-        "code": "C47",
+        "code": "C61",
         "name": "Mass Exercises for Fall",
         "desc": "Secure 8 victories in Exercises within the same day.",
         "memo": "\u27a3Rewards a Mamiya and a Present Box"
@@ -2530,6 +2542,12 @@
         "name": "[Event Preparation] Stage One (Anti-Submarine Maintenance)",
         "desc": "Complete Expeditions 3, 4, 5, A1 and A2.",
         "memo": "\u27a3Rewards: \u00B6First choice: Either three Type 93 Passive Sonar OR six Development Materials \u00B6Second choice: Either three Type 94 Depth Charge Projector OR four Screws OR a Mamiya"
+    },
+	"447": {
+        "code": "D43",
+        "name": "Strengthening the escort for maritime transport",
+        "desc": "Complete Expeditions 4, 5, 9, A1 and B1.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either two Type 93 Passive Sonars OR two Type 94 Depth Charge Projectors OR six Development Materials \u00B6Second choice: Either two Type 3 Active Sonars OR three Screws OR a Furniture Fairy"
     },
 
 	"501": {
@@ -3226,6 +3244,18 @@
         "desc": "Have 1300 Fuel, 1700 Baux, an Action Report, an Aerial Arm. Material and 2 Sk. Crew Members. Set Yura Kai Ni as secretary with a \u2605max Type 0 Reconnaissance Seaplane Model 11B in her 1st slot. Scrap 3 Type 0 Reconnaissance Seaplane and 3 Zuiun.",
         "memo": "\u2718Consumes the resources and items. \u27a3Rewards a Type 0 Reconnaissance Seaplane Model 11B (Skilled)"
     },
+	"1107": {
+        "code": "F102",
+        "name": "Annual Land Base Strengthening - September",
+        "desc": "Have 24000 Steel and 10 Development Materials. Scrap 2 Fighters and 2 Torpedo Bombers.",
+        "memo": "This quest resets on the first quest reset of September. \u203b[Steel Export] Strengthening the Land Base's Air Power \u27a3Rewards: \u00B6First choice: Either two Type 96 Land-based Attack Aircraft OR a Type 1 Land-based Attack Aircraft OR a New Model Aviation Armament Material \u00B6Second choice: Either three Screws OR a New Model Armament Material"
+    },
+    "1108": {
+        "code": "F103",
+        "name": "Increased production of the newly adjusted and improved Active Sonar",
+        "desc": "Have 1300 Baux, 30 Dev. Material. and two New Model Arm. Material. Set either Yamakaze Kai Ni (D) or Shigure Kai Ni as secretary with a \u2605max Type 3 Active Sonar in the first slot. Scrap 2 Type 93 Passive Sonars and 2 Type 3 Active Sonars.",
+        "memo": "\u2718Consumes the resources. \u27a3Rewards a Type 3 Active Sonar Kai"
+    },
 
 	"701": {
 		"code": "G1",
@@ -3417,43 +3447,5 @@
         "name": "It's Spring! Sortie, DesDiv 31 Flagship Naganami!",
         "desc": "Sortie Naganami as flagship, any 3 of DesDiv31 and up to 2 additional ships to [W2-1] and [W2-2]. S-Rank each boss node twice. Sortie to [W5-4]. A-Rank+ the boss node.",
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
-	},
-
-	"950": {
-        "code": "2107LQ1",
-        "name": "[Summer Limited] Operation Mermaid's Shore!",
-        "desc": "Sortie either Sazanami, Oboro, Ushio and Akebono OR Shiratsuyu Kai Ni, Shigure Kai Ni, Murasame Kai Ni and Yuudachi Kai Ni AND up to two additional ships to [W1-4], [W2-3] and [W3-2]. S-Rank the boss nodes twice.",
-        "memo": "\u2718 Your fleet must contain all four members of the same group. \u27a3Rewards: \u00B6First choice: Either ten Development Material OR eight buckets \u00B6Second choice: Either a Medal OR a Mamiya OR a Reinforcement Expansion"
-    },
-    "951": {
-        "code": "2107LQ2",
-        "name": "[Summer Limited] European Operation Siren's Shore!",
-        "desc": "Sortie a fleet with at least five of Italian DDs, German DDs, American DDs, French ships, Littorio/Italia, U-511/Ro-500, Houston and Gotland to [W4-1], [W4-3] and [W4-4]. S-Rank the boss nodes twice.",
-        "memo": "\u2718 Known acceptable ships: Maestrale, Grecale, Libeccio, Scirocco, Z1, Z3, Fletcher, Johnston, Samuel B.Roberts, Richelieu, Commandant Teste, Littorio/Italia, U-511/Ro-500, Houston, Gotland \u27a3Rewards: \u00B6First choice: Either a Furniture Fairy or five Screws or a Medal \u00B6Second choice: Either a Remodal Blueprint OR a Prototype Flight Deck Catapult"
-    },
-
-	"953": {
-        "code": "21SuLB1",
-        "name": "[Mediterranean Operation] Assemble the Special Mission Striking Force Fleet!",
-        "desc": "Sortie any fleet to Summer 2021 [E-1]. A-Rank+ nodes F, L and boss O.",
-        "memo": "\u27a3 Unlocks the Striking Force on Fleet 3. \u27a3 Rewards either a Type 3 Shell OR a Shipborne Type 4 20cm Anti-Ground Mortar OR four Buckets"
-    },
-    "954": {
-        "code": "21SuLB2",
-        "name": "[Mediterranean Operation] Attack the enemy deployed in the Mediterranean Region!",
-        "desc": "Sortie any fleet to Summer 2021 [E-1]. A-Rank+ nodes P, H and S.",
-        "memo": "\u27a3 Rewards: \u00B6 First choice: Either six Development Materials OR five Buckets OR three Screws \u00B6 Second choice: Either a Type 3 Depth Charge Projector OR a Furniture Fairy OR a Medal"
-    },
-    "955": {
-        "code": "21SuLB3",
-        "name": "[Mediterranean Operation] 10th Submarine Flotilla Operation",
-        "desc": "Sortie submarine fleet to Summer 2021 [E-3]. A-Rank+ nodes T1 and T4 twice.",
-        "memo": "\u2718 Quest only available when playing on either Easy, Normal or Hard. Will be reset upon changing difficulties. \u27a3 Rewards: \u00B6 First choice: Either three Type 3 Depth Charge Projector OR three Type 2 Depth Charge OR two Type124 ASDIC \u00B6 Second choice: Either two Action Reports OR a Remodel Blueprint"
-    },
-    "956": {
-        "code": "21SuLB4",
-        "name": "[Mediterranean Operation] North Africa Operation",
-        "desc": "Sortie any fleet to Summer 2021 [E-3]. S-Rank nodes F and W twice.",
-        "memo": "\u2718 Quest only available when playing on either Normal or Hard. Will be reset upon changing difficulties. \u27a3 Rewards a Daihatsu Landing Craft (Panzer II / North African Specification) and either four 25mm Single Autocannon Mount OR four Screws OR ten Development Materials"
-    }
+	}
 }
