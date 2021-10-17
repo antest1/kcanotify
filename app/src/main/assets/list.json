@@ -4,7 +4,7 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/icon_info.json"
 }, {
 	"name": "akashi_data.json",
-	"version": 2021050901,
+	"version": 2021101701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/akashi_data.json"
 }, {
 	"name": "akashi_reqitems.json",
@@ -12,7 +12,7 @@
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/akashi_reqitems.json"
 }, {
 	"name": "akashi_day.json",
-	"version": 2021050801,
+	"version": 2021101701,
 	"url": "https://raw.githubusercontent.com/antest1/kcanotify-gamedata/master/files/akashi_day.json"
 }, {
 	"name": "edges.json",
