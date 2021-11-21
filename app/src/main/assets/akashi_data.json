@@ -1938,6 +1938,16 @@
 		],
 		"convert_exception": true
 	},
+	"381": {
+		"improvement": [{
+				"upgrade": [385, 0],
+				"req": [[[true, true, true, true, true, true, true], [602, 654, 659, 697]]],
+				"require_item": [[2, 1]],
+				"resource": [[40, 420, 600, 40], [3, 4, 3, 4, 8, 1], [5, 7, 4, 5, 8, 2], [10, 18, 7, 13, 8, 3]]
+			}
+		],
+		"default_equipped_on": [602, 654]
+	},
 	"382": {
 		"improvement": [{
 				"upgrade": false,
@@ -1946,6 +1956,15 @@
 			}
 		],
 		"default_equipped_on": [377, 383, 384, 385, 386, 551, 678, 552, 679, 685, 378, 379, 611, 616, 684, 701, 612, 617]
+	},
+	"385": {
+		"improvement": [{
+				"upgrade": false,
+				"req": [[[true, true, true, true, true, false, false], [602, 697]], [[false, false, true, true, true, true, true], [654, 659]]],
+				"resource": [[40, 430, 650, 40], [7, 8, 4, 5, 8, 2], [9, 12, 5, 7, 9, 1], [0, 0, 0, 0, 0, 0]]
+			}
+		],
+		"default_equipped_on": [659, 697]
 	},
 	"391": {
 		"improvement": [{
