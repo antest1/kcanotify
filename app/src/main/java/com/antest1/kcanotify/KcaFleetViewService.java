@@ -828,88 +828,14 @@ public class KcaFleetViewService extends Service {
         int sum_level = 0;
         for (int i = 0; i < Math.max(6, maindata.size()); i++) {
             int view_id = base_view_id * 6 + i + 1;
-            View fleetitem = view.findViewById(getId(KcaUtils.format("fleetview_item_%d", view_id), R.id.class));
+            KcsFleetViewListItem fleetitem = view.findViewById(getId(KcaUtils.format("fleetview_item_%d", view_id), R.id.class));
 
             if (i >= maindata.size()) {
                 fleetitem.setVisibility(INVISIBLE);
             } else {
-                JsonObject userData = maindata.get(i).getAsJsonObject().getAsJsonObject("user");
-                JsonObject kcData = maindata.get(i).getAsJsonObject().getAsJsonObject("kc");
-                int ship_id = userData.get("id").getAsInt();
+                fleetitem.setData(maindata.get(i).getAsJsonObject());
 
-                // region view obtaining block
-                TextView tv_name = view.findViewById(getId(KcaUtils.format("fleetview_item_%d_name", view_id), R.id.class));
-                TextView tv_condmark = view.findViewById(getId(KcaUtils.format("fleetview_item_%d_condmark", view_id), R.id.class));
-                TextView tv_stype = view.findViewById(getId(KcaUtils.format("fleetview_item_%d_stype", view_id), R.id.class));
-                TextView tv_lv = view.findViewById(getId(KcaUtils.format("fleetview_item_%d_lv", view_id), R.id.class));
-                TextView tv_exp = view.findViewById(getId(KcaUtils.format("fleetview_item_%d_exp", view_id), R.id.class));
-                TextView tv_hp = view.findViewById(getId(KcaUtils.format("fleetview_item_%d_hp", view_id), R.id.class));
-                TextView tv_cond = view.findViewById(getId(KcaUtils.format("fleetview_item_%d_cond", view_id), R.id.class));
-                // endregion
-
-                tv_name.setText(getShipTranslation(kcData.get("name").getAsString(), false));
-                tv_stype.setText(getShipTypeAbbr(kcData.get("stype").getAsInt()));
-                tv_stype.setBackgroundColor(ContextCompat.getColor(appContext, R.color.transparent));
-                tv_stype.setTextColor(ContextCompat.getColor(appContext, R.color.colorAccent));
-
-                if (userData.has("sally_area")) {
-                    int sally_area = userData.get("sally_area").getAsInt();
-                    if (sally_area > 0) {
-                        tv_stype.setBackgroundColor(ContextCompat.getColor(appContext,
-                                getId("colorStatSallyArea".concat(String.valueOf(sally_area)), R.color.class)));
-                        tv_stype.getBackground().setAlpha(192);
-                        tv_stype.setTextColor(ContextCompat.getColor(appContext, R.color.white));
-                    }
-                }
-
-                int now_hp = userData.get("nowhp").getAsInt(), max_hp = userData.get("maxhp").getAsInt();
-                tv_lv.setText(makeLvString(userData.get("lv").getAsInt()));
-                tv_exp.setText(makeExpString(userData.getAsJsonArray("exp").get(1).getAsInt()));
-                tv_hp.setText(makeHpString(now_hp, max_hp));
-
-                tv_cond.setText(userData.get("cond").getAsString());
-                int condition = userData.get("cond").getAsInt();
-                if (condition > 49) {
-                    tv_cond.setBackgroundColor(ContextCompat.getColor(appContext, R.color.colorFleetShipKira));
-                    tv_cond.setTextColor(ContextCompat.getColor(appContext, R.color.colorPrimaryDark));
-                } else if (condition / 10 >= 4) {
-                    tv_cond.setBackgroundColor(ContextCompat.getColor(appContext, R.color.colorFleetInfoBtn));
-                    tv_cond.setTextColor(ContextCompat.getColor(appContext, R.color.white));
-                } else if (condition / 10 >= 3) {
-                    tv_cond.setBackgroundColor(ContextCompat.getColor(appContext, R.color.colorFleetInfoBtn));
-                    tv_cond.setTextColor(ContextCompat.getColor(appContext, R.color.colorFleetShipFatigue1));
-                } else if (condition / 10 == 2) {
-                    tv_cond.setBackgroundColor(ContextCompat.getColor(appContext, R.color.colorFleetShipFatigue1));
-                    tv_cond.setTextColor(ContextCompat.getColor(appContext, R.color.white));
-                } else {
-                    tv_cond.setBackgroundColor(ContextCompat.getColor(appContext, R.color.colorFleetShipFatigue2));
-                    tv_cond.setTextColor(ContextCompat.getColor(appContext, R.color.white));
-                }
-
-                if (now_hp * 4 <= max_hp) {
-                    fleetitem.setBackgroundColor(ContextCompat.getColor(appContext, R.color.colorFleetWarning));
-                    tv_hp.setTextColor(ContextCompat.getColor(appContext, R.color.colorHeavyDmgState));
-                } else if (now_hp * 2 <= max_hp) {
-                    fleetitem.setBackgroundColor(Color.TRANSPARENT);
-                    tv_hp.setTextColor(ContextCompat.getColor(appContext, R.color.colorModerateDmgState));
-                } else if (now_hp * 4 <= max_hp * 3) {
-                    fleetitem.setBackgroundColor(Color.TRANSPARENT);
-                    tv_hp.setTextColor(ContextCompat.getColor(appContext, R.color.colorLightDmgState));
-                } else if (now_hp != max_hp) {
-                    fleetitem.setBackgroundColor(Color.TRANSPARENT);
-                    tv_hp.setTextColor(ContextCompat.getColor(appContext, R.color.colorNormalState));
-                } else {
-                    fleetitem.setBackgroundColor(Color.TRANSPARENT);
-                    tv_hp.setTextColor(ContextCompat.getColor(appContext, R.color.colorFullState));
-                }
-
-                if (KcaDocking.checkShipInDock(ship_id)) {
-                    fleetitem.setBackgroundColor(ContextCompat.getColor(appContext, R.color.colorFleetInRepair));
-                }
-
-                fleetitem.setVisibility(View.VISIBLE);
-
-                sum_level += userData.get("lv").getAsInt();
+                sum_level += fleetitem.getShipInfo().lv;
             }
         }
         return sum_level;
