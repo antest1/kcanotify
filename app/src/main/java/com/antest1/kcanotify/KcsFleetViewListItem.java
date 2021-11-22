@@ -34,6 +34,8 @@ public class KcsFleetViewListItem extends LinearLayout {
 
     private ShipInfo info;
 
+    private boolean isAkashiActive = false;
+
     public KcsFleetViewListItem(Context context) {
         this(context, null);
     }
@@ -82,7 +84,8 @@ public class KcsFleetViewListItem extends LinearLayout {
 
         tv_lv.setText(makeLvString(info.lv));
         tv_exp.setText(makeExpString(info.exp));
-        tv_hp.setText(makeHpString(info.now_hp, info.max_hp));
+//        tv_hp.setText(makeHpString(info.now_hp, info.max_hp));
+        updateHP();
 
         int cond = info.cond;
         tv_cond.setText(makeCondString(cond));
@@ -129,9 +132,12 @@ public class KcsFleetViewListItem extends LinearLayout {
     }
 
     public void setAkashiTimer(boolean isActive) {
-        if (info == null) return;
+        isAkashiActive = isActive;
+        if (info != null) updateHP();
+    }
 
-        if (isActive && info.now_hp < info.max_hp && info.now_hp * 2 > info.max_hp) {
+    private void updateHP() {
+        if (isAkashiActive && info.now_hp < info.max_hp && info.now_hp * 2 > info.max_hp) {
             int elapsed = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
             int repaired = KcaDocking.getRepairedHp(info.lv, info.stype, elapsed);
             int next = Math.max(KcaDocking.getNextRepair(info.lv, info.stype, elapsed), 0);
@@ -143,11 +149,10 @@ public class KcsFleetViewListItem extends LinearLayout {
                     KcaUtils.getTimeStr(next, true)
             );
             tv_hp.setText(str);
+        } else {
 
-            return;
+            tv_hp.setText(makeHpString(info.now_hp, info.max_hp));
         }
-
-        tv_hp.setText(makeHpString(info.now_hp, info.max_hp));
     }
 
     public ShipInfo getShipInfo() {
@@ -193,7 +198,7 @@ public class KcsFleetViewListItem extends LinearLayout {
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
 
-        return new ShipInfoState(superState, info);
+        return new ShipInfoState(superState, info, isAkashiActive);
     }
 
     @Override
@@ -205,6 +210,7 @@ public class KcsFleetViewListItem extends LinearLayout {
         ShipInfoState state0 = (ShipInfoState) state;
         super.onRestoreInstanceState(state0.getSuperState());
 
+        isAkashiActive = state0.isAkashiActive;
         setData(state0.info);
     }
 
@@ -281,20 +287,24 @@ public class KcsFleetViewListItem extends LinearLayout {
 
     private static class ShipInfoState extends View.BaseSavedState {
         final ShipInfo info;
+        final boolean isAkashiActive;
 
         public ShipInfoState(
                 Parcelable superState,
-                ShipInfo info
+                ShipInfo info,
+                boolean isAkashiActive
         ) {
             super(superState);
 
             this.info = info;
+            this.isAkashiActive = isAkashiActive;
         }
 
         public ShipInfoState(Parcel source) {
             super(source);
 
             info = new ShipInfo(source);
+            isAkashiActive = source.readInt() == 1; // to avoid using read/writeBoolean
         }
 
         @Override
@@ -302,6 +312,7 @@ public class KcsFleetViewListItem extends LinearLayout {
             super.writeToParcel(out, flags);
 
             info.writeToParcel(out, flags);
+            out.writeInt(isAkashiActive ? 1 : 0); // to avoid using read/writeBoolean
         }
 
         @SuppressWarnings("hiding")
