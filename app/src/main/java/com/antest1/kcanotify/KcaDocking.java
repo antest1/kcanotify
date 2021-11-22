@@ -94,6 +94,7 @@ public class KcaDocking {
      * @return
      */
     public static int getNextRepair(int level, int stype, int elapsed) {
-        return (int) Math.ceil(getRepair1HpTime(level, stype) * (getRepairedHp(level, stype, elapsed) + 1));
+        int need = (int) Math.ceil(getRepair1HpTime(level, stype) * (getRepairedHp(level, stype, elapsed) + 1));
+        return need - elapsed;
     }
 }

@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,7 +18,10 @@ import androidx.core.content.ContextCompat;
 
 import com.google.gson.JsonObject;
 
+import java.util.Locale;
+
 public class KcsFleetViewListItem extends LinearLayout {
+    private static final String TAG = "FleetViewItem";
 
     private final LinearLayout container;
     private final TextView tv_name;
@@ -122,6 +126,28 @@ public class KcsFleetViewListItem extends LinearLayout {
         }
 
         container.setVisibility(View.VISIBLE);
+    }
+
+    public void setAkashiTimer(boolean isActive) {
+        if (info == null) return;
+
+        if (isActive && info.now_hp < info.max_hp && info.now_hp * 2 > info.max_hp) {
+            int elapsed = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
+            int repaired = KcaDocking.getRepairedHp(info.lv, info.stype, elapsed);
+            int next = Math.max(KcaDocking.getNextRepair(info.lv, info.stype, elapsed), 0);
+
+            String str = String.format(
+                    Locale.ENGLISH,
+                    "HP %d/%d +%d %s",
+                    info.now_hp, info.max_hp, repaired,
+                    KcaUtils.getTimeStr(next, true)
+            );
+            tv_hp.setText(str);
+
+            return;
+        }
+
+        tv_hp.setText(makeHpString(info.now_hp, info.max_hp));
     }
 
     public ShipInfo getShipInfo() {

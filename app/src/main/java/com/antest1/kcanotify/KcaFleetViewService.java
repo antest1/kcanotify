@@ -898,10 +898,17 @@ public class KcaFleetViewService extends Service {
                         fleetInfoLine.setText(displayText);
                     }
 
+                    for (int i = 0; i < 12; i++) {
+                        getFleetViewItem(i).setAkashiTimer(false);
+                    }
+
                     if (KcaAkashiRepairInfo.getAkashiTimerValue() < 0) {
                         fleetAkashiTimerBtn.setVisibility(View.GONE);
                     } else {
                         if (isAkashiTimerActive) {
+                            for (int i = 0; i < 12; i++) {
+                                getFleetViewItem(i).setAkashiTimer(true);
+                            }
                             fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnActive));
                         } else {
                             fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnDeactive));
