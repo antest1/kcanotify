@@ -384,7 +384,8 @@ public class KcaFleetViewService extends Service {
             mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
         }
         for (int i = 0; i < 12; i++) {
-            mView.findViewById(getId("fleetview_item_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
+//            mView.findViewById(getId("fleetview_item_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(mViewTouchListener);
+            getFleetViewItem(i).setOnTouchListener(mViewTouchListener);
         }
 
         setFleetMenu();
@@ -511,8 +512,9 @@ public class KcaFleetViewService extends Service {
                         fleetInfoLine.setSelected(true);
                     }
                     for (int i = 0; i < 12; i++) {
-                        String item_id = "fleetview_item_".concat(String.valueOf(i + 1));
-                        if (id == mView.findViewById(getId(item_id, R.id.class)).getId()) {
+//                        String item_id = "fleetview_item_".concat(String.valueOf(i + 1));
+//                        if (id == mView.findViewById(getId(item_id, R.id.class)).getId()) {
+                        if (id == getFleetViewItem(i).getId()) {
                             JsonArray data;
                             JsonObject udata, kcdata;
 
@@ -563,8 +565,9 @@ public class KcaFleetViewService extends Service {
                     }
 
                     for (int i = 0; i < 12; i++) {
-                        String item_id = "fleetview_item_".concat(String.valueOf(i + 1));
-                        if (id == mView.findViewById(getId(item_id, R.id.class)).getId()) {
+//                        String item_id = "fleetview_item_".concat(String.valueOf(i + 1));
+//                        if (id == mView.findViewById(getId(item_id, R.id.class)).getId()) {
+                        if (id == getFleetViewItem(i).getId()) {
                             itemView.setVisibility(GONE);
                             break;
                         }
@@ -733,8 +736,11 @@ public class KcaFleetViewService extends Service {
             mView.findViewById(R.id.fleet_list_combined).setVisibility((is_combined && !switch_is_one) ? View.VISIBLE : View.GONE);
         }
 
-        for (int i = 1; i <= 12; i++) {
-            mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", i), R.id.class)).setVisibility(INVISIBLE);
+//        for (int i = 1; i <= 12; i++) {
+//            mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", i), R.id.class)).setVisibility(INVISIBLE);
+//        }
+        for (int i = 0; i < 12; i++) {
+            getFleetViewItem(i).setVisibility(INVISIBLE);
         }
 
         int cn = seekcn_internal;
@@ -784,16 +790,16 @@ public class KcaFleetViewService extends Service {
         if (isCombined) {
             for (int n = 0; n < 2; n++) {
                 JsonArray maindata = deckInfoCalc.getDeckListInfo(deckportdata, n, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
-                sum_level += setFleetInfo(maindata, n, mView, getApplicationContext());
+                sum_level += setFleetInfo(maindata, n);
             }
 
         } else {
             JsonArray maindata = deckInfoCalc.getDeckListInfo(deckportdata, idx, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
             int max_count = Math.max(6, maindata.size());
-            if (max_count > 6) {
+            if (max_count > 6) { // if need to show combined fleet (maybe 遊撃艦隊)
                 mView.findViewById(R.id.fleet_list_combined).setVisibility(View.VISIBLE);
             }
-            sum_level += setFleetInfo(maindata, 0, mView, getApplicationContext());
+            sum_level += setFleetInfo(maindata, 0);
         }
 
         isAkashiTimerActive = deckInfoCalc.checkAkashiFlagship(deckportdata).size() > 0;
@@ -819,16 +825,15 @@ public class KcaFleetViewService extends Service {
 
     /**
      *
-     * @param maindata
+     * @param maindata maindata
      * @param base_view_id 0 for 1st-4th fleet and 1st combined fleet, 1 for 2nd combined fleet
-     * @param view mView
      * @return sum of level
      */
-    static int setFleetInfo(JsonArray maindata, int base_view_id, View view, Context appContext) {
+    private int setFleetInfo(JsonArray maindata, int base_view_id) {
         int sum_level = 0;
         for (int i = 0; i < Math.max(6, maindata.size()); i++) {
-            int view_id = base_view_id * 6 + i + 1;
-            KcsFleetViewListItem fleetitem = view.findViewById(getId(KcaUtils.format("fleetview_item_%d", view_id), R.id.class));
+            int view_id = base_view_id * 6 + i;
+            KcsFleetViewListItem fleetitem = getFleetViewItem(view_id);
 
             if (i >= maindata.size()) {
                 fleetitem.setVisibility(INVISIBLE);
@@ -839,6 +844,21 @@ public class KcaFleetViewService extends Service {
             }
         }
         return sum_level;
+    }
+
+    /**
+     *
+     * @param index 0 <= index < 12
+     * @return fleetview_item_$index
+     */
+    private KcsFleetViewListItem getFleetViewItem(int index) {
+        if (index < 6) {
+            ViewGroup main = mView.findViewById(R.id.fleet_list_main);
+            return (KcsFleetViewListItem) main.getChildAt(index);
+        } else {
+            ViewGroup combined = mView.findViewById(R.id.fleet_list_combined);
+            return (KcsFleetViewListItem) combined.getChildAt(index - 6);
+        }
     }
 
     public void updateFleetInfoLine() {
