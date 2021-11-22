@@ -137,14 +137,14 @@ public class KcsFleetViewListItem extends LinearLayout {
     }
 
     private void updateHP() {
-        if (isAkashiActive && info.now_hp < info.max_hp && info.now_hp * 2 > info.max_hp) {
-            int elapsed = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
-            int repaired = KcaDocking.getRepairedHp(info.lv, info.stype, elapsed);
-            int next = KcaDocking.getNextRepair(info.lv, info.stype, elapsed;
+        int now = info.now_hp, max = info.max_hp;
+        int lv = info.lv, stype = info.stype;
+        int damage = max - now;
+        if (isAkashiActive && damage > 0 && now * 2 > max) {
 
-            if (info.now_hp + repaired >= info.max_hp) {
-                next = 0;
-            }
+            int elapsed = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
+            int repaired = Math.min(damage, KcaDocking.getRepairedHp(lv, stype, elapsed));
+            int next = (repaired < damage) ? KcaDocking.getNextRepair(lv, stype, elapsed) : 0;
 
             String str = String.format(
                     Locale.ENGLISH,
