@@ -140,7 +140,11 @@ public class KcsFleetViewListItem extends LinearLayout {
         if (isAkashiActive && info.now_hp < info.max_hp && info.now_hp * 2 > info.max_hp) {
             int elapsed = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
             int repaired = KcaDocking.getRepairedHp(info.lv, info.stype, elapsed);
-            int next = Math.max(KcaDocking.getNextRepair(info.lv, info.stype, elapsed), 0);
+            int next = KcaDocking.getNextRepair(info.lv, info.stype, elapsed;
+
+            if (info.now_hp + repaired >= info.max_hp) {
+                next = 0;
+            }
 
             String str = String.format(
                     Locale.ENGLISH,
