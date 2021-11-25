@@ -154,7 +154,7 @@ public class KcaFleetViewListItem extends LinearLayout {
         int now = info.now_hp, max = info.max_hp;
         int lv = info.lv, stype = info.stype;
         int damage = max - now;
-        if (isAkashiActive && damage > 0 && now * 2 > max) {
+        if (isAkashiActive && !KcaDocking.checkShipInDock(info.ship_id) && damage > 0 && now * 2 > max) {
 
             int elapsed = KcaAkashiRepairInfo.getAkashiElapsedTimeInSecond();
             int repaired = Math.min(damage, KcaDocking.getRepairedHp(lv, stype, elapsed));
