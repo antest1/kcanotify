@@ -1,13 +1,11 @@
 package com.antest1.kcanotify;
 
-import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
@@ -50,8 +48,6 @@ import static android.view.View.INVISIBLE;
 import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
 import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
-import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
-import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
@@ -817,7 +813,7 @@ public class KcaFleetViewService extends Service {
         int sum_level = 0;
         for (int i = 0; i < Math.max(6, maindata.size()); i++) {
             int view_id = base_view_id * 6 + i;
-            KcsFleetViewListItem fleetitem = getFleetViewItem(view_id);
+            KcaFleetViewListItem fleetitem = getFleetViewItem(view_id);
 
             if (i >= maindata.size()) {
                 fleetitem.setVisibility(INVISIBLE);
@@ -835,13 +831,13 @@ public class KcaFleetViewService extends Service {
      * @param index 0 <= index < 12
      * @return fleetview_item_$index
      */
-    private KcsFleetViewListItem getFleetViewItem(int index) {
+    private KcaFleetViewListItem getFleetViewItem(int index) {
         if (index < 6) {
             ViewGroup main = mView.findViewById(R.id.fleet_list_main);
-            return (KcsFleetViewListItem) main.getChildAt(index);
+            return (KcaFleetViewListItem) main.getChildAt(index);
         } else {
             ViewGroup combined = mView.findViewById(R.id.fleet_list_combined);
-            return (KcsFleetViewListItem) combined.getChildAt(index - 6);
+            return (KcaFleetViewListItem) combined.getChildAt(index - 6);
         }
     }
 

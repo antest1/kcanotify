@@ -535,7 +535,7 @@
                             android:layout_weight="1.0"
                             android:orientation="vertical">
 
-                            <com.antest1.kcanotify.KcsFleetViewListItem
+                            <com.antest1.kcanotify.KcaFleetViewListItem
                                 android:id="@+id/fleetview_item_1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -545,7 +545,7 @@
                                 android:paddingTop="2dp"
                                 android:visibility="visible"/>
 
-                            <com.antest1.kcanotify.KcsFleetViewListItem
+                            <com.antest1.kcanotify.KcaFleetViewListItem
                                 android:id="@+id/fleetview_item_2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -555,7 +555,7 @@
                                 android:paddingTop="2dp"
                                 android:visibility="visible"/>
 
-                            <com.antest1.kcanotify.KcsFleetViewListItem
+                            <com.antest1.kcanotify.KcaFleetViewListItem
                                 android:id="@+id/fleetview_item_3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -565,7 +565,7 @@
                                 android:paddingTop="2dp"
                                 android:visibility="visible"/>
 
-                            <com.antest1.kcanotify.KcsFleetViewListItem
+                            <com.antest1.kcanotify.KcaFleetViewListItem
                                 android:id="@+id/fleetview_item_4"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -575,7 +575,7 @@
                                 android:paddingTop="2dp"
                                 android:visibility="visible"/>
 
-                            <com.antest1.kcanotify.KcsFleetViewListItem
+                            <com.antest1.kcanotify.KcaFleetViewListItem
                                 android:id="@+id/fleetview_item_5"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -585,7 +585,7 @@
                                 android:paddingTop="2dp"
                                 android:visibility="visible"/>
 
-                            <com.antest1.kcanotify.KcsFleetViewListItem
+                            <com.antest1.kcanotify.KcaFleetViewListItem
                                 android:id="@+id/fleetview_item_6"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -604,7 +604,7 @@
                             android:layout_weight="1.0"
                             android:orientation="vertical">
 
-                            <com.antest1.kcanotify.KcsFleetViewListItem
+                            <com.antest1.kcanotify.KcaFleetViewListItem
                                 android:id="@+id/fleetview_item_7"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -614,7 +614,7 @@
                                 android:paddingTop="2dp"
                                 android:visibility="visible"/>
 
-                            <com.antest1.kcanotify.KcsFleetViewListItem
+                            <com.antest1.kcanotify.KcaFleetViewListItem
                                 android:id="@+id/fleetview_item_8"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -624,7 +624,7 @@
                                 android:paddingTop="2dp"
                                 android:visibility="visible"/>
 
-                            <com.antest1.kcanotify.KcsFleetViewListItem
+                            <com.antest1.kcanotify.KcaFleetViewListItem
                                 android:id="@+id/fleetview_item_9"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -634,7 +634,7 @@
                                 android:paddingTop="2dp"
                                 android:visibility="visible"/>
 
-                            <com.antest1.kcanotify.KcsFleetViewListItem
+                            <com.antest1.kcanotify.KcaFleetViewListItem
                                 android:id="@+id/fleetview_item_10"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -644,7 +644,7 @@
                                 android:paddingTop="2dp"
                                 android:visibility="visible"/>
 
-                            <com.antest1.kcanotify.KcsFleetViewListItem
+                            <com.antest1.kcanotify.KcaFleetViewListItem
                                 android:id="@+id/fleetview_item_11"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -654,7 +654,7 @@
                                 android:paddingTop="2dp"
                                 android:visibility="visible"/>
 
-                            <com.antest1.kcanotify.KcsFleetViewListItem
+                            <com.antest1.kcanotify.KcaFleetViewListItem
                                 android:id="@+id/fleetview_item_12"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

@@ -21,7 +21,7 @@ import com.google.gson.JsonObject;
 
 import java.util.Locale;
 
-public class KcsFleetViewListItem extends LinearLayout {
+public class KcaFleetViewListItem extends LinearLayout {
     private static final String TAG = "FleetViewItem";
 
     private final LinearLayout container;
@@ -48,15 +48,15 @@ public class KcsFleetViewListItem extends LinearLayout {
 
     private boolean isAkashiActive = false;
 
-    public KcsFleetViewListItem(Context context) {
+    public KcaFleetViewListItem(Context context) {
         this(context, null);
     }
 
-    public KcsFleetViewListItem(Context context, @Nullable AttributeSet attrs) {
+    public KcaFleetViewListItem(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public KcsFleetViewListItem(Context context, AttributeSet attrs, int defStyleAttr) {
+    public KcaFleetViewListItem(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         inflate(context, R.layout.view_fleet_list_item, this);
 
@@ -220,16 +220,16 @@ public class KcsFleetViewListItem extends LinearLayout {
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
 
-        return new ShipInfoState(superState, info, isAkashiActive);
+        return new SavedState(superState, info, isAkashiActive);
     }
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
-        if (!(state instanceof ShipInfoState)) {
+        if (!(state instanceof SavedState)) {
             super.onRestoreInstanceState(state);
             return;
         }
-        ShipInfoState state0 = (ShipInfoState) state;
+        SavedState state0 = (SavedState) state;
         super.onRestoreInstanceState(state0.getSuperState());
 
         isAkashiActive = state0.isAkashiActive;
@@ -307,11 +307,11 @@ public class KcsFleetViewListItem extends LinearLayout {
         };
     }
 
-    private static class ShipInfoState extends View.BaseSavedState {
+    private static class SavedState extends View.BaseSavedState {
         final ShipInfo info;
         final boolean isAkashiActive;
 
-        public ShipInfoState(
+        public SavedState(
                 Parcelable superState,
                 ShipInfo info,
                 boolean isAkashiActive
@@ -322,7 +322,7 @@ public class KcsFleetViewListItem extends LinearLayout {
             this.isAkashiActive = isAkashiActive;
         }
 
-        public ShipInfoState(Parcel source) {
+        public SavedState(Parcel source) {
             super(source);
 
             info = new ShipInfo(source);
@@ -338,13 +338,13 @@ public class KcsFleetViewListItem extends LinearLayout {
         }
 
         @SuppressWarnings("hiding")
-        public static final Parcelable.Creator<ShipInfoState> CREATOR = new Parcelable.Creator<ShipInfoState>() {
-            public ShipInfoState createFromParcel(Parcel in) {
-                return new ShipInfoState(in);
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
             }
 
-            public ShipInfoState[] newArray(int size) {
-                return new ShipInfoState[size];
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
             }
         };
     }
