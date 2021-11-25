@@ -2,13 +2,14 @@ package com.antest1.kcanotify;
 
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_HP_FORMAT;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,6 +32,17 @@ public class KcsFleetViewListItem extends LinearLayout {
     private final TextView tv_exp;
     private final TextView tv_hp;
     private final TextView tv_cond;
+
+    private final SharedPreferences pref;
+
+    private static final String[] hp_format_list = {
+            "HP %1$d/%2$d",         // HP 35/37
+            "HP %1$d/%2$d +%3$s %4$s",  // HP 35/37 +2 3:24
+            "HP %1$d+%3$s/%2$d %4$s",   // HP 35+2/37 3:24
+            "HP %1$d/%2$d +%3$s",   // HP 35/37 +2
+            "HP %1$d+%3$s/%2$d",    // HP 35+2/37
+            "HP %1$d/%2$d %4$s"     // HP 35/37 3:24
+    };
 
     private ShipInfo info;
 
@@ -57,6 +69,8 @@ public class KcsFleetViewListItem extends LinearLayout {
         tv_exp = findViewById(R.id.exp);
         tv_hp = findViewById(R.id.hp);
         tv_cond = findViewById(R.id.cond);
+
+        pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
     }
 
     /**
@@ -148,19 +162,27 @@ public class KcsFleetViewListItem extends LinearLayout {
 
             String str = String.format(
                     Locale.ENGLISH,
-                    "HP %d/%d +%d %s",
+                    hp_format_list[getHPFormatId()],
                     info.now_hp, info.max_hp, repaired,
                     KcaUtils.getTimeStr(next, true)
             );
             tv_hp.setText(str);
         } else {
 
-            tv_hp.setText(makeHpString(info.now_hp, info.max_hp));
+            tv_hp.setText(String.format(Locale.ENGLISH, hp_format_list[0], now, max));
         }
     }
 
     public ShipInfo getShipInfo() {
         return info;
+    }
+
+    private int getHPFormatId() {
+        try {
+            return Integer.parseInt(pref.getString(PREF_KCA_HP_FORMAT, "1"));
+        } catch (Exception e) {
+            return 1;
+        }
     }
 
     // region static
@@ -170,10 +192,6 @@ public class KcsFleetViewListItem extends LinearLayout {
 
     private static String makeExpString(int exp) {
         return KcaUtils.format("next: %d", exp);
-    }
-
-    private static String makeHpString(int now, int max) {
-        return KcaUtils.format("HP %d/%d", now, max);
     }
 
     private static String makeCondString(int cond) {

@@ -419,6 +419,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_LANGUAGE = "kca_language";
     public static final String PREF_SNIFFER_MODE = "kca_sniffer_mode";
     public static final String PREF_KCA_SEEK_CN = "kca_seek_cn";
+    public static final String PREF_KCA_HP_FORMAT = "kca_hp_format";
     public static final String PREF_POIDB_API_USE = "poidb_api_use";
     public static final String PREF_KCA_EXP_VIEW = "expedition_view";
     public static final String PREF_KCA_EXP_TYPE = "expedition_type";
@@ -498,6 +499,7 @@ public final class KcaConstants {
             PREF_KCA_LANGUAGE,
             PREF_SNIFFER_MODE,
             PREF_KCA_SEEK_CN,
+            PREF_KCA_HP_FORMAT,
             PREF_POIDB_API_USE,
             PREF_KCA_EXP_VIEW,
             PREF_KCA_EXP_TYPE,

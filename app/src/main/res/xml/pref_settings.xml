@@ -38,6 +38,19 @@
             android:positiveButtonText="@null"
             android:title="@string/setting_menu_kand_title_saku_cal" />
 
+        <ListPreference
+            android:id="@+id/hp_format_value"
+            app:iconSpaceReserved="false"
+            android:defaultValue="1"
+            android:entries="@array/hpFormatOption"
+            android:entryValues="@array/hpFormatOptionValue"
+            android:key="kca_hp_format"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="@string/setting_menu_kand_desc_hp_format"
+            android:title="@string/setting_menu_kand_title_hp_format" />
+
+
         <CheckBoxPreference
             android:defaultValue="true"
             app:iconSpaceReserved="false"

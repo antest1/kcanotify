@@ -141,22 +141,6 @@ public class KcaFleetViewService extends Service {
         isReady = flag;
     }
 
-    private static String makeLvString(int level) {
-        return KcaUtils.format("Lv %d", level);
-    }
-
-    private static String makeExpString(int exp) { return KcaUtils.format("next: %d", exp);}
-
-    private static String makeSimpleExpString(float e1, float e2) {
-        return KcaUtils.format("%.2f/%.2f", e1, e2);
-    }
-
-    private static String makeHpString(int currenthp, int maxhp) {
-        return KcaUtils.format("HP %d/%d", currenthp, maxhp);
-    }
-
-    @SuppressLint("DefaultLocale")
-
     public int setView() {
         try {
             Log.e("KCA-FV", String.valueOf(selected));
@@ -898,17 +882,16 @@ public class KcaFleetViewService extends Service {
                         fleetInfoLine.setText(displayText);
                     }
 
+                    long akashiTimerValue = KcaAkashiRepairInfo.getAkashiTimerValue();
+                    boolean isAkashiActive = akashiTimerValue >= 0 && isAkashiTimerActive;
                     for (int i = 0; i < 12; i++) {
-                        getFleetViewItem(i).setAkashiTimer(false);
+                        getFleetViewItem(i).setAkashiTimer(isAkashiActive);
                     }
 
-                    if (KcaAkashiRepairInfo.getAkashiTimerValue() < 0) {
+                    if (akashiTimerValue < 0) {
                         fleetAkashiTimerBtn.setVisibility(View.GONE);
                     } else {
                         if (isAkashiTimerActive) {
-                            for (int i = 0; i < 12; i++) {
-                                getFleetViewItem(i).setAkashiTimer(true);
-                            }
                             fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnActive));
                         } else {
                             fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnDeactive));
