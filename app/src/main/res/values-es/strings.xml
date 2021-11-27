@@ -710,10 +710,9 @@
     <string name="fleetinfo_export_openpage1">Exportar a Deckbuilder</string>
     <string name="fleetinfo_export_openpage2">Exportar a ImgKCbuilder</string>
 
-    <string name="action_export_fleetanalysis">fleetanalysis</string>
-    <string name="equipinfo_export_title">Exportar a fleetanalysis</string>
+    <string name="action_export_fleetanalysis">SeikuukenSimulator</string>
+    <string name="equipinfo_export_title">Exportar a SeikuukenSimulator</string>
     <string name="equipinfo_export_clipboard">Copiar</string>
-    <string name="equipinfo_export_openpage">Abrir página fleetanalysis</string>
     <string name="equipinfo_export_openpage2">Abrir página SeikuukenSimulator</string>
 
     <string name="text_api_houg">FP</string>

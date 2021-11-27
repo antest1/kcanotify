@@ -774,10 +774,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetinfo_export_openpage1">Export to DeckBuilder</string>
     <string name="fleetinfo_export_openpage2">Export to KanColleImgBuilder</string>
 
-    <string name="action_export_fleetanalysis">fleetanalysis</string>
-    <string name="equipinfo_export_title">Export to fleetanalysis</string>
+    <string name="action_export_fleetanalysis">SeikuukenSimulator</string>
+    <string name="equipinfo_export_title">Export to SeikuukenSimulator</string>
     <string name="equipinfo_export_clipboard">Copy to Clipboard</string>
-    <string name="equipinfo_export_openpage">Open fleetanalysis Page</string>
     <string name="equipinfo_export_openpage2">Open SeikuukenSimulator Page</string>
 
 

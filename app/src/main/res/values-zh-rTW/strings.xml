@@ -711,10 +711,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetinfo_export_openpage1">開啟艦隊模擬器網站</string>
     <string name="fleetinfo_export_openpage2">艦隊編成圖像輸出</string>
     <string name="fleetinfo_export_title">匯出到 DeckBuilder</string>
-    <string name="action_export_fleetanalysis">艦隊分析</string>
-    <string name="equipinfo_export_title">匯出到 艦隊分析</string>
+    <string name="action_export_fleetanalysis">制空權模擬器</string>
+    <string name="equipinfo_export_title">匯出到 制空權模擬器</string>
     <string name="equipinfo_export_clipboard">复制到剪贴板</string>
-    <string name="equipinfo_export_openpage">開啟擁有艦隊分析頁網站</string>
     <string name="equipinfo_export_openpage2">開啟制空權模擬器</string>
 
     <string name="text_api_houg">火力</string>
