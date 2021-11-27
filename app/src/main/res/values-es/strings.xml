@@ -697,11 +697,12 @@
     <string name="setting_menu_sniffer_desc_package_allow">Para usuarios jugando KanColle con otros navegadores</string>
     <string name="setting_menu_sniffer_desc_extfilter_use">Seleccionar esta opción si está usando un servicio web-proxy como ooi.moe</string>
 
-    <string name="action_export_kanmusu_list">kanmusu_list</string>
-    <string name="shipinfo_export_title">Exportar a kanmusu_list</string>
+    <string name="action_export_kanmusu_list">Exportar</string>
+    <string name="shipinfo_export_title">Convertir &amp; Exportar</string>
     <string name="shipinfo_export_clipboard">Copiar</string>
-    <string name="shipinfo_export_openpage">Abrir página kanmusu_list</string>
-    <string name="shipinfo_export_openfa">Abrir página fleetanalysis</string>
+    <string name="shipinfo_export_openpage">Abrir página</string>
+    <string name="shipinfo_export_kanmusu_list">kanmusu_list</string>
+    <string name="shipinfo_export_seikuukensimulator">SeikuukenSimulator</string>
 
     <string name="action_export_deckbuilder">DeckBuilder</string>
     <string name="fleetinfo_export_title">Exportar información de flota</string>

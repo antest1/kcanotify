@@ -699,11 +699,14 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_sniffer_title_extfilter_use">启用进阶IP筛选</string>
     <string name="setting_menu_sniffer_desc_package_allow">为使用其他浏览器游玩舰これ的提督而设</string>
     <string name="setting_menu_sniffer_desc_extfilter_use">若有使用如ooi.moe的网络代理服务，请选取此选项</string>
-    <string name="action_export_kanmusu_list">kanmusu_list</string>
-    <string name="shipinfo_export_title">汇出到 kanmusu_list</string>
+
+    <string name="action_export_kanmusu_list">汇出</string>
+    <string name="shipinfo_export_title">变换/汇出</string>
     <string name="shipinfo_export_clipboard">复制到剪贴板</string>
-    <string name="shipinfo_export_openpage">开启拥有舰队展示页网站</string>
-    <string name="shipinfo_export_openfa">开启拥有舰队分析页网站</string>
+    <string name="shipinfo_export_openpage">开启网站</string>
+    <string name="shipinfo_export_kanmusu_list">舰队展示</string>
+    <string name="shipinfo_export_seikuukensimulator">制空权模拟器</string>
+
     <string name="action_export_deckbuilder">DeckBuilder</string>
     <string name="fleetinfo_export_clipboard">复制到剪贴板</string>
     <string name="fleetinfo_export_openpage1">开启舰队模拟器网站</string>

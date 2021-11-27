@@ -761,11 +761,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="special_message">Saury-Calibur</string>
     <string name="notification_message">Notification and Information</string>
 
-    <string name="action_export_kanmusu_list">kanmusu_list</string>
-    <string name="shipinfo_export_title">Export to kanmusu_list</string>
+    <string name="action_export_kanmusu_list">Export</string>
+    <string name="shipinfo_export_title">Convert &amp; Export</string>
     <string name="shipinfo_export_clipboard">Copy to Clipboard</string>
-    <string name="shipinfo_export_openpage">Open kanmusu_list Page</string>
-    <string name="shipinfo_export_openfa">Open fleetanalysis Page</string>
+    <string name="shipinfo_export_openpage">Open Page</string>
+    <string name="shipinfo_export_kanmusu_list">kanmusu_list</string>
+    <string name="shipinfo_export_seikuukensimulator">SeikuukenSimulator</string>
 
     <string name="action_export_deckbuilder">DeckBuilder</string>
     <string name="fleetinfo_export_title">Export Fleet Information</string>
@@ -778,6 +779,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="equipinfo_export_clipboard">Copy to Clipboard</string>
     <string name="equipinfo_export_openpage">Open fleetanalysis Page</string>
     <string name="equipinfo_export_openpage2">Open SeikuukenSimulator Page</string>
+
 
 
     <string name="text_api_houg">FP</string>

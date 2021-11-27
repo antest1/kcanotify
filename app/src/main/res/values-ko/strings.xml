@@ -693,11 +693,14 @@
     <string name="setting_menu_sniffer_title_extfilter_use">확장 IP 필터 사용</string>
     <string name="setting_menu_sniffer_desc_package_allow">다른 브라우저로 칸코레를 플레이하는 경우</string>
     <string name="setting_menu_sniffer_desc_extfilter_use">ooi.moe와 같은 웹 프록시를 사용하는 경우 선택</string>
-    <string name="action_export_kanmusu_list">kanmusu_list</string>
+
+    <string name="action_export_kanmusu_list">내보내기</string>
     <string name="shipinfo_export_title">함선목록 내보내기</string>
     <string name="shipinfo_export_clipboard">클립보드에 복사</string>
-    <string name="shipinfo_export_openpage">kanmusu_list 페이지 열기</string>
-    <string name="shipinfo_export_openfa">함대분석 페이지 열기</string>
+    <string name="shipinfo_export_openpage">페이지 열기</string>
+    <string name="shipinfo_export_kanmusu_list">kanmusu_list</string>
+    <string name="shipinfo_export_seikuukensimulator">제공권시뮬레이터</string>
+
     <string name="action_export_deckbuilder">DeckBuilder</string>
     <string name="fleetinfo_export_title">DeckBuilder 내보내기</string>
     <string name="fleetinfo_export_clipboard">클립보드에 복사</string>

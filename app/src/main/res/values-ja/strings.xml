@@ -695,11 +695,13 @@
     <string name="setting_menu_sniffer_title_extfilter_use">拡張IPフィルタ</string>
     <string name="setting_menu_sniffer_desc_package_allow">ブラウザなどを使って艦これをプレイしている場合</string>
     <string name="setting_menu_sniffer_desc_extfilter_use">ooi.moeのようなWebプロキシサービスを使用している場合は、チェックしてください。</string>
-    <string name="action_export_kanmusu_list">艦隊晒し</string>
-    <string name="shipinfo_export_title">艦隊晒しへのコード変換</string>
+
+    <string name="action_export_kanmusu_list">コード変換</string>
+    <string name="shipinfo_export_title">コード変換</string>
     <string name="shipinfo_export_clipboard">クリップボードにコピー</string>
     <string name="shipinfo_export_openpage">艦隊晒し用ページを開く</string>
-    <string name="shipinfo_export_openfa">艦隊分析ページを開く</string>
+    <string name="shipinfo_export_kanmusu_list">艦隊晒し</string>
+    <string name="shipinfo_export_seikuukensimulator">制空権シミュレータ</string>
 
     <string name="action_export_deckbuilder">デッキビルダー</string>
     <string name="fleetinfo_export_title">デッキビルダー出力</string>
