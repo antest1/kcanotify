@@ -742,4 +742,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fairy_size_value_5">特大</string>
     <string name="fairy_size_value_1">特小</string>
     <string name="notice_donotsee">再也見不到</string>
+    <string name="hp_format_0">HP 30/37 (禁用)</string>
 </resources>

@@ -811,11 +811,14 @@ public class KcaFleetViewService extends Service {
      */
     private int setFleetInfo(JsonArray maindata, int base_view_id) {
         int sum_level = 0;
-        for (int i = 0; i < Math.max(6, maindata.size()); i++) {
+        int ships_in_fleet = maindata.size();
+        // 1-6 for normal fleet and combined fleet
+        // 7 for the striking force fleet (遊撃艦隊)
+        for (int i = 0; i < Math.max(6, ships_in_fleet); i++) {
             int view_id = base_view_id * 6 + i;
             KcaFleetViewListItem fleetitem = getFleetViewItem(view_id);
 
-            if (i >= maindata.size()) {
+            if (i >= ships_in_fleet) {
                 fleetitem.setVisibility(INVISIBLE);
             } else {
                 fleetitem.setData(maindata.get(i).getAsJsonObject());
