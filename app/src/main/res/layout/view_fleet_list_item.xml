@@ -8,10 +8,7 @@
     android:layout_gravity="center_vertical"
     android:gravity="bottom"
     android:orientation="horizontal"
-    android:paddingBottom="2dp"
-    android:paddingLeft="2dp"
-    android:paddingRight="2dp"
-    android:paddingTop="2dp">
+    android:padding="2dp" >
 
     <LinearLayout
         android:layout_width="0dp"
