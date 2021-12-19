@@ -437,7 +437,9 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                 item.add("st", v.get("api_kyouka").getAsJsonArray());
                 item.add("exp", v.get("api_exp").getAsJsonArray());
                 item.addProperty("ex", v.get("api_slot_ex").getAsInt());
-                item.addProperty("area", v.get("api_sally_area").getAsInt());
+                if (v.has("api_sally_area") && !v.get("api_sally_area").isJsonNull()) {
+                    item.addProperty("area", v.get("api_sally_area").getAsInt());
+                }
                 data.add(item);
             }
         }
