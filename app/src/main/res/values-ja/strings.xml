@@ -699,7 +699,7 @@
     <string name="action_export_kanmusu_list">コード変換</string>
     <string name="shipinfo_export_title">コード変換</string>
     <string name="shipinfo_export_clipboard">クリップボードにコピー</string>
-    <string name="shipinfo_export_openpage">艦隊晒し用ページを開く</string>
+    <string name="shipinfo_export_openpage">ページを開く</string>
     <string name="shipinfo_export_kanmusu_list">艦隊晒し</string>
     <string name="shipinfo_export_seikuukensimulator">制空権シミュレータ</string>
 

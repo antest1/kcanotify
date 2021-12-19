@@ -393,10 +393,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_label_type_100" formatted="false">年%d</string>
 
     <string name="quest_class_1">出撃</string>
-    <string name="quest_class_2">演习</string>
-    <string name="quest_class_3">远征</string>
-    <string name="quest_class_4">工厂</string>
-    <string name="quest_class_5">其他</string>
+    <string name="quest_class_2">演习</string>
+    <string name="quest_class_3">远征</string>
+    <string name="quest_class_4">工厂</string>
+    <string name="quest_class_5">其他</string>
 
     <string name="questview_page" formatted="false">第 %d/%d 页</string>
 
@@ -718,25 +718,25 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="equipinfo_export_openpage2">开启制空权模拟器</string>
 
     <string name="text_api_houg">火力</string>
-    <string name="text_api_raig">雷装</string>
-    <string name="text_api_tyku">对空</string>
-    <string name="text_api_souk">装甲</string>
-    <string name="text_api_tais">对潜</string>
-    <string name="text_api_houk">回避</string>
-    <string name="text_api_saku">索敌</string>
-    <string name="text_api_houm">命中</string>
-    <string name="text_api_baku">爆装</string>
-    <string name="text_api_leng">射程</string>
+    <string name="text_api_raig">雷装</string>
+    <string name="text_api_tyku">对空</string>
+    <string name="text_api_souk">装甲</string>
+    <string name="text_api_tais">对潜</string>
+    <string name="text_api_houk">回避</string>
+    <string name="text_api_saku">索敌</string>
+    <string name="text_api_houm">命中</string>
+    <string name="text_api_baku">爆装</string>
+    <string name="text_api_leng">射程</string>
 
     <string name="text_api_leng_1">短</string>
     <string name="text_api_leng_2">中</string>
     <string name="text_api_leng_3">长</string>
     <string name="text_api_leng_4">超长</string>
 
-    <string name="text_api_houm2">对爆</string>
-    <string name="text_api_houk2">迎击</string>
-    <string name="text_api_cost">配置费用</string>
-    <string name="text_api_distance">行动半径</string>
+    <string name="text_api_houm2">对爆</string>
+    <string name="text_api_houk2">迎击</string>
+    <string name="text_api_cost">配置费用</string>
+    <string name="text_api_distance">行动半径</string>
     <string name="ask_to_dev">艦これ 装备王</string>
     <string name="fleetview_fish_text" formatted="false">[秋刀鱼] %03d [沙丁鱼] %03d</string>
     <string name="fairy_size_value_4">大</string>
