@@ -668,7 +668,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_18spring_nori" formatted="false">苔 %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">茶 %02d</string>
 
-    <string name="special_message">秋刀魚劍</string>
+    <string name="special_message">聖誕節快樂！</string>
     <string name="notification_message">通知和信息</string>
 
     <string name="widget_timer_name">Kcanotify計時Widget</string>

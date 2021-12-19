@@ -734,7 +734,7 @@
     <string name="text_api_houk2">迎擊</string>
     <string name="text_api_cost">配置コスト</string>
     <string name="text_api_distance">行動半径</string>
-    <string name="special_message">サンマ・カリバー</string>
+    <string name="special_message">メリークリスマス！</string>
     <string name="notification_message">お知らせと情報</string>
     <string name="ask_to_dev">艦これ 装備王</string>
     <string name="fleetview_fish_text" formatted="false">[秋刀魚] %03d [鰯] %03d</string>

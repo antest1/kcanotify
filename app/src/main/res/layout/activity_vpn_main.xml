@@ -169,7 +169,9 @@
                         android:layout_gravity="bottom|right|end"
                         android:adjustViewBounds="true"
                         android:alpha="0.5"
-                        android:cropToPadding="false" />
+                        android:cropToPadding="false"
+                        android:src="@mipmap/_background"
+                        app:srcCompat="@mipmap/_background" />
                 </LinearLayout>
 
                 <TextView
