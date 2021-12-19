@@ -2263,7 +2263,7 @@
         "memo": "\u27a3Rewards a Mamiya and a Present Box"
     },
     "314": {
-        "code": "C52",
+        "code": "C63",
         "name": "Mass Exercises for Winter",
         "desc": "Secure 8 victories in Exercises within the same day.",
         "memo": "\u27a3Rewards a Mamiya and a Present Box"
@@ -3286,6 +3286,12 @@
         "desc": "Have 8 Flamethrowers, 10 Dev. Materials and 800 steel. Set Shinshuu Maru as secretary with a \u2605max Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force) in her 1st slot. Scrap 2 7.7mm Machine Gun and 2 Daihatsu Landing Craft.",
         "memo": "\u2718Consumes the resources. \u27a3Rewards a Soukoutei (Armored Boat Class)"
     },
+	"1111": {
+        "code": "F105",
+        "name": "Formation of the Elite Type 1 Land-based Attack Aircraft Squadrons",
+        "desc": "Have a \u2605max Type 1 Land-based Attack Aircraft Model 22A, two Type 1 Land-based Attack Aircraft and three Skilled Crew Members.",
+        "memo": "\u2718Consumes the items. \u27a3Rewards a Type 1 Land-based Attack Aircraft (Nonaka Squadron)"
+    },
 
 	"701": {
 		"code": "G1",
@@ -3479,28 +3485,28 @@
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
 	},
 
-	"866": {
-        "code": "21FaLB1",
-        "name": "Do you love....Saury Fishing?",
-        "desc": "Have 5 Sauries in your inventory.",
-        "memo": "\u27a3Rewards: \u00B6First choice: Either eight Development Materials OR Furniture Submarine Fleet's Window OR a Mamiya \u00B6Second choice: Either two Type 3 Active Sonars OR two Searchlights OR a Furniture Fairy"
+	"962": {
+        "code": "2112LB01",
+        "name": "[Christmas Limited] Merry Christmas Torpedo Squadron!",
+        "desc": "Sortie a fleet with either Shigure Kai Ni, Asagumo and Yamagumo OR Naka, Oboro and Ushio AND up to three aditional ships to [W1-3], [W1-4] and [W2-2]. S-Rank each boss node twice.",
+        "memo": "\u27a3Rewards eight Development Materials OR four Screws OR a Furniture Fairy"
     },
-    "867": {
-        "code": "21FaLB2",
-        "name": "Saury Fishing: My sister is so... please forgive her.",
-        "desc": "Have 11 Sauries in your inventory.",
-        "memo": "\u27a3Rewards: \u00B6First choice: Either three Daihatsu Landing Craft OR four 12cm 30-tube Rocket Launchers OR an Action Report \u00B6Second choice: Either three New Model Gun Mount Improvement Materials OR three New Model Aerial Armament Materials OR a Blueprint"
+    "963": {
+        "code": "2112LB02",
+        "name": "[Christmas Limited] Christmas Maritime Escort, weigh anchor!",
+        "desc": "Sortie a fleet with four of Etorofu, Matsuwa, Sado, Fukae, Kaiboukan No.4 or Kaiboukan No.30 AND up to two aditional ships to [W1-5], [W7-1] and [W1-6-N]. S-Rank each relevant boss node twice. Reach [W1-6N] twice.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either two Type 2 Depth Charges OR three 7.7mm Machine Guns \u00B6Second choice: Either five Buckets OR three Screws"
     },
-    "868": {
-        "code": "21FaLB3",
-        "name": "Saury Fishing: Te~i~to~ku... let us get the big catch flag!",
-        "desc": "Have 33 Sauries in your inventory.",
-        "memo": "\u27a3Rewards: \u00B6a Type 21 Big Catch Banner and either two Blueprints OR a Prototype Flight Deck Catapult OR a Type 19 Big Catch Banner"
+    "964": {
+        "code": "2112LB03",
+        "name": "[Christmas Limited] Wings of the Holy Night, sortie!",
+        "desc": "Sortie a fleet with either Shoukaku, Zuikaku and Hayasui OR Suzuya, Kumano and Gotland AND up to three aditional ships to [W2-4], [W3-5] and [W5-2]. S-Rank each boss node twice.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either two Type 1 Land-based Attack Aircraft OR a Shinzan OR a Prototype Keiun (Carrier-based Reconnaissance Model) \u00B6Second choice: Either two Skilled Crew Members OR two New Model Aerial Armament Materials OR a Ne-Type Engine"
     },
-    "1110": {
-        "code": "21FaLF1",
-        "name": "Pacific Saury Festival Limited Time Mission: Deploy Elite Swordfish!",
-        "desc": "Have 13 Sauries, 39 Dev. Materials and 1300 bauxite. Set secretary with a \u2605max Swordfish Mk.II (Skilled) in her 1st slot. Scrap two 7.7mm Machine Guns and two Zuiuns.",
-        "memo": "\u2718Consumes the resources. \u27a3Rewards a Swordfish Mk.III (Skilled)"
+    "965": {
+        "code": "2112LB04",
+        "name": "[Christmas Limited (Extra Operation)] Activate the final Christmas operation!",
+        "desc": "Sortie a fleet with three of Sheffield, Commandant Teste, Kinugasa, Kashima, Kuma or Sakawa and up to three additional ships to [W4-5] and [W5-3]. S-Rank each boss node twice.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either a Medal OR five Screws \u00B6Second choice: Either three New Model Armament Materials OR an Action Report OR a Torpedo Squadron Skilled Lookout"
     }
 }

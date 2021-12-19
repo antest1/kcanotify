@@ -1497,7 +1497,7 @@
 	"250": {
 		"improvement": [{
 				"upgrade": [251, 0],
-				"req": [[[true, true, false, false, false, true, true], [439, 364]], [[true, true, true, false, false, true, true], [515, 393]], [[false, false, true, true, true, false, false], [519, 394]]],
+				"req": [[[true, true, false, false, false, false, true], [439, 364]], [[false, true, true, false, false, false, false], [515, 393]], [[false, false, true, true, true, false, false], [519, 394]]],
 				"require_item": [[4, 1]],
 				"resource": [[90, 130, 0, 360], [5, 6, 2, 3, 19, 1], [6, 8, 2, 4, 20, 2], [9, 16, 5, 7, 181, 2]]
 			}
