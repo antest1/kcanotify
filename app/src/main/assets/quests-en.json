@@ -1575,6 +1575,24 @@
         "desc": "Sortie two of Yamakaze Kai Ni (D), Kawakaze Kai Ni and Umikaze Kai Ni and up to 4 additional ships to [W2-2], [W7-2-M], [W5-1] and [W6-4]. S-Rank all relevant boss nodes.",
         "memo": "\u27a3Rewards: \u00B6First choice: Either five Screws OR three Daihatsu Landing Crafts OR two New Model Armament Materials \u00B6Second choice: Either an Action Report OR a 12.7cm Twin Gun Mount Model C Kai Ni OR a 61cm Quadruple (Oxygen) Torpedo Mount Late Model"
     },
+	"959": {
+        "code": "B174",
+        "name": "Preparations for the Naval District Saury Festival!",
+        "desc": "Sortie a CL/CT/AV or Souya as flagship and up to 5 additional ships to [W1-1], [W1-2], [W1-3], [W1-4] and [W1-5]. S-Rank all relevant boss nodes.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either two Zuiun M12 OR three Swordfish OR two Screws \u00B6Second choice: Either two Searchlights OR two Type 3 Active Sonars OR two Screws"
+    },
+    "960": {
+        "code": "B175",
+        "name": "Preparations for the Naval District Saury Festival, Continued!",
+        "desc": "Sortie a CL/CT/AS or Souya as flagship and up to 5 additional ships to [W3-1], [W3-2], [W3-3], [W3-4] and [W3-5]. S-Rank all relevant boss nodes.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either two Skilled Lookouts OR a Furniture Fairy OR four Screws \u00B6Second choice: Either three Type 2 Depth Charges OR two Night Operation Aviation Personnel OR a Type 2 Flying Boat"
+    },
+    "961": {
+        "code": "B176",
+        "name": "Elite DesDiv15 1st Platoon, Fight Hard!",
+        "desc": "Sortie Oyashio Kai Ni, Kuroshio Kai Ni and up to 4 additional ships to [W2-4], [W5-4] and [W7-2M]. S-Rank each boss node twice.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either a Furniture Fairy OR two New Model Artillery Armament Materials OR five Screws \u00B6Second choice: Either a 61cm Quadruple (Oxygen) Torpedo Mount Late Model OR four New Model Armament Materials OR an Action Report"
+    },
 
 	"201": {
 		"code": "Bd1",
@@ -2231,6 +2249,12 @@
         "desc": "Secure 4 S-Rank victories in Exercises within the same day using Gambier Bay MK. II as flagship, any two of Fletcher, Johnston and Samuel B. Roberts and up to three additional ships.",
         "memo": "This quest resets on the first quest reset of July. \u203bRemodeled Carrier Task Force Exercise! \u27a3Rewards a Construction Battalion and either two FM-2 OR two TBF OR a \u2605+5 SK Radar"
     },
+	"355": {
+        "code": "C62",
+        "name": "Annual DesDiv 15 Excercises - October",
+        "desc": "Secure 4 S-Rank victories in Exercises within the same day using Oyashio Kai Ni and Kuroshio Kai Ni as the first two ships and up to 4 additional ships.",
+        "memo": "This quest resets on the first quest reset of October. \u203bElite DesDiv 15 First Platoon Exercises! \u27a3Rewards: \u00B6First choice: Either a \u2605+2 Type 22 Surface Radar Kai 4 OR a \u2605+2 Skilled Lookouts \u00B6Second choice: Either two Irako OR three Screws"
+    },
 
 	"313": {
         "code": "C61",
@@ -2239,7 +2263,7 @@
         "memo": "\u27a3Rewards a Mamiya and a Present Box"
     },
     "314": {
-        "code": "C52",
+        "code": "C63",
         "name": "Mass Exercises for Winter",
         "desc": "Secure 8 victories in Exercises within the same day.",
         "memo": "\u27a3Rewards a Mamiya and a Present Box"
@@ -3256,6 +3280,18 @@
         "desc": "Have 1300 Baux, 30 Dev. Material. and two New Model Arm. Material. Set either Yamakaze Kai Ni (D) or Shigure Kai Ni as secretary with a \u2605max Type 3 Active Sonar in the first slot. Scrap 2 Type 93 Passive Sonars and 2 Type 3 Active Sonars.",
         "memo": "\u2718Consumes the resources. \u27a3Rewards a Type 3 Active Sonar Kai"
     },
+	"1109": {
+        "code": "F104",
+        "name": "Equipment deployment to support landing operations",
+        "desc": "Have 8 Flamethrowers, 10 Dev. Materials and 800 steel. Set Shinshuu Maru as secretary with a \u2605max Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force) in her 1st slot. Scrap 2 7.7mm Machine Gun and 2 Daihatsu Landing Craft.",
+        "memo": "\u2718Consumes the resources. \u27a3Rewards a Soukoutei (Armored Boat Class)"
+    },
+	"1111": {
+        "code": "F105",
+        "name": "Formation of the Elite Type 1 Land-based Attack Aircraft Squadrons",
+        "desc": "Have a \u2605max Type 1 Land-based Attack Aircraft Model 22A, two Type 1 Land-based Attack Aircraft and three Skilled Crew Members.",
+        "memo": "\u2718Consumes the items. \u27a3Rewards a Type 1 Land-based Attack Aircraft (Nonaka Squadron)"
+    },
 
 	"701": {
 		"code": "G1",
@@ -3447,5 +3483,30 @@
         "name": "It's Spring! Sortie, DesDiv 31 Flagship Naganami!",
         "desc": "Sortie Naganami as flagship, any 3 of DesDiv31 and up to 2 additional ships to [W2-1] and [W2-2]. S-Rank each boss node twice. Sortie to [W5-4]. A-Rank+ the boss node.",
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
-	}
+	},
+
+	"962": {
+        "code": "2112LB01",
+        "name": "[Christmas Limited] Merry Christmas Torpedo Squadron!",
+        "desc": "Sortie a fleet with either Shigure Kai Ni, Asagumo and Yamagumo OR Naka, Oboro and Ushio AND up to three aditional ships to [W1-3], [W1-4] and [W2-2]. S-Rank each boss node twice.",
+        "memo": "\u27a3Rewards eight Development Materials OR four Screws OR a Furniture Fairy"
+    },
+    "963": {
+        "code": "2112LB02",
+        "name": "[Christmas Limited] Christmas Maritime Escort, weigh anchor!",
+        "desc": "Sortie a fleet with four of Etorofu, Matsuwa, Sado, Fukae, Kaiboukan No.4 or Kaiboukan No.30 AND up to two aditional ships to [W1-5], [W7-1] and [W1-6-N]. S-Rank each relevant boss node twice. Reach [W1-6N] twice.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either two Type 2 Depth Charges OR three 7.7mm Machine Guns \u00B6Second choice: Either five Buckets OR three Screws"
+    },
+    "964": {
+        "code": "2112LB03",
+        "name": "[Christmas Limited] Wings of the Holy Night, sortie!",
+        "desc": "Sortie a fleet with either Shoukaku, Zuikaku and Hayasui OR Suzuya, Kumano and Gotland AND up to three aditional ships to [W2-4], [W3-5] and [W5-2]. S-Rank each boss node twice.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either two Type 1 Land-based Attack Aircraft OR a Shinzan OR a Prototype Keiun (Carrier-based Reconnaissance Model) \u00B6Second choice: Either two Skilled Crew Members OR two New Model Aerial Armament Materials OR a Ne-Type Engine"
+    },
+    "965": {
+        "code": "2112LB04",
+        "name": "[Christmas Limited (Extra Operation)] Activate the final Christmas operation!",
+        "desc": "Sortie a fleet with three of Sheffield, Commandant Teste, Kinugasa, Kashima, Kuma or Sakawa and up to three additional ships to [W4-5] and [W5-3]. S-Rank each boss node twice.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either a Medal OR five Screws \u00B6Second choice: Either three New Model Armament Materials OR an Action Report OR a Torpedo Squadron Skilled Lookout"
+    }
 }

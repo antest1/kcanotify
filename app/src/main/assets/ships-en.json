@@ -22,6 +22,7 @@
 		" flagship": " flagship",
 		"II elite": "II elite",
 		"II flagship": "II flagship",
+		"IIe(量産型)": "IIe (MPT)",
 		" バカンスmode" : " Vacation Mode",
 		" バカンスmode-壊" : " V.M. - Damaged",
 		" 夏季上陸mode" : " Summer Landing Mode",
@@ -328,6 +329,7 @@
 	"平戸": "Hirato",
 	"日振": "Hiburi",
 	"大東": "Daitou",
+	"昭南": "Shounan",
 	"御蔵": "Mikura",
 	"第四号海防艦": "Kaiboukan No.4",
 	"第三〇号海防艦": "Kaiboukan No.30",
@@ -391,6 +393,7 @@
 	"Honolulu": "Honolulu",
 	"Conte di Cavour": "Conte di Cavour",
 	"Victorious": "Victorious",
+	"Scamp": "Scamp",
 
 	"防空棲姫":"Air Defense Princess",
 	"空母棲鬼":"Aircraft Carrier Demon",
@@ -503,6 +506,7 @@
 	"軽巡新棲姫":"New Light Cruiser Princess",
 	"地中海弩級水姫": "Mediterranean Dreadnought Water Princess",
 	"欧州装甲空母棲姫": "European Armored Carrier Princess",
+	"潜水鮫水鬼": "Submarine Shark Water Demon",
 
 	"elite":" elite",
 	"flagship":" flagship"

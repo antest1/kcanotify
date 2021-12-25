@@ -698,11 +698,13 @@
     <string name="setting_menu_sniffer_title_extfilter_use">拡張IPフィルタ</string>
     <string name="setting_menu_sniffer_desc_package_allow">ブラウザなどを使って艦これをプレイしている場合</string>
     <string name="setting_menu_sniffer_desc_extfilter_use">ooi.moeのようなWebプロキシサービスを使用している場合は、チェックしてください。</string>
-    <string name="action_export_kanmusu_list">艦隊晒し</string>
-    <string name="shipinfo_export_title">艦隊晒しへのコード変換</string>
+
+    <string name="action_export_kanmusu_list">コード変換</string>
+    <string name="shipinfo_export_title">コード変換</string>
     <string name="shipinfo_export_clipboard">クリップボードにコピー</string>
-    <string name="shipinfo_export_openpage">艦隊晒し用ページを開く</string>
-    <string name="shipinfo_export_openfa">艦隊分析ページを開く</string>
+    <string name="shipinfo_export_openpage">ページを開く</string>
+    <string name="shipinfo_export_kanmusu_list">艦隊晒し</string>
+    <string name="shipinfo_export_seikuukensimulator">制空権シミュレータ</string>
 
     <string name="action_export_deckbuilder">デッキビルダー</string>
     <string name="fleetinfo_export_title">デッキビルダー出力</string>
@@ -710,10 +712,9 @@
     <string name="fleetinfo_export_openpage2">艦これ編成画像出力</string>
     <string name="fleetinfo_export_clipboard">クリップボードにコピー</string>
 
-    <string name="action_export_fleetanalysis">艦隊分析</string>
-    <string name="equipinfo_export_title">艦隊分析へのコード変換</string>
+    <string name="action_export_fleetanalysis">コード変換</string>
+    <string name="equipinfo_export_title">コード変換</string>
     <string name="equipinfo_export_clipboard">クリップボードにコピー</string>
-    <string name="equipinfo_export_openpage">艦隊分析ページを開く</string>
     <string name="equipinfo_export_openpage2">制空権シミュレータを開く</string>
 
     <string name="text_api_houg">火力</string>
@@ -736,7 +737,7 @@
     <string name="text_api_houk2">迎擊</string>
     <string name="text_api_cost">配置コスト</string>
     <string name="text_api_distance">行動半径</string>
-    <string name="special_message">ハロウィンベイー</string>
+    <string name="special_message">メリークリスマス！</string>
     <string name="notification_message">お知らせと情報</string>
     <string name="ask_to_dev">艦これ 装備王</string>
     <string name="fleetview_fish_text" formatted="false">[秋刀魚] %03d [鰯] %03d</string>

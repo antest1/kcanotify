@@ -12,7 +12,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- Application Information -->
     <string name="app_name">Kcanotify</string>
     <string name="app_brand" translatable="false" traslatable="false">시제 깡들리티</string> <!-- Do not translate here -->
-    <string name="app_version" translatable="false">2.8.2 rev11</string>
+    <string name="app_version" translatable="false">2.8.2 rev14</string>
     <string name="action_settings">Settings</string>
     <string name="action_errorlog">Error Log</string>
     <string name="action_download">Download</string>
@@ -27,7 +27,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="backpress_msg">Press back one more time to exit</string>
     <string name="notification_appinfo_title">Kcanotify Notification</string>
     <string name="developer_email" translatable="false">kcanotify@gmail.com</string>
-    <string name="default_gamedata_version" translatable="false">5.3.2.0</string>
+    <string name="default_gamedata_version" translatable="false">5.3.4.1</string>
 
     <string name="app_download_link_playstore_label" translatable="false">Google Play Store</string>
     <string name="app_download_link_googledrive_label" translatable="false">Google Drive</string>
@@ -300,7 +300,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_stat_desc_poidb" translatable="false">https://db.kcwiki.org/</string>
 
     <string name="setting_menu_app_head">Application Information</string>
-    <string name="setting_menu_app_title_current">Current Version</string>
+    <string name="setting_menu_app_title_current" translatable="false">Current Version</string>
     <string name="setting_menu_app_title_updatecheckserver">Select Update Check Server</string>
     <string name="setting_menu_app_title_updatecheck">Check For Updates</string>
     <string name="setting_menu_app_title_down">APK Download Site</string>
@@ -766,14 +766,15 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="packagefilter_count_format" formatted="false">Total Count: %d</string>
     <string name="packagefilter_restart">You need to restart VPN Service to make these options effective.</string>
-    <string name="special_message">Halloween Bay</string>
+    <string name="special_message">Merry Chirstmas!</string>
     <string name="notification_message">Notification and Information</string>
 
-    <string name="action_export_kanmusu_list">kanmusu_list</string>
-    <string name="shipinfo_export_title">Export to kanmusu_list</string>
+    <string name="action_export_kanmusu_list">Export</string>
+    <string name="shipinfo_export_title">Convert &amp; Export</string>
     <string name="shipinfo_export_clipboard">Copy to Clipboard</string>
-    <string name="shipinfo_export_openpage">Open kanmusu_list Page</string>
-    <string name="shipinfo_export_openfa">Open fleetanalysis Page</string>
+    <string name="shipinfo_export_openpage">Open Page</string>
+    <string name="shipinfo_export_kanmusu_list">kanmusu_list</string>
+    <string name="shipinfo_export_seikuukensimulator">SeikuukenSimulator</string>
 
     <string name="action_export_deckbuilder">DeckBuilder</string>
     <string name="fleetinfo_export_title">Export Fleet Information</string>
@@ -781,11 +782,11 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetinfo_export_openpage1">Export to DeckBuilder</string>
     <string name="fleetinfo_export_openpage2">Export to KanColleImgBuilder</string>
 
-    <string name="action_export_fleetanalysis">fleetanalysis</string>
-    <string name="equipinfo_export_title">Export to fleetanalysis</string>
+    <string name="action_export_fleetanalysis">SeikuukenSimulator</string>
+    <string name="equipinfo_export_title">Export to SeikuukenSimulator</string>
     <string name="equipinfo_export_clipboard">Copy to Clipboard</string>
-    <string name="equipinfo_export_openpage">Open fleetanalysis Page</string>
     <string name="equipinfo_export_openpage2">Open SeikuukenSimulator Page</string>
+
 
 
     <string name="text_api_houg">FP</string>

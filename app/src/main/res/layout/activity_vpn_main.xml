@@ -170,6 +170,7 @@
                         android:adjustViewBounds="true"
                         android:alpha="0.5"
                         android:cropToPadding="false"
+                        android:src="@mipmap/_background"
                         app:srcCompat="@mipmap/_background" />
                 </LinearLayout>
 

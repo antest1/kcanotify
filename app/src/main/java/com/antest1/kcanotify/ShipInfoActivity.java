@@ -63,10 +63,14 @@ public class ShipInfoActivity extends AppCompatActivity {
     EditText searchEditText;
     Vibrator vibrator;
 
+    String export_kanmusu_list = "";
+    String export_seikuuken = "";
+
     boolean is_popup_on;
     boolean is_search_on;
     View export_popup, export_exit;
-    TextView export_clipboard, export_openpage, export_openfa;
+    TextView export_clipboard_1, export_openpage_1;
+    TextView export_clipboard_2, export_openpage_2;
 
     public ShipInfoActivity() {
         LocaleUtils.updateConfig(this);
@@ -184,32 +188,40 @@ public class ShipInfoActivity extends AppCompatActivity {
             export_popup.setVisibility(View.GONE);
         });
 
-        export_clipboard = export_popup.findViewById(R.id.export_clipboard);
-        export_clipboard.setText(getStringWithLocale(R.string.shipinfo_export_clipboard));
-        export_clipboard.setOnClickListener(v -> {
-            CharSequence text = ((TextView) findViewById(R.id.export_content)).getText();
+        export_clipboard_1 = export_popup.findViewById(R.id.export_clipboard_1);
+        export_clipboard_1.setText(getStringWithLocale(R.string.shipinfo_export_clipboard));
+        export_clipboard_1.setOnClickListener(v -> {
             ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            clip.setPrimaryClip(ClipData.newPlainText("text", text));
+            clip.setPrimaryClip(ClipData.newPlainText("text", export_kanmusu_list));
             doVibrate(vibrator, 100);
             Toast.makeText(getApplicationContext(),
                     getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
         });
 
-        export_openpage = export_popup.findViewById(R.id.export_openpage);
-        export_openpage.setText(getStringWithLocale(R.string.shipinfo_export_openpage));
-        export_openpage.setOnClickListener(v -> {
-            String data1 = ((TextView) findViewById(R.id.export_content)).getText().toString();
-            String encoded = KcaUtils.encode64(data1);
+        export_clipboard_2 = export_popup.findViewById(R.id.export_clipboard_2);
+        export_clipboard_2.setText(getStringWithLocale(R.string.shipinfo_export_clipboard));
+        export_clipboard_2.setOnClickListener(v -> {
+            ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            clip.setPrimaryClip(ClipData.newPlainText("text", export_seikuuken));
+            doVibrate(vibrator, 100);
+            Toast.makeText(getApplicationContext(),
+                    getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
+        });
+
+        export_openpage_1 = export_popup.findViewById(R.id.export_openpage_1);
+        export_openpage_1.setText(getStringWithLocale(R.string.shipinfo_export_openpage));
+        export_openpage_1.setOnClickListener(v -> {
+            String encoded = KcaUtils.encode64(export_kanmusu_list);
             Intent bIntent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://kancolle-calc.net/kanmusu_list.html?data=".concat(encoded)));
             startActivity(bIntent);
         });
 
-        export_openfa = export_popup.findViewById(R.id.export_openfa);
-        export_openfa.setText(getStringWithLocale(R.string.shipinfo_export_openfa));
-        export_openfa.setOnClickListener(v -> {
+        export_openpage_2 = export_popup.findViewById(R.id.export_openpage_2);
+        export_openpage_2.setText(getStringWithLocale(R.string.shipinfo_export_openpage));
+        export_openpage_2.setOnClickListener(v -> {
             Intent bIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://kancolle-fleetanalysis.firebaseapp.com/#/"));
+                    Uri.parse("https://noro6.github.io/kcTools/manager/"));
             startActivity(bIntent);
         });
 
@@ -283,9 +295,10 @@ public class ShipInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_ship_export:
-                String data = adapter.getKanmusuListText();
-                // String encoded_data = KcaUtils.encode64(data);
-                ((TextView) export_popup.findViewById(R.id.export_content)).setText(data);
+                export_kanmusu_list = adapter.getKanmusuListText();
+                export_seikuuken = adapter.getSeikuukenSimulatorText();
+                ((TextView) export_popup.findViewById(R.id.export_content_1)).setText(export_kanmusu_list);
+                ((TextView) export_popup.findViewById(R.id.export_content_2)).setText(export_seikuuken);
                 is_popup_on = true;
                 export_popup.setVisibility(View.VISIBLE);
                 return true;

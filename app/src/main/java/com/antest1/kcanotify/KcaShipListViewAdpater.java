@@ -426,6 +426,27 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         setListViewItemList(ship_list, deck_list, sort_key, "|", special_equip, ship_status);
     }
 
+    public String getSeikuukenSimulatorText() {
+        JsonArray data = new JsonArray();
+        if (listViewItemList != null) {
+            for (JsonObject v: listViewItemList) {
+                JsonObject item = new JsonObject();
+                item.addProperty("id", v.get("api_ship_id").getAsInt());
+                item.addProperty("lv", v.get("api_lv").getAsInt());
+                item.addProperty("locked", v.get("api_locked").getAsInt());
+                item.add("st", v.get("api_kyouka").getAsJsonArray());
+                item.add("exp", v.get("api_exp").getAsJsonArray());
+                item.addProperty("ex", v.get("api_slot_ex").getAsInt());
+                if (v.has("api_sally_area") && !v.get("api_sally_area").isJsonNull()) {
+                    item.addProperty("area", v.get("api_sally_area").getAsInt());
+                }
+                data.add(item);
+            }
+        }
+        return data.toString();
+    }
+
+
     public String getKanmusuListText() {
         JsonObject data = KcaApiData.buildShipUpdateData();
         JsonObject frombefore = data.getAsJsonObject("frombefore");
