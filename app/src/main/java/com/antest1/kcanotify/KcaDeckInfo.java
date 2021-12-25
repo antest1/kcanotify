@@ -4,6 +4,9 @@ import android.content.Context;
 import androidx.annotation.IntegerRes;
 import android.util.Log;
 
+import com.google.common.collect.Collections2;
+import com.google.common.primitives.Ints;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -36,6 +39,7 @@ public class KcaDeckInfo {
     private static final int SPEEDFLAG_SUPERFAST = 1 << 0;
     private KcaDBHelper helper;
     private Context ac, bc;
+    private static final Gson gson = new Gson();
 
     public KcaDeckInfo(Context a, Context b) {
         this.ac = a;
@@ -672,6 +676,23 @@ public class KcaDeckInfo {
             }
         }
         return deckListInfo;
+    }
+
+    /**
+     * @return 0 <= length <= 7, also 0 if deck is not unlocked
+     */
+    public int[] getDeckList(JsonArray deckPortData, int deck_id) {
+
+        if (deck_id < deckPortData.size()) {
+            int[] list = gson.fromJson(
+                    deckPortData.get(deck_id).getAsJsonObject().get("api_ship"),
+                    int[].class
+            );
+
+            return Ints.toArray(Collections2.filter(Ints.asList(list), (id) -> id != -1));
+        } else {
+            return new int[0];
+        }
     }
 
     public int checkHeavyDamageExist(JsonArray deckPortData, int deckid) {

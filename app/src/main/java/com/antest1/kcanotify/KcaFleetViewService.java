@@ -716,13 +716,6 @@ public class KcaFleetViewService extends Service {
             mView.findViewById(R.id.fleet_list_combined).setVisibility((is_combined && !switch_is_one) ? View.VISIBLE : View.GONE);
         }
 
-//        for (int i = 1; i <= 12; i++) {
-//            mView.findViewById(getId(KcaUtils.format("fleetview_item_%d", i), R.id.class)).setVisibility(INVISIBLE);
-//        }
-        for (int i = 0; i < 12; i++) {
-            getFleetViewItem(i).setVisibility(INVISIBLE);
-        }
-
         int cn = seekcn_internal;
         List<String> infoList = new ArrayList<>();
 
@@ -766,20 +759,23 @@ public class KcaFleetViewService extends Service {
         }
         infoList.add(tpValue);
 
+        for (int i = 0; i < 12; i++) {
+            getFleetViewItem(i).setVisibility(INVISIBLE);
+        }
+
         int sum_level = 0;
         if (isCombined) {
-            for (int n = 0; n < 2; n++) {
-                JsonArray maindata = deckInfoCalc.getDeckListInfo(deckportdata, n, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
-                sum_level += setFleetInfo(maindata, n);
-            }
 
+            sum_level += setFleetInfo(deckInfoCalc.getDeckList(deckportdata, 0), 0);
+            sum_level += setFleetInfo(deckInfoCalc.getDeckList(deckportdata, 1), 1);
         } else {
-            JsonArray maindata = deckInfoCalc.getDeckListInfo(deckportdata, idx, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
-            int max_count = Math.max(6, maindata.size());
-            if (max_count > 6) { // if need to show combined fleet (maybe 遊撃艦隊)
+
+            int[] ship_id_list = deckInfoCalc.getDeckList(deckportdata, idx);
+            if (ship_id_list.length > 6) { // if need to show combined fleet (maybe 遊撃艦隊)
                 mView.findViewById(R.id.fleet_list_combined).setVisibility(View.VISIBLE);
             }
-            sum_level += setFleetInfo(maindata, 0);
+
+            sum_level += setFleetInfo(ship_id_list, 0);
         }
 
         isAkashiTimerActive = deckInfoCalc.checkAkashiFlagship(deckportdata).size() > 0;
@@ -805,25 +801,25 @@ public class KcaFleetViewService extends Service {
 
     /**
      *
-     * @param maindata maindata
+     * @param list member ship id list
      * @param base_view_id 0 for 1st-4th fleet and 1st combined fleet, 1 for 2nd combined fleet
      * @return sum of level
      */
-    private int setFleetInfo(JsonArray maindata, int base_view_id) {
+    private int setFleetInfo(int[] list, int base_view_id) {
         int sum_level = 0;
-        int ships_in_fleet = maindata.size();
+        int ships_in_fleet = list.length;
         // 1-6 for normal fleet and combined fleet
         // 7 for the striking force fleet (遊撃艦隊)
         for (int i = 0; i < Math.max(6, ships_in_fleet); i++) {
             int view_id = base_view_id * 6 + i;
-            KcaFleetViewListItem fleetitem = getFleetViewItem(view_id);
+            KcaFleetViewListItem ship = getFleetViewItem(view_id);
 
             if (i >= ships_in_fleet) {
-                fleetitem.setVisibility(INVISIBLE);
+                getFleetViewItem(view_id).setVisibility(INVISIBLE);
             } else {
-                fleetitem.setData(maindata.get(i).getAsJsonObject());
+                getFleetViewItem(view_id).setContent(list[i]);
 
-                sum_level += fleetitem.getShipInfo().lv;
+                sum_level += ship.getShipInfo().lv;
             }
         }
         return sum_level;

@@ -3,9 +3,11 @@ package com.antest1.kcanotify;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_HP_FORMAT;
+import static com.antest1.kcanotify.KcaUtils.*;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -35,7 +37,7 @@ public class KcaFleetViewListItem extends LinearLayout {
 
     private final SharedPreferences pref;
 
-    private static final String[] hp_format_list = {
+    private static final String[] HP_FORMAT_LIST = {
             "HP %1$d/%2$d",         // HP 35/37
             "HP %1$d/%2$d +%3$s %4$s",  // HP 35/37 +2 3:24
             "HP %1$d+%3$s/%2$d %4$s",   // HP 35+2/37 3:24
@@ -43,6 +45,7 @@ public class KcaFleetViewListItem extends LinearLayout {
             "HP %1$d+%3$s/%2$d",    // HP 35+2/37
             "HP %1$d/%2$d %4$s"     // HP 35/37 3:24
     };
+    private int hp_format_id = 1;
 
     private ShipInfo info;
 
@@ -71,15 +74,14 @@ public class KcaFleetViewListItem extends LinearLayout {
         tv_cond = findViewById(R.id.cond);
 
         pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
+        updateHPFormatId(pref);
     }
 
-    /**
-     * @param data maindata.get(i).getAsJsonObject()
-     */
-    public void setData(JsonObject data) {
-        setData(jsonToShipInfo(data));
+    public void setContent(int ship_id) {
+        setContent(getShipInfoById(ship_id));
     }
-    public void setData(ShipInfo info) {
+
+    public void setContent(ShipInfo info) {
         this.info = info;
 
         Context appContext = getContext().getApplicationContext();
@@ -98,8 +100,7 @@ public class KcaFleetViewListItem extends LinearLayout {
 
         tv_lv.setText(makeLvString(info.lv));
         tv_exp.setText(makeExpString(info.exp));
-//        tv_hp.setText(makeHpString(info.now_hp, info.max_hp));
-        updateHP();
+        setHPText();
 
         int cond = info.cond;
         tv_cond.setText(makeCondString(cond));
@@ -146,11 +147,12 @@ public class KcaFleetViewListItem extends LinearLayout {
     }
 
     public void setAkashiTimer(boolean isActive) {
+        if (!isActive && !isAkashiActive) return; // inactive -> inactive, no need to update
         isAkashiActive = isActive;
-        if (info != null) updateHP();
+        if (info != null) setHPText();
     }
 
-    private void updateHP() {
+    private void setHPText() {
         int now = info.now_hp, max = info.max_hp;
         int lv = info.lv, stype = info.stype;
         int damage = max - now;
@@ -160,16 +162,15 @@ public class KcaFleetViewListItem extends LinearLayout {
             int repaired = Math.min(damage, KcaDocking.getRepairedHp(lv, stype, elapsed));
             int next = (repaired < damage) ? KcaDocking.getNextRepair(lv, stype, elapsed) : 0;
 
-            String str = String.format(
-                    Locale.ENGLISH,
-                    hp_format_list[getHPFormatId()],
-                    info.now_hp, info.max_hp, repaired,
-                    KcaUtils.getTimeStr(next, true)
+            String str = format(
+                    HP_FORMAT_LIST[hp_format_id],
+                    now, max, repaired,
+                    getTimeStr(next, true)
             );
             tv_hp.setText(str);
         } else {
 
-            tv_hp.setText(String.format(Locale.ENGLISH, hp_format_list[0], now, max));
+            tv_hp.setText(format(HP_FORMAT_LIST[0], now, max));
         }
     }
 
@@ -177,41 +178,59 @@ public class KcaFleetViewListItem extends LinearLayout {
         return info;
     }
 
-    private int getHPFormatId() {
-        try {
-            return Integer.parseInt(pref.getString(PREF_KCA_HP_FORMAT, "1"));
-        } catch (Exception e) {
-            return 1;
-        }
-    }
-
     // region static
     private static String makeLvString(int lv) {
-        return KcaUtils.format("Lv %d", lv);
+        return format("Lv %d", lv);
     }
 
     private static String makeExpString(int exp) {
-        return KcaUtils.format("next: %d", exp);
+        return format("next: %d", exp);
     }
 
     private static String makeCondString(int cond) {
-        return KcaUtils.format("%d", cond);
+        return format("%d", cond);
     }
 
-    public static ShipInfo jsonToShipInfo(JsonObject data) {
-        JsonObject userData = data.getAsJsonObject("user");
-        JsonObject kcData = data.getAsJsonObject("kc");
+    private static ShipInfo getShipInfoById(int ship_id) {
+        JsonObject userData = KcaApiData.getUserShipDataById(ship_id, "id,ship_id,lv,exp,nowhp,maxhp,cond,sally_area");
+        int mst_ship_id = userData.get("ship_id").getAsInt();
+        JsonObject kcData = KcaApiData.getKcShipDataById(mst_ship_id, "name,stype");
 
         return new ShipInfo(
                 userData.get("id").getAsInt(),
-                kcData.get("name").getAsString(),
-                kcData.get("stype").getAsInt(),
+                kcData == null ? "" : kcData.get("name").getAsString(),
+                kcData == null ? 0 : kcData.get("stype").getAsInt(),
                 userData.get("lv").getAsInt(),
                 userData.getAsJsonArray("exp").get(1).getAsInt(),
                 userData.get("nowhp").getAsInt(), userData.get("maxhp").getAsInt(),
                 userData.get("cond").getAsInt(),
                 userData.has("sally_area") ? userData.get("sally_area").getAsInt() : 0
         );
+    }
+    // endregion
+
+    // region preferences
+    private void updateHPFormatId(SharedPreferences pref) {
+        try {
+            hp_format_id = Integer.parseInt(pref.getString(PREF_KCA_HP_FORMAT, "1"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private final OnSharedPreferenceChangeListener onSharedPreferenceChanged = (pref, key) -> {
+        if (!key.equals(PREF_KCA_HP_FORMAT)) return;
+        updateHPFormatId(pref);
+    };
+
+    @Override protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        pref.registerOnSharedPreferenceChangeListener(onSharedPreferenceChanged);
+    }
+
+    @Override protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        pref.unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChanged);
     }
     // endregion
 
@@ -233,7 +252,7 @@ public class KcaFleetViewListItem extends LinearLayout {
         super.onRestoreInstanceState(state0.getSuperState());
 
         isAkashiActive = state0.isAkashiActive;
-        setData(state0.info);
+        setContent(state0.info);
     }
 
     public static final class ShipInfo implements Parcelable {
