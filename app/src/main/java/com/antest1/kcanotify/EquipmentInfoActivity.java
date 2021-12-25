@@ -66,14 +66,14 @@ public class EquipmentInfoActivity extends AppCompatActivity {
     KcaDBHelper dbHelper;
     KcaEquipListViewAdpater adapter;
     JsonArray equipment_data = new JsonArray();
-    JsonArray fleetanalysis_data = new JsonArray();
+    JsonArray seikuuken_data = new JsonArray();
     JsonArray ship_data = new JsonArray();
     JsonObject ship_equip_info = new JsonObject();
     Map<String, AtomicInteger> counter = new HashMap<>();
 
     boolean is_popup_on;
     View export_popup, export_exit;
-    TextView export_clipboard, export_openpage, export_openpage2;
+    TextView export_clipboard, export_openpage2;
     Vibrator vibrator;
 
     public EquipmentInfoActivity() {
@@ -110,7 +110,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
         for (JsonElement data: user_equipment_data) {
             JsonObject equip = data.getAsJsonObject();
             JsonObject value = new JsonParser().parse(equip.get("value").getAsString()).getAsJsonObject();
-            fleetanalysis_data.add(getFleetAnalysisItem(value));
+            seikuuken_data.add(getSeikuukenSimluatorData(value));
             String id = getItemKey(value);
             if(!counter.containsKey(id)) {
                 counter.put(id,  new AtomicInteger(1));
@@ -245,19 +245,11 @@ public class EquipmentInfoActivity extends AppCompatActivity {
                     getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
         });
 
-        export_openpage = export_popup.findViewById(R.id.export_openpage);
-        export_openpage.setText(getStringWithLocale(R.string.equipinfo_export_openpage));
-        export_openpage.setOnClickListener(v -> {
-            Intent bIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://kancolle-fleetanalysis.firebaseapp.com/#/equipInput"));
-            startActivity(bIntent);
-        });
-
         export_openpage2 = export_popup.findViewById(R.id.export_openpage2);
         export_openpage2.setText(getStringWithLocale(R.string.equipinfo_export_openpage2));
         export_openpage2.setOnClickListener(v -> {
             Intent bIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://noro6.github.io/kcTools/#input_equipment_json"));
+                    Uri.parse("https://noro6.github.io/kcTools/simulator/"));
             startActivity(bIntent);
         });
 
@@ -277,10 +269,11 @@ public class EquipmentInfoActivity extends AppCompatActivity {
         }
     }
 
-    private JsonObject getFleetAnalysisItem(JsonObject item) {
+    private JsonObject getSeikuukenSimluatorData(JsonObject item) {
         JsonObject new_item = new JsonObject();
-        new_item.addProperty("api_slotitem_id", item.get("api_slotitem_id").getAsInt());
-        new_item.addProperty("api_level", item.get("api_level").getAsInt());
+        new_item.addProperty("id", item.get("api_slotitem_id").getAsInt());
+        new_item.addProperty("lv", item.get("api_level").getAsInt());
+        new_item.addProperty("locked", item.get("api_locked").getAsInt());
         return new_item;
     }
 
@@ -325,7 +318,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_equip_export:
-                String data = fleetanalysis_data.toString();
+                String data = seikuuken_data.toString();
                 ((TextView) export_popup.findViewById(R.id.export_content)).setText(data);
                 is_popup_on = true;
                 export_popup.setVisibility(View.VISIBLE);

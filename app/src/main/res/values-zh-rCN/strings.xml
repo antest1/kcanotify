@@ -393,10 +393,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_label_type_100" formatted="false">年%d</string>
 
     <string name="quest_class_1">出撃</string>
-    <string name="quest_class_2">演习</string>
-    <string name="quest_class_3">远征</string>
-    <string name="quest_class_4">工厂</string>
-    <string name="quest_class_5">其他</string>
+    <string name="quest_class_2">演习</string>
+    <string name="quest_class_3">远征</string>
+    <string name="quest_class_4">工厂</string>
+    <string name="quest_class_5">其他</string>
 
     <string name="questview_page" formatted="false">第 %d/%d 页</string>
 
@@ -669,7 +669,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_18spring_nori" formatted="false">苔 %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">茶 %02d</string>
 
-    <string name="special_message">万圣节湾</string>
+    <string name="special_message">圣诞节快乐！</string>
     <string name="notification_message">通知和信息</string>
 
     <string name="widget_timer_name">Kcanotify计时Widget</string>
@@ -699,42 +699,44 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_sniffer_title_extfilter_use">启用进阶IP筛选</string>
     <string name="setting_menu_sniffer_desc_package_allow">为使用其他浏览器游玩舰これ的提督而设</string>
     <string name="setting_menu_sniffer_desc_extfilter_use">若有使用如ooi.moe的网络代理服务，请选取此选项</string>
-    <string name="action_export_kanmusu_list">kanmusu_list</string>
-    <string name="shipinfo_export_title">汇出到 kanmusu_list</string>
+
+    <string name="action_export_kanmusu_list">汇出</string>
+    <string name="shipinfo_export_title">变换/汇出</string>
     <string name="shipinfo_export_clipboard">复制到剪贴板</string>
-    <string name="shipinfo_export_openpage">开启拥有舰队展示页网站</string>
-    <string name="shipinfo_export_openfa">开启拥有舰队分析页网站</string>
+    <string name="shipinfo_export_openpage">开启网站</string>
+    <string name="shipinfo_export_kanmusu_list">舰队展示</string>
+    <string name="shipinfo_export_seikuukensimulator">制空权模拟器</string>
+
     <string name="action_export_deckbuilder">DeckBuilder</string>
     <string name="fleetinfo_export_clipboard">复制到剪贴板</string>
     <string name="fleetinfo_export_openpage1">开启舰队模拟器网站</string>
     <string name="fleetinfo_export_openpage2">舰队编成图像输出</string>
     <string name="fleetinfo_export_title">汇出到 DeckBuilder</string>
-    <string name="action_export_fleetanalysis">舰队分析</string>
-    <string name="equipinfo_export_title">汇出到 舰队分析</string>
+    <string name="action_export_fleetanalysis">制空权模拟器</string>
+    <string name="equipinfo_export_title">汇出到 制空权模拟器</string>
     <string name="equipinfo_export_clipboard">复制到剪贴板</string>
-    <string name="equipinfo_export_openpage">开启拥有舰队分析页网站</string>
     <string name="equipinfo_export_openpage2">开启制空权模拟器</string>
 
     <string name="text_api_houg">火力</string>
-    <string name="text_api_raig">雷装</string>
-    <string name="text_api_tyku">对空</string>
-    <string name="text_api_souk">装甲</string>
-    <string name="text_api_tais">对潜</string>
-    <string name="text_api_houk">回避</string>
-    <string name="text_api_saku">索敌</string>
-    <string name="text_api_houm">命中</string>
-    <string name="text_api_baku">爆装</string>
-    <string name="text_api_leng">射程</string>
+    <string name="text_api_raig">雷装</string>
+    <string name="text_api_tyku">对空</string>
+    <string name="text_api_souk">装甲</string>
+    <string name="text_api_tais">对潜</string>
+    <string name="text_api_houk">回避</string>
+    <string name="text_api_saku">索敌</string>
+    <string name="text_api_houm">命中</string>
+    <string name="text_api_baku">爆装</string>
+    <string name="text_api_leng">射程</string>
 
     <string name="text_api_leng_1">短</string>
     <string name="text_api_leng_2">中</string>
     <string name="text_api_leng_3">长</string>
     <string name="text_api_leng_4">超长</string>
 
-    <string name="text_api_houm2">对爆</string>
-    <string name="text_api_houk2">迎击</string>
-    <string name="text_api_cost">配置费用</string>
-    <string name="text_api_distance">行动半径</string>
+    <string name="text_api_houm2">对爆</string>
+    <string name="text_api_houk2">迎击</string>
+    <string name="text_api_cost">配置费用</string>
+    <string name="text_api_distance">行动半径</string>
     <string name="ask_to_dev">艦これ 装备王</string>
     <string name="fleetview_fish_text" formatted="false">[秋刀鱼] %03d [沙丁鱼] %03d</string>
     <string name="fairy_size_value_4">大</string>

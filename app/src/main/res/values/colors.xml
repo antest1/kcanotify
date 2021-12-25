@@ -2,10 +2,10 @@
 <resources>
     <color name="colorPrimary">#313447</color>
     <color name="colorPrimaryDark">#2B2B30</color>
-    <color name="colorAccent">#F5A35B</color>
+    <color name="colorAccent">#03A9F4</color>
     <color name="colorActivityBack">#ffffff</color>
     <color name="colorActivityText">#888888</color>
-    <color name="colorMainBtn">#E9964D</color>
+    <color name="colorMainBtn">#6082a6</color>
     <color name="colorMainBtnText">#ffffff</color>
     <color name="colorToolbarText">#ffffff</color>
     <color name="colorBtn">#d6d6d6</color>
@@ -13,9 +13,9 @@
     <color name="colorBtnTextAccent">#ffffff</color>
     <color name="colorFleetInfoBtn">#313447</color>
 
-    <color name="colorGameStartBtn">#3C436D</color>
-    <color name="colorFairyShowBtn">#EAC68F</color>
-    <color name="colorToolsBtn">#D28984</color>
+    <color name="colorGameStartBtn">#232b35</color>
+    <color name="colorFairyShowBtn">#8b1b1b</color>
+    <color name="colorToolsBtn">#406558</color>
 
     <color name="colorUpdate">#e8f5e9</color>
     <color name="colorUpdateText">#1b5e20</color>

@@ -663,7 +663,7 @@
     <string name="fleetview_18spring_nori" formatted="false">김 %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">차 %02d</string>
 
-    <string name="special_message">할로윈 베이</string>
+    <string name="special_message">메리 크리스마스!</string>
     <string name="notification_message">공지 및 정보</string>
 
     <string name="widget_timer_name">시제 깡들리티 타이머</string>
@@ -693,20 +693,22 @@
     <string name="setting_menu_sniffer_title_extfilter_use">확장 IP 필터 사용</string>
     <string name="setting_menu_sniffer_desc_package_allow">다른 브라우저로 칸코레를 플레이하는 경우</string>
     <string name="setting_menu_sniffer_desc_extfilter_use">ooi.moe와 같은 웹 프록시를 사용하는 경우 선택</string>
-    <string name="action_export_kanmusu_list">kanmusu_list</string>
+
+    <string name="action_export_kanmusu_list">내보내기</string>
     <string name="shipinfo_export_title">함선목록 내보내기</string>
     <string name="shipinfo_export_clipboard">클립보드에 복사</string>
-    <string name="shipinfo_export_openpage">kanmusu_list 페이지 열기</string>
-    <string name="shipinfo_export_openfa">함대분석 페이지 열기</string>
+    <string name="shipinfo_export_openpage">페이지 열기</string>
+    <string name="shipinfo_export_kanmusu_list">kanmusu_list</string>
+    <string name="shipinfo_export_seikuukensimulator">제공권시뮬레이터</string>
+
     <string name="action_export_deckbuilder">DeckBuilder</string>
     <string name="fleetinfo_export_title">DeckBuilder 내보내기</string>
     <string name="fleetinfo_export_clipboard">클립보드에 복사</string>
     <string name="fleetinfo_export_openpage1">함대시뮬레이터 열기</string>
     <string name="fleetinfo_export_openpage2">편성화면 출력</string>
-    <string name="action_export_fleetanalysis">함대분석</string>
-    <string name="equipinfo_export_title">함대분석 내보내기</string>
+    <string name="action_export_fleetanalysis">제공권시뮬레이터</string>
+    <string name="equipinfo_export_title">제공권시뮬레이터 내보내기</string>
     <string name="equipinfo_export_clipboard">클립보드에 복사</string>
-    <string name="equipinfo_export_openpage">함대분석 페이지 열기</string>
     <string name="equipinfo_export_openpage2">제공권 시뮬레이터 열기</string>
 
     <string name="text_api_houg">화력</string>
