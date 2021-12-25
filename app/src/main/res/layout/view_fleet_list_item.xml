@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:parentTag="LinearLayout"
     android:id="@+id/conrainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical"
-    android:gravity="bottom"
-    android:orientation="horizontal"
-    android:padding="2dp" >
+    android:padding="2dp"
+    tools:parentTag="FrameLayout"
+    tools:ignore="SpUsage">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1.0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginStart="6dp"
+        android:layout_marginLeft="6dp"
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1.0"
             android:orientation="horizontal">
 
@@ -27,22 +27,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="6dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:paddingRight="6dp"
                 android:singleLine="true"
                 android:text=""
                 android:textColor="@color/white"
                 android:textSize="@dimen/fleetview_text_ship_large"
-                tools:text="Верный" />
+                tools:text="Верный два" />
 
             <TextView
                 android:id="@+id/condmark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="2dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/fleetview_condmark"
                 android:textColor="@android:color/transparent"
                 android:textSize="@dimen/fleetview_text_ship_large"
@@ -50,8 +49,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1.0"
             android:orientation="horizontal">
 
@@ -59,8 +58,6 @@
                 android:id="@+id/stype"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:gravity="top"
                 android:maxLines="1"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/fleetview_text_ship_medium"
@@ -70,9 +67,9 @@
                 android:id="@+id/lv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="top"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
                 android:maxLines="1"
-                android:paddingLeft="6dp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/fleetview_text_ship_medium"
                 tools:text="Lv 175" />
@@ -81,11 +78,9 @@
                 android:id="@+id/exp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="top"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
                 android:maxLines="1"
-                android:paddingLeft="6dp"
-                android:paddingStart="6dp"
-                android:singleLine="true"
                 android:textColor="@color/grey"
                 android:textSize="@dimen/fleetview_text_ship_small"
                 tools:text="next: 0" />
@@ -94,18 +89,15 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="6dp"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/hp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:gravity="right"
+            android:layout_gravity="end"
             android:maxLines="1"
             android:textColor="@color/white"
             android:textSize="@dimen/fleetview_text_ship_medium"
@@ -116,10 +108,9 @@
             android:layout_width="@dimen/fleetview_text_moralearea"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:paddingHorizontal="4dp"
             android:gravity="center"
             android:maxLines="1"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
             android:textColor="@color/white"
             android:textSize="@dimen/fleetview_text_ship_medium"
             tools:text="100" />

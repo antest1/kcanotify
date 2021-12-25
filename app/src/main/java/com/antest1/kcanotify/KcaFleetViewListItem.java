@@ -13,7 +13,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -21,12 +21,10 @@ import androidx.core.content.ContextCompat;
 
 import com.google.gson.JsonObject;
 
-import java.util.Locale;
-
-public class KcaFleetViewListItem extends LinearLayout {
+public class KcaFleetViewListItem extends FrameLayout {
     private static final String TAG = "FleetViewItem";
 
-    private final LinearLayout container;
+    private final FrameLayout container;
     private final TextView tv_name;
 //    private final TextView tv_condmark;
     private final TextView tv_stype;
