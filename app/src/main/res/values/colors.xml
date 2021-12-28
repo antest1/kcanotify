@@ -157,6 +157,8 @@
     <color name="colorExpeditionBtnFailText">#f8bbd0</color>
     <color name="colorExpeditionBtnGoodBack">#009688</color>
     <color name="colorExpeditionBtnGoodText">#b2dfdb</color>
+    <color name="colorExpeditionCombatI">#FF9800</color>
+    <color name="colorExpeditionCombatII">#FF5722</color>
 
     <color name="colorExpCalcFlagship">#16a085</color>
     <color name="colorExpCalcMVP">#ffa000</color>
