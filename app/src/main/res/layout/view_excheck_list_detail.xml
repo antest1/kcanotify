@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:showIn="@layout/view_excheck_list_dev"
+    tools:showIn="@layout/view_excheck_list"
     tools:ignore="SpUsage,HardcodedText,ContentDescription">
 
     <!-- region header -->
