@@ -650,12 +650,15 @@
     <string name="excheckview_bonus_los" formatted="false">索敵：%d</string>
     <string name="excheckview_bonus_kinu">鬼怒改二</string>
     <string name="excheckview_bonus_drum" formatted="false">ドラム缶：%d</string>
+    <string name="excheckview_bonus_drum_carrying" formatted="false">ドラム缶：%d（%d隻）</string>
     <string name="excheckview_bonus_dlc" formatted="false">大発：%d</string>
+    <string name="excheckview_bonus_dlcs" formatted="false">大発系：%d</string>
     <string name="excheckview_bonus_tank" formatted="false">中戦車：%d</string>
     <string name="excheckview_bonus_amp" formatted="false">内火艇：%d</string>
     <string name="excheckview_bonus_toku" formatted="false">特大発：%d</string>
     <string name="excheckview_bonus_result" formatted="false">（ボーナス：%.1f%%）</string>
     <string name="excheckview_ship_cvs">空母系</string>
+    <string name="excheckview_ship_cond" formatted="false">%s：%d</string>
     <string name="labinfoview_status_standby">待機</string>
     <string name="labinfoview_status_sortie">出撃</string>
     <string name="labinfoview_status_defense">防空</string>
@@ -755,4 +758,5 @@
     <string name="fairy_size_value_5">最大</string>
     <string name="fairy_size_value_1">最小</string>
     <string name="notice_donotsee">再び見ない</string>
+    <string name="excheckview_bonus_lv">Lv：%d</string>
 </resources>
