@@ -213,35 +213,35 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="1" />
+            android:text="1" />
 
         <TextView
             android:id="@+id/expd_btn_1"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="2" />
+            android:text="2" />
 
         <TextView
             android:id="@+id/expd_btn_2"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="3" />
+            android:text="3" />
 
         <TextView
             android:id="@+id/expd_btn_3"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="4" />
+            android:text="4" />
 
         <TextView
             android:id="@+id/expd_btn_4"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="5"
+            android:text="5"
             tools:layout_editor_absoluteY="179dp"
             tools:layout_editor_absoluteX="17dp" />
 
@@ -250,70 +250,70 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="6" />
+            android:text="6" />
 
         <TextView
             android:id="@+id/expd_btn_6"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="7" />
+            android:text="7" />
 
         <TextView
             android:id="@+id/expd_btn_7"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="8" />
+            android:text="8" />
 
         <TextView
             android:id="@+id/expd_btn_8"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="9" />
+            android:text="9" />
 
         <TextView
             android:id="@+id/expd_btn_9"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="10" />
+            android:text="10" />
 
         <TextView
             android:id="@+id/expd_btn_10"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="11" />
+            android:text="11" />
 
         <TextView
             android:id="@+id/expd_btn_11"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="12" />
+            android:text="12" />
 
         <TextView
             android:id="@+id/expd_btn_12"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="13" />
+            android:text="13" />
 
         <TextView
             android:id="@+id/expd_btn_13"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="14" />
+            android:text="14" />
 
         <TextView
             android:id="@+id/expd_btn_14"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            tools:text="15" />
+            android:text="15" />
         <!-- endregion expedition table -->
 
         <include

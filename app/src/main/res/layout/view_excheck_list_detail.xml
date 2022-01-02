@@ -240,26 +240,6 @@
         app:layout_constraintGuide_percent="0.6" />
 
     <!-- region status cond -->
-    <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/expd_flow_status"
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:orientation="horizontal"
-        app:flow_wrapMode="chain"
-        app:flow_maxElementsWrap="2"
-        app:flow_horizontalGap="4dp"
-        app:flow_horizontalBias="0.0"
-        app:flow_horizontalStyle="packed"
-        app:flow_verticalAlign="top"
-        app:constraint_referenced_ids="
-        expd_firepower_label,expd_flow_firepower,
-        expd_asw_label,expd_flow_asw,
-        expd_aa_label,expd_flow_aa,
-        expd_los_label,expd_flow_los"
-        app:layout_constraintTop_toBottomOf="@id/barrier_flagship_cond"
-        app:layout_constraintStart_toStartOf="@id/guide_fleet_cond"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0" />
 
     <TextView
         android:id="@+id/expd_firepower_label"
@@ -268,19 +248,29 @@
         android:text="@string/excheckview_firepower_info"
         android:textAlignment="center"
         android:gravity="center_horizontal"
-        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal" />
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        app:layout_constraintStart_toEndOf="@id/guide_fleet_cond"
+        app:layout_constraintEnd_toStartOf="@id/expd_flow_firepower"
+        app:layout_constraintTop_toBottomOf="@id/barrier_flagship_cond"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/expd_flow_firepower"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
         android:orientation="horizontal"
         app:constraint_referenced_ids="expd_total_firepower,expd_fleet_firepower"
         app:flow_wrapMode="chain"
         app:flow_horizontalStyle="packed"
         app:flow_horizontalGap="4dp"
         app:flow_horizontalBias="0"
-        app:flow_verticalAlign="baseline" />
+        app:flow_verticalAlign="baseline"
+        app:layout_constraintStart_toEndOf="@id/expd_firepower_label"
+        app:layout_constraintTop_toTopOf="@id/expd_firepower_label"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/expd_total_firepower"
@@ -297,6 +287,13 @@
         android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
         tools:text="120%" />
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_firepower"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="expd_firepower_label,expd_flow_firepower"
+        app:barrierDirection="bottom" />
+
     <TextView
         android:id="@+id/expd_asw_label"
         android:layout_height="wrap_content"
@@ -304,19 +301,29 @@
         android:text="@string/excheckview_asw_info"
         android:textAlignment="center"
         android:gravity="center_horizontal"
-        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal" />
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        app:layout_constraintStart_toEndOf="@id/guide_fleet_cond"
+        app:layout_constraintEnd_toStartOf="@id/expd_flow_asw"
+        app:layout_constraintTop_toBottomOf="@id/barrier_firepower"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/expd_flow_asw"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
         android:orientation="horizontal"
         app:constraint_referenced_ids="expd_total_asw,expd_fleet_asw"
         app:flow_wrapMode="chain"
         app:flow_horizontalStyle="packed"
         app:flow_horizontalGap="4dp"
         app:flow_horizontalBias="0"
-        app:flow_verticalAlign="baseline" />
+        app:flow_verticalAlign="baseline"
+        app:layout_constraintStart_toEndOf="@id/expd_asw_label"
+        app:layout_constraintTop_toTopOf="@id/expd_asw_label"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/expd_total_asw"
@@ -329,8 +336,16 @@
         android:id="@+id/expd_fleet_asw"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:visibility="gone"
         android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
         tools:text="100%" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_asw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="expd_asw_label,expd_flow_asw"
+        app:barrierDirection="bottom" />
 
     <TextView
         android:id="@+id/expd_aa_label"
@@ -339,19 +354,29 @@
         android:text="@string/excheckview_fp_info"
         android:textAlignment="center"
         android:gravity="center_horizontal"
-        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal" />
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        app:layout_constraintStart_toEndOf="@id/guide_fleet_cond"
+        app:layout_constraintEnd_toStartOf="@id/expd_flow_aa"
+        app:layout_constraintTop_toBottomOf="@id/barrier_asw"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/expd_flow_aa"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
         android:orientation="horizontal"
         app:constraint_referenced_ids="expd_total_aa,expd_fleet_aa"
         app:flow_wrapMode="chain"
         app:flow_horizontalStyle="packed"
         app:flow_horizontalGap="4dp"
         app:flow_horizontalBias="0"
-        app:flow_verticalAlign="baseline" />
+        app:flow_verticalAlign="baseline"
+        app:layout_constraintStart_toEndOf="@id/expd_aa_label"
+        app:layout_constraintTop_toTopOf="@id/expd_aa_label"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/expd_total_aa"
@@ -368,6 +393,13 @@
         android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
         tools:text="10000%" />
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_aa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="expd_aa_label,expd_flow_aa"
+        app:barrierDirection="bottom" />
+
     <TextView
         android:id="@+id/expd_los_label"
         android:layout_height="wrap_content"
@@ -375,19 +407,29 @@
         android:text="@string/excheckview_los_info"
         android:textAlignment="center"
         android:gravity="center_horizontal"
-        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal" />
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        app:layout_constraintStart_toEndOf="@id/guide_fleet_cond"
+        app:layout_constraintEnd_toStartOf="@id/expd_flow_los"
+        app:layout_constraintTop_toBottomOf="@id/barrier_aa"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/expd_flow_los"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
         android:orientation="horizontal"
         app:constraint_referenced_ids="expd_total_los,expd_fleet_los"
         app:flow_wrapMode="chain"
         app:flow_horizontalStyle="packed"
         app:flow_horizontalGap="4dp"
         app:flow_horizontalBias="0"
-        app:flow_verticalAlign="baseline" />
+        app:flow_verticalAlign="baseline"
+        app:layout_constraintStart_toEndOf="@id/expd_los_label"
+        app:layout_constraintTop_toTopOf="@id/expd_los_label"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/expd_total_los"
@@ -410,7 +452,7 @@
         android:id="@+id/barrier_fleet_cond"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        app:constraint_referenced_ids="expd_fleet_label,expd_flow_fleet,expd_fleet_cond,expd_flow_status"
+        app:constraint_referenced_ids="expd_fleet_label,expd_flow_fleet,expd_fleet_cond,expd_los_label,expd_flow_los"
         app:barrierDirection="bottom" />
 
     <!-- region drum cond -->

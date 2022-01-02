@@ -644,6 +644,7 @@
     <string name="excheckview_drum_ship_format" formatted="false">%d隻以上に装備</string>
     <string name="excheckview_drum_num_format" formatted="false">合計%dつ以上</string>
     <string name="excheckview_total_format" formatted="false">合計%d+</string>
+    <string name="excheckview_cur_total_format" formatted="false">現在%.0f</string>
     <string name="excheckview_bonus_firepower" formatted="false">火力：%d</string>
     <string name="excheckview_bonus_asw" formatted="false">対潜：%d</string>
     <string name="excheckview_bonus_aa" formatted="false">対空：%d</string>
@@ -658,7 +659,6 @@
     <string name="excheckview_bonus_toku" formatted="false">特大発：%d</string>
     <string name="excheckview_bonus_result" formatted="false">（ボーナス：%.1f%%）</string>
     <string name="excheckview_ship_cvs">空母系</string>
-    <string name="excheckview_ship_cond" formatted="false">%s：%d</string>
     <string name="labinfoview_status_standby">待機</string>
     <string name="labinfoview_status_sortie">出撃</string>
     <string name="labinfoview_status_defense">防空</string>
