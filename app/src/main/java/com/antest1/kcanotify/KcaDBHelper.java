@@ -310,12 +310,13 @@ public class KcaDBHelper extends SQLiteOpenHelper {
     public int getItemCount() {
         int result = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT KEY from ".concat(slotitem_table_name), null);
+        String query = KcaUtils.format("SELECT KEY from %s WHERE KCID NOT IN (%s)",
+                slotitem_table_name, getNoCountItemDataString());
+        Cursor c = db.rawQuery(query, null);
         result = c.getCount();
         c.close();
         return result;
     }
-
 
     public int getItemCountByKcId(int id) {
         int result = 0;
@@ -712,6 +713,14 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         }
         c.close();
         return sb.toString().trim();
+    }
+
+    public String getNoCountItemDataString() {
+        List<String> strList = new ArrayList<>();
+        for (int item: KcaApiData.kcNotCountItemData) {
+            strList.add(KcaUtils.format("%s", item));
+        }
+        return KcaUtils.joinStr(strList,",");
     }
 
     // test code
