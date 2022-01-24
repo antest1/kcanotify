@@ -355,7 +355,7 @@ public class KcaApiData {
         int max_equip_size = 0;
         JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
         if (basic_info != null) max_equip_size = basic_info.get("api_max_slotitem").getAsInt();
-        return max_equip_size <= getItemSize();
+        return max_equip_size <= getItemSizeWithExclusions();
     }
 
     public static boolean checkEventUserShip() {
@@ -370,7 +370,7 @@ public class KcaApiData {
         JsonObject basic_info = helper.getJsonObjectValue(DB_KEY_BASICIFNO);
         if (basic_info != null) max_item_size = basic_info.get("api_max_slotitem").getAsInt();
         //Log.e("KCA", KcaUtils.format("Item: %d - %d", maxItemSize, helper.getItemCount() + getItemCountInBattle));
-        return (max_item_size + 3) < (getItemSize() + 20);
+        return (max_item_size + 3) < (getItemSizeWithExclusions() + 20);
     }
 
 
@@ -466,6 +466,10 @@ public class KcaApiData {
     }
 
     public static int getItemSize() { return helper.getItemCount() + getItemCountInBattle; }
+
+    public static int getItemSizeWithExclusions() {
+        return helper.getItemCountWithExclusions() + getItemCountInBattle;
+    }
 
     private static JsonObject getJsonObjectFromStorage(Context context, String name) {
         return KcaUtils.getJsonObjectFromStorage(context, name, helper);

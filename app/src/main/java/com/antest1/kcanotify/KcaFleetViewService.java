@@ -203,7 +203,7 @@ public class KcaFleetViewService extends Service {
                             R.color.white), PorterDuff.Mode.MULTIPLY);
                 }
 
-                equipcntview.setText(KcaUtils.format("%d/%d", KcaApiData.getItemSize(), KcaApiData.getUserMaxItemCount()));
+                equipcntview.setText(KcaUtils.format("%d/%d", KcaApiData.getItemSizeWithExclusions(), KcaApiData.getUserMaxItemCount()));
                 if (KcaApiData.checkEventUserItem()){
                     equipcntview.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHqCheckEventCondFailed));
                     equipcntviewicon.setColorFilter(ContextCompat.getColor(getApplicationContext(),

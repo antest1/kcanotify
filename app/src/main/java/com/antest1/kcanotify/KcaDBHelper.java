@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
@@ -316,6 +317,22 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    /**
+     * same as {@link #getItemCount()} but excluding these items:
+     * 42: 応急修理要員
+     * 43: 応急修理女神
+     * 145: 戦闘糧食
+     * 146: 洋上補給
+     * 150: 秋刀魚の缶詰
+     * 241: 戦闘糧食(特別なおにぎり)
+     */
+    public int getItemCountWithExclusions() {
+        try (SQLiteDatabase db = getReadableDatabase()) {
+            return (int) DatabaseUtils.queryNumEntries(db,
+                    slotitem_table_name,
+                    "KCID NOT IN(42, 43, 145, 146, 150, 241)");
+        }
+    }
 
     public int getItemCountByKcId(int id) {
         int result = 0;
