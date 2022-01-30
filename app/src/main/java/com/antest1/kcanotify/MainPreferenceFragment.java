@@ -118,9 +118,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             if (preference == null) continue;
             if (preference instanceof ListPreference) {
                 ListPreference etp = (ListPreference) preference;
-                if (!preference.getKey().equals(PREF_KCA_HP_FORMAT)) { // PREF_KCA_HP_FORMAT already has a summary
-                    preference.setSummary(etp.getEntry());
-                }
+                preference.setSummary(etp.getEntry());
             } else if (preference instanceof EditTextPreference) {
                 EditTextPreference etp = (EditTextPreference) preference;
                 preference.setSummary(getEditTextSummary(key, etp.getText()));
