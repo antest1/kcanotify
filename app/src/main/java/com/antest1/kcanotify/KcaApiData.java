@@ -62,6 +62,7 @@ public class KcaApiData {
     public static JsonObject kcExpeditionData = new JsonObject();
     public static JsonObject kcShipInitEquipCount = new JsonObject();
     public static Set<Integer> kcNotCountItemData = new HashSet<>();
+    public static Set<Integer> kcTaisenOverPlaneItemData = new HashSet<>();
 
     public static Handler sHandler = null;
     public static KcaDBHelper helper = null;
@@ -226,8 +227,12 @@ public class KcaApiData {
                 temp = itr.next();
                 Integer api_id = temp.getAsJsonObject().get("api_id").getAsInt();
                 int api_type2 = temp.getAsJsonObject().getAsJsonArray("api_type").get(2).getAsInt();
+                int api_taisen = temp.getAsJsonObject().get("api_tais").getAsInt();
                 if (api_type2 == T2_DAMECON || api_type2 == T2_COMBAT_FOOD || api_type2 == T2_SUPPLIES) {
                     kcNotCountItemData.add(api_id);
+                }
+                if (api_type2 == T2_TORPEDO_BOMBER && api_taisen >= 7) {
+                    kcTaisenOverPlaneItemData.add(api_id);
                 }
                 kcItemData.put(api_id, temp.getAsJsonObject());
             }

@@ -13,6 +13,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
+import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
+import static com.antest1.kcanotify.KcaApiData.kcTaisenOverPlaneItemData;
 import static com.antest1.kcanotify.KcaUtils.getId;
 
 public class KcaFleetInfoItemAdapter extends BaseAdapter {
@@ -120,7 +122,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
         int ship_ex_item_lv = 0;
 
         int slot_sum = 0;
-        boolean flag_931 = false;
+        boolean flag_plane_taisen_over_7 = false;
         JsonArray ship_item = new JsonArray();
 
         for (int j = 0; j < ship_slot.size(); j++) {
@@ -129,7 +131,9 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
                 JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "id,type,name");
                 if (itemData != null) {
                     int item_kc_id = itemData.get("id").getAsInt();
-                    if (item_kc_id == 82 || item_kc_id == 83) flag_931 = true;
+                    if (kcTaisenOverPlaneItemData.contains(item_kc_id)) {
+                        flag_plane_taisen_over_7 = true;
+                    }
                     int item_type = itemData.get("type").getAsJsonArray().get(3).getAsInt();
                     itemData.addProperty("icon", item_type);
                     itemData.addProperty("name", KcaApiData.getItemTranslation(itemData.get("name").getAsString()));
@@ -173,8 +177,11 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
 
         int taisen_value = ship_ts.get(0).getAsInt();
         if (taisen_value >= 100 || (ship_stype == 1 && taisen_value >= 60) ||
-                kc_ship_id == 141 || ((kc_ship_id == 529 || kc_ship_id == 536) && taisen_value >= 65) ||
-                ((kc_ship_id == 380 || kc_ship_id == 526 || kc_ship_id == 381 || kc_ship_id == 534) && taisen_value >= 65 && flag_931)) {
+                kc_ship_id == 141 || kc_ship_id == 478 || kc_ship_id == 624 || kc_ship_id == 394 ||
+                kc_ship_id == 893 || kc_ship_id == 681 || kc_ship_id == 692 || kc_ship_id == 689 ||
+                ((kc_ship_id == 529 || kc_ship_id == 536 || kc_ship_id == 889) && taisen_value >= 65) ||
+                ((kc_ship_id == 380 || kc_ship_id == 526 || kc_ship_id == 381 || kc_ship_id == 534 || kc_ship_id == 382 || kc_ship_id == 884)
+                        && taisen_value >= 65 && flag_plane_taisen_over_7)) {
             holder.ship_taisen.setTextColor(ContextCompat.getColor(context, R.color.colorStatTaisen));
         } else {
             holder.ship_taisen.setTextColor(ContextCompat.getColor(context, R.color.grey));
