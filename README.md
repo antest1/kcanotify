@@ -48,6 +48,7 @@ Language
 - English
 - Simplified/Traditional Chinese (中文)
 - Japanese (日本語)
+- Spanish (Español)
 
 Translations to other languages are welcomed. (please contact to developer to email)  
 
@@ -88,7 +89,7 @@ License
 -------
 [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt)
 
-Copyright (c) 2016-2018 antest1(IE10)
+Copyright (c) 2016-2022 antest1(IE10)
 
 All rights reserved
 
