@@ -5,7 +5,7 @@
     <color name="colorAccent">#03A9F4</color>
     <color name="colorActivityBack">#ffffff</color>
     <color name="colorActivityText">#888888</color>
-    <color name="colorMainBtn">#6082a6</color>
+    <color name="colorMainBtn">#788283</color>
     <color name="colorMainBtnText">#ffffff</color>
     <color name="colorToolbarText">#ffffff</color>
     <color name="colorBtn">#d6d6d6</color>
@@ -13,9 +13,9 @@
     <color name="colorBtnTextAccent">#ffffff</color>
     <color name="colorFleetInfoBtn">#313447</color>
 
-    <color name="colorGameStartBtn">#232b35</color>
-    <color name="colorFairyShowBtn">#8b1b1b</color>
-    <color name="colorToolsBtn">#406558</color>
+    <color name="colorGameStartBtn">#A34237</color>
+    <color name="colorFairyShowBtn">#4A3E39</color>
+    <color name="colorToolsBtn">#1B1C22</color>
 
     <color name="colorUpdate">#e8f5e9</color>
     <color name="colorUpdateText">#1b5e20</color>
