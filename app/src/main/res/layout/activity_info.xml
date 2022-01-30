@@ -26,13 +26,33 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/AppName"
+        <LinearLayout
+            android:id="@+id/layout_logo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/app_brand"
-            android:textAlignment="center"
-            android:textSize="36sp" />
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/app_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:src="@mipmap/main_image"
+                app:srcCompat="@mipmap/main_image" />
+
+            <TextView
+                android:id="@+id/app_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/app_brand"
+                android:textSize="32dp" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/AppVersion"
