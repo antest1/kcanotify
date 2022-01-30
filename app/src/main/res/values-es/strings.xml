@@ -743,4 +743,7 @@
     <string name="fairy_size_value_3">medio</string>
     <string name="fairy_size_value_2">pequeño</string>
     <string name="notice_donotsee">Nunca ver de nuevo</string>
+    <string name="hp_format_0">HP 30/37 (desactivar)</string>
+    <string name="setting_menu_kand_title_hp_format">Seleccione el formato HP en la flota</string>
+    <string name="setting_menu_kand_desc_hp_format">Durante la reparación del anclaje, se mostrará el progreso de la reparación</string>
 </resources>

@@ -153,6 +153,8 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_FAIRY_REV:
             case PREF_HDNOTI_MINLEVEL:
                 return "0";
+            case PREF_KCA_HP_FORMAT:
+                return "1";
             case PREF_ALARM_DELAY:
                 return "61";
             case PREF_KCA_MORALE_MIN:

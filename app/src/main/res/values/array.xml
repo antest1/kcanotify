@@ -16,6 +16,24 @@
         <item >4</item>
     </string-array>
 
+    <string-array name="hpFormatOption">
+        <item>@string/hp_format_0</item>
+        <item>@string/hp_format_1</item> <!-- Default -->
+        <item>@string/hp_format_2</item>
+        <item>@string/hp_format_3</item>
+        <item>@string/hp_format_4</item>
+        <item>@string/hp_format_5</item>
+    </string-array>
+
+    <string-array name="hpFormatOptionValue">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
     <string-array name="languageOption">
         <item>@string/language_system</item>
         <item>@string/language_ko</item>
