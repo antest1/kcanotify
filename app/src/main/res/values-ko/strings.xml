@@ -739,4 +739,7 @@
     <string name="fairy_size_value_2">작게</string>
     <string name="fairy_size_value_1">매우 작게</string>
     <string name="notice_donotsee">다시 보지 않기</string>
+    <string name="hp_format_0">HP 30/37 (무효화)</string>
+    <string name="setting_menu_kand_title_hp_format">함대 정보에 HP 표시</string>
+    <string name="setting_menu_kand_desc_hp_format">부두 수리 중 수리 진행 상황을 확인할 수 있습니다.</string>
 </resources>

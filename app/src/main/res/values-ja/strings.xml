@@ -154,6 +154,9 @@
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">Kcanotify設定</string>
     <string name="setting_menu_kand_title_saku_cal">索敵計算式</string>
+    <string name="setting_menu_kand_title_hp_format">艦隊情報でのHP表示</string>
+    <string name="setting_menu_kand_desc_hp_format">泊地修理中、修理の進捗状況を確認できます</string>
+    <!--entry--><string name="hp_format_0">HP 30/37 (無効化)</string>
     <string name="setting_menu_kand_title_kancolle_app">実行するアプリケーション</string>
     <string name="setting_menu_kand_title_sniffer_type">Snifferモード</string>
     <string name="setting_menu_kand_title_exp_realtime_show">遠征の残り時間を表示</string>

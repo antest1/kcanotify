@@ -203,6 +203,14 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_head">Kcanotify Settings</string>
     <string name="setting_menu_kand_title_language">Language Settings</string>
     <string name="setting_menu_kand_title_saku_cal">Select LoS formula</string>
+    <string name="setting_menu_kand_title_hp_format">Select HP display in FleetView</string>
+    <string name="setting_menu_kand_desc_hp_format">During anchorage repair, the progress of the repair will be displayed</string>
+    <!--entry--><string name="hp_format_0">HP 30/37 (disable)</string>
+    <!--entry--><string name="hp_format_1" translatable="false">HP 30/37 +2 3:24</string>
+    <!--entry--><string name="hp_format_2" translatable="false">HP 30+2/37 3:24</string>
+    <!--entry--><string name="hp_format_3" translatable="false">HP 30/37 +2</string>
+    <!--entry--><string name="hp_format_4" translatable="false">HP 30+2/37</string>
+    <!--entry--><string name="hp_format_5" translatable="false">HP 30/37 3:24</string>
     <string name="setting_menu_kand_title_kancolle_app">Select KanColle Application</string>
     <string name="setting_menu_kand_title_sniffer_type">Sniffer Mode</string>
     <string name="setting_menu_kand_title_exp_realtime_show">Track Expedition Time</string>

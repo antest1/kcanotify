@@ -56,6 +56,7 @@ import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_SIZE;
 import static com.antest1.kcanotify.KcaConstants.PREF_HDNOTI_MINLEVEL;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_HP_FORMAT;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_MORALE_MIN;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
@@ -117,7 +118,9 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             if (preference == null) continue;
             if (preference instanceof ListPreference) {
                 ListPreference etp = (ListPreference) preference;
-                preference.setSummary(etp.getEntry());
+                if (!preference.getKey().equals(PREF_KCA_HP_FORMAT)) { // PREF_KCA_HP_FORMAT already has a summary
+                    preference.setSummary(etp.getEntry());
+                }
             } else if (preference instanceof EditTextPreference) {
                 EditTextPreference etp = (EditTextPreference) preference;
                 preference.setSummary(getEditTextSummary(key, etp.getText()));
@@ -303,7 +306,9 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         Preference preference = findPreference(key);
         if (preference instanceof ListPreference) {
             ListPreference lp = (ListPreference) preference;
-            preference.setSummary(lp.getEntry());
+            if (!preference.getKey().equals(PREF_KCA_HP_FORMAT)) { // PREF_KCA_HP_FORMAT already has a summary
+                preference.setSummary(lp.getEntry());
+            }
         }
 
         if (preference instanceof EditTextPreference) {
