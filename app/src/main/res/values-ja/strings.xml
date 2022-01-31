@@ -540,12 +540,14 @@
     <string name="expdtable_label_ship_exp">艦娘</string>
     <string name="expdtable_label_condition">必要条件／編成</string>
 
+    <string name="expd_type_normal">通常方式</string>
     <string name="expd_type_drum">ドラム缶方式</string>
     <string name="expd_type_flagship_lv">旗艦Lv方式</string>
     <string name="expd_ctype_1">交戦I型</string>
     <string name="expd_ctype_2">交戦II型</string>
     <string name="expd_support">支援</string>
     <string name="expd_monthly">月</string>
+    <string name="expd_gs_rate">大成功率：%3d%%</string>
 
     <string name="action_droplog">ドロップ記録</string>
     <string name="droplog_search">検索</string>

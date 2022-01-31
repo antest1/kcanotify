@@ -5,15 +5,14 @@
     android:id="@+id/expd_layout"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:layout_gravity="center_horizontal|top"
     android:clickable="false"
-    android:orientation="vertical"
     tools:ignore="SpUsage,HardcodedText,ContentDescription">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/expd_panel"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_gravity="center_horizontal|top"
         style="@style/FloatingWindow">
 
         <TextView
@@ -29,7 +28,7 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <androidx.constraintlayout.helper.widget.Flow
-            android:id="@+id/fleet_tab"
+            android:id="@+id/expd_fleet_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -90,7 +89,7 @@
             android:id="@+id/barrier_header"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            app:constraint_referenced_ids="window_title,fleet_tab,window_exit"
+            app:constraint_referenced_ids="window_title,expd_fleet_tab,window_exit"
             app:barrierDirection="bottom" />
 
         <View
@@ -199,14 +198,14 @@
             android:layout_marginRight="2dp"
             android:layout_marginTop="4dp"
             android:orientation="horizontal"
-            app:flow_wrapMode="aligned"
+            app:flow_wrapMode="chain"
             app:flow_maxElementsWrap="3"
             app:flow_horizontalGap="4dp"
             app:flow_verticalGap="4dp"
             app:constraint_referenced_ids="expd_btn_0,expd_btn_1,expd_btn_2,expd_btn_3,expd_btn_4,expd_btn_5,expd_btn_6,expd_btn_7,expd_btn_8,expd_btn_9,expd_btn_10,expd_btn_11,expd_btn_12,expd_btn_13,expd_btn_14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guide_expd_table"
-            app:layout_constraintTop_toBottomOf="@id/expd_world_1" />
+            app:layout_constraintTop_toBottomOf="@id/expd_worlds" />
 
         <TextView
             android:id="@+id/expd_btn_0"

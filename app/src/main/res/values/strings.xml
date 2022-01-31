@@ -611,12 +611,14 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expdtable_label_hq_exp">HQ</string>
     <string name="expdtable_label_ship_exp">Ship</string>
     <string name="expdtable_label_condition">Success Condition</string>
+    <string name="expd_type_normal">Normal Type</string>
     <string name="expd_type_drum">Drum Type</string>
     <string name="expd_type_flagship_lv">Flag Lv Type</string>
     <string name="expd_ctype_1">Combat Exped. I</string>
     <string name="expd_ctype_2">Combat Exped. II</string>
     <string name="expd_support">Support</string>
     <string name="expd_monthly">Monthly</string>
+    <string name="expd_gs_rate">Great Success: %3d%%</string>
 
     <string name="action_droplog">Drop Log</string>
     <string name="droplog_search">Search</string>
@@ -724,7 +726,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_bonus_los" formatted="false">LoS: %d</string>
     <string name="excheckview_bonus_kinu">Kinu Kai Ni</string>
     <string name="excheckview_bonus_drum" formatted="false">Drum: %d</string>
-    <string name="excheckview_bonus_drum_carrying" formatted="false">Drum: %d (%d ships carrying)</string>
+    <string name="excheckview_bonus_drum_carrying" formatted="false">Drum: %d（%d ships carrying）</string>
     <string name="excheckview_bonus_dlc" formatted="false">DLC: %d</string>
     <string name="excheckview_bonus_dlcs" formatted="false">DLCs: %d</string>
     <string name="excheckview_bonus_tank" formatted="false">DLC(89Tank): %d</string>

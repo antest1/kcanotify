@@ -8,60 +8,84 @@
     tools:ignore="SpUsage,HardcodedText,ContentDescription">
 
     <!-- region header -->
-    <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/expd_header"
+    <TextView
+        android:id="@+id/expd_id"
         android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:orientation="horizontal"
-        app:constraint_referenced_ids="expd_title,expd_type,expd_ctype,title_spacer,expd_time,expd_reward"
-        app:flow_wrapMode="chain"
-        app:flow_horizontalGap="8dp"
-        app:flow_verticalGap="4dp"
-        app:flow_verticalAlign="baseline"
-        app:flow_horizontalStyle="packed"
-        app:flow_horizontalBias="0"
-        app:flow_lastHorizontalBias="1"
-        app:flow_lastHorizontalStyle="packed"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_width="wrap_content"
+        android:maxLines="1"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Large"
+        app:layout_constraintBaseline_toBaselineOf="@id/expd_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/expd_title"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0"
+        tools:text="[24]" />
 
     <TextView
         android:id="@+id/expd_title"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:maxLines="1"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
         android:textAppearance="@style/FloatingWindow.TextAppearance.Large"
-        tools:text="北方航路海上護衛" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/expd_id"
+        app:layout_constraintEnd_toStartOf="@id/expd_time"
+        app:layout_constrainedWidth="true"
+        tools:text="北方航路海上護衛北方航路海上護衛" />
 
     <TextView
         android:id="@+id/expd_type"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_marginTop="4dp"
         android:maxLines="1"
         android:textAppearance="@style/FloatingWindow.TextAppearance.Small"
+        app:layout_constraintTop_toBottomOf="@id/expd_title"
+        app:layout_constraintStart_toStartOf="@id/expd_title"
+        app:layout_constraintEnd_toStartOf="@id/expd_ctype"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0"
         tools:text="@string/expd_type_flagship_lv" />
 
     <TextView
         android:id="@+id/expd_ctype"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:maxLines="1"
         android:textAppearance="@style/FloatingWindow.TextAppearance.Small"
+        app:layout_constraintBaseline_toBaselineOf="@id/expd_type"
+        app:layout_constraintStart_toEndOf="@id/expd_type"
+        app:layout_constraintEnd_toStartOf="@id/expd_gs_rate"
         tools:text="@string/expd_ctype_2" />
 
-    <androidx.legacy.widget.Space
-        android:id="@+id/title_spacer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/expd_gs_rate"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:maxLines="1"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Small"
+        app:layout_constraintBaseline_toBaselineOf="@id/expd_type"
+        app:layout_constraintStart_toEndOf="@id/expd_ctype"
+        app:layout_constraintEnd_toStartOf="@+id/expd_reward"
+        tools:text="@string/expd_gs_rate" />
 
     <TextView
         android:id="@+id/expd_time"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:maxLines="1"
         android:text="00:00:00"
-        android:textAppearance="@style/FloatingWindow.TextAppearance.Small" />
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Small"
+        app:layout_constraintBaseline_toBaselineOf="@id/expd_title"
+        app:layout_constraintStart_toEndOf="@id/expd_title"
+        app:layout_constraintEnd_toStartOf="@id/expd_reward" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/expd_reward"
@@ -74,7 +98,9 @@
         android:background="@color/colorFleetInfoBtn"
         app:constraint_referenced_ids="expd_reward_res,expd_reward_item1,expd_reward_item2"
         app:flow_horizontalGap="8dp"
-        app:flow_verticalAlign="baseline" />
+        app:flow_verticalAlign="baseline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/expd_title" />
 
     <TextView
         android:id="@+id/expd_reward_res"
@@ -97,23 +123,32 @@
         android:background="@color/colorPrimaryDark" />
     <!-- endregion -->
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_expd_title"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="expd_title,expd_type,expd_ctype,expd_gs_rate,expd_time,expd_reward"
+        tools:layout_editor_absoluteY="43dp" />
+
     <View
         android:id="@+id/expd_detail_divider"
         android:layout_height="0.5dp"
         android:layout_width="0dp"
         android:layout_marginTop="1dp"
         android:background="@color/grey"
-        app:layout_constraintTop_toBottomOf="@id/expd_header"
+        app:layout_constraintTop_toBottomOf="@id/barrier_expd_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier_expd_title"
+        android:id="@+id/barrier_expd_detail_divider"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         app:barrierDirection="bottom"
         app:barrierMargin="4dp"
-        app:constraint_referenced_ids="expd_header,expd_detail_divider" />
+        app:constraint_referenced_ids="expd_detail_divider"
+        tools:layout_editor_absoluteY="48dp" />
 
     <!-- region flagship cond -->
     <TextView
@@ -124,7 +159,7 @@
         android:textAlignment="center"
         android:gravity="center_horizontal"
         android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
-        app:layout_constraintTop_toBottomOf="@id/barrier_expd_title"
+        app:layout_constraintTop_toBottomOf="@id/barrier_expd_detail_divider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/expd_flow_flagship"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -202,7 +237,7 @@
         app:flow_horizontalStyle="packed"
         app:flow_horizontalBias="0.0"
         app:layout_constraintStart_toEndOf="@id/expd_fleet_label"
-        app:layout_constraintEnd_toEndOf="@id/guide_fleet_cond"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/expd_fleet_label" />
 
     <TextView
@@ -232,6 +267,19 @@
         app:layout_constraintStart_toStartOf="@id/expd_fleet_total_num" />
     <!-- endregion -->
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_fleet_cond"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:constraint_referenced_ids="expd_fleet_label,expd_flow_fleet,expd_fleet_cond"
+        app:barrierDirection="bottom" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_fleet_cond"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0" />
     <!-- region status cond -->
 
     <TextView
@@ -242,9 +290,9 @@
         android:textAlignment="center"
         android:gravity="center_horizontal"
         android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guide_fleet_cond"
         app:layout_constraintEnd_toStartOf="@id/expd_flow_firepower"
-        app:layout_constraintTop_toBottomOf="@id/barrier_drum_cond"
+        app:layout_constraintTop_toBottomOf="@id/barrier_fleet_cond"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintHorizontal_bias="0.0" />
 
@@ -295,7 +343,7 @@
         android:textAlignment="center"
         android:gravity="center_horizontal"
         android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guide_fleet_cond"
         app:layout_constraintEnd_toStartOf="@id/expd_flow_asw"
         app:layout_constraintTop_toBottomOf="@id/barrier_firepower"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -348,7 +396,7 @@
         android:textAlignment="center"
         android:gravity="center_horizontal"
         android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guide_fleet_cond"
         app:layout_constraintEnd_toStartOf="@id/expd_flow_aa"
         app:layout_constraintTop_toBottomOf="@id/barrier_asw"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -401,7 +449,7 @@
         android:textAlignment="center"
         android:gravity="center_horizontal"
         android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guide_fleet_cond"
         app:layout_constraintEnd_toStartOf="@id/expd_flow_los"
         app:layout_constraintTop_toBottomOf="@id/barrier_aa"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -439,13 +487,19 @@
         android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
         tools:text="200%" />
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_los"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:constraint_referenced_ids="expd_los_label,expd_flow_los"
+        app:barrierDirection="bottom" />
     <!-- endregion -->
 
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier_fleet_cond"
+        android:id="@+id/barrier_fleet_status_cond"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        app:constraint_referenced_ids="expd_fleet_label,expd_flow_fleet,expd_fleet_cond"
+        app:constraint_referenced_ids="barrier_fleet_cond,barrier_los"
         app:barrierDirection="bottom" />
 
     <!-- region drum cond -->
@@ -458,7 +512,7 @@
         android:gravity="center_horizontal"
         android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrier_fleet_cond"
+        app:layout_constraintTop_toBottomOf="@id/barrier_fleet_status_cond"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintEnd_toStartOf="@id/expd_flow_drum"
         app:layout_constraintHorizontal_chainStyle="packed" />
@@ -507,14 +561,5 @@
         android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
         tools:text="合計8つ以上" />
     <!-- endregion -->
-
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier_drum_cond"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="expd_drum_label,expd_flow_drum"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

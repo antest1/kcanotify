@@ -29,7 +29,7 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <androidx.constraintlayout.helper.widget.Flow
-            android:id="@+id/fleet_tab"
+            android:id="@+id/expd_fleet_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -90,10 +90,8 @@
             android:id="@+id/barrier_header"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            app:constraint_referenced_ids="window_title,fleet_tab,window_exit"
-            app:barrierDirection="bottom"
-            tools:layout_editor_absoluteY="37dp"
-            tools:layout_editor_absoluteX="8dp" />
+            app:constraint_referenced_ids="window_title,expd_fleet_tab,window_exit"
+            app:barrierDirection="bottom" />
 
         <View
             android:id="@+id/header_divider"
@@ -241,9 +239,7 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             style="@style/ExpeditionView.TableItem"
-            android:text="5"
-            tools:layout_editor_absoluteY="179dp"
-            tools:layout_editor_absoluteX="17dp" />
+            android:text="5" />
 
         <TextView
             android:id="@+id/expd_btn_5"
