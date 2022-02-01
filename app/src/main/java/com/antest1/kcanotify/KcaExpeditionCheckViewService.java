@@ -23,7 +23,6 @@ import static com.antest1.kcanotify.KcaApiData.T2_SONAR;
 import static com.antest1.kcanotify.KcaApiData.T2_SONAR_LARGE;
 import static com.antest1.kcanotify.KcaApiData.T2_SUB_GUN;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
-import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
@@ -79,6 +78,7 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
 import com.google.gson.Gson;
@@ -676,7 +676,7 @@ public class KcaExpeditionCheckViewService extends Service {
     }
 
     private void updateCheckData(boolean isFleetChanged) {
-        if (!checkUserShipDataLoaded()) return;
+        if (!checkUserShipDataLoaded() || fleet_info == null) return;
 
         // if fleet wasn't changed, don't delete, just append.
         if (isFleetChanged) check_data.clear();
@@ -826,16 +826,14 @@ public class KcaExpeditionCheckViewService extends Service {
         return result;
     }
 
-    /**
-     * @return {@code List<List<[stype, count]>>}
-     */
-    private List<List<Pair<String, Integer>>> parseFleetCond(String cond_data) {
-        return transform(Arrays.asList(cond_data.split("/")), cond_list -> {
-            return transform(Arrays.asList(cond_list.split("\\|")), cond_str -> {
-                String[] ship_cond = cond_str.split("-");
+    private String[] parseTotalCond(String total_cond) {
+        return total_cond.split("/");
+    }
 
-                return new Pair<>(ship_cond[0], Integer.parseInt(ship_cond[1]));
-            });
+    private List<Pair<String, Integer>> parseFleetCond(String fleet_cond) {
+        return transform(Arrays.asList(fleet_cond.split("\\|")), stype_cond -> {
+            String[] cond = stype_cond.split("-");
+            return new Pair<>(cond[0], Integer.parseInt(cond[1]));
         });
     }
 
@@ -856,12 +854,13 @@ public class KcaExpeditionCheckViewService extends Service {
 
         boolean total_pass = false;
         JsonArray total_check = new JsonArray();
-        for (List<Pair<String, Integer>> cond_list : parseFleetCond(total_cond)) {
+        for (String fleet_cond : parseTotalCond(total_cond)) {
             JsonObject cond_check = new JsonObject();
             total_check.add(cond_check);
 
             boolean partial_pass = true;
-            for (Pair<String, Integer> cond : cond_list) {
+            for (Pair<String, Integer> cond : parseFleetCond(fleet_cond)) {
+
                 String[] stype_list = cond.first.split(",");
                 int count = 0;
 
@@ -989,16 +988,19 @@ public class KcaExpeditionCheckViewService extends Service {
         }
         // endregion
 
-        if (!checkUserShipDataLoaded() || fleet_info == null) return;
+//        if (!checkUserShipDataLoaded() || fleet_info == null) return;
 
         JsonObject check = check_data.get(data.get("no").getAsInt());
-        if (check == null) return;
+        boolean checked = check != null;
+//        if (check == null) return;
         Log.d(TAG, "check: " + check);
 
-        setViewTextColorById(R.id.expd_id, getColorByCond(check.get("pass").getAsBoolean()));
-        setViewTextColorById(R.id.expd_title, getColorByCond(check.get("pass").getAsBoolean()));
+        if (checked) {
+            setViewTextColorById(R.id.expd_id, getColorByCond(check.get("pass").getAsBoolean()));
+            setViewTextColorById(R.id.expd_title, getColorByCond(check.get("pass").getAsBoolean()));
+        }
 
-        if (check.get("pass").getAsBoolean()) {
+        if (checked && fleet_info != null && check.get("pass").getAsBoolean()) {
             int gs_rate;
             if (features.contains("drum")) {
                 gs_rate = check.get(DRUM_OPTIONAL).getAsBoolean()
@@ -1022,19 +1024,15 @@ public class KcaExpeditionCheckViewService extends Service {
             setViewVisibilityById(R.id.expd_flagship_label, true);
             setViewContentById(R.id.expd_flagship_lv,
                     format(R.string.excheckview_flag_lv_format, data.get(FLAG_LV).getAsInt()),
-                    getColorByCond(check.get(FLAG_LV).getAsBoolean()));
+                    getColorByCheck(check, FLAG_LV));
         }
 
         if (data.has(FLAG_COND)) {
             setViewVisibilityById(R.id.expd_flagship_label, true);
 
-            List<String> stype_list = transform(
-                    Arrays.asList(data.get(FLAG_COND).getAsString().split("/")),
-                    (str) -> getShipTypeAbbr(Integer.parseInt(str)));
-
             setViewContentById(R.id.expd_flagship_cond,
-                    KcaUtils.joinStr(stype_list, "/"),
-                    getColorByCond(check.get(FLAG_COND).getAsBoolean()));
+                    getSshipTypeAbbrList(data.get(FLAG_COND).getAsString().split("/")),
+                    getColorByCheck(check, FLAG_COND));
         }
         // endregion
 
@@ -1043,24 +1041,22 @@ public class KcaExpeditionCheckViewService extends Service {
             setViewVisibilityById(R.id.expd_fleet_label, true);
             setViewContentById(R.id.expd_fleet_total_num,
                     format(R.string.excheckview_total_num_format, data.get(FLEET_NUM).getAsInt()),
-                    getColorByCond(check.get(FLEET_NUM).getAsBoolean()));
+                    getColorByCheck(check, FLEET_NUM));
         }
 
         if (data.has(FLEET_LV)) {
             setViewVisibilityById(R.id.expd_fleet_label, true);
             setViewContentById(R.id.expd_fleet_total_lv,
                     format(R.string.excheckview_total_lv_format, data.get(FLEET_LV).getAsInt()),
-                    getColorByCond(check.get(FLEET_LV).getAsBoolean()));
+                    getColorByCheck(check, FLEET_LV));
         }
 
         if (data.has(FLEET_COND)) {
             setViewVisibilityById(R.id.expd_fleet_label, true);
             setViewVisibilityById(R.id.expd_fleet_cond, true);
-            String total_cond = data.get(FLEET_COND).getAsString();
-            LinearLayout container = findViewById(R.id.expd_fleet_cond);
-            for (View v : generateCondView(total_cond, check.getAsJsonArray(FLEET_COND))) {
-                container.addView(v);
-            }
+            addFleetCondView(findViewById(R.id.expd_fleet_cond),
+                    data.get(FLEET_COND).getAsString(),
+                    checked ? check.getAsJsonArray(FLEET_COND) : null);
         }
         // endregion
 
@@ -1069,21 +1065,21 @@ public class KcaExpeditionCheckViewService extends Service {
             setViewVisibilityById(R.id.expd_drum_label, true);
             setViewContentById(R.id.expd_drum_ships,
                     format(R.string.excheckview_drum_ship_format, data.get(DRUM_SHIPS).getAsInt()),
-                    getColorByCond(check.get(DRUM_SHIPS).getAsBoolean()));
+                    getColorByCheck(check, DRUM_SHIPS));
         }
 
         if (data.has(DRUM_COUNT)) {
             setViewVisibilityById(R.id.expd_drum_label, true);
             setViewContentById(R.id.expd_drum_count,
                     format(R.string.excheckview_drum_num_format, data.get(DRUM_COUNT).getAsInt()),
-                    getColorByCond(check.get(DRUM_COUNT).getAsBoolean()));
+                    getColorByCheck(check, DRUM_COUNT));
         }
 
         if (data.has(DRUM_OPTIONAL)) {
             setViewVisibilityById(R.id.expd_drum_label, true);
             setViewContentById(R.id.expd_drum_optional,
                     format(R.string.excheckview_drum_num_format, data.get(DRUM_OPTIONAL).getAsInt()),
-                    getColorByCond(check.get(DRUM_OPTIONAL).getAsBoolean(), true));
+                    getColorByCheck(check, DRUM_COUNT, true));
         }
         // endregion
 
@@ -1129,8 +1125,8 @@ public class KcaExpeditionCheckViewService extends Service {
 
     private void setStatusInfoFor(
             String key,
-            JsonObject data,
-            JsonObject check,
+            @NonNull JsonObject data,
+            @Nullable JsonObject check,
             boolean isCombat2,
             @IdRes int labelId,
             @IdRes int reqId,
@@ -1138,13 +1134,16 @@ public class KcaExpeditionCheckViewService extends Service {
 
         if (data.has(key)) {
             int req = data.get(key).getAsInt();
-            boolean pass = check.get(key).getAsBoolean();
-            float fleet = fleet_info.get(key).getAsFloat();
 
             setViewVisibilityById(labelId, true);
             setViewContentById(reqId,
                     format(R.string.excheckview_total_format, req),
-                    getColorByCond(pass));
+                    getColorByCheck(check, key));
+
+            if (check == null || fleet_info == null) return;
+
+            boolean pass = check.get(key).getAsBoolean();
+            float fleet = fleet_info.get(key).getAsFloat();
 
             if (!pass) {
                 setViewContentById(fleetId,
@@ -1160,53 +1159,10 @@ public class KcaExpeditionCheckViewService extends Service {
         }
     }
 
-    /**
-     * @param cond_data {@code "1-2|2-3/1,2,3-4"} means ( DE*2 + DD*3 ) or ( (DE+DD+CL)*4 )
-     */
-    private List<List<JsonObject>> convertTotalCond(String cond_data, JsonArray check_data) {
-
-        List<List<JsonObject>> condList = Lists.newArrayList();
-
-        int i = 0;
-        for (String org_cond_str : cond_data.split("/")) {
-            List<JsonObject> org_cond = Lists.newArrayList();
-            condList.add(org_cond);
-
-            for (String ship_cond_str : org_cond_str.split("\\|")) {
-                JsonObject ship_cond = new JsonObject();
-                org_cond.add(ship_cond);
-
-                String stypes = ship_cond_str.split("-")[0];
-                int count = Integer.parseInt(ship_cond_str.split("-")[1]);
-
-                String str;
-                if (stypes.equals(CARRIERS)) {
-                    str = getStringWithLocale(R.string.excheckview_ship_cvs);
-                } else {
-                    List<String> abbr = transform(Arrays.asList(stypes.split(",")),
-                            stype -> getShipTypeAbbr(Integer.parseInt(stype)));
-                    str = joinStr(abbr, "/");
-                }
-
-                ship_cond.addProperty("pass", check_data.get(i).getAsJsonObject().get(stypes).getAsBoolean());
-                ship_cond.addProperty("text", format(R.string.excheckview_ship_cond, str, count));
-            }
-
-            i++;
-        }
-
-        return condList;
-    }
-
-    private TextView getTextViewFor(String text, boolean is_pass) {
-        TextView tv = new TextView(this);
-        tv.setText(text);
-        tv.setTextAppearance(this, R.style.FloatingWindow_TextAppearance_Normal);
-        tv.setTextColor(ContextCompat.getColor(getApplicationContext(), getColorByCond(is_pass)));
-        return tv;
-    }
-
-    private List<View> generateCondView(String data, JsonArray check) {
+    private void addFleetCondView(
+            LinearLayout container,
+            @NonNull String data,
+            @Nullable JsonArray check) {
 
         LinearLayout.LayoutParams row_params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -1219,20 +1175,37 @@ public class KcaExpeditionCheckViewService extends Service {
                 getApplicationContext().getResources().getDisplayMetrics());
         text_params.setMargins(0, 0, margin4dp, 0);
 
-        return transform(convertTotalCond(data, check),
-                cond_list -> {
-                    LinearLayout row = new LinearLayout(this);
-                    row.setLayoutParams(row_params);
-                    row.setOrientation(LinearLayout.HORIZONTAL);
+        int i = 0;
+        for (String fleet_cond : parseTotalCond(data)) {
+            JsonObject fleet_check = check != null ? check.get(i++).getAsJsonObject() : null;
 
-                    for (JsonObject cond : cond_list) {
-                        String text = cond.get("text").getAsString();
-                        boolean pass = cond.get("pass").getAsBoolean();
-                        row.addView(getTextViewFor(text, pass), text_params);
-                    }
+            LinearLayout row = new LinearLayout(this);
+            row.setLayoutParams(row_params);
+            row.setOrientation(LinearLayout.HORIZONTAL);
 
-                    return row;
-                });
+            for (Pair<String, Integer> stype_cond : parseFleetCond(fleet_cond)) {
+
+                String stype_abbr = stype_cond.first.equals(CARRIERS)
+                        ? getStringWithLocale(R.string.excheckview_ship_cvs)
+                        : getSshipTypeAbbrList(stype_cond.first.split(","));
+
+                int color = fleet_check == null
+                        ? R.color.white
+                        : getColorByCond(fleet_check.get(stype_cond.first).getAsBoolean());
+
+                row.addView(generateTextView(stype_abbr, stype_cond.second, color), text_params);
+            }
+
+            container.addView(row);
+        }
+    }
+
+    private TextView generateTextView(String stype, int count, @ColorRes int color) {
+        TextView tv = new TextView(this);
+        tv.setText(format(R.string.excheckview_ship_cond, stype, count));
+        tv.setTextAppearance(this, R.style.FloatingWindow_TextAppearance_Normal);
+        tv.setTextColor(ContextCompat.getColor(getApplicationContext(), color));
+        return tv;
     }
 
     private void setFleetInfoView() {
@@ -1294,8 +1267,18 @@ public class KcaExpeditionCheckViewService extends Service {
         return KcaUtils.format(getStringWithLocale(formatResId), args);
     }
 
+    private String getSshipTypeAbbrList(String[] stype_list) {
+        StringBuilder sb = new StringBuilder();
+        Iterator<String> itr = Iterators.forArray(stype_list);
+        while (itr.hasNext()) {
+            sb.append(KcaApiData.getShipTypeAbbr(Integer.parseInt(itr.next())));
+            if (itr.hasNext()) sb.append("/");
+        }
+        return sb.toString();
+    }
+
     private int applyBonus(int value, boolean isGreatSuccess) {
-        if (!checkUserShipDataLoaded()) return value;
+        if (!checkUserShipDataLoaded() || fleet_info == null) return value;
 
         float dlcs_bonus = fleet_info.get(DLCS_BONUS).getAsFloat();
         float toku_bonus = fleet_info.get(TOKU_BONUS).getAsFloat();
@@ -1352,6 +1335,16 @@ public class KcaExpeditionCheckViewService extends Service {
 
     @ColorRes private int getColorByCond(boolean is_pass) {
         return getColorByCond(is_pass, false);
+    }
+
+    @ColorRes private int getColorByCheck(@Nullable JsonObject check, String key, boolean is_option) {
+        return check == null
+                ? R.color.white
+                : getColorByCond(check.get(key).getAsBoolean(), is_option);
+    }
+
+    @ColorRes private int getColorByCheck(@Nullable JsonObject check, String key) {
+        return getColorByCheck(check, key, false);
     }
 
     private void setViewContentById(@IdRes int id, String content, @ColorRes int color) {
