@@ -75,7 +75,6 @@ import androidx.annotation.StringRes;
 import androidx.constraintlayout.helper.widget.Flow;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -86,6 +85,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -388,8 +388,9 @@ public class KcaExpeditionCheckViewService extends Service {
         isGreatSuccess = !isGreatSuccess;
         setExpdDetailLayout();
     }
-    // endregion
+    // endregion lifecycle
 
+    // region data update
     private void setSelectedFleet(int newValue) {
         newValue = clamp(newValue, 1, fleet_list.size()); // 1 <= i < size
         selected_fleet = newValue;
@@ -414,6 +415,14 @@ public class KcaExpeditionCheckViewService extends Service {
         if (!checkUserShipDataLoaded())
             return; // view will be updated even when the load isn't completed
 
+        updateFleetInfo();
+        setFleetInfoView();
+
+        Log.d(TAG, "ship_list[" + ship_list.size() + "]: " + ship_list);
+        Log.d(TAG, "fleet_info: " + fleet_info);
+    }
+
+    private void updateFleetInfo() {
         ship_list.clear();
         for (int id : fleet_list.get(selected_fleet)) {
             if (id <= 0) continue;
@@ -422,15 +431,11 @@ public class KcaExpeditionCheckViewService extends Service {
             JsonObject userData = getUserShipDataById(id, USER_SHIP_REQ_LIST);
             int kc_ship_id = userData.get("ship_id").getAsInt();
             JsonObject kcData = getKcShipDataById(kc_ship_id, KC_SHIP_REQ_LIST);
-            if (kcData == null) {
-                Log.e(TAG, "cannot find kc data for ship_id: " + kc_ship_id);
-                continue;
-            }
 
             data.add("ship_id", userData.get("ship_id"));
             data.add("lv", userData.get("lv"));
             data.add("cond", userData.get("cond"));
-            data.add("stype", kcData.get("stype"));
+            data.add("stype", kcData == null ? new JsonPrimitive(0) : kcData.get("stype"));
             data.add("karyoku", userData.getAsJsonArray("karyoku").get(0));
             data.add("taisen", userData.getAsJsonArray("taisen").get(0));
             data.add("taiku", userData.getAsJsonArray("taiku").get(0));
@@ -443,17 +448,14 @@ public class KcaExpeditionCheckViewService extends Service {
                 if (itemData != null) data.getAsJsonArray("item").add(itemData);
             }
 
+            if (kcData == null) {
+                Log.e(TAG, "cannot find kc data for ship_id: " + kc_ship_id);
+                continue;
+            }
+
             ship_list.add(data);
         }
 
-        updateFleetInfo(ship_list);
-        setFleetInfoView();
-
-        Log.d(TAG, "ship_list[" + ship_list.size() + "]: " + ship_list);
-        Log.d(TAG, "fleet_info: " + fleet_info);
-    }
-
-    private void updateFleetInfo(List<JsonObject> ship_list) {
         JsonObject result = new JsonObject();
         getStatusInfo(ship_list, result);
         getGSInfo(ship_list, result);
@@ -466,6 +468,8 @@ public class KcaExpeditionCheckViewService extends Service {
      * <a href="https://kitongame.com/%E3%80%90%E8%89%A6%E3%81%93%E3%82%8C%E3%80%91%E3%83%9E%E3%83%B3%E3%82%B9%E3%83%AA%E3%83%BC%E9%81%A0%E5%BE%81%E3%81%AE%E6%88%90%E5%8A%9F%E6%9D%A1%E4%BB%B6%E3%81%A8%E7%8D%B2%E5%BE%97%E8%B3%87%E6%9D%90/">kiton</a>
      */
     private static void getStatusInfo(List<JsonObject> ship_list, JsonObject result) {
+        int flag_lv = ship_list.isEmpty() ? -1 : ship_list.get(0).get("lv").getAsInt();
+
         int total_lv = 0;
         float total_fire = 0;
         float total_asw = 0;
@@ -523,6 +527,7 @@ public class KcaExpeditionCheckViewService extends Service {
             }
         }
 
+        result.addProperty(FLAG_LV, flag_lv);
         result.addProperty(FLEET_LV, total_lv);
         result.addProperty(TOTAL_FIRE, total_fire);
         result.addProperty(TOTAL_ASW, total_asw);
@@ -536,6 +541,14 @@ public class KcaExpeditionCheckViewService extends Service {
      * <a href="https://docs.google.com/spreadsheets/d/1bKwHBxtQhNfxE4PAzYaFlbiO_soQTFi3dG1U4nh9njs/edit#gid=330967444">Spreadsheet</a>
      */
     private static void getGSInfo(List<JsonObject> ship_list, JsonObject result) {
+        if (ship_list.isEmpty()) { // if fleet is empty, set all rate to 0, return
+            result.addProperty(GS_RATE_NORMAL, 0);
+            result.addProperty(GS_RATE_DRUM_1, 0);
+            result.addProperty(GS_RATE_DRUM_2, 0);
+            result.addProperty(GS_RATE_FLAGSHIP, 0);
+            return;
+        }
+
         int flag_lv = ship_list.get(0).get("lv").getAsInt();
         int sparkles = 0;
         boolean all_sparkle = true;
@@ -665,8 +678,9 @@ public class KcaExpeditionCheckViewService extends Service {
     private void updateCheckData(boolean isFleetChanged) {
         if (!checkUserShipDataLoaded()) return;
 
-        if (isFleetChanged)
-            check_data.clear(); // if fleet wasn't changed, don't delete, just append.
+        // if fleet wasn't changed, don't delete, just append.
+        if (isFleetChanged) check_data.clear();
+
         for (int expd : expd_list) {
             check_data.put(expd, checkCondition(KcaApiData.getExpeditionInfo(expd, locale)));
         }
@@ -876,7 +890,9 @@ public class KcaExpeditionCheckViewService extends Service {
 
         setExpdDetailLayout();
     }
+    // endregion data update
 
+    // region layout update
     private void clearExpdDetailLayout() {
         // clear detail header
         setViewContentById(R.id.expd_id, "");
@@ -894,7 +910,7 @@ public class KcaExpeditionCheckViewService extends Service {
         setViewsGone(R.id.expd_flagship_label, R.id.expd_flagship_lv, R.id.expd_flagship_cond);
         setViewsGone(R.id.expd_fleet_label, R.id.expd_fleet_total_num, R.id.expd_fleet_total_lv);
         this.<LinearLayout>findViewById(R.id.expd_fleet_cond).removeAllViews();
-        setViewsGone(R.id.expd_firepower_label, R.id.expd_total_firepower, R.id.expd_fleet_firepower,
+        setViewsGone(R.id.expd_fire_label, R.id.expd_total_fire, R.id.expd_fleet_fire,
                 R.id.expd_asw_label, R.id.expd_total_asw, R.id.expd_fleet_asw,
                 R.id.expd_aa_label, R.id.expd_total_aa, R.id.expd_fleet_aa,
                 R.id.expd_los_label, R.id.expd_total_los, R.id.expd_fleet_los);
@@ -902,7 +918,7 @@ public class KcaExpeditionCheckViewService extends Service {
     }
 
     public void setExpdDetailLayout() {
-        if (!checkUserShipDataLoaded() || !KcaApiData.isExpeditionDataLoaded()) return;
+        if (!KcaApiData.isExpeditionDataLoaded()) return;
 
         int expd_id = expd_list.get(selected_expd.get(selected_world, 0));
         JsonObject data = KcaApiData.getExpeditionInfo(expd_id, locale);
@@ -973,6 +989,8 @@ public class KcaExpeditionCheckViewService extends Service {
         }
         // endregion
 
+        if (!checkUserShipDataLoaded() || fleet_info == null) return;
+
         JsonObject check = check_data.get(data.get("no").getAsInt());
         if (check == null) return;
         Log.d(TAG, "check: " + check);
@@ -992,10 +1010,11 @@ public class KcaExpeditionCheckViewService extends Service {
                 gs_rate = fleet_info.get(GS_RATE_NORMAL).getAsInt();
             }
 
-            if (gs_rate <= 0) return;
+            if (gs_rate > 0) {
 
-            setViewVisibilityById(R.id.expd_gs_rate, true);
-            setViewContentById(R.id.expd_gs_rate, format(R.string.expd_gs_rate, gs_rate));
+                setViewVisibilityById(R.id.expd_gs_rate, true);
+                setViewContentById(R.id.expd_gs_rate, format(R.string.expd_gs_rate, gs_rate));
+            }
         }
 
         // region flagship cond
@@ -1038,9 +1057,9 @@ public class KcaExpeditionCheckViewService extends Service {
             setViewVisibilityById(R.id.expd_fleet_label, true);
             setViewVisibilityById(R.id.expd_fleet_cond, true);
             String total_cond = data.get(FLEET_COND).getAsString();
-            LinearLayout layout = findViewById(R.id.expd_fleet_cond);
+            LinearLayout container = findViewById(R.id.expd_fleet_cond);
             for (View v : generateCondView(total_cond, check.getAsJsonArray(FLEET_COND))) {
-                layout.addView(v);
+                container.addView(v);
             }
         }
         // endregion
@@ -1072,9 +1091,9 @@ public class KcaExpeditionCheckViewService extends Service {
         boolean isCombat2 = features.contains("combat_2");
 
         setStatusInfoFor(TOTAL_FIRE, data, check, isCombat2,
-                R.id.expd_firepower_label,
-                R.id.expd_total_firepower,
-                R.id.expd_fleet_firepower);
+                R.id.expd_fire_label,
+                R.id.expd_total_fire,
+                R.id.expd_fleet_fire);
 
         setStatusInfoFor(TOTAL_AA, data, check, isCombat2,
                 R.id.expd_aa_label,
@@ -1223,10 +1242,10 @@ public class KcaExpeditionCheckViewService extends Service {
         List<String> info = new ArrayList<>();
 
         info.add(format(R.string.excheckview_bonus_lv, fleet_info.get(FLEET_LV).getAsInt()));
-        info.add(format(R.string.excheckview_bonus_firepower, fleet_info.get(TOTAL_FIRE).getAsInt()));
-        info.add(format(R.string.excheckview_bonus_asw, fleet_info.get(TOTAL_ASW).getAsInt()));
-        info.add(format(R.string.excheckview_bonus_aa, fleet_info.get(TOTAL_AA).getAsInt()));
-        info.add(format(R.string.excheckview_bonus_los, fleet_info.get(TOTAL_LOS).getAsInt()));
+//        info.add(format(R.string.excheckview_bonus_firepower, fleet_info.get(TOTAL_FIRE).getAsInt()));
+//        info.add(format(R.string.excheckview_bonus_asw, fleet_info.get(TOTAL_ASW).getAsInt()));
+//        info.add(format(R.string.excheckview_bonus_aa, fleet_info.get(TOTAL_AA).getAsInt()));
+//        info.add(format(R.string.excheckview_bonus_los, fleet_info.get(TOTAL_LOS).getAsInt()));
 
         int drum_count = fleet_info.get(DRUM_COUNT).getAsInt();
         int drum_ships = fleet_info.get(DRUM_SHIPS).getAsInt();
@@ -1256,6 +1275,7 @@ public class KcaExpeditionCheckViewService extends Service {
         findViewById(R.id.expd_fleet_info)
                 .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpedition));
     }
+    // endregion layout update
 
     // region utilities
     private String getResName(@AnyRes int res) {
@@ -1275,6 +1295,8 @@ public class KcaExpeditionCheckViewService extends Service {
     }
 
     private int applyBonus(int value, boolean isGreatSuccess) {
+        if (!checkUserShipDataLoaded()) return value;
+
         float dlcs_bonus = fleet_info.get(DLCS_BONUS).getAsFloat();
         float toku_bonus = fleet_info.get(TOKU_BONUS).getAsFloat();
 

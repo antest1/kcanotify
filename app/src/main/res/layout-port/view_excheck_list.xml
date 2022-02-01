@@ -5,16 +5,24 @@
     android:id="@+id/expd_layout"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:layout_gravity="center_horizontal|top"
     android:clickable="false"
-    android:orientation="vertical"
     tools:ignore="SpUsage,HardcodedText,ContentDescription">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/expd_panel"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_gravity="center_horizontal|top"
         style="@style/FloatingWindow">
+
+        <View
+            android:id="@+id/window_head"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/barrier_header" />
 
         <TextView
             android:id="@+id/window_title"
@@ -41,30 +49,6 @@
             app:layout_constraintStart_toEndOf="@id/window_title"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/fleet_2"
-            android:tag="2"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            style="@style/ExpeditionView.FleetTab"
-            android:text="\#2" />
-
-        <TextView
-            android:id="@+id/fleet_3"
-            android:tag="3"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            style="@style/ExpeditionView.FleetTab"
-            android:text="\#3" />
-
-        <TextView
-            android:id="@+id/fleet_4"
-            android:tag="4"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            style="@style/ExpeditionView.FleetTab"
-            android:text="\#4" />
-
         <ImageView
             android:id="@+id/window_exit"
             android:layout_height="@dimen/view_text_title"
@@ -76,15 +60,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/window_title"
             app:layout_constraintBottom_toBottomOf="@id/window_title" />
-
-        <androidx.legacy.widget.Space
-            android:id="@+id/window_head"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/barrier_header" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier_header"
@@ -128,189 +103,36 @@
             android:layout_width="0dp"
             android:layout_marginTop="4dp"
             android:orientation="horizontal"
+            app:flow_wrapMode="chain"
+            app:flow_maxElementsWrap="3"
             app:constraint_referenced_ids="expd_world_1,expd_world_2,expd_world_3,expd_world_7,expd_world_4,expd_world_5,expd_world_6"
             app:layout_constraintTop_toBottomOf="@id/expd_fleet_info"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/expd_world_1"
-            android:tag="1"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.WorldItem"
-            android:text="@string/expdtable_btn_w1" />
-
-        <TextView
-            android:id="@+id/expd_world_2"
-            android:tag="2"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.WorldItem"
-            android:text="@string/expdtable_btn_w2" />
-
-        <TextView
-            android:id="@+id/expd_world_3"
-            android:tag="3"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.WorldItem"
-            android:text="@string/expdtable_btn_w3" />
-
-        <TextView
-            android:id="@+id/expd_world_7"
-            android:tag="7"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.WorldItem"
-            android:text="@string/expdtable_btn_w7" />
-
-        <TextView
-            android:id="@+id/expd_world_4"
-            android:tag="4"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.WorldItem"
-            android:text="@string/expdtable_btn_w4" />
-
-        <TextView
-            android:id="@+id/expd_world_5"
-            android:tag="5"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.WorldItem"
-            android:text="@string/expdtable_btn_w5" />
-
-        <TextView
-            android:id="@+id/expd_world_6"
-            android:tag="6"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:visibility="gone"
-            style="@style/ExpeditionView.WorldItem"
-            android:text="@string/expdtable_btn_w6" />
-
-        <!-- region expedition table -->
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/expd_table"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_marginTop="4dp"
             android:orientation="horizontal"
-            app:flow_wrapMode="aligned"
+            app:flow_wrapMode="chain"
             app:flow_maxElementsWrap="5"
             app:flow_horizontalGap="4dp"
             app:flow_verticalGap="4dp"
             app:constraint_referenced_ids="expd_btn_0,expd_btn_1,expd_btn_2,expd_btn_3,expd_btn_4,expd_btn_5,expd_btn_6,expd_btn_7,expd_btn_8,expd_btn_9,expd_btn_10,expd_btn_11,expd_btn_12,expd_btn_13,expd_btn_14"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/expd_world_1"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/expd_worlds" />
 
-        <TextView
-            android:id="@+id/expd_btn_0"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="1" />
+        <include layout="@layout/view_excheck_parts" />
 
-        <TextView
-            android:id="@+id/expd_btn_1"
-            android:layout_height="wrap_content"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_expd_table"
+            android:layout_height="0dp"
             android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="2" />
-
-        <TextView
-            android:id="@+id/expd_btn_2"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="3" />
-
-        <TextView
-            android:id="@+id/expd_btn_3"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="4" />
-
-        <TextView
-            android:id="@+id/expd_btn_4"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="5" />
-
-        <TextView
-            android:id="@+id/expd_btn_5"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="6" />
-
-        <TextView
-            android:id="@+id/expd_btn_6"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="7" />
-
-        <TextView
-            android:id="@+id/expd_btn_7"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="8" />
-
-        <TextView
-            android:id="@+id/expd_btn_8"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="9" />
-
-        <TextView
-            android:id="@+id/expd_btn_9"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="10" />
-
-        <TextView
-            android:id="@+id/expd_btn_10"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="11" />
-
-        <TextView
-            android:id="@+id/expd_btn_11"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="12" />
-
-        <TextView
-            android:id="@+id/expd_btn_12"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="13" />
-
-        <TextView
-            android:id="@+id/expd_btn_13"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="14" />
-
-        <TextView
-            android:id="@+id/expd_btn_14"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            style="@style/ExpeditionView.TableItem"
-            android:text="15" />
-        <!-- endregion expedition table -->
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0" />
 
         <include
             android:id="@+id/expd_detail"
@@ -318,8 +140,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             layout="@layout/view_excheck_list_detail"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/expd_table"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/expd_table"
+            app:layout_constraintStart_toEndOf="@id/guide_expd_table"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

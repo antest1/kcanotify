@@ -613,12 +613,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expdtable_label_condition">Success Condition</string>
     <string name="expd_type_normal">Normal Type</string>
     <string name="expd_type_drum">Drum Type</string>
-    <string name="expd_type_flagship_lv">Flag Lv Type</string>
+    <string name="expd_type_flagship_lv">Flagship Lv Type</string>
     <string name="expd_ctype_1">Combat Exped. I</string>
     <string name="expd_ctype_2">Combat Exped. II</string>
     <string name="expd_support">Support</string>
     <string name="expd_monthly">Monthly</string>
-    <string name="expd_gs_rate">Great Success: %3d%%</string>
+    <string name="expd_gs_rate">G.S. Rate: %3d%%</string>
 
     <string name="action_droplog">Drop Log</string>
     <string name="droplog_search">Search</string>

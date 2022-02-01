@@ -88,4 +88,23 @@
         <item name="android:gravity">center</item>
         <item name="android:textAppearance">@style/FloatingWindow.TextAppearance.Large</item>
     </style>
+
+    <style name="ExpeditionView.Label" parent="">
+        <item name="android:minWidth">@dimen/excheckview_label_width</item>
+        <item name="android:maxWidth">@dimen/excheckview_label_width</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment" tools:targetApi="jelly_bean_mr1">center</item>
+        <item name="android:textAppearance">@style/FloatingWindow.TextAppearance.Normal</item>
+    </style>
+
+    <style name="ExpeditionView.FlowStyle" parent="">
+        <item name="android:orientation">horizontal</item>
+        <item name="flow_wrapMode">chain</item>
+        <item name="flow_verticalAlign">baseline</item>
+        <item name="flow_horizontalAlign">start</item>
+        <item name="flow_horizontalGap">4dp</item>
+        <item name="flow_horizontalStyle">packed</item>
+        <item name="flow_horizontalBias">0</item>
+    </style>
 </resources>

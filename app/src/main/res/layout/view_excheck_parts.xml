@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/view_excheck_list"
+    tools:ignore="SpUsage,HardcodedText">
+
+    <!-- these views are layout by Flow -->
+
+    <TextView
+        android:id="@+id/fleet_2"
+        android:tag="2"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/ExpeditionView.FleetTab"
+        android:text="#2" />
+
+    <TextView
+        android:id="@+id/fleet_3"
+        android:tag="3"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/ExpeditionView.FleetTab"
+        android:text="#3" />
+
+    <TextView
+        android:id="@+id/fleet_4"
+        android:tag="4"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/ExpeditionView.FleetTab"
+        android:text="#4" />
+
+
+    <TextView
+        android:id="@+id/expd_world_1"
+        android:tag="1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.WorldItem"
+        android:text="@string/expdtable_btn_w1" />
+
+    <TextView
+        android:id="@+id/expd_world_2"
+        android:tag="2"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.WorldItem"
+        android:text="@string/expdtable_btn_w2" />
+
+    <TextView
+        android:id="@+id/expd_world_3"
+        android:tag="3"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.WorldItem"
+        android:text="@string/expdtable_btn_w3" />
+
+    <TextView
+        android:id="@+id/expd_world_7"
+        android:tag="7"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.WorldItem"
+        android:text="@string/expdtable_btn_w7" />
+
+    <TextView
+        android:id="@+id/expd_world_4"
+        android:tag="4"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.WorldItem"
+        android:text="@string/expdtable_btn_w4" />
+
+    <TextView
+        android:id="@+id/expd_world_5"
+        android:tag="5"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.WorldItem"
+        android:text="@string/expdtable_btn_w5" />
+
+    <TextView
+        android:id="@+id/expd_world_6"
+        android:tag="6"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:visibility="gone"
+        style="@style/ExpeditionView.WorldItem"
+        android:text="@string/expdtable_btn_w6" />
+
+
+    <TextView
+        android:id="@+id/expd_btn_0"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="1" />
+
+    <TextView
+        android:id="@+id/expd_btn_1"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="2" />
+
+    <TextView
+        android:id="@+id/expd_btn_2"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="3" />
+
+    <TextView
+        android:id="@+id/expd_btn_3"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="4" />
+
+    <TextView
+        android:id="@+id/expd_btn_4"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="5" />
+
+    <TextView
+        android:id="@+id/expd_btn_5"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="6" />
+
+    <TextView
+        android:id="@+id/expd_btn_6"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="7" />
+
+    <TextView
+        android:id="@+id/expd_btn_7"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="8" />
+
+    <TextView
+        android:id="@+id/expd_btn_8"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="9" />
+
+    <TextView
+        android:id="@+id/expd_btn_9"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="10" />
+
+    <TextView
+        android:id="@+id/expd_btn_10"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="11" />
+
+    <TextView
+        android:id="@+id/expd_btn_11"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="12" />
+
+    <TextView
+        android:id="@+id/expd_btn_12"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="13" />
+
+    <TextView
+        android:id="@+id/expd_btn_13"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="14" />
+
+    <TextView
+        android:id="@+id/expd_btn_14"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        style="@style/ExpeditionView.TableItem"
+        android:text="15" />
+</merge>
