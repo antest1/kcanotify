@@ -698,7 +698,7 @@ public class KcaExpeditionCheckViewService extends Service {
                         pass ? R.color.colorExpeditionBtnGoodText : R.color.colorExpeditionBtnFailText,
                         pass ? R.color.colorExpeditionBtnGoodBack : R.color.colorExpeditionBtnFailBack);
             } else {
-                setViewTextColorById(id, R.color.white, R.color.grey);
+                setViewTextColorById(id, R.color.white, R.color.colorFleetInfoNoShip);
             }
         }
     }
@@ -1278,12 +1278,12 @@ public class KcaExpeditionCheckViewService extends Service {
     }
 
     private int applyBonus(int value, boolean isGreatSuccess) {
-        if (!checkUserShipDataLoaded() || fleet_info == null) return value;
+        float gs = isGreatSuccess ? 1.5f : 1f;
+        if (!checkUserShipDataLoaded() || fleet_info == null) return (int) (value * gs);
 
         float dlcs_bonus = fleet_info.get(DLCS_BONUS).getAsFloat();
         float toku_bonus = fleet_info.get(TOKU_BONUS).getAsFloat();
 
-        float gs = isGreatSuccess ? 1.5f : 1f;
         return (int) (value * gs * (1f + dlcs_bonus)) + (int) (value * gs * toku_bonus);
     }
 
@@ -1329,7 +1329,7 @@ public class KcaExpeditionCheckViewService extends Service {
 
     @ColorRes private int getColorByCond(boolean is_pass, boolean is_option) {
         return is_pass ? R.color.colorExpeditionBtnGoodBack
-                : is_option ? R.color.grey
+                : is_option ? R.color.colorFleetInfoNoShip
                 : R.color.colorExpeditionBtnFailBack;
     }
 

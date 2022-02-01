@@ -504,4 +504,11 @@
         tools:text="合計8つ以上" />
     <!-- endregion -->
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_drum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="expd_drum_label,expd_flow_drum"
+        app:barrierDirection="bottom" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

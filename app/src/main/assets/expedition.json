@@ -246,7 +246,9 @@
 	"total-fp": 220,
 	"total-asw": 240,
 	"total-los": 150,
-	"features": ["flag_lv", "combat_1", "monthly"]
+	"features": ["flag_lv", "combat_1", "monthly"],
+	"depends-on": ["103", "111", "112"],
+	"depends-on-code": ["A2", "B2", "B3"]
 }, {
 	"no": "105",
 	"code": "A6",
@@ -270,7 +272,9 @@
 	"total-asw": 270,
 	"total-fp": 300,
 	"total-los": 180,
-	"features": ["flag_lv", "combat_2", "monthly"]
+	"features": ["flag_lv", "combat_2", "monthly"],
+	"depends-on": ["104", "113"],
+	"depends-on-code": ["A5", "B4"]
 }, {
 	"no": "9",
 	"code": "9",
@@ -484,7 +488,9 @@
 	"total-asw": 220,
 	"total-los": 190,
 	"total-fp": 220,
-	"features": ["flag_lv", "monthly"]
+	"features": ["flag_lv", "monthly"],
+	"depends-on": ["111"],
+	"depends-on-code": ["B2"]
 }, {
 	"no": "113",
 	"code": "B4",
@@ -508,7 +514,8 @@
 	"total-asw": 280,
 	"total-los": 170,
 	"total-fp": 280,
-	"features": ["flag_lv", "combat_1", "monthly"]
+	"features": ["flag_lv", "combat_1", "monthly"],
+	"depends-on": ["B3"]
 }, {
 	"no": "114",
 	"code": "B5",
@@ -532,7 +539,9 @@
 	"total-fp": 400,
 	"total-asw": 285,
 	"total-los": 385,
-	"features": ["flag_lv", "combat_2", "monthly"]
+	"features": ["flag_lv", "combat_2", "monthly"],
+	"depends-on": ["113"],
+	"depends-on-code": ["B4"]
 }, {
 	"no": "115",
 	"code": "B6",
@@ -557,7 +566,9 @@
 	"total-fp": 390,
 	"total-asw": 410,
 	"total-los": 340,
-	"features": ["flag_lv", "combat_2", "monthly"]
+	"features": ["flag_lv", "combat_2", "monthly"],
+	"depends-on": ["103", "111", "112", "113"],
+	"depends-on-code": ["A4", "B2", "B3", "B4"]
 }, {
 	"no": "17",
 	"code": "17",
@@ -782,7 +793,9 @@
 	"total-fp": 280,
 	"total-los": 170,
 	"total-cond": "7-1|3-1|2-4/27-1|2-2/27-1|1-2",
-	"features": ["flag_lv", "combat_1", "monthly"]
+	"features": ["flag_lv", "combat_1", "monthly"],
+	"depends-on": ["42"],
+	"depends-on-code": ["42"]
 }, {
 	"no": "44",
 	"code": "44",
@@ -808,7 +821,9 @@
 	"drum-ship": 3,
 	"drum-num": 6,
 	"drum-num-optional": 8,
-	"features": ["drum", "monthly"]
+	"features": ["drum", "monthly"],
+	"depends-on": ["103"],
+	"depends-on-code": ["A4"]
 }, {
 	"no": "45",
 	"code": "45",
@@ -1076,7 +1091,9 @@
 	"total-fp": 90,
 	"total-asw": 70,
 	"total-los": 95,
-	"features": ["flag_lv", "combat_2", "monthly"]
+	"features": ["flag_lv", "combat_2", "monthly"],
+	"depends-on": ["132"],
+	"depends-on-code": ["D2"]
 }, {
 	"no": "33",
 	"code": "33",
@@ -1093,7 +1110,8 @@
 	"reward": [[0, 0], [0, 0]],
 	"exp": [0, 0],
 	"total-num": 2,
-	"total-cond": "2-2"
+	"total-cond": "2-2",
+	"features": ["support"]
 }, {
 	"no": "34",
 	"code": "34",
@@ -1110,7 +1128,8 @@
 	"reward": [[0, 0], [0, 0]],
 	"exp": [0, 0],
 	"total-num": 2,
-	"total-cond": "2-2"
+	"total-cond": "2-2",
+	"features":  ["support"]
 }, {
 	"no": "35",
 	"code": "35",
@@ -1302,7 +1321,8 @@
 	"reward": [[0, 0], [0, 0]],
 	"exp": [0, 0],
 	"total-num": 2,
-	"total-cond": "2-2"
+	"total-cond": "2-2",
+	"features":  ["support"]
 }, {
 	"no": "204",
 	"code": "S2",
@@ -1319,5 +1339,6 @@
 	"reward": [[0, 0], [0, 0]],
 	"exp": [0, 0],
 	"total-num": 2,
-	"total-cond": "2-2"
+	"total-cond": "2-2",
+	"features":  ["support"]
 }]
