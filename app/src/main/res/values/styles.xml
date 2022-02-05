@@ -101,8 +101,7 @@
     <style name="ExpeditionView.FlowStyle" parent="">
         <item name="android:orientation">horizontal</item>
         <item name="flow_wrapMode">chain</item>
-        <item name="flow_verticalAlign">baseline</item>
-        <item name="flow_verticalBias">0</item>
+        <item name="flow_verticalAlign">top</item>
         <item name="flow_horizontalAlign">start</item>
         <item name="flow_horizontalGap">4dp</item>
         <item name="flow_horizontalStyle">packed</item>
