@@ -4,7 +4,10 @@
     tools:showIn="@layout/view_excheck_list"
     tools:ignore="SpUsage,HardcodedText">
 
-    <!-- these views are layout by Flow -->
+    <!--
+    These views are common to each version of the layout,
+    and will be included (merged) into those layout, and laid-out by Flow.
+    -->
 
     <TextView
         android:id="@+id/fleet_2"

@@ -102,9 +102,13 @@
         <item name="android:orientation">horizontal</item>
         <item name="flow_wrapMode">chain</item>
         <item name="flow_verticalAlign">baseline</item>
+        <item name="flow_verticalBias">0</item>
         <item name="flow_horizontalAlign">start</item>
         <item name="flow_horizontalGap">4dp</item>
         <item name="flow_horizontalStyle">packed</item>
         <item name="flow_horizontalBias">0</item>
+    </style>
+    <style name="ExpeditionView.FlowStyle.NoWrap">
+        <item name="flow_wrapMode">none</item>
     </style>
 </resources>

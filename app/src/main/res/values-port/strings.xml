@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="expd_type_flagship_lv">F.S. Lv Type</string>
+    <string name="expd_type_flagship_lv">FS Lv Type</string>
     <string name="expd_ctype_1">Combat I</string>
     <string name="expd_ctype_2">Combat II</string>
     <string name="expd_gs_rate">G.S. Rate: %3d%%</string>
