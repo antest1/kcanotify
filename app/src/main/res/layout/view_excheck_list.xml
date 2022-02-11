@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/expd_panel"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
+        android:layout_width="800dp"
         style="@style/FloatingWindow">
 
         <View

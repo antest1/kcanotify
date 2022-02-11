@@ -63,7 +63,8 @@
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="android:paddingBottom">4dp</item>
-        <item name="android:background">@color/colorFleetInfoBtn</item>
+        <item name="android:background">@color/white</item>
+        <item name="backgroundTint">@color/color_fleet_button</item>
         <item name="android:maxLines">1</item>
         <item name="android:textAlignment" tools:targetApi="jelly_bean_mr1">center</item>
         <item name="android:gravity">center</item>
@@ -73,7 +74,8 @@
 
     <style name="ExpeditionView.WorldItem" parent="">
         <item name="android:padding">6dp</item>
-        <item name="android:background">@color/colorFleetInfoBtn</item>
+        <item name="android:background">@color/white</item>
+        <item name="backgroundTint">@color/color_fleet_button</item>
         <item name="android:maxLines">1</item>
         <item name="android:textAlignment" tools:targetApi="jelly_bean_mr1">center</item>
         <item name="android:gravity">center</item>
@@ -82,7 +84,9 @@
 
     <style name="ExpeditionView.TableItem" parent="">
         <item name="android:padding">6dp</item>
-        <item name="android:background">@color/colorFleetInfoNoShip</item>
+        <item name="android:background">@drawable/expd_btn_background</item>
+        <item name="backgroundTint">@color/colorFleetInfoNoShip</item>
+        <item name="backgroundTintMode">add</item>
         <item name="android:maxLines">1</item>
         <item name="android:textAlignment" tools:targetApi="jelly_bean_mr1">center</item>
         <item name="android:gravity">center</item>

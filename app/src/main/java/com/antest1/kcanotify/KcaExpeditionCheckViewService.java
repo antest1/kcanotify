@@ -28,7 +28,6 @@ import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-import static com.antest1.kcanotify.KcaExpedition2.getExpeditionHeader;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getTimeStr;
@@ -45,8 +44,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -73,6 +74,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.constraintlayout.helper.widget.Flow;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
@@ -87,6 +89,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import java.io.BufferedOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -292,12 +295,6 @@ public class KcaExpeditionCheckViewService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand: " + intent);
 
-        // when onStartCommand returns START_NOT_STICKY, intent must not be null.
-//        if (intent == null || intent.getAction() == null
-//                || !intent.getAction().startsWith(SHOW_EXCHECKVIEW_ACTION)) {
-//            return super.onStartCommand(intent, flags, startId);
-//        }
-
         try (KcaDBHelper db = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION)) {
 
             fleet_list.clear();
@@ -407,9 +404,7 @@ public class KcaExpeditionCheckViewService extends Service {
 
         for (int id : this.<Flow>findViewById(R.id.expd_fleet_tab).getReferencedIds()) {
             View v = findViewById(id);
-            v.setBackgroundColor(selected_fleet + 1 == Integer.parseInt((String) v.getTag())
-                    ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)
-                    : ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+            v.setSelected(selected_fleet + 1 == Integer.parseInt((String) v.getTag()));
         }
 
         if (!checkUserShipDataLoaded())
@@ -462,6 +457,94 @@ public class KcaExpeditionCheckViewService extends Service {
         getBonusInfo(ship_list, result);
         fleet_info = result;
     }
+
+    private void setSelectedWorld(int newValue) {
+        newValue = clamp(newValue, 1, 7); // 1 <= i <= 7, exclude 6
+        selected_world = newValue;
+
+        Log.d(TAG, "world: " + newValue);
+
+        updateWorld();
+        updateCheckData(false);
+        setSelectedExpd(selected_expd.get(newValue, 0)); // restore the last selection or the first expd of the world
+    }
+
+    private void updateWorld() {
+        selected_world = clamp(selected_world, 1, 7); // 1 <= i <= 7, exclude 6
+
+        for (int id : this.<Flow>findViewById(R.id.expd_worlds).getReferencedIds()) {
+            View v = findViewById(id);
+            v.setSelected(selected_world == Integer.parseInt((String) v.getTag()));
+        }
+
+        if (!KcaApiData.isExpeditionDataLoaded())
+            return; // view will be updated even when the load isn't completed
+
+        expd_list.clear();
+        expd_list.addAll(KcaApiData.getExpeditionNumByWorld(selected_world));
+        Log.d(TAG, "expd_list[" + expd_list.size() + "]: " + expd_list);
+
+        int[] view_ids = this.<Flow>findViewById(R.id.expd_table).getReferencedIds();
+        for (int i = 0; i < view_ids.length; i++) {
+            int id = view_ids[i];
+
+            if (i >= expd_list.size()) {
+                findViewById(id).setVisibility(INVISIBLE);
+            } else {
+
+                setViewContentById(id, KcaExpedition2.getExpeditionStr(expd_list.get(i)));
+                findViewById(id).setVisibility(VISIBLE);
+            }
+        }
+    }
+
+    private void updateCheckData(boolean isFleetChanged) {
+        if (!checkUserShipDataLoaded() || fleet_info == null) return;
+
+        // if fleet wasn't changed, don't delete, just append.
+        if (isFleetChanged) check_data.clear();
+
+        for (int expd : expd_list) {
+            if (check_data.indexOfKey(expd) >= 0)
+                continue; // fleet is not changed, and check data is cached
+            check_data.put(expd, checkCondition(KcaApiData.getExpeditionInfo(expd, locale)));
+        }
+
+        Log.d(TAG, "check_data[" + check_data.size() + "]: " + check_data);
+
+        int[] view_ids = this.<Flow>findViewById(R.id.expd_table).getReferencedIds();
+        for (int i = 0; i < expd_list.size(); i++) {
+            int id = view_ids[i];
+
+            JsonObject check = check_data.get(expd_list.get(i));
+            if (check != null) {
+                boolean pass = check.get("pass").getAsBoolean();
+                setViewTextColorById(id, pass ? R.color.colorExpeditionBtnGoodText : R.color.colorExpeditionBtnFailText);
+                setViewTintColorById(id, pass ? R.color.colorExpeditionBtnGoodBack : R.color.colorExpeditionBtnFailBack);
+            } else {
+                setViewTextColorById(id, R.color.white);
+                setViewTintColorById(id, R.color.colorFleetInfoNoShip);
+            }
+        }
+    }
+
+    private void setSelectedExpd(int newValue) {
+        newValue = clamp(newValue, 0, expd_list.size() - 1); // 1 <= i <= 7, exclude 6
+        selected_expd.put(selected_world, newValue);
+
+        Log.d(TAG, "expd: " + newValue);
+
+        int[] view_ids = this.<Flow>findViewById(R.id.expd_table).getReferencedIds();
+        for (int i = 0, len = view_ids.length; i < len; i++) {
+            View v = findViewById(view_ids[i]);
+            v.setSelected(newValue == i);
+        }
+
+        setExpdDetailLayout();
+    }
+    // endregion data update
+
+    // region fleet info
 
     /**
      * <a href="https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat">wikiwiki</a>
@@ -559,10 +642,10 @@ public class KcaExpeditionCheckViewService extends Service {
 
         int base = 20 + sparkles * 15 + 1;
         int flagship = -5 + (int) floor(sqrt(flag_lv) + flag_lv / 10.0);
-        result.addProperty(GS_RATE_NORMAL, all_sparkle ? base : 0);
-        result.addProperty(GS_RATE_DRUM_1, base - 15);
-        result.addProperty(GS_RATE_DRUM_2, base + 20);
-        result.addProperty(GS_RATE_FLAGSHIP, base + flagship);
+        result.addProperty(GS_RATE_NORMAL, clamp(all_sparkle ? base : 0, 0, 100));
+        result.addProperty(GS_RATE_DRUM_1, clamp(base - 15, 0, 100));
+        result.addProperty(GS_RATE_DRUM_2, clamp(base + 20, 0, 100));
+        result.addProperty(GS_RATE_FLAGSHIP, clamp(base + flagship, 0, 100));
     }
 
     /**
@@ -632,77 +715,9 @@ public class KcaExpeditionCheckViewService extends Service {
         result.addProperty(DLCS_BONUS, sum_of_bonus + 0.01f * sum_of_bonus * avg_of_level);
         result.addProperty(TOKU_BONUS, toku_bonus);
     }
+    // endregion fleet info
 
-    private void setSelectedWorld(int newValue) {
-        newValue = clamp(newValue, 1, 7); // 1 <= i <= 7, exclude 6
-        selected_world = newValue;
-
-        Log.d(TAG, "world: " + newValue);
-
-        updateWorld();
-        updateCheckData(false);
-        setSelectedExpd(selected_expd.get(newValue, 0)); // restore the last selection or the first expd of the world
-    }
-
-    private void updateWorld() {
-        selected_world = clamp(selected_world, 1, 7); // 1 <= i <= 7, exclude 6
-
-        for (int id : this.<Flow>findViewById(R.id.expd_worlds).getReferencedIds()) {
-            View v = findViewById(id);
-            v.setBackgroundColor(selected_world == Integer.parseInt((String) v.getTag())
-                    ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)
-                    : ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
-        }
-
-        if (!KcaApiData.isExpeditionDataLoaded())
-            return; // view will be updated even when the load isn't completed
-
-        expd_list.clear();
-        expd_list.addAll(KcaApiData.getExpeditionNumByWorld(selected_world));
-        Log.d(TAG, "expd_list[" + expd_list.size() + "]: " + expd_list);
-
-        int[] view_ids = this.<Flow>findViewById(R.id.expd_table).getReferencedIds();
-        for (int i = 0; i < view_ids.length; i++) {
-            int id = view_ids[i];
-
-            if (i >= expd_list.size()) {
-                findViewById(id).setVisibility(INVISIBLE);
-            } else {
-
-                setViewContentById(id, KcaExpedition2.getExpeditionStr(expd_list.get(i)));
-                findViewById(id).setVisibility(VISIBLE);
-            }
-        }
-    }
-
-    private void updateCheckData(boolean isFleetChanged) {
-        if (!checkUserShipDataLoaded() || fleet_info == null) return;
-
-        // if fleet wasn't changed, don't delete, just append.
-        if (isFleetChanged) check_data.clear();
-
-        for (int expd : expd_list) {
-            check_data.put(expd, checkCondition(KcaApiData.getExpeditionInfo(expd, locale)));
-        }
-
-        Log.d(TAG, "check_data[" + check_data.size() + "]: " + check_data);
-
-        int[] view_ids = this.<Flow>findViewById(R.id.expd_table).getReferencedIds();
-        for (int i = 0; i < expd_list.size(); i++) {
-            int id = view_ids[i];
-
-            JsonObject check_item = check_data.get(expd_list.get(i));
-            if (check_item != null) {
-                boolean pass = check_item.get("pass").getAsBoolean();
-                setViewTextColorById(id,
-                        pass ? R.color.colorExpeditionBtnGoodText : R.color.colorExpeditionBtnFailText,
-                        pass ? R.color.colorExpeditionBtnGoodBack : R.color.colorExpeditionBtnFailBack);
-            } else {
-                setViewTextColorById(id, R.color.white, R.color.colorFleetInfoNoShip);
-            }
-        }
-    }
-
+    // region check data
     private JsonObject checkCondition(JsonObject expd_data) {
         if (expd_data == null || fleet_info == null) return null;
 
@@ -880,16 +895,7 @@ public class KcaExpeditionCheckViewService extends Service {
         result.add("value", total_check);
         return result;
     }
-
-    private void setSelectedExpd(int newValue) {
-        newValue = clamp(newValue, 0, expd_list.size() - 1); // 1 <= i <= 7, exclude 6
-        selected_expd.put(selected_world, newValue);
-
-        Log.d(TAG, "expd: " + newValue);
-
-        setExpdDetailLayout();
-    }
-    // endregion data update
+    // endregion check data
 
     // region layout update
     private void clearExpdDetailLayout() {
@@ -926,7 +932,7 @@ public class KcaExpeditionCheckViewService extends Service {
         clearExpdDetailLayout();
 
         // region header
-        setViewContentById(R.id.expd_id, getExpeditionHeader(data.get("no").getAsInt()));
+        setViewContentById(R.id.expd_id, KcaExpedition2.getExpeditionHeader(data.get("no").getAsInt()));
         setViewContentById(R.id.expd_title, data.get("name").getAsString());
 
         List<String> features = data.has("features")
@@ -1006,11 +1012,12 @@ public class KcaExpeditionCheckViewService extends Service {
                 gs_rate = check.get(DRUM_OPTIONAL).getAsBoolean()
                         ? fleet_info.get(GS_RATE_DRUM_2).getAsInt()
                         : fleet_info.get(GS_RATE_DRUM_1).getAsInt();
-            } else if (features.contains("flagship")) {
+            } else if (features.contains("flag_lv")) {
                 gs_rate = fleet_info.get(GS_RATE_FLAGSHIP).getAsInt();
             } else {
                 gs_rate = fleet_info.get(GS_RATE_NORMAL).getAsInt();
             }
+
 
             if (gs_rate > 0) {
 
@@ -1107,20 +1114,18 @@ public class KcaExpeditionCheckViewService extends Service {
                 R.id.expd_fleet_los);
         // endregion
 
-        // code for save view bitmap into view.png (used to take screenshot)
-//        mView.setDrawingCacheEnabled(true);
-//        mView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-//        mView.setDrawingCacheBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-//        mView.post(() -> AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-//            deleteFile("view.png");
-//            try (BufferedOutputStream out = new BufferedOutputStream(openFileOutput("view.png", MODE_PRIVATE))) {
-//
-//                mView.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 90, out);
-//                Log.d(TAG, "saved");
-//            } catch (Exception e) {
-//                Log.e(TAG, "", e);
-//            }
-//        }));
+//        captureImage(findViewById(R.id.expd_panel));
+
+//        SpannableStringBuilder sb = new SpannableStringBuilder();
+//        sb.append("Unlocked by: ");
+//        for (JsonElement dep_id : data.getAsJsonArray("depends-on")) {
+//            JsonObject dep_expd = KcaApiData.getExpeditionInfo(dep_id.getAsInt(), locale);
+//            int begin = sb.length();
+//            sb.append(KcaExpedition2.getExpeditionStr(dep_expd.get("no").getAsInt()));
+//            sb.append('(');
+//            sb.append(KcaUtils.getTimeStr(dep_expd.get("time").getAsInt(), true));
+//            sb.append(')');
+//        }
     }
 
     private void setStatusInfoFor(
@@ -1205,6 +1210,7 @@ public class KcaExpeditionCheckViewService extends Service {
         tv.setText(format(R.string.excheckview_ship_cond, stype, count));
         tv.setTextAppearance(this, R.style.FloatingWindow_TextAppearance_Normal);
         tv.setTextColor(ContextCompat.getColor(getApplicationContext(), color));
+//        Log.d(TAG, "generated TextView: " + tv.getText());
         return tv;
     }
 
@@ -1320,11 +1326,8 @@ public class KcaExpeditionCheckViewService extends Service {
                 .setTextColor(ContextCompat.getColor(getApplicationContext(), resId));
     }
 
-    private void setViewTextColorById(@IdRes int id, @ColorRes int fgId, @ColorRes int bgId) {
-        this.<TextView>findViewById(id)
-                .setTextColor(ContextCompat.getColor(getApplicationContext(), fgId));
-        this.<TextView>findViewById(id)
-                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), bgId));
+    private void setViewTintColorById(@IdRes int id, @ColorRes int resId) {
+        ViewCompat.setBackgroundTintList(findViewById(id), ContextCompat.getColorStateList(getApplicationContext(), resId));
     }
 
     @ColorRes private int getColorByCond(boolean is_pass, boolean is_option) {
@@ -1337,7 +1340,8 @@ public class KcaExpeditionCheckViewService extends Service {
         return getColorByCond(is_pass, false);
     }
 
-    @ColorRes private int getColorByCheck(@Nullable JsonObject check, String key, boolean is_option) {
+    @ColorRes
+    private int getColorByCheck(@Nullable JsonObject check, String key, boolean is_option) {
         return check == null
                 ? R.color.white
                 : getColorByCond(check.get(key).getAsBoolean(), is_option);
@@ -1386,6 +1390,26 @@ public class KcaExpeditionCheckViewService extends Service {
 
     private static double floor01(double x) {
         return floor(x * 10f) / 10f;
+    }
+
+    private void captureImage(View view) {
+        // code for save view bitmap into view.png (used to take screenshot)
+
+        view.setDrawingCacheEnabled(true);
+        view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        view.setDrawingCacheBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+        view.post(() -> AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+            deleteFile("view.jpg");
+            try (BufferedOutputStream out = new BufferedOutputStream(openFileOutput("view.jpg", MODE_PRIVATE))) {
+
+                view.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 90, out);
+                Log.d(TAG, "saved");
+            } catch (Exception e) {
+                Log.e(TAG, "error", e);
+            } finally {
+                view.setDrawingCacheEnabled(false);
+            }
+        }));
     }
     // endregion
 }
