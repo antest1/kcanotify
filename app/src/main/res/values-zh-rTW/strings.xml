@@ -684,7 +684,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_iteminfo">裝備翻譯 </string>
     <string name="download_akashi">改修工廠</string>
     <string name="download_fairy">妖精醬~</string>
-    <string name="download_progress">正在下載中...</string>
+    <string name="download_progress">正在下載中&#8230;</string>
     <string name="download_reset">初始化資源</string>
     <string name="download_reset_message">初始化應用程序資源</string>
     <string name="download_check_error">從裝置加載時出現錯誤(使用預設資料)</string>
