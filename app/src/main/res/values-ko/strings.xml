@@ -663,7 +663,7 @@
     <string name="fleetview_18spring_nori" formatted="false">김 %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">차 %02d</string>
 
-    <string name="special_message">발렌타인데이 선물~</string>
+    <string name="special_message">하루사메와 막대사탕</string>
     <string name="notification_message">공지 및 정보</string>
 
     <string name="widget_timer_name">시제 깡들리티 타이머</string>
