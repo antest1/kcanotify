@@ -1874,11 +1874,11 @@
 		"memo": "\u27a3 Rewards a Combat Ration and either a Furniture Fairy OR a \u2605+3 12.7cm Twin Gun Mount Model C Kai Ni OR a Medal"
 	},
 	"875": {
-		"code": "Bq6",
-		"name": "Quarterly [W5-4]",
-		"desc": "Sortie Naganami Kai Ni as flagship, one of Takanami Kai, Asashimo Kai or Okinami Kai, and up to 4 additional ships to [W5-4]. S-Rank the boss node twice.",
-		"memo": "\u203bElite DesDiv 31, Break Into the Iron Bottom Sound! \u27a3 Rewards: \u00B6First choice: Either 2 Type 13 Air Radars OR 2 Type 22 Surface Radars OR an Action Report \u00B6Second choice: Either a New Model Artillery Armament Materials OR a Present Box"
-	},
+        "code": "Bq6",
+        "name": "Quarterly [W5-4]",
+        "desc": "Sortie Naganami Kai Ni with one of Takanami Kai, Asashimo Kai or Okinami Kai, and up to 4 additional ships to [W5-4]. S-Rank the boss node twice.",
+        "memo": "\u203bElite DesDiv 31, Break Into the Iron Bottom Sound! \u27a3 Rewards: \u00B6First choice: Either 2 Type 13 Air Radars OR 2 Type 22 Surface Radars OR an Action Report \u00B6Second choice: Either a New Model Artillery Armament Materials OR a Present Box"
+    },
 	"888": {
 		"code": "Bq7",
 		"name": "Quarterly Mikawa Fleet",
@@ -3503,34 +3503,22 @@
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
 	},
 	
-	"329": {
-        "code": "2201LC01",
-        "name": "[Setsubun Mission] Setsubun Exercises 2022!",
-        "desc": "Secure 3 S-Rank victories in Exercises within the same day using 2 CL/CT, 2 DD/DE and up to 2 additional ships.",
-        "memo": "\u27a3Rewards one unit of Setsubun Beans"
+	"906": {
+        "code": "2203LB1",
+        "name": "[Hinamatsuri 2022] Safeguarding the Naval Base's Coastal Waters",
+        "desc": "Sortie 3 DD/DE and up to 3 additional ships to [W1-2], [W1-3], [W1-5] and [W1-6-N]. A-Rank+ all relevant boss nodes.",
+        "memo": "\u27a3 Rewards Hishimochi and either two 25mm Single Autocannon Mounts OR five Development Materials OR a Type 2 12cm Mortar Kai"
     },
-    "840": {
-        "code": "2201LB05",
-        "name": "[Setsubun Mission] Setsubun Operation 2022",
-        "desc": "Sortie a CVL/CL(T)/CT as flagship, 3 DD/DE and up to 2 additional ships to [W1-3], [W1-5] and [W2-3]. A-Rank+ each boss node.",
-        "memo": "\u27a3Rewards two units of Setsubun Beans and either three Buckets OR an Underway Replenishment OR an Emergency Repair Material"
+    "907": {
+        "code": "2203LB2",
+        "name": "[Hinamatsuri 2022] Nansei Region Combat Patrols!",
+        "desc": "Sortie 4 DD/DE and up to 2 additional ships to [W2-1], [W2-2] and [W2-3]. S-Rank each boss node twice.",
+        "memo": "\u27a3 Rewards two Hishimochi and either five Buckets OR a Mamiya OR two Type 3 Depth Charge Projectors"
     },
-    "841": {
-        "code": "2201LB06",
-        "name": "[Setsubun Mission] Southwestern Sea Setsubun Operation 2022",
-        "desc": "Sortie a fleet with 2 CA/ 2 CAV/ 2 AV\u203b, one of them as flagship and up to 4 additional ships to [W7-2-M], [W7-3-P] and [W7-4]. S-Rank [W7-2-M] and [W7-3-P] boss node, A-Rank+ [W7-4] boss node.",
-        "memo": "\u203bFor the two required ships, you can't mix ship types. For example, if your flagship is a CAV, you must sortie another CAV as well. \u27a3Rewards two units of Setsubun Beans and either six Development Materials OR an Irako OR two Screws"
-    },
-    "843": {
-        "code": "2201LB07",
-        "name": "[Setsubun Extra Mission] Setsubun 2022, All-out Sortie!",
-        "desc": "Sortie a fleet with 2 (F)BB(V)/ 2 CV(L/B)\u203b, a Sendai-class CL/Ooyodo and up to 3 additional ships to [W2-5], [W5-2], [W5-5] and [W6-4]. S-Rank each boss node.",
-        "memo": "\u203bFor the two required ships, you can't mix ship types between BB and CV. For example, if one is a (F)BB(V), you must sortie another (F)BB(V) as well. \u27a3Rewards three units of Setsubun Beans and 220 Ranking Points"
-    },
-	"441": {
-        "code": "2201LD01",
-        "name": "[Setsubun Mission] Reiwa's 4th Year Setsubun Expedition Mission",
-        "desc": "Complete Expeditions A3, 29, 30, 45 and D1.",
-        "memo": "\u27a3Rewards:\n\u00B6First choice: either a Furniture Fairy OR two New Model Aviation Armament Materials OR four Screws \u00B6Second choice: either a Me163B OR two Do 17 Z-2 OR three \u2605+2 2cm Flakvierling 38"
+    "908": {
+        "code": "2203LB3",
+        "name": "[Hinamatsuri 2022] Decisive Battles! Strike Down the Enemy Task Force!",
+        "desc": "Sortie a CV(L/B), a CA(V), a CL and up to 3 additional ships to [W2-4], [W2-5] and [W7-2-M]. S-Rank each boss node twice.",
+        "memo": "\u27a3 Rewards four Hishimochi and either ten Development Materials OR a Reinforcement Expansion OR a Medal"
     }
 }

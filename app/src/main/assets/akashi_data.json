@@ -296,6 +296,15 @@
 			}
 		]
 	},
+	"37": {
+		"improvement": [{
+				"upgrade": [38, 0],
+				"req": [[[false, false, false, true, true, true, true], [370, 472]], [[true, true, true, false, false, true, true], [371, 474]]],
+				"resource": [[0, 10, 10, 10], [0, 1, 1, 1, 0, 0], [1, 2, 1, 1, 37, 1], [1, 2, 1, 2, 37, 1]]
+			}
+		],
+		"default_equipped_on": [1, 51, 52, 59, 61, 123, 78, 86, 79, 85]
+	},
 	"39": {
 		"improvement": [{
 				"upgrade": [40, 3],
@@ -712,7 +721,7 @@
 	"104": {
 		"improvement": [{
 				"upgrade": false,
-				"req": [[[true, true, true, true, false, false, true], [151]]],
+				"req": [[[true, true, true, true, false, false, false], [151]]],
 				"resource": [[30, 250, 300, 30], [3, 4, 2, 3, 7, 1], [4, 5, 3, 5, 7, 2], [0, 0, 0, 0, 0, 0]]
 			}
 		],
@@ -1121,6 +1130,15 @@
 			}
 		]
 	},
+	"180": {
+		"improvement": [{
+				"upgrade": [186, 0],
+				"req": [[[true, false, false, false, true, true, true], [152]]],
+				"require_item": [[4, 2], [3, 2]],
+				"resource": [[430, 420, 0, 540], [6, 8, 4, 4, 20, 2], [8, 9, 5, 6, 372, 2], [10, 16, 7, 11, 169, 1]]
+			}
+		]
+	},
 	"181": {
 		"improvement": [{
 				"upgrade": [21, 3],
@@ -1154,6 +1172,14 @@
 			}
 		],
 		"default_equipped_on": [444, 365]
+	},
+	"186": {
+		"improvement": [{
+				"upgrade": false,
+				"req": [[[true, false, false, false, false, true, true], [151]]],
+				"resource": [[480, 490, 0, 580], [7, 9, 5, 5, 21, 2], [9, 10, 6, 7, 18, 2], [0, 0, 0, 0, 0, 0]]
+			}
+		]
 	},
 	"190": {
 		"improvement": [{
@@ -1938,6 +1964,15 @@
 		],
 		"convert_exception": true
 	},
+	"379": {
+		"improvement": [{
+				"upgrade": false,
+				"req": [[[true, true, true, true, true, true, true], [641, 702]]],
+				"resource": [[10, 30, 50, 10], [4, 5, 3, 4, 382, 1], [6, 9, 4, 5, 91, 1], [0, 0, 0, 0, 0, 0]]
+			}
+		],
+		"default_equipped_on": [656]
+	},
 	"381": {
 		"improvement": [{
 				"upgrade": [385, 0],
@@ -1984,6 +2019,14 @@
 		],
 		"convert_exception": true
 	},
+	"393": {
+		"improvement": [{
+				"upgrade": false,
+				"req": [[[true, true, true, false, false, true, true], [580]]],
+				"resource": [[20, 90, 80, 30], [5, 6, 3, 3, 1, 2], [7, 9, 4, 5, 297, 2], [0, 0, 0, 0, 0, 0]]
+			}
+		]
+	},
 	"401": {
 		"improvement": [{
 				"upgrade": [405, 0],
@@ -2013,7 +2056,7 @@
 	"408": {
 		"improvement": [{
 				"upgrade": false,
-				"req": [[[true, false, false, false, false, true, true], [621, 626]]],
+				"req": [[[false, true, true, true, false, false, false], [621, 626]]],
 				"resource": [[80, 60, 100, 30], [4, 5, 2, 3, 49, 1], [5, 8, 3, 5, 346, 1], [0, 0, 0, 0, 0, 0]]
 			}
 		]
@@ -2035,5 +2078,13 @@
 			}
 		],
 		"convert_exception": true
+	},
+	"440": {
+		"improvement": [{
+				"upgrade": false,
+				"req": [[[true, false, false, false, false, true, true], [299, 715]]],
+				"resource": [[80, 140, 60, 50], [2, 3, 2, 2, 13, 2], [3, 6, 2, 3, 14, 2], [0, 0, 0, 0, 0, 0]]
+			}
+		]
 	}
 }

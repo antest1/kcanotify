@@ -443,8 +443,12 @@
   "潜水艦後部魚雷発射管4門(後期型)": "Submarine Rear Torpedo Launcher (4 tubes, Late Model)",
   "四式重爆 飛龍+イ号一型甲 誘導弾" : "Type 4 Heavy Bomber Hiryuu + No.1 Model 1A Guided Missile",
   "二式複戦 屠龍" : "Type 2 Two-seat Fighter Toryuu",
-	"二式複戦 屠龍 丙型" : "Type 2 Two-seat Fighter Toryuu Model C",
+  "二式複戦 屠龍 丙型" : "Type 2 Two-seat Fighter Toryuu Model C",
   "零式艦戦64型(複座KMX搭載機)" : "Type 0 Fighter Model 64 (Two-seat w/ KMX)",
+  "13号対空電探改(後期型)" : "Type 13 Air Radar Kai (Late Model)",
+  "三式指揮連絡機改" : "Type 3 Command Liaison Aircraft Kai",
+  "キ96": "Ki-96",
+  "キ102乙": "Ki-102 B",  
   
   "プレゼント箱": "Present Box",
   "秋刀魚": "Saury",
@@ -571,5 +575,8 @@
   "地中海12.6inch/44 三連装砲": "Mediterranean 12.6inch/46 Triple Gun Mount",
   "夜猫深海艦戦II": "Abyssal Night Cat Fighter II",
   "夜深海艦爆II": "Abyssal Night Dive Bomber II",
-  "夜復讐深海艦攻II": "Abyssal Night Revenge Torpedo Bomber II"
+  "夜復讐深海艦攻II": "Abyssal Night Revenge Torpedo Bomber II",
+  "深海戦爆複座鷹": "Abyssal Two-seat Fighter-bomber Hawk",
+  "深海戦爆複座鷹改": "Abyssal Two-seat Fighter-bomber Hawk Kai",
+  "深海四連装(酸素)魚雷後期型": "Abyssal Quadruple (Oxygen) Torpedo Mount Late Model"
 }
