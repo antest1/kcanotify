@@ -1605,6 +1605,12 @@
         "desc": "Sortie a fleet with Amagiri Kai Ni (D), any two of Aoba, Ooi or Sagiri and up to 3 additional ships to [W2-2], [W7-3-P], [W5-1], [W5-4] and [W6-4]. S-Rank each boss node.",
         "memo": "\u27a3Rewards: \u00B6First choice: Either a Medal or a Reinforcement Expansion / \u00B6Second choice: Either an Action Report OR a \u2605+4 12.7cm Twin Gun Mount Model B Kai 4 (Wartime Modification) + Anti-Aircraft Fire Director OR a \u2605+4 61cm Triple (Oxygen) Torpedo Mount Late Model"
     },
+	"970": {
+        "code": "B179",
+        "name": "DesDiv 16, Remodeled [Uranami Kai Ni], Sortie!",
+        "desc": "Sortie a fleet with Uranami Kai Ni, Aoba, Kinu and up to 3 additional ships to [W1-4], [W2-3], [W2-5], [W7-2-M] and [W7-4]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either a New Model Artillery Armament Material OR a New Model Aviation Armament Material OR a Reinforcement Expansion \u00B6Second choice: Either a Prototype Long-barrel 12.7cm Twin Gun Mount Model A Kai 4 OR three New Model Aviation Armament Materials OR an Action Report"
+    },
 
 	"201": {
 		"code": "Bd1",
@@ -2281,7 +2287,7 @@
         "memo": "\u27a3Rewards a Mamiya and a Present Box"
     },
     "315": {
-        "code": "C54",
+        "code": "C64",
         "name": "Mass Exercises for Spring",
         "desc": "Secure 8 victories in Exercises within the same day.",
         "memo": "\u27a3Rewards a Mamiya and a Present Box"
@@ -3310,6 +3316,12 @@
         "desc": "Have a Drum Canister, 10 Dev. Materials and 1800 steel. Scrap 4 Small Cal. Main Guns, 4 Medium Cal. Main Guns and 4 Large Cal. Main Guns.",
         "memo": "\u2718Consumes the items and resources. \u27a3Rewards eight Screws or three New Model Artillery Armament Materials or a Construction Battalion"
     },
+	"1113": {
+        "code": "F107",
+        "name": "Deployment a New Assault Aircraft with [Guided Missile]",
+        "desc": "Have a Ki-102 B, a Type 2 Two-seat Fighter Toryuu Model C, two Skilled Crew Members and four New Model Aviation Armament Materials.",
+        "memo": "\u2718 Consumes the items (even with any \u2605). \u27a3 Rewards a Ki-102 B Kai + No.1 Model 1B Guided Missile"
+    },
 
 	"701": {
 		"code": "G1",
@@ -3503,22 +3515,10 @@
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
 	},
 	
-	"906": {
-        "code": "2203LB1",
-        "name": "[Hinamatsuri 2022] Safeguarding the Naval Base's Coastal Waters",
-        "desc": "Sortie 3 DD/DE and up to 3 additional ships to [W1-2], [W1-3], [W1-5] and [W1-6-N]. A-Rank+ all relevant boss nodes.",
-        "memo": "\u27a3 Rewards Hishimochi and either two 25mm Single Autocannon Mounts OR five Development Materials OR a Type 2 12cm Mortar Kai"
-    },
-    "907": {
-        "code": "2203LB2",
-        "name": "[Hinamatsuri 2022] Nansei Region Combat Patrols!",
-        "desc": "Sortie 4 DD/DE and up to 2 additional ships to [W2-1], [W2-2] and [W2-3]. S-Rank each boss node twice.",
-        "memo": "\u27a3 Rewards two Hishimochi and either five Buckets OR a Mamiya OR two Type 3 Depth Charge Projectors"
-    },
-    "908": {
-        "code": "2203LB3",
-        "name": "[Hinamatsuri 2022] Decisive Battles! Strike Down the Enemy Task Force!",
-        "desc": "Sortie a CV(L/B), a CA(V), a CL and up to 3 additional ships to [W2-4], [W2-5] and [W7-2-M]. S-Rank each boss node twice.",
-        "memo": "\u27a3 Rewards four Hishimochi and either ten Development Materials OR a Reinforcement Expansion OR a Medal"
+	"932": {
+        "code": "2204B1",
+        "name": "[Spring-Limited] The Springtime of Amatsukaze!",
+        "desc": "Sortie Amatsukaze as flagship, one of Tokitsukaze, Yukikaze or Hatsukaze as second ship, and up to 4 additional ships to [W2-2], [W2-3] and [W7-3-P]. A-Rank+ each boss node twice.",
+        "memo": "\u27a3 Rewards a Furniture Fairy and either six Buckets OR three Type 3 Depth Charge Projectors OR three Underway Replenishments"
     }
 }
