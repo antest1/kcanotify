@@ -417,12 +417,17 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     private String getRingtoneTitle(Uri ringtoneUri) {
         Log.e("KCA", "uri: " + (ringtoneUri != null ? ringtoneUri.toString() : ""));
         Log.e("KCA", "valid: " + checkActivityValid());
-        if (ringtoneUri != null && checkActivityValid()) {
-            getActivity().grantUriPermission(BuildConfig.APPLICATION_ID, ringtoneUri, FLAG_GRANT_READ_URI_PERMISSION);
-            Ringtone ringtone = RingtoneManager.getRingtone(getContext(), ringtoneUri);
-            return ringtone.getTitle(getContext());
-        } else {
-            return getStringWithLocale(R.string.settings_string_silent);
+        try {
+            if (ringtoneUri != null && checkActivityValid()) {
+                getActivity().grantUriPermission(BuildConfig.APPLICATION_ID, ringtoneUri, FLAG_GRANT_READ_URI_PERMISSION);
+                Ringtone ringtone = RingtoneManager.getRingtone(getContext(), ringtoneUri);
+                return ringtone.getTitle(getContext());
+            } else {
+                return getStringWithLocale(R.string.settings_string_silent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "???";
         }
     }
 
