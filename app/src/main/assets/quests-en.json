@@ -1611,6 +1611,12 @@
         "desc": "Sortie a fleet with Uranami Kai Ni, Aoba, Kinu and up to 3 additional ships to [W1-4], [W2-3], [W2-5], [W7-2-M] and [W7-4]. S-Rank each boss node.",
         "memo": "\u27a3Rewards: \u00B6First choice: Either a New Model Artillery Armament Material OR a New Model Aviation Armament Material OR a Reinforcement Expansion \u00B6Second choice: Either a Prototype Long-barrel 12.7cm Twin Gun Mount Model A Kai 4 OR three New Model Aviation Armament Materials OR an Action Report"
     },
+	"974": {
+        "code": "B180",
+        "name": "Isonami Kai Ni, Weigh Anchor!",
+        "desc": "Sortie a fleet with Isonami Kai Ni and up to 5 additional ships to [W1-2], [W1-3] and [W5-1]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either nine Buckets OR a New Model Artillery Armament Materials OR a Reinforcement Expansion \u00B6Second choice: Either a 12.7cm Twin Gun Mount Model A Kai Ni OR two 61cm Triple (Oxygen) Torpedo Mount OR nine Development Materials"
+    },
 
 	"201": {
 		"code": "Bd1",
@@ -1988,6 +1994,18 @@
         "desc": "Sortie a CV(L/B) as flagship and up to 5 additional ships to [W5-2], [W5-5], [W6-4] and [W6-5]. A-Rank+ [W6-4] twice. S-Rank all other relevant boss nodes twice.",
         "memo": "This quest resets on the first quest reset of June. \u203bNaval Task Force Decisive Battle Rewards 600 Ranking Points and either five Skilled Crew Members OR a Prototype Flight Deck Catapult OR a Kikka Kai"
     },
+	"973": {
+        "code": "By11",
+        "name": "Annual UK-US Joint Surface Fleet - May",
+        "desc": "Sortie 3 British/American ships, no any CV(L/B) and up to 3 additional ships to [W3-1], [W3-3], [W4-3] and [W7-3-P]. A-Rank+ the boss node of each.",
+        "memo": "This quest resets on the first quest reset of May. \u203bJapan-UK-US Joint Surface Fleet, Weigh Anchor! \u27a3Rewards: \u00B6First choice: Either eight Development Materials OR a Skilled Crew Member OR a New Model Aviation Armament Materials \u00B6Second choice: Either two Swordfish (Seaplane Model) OR a SOC Seagull OR a OS2U"
+    },
+    "975": {
+        "code": "By12",
+        "name": "Annual DesDev 19 Sortie - May",
+        "desc": "Sortie Isonami Kai Ni, Uranami Kai Ni, Ayanami Kai Ni, Shikinami Kai Ni, and up to 2 additional ships to [W1-5], [W2-3], [W3-2] and [W5-3]. S-Rank the boss node of each.",
+        "memo": "This quest resets on the first quest reset of May. \u203bElite DesDiv 19, All-out Sortie! \u27a3Rewards: \u00B6First choice: Either two Skilled Lookouts OR four Screws OR nine Buckets \u00B6Second choice: Either two Medals OR two 12.7cm Twin Gun Mount Model A Kai Ni OR a 61cm Triple (Oxygen) Torpedo Mount Late Model"
+    },
 
 	"301": {
         "code": "C1",
@@ -2272,6 +2290,12 @@
         "name": "Annual DesDiv 15 Excercises - October",
         "desc": "Secure 4 S-Rank victories in Exercises within the same day using Oyashio Kai Ni and Kuroshio Kai Ni as the first two ships and up to 4 additional ships.",
         "memo": "This quest resets on the first quest reset of October. \u203bElite DesDiv 15 First Platoon Exercises! \u27a3Rewards: \u00B6First choice: Either a \u2605+2 Type 22 Surface Radar Kai 4 OR a \u2605+2 Skilled Lookouts \u00B6Second choice: Either two Irako OR three Screws"
+    },
+	"356": {
+        "code": "C65",
+        "name": "Annual DesDiv 19 Excercises - May",
+        "desc": "Secure 3 S-Rank victories in Exercises within the same day using Isonami Kai Ni, Uranami Kai Ni, Ayanami Kai Ni, Shikinami Kai Ni and up to 2 additional ships.",
+        "memo": "This quest resets on the first quest reset of May. \u203bElite DesDiv 19 Exercises! \u27a3Rewards: \u00B6First choice: Either a Irako OR four Development Materials \u00B6Second choice: Either a \u2605+4 Skilled Lookouts OR a Mamiya OR three Screws"
     },
 
 	"313": {
@@ -3322,6 +3346,12 @@
         "desc": "Have a Ki-102 B, a Type 2 Two-seat Fighter Toryuu Model C, two Skilled Crew Members and four New Model Aviation Armament Materials.",
         "memo": "\u2718 Consumes the items (even with any \u2605). \u27a3 Rewards a Ki-102 B Kai + No.1 Model 1B Guided Missile"
     },
+	"1114": {
+        "code": "F108",
+        "name": "New Equipment Development Plan I",
+        "desc": "Have three 35.6cm Twin Gun Mounts, 8 Flamethrowers and 800 bauxite. Scrap 3 Small Cal. Main Guns, 3 Medium Cal. Main Guns and 3 Secondary Guns.",
+        "memo": "\u2718Consumes the items and resources. \u27a3Rewards: \u00B6First choice: Either a New Model Artillery Armament Materials OR a New Model Aviation Armament Materials OR five Development Materials \u00B6Second choice: Either a New Model Armament Materials OR a New Model Rocket Development Materials OR three Screws"
+    },
 
 	"701": {
 		"code": "G1",
@@ -3520,5 +3550,18 @@
         "name": "[Spring-Limited] The Springtime of Amatsukaze!",
         "desc": "Sortie Amatsukaze as flagship, one of Tokitsukaze, Yukikaze or Hatsukaze as second ship, and up to 4 additional ships to [W2-2], [W2-3] and [W7-3-P]. A-Rank+ each boss node twice.",
         "memo": "\u27a3 Rewards a Furniture Fairy and either six Buckets OR three Type 3 Depth Charge Projectors OR three Underway Replenishments"
+    },
+
+	"971": {
+        "code": "2204B2",
+        "name": "[Limited] 9th Anniversary Fleet, Set Sail!",
+        "desc": "Sortie a CL as flagship, 2 DD and up to 3 additional ships to [W1-1], [W1-2], [W1-3], [W1-4] and [W1-5]. S-Rank each boss node.",
+        "memo": "\u27a3 Rewards: \u00B6First choice: Either nine Development Materials OR nine Buckets \u00B6Second choice: Either three Type 99 Dive Bomber Model 22 OR a Type 99 Dive Bomber Model 22 (Skilled) OR a Reinforcement Expansion"
+    },
+    "972": {
+        "code": "2204B3",
+        "name": "[Limited] 9th Anniversary Fleet, Extra Operation!",
+        "desc": "Sortie a CVL as flagship, 2 DD and up to 3 additional ships to [W2-3], [W3-5], [W7-4] and [W6-4]. S-Rank each boss node.",
+        "memo": "\u27a3 Rewards either six New Model Aviation Armament Materials OR 3 Medals OR a 51cm Twin Gun Mount"
     }
 }
