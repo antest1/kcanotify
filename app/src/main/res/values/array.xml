@@ -130,7 +130,6 @@
 
     <string-array name="ServerLocationValue" translatable="false">
         <item>@string/server_swaytwig</item>
-        <item>@string/server_nova</item>
         <item>@string/server_liza</item>
     </string-array>
 
