@@ -59,6 +59,7 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,6 +69,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.channels.FileChannel;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -1081,6 +1083,26 @@ public class KcaUtils {
             }
         }
         return dataString.toString();
+    }
+
+    public static void copyFile(FileInputStream src, FileOutputStream dst) throws IOException {
+        FileChannel fromChannel = null;
+        FileChannel toChannel = null;
+        try {
+            fromChannel = src.getChannel();
+            toChannel = dst.getChannel();
+            fromChannel.transferTo(0, fromChannel.size(), toChannel);
+        } finally {
+            try {
+                if (fromChannel != null) {
+                    fromChannel.close();
+                }
+            } finally {
+                if (toChannel != null) {
+                    toChannel.close();
+                }
+            }
+        }
     }
 
     public static void sendUserAnalytics(Context context, String event, JsonObject value) {

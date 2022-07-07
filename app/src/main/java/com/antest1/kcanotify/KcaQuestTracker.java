@@ -55,6 +55,10 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
     private final static int[] quest_cont_quest_id = {411, 607, 608};
     private static boolean ap_dup_flag = false;
 
+    public static String getName() {
+        return qt_db_name;
+    }
+
     public void setApDupFlag() {
         ap_dup_flag = true;
     }

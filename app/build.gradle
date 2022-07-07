@@ -71,6 +71,7 @@ dependencies {
     }
     implementation 'com.squareup.okhttp3:okhttp:3.12.3'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+    implementation 'net.lingala.zip4j:zip4j:2.11.1'
     implementation 'com.pixplicity.htmlcompat:library:1.1.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.woxthebox:draglistview:1.5.2'

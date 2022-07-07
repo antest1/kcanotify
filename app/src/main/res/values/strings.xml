@@ -309,7 +309,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_app_title_enable_acra">Use Crash Report System (ACRA)</string>
     <string name="setting_menu_app_desc_enable_acra">Mail client will be open when crash occurs</string>
     <string name="setting_menu_app_desc_contact">Send an E-mail to the developer</string>
-    <string name="setting_menu_app_desc_inspector">データベース/設定値を表示/初期化</string>
+    <string name="setting_menu_app_desc_inspector">Show or initialize database/preference values</string>
+    <string name="setting_menu_app_backup" translatable="false">Backup App Data</string>
     <string name="setting_menu_app_info">About kcanotify</string>
 
     <string name="setting_menu_sniffer_title_head">Sniffer Settings</string>
@@ -787,6 +788,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="equipinfo_export_clipboard">Copy to Clipboard</string>
     <string name="equipinfo_export_openpage2">Open SeikuukenSimulator Page</string>
 
+    <string name="action_appbackup" translatable="false">Backup App Data</string>
 
 
     <string name="text_api_houg">FP</string>

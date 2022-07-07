@@ -27,6 +27,10 @@ public class KcaResourceLogger extends SQLiteOpenHelper {
         super(context, resourcelog_db_name, factory, version);
     }
 
+    public static String getName() {
+        return resourcelog_db_name;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         StringBuffer sb = new StringBuffer();
