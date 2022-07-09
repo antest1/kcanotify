@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import static com.antest1.kcanotify.KcaBackupItemAdpater.BACKUP_KEY;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
@@ -7,15 +8,20 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import net.lingala.zip4j.ZipFile;
 
@@ -23,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +38,7 @@ import java.util.Locale;
 
 public class KcaBackupActivity extends AppCompatActivity {
     private final String FILE_PATH = "/backup";
+    static Gson gson = new Gson();
 
     Toolbar toolbar;
     List<String> db_paths = new ArrayList();
@@ -38,6 +46,11 @@ public class KcaBackupActivity extends AppCompatActivity {
 
     TextView exportButton;
     TextView exportMessage;
+    TextView backup_load;
+    ListView backup_list;
+
+    KcaBackupItemAdpater adapter = new KcaBackupItemAdpater();
+    UpdateHandler handler;
 
     public KcaBackupActivity() {
         LocaleUtils.updateConfig(this);
@@ -56,10 +69,17 @@ public class KcaBackupActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getStringWithLocale(R.string.action_appbackup));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        backup_load = findViewById(R.id.backup_loading);
+        backup_list = findViewById(R.id.backup_list);
+        backup_list.setAdapter(adapter);
+
         exportButton = findViewById(R.id.backup_export_button);
         exportButton.setOnClickListener(v -> {
             new BackupSaveTask().execute();
         });
+
+        handler = new UpdateHandler(this);
+        adapter.setHandler(handler);
 
         exportMessage = findViewById(R.id.backup_export_result_message);
         exportMessage.setText("");
@@ -68,23 +88,21 @@ public class KcaBackupActivity extends AppCompatActivity {
         db_paths.add(KcaQuestTracker.getName());
         db_paths.add(KcaDropLogger.getName());
         db_paths.add(KcaResourceLogger.getName());
-        // Toast.makeText(getApplicationContext(), getDatabasePath().getAbsolutePath(), Toast.LENGTH_LONG).show();
 
         for (String name: db_paths) {
             Log.e("KCA", getDatabasePath(name).getAbsolutePath());
         }
+
+        adapter.setListItem(getBackupDataList());
+        adapter.notifyDataSetChanged();
+
+        backup_load.setVisibility(View.GONE);
+        backup_list.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.droplog, menu);
-        return true;
     }
 
     @Override
@@ -99,15 +117,11 @@ public class KcaBackupActivity extends AppCompatActivity {
     }
 
     private class BackupSaveTask extends AsyncTask<String, String, String> {
-        File file;
-
         @Override
         protected void onPreExecute() {
             is_exporting = true;
             exportButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
             exportButton.setClickable(false);
-            //row_count.setText(getStringWithLocale(R.string.action_save_msg));
-            //row_count.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPanelWarning));
         }
 
         @Override
@@ -154,12 +168,105 @@ public class KcaBackupActivity extends AppCompatActivity {
                 exportMessage.setText("An error occurred when exporting backup file.");
             } else if (result != null) {
                 exportMessage.setText("Exported to: ".concat(result));
+                adapter.setListItem(getBackupDataList());
+                adapter.notifyDataSetChanged();
             }
         }
     }
 
-    public void setListView() {
+    private class BackupLoadTask extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String[] params) {
+            String backup_fn = params[0];
+            File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(FILE_PATH));
 
+            try {
+                File exportFolder = new File(savedir.getAbsolutePath().concat("/").concat(backup_fn).replace(".zip", ""));
+                if (!exportFolder.exists()) exportFolder.mkdirs();
+                new ZipFile(savedir.getAbsolutePath().concat("/").concat(backup_fn)).extractAll(savedir.getAbsolutePath());
+
+                for (String name: db_paths) {
+                    File src = new File(exportFolder.getAbsolutePath().concat("/").concat(name));
+                    File dst = new File(getDatabasePath(name).getAbsolutePath());
+                    KcaUtils.copyFile(new FileInputStream(src), new FileOutputStream(dst));
+                }
+
+                for (File file: exportFolder.listFiles()) {
+                    if (!file.isDirectory())
+                        file.delete();
+                }
+                exportFolder.delete();
+                return backup_fn;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "Error";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            is_exporting = false;
+            exportButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+            exportButton.setClickable(true);
+            if ("Error".equals(result)) {
+                exportMessage.setText("An error occurred when importing from backup file.");
+            } else if (result != null) {
+                exportMessage.setText("Imported from " + result);
+            }
+        }
+    }
+
+    private List<JsonObject> getBackupDataList() {
+        List<JsonObject> list = new ArrayList<>();
+        File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(FILE_PATH));
+        if (savedir.isDirectory()) {
+            File[] files = savedir.listFiles();
+            for (File f: files) {
+                if (!f.getName().endsWith(".zip")) continue;
+                JsonObject item = new JsonObject();
+                item.addProperty("name", f.getName());
+                item.addProperty("size", f.length());
+                list.add(item);
+                Log.e("KCA", item.toString());
+            }
+        }
+        return list;
+    }
+
+    private static class UpdateHandler extends Handler {
+        private final WeakReference<KcaBackupActivity> mActivity;
+
+        UpdateHandler(KcaBackupActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            KcaBackupActivity activity = mActivity.get();
+            if (activity != null) {
+                Bundle bundle = msg.getData();
+                String data = bundle.getString(BACKUP_KEY);
+                activity.handleUpdateMessage(data);
+            }
+        }
+    }
+
+    public void handleUpdateMessage(String data) {
+        JsonObject obj = gson.fromJson(data, JsonObject.class);
+        String backup_fn = obj.get("name").getAsString();
+        String action = obj.get("action").getAsString();
+        File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(FILE_PATH));
+
+        if (action.equals("restore")) {
+            new BackupLoadTask().execute(backup_fn);
+        } else if (action.equals("delete")) {
+            File file = new File(savedir.getAbsolutePath().concat("/").concat(backup_fn));
+            file.delete();
+            exportMessage.setText("Deleted ".concat(backup_fn));
+            adapter.setListItem(getBackupDataList());
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override

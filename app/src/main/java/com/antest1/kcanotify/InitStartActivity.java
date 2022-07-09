@@ -129,6 +129,10 @@ public class InitStartActivity extends Activity {
             setPreferences(getApplicationContext(), PREF_FAIRY_ICON, 0);
         }
 
+        // make backup locate directory at first
+        File backup_dir = new File(getExternalFilesDir(null).getAbsolutePath().concat("/backup"));
+        if (!backup_dir.exists()) backup_dir.mkdirs();
+
         // Initialize resources
         setPreferences(getApplicationContext(), PREF_DATALOAD_ERROR_FLAG, false);
         loadDefaultAsset();
