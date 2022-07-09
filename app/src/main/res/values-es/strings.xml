@@ -15,7 +15,8 @@
     <string name="app_name_kancolle">KanColle Android (Oficial)</string>
     <string name="app_name_gotobrowser">GotoBrowser</string>
 
-    <!-- Link Information, Do Not Translate Here -->
+    <string name="special_message">Minazuki y paletas heladas</string>
+    <string name="notification_message">Notificación e información</string>
 
     <!-- Common Text -->
     <string name="dialog_ok">Confirmar</string>
@@ -665,9 +666,6 @@
     <string name="fleetview_18spring_umeboshi" formatted="false">U %02d</string>
     <string name="fleetview_18spring_nori" formatted="false">N %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">T %02d</string>
-
-    <string name="special_message">Harusame y Piruleta</string>
-    <string name="notification_message">Notificación e información</string>
 
     <string name="widget_timer_name">Kcanotify Temporizador</string>
     <string name="fleet_format">Flota %d</string>

@@ -22,6 +22,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_name_kancolle">Android版本的舰これ (公式)</string>
     <string name="app_name_gotobrowser">GotoBrowser</string>
 
+    <string name="special_message">水无月和冰棒</string>
+    <string name="notification_message">通知和信息</string>
+
     <!-- Common Text -->
     <string name="dialog_ok">确认</string>
     <string name="dialog_cancel">取消</string>
@@ -668,9 +671,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_18spring_umeboshi" formatted="false">梅 %02d</string>
     <string name="fleetview_18spring_nori" formatted="false">苔 %02d</string>
     <string name="fleetview_18spring_tea" formatted="false">茶 %02d</string>
-
-    <string name="special_message">春雨和棒糖</string>
-    <string name="notification_message">通知和信息</string>
 
     <string name="widget_timer_name">Kcanotify计时Widget</string>
     <string name="fleet_format">第%d舰队</string>
