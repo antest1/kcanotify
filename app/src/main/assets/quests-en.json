@@ -1605,6 +1605,18 @@
         "desc": "Sortie a fleet with Amagiri Kai Ni (D), any two of Aoba, Ooi or Sagiri and up to 3 additional ships to [W2-2], [W7-3-P], [W5-1], [W5-4] and [W6-4]. S-Rank each boss node.",
         "memo": "\u27a3Rewards: \u00B6First choice: Either a Medal or a Reinforcement Expansion / \u00B6Second choice: Either an Action Report OR a \u2605+4 12.7cm Twin Gun Mount Model B Kai 4 (Wartime Modification) + Anti-Aircraft Fire Director OR a \u2605+4 61cm Triple (Oxygen) Torpedo Mount Late Model"
     },
+	"970": {
+        "code": "B179",
+        "name": "DesDiv 16, Remodeled [Uranami Kai Ni], Sortie!",
+        "desc": "Sortie a fleet with Uranami Kai Ni, Aoba, Kinu and up to 3 additional ships to [W1-4], [W2-3], [W2-5], [W7-2-M] and [W7-4]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either a New Model Artillery Armament Material OR a New Model Aviation Armament Material OR a Reinforcement Expansion \u00B6Second choice: Either a Prototype Long-barrel 12.7cm Twin Gun Mount Model A Kai 4 OR three New Model Aviation Armament Materials OR an Action Report"
+    },
+	"974": {
+        "code": "B180",
+        "name": "Isonami Kai Ni, Weigh Anchor!",
+        "desc": "Sortie a fleet with Isonami Kai Ni and up to 5 additional ships to [W1-2], [W1-3] and [W5-1]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either nine Buckets OR a New Model Artillery Armament Materials OR a Reinforcement Expansion \u00B6Second choice: Either a 12.7cm Twin Gun Mount Model A Kai Ni OR two 61cm Triple (Oxygen) Torpedo Mount OR nine Development Materials"
+    },
 
 	"201": {
 		"code": "Bd1",
@@ -1874,11 +1886,11 @@
 		"memo": "\u27a3 Rewards a Combat Ration and either a Furniture Fairy OR a \u2605+3 12.7cm Twin Gun Mount Model C Kai Ni OR a Medal"
 	},
 	"875": {
-		"code": "Bq6",
-		"name": "Quarterly [W5-4]",
-		"desc": "Sortie Naganami Kai Ni as flagship, one of Takanami Kai, Asashimo Kai or Okinami Kai, and up to 4 additional ships to [W5-4]. S-Rank the boss node twice.",
-		"memo": "\u203bElite DesDiv 31, Break Into the Iron Bottom Sound! \u27a3 Rewards: \u00B6First choice: Either 2 Type 13 Air Radars OR 2 Type 22 Surface Radars OR an Action Report \u00B6Second choice: Either a New Model Artillery Armament Materials OR a Present Box"
-	},
+        "code": "Bq6",
+        "name": "Quarterly [W5-4]",
+        "desc": "Sortie Naganami Kai Ni with one of Takanami Kai, Asashimo Kai or Okinami Kai, and up to 4 additional ships to [W5-4]. S-Rank the boss node twice.",
+        "memo": "\u203bElite DesDiv 31, Break Into the Iron Bottom Sound! \u27a3 Rewards: \u00B6First choice: Either 2 Type 13 Air Radars OR 2 Type 22 Surface Radars OR an Action Report \u00B6Second choice: Either a New Model Artillery Armament Materials OR a Present Box"
+    },
 	"888": {
 		"code": "Bq7",
 		"name": "Quarterly Mikawa Fleet",
@@ -1981,6 +1993,18 @@
         "name": "Annual Naval Task Force Decisive Battle - June",
         "desc": "Sortie a CV(L/B) as flagship and up to 5 additional ships to [W5-2], [W5-5], [W6-4] and [W6-5]. A-Rank+ [W6-4] twice. S-Rank all other relevant boss nodes twice.",
         "memo": "This quest resets on the first quest reset of June. \u203bNaval Task Force Decisive Battle Rewards 600 Ranking Points and either five Skilled Crew Members OR a Prototype Flight Deck Catapult OR a Kikka Kai"
+    },
+	"973": {
+        "code": "By11",
+        "name": "Annual UK-US Joint Surface Fleet - May",
+        "desc": "Sortie 3 British/American ships, no any CV(L/B) and up to 3 additional ships to [W3-1], [W3-3], [W4-3] and [W7-3-P]. A-Rank+ the boss node of each.",
+        "memo": "This quest resets on the first quest reset of May. \u203bJapan-UK-US Joint Surface Fleet, Weigh Anchor! \u27a3Rewards: \u00B6First choice: Either eight Development Materials OR a Skilled Crew Member OR a New Model Aviation Armament Materials \u00B6Second choice: Either two Swordfish (Seaplane Model) OR a SOC Seagull OR a OS2U"
+    },
+    "975": {
+        "code": "By12",
+        "name": "Annual DesDev 19 Sortie - May",
+        "desc": "Sortie Isonami Kai Ni, Uranami Kai Ni, Ayanami Kai Ni, Shikinami Kai Ni, and up to 2 additional ships to [W1-5], [W2-3], [W3-2] and [W5-3]. S-Rank the boss node of each.",
+        "memo": "This quest resets on the first quest reset of May. \u203bElite DesDiv 19, All-out Sortie! \u27a3Rewards: \u00B6First choice: Either two Skilled Lookouts OR four Screws OR nine Buckets \u00B6Second choice: Either two Medals OR two 12.7cm Twin Gun Mount Model A Kai Ni OR a 61cm Triple (Oxygen) Torpedo Mount Late Model"
     },
 
 	"301": {
@@ -2267,6 +2291,12 @@
         "desc": "Secure 4 S-Rank victories in Exercises within the same day using Oyashio Kai Ni and Kuroshio Kai Ni as the first two ships and up to 4 additional ships.",
         "memo": "This quest resets on the first quest reset of October. \u203bElite DesDiv 15 First Platoon Exercises! \u27a3Rewards: \u00B6First choice: Either a \u2605+2 Type 22 Surface Radar Kai 4 OR a \u2605+2 Skilled Lookouts \u00B6Second choice: Either two Irako OR three Screws"
     },
+	"356": {
+        "code": "C65",
+        "name": "Annual DesDiv 19 Excercises - May",
+        "desc": "Secure 3 S-Rank victories in Exercises within the same day using Isonami Kai Ni, Uranami Kai Ni, Ayanami Kai Ni, Shikinami Kai Ni and up to 2 additional ships.",
+        "memo": "This quest resets on the first quest reset of May. \u203bElite DesDiv 19 Exercises! \u27a3Rewards: \u00B6First choice: Either a Irako OR four Development Materials \u00B6Second choice: Either a \u2605+4 Skilled Lookouts OR a Mamiya OR three Screws"
+    },
 
 	"313": {
         "code": "C61",
@@ -2281,7 +2311,7 @@
         "memo": "\u27a3Rewards a Mamiya and a Present Box"
     },
     "315": {
-        "code": "C54",
+        "code": "C64",
         "name": "Mass Exercises for Spring",
         "desc": "Secure 8 victories in Exercises within the same day.",
         "memo": "\u27a3Rewards a Mamiya and a Present Box"
@@ -3310,6 +3340,18 @@
         "desc": "Have a Drum Canister, 10 Dev. Materials and 1800 steel. Scrap 4 Small Cal. Main Guns, 4 Medium Cal. Main Guns and 4 Large Cal. Main Guns.",
         "memo": "\u2718Consumes the items and resources. \u27a3Rewards eight Screws or three New Model Artillery Armament Materials or a Construction Battalion"
     },
+	"1113": {
+        "code": "F107",
+        "name": "Deployment a New Assault Aircraft with [Guided Missile]",
+        "desc": "Have a Ki-102 B, a Type 2 Two-seat Fighter Toryuu Model C, two Skilled Crew Members and four New Model Aviation Armament Materials.",
+        "memo": "\u2718 Consumes the items (even with any \u2605). \u27a3 Rewards a Ki-102 B Kai + No.1 Model 1B Guided Missile"
+    },
+	"1114": {
+        "code": "F108",
+        "name": "New Equipment Development Plan I",
+        "desc": "Have three 35.6cm Twin Gun Mounts, 8 Flamethrowers and 800 bauxite. Scrap 3 Small Cal. Main Guns, 3 Medium Cal. Main Guns and 3 Secondary Guns.",
+        "memo": "\u2718Consumes the items and resources. \u27a3Rewards: \u00B6First choice: Either a New Model Artillery Armament Materials OR a New Model Aviation Armament Materials OR five Development Materials \u00B6Second choice: Either a New Model Armament Materials OR a New Model Rocket Development Materials OR three Screws"
+    },
 
 	"701": {
 		"code": "G1",
@@ -3503,34 +3545,23 @@
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
 	},
 	
-	"329": {
-        "code": "2201LC01",
-        "name": "[Setsubun Mission] Setsubun Exercises 2022!",
-        "desc": "Secure 3 S-Rank victories in Exercises within the same day using 2 CL/CT, 2 DD/DE and up to 2 additional ships.",
-        "memo": "\u27a3Rewards one unit of Setsubun Beans"
+	"932": {
+        "code": "2204B1",
+        "name": "[Spring-Limited] The Springtime of Amatsukaze!",
+        "desc": "Sortie Amatsukaze as flagship, one of Tokitsukaze, Yukikaze or Hatsukaze as second ship, and up to 4 additional ships to [W2-2], [W2-3] and [W7-3-P]. A-Rank+ each boss node twice.",
+        "memo": "\u27a3 Rewards a Furniture Fairy and either six Buckets OR three Type 3 Depth Charge Projectors OR three Underway Replenishments"
     },
-    "840": {
-        "code": "2201LB05",
-        "name": "[Setsubun Mission] Setsubun Operation 2022",
-        "desc": "Sortie a CVL/CL(T)/CT as flagship, 3 DD/DE and up to 2 additional ships to [W1-3], [W1-5] and [W2-3]. A-Rank+ each boss node.",
-        "memo": "\u27a3Rewards two units of Setsubun Beans and either three Buckets OR an Underway Replenishment OR an Emergency Repair Material"
+
+	"971": {
+        "code": "2204B2",
+        "name": "[Limited] 9th Anniversary Fleet, Set Sail!",
+        "desc": "Sortie a CL as flagship, 2 DD and up to 3 additional ships to [W1-1], [W1-2], [W1-3], [W1-4] and [W1-5]. S-Rank each boss node.",
+        "memo": "\u27a3 Rewards: \u00B6First choice: Either nine Development Materials OR nine Buckets \u00B6Second choice: Either three Type 99 Dive Bomber Model 22 OR a Type 99 Dive Bomber Model 22 (Skilled) OR a Reinforcement Expansion"
     },
-    "841": {
-        "code": "2201LB06",
-        "name": "[Setsubun Mission] Southwestern Sea Setsubun Operation 2022",
-        "desc": "Sortie a fleet with 2 CA/ 2 CAV/ 2 AV\u203b, one of them as flagship and up to 4 additional ships to [W7-2-M], [W7-3-P] and [W7-4]. S-Rank [W7-2-M] and [W7-3-P] boss node, A-Rank+ [W7-4] boss node.",
-        "memo": "\u203bFor the two required ships, you can't mix ship types. For example, if your flagship is a CAV, you must sortie another CAV as well. \u27a3Rewards two units of Setsubun Beans and either six Development Materials OR an Irako OR two Screws"
-    },
-    "843": {
-        "code": "2201LB07",
-        "name": "[Setsubun Extra Mission] Setsubun 2022, All-out Sortie!",
-        "desc": "Sortie a fleet with 2 (F)BB(V)/ 2 CV(L/B)\u203b, a Sendai-class CL/Ooyodo and up to 3 additional ships to [W2-5], [W5-2], [W5-5] and [W6-4]. S-Rank each boss node.",
-        "memo": "\u203bFor the two required ships, you can't mix ship types between BB and CV. For example, if one is a (F)BB(V), you must sortie another (F)BB(V) as well. \u27a3Rewards three units of Setsubun Beans and 220 Ranking Points"
-    },
-	"441": {
-        "code": "2201LD01",
-        "name": "[Setsubun Mission] Reiwa's 4th Year Setsubun Expedition Mission",
-        "desc": "Complete Expeditions A3, 29, 30, 45 and D1.",
-        "memo": "\u27a3Rewards:\n\u00B6First choice: either a Furniture Fairy OR two New Model Aviation Armament Materials OR four Screws \u00B6Second choice: either a Me163B OR two Do 17 Z-2 OR three \u2605+2 2cm Flakvierling 38"
+    "972": {
+        "code": "2204B3",
+        "name": "[Limited] 9th Anniversary Fleet, Extra Operation!",
+        "desc": "Sortie a CVL as flagship, 2 DD and up to 3 additional ships to [W2-3], [W3-5], [W7-4] and [W6-4]. S-Rank each boss node.",
+        "memo": "\u27a3 Rewards either six New Model Aviation Armament Materials OR 3 Medals OR a 51cm Twin Gun Mount"
     }
 }

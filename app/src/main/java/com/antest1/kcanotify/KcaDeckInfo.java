@@ -141,34 +141,35 @@ public class KcaDeckInfo {
 
     public double getSeekValue(JsonArray deckPortData, String deckid_list, int Cn, JsonObject exclude_flag) {
         double pureTotalSeek = 0.0;
-        double totalSeek = 0.0;
-
         double totalShipSeek = 0.0;
         double totalEquipSeek = 0.0;
-        double hqPenalty = 0.0;
-        double noShipBonus = 0;
         int noShipCount = 0;
 
         int userLevel = getAdmiralLevel();
-        hqPenalty = Math.ceil(0.4 * userLevel);
+        double hqPenalty = Math.ceil(0.4 * userLevel);
 
         String[] decklist = deckid_list.split(",");
-        for (int n = 0; n < decklist.length; n++) {
-            int deckid = Integer.parseInt(decklist[n]);
-            if (deckid >= deckPortData.size()) continue;
-            JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
-            JsonObject seekData = getEachSeekValue(deckShipIdList, deckid, Cn, exclude_flag);
-            pureTotalSeek += seekData.get("pure").getAsDouble();
-            totalEquipSeek += seekData.get("equip").getAsDouble();
-            totalShipSeek += seekData.get("ship").getAsDouble();
-            noShipCount += seekData.get("nscount").getAsInt();
+        if (decklist.length == 2) {
+            double seek_sum = 0;
+            for (int n = 0; n < decklist.length; n++) {
+                seek_sum += getSeekValue(deckPortData, decklist[n], Cn, exclude_flag);
+            }
+            return seek_sum;
         }
+
+        int deckid = Integer.parseInt(decklist[0]);
+        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
+        JsonObject seekData = getEachSeekValue(deckShipIdList, deckid, Cn, exclude_flag);
+        pureTotalSeek += seekData.get("pure").getAsDouble();
+        totalEquipSeek += seekData.get("equip").getAsDouble();
+        totalShipSeek += seekData.get("ship").getAsDouble();
+        noShipCount += seekData.get("nscount").getAsInt();
 
         if (Cn == SEEK_PURE) {
             return pureTotalSeek;
         } else {
-            noShipBonus = 2 * noShipCount;
-            totalSeek = totalShipSeek + Cn * totalEquipSeek - hqPenalty + noShipBonus;
+            double noShipBonus = 2 * noShipCount;
+            double totalSeek = totalShipSeek + Cn * totalEquipSeek - hqPenalty + noShipBonus;
             return Math.floor(totalSeek * 100) / 100;
         }
     }

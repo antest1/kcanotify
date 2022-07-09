@@ -283,7 +283,14 @@ public class KcaAlarmService extends Service {
             alarmChannelList.add(channel_name);
             NotificationChannel channel = new NotificationChannel(alarmChannelList.peek(),
                     getStringWithLocale(R.string.notification_appinfo_title), NotificationManager.IMPORTANCE_HIGH);
-            channel.setSound(Uri.parse(uri), attrs.build());
+
+            Uri content_uri = getContentUri(getApplicationContext(), Uri.parse(uri));
+            if (checkContentUri(getContentResolver(), content_uri)) {
+                channel.setSound(content_uri, attrs.build());
+            } else {
+                channel.setSound(RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(),
+                        RingtoneManager.TYPE_NOTIFICATION), attrs.build());
+            }
             channel.enableVibration(isVibrate);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
             notificationManager.createNotificationChannel(channel);

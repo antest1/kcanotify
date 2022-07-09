@@ -431,7 +431,16 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/setting_menu_app_title_down" />
-
+        <Preference
+            android:defaultValue=""
+            app:iconSpaceReserved="false"
+            android:key="app_backup"
+            android:title="@string/setting_menu_app_backup">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.antest1.kcanotify"
+                android:targetClass="com.antest1.kcanotify.KcaBackupActivity" />
+        </Preference>
         <Preference
             android:defaultValue=""
             app:iconSpaceReserved="false"
