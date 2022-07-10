@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -41,7 +42,7 @@ public class KcaBackupActivity extends AppCompatActivity {
     static Gson gson = new Gson();
 
     Toolbar toolbar;
-    List<String> db_paths = new ArrayList();
+    List<String> db_paths = new ArrayList<>();
     boolean is_exporting = false;
 
     TextView exportButton;
@@ -69,6 +70,11 @@ public class KcaBackupActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getStringWithLocale(R.string.action_appbackup));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        ((TextView) findViewById(R.id.backup_export_label)).setText(getStringWithLocale(R.string.backup_export_label));
+        ((TextView) findViewById(R.id.backup_export_desc)).setText(getStringWithLocale(R.string.backup_export_desc));
+        ((TextView) findViewById(R.id.backup_export_button)).setText(getStringWithLocale(R.string.backup_export_button));
+        ((TextView) findViewById(R.id.backup_list_label)).setText(getStringWithLocale(R.string.backup_list_label));
+
         backup_load = findViewById(R.id.backup_loading);
         backup_list = findViewById(R.id.backup_list);
         backup_list.setAdapter(adapter);
@@ -81,7 +87,7 @@ public class KcaBackupActivity extends AppCompatActivity {
         handler = new UpdateHandler(this);
         adapter.setHandler(handler);
 
-        exportMessage = findViewById(R.id.backup_export_result_message);
+        exportMessage = findViewById(R.id.backup_result_message);
         exportMessage.setText("");
 
         db_paths.add(KcaDBHelper.getName());
@@ -165,9 +171,9 @@ public class KcaBackupActivity extends AppCompatActivity {
             exportButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
             exportButton.setClickable(true);
             if ("Error".equals(result)) {
-                exportMessage.setText("An error occurred when exporting backup file.");
+                exportMessage.setText(getStringWithLocale(R.string.backup_msg_export_error).concat(result));
             } else if (result != null) {
-                exportMessage.setText("Exported to: ".concat(result));
+                exportMessage.setText(getStringWithLocale(R.string.backup_msg_export_done).concat(result));
                 adapter.setListItem(getBackupDataList());
                 adapter.notifyDataSetChanged();
             }
@@ -210,9 +216,9 @@ public class KcaBackupActivity extends AppCompatActivity {
             exportButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
             exportButton.setClickable(true);
             if ("Error".equals(result)) {
-                exportMessage.setText("An error occurred when importing from backup file.");
+                exportMessage.setText(getStringWithLocale(R.string.backup_msg_import_error).concat(result));
             } else if (result != null) {
-                exportMessage.setText("Imported from " + result);
+                exportMessage.setText(getStringWithLocale(R.string.backup_msg_import_done).concat(result));
             }
         }
     }
@@ -258,14 +264,33 @@ public class KcaBackupActivity extends AppCompatActivity {
         String action = obj.get("action").getAsString();
         File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(FILE_PATH));
 
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(KcaBackupActivity.this);
         if (action.equals("restore")) {
-            new BackupLoadTask().execute(backup_fn);
+            mBuilder.setTitle(getStringWithLocale(R.string.backup_dialog_import_title));
+            mBuilder.setMessage(KcaUtils.format(getStringWithLocale(R.string.backup_dialog_import_msg), backup_fn));
+            mBuilder.setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog, which) -> {
+                new BackupLoadTask().execute(backup_fn);
+            });
+            mBuilder.setNegativeButton(getStringWithLocale(R.string.dialog_cancel), ((dialog, which) -> {
+                dialog.dismiss();
+            }));
+            AlertDialog mDialog = mBuilder.create();
+            mDialog.show();
         } else if (action.equals("delete")) {
-            File file = new File(savedir.getAbsolutePath().concat("/").concat(backup_fn));
-            file.delete();
-            exportMessage.setText("Deleted ".concat(backup_fn));
-            adapter.setListItem(getBackupDataList());
-            adapter.notifyDataSetChanged();
+            mBuilder.setTitle(getStringWithLocale(R.string.backup_dialog_delete_title));
+            mBuilder.setMessage(KcaUtils.format(getStringWithLocale(R.string.backup_dialog_delete_msg), backup_fn));
+            mBuilder.setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog, which) -> {
+                File file = new File(savedir.getAbsolutePath().concat("/").concat(backup_fn));
+                file.delete();
+                exportMessage.setText("Deleted ".concat(backup_fn));
+                adapter.setListItem(getBackupDataList());
+                adapter.notifyDataSetChanged();
+            });
+            mBuilder.setNegativeButton(getStringWithLocale(R.string.dialog_cancel), ((dialog, which) -> {
+                dialog.dismiss();
+            }));
+            AlertDialog mDialog = mBuilder.create();
+            mDialog.show();
         }
     }
 

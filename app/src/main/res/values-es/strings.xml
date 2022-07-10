@@ -241,6 +241,7 @@
     <string name="setting_menu_app_title_enable_acra">Usar Sistema de Reporte (ACRA)</string>
     <string name="setting_menu_app_desc_enable_acra">Mail será abierto cuando ocurra un error que cierre la aplicación</string>
     <string name="setting_menu_app_desc_inspector">Mostrar / inicializar base de datos / valor de configuración</string>
+    <string name="setting_menu_app_backup">Copia de seguridad de los datos</string>
     <string name="setting_menu_app_info">Sobre kcanotify</string>
 
     <!-- BattleView Strings -->
@@ -712,6 +713,16 @@
     <string name="equipinfo_export_title">Exportar a SeikuukenSimulator</string>
     <string name="equipinfo_export_clipboard">Copiar</string>
     <string name="equipinfo_export_openpage2">Abrir página SeikuukenSimulator</string>
+
+    <string name="action_appbackup">Copia de seguridad de restauracion</string>
+    <string name="backup_export_label">Los datos de copia de seguridad</string>
+    <string name="backup_export_desc">Exporte datos de la aplicación, como registro de caída/registro de recursos/pista de búsqueda/etc. ¡Asegúrese de mover su archivo de copia de seguridad a la PC antes de realizar la copia de seguridad! El archivo estará ubicado en: /android/data/com.antest1.kcanotify/files/backup</string>
+    <string name="backup_export_button">EXPORTAR ARCHIVO DE RESPALDO</string>
+    <string name="backup_list_label">Lista de archivos de copia de seguridad</string>
+    <string name="backup_dialog_import_title">Restaurar desde archivo de copia de seguridad</string>
+    <string name="backup_dialog_import_msg" formatted="false">¡Los datos existentes se sobrescribirán! ¿Está seguro de restaurar los datos del archivo %s?</string>
+    <string name="backup_dialog_delete_title">Eliminar archivo de copia de seguridad</string>
+    <string name="backup_dialog_delete_msg" formatted="false">¿Continuar eliminar el archivo %s?</string>
 
     <string name="text_api_houg">FP</string>
     <string name="text_api_raig">TP</string>

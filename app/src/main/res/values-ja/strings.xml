@@ -234,6 +234,7 @@
     <string name="setting_menu_app_title_enable_acra">Crashレポートシステムの使用（ACRA）</string>
     <string name="setting_menu_app_desc_enable_acra">Crash発生時メールクライアントが開きます</string>
     <string name="setting_menu_app_desc_inspector">内部プロパティ、データベース情報</string>
+    <string name="setting_menu_app_backup">アプリデータのバックアップ</string>
     <string name="setting_menu_app_info">About Kcanotify</string>
 
     <!-- BattleView Strings -->
@@ -717,6 +718,16 @@
     <string name="equipinfo_export_title">コード変換</string>
     <string name="equipinfo_export_clipboard">クリップボードにコピー</string>
     <string name="equipinfo_export_openpage2">制空権シミュレータを開く</string>
+
+    <string name="action_appbackup">アプリデータのバックアップ/復元</string>
+    <string name="backup_export_label">データのバックアップ</string>
+    <string name="backup_export_desc">ドロップ記録/資源記録/任務情報などのアプリデータをエクスポートします。 バックアップする前に、必ずバックアップファイルをPCに移動してください。 ファイルはこの経路にあります: /android/data/com.antest1.kcanotify/files/backup</string>
+    <string name="backup_export_button">エクスポートする</string>
+    <string name="backup_list_label">バックアップファイルリスト</string>
+    <string name="backup_dialog_import_title">バックアップファイルから復元</string>
+    <string name="backup_dialog_import_msg" formatted="false">既存のデータは上書きされます！ このファイルからデータを復元してもよろしいですか？：%s</string>
+    <string name="backup_dialog_delete_title">バックアップファイルを削除する</string>
+    <string name="backup_dialog_delete_msg" formatted="false">削除してもよろしいですか？: %s</string>
 
     <string name="text_api_houg">火力</string>
     <string name="text_api_raig">雷装</string>

@@ -237,6 +237,7 @@
     <string name="setting_menu_app_title_enable_acra">Crash 보고 시스템 사용 (ACRA)</string>
     <string name="setting_menu_app_desc_enable_acra">앱 Crash 발생 시 메일 클라이언트 열림</string>
     <string name="setting_menu_app_desc_inspector">내부 속성 및 데이터베이스 정보 값 보기</string>
+    <string name="setting_menu_app_backup">어플리케이션 데이터 백업</string>
     <string name="setting_menu_app_info">시제 깡들리티 정보</string>
 
     <!-- BattleView Strings -->
@@ -708,6 +709,16 @@
     <string name="equipinfo_export_title">제공권시뮬레이터 내보내기</string>
     <string name="equipinfo_export_clipboard">클립보드에 복사</string>
     <string name="equipinfo_export_openpage2">제공권 시뮬레이터 열기</string>
+
+    <string name="action_appbackup">데이터 백업 및 복구</string>
+    <string name="backup_export_label">앱 데이터 백업</string>
+    <string name="backup_export_desc">드랍 기록/자원 기록/퀘스트 추적 등의 앱 데이터를 파일로 내보냅니다. 백업 전 백업 파일을 꼭 PC로 옮겨두세요! 백업 경로는 다음과 같습니다: /android/data/com.antest1.kcanotify/files/backup</string>
+    <string name="backup_export_button">백업 파일 내보내기</string>
+    <string name="backup_list_label">백업 파일 목록</string>
+    <string name="backup_dialog_import_title">백업 파일로부터 복구</string>
+    <string name="backup_dialog_import_msg" formatted="false">기존의 데이터가 덮어씌워집니다! 다음 파일로부터 데이터를 복구하시겠습니까: %s?</string>
+    <string name="backup_dialog_delete_title">백업 파일 삭제</string>
+    <string name="backup_dialog_delete_msg" formatted="false">해당 파일을 정말 삭제하시겠습니까: %s?</string>
 
     <string name="text_api_houg">화력</string>
     <string name="text_api_raig">뇌장</string>

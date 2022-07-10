@@ -263,6 +263,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_app_title_enable_acra">啟用崩潰報錯系統(ACRA)</string>
     <string name="setting_menu_app_desc_enable_acra">當應用崩潰時將會打開報錯用電郵</string>
     <string name="setting_menu_app_desc_inspector">查詢資料庫及選項數據</string>
+    <string name="setting_menu_app_backup">備份應用程序數據</string>
     <string name="setting_menu_app_info">關於Kcanotify</string>
 
     <!-- BattleView Strings -->
@@ -715,6 +716,16 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="equipinfo_export_title">匯出到 制空權模擬器</string>
     <string name="equipinfo_export_clipboard">复制到剪贴板</string>
     <string name="equipinfo_export_openpage2">開啟制空權模擬器</string>
+
+    <string name="action_appbackup">備份和恢復應用數據</string>
+    <string name="backup_export_label">備份數據</string>
+    <string name="backup_export_desc">導出應用程序數據例如掉落紀錄/資源紀錄/任務跟踪/等。請務必在備份前將備份文件移動到 PC！該文件將位於：/android/data/com.antest1.kcanotify/files/backup</string>
+    <string name="backup_export_button">導出備份文件</string>
+    <string name="backup_list_label">備份文件列表</string>
+    <string name="backup_dialog_import_title">從備份文件恢復</string>
+    <string name="backup_dialog_import_msg" formatted="false">現有數據將被覆蓋！您確定要從文件中恢復數據嗎？ : %s?</string>
+    <string name="backup_dialog_delete_title">刪除備份文件</string>
+    <string name="backup_dialog_delete_msg" formatted="false">您確定要刪除文件嗎？ : %s</string>
 
     <string name="text_api_houg">火力</string>
     <string name="text_api_raig">雷裝</string>
