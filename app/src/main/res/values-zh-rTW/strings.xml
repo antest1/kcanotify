@@ -694,7 +694,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="packagefilter_count_format" formatted="false">總計：%d</string>
     <string name="packagefilter_restart">更改設定後妳需要重新啟用VPN來使設定生效</string>
-    <string name="setting_menu_sniffer_title_head">Sniffer設定</string>
+    <string name="setting_menu_sniffer_title_head">Sniffer(ACTIVE)設定</string>
     <string name="setting_menu_sniffer_title_package_allow">於其他應用程式中使用Sniffer</string>
     <string name="setting_menu_sniffer_title_extfilter_use">启用進階IP篩選</string>
     <string name="setting_menu_sniffer_desc_package_allow">為使用其他瀏覽器遊玩艦これ的提督而設</string>

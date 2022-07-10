@@ -687,7 +687,7 @@
 
     <string name="packagefilter_count_format" formatted="false">합계: %d</string>
     <string name="packagefilter_restart">해당 설정을 적용하기 위해서는 VPN을 재시작하여야 합니다.</string>
-    <string name="setting_menu_sniffer_title_head">스니퍼 설정</string>
+    <string name="setting_menu_sniffer_title_head">스니퍼(ACTIVE) 설정</string>
     <string name="setting_menu_sniffer_title_package_allow">다른 어플리케이션에 스니퍼 적용</string>
     <string name="setting_menu_sniffer_title_extfilter_use">확장 IP 필터 사용</string>
     <string name="setting_menu_sniffer_desc_package_allow">다른 브라우저로 칸코레를 플레이하는 경우</string>

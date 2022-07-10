@@ -316,7 +316,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_app_backup">Backup App Data</string>
     <string name="setting_menu_app_info">About kcanotify</string>
 
-    <string name="setting_menu_sniffer_title_head">Sniffer Settings</string>
+    <string name="setting_menu_sniffer_title_head">Sniffer(ACTIVE) Settings</string>
     <string name="setting_menu_sniffer_title_package_allow">Use Sniffer for Other Applications</string>
     <string name="setting_menu_sniffer_title_extfilter_use">Use extended IP Filter</string>
     <string name="setting_menu_sniffer_desc_package_allow">For users playing the KanColle with other browsers</string>

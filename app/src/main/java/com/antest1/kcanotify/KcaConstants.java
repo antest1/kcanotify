@@ -470,6 +470,7 @@ public final class KcaConstants {
     public static final String PREF_TIMER_WIDGET_STATE = "timer_widget_state";
     public static final String PREF_DATALOAD_ERROR_FLAG = "dataload_error_flag";
     public static final String PREF_FIX_VIEW_LOC = "fix_view_loc";
+    public static final String PREF_SCREEN_SNIFFER_ALLOW = "kca_sniffer_allow";
     public static final String PREF_SCREEN_ADV_NETWORK = "adv_network_setting";
     public static final String PREF_LAST_QUEST_CHECK = "last_quest_check";
     public static final String PREF_KCAQSYNC_USE = "kcaqsync_use";

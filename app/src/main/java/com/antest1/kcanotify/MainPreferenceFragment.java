@@ -50,6 +50,7 @@ import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_FAIRYSIZE_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_LANGUAGE_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_PRIORITY_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
+import static com.antest1.kcanotify.KcaConstants.PREF_ALLOW_EXTFILTER;
 import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
 import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
@@ -63,8 +64,10 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
 import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
 import static com.antest1.kcanotify.KcaConstants.PREF_SCREEN_ADV_NETWORK;
+import static com.antest1.kcanotify.KcaConstants.PREF_SCREEN_SNIFFER_ALLOW;
 import static com.antest1.kcanotify.KcaConstants.PREF_SNIFFER_MODE;
 import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
+import static com.antest1.kcanotify.KcaConstants.SNIFFER_ACTIVE;
 import static com.antest1.kcanotify.KcaConstants.SNIFFER_PASSIVE;
 import static com.antest1.kcanotify.KcaConstants.VPN_STOP_REASON;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
@@ -132,6 +135,8 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             }
             preference.setOnPreferenceChangeListener(this);
         }
+        int sniffer_mode = Integer.parseInt(sharedPref.getString(PREF_SNIFFER_MODE, "0"));
+        setActiveSnifferSettingEnabled(sniffer_mode == SNIFFER_ACTIVE);
     }
 
     @Override
@@ -341,9 +346,14 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             if (!KcaService.getServiceStatus()) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
                 String val = (String) newValue;
-                if (Integer.parseInt(val) == SNIFFER_PASSIVE && prefs.getBoolean(PREF_VPN_ENABLED, false)) {
-                    KcaVpnService.stop(VPN_STOP_REASON, getActivity());
-                    prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                if (Integer.parseInt(val) == SNIFFER_PASSIVE) {
+                    if (prefs.getBoolean(PREF_VPN_ENABLED, false)) {
+                        KcaVpnService.stop(VPN_STOP_REASON, getActivity());
+                        prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                    }
+                    setActiveSnifferSettingEnabled(false);
+                } else if (Integer.parseInt(val) == SNIFFER_ACTIVE) {
+                    setActiveSnifferSettingEnabled(true);
                 }
             } else {
                 showToast(getActivity(), "Cannot change while service is running.", Toast.LENGTH_SHORT);
@@ -426,6 +436,12 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             e.printStackTrace();
             return "???";
         }
+    }
+
+    private void setActiveSnifferSettingEnabled(boolean enabled) {
+        findPreference(PREF_SCREEN_SNIFFER_ALLOW).setEnabled(enabled);
+        findPreference(PREF_ALLOW_EXTFILTER).setEnabled(enabled);
+        findPreference(PREF_SCREEN_ADV_NETWORK).setEnabled(enabled);
     }
 
     private boolean checkActivityValid() {

@@ -690,7 +690,7 @@
 
     <string name="packagefilter_count_format" formatted="false">Total: %d</string>
     <string name="packagefilter_restart">Debe reinicar el servicio VPN para hacer estas opciones efectivas.</string>
-    <string name="setting_menu_sniffer_title_head">Ajustes del Sniffer</string>
+    <string name="setting_menu_sniffer_title_head">Ajustes del Sniffer(ACTIVE)</string>
     <string name="setting_menu_sniffer_title_package_allow">Usar Sniffer para otras aplicaciones</string>
     <string name="setting_menu_sniffer_title_extfilter_use">Usar Filtro de IP extendida</string>
     <string name="setting_menu_sniffer_desc_package_allow">Para usuarios jugando KanColle con otros navegadores</string>

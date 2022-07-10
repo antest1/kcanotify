@@ -28,6 +28,17 @@
             android:title="@string/setting_menu_kand_title_kancolle_app" />
 
         <ListPreference
+            android:id="@+id/sniffer_mode_value"
+            app:iconSpaceReserved="false"
+            android:defaultValue="0"
+            android:entries="@array/snifferOption"
+            android:entryValues="@array/snifferOptionValue"
+            android:key="kca_sniffer_mode"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/setting_menu_kand_title_sniffer_type" />
+
+        <ListPreference
             android:id="@+id/seek_type_value"
             app:iconSpaceReserved="false"
             android:defaultValue="1"
@@ -163,16 +174,6 @@
     <PreferenceCategory
         android:title="@string/setting_menu_sniffer_title_head"
         app:iconSpaceReserved="false">
-        <ListPreference
-            android:id="@+id/sniffer_mode_value"
-            app:iconSpaceReserved="false"
-            android:defaultValue="0"
-            android:entries="@array/snifferOption"
-            android:entryValues="@array/snifferOptionValue"
-            android:key="kca_sniffer_mode"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            android:title="@string/setting_menu_kand_title_sniffer_type" />
 
         <Preference
             android:defaultValue=""
