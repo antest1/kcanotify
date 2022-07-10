@@ -136,18 +136,26 @@ public class KcaBattle {
     public static String currentEnemyDeckName = "";
 
     public static int checkHeavyDamagedExist() {
+        boolean[] dcusedflag = new boolean[7];
+
+        if (damecon_used.size() > 0) {
+            for (int i = 0; i < damecon_used.size(); i++) {
+                String[] pair = damecon_used.get(i).getAsString().split("_");
+                int index = Integer.parseInt(pair[1]);
+                dcusedflag[index] = true;
+            }
+        }
+
         int status = HD_NONE;
         for (int i = 0; i < friendMaxHps.size(); i++) {
             if (!checkhdmgflag[i]) continue;
             if (friendNowHps.get(i).getAsInt() * 4 <= friendMaxHps.get(i).getAsInt()
                     && !escapelist.contains(new JsonPrimitive(i + 1))) {
-                if (dameconflag[i]) {
-                    status = Math.max(status, HD_DAMECON);
+                if (dameconflag[i] && !dcusedflag[i]) {
+                    status = HD_DAMECON;
                 } else {
-                    status = Math.max(status, HD_DANGER);
-                    if (status == HD_DANGER) {
-                        return status;
-                    }
+                    status = HD_DANGER;
+                    return status;
                 }
             }
         }
@@ -155,18 +163,30 @@ public class KcaBattle {
     }
 
     public static int checkCombinedHeavyDamagedExist() {
+        boolean[] dcusedflag = new boolean[7];
+        boolean[] dccbusedflag = new boolean[7];
+
+        if (damecon_used.size() > 0) {
+            for (int i = 0; i < damecon_used.size(); i++) {
+                String[] pair = damecon_used.get(i).getAsString().split("_");
+                boolean is_combined = Integer.parseInt(pair[0]) > 0;
+                int index = Integer.parseInt(pair[1]);
+
+                if (is_combined) dccbusedflag[index] = true;
+                else dcusedflag[index] = true;
+            }
+        }
+
         int status = HD_NONE;
         for (int i = 0; i < friendMaxHps.size(); i++) {
             if (!checkhdmgflag[i]) continue;
             if (friendNowHps.get(i).getAsInt() * 4 <= friendMaxHps.get(i).getAsInt()
                     && !escapelist.contains(new JsonPrimitive(i + 1))) {
-                if (dameconflag[i]) {
-                    status = Math.max(status, HD_DAMECON);
+                if (dameconflag[i] && !dcusedflag[i]) {
+                    status = HD_DAMECON;
                 } else {
-                    status = Math.max(status, HD_DANGER);
-                    if (status == HD_DANGER) {
-                        return status;
-                    }
+                    status = HD_DANGER;
+                    return status;
                 }
             }
         }
@@ -174,13 +194,11 @@ public class KcaBattle {
             if (!checkhdmgcbflag[i]) continue;
             if (friendCbNowHps.get(i).getAsInt() * 4 <= friendCbMaxHps.get(i).getAsInt() &&
                     !escapecblist.contains(new JsonPrimitive(i + 1))) {
-                if (dameconcbflag[i]) {
-                    status = Math.max(status, HD_DAMECON);
+                if (dameconcbflag[i] && !dccbusedflag[i]) {
+                    status = HD_DAMECON;
                 } else {
-                    status = Math.max(status, HD_DANGER);
-                    if (status == HD_DANGER) {
-                        return status;
-                    }
+                    status = HD_DANGER;
+                    return status;
                 }
             }
         }
@@ -887,7 +905,6 @@ public class KcaBattle {
 
                 int checkcbresult = checkCombinedHeavyDamagedExist();
                 Log.e("KCA", "hd: " + String.valueOf(checkcbresult));
-                damecon_used = new JsonArray();
 
                 currentMapArea = api_data.get("api_maparea_id").getAsInt();
                 currentMapNo = api_data.get("api_mapinfo_no").getAsInt();
@@ -955,6 +972,8 @@ public class KcaBattle {
                 enemyMaxHps = KcaUtils.parseJson(enemyMaxHpsData).getAsJsonArray();
                 enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
                 enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
+
+                damecon_used = new JsonArray();
 
                 // 기항대분식항공전 Stage 3
                 if (isKeyExist(api_data, "api_air_base_injection")) {
@@ -1131,6 +1150,8 @@ public class KcaBattle {
                 enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
                 enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
 
+                damecon_used = new JsonArray();
+
                 // 기항대분식항공전 Stage 3
                 if (isKeyExist(api_data, "api_air_base_injection")) {
                     calculateAirBattle(api_data.getAsJsonObject("api_air_base_injection"));
@@ -1187,6 +1208,8 @@ public class KcaBattle {
                 enemyMaxHps = KcaUtils.parseJson(enemyMaxHpsData).getAsJsonArray();
                 enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
                 enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
+
+                damecon_used = new JsonArray();
 
                 // 기항대분식항공전 Stage 3
                 if (isKeyExist(api_data, "api_air_base_injection")) {
@@ -1394,6 +1417,8 @@ public class KcaBattle {
                 friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
                 friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
 
+                damecon_used = new JsonArray();
+
                 // 기항대분식항공전 Stage 3
                 if (isKeyExist(api_data, "api_air_base_injection")) {
                     calculateAirBattle(api_data.getAsJsonObject("api_air_base_injection"));
@@ -1500,6 +1525,8 @@ public class KcaBattle {
                 enemyMaxHps = KcaUtils.parseJson(enemyMaxHpsData).getAsJsonArray();
                 enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
                 enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
+
+                damecon_used = new JsonArray();
 
                 if (isKeyExist(api_data, "api_f_maxhps_combined")) {
                     String friendCbMaxHpsData = api_data.getAsJsonArray("api_f_maxhps_combined").toString();
@@ -1637,6 +1664,8 @@ public class KcaBattle {
                 friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
                 friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
 
+                damecon_used = new JsonArray();
+
                 // 기항대분식항공전 Stage 3
                 if (isKeyExist(api_data, "api_air_base_injection")) {
                     calculateAirBattle(api_data.getAsJsonObject("api_air_base_injection"));
@@ -1704,6 +1733,8 @@ public class KcaBattle {
                 friendCbNowHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
                 friendCbAfterHps = KcaUtils.parseJson(friendCbNowHpsData).getAsJsonArray();
 
+                damecon_used = new JsonArray();
+
                 // 야간지원함대
                 if (isKeyExist(api_data, "api_n_support_info")) {
                     JsonObject support_info = api_data.getAsJsonObject("api_n_support_info");
@@ -1757,6 +1788,8 @@ public class KcaBattle {
                 ship_eslot = api_data.getAsJsonArray("api_eSlot");
                 ship_eslot_combined = api_data.getAsJsonArray("api_eSlot_combined");
                 currentEnemyFormation = api_data.getAsJsonArray("api_formation").get(1).getAsInt();
+
+                damecon_used = new JsonArray();
 
                 JsonArray activeDeckData = api_data.getAsJsonArray("api_active_deck");
                 int[] activedeck = {0, 0};
@@ -1855,6 +1888,8 @@ public class KcaBattle {
                 enemyMaxHps = KcaUtils.parseJson(enemyMaxHpsData).getAsJsonArray();
                 enemyNowHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
                 enemyAfterHps = KcaUtils.parseJson(enemyNowHpsData).getAsJsonArray();
+
+                damecon_used = new JsonArray();
 
                 boolean friend_searchlight;
                 if (isKeyExist(api_data, "api_f_maxhps_combined")) {
