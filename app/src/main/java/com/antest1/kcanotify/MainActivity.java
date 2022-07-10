@@ -474,10 +474,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, SettingActivity.class));
             return true;
         }
-        if (id == R.id.action_errorlog) {
-            startActivity(new Intent(this, ErrorlogActivity.class));
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 

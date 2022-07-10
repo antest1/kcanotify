@@ -445,6 +445,16 @@
         <Preference
             android:defaultValue=""
             app:iconSpaceReserved="false"
+            android:key="app_error_log"
+            android:title="@string/action_errorlog">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.antest1.kcanotify"
+                android:targetClass="com.antest1.kcanotify.ErrorlogActivity" />
+        </Preference>
+        <Preference
+            android:defaultValue=""
+            app:iconSpaceReserved="false"
             android:key="app_inspector"
             android:summary="@string/setting_menu_app_desc_inspector"
             android:title="@string/action_inspector">
