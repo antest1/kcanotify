@@ -124,7 +124,6 @@
 
     <string-array name="ServerLocation" translatable="false">
         <item>WolfgangKurz Artworks</item>
-        <item>NOVA Server</item>
         <item>LIZA Server</item>
     </string-array>
 
