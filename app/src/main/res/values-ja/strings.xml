@@ -235,7 +235,7 @@
     <string name="setting_menu_app_desc_enable_acra">Crash発生時メールクライアントが開きます</string>
     <string name="setting_menu_app_desc_inspector">内部プロパティ、データベース情報</string>
     <string name="setting_menu_app_backup">アプリデータのバックアップ</string>
-    <string name="setting_menu_app_info">About Kcanotify</string>
+    <string name="setting_menu_app_info">Kcanotifyについて</string>
 
     <!-- BattleView Strings -->
     <string name="battleview_error">処理中エラーが発生しました。</string>
@@ -417,12 +417,7 @@
     <string name="current_fairy_changed_in_next">※現在戦闘予報/任務情報が終わった後に変更されます。</string>
     <string name="setting_menu_app_title_down">APKダウンロードサイトの設定</string>
     <string name="language_system">システム設定を使用</string>
-    <string name="item_engine">ネ式エンジン</string>
-    <string name="item_gmi_material">新型砲熕兵装資材</string>
-    <string name="item_skilled_crew">熟練搭乗員</string>
-    <string name="item_kouku_material">新型航空兵装資材</string>
-    <string name="item_action_report">戦闘詳報</string>
-    <string name="item_rocket_material">新型噴進装備開発資材</string>
+
     <string name="setting_menu_kand_desc_bypass_address">CIDR形式でプロキシを使用しないアドレスを設定 (各CIDRはカンマで区切って)</string>
     <string name="settings_menu_kand_title_bypass_address">例外リスト</string>
     <string name="setting_menu_kand_warn_adv_network">警告：これらの設定を正しくしていない場合は、Snifferが動作しないことがあります。この設定が何をするかわからない場合は設定しないでください。設定を適用するためには、Sniffer(VPN)を再起動してください。</string>
