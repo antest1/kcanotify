@@ -792,10 +792,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="backup_export_desc">Export app data such as drop log/resource log/quest track/etc. Make sure to move your backup file to PC before backup! The file will be located in: /android/data/com.antest1.kcanotify/files/backup</string>
     <string name="backup_export_button">EXPORT BACKUP FILE</string>
     <string name="backup_list_label">Backup File List</string>
-    <string name="backup_msg_export_done" translatable="false">Exported to: </string>
-    <string name="backup_msg_export_error" translatable="false">An error occurred when exporting backup file.</string>
-    <string name="backup_msg_import_done" translatable="false">Imported from </string>
-    <string name="backup_msg_import_error" translatable="false">An error occurred when importing from backup file.</string>
+    <string name="backup_msg_export_done" translatable="false">Exported to:&#160;;</string>
+    <string name="backup_msg_export_error" translatable="false">An error occurred when exporting backup file.\n\n</string>
+    <string name="backup_msg_import_done" translatable="false">Imported from:&#160;</string>
+    <string name="backup_msg_import_error" translatable="false">An error occurred when importing from backup file.\n\n</string>
     <string name="backup_msg_delete" translatable="false">Deleted </string>
     <string name="backup_dialog_import_title">Restore from Backup File</string>
     <string name="backup_dialog_import_msg" formatted="false">Existing data will be overwritten! Are you sure to restore data from file %s?</string>

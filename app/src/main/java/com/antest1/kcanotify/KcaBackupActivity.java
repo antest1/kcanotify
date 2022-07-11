@@ -145,7 +145,9 @@ public class KcaBackupActivity extends AppCompatActivity {
                 for (String name: db_paths) {
                     File src = new File(getDatabasePath(name).getAbsolutePath());
                     File dst = new File(exportPath.concat("/").concat(name));
-                    KcaUtils.copyFile(new FileInputStream(src), new FileOutputStream(dst));
+                    if (src.exists()) {
+                        KcaUtils.copyFile(new FileInputStream(src), new FileOutputStream(dst));
+                    }
                 }
 
                 ZipFile zipFile = new ZipFile(exportPath.concat(".zip"));
@@ -161,7 +163,7 @@ public class KcaBackupActivity extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                return "Error";
+                return KcaUtils.getStringFromException(e);
             }
         }
 
@@ -194,7 +196,9 @@ public class KcaBackupActivity extends AppCompatActivity {
                 for (String name: db_paths) {
                     File src = new File(exportFolder.getAbsolutePath().concat("/").concat(name));
                     File dst = new File(getDatabasePath(name).getAbsolutePath());
-                    KcaUtils.copyFile(new FileInputStream(src), new FileOutputStream(dst));
+                    if (src.exists()) {
+                        KcaUtils.copyFile(new FileInputStream(src), new FileOutputStream(dst));
+                    }
                 }
 
                 for (File file: exportFolder.listFiles()) {
@@ -206,7 +210,7 @@ public class KcaBackupActivity extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                return "Error";
+                return KcaUtils.getStringFromException(e);
             }
         }
 
