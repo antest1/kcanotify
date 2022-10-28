@@ -1617,6 +1617,48 @@
         "desc": "Sortie a fleet with Isonami Kai Ni and up to 5 additional ships to [W1-2], [W1-3] and [W5-1]. S-Rank each boss node.",
         "memo": "\u27a3Rewards: \u00B6First choice: Either nine Buckets OR a New Model Artillery Armament Materials OR a Reinforcement Expansion \u00B6Second choice: Either a 12.7cm Twin Gun Mount Model A Kai Ni OR two 61cm Triple (Oxygen) Torpedo Mount OR nine Development Materials"
     },
+	"976": {
+        "code": "B181",
+        "name": "Remodeled Yamato-class Battleship Yamato Kai Ni, Sortie!",
+        "desc": "Sortie a fleet with Yamato Kai Ni (Juu) as flagship, 1 CL, 2 DD and up to 2 additional ships to [W1-4], [W2-5], [W5-1] and [W4-4]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either ten Buckets OR two New Model Artillery Armament Materials OR a Reinforcement Expansion \u00B6Second choice: Either a Prototype 51cm Twin Gun Mount OR a \u2605+2 15.5cm Triple Secondary Gun Mount Kai Ni OR a 10cm Twin High-angle Gun Mount Battery Concentrated Deployment"
+    },
+    "977": {
+        "code": "B182",
+        "name": "Kill on sight! Most Elite Yamato-class 1st Squadron, Weigh Anchor!",
+        "desc": "Sortie a fleet with Yamato Kai Ni (Juu), Musashi Kai Ni, 2 DD and up to 2 additional ships to [W4-5], [W5-3], [W7-2-M] and [W6-5]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either a Blueprint OR a Action Report OR a 10cm Twin High-angle Gun Mount Battery Concentrated Deployment \u00B6Second choice: Either a 15m Duplex Rangefinder + Type 21 Air Radar Kai Ni OR a \u2605+8 46cm Triple Gun Mount Kai OR two \u2605+2 15.5cm Triple Secondary Gun Mount Kai Ni"
+    },
+    "978": {
+        "code": "B183",
+        "name": "Extra Operation Heavy Remodel Yamato Kai Ni Juu, Sortie!",
+        "desc": "Sortie a fleet with Yamato Kai Ni Juu as flagship and up to 5 additional ships to [W7-3-P], [W7-4], [W5-5] and [W6-4]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either two Mamiya OR two New Model Armament Materials OR eight Screws \u00B6Second choice: Either a 15m Duplex Rangefinder Kai + Type 21 Air Radar Kai Ni + Skilled Fire Direction Center OR a Prototype 51cm Triple Gun Mount OR a \u2605+2 10cm Twin High-angle Gun Mount Battery Concentrated Deployment"
+    },
+    "980": {
+        "code": "B184",
+        "name": "Powerful DesDiv15, Weigh Anchor!",
+        "desc": "Sortie a fleet with any two of Hayashio Kai Ni, Oyashio Kai Ni or Kuroshio Kai Ni and up to 4 additional ships to [W2-4], [W5-4], [W5-5] and [W6-4]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either a Furniture Fairy OR a Reinforcement Expansion OR a Medal \u00B6Second choice: Either an Action Report OR a 12.7cm Twin Gun Mount Model C Kai 3 OR a 61cm Quadruple (Oxygen) Torpedo Mount Late Model"
+    },
+    "981": {
+        "code": "B185",
+        "name": "The Struggling Battle of the US Destroyer Force",
+        "desc": "Sortie a fleet with at least two Fletcher-class or John C. Butler-class DDs and up to 4 additional ships to [W2-3], [W6-4], [W7-3-P] and [W7-4]. S-Rank each boss node twice.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either two Furniture Fairy OR two Mamiya OR seven Screws \u00B6Second choice: Either four 5inch Single Gun Mount Mk.30 OR a GFCS Mk.37"
+    },
+    "982": {
+        "code": "B186",
+        "name": "Samuel B. Roberts Mk.II, Weigh Anchor!",
+        "desc": "Sortie a fleet with Samuel B. Roberts Mk.II as flagship and up to 5 additional ships to [W1-5], [W1-6-N], [W2-2] and [W3-5]. S-Rank all relevant boss nodes.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either six Buckets OR seven Screws \u00B6Second choice: Either two New Model Armament Material OR two 5inch Single Gun Mount Mk.30 OR a Medal"
+    },
+    "983": {
+        "code": "B187",
+        "name": "Unyielding Taffy Ⅲ, Weigh Anchor!",
+        "desc": "Sortie a fleet with Gambier Bay, Johnston, Samuel B. Roberts and up to 3 additional ships to [W2-3], [W2-5], [W4-5] and [W5-5]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards a Mk.32 ASW Torpedo (Mk.2 Thrower) and either two Reinforcement Expansions OR a \u2605+7 FM-2 OR seven Screws"
+    },
 
 	"201": {
 		"code": "Bd1",
@@ -2296,6 +2338,18 @@
         "name": "Annual DesDiv 19 Excercises - May",
         "desc": "Secure 3 S-Rank victories in Exercises within the same day using Isonami Kai Ni, Uranami Kai Ni, Ayanami Kai Ni, Shikinami Kai Ni and up to 2 additional ships.",
         "memo": "This quest resets on the first quest reset of May. \u203bElite DesDiv 19 Exercises! \u27a3Rewards: \u00B6First choice: Either a Irako OR four Development Materials \u00B6Second choice: Either a \u2605+4 Skilled Lookouts OR a Mamiya OR three Screws"
+    },
+	"357": {
+        "code": "C66",
+        "name": "Annual 1st Squadron Exercises - June",
+        "desc": "Secure 3 S-Rank victories in Execises within the same day using Yamato, Musashi, 1 CL, 2 DD and up to 1 additional ship.",
+        "memo": "This quest resets on the first quest reset of June. \u203bYamato-class Battleship 1st Squadron Exercises, Begin! \u27a3Rewards: \u00B6First choice: Either two 15.5cm Triple Secondary Gun Mount OR a New Model Artillery Armament Materials OR six Development Materials \u00B6Second choice: Either a Mamiya OR two Type 21 Air Radar OR four Screws"
+    },
+    "358": {
+        "code": "C68",
+        "name": "[Taffy Ⅲ] This is a drill!",
+        "desc": "Secure 4 S-Rank victories in Execises within the same day using Samuel B. Roberts, Johnston, Gambier Bay and up to 3 additional ships.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either an Irako OR two Screws \u00B6Second choice: Either 10 Development Materials OR a TBF OR a SG Radar (Initial Model)"
     },
 
 	"313": {
@@ -3352,7 +3406,31 @@
         "desc": "Have three 35.6cm Twin Gun Mounts, 8 Flamethrowers and 800 bauxite. Scrap 3 Small Cal. Main Guns, 3 Medium Cal. Main Guns and 3 Secondary Guns.",
         "memo": "\u2718Consumes the items and resources. \u27a3Rewards: \u00B6First choice: Either a New Model Artillery Armament Materials OR a New Model Aviation Armament Materials OR five Development Materials \u00B6Second choice: Either a New Model Armament Materials OR a New Model Rocket Development Materials OR three Screws"
     },
-
+    "1115": {
+        "code": "F109",
+        "name": "New Equipment Development Plan II",
+        "desc": "Have two 46cm Triple Gun Mount, four Underway Resupplies and 2700 ammo. Scrap 3 Large Cal. Main Guns, 3 Secondary Guns, 3 Seaplane Recons.",
+        "memo": "\u2718Consumes the items and resources. \u27a3Rewards: \u00B6First choice: Either a New Model Artillery Armament Materials OR a New Model High Temperature High Pressure Boiler OR six Development Materials \u00B6Second choice: Either a New Model Armament Materials OR a New Model High Temperature High Pressure Boiler OR a Medal"
+    },
+    "1116": {
+        "code": "F110",
+        "name": "New Equipment Development Plan III",
+        "desc": "Have two Type 98 Reconnaissance Seaplane (Night Recon), 10 Flamethrowers and 2800 steel. Scrap 3 Seaplane Recons, 3 Seaplane Bombers and 3 Anti-Air Guns.",
+        "memo": "\u2718Consumes the items and resources. \u27a3Rewards: \u00B6First choice: Either eight Development Materials OR two Screws \u00B6Second choice: Either a New Model Aviation Material OR three Screws OR a Skilled Crew Member"
+    },
+    "1117": {
+        "code": "F111",
+        "name": "Deployment of a new Night Recon",
+        "desc": "Have a \u2605max Type 0 Reconnaissance Seaplane Model 11B, 13 Screws, 13 Development Materials and 3 Skilled Crew Members. Set Sendai Kai Ni or Yura Kai Ni as secretary with a \u2605max Type 98 Reconnaissance Seaplane (Night Recon) in her first slot.",
+        "memo": "\u2718Consumes the items. \u27a3Rewards a Type 0 Reconnaissance Seaplane Model 11B Kai (Night Recon)"
+    },
+    "1118": {
+        "code": "F112",
+        "name": "Hedgehog Deployment",
+        "desc": "Have 15 Development Materials, 2 New Model Armament Materials, 2 New Model Rocket Development Materials and 960 ammo. Set Samuel B. Roberts Mk.II as secretary with a 5inch Single Gun Mount Mk.30 in her first slot.",
+        "memo": "\u2718Consumes the items and resources. \u27a3Rewards a Hedgehog (Initial Model)"
+    },
+	
 	"701": {
 		"code": "G1",
 		"name": "The First Modernization!",
@@ -3545,23 +3623,40 @@
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
 	},
 	
-	"932": {
-        "code": "2204B1",
-        "name": "[Spring-Limited] The Springtime of Amatsukaze!",
-        "desc": "Sortie Amatsukaze as flagship, one of Tokitsukaze, Yukikaze or Hatsukaze as second ship, and up to 4 additional ships to [W2-2], [W2-3] and [W7-3-P]. A-Rank+ each boss node twice.",
-        "memo": "\u27a3 Rewards a Furniture Fairy and either six Buckets OR three Type 3 Depth Charge Projectors OR three Underway Replenishments"
+	"984": {
+        "code": "2210B1",
+        "name": "[Time-Limited] Fleet Pumpkin Festival, Let's Begin!",
+        "desc": "Sortie a fleet with any of Asashio, Hamanami, Nowaki, Yuudachi or Mizuho as flagship and up to 5 additional ships to [W1-3], [W1-4] and [W1-5]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: a Pumpkin and either four Buckets OR five Development Materials"
     },
-
-	"971": {
-        "code": "2204B2",
-        "name": "[Limited] 9th Anniversary Fleet, Set Sail!",
-        "desc": "Sortie a CL as flagship, 2 DD and up to 3 additional ships to [W1-1], [W1-2], [W1-3], [W1-4] and [W1-5]. S-Rank each boss node.",
-        "memo": "\u27a3 Rewards: \u00B6First choice: Either nine Development Materials OR nine Buckets \u00B6Second choice: Either three Type 99 Dive Bomber Model 22 OR a Type 99 Dive Bomber Model 22 (Skilled) OR a Reinforcement Expansion"
+    "985": {
+        "code": "2210B2",
+        "name": "[Time-Limited] Fleet Pumpkin Festival, Heading North!",
+        "desc": "Sortie a fleet with two of Mogami, Shigure, Michishio, Yamagumo, Asagumo and up to 4 additional ships to [W3-1], [W3-3] and [W3-5]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: two Pumpkins and either a Reinforcement Expansion OR three Irako"
     },
-    "972": {
-        "code": "2204B3",
-        "name": "[Limited] 9th Anniversary Fleet, Extra Operation!",
-        "desc": "Sortie a CVL as flagship, 2 DD and up to 3 additional ships to [W2-3], [W3-5], [W7-4] and [W6-4]. S-Rank each boss node.",
-        "memo": "\u27a3 Rewards either six New Model Aviation Armament Materials OR 3 Medals OR a 51cm Twin Gun Mount"
+    "986": {
+        "code": "2210B3",
+        "name": "[Time-Limited] Fleet Pumpkin Festival, Heading West!",
+        "desc": "Sortie a fleet with any of Roma, Libeccio, Grecale, Hayanami and Tama as flagship and up to 5 additional ships to [W4-2], [W4-3] and [W4-5]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: two Pumpkins and either six Screws OR two Mamiya"
+    },
+    "987": {
+        "code": "2210B4",
+        "name": "[First Class Quest] Fleet Pumpkin Festival, Extra Operation!",
+        "desc": "Sortie either Fusou and Yamashiro OR Ise and Hyuuga OR Isokaze, Hamakaze and Yukikaze, and up to 4 or 3 additional ships to [W6-2], [W6-3], [W6-4] and [W6-5]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: three Pumpkins and either a Ryuusei Kai (Skilled) OR two Skilled Deck Personnel"
+    },
+    "359": {
+        "code": "2210C1",
+        "name": "Halloween Special Exercise!",
+        "desc": "Secure 4 S-Rank victories in Exercises within the same day using three of Asashio, Yuudachi, Nowaki, Hamanami, Hayanami, Mizuho, I-47, Johnston and Brooklyn and up to 3 additional ships.",
+        "memo": "\u27a3Rewards:\n\u00B6First choice: Either a Mamiya OR five Flamethrowers OR three Screws \u00B6Second choice: Either a Pumpkin OR 4000 Fuel OR 4000 Ammo"
+    },
+    "1119": {
+        "code": "2210F1",
+        "name": "Weekly Cleaning up for Halloween!",
+        "desc": "Have four 35.6cm Twin Gun Mount, two Type 13 Air Radar and 1031 Furniture coins. Scrap 5 Small Caliber Main Guns, 5 Medium Caliber Main Guns and 5 Recon Seaplanes.",
+        "memo": "\u2718Consumes the items and resources. \u27a3Rewards: \u00B6First choice: Either a Pumpkin OR seven Flamethrowers OR seven Development Materials \u00B6Second choice: Either 2000 Bauxite OR a Mamiya OR a Pumpkin"
     }
 }

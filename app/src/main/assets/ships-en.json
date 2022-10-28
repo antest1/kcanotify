@@ -30,6 +30,8 @@
 		" バカンスmode-壊" :" V.M. - Damaged",
 		" 夏季上陸mode" :" Summer Landing Mode",
 		" 夏季上陸mode-壊" :" S.L.M - Damaged",
+		"III バカンスmode": "III Vacation Mode",
+		"III バカンスmode-壊": "III V.M. - Damaged",
 		"(哨戒機配備)"  : " (w/ Patrol Aircraft)",
 		"改-壊":" Kai - Damaged",
 		"-壊":" - Damaged",
@@ -343,6 +345,7 @@
 	"丹陽":"Dan Yang",
 	"八幡丸":"Yawata Maru",
 	"山汐丸":"Yamashio Maru",
+	"鵜来":"Ukuru",
 
 	"Верный":"Verniy",
 	"Гангут":"Gangut",
@@ -403,6 +406,11 @@
 	"Conte di Cavour":"Conte di Cavour",
 	"Victorious":"Victorious",
 	"Scamp":"Scamp",
+	"Langley":"Langley",
+	"Ranger": "Ranger",
+	"Massachusetts": "Massachusetts",
+	"Jean Bart": "Jean Bart",
+	"Brooklyn": "Brooklyn",
 
 	"防空棲姫":"Air Defense Princess",
 	"空母棲鬼":"Aircraft Carrier Demon",
@@ -524,6 +532,9 @@
 	"防空埋護冬姫":"Entombed Anti-Air Guardian Winter Princess",
 	"外南洋駆逐棲姫":"Outer Southern Sea Destroyer Princess",
 	"近代化戦艦棲姫":"Modernized Battleship Princess",
+	"高速軽空母水鬼":"High Speed Light Carrier Water Demon",
+	"試作空母姫": "Trial Aircraft Carrier Princess",
+  	"戦艦未完棲姫": "Incompleted Battelship Princesss",
 
 	"elite":" elite",
 	"flagship":" flagship"
