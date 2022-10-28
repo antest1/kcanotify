@@ -42,7 +42,6 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SHIPSTAT;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SPEQUIPS;
-import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
@@ -59,7 +58,6 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
     LinearLayout listview;
     public int count;
     public static SparseArray<String> sort_values = new SparseArray<>();
-    KcaDBHelper dbHelper;
 
     public ShipInfoFilterActivity() {
         LocaleUtils.updateConfig(this);
@@ -112,7 +110,7 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String pref_special_equips = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SPEQUIPS);
-        List<String> specialEquipsFilterList = new ArrayList<String>(Arrays.asList(pref_special_equips.split(",")));
+        List<String> specialEquipsFilterList = new ArrayList<>(Arrays.asList(pref_special_equips.split(",")));
 
         for (int i = 0; i < SPECIAL_EQUIPMENT_COUNT; i++) {
             final String key = KcaUtils.format("stype%d", i+1);
@@ -273,23 +271,20 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
         add_remove_btn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
 
-        add_remove_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listview.findViewWithTag(target).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.transparent));
-                ImageView im = (ImageView) view;
-                boolean is_add = (Boolean) im.getTag();
-                if (is_add) {
-                    im.setImageResource(R.mipmap.ic_remove_circle);
-                    im.setTag(false);
-                    makeAndFilterItem();
-                } else {
-                    if (sort_values.size() > 1) {
-                        removeViewByTag(target);
-                        sort_values.delete(target);
-                        listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
-                    }
+        add_remove_btn.setOnClickListener(view -> {
+            listview.findViewWithTag(target).setBackgroundColor(
+                    ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+            ImageView im = (ImageView) view;
+            boolean is_add = (Boolean) im.getTag();
+            if (is_add) {
+                im.setImageResource(R.mipmap.ic_remove_circle);
+                im.setTag(false);
+                makeAndFilterItem();
+            } else {
+                if (sort_values.size() > 1) {
+                    removeViewByTag(target);
+                    sort_values.delete(target);
+                    listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
                 }
             }
         });

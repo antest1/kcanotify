@@ -33,7 +33,9 @@ import com.google.gson.JsonArray;
 import java.util.Locale;
 
 import static android.widget.Toast.makeText;
+import static com.antest1.kcanotify.KcaApiData.getSpecialEquipmentInfo;
 import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
+import static com.antest1.kcanotify.KcaApiData.loadShipFilterDataFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
@@ -94,6 +96,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
         loadTranslationData(getApplicationContext());
+        loadShipFilterDataFromStorage(getApplicationContext());
 
         AssetManager assetManager = getAssets();
         int loadExpShipInfoResult = loadShipExpInfoFromAssets(assetManager);
@@ -166,7 +169,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         setButtonStyle(filterButton, filtcond.length() > 1
                 || special_equip.trim().length() > 0
                 || ship_status.trim().length() > 0);
-        adapter.setSpecialEquipment(KcaApiData.loadSpecialEquipmentShipInfo(getAssets()));
+        adapter.setSpecialEquipment(getSpecialEquipmentInfo());
         adapter.setListViewItemList(data, deckdata, sortkey, filtcond, special_equip, ship_status);
 
         totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));

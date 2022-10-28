@@ -60,6 +60,7 @@ public class KcaApiData {
 
     public static JsonObject kcShipAbbrData = new JsonObject(); // For English
     public static JsonObject kcExpeditionData = new JsonObject();
+    public static JsonObject kcShipFilterData = new JsonObject();
     public static JsonObject kcShipInitEquipCount = new JsonObject();
     public static Set<Integer> kcNotCountItemData = new HashSet<>();
     public static Set<Integer> kcTaisenOverPlaneItemData = new HashSet<>();
@@ -477,6 +478,10 @@ public class KcaApiData {
 
     public static int getItemSize() { return helper.getItemCount() + getItemCountInBattle; }
 
+    public static JsonObject getSpecialEquipmentInfo() {
+        return kcShipFilterData.getAsJsonObject("equip_special");
+    }
+
     private static JsonObject getJsonObjectFromStorage(Context context, String name) {
         return KcaUtils.getJsonObjectFromStorage(context, name, helper);
     }
@@ -499,6 +504,16 @@ public class KcaApiData {
         JsonObject data = getJsonObjectFromStorage(context, "map_sub.json");
         if (data != null) {
             helper.putValue(DB_KEY_MAPSUBDT, data.toString());
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    public static int loadShipFilterDataFromStorage(Context context) {
+        JsonObject data = getJsonObjectFromStorage(context, "ships_filter_data.json");
+        if (data != null) {
+            kcShipFilterData = data;
             return 1;
         } else {
             return -1;
@@ -656,24 +671,8 @@ public class KcaApiData {
         }
     }
 
-    public static JsonObject loadSpecialEquipmentShipInfo(AssetManager am) {
-        try {
-            AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("equip_special.json");
-            byte[] bytes = ByteStreams.toByteArray(ais);
-            JsonElement data = new JsonParser().parse(new String(bytes));
-            if (data.isJsonObject()) {
-                return data.getAsJsonObject();
-            } else {
-                return null;
-            }
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
     public static boolean isQuestTrackable(String id) {
         JsonObject kcQuestTrackData = helper.getJsonObjectValue(DB_KEY_QUESTTRACK);
-        int id_int = Integer.parseInt(id);
         return kcQuestTrackData.has(id);
     }
 
@@ -1086,8 +1085,12 @@ public class KcaApiData {
     }
 
     public static boolean isShipCVE(int id) {
-        int[] ship_cve = {380, 381, 396, 526, 529, 534, 536, 544, 560};
-        return Arrays.binarySearch(ship_cve, id) >= 0;
+        if (kcShipFilterData.has("cve_ids")) {
+            JsonArray ship_cve = kcShipFilterData.getAsJsonArray("cve_ids");
+            return ship_cve.contains(new JsonPrimitive(id));
+        } else {
+            return false;
+        }
     }
 
     public static void addUserShip(JsonObject api_data) {
