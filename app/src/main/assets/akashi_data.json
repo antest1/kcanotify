@@ -2228,6 +2228,14 @@
 			}
 		]
 	},
+	"409": {
+		"improvement": [{
+				"upgrade": false,
+				"req": [[[true, false, false, false, true, true, true], [621, 626]]],
+				"resource": [[60, 80, 10, 40], [3, 6, 3, 3, 38, 1], [4, 8, 4, 5, 346, 1], [0, 0, 0, 0, 0, 0]]
+			}
+		]
+	},
 	"414": {
 		"improvement": [{
 				"upgrade": [415, 0],
