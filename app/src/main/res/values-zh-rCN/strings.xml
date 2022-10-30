@@ -22,7 +22,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_name_kancolle">Android版本的舰これ (公式)</string>
     <string name="app_name_gotobrowser">GotoBrowser</string>
 
-    <string name="special_message">水无月和冰棒</string>
+    <string name="special_message">晓与万圣节</string>
     <string name="notification_message">通知和信息</string>
 
     <!-- Common Text -->
