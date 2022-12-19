@@ -1659,6 +1659,12 @@
         "desc": "Sortie a fleet with Gambier Bay, Johnston, Samuel B. Roberts and up to 3 additional ships to [W2-3], [W2-5], [W4-5] and [W5-5]. S-Rank each boss node.",
         "memo": "\u27a3Rewards a Mk.32 ASW Torpedo (Mk.2 Thrower) and either two Reinforcement Expansions OR a \u2605+7 FM-2 OR seven Screws"
     },
+	"989": {
+        "code": "B188",
+        "name": "Carrier Task Force Flagship Houshou Kai Ni, to the Front!",
+        "desc": "Sortie a fleet with Houshou Kai Ni (Sen) as flagship and up to 5 additional ships to [W2-5], [W3-5], [W4-5], [W5-2], [W6-4] and [W7-4]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards a Type 0 Fighter Model 64 (Air Superiority Fighter Specification) and either three Skilled Crew Members OR two Medals OR ten Screws"
+    },
 
 	"201": {
 		"code": "Bd1",
@@ -2351,15 +2357,21 @@
         "desc": "Secure 4 S-Rank victories in Execises within the same day using Samuel B. Roberts, Johnston, Gambier Bay and up to 3 additional ships.",
         "memo": "\u27a3Rewards: \u00B6First choice: Either an Irako OR two Screws \u00B6Second choice: Either 10 Development Materials OR a TBF OR a SG Radar (Initial Model)"
     },
+    "360": {
+        "code": "C70",
+        "name": "Frontline Aircraft Carrier Houshou Kai Ni, Begin Exercises!",
+        "desc": "Secure 5 S-Rank victories in Execises within the same day using Houshou Kai Ni (Sen), 3 DD and up to 2 additional ships.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either a Mamiya OR a Reinforcement Expansion OR a Skilled Crew Member \u00B6Second choice: Either a 10cm Twin High-angle Gun Mount Kai + Additional Machine Guns OR a Type 0 Fighter Model 64 (Air Superiority Fighter Specification)"
+    },
 
 	"313": {
-        "code": "C61",
+        "code": "C69",
         "name": "Mass Exercises for Fall",
         "desc": "Secure 8 victories in Exercises within the same day.",
         "memo": "\u27a3Rewards a Mamiya and a Present Box"
     },
     "314": {
-        "code": "C63",
+        "code": "C71",
         "name": "Mass Exercises for Winter",
         "desc": "Secure 8 victories in Exercises within the same day.",
         "memo": "\u27a3Rewards a Mamiya and a Present Box"
@@ -3430,6 +3442,12 @@
         "desc": "Have 15 Development Materials, 2 New Model Armament Materials, 2 New Model Rocket Development Materials and 960 ammo. Set Samuel B. Roberts Mk.II as secretary with a 5inch Single Gun Mount Mk.30 in her first slot.",
         "memo": "\u2718Consumes the items and resources. \u27a3Rewards a Hedgehog (Initial Model)"
     },
+	"1120": {
+        "code": "F113",
+        "name": "Annual Land Base Fighter - December",
+        "desc": "Have three Type 0 Fighter Model 21, three Type 0 Fighter Model 52 and 1800 bauxite. Scrap 4 Fighters, 4 Dive Bombers and 4 Torpedo Bombers.",
+        "memo": "This quest resets on the first quest reset of December. \u2718Consumes the items and resources. \u203b[Model Consolidation] Mass Production Plan For New Fighter \u27a3Rewards: \u00B6First choice: Either eight Development Materials OR a New Model Aerial Armament Material OR three Screws \u00B6Second choice: Either three Shiden Model 11 OR two Shiden Model 21 Shiden Kai OR two Prototype Reppuu Late Model"
+    },
 	
 	"701": {
 		"code": "G1",
@@ -3623,40 +3641,16 @@
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
 	},
 	
-	"984": {
-        "code": "2210B1",
-        "name": "[Time-Limited] Fleet Pumpkin Festival, Let's Begin!",
-        "desc": "Sortie a fleet with any of Asashio, Hamanami, Nowaki, Yuudachi or Mizuho as flagship and up to 5 additional ships to [W1-3], [W1-4] and [W1-5]. S-Rank each boss node.",
-        "memo": "\u27a3Rewards: a Pumpkin and either four Buckets OR five Development Materials"
+	"915": {
+        "code": "2212B1",
+        "name": "Time-Limited Mission: Fly! Seaplanes of the World!",
+        "desc": "Sortie an AV as flagship, 2 DD/DE and up to 3 additional ships to [W1-4], [W2-3] and [W2-4]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either two SOC Seagull OR two Ro.43 Reconnaissance Seaplane OR two Laté 298B \u00B6Second choice: Either two S9 Osprey OR two Swordfish (Seaplane Model) OR a Medal"
     },
-    "985": {
-        "code": "2210B2",
-        "name": "[Time-Limited] Fleet Pumpkin Festival, Heading North!",
-        "desc": "Sortie a fleet with two of Mogami, Shigure, Michishio, Yamagumo, Asagumo and up to 4 additional ships to [W3-1], [W3-3] and [W3-5]. S-Rank each boss node.",
-        "memo": "\u27a3Rewards: two Pumpkins and either a Reinforcement Expansion OR three Irako"
-    },
-    "986": {
-        "code": "2210B3",
-        "name": "[Time-Limited] Fleet Pumpkin Festival, Heading West!",
-        "desc": "Sortie a fleet with any of Roma, Libeccio, Grecale, Hayanami and Tama as flagship and up to 5 additional ships to [W4-2], [W4-3] and [W4-5]. S-Rank each boss node.",
-        "memo": "\u27a3Rewards: two Pumpkins and either six Screws OR two Mamiya"
-    },
-    "987": {
-        "code": "2210B4",
-        "name": "[First Class Quest] Fleet Pumpkin Festival, Extra Operation!",
-        "desc": "Sortie either Fusou and Yamashiro OR Ise and Hyuuga OR Isokaze, Hamakaze and Yukikaze, and up to 4 or 3 additional ships to [W6-2], [W6-3], [W6-4] and [W6-5]. S-Rank each boss node.",
-        "memo": "\u27a3Rewards: three Pumpkins and either a Ryuusei Kai (Skilled) OR two Skilled Deck Personnel"
-    },
-    "359": {
-        "code": "2210C1",
-        "name": "Halloween Special Exercise!",
-        "desc": "Secure 4 S-Rank victories in Exercises within the same day using three of Asashio, Yuudachi, Nowaki, Hamanami, Hayanami, Mizuho, I-47, Johnston and Brooklyn and up to 3 additional ships.",
-        "memo": "\u27a3Rewards:\n\u00B6First choice: Either a Mamiya OR five Flamethrowers OR three Screws \u00B6Second choice: Either a Pumpkin OR 4000 Fuel OR 4000 Ammo"
-    },
-    "1119": {
-        "code": "2210F1",
-        "name": "Weekly Cleaning up for Halloween!",
-        "desc": "Have four 35.6cm Twin Gun Mount, two Type 13 Air Radar and 1031 Furniture coins. Scrap 5 Small Caliber Main Guns, 5 Medium Caliber Main Guns and 5 Recon Seaplanes.",
-        "memo": "\u2718Consumes the items and resources. \u27a3Rewards: \u00B6First choice: Either a Pumpkin OR seven Flamethrowers OR seven Development Materials \u00B6Second choice: Either 2000 Bauxite OR a Mamiya OR a Pumpkin"
+	"988": {
+        "code": "2212B2",
+        "name": "[Christmas Limited Weekly] Patrol Line on Christmas Eve",
+        "desc": "Sortie a fleet with a CL(L/T) as flagship and up to 5 additional ships to [W1-2], [W1-3], [W1-5] and [W2-1]. S-Rank each boss node.",
+        "memo": "\u27a3Rewards: \u00B6First choice: Either four Buckets OR five Development Materials OR 600 Fuel \u00B6Second choice: Either an Irako OR 800 Steel OR three Screws"
     }
 }
