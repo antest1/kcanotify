@@ -21,7 +21,7 @@ Download
 - [Direct Download](http://luckyjervis.com/kcanotify/apk/) 
 - [Github Releases](https://github.com/antest1/kcanotify/releases) (All versions)
 - [kcwiki mirror](https://mirrors.kcwiki.org/kcanotify/) (All versions)
-- [Google Drive](http://bit.ly/kcanotifydown) (Latest Version)
+- [Google Drive](http://bit.ly/kcanotify_gdrive) (Latest Version)
 - [MEGA](https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw) (All versions)
 
 Demo
