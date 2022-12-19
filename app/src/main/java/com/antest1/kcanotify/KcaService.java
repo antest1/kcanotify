@@ -191,12 +191,12 @@ public class KcaService extends Service {
 
     private void createServiceChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int priority = IMPORTANCE_DEFAULT;
+            NotificationChannel channel;
             if (getBooleanPreferences(getApplicationContext(), PREF_KCA_SET_PRIORITY)) {
-                priority = IMPORTANCE_HIGH;
+                channel = new NotificationChannel(getServiceChannelId(), SERVICE_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            } else {
+                channel = new NotificationChannel(getServiceChannelId(), SERVICE_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             }
-            NotificationChannel channel = new NotificationChannel(getServiceChannelId(),
-                    SERVICE_CHANNEL_NAME, priority);
             channel.enableVibration(false);
             channel.setSound(null, null);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
@@ -439,8 +439,9 @@ public class KcaService extends Service {
 
     private void initViewNotificationBuilder(String title, String content) {
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent;
+        pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         int type = KcaAlarmService.getAlarmCount() > 0 ? 1 : 0;
         String fairyId = "noti_icon_".concat(getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON));
@@ -468,7 +469,7 @@ public class KcaService extends Service {
     private void updateViewNotificationBuilder(String title, String content2) {
         Intent aIntent = new Intent(KcaService.this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(KcaService.this, 0, aIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         notifyBuilder.setContentTitle(title)
                 .setTicker(title)
@@ -551,7 +552,7 @@ public class KcaService extends Service {
                 getApplicationContext(),
                 getNotificationId(NOTI_EXP, idx),
                 aIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
         setAlarm(arrive_time, pendingIntent, getNotificationId(NOTI_EXP, idx), true);
     }
@@ -573,7 +574,7 @@ public class KcaService extends Service {
                 getApplicationContext(),
                 getNotificationId(NOTI_DOCK, dockId),
                 aIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
         setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_DOCK, dockId), true);
     }
@@ -589,7 +590,7 @@ public class KcaService extends Service {
                 getApplicationContext(),
                 getNotificationId(NOTI_MORALE, deckId),
                 aIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
         setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_DOCK, deckId), false);
@@ -603,7 +604,7 @@ public class KcaService extends Service {
                 getApplicationContext(),
                 getNotificationId(NOTI_AKASHI, 0),
                 aIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
         long complete_time = KcaAkashiRepairInfo.getAkashiRepairTime();
         if (complete_time > 0) setAlarm(complete_time, pendingIntent, getNotificationId(NOTI_AKASHI, 0), false);
@@ -2229,9 +2230,9 @@ public class KcaService extends Service {
                 Intent removeIntent = new Intent(this, KcaViewButtonService.class)
                         .setAction(REMOVE_FAIRY_ACTION);
                 PendingIntent returnPendingIntent = PendingIntent.getService(getApplicationContext(), 0,
-                        returnIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        returnIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
                 PendingIntent removePendingIntent = PendingIntent.getService(getApplicationContext(), 0,
-                        removeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        removeIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
                 notifyBuilder.addAction(new NotificationCompat.Action(0, getStringWithLocale(R.string.fairy_hidden_notification_action_return), returnPendingIntent))
                         .addAction(new NotificationCompat.Action(0, getStringWithLocale(R.string.fairy_hidden_notification_action_remove), removePendingIntent));
@@ -2556,7 +2557,7 @@ public class KcaService extends Service {
                             getApplicationContext(),
                             getNotificationId(NOTI_EXP, i),
                             new Intent(getApplicationContext(), KcaAlarmService.class),
-                            PendingIntent.FLAG_UPDATE_CURRENT
+                            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
                     );
                     pendingIntent.cancel();
                     alarmManager.cancel(pendingIntent);
@@ -2616,7 +2617,7 @@ public class KcaService extends Service {
                                 getApplicationContext(),
                                 getNotificationId(NOTI_DOCK, dockId),
                                 new Intent(getApplicationContext(), KcaAlarmService.class),
-                                PendingIntent.FLAG_UPDATE_CURRENT
+                                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
                         );
                         pendingIntent.cancel();
                         alarmManager.cancel(pendingIntent);
@@ -2643,7 +2644,7 @@ public class KcaService extends Service {
                 getApplicationContext(),
                 getNotificationId(NOTI_DOCK, dockId),
                 new Intent(getApplicationContext(), KcaAlarmService.class),
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
         pendingIntent.cancel();
         alarmManager.cancel(pendingIntent);
@@ -2665,7 +2666,7 @@ public class KcaService extends Service {
                     getApplicationContext(),
                     nid,
                     new Intent(getApplicationContext(), KcaAlarmService.class),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
             );
             pendingIntent.cancel();
             alarmManager.cancel(pendingIntent);
@@ -2680,7 +2681,7 @@ public class KcaService extends Service {
                 getApplicationContext(),
                 nid,
                 new Intent(getApplicationContext(), KcaAlarmService.class),
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
         pendingIntent.cancel();
         alarmManager.cancel(pendingIntent);

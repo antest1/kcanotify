@@ -100,7 +100,7 @@ public class KcaTimerWidget extends AppWidgetProvider {
             changeIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
             changeIntent.putExtra("menu", i + 1);
 
-            PendingIntent changePendingIntent = PendingIntent.getBroadcast(context, widgetId+10, changeIntent, 0);
+            PendingIntent changePendingIntent = PendingIntent.getBroadcast(context, widgetId+10, changeIntent, PendingIntent.FLAG_IMMUTABLE);
             views.setOnClickPendingIntent(menu_list[i], changePendingIntent);
         }
 

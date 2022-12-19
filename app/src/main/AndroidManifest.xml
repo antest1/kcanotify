@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
     <uses-permission android:name="com.antest1.kcasniffer.contentprovider.READ_DATA"/>
     <uses-permission android:name="com.antest1.gotobrowser.contentprovider.READ_DATA"/>
@@ -211,6 +212,7 @@
         </activity>
         <activity
             android:name="com.antest1.kcanotify.InitStartActivity"
+            android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -226,6 +228,7 @@
         </activity>
         <service
             android:name=".KcaService"
+            android:exported="true"
             android:configChanges="locale|layoutDirection" >
             <intent-filter>
                 <action android:name="com.antest1.kcasniffer.broadcast"/>
@@ -236,6 +239,7 @@
             android:name=".KcaAlarmService" />
         <service
             android:name=".KcaViewButtonService"
+            android:exported="true"
             android:configChanges="locale|layoutDirection">
             <intent-filter>
                 <action android:name="com.antest1.gotobrowser.foreground"/>
@@ -269,6 +273,7 @@
         <service
             android:name=".KcaVpnService"
             android:label="@string/app_vpn_name"
+            android:exported="true"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
@@ -288,6 +293,7 @@
 
         <receiver
             android:name=".KcaTimerWidget"
+            android:exported="true"
             android:label="@string/widget_timer_name">
             <meta-data
                 android:name="android.appwidget.provider"

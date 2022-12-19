@@ -156,7 +156,7 @@ public class KcaAlarmService extends Service {
                     Intent kcintent = getKcIntent(getApplicationContext());
                     if (kcintent != null) {
                         kcintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        PendingIntent pintent = PendingIntent.getActivity(getApplicationContext(), 0, kcintent, 0);
+                        PendingIntent pintent = PendingIntent.getActivity(getApplicationContext(), 0, kcintent, PendingIntent.FLAG_IMMUTABLE);
                         try {
                             pintent.send();
                         } catch (PendingIntent.CanceledException e) {
@@ -303,9 +303,11 @@ public class KcaAlarmService extends Service {
 
     private Notification createExpeditionNotification(int missionNo, String missionName, String kantaiName, boolean cancelFlag, boolean caFlag, int nid) {
         PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         String title = "";
         String content = "";
         String missionNoStr = KcaExpedition2.getExpeditionStr(missionNo);
@@ -349,9 +351,11 @@ public class KcaAlarmService extends Service {
 
     private Notification createDockingNotification(int dockId, String shipName, int nid) {
         PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))),
+                PendingIntent.FLAG_UPDATE_CURRENT| PendingIntent.FLAG_IMMUTABLE);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         String title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_dock_finished), dockId + 1);
         String content = "";
         if (shipName.length() > 0) {
@@ -389,9 +393,12 @@ public class KcaAlarmService extends Service {
 
     private Notification createMoraleNotification(int idx, String kantaiName, int nid) {
         PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class)
+                        .setAction(CLICK_ACTION.concat(String.valueOf(nid))),
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         String title = KcaUtils.format(getStringWithLocale(R.string.kca_noti_title_morale_recovered), idx + 1);
         String content = KcaUtils.format(getStringWithLocale(R.string.kca_noti_content_morale_recovered), kantaiName);
 
@@ -423,9 +430,13 @@ public class KcaAlarmService extends Service {
 
     private Notification createAkashiRepairNotification(int nid) {
         PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(CLICK_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class)
+                        .setAction(CLICK_ACTION.concat(String.valueOf(nid))),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class)
+                        .setAction(DELETE_ACTION.concat(String.valueOf(nid))),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         String title = getStringWithLocale(R.string.kca_noti_title_akashirepair_recovered);
         String content = getStringWithLocale(R.string.kca_noti_content_akashirepair_recovered);
 
@@ -457,9 +468,13 @@ public class KcaAlarmService extends Service {
 
     private Notification createUpdateNotification(int type, String version, int nid) {
         PendingIntent contentPendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(UPDATE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class)
+                        .setAction(UPDATE_ACTION.concat(String.valueOf(nid))),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         PendingIntent deletePendingIntent = PendingIntent.getService(this, 0,
-                new Intent(this, KcaAlarmService.class).setAction(DELETE_ACTION.concat(String.valueOf(nid))), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, KcaAlarmService.class)
+                        .setAction(DELETE_ACTION.concat(String.valueOf(nid))),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         int title_text_id;
         switch(type) {
