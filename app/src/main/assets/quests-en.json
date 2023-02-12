@@ -3448,7 +3448,13 @@
         "desc": "Have three Type 0 Fighter Model 21, three Type 0 Fighter Model 52 and 1800 bauxite. Scrap 4 Fighters, 4 Dive Bombers and 4 Torpedo Bombers.",
         "memo": "This quest resets on the first quest reset of December. \u2718Consumes the items and resources. \u203b[Model Consolidation] Mass Production Plan For New Fighter \u27a3Rewards: \u00B6First choice: Either eight Development Materials OR a New Model Aerial Armament Material OR three Screws \u00B6Second choice: Either three Shiden Model 11 OR two Shiden Model 21 Shiden Kai OR two Prototype Reppuu Late Model"
     },
-	
+	"1123": {
+		"code": "F114",
+		"name": "Annual Reconnaissance Seaplane - January",
+		"desc": "Have two New Model Aviation Armament Materials, two Skilled Crew Members and 35 Development Materials. Set Tone Kai Ni or Yura Kai Ni as secretary with a \u2605max Type 0 Reconnaissance Seaplane in her first slot. Scrap two Type 97 Torpedo Bomber (931 Air Group).",
+		"memo": "This quest resets on the first quest reset of January. \u2718Consumes the items and resources. \u203b Increasement of Improved 3-seat Reconnaissance Seaplane \u27a3 Rewards a Type 0 Reconnaissance Seaplane Model 11B"
+	},
+
 	"701": {
 		"code": "G1",
 		"name": "The First Modernization!",
@@ -3640,17 +3646,35 @@
         "desc": "Sortie Naganami as flagship, any 3 of DesDiv31 and up to 2 additional ships to [W2-1] and [W2-2]. S-Rank each boss node twice. Sortie to [W5-4]. A-Rank+ the boss node.",
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
 	},
-	
-	"915": {
-        "code": "2212B1",
-        "name": "Time-Limited Mission: Fly! Seaplanes of the World!",
-        "desc": "Sortie an AV as flagship, 2 DD/DE and up to 3 additional ships to [W1-4], [W2-3] and [W2-4]. S-Rank each boss node.",
-        "memo": "\u27a3Rewards: \u00B6First choice: Either two SOC Seagull OR two Ro.43 Reconnaissance Seaplane OR two Laté 298B \u00B6Second choice: Either two S9 Osprey OR two Swordfish (Seaplane Model) OR a Medal"
-    },
-	"988": {
-        "code": "2212B2",
-        "name": "[Christmas Limited Weekly] Patrol Line on Christmas Eve",
-        "desc": "Sortie a fleet with a CL(L/T) as flagship and up to 5 additional ships to [W1-2], [W1-3], [W1-5] and [W2-1]. S-Rank each boss node.",
-        "memo": "\u27a3Rewards: \u00B6First choice: Either four Buckets OR five Development Materials OR 600 Fuel \u00B6Second choice: Either an Irako OR 800 Steel OR three Screws"
-    }
+
+	"329": {
+		"code": "2301C1",
+		"name": "[Setsubun Mission] Setsubun Exercises 2023",
+		"desc": "Secure 3 S-Rank victories in Exercises within the same day using 2 CL/CT, 3 DD/DE and up to 1 additional ships.",
+		"memo": "\u27a3 Rewards one unit of Setsubun Beans"
+	},
+	"840": {
+		"code": "2301B5",
+		"name": "[Setsubun Mission] Setsubun Operation 2023",
+		"desc": "Sortie a CVL/CL(T)/CT as flagship, 3 DD/DE and up to 2 additional ships to [W1-3], [W1-4] and [W1-5]. A-Rank+ each boss node.",
+		"memo": "\u27a3 Rewards two units of Setsubun Beans and either four Buckets OR an Underway Replenishment OR six Development Materials"
+	},
+	"841": {
+		"code": "2301B6",
+		"name": "[Setsubun Mission] Southwestern Sea Setsubun Operation 2023",
+		"desc": "Sortie a fleet with 2 CAV/ 2 AV\u203b, one of them as flagship and up to 4 additional ships to [W7-2-M], [W7-3-P], [W7-4] and [W7-5-T]. S-Rank [W7-2-M], [W7-3-P] and [W7-5-T] boss node, A-Rank+ [W7-4] boss node.",
+		"memo": "\u203b For the two required ships, you can't mix ship types. For example, if your flagship is a CAV, you must sortie another CAV as well. \u27a3Rewards three units of Setsubun Beans and either a Mamiya OR two Irako OR four Screws"
+	},
+	"441": {
+		"code": "2301D1",
+		"name": "[Setsubun Mission] Reiwa's 5th Year Setsubun` Expedition Mission",
+		"desc": "Complete Expeditions 41, 04, 05, A3, B1 and 14.",
+		"memo": "\u27a3 Rewards: \u00B6First choice: either two New Model Aviation Armament Materials OR three units of Setsubun Beans OR 2023 Fuel \u00B6Second choice: either five Screws OR a Medal OR a Type 2 Depth Charge Kai Ni"
+	},
+	"843": {
+		"code": "2301B7",
+		"name": "[Setsubun Extra Mission] Setsubun 2023, All-out Sortie!",
+		"desc": "Sortie a fleet with 2 (F)BB(V)/ 2 CV(L/B)\u203b, a Kuma-class CL(T)/Ooyodo and up to 3 additional ships to [W2-5], [W4-5], [W5-5] and [W6-5]. S-Rank each boss node.",
+		"memo": "\u203b For the two required ships, you can't mix ship types between BB and CV. For example, if one is a (F)BB(V), you must sortie another (F)BB(V) as well. \u27a3Rewards four units of Setsubun Beans and 230 Ranking Points"
+	}
 }
