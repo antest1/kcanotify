@@ -51,13 +51,17 @@ public class EquipmentListFilterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         List<Integer> equipment_id = new ArrayList<>();
-        for(int i = 0; i<T3_COUNT; i++) {
+        for(int i = 0; i < T3_COUNT; i++) {
             try {
                 int btnId = getId("item_".concat(String.valueOf(i+1)), R.mipmap.class);
                 equipment_id.add(btnId);
             } catch (RuntimeException e){
                 equipment_id.add(0);
             }
+        }
+
+        while (equipment_id.get(equipment_id.size() - 1) == 0) {
+            equipment_id.remove(equipment_id.size() - 1);
         }
 
         final float scale = getResources().getDisplayMetrics().density;
