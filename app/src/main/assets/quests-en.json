@@ -3647,34 +3647,40 @@
         "memo": "DesDiv 31 members include Asashimo, Kishinami, Okinami and Takanami. \u27a3 Rewards: \u00B6First choice: Either a Present Box OR three Furniture Boxes (Large) \u00B6Second choice: Either two New Model Artillery Armament Materials OR a Medal OR an Action Report"
 	},
 
-	"329": {
-		"code": "2301C1",
-		"name": "[Setsubun Mission] Setsubun Exercises 2023",
-		"desc": "Secure 3 S-Rank victories in Exercises within the same day using 2 CL/CT, 3 DD/DE and up to 1 additional ships.",
-		"memo": "\u27a3 Rewards one unit of Setsubun Beans"
-	},
-	"840": {
-		"code": "2301B5",
-		"name": "[Setsubun Mission] Setsubun Operation 2023",
-		"desc": "Sortie a CVL/CL(T)/CT as flagship, 3 DD/DE and up to 2 additional ships to [W1-3], [W1-4] and [W1-5]. A-Rank+ each boss node.",
-		"memo": "\u27a3 Rewards two units of Setsubun Beans and either four Buckets OR an Underway Replenishment OR six Development Materials"
-	},
-	"841": {
-		"code": "2301B6",
-		"name": "[Setsubun Mission] Southwestern Sea Setsubun Operation 2023",
-		"desc": "Sortie a fleet with 2 CAV/ 2 AV\u203b, one of them as flagship and up to 4 additional ships to [W7-2-M], [W7-3-P], [W7-4] and [W7-5-T]. S-Rank [W7-2-M], [W7-3-P] and [W7-5-T] boss node, A-Rank+ [W7-4] boss node.",
-		"memo": "\u203b For the two required ships, you can't mix ship types. For example, if your flagship is a CAV, you must sortie another CAV as well. \u27a3Rewards three units of Setsubun Beans and either a Mamiya OR two Irako OR four Screws"
-	},
-	"441": {
-		"code": "2301D1",
-		"name": "[Setsubun Mission] Reiwa's 5th Year Setsubun` Expedition Mission",
-		"desc": "Complete Expeditions 41, 04, 05, A3, B1 and 14.",
-		"memo": "\u27a3 Rewards: \u00B6First choice: either two New Model Aviation Armament Materials OR three units of Setsubun Beans OR 2023 Fuel \u00B6Second choice: either five Screws OR a Medal OR a Type 2 Depth Charge Kai Ni"
-	},
-	"843": {
-		"code": "2301B7",
-		"name": "[Setsubun Extra Mission] Setsubun 2023, All-out Sortie!",
-		"desc": "Sortie a fleet with 2 (F)BB(V)/ 2 CV(L/B)\u203b, a Kuma-class CL(T)/Ooyodo and up to 3 additional ships to [W2-5], [W4-5], [W5-5] and [W6-5]. S-Rank each boss node.",
-		"memo": "\u203b For the two required ships, you can't mix ship types between BB and CV. For example, if one is a (F)BB(V), you must sortie another (F)BB(V) as well. \u27a3Rewards four units of Setsubun Beans and 230 Ranking Points"
-	}
+	"234": {
+        "code": "2302B1",
+        "name": "Time-Limited 2023 Valentine's Day Quest: First Operation",
+        "desc": "Sortie 2 CL(T)/CT, 2 DD and up to 2 additional ships to [W1-3], [W1-4], [W2-2] and [W2-3]. A-Rank+ the boss nodes.",
+        "memo": "\u27a3 Rewards a Mamiya and either five Development Materials OR two 12cm 30-tube Rocket Launcher OR a Furniture Fairy"
+    },
+    "238": {
+        "code": "2302B2",
+        "name": "Time-Limited 2023 Valentine's Day Quest: Second Operation",
+        "desc": "Sortie 3 CL(T)/CA(V)/CT and up to 3 additional ships to [W2-4], [W3-1], [W3-3] and [W3-4]. S-Rank the boss nodes.",
+        "memo": "\u27a3 Rewards Valentine's Day Chocolate and either a Medal OR a Reinforcement Expansion OR an Action Report"
+    },
+    "349": {
+        "code": "2302C1",
+        "name": "Time-Limited 2023 Valentine's Day Quest: Special Exercises",
+        "desc": "Secure 4 S-Rank victories in Exercises within the same day using 1 AV, 1 CA(V), 1 CL(T)/CT, 2 DD and up to 1 additional ship.",
+        "memo": "\u27a3 Rewards a Valentine Window Furniture and either three Zuiun OR two Type 2 Depth Charge OR two New Model Aerial Armament Materials"
+    },
+	"991": {
+        "code": "2302B3",
+        "name": "Time-Limited Early Spring Quest: Deploy Striking Force",
+        "desc": "Sortie a CL as flagship, 1 CAV, 1 DD and up to 3 additional ships to [W7-2-M], [W7-3-P], [W7-4] and [W5-5]. S-Rank the boss nodes.",
+        "memo": "\u203b Gotland can be used as both CL and CAV here \u27a3Rewards: \u00B6First choice: Either an Action Report OR two Reinforcement Expansions OR three New Model Aviation Armament Materials \u00B6Second choice: Either four Skilled Crew Member OR a Type 1 Land-based Attack Aircraft Model 34 OR a Zuiun Kai Ni (634 Air Group)"
+    },
+    "1124": {
+        "code": "2302F1",
+        "name": "Time-Limted Early Spring Quest: Enhancement of Night Air Operations Capability",
+        "desc": "Have a New Model Aviation Armament Materials, a Skilled Crew Member, 16 Development Materials and 370 bauxite. Set Ryuuhou Kai Ni/E or Houshou Kai/Ni as secretary with a Type 97 Torpedo Bomber (Skilled) in her first slot. Scrap two Type 97 Torpedo Bomber.",
+        "memo": "\u2718 Consumes the items and resources. \u27a3Rewards a Prototype Type 97 Torpedo Bomber Kai No. 3 Model E (w/ Type 6 Airborne Radar Kai)"
+    },
+    "1125": {
+        "code": "2302F2",
+        "name": "Time-Limted Early Spring Quest: Development of Prototype Night Zuiun",
+        "desc": "Have 4 New Model Aviation Armament Materials, 2 Skilled Crew Members, 72 Development Materials and 1634 bauxite. Set Mogami Kai Ni/Toku as secretary with a \u26056+ Zuiun Kai Ni (634 Air Group) in her first slot. Scrap three Zuiuns.",
+        "memo": "\u2718 Consumes the items and resources. \u27a3Rewards a Prototype Night Zuiun (Attack Equipment)"
+    }
 }
