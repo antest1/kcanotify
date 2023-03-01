@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_version" translatable="false">2.9 rev5</string>
-    <string name="default_gamedata_version" translatable="false">5.5.8.0</string>
+    <string name="default_gamedata_version" translatable="false">5.5.9.1</string>
 </resources>
