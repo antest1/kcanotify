@@ -1207,7 +1207,7 @@ public class KcaApiData {
         else return STATE_HEAVYDMG;
     }
 
-    public static String getNodeFullInfo(Context context, String currentNode, int id, int kind, boolean includeNormal) {
+    public static String getNodeFullInfo(Context context, String currentNode, int id, int kind, int color, boolean includeNormal) {
 
         String currentNodeInfo = "";
         switch (id) {
@@ -1219,7 +1219,9 @@ public class KcaApiData {
                 break;
             case API_NODE_EVENT_ID_NORMAL:
                 if (kind == API_NODE_EVENT_KIND_BATTLE) {
-                    if (includeNormal) {
+                    if (color == API_NODE_EVENT_COLOR_SUBSTRIKE) {
+                        currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_substrike), currentNode);
+                    } else if (includeNormal) {
                         currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_normal_battle), currentNode);
                     } else {
                         currentNodeInfo = KcaUtils.format(context.getString(R.string.node_info_normal), currentNode);
@@ -1314,6 +1316,8 @@ public class KcaApiData {
                 return ContextCompat.getColor(context, R.color.colorLdShooting);
             case 14:
                 return ContextCompat.getColor(context, R.color.colorAnchorage);
+            case 15:
+                return ContextCompat.getColor(context, R.color.colorSubmarineWithStrikeNode);
             default:
                 return ContextCompat.getColor(context, R.color.colorPrimaryDark);
         }

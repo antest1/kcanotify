@@ -269,8 +269,8 @@ public final class KcaConstants {
     public static final int API_NODE_EVENT_KIND_LDSHOOTING = 8;
 
     public static final int API_NODE_EVENT_KIND_SELECTABLE = 2;
-
     public static final int API_NODE_EVENT_KIND_AIRSEARCH = 0;
+    public static final int API_NODE_EVENT_COLOR_SUBSTRIKE = 15;
 
     public static final String KCA_API_DATA_LOADED = "/kca_api/data_loaded";
     public static final String KCA_API_UPDATE_FRONTVIEW = "/kca_api/update_frontview";

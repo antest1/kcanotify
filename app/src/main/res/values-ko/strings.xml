@@ -72,6 +72,7 @@
     <string name="node_info_sendan" formatted="false">%s (선단호위 끝)</string>
     <string name="node_info_ecbattle" formatted="false">%s (적 연합함대)</string>
     <string name="node_info_anchorage" formatted="false">%s (박지수리지점)</string>
+    <string name="node_info_substrike" formatted="false">%s (잠수/항공지원)</string>
     <string name="node_info_practice" formatted="false">연습전</string>
     <!-- MainActivity Strings -->
     <string name="ma_vpn_toggleon">스니퍼 On</string>

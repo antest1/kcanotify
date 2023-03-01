@@ -239,7 +239,7 @@ public class KcaBattleViewService extends Service {
                 int api_event_id = api_data.get("api_event_id").getAsInt();
                 int api_event_kind = api_data.get("api_event_kind").getAsInt();
                 int api_color_no = api_data.get("api_color_no").getAsInt();
-                currentNodeInfo = getNodeFullInfo(contextWithLocale, current_node, api_event_id, api_event_kind, true);
+                currentNodeInfo = getNodeFullInfo(contextWithLocale, current_node, api_event_id, api_event_kind, api_color_no, true);
                 currentNodeInfo = currentNodeInfo.replaceAll("[()]", "");
 
                 // View Settings

@@ -73,6 +73,7 @@
     <string name="node_info_sendan" formatted="false">%s (Gran Punto de Recursos)</string>
     <string name="node_info_ecbattle" formatted="false">%s (Enemigo Combinado)</string>
     <string name="node_info_anchorage" formatted="false">%s (Reparación de anclaje)</string>
+    <string name="node_info_substrike" formatted="false">%s (Sub/Asalto)</string>
     <string name="node_info_practice" formatted="false">PVP</string>
     <!-- MainActivity Strings -->
     <string name="ma_vpn_toggleon">Sniffer ON</string>

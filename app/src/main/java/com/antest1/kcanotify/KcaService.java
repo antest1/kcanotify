@@ -945,7 +945,7 @@ public class KcaService extends Service {
                     int api_event_kind = api_data.get("api_event_kind").getAsInt();
                     int api_event_id = api_data.get("api_event_id").getAsInt();
                     int api_color_no = api_data.get("api_color_no").getAsInt();
-                    currentNodeInfo = KcaApiData.getNodeFullInfo(contextWithLocale, currentNodeAlphabet, api_event_id, api_event_kind, false);
+                    currentNodeInfo = KcaApiData.getNodeFullInfo(contextWithLocale, currentNodeAlphabet, api_event_id, api_event_kind, api_color_no, false);
                     makeToast(currentNodeInfo, Toast.LENGTH_LONG, getNodeColor(getApplicationContext(), api_event_id, api_event_kind, api_color_no));
                 }
             }

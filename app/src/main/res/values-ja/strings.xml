@@ -59,7 +59,7 @@
     <string name="node_info_normal_battle" formatted="false">%s (通常)</string>
     <string name="node_info_boss" formatted="false">%s (ボス)</string>
     <string name="node_info_boss_nightbattle" formatted="false">%s (ボス/夜戦)</string>
-    <string name="node_info_boss_nightdaybattle" formatted="false">%s (ボス/夜->昼)</string>
+    <string name="node_info_boss_nightdaybattle" formatted="false">%s (ボス/夜→昼)</string>
     <string name="node_info_boss_ecbattle" formatted="false">%s (ボス/敵連合)</string>
     <string name="node_info_airbattle" formatted="false">%s (航空戦)</string>
     <string name="node_info_airsearch" formatted="false">%s (航空偵察)</string>
@@ -72,6 +72,7 @@
     <string name="node_info_sendan" formatted="false">%s (船団護衛成功)</string>
     <string name="node_info_ecbattle" formatted="false">%s (敵連合艦隊)</string>
     <string name="node_info_anchorage" formatted="false">%s (泊地修理)</string>
+    <string name="node_info_substrike" formatted="false">%s (対潜/航空支援)</string>
     <string name="node_info_practice" formatted="false">練習</string>
     <!-- MainActivity Strings -->
     <string name="ma_vpn_toggleon">Sniffer On</string>

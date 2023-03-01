@@ -114,6 +114,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="node_info_sendan" formatted="false">%s (Large Resource Point)</string>
     <string name="node_info_ecbattle" formatted="false">%s (Enemy Combined)</string>
     <string name="node_info_anchorage" formatted="false">%s (Anchorage Repair)</string>
+    <string name="node_info_substrike" formatted="false">%s (Sub/Strike)</string>
     <string name="node_info_practice" formatted="false">PVP</string>
     <!-- MainActivity Strings -->
     <string name="ma_vpn_toggleon">Sniffer On</string>
