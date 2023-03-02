@@ -778,18 +778,25 @@ public class KcaBattleViewService extends Service {
                                 .setTextSize(TypedValue.COMPLEX_UNIT_PX, textsize_n_large);
                     }
 
-                    int maxhp = api_e_maxhps.get(i).getAsInt();
-                    int afterhp = api_e_afterhps.get(i).getAsInt();
-                    if (maxhp == -1) continue;
-                    else {
-                        float hpPercent = afterhp * VIEW_HP_MAX / (float) maxhp;
+                    String hp_str = api_e_maxhps.get(i).getAsString();
+                    float hpPercent = 0;
+                    if (hp_str.contains("N")) { // N/A
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_hp_txt", i + 1), R.id.class)))
-                                .setText(makeHpString(afterhp, maxhp));
-                        ((ProgressBar) battleview.findViewById(getId(KcaUtils.format("em_%d_hp_bar", i + 1), R.id.class)))
-                                .setProgress(Math.round(hpPercent));
-                        ((ProgressBar) battleview.findViewById(getId(KcaUtils.format("em_%d_hp_bar", i + 1), R.id.class)))
-                                .setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
+                                .setText("N/A");
+                    } else {
+                        int maxhp = api_e_maxhps.get(i).getAsInt();
+                        int afterhp = api_e_afterhps.get(i).getAsInt();
+                        if (maxhp == -1) continue;
+                        else {
+                            hpPercent = afterhp * VIEW_HP_MAX / (float) maxhp;
+                            ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_hp_txt", i + 1), R.id.class)))
+                                    .setText(makeHpString(afterhp, maxhp));
+                        }
                     }
+                    ((ProgressBar) battleview.findViewById(getId(KcaUtils.format("em_%d_hp_bar", i + 1), R.id.class)))
+                            .setProgress(Math.round(hpPercent));
+                    ((ProgressBar) battleview.findViewById(getId(KcaUtils.format("em_%d_hp_bar", i + 1), R.id.class)))
+                            .setProgressDrawable(getProgressDrawable(getApplicationContext(), hpPercent));
                 }
 
                 if (api_data.has("api_f_maxhps_combined")) {

@@ -261,7 +261,9 @@ public class KcaBattle {
         for (int i = 0; i < ship_ke.size(); i++) {
             int shipId = ship_ke.get(i).getAsInt();
             if (shipId > 0) {
-                if (currentHP.get(i).getAsInt() <= 1) continue;
+                String hp_value = currentHP.get(i).getAsString();
+                if (hp_value.contains("N")) continue;
+                if (Integer.parseInt(hp_value) <= 1) continue;
                 JsonArray slot = eslot.get(i).getAsJsonArray();
                 for (int j = 0; j < slot.size(); j++) {
                     if (slot.get(j).getAsInt() == 560) return true;
@@ -312,7 +314,6 @@ public class KcaBattle {
         return value;
     }
 
-
     public static void cleanEscapeList() {
         escapedata = null;
         escapelist = new JsonArray();
@@ -348,13 +349,17 @@ public class KcaBattle {
         int enemyCbGoodHealth = 0;
 
         for (int i = 0; i < api_e_nowhps.size(); i++) {
-            if (api_e_afterhps.get(i).getAsInt() <= 0) {
+            String hp = api_e_afterhps.get(i).getAsString();
+            if (hp.contains("N")) continue;
+            enemyMainCount += 1;
+            if (Integer.parseInt(hp) <= 0) {
                 enemyMainSunkCount += 1;
                 enemySunkIdx.add(i);
             }
         }
 
         for (int i = 0; i < api_e_nowhps_combined.size(); i++) {
+            enemyCbCount += 1;
             if (api_e_afterhps_combined.get(i).getAsInt() <= 0) {
                 enemyCbSunkCount += 1;
                 enemyCbSunkIdx.add(i);
@@ -422,8 +427,11 @@ public class KcaBattle {
         }
 
         for (int i = 0; i < api_e_nowhps.size(); i++) {
+            String hp = api_e_afterhps.get(i).getAsString();
+            if (hp.contains("N")) continue;
+
             enemyCount += 1;
-            if (api_e_afterhps.get(i).getAsInt() <= 0) {
+            if (Integer.parseInt(hp) <= 0) {
                 enemySunkIdx.add(i);
                 enemySunkCount += 1;
             }
@@ -596,7 +604,11 @@ public class KcaBattle {
             if (isKeyExist(api_stage3, "api_edam")) {
                 JsonArray api_edam = api_stage3.getAsJsonArray("api_edam");
                 for (int i = 0; i < api_edam.size(); i++) {
-                    if (i < 6) reduce_value(false, enemyAfterHps, i, cnv(api_edam.get(i)), false);
+                    if (i < 6) {
+                        String hp_value = enemyAfterHps.get(i).getAsString();
+                        if (hp_value.contains("N")) continue;
+                        reduce_value(false, enemyAfterHps, i, cnv(api_edam.get(i)), false);
+                    }
                     else if (ship_ke_combined != null)
                         reduce_value(false, enemyCbAfterHps, i - 6, cnv(api_edam.get(i)), true);
                 }
@@ -630,9 +642,16 @@ public class KcaBattle {
             damage = support_hourai.getAsJsonArray("api_damage");
         }
         for (int d = 0; d < damage.size(); d++) {
+            String value_chk = damage.get(d).getAsString();
+            if (value_chk.contains("N")) continue;
+
             int damage_value = cnv(damage.get(d));
             if (damage_value > 0) {
-                if (d < 6) reduce_value(false, enemyAfterHps, d, damage_value, false);
+                if (d < 6) {
+                    String hp_value = enemyAfterHps.get(d).getAsString();
+                    if (hp_value.contains("N")) continue;
+                    reduce_value(false, enemyAfterHps, d, damage_value, false);
+                }
                 else reduce_value(false, enemyCbAfterHps, d - 6, damage_value, true);
             }
         }
@@ -649,9 +668,16 @@ public class KcaBattle {
             }
         }
         for (int i = 0; i < damage_info_edam.size(); i++) {
+            String value_chk = damage_info_edam.get(i).getAsString();
+            if (value_chk.contains("N")) continue;
+
             int value = cnv(damage_info_edam.get(i));
             if (value > 0) {
-                if (i < 6) reduce_value(false, enemyAfterHps, i, value, false);
+                if (i < 6) {
+                    String hp_value = enemyAfterHps.get(i).getAsString();
+                    if (hp_value.contains("N")) continue;
+                    reduce_value(false, enemyAfterHps, i, value, false);
+                }
                 else reduce_value(false, enemyCbAfterHps, i - 6, value, true);
             }
         }

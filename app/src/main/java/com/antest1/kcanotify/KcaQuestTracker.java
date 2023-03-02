@@ -439,7 +439,9 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             if (ship_id == -1) break;
             JsonObject kcShipData = KcaApiData.getKcShipDataById(ship_ke.get(i).getAsInt(), "stype");
             int stype = kcShipData.get("stype").getAsInt();
-            boolean isSunk = afterhps_e.get(i).getAsInt() <= 0;
+            String hp_str = afterhps_e.get(i).getAsString();
+            if (hp_str.contains("N")) continue;
+            boolean isSunk = (Integer.parseInt(hp_str) <= 0);
             if ((stype == STYPE_CV || stype == STYPE_CVL || stype == STYPE_CVB) && isSunk)
                 cvcount += 1;
             if (stype == STYPE_AP && isSunk) apcount += 1;
