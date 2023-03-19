@@ -487,6 +487,14 @@
   "試製 夜間瑞雲(攻撃装備)" : "Prototype Night Zuiun (Attack Equipment)",
   "紫電改(三四三空) 戦闘407": "Shiden Kai (343 Air Group) 407th Fighter Squadron",
   "一式戦 隼III型改(熟練/20戦隊)" : "Type 1 Fighter Hayabusa Model III Kai (Skilled / 20th Squadron)",
+  "零戦52型丙(八幡部隊)" : "Zero Fighter Model 52C (Hachiman Force)",
+	"一式陸攻(八幡部隊)" : "Type 1 Land-based Attack Aircraft (Hachiman Force)",
+	"特大発動艇+チハ" : "Toku Daihatsu Landing Craft + Chi-Ha Tank",
+	"特大発動艇+チハ改" : "Toku Daihatsu Landing Craft + Chi-Ha Kai Tank",
+	"陸軍歩兵部隊" : "Army Infantry Units",
+	"九七式中戦車(チハ)" : "Type 97 Medium Tank (Chi-Ha)",
+	"九七式中戦車 新砲塔(チハ改)" : "Type 97 Medium Tank New Gun Turret (Chi-Ha Kai)",
+	"陸軍歩兵部隊+チハ改" : "Army Infantry Units + Chi-Ha Kai Tank",
   
   "プレゼント箱": "Present Box",
   "秋刀魚": "Saury",
@@ -618,5 +626,8 @@
   "深海戦爆複座鷹改": "Abyssal Two-seat Fighter-bomber Hawk Kai",
   "深海四連装(酸素)魚雷後期型": "Abyssal Quadruple (Oxygen) Torpedo Mount Late Model",
   "深海双発陸爆": "Abyssal Twin-engine Land-based Dive Bomber",
-  "深海双発陸爆Ace": "Abyssal Twin-engine Land-based Dive Bomber Ace"
+  "深海双発陸爆Ace": "Abyssal Twin-engine Land-based Dive Bomber Ace",
+  "深海空超要塞": "Abyssal Sky Super Fortress",
+  "深海航空整備蟲": "Abyssal Aviation Maintenance Bugs",
+  "深海航空整備蟲pro": "Abyssal Aviation Maintenance Bugs pro"
 }

@@ -345,7 +345,10 @@
 	"丹陽":"Dan Yang",
 	"八幡丸":"Yawata Maru",
 	"山汐丸":"Yamashio Maru",
+	"熊野丸":"Kumano Maru",
 	"鵜来":"Ukuru",
+	"能美":"Noumi",
+	"第百一号輸送艦":"Landing Ship No.101",
 
 	"Верный":"Verniy",
 	"Гангут":"Gangut",
@@ -412,6 +415,7 @@
 	"Jean Bart": "Jean Bart",
 	"Brooklyn": "Brooklyn",
 	"Heywood L. Edwards": "Heywood L. Edwards",
+	"Tuscaloosa":"Tuscaloosa",
 
 	"防空棲姫":"Air Defense Princess",
 	"空母棲鬼":"Aircraft Carrier Demon",
@@ -536,6 +540,9 @@
 	"高速軽空母水鬼":"High Speed Light Carrier Water Demon",
 	"試作空母姫": "Trial Aircraft Carrier Princess",
   	"戦艦未完棲姫": "Incompleted Battelship Princesss",
+	"戦標船改装棲姫": "Remodeled Liberty Ship Princess",
+	"深海重巡水姫":"Abyssal Heavy Cruiser Water Princess",
+	"深海擱座揚陸姫":"Abyssal Stranded Landing Princess",
 
 	"elite":" elite",
 	"flagship":" flagship"
