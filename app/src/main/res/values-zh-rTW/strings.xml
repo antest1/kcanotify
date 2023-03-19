@@ -22,7 +22,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_name_kancolle">Android版本的艦これ (公式)</string>
     <string name="app_name_gotobrowser">GotoBrowser</string>
 
-    <string name="special_message">情人節禮物！</string>
+    <string name="special_message">不允許偷情</string>
     <string name="notification_message">通知和信息</string>
 
     <!-- Common Text -->
