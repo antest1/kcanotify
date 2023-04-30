@@ -374,8 +374,12 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             if (item_id == 0) {
                 holder.ship_equip_icon[i].setVisibility(i == 4 ? View.GONE : View.INVISIBLE);
             } else {
-                holder.ship_equip_icon[i].setImageResource(
-                        getId(KcaUtils.format("item_%d", item_id), R.mipmap.class));
+                try {
+                    holder.ship_equip_icon[i].setImageResource(
+                            getId(KcaUtils.format("item_%d", item_id), R.mipmap.class));
+                } catch (Exception e) {
+                    holder.ship_equip_icon[i].setImageResource(R.mipmap.item_0);
+                }
                 holder.ship_equip_icon[i].setVisibility(View.VISIBLE);
             }
         }
@@ -383,8 +387,12 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         if (ship_slot_ex == 0) {
             holder.ship_equip_icon_ex.setVisibility(View.INVISIBLE);
         } else {
-            holder.ship_equip_icon_ex.setImageResource(
-                    getId(KcaUtils.format("item_%d", ship_ex_item_icon), R.mipmap.class));
+            try {
+                holder.ship_equip_icon_ex.setImageResource(
+                        getId(KcaUtils.format("item_%d", ship_ex_item_icon), R.mipmap.class));
+            } catch (Exception e) {
+                holder.ship_equip_icon_ex.setImageResource(R.mipmap.item_0);
+            }
             holder.ship_equip_icon_ex.setVisibility(View.VISIBLE);
         }
 

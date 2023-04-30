@@ -217,9 +217,14 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
                 int item_icon = item_data.get("icon").getAsInt();
                 String item_name = item_data.get("name").getAsString();
                 holder.ship_equip_name[i].setText(item_name);
-                holder.ship_equip_icon[i].setImageResource(
-                        getId(KcaUtils.format("item_%d", item_icon), R.mipmap.class));
                 holder.ship_equip_icon[i].setVisibility(View.VISIBLE);
+                try {
+                    holder.ship_equip_icon[i].setImageResource(
+                            getId(KcaUtils.format("item_%d", item_icon), R.mipmap.class));
+                } catch (Exception e) {
+                    holder.ship_equip_icon[i].setImageResource(R.mipmap.item_0);
+                }
+
 
                 if (item_data.has("level")) {
                     int lv = item_data.get("level").getAsInt();

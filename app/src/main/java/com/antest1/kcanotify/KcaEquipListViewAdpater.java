@@ -111,9 +111,13 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         final Integer target = item_id;
 
         holder.equipment_id.setText(String.valueOf(item_id));
-        holder.equipment_icon.setImageResource(KcaUtils.getId(KcaUtils.format("item_%d", item_type_3), R.mipmap.class));
         holder.equipment_name.setText(item_name);
         holder.equipment_count.setText(KcaUtils.format("x%d", item_count));
+        try {
+            holder.equipment_icon.setImageResource(KcaUtils.getId(KcaUtils.format("item_%d", item_type_3), R.mipmap.class));
+        } catch (Exception e) {
+            holder.equipment_icon.setImageResource(R.mipmap.item_0);
+        }
 
         LayoutInflater inflater = LayoutInflater.from(context);
         holder.equipment_item_detail_list.removeAllViews();
