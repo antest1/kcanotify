@@ -438,8 +438,8 @@
 	},
 	"55": {
 		"improvement": [{
-				"upgrade": [271, 1],
-				"req": [[[false, true, true, true, true, false, false], [508]]],
+				"upgrade": [271, 0],
+				"req": [[[false, true, true, true, true, false, false], [508]], [[true, true, true, true, true, false, false], [662]], [[true, false, false, false, false, true, true], [663, 314]]],
 				"require_item": [[4, 1], [3, 1]],
 				"resource": [[110, 160, 0, 330], [5, 7, 4, 5, 55, 1], [8, 10, 5, 7, 55, 2], [13, 20, 7, 9, 22, 2]]
 			}

@@ -1665,6 +1665,12 @@
         "desc": "Sortie a fleet with Houshou Kai Ni (Sen) as flagship and up to 5 additional ships to [W2-5], [W3-5], [W4-5], [W5-2], [W6-4] and [W7-4]. S-Rank each boss node.",
         "memo": "\u27a3Rewards a Type 0 Fighter Model 64 (Air Superiority Fighter Specification) and either three Skilled Crew Members OR two Medals OR ten Screws"
     },
+	"995": {
+		"code": "B189",
+		"name": "Remodelled Special Type I Destroyer [Miyuki Kai Ni], Sortie!",
+		"desc": "Assemble a fleet containing Miyuki Kai Ni, 1 Fubuki-class, and up to 4 additional ships, then S rank the boss nodes of [W3-2], [W7-3-P], [W5-3], and [W6-4].",
+		"memo": "\u27a3Rewards: \u00B6First choice: Either two Reinforcement Expansion OR two Emergency Repair Goddess OR an Action Report \u00B6Second choice: Either a 12.7cm Twin Gun Mount Model A Kai 2 \u2605+10 OR three Smoke Generator (Smoke Screen) OR two 61cm Triple (Oxygen) Torpedo Mount \u2605+3"
+	},
 
 	"201": {
 		"code": "Bd1",
@@ -2362,6 +2368,12 @@
         "name": "Frontline Aircraft Carrier Houshou Kai Ni, Begin Exercises!",
         "desc": "Secure 5 S-Rank victories in Execises within the same day using Houshou Kai Ni (Sen), 3 DD and up to 2 additional ships.",
         "memo": "\u27a3Rewards: \u00B6First choice: Either a Mamiya OR a Reinforcement Expansion OR a Skilled Crew Member \u00B6Second choice: Either a 10cm Twin High-angle Gun Mount Kai + Additional Machine Guns OR a Type 0 Fighter Model 64 (Air Superiority Fighter Specification)"
+    },
+	"362": {
+        "code": "C72",
+        "name": "Special Type [11th DesDiv Destroyer], Exercises!",
+        "desc": "Assemble a fleet containing Fubuki, Shirayuki, Hatsuyuki, and Miyuki, and up to 2 additional ships, then score 4 A+ ranks in PVP within the same day.",
+        "memo": "This quest resets on the first quest reset of April. \u27a3Rewards: \u00B6First choice: Either three 12.7cm Twin Gun Mount Model A OR three 61cm Triple Torpedo Mount OR six Development Material \u00B6Second choice: Either two Skilled Lookouts OR three Irako OR four Improvement Materials"
     },
 
 	"313": {
@@ -3454,6 +3466,12 @@
 		"desc": "Have two New Model Aviation Armament Materials, two Skilled Crew Members and 35 Development Materials. Set Tone Kai Ni or Yura Kai Ni as secretary with a \u2605max Type 0 Reconnaissance Seaplane in her first slot. Scrap two Type 97 Torpedo Bomber (931 Air Group).",
 		"memo": "This quest resets on the first quest reset of January. \u2718Consumes the items and resources. \u203b Increasement of Improved 3-seat Reconnaissance Seaplane \u27a3 Rewards a Type 0 Reconnaissance Seaplane Model 11B"
 	},
+	"1127": {
+        "code": "F115",
+        "name": "Improving Shipborne [Smoke Screen Generator]",
+        "desc": "Set Miyuki Kai Ni as Secretary, equipped with a Smoke Generator (Smoke Screen) in her 1st slot. Prepare 2 Smoke Generator (Smoke Screen), 12 Development Materials, 1 New Model Armament Material, 480 fuel, and 350 bauxite.",
+        "memo": "\u2718Consumes the items and resources. \u27a3Rewards a Smoke Generator Kai (Smoke Screen)"
+    },
 
 	"701": {
 		"code": "G1",
@@ -3682,5 +3700,41 @@
         "name": "Time-Limted Early Spring Quest: Development of Prototype Night Zuiun",
         "desc": "Have 4 New Model Aviation Armament Materials, 2 Skilled Crew Members, 72 Development Materials and 1634 bauxite. Set Mogami Kai Ni/Toku as secretary with a \u26056+ Zuiun Kai Ni (634 Air Group) in her first slot. Scrap three Zuiuns.",
         "memo": "\u2718 Consumes the items and resources. \u27a3Rewards a Prototype Night Zuiun (Attack Equipment)"
+    },
+	"992": {
+        "code": "2304B1",
+        "name": "[10th Anniversary Quest] Fubuki-class Destroyer, Sortie!",
+        "desc": "Assemble a fleet containing 4 Fubuki-class, and up to 2 additional ships, then S rank the boss nodes of [W1-1], [W1-2], [W1-3], and [W1-4].",
+        "memo": "Rewards: 10 buckets, \u00B6First choice: two Irako OR a New Model Aerial Armament Material OR a Furniture Fairy"
+    },
+    "993": {
+        "code": "2304B2",
+        "name": "[10th Anniversary Quest] Shiratsuyu-class Destroyer, Sortie!",
+        "desc": "Assemble a fleet containing 3 Shiratsuyu-class, and up to 3 additional ships, then S rank the boss nodes of [W2-2], [W2-3], [W2-4], and [W2-5].",
+        "memo": "Rewards: \u00B6First choice: 10 Irako OR 10 Improvement Materials OR 3 New Model Aerial Armament Materials \u00B6Second choice: a 12.7cm Twin Gun Mount Model C Kai 3 OR a Type 3 Active Sonar Kai \u26051 OR a 61cm Quadruple (Oxygen) Torpedo Mount \u26052"
+    },
+    "994": {
+        "code": "2304B3",
+        "name": "[Commemorative Mission: Expansion Operations] Main Force of Main Force, Decisive Battle!",
+        "desc": "Assemble a fleet containing 2 Yuugumo-class, and up to 4 additional ships, then S rank the boss nodes of [W3-5], [W4-5], [W5-2], and [W5-5].",
+        "memo": "Rewards: Furniture [10 years anniversary scroll], \u00B6First choice: 3 Medals OR a Shiden Kai \u26058 OR a 12.7cm Twin Gun Mount Model D Kai 2 \u26053"
+    },
+	"363": {
+        "code": "2304C1",
+        "name": "【[10th Anniversary Quest] Mutsuki-class Destroyer, Exercises!",
+        "desc": "Assemble a fleet containing 4 Mutsuki-class, and up to 2 additional ships, then score 5 A+ ranks in PVP within the same day.",
+        "memo": "Rewards: \u00B6First choice: 2 Skilled Lookouts OR 4 25mm Single Autocannon Mounts OR a Reinforcement Expansion \u00B6Second choice: 12cm Single Gun Mount Kai 2 \u26053 OR 61cm Triple (Oxygen) Torpedo Mount \u26053 "
+    },
+    "448": {
+        "code": "2304D1",
+        "name": "[10th Anniversary Quest] 10th Anniversary Logistics Expedition",
+        "desc": "Complete expeditions 05, A1, 09, and 11 once each, and 07 three times.",
+        "memo": "Rewards: \u00B6First choice: 8800 Fuel OR 8 Improvement Materials \u00B6Second choice: 10 Development Materials OR 2 Daihatsu Landing Crafts OR 3900 Bauxites"
+    },
+    "1126": {
+        "code": "2304F1",
+        "name": "[10th Anniversary Quest: Extended Mission] Special Arsenal Quest",
+        "desc": "Scrap 8 Fighters, 4 Seaplane Bombers, 4 AA Guns, and prepare 2 Shiden Kai 4, 80 Development Materials, and 3000 bauxite.",
+        "memo": "Rewards: Reppuu Kai (Prototype Carrier-based Model) OR Reppuu Kai Ni Model E OR Shinden Kai"
     }
 }
