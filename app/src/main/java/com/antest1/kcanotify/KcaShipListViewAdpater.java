@@ -226,7 +226,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         }
 
         holder.ship_stype.setText(KcaApiData.getShipTypeAbbr(ship_stype));
-        holder.ship_name.setText(KcaApiData.getShipTranslation(ship_name, false));
+        holder.ship_name.setText(KcaApiData.getShipTranslation(ship_name, kc_ship_id, false));
 
         int cond = item.get("api_cond").getAsInt();
         holder.ship_cond.setText(String.valueOf(cond));
@@ -553,7 +553,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                             item.getAsJsonArray("api_raisou").get(0).getAsInt());
             JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_yomi,api_stype,api_sort_id");
             String name = kcShipData != null ? kcShipData.get("api_name").getAsString() : "";
-            name = KcaApiData.getShipTranslation(name, false);
+            name = KcaApiData.getShipTranslation(name, kc_ship_id, false);
             String yomi = kcShipData != null ? kcShipData.get("api_yomi").getAsString() : "";
             int stype = kcShipData != null ? kcShipData.get("api_stype").getAsInt() : 0;
 

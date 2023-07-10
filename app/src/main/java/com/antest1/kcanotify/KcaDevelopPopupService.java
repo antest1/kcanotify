@@ -150,8 +150,11 @@ public class KcaDevelopPopupService extends Service {
                 data = dbHelper.getJsonObjectValue(DB_KEY_LATESTDEV);
             }
             if (data != null) {
+                int ship_id = data.get("flagship_id").getAsInt();
+                String ship_name = data.get("flagship").getAsString();
+
                 ed_time.setText(data.get("time").getAsString());
-                ed_ship.setText(KcaApiData.getShipTranslation(data.get("flagship").getAsString(), false));
+                ed_ship.setText(KcaApiData.getShipTranslation(ship_name, ship_id, false));
                 if (data.has("items")) {
                     JsonArray arr = data.getAsJsonArray("items");
                     for (int i = 0; i < arr.size(); i++) {

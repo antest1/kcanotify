@@ -211,8 +211,12 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         for (int k = 0; k < data.size(); k++) {
             JsonObject ship_info = data.get(k).getAsJsonObject();
             int ship_id = ship_info.get("id").getAsInt();
+            int ship_kc_id = ship_info.get("kc_id").getAsInt();
             int ship_lv = ship_info.get("lv").getAsInt();
-            String ship_name = KcaApiData.getShipTranslation(ship_info.get("name").getAsString(), false);
+
+            String ship_name = ship_info.get("name").getAsString();
+            ship_name = KcaApiData.getShipTranslation(ship_name, ship_kc_id, false);
+
             int ship_count = counter.get(ship_id).get();
             String val = KcaUtils.format("%s (Lv %d) x%d", ship_name, ship_lv, ship_count);
             if (!equipment_ship_info_list.contains(val)) {

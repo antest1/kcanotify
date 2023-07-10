@@ -172,7 +172,7 @@ public class KcaTimerWidget extends AppWidgetProvider {
                                     JsonObject shipData = getUserShipDataById(ship_id, "ship_id");
                                     JsonObject kcShipData = KcaApiData.getKcShipDataById(shipData.get("ship_id").getAsInt(), "name");
                                     if (kcShipData != null) {
-                                        ship_name = getShipTranslation(kcShipData.get("name").getAsString(), false);
+                                        ship_name = getShipTranslation(kcShipData.get("name").getAsString(), ship_id, false);
                                     }
                                     entries.add(new AbstractMap.SimpleEntry<>(ship_name, getLeftTimeStr(item.get("api_complete_time").getAsLong())));
                                 } else {
@@ -197,7 +197,7 @@ public class KcaTimerWidget extends AppWidgetProvider {
                             int ship_id = item.get("api_created_ship_id").getAsInt();
                             if (ship_id > 0) {
                                 JsonObject shipdata = KcaApiData.getKcShipDataById(item.get("api_created_ship_id").getAsInt(), "name");
-                                String shipname = show_shipname ? KcaApiData.getShipTranslation(shipdata.get("name").getAsString(), false) : "？？？";
+                                String shipname = show_shipname ? KcaApiData.getShipTranslation(shipdata.get("name").getAsString(), ship_id, false) : "？？？";
                                 entries.add(new AbstractMap.SimpleEntry<>(shipname, getConstrLeftTimeStr(item.get("api_complete_time").getAsLong())));
                             } else {
                                 entries.add(new AbstractMap.SimpleEntry<>("-", ""));

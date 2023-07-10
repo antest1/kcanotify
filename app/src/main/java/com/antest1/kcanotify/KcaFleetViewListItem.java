@@ -84,7 +84,7 @@ public class KcaFleetViewListItem extends FrameLayout {
 
         Context appContext = getContext().getApplicationContext();
 
-        tv_name.setText(getShipTranslation(info.name, false));
+        tv_name.setText(getShipTranslation(info.name, info.mst_ship_id, false));
         tv_stype.setText(getShipTypeAbbr(info.stype));
         tv_stype.setBackgroundColor(ContextCompat.getColor(appContext, R.color.transparent));
         tv_stype.setTextColor(ContextCompat.getColor(appContext, R.color.colorAccent));
@@ -196,6 +196,7 @@ public class KcaFleetViewListItem extends FrameLayout {
 
         return new ShipInfo(
                 userData.get("id").getAsInt(),
+                mst_ship_id,
                 kcData == null ? "" : kcData.get("name").getAsString(),
                 kcData == null ? 0 : kcData.get("stype").getAsInt(),
                 userData.get("lv").getAsInt(),
@@ -255,6 +256,7 @@ public class KcaFleetViewListItem extends FrameLayout {
 
     public static final class ShipInfo implements Parcelable {
         final int ship_id;
+        final int mst_ship_id;
         final String name;
         final int stype;
         final int lv, exp;
@@ -263,13 +265,14 @@ public class KcaFleetViewListItem extends FrameLayout {
         final int sally_area;
 
         public ShipInfo(
-                int ship_id, String name, int stype,
+                int ship_id, int mst_ship_id, String name, int stype,
                 int lv, int exp,
                 int now_hp, int max_hp, int cond,
                 int sally_area
         ) {
 
             this.ship_id = ship_id;
+            this.mst_ship_id = mst_ship_id;
             this.name = name;
             this.stype = stype;
             this.lv = lv;
@@ -283,6 +286,7 @@ public class KcaFleetViewListItem extends FrameLayout {
         public ShipInfo(Parcel source) {
 
             this.ship_id = source.readInt();
+            this.mst_ship_id = source.readInt();
             this.name = source.readString();
             this.stype = source.readInt();
             this.lv = source.readInt();
@@ -302,6 +306,7 @@ public class KcaFleetViewListItem extends FrameLayout {
         public void writeToParcel(Parcel dest, int flags) {
 
             dest.writeInt(ship_id);
+            dest.writeInt(mst_ship_id);
             dest.writeString(name);
             dest.writeInt(stype);
             dest.writeInt(lv);

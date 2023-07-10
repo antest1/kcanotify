@@ -172,7 +172,7 @@ public class KcaDockingPopupService extends Service {
                             String id = item.get("api_id").getAsString();
                             int level = item.get("api_lv").getAsInt();
                             JsonObject repair_item = new JsonObject();
-                            String name = getShipTranslation(kcdata.get("name").getAsString(), false);
+                            String name = getShipTranslation(kcdata.get("name").getAsString(), ship_id, false);
                             String name_level = KcaUtils.format("%s (Lv %d)", name, level);
                             int stype = kcdata.get("stype").getAsInt();
                             int repair_time = KcaDocking.getDockingTime(hp_loss, level, stype);
@@ -265,9 +265,11 @@ public class KcaDockingPopupService extends Service {
                         if (ship_id > 0) {
                             String ship_name = "";
                             JsonObject shipData = getUserShipDataById(ship_id, "ship_id");
-                            JsonObject kcShipData = KcaApiData.getKcShipDataById(shipData.get("ship_id").getAsInt(), "name");
+
+                            int kc_ship_id = shipData.get("ship_id").getAsInt();
+                            JsonObject kcShipData = KcaApiData.getKcShipDataById(kc_ship_id, "name");
                             if (kcShipData != null) {
-                                ship_name = getShipTranslation(kcShipData.get("name").getAsString(), false);
+                                ship_name = getShipTranslation(kcShipData.get("name").getAsString(), kc_ship_id, false);
                             }
                             nameview.setText(ship_name);
                             timeview.setText(getLeftTimeStr(item.get("api_complete_time").getAsLong()));

@@ -401,7 +401,16 @@ public class KcaApiData {
         return !(mission_no == 33 || mission_no == 34 || (mission_no > 130));
     }
 
-    public static String getShipTranslation(String jp_name, boolean abbr) {
+    public static String getShipTranslation(String jp_name, int api_id, boolean abbr) {
+        // add suffix for souya
+        if (api_id == 699) {
+            jp_name += "(特務艦)";
+        } else if (api_id == 645) {
+            jp_name += "(灯台補給船)";
+        } else if (api_id == 650) {
+            jp_name += "(南極観測船)";
+        }
+
         if (currentLocaleCode.equals("jp")) {
             return jp_name;
         }
@@ -415,7 +424,7 @@ public class KcaApiData {
         JsonObject suffixes = kcShipTranslationData.getAsJsonObject("suffixes");
         for (Map.Entry<String, JsonElement> entry : suffixes.entrySet()) {
             if (jp_name.endsWith(entry.getKey())) {
-                name = name.replaceAll(entry.getKey(), "");
+                name = name.replace(entry.getKey(), "");
                 name_suffix = entry.getValue().getAsString();
                 break;
             }

@@ -93,7 +93,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
         JsonObject kcdata = data.getAsJsonObject("kc");
         JsonObject userdata = data.getAsJsonObject("user");
 
-        holder.ship_name.setText(KcaApiData.getShipTranslation(kcdata.get("name").getAsString(), false));
+        holder.ship_name.setText(KcaApiData.getShipTranslation(kcdata.get("name").getAsString(), kcdata.get("id").getAsInt(), false));
         holder.ship_stype.setText(KcaApiData.getShipTypeAbbr(kcdata.get("stype").getAsInt()));
         holder.ship_lv.setText("Lv ".concat(userdata.get("api_lv").getAsString()));
         holder.ship_maxhp.setText("HP ".concat(userdata.get("api_maxhp").getAsString()));

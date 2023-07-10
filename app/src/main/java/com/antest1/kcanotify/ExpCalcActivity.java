@@ -300,7 +300,7 @@ public class ExpCalcActivity extends AppCompatActivity {
             String name = "???";
             JsonObject kc_ship_data = KcaApiData.getKcShipDataById(ship_id, "name");
             if (kc_ship_data != null) {
-                name = getShipTranslation(kc_ship_data.get("name").getAsString(), false);
+                name = getShipTranslation(kc_ship_data.get("name").getAsString(), ship_id, false);
             }
             ship_label_list[i] = KcaUtils.format("[Lv.%d] %s", lv, name);
         }
@@ -495,7 +495,8 @@ public class ExpCalcActivity extends AppCompatActivity {
         String ship_name_value = "???";
         JsonObject kc_ship_data = KcaApiData.getKcShipDataById(ship_id, "name");
         if (kc_ship_data != null) {
-            ship_name_value = getShipTranslation(kc_ship_data.get("name").getAsString(), false);
+            ship_name_value = kc_ship_data.get("name").getAsString();
+            ship_name_value = getShipTranslation(ship_name_value, ship_id, false);
         }
 
         ship_name.setText(ship_name_value);

@@ -464,7 +464,8 @@ public class KcaBattleViewService extends Service {
                                 } else {
                                     //Log.e("KCA", KcaUtils.format("%d: visible", j + 1));
                                     JsonObject data = shipData.getAsJsonObject(String.valueOf(mainDeck.get(j)));
-                                    JsonObject kcdata = getKcShipDataById(data.get("api_ship_id").getAsInt(), "maxeq");
+                                    int ship_id = data.get("api_ship_id").getAsInt();
+                                    JsonObject kcdata = getKcShipDataById(data.get("api_ship_id").getAsInt(), "name,maxeq");
                                     JsonObject itemdata = new JsonObject();
                                     itemdata.add("api_slot", data.get("api_slot"));
                                     itemdata.add("api_slot_ex", data.get("api_slot_ex"));
@@ -476,8 +477,8 @@ public class KcaBattleViewService extends Service {
                                     int level = data.get("api_lv").getAsInt();
                                     int condition = data.get("api_cond").getAsInt();
                                     int exp_left = data.getAsJsonArray("api_exp").get(1).getAsInt();
-                                    JsonObject kcShipData = KcaApiData.getKcShipDataById(data.get("api_ship_id").getAsInt(), "name");
-                                    String kcname = getShipTranslation(kcShipData.get("name").getAsString(), false);
+
+                                    String kcname = getShipTranslation(kcdata.get("name").getAsString(), ship_id, false);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_name", j + 1), R.id.class))).setText(kcname);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fm_%d_name", j + 1), R.id.class)))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
@@ -550,7 +551,10 @@ public class KcaBattleViewService extends Service {
                                 } else {
                                     //Log.e("KCA", KcaUtils.format("%d: visible", j + 1));
                                     JsonObject data = shipData.getAsJsonObject(String.valueOf(combinedDeck.get(j)));
-                                    JsonObject kcdata = getKcShipDataById(data.get("api_ship_id").getAsInt(), "maxeq");
+
+                                    int ship_id = data.get("api_ship_id").getAsInt();
+
+                                    JsonObject kcdata = getKcShipDataById(ship_id, "maxeq,name");
                                     JsonObject itemdata = new JsonObject();
                                     itemdata.add("api_slot", data.get("api_slot"));
                                     itemdata.add("api_slot_ex", data.get("api_slot_ex"));
@@ -562,8 +566,8 @@ public class KcaBattleViewService extends Service {
                                     int level = data.get("api_lv").getAsInt();
                                     int condition = data.get("api_cond").getAsInt();
                                     int exp_left = data.getAsJsonArray("api_exp").get(1).getAsInt();
-                                    JsonObject kcShipData = KcaApiData.getKcShipDataById(data.get("api_ship_id").getAsInt(), "name");
-                                    String kcname = getShipTranslation(kcShipData.get("name").getAsString(), false);
+
+                                    String kcname = getShipTranslation(kcdata.get("name").getAsString(), ship_id, false);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_name", j + 1), R.id.class))).setText(kcname);
                                     ((TextView) battleview.findViewById(getId(KcaUtils.format("fs_%d_name", j + 1), R.id.class)))
                                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
@@ -695,8 +699,9 @@ public class KcaBattleViewService extends Service {
                         battleview.findViewById(getId(KcaUtils.format("em_%d", i + 1), R.id.class)).setVisibility(View.INVISIBLE);
                     } else {
                         int level = api_ship_lv.get(i).getAsInt();
-                        JsonObject kcShipData = KcaApiData.getKcShipDataById(api_ship_ke.get(i).getAsInt(), "name,yomi");
-                        String kcname = getShipTranslation(kcShipData.get("name").getAsString(), true);
+                        int ship_ke_id = api_ship_ke.get(i).getAsInt();
+                        JsonObject kcShipData = KcaApiData.getKcShipDataById(ship_ke_id, "name,yomi");
+                        String kcname = getShipTranslation(kcShipData.get("name").getAsString(), ship_ke_id, true);
                         String kcyomi = kcShipData.get("yomi").getAsString();
 
                         ((TextView) battleview.findViewById(getId(KcaUtils.format("em_%d_name", i + 1), R.id.class))).setText(kcname);
@@ -861,8 +866,9 @@ public class KcaBattleViewService extends Service {
                             battleview.findViewById(getId(KcaUtils.format("es_%d", i + 1), R.id.class)).setVisibility(View.INVISIBLE);
                         } else {
                             int level = api_ship_lv.get(i).getAsInt();
-                            JsonObject kcShipData = KcaApiData.getKcShipDataById(api_ship_ke_combined.get(i).getAsInt(), "name,yomi");
-                            String kcname = getShipTranslation(kcShipData.get("name").getAsString(), true);
+                            int ship_ke_id = api_ship_ke_combined.get(i).getAsInt();
+                            JsonObject kcShipData = KcaApiData.getKcShipDataById(ship_ke_id, "name,yomi");
+                            String kcname = getShipTranslation(kcShipData.get("name").getAsString(), ship_ke_id, true);
                             String kcyomi = kcShipData.get("yomi").getAsString();
 
                             ((TextView) battleview.findViewById(getId(KcaUtils.format("es_%d_name", i + 1), R.id.class))).setText(kcname);
@@ -1110,9 +1116,10 @@ public class KcaBattleViewService extends Service {
                     }
                 }
                 if (api_data.has("api_get_ship")) {
+                    int ship_id = api_data.getAsJsonObject("api_get_ship").get("api_ship_id").getAsInt();
                     String ship_name = api_data.getAsJsonObject("api_get_ship").get("api_ship_name").getAsString();
                     ((TextView) battleview.findViewById(R.id.battle_getship))
-                            .setText(getShipTranslation(ship_name, false));
+                            .setText(getShipTranslation(ship_name, ship_id, false));
                 } else if (!is_practice && checkUserPortEnough()) {
                     ((TextView) battleview.findViewById(R.id.battle_getship))
                             .setText(getStringWithLocale(R.string.getship_none));

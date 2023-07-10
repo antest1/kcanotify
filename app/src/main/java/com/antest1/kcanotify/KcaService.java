@@ -1612,6 +1612,7 @@ public class KcaService extends Service {
 
                             JsonObject equipdevdata = new JsonObject();
                             equipdevdata.addProperty("flagship", shipname);
+                            equipdevdata.addProperty("flagship_id", flagship);
                             equipdevdata.addProperty("time", timetext);
                             equipdevdata.add("items", new JsonArray());
 

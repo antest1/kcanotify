@@ -231,10 +231,11 @@ public class AkashiDetailActivity extends AppCompatActivity {
 
                 if (itemDefaultEquippedOn != null) {
                     for (JsonElement element : itemDefaultEquippedOn) {
-                        String shipId = element.getAsString();
-                        shipList.add(shipId);
-                        JsonObject kcShipData = getKcShipDataById(Integer.parseInt(shipId), "name");
-                        shipName.addProperty(shipId, getShipTranslation(kcShipData.get("name").getAsString(), false));
+                        int shipId = element.getAsInt();
+                        shipList.add(String.valueOf(shipId));
+                        JsonObject kcShipData = getKcShipDataById(shipId, "name");
+                        String translatedName = getShipTranslation(kcShipData.get("name").getAsString(), shipId, false);
+                        shipName.addProperty(String.valueOf(shipId), translatedName);
                     }
                     if (shipList.size() > 0) {
                         JsonObject shipRemovelLv = findRemodelLv(joinStr(shipList, ","));
@@ -353,7 +354,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
                 int[] shiplist = removeKai(item.get(1).getAsJsonArray(), exception);
                 for (int j = 0; j < shiplist.length; j++) {
                     JsonObject kcShipData = getKcShipDataById(shiplist[j], "name");
-                    String shipname = getShipTranslation(kcShipData.get("name").getAsString(), false);
+                    String shipname = getShipTranslation(kcShipData.get("name").getAsString(), shiplist[j], false);
                     supportString = supportString.concat(KcaUtils.format("%s(%s)", shipname, daytext)).concat("\n");
                 }
             } else {

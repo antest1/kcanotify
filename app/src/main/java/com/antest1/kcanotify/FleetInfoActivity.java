@@ -47,7 +47,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
 public class FleetInfoActivity extends AppCompatActivity {
-    static final String KC_REQ_LIST = "name,stype,houg,raig,tyku,souk,tais,luck,afterlv,slot_num";
+    static final String KC_REQ_LIST = "id,name,stype,houg,raig,tyku,souk,tais,luck,afterlv,slot_num";
 
     Toolbar toolbar;
     KcaDBHelper dbHelper;

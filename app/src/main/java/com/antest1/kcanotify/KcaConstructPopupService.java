@@ -181,9 +181,9 @@ public class KcaConstructPopupService extends Service {
                     if (item.get("api_state").getAsInt() != -1) {
                         int ship_id = item.get("api_created_ship_id").getAsInt();
                         if (ship_id > 0) {
-                            JsonObject shipdata = KcaApiData.getKcShipDataById(item.get("api_created_ship_id").getAsInt(), "name");
+                            JsonObject shipdata = KcaApiData.getKcShipDataById(ship_id, "name");
                             if (spoilerStatus) {
-                                nameview.setText(KcaApiData.getShipTranslation(shipdata.get("name").getAsString(), false));
+                                nameview.setText(KcaApiData.getShipTranslation(shipdata.get("name").getAsString(), ship_id, false));
                             } else {
                                 nameview.setText("？？？");
                             }

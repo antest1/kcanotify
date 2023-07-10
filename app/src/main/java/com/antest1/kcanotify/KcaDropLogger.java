@@ -176,7 +176,7 @@ public class KcaDropLogger extends SQLiteOpenHelper {
                 JsonObject kc_data = KcaApiData.getKcShipDataById(ship_id, "name");
                 if (kc_data != null) {
                     String kc_name = kc_data.get("name").getAsString();
-                    ship_name_text = KcaApiData.getShipTranslation(kc_name, false);
+                    ship_name_text = KcaApiData.getShipTranslation(kc_name, ship_id, false);
                 }
             }
             String str_item = KcaUtils.format("%s,%s,%s,%s,%s", timetext, node_text, isboss_text, rank_text, ship_name_text);

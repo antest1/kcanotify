@@ -98,7 +98,7 @@ public class KcaAkashiListViewItem {
                         int[] filtered = removeKai(supportInfo.getAsJsonArray(), convert_exception);
                         for(int k = 0; k < filtered.length; k++) {
                             JsonObject kcShipData = getKcShipDataById(filtered[k], "name");
-                            shiplist.add(getShipTranslation(kcShipData.get("name").getAsString(), false));
+                            shiplist.add(getShipTranslation(kcShipData.get("name").getAsString(), filtered[k], false));
                         }
                     } else {
                         shiplist.add("-");

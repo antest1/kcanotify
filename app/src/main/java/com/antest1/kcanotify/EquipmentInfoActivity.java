@@ -126,12 +126,14 @@ public class EquipmentInfoActivity extends AppCompatActivity {
                 JsonObject ship_info = ship_data.get(i).getAsJsonObject();
                 int ship_id = ship_info.get("api_id").getAsInt();
                 int ship_lv = ship_info.get("api_lv").getAsInt();
-                JsonObject ship_kc_info = getKcShipDataById(ship_info.get("api_ship_id").getAsInt(), "name");
+                int ship_kc_id = ship_info.get("api_ship_id").getAsInt();
+                JsonObject ship_kc_info = getKcShipDataById(ship_kc_id, "name");
                 String ship_name = "";
                 if (ship_kc_info != null) ship_name = ship_kc_info.get("name").getAsString();
 
                 JsonObject ship_id_lv = new JsonObject();
                 ship_id_lv.addProperty("id", ship_id);
+                ship_id_lv.addProperty("kc_id", ship_kc_id);
                 ship_id_lv.addProperty("name", ship_name);
                 ship_id_lv.addProperty("lv", ship_lv);
 

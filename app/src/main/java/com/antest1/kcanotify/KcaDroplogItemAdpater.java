@@ -91,7 +91,7 @@ public class KcaDroplogItemAdpater extends BaseAdapter {
             JsonObject kc_data = KcaApiData.getKcShipDataById(ship_id, "name");
             if (kc_data != null) {
                 String kc_name = kc_data.get("name").getAsString();
-                holder.item_name.setText(KcaApiData.getShipTranslation(kc_name, false));
+                holder.item_name.setText(KcaApiData.getShipTranslation(kc_name, ship_id, false));
             }
             holder.item_name.setTextColor(color_normal);
         }

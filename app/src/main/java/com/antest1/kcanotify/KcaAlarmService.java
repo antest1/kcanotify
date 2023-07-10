@@ -217,7 +217,8 @@ public class KcaAlarmService extends Service {
                             if (shipId != -1) {
                                 JsonObject kcShipData = KcaApiData.getKcShipDataById(shipId, "name");
                                 if (kcShipData != null) {
-                                    shipName = getShipTranslation(kcShipData.get("name").getAsString(), false);
+                                    String kcShipName = kcShipData.get("name").getAsString();
+                                    shipName = getShipTranslation(kcShipName, shipId, false);
                                 }
                             }
                             int nid = getNotificationId(NOTI_DOCK, dockId);
