@@ -1,91 +1,91 @@
 [{
-	"id": 0,
-	"useitem_id": -1,
-	"name": {
-		"ko": "",
-		"en": "",
-		"jp": "",
-		"scn": "",
-		"tcn": ""
-	}
+    "id": 0,
+    "useitem_id": -1,
+    "name": {
+        "jp": "",
+        "en": "",
+        "ko": "",
+        "scn": "",
+        "tcn": ""
+    }
 }, {
-	"id": 1,
-	"useitem_id": 71,
-	"name": {
-		"ko": "네식엔진",
-		"en": "Ne Type Engine",
-		"jp": "ネ式エンジン",
-		"scn": "Ne式喷射发动机",
-		"tcn": "Ne式噴射發動機"
-	}
+    "id": 1,
+    "useitem_id": 71,
+    "name": {
+        "jp": "ネ式エンジン",
+        "en": "Ne Type Engine",
+        "ko": "네식엔진",
+        "scn": "Ne式喷射发动机",
+        "tcn": "Ne式噴射發動機"
+    }
 }, {
-	"id": 2,
-	"useitem_id": 75,
-	"name": {
-		"ko": "신형포공병장자재",
-		"en": "New Model Gun Mount Improvement Material",
-		"jp": "新型砲熕兵装資材",
-		"scn": "新型火炮兵装资材",
-		"tcn": "新型火炮兵裝資材"
-	}
+    "id": 2,
+    "useitem_id": 75,
+    "name": {
+        "jp": "新型砲熕兵装資材",
+        "en": "New Model Gun Mount Improvement Material",
+        "ko": "신형포공병장자재",
+        "scn": "新型火炮兵装资材",
+        "tcn": "新型火砲兵裝資材"
+    }
 }, {
-	"id": 3,
-	"useitem_id": 70,
-	"name": {
-		"ko": "숙련탑승원",
-		"en": "Skilled Crew Member",
-		"jp": "熟練搭乗員",
-		"scn": "熟练搭乘员",
-		"tcn": "熟練搭乘員"
-	}
+    "id": 3,
+    "useitem_id": 70,
+    "name": {
+        "jp": "熟練搭乗員",
+        "en": "Skilled Crew Member",
+        "ko": "숙련탑승원",
+        "scn": "熟练搭乘员",
+        "tcn": "熟練搭乘員"
+    }
 }, {
-	"id": 4,
-	"useitem_id": 77,
-	"name": {
-		"ko": "신형항공병장자재",
-		"en": "New Model Aerial Armament Materials",
-		"jp": "新型航空兵装資材",
-		"scn": "新型航空兵装资材",
-		"tcn": "新型航空兵裝資材"
-	}
+    "id": 4,
+    "useitem_id": 77,
+    "name": {
+        "jp": "新型航空兵装資材",
+        "en": "New Model Aerial Armament Material",
+        "ko": "신형항공병장자재",
+        "scn": "新型航空兵装资材",
+        "tcn": "新型航空兵裝資材"
+    }
 }, {
-	"id": 5,
-	"useitem_id": 78,
-	"name": {
-		"ko": "전투상보",
-		"en": "Action Report",
-		"jp": "戦闘詳報",
-		"scn": "战斗详报",
-		"tcn": "戰鬥詳報"
-	}
+    "id": 5,
+    "useitem_id": 78,
+    "name": {
+        "jp": "戦闘詳報",
+        "en": "Action Report",
+        "ko": "전투상보",
+        "scn": "战斗详报",
+        "tcn": "戰鬥詳報"
+    }
 }, {
-	"id": 6,
-	"useitem_id": 92,
-	"name": {
-		"ko": "신형분진장비개발자재",
-		"en": "New Model Rocket Development Material",
-		"jp": "新型噴進装備開発資材",
-		"scn": "新型喷进装备开发资",
-		"tcn": "新型噴進裝備開発資材"
-	}
+    "id": 6,
+    "useitem_id": 92,
+    "name": {
+        "jp": "新型噴進装備開発資材",
+        "en": "New Model Rocket Development Material",
+        "ko": "신형분진장비개발자재",
+        "scn": "新型喷进装备开发资",
+        "tcn": "新型噴進裝備開發資"
+    }
 }, {
-	"id": 7,
-	"useitem_id": 94,
-	"name": {
-		"ko": "신형병장자재",
-		"en": "New Model Armament Material",
-		"jp": "新型兵装資材",
-		"scn": "新型兵装资材",
-		"tcn": "新型兵裝資材"
-	}
+    "id": 7,
+    "useitem_id": 94,
+    "name": {
+        "jp": "新型兵装資材",
+        "en": "New Model Armament Material",
+        "ko": "신형병장자재",
+        "scn": "新型兵装资材",
+        "tcn": "新型兵裝資材"
+    }
 }, {
-	"id": 8,
-	"useitem_id": 57,
-	"name": {
-		"ko": "훈장",
-		"en": "Medal",
-		"jp": "勲章",
-		"scn": "勋章",
-		"tcn": "勳章"
-	}
+    "id": 8,
+    "useitem_id": 57,
+    "name": {
+        "jp": "勲章",
+        "en": "Medal",
+        "ko": "훈장",
+        "scn": "勋章",
+        "tcn": "勳章"
+    }
 }]
