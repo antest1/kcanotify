@@ -26,6 +26,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
 
     <string name="special_message">no cheating allowed</string>
     <string name="notification_message">Notification and Information</string>
+    <string name="app_notice_link" translatable="false">https://luckyjervis.com/kcanotify/notice</string>
 
     <string name="backpress_msg">Press back one more time to exit</string>
     <string name="notification_appinfo_title">Kcanotify Notification</string>
@@ -39,12 +40,12 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_download_link_googledrive" translatable="false">https://bit.ly/kcanotify_gdrive</string>
     <string name="app_download_link_mega" translatable="false">https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw</string>
     <string name="app_download_link_playstore" translatable="false">market://details?id=com.antest1.kcanotify</string>
-    <string name="app_download_link_luckyjervis" translatable="false">http://luckyjervis.com/kcanotify/apk/latest.apk</string>
+    <string name="app_download_link_luckyjervis" translatable="false">https://luckyjervis.com/kcanotify/apk/latest.apk</string>
     <string name="app_download_link_kcwiki" translatable="false">https://mirrors.kcwiki.org/kcanotify/</string>
 
     <!-- Link Information -->
-    <string name="server_swaytwig" translatable="false">http://swaytwig.com/</string>
-    <string name="server_liza" translatable="false">http://luckyjervis.com/</string>
+    <string name="server_swaytwig" translatable="false">https://swaytwig.com/</string>
+    <string name="server_liza" translatable="false">https://luckyjervis.com/</string>
     <string name="kcanotify_checkversion_link" translatable="false" formatted="false">kcanotify/v.php</string>
     <string name="api_start2_recent_version_link" translatable="false" formatted="false">kcanotify/kca_api_start2.php?v=recent</string>
 

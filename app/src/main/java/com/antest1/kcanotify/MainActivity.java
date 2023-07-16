@@ -26,6 +26,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
+import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -349,14 +350,15 @@ public class MainActivity extends AppCompatActivity {
         textSpecial2 = findViewById(R.id.textSpecial2);
         textSpecial2.setText(getStringWithLocale(R.string.notification_message));
         textSpecial2.setOnClickListener(v -> {
-            String locale1 = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
-            String locale_code = getResourceLocaleCode(locale1);
-            String url = KcaUtils.format("http://luckyjervis.com/noti.html", locale_code);
+            String url = getStringWithLocale(R.string.app_notice_link);
 
             CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
             intentBuilder.setShowTitle(true);
-            intentBuilder.setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
-            intentBuilder.enableUrlBarHiding();
+            CustomTabColorSchemeParams params = new CustomTabColorSchemeParams.Builder()
+                    .setToolbarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
+                    .build();
+            intentBuilder.setDefaultColorSchemeParams(params);
+            intentBuilder.setUrlBarHidingEnabled(true);
 
             final CustomTabsIntent customTabsIntent = intentBuilder.build();
             final List<ResolveInfo> customTabsApps = getPackageManager().queryIntentActivities(customTabsIntent.intent, 0);
