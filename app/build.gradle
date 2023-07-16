@@ -9,8 +9,8 @@ android {
         applicationId "com.antest1.kcanotify"
         minSdkVersion 16
         targetSdkVersion 31
-        versionCode 209009
-        versionName "2.9r9"
+        versionCode 209011
+        versionName "2.9r10"
 
         multiDexEnabled true
         externalNativeBuild {
@@ -51,6 +51,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    ndkVersion '23.1.7779620'
 }
 
 dependencies {
@@ -59,7 +60,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation "androidx.fragment:fragment:1.3.4"
-    implementation "androidx.preference:preference:1.1.1"
+    implementation "androidx.preference:preference:1.2.0"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.3.0'
     api 'com.google.guava:guava:27.0.1-android'
