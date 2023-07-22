@@ -56,7 +56,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
 public class ExpCalcActivity extends AppCompatActivity {
-    public static final int LEVEL_MAX = 175;
+    public static final int LEVEL_MAX = 180;
     private static final int RANK_S = 0;
     private static final int RANK_A = 1;
     private static final int RANK_B = 2;
