@@ -99,7 +99,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
 
         for (JsonElement data: user_equipment_data) {
             JsonObject equip = data.getAsJsonObject();
-            JsonObject value = new JsonParser().parse(equip.get("value").getAsString()).getAsJsonObject();
+            JsonObject value = JsonParser.parseString(equip.get("value").getAsString()).getAsJsonObject();
             seikuuken_data.add(getSeikuukenSimluatorData(value));
             String id = getItemKey(value);
             if(!counter.containsKey(id)) {
@@ -133,7 +133,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
                     if (item_id > 0) {
                         String item_info_str = helper.getItemValue(item_id);
                         if (item_info_str != null) {
-                            JsonObject item_info = new JsonParser().parse(item_info_str).getAsJsonObject();
+                            JsonObject item_info = JsonParser.parseString(item_info_str).getAsJsonObject();
                             item_list.add(getItemKey(item_info));
                         }
                     }
@@ -142,7 +142,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
                 if (ex_item_id > 0) {
                     String item_info_str = helper.getItemValue(ex_item_id);
                     if (item_info_str != null) {
-                        JsonObject item_info = new JsonParser().parse(item_info_str).getAsJsonObject();
+                        JsonObject item_info = JsonParser.parseString(item_info_str).getAsJsonObject();
                         item_list.add(getItemKey(item_info));
                     }
                 }

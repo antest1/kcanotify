@@ -101,7 +101,7 @@ public class PackageFilterActivity extends AppCompatActivity {
     }
 
     public void setAllowCount() {
-        JsonArray data = new JsonParser().parse(getStringPreferences(getApplicationContext(), PREF_PACKAGE_ALLOW)).getAsJsonArray();
+        JsonArray data = JsonParser.parseString(getStringPreferences(getApplicationContext(), PREF_PACKAGE_ALLOW)).getAsJsonArray();
         countview.setText(KcaUtils.format(getStringWithLocale(R.string.packagefilter_count_format), data.size()));
     }
 }

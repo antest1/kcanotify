@@ -107,7 +107,7 @@ public class KcaCustomToastService extends Service {
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
             if(intent.getAction().equals(TOAST_SHOW_ACTION)) {
-                JsonObject data = new JsonParser().parse(intent.getExtras().getString("data")).getAsJsonObject();
+                JsonObject data = JsonParser.parseString(intent.getExtras().getString("data")).getAsJsonObject();
                 String body = data.get("text").getAsString();
                 int color = data.get("color").getAsInt();
                 int duration = data.get("duration").getAsInt();

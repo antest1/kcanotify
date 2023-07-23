@@ -225,7 +225,7 @@ public class KcaTimerWidget extends AppWidgetProvider {
         JsonObject state;
 
         try {
-            state = new JsonParser().parse(getStringPreferences(context, PREF_TIMER_WIDGET_STATE)).getAsJsonObject();
+            state = JsonParser.parseString(getStringPreferences(context, PREF_TIMER_WIDGET_STATE)).getAsJsonObject();
         } catch (JsonSyntaxException | IllegalStateException e) {
             state = new JsonObject();
         }
@@ -268,7 +268,7 @@ public class KcaTimerWidget extends AppWidgetProvider {
             int[] appWidgetIds =  manager.getAppWidgetIds(new ComponentName(context, getClass()));
             JsonObject state;
             try {
-                state = new JsonParser().parse(getStringPreferences(context, PREF_TIMER_WIDGET_STATE)).getAsJsonObject();
+                state = JsonParser.parseString(getStringPreferences(context, PREF_TIMER_WIDGET_STATE)).getAsJsonObject();
             } catch (JsonSyntaxException | IllegalStateException e) {
                 state = new JsonObject();
             }

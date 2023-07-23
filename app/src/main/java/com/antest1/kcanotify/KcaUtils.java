@@ -127,7 +127,7 @@ public class KcaUtils {
     }
 
     public static JsonElement parseJson(String v) {
-        return new JsonParser().parse(v);
+        return JsonParser.parseString(v);
     }
 
     public static String joinStr(List<String> list, String delim) {
@@ -303,7 +303,7 @@ public class KcaUtils {
     }
 
     public static JsonObject getJsonObjectCopy(JsonObject data) {
-        return new JsonParser().parse(data.toString()).getAsJsonObject();
+        return JsonParser.parseString(data.toString()).getAsJsonObject();
     }
 
     public static int setDefaultGameData(Context context, KcaDBHelper helper) {
@@ -327,7 +327,7 @@ public class KcaUtils {
                         (AssetManager.AssetInputStream) assetManager.open("api_start2");
                 byte[] bytes = KcaUtils.gzipdecompress(ByteStreams.toByteArray(ais));
                 helper.putValue(DB_KEY_STARTDATA, new String(bytes));
-                JsonElement data = new JsonParser().parse(new String(bytes));
+                JsonElement data = JsonParser.parseString(new String(bytes));
                 JsonObject api_data = new Gson().fromJson(data, JsonObject.class).getAsJsonObject("api_data");
                 KcaApiData.getKcGameData(api_data);
                 setPreferences(context, PREF_KCA_VERSION, default_version);
@@ -645,7 +645,7 @@ public class KcaUtils {
             JsonObject data = null;
             try {
                 Reader reader = new FileReader(jsonFile);
-                data = new JsonParser().parse(reader).getAsJsonObject();
+                data = JsonParser.parseReader(reader).getAsJsonObject();
                 reader.close();
             } catch (IOException | IllegalStateException | JsonSyntaxException e) {
                 e.printStackTrace();
@@ -665,7 +665,7 @@ public class KcaUtils {
             AssetManager.AssetInputStream ais =
                     (AssetManager.AssetInputStream) am.open(name);
             byte[] bytes = ByteStreams.toByteArray(ais);
-            data = new JsonParser().parse(new String(bytes)).getAsJsonObject();
+            data = JsonParser.parseString(new String(bytes)).getAsJsonObject();
             ais.close();
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -685,7 +685,7 @@ public class KcaUtils {
             JsonArray data = new JsonArray();
             try {
                 Reader reader = new FileReader(jsonFile);
-                data = new JsonParser().parse(reader).getAsJsonArray();
+                data = JsonParser.parseReader(reader).getAsJsonArray();
                 reader.close();
             } catch (IOException | IllegalStateException | JsonSyntaxException e ) {
                 e.printStackTrace();
@@ -705,7 +705,7 @@ public class KcaUtils {
             AssetManager.AssetInputStream ais =
                     (AssetManager.AssetInputStream) am.open(name);
             byte[] bytes = ByteStreams.toByteArray(ais);
-            data = new JsonParser().parse(new String(bytes)).getAsJsonArray();
+            data = JsonParser.parseString(new String(bytes)).getAsJsonArray();
             ais.close();
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -874,7 +874,7 @@ public class KcaUtils {
         for (final File entry : directory.listFiles()) {
             try {
                 Reader reader = new FileReader(entry);
-                new JsonParser().parse(reader);
+                JsonParser.parseReader(reader);
                 count += 1;
             } catch (FileNotFoundException | IllegalStateException | JsonSyntaxException e ) {
                 e.printStackTrace();

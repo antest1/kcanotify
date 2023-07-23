@@ -533,7 +533,7 @@ public class KcaApiData {
         try {
             AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("exp_ship.json");
             byte[] bytes = ByteStreams.toByteArray(ais);
-            JsonElement expShipData = new JsonParser().parse(new String(bytes));
+            JsonElement expShipData = JsonParser.parseString(new String(bytes));
             if (expShipData.isJsonObject()) {
                 helper.putValue(DB_KEY_EXPSHIP, expShipData.toString());
                 return 1;
@@ -549,7 +549,7 @@ public class KcaApiData {
         try {
             AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("exp_sortie.json");
             byte[] bytes = ByteStreams.toByteArray(ais);
-            JsonElement expSortieData = new JsonParser().parse(new String(bytes));
+            JsonElement expSortieData = JsonParser.parseString(new String(bytes));
             if (expSortieData.isJsonObject()) {
                 helper.putValue(DB_KEY_EXPSORTIE, expSortieData.toString());
                 return 1;
@@ -568,7 +568,7 @@ public class KcaApiData {
             AssetManager.AssetInputStream ais_abbr =
                     (AssetManager.AssetInputStream) context.getResources().getAssets().open("en-abbr.json");
             byte[] bytes_abbr = ByteStreams.toByteArray(ais_abbr);
-            JsonElement data_abbr = new JsonParser().parse(new String(bytes_abbr));
+            JsonElement data_abbr = JsonParser.parseString(new String(bytes_abbr));
 
             if (data != null) {
                 kcShipTranslationData = data;
@@ -1039,7 +1039,7 @@ public class KcaApiData {
         if (helper == null || kcGameData == null) return null;
         String data = helper.getItemValue(id);
         if (data != null) {
-            JsonObject userData = new JsonParser().parse(data).getAsJsonObject();
+            JsonObject userData = JsonParser.parseString(data).getAsJsonObject();
             int kc_item_id = userData.get("api_slotitem_id").getAsInt();
             JsonObject kcData = getKcItemStatusById(kc_item_id, kclist);
 

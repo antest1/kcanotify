@@ -426,7 +426,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 JsonObject response_data = new JsonObject();
                 try {
                     if (response.body() != null) {
-                        response_data = new JsonParser().parse(response.body()).getAsJsonObject();
+                        response_data = JsonParser.parseString(response.body()).getAsJsonObject();
                     }
                 } catch (Exception e) {
                     dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "version_check", "", "", getStringFromException(e));

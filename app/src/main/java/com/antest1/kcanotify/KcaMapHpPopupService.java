@@ -42,7 +42,7 @@ public class KcaMapHpPopupService extends Service {
     public static final String MAPHP_RESET_ACTION = "maphp_reset_action";
 
     // public static final String count_data_raw = "{\"15\":4,\"16\":7,\"25\":4,\"35\":4,\"44\":4,\"45\":5,\"52\":4,\"53\":5,\"54\":5,\"55\":5,\"62\":3,\"63\":4,\"64\":5,\"65\":6,\"71\":3}";
-    // public static final JsonObject count_data = new JsonParser().parse(count_data_raw).getAsJsonObject();
+    // public static final JsonObject count_data = JsonParser.parseString(count_data_raw).getAsJsonObject();
     public static final String maphp_format = "[%s] %s %d/%d";
     private LocalBroadcastManager broadcaster;
     private BroadcastReceiver data_receiver;

@@ -53,7 +53,7 @@ public class KcaFleetViewMenuOrderActivity extends AppCompatActivity {
         ArrayList<JsonObject> data = new ArrayList<>();
         String pref_value = getStringPreferences(getApplicationContext(), PREF_FV_MENU_ORDER);
         if (pref_value.length() > 0) {
-            order_data = new JsonParser().parse(pref_value).getAsJsonArray();
+            order_data = JsonParser.parseString(pref_value).getAsJsonArray();
             for (int i = 0; i < order_data.size(); i++) {
                 JsonObject item = new JsonObject();
                 int key = order_data.get(i).getAsInt();

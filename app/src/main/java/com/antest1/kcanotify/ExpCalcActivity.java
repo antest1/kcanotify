@@ -534,7 +534,7 @@ public class ExpCalcActivity extends AppCompatActivity {
         for (int i = 0; i < track_values.size(); i++) {
             int k = track_values.keyAt(i);
             if (k <= count) {
-                JsonObject val = new JsonParser().parse(track_values.get(k)).getAsJsonObject();
+                JsonObject val = JsonParser.parseString(track_values.get(k)).getAsJsonObject();
                 data.add(val);
             }
         }

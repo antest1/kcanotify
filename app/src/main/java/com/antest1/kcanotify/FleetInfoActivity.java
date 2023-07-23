@@ -171,7 +171,7 @@ public class FleetInfoActivity extends AppCompatActivity {
             if (locale_code.equals("ko")) locale_code = "kr";
             if (locale_code.equals("tcn")) locale_code = "jp";
             try {
-                JsonObject add_data = new JsonParser().parse(data).getAsJsonObject();
+                JsonObject add_data = JsonParser.parseString(data).getAsJsonObject();
                 add_data.addProperty("lang", locale_code);
                 add_data.addProperty("theme", "dark");
                 data = add_data.toString();

@@ -407,7 +407,7 @@ public class KcaVpnService extends VpnService {
         boolean socks5_enable = prefs.getBoolean("socks5_enable", false);
         boolean socks5_allapps = prefs.getBoolean("socks5_allapps", false);
 
-        JsonArray allowed_apps = new JsonParser().parse(KcaUtils.getStringPreferences(
+        JsonArray allowed_apps = JsonParser.parseString(KcaUtils.getStringPreferences(
                 getApplicationContext(), PREF_PACKAGE_ALLOW)).getAsJsonArray();
 
         // Build VPN service

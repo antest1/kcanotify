@@ -54,7 +54,7 @@ public class KcaPackageListViewAdpater extends BaseAdapter {
         final int pos = position;
         final Context context = parent.getContext();
         PackageManager pm = context.getPackageManager();
-        JsonArray list = new JsonParser().parse(getStringPreferences(context, PREF_PACKAGE_ALLOW)).getAsJsonArray();
+        JsonArray list = JsonParser.parseString(getStringPreferences(context, PREF_PACKAGE_ALLOW)).getAsJsonArray();
 
         View v = convertView;
         if (v == null) {
@@ -84,7 +84,7 @@ public class KcaPackageListViewAdpater extends BaseAdapter {
 
         final String package_name = pkgname;
         holder.itemView.setOnClickListener(v1 -> {
-            JsonArray data = new JsonParser().parse(getStringPreferences(context, PREF_PACKAGE_ALLOW)).getAsJsonArray();
+            JsonArray data = JsonParser.parseString(getStringPreferences(context, PREF_PACKAGE_ALLOW)).getAsJsonArray();
             JsonPrimitive pkg = new JsonPrimitive(package_name);
             if (data.contains(pkg)) {
                 data.remove(pkg);

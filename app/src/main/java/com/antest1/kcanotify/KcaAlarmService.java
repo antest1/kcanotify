@@ -177,7 +177,7 @@ public class KcaAlarmService extends Service {
             }
             Log.e("KCA-N", "A> " + alarm_set.toString());
         } else if (intent != null && intent.getStringExtra("data") != null) {
-            JsonObject data = new JsonParser().parse(intent.getStringExtra("data")).getAsJsonObject();
+            JsonObject data = JsonParser.parseString(intent.getStringExtra("data")).getAsJsonObject();
             int type = data.get("type").getAsInt();
             if (type == TYPE_UPDATE) {
                 int utype = data.get("utype").getAsInt();

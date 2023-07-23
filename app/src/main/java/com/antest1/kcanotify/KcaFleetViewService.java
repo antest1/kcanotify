@@ -337,7 +337,7 @@ public class KcaFleetViewService extends Service {
 
         String order_data = getStringPreferences(getApplicationContext(), PREF_FV_MENU_ORDER);
         if (order_data.length() > 0) {
-            JsonArray order = new JsonParser().parse(order_data).getAsJsonArray();
+            JsonArray order = JsonParser.parseString(order_data).getAsJsonArray();
             for (int i = 0; i < order.size(); i++) {
                 fleetMenuArea.addView(menuBtnList.get(order.get(i).getAsInt()));
             }
@@ -1136,7 +1136,7 @@ public class KcaFleetViewService extends Service {
         try {
             AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("gunfit.json");
             byte[] bytes = ByteStreams.toByteArray(ais);
-            return new JsonParser().parse(new String(bytes)).getAsJsonObject();
+            return JsonParser.parseString(new String(bytes)).getAsJsonObject();
         } catch (IOException e) {
             return new JsonObject();
         }

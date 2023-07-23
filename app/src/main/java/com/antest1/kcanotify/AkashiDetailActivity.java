@@ -126,7 +126,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
             }
 
             if (itemImprovmetInfo.length() > 0) {
-                itemImprovementData = new JsonParser().parse(itemImprovmetInfo).getAsJsonObject();
+                itemImprovementData = JsonParser.parseString(itemImprovmetInfo).getAsJsonObject();
                 JsonArray itemImprovementDetail = itemImprovementData.getAsJsonArray("improvement");
                 JsonArray itemDefaultEquippedOn = itemImprovementData.getAsJsonArray("default_equipped_on");
                 boolean itemConvertException = itemImprovementData.has("convert_exception");
@@ -370,7 +370,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
 
         for (JsonElement data: user_equipment_data) {
             JsonObject equip = data.getAsJsonObject();
-            JsonObject value = new JsonParser().parse(equip.get("value").getAsString()).getAsJsonObject();
+            JsonObject value = JsonParser.parseString(equip.get("value").getAsString()).getAsJsonObject();
             String slotitem_id = value.get("api_slotitem_id").getAsString();
             int level = value.get("api_level").getAsInt();
             if (equip_id.equals(slotitem_id)) {
@@ -391,7 +391,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
 
         for (JsonElement data: user_equipment_data) {
             JsonObject equip = data.getAsJsonObject();
-            JsonObject value = new JsonParser().parse(equip.get("value").getAsString()).getAsJsonObject();
+            JsonObject value = JsonParser.parseString(equip.get("value").getAsString()).getAsJsonObject();
             String slotitem_id = value.get("api_slotitem_id").getAsString();
             int level = value.get("api_level").getAsInt();
             if (level == 0 && equip_id.contains(slotitem_id)) {

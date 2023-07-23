@@ -371,7 +371,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
     public void putItemValue(int key, String value) {
         SQLiteDatabase db = this.getWritableDatabase();
-        JsonObject obj = new JsonParser().parse(value).getAsJsonObject();
+        JsonObject obj = JsonParser.parseString(value).getAsJsonObject();
         int slotitem_id = obj.get("api_slotitem_id").getAsInt();
         ContentValues values = new ContentValues();
         values.put("KEY", key);
@@ -443,7 +443,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             String quest_str = c.getString(c.getColumnIndex("VALUE"));
 
             if (quest_str != null) {
-                JsonObject quest_data = new JsonParser().parse(quest_str).getAsJsonObject();
+                JsonObject quest_data = JsonParser.parseString(quest_str).getAsJsonObject();
                 int quest_type = quest_data.get("api_type").getAsInt();
 
                 String[] quest_time = getQuestDate(quest_id).split("-");
@@ -494,7 +494,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
             }
             Log.e("KCA", KcaUtils.format("%d: %b", quest_id, valid_flag));
             if (valid_flag) {
-                data.add(new JsonParser().parse(quest_str).getAsJsonObject());
+                data.add(JsonParser.parseString(quest_str).getAsJsonObject());
             } else {
                 db.delete(questlist_table_name, "KEY=?", new String[]{String.valueOf(quest_id)});
             }
