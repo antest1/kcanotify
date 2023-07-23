@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,8 +23,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
@@ -36,6 +39,7 @@ import com.tonyodev.fetch2.Request;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -72,6 +76,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
     String latest_gamedata_version = "";
     List<JsonObject> gamedata_info = new ArrayList<>();
     List<JsonObject> resource_info = new ArrayList<>();
+    List<String> resource_target;
     ListView data_list, resource_list;
     KcaResCheckItemAdpater gamedata_adapter = new KcaResCheckItemAdpater();
     KcaResCheckItemAdpater resource_adapter = new KcaResCheckItemAdpater();
@@ -132,6 +137,8 @@ public class UpdateCheckActivity extends AppCompatActivity {
         handler = new UpdateHandler(this);
         gamedata_adapter.setHandler(handler);
         resource_adapter.setHandler(handler);
+
+        resource_target = getResourcesFilter();
 
         checkstart_chkbox = findViewById(R.id.reschk_checkatstart);
         checkstart_chkbox.setText(getStringWithLocale(R.string.download_setting_checkatstart));
@@ -327,16 +334,16 @@ public class UpdateCheckActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     int num_count = 0;
-                    String res_result = response.body();
                     try {
-                        resource_info = gson.fromJson(res_result, listType);
-                        if (resource_info == null) {
-                            resource_info = new ArrayList<>();
+                        resource_info = new ArrayList<>();
+                        List<JsonObject> res_result = gson.fromJson(response.body(), listType);
+                        if (res_result == null) {
                             return;
                         } else {
-                            for (int i = 0; i < resource_info.size(); i++) {
-                                JsonObject item = resource_info.get(i).getAsJsonObject();
+                            for (int i = 0; i < res_result.size(); i++) {
+                                JsonObject item = res_result.get(i).getAsJsonObject();
                                 String name = item.get("name").getAsString();
+                                if (!isInResourcesFilter(name)) continue;
                                 String desc = "download " + name;
                                 item.addProperty("desc", desc);
                                 int current_res_v = dbHelper.getResVer(name);
@@ -344,7 +351,9 @@ public class UpdateCheckActivity extends AppCompatActivity {
                                 item.addProperty("version_str", getVersionString(current_res_v, latest_res_v));
                                 item.addProperty("highlight", current_res_v < latest_res_v);
                                 if (current_res_v < latest_res_v) num_count += 1;
+                                resource_info.add(item);
                             }
+
                             resource_adapter.setContext(getApplicationContext());
                             resource_adapter.setListItem(resource_info);
 
@@ -421,7 +430,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
                 JsonObject response_data = new JsonObject();
                 try {
                     if (response.body() != null) {
-                        response_data = new JsonParser().parse(response.body()).getAsJsonObject();
+                        response_data = JsonParser.parseString(response.body()).getAsJsonObject();
                         String kca_version = KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_VERSION);
                         String server_kca_version = response.headers().get("X-Api-Version");
                         Log.e("KCA", "api_version: " + server_kca_version);
@@ -547,6 +556,28 @@ public class UpdateCheckActivity extends AppCompatActivity {
         };
     }
 
+    public List<String> getResourcesFilter() {
+        List<String> filter = new ArrayList<>();
+        AssetManager am = getAssets();
+        try {
+            AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("resources_config.json");
+            byte[] bytes = ByteStreams.toByteArray(ais);
+            JsonObject config = JsonParser.parseString(new String(bytes)).getAsJsonObject();
+            for (JsonElement item : config.getAsJsonArray("common")) {
+                filter.add(item.getAsString());
+            }
+            for (JsonElement item : config.getAsJsonObject("langpacks").getAsJsonArray(LocaleUtils.getResourceLocaleCode())) {
+                filter.add(item.getAsString());
+            }
+        } catch (IOException e) {
+            // do nothing
+        }
+        return filter;
+    }
+
+    public boolean isInResourcesFilter(String key) {
+        return resource_target.size() > 0 && resource_target.contains(key);
+    }
 
     private class KcaFairyDownloader extends AsyncTask<Integer, Integer, Integer> {
         boolean is_finishing = false;

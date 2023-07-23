@@ -67,6 +67,7 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.gzipdecompress;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
+import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
 public class InitStartActivity extends Activity {
     public static final String ACTION_RESET = "ACTION_RESET";
@@ -80,7 +81,7 @@ public class InitStartActivity extends Activity {
     ImageView appfront;
 
     boolean is_destroyed = false;
-    int fairy_flag, new_resversion;
+    int fairy_flag;
     boolean reset_flag = false;
     boolean validated_flag = false;
     boolean is_skipped = false;
@@ -190,13 +191,12 @@ public class InitStartActivity extends Activity {
 
                 final Call<String> rv_data = downloader.getRecentVersion();
                 String response = getResultFromCall(rv_data);
-                new_resversion = -1;
                 fairy_flag = 0;
 
                 JsonObject response_data = new JsonObject();
                 try {
                     if (response != null) {
-                        response_data = new JsonParser().parse(response).getAsJsonObject();
+                        response_data = JsonParser.parseString(response).getAsJsonObject();
                     }
                 } catch (Exception e) {
                     dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "version_check", "", "", getStringFromException(e));
@@ -280,7 +280,10 @@ public class InitStartActivity extends Activity {
         }
 
         if (response_data.has("kcadata_version")) {
-            new_resversion = response_data.get("kcadata_version").getAsInt();
+            int common_version = response_data.get("kcadata_version").getAsInt();
+            int langpacks_version = response_data.getAsJsonObject("kcadata_langpacks")
+                    .get(LocaleUtils.getResourceLocaleCode()).getAsInt();
+            int new_resversion = Math.max(common_version, langpacks_version);
             latest_flag = latest_flag && new_resversion <= currentKcaResVersion;
         }
 
@@ -357,7 +360,7 @@ public class InitStartActivity extends Activity {
 
             AssetManager.AssetInputStream ais = (AssetManager.AssetInputStream) am.open("list.json");
             bytes = ByteStreams.toByteArray(ais);
-            JsonArray data = new JsonParser().parse(new String(bytes)).getAsJsonArray();
+            JsonArray data = JsonParser.parseString(new String(bytes)).getAsJsonArray();
 
             for (JsonElement item: data) {
                 JsonObject res_info = item.getAsJsonObject();
