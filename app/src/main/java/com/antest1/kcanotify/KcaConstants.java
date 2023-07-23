@@ -101,6 +101,7 @@ public final class KcaConstants {
     public static final String ERROR_TYPE_RESLOG = "RL";
     public static final String ERROR_TYPE_DATALOAD = "DL";
 
+    // region api
     public static final String API_PORT = "/api_port/port";
     public static final String API_WORLD_GET_WORLDINFO = "/api_world/get_worldinfo";
     public static final String API_WORLD_GET_ID = "/api_world/get_id";
@@ -315,6 +316,7 @@ public final class KcaConstants {
 
     public static final String KCA_API_VPN_DATA_ERROR = "/kca_api/vpn_data_error";
     public static final String KCA_API_RESOURCE_URL = "/kca_api/resource_url";
+    // endregion api
 
     public static final int SEEK_PURE = 0;
     public static final int SEEK_33CN1 = 1;
@@ -414,6 +416,7 @@ public final class KcaConstants {
     public static final int SNIFFER_ACTIVE = 0;
     public static final int SNIFFER_PASSIVE = 1;
 
+    // region pref key
     public static final String PREF_KCA_VERSION = "kca_version";
     public static final String PREF_KCARESOURCE_VERSION = "kcadata_version";
     public static final String PREF_KCA_LANGUAGE = "kca_language";
@@ -490,6 +493,7 @@ public final class KcaConstants {
     public static final String PREF_FAIRY_SIZE = "fairy_size";
     public static final String PREF_FAIRY_RANDOM = "fairy_random";
     public static final String PREF_NOTICE_CHK_FLAG = "kr_notice_chk";
+    public static final String PREF_EXPD_SELECTION = "kca_expd_selection"; // the expd number
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -601,4 +605,5 @@ public final class KcaConstants {
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);
     public static final List<String> PREFS_BOOLEAN_LIST = Arrays.asList(PREF_BOOLEAN_ARRAY);
+    // endregion
 }

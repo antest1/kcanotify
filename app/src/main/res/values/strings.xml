@@ -615,6 +615,14 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="expdtable_label_hq_exp">HQ</string>
     <string name="expdtable_label_ship_exp">Ship</string>
     <string name="expdtable_label_condition">Success Condition</string>
+    <string name="expd_type_normal">Normal Type</string>
+    <string name="expd_type_drum">Drum Type</string>
+    <string name="expd_type_flagship_lv">Flagship Lv Type</string>
+    <string name="expd_ctype_1">Combat Exped. I</string>
+    <string name="expd_ctype_2">Combat Exped. II</string>
+    <string name="expd_support">Support</string>
+    <string name="expd_monthly">Monthly</string>
+    <string name="expd_gs_rate">G.S. Rate: %3d%%</string>
 
     <string name="action_droplog">Drop Log</string>
     <string name="droplog_search">Search</string>
@@ -713,17 +721,24 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="excheckview_drum_ship_format" formatted="false">%d+ ships carryings</string>
     <string name="excheckview_drum_num_format" formatted="false">%d+ Drums</string>
     <string name="excheckview_total_format" formatted="false">Total %d+</string>
-    <string name="excheckview_bonus_firepower" formatted="false">FIREPOWER: %d</string>
+    <string name="excheckview_cur_total_format" formatted="false">Curr. %.0f</string>
+    <string name="excheckview_per_format" formatted="false" translatable="false">%.0f%%</string>
+    <string name="excheckview_bonus_lv" formatted="false">Lv: %d</string>
+    <string name="excheckview_bonus_firepower" formatted="false">Firepower: %d</string>
     <string name="excheckview_bonus_asw" formatted="false">ASW: %d</string>
+    <string name="excheckview_bonus_aa" formatted="false">AA: %d</string>
     <string name="excheckview_bonus_los" formatted="false">LoS: %d</string>
     <string name="excheckview_bonus_kinu">Kinu Kai Ni</string>
     <string name="excheckview_bonus_drum" formatted="false">Drum: %d</string>
+    <string name="excheckview_bonus_drum_carrying" formatted="false">Drum: %d（%d ships carrying）</string>
     <string name="excheckview_bonus_dlc" formatted="false">DLC: %d</string>
+    <string name="excheckview_bonus_dlcs" formatted="false">DLCs: %d</string>
     <string name="excheckview_bonus_tank" formatted="false">DLC(89Tank): %d</string>
     <string name="excheckview_bonus_amp" formatted="false">ALC: %d</string>
     <string name="excheckview_bonus_toku" formatted="false">TokuDLC: %d</string>
     <string name="excheckview_bonus_result" formatted="false">（Bonus: %.1f%%）</string>
     <string name="excheckview_ship_cvs">CV*</string>
+    <string name="excheckview_ship_cond" formatted="false">%s: %d</string>
     <string name="labinfoview_status_standby">Standby</string>
     <string name="labinfoview_status_sortie">Sortie</string>
     <string name="labinfoview_status_defense">Defense</string>
@@ -820,8 +835,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="text_api_leng_3">L</string>
     <string name="text_api_leng_4">VL</string>
 
-    <string name="text_api_houm2">ABM</string>
-    <string name="text_api_houk2">INT</string>
+    <string name="text_api_houm2">ABM</string>
+    <string name="text_api_houk2">INT</string>
     <string name="text_api_cost">COST</string>
     <string name="text_api_distance">DIST</string>
 

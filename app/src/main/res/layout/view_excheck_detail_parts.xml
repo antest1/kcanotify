@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/view_excheck_list"
+    tools:ignore="SpUsage,HardcodedText">
+
+    <!--
+    These views are common to each version of the layout,
+    and will be included (merged) into those layout, and laid-out by Flow.
+    -->
+
+    <!-- region flagship cond -->
+    <TextView
+        android:id="@+id/expd_flagship_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/ExpeditionView.Label"
+        android:text="@string/excheckview_flag_info" />
+
+    <TextView
+        android:id="@+id/expd_flagship_lv"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="Lv50+" />
+
+    <TextView
+        android:id="@+id/expd_flagship_cond"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="駆逐" />
+    <!-- endregion flagship cond -->
+
+    <!-- region fleet cond -->
+    <TextView
+        android:id="@+id/expd_fleet_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/ExpeditionView.Label"
+        android:text="@string/excheckview_total_info" />
+
+    <TextView
+        android:id="@+id/expd_fleet_total_num"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="最低6隻" />
+
+    <TextView
+        android:id="@+id/expd_fleet_total_lv"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="Lv合計300" />
+    <!-- endregion fleet cond -->
+
+    <!-- region status cond -->
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/box_fire_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="expd_fire_label" />
+
+    <TextView
+        android:id="@+id/expd_fire_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/ExpeditionView.Label"
+        android:text="@string/excheckview_firepower_info" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_fire"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/ExpeditionView.FlowStyle"
+        app:constraint_referenced_ids="expd_total_fire,expd_fleet_fire" />
+
+    <TextView
+        android:id="@+id/expd_total_fire"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="合計1000+" />
+
+    <TextView
+        android:id="@+id/expd_fleet_fire"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="120%"
+        tools:visibility="visible" />
+
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/box_asw_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="expd_asw_label" />
+
+    <TextView
+        android:id="@+id/expd_asw_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/ExpeditionView.Label"
+        android:text="@string/excheckview_asw_info" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_asw"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/ExpeditionView.FlowStyle"
+        app:constraint_referenced_ids="expd_total_asw,expd_fleet_asw" />
+
+    <TextView
+        android:id="@+id/expd_total_asw"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="合計10+" />
+
+    <TextView
+        android:id="@+id/expd_fleet_asw"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="100%"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/box_aa_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="expd_aa_label" />
+
+    <TextView
+        android:id="@+id/expd_aa_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/ExpeditionView.Label"
+        android:text="@string/excheckview_fp_info" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_aa"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/ExpeditionView.FlowStyle"
+        app:constraint_referenced_ids="expd_total_aa,expd_fleet_aa" />
+
+    <TextView
+        android:id="@+id/expd_total_aa"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="合計100000+" />
+
+    <TextView
+        android:id="@+id/expd_fleet_aa"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="10000%"
+        tools:visibility="visible" />
+
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/box_los_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="expd_los_label" />
+
+    <TextView
+        android:id="@+id/expd_los_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/ExpeditionView.Label"
+        android:text="@string/excheckview_los_info" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_los"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/ExpeditionView.FlowStyle"
+        app:constraint_referenced_ids="expd_total_los,expd_fleet_los" />
+
+    <TextView
+        android:id="@+id/expd_total_los"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="合計1948+" />
+
+    <TextView
+        android:id="@+id/expd_fleet_los"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="200%"
+        tools:visibility="visible" />
+    <!-- endregion status cond -->
+
+    <!-- region drum cond -->
+    <TextView
+        android:id="@+id/expd_drum_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/ExpeditionView.Label"
+        android:text="@string/excheckview_drum_info" />
+
+    <TextView
+        android:id="@+id/expd_drum_ships"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="3隻以上に装備" />
+
+    <TextView
+        android:id="@+id/expd_drum_count"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="合計4つ以上" />
+
+    <TextView
+        android:id="@+id/expd_drum_optional"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Normal"
+        tools:text="合計8つ以上" />
+    <!-- endregion drum cond -->
+</merge>

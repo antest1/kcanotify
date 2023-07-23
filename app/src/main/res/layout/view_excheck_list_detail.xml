@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:showIn="@layout/view_excheck_list"
+    tools:ignore="SpUsage,HardcodedText,ContentDescription">
+
+    <!-- region header -->
+    <TextView
+        android:id="@+id/expd_id"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:maxLines="1"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Large"
+        app:layout_constraintBaseline_toBaselineOf="@id/expd_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/expd_title"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0"
+        tools:text="[24]" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/expd_title"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        app:layout_constrainedWidth="true"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Large"
+        android:maxLines="2"
+        app:autoSizeMinTextSize="4dp"
+        app:autoSizeMaxTextSize="@dimen/popup_text_large"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/expd_id"
+        app:layout_constraintEnd_toStartOf="@id/expd_time"
+        tools:text="北方航路海上護衛" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_data"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/ExpeditionView.FlowStyle"
+        app:constraint_referenced_ids="expd_type,expd_ctype,expd_gs_rate"
+        app:layout_constraintTop_toBottomOf="@id/expd_title"
+        app:layout_constraintStart_toStartOf="@id/expd_title"
+        app:layout_constraintEnd_toStartOf="@id/barrier_reward_start" />
+
+    <TextView
+        android:id="@+id/expd_type"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:maxLines="1"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Small"
+        tools:text="@string/expd_type_flagship_lv" />
+
+    <TextView
+        android:id="@+id/expd_ctype"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:maxLines="1"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Small"
+        tools:text="@string/expd_ctype_2" />
+
+    <TextView
+        android:id="@+id/expd_gs_rate"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:maxLines="1"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Small"
+        tools:text="@string/expd_gs_rate" />
+
+    <TextView
+        android:id="@+id/expd_time"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:maxLines="1"
+        android:text="00:00:00"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Small"
+        app:layout_constraintBaseline_toBaselineOf="@id/expd_title"
+        app:layout_constraintStart_toEndOf="@id/expd_title"
+        app:layout_constraintEnd_toStartOf="@id/barrier_reward_start" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_reward_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="expd_reward"
+        app:barrierDirection="start"
+        app:barrierMargin="-8dp" /> <!-- 8dp did not work -->
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/expd_reward"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:background="@color/colorFleetInfoBtn"
+        app:constraint_referenced_ids="expd_reward_res,expd_reward_item1,expd_reward_item2"
+        app:flow_horizontalGap="8dp"
+        app:flow_verticalAlign="baseline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/expd_reward_res"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:maxLines="1"
+        android:text="0/0/0/0"
+        android:textAppearance="@style/FloatingWindow.TextAppearance.Small" />
+
+    <ImageView
+        android:id="@+id/expd_reward_item1"
+        android:layout_height="16dp"
+        android:layout_width="16dp"
+        android:background="@color/colorPrimaryDark" />
+
+    <ImageView
+        android:id="@+id/expd_reward_item2"
+        android:layout_height="16dp"
+        android:layout_width="16dp"
+        android:background="@color/colorPrimaryDark" />
+    <!-- endregion -->
+
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_header_bottom"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:barrierDirection="bottom"
+        app:barrierMargin="4dp"
+        app:constraint_referenced_ids="expd_title,expd_type,expd_ctype,expd_gs_rate,expd_time,expd_reward" />
+
+    <View
+        android:id="@+id/expd_detail_divider"
+        android:layout_height="0.5dp"
+        android:layout_width="0dp"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_header_bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- region flagship cond row -->
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/box_flagship_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ExpeditionView.FlowStyle.NoWrap"
+        app:constraint_referenced_ids="expd_flagship_label"
+        app:layout_constraintTop_toBottomOf="@id/barrier_header_bottom"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_flagship"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        style="@style/ExpeditionView.FlowStyle"
+        app:constraint_referenced_ids="expd_flagship_lv,expd_flagship_cond"
+        app:layout_constraintTop_toTopOf="@id/box_flagship_label"
+        app:layout_constraintStart_toEndOf="@id/box_flagship_label"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_flagship_row_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="box_flagship_label,flow_flagship" />
+    <!-- endregion flagship cond row -->
+
+
+    <!-- region fleet cond row -->
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/box_fleet_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ExpeditionView.FlowStyle.NoWrap"
+        app:constraint_referenced_ids="expd_fleet_label"
+        app:layout_constraintTop_toBottomOf="@id/barrier_flagship_row_bottom"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_fleet"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        style="@style/ExpeditionView.FlowStyle"
+        app:constraint_referenced_ids="expd_fleet_total_num,expd_fleet_total_lv"
+        app:layout_constraintTop_toTopOf="@id/box_fleet_label"
+        app:layout_constraintStart_toEndOf="@id/box_fleet_label"
+        app:layout_constraintEnd_toEndOf="@id/guide_fleet_row_end" />
+
+    <LinearLayout
+        android:id="@+id/expd_fleet_cond"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:orientation="vertical"
+        android:gravity="top|start"
+        app:layout_constraintTop_toBottomOf="@id/flow_fleet"
+        app:layout_constraintStart_toStartOf="@id/flow_fleet"
+        app:layout_constraintEnd_toEndOf="@id/guide_fleet_row_end" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_fleet_row_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="box_fleet_label,flow_fleet,expd_fleet_cond" />
+    <!-- endregion fleet cond row -->
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_fleet_row_end"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_status_row_start"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
+
+
+    <!-- region status cond rows -->
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/expd_flow_status_cond"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/ExpeditionView.FlowStyle"
+        app:constraint_referenced_ids="
+                box_fire_label,flow_fire,
+                box_asw_label,flow_asw,
+                box_aa_label,flow_aa,
+                box_los_label,flow_los,"
+        app:flow_maxElementsWrap="2"
+        app:layout_constraintTop_toBottomOf="@id/barrier_flagship_row_bottom"
+        app:layout_constraintStart_toEndOf="@id/guide_status_row_start"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_status_row_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="expd_flow_status_cond" />
+    <!-- endregion status cond rows -->
+
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_fleet_row_status_row_bottom"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:constraint_referenced_ids="barrier_fleet_row_bottom,barrier_status_row_bottom"
+        app:barrierDirection="bottom" />
+
+
+    <!-- region drum cond row -->
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/box_drum_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ExpeditionView.FlowStyle.NoWrap"
+        app:constraint_referenced_ids="expd_drum_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier_fleet_row_status_row_bottom" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_drum"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        style="@style/ExpeditionView.FlowStyle"
+        app:constraint_referenced_ids="expd_drum_ships,expd_drum_count,expd_drum_optional"
+        app:layout_constraintTop_toTopOf="@id/box_drum_label"
+        app:layout_constraintStart_toEndOf="@id/box_drum_label"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_drum_row_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="box_drum_label,flow_drum" />
+    <!-- endregion drum cond row -->
+
+
+    <!-- merge common parts -->
+    <include layout="@layout/view_excheck_detail_parts" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

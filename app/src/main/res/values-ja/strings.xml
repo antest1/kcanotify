@@ -538,6 +538,15 @@
     <string name="expdtable_label_ship_exp">艦娘</string>
     <string name="expdtable_label_condition">必要条件／編成</string>
 
+    <string name="expd_type_normal">通常方式</string>
+    <string name="expd_type_drum">ドラム缶方式</string>
+    <string name="expd_type_flagship_lv">旗艦Lv方式</string>
+    <string name="expd_ctype_1">交戦I型</string>
+    <string name="expd_ctype_2">交戦II型</string>
+    <string name="expd_support">支援</string>
+    <string name="expd_monthly">月</string>
+    <string name="expd_gs_rate">大成功率：%3d%%</string>
+
     <string name="action_droplog">ドロップ記録</string>
     <string name="droplog_search">検索</string>
     <string name="droplog_clear">記録を削除する</string>
@@ -635,12 +644,16 @@
     <string name="excheckview_drum_ship_format" formatted="false">%d隻以上に装備</string>
     <string name="excheckview_drum_num_format" formatted="false">合計%dつ以上</string>
     <string name="excheckview_total_format" formatted="false">合計%d+</string>
-    <string name="excheckview_bonus_firepower" formatted="false">火力: %d</string>
-    <string name="excheckview_bonus_asw" formatted="false">潜%d</string>
-    <string name="excheckview_bonus_los" formatted="false">索%d</string>
+    <string name="excheckview_cur_total_format" formatted="false">現在%.0f</string>
+    <string name="excheckview_bonus_firepower" formatted="false">火力：%d</string>
+    <string name="excheckview_bonus_asw" formatted="false">対潜：%d</string>
+    <string name="excheckview_bonus_aa" formatted="false">対空：%d</string>
+    <string name="excheckview_bonus_los" formatted="false">索敵：%d</string>
     <string name="excheckview_bonus_kinu">鬼怒改二</string>
     <string name="excheckview_bonus_drum" formatted="false">ドラム缶：%d</string>
+    <string name="excheckview_bonus_drum_carrying" formatted="false">ドラム缶：%d（%d隻）</string>
     <string name="excheckview_bonus_dlc" formatted="false">大発：%d</string>
+    <string name="excheckview_bonus_dlcs" formatted="false">大発系：%d</string>
     <string name="excheckview_bonus_tank" formatted="false">中戦車：%d</string>
     <string name="excheckview_bonus_amp" formatted="false">内火艇：%d</string>
     <string name="excheckview_bonus_toku" formatted="false">特大発：%d</string>
@@ -753,4 +766,5 @@
     <string name="fairy_size_value_5">最大</string>
     <string name="fairy_size_value_1">最小</string>
     <string name="notice_donotsee">再び見ない</string>
+    <string name="excheckview_bonus_lv">Lv：%d</string>
 </resources>

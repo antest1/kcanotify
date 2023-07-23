@@ -70,29 +70,52 @@ public class KcaApiData {
     public static boolean isEventTime = false;
 
     // Ship Type Constants (api_stype)
+    /** 海防艦 */
     public static final int STYPE_DE = 1;
+    /** 駆逐艦 */
     public static final int STYPE_DD = 2;
+    /** 軽巡洋艦 */
     public static final int STYPE_CL = 3;
+    /** 重雷装巡洋艦 */
     public static final int STYPE_CLT = 4;
+    /** 重巡洋艦 */
     public static final int STYPE_CA = 5;
+    /** 航空巡洋艦 */
     public static final int STYPE_CAV = 6;
+    /** 軽空母 */
     public static final int STYPE_CVL = 7;
+    /** 戦艦 */
     public static final int STYPE_FBB = 8;
+    /** 戦艦 */
     public static final int STYPE_BB = 9;
+    /** 航空戦艦 */
     public static final int STYPE_BBV = 10;
+    /** 正規空母 */
     public static final int STYPE_CV = 11;
+    /** 超弩級戦艦 */
     public static final int STYPE_XBB = 12;
+    /** 潜水艦 */
     public static final int STYPE_SS = 13;
+    /** 潜水空母 */
     public static final int STYPE_SSV = 14;
+    /** 補給艦 */
     public static final int STYPE_AP = 15;
+    /** 水上機母艦 */
     public static final int STYPE_AV = 16;
+    /** 揚陸艦 */
     public static final int STYPE_LHA = 17;
+    /** 装甲空母 */
     public static final int STYPE_CVB = 18;
+    /** 工作艦 */
     public static final int STYPE_AR = 19;
+    /** 潜水母艦 */
     public static final int STYPE_AS = 20;
+    /** 練習巡洋艦 */
     public static final int STYPE_CT = 21;
+    /** 補給艦 */
     public static final int STYPE_AO = 22;
 
+    /** 護衛空母 */
     public static final int STYPE_CVE = 27;
 
     // Equipment Constants (api_type 2)

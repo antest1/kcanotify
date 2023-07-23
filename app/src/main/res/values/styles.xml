@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -23,4 +23,95 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="FloatingWindow">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:alpha">0.9</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:padding">@dimen/view_padding</item>
+    </style>
+
+    <style name="FloatingWindow.TextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="FloatingWindow.TextAppearance.Title">
+        <item name="android:textSize">@dimen/view_text_title</item>
+    </style>
+
+    <style name="FloatingWindow.TextAppearance.Large">
+        <item name="android:textSize">@dimen/popup_text_large</item>
+    </style>
+
+    <style name="FloatingWindow.TextAppearance.Normal">
+        <item name="android:textSize">@dimen/popup_text_normal</item>
+    </style>
+
+    <style name="FloatingWindow.TextAppearance.Small">
+        <item name="android:textSize">@dimen/popup_text_small</item>
+    </style>
+
+    <style name="FloatingWindow.TextAppearance.XSmall">
+        <item name="android:textSize">@dimen/popup_text_xsmall</item>
+    </style>
+
+    <style name="FloatingWindow.TextAppearance.XXSmall">
+        <item name="android:textSize">@dimen/popup_text_xxsmall</item>
+    </style>
+
+    <style name="ExpeditionView.FleetTab" parent="">
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="backgroundTint">@color/color_fleet_button</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAlignment" tools:targetApi="jelly_bean_mr1">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">@style/FloatingWindow.TextAppearance</item>
+        <item name="android:textSize">@dimen/excheckview_text_tbutton</item>
+    </style>
+
+    <style name="ExpeditionView.WorldItem" parent="">
+        <item name="android:padding">6dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="backgroundTint">@color/color_fleet_button</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAlignment" tools:targetApi="jelly_bean_mr1">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">@style/FloatingWindow.TextAppearance.Normal</item>
+    </style>
+
+    <style name="ExpeditionView.TableItem" parent="">
+        <item name="android:padding">6dp</item>
+        <item name="android:background">@drawable/expd_btn_background</item>
+        <item name="backgroundTint">@color/colorFleetInfoNoShip</item>
+        <item name="backgroundTintMode">add</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAlignment" tools:targetApi="jelly_bean_mr1">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">@style/FloatingWindow.TextAppearance.Large</item>
+    </style>
+
+    <style name="ExpeditionView.Label" parent="">
+        <item name="android:minWidth">@dimen/excheckview_label_width</item>
+        <item name="android:maxWidth">@dimen/excheckview_label_width</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment" tools:targetApi="jelly_bean_mr1">center</item>
+        <item name="android:textAppearance">@style/FloatingWindow.TextAppearance.Normal</item>
+    </style>
+
+    <style name="ExpeditionView.FlowStyle" parent="">
+        <item name="android:orientation">horizontal</item>
+        <item name="flow_wrapMode">chain</item>
+        <item name="flow_verticalAlign">top</item>
+        <item name="flow_horizontalAlign">start</item>
+        <item name="flow_horizontalGap">4dp</item>
+        <item name="flow_horizontalStyle">packed</item>
+        <item name="flow_horizontalBias">0</item>
+    </style>
+    <style name="ExpeditionView.FlowStyle.NoWrap">
+        <item name="flow_wrapMode">none</item>
+    </style>
 </resources>

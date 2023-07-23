@@ -1,17 +1,61 @@
 package com.antest1.kcanotify;
 
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+import static com.antest1.kcanotify.KcaApiData.STYPE_CVE;
+import static com.antest1.kcanotify.KcaApiData.T2_ANTISUB_PATROL;
+import static com.antest1.kcanotify.KcaApiData.T2_AP_SHELL;
+import static com.antest1.kcanotify.KcaApiData.T2_AUTOGYRO;
+import static com.antest1.kcanotify.KcaApiData.T2_DEPTH_CHARGE;
+import static com.antest1.kcanotify.KcaApiData.T2_DRUM_CAN;
+import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
+import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
+import static com.antest1.kcanotify.KcaApiData.T2_GUN_MEDIUM;
+import static com.antest1.kcanotify.KcaApiData.T2_GUN_SMALL;
+import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
+import static com.antest1.kcanotify.KcaApiData.T2_RADAR_LARGE;
+import static com.antest1.kcanotify.KcaApiData.T2_RADAR_SMALL;
+import static com.antest1.kcanotify.KcaApiData.T2_RADER_LARGE_II;
+import static com.antest1.kcanotify.KcaApiData.T2_SANSHIKIDAN;
+import static com.antest1.kcanotify.KcaApiData.T2_SEA_SCOUT;
+import static com.antest1.kcanotify.KcaApiData.T2_SONAR;
+import static com.antest1.kcanotify.KcaApiData.T2_SONAR_LARGE;
+import static com.antest1.kcanotify.KcaApiData.T2_SUB_GUN;
+import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
+import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
+import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
+import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
+import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
+import static com.antest1.kcanotify.KcaUtils.getId;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
+import static com.antest1.kcanotify.KcaUtils.getTimeStr;
+import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
+import static com.antest1.kcanotify.KcaUtils.joinStr;
+import static com.google.common.collect.Lists.transform;
+import static java.lang.Math.floor;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.sqrt;
+
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
+import android.util.Pair;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,699 +65,913 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.AnyRes;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.constraintlayout.helper.widget.Flow;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
+import com.google.common.primitives.Ints;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
+import java.io.BufferedOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
-import static com.antest1.kcanotify.KcaApiData.STYPE_CVE;
-import static com.antest1.kcanotify.KcaApiData.T2_ANTISUB_PATROL;
-import static com.antest1.kcanotify.KcaApiData.T2_AUTOGYRO;
-import static com.antest1.kcanotify.KcaApiData.T2_DEPTH_CHARGE;
-import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
-import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
-import static com.antest1.kcanotify.KcaApiData.T2_GUN_MEDIUM;
-import static com.antest1.kcanotify.KcaApiData.T2_GUN_SMALL;
-import static com.antest1.kcanotify.KcaApiData.T2_RADAR_LARGE;
-import static com.antest1.kcanotify.KcaApiData.T2_RADAR_SMALL;
-import static com.antest1.kcanotify.KcaApiData.T2_RADER_LARGE_II;
-import static com.antest1.kcanotify.KcaApiData.T2_SONAR;
-import static com.antest1.kcanotify.KcaApiData.T2_SONAR_LARGE;
-import static com.antest1.kcanotify.KcaApiData.T2_SUB_GUN;
-import static com.antest1.kcanotify.KcaApiData.checkUserShipDataLoaded;
-import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
-import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
-import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
-import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
-import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
-import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-import static com.antest1.kcanotify.KcaExpedition2.getExpeditionHeader;
-import static com.antest1.kcanotify.KcaUtils.getId;
-import static com.antest1.kcanotify.KcaUtils.getStringFromException;
-import static com.antest1.kcanotify.KcaUtils.getTimeStr;
-import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
-import static com.antest1.kcanotify.KcaUtils.joinStr;
+// Drum: 21, 44, 37, 38, E2, 24, 40
+// Flag Lv: A2, A3, A4, A5, A6,
+//      B3, B4, B5, B6,
+//      41, 43, 45, 46,
+//      32, D1, D2, D3, E1
+// Monthly: A4, A5, A6,
+//      B2, B3, B4, B5, B6,
+//      42, 43, 44, 46,
+//      D2, D3, E1, E2
+// Combat I: A5, B4, 43, D2
+// Combat II: A6, B5, B6, 46, D3, E1, E2
 
+/*
+cat 'app/src/main/assets/expedition.json' | jq \
+--argjson drum '["21", "44", "37", "38", "E2", "24", "40"]' \
+--argjson flag '["A2", "A3", "A4", "A5", "A6", "B3", "B4", "B5", "B6", "41", "43", "45", "46", "32", "D1", "D2", "D3", "E1"]' \
+--argjson c1 '["A5", "B4", "43", "D2"]' \
+--argjson c2 '["A6", "B5", "B6", "46", "D3", "E1", "E2"]' \
+--argjson month '["A4", "A5", "A6", "B2", "B3", "B4", "B5", "B6", "42", "43", "44", "46", "D2", "D3", "E1", "E2"]' \
+'def containedIn($arr): . as $x | $arr | any(. == $x); del(.[].features)
+| map(if .code | containedIn($drum) then .features += ["drum"] else . end
+| if .code | containedIn($flag) then .features += ["flag_lv"] else . end
+| if .code | containedIn($c1) then .features += ["combat_1"] else . end
+| if .code | containedIn($c2) then .features += ["combat_2"] else . end
+| if .code | containedIn($month) then .features += ["monthly"] else . end)'
+*/
 public class KcaExpeditionCheckViewService extends Service {
+    // region constants
+    public static final String TAG = "KCA/EXPD";
     public static final String SHOW_EXCHECKVIEW_ACTION = "show_excheckview";
-    final int[] expedition_list = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-            21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 35, 36, 37, 38, 39, 40,
-            100, 101, 102, 110, 111, 203, 204};
-    public static final double[][] toku_bonus = {
-            {2.0, 2.0, 2.0, 2.0, 2.0},
-            {4.0, 4.0, 4.0, 4.0, 4.0},
-            {5.0, 5.0, 5.2, 5.4, 5.4},
-            {5.4, 5.6, 5.8, 5.9, 6.0}
+
+    private static final String USER_SHIP_REQ_LIST = "ship_id,lv,slot,cond,karyoku,taisen,taiku,sakuteki";
+    private static final String KC_SHIP_REQ_LIST = "stype";
+    private static final String USER_EQUIP_REQ_LIST = "slotitem_id,level";
+    private static final String KC_EQUIP_REQ_LIST = "type,tais,tyku,saku";
+
+    private static final float[][] TOKU_BONUS_DATA = {
+            {0.02f, 0.02f, 0.02f, 0.02f, 0.02f},
+            {0.04f, 0.04f, 0.04f, 0.04f, 0.04f},
+            {0.05f, 0.05f, 0.052f, 0.054f, 0.054f},
+            {0.05f, 0.056f, 0.058f, 0.059f, 0.06f}
     };
 
-    public static boolean active;
-    static boolean error_flag = false;
-    Context contextWithLocale;
-    int displayWidth = 0;
-    public KcaDBHelper dbHelper;
-    private View mView, itemView;
-    LayoutInflater mInflater;
-    private WindowManager mManager;
-    WindowManager.LayoutParams mParams;
+    private static final SparseArray<Float> DLCS_BONUS_DATA = new SparseArray<>();
 
-    String locale;
-    int selected = 1;
-    int world = 1;
-    int button = 0;
-    boolean isGreatSuccess = false;
-    JsonArray deckdata;
-    List<JsonObject> ship_data;
-    List<Integer> expedition_data = new ArrayList<>();
-    Map<String, JsonObject> checkdata;
-
-    public String getStringWithLocale(int id) {
-        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
+    static {
+        DLCS_BONUS_DATA.put(68, 0.05f); // Daihatsu / 大発動艇
+        DLCS_BONUS_DATA.put(166, 0.02f); // 89Tank / 大発動艇(八九式中戦車&陸戦隊)
+        DLCS_BONUS_DATA.put(167, 0.01f); // Amp. Tank / 特二式内火艇
+        DLCS_BONUS_DATA.put(193, 0.05f); // Toku Daihatsu / 特大発動艇
+        DLCS_BONUS_DATA.put(230, 0.00f); // 11th Tank Regiment / 特大発動艇+戦車第11連隊
+        DLCS_BONUS_DATA.put(355, 0.00f); // M4A1 DD
+        DLCS_BONUS_DATA.put(408, 0.02f); // Armored Boat / 装甲艇(AB艇)
+        DLCS_BONUS_DATA.put(409, 0.03f); // Armed Daihatsu / 武装大発
+        DLCS_BONUS_DATA.put(436, 0.02f); // Panzer II / 大発動艇(II号戦車/北アフリカ仕様)
+        DLCS_BONUS_DATA.put(449, 0.02f); // Type 1 Gun Tank / 特大発動艇＋一式砲戦車
     }
 
-    private void updateSelectedView(int idx, int world) {
-        for (int i = 0; i < 15; i++) {
-            int view_id = getId("expd_btn_".concat(String.valueOf(i)), R.id.class);
-            if (i < expedition_data.size()) {
-                int value = expedition_data.get(i);
-                ((TextView) mView.findViewById(view_id)).setText(KcaExpedition2.getExpeditionStr(value));
-                mView.findViewById(view_id).setVisibility(View.VISIBLE);
-            } else {
-                mView.findViewById(view_id).setVisibility(View.INVISIBLE);
-            }
-        }
+    /**
+     * @see KcaApiData#STYPE_CVL
+     * @see KcaApiData#STYPE_CV
+     * @see KcaApiData#STYPE_AV
+     * @see KcaApiData#STYPE_CVB
+     */
+    private static final String CARRIERS = "7,11,16,18";
 
-        for (int i = 1; i <= 7; i++) {
-            int view_id = getId("expd_world_".concat(String.valueOf(i)), R.id.class);
-            if (world == i) {
-                mView.findViewById(view_id).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-            } else {
-                mView.findViewById(view_id).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
-            }
-        }
+    private static final String FLAG_LV = "flag-lv";
+    private static final String FLAG_COND = "flag-cond";
+    private static final String FLEET_LV = "total-lv";
+    private static final String FLEET_NUM = "total-num";
+    private static final String FLEET_COND = "total-cond";
+    private static final String DRUM_SHIPS = "drum-ship";
+    private static final String DRUM_COUNT = "drum-num";
+    private static final String DRUM_OPTIONAL = "drum-num-optional";
+    private static final String TOTAL_FIRE = "total-firepower";
+    private static final String TOTAL_ASW = "total-asw";
+    private static final String TOTAL_AA = "total-fp";
+    private static final String TOTAL_LOS = "total-los";
+    private static final String KINU_EXISTS = "kinu";
+    private static final String DLCS_COUNT = "daihatsu";
+    private static final String DLCS_BONUS = "dlc-bonus";
+    private static final String TOKU_BONUS = "toku-bonus";
+    private static final String HAS_AIRCRAFT = "has-aircraft";
+    private static final String GS_RATE_NORMAL = "gs-normal";
+    private static final String GS_RATE_DRUM_1 = "gs-drum"; // when < drum-num-optional
+    private static final String GS_RATE_DRUM_2 = "gs-drum-2"; // when >= drum-num-optional
+    private static final String GS_RATE_FLAGSHIP = "gs-flagship";
 
-        for (int i = 1; i < 4; i++) {
-            int view_id = getId("fleet_".concat(String.valueOf(i + 1)), R.id.class);
-            if (idx == i) {
-                mView.findViewById(view_id).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-            } else {
-                mView.findViewById(view_id).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
-            }
-        }
-    }
+    /**
+     * the last selected world and expedition
+     * format: <selected_world>[;<world>,<selected_expd_id>...]
+     */
+    private static final String EXPD_SELECTION_KEY = KcaConstants.PREF_EXPD_SELECTION;
+    // endregion
 
+    private String locale;
+    private View mView;
+    private final Gson gson = new Gson();
+
+    private int selected_fleet = 1;
+    private int selected_world = 1;
+    /**
+     * selected expd index of each world
+     */
+    private final SparseIntArray selected_expd = new SparseIntArray();
+    private boolean isGreatSuccess = false;
+
+    /**
+     * ship id list of each fleet
+     */
+    private final List<List<Integer>> fleet_list = new ArrayList<>(); // set by onStartCommand
+    private final List<JsonObject> ship_list = new ArrayList<>(); // set by updateFleet
+    /**
+     * expd id list in current world
+     */
+    private final List<Integer> expd_list = new ArrayList<>(); // set by updateWorld
+    private JsonObject fleet_info; // set by updateFleetInfo
+    /**
+     * expd id to check result map
+     */
+    private final SparseArray<JsonObject> check_data = new SparseArray<>(); // set by updateCheckData
+
+    // region lifecycle
     public IBinder onBind(Intent paramIntent) {
         return null;
     }
 
     public void onCreate() {
-        super.onCreate();
+        Log.d(TAG, "onCreate");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && !Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
+            Log.e(TAG, "Can not draw overlays");
             stopSelf();
         }
 
         try {
-            active = true;
             locale = LocaleUtils.getResourceLocaleCode(KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
-            ship_data = new ArrayList<>();
-            checkdata = new HashMap<>();
-            dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
-            contextWithLocale = KcaUtils.getContextWithLocale(getApplicationContext(), getBaseContext());
-            mInflater = LayoutInflater.from(contextWithLocale);
-            mView = mInflater.inflate(R.layout.view_excheck_list, null);
-            KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
-            mView.setVisibility(View.GONE);
 
-            itemView = mView.findViewById(R.id.view_excheck_detail);
-            mParams = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    getWindowLayoutType(),
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSLUCENT);
-            mParams.gravity = Gravity.CENTER;
+            initView();
 
-            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            mManager.addView(mView, mParams);
+            // region load selection
+            String selection = KcaUtils.getStringPreferences(this, EXPD_SELECTION_KEY);
+            Log.d(TAG, "restore selection: " + selection);
+            Iterator<String> data = Splitter.on(CharMatcher.anyOf(";,")).split(selection).iterator();
+            if (data.hasNext()) {
+                selected_world = parseIntOrDefault(data.next(), selected_world);
 
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            displayWidth = size.x;
+                while (data.hasNext()) {
+                    int key = parseIntOrDefault(data.next(), -1);
+                    if (!data.hasNext()) break; // lack
+                    int expd = parseIntOrDefault(data.next(), -1);
+                    if (key == -1 || expd == -1) continue; // invalid value
+                    selected_expd.put(key, expd);
+                }
+            }
+            // endregion
         } catch (Exception e) {
-            e.printStackTrace();
-            active = false;
-            error_flag = true;
+            Log.e(TAG, "exception while onCreate", e);
+            Toast.makeText(getApplicationContext(), getStringFromException(e), Toast.LENGTH_LONG).show();
             stopSelf();
         }
     }
 
-    @Override
-    public void onDestroy() {
-        active = false;
-        if (mView != null) {
-            if (mView.getParent() != null) mManager.removeViewImmediate(mView);
-        }
-        super.onDestroy();
+    @SuppressLint("InflateParams")
+    public void initView() {
+        Context contextWithLocale = KcaUtils.getContextWithLocale(getApplicationContext(), getBaseContext());
+        mView = LayoutInflater.from(contextWithLocale).inflate(R.layout.view_excheck_list, null);
+        KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
+
+        findViewById(R.id.window_head).setOnClickListener((v) -> stopSelf());
+        findViewById(R.id.window_exit).setOnClickListener((v) -> stopSelf());
+        for (int id : this.<Flow>findViewById(R.id.expd_fleet_tab).getReferencedIds())
+            findViewById(id).setOnClickListener(this::onClickFleetTab);
+        for (int id : this.<Flow>findViewById(R.id.expd_worlds).getReferencedIds())
+            findViewById(id).setOnClickListener(this::onClickWorldTab);
+        for (int id : this.<Flow>findViewById(R.id.expd_table).getReferencedIds())
+            findViewById(id).setOnClickListener(this::onClickExpdButton);
+        findViewById(R.id.expd_reward).setOnClickListener(this::onToggleRewardButton);
+
+        clearExpdDetailLayout();
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                getWindowLayoutType(),
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
+        params.gravity = Gravity.CENTER;
+
+        mView.setLayoutParams(params);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getAction() != null) {
-            if (intent.getAction().startsWith(SHOW_EXCHECKVIEW_ACTION)) {
-                deckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
-                if (deckdata != null && deckdata.size() >= 2) {
-                    int selected_new = Integer.parseInt(intent.getAction().split("/")[1]);
-                    if (selected_new < 1) selected_new = 1;
-                    else if (selected_new > 3) selected_new = 2;
-                    if (selected_new < deckdata.size()) {
-                        selected = selected_new;
-                    }
-                    clearItemViewLayout();
-                    int setViewResult = setView();
-                    if (setViewResult == 0) {
-                        if (mView.getParent() != null) {
-                            mManager.removeViewImmediate(mView);
-                        }
-                        mManager.addView(mView, mParams);
-                    }
-                    Log.e("KCA", "show_excheckview_action " + String.valueOf(setViewResult));
-                    mView.findViewById(R.id.excheckview_head).setOnClickListener(mViewClickListener);
-                    mView.findViewById(R.id.excheck_detail_reward).setOnClickListener(mViewClickListener);
-                    for (int i = 1; i < 4; i++) {
-                        mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnClickListener(mViewClickListener);
-                    }
-                    for (int i = 1; i <= 7; i++) {
-                        mView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
-                    }
-                    for (int i = 0; i < 15; i++) {
-                        mView.findViewById(KcaUtils.getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
-                    }
-                    mView.setVisibility(View.VISIBLE);
-                } else {
-                    stopSelf();
-                }
+        Log.d(TAG, "onStartCommand: " + intent);
+
+        try (KcaDBHelper db = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION)) {
+
+            fleet_list.clear();
+            for (JsonElement fleet : db.getJsonArrayValue(DB_KEY_DECKPORT)) {
+                int[] ships = gson.fromJson(fleet.getAsJsonObject().get("api_ship"), int[].class);
+                fleet_list.add(Ints.asList(ships));
             }
+
+            if (fleet_list.size() <= 1) {
+                stopSelf();
+                throw new IllegalArgumentException("at least 2nd fleets is required, fleet_list: " + fleet_list);
+            }
+
+            if (intent.getAction() != null) {
+                String fleet = Iterables.get(Splitter.on('/').split(intent.getAction()), 1, "1");
+                selected_fleet = parseIntOrDefault(fleet, selected_fleet);
+            }
+
+            updateFleet();
+            updateWorld();
+            updateCheckData(true);
+            setSelectedExpd(selected_expd.get(selected_world, 0));
+
+            WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+            if (mView.getParent() != null) {
+                wm.removeViewImmediate(mView);
+            }
+            wm.addView(mView, mView.getLayoutParams());
+
+        } catch (Exception e) {
+            Log.e(TAG, "exception while onStartCommand", e);
+            Toast.makeText(getApplicationContext(), getStringFromException(e), Toast.LENGTH_LONG).show();
+            stopSelf();
         }
-        return super.onStartCommand(intent, flags, startId);
+
+        return START_NOT_STICKY; // this service does not have to be restarted.
     }
 
-    private JsonObject checkFleetCondition(String data) {
-        boolean total_pass = false;
-        String cve_key = String.valueOf(STYPE_CVE);
-        Map<String, Integer> stypedata = new HashMap<>();
-        for (JsonObject obj : ship_data) {
-            int ship_id = obj.get("ship_id").getAsInt();
-            String stype = String.valueOf(obj.get("stype").getAsInt());
-            if (KcaApiData.isShipCVE(ship_id)) {
-                if (stypedata.containsKey(cve_key)) {
-                    stypedata.put(cve_key, stypedata.get(cve_key) + 1);
-                }
-                stypedata.put(cve_key, 1);
-            }
-            if (stypedata.containsKey(stype)) {
-                stypedata.put(stype, stypedata.get(stype) + 1);
-            } else {
-                stypedata.put(stype, 1);
-            }
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        if (mView != null && mView.getParent() != null) {
+            WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+            wm.removeViewImmediate(mView);
         }
 
-        JsonArray value = new JsonArray();
-        String[] conds = data.split("/");
-        for (String cond : conds) {
-            boolean partial_pass = true;
-            JsonObject cond_check = new JsonObject();
-            LinearLayout rowLayout = new LinearLayout(this);
-            rowLayout.setOrientation(LinearLayout.HORIZONTAL);
-            String[] shipcond = cond.split("\\|");
-            for (String sc : shipcond) {
-                String[] ship_count = sc.split("\\-");
-                String[] ship = ship_count[0].split(",");
-                int count = Integer.valueOf(ship_count[1]);
-                List<String> ship_list = new ArrayList<>();
-                for (String s : ship) {
-                    if (stypedata.containsKey(s)) {
-                        count -= stypedata.get(s);
-                    }
-                }
-                cond_check.addProperty(ship_count[0], count <= 0);
-                partial_pass = partial_pass && (count <= 0);
-            }
-            total_pass = total_pass || partial_pass;
-            value.add(cond_check);
+        // region save selection
+        List<String> data = Lists.newArrayList(String.valueOf(selected_world));
+        for (int i = 0, size = selected_expd.size(); i < size; i++) {
+            data.add(KcaUtils.format("%d,%d", selected_expd.keyAt(i), selected_expd.valueAt(i)));
         }
+        Log.d(TAG, "save selection: " + Joiner.on(';').join(data));
+        KcaUtils.setPreferences(this, EXPD_SELECTION_KEY, Joiner.on(';').join(data));
+        // endregion
+
+        super.onDestroy();
+    }
+
+    private void onClickExpdButton(View v) {
+        Flow table = findViewById(R.id.expd_table);
+        int expd = Ints.indexOf(table.getReferencedIds(), v.getId());
+        if (expd == -1) {
+            Log.e(TAG, "can not find clicked view, id: " + getResName(v.getId()));
+            return;
+        }
+        if (expd != selected_expd.get(selected_world, -1)) setSelectedExpd(expd);
+    }
+
+    private void onClickWorldTab(View v) {
+        try {
+            int world = Integer.parseInt((String) v.getTag());
+            if (world != selected_world) setSelectedWorld(world);
+        } catch (ClassCastException | NumberFormatException e) {
+            Log.e(TAG, "can not find clicked view, id: " + getResName(v.getId()) + ", tag: " + v.getTag(), e);
+        }
+    }
+
+    private void onClickFleetTab(View v) {
+        try {
+            int fleet = Integer.parseInt((String) v.getTag()) - 1 /* fleet id is 0(main) <= id <= 3 */;
+            if (fleet != selected_fleet) setSelectedFleet(fleet);
+        } catch (ClassCastException | NumberFormatException e) {
+            Log.e(TAG, "can not find clicked view, id: " + getResName(v.getId()) + ", tag: " + v.getTag(), e);
+        }
+    }
+
+    private void onToggleRewardButton(View v) {
+        isGreatSuccess = !isGreatSuccess;
+        setExpdDetailLayout();
+    }
+    // endregion lifecycle
+
+    // region data update
+    private void setSelectedFleet(int newValue) {
+        newValue = clamp(newValue, 1, fleet_list.size()); // 1 <= i < size
+        selected_fleet = newValue;
+
+        Log.d(TAG, "fleet: " + newValue);
+
+        updateFleet();
+        updateCheckData(true);
+        setExpdDetailLayout();
+    }
+
+    private void updateFleet() {
+        selected_fleet = clamp(selected_fleet, 1, fleet_list.size()); // 1 <= i < size
+
+        for (int id : this.<Flow>findViewById(R.id.expd_fleet_tab).getReferencedIds()) {
+            View v = findViewById(id);
+            v.setSelected(selected_fleet + 1 == Integer.parseInt((String) v.getTag()));
+        }
+
+        if (!checkUserShipDataLoaded())
+            return; // view will be updated even when the load isn't completed
+
+        updateFleetInfo();
+        setFleetInfoView();
+
+        Log.d(TAG, "ship_list[" + ship_list.size() + "]: " + ship_list);
+        Log.d(TAG, "fleet_info: " + fleet_info);
+    }
+
+    private void updateFleetInfo() {
+        ship_list.clear();
+        for (int id : fleet_list.get(selected_fleet)) {
+            if (id <= 0) continue;
+
+            JsonObject data = new JsonObject();
+            JsonObject userData = getUserShipDataById(id, USER_SHIP_REQ_LIST);
+            int kc_ship_id = userData.get("ship_id").getAsInt();
+            JsonObject kcData = getKcShipDataById(kc_ship_id, KC_SHIP_REQ_LIST);
+
+            data.add("ship_id", userData.get("ship_id"));
+            data.add("lv", userData.get("lv"));
+            data.add("cond", userData.get("cond"));
+            data.add("stype", kcData == null ? new JsonPrimitive(0) : kcData.get("stype"));
+            data.add("karyoku", userData.getAsJsonArray("karyoku").get(0));
+            data.add("taisen", userData.getAsJsonArray("taisen").get(0));
+            data.add("taiku", userData.getAsJsonArray("taiku").get(0));
+            data.add("sakuteki", userData.getAsJsonArray("sakuteki").get(0));
+            data.add("item", new JsonArray());
+            for (int item_id : gson.fromJson(userData.get("slot"), int[].class)) {
+                if (item_id <= 0) continue;
+
+                JsonObject itemData = getUserItemStatusById(item_id, USER_EQUIP_REQ_LIST, KC_EQUIP_REQ_LIST);
+                if (itemData != null) data.getAsJsonArray("item").add(itemData);
+            }
+
+            if (kcData == null) {
+                Log.e(TAG, "cannot find kc data for ship_id: " + kc_ship_id);
+                continue;
+            }
+
+            ship_list.add(data);
+        }
+
         JsonObject result = new JsonObject();
-        result.addProperty("pass", total_pass);
-        result.add("value", value);
-        return result;
+        getStatusInfo(ship_list, result);
+        getGSInfo(ship_list, result);
+        getBonusInfo(ship_list, result);
+        fleet_info = result;
     }
 
-    private JsonObject checkCondition(int exp_no) {
-        boolean total_pass = true;
-        JsonObject result = new JsonObject();
+    private void setSelectedWorld(int newValue) {
+        newValue = clamp(newValue, 1, 7); // 1 <= i <= 7, exclude 6
+        selected_world = newValue;
 
-        JsonObject data = KcaApiData.getExpeditionInfo(exp_no, locale);
-        if (data == null) return null;
+        Log.d(TAG, "world: " + newValue);
 
-        boolean has_flag_lv = data.has("flag-lv");
-        boolean has_flag_cond = data.has("flag-cond");
-        boolean has_total_lv = data.has("total-lv");
-        boolean has_total_cond = data.has("total-cond");
-        boolean has_drum_ship = data.has("drum-ship");
-        boolean has_drum_num = data.has("drum-num");
-        boolean has_drum_num_optional = data.has("drum-num-optional");
-        boolean has_total_asw = data.has("total-asw");
-        boolean has_total_fp = data.has("total-fp");
-        boolean has_total_los = data.has("total-los");
-        boolean has_total_firepower = data.has("total-firepower");
-
-        int total_num = data.get("total-num").getAsInt();
-        result.addProperty("total-num", ship_data.size() >= total_num);
-        total_pass = total_pass && (ship_data.size() >= total_num);
-
-        result.addProperty("flag-lv", true);
-        if (has_flag_lv) {
-            if (ship_data.size() > 0) {
-                int flag_lv_value = ship_data.get(0).get("lv").getAsInt();
-                int flag_lv = data.get("flag-lv").getAsInt();
-                result.addProperty("flag-lv", flag_lv_value >= flag_lv);
-                total_pass = total_pass && (flag_lv_value >= flag_lv);
-            } else {
-                result.addProperty("flag-cond", false);
-                total_pass = false;
-            }
-        }
-
-        result.addProperty("flag-cond", true);
-        if (has_flag_cond) {
-            if (ship_data.size() > 0) {
-                boolean is_flag_passed = false;
-                int flag_ship_id = ship_data.get(0).get("ship_id").getAsInt();
-                int flag_conv_value = ship_data.get(0).get("stype").getAsInt();
-                if (KcaApiData.isShipCVE(flag_ship_id)) flag_conv_value = STYPE_CVE;
-                String[] flag_cond = data.get("flag-cond").getAsString().split("/");
-                for (int i = 0; i < flag_cond.length; i++) {
-                    if (flag_conv_value == Integer.parseInt(flag_cond[i])) {
-                        is_flag_passed = true;
-                        break;
-                    }
-                }
-                result.addProperty("flag-cond", is_flag_passed);
-                total_pass = total_pass && is_flag_passed;
-            } else {
-                result.addProperty("flag-cond", false);
-                total_pass = false;
-            }
-        }
-
-        result.addProperty("total-lv", true);
-        if (has_total_lv) {
-            int total_lv_value = 0;
-            for (JsonObject obj : ship_data) {
-                total_lv_value += obj.get("lv").getAsInt();
-            }
-            int total_lv = data.get("total-lv").getAsInt();
-            result.addProperty("total-lv", total_lv_value >= total_lv);
-            total_pass = total_pass && (total_lv_value >= total_lv);
-        }
-
-        if (has_total_cond) {
-            String total_cond = data.get("total-cond").getAsString();
-            JsonObject total_cond_result = checkFleetCondition(total_cond);
-            result.add("total-cond", total_cond_result.getAsJsonArray("value"));
-            total_pass = total_pass && total_cond_result.get("pass").getAsBoolean();
-        }
-
-        // Drum: 75
-        int drum_ship_value = 0;
-        int drum_num_value = 0;
-        int plane_tais_value = 0;
-
-        for (JsonObject obj : ship_data) {
-            int count = 0;
-            for (JsonElement itemobj : obj.getAsJsonArray("item")) {
-                int slotitem_id = itemobj.getAsJsonObject().get("slotitem_id").getAsInt();
-                int level = itemobj.getAsJsonObject().get("level").getAsInt();
-                int type_t2 = itemobj.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
-                int tais = itemobj.getAsJsonObject().get("tais").getAsInt();
-                if (KcaApiData.isItemAircraft(type_t2) || type_t2 == T2_AUTOGYRO || type_t2 == T2_ANTISUB_PATROL) {
-                    plane_tais_value += tais;
-                }
-                if (slotitem_id == 75) {
-                    drum_num_value += 1;
-                    count += 1;
-                }
-            }
-            if (count > 0) drum_ship_value += 1;
-        }
-
-        result.addProperty("drum-ship", true);
-        result.addProperty("drum-num", true);
-        result.addProperty("drum-num-optional", true);
-
-        if (has_drum_ship) {
-            int drum_ship = data.get("drum-ship").getAsInt();
-            result.addProperty("drum-ship", drum_ship_value >= drum_ship);
-            total_pass = total_pass && (drum_ship_value >= drum_ship);
-        }
-        if (has_drum_num) {
-            int drum_num = data.get("drum-num").getAsInt();
-            result.addProperty("drum-num", drum_num_value >= drum_num);
-            total_pass = total_pass && (drum_num_value >= drum_num);
-        } else if (has_drum_num_optional) {
-            int drum_num = data.get("drum-num-optional").getAsInt();
-            result.addProperty("drum-num-optional", drum_num_value >= drum_num);
-        }
-
-        result.addProperty("total-asw", true);
-        if (has_total_asw) {
-            double total_asw_value = 0;
-            double total_asw_bonus = 0;
-            for (JsonObject obj : ship_data) {
-                total_asw_value += (obj.get("taisen").getAsInt());
-                for (JsonElement itemobj : obj.getAsJsonArray("item")) {
-                    int level = itemobj.getAsJsonObject().get("level").getAsInt();
-                    int type_t2 = itemobj.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
-                    if (type_t2 == T2_SONAR || type_t2 == T2_SONAR_LARGE || type_t2 == T2_DEPTH_CHARGE ) {
-                        total_asw_bonus += Math.sqrt(level);
-                    }
-                }
-            }
-            total_asw_value = Math.floor(total_asw_value - plane_tais_value + total_asw_bonus * 2 / 3);
-            int total_asw = data.get("total-asw").getAsInt();
-            result.addProperty("total-asw", total_asw_value >= total_asw);
-            total_pass = total_pass && (total_asw_value >= total_asw);
-        }
-
-        result.addProperty("total-fp", true);
-        if (has_total_fp) {
-            int total_fp_value = 0;
-            for (JsonObject obj : ship_data) {
-                total_fp_value += (obj.get("taiku").getAsInt());
-                for (JsonElement itemobj : obj.getAsJsonArray("item")) {
-                    int level = itemobj.getAsJsonObject().get("level").getAsInt();
-                    int type_t3 = itemobj.getAsJsonObject().getAsJsonArray("type").get(3).getAsInt();
-                    if (type_t3 == 15) total_fp_value += Math.sqrt(level);
-                    if (type_t3 == 16) total_fp_value += 0.3 * Math.sqrt(level);
-                }
-            }
-            int total_fp = data.get("total-fp").getAsInt();
-            result.addProperty("total-fp", total_fp_value >= total_fp);
-            total_pass = total_pass && (total_fp_value >= total_fp);
-        }
-
-        result.addProperty("total-los", true);
-        if (has_total_los) {
-            int total_los_value = 0;
-            for (JsonObject obj : ship_data) {
-                total_los_value += obj.get("sakuteki").getAsInt();
-                for (JsonElement itemobj : obj.getAsJsonArray("item")) {
-                    int level = itemobj.getAsJsonObject().get("level").getAsInt();
-                    int type_t2 = itemobj.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
-                    if (type_t2 == T2_RADAR_SMALL || type_t2 == T2_RADAR_LARGE || type_t2 == T2_RADER_LARGE_II ) {
-                        total_los_value += Math.sqrt(level);
-                    }
-                }
-            }
-            int total_los = data.get("total-los").getAsInt();
-            result.addProperty("total-los", total_los_value >= total_los);
-            total_pass = total_pass && (total_los_value >= total_los);
-        }
-
-        result.addProperty("total-firepower", true);
-        if (has_total_firepower) {
-            double total_firepower_value = 0;
-            for (JsonObject obj : ship_data) {
-                total_firepower_value += obj.get("karyoku").getAsInt();
-                for (JsonElement itemobj : obj.getAsJsonArray("item")) {
-                    int level = itemobj.getAsJsonObject().get("level").getAsInt();
-                    int type_t2 = itemobj.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
-                    if (type_t2 == T2_GUN_MEDIUM || type_t2 == T2_GUN_LARGE || type_t2 == T2_GUN_LARGE_II) {
-                        total_firepower_value += Math.sqrt(level);
-                    } else if (type_t2 == T2_GUN_SMALL) {
-                        total_firepower_value += 0.5 * Math.sqrt(level);
-                    } else if (type_t2 == T2_SUB_GUN) {
-                        total_firepower_value += 0.15 * Math.sqrt(level);
-                    }
-                }
-            }
-            total_firepower_value = Math.floor(total_firepower_value);
-            int total_firepower = data.get("total-firepower").getAsInt();
-            result.addProperty("total-firepower", total_firepower_value >= total_firepower);
-            total_pass = total_pass && (total_firepower_value >= total_firepower);
-        }
-
-        result.addProperty("pass", total_pass);
-        return result;
+        updateWorld();
+        updateCheckData(false);
+        setSelectedExpd(selected_expd.get(newValue, 0)); // restore the last selection or the first expd of the world
     }
 
-    // Drum: 75, Daihatsu: 68, 89Tank: 166, Amp: 167, Toku-Daihatsu: 193
-    private JsonObject getBonusInfo() {
-        double bonus = 0.0;
+    private void updateWorld() {
+        selected_world = clamp(selected_world, 1, 7); // 1 <= i <= 7, exclude 6
+
+        for (int id : this.<Flow>findViewById(R.id.expd_worlds).getReferencedIds()) {
+            View v = findViewById(id);
+            v.setSelected(selected_world == Integer.parseInt((String) v.getTag()));
+        }
+
+        if (!KcaApiData.isExpeditionDataLoaded())
+            return; // view will be updated even when the load isn't completed
+
+        expd_list.clear();
+        expd_list.addAll(KcaApiData.getExpeditionNumByWorld(selected_world));
+        Log.d(TAG, "expd_list[" + expd_list.size() + "]: " + expd_list);
+
+        int[] view_ids = this.<Flow>findViewById(R.id.expd_table).getReferencedIds();
+        for (int i = 0; i < view_ids.length; i++) {
+            int id = view_ids[i];
+
+            if (i >= expd_list.size()) {
+                findViewById(id).setVisibility(INVISIBLE);
+            } else {
+
+                setViewContentById(id, KcaExpedition2.getExpeditionStr(expd_list.get(i)));
+                findViewById(id).setVisibility(VISIBLE);
+            }
+        }
+    }
+
+    private void updateCheckData(boolean isFleetChanged) {
+        if (!checkUserShipDataLoaded() || fleet_info == null) return;
+
+        // if fleet wasn't changed, don't delete, just append.
+        if (isFleetChanged) check_data.clear();
+
+        for (int expd : expd_list) {
+            if (check_data.indexOfKey(expd) >= 0)
+                continue; // fleet is not changed, and check data is cached
+            check_data.put(expd, checkCondition(KcaApiData.getExpeditionInfo(expd, locale)));
+        }
+
+        Log.d(TAG, "check_data[" + check_data.size() + "]: " + check_data);
+
+        int[] view_ids = this.<Flow>findViewById(R.id.expd_table).getReferencedIds();
+        for (int i = 0; i < expd_list.size(); i++) {
+            int id = view_ids[i];
+
+            JsonObject check = check_data.get(expd_list.get(i));
+            if (check != null) {
+                boolean pass = check.get("pass").getAsBoolean();
+                setViewTextColorById(id, pass ? R.color.colorExpeditionBtnGoodText : R.color.colorExpeditionBtnFailText);
+                setViewTintColorById(id, pass ? R.color.colorExpeditionBtnGoodBack : R.color.colorExpeditionBtnFailBack);
+            } else {
+                setViewTextColorById(id, R.color.white);
+                setViewTintColorById(id, R.color.colorFleetInfoNoShip);
+            }
+        }
+    }
+
+    private void setSelectedExpd(int newValue) {
+        newValue = clamp(newValue, 0, expd_list.size() - 1); // 1 <= i <= 7, exclude 6
+        selected_expd.put(selected_world, newValue);
+
+        Log.d(TAG, "expd: " + newValue);
+
+        int[] view_ids = this.<Flow>findViewById(R.id.expd_table).getReferencedIds();
+        for (int i = 0, len = view_ids.length; i < len; i++) {
+            View v = findViewById(view_ids[i]);
+            v.setSelected(newValue == i);
+        }
+
+        setExpdDetailLayout();
+    }
+    // endregion data update
+
+    // region fleet info
+
+    /**
+     * <a href="https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat">wikiwiki</a>
+     * <a href="https://kitongame.com/%E3%80%90%E8%89%A6%E3%81%93%E3%82%8C%E3%80%91%E3%83%9E%E3%83%B3%E3%82%B9%E3%83%AA%E3%83%BC%E9%81%A0%E5%BE%81%E3%81%AE%E6%88%90%E5%8A%9F%E6%9D%A1%E4%BB%B6%E3%81%A8%E7%8D%B2%E5%BE%97%E8%B3%87%E6%9D%90/">kiton</a>
+     */
+    private static void getStatusInfo(List<JsonObject> ship_list, JsonObject result) {
+        int flag_lv = ship_list.isEmpty() ? -1 : ship_list.get(0).get("lv").getAsInt();
+
+        int total_lv = 0;
+        float total_fire = 0;
+        float total_asw = 0;
+        float total_aa = 0;
+        float total_los = 0;
+
+        boolean has_aircraft = false;
+
+        for (JsonObject ship : ship_list) {
+
+            total_lv += ship.get("lv").getAsInt();
+            total_fire += ship.get("karyoku").getAsInt();
+            total_asw += ship.get("taisen").getAsInt();
+            total_aa += ship.get("taiku").getAsInt();
+            total_los += ship.get("sakuteki").getAsInt();
+
+            for (JsonElement itemData : ship.getAsJsonArray("item")) {
+                int type2 = itemData.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
+                int type3 = itemData.getAsJsonObject().getAsJsonArray("type").get(3).getAsInt();
+                int level = itemData.getAsJsonObject().get("level").getAsInt();
+
+                if (type2 == T2_GUN_SMALL || type2 == T2_SANSHIKIDAN || type2 == T2_AP_SHELL)
+                    total_fire += floor01(0.5 * sqrt(level));
+
+                if (type2 == T2_GUN_MEDIUM)
+                    total_fire += floor01(sqrt(level));
+
+                if (type2 == T2_GUN_LARGE || type2 == T2_GUN_LARGE_II)
+                    total_fire += floor01(0.97 * sqrt(level));
+
+                if (type2 == T2_SUB_GUN)
+                    total_fire += floor01(0.15 * level);
+
+                if (type3 == 16 /* green aa gun */)
+                    total_aa += floor01(0.3 * level);
+
+                if (type2 == T2_MACHINE_GUN)
+                    total_aa += floor01(sqrt(level));
+
+                if (type2 == T2_SONAR || type2 == T2_SONAR_LARGE || type2 == T2_DEPTH_CHARGE)
+                    total_asw += floor01(sqrt(level));
+
+                if (type2 == T2_SEA_SCOUT || type2 == T2_RADAR_LARGE || type2 == T2_RADER_LARGE_II)
+                    total_los += floor01(0.95 * sqrt(level));
+
+                if (type2 == T2_RADAR_SMALL)
+                    total_los += floor01(sqrt(level));
+
+                if (KcaApiData.isItemAircraft(type2) || type2 == T2_AUTOGYRO || type2 == T2_ANTISUB_PATROL) {
+                    has_aircraft = true;
+                    total_asw -= itemData.getAsJsonObject().get("tais").getAsInt();
+                    total_aa -= itemData.getAsJsonObject().get("tyku").getAsInt();
+                    total_los -= itemData.getAsJsonObject().get("saku").getAsInt();
+                }
+            }
+        }
+
+        result.addProperty(FLAG_LV, flag_lv);
+        result.addProperty(FLEET_LV, total_lv);
+        result.addProperty(TOTAL_FIRE, total_fire);
+        result.addProperty(TOTAL_ASW, total_asw);
+        result.addProperty(TOTAL_AA, total_aa);
+        result.addProperty(TOTAL_LOS, total_los);
+        result.addProperty(HAS_AIRCRAFT, has_aircraft);
+    }
+
+    /**
+     * <a href="https://twitter.com/jo_swaf/status/1283626757367590913/photo/2">twitter @jo_swaf: great success rate</a>
+     * <a href="https://docs.google.com/spreadsheets/d/1bKwHBxtQhNfxE4PAzYaFlbiO_soQTFi3dG1U4nh9njs/edit#gid=330967444">Spreadsheet</a>
+     */
+    private static void getGSInfo(List<JsonObject> ship_list, JsonObject result) {
+        if (ship_list.isEmpty()) { // if fleet is empty, set all rate to 0, return
+            result.addProperty(GS_RATE_NORMAL, 0);
+            result.addProperty(GS_RATE_DRUM_1, 0);
+            result.addProperty(GS_RATE_DRUM_2, 0);
+            result.addProperty(GS_RATE_FLAGSHIP, 0);
+            return;
+        }
+
+        int flag_lv = ship_list.get(0).get("lv").getAsInt();
+        int sparkles = 0;
+        boolean all_sparkle = true;
+        for (JsonObject ship : ship_list) {
+            if (ship.get("cond").getAsInt() >= 50) sparkles += 1;
+            else all_sparkle = false;
+        }
+
+        int base = 20 + sparkles * 15 + 1;
+        int flagship = -5 + (int) floor(sqrt(flag_lv) + flag_lv / 10.0);
+        result.addProperty(GS_RATE_NORMAL, clamp(all_sparkle ? base : 0, 0, 100));
+        result.addProperty(GS_RATE_DRUM_1, clamp(base - 15, 0, 100));
+        result.addProperty(GS_RATE_DRUM_2, clamp(base + 20, 0, 100));
+        result.addProperty(GS_RATE_FLAGSHIP, clamp(base + flagship, 0, 100));
+    }
+
+    /**
+     * <a href="https://wikiwiki.jp/kancolle/%E6%94%B9%E4%BF%AE%E5%B7%A5%E5%BB%A0#abf2415c">wikiwiki: daihatsu bonus</a>
+     * <a href="https://wikiwiki.jp/kancolle/%E7%89%B9%E5%A4%A7%E7%99%BA%E5%8B%95%E8%89%87/%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%881#:~:text=%E7%89%B9%E5%A4%A7%E7%99%BA%E8%A3%9C%E6%AD%A3%E3%81%A7,%E9%87%91)%2018%3A10%3A58">wikiwiki: toku daihatsu bonus</a>
+     */
+    private static void getBonusInfo(List<JsonObject> ship_list, JsonObject result) {
         boolean kinu_exist = false;
-
-        int bonus_default = 0;
         int drum_count = 0;
+        int drum_ships = 0;
+        SparseIntArray dlcs_count = new SparseIntArray();
+        int all_dlcs_count = 0;
+        int sum_of_level = 0;
         int bonus_count = 0;
-        int daihatsu_count = 0;
-        int tank_count = 0;
-        int amp_count = 0;
-        int toku_count = 0;
-        double bonus_level = 0.0;
 
-        float total_firepower = 0;
-        float total_asw_value = 0;
-        float total_asw_bonus = 0;
-        float plane_tais_value = 0;
-        int total_los = 0;
-        JsonObject result = new JsonObject();
-
-        for (JsonObject obj : ship_data) {
-            if (obj.get("ship_id").getAsInt() == 487) { // Kinu Kai Ni
+        for (JsonObject ship : ship_list) {
+            if (ship.get("ship_id").getAsInt() == 487) { // Kinu Kai Ni
                 kinu_exist = true;
             }
 
-            total_firepower += obj.get("karyoku").getAsInt();
-            total_asw_value += obj.get("taisen").getAsInt();
-            total_los += obj.get("sakuteki").getAsInt();
-            for (JsonElement itemobj : obj.getAsJsonArray("item")) {
-                int type_t2 = itemobj.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
-                int slotitem_id = itemobj.getAsJsonObject().get("slotitem_id").getAsInt();
-                int level = itemobj.getAsJsonObject().get("level").getAsInt();
-                int tais = itemobj.getAsJsonObject().get("tais").getAsInt();
-                if (KcaApiData.isItemAircraft(type_t2) || type_t2 == T2_AUTOGYRO || type_t2 == T2_ANTISUB_PATROL) plane_tais_value += tais;
+            boolean has_drum = false;
+            for (JsonElement itemData : ship.getAsJsonArray("item")) {
+                int item_id = itemData.getAsJsonObject().get("slotitem_id").getAsInt();
+                int type2 = itemData.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
+                int level = itemData.getAsJsonObject().get("level").getAsInt();
 
-                if (type_t2 == T2_GUN_MEDIUM || type_t2 == T2_GUN_LARGE || type_t2 == T2_GUN_LARGE_II) {
-                    total_firepower += Math.sqrt(level);
-                } else if (type_t2 == T2_GUN_SMALL) {
-                    total_firepower += 0.5 * Math.sqrt(level);
-                } else if (type_t2 == T2_SUB_GUN) {
-                    total_firepower += 0.15 * Math.sqrt(level);
+                if (type2 == T2_DRUM_CAN) {
+                    has_drum = true;
+                    drum_count += 1;
                 }
 
-                if (type_t2 == T2_SONAR || type_t2 == T2_SONAR_LARGE || type_t2 == T2_DEPTH_CHARGE ) {
-                    total_asw_bonus += Math.sqrt(level);
-                }
+                if (DLCS_BONUS_DATA.indexOfKey(item_id) >= 0) {
+                    all_dlcs_count += 1;
+                    dlcs_count.put(item_id, dlcs_count.get(item_id, 0) + 1);
 
-                switch (slotitem_id) {
-                    case 75:
-                        drum_count += 1;
-                        break;
-                    case 68:
-                        bonus_level += level;
-                        bonus_count += 1.0;
-                        daihatsu_count += 1;
-                        break;
-                    case 166:
-                        bonus_level += level;
-                        bonus_count += 1.0;
-                        tank_count += 1;
-                        break;
-                    case 167:
-                        bonus_level += level;
-                        bonus_count += 1.0;
-                        amp_count += 1;
-                        break;
-                    case 193:
-                        bonus_level += level;
-                        bonus_count += 1.0;
-                        toku_count += 1;
-                        break;
-                    default:
-                        break;
+                    if (DLCS_BONUS_DATA.get(item_id, 0f) > 0f) {
+                        sum_of_level += level;
+                        bonus_count += 1;
+                    }
                 }
             }
-        }
-        if (bonus_count > 0) bonus_level /= bonus_count;
 
-        result.addProperty("kinu", kinu_exist);
-        result.addProperty("drum", drum_count);
-        result.addProperty("daihatsu", daihatsu_count);
-        result.addProperty("tank", tank_count);
-        result.addProperty("amp", amp_count);
-        result.addProperty("toku", toku_count);
-        result.addProperty("level", bonus_level);
-        result.addProperty("firepower", (int) total_firepower);
-        result.addProperty("asw", Math.floor(total_asw_value - plane_tais_value + total_asw_bonus * 2 / 3) );
-        result.addProperty("los", total_los);
+            if (has_drum) drum_ships += 1;
+        }
+
+        float avg_of_level = 0f;
+        if (bonus_count > 0) avg_of_level = ((float) sum_of_level) / bonus_count;
+
+        float sum_of_bonus = kinu_exist ? 0.05f : 0f;
+        for (int i = 0; i < dlcs_count.size(); i++) {
+            int item_id = dlcs_count.keyAt(i);
+            sum_of_bonus += DLCS_BONUS_DATA.get(item_id) * dlcs_count.get(item_id);
+        }
+        sum_of_bonus = min(sum_of_bonus, 0.2f);
+
+        float toku_bonus = 0f;
+        if (dlcs_count.get(193, 0) >= 1) {
+            int toku_idx = min(dlcs_count.get(193) - 1, 3);
+            int dlc_idx = min(dlcs_count.get(68), 4);
+            toku_bonus = TOKU_BONUS_DATA[toku_idx][dlc_idx];
+        }
+
+        result.addProperty(KINU_EXISTS, kinu_exist);
+        result.addProperty(DRUM_COUNT, drum_count);
+        result.addProperty(DRUM_SHIPS, drum_ships);
+        result.addProperty(DLCS_COUNT, all_dlcs_count);
+        result.addProperty(DLCS_BONUS, sum_of_bonus + 0.01f * sum_of_bonus * avg_of_level);
+        result.addProperty(TOKU_BONUS, toku_bonus);
+    }
+    // endregion fleet info
+
+    // region check data
+    private JsonObject checkCondition(JsonObject expd_data) {
+        if (expd_data == null || fleet_info == null) return null;
+
+        boolean any_ship = ship_list.size() >= 1;
+        boolean total_pass = any_ship;
+        JsonObject result = new JsonObject();
+
+        // region flagship & fleet check
+        result.addProperty(FLAG_LV, any_ship);
+        if (any_ship && expd_data.has(FLAG_LV)) {
+            int lv = ship_list.get(0).get("lv").getAsInt();
+            int req = expd_data.get(FLAG_LV).getAsInt();
+            result.addProperty(FLAG_LV, lv >= req);
+            // noinspection ConstantConditions
+            total_pass = total_pass && (lv >= req);
+        }
+
+        result.addProperty(FLAG_COND, any_ship);
+        if (any_ship && expd_data.has(FLAG_COND)) {
+            int stype = ship_list.get(0).get("stype").getAsInt();
+            boolean isCVE = KcaApiData.isShipCVE(ship_list.get(0).get("ship_id").getAsInt());
+
+            boolean flag_pass = false;
+            for (String stype_str : expd_data.get(FLAG_COND).getAsString().split("/")) {
+                int req = Integer.parseInt(stype_str);
+
+                if (stype == req || (stype == STYPE_CVE && isCVE)) {
+                    flag_pass = true;
+                    break;
+                }
+            }
+
+            result.addProperty(FLAG_COND, flag_pass);
+            total_pass = total_pass && flag_pass;
+        }
+
+        result.addProperty(FLEET_LV, any_ship);
+        if (expd_data.has(FLEET_LV)) {
+            int req = expd_data.get(FLEET_LV).getAsInt();
+            int total = fleet_info.get(FLEET_LV).getAsInt();
+            result.addProperty(FLEET_LV, total >= req);
+            total_pass = total_pass && (total >= req);
+        }
+
+        result.addProperty(FLEET_NUM, true);
+        if (expd_data.has(FLEET_NUM)) {
+            int req = expd_data.get(FLEET_NUM).getAsInt();
+            int total = ship_list.size();
+            result.addProperty(FLEET_NUM, total >= req);
+            total_pass = total_pass && (total >= req);
+        }
+
+        result.addProperty(FLEET_COND, true);
+        if (expd_data.has(FLEET_COND)) {
+            JsonObject res = checkFleetCondition(expd_data.get(FLEET_COND).getAsString());
+            result.add(FLEET_COND, res.get("value"));
+            total_pass = total_pass && res.get("pass").getAsBoolean();
+        }
+        // endregion
+
+        // region drum check
+        result.addProperty(DRUM_SHIPS, true);
+        if (expd_data.has(DRUM_SHIPS)) {
+            int req = expd_data.get(DRUM_SHIPS).getAsInt();
+            int ships = fleet_info.get(DRUM_SHIPS).getAsInt();
+            result.addProperty(DRUM_SHIPS, ships >= req);
+            total_pass = total_pass && (ships >= req);
+        }
+
+        result.addProperty(DRUM_COUNT, true);
+        if (expd_data.has(DRUM_COUNT)) {
+            int req = expd_data.get(DRUM_COUNT).getAsInt();
+            int count = fleet_info.get(DRUM_COUNT).getAsInt();
+            result.addProperty(DRUM_COUNT, count >= req);
+            total_pass = total_pass && (count >= req);
+        }
+
+        result.addProperty(DRUM_OPTIONAL, true);
+        if (expd_data.has(DRUM_OPTIONAL)) {
+            int req = expd_data.get(DRUM_OPTIONAL).getAsInt();
+            int count = fleet_info.get(DRUM_COUNT).getAsInt();
+            result.addProperty(DRUM_OPTIONAL, count >= req);
+        }
+        // endregion
+
+        // region status check
+        result.addProperty(TOTAL_FIRE, true);
+        if (expd_data.has(TOTAL_FIRE)) {
+            int req = expd_data.get(TOTAL_FIRE).getAsInt();
+            int total = fleet_info.get(TOTAL_FIRE).getAsInt();
+            result.addProperty(TOTAL_FIRE, total >= req);
+            total_pass = total_pass && total >= req;
+        }
+
+        result.addProperty(TOTAL_ASW, true);
+        if (expd_data.has(TOTAL_ASW)) {
+            int req = expd_data.get(TOTAL_ASW).getAsInt();
+            int total = fleet_info.get(TOTAL_ASW).getAsInt();
+            result.addProperty(TOTAL_ASW, total >= req);
+            total_pass = total_pass && total >= req;
+        }
+
+        result.addProperty(TOTAL_AA, true);
+        if (expd_data.has(TOTAL_AA)) {
+            int req = expd_data.get(TOTAL_AA).getAsInt();
+            int total = fleet_info.get(TOTAL_AA).getAsInt();
+            result.addProperty(TOTAL_AA, total >= req);
+            total_pass = total_pass && total >= req;
+        }
+
+        result.addProperty(TOTAL_LOS, true);
+        if (expd_data.has(TOTAL_LOS)) {
+            int req = expd_data.get(TOTAL_LOS).getAsInt();
+            int total = fleet_info.get(TOTAL_LOS).getAsInt();
+            result.addProperty(TOTAL_LOS, total >= req);
+            total_pass = total_pass && total >= req;
+        }
+        // endregion
+
+        result.addProperty("pass", total_pass);
         return result;
     }
 
-    private int calculateBonusValue(int value, JsonObject bonus_info, boolean is_gs) {
-        int kinu_count = bonus_info.get("kinu").getAsBoolean() ? 1 : 0;
-        int daihatsu_count = bonus_info.get("daihatsu").getAsInt();
-        int tank_count = bonus_info.get("tank").getAsInt();
-        int amp_count = bonus_info.get("amp").getAsInt();
-        int toku_count = bonus_info.get("toku").getAsInt();
-        double bonus_level = bonus_info.get("level").getAsDouble();
-
-        int dlc_count = kinu_count + daihatsu_count + toku_count;
-        int ntoku_count = Math.min(4, daihatsu_count + tank_count + amp_count);
-        double bonus_default = Math.min(dlc_count * 0.05 + tank_count * 0.02 + amp_count * 0.01, 0.2);
-        bonus_default += 0.002 * bonus_level;
-        double bonus_toku = 0.0;
-        if (toku_count > 0) {
-            int toku_idx;
-            if (toku_count > 4) toku_idx = 3;
-            else toku_idx = toku_count - 1;
-            bonus_toku = toku_bonus[toku_idx][ntoku_count] * 0.01;
-        }
-
-        int value_bonus = 0;
-        if (is_gs) {
-            value_bonus = (int)(value * 3 * (1 + bonus_default) / 2) + (int)(value * 3 * bonus_toku / 2);
-        } else {
-            value_bonus = (int)(value * (1 + bonus_default)) + (int)(value * bonus_toku);
-        }
-        return value_bonus;
+    private String[] parseTotalCond(String total_cond) {
+        return total_cond.split("/");
     }
 
-    private void setItemViewVisibilityById(int id, boolean visible) {
-        int visible_value = visible ? View.VISIBLE : View.GONE;
-        itemView.findViewById(id).setVisibility(visible_value);
+    private List<Pair<String, Integer>> parseFleetCond(String fleet_cond) {
+        return transform(Arrays.asList(fleet_cond.split("\\|")), stype_cond -> {
+            String[] cond = stype_cond.split("-");
+            return new Pair<>(cond[0], Integer.parseInt(cond[1]));
+        });
     }
 
-    private void setItemTextViewById(int id, String value) {
-        ((TextView) itemView.findViewById(id)).setText(value);
-    }
+    private JsonObject checkFleetCondition(String total_cond) {
 
-    private void setItemTextViewColorById(int id, boolean value, boolean is_option) {
-        if (value) {
-            ((TextView) itemView.findViewById(id)).setTextColor(ContextCompat
-                    .getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodBack));
-        } else if (is_option) {
-            ((TextView) itemView.findViewById(id)).setTextColor(ContextCompat
-                    .getColor(getApplicationContext(), R.color.grey));
-        } else {
-            ((TextView) itemView.findViewById(id)).setTextColor(ContextCompat
-                    .getColor(getApplicationContext(), R.color.colorExpeditionBtnFailBack));
-        }
-    }
+        // stype to count map
+        SparseIntArray stype_data = new SparseIntArray();
+        for (JsonObject ship : ship_list) {
+            int ship_id = ship.get("ship_id").getAsInt();
+            int stype = ship.get("stype").getAsInt();
 
-
-    private String convertTotalCond(String str) {
-        String[] ship_count = str.split("\\-");
-        String ship_concat;
-        if (ship_count[0].equals("7,11,16,18")) {
-            ship_concat = getStringWithLocale(R.string.excheckview_ship_cvs);
-        } else {
-            String[] ship = ship_count[0].split(",");
-            List<String> ship_list = new ArrayList<>();
-            for (String s : ship) {
-                ship_list.add(getShipTypeAbbr(Integer.parseInt(s)));
+            if (KcaApiData.isShipCVE(ship_id)) {
+                stype_data.put(STYPE_CVE, stype_data.get(STYPE_CVE, 0) + 1);
             }
-            ship_concat = joinStr(ship_list, "/");
+
+            stype_data.put(stype, stype_data.get(stype, 0) + 1);
         }
-        return ship_concat.concat(":").concat(ship_count[1]);
-    }
 
-    private List<View> generateConditionView(String data, JsonArray check) {
-        int textsize = getResources().getDimensionPixelSize(R.dimen.popup_text_normal);
-        List<View> views = new ArrayList<>();
-        LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, 0, 14, 0);
+        boolean total_pass = false;
+        JsonArray total_check = new JsonArray();
+        for (String fleet_cond : parseTotalCond(total_cond)) {
+            JsonObject cond_check = new JsonObject();
+            total_check.add(cond_check);
 
-        String[] conds = data.split("/");
-        int count = 0;
-        for (String cond : conds) {
-            LinearLayout rowLayout = new LinearLayout(this);
-            rowLayout.setOrientation(LinearLayout.HORIZONTAL);
-            String[] shipcond = cond.split("\\|");
-            for (String sc : shipcond) {
-                TextView scView = new TextView(this);
-                scView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textsize);
-                scView.setText(convertTotalCond(sc));
-                if (check.get(count).getAsJsonObject().get(sc.split("\\-")[0]).getAsBoolean()) {
-                    scView.setTextColor(ContextCompat
-                            .getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodBack));
-                } else {
-                    scView.setTextColor(ContextCompat
-                            .getColor(getApplicationContext(), R.color.colorExpeditionBtnFailBack));
+            boolean partial_pass = true;
+            for (Pair<String, Integer> cond : parseFleetCond(fleet_cond)) {
+
+                String[] stype_list = cond.first.split(",");
+                int count = 0;
+
+                for (String stype : stype_list) {
+                    count += stype_data.get(Integer.parseInt(stype), 0);
                 }
-                rowLayout.addView(scView, params);
+
+                cond_check.addProperty(cond.first, cond.second <= count);
+                partial_pass = partial_pass && cond.second <= count;
             }
-            views.add(rowLayout);
-            count += 1;
+
+            total_pass = total_pass || partial_pass;
         }
-        return views;
+
+        JsonObject result = new JsonObject();
+        result.addProperty("pass", total_pass);
+        result.add("value", total_check);
+        return result;
+    }
+    // endregion check data
+
+    // region layout update
+    private void clearExpdDetailLayout() {
+        // clear detail header
+        setViewContentById(R.id.expd_id, "");
+        setViewContentById(R.id.expd_title, "");
+        setViewVisibilityById(R.id.expd_type, false);
+        setViewVisibilityById(R.id.expd_ctype, false);
+        setViewVisibilityById(R.id.expd_gs_rate, false);
+        setViewContentById(R.id.expd_time, "");
+        setViewContentById(R.id.expd_reward_res, "0/0/0/0");
+        setViewTextColorById(R.id.expd_reward_res, R.color.white);
+        setViewContentById(R.id.expd_reward_item1, (Drawable) null);
+        setViewContentById(R.id.expd_reward_item2, (Drawable) null);
+
+        // clear conditions
+        setViewsGone(R.id.expd_flagship_label, R.id.expd_flagship_lv, R.id.expd_flagship_cond);
+        setViewsGone(R.id.expd_fleet_label, R.id.expd_fleet_total_num, R.id.expd_fleet_total_lv);
+        this.<LinearLayout>findViewById(R.id.expd_fleet_cond).removeAllViews();
+        setViewsGone(R.id.expd_fire_label, R.id.expd_total_fire, R.id.expd_fleet_fire,
+                R.id.expd_asw_label, R.id.expd_total_asw, R.id.expd_fleet_asw,
+                R.id.expd_aa_label, R.id.expd_total_aa, R.id.expd_fleet_aa,
+                R.id.expd_los_label, R.id.expd_total_los, R.id.expd_fleet_los);
+        setViewsGone(R.id.expd_drum_label, R.id.expd_drum_ships, R.id.expd_drum_count, R.id.expd_drum_optional);
     }
 
-    private void clearItemViewLayout() {
-        ((TextView) itemView.findViewById(R.id.view_excheck_title)).setText("");
-        ((TextView) itemView.findViewById(R.id.view_excheck_time)).setText("");
-        setItemViewVisibilityById(R.id.view_excheck_flagship, false);
-        setItemViewVisibilityById(R.id.view_excheck_flagship_lv, false);
-        setItemViewVisibilityById(R.id.view_excheck_flagship_cond, false);
-        setItemViewVisibilityById(R.id.view_excheck_fleet, false);
-        setItemViewVisibilityById(R.id.view_excheck_fleet_total_lv, false);
-        setItemViewVisibilityById(R.id.view_excheck_fleet_condition, false);
-        setItemViewVisibilityById(R.id.view_excheck_drum, false);
-        setItemViewVisibilityById(R.id.view_excheck_drum_ship, false);
-        setItemViewVisibilityById(R.id.view_excheck_drum_count, false);
-        setItemViewVisibilityById(R.id.view_excheck_asw, false);
-        setItemViewVisibilityById(R.id.view_excheck_fp, false);
-        setItemViewVisibilityById(R.id.view_excheck_los, false);
-        setItemViewVisibilityById(R.id.view_excheck_firepower, false);
-    }
+    public void setExpdDetailLayout() {
+        if (!KcaApiData.isExpeditionDataLoaded()) return;
 
-    public void setItemViewLayout(int index, JsonObject bonus_info) {
-        double gs_ratio = isGreatSuccess ? 1.5 : 1.0;
-        int expd_value = expedition_data.get(index);
-        Log.e("KCA", String.valueOf(index) + " " + expd_value);
-        JsonObject data = KcaApiData.getExpeditionInfo(expd_value, locale);
+        int expd_id = expd_list.get(selected_expd.get(selected_world, 0));
+        JsonObject data = KcaApiData.getExpeditionInfo(expd_id, locale);
+        Log.d(TAG, "data: " + data);
 
-        String no = data.get("no").getAsString();
-        String name = data.get("name").getAsString();
-        int no_value = Integer.parseInt(no);
-        String title = getExpeditionHeader(no_value).concat(name);
-        int time = data.get("time").getAsInt() * 60;
-        int total_num = data.get("total-num").getAsInt();
-        JsonArray resource = data.getAsJsonArray("resource");
-        int fuel = calculateBonusValue(resource.get(0).getAsInt(), bonus_info, isGreatSuccess);
-        int ammo = calculateBonusValue(resource.get(1).getAsInt(), bonus_info, isGreatSuccess);
-        int steel = calculateBonusValue(resource.get(2).getAsInt(), bonus_info, isGreatSuccess);
-        int bauxite = calculateBonusValue(resource.get(3).getAsInt(), bonus_info, isGreatSuccess);
-        String resource_text = KcaUtils.format("%d/%d/%d/%d", fuel, ammo, steel, bauxite);
-        ((TextView) itemView.findViewById(R.id.excheck_reward_res)).setText(resource_text);
-        if (isGreatSuccess) {
-            ((TextView) itemView.findViewById(R.id.excheck_reward_res))
-                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionGreatSuccess));
+        clearExpdDetailLayout();
+
+        // region header
+        setViewContentById(R.id.expd_id, KcaExpedition2.getExpeditionHeader(data.get("no").getAsInt()));
+        setViewContentById(R.id.expd_title, data.get("name").getAsString());
+
+        List<String> features = data.has("features")
+                ? Arrays.asList(gson.fromJson(data.get("features"), String[].class))
+                : Collections.emptyList();
+
+        setViewVisibilityById(R.id.expd_type, true);
+        if (features.contains("drum")) {
+            setViewContentById(R.id.expd_type, R.string.expd_type_drum);
+        } else if (features.contains("flag_lv")) {
+            setViewContentById(R.id.expd_type, R.string.expd_type_flagship_lv);
         } else {
-            ((TextView) itemView.findViewById(R.id.excheck_reward_res))
-                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+            setViewContentById(R.id.expd_type, R.string.expd_type_normal);
+        }
+        if (features.contains("combat_1")) {
+            setViewVisibilityById(R.id.expd_ctype, true);
+            setViewContentById(R.id.expd_ctype, R.string.expd_ctype_1);
+            setViewTextColorById(R.id.expd_ctype, R.color.colorExpeditionCombatI);
+        }
+        if (features.contains("combat_2")) {
+            setViewVisibilityById(R.id.expd_ctype, true);
+            setViewContentById(R.id.expd_ctype, R.string.expd_ctype_2);
+            setViewTextColorById(R.id.expd_ctype, R.color.colorExpeditionCombatII);
+        }
+//        if (features.contains("support")) {}
+//        if (features.contains("monthly")) {}
+
+        setViewContentById(R.id.expd_time, getTimeStr(data.get("time").getAsInt() * 60));
+
+        JsonArray resource = data.getAsJsonArray("resource");
+        int fuel = applyBonus(resource.get(0).getAsInt(), isGreatSuccess);
+        int ammo = applyBonus(resource.get(1).getAsInt(), isGreatSuccess);
+        int steel = applyBonus(resource.get(2).getAsInt(), isGreatSuccess);
+        int bauxite = applyBonus(resource.get(3).getAsInt(), isGreatSuccess);
+
+        String resource_text = KcaUtils.format("%d/%d/%d/%d", fuel, ammo, steel, bauxite);
+        setViewContentById(R.id.expd_reward_res, resource_text);
+        if (isGreatSuccess) {
+            setViewTextColorById(R.id.expd_reward_res, R.color.colorExpeditionGreatSuccess);
         }
 
         JsonArray reward = data.getAsJsonArray("reward");
@@ -721,318 +979,437 @@ public class KcaExpeditionCheckViewService extends Service {
         int reward2 = reward.get(1).getAsJsonArray().get(0).getAsInt();
         try {
             if (reward1 > 0) {
-                ((ImageView) itemView.findViewById(R.id.excheck_reward_item1))
-                        .setImageResource(getId("common_itemicons_id_" + reward1, R.mipmap.class));
-            } else {
-                ((ImageView) itemView.findViewById(R.id.excheck_reward_item1)).setImageDrawable(null);
+                setViewContentById(R.id.expd_reward_item1, getId("common_itemicons_id_" + reward1, R.mipmap.class));
             }
         } catch (Exception e) {
-            ((ImageView) itemView.findViewById(R.id.excheck_reward_item1)).setImageDrawable(null);
+            Log.e(TAG, "Item image not found for item: " + reward1);
         }
+
         try {
             if (reward2 > 0) {
-                ((ImageView) itemView.findViewById(R.id.excheck_reward_item2))
-                        .setImageResource(getId("common_itemicons_id_" + reward2, R.mipmap.class));
-            } else {
-                ((ImageView) itemView.findViewById(R.id.excheck_reward_item2)).setImageDrawable(null);
+                setViewContentById(R.id.expd_reward_item1, getId("common_itemicons_id_" + reward2, R.mipmap.class));
             }
         } catch (Exception e) {
-            ((ImageView) itemView.findViewById(R.id.excheck_reward_item2)).setImageDrawable(null);
+            Log.e(TAG, "Item image not found for item: " + reward2);
+        }
+        // endregion
+
+//        if (!checkUserShipDataLoaded() || fleet_info == null) return;
+
+        JsonObject check = check_data.get(data.get("no").getAsInt());
+        boolean checked = check != null;
+//        if (check == null) return;
+        Log.d(TAG, "check: " + check);
+
+        if (checked) {
+            setViewTextColorById(R.id.expd_id, getColorByCond(check.get("pass").getAsBoolean()));
+            setViewTextColorById(R.id.expd_title, getColorByCond(check.get("pass").getAsBoolean()));
         }
 
-        JsonObject check = checkdata.get(no);
-        if (check == null) return;
+        if (checked && fleet_info != null && check.get("pass").getAsBoolean()) {
+            int gs_rate;
+            if (features.contains("drum")) {
+                gs_rate = check.get(DRUM_OPTIONAL).getAsBoolean()
+                        ? fleet_info.get(GS_RATE_DRUM_2).getAsInt()
+                        : fleet_info.get(GS_RATE_DRUM_1).getAsInt();
+            } else if (features.contains("flag_lv")) {
+                gs_rate = fleet_info.get(GS_RATE_FLAGSHIP).getAsInt();
+            } else {
+                gs_rate = fleet_info.get(GS_RATE_NORMAL).getAsInt();
+            }
 
-        boolean has_flag_lv = data.has("flag-lv");
-        boolean has_flag_cond = data.has("flag-cond");
-        boolean has_flag_info = has_flag_lv || has_flag_cond;
-        boolean has_total_lv = data.has("total-lv");
-        boolean has_total_cond = data.has("total-cond");
-        boolean has_drum_ship = data.has("drum-ship");
-        boolean has_drum_num = data.has("drum-num");
-        boolean has_drum_num_optional = data.has("drum-num-optional");
-        boolean has_drum_info = has_drum_ship || has_drum_num || has_drum_num_optional;
-        boolean has_total_asw = data.has("total-asw");
-        boolean has_total_fp = data.has("total-fp");
-        boolean has_total_los = data.has("total-los");
-        boolean has_total_firepower = data.has("total-firepower");
 
-        ((LinearLayout) itemView.findViewById(R.id.view_excheck_fleet_condition)).removeAllViews();
+            if (gs_rate > 0) {
 
-        ((TextView) itemView.findViewById(R.id.view_excheck_title))
-                .setText(title);
-        if (check.get("pass").getAsBoolean()) {
-            ((TextView) itemView.findViewById(R.id.view_excheck_title))
-                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodBack));
+                setViewVisibilityById(R.id.expd_gs_rate, true);
+                setViewContentById(R.id.expd_gs_rate, format(R.string.expd_gs_rate, gs_rate));
+            }
+        }
+
+        // region flagship cond
+        if (data.has(FLAG_LV)) {
+            setViewVisibilityById(R.id.expd_flagship_label, true);
+            setViewContentById(R.id.expd_flagship_lv,
+                    format(R.string.excheckview_flag_lv_format, data.get(FLAG_LV).getAsInt()),
+                    getColorByCheck(check, FLAG_LV));
+        }
+
+        if (data.has(FLAG_COND)) {
+            setViewVisibilityById(R.id.expd_flagship_label, true);
+
+            setViewContentById(R.id.expd_flagship_cond,
+                    getSshipTypeAbbrList(data.get(FLAG_COND).getAsString().split("/")),
+                    getColorByCheck(check, FLAG_COND));
+        }
+        // endregion
+
+        // region fleet cond
+        if (data.has(FLEET_NUM)) {
+            setViewVisibilityById(R.id.expd_fleet_label, true);
+            setViewContentById(R.id.expd_fleet_total_num,
+                    format(R.string.excheckview_total_num_format, data.get(FLEET_NUM).getAsInt()),
+                    getColorByCheck(check, FLEET_NUM));
+        }
+
+        if (data.has(FLEET_LV)) {
+            setViewVisibilityById(R.id.expd_fleet_label, true);
+            setViewContentById(R.id.expd_fleet_total_lv,
+                    format(R.string.excheckview_total_lv_format, data.get(FLEET_LV).getAsInt()),
+                    getColorByCheck(check, FLEET_LV));
+        }
+
+        if (data.has(FLEET_COND)) {
+            setViewVisibilityById(R.id.expd_fleet_label, true);
+            setViewVisibilityById(R.id.expd_fleet_cond, true);
+            addFleetCondView(findViewById(R.id.expd_fleet_cond),
+                    data.get(FLEET_COND).getAsString(),
+                    checked ? check.getAsJsonArray(FLEET_COND) : null);
+        }
+        // endregion
+
+        // region drum cond
+        if (data.has(DRUM_SHIPS)) {
+            setViewVisibilityById(R.id.expd_drum_label, true);
+            setViewContentById(R.id.expd_drum_ships,
+                    format(R.string.excheckview_drum_ship_format, data.get(DRUM_SHIPS).getAsInt()),
+                    getColorByCheck(check, DRUM_SHIPS));
+        }
+
+        if (data.has(DRUM_COUNT)) {
+            setViewVisibilityById(R.id.expd_drum_label, true);
+            setViewContentById(R.id.expd_drum_count,
+                    format(R.string.excheckview_drum_num_format, data.get(DRUM_COUNT).getAsInt()),
+                    getColorByCheck(check, DRUM_COUNT));
+        }
+
+        if (data.has(DRUM_OPTIONAL)) {
+            setViewVisibilityById(R.id.expd_drum_label, true);
+            setViewContentById(R.id.expd_drum_optional,
+                    format(R.string.excheckview_drum_num_format, data.get(DRUM_OPTIONAL).getAsInt()),
+                    getColorByCheck(check, DRUM_COUNT, true));
+        }
+        // endregion
+
+        // region status cond
+        boolean isCombat2 = features.contains("combat_2");
+
+        setStatusInfoFor(TOTAL_FIRE, data, check, isCombat2,
+                R.id.expd_fire_label,
+                R.id.expd_total_fire,
+                R.id.expd_fleet_fire);
+
+        setStatusInfoFor(TOTAL_AA, data, check, isCombat2,
+                R.id.expd_aa_label,
+                R.id.expd_total_aa,
+                R.id.expd_fleet_aa);
+
+        setStatusInfoFor(TOTAL_ASW, data, check, isCombat2,
+                R.id.expd_asw_label,
+                R.id.expd_total_asw,
+                R.id.expd_fleet_asw);
+
+        setStatusInfoFor(TOTAL_LOS, data, check, isCombat2,
+                R.id.expd_los_label,
+                R.id.expd_total_los,
+                R.id.expd_fleet_los);
+        // endregion
+
+//        captureImage(findViewById(R.id.expd_panel));
+
+//        SpannableStringBuilder sb = new SpannableStringBuilder();
+//        sb.append("Unlocked by: ");
+//        for (JsonElement dep_id : data.getAsJsonArray("depends-on")) {
+//            JsonObject dep_expd = KcaApiData.getExpeditionInfo(dep_id.getAsInt(), locale);
+//            int begin = sb.length();
+//            sb.append(KcaExpedition2.getExpeditionStr(dep_expd.get("no").getAsInt()));
+//            sb.append('(');
+//            sb.append(KcaUtils.getTimeStr(dep_expd.get("time").getAsInt(), true));
+//            sb.append(')');
+//        }
+    }
+
+    private void setStatusInfoFor(
+            String key,
+            @NonNull JsonObject data,
+            @Nullable JsonObject check,
+            boolean isCombat2,
+            @IdRes int labelId,
+            @IdRes int reqId,
+            @IdRes int fleetId) {
+
+        if (data.has(key)) {
+            int req = data.get(key).getAsInt();
+
+            setViewVisibilityById(labelId, true);
+            setViewContentById(reqId,
+                    format(R.string.excheckview_total_format, req),
+                    getColorByCheck(check, key));
+
+            if (check == null || fleet_info == null) return;
+
+            boolean pass = check.get(key).getAsBoolean();
+            float fleet = fleet_info.get(key).getAsFloat();
+
+            if (!pass) {
+                setViewContentById(fleetId,
+                        format(R.string.excheckview_cur_total_format, fleet),
+                        getColorByCond(false));
+            }
+
+            if (pass && isCombat2) {
+                setViewContentById(fleetId,
+                        format(R.string.excheckview_per_format, fleet / req * 100),
+                        getColorByCond(fleet >= req * 2.17, true));
+            }
+        }
+    }
+
+    private void addFleetCondView(
+            LinearLayout container,
+            @NonNull String data,
+            @Nullable JsonArray check) {
+
+        LinearLayout.LayoutParams row_params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams text_params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        int margin4dp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
+                getApplicationContext().getResources().getDisplayMetrics());
+        text_params.setMargins(0, 0, margin4dp, 0);
+
+        int i = 0;
+        for (String fleet_cond : parseTotalCond(data)) {
+            JsonObject fleet_check = check != null ? check.get(i++).getAsJsonObject() : null;
+
+            LinearLayout row = new LinearLayout(this);
+            row.setLayoutParams(row_params);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+
+            for (Pair<String, Integer> stype_cond : parseFleetCond(fleet_cond)) {
+
+                String stype_abbr = stype_cond.first.equals(CARRIERS)
+                        ? getStringWithLocale(R.string.excheckview_ship_cvs)
+                        : getSshipTypeAbbrList(stype_cond.first.split(","));
+
+                int color = fleet_check == null
+                        ? R.color.white
+                        : getColorByCond(fleet_check.get(stype_cond.first).getAsBoolean());
+
+                row.addView(generateTextView(stype_abbr, stype_cond.second, color), text_params);
+            }
+
+            container.addView(row);
+        }
+    }
+
+    private TextView generateTextView(String stype, int count, @ColorRes int color) {
+        TextView tv = new TextView(this);
+        tv.setText(format(R.string.excheckview_ship_cond, stype, count));
+        tv.setTextAppearance(this, R.style.FloatingWindow_TextAppearance_Normal);
+        tv.setTextColor(ContextCompat.getColor(getApplicationContext(), color));
+//        Log.d(TAG, "generated TextView: " + tv.getText());
+        return tv;
+    }
+
+    private void setFleetInfoView() {
+        // actually never, but just in case
+        if (!checkUserShipDataLoaded() || fleet_info == null) return;
+
+        List<String> info = new ArrayList<>();
+
+        info.add(format(R.string.excheckview_bonus_lv, fleet_info.get(FLEET_LV).getAsInt()));
+//        info.add(format(R.string.excheckview_bonus_firepower, fleet_info.get(TOTAL_FIRE).getAsInt()));
+//        info.add(format(R.string.excheckview_bonus_asw, fleet_info.get(TOTAL_ASW).getAsInt()));
+//        info.add(format(R.string.excheckview_bonus_aa, fleet_info.get(TOTAL_AA).getAsInt()));
+//        info.add(format(R.string.excheckview_bonus_los, fleet_info.get(TOTAL_LOS).getAsInt()));
+
+        int drum_count = fleet_info.get(DRUM_COUNT).getAsInt();
+        int drum_ships = fleet_info.get(DRUM_SHIPS).getAsInt();
+        if (drum_count >= 1) {
+            info.add(format(R.string.excheckview_bonus_drum_carrying, drum_count, drum_ships));
         } else {
-            ((TextView) itemView.findViewById(R.id.view_excheck_title))
-                    .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailBack));
+            info.add(format(R.string.excheckview_bonus_drum, 0));
         }
 
-        ((TextView) itemView.findViewById(R.id.view_excheck_time))
-                .setText(getTimeStr(time));
-
-        ((TextView) itemView.findViewById(R.id.view_excheck_fleet_total_num))
-                .setText(KcaUtils.format(getStringWithLocale(R.string.excheckview_total_num_format), total_num));
-        setItemTextViewColorById(R.id.view_excheck_fleet_total_num,
-                check.get("total-num").getAsBoolean(), false);
-
-        setItemViewVisibilityById(R.id.view_excheck_flagship, has_flag_info);
-        if (has_flag_info) {
-            setItemViewVisibilityById(R.id.view_excheck_flagship_lv, has_flag_lv);
-            if (has_flag_lv) {
-                int flag_lv = data.get("flag-lv").getAsInt();
-                setItemTextViewById(R.id.view_excheck_flagship_lv,
-                        KcaUtils.format(getStringWithLocale(R.string.excheckview_flag_lv_format), flag_lv));
-                setItemTextViewColorById(R.id.view_excheck_flagship_lv,
-                        check.get("flag-lv").getAsBoolean(), false);
-            }
-            setItemViewVisibilityById(R.id.view_excheck_flagship_cond, has_flag_cond);
-            if (has_flag_cond) {
-                String[] flag_cond = data.get("flag-cond").getAsString().split("/");
-                List<String> abbr_text_list = new ArrayList<>();
-                for (int i = 0; i < flag_cond.length; i++) {
-                    abbr_text_list.add(getShipTypeAbbr(Integer.parseInt(flag_cond[i])));
-                }
-                setItemTextViewById(R.id.view_excheck_flagship_cond, KcaUtils.joinStr(abbr_text_list, "/"));
-                setItemTextViewColorById(R.id.view_excheck_flagship_cond,
-                        check.get("flag-cond").getAsBoolean(), false);
-            }
+        if (fleet_info.get(KINU_EXISTS).getAsBoolean()) {
+            info.add(getStringWithLocale(R.string.excheckview_bonus_kinu));
         }
 
-        setItemViewVisibilityById(R.id.view_excheck_fleet, true);
-        setItemViewVisibilityById(R.id.view_excheck_fleet_total_lv, has_total_lv);
-        if (has_total_lv) {
-            int total_lv = data.get("total-lv").getAsInt();
-            setItemTextViewById(R.id.view_excheck_fleet_total_lv,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_lv_format), total_lv));
-            setItemTextViewColorById(R.id.view_excheck_fleet_total_lv,
-                    check.get("total-lv").getAsBoolean(), false);
+        int dlcs_count = fleet_info.get(DLCS_COUNT).getAsInt();
+        if (dlcs_count > 0) {
+            info.add(format(R.string.excheckview_bonus_dlcs, dlcs_count));
         }
 
-        setItemViewVisibilityById(R.id.view_excheck_fleet_condition, has_total_cond);
-        if (has_total_cond) {
-            String total_cond = data.get("total-cond").getAsString();
-            for (View v : generateConditionView(total_cond, check.getAsJsonArray("total-cond"))) {
-                ((LinearLayout) itemView.findViewById(R.id.view_excheck_fleet_condition)).addView(v);
-            }
+        String bonus_text = joinStr(info, " / ");
+        float dlcs_bonus = fleet_info.get(DLCS_BONUS).getAsFloat();
+        float toku_bonus = fleet_info.get(TOKU_BONUS).getAsFloat();
+        if (dlcs_bonus + toku_bonus > 0f) {
+            bonus_text += format(R.string.excheckview_bonus_result, (dlcs_bonus + toku_bonus) * 100f);
         }
 
-        setItemViewVisibilityById(R.id.view_excheck_drum, has_drum_info);
-        if (has_drum_info) {
-            setItemViewVisibilityById(R.id.view_excheck_drum_ship, has_drum_ship);
-            if (has_drum_ship) {
-                int drum_ship = data.get("drum-ship").getAsInt();
-                setItemTextViewById(R.id.view_excheck_drum_ship,
-                        KcaUtils.format(getStringWithLocale(R.string.excheckview_drum_ship_format), drum_ship));
-                setItemTextViewColorById(R.id.view_excheck_drum_ship,
-                        check.get("drum-ship").getAsBoolean(), false);
-            }
-            setItemViewVisibilityById(R.id.view_excheck_drum_count, has_drum_num || has_drum_num_optional);
-            if (has_drum_num) {
-                int drum_num = data.get("drum-num").getAsInt();
-                setItemTextViewById(R.id.view_excheck_drum_count,
-                        KcaUtils.format(getStringWithLocale(R.string.excheckview_drum_num_format), drum_num));
-                setItemTextViewColorById(R.id.view_excheck_drum_count,
-                        check.get("drum-num").getAsBoolean(), false);
-            } else if (has_drum_num_optional) {
-                int drum_num = data.get("drum-num-optional").getAsInt();
-                setItemTextViewById(R.id.view_excheck_drum_count,
-                        KcaUtils.format(getStringWithLocale(R.string.excheckview_drum_num_format), drum_num));
-                setItemTextViewColorById(R.id.view_excheck_drum_count,
-                        check.get("drum-num").getAsBoolean(), true);
-            }
-        }
-
-        setItemViewVisibilityById(R.id.view_excheck_asw, has_total_asw);
-        if (has_total_asw) {
-            int total_asw = data.get("total-asw").getAsInt();
-            setItemTextViewById(R.id.view_excheck_total_asw,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_asw));
-            setItemTextViewColorById(R.id.view_excheck_total_asw,
-                    check.get("total-asw").getAsBoolean(), false);
-        }
-
-        setItemViewVisibilityById(R.id.view_excheck_fp, has_total_fp);
-        if (has_total_fp) {
-            int total_fp = data.get("total-fp").getAsInt();
-            setItemTextViewById(R.id.view_excheck_total_fp,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_fp));
-            setItemTextViewColorById(R.id.view_excheck_total_fp,
-                    check.get("total-fp").getAsBoolean(), false);
-        }
-
-        setItemViewVisibilityById(R.id.view_excheck_los, has_total_los);
-        if (has_total_los) {
-            int total_los = data.get("total-los").getAsInt();
-            setItemTextViewById(R.id.view_excheck_total_los,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_los));
-            setItemTextViewColorById(R.id.view_excheck_total_los,
-                    check.get("total-los").getAsBoolean(), false);
-        }
-
-        setItemViewVisibilityById(R.id.view_excheck_firepower, has_total_firepower);
-        if (has_total_firepower) {
-            int total_firepower = data.get("total-firepower").getAsInt();
-            setItemTextViewById(R.id.view_excheck_total_firepower,
-                    KcaUtils.format(getStringWithLocale(R.string.excheckview_total_format), total_firepower));
-            setItemTextViewColorById(R.id.view_excheck_total_firepower,
-                    check.get("total-firepower").getAsBoolean(), false);
-        }
-
-        itemView.setVisibility(View.VISIBLE);
+        setViewContentById(R.id.expd_fleet_info, bonus_text);
+        findViewById(R.id.expd_fleet_info)
+                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpedition));
     }
+    // endregion layout update
 
-    public int setView() {
+    // region utilities
+    private String getResName(@AnyRes int res) {
         try {
-            expedition_data = KcaApiData.getExpeditionNumByWorld(world);
-            JsonArray api_ship = deckdata.get(selected)
-                    .getAsJsonObject().getAsJsonArray("api_ship");
-            ship_data.clear();
-            if (checkUserShipDataLoaded()) {
-                for (int i = 0; i < api_ship.size(); i++) {
-                    int id = api_ship.get(i).getAsInt();
-                    if (id > 0) {
-                        JsonObject data = new JsonObject();
-                        JsonObject usershipinfo = getUserShipDataById(id, "ship_id,lv,slot,cond,karyoku,taisen,taiku,sakuteki");
-                        JsonObject kcshipinfo = getKcShipDataById(usershipinfo.get("ship_id").getAsInt(), "stype");
-                        data.addProperty("ship_id", usershipinfo.get("ship_id").getAsInt());
-                        data.addProperty("lv", usershipinfo.get("lv").getAsInt());
-                        data.addProperty("cond", usershipinfo.get("cond").getAsInt());
-                        data.addProperty("stype", kcshipinfo.get("stype").getAsInt());
-                        data.addProperty("karyoku", usershipinfo.getAsJsonArray("karyoku").get(0).getAsInt());
-                        data.addProperty("taisen", usershipinfo.getAsJsonArray("taisen").get(0).getAsInt());
-                        data.addProperty("taiku", usershipinfo.getAsJsonArray("taiku").get(0).getAsInt());
-                        data.addProperty("sakuteki", usershipinfo.getAsJsonArray("sakuteki").get(0).getAsInt());
-                        data.add("item", new JsonArray());
-                        JsonArray shipslot = usershipinfo.getAsJsonArray("slot");
-                        for (int j = 0; j < shipslot.size(); j++) {
-                            int itemid = shipslot.get(j).getAsInt();
-                            if (itemid > 0) {
-                                JsonObject iteminfo = getUserItemStatusById(itemid, "slotitem_id,level", "type,tais");
-                                if (iteminfo != null) data.getAsJsonArray("item").add(iteminfo);
-                            }
-                        }
-                        ship_data.add(data);
-                    }
-                }
-
-                checkdata = new HashMap<>();
-                for (int i = 0; i < 15; i++) {
-                    if (i < expedition_data.size()) {
-                        int expd = expedition_data.get(i);
-                        String key = String.valueOf(expd);
-                        checkdata.put(key, checkCondition(expd));
-                        JsonObject check_item = checkdata.get(key);
-                        if (check_item != null) {
-                            if (check_item.get("pass").getAsBoolean()) {
-                                mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
-                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodBack));
-                                ((TextView) mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
-                                        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnGoodText));
-                            } else {
-                                mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class))
-                                        .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailBack));
-                                ((TextView) mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)))
-                                        .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorExpeditionBtnFailText));
-                            }
-                        }
-                    }
-                }
-
-                updateSelectedView(selected, world);
-
-                JsonObject bonus_info = getBonusInfo();
-                List<String> bonus_info_text = new ArrayList<>();
-
-                int total_firepower = bonus_info.get("firepower").getAsInt();
-                bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_firepower), total_firepower));
-
-                int total_asw = bonus_info.get("asw").getAsInt();
-                bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_asw), total_asw));
-
-                int total_los = bonus_info.get("los").getAsInt();
-                bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_los), total_los));
-
-                int drum_count = bonus_info.get("drum").getAsInt();
-                if (drum_count > 0) {
-                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_drum), drum_count));
-                } else {
-                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_drum), 0));
-                }
-                if (bonus_info.get("kinu").getAsBoolean())
-                    bonus_info_text.add(getStringWithLocale(R.string.excheckview_bonus_kinu));
-                int daihatsu_count = bonus_info.get("daihatsu").getAsInt();
-                if (daihatsu_count > 0)
-                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_dlc), daihatsu_count));
-                int tank_count = bonus_info.get("tank").getAsInt();
-                if (tank_count > 0)
-                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_tank), tank_count));
-                int amp_count = bonus_info.get("amp").getAsInt();
-                if (amp_count > 0)
-                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_amp), amp_count));
-                int toku_count = bonus_info.get("toku").getAsInt();
-                if (toku_count > 0)
-                    bonus_info_text.add(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_toku), toku_count));
-                String bonus_info_content = joinStr(bonus_info_text, " / ");
-                double bonus_value = (double) calculateBonusValue(100, bonus_info, false);
-                if (bonus_value > 100.0) {
-                    bonus_info_content = bonus_info_content.concat(KcaUtils.format(getStringWithLocale(R.string.excheckview_bonus_result), bonus_value - 100.0));
-                }
-                ((TextView) mView.findViewById(R.id.excheck_info)).setText(bonus_info_content);
-                mView.findViewById(R.id.excheck_info).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpedition));
-                setItemViewLayout(button, bonus_info);
-            } else {
-                ((TextView) mView.findViewById(R.id.excheck_info)).setText(getStringWithLocale(R.string.kca_init_content));
-                mView.findViewById(R.id.excheck_info).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
-            }
-            return 0;
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), getStringFromException(e), Toast.LENGTH_LONG).show();
-            return 1;
+            return getResources().getResourceEntryName(res);
+        } catch (Resources.NotFoundException ignored) {
+            return String.valueOf(res);
         }
     }
 
-    private View.OnClickListener mViewClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            int id = v.getId();
-            if (id == mView.findViewById(R.id.excheckview_head).getId()) {
-                stopSelf();
-            } else if (checkUserShipDataLoaded()) {
-                JsonObject bonus_info = getBonusInfo();
-                if (id == mView.findViewById(R.id.excheck_detail_reward).getId()) {
-                    isGreatSuccess = !isGreatSuccess;
-                    setItemViewLayout(button, bonus_info);
-                    return;
-                }
+    public String getStringWithLocale(int id) {
+        return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
+    }
 
-                for (int i = 1; i <= 7; i++) {
-                    if (id == mView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).getId()) {
-                        world = i;
-                        button = 0;
-                        clearItemViewLayout();
-                        setView();
-                        return;
-                    }
-                }
-                for (int i = 1; i < 4; i++) {
-                    if (id == mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
-                        if (i < deckdata.size()) { selected = i; }
-                        setView();
-                        return;
-                    }
-                }
-                for (int i = 0; i < 15; i++) {
-                    if (id == mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).getId()) {
-                        button = i;
-                        setItemViewLayout(button, bonus_info);
-                        break;
-                    }
-                }
-            }
+    private String format(@StringRes int formatResId, Object... args) {
+        return KcaUtils.format(getStringWithLocale(formatResId), args);
+    }
+
+    private String getSshipTypeAbbrList(String[] stype_list) {
+        StringBuilder sb = new StringBuilder();
+        Iterator<String> itr = Iterators.forArray(stype_list);
+        while (itr.hasNext()) {
+            sb.append(KcaApiData.getShipTypeAbbr(Integer.parseInt(itr.next())));
+            if (itr.hasNext()) sb.append("/");
         }
-    };
+        return sb.toString();
+    }
+
+    private int applyBonus(int value, boolean isGreatSuccess) {
+        float gs = isGreatSuccess ? 1.5f : 1f;
+        if (!checkUserShipDataLoaded() || fleet_info == null) return (int) (value * gs);
+
+        float dlcs_bonus = fleet_info.get(DLCS_BONUS).getAsFloat();
+        float toku_bonus = fleet_info.get(TOKU_BONUS).getAsFloat();
+
+        return (int) (value * gs * (1f + dlcs_bonus)) + (int) (value * gs * toku_bonus);
+    }
+
+    @NonNull
+    private <T extends View> T findViewById(@IdRes int id) {
+        try {
+            return Objects.requireNonNull(mView.findViewById(id));
+        } catch (NullPointerException e) {
+            throw new NullPointerException("View not found, id: " + getResName(id));
+        }
+    }
+
+    private void setViewVisibilityById(@IdRes int id, boolean visibility) {
+        int visible_value = visibility ? VISIBLE : GONE;
+        mView.findViewById(id).setVisibility(visible_value);
+    }
+
+    private void setViewContentById(@IdRes int id, String text) {
+        this.<TextView>findViewById(id).setText(text);
+    }
+
+    private void setViewContentById(@IdRes int id, @Nullable Drawable drawable) {
+        this.<ImageView>findViewById(id).setImageDrawable(drawable);
+    }
+
+    private void setViewContentById(@IdRes int id, @StringRes @DrawableRes int resId) {
+        View v = findViewById(id);
+        if (v instanceof ImageView) ((ImageView) v).setImageResource(resId);
+        if (v instanceof TextView) ((TextView) v).setText(getStringWithLocale(resId));
+    }
+
+    private void setViewTextColorById(@IdRes int id, @ColorRes int resId) {
+        this.<TextView>findViewById(id)
+                .setTextColor(ContextCompat.getColor(getApplicationContext(), resId));
+    }
+
+    private void setViewTintColorById(@IdRes int id, @ColorRes int resId) {
+        ViewCompat.setBackgroundTintList(findViewById(id), ContextCompat.getColorStateList(getApplicationContext(), resId));
+    }
+
+    @ColorRes private int getColorByCond(boolean is_pass, boolean is_option) {
+        return is_pass ? R.color.colorExpeditionBtnGoodBack
+                : is_option ? R.color.colorFleetInfoNoShip
+                : R.color.colorExpeditionBtnFailBack;
+    }
+
+    @ColorRes private int getColorByCond(boolean is_pass) {
+        return getColorByCond(is_pass, false);
+    }
+
+    @ColorRes
+    private int getColorByCheck(@Nullable JsonObject check, String key, boolean is_option) {
+        return check == null
+                ? R.color.white
+                : getColorByCond(check.get(key).getAsBoolean(), is_option);
+    }
+
+    @ColorRes private int getColorByCheck(@Nullable JsonObject check, String key) {
+        return getColorByCheck(check, key, false);
+    }
+
+    private void setViewContentById(@IdRes int id, String content, @ColorRes int color) {
+        setViewVisibilityById(id, true);
+        setViewContentById(id, content);
+        setViewTextColorById(id, color);
+    }
+
+    private void setViewsGone(@IdRes int... id) {
+        for (int view_id : id) {
+            setViewVisibilityById(view_id, false);
+        }
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private boolean checkUserShipDataLoaded() {
+        if (!KcaApiData.checkUserShipDataLoaded()) {
+            setViewContentById(R.id.expd_fleet_info, R.string.kca_init_content);
+            findViewById(R.id.expd_fleet_info).setBackgroundColor(
+                    ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNoShip));
+            return false;
+        }
+
+        return true;
+    }
+
+    private static int parseIntOrDefault(String s, int defaultValue) {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            Log.d(TAG, String.format("failed to parse '%s' into int; use default value %d", s, defaultValue), e);
+            return defaultValue;
+        }
+    }
+
+    private static int clamp(int x, int min, int max) {
+        return min(max(x, min), max);
+    }
+
+    private static double floor01(double x) {
+        return floor(x * 10f) / 10f;
+    }
+
+    private void captureImage(View view) {
+        // code for save view bitmap into view.png (used to take screenshot)
+
+        view.setDrawingCacheEnabled(true);
+        view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        view.setDrawingCacheBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+        view.post(() -> AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+            deleteFile("view.jpg");
+            try (BufferedOutputStream out = new BufferedOutputStream(openFileOutput("view.jpg", MODE_PRIVATE))) {
+
+                view.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 90, out);
+                Log.d(TAG, "saved");
+            } catch (Exception e) {
+                Log.e(TAG, "error", e);
+            } finally {
+                view.setDrawingCacheEnabled(false);
+            }
+        }));
+    }
+    // endregion
 }
