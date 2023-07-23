@@ -51,7 +51,6 @@ import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaExpedition2.getExpeditionHeader;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
@@ -81,7 +80,6 @@ public class KcaExpeditionCheckViewService extends Service {
     private WindowManager mManager;
     WindowManager.LayoutParams mParams;
 
-    String locale;
     int selected = 1;
     int world = 1;
     int button = 0;
@@ -144,7 +142,6 @@ public class KcaExpeditionCheckViewService extends Service {
 
         try {
             active = true;
-            locale = LocaleUtils.getResourceLocaleCode(KcaUtils.getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
             ship_data = new ArrayList<>();
             checkdata = new HashMap<>();
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
@@ -282,7 +279,7 @@ public class KcaExpeditionCheckViewService extends Service {
         boolean total_pass = true;
         JsonObject result = new JsonObject();
 
-        JsonObject data = KcaApiData.getExpeditionInfo(exp_no, locale);
+        JsonObject data = KcaApiData.getExpeditionInfo(exp_no);
         if (data == null) return null;
 
         boolean has_flag_lv = data.has("flag-lv");
@@ -693,7 +690,7 @@ public class KcaExpeditionCheckViewService extends Service {
         double gs_ratio = isGreatSuccess ? 1.5 : 1.0;
         int expd_value = expedition_data.get(index);
         Log.e("KCA", String.valueOf(index) + " " + expd_value);
-        JsonObject data = KcaApiData.getExpeditionInfo(expd_value, locale);
+        JsonObject data = KcaApiData.getExpeditionInfo(expd_value);
 
         String no = data.get("no").getAsString();
         String name = data.get("name").getAsString();

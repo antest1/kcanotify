@@ -105,9 +105,7 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DATALOAD;
 import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
-import static com.antest1.kcanotify.KcaConstants.PREF_DISABLE_CUSTOMTOAST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KC_PACKAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_RES_USELOCAL;
@@ -288,26 +286,17 @@ public class KcaUtils {
     }
 
     public static Context getContextWithLocale(Context ac, Context bc) {
-        Locale locale;
-        String[] pref_locale = getStringPreferences(ac, PREF_KCA_LANGUAGE).split("-");
-        if (pref_locale[0].toLowerCase().equals("default") || pref_locale.length < 2) {
-            locale = Locale.getDefault();
-        } else {
-            locale = new Locale(pref_locale[0], pref_locale[1]);
-        }
+        Locale locale = LocaleUtils.getLocale();
         Configuration configuration = new Configuration(ac.getResources().getConfiguration());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             configuration.setLocale(locale);
             return bc.createConfigurationContext(configuration);
         } else {
             configuration.locale = locale;
-            DisplayMetrics metrics = new DisplayMetrics();
             bc.getResources().updateConfiguration(configuration, bc.getResources().getDisplayMetrics());
             return bc;
         }
     }
-
-
 
     public static String getStringWithLocale(Context ac, Context bc, int id) {
         return getContextWithLocale(ac, bc).getString(id);

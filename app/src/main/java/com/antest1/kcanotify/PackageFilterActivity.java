@@ -19,10 +19,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 
 import java.lang.ref.WeakReference;
-import java.util.Locale;
 
-import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_PACKAGE_ALLOW;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
@@ -85,25 +82,6 @@ public class PackageFilterActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
-            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
-        } else {
-            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
-            KcaApplication.defaultLocale = newConfig.locale;
-        }
-        if(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
-            LocaleUtils.setLocale(Locale.getDefault());
-        } else {
-            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
-            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
-        }
-        loadTranslationData(getApplicationContext());
-        super.onConfigurationChanged(newConfig);
     }
 
     private static class UpdateHandler extends Handler {

@@ -152,7 +152,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_usagestat_dialog_title">UsageStats Access Permission</string>
     <string name="sa_usagestat_dialog_desc">In Android 5.0+, you should set this permission to use this feature. This permission is required for checking kancolle is on the screen.</string>
 
-    <string name="sa_language_changed">Please restart kcanotify to apply new language setting.</string>
     <string name="sa_bypass_list_invalid">The bypass address list is invalid. Please double-check your input.</string>
 
     <!-- InfoActivity Strings -->
@@ -205,6 +204,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">Kcanotify Settings</string>
     <string name="setting_menu_kand_title_language">Language Settings</string>
+    <string name="setting_menu_kand_desc_language">Restart kcanotify to apply new setting</string>
     <string name="setting_menu_kand_title_saku_cal">Select LoS formula</string>
     <string name="setting_menu_kand_title_hp_format">Select HP display in FleetView</string>
     <string name="setting_menu_kand_desc_hp_format">During anchorage repair, the progress of the repair will be displayed</string>

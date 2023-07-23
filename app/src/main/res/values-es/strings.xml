@@ -158,6 +158,7 @@
     <!-- Setting Strings -->
     <string name="setting_menu_kand_head">Ajustes de kcanotify</string>
     <string name="setting_menu_kand_title_language">Ajustes de Idioma</string>
+    <string name="setting_menu_kand_desc_language">Reinicie kcanotify para aplicar una nueva configuración</string>
     <string name="setting_menu_kand_title_saku_cal">Seleccionar fórmula de LoS</string>
     <string name="setting_menu_kand_title_kancolle_app">Seleccione la aplicación KanColle</string>
     <string name="setting_menu_kand_title_sniffer_type">Modo Sniffer</string>
@@ -317,7 +318,6 @@
     <string name="item_boxs">Caja de Muebles(P)</string>
     <string name="item_boxm">Caja de Muebles(M)</string>
     <string name="item_boxl">Caja de Muebles(G)</string>
-    <string name="sa_language_changed">Por favor reinicie kcanotify para aplicar nuevos ajustes de idioma. (Please restart kcanotify)</string>
     <string name="setting_menu_noti_title_ringtone">Tonos</string>
     <string name="setting_menu_noti_desc_ringtone">Elige un tono </string>
     <string name="settings_string_silent">Silencioso</string>

@@ -12,6 +12,10 @@ public class LocaleUtils {
 
     private static Locale sLocale;
 
+    public static Locale getLocale() {
+        return sLocale;
+    }
+
     public static void setLocale(Locale locale) {
         sLocale = locale;
         if(sLocale != null) {
@@ -37,13 +41,10 @@ public class LocaleUtils {
         }
     }
 
-    public static String getLocaleCode(String pref) {
-        if (pref.startsWith("default")) {
-            Locale locale = Locale.getDefault();
-            String language = locale.getLanguage();
-            String country = locale.getCountry();
-            pref = language.concat("-").concat(country);
-        }
+    public static String getLocaleCode() {
+        String language = sLocale.getLanguage();
+        String country = sLocale.getCountry();
+        String pref = language.concat("-").concat(country);
 
         if (pref.startsWith("ko")) {
             return "ko";
@@ -62,8 +63,8 @@ public class LocaleUtils {
         }
     }
 
-    public static String getResourceLocaleCode(String pref) {
-        String locale = getLocaleCode(pref);
+    public static String getResourceLocaleCode() {
+        String locale = getLocaleCode();
         if (locale.equals("es")) locale = "en";
         return locale;
     }

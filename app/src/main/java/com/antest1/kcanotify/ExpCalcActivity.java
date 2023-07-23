@@ -3,7 +3,6 @@ package com.antest1.kcanotify;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.core.content.ContextCompat;
@@ -11,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -38,21 +36,16 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadSortieExpInfoFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPCALTRK;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPSHIP;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_EXPSORTIE;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
 public class ExpCalcActivity extends AppCompatActivity {
@@ -106,7 +99,6 @@ public class ExpCalcActivity extends AppCompatActivity {
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
-        loadTranslationData(getApplicationContext());
         int exp_load_result = loadShipExpInfoFromAssets(getAssets());
         int exp_sortie_result = loadSortieExpInfoFromAssets(getAssets());
         if (exp_load_result != 1 || exp_sortie_result != 1) {
@@ -581,20 +573,6 @@ public class ExpCalcActivity extends AppCompatActivity {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
-            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
-        } else {
-            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
-            KcaApplication.defaultLocale = newConfig.locale;
-        }
-        if (getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
-            LocaleUtils.setLocale(Locale.getDefault());
-        } else {
-            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
-            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
-        }
-
         super.onConfigurationChanged(newConfig);
         setUI();
     }

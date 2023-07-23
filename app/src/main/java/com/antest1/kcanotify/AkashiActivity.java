@@ -1,15 +1,12 @@
 package com.antest1.kcanotify;
 
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -31,14 +28,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_MATERIALS;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_RESOURCELOG_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STARLIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_STAR_CHECKED;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
@@ -88,7 +83,6 @@ public class AkashiActivity extends AppCompatActivity {
         resourceLogger = new KcaResourceLogger(getApplicationContext(), null, KCANOTIFY_RESOURCELOG_VERSION);
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
-        loadTranslationData(getApplicationContext());
 
         Calendar calendar = getJapanCalendarInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0(Sun) ~ 6(Sat)
@@ -350,24 +344,5 @@ public class AkashiActivity extends AppCompatActivity {
 
     private int setDefaultGameData() {
         return KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
-            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
-        } else {
-            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
-            KcaApplication.defaultLocale = newConfig.locale;
-        }
-        if(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
-            LocaleUtils.setLocale(Locale.getDefault());
-        } else {
-            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
-            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
-        }
-        loadTranslationData(getApplicationContext());
-        super.onConfigurationChanged(newConfig);
     }
 }

@@ -1,13 +1,10 @@
 package com.antest1.kcanotify;
 
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +16,9 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import static com.antest1.kcanotify.KcaApiData.T3LIST_IMPROVABLE;
 import static com.antest1.kcanotify.KcaConstants.PREF_AKASHI_FILTERLIST;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
@@ -166,23 +161,5 @@ public class AkashiFilterActivity extends AppCompatActivity {
                 btnView.setBackground(ContextCompat.getDrawable(this, R.drawable.imagebtn_on));
             }
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
-            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
-        } else {
-            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
-            KcaApplication.defaultLocale = newConfig.locale;
-        }
-        if(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
-            LocaleUtils.setLocale(Locale.getDefault());
-        } else {
-            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
-            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
-        }
-        super.onConfigurationChanged(newConfig);
     }
 }

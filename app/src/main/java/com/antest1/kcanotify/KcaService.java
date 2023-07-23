@@ -61,35 +61,7 @@ import static androidx.core.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
 import static androidx.core.app.NotificationManagerCompat.IMPORTANCE_HIGH;
 import static android.widget.Toast.makeText;
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
-import static com.antest1.kcanotify.KcaApiData.AKASHI_TIMER_20MIN;
-import static com.antest1.kcanotify.KcaApiData.T2_DRUM_CAN;
-import static com.antest1.kcanotify.KcaApiData.T2_FIGHTER;
-import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE;
-import static com.antest1.kcanotify.KcaApiData.T2_GUN_LARGE_II;
-import static com.antest1.kcanotify.KcaApiData.T2_GUN_MEDIUM;
-import static com.antest1.kcanotify.KcaApiData.T2_GUN_SMALL;
-import static com.antest1.kcanotify.KcaApiData.T2_MACHINE_GUN;
-import static com.antest1.kcanotify.KcaApiData.T2_RADAR_LARGE;
-import static com.antest1.kcanotify.KcaApiData.T2_RADAR_SMALL;
-import static com.antest1.kcanotify.KcaApiData.T2_RADER_LARGE_II;
-import static com.antest1.kcanotify.KcaApiData.T2_SEA_SCOUT;
-import static com.antest1.kcanotify.KcaApiData.T2_SUB_GUN;
-import static com.antest1.kcanotify.KcaApiData.T2_TORPEDO;
-import static com.antest1.kcanotify.KcaApiData.checkDataLoadTriggered;
-import static com.antest1.kcanotify.KcaApiData.getAdmiralLevel;
-import static com.antest1.kcanotify.KcaApiData.getNodeColor;
-import static com.antest1.kcanotify.KcaApiData.getReturnFlag;
-import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
-import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
-import static com.antest1.kcanotify.KcaApiData.loadMapEdgeInfoFromStorage;
-import static com.antest1.kcanotify.KcaApiData.loadQuestTrackDataFromStorage;
-import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
-import static com.antest1.kcanotify.KcaApiData.loadShipFilterDataFromStorage;
-import static com.antest1.kcanotify.KcaApiData.loadShipInitEquipCountFromStorage;
-import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStorage;
-import static com.antest1.kcanotify.KcaApiData.loadSubMapInfoFromStorage;
-import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
-import static com.antest1.kcanotify.KcaApiData.updateUserShip;
+import static com.antest1.kcanotify.KcaApiData.*;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaFleetViewService.REFRESH_FLEETVIEW_ACTION;
 import static com.antest1.kcanotify.KcaMoraleInfo.setMoraleValue;
@@ -2752,28 +2724,5 @@ public class KcaService extends Service {
 
     public void showCustomToast(KcaCustomToast toast, String body, int duration, int color) {
         KcaUtils.showCustomToast(getApplicationContext(), getBaseContext(), toast, body, duration, color);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
-            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
-        } else {
-            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
-            KcaApplication.defaultLocale = newConfig.locale;
-        }
-        if (getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
-            LocaleUtils.setLocale(Locale.getDefault());
-        } else {
-            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
-            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
-        }
-
-        contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
-        loadTranslationData(getApplicationContext());
-        showDataLoadErrorToast(getApplicationContext(), getBaseContext(), getStringWithLocale(R.string.download_check_error));
-
-        super.onConfigurationChanged(newConfig);
     }
 }

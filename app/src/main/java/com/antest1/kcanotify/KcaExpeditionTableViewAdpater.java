@@ -27,17 +27,15 @@ import static com.antest1.kcanotify.KcaApiData.getShipTypeAbbr;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class KcaExpeditionTableViewAdpater extends BaseAdapter {
-    private String locale;
     private int daihatsu_cnt = 0;
     private boolean is_great_success = false;
     private List<JsonObject> listViewItemList = new ArrayList<>();
     private Context application_context, base_context;
     private List<Integer> active = new ArrayList<>();
 
-    public KcaExpeditionTableViewAdpater(Context ac, Context bc, String loc) {
+    public KcaExpeditionTableViewAdpater(Context ac, Context bc) {
         application_context = ac;
         base_context = bc;
-        locale = loc;
     }
 
     public String getStringWithLocale(int id) {
@@ -152,6 +150,8 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
         String no_str = KcaExpedition2.getExpeditionStr(no);
         holder.value_no.setText(no_str);
         holder.label_no_abs.setText(no_str);
+
+        String locale = LocaleUtils.getResourceLocaleCode();
         JsonObject name = item.getAsJsonObject("name");
         String name_locale = "";
         if (name.has(locale)) {
@@ -231,7 +231,7 @@ public class KcaExpeditionTableViewAdpater extends BaseAdapter {
         v.findViewById(R.id.expedition_item_abstract).setVisibility(active.contains(target) ? View.GONE : View.VISIBLE);
         v.findViewById(R.id.expedition_item_full).setVisibility(active.contains(target) ? View.VISIBLE : View.GONE);
 
-        setConditionContent(v.findViewWithTag(target), getExpeditionInfo(target, locale));
+        setConditionContent(v.findViewWithTag(target), getExpeditionInfo(target));
         return v;
     }
 

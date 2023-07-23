@@ -41,7 +41,6 @@ import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.NOTI_MORALE;
 import static com.antest1.kcanotify.KcaConstants.NOTI_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_AKASHI;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_EXP;
@@ -188,9 +187,7 @@ public class KcaAlarmService extends Service {
                 alarm_set.add(nid);
 
             } else if (getBooleanPreferences(getApplication(), PREF_KCA_NOTI_NOTIFYATSVCOFF) || KcaService.getServiceStatus()) {
-                loadTranslationData(getApplicationContext());
                 if (intent.getStringExtra("data") != null) {
-                    String locale = LocaleUtils.getResourceLocaleCode(getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE));
                     if (type == TYPE_EXPEDITION) {
                         int idx = data.get("idx").getAsInt();
                         KcaExpedition2.clearMissionData(idx);
@@ -198,7 +195,7 @@ public class KcaAlarmService extends Service {
                             if (!isExpeditionDataLoaded())
                                 loadSimpleExpeditionInfoFromStorage(getApplicationContext());
                             int mission_no = data.get("mission_no").getAsInt();
-                            String mission_name = KcaApiData.getExpeditionName(mission_no, locale);
+                            String mission_name = KcaApiData.getExpeditionName(mission_no);
                             String kantai_name = data.get("kantai_name").getAsString();
                             boolean cancelFlag = data.get("cancel_flag").getAsBoolean();
                             boolean caFlag = data.get("ca_flag").getAsBoolean();

@@ -310,8 +310,8 @@
     <string name="item_boxs">家具箱(小)</string>
     <string name="item_boxm">家具箱(中)</string>
     <string name="item_boxl">家具箱(大)</string>
-    <string name="sa_language_changed">変更された言語の設定を適用するには、Kcanotifyを再起動します。(Please restart kcanotify)</string>
     <string name="setting_menu_kand_title_language">言語設定</string>
+    <string name="setting_menu_kand_desc_language">アプリを再起動して変更を適用</string>
     <string name="setting_menu_noti_title_ringtone">通知音</string>
     <string name="setting_menu_noti_desc_ringtone">通知音選択</string>
     <string name="settings_string_silent">サイレント</string>

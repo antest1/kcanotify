@@ -9,14 +9,12 @@ import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,19 +29,14 @@ import com.google.gson.JsonParser;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Locale;
 
-import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
-import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 import static com.antest1.kcanotify.KcaConstants.SEEK_33CN1;
 import static com.antest1.kcanotify.KcaUtils.doVibrate;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
 import static com.antest1.kcanotify.KcaUtils.getId;
-import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
 public class FleetInfoActivity extends AppCompatActivity {
@@ -89,7 +82,6 @@ public class FleetInfoActivity extends AppCompatActivity {
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
-        loadTranslationData(getApplicationContext());
 
         final String[] deck_list = {"1", "2", "3", "4", getStringWithLocale(R.string.fleetview_combined)};
 
@@ -175,8 +167,7 @@ public class FleetInfoActivity extends AppCompatActivity {
         export_openpage2.setText(getStringWithLocale(R.string.fleetinfo_export_openpage2));
         export_openpage2.setOnClickListener(v -> {
             String data = imageBuilderData();
-            String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
-            String locale_code = getResourceLocaleCode(locale);
+            String locale_code = getResourceLocaleCode();
             if (locale_code.equals("ko")) locale_code = "kr";
             if (locale_code.equals("tcn")) locale_code = "jp";
             try {
@@ -462,20 +453,6 @@ public class FleetInfoActivity extends AppCompatActivity {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
-            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
-        } else {
-            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
-            KcaApplication.defaultLocale = newConfig.locale;
-        }
-        if (getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
-            LocaleUtils.setLocale(Locale.getDefault());
-        } else {
-            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
-            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
-        }
-
         super.onConfigurationChanged(newConfig);
         is_portrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT;
         if (is_portrait) {

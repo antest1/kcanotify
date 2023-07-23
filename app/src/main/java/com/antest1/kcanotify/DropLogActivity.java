@@ -1,17 +1,13 @@
 package com.antest1.kcanotify;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,11 +38,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DROPLOG_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
 public class DropLogActivity extends AppCompatActivity {
@@ -102,7 +95,6 @@ public class DropLogActivity extends AppCompatActivity {
         dropLogger = new KcaDropLogger(getApplicationContext(), null, KCANOTIFY_DROPLOG_VERSION);
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
-        loadTranslationData(getApplicationContext());
 
         JsonArray appWorldListData = KcaUtils.getJsonArrayFromAsset(getApplicationContext(), "world_list.json", dbHelper);
         if (appWorldListData != null) {
@@ -528,22 +520,4 @@ public class DropLogActivity extends AppCompatActivity {
 
         }
     };
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
-            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
-        } else {
-            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
-            KcaApplication.defaultLocale = newConfig.locale;
-        }
-        if (getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
-            LocaleUtils.setLocale(Locale.getDefault());
-        } else {
-            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
-            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
-        }
-        super.onConfigurationChanged(newConfig);
-    }
 }

@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_BATTLEINFO;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_LATESTDEV;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -96,7 +95,6 @@ public class KcaDevelopPopupService extends Service {
                     Log.e("KCA", "KCA_MSG_BATTLE_INFO Received: \n".concat(s));
                 }
             };
-            loadTranslationData(getApplicationContext());
             LocalBroadcastManager.getInstance(this).registerReceiver((data_receiver), new IntentFilter(KCA_MSG_BATTLE_INFO));
 
             LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -145,12 +143,13 @@ public class KcaDevelopPopupService extends Service {
         } else if (intent != null) {
             JsonObject data = null;
             if(intent.getAction() != null && intent.getAction().equals(DEV_DATA_ACTION)) {
-                data = new JsonParser().parse(intent.getExtras().getString("data")).getAsJsonObject();
+                data = JsonParser.parseString(intent.getExtras().getString("data")).getAsJsonObject();
             } else {
                 data = dbHelper.getJsonObjectValue(DB_KEY_LATESTDEV);
             }
             if (data != null) {
-                int ship_id = data.get("flagship_id").getAsInt();
+                int ship_id = -1;
+                if (data.has("flagship_id")) ship_id = data.get("flagship_id").getAsInt();
                 String ship_name = data.get("flagship").getAsString();
 
                 ed_time.setText(data.get("time").getAsString());

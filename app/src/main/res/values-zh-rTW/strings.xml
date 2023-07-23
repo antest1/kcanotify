@@ -117,8 +117,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_usagestat_dialog_title">UsageStats存取權限</string>
     <string name="sa_usagestat_dialog_desc">在Android 5.0+的裝置上，你需要準許這個權限以使用此功能。這是用於檢測艦これ是否啟動於螢幕上的所需權限。</string>
 
-    <string name="sa_language_changed">請重新啟動Kcanotify來套用新語言設定。</string>
-
     <string name="sa_bypass_list_invalid">繞行地址列表有誤，請檢查及更正後重試。</string>
 
     <!-- KcaService Strings -->
@@ -168,6 +166,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_head">Kcanotify設定</string>
     <string name="setting_menu_noti_title_alarm_delay">通知時間提前值（秒）</string>
     <string name="setting_menu_kand_title_language">語言設定</string>
+    <string name="setting_menu_kand_desc_language">重新啟動應用程序以應用新設置</string>
     <string name="setting_menu_kand_title_saku_cal">選擇索敵公式</string>
     <string name="setting_menu_kand_title_kancolle_app">選擇要運行的應用程序</string>
     <string name="setting_menu_kand_title_sniffer_type">Sniffer模式</string>

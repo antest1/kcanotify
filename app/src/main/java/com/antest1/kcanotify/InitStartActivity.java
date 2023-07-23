@@ -34,6 +34,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 
@@ -105,6 +106,8 @@ public class InitStartActivity extends Activity {
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         setDefaultPreferences();
+
+        setAppLocale();
 
         dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
@@ -312,9 +315,7 @@ public class InitStartActivity extends Activity {
         if (!is_destroyed) {
             runOnUiThread(() -> {
                 Intent mainIntent;
-                String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
                 String checked = getStringPreferences(getApplicationContext(), PREF_NOTICE_CHK_FLAG);
-                String locale_code = LocaleUtils.getLocaleCode(locale);
                 if (!NOTICE_CHK_CODE.equals(checked)) {
                     mainIntent = new Intent(getApplicationContext(), KcaNoticeActivity.class);
                 } else {
@@ -432,5 +433,16 @@ public class InitStartActivity extends Activity {
             }
         }
         editor.commit();
+    }
+
+    private void setAppLocale() {
+        String pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
+        if (pref.startsWith("default")) {
+            LocaleUtils.setLocale(Locale.getDefault());
+        } else {
+            String[] locale = pref.split("-");
+            LocaleUtils.setLocale(new Locale(locale[0], locale[1]));
+        }
+        KcaApplication.defaultLocale = LocaleUtils.getLocale();
     }
 }

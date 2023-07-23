@@ -561,9 +561,9 @@ public class KcaApiData {
         }
     }
 
-    public static int loadShipTranslationDataFromStorage(Context context, String locale) {
+    public static int loadShipTranslationDataFromStorage(Context context) {
         try {
-            locale = getResourceLocaleCode(locale);
+            String locale = getResourceLocaleCode();
             JsonObject data = getJsonObjectFromStorage(context, KcaUtils.format("ships-%s.json", locale));
             AssetManager.AssetInputStream ais_abbr =
                     (AssetManager.AssetInputStream) context.getResources().getAssets().open("en-abbr.json");
@@ -582,8 +582,8 @@ public class KcaApiData {
         }
     }
 
-    public static int loadItemTranslationDataFromStorage(Context context, String locale) {
-        locale = getResourceLocaleCode(locale);
+    public static int loadItemTranslationDataFromStorage(Context context) {
+        String locale = getResourceLocaleCode();
         JsonObject data = getJsonObjectFromStorage(context, KcaUtils.format("items-%s.json", locale));
         if (data != null) {
             kcItemTranslationData = data.getAsJsonObject();
@@ -593,8 +593,8 @@ public class KcaApiData {
         }
     }
 
-    public static int loadStypeTranslationDataFromStorage(Context context, String locale) {
-        locale = getResourceLocaleCode(locale);
+    public static int loadStypeTranslationDataFromStorage(Context context) {
+        String locale = getResourceLocaleCode();
         JsonArray data = getJsonArrayFromStorage(context, KcaUtils.format("stype-%s.json", locale));
         if (data != null) {
             kcStypeData = data;
@@ -604,8 +604,8 @@ public class KcaApiData {
         }
     }
 
-    public static int loadQuestInfoDataFromStorage(Context context, String locale) {
-        locale = getResourceLocaleCode(locale);
+    public static int loadQuestInfoDataFromStorage(Context context) {
+        String locale = getResourceLocaleCode();
         JsonObject data = getJsonObjectFromStorage(context, KcaUtils.format("quests-%s.json", locale));
         if (data != null) {
             kcQuestInfoData = data.getAsJsonObject();
@@ -623,24 +623,24 @@ public class KcaApiData {
         boolean isDataLoaded = (kcShipTranslationData.entrySet().size() != 0) &&
                 (kcItemTranslationData.entrySet().size() != 0) &&
                 (kcQuestInfoData.entrySet().size() != 0);
-        String locale = getStringPreferences(context, PREF_KCA_LANGUAGE);
-        if (force || !isDataLoaded || !currentLocaleCode.equals(getResourceLocaleCode(locale))) {
-            currentLocaleCode = getResourceLocaleCode(locale);
+
+        if (force || !isDataLoaded || !currentLocaleCode.equals(getResourceLocaleCode())) {
+            currentLocaleCode = getResourceLocaleCode();
             if (!currentLocaleCode.equals("jp")) {
-                int loadShipTranslationDataResult = loadShipTranslationDataFromStorage(context, locale);
+                int loadShipTranslationDataResult = loadShipTranslationDataFromStorage(context);
                 if (loadShipTranslationDataResult != 1) {
                     Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
                 }
-                int loadItemTranslationDataResult = loadItemTranslationDataFromStorage(context, locale);
+                int loadItemTranslationDataResult = loadItemTranslationDataFromStorage(context);
                 if (loadItemTranslationDataResult != 1) {
                     Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
                 }
             }
-            int loadStypeTranslationDataResult = loadStypeTranslationDataFromStorage(context, locale);
+            int loadStypeTranslationDataResult = loadStypeTranslationDataFromStorage(context);
             if (loadStypeTranslationDataResult != 1) {
                 Toast.makeText(context, "Error loading Stype Info", Toast.LENGTH_LONG).show();
             }
-            int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromStorage(context, locale);
+            int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromStorage(context);
             if (loadQuestInfoTranslationDataResult != 1) {
                 Toast.makeText(context, "Error loading Quest Info", Toast.LENGTH_LONG).show();
             }
@@ -776,16 +776,18 @@ public class KcaApiData {
     }
 
 
-    public static JsonObject getExpeditionInfo(int mission_no, String locale) {
-        JsonObject data = null;
+    public static JsonObject getExpeditionInfo(int mission_no) {
         int mission_key = mission_no;
+        String locale = getResourceLocaleCode();
         String key = String.valueOf(mission_key);
+
         if (!kcExpeditionData.has(key)) {
             if (mission_no % 2 == 1) key = "203";
             else key = "204";
         }
+
         JsonObject rawdata = kcExpeditionData.getAsJsonObject(key);
-        data = new JsonParser().parse(rawdata.toString()).getAsJsonObject();
+        JsonObject data = JsonParser.parseString(rawdata.toString()).getAsJsonObject();
         JsonObject name = data.getAsJsonObject("name");
         if (name.has(locale)) {
             data.addProperty("name", name.get(locale).getAsString());
@@ -795,7 +797,8 @@ public class KcaApiData {
         return data;
     }
 
-    public static String getExpeditionName(int mission_no, String locale) {
+    public static String getExpeditionName(int mission_no) {
+        String locale = getResourceLocaleCode();
         int mission_key = mission_no;
         if (mission_no >= 130) {
             if (mission_no % 2 == 1) mission_key = 133;

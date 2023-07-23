@@ -62,7 +62,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
-import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUseStatConstant.END_APP;
 import static com.antest1.kcanotify.KcaUseStatConstant.END_SERVICE;
@@ -186,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
             if (isChecked) {
                 if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
                     sendUserAnalytics(getApplicationContext(), START_SERVICE, null);
-                    loadTranslationData(getApplicationContext());
                     serviceIntent.setAction(KcaService.KCASERVICE_START);
                     if (Build.VERSION.SDK_INT >= 26) {
                         startForegroundService(serviceIntent);
@@ -275,8 +273,7 @@ public class MainActivity extends AppCompatActivity {
 
         String main_html = "";
         try {
-            String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
-            InputStream ais = assetManager.open("main-".concat(getResourceLocaleCode(locale)).concat(".html"));
+            InputStream ais = assetManager.open("main-".concat(getResourceLocaleCode()).concat(".html"));
             byte[] bytes = ByteStreams.toByteArray(ais);
             main_html = new String(bytes);
         } catch (IOException e) {
@@ -333,7 +330,6 @@ public class MainActivity extends AppCompatActivity {
             textMaintenance.setVisibility(View.GONE);
         }
 
-        String locale = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
         ImageView specialImage = findViewById(R.id.special_image);
         specialImage.setImageResource(R.mipmap.special_image);
         specialImage.setVisibility(View.GONE);
@@ -551,25 +547,6 @@ public class MainActivity extends AppCompatActivity {
                 startService(deleteIntent);
             }
         });
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("KCA", "lang: " + newConfig.getLocales().get(0).getLanguage() + " " + newConfig.getLocales().get(0).getCountry());
-            KcaApplication.defaultLocale = newConfig.getLocales().get(0);
-        } else {
-            Log.e("KCA", "lang: " + newConfig.locale.getLanguage() + " " + newConfig.locale.getCountry());
-            KcaApplication.defaultLocale = newConfig.locale;
-        }
-        if (getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).startsWith("default")) {
-            LocaleUtils.setLocale(Locale.getDefault());
-        } else {
-            String[] pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE).split("-");
-            LocaleUtils.setLocale(new Locale(pref[0], pref[1]));
-        }
-        loadTranslationData(getApplicationContext());
-        super.onConfigurationChanged(newConfig);
     }
 }
 

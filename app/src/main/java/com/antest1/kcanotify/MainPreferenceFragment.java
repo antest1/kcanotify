@@ -33,43 +33,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
 
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_MAIN;
-import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
-import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_ALARMDELAY_CHANGED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_CN_CHANGED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_EXPVIEW_CHANGED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_FAIRYSIZE_CHANGED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_LANGUAGE_CHANGED;
-import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_PRIORITY_CHANGED;
-import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
-import static com.antest1.kcanotify.KcaConstants.PREF_ALLOW_EXTFILTER;
-import static com.antest1.kcanotify.KcaConstants.PREF_APK_DOWNLOAD_SITE;
-import static com.antest1.kcanotify.KcaConstants.PREF_CHECK_UPDATE;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
-import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_SIZE;
-import static com.antest1.kcanotify.KcaConstants.PREF_HDNOTI_MINLEVEL;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_EXP_VIEW;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_MORALE_MIN;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SET_PRIORITY;
-import static com.antest1.kcanotify.KcaConstants.PREF_OVERLAY_SETTING;
-import static com.antest1.kcanotify.KcaConstants.PREF_SCREEN_ADV_NETWORK;
-import static com.antest1.kcanotify.KcaConstants.PREF_SCREEN_SNIFFER_ALLOW;
-import static com.antest1.kcanotify.KcaConstants.PREF_SNIFFER_MODE;
-import static com.antest1.kcanotify.KcaConstants.PREF_VPN_ENABLED;
-import static com.antest1.kcanotify.KcaConstants.SNIFFER_ACTIVE;
-import static com.antest1.kcanotify.KcaConstants.SNIFFER_PASSIVE;
-import static com.antest1.kcanotify.KcaConstants.VPN_STOP_REASON;
+import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
@@ -119,8 +89,10 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             Preference preference = findPreference(key);
             if (preference == null) continue;
             if (preference instanceof ListPreference) {
-                ListPreference etp = (ListPreference) preference;
-                preference.setSummary(etp.getEntry());
+                if (!PREF_KCA_LANGUAGE.equals(preference.getKey())) {
+                    ListPreference etp = (ListPreference) preference;
+                    preference.setSummary(etp.getEntry());
+                }
             } else if (preference instanceof EditTextPreference) {
                 EditTextPreference etp = (EditTextPreference) preference;
                 preference.setSummary(getEditTextSummary(key, etp.getText()));
@@ -324,22 +296,19 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         Log.e("KCA", "onPreferenceChange " + key);
 
         if (PREF_KCA_LANGUAGE.equals(key)) {
-            String pref = (String) newValue;
-            if (pref.startsWith("default")) {
-                LocaleUtils.setLocale(Locale.getDefault());
+            if (!KcaService.getServiceStatus()) {
+                /*
+                String pref = (String) newValue;
+                if (pref.startsWith("default")) {
+                    LocaleUtils.setLocale(Locale.getDefault());
+                } else {
+                    String[] locale = ((String) newValue).split("-");
+                    LocaleUtils.setLocale(new Locale(locale[0], locale[1]));
+                }*/
             } else {
-                String[] locale = ((String) newValue).split("-");
-                LocaleUtils.setLocale(new Locale(locale[0], locale[1]));
+                showToast(getActivity(), "Cannot change while service is running.", Toast.LENGTH_SHORT);
+                return false;
             }
-            if (sHandler != null) {
-                Bundle bundle = new Bundle();
-                bundle.putString("url", KCA_API_PREF_LANGUAGE_CHANGED);
-                bundle.putString("data", "");
-                Message sMsg = sHandler.obtainMessage();
-                sMsg.setData(bundle);
-                sHandler.sendMessage(sMsg);
-            }
-            showToast(getActivity(), getStringWithLocale(R.string.sa_language_changed), Toast.LENGTH_LONG);
         }
 
         if (PREF_SNIFFER_MODE.equals(key)) {
