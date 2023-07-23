@@ -107,15 +107,20 @@ public class KcaQuestListAdpater extends BaseAdapter {
 
         String api_title = KcaUtils.format("[%s] %s", api_no, item.get("api_title").getAsString());
         String api_detail = item.get("api_detail").getAsString();
+        JsonArray api_get_material = item.get("api_get_material").getAsJsonArray();
+        String api_memo = "";
+        String api_rewards = "";
 
         if (kcQuestInfoData.has(api_no)) {
             String code = kcQuestInfoData.getAsJsonObject(api_no).get("code").getAsString();
             String name = kcQuestInfoData.getAsJsonObject(api_no).get("name").getAsString();
             api_title = KcaUtils.format("[%s] %s", code, name);
             api_detail = kcQuestInfoData.getAsJsonObject(api_no).get("desc").getAsString();
-            if (kcQuestInfoData.getAsJsonObject(api_no).has("memo")) { // Temporary
-                String memo = kcQuestInfoData.getAsJsonObject(api_no).get("memo").getAsString();
-                api_detail = api_detail.concat(" (").concat(memo).concat(")");
+            if (kcQuestInfoData.getAsJsonObject(api_no).has("memo")) {
+                api_memo = kcQuestInfoData.getAsJsonObject(api_no).get("memo").getAsString();
+            }
+            if (kcQuestInfoData.getAsJsonObject(api_no).has("rewards")) {
+                api_rewards = kcQuestInfoData.getAsJsonObject(api_no).get("rewards").getAsString();
             }
         }
 
@@ -126,12 +131,17 @@ public class KcaQuestListAdpater extends BaseAdapter {
         holder.quest_type.setBackgroundColor(getQuestLabelColor(api_label_type));
 
         holder.quest_name.setText(api_title);
-        holder.quest_desc.setText(api_detail);
+        holder.quest_desc.setText(getQuestPopupDetailText(api_detail, api_memo, api_rewards));
 
-        String finalApiTitle = api_title;
-        String finalApiDetail = api_detail;
+        JsonObject questDetailViewData = new JsonObject();
+        questDetailViewData.addProperty("title", api_title);
+        questDetailViewData.addProperty("detail", api_detail);
+        questDetailViewData.addProperty("memo", api_memo);
+        questDetailViewData.addProperty("rewards", api_rewards);
+        questDetailViewData.add("materials", api_get_material);
+
         holder.quest_desc_full.setOnClickListener(v1 ->
-                service.setAndShowPopup(finalApiTitle, finalApiDetail));
+                service.setAndShowPopup(questDetailViewData));
 
         if (api_progress != 0) {
             holder.quest_progress
@@ -198,6 +208,11 @@ public class KcaQuestListAdpater extends BaseAdapter {
         holder.quest_name.setTextColor(ContextCompat.getColor(application_context,
                         getId(KcaUtils.format("colorQuestState%d", api_state), R.color.class)));
         return v;
+    }
+
+    private String getQuestPopupDetailText(String desc, String memo, String rewards) {
+        String memo_rewards = KcaUtils.format(getStringWithLocale(R.string.questview_memo_format), memo, rewards).trim();
+        return KcaUtils.format("%s %s", desc, memo_rewards);
     }
 
     private static class ViewHolder {

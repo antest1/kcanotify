@@ -381,6 +381,8 @@
     <string name="quest_class_5">기타</string>
 
     <string name="questview_page" formatted="false">페이지 %d/%d</string>
+    <string name="questview_reward">보상</string>
+    <string name="questview_memo_format" formatted="false">%s ➣보상: %s</string>
 
     <string name="action_tools">도구모음</string>
     <string name="action_save_msg">처리중</string>

@@ -176,6 +176,8 @@ public class KcaQuestViewService extends Service {
                 questDescPopupView = mView.findViewById(R.id.quest_desc_popup);
                 questDescPopupView.setVisibility(View.GONE);
                 questDescPopupView.findViewById(R.id.view_qd_head).setOnTouchListener(popupViewTouchListener);
+                ((TextView) questDescPopupView.findViewById(R.id.view_qd_rewards_hd))
+                        .setText(getStringWithLocale(R.string.questview_reward));
 
                 adapter = new KcaQuestListAdpater(KcaQuestViewService.this, questTracker);
                 questList = mView.findViewById(R.id.quest_list);
@@ -435,11 +437,37 @@ public class KcaQuestViewService extends Service {
         }
     }
 
-    public void setAndShowPopup(String title, String content) {
-        TextView qdTitle = questDescPopupView.findViewById(R.id.view_qd_title);
-        TextView qdContent = questDescPopupView.findViewById(R.id.view_qd_text);
-        qdTitle.setText(title);
-        qdContent.setText(content);
+    public void setAndShowPopup(JsonObject data) {
+        ((TextView) questDescPopupView.findViewById(R.id.view_qd_title))
+                .setText(data.get("title").getAsString());
+        ((TextView) questDescPopupView.findViewById(R.id.view_qd_text))
+                .setText(data.get("detail").getAsString());
+
+        String memo = data.get("memo").getAsString();
+        TextView memoView = questDescPopupView.findViewById(R.id.view_qd_memo);
+        if (memo.length() > 0) {
+            memoView.setText(memo);
+            memoView.setVisibility(View.VISIBLE);
+        } else {
+            memoView.setVisibility(View.GONE);
+        }
+
+        String rewards = data.get("rewards").getAsString();
+        if (rewards.length() > 0) {
+            ((TextView) questDescPopupView.findViewById(R.id.view_qd_rewards)).setText(rewards);
+            questDescPopupView.findViewById(R.id.view_qd_rewards_layout).setVisibility(View.VISIBLE);
+        } else {
+            questDescPopupView.findViewById(R.id.view_qd_rewards_layout).setVisibility(View.GONE);
+        }
+
+        JsonArray materials = data.getAsJsonArray("materials");
+        for (int i = 0; i < materials.size(); i++) {
+            int value = materials.get(i).getAsInt();
+            String view_name = "view_qd_materials_" + (i+1);
+            ((TextView) questDescPopupView.findViewById(getId(view_name, R.id.class)))
+                    .setText(String.valueOf(value));
+        }
+
         questDescPopupView.setVisibility(View.VISIBLE);
     }
 

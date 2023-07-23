@@ -459,7 +459,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_category_11">F</string>
 
     <string name="quest_label_type_0" formatted="false" translatable="false">\?</string>
-    <string name="quest_label_type_1">O</string>
+    <string name="quest_label_type_1">1</string>
     <string name="quest_label_type_2">D</string>
     <string name="quest_label_type_3">W</string>
     <string name="quest_label_type_4">_</string>
@@ -478,6 +478,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_class_5">ETC</string>
 
     <string name="questview_page" formatted="false">Page %d/%d</string>
+    <string name="questview_reward">Rewards</string>
+    <string name="questview_memo_format" formatted="false">%s ➣Rewards %s</string>
 
     <string name="action_tools">Tools</string>
     <string name="action_save_msg">Processing...</string>

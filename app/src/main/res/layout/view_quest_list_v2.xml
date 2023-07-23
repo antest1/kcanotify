@@ -338,6 +338,7 @@
                     android:src="@mipmap/ic_cancel" />
             </LinearLayout>
 
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -351,19 +352,176 @@
                 android:paddingRight="5dp"
                 android:paddingBottom="0.5dp"
                 android:scaleType="fitXY"
-                android:src="@android:drawable/divider_horizontal_bright" />
+                android:src="@android:drawable/divider_horizontal_bright"
+                tools:ignore="ImageContrastCheck" />
 
-
-            <TextView
-                android:id="@+id/view_qd_text"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:minHeight="50dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
+                android:orientation="vertical"
+                android:padding="4dp"
+                android:paddingBottom="4dp">
+
+                <TextView
+                    android:id="@+id/view_qd_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/questview_text_large" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-4dp"
+                    android:layout_marginLeft="-4dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/view_qd_materials_icon_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@mipmap/icon_fuel"
+                            app:srcCompat="@mipmap/icon_fuel" />
+
+                        <TextView
+                            android:id="@+id/view_qd_materials_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_weight="1"
+                            android:minWidth="36dp"
+                            android:text="500"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/questview_text_large" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/view_qd_materials_icon_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@mipmap/icon_ammo"
+                            app:srcCompat="@mipmap/icon_ammo" />
+
+
+                        <TextView
+                            android:id="@+id/view_qd_materials_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_weight="1"
+                            android:minWidth="36dp"
+                            android:text="500"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/questview_text_large" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/view_qd_materials_icon_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@mipmap/icon_steel"
+                            app:srcCompat="@mipmap/icon_steel" />
+
+                        <TextView
+                            android:id="@+id/view_qd_materials_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_weight="1"
+                            android:minWidth="36dp"
+                            android:text="500"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/questview_text_large" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/view_qd_materials_icon_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@mipmap/icon_bauxite"
+                            app:srcCompat="@mipmap/icon_bauxite" />
+
+                        <TextView
+                            android:id="@+id/view_qd_materials_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_weight="1"
+                            android:minWidth="36dp"
+                            android:text="500"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/questview_text_large" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/view_qd_memo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="false"
+                    android:textColor="@color/colorQuestViewMemo"
+                    android:textSize="@dimen/questview_text_medium"
+                    app:lineHeight="@dimen/questview_text_small" />
+
+                <LinearLayout
+                    android:id="@+id/view_qd_rewards_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/view_qd_rewards_hd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/questview_reward"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/questview_text_top" />
+
+                    <TextView
+                        android:id="@+id/view_qd_rewards"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/questview_text_large" />
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 

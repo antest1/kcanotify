@@ -404,6 +404,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_class_5">其他</string>
 
     <string name="questview_page" formatted="false">第 %d/%d 页</string>
+    <string name="questview_reward">奖励</string>
+    <string name="questview_memo_format" formatted="false">%s %s</string>
 
     <string name="action_tools">实用工具</string>
     <string name="action_save_msg">处理中</string>

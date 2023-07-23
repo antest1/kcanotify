@@ -378,6 +378,8 @@
     <string name="quest_class_5">その他</string>
 
     <string name="questview_page" formatted="false">ページ %d/%d</string>
+    <string name="questview_reward">報酬</string>
+    <string name="questview_memo_format" formatted="false">%s [獲]%s</string>
 
     <string name="action_tools">ツール</string>
     <string name="action_save_msg">処理中</string>
