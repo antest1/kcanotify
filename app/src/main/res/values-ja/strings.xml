@@ -99,11 +99,14 @@
     <string name="sa_getupdate_started">ゲームデータリクエスト&#8230;</string>
     <string name="sa_getupdate_servererror" formatted="false">サーバーエラー: %s</string>
     <string name="sa_getupdate_ioexceptionerror">エラー (IOException)</string>
-    <string name="sa_overlay_under_m">Android 6.0 (Marshmallow)未満の場合には設定する必要がありません。</string>
-    <string name="sa_overlay_appearontop">アプリケーション管理の「他のアプリの上に表示」(フローティング表示するアプリ)設定で「Kcanotify」を有効にしてください。</string>
+    <string name="sa_under_m">Android 6.0 (Marshmallow)未満の場合には設定する必要がありません。</string>
 
+    <string name="sa_overlay_appearontop">アプリ情報の「フローティング表示」設定を有効にしてください。</string>
     <string name="sa_overlay_ok">画面オーバーレイ権限が設定されました。</string>
     <string name="sa_overlay_no">画面オーバーレイ権限が設定されていません。 (戦闘予報利用不可)</string>
+    <string name="sa_batteryoptim_appearontop">アプリ情報の「バッテリー」をタップして、バッテリー使用量の管理を「制限なし」にしてください。</string>
+    <string name="sa_batteryoptim_ok">電池の最適化がオフになりました</string>
+    <string name="sa_batteryoptim_no">電池の最適化がオフになっていません（通知などが正常に動作しない可能性があります）</string>
     <string name="sa_usagestat_ok">使用履歴へのアクセスを許可しました。</string>
     <string name="sa_usagestat_no">使用履歴へのアクセスを不許可しました。</string>
     <string name="sa_usagestat_dialog_title">使用履歴へのアクセス設定</string>
@@ -175,11 +178,15 @@
     <string name="setting_menu_kand_title_record_resourcelog">資源記録機能を使用</string>
     <string name="record_storage_warning">内部ストレージの一部を使用します</string>
 
-    <string name="setting_menu_view_head">権限/機能設定</string>
-    <string name="setting_menu_view_title_accessibility_setting">アクセシビリティ(ユーザー補助)設定</string>
-    <string name="setting_menu_view_desc_accessibility_setting">サービスでKcanotifyを選択 (艦これの動作を検出するために必要)</string>
+    <string name="setting_menu_perm_head">アプリ権限設定</string>
     <string name="setting_menu_view_title_overlay_setting">画面オーバーレイ設定</string>
     <string name="setting_menu_view_desc_overlay_setting">他のアプリの上に重ねて表示する (戦闘予報などに必要)</string>
+    <string name="setting_menu_perm_title_batoptim_setting">電池の最適化</string>
+    <string name="setting_menu_perm_desc_batoptim_setting">遠征・入居の通知などの正常な機能利用のためには、アプリの電池の最適化をオフにする必要があります</string>
+
+    <string name="setting_menu_view_head">機能設定</string>
+    <string name="setting_menu_view_title_accessibility_setting">アクセシビリティ(ユーザー補助)設定</string>
+    <string name="setting_menu_view_desc_accessibility_setting">サービスでKcanotifyを選択 (艦これの動作を検出するために必要)</string>
     <string name="setting_menu_view_title_battlenode_use">次のマスを予報する</string>
     <string name="setting_menu_view_desc_battlenode_use">出撃中トーストで次のマス情報を表示する</string>
     <string name="setting_menu_view_title_battleview_use">戦闘予報を使う</string>

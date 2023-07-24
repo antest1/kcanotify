@@ -101,10 +101,13 @@
     <string name="sa_getupdate_servererror" formatted="false">Ocurrió un error del servidor: %s</string>
     <string name="sa_getupdate_ioexceptionerror">Ocurrió un error mientras se guardaban datos.</string>
 
-    <string name="sa_overlay_under_m">Este ajuste no es necesario para versiones de Android anteriores a 6.0.</string>
+    <string name="sa_under_m">Este ajuste no es necesario para versiones de Android anteriores a 6.0.</string>
     <string name="sa_overlay_appearontop">En Ajustes-Aplicaciones, activar [Kcanotify] en "Mostrar sobre otras Aplicaciones".</string>
     <string name="sa_overlay_ok">Permitir Superposición en pantalla: Activado.</string>
     <string name="sa_overlay_no">Permitir Superposición en pantalla: Desactivado. (Predicción de batalla será desactivada)</string>
+    <string name="sa_batteryoptim_appearontop">En la información de la aplicación, vaya a "Batería" y elija la opción "Sin restricciones".</string>
+    <string name="sa_batteryoptim_ok">Optimización de la batería: Desactivado</string>
+    <string name="sa_batteryoptim_no">Optimización de la batería: No desactivado (es posible que las notificaciones no se activen en el momento correcto)</string>
     <string name="sa_usagestat_ok">Acceso a Estadísticas de Uso Permitido</string>
     <string name="sa_usagestat_no">Acceso a Estadísticas de Uso No Permitido</string>
     <string name="sa_usagestat_dialog_title">Permiso de Acceso a Estadísticas de Uso</string>
@@ -182,11 +185,15 @@
     <string name="setting_menu_kand_title_record_resourcelog">Guardar vitácora de recursos</string>
     <string name="record_storage_warning">Ocupa algo de espacio dentro del dispositivo.</string>
 
-    <string name="setting_menu_view_head">Ajustes de Permisos/Funciones</string>
-    <string name="setting_menu_view_title_accessibility_setting">Ajustes de Accesibilidad</string>
-    <string name="setting_menu_view_desc_accessibility_setting">Selecciona kcanotify de Servicios. (Requerido para detectar la aplicación de Kancolle)</string>
+    <string name="setting_menu_perm_head">Ajustes de Permisos</string>
     <string name="setting_menu_view_title_overlay_setting">Ajustes de Superposición de Pantalla</string>
     <string name="setting_menu_view_desc_overlay_setting">Establecer Permiso de Superposición de Pantalla (Requerido para Predicción de Batalla)</string>
+    <string name="setting_menu_perm_title_batoptim_setting">Configuración de optimización de batería</string>
+    <string name="setting_menu_perm_desc_batoptim_setting">Desactive la optimización de la batería para kcanotify (requerido para alertas precisas de atraque/expedición/moral)</string>
+
+    <string name="setting_menu_view_head">Ajustes de Funciones</string>
+    <string name="setting_menu_view_title_accessibility_setting">Ajustes de Accesibilidad</string>
+    <string name="setting_menu_view_desc_accessibility_setting">Selecciona kcanotify de Servicios. (Requerido para detectar la aplicación de Kancolle)</string>
     <string name="setting_menu_view_title_battlenode_use">Usar Predicción de Nodo</string>
     <string name="setting_menu_view_desc_battlenode_use">Mostrar información del próximo nodo durante combate.</string>
     <string name="setting_menu_view_title_battleview_use">Usar Predicción de Batalla</string>

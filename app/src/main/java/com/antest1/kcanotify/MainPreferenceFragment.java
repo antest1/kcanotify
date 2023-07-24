@@ -15,12 +15,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.EditTextPreference;
@@ -47,6 +51,7 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 import static com.antest1.kcanotify.KcaViewButtonService.FAIRY_FORECHECK_OFF;
 import static com.antest1.kcanotify.KcaViewButtonService.FAIRY_FORECHECK_ON;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_ALERT_RINGTONE;
+import static com.antest1.kcanotify.SettingActivity.REQUEST_BATOPTIM_PERMISSION;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_OVERLAY_PERMISSION;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_USAGESTAT_PERMISSION;
 
@@ -61,8 +66,11 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     static Gson gson = new Gson();
     private Callback mCallback;
 
+    ActivityResultLauncher<Intent> startActivityResult;
+    private int currentActivity = 0;
+
     public interface Callback {
-        public void onNestedPreferenceSelected(int key);
+        void onNestedPreferenceSelected(int key);
     }
 
     @Override
@@ -75,6 +83,27 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         super.onAttach(context);
         dbHelper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
         downloader = KcaUtils.getInfoDownloader(context);
+
+        startActivityResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    switch (currentActivity) {
+                        case REQUEST_OVERLAY_PERMISSION:
+                            showOverlayPermissionResult();
+                            break;
+                        case REQUEST_BATOPTIM_PERMISSION:
+                            showBatteryOptimizationPermissionResult();
+                            break;
+                        case REQUEST_USAGESTAT_PERMISSION:
+                            showUsageStatsPermissionResult();
+                            break;
+                        case REQUEST_ALERT_RINGTONE:
+                            callbackAlertRingtoneResult(result);
+                            break;
+                    }
+                    currentActivity = 0;
+                }
+        );
     }
 
     @Override
@@ -129,7 +158,15 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 showObtainingPermissionOverlayWindow();
             } else {
-                showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_under_m), Toast.LENGTH_SHORT);
+                showToast(getActivity(), getStringWithLocale(R.string.sa_under_m), Toast.LENGTH_SHORT);
+            }
+        }
+
+        if (PREF_BATOPTIM_SETTING.equals(key)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                showObtainingPermissionBatteryOptimization();
+            } else {
+                showToast(getActivity(), getStringWithLocale(R.string.sa_under_m), Toast.LENGTH_SHORT);
             }
         }
 
@@ -156,7 +193,8 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 // No ringtone has been selected, set to the default
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
             }
-            startActivityForResult(intent, REQUEST_ALERT_RINGTONE);
+            currentActivity = REQUEST_ALERT_RINGTONE;
+            startActivityResult.launch(intent);
         }
 
         if (PREF_CHECK_UPDATE.equals(key)) {
@@ -176,16 +214,28 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
     @TargetApi(Build.VERSION_CODES.M)
     public void showObtainingPermissionOverlayWindow() {
-        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
-        if(intent.resolveActivity(getContext().getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION);
-        } else {
-            try {
-                startActivityForResult(new Intent(android.provider.Settings.ACTION_APPLICATION_SETTINGS), REQUEST_OVERLAY_PERMISSION);
-            } finally {
-                showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_appearontop), Toast.LENGTH_LONG);
-            }
+        String package_name = getContext().getPackageName();
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + package_name));
+
+        if (intent.resolveActivity(getContext().getPackageManager()) == null) {
+            intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + package_name));
+            showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_appearontop), Toast.LENGTH_LONG);
         }
+        currentActivity = REQUEST_OVERLAY_PERMISSION;
+        startActivityResult.launch(intent);
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public void showObtainingPermissionBatteryOptimization() {
+        String package_name = getContext().getPackageName();
+        Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+
+        if (intent.resolveActivity(getContext().getPackageManager()) == null) {
+            intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + package_name));
+            showToast(getActivity(), getStringWithLocale(R.string.sa_batteryoptim_appearontop), Toast.LENGTH_LONG);
+        }
+        currentActivity = REQUEST_BATOPTIM_PERMISSION;
+        startActivityResult.launch(intent);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -200,42 +250,65 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void showObtainingUsageStatPermission() {
         Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-        startActivityForResult(intent, REQUEST_USAGESTAT_PERMISSION);
+        currentActivity = REQUEST_USAGESTAT_PERMISSION;
+        startActivityResult.launch(intent);
     }
 
-    @Override
     @TargetApi(Build.VERSION_CODES.M)
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void showOverlayPermissionResult() {
         if (checkActivityValid()) {
-            if (requestCode == REQUEST_OVERLAY_PERMISSION) {
-                int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
-                new Handler().postDelayed(() -> {
-                    Context context = getContext();
-                    if (context != null) {
-                        if (Settings.canDrawOverlays(getContext())) {
-                            showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_ok), Toast.LENGTH_SHORT);
-                        } else {
-                            showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_no), Toast.LENGTH_SHORT);
-                        }
+            int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
+            new Handler().postDelayed(() -> {
+                Context context = getContext();
+                if (context != null) {
+                    if (Settings.canDrawOverlays(getContext())) {
+                        showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_ok), Toast.LENGTH_SHORT);
+                    } else {
+                        showToast(getActivity(), getStringWithLocale(R.string.sa_overlay_no), Toast.LENGTH_SHORT);
                     }
-                }, delay);
-            } else if (requestCode == REQUEST_USAGESTAT_PERMISSION) {
-                if(hasUsageStatPermission(getContext())) {
-                    showToast(getActivity(), getStringWithLocale(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT);
-                } else {
-                    showToast(getActivity(), getStringWithLocale(R.string.sa_usagestat_no), Toast.LENGTH_SHORT);
                 }
-            } else if (requestCode == REQUEST_ALERT_RINGTONE && data != null) {
-                Preference pref = findPreference(PREF_KCA_NOTI_RINGTONE);
-                Uri ringtoneUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                String ringtoneTitle = getRingtoneTitle(ringtoneUri);
-                pref.setSummary(ringtoneTitle);
-                if (ringtoneUri != null) {
-                    sharedPref.edit().putString(PREF_KCA_NOTI_RINGTONE, ringtoneUri.toString()).apply();
-                } else {
-                    sharedPref.edit().putString(PREF_KCA_NOTI_RINGTONE, "").apply();
+            }, delay);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void showBatteryOptimizationPermissionResult() {
+        if (checkActivityValid()) {
+            int delay = Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? 0 : 1000;
+            new Handler().postDelayed(() -> {
+                Context context = getContext();
+                if (context != null) {
+                    PowerManager manager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+                    if (manager.isIgnoringBatteryOptimizations(context.getPackageName())) {
+                        showToast(getActivity(), getStringWithLocale(R.string.sa_batteryoptim_ok), Toast.LENGTH_SHORT);
+                    } else {
+                        showToast(getActivity(), getStringWithLocale(R.string.sa_batteryoptim_no), Toast.LENGTH_SHORT);
+                    }
                 }
+            }, delay);
+        }
+    }
+
+    private void showUsageStatsPermissionResult() {
+        if (checkActivityValid()) {
+            if(hasUsageStatPermission(getContext())) {
+                showToast(getActivity(), getStringWithLocale(R.string.sa_usagestat_ok), Toast.LENGTH_SHORT);
+            } else {
+                showToast(getActivity(), getStringWithLocale(R.string.sa_usagestat_no), Toast.LENGTH_SHORT);
+            }
+        }
+    }
+
+    private void callbackAlertRingtoneResult(ActivityResult result) {
+        Preference pref = findPreference(PREF_KCA_NOTI_RINGTONE);
+        if (pref != null && result.getData() != null) {
+            Uri ringtoneUri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            String ringtoneTitle = getRingtoneTitle(ringtoneUri);
+            pref.setSummary(ringtoneTitle);
+            if (ringtoneUri != null) {
+                sharedPref.edit().putString(PREF_KCA_NOTI_RINGTONE, ringtoneUri.toString()).apply();
+            } else {
+                sharedPref.edit().putString(PREF_KCA_NOTI_RINGTONE, "").apply();
             }
         }
     }

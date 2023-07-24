@@ -22,6 +22,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_USAGESTAT_PERMISSION = 3;
     public static final int REQUEST_ALERT_RINGTONE = 4;
+    public static final int REQUEST_BATOPTIM_PERMISSION = 5;
 
     Toolbar toolbar;
     public SettingActivity() {

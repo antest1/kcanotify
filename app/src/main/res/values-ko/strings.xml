@@ -100,10 +100,13 @@
     <string name="sa_getupdate_servererror" formatted="false">서버 오류 발생: %s</string>
     <string name="sa_getupdate_ioexceptionerror">데이터 저장 중 오류 발생</string>
 
-    <string name="sa_overlay_under_m">안드로이드 6.0 (마시멜로) 미만의 경우 설정할 필요가 없습니다.</string>
-    <string name="sa_overlay_appearontop">어플리케이션 관리자 설정의 "화면 위에 그릴 수 있는 앱"(다른 앱 위에 표시되는 앱) 항목에서 [시제 깡들리티]를 활성화하세요.</string>
+    <string name="sa_under_m">안드로이드 6.0 (마시멜로) 미만의 경우 설정할 필요가 없습니다.</string>
+    <string name="sa_overlay_appearontop">애플리케이션 정보의 "다른 앱 위에 표시"를 활성화하세요.</string>
     <string name="sa_overlay_ok">화면 오버레이 권한이 설정되었습니다.</string>
     <string name="sa_overlay_no">화면 오버레이 권한이 설정되지 않았습니다. (전투예보 이용 불가)</string>
+    <string name="sa_batteryoptim_appearontop">애플리케이션 정보의 "배터리"를 선택한 이후 "제한 없음"으로 설정해주세요.</string>
+    <string name="sa_batteryoptim_ok">배터리 최적화를 해제했습니다.</string>
+    <string name="sa_batteryoptim_no">배터리 최적화가 해제되지 않았습니다. (알림이 제대로 동작하지 않을 수 있음)</string>
     <string name="sa_usagestat_ok">사용정보 접근 허용</string>
     <string name="sa_usagestat_no">사용정보 접근 허용 안함</string>
     <string name="sa_usagestat_dialog_title">사용정보 접근 허용 설정</string>
@@ -178,11 +181,15 @@
     <string name="setting_menu_kand_title_record_resourcelog">자원 기록 기능 활성화</string>
     <string name="record_storage_warning">내부 저장공간의 일부를 차지합니다.</string>
 
-    <string name="setting_menu_view_head">권한 및 기능 설정</string>
-    <string name="setting_menu_view_title_accessibility_setting">접근성 설정</string>
-    <string name="setting_menu_view_desc_accessibility_setting">서비스에서 시제 깡들리티 선택 (칸코레 감지를 위해 필요)</string>
+    <string name="setting_menu_perm_head">권한 설정</string>
     <string name="setting_menu_view_title_overlay_setting">화면 오버레이 설정</string>
     <string name="setting_menu_view_desc_overlay_setting">다른 앱 위에 그리기 권한 설정 (전투예보 기능에 필요)</string>
+    <string name="setting_menu_perm_title_batoptim_setting">배터리 최적화 설정</string>
+    <string name="setting_menu_perm_desc_batoptim_setting">원정/입거/피로도 알림 등의 정상적인 기능 이용을 위해서는 해당 설정을 꺼야 함</string>
+
+    <string name="setting_menu_view_head">기능 설정</string>
+    <string name="setting_menu_view_title_accessibility_setting">접근성 설정</string>
+    <string name="setting_menu_view_desc_accessibility_setting">서비스에서 시제 깡들리티 선택 (칸코레 감지를 위해 필요)</string>
     <string name="setting_menu_view_title_battlenode_use">다음 마스 예보 사용</string>
     <string name="setting_menu_view_desc_battlenode_use">출격 중 토스트로 다음 마스 정보 표시</string>
     <string name="setting_menu_view_title_battleview_use">전투예보 사용</string>

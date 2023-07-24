@@ -143,14 +143,18 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_getupdate_servererror" formatted="false">A Server Error Occurred: %s</string>
     <string name="sa_getupdate_ioexceptionerror">An error occurred while saving data.</string>
 
-    <string name="sa_overlay_under_m">This setting is not required for Android versions below 6.0.</string>
-    <string name="sa_overlay_appearontop">In application manager, activate [Kcanotify] in "Draw over other apps"(Apps that can appear on top).</string>
+    <string name="sa_under_m">This setting is not required for Android versions below 6.0.</string>
+    <string name="sa_overlay_appearontop">In application info, allow "Appear on top" permission.</string>
     <string name="sa_overlay_ok">Allow Screen Overlay: On</string>
     <string name="sa_overlay_no">Allow Screen Overlay: Off (BattleView will be disabled)</string>
+    <string name="sa_batteryoptim_appearontop">In application info, got to "Battery" and choose "Unrestricted" option.</string>
+    <string name="sa_batteryoptim_ok">Battery Optimization: Off</string>
+    <string name="sa_batteryoptim_no">Battery Optimization: Not Off (notifications may not trigger at correct time)</string>
     <string name="sa_usagestat_ok">UsageStats Access Allowed</string>
     <string name="sa_usagestat_no">UsageStats Access Disallowed</string>
     <string name="sa_usagestat_dialog_title">UsageStats Access Permission</string>
     <string name="sa_usagestat_dialog_desc">In Android 5.0+, you should set this permission to use this feature. This permission is required for checking kancolle is on the screen.</string>
+
 
     <string name="sa_bypass_list_invalid">The bypass address list is invalid. Please double-check your input.</string>
 
@@ -249,11 +253,15 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_button_order_change_when_restart">Restart service to apply the change.</string>
     <string name="record_storage_warning">Takes up some of device\'s storage space.</string>
 
-    <string name="setting_menu_view_head">Permission/Function Settings</string>
-    <string name="setting_menu_view_title_accessibility_setting">Accessibility Settings</string>
-    <string name="setting_menu_view_desc_accessibility_setting">Select Kcanotify from Services. (required for detect kancolle app)</string>
+    <string name="setting_menu_perm_head">Permission Settings</string>
     <string name="setting_menu_view_title_overlay_setting">Screen Overlay Settings</string>
     <string name="setting_menu_view_desc_overlay_setting">Set Screen Overlay Permission (required for BattleView).</string>
+    <string name="setting_menu_perm_title_batoptim_setting">Battery Optimization Settings</string>
+    <string name="setting_menu_perm_desc_batoptim_setting">Turn off battery optimization for kcanotify (required for accurate docking/exped/morale alerts)</string>
+
+    <string name="setting_menu_view_head">Function Settings</string>
+    <string name="setting_menu_view_title_accessibility_setting">Accessibility Settings</string>
+    <string name="setting_menu_view_desc_accessibility_setting">Select Kcanotify from Services. (required for detect kancolle app)</string>
     <string name="setting_menu_view_title_battlenode_use">Use Node Prediction</string>
     <string name="setting_menu_view_desc_battlenode_use">Display next node info during sortie with toast.</string>
     <string name="setting_menu_view_title_battleview_use">Use BattleView</string>

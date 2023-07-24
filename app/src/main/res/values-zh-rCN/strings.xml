@@ -108,10 +108,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_getupdate_servererror" formatted="false">服务器出错: %s</string>
     <string name="sa_getupdate_ioexceptionerror">保存数据时出现错误</string>
 
-    <string name="sa_overlay_under_m">Android 6.0以下版本可以跳过该设定</string>
-    <string name="sa_overlay_appearontop">请于应用管理中给予Kcanotify「盖过其他应用程式」的权限。(以在其他应用程式之上显示内容)</string>
+    <string name="sa_under_m">Android 6.0以下版本可以跳过该设定</string>
+    <string name="sa_overlay_appearontop">请在应用程序信息中启用“悬浮窗”设置。</string>
     <string name="sa_overlay_ok">悬浮视窗权限：已取得</string>
     <string name="sa_overlay_no">悬浮视窗权限：未取得（将无法使用战斗剧透功能）</string>
+    <string name="sa_batteryoptim_appearontop">点击应用信息中的“电池”，将电池使用管理设置为“不受限制”。</string>
+    <string name="sa_batteryoptim_ok">电池优化已关闭</string>
+    <string name="sa_batteryoptim_no">电池优化未关闭（通知等可能无法正常工作）</string>
     <string name="sa_usagestat_ok">允许存取使用信息</string>
     <string name="sa_usagestat_no">禁止存取使用信息</string>
     <string name="sa_usagestat_dialog_title">UsageStats存取权限</string>
@@ -202,11 +205,15 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_button_order_change_when_restart">重启应用以套用设定</string>
     <string name="record_storage_warning">会占用设备部分的储存空间</string>
 
+    <string name="setting_menu_perm_head">应用程序权限设置</string>
+    <string name="setting_menu_view_title_overlay_setting">悬浮视窗设定</string>
+    <string name="setting_menu_view_desc_overlay_setting">取得悬浮视窗权限（以使用战斗剧透功能）</string>
+    <string name="setting_menu_perm_title_batoptim_setting">电池优化</string>
+    <string name="setting_menu_perm_desc_batoptim_setting">为了使用通知等正常功能，需要关闭应用程序的电池优化。</string>
+
     <string name="setting_menu_view_head">功能设定</string>
     <string name="setting_menu_view_title_accessibility_setting">辅助功能设置</string>
     <string name="setting_menu_view_desc_accessibility_setting">选择并开启Kcanotify服务（以检测舰これ客户端）</string>
-    <string name="setting_menu_view_title_overlay_setting">悬浮视窗设定</string>
-    <string name="setting_menu_view_desc_overlay_setting">取得悬浮视窗权限（以使用战斗剧透功能）</string>
     <string name="setting_menu_view_title_battlenode_use">预知罗盘娘的阴谋</string>
     <string name="setting_menu_view_desc_battlenode_use">进击时显示下一个会进入的路线</string>
     <string name="setting_menu_view_title_battleview_use">预知战况</string>

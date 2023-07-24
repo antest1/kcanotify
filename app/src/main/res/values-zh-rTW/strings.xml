@@ -108,10 +108,13 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_getupdate_servererror" formatted="false">伺服器出錯: %s</string>
     <string name="sa_getupdate_ioexceptionerror">保存數據時出現錯誤</string>
 
-    <string name="sa_overlay_under_m">Android 6.0以下版本可以跳過該設定</string>
+    <string name="sa_under_m">Android 6.0以下版本可以跳過該設定</string>
     <string name="sa_overlay_appearontop">請於應用管理中給予Kcanotify「蓋過其他應用程式」的權限。(以在其他應用程式之上顯示內容)</string>
     <string name="sa_overlay_ok">懸浮視窗權限：已取得</string>
     <string name="sa_overlay_no">懸浮視窗權限：未取得（將無法使用戰鬥劇透功能）</string>
+    <string name="sa_batteryoptim_appearontop">點擊應用信息中的“電池”，將電池使用管理設置為“不受限制”。 </string>
+    <string name="sa_batteryoptim_ok">電池優化已關閉</string>
+    <string name="sa_batteryoptim_no">電池優化未關閉（通知等可能無法正常工作）</string>
     <string name="sa_usagestat_ok">允許存取使用信息</string>
     <string name="sa_usagestat_no">禁止存取使用信息</string>
     <string name="sa_usagestat_dialog_title">UsageStats存取權限</string>
@@ -203,11 +206,15 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_button_order_change_when_restart">重啟應用以套用設定</string>
     <string name="record_storage_warning">會佔用設備部分的儲存空間</string>
 
+    <string name="setting_menu_perm_head">應用程序權限設置</string>
+    <string name="setting_menu_view_title_overlay_setting">懸浮視窗設定</string>
+    <string name="setting_menu_view_desc_overlay_setting">取得懸浮視窗權限（以使用戰鬥劇透功能）</string>
+    <string name="setting_menu_perm_title_batoptim_setting">電池優化</string>
+    <string name="setting_menu_perm_desc_batoptim_setting">為了使用通知等正常功能，需要關閉應用程序的電池優化。 </string>
+
     <string name="setting_menu_view_head">功能設定</string>
     <string name="setting_menu_view_title_accessibility_setting">輔助功能設置</string>
     <string name="setting_menu_view_desc_accessibility_setting">選擇並開啟Kcanotify服務（以檢測艦これ客戶端）</string>
-    <string name="setting_menu_view_title_overlay_setting">懸浮視窗設定</string>
-    <string name="setting_menu_view_desc_overlay_setting">取得懸浮視窗權限（以使用戰鬥劇透功能）</string>
     <string name="setting_menu_view_title_battlenode_use">預知羅盤娘的陰謀</string>
     <string name="setting_menu_view_desc_battlenode_use">進擊時顯示下一個會進入的路線</string>
     <string name="setting_menu_view_title_battleview_use">預知戰況</string>

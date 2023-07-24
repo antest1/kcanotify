@@ -174,6 +174,25 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/setting_menu_perm_head"
+        app:iconSpaceReserved="false">
+        <Preference
+            android:defaultValue=""
+            app:iconSpaceReserved="false"
+            android:key="overlay_setting"
+            android:summary="@string/setting_menu_view_desc_overlay_setting"
+            android:title="@string/setting_menu_view_title_overlay_setting" />
+
+        <Preference
+            android:defaultValue=""
+            app:iconSpaceReserved="false"
+            android:key="battery_optimization_setting"
+            android:summary="@string/setting_menu_perm_desc_batoptim_setting"
+            android:title="@string/setting_menu_perm_title_batoptim_setting" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/setting_menu_sniffer_title_head"
         app:iconSpaceReserved="false">
 
@@ -214,13 +233,6 @@
     <PreferenceCategory
         android:title="@string/setting_menu_view_head"
         app:iconSpaceReserved="false">
-        <Preference
-            android:defaultValue=""
-            app:iconSpaceReserved="false"
-            android:key="overlay_setting"
-            android:summary="@string/setting_menu_view_desc_overlay_setting"
-            android:title="@string/setting_menu_view_title_overlay_setting" />
-
         <CheckBoxPreference
             android:defaultValue="true"
             app:iconSpaceReserved="false"

@@ -428,6 +428,7 @@ public final class KcaConstants {
     public static final String PREF_KCA_BATTLEVIEW_USE = "battleview_use";
     public static final String PREF_KCA_QUESTVIEW_USE = "questview_use";
     public static final String PREF_OVERLAY_SETTING = "overlay_setting";
+    public static final String PREF_BATOPTIM_SETTING = "battery_optimization_setting";
     public static final String PREF_SHOWDROP_SETTING = "showdrop_setting";
     public static final String PREF_KCA_DOWNLOAD_DATA = "download_data";
     public static final String PREF_CHECK_UPDATE = "check_update";
