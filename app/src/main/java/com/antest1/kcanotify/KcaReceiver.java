@@ -62,9 +62,9 @@ public class KcaReceiver extends BroadcastReceiver {
                 Cursor cursor = context.getContentResolver().query(uri, null, null, null, null, null);
                 if(cursor != null) {
                     if (cursor.moveToFirst()) {
-                        String url = cursor.getString(cursor.getColumnIndex("URL"));
-                        byte[] request = cursor.getString(cursor.getColumnIndex("REQUEST")).getBytes();
-                        byte[] response = cursor.getString(cursor.getColumnIndex("RESPONSE")).getBytes();
+                        String url = cursor.getString(cursor.getColumnIndexOrThrow("URL"));
+                        byte[] request = cursor.getString(cursor.getColumnIndexOrThrow("REQUEST")).getBytes();
+                        byte[] response = cursor.getString(cursor.getColumnIndexOrThrow("RESPONSE")).getBytes();
                         KcaHandler k = new KcaHandler(handler, url, request, response);
                         executorService.execute(k);
                     }

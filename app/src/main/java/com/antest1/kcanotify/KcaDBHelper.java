@@ -132,7 +132,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         try {
             if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
-                value = c.getInt(c.getColumnIndex("version"));
+                value = c.getInt(c.getColumnIndexOrThrow("version"));
             }
         } catch (Exception e) {
             recordErrorLog(ERROR_TYPE_DB, "getResVer", filename, "", getStringFromException(e));
@@ -150,8 +150,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         Cursor c = db.query(resver_table_name, null, null, null, null, null, null);
         try {
             while (c.moveToNext()) {
-                String name =c.getString(c.getColumnIndex("file"));
-                value = Math.max(value, c.getInt(c.getColumnIndex("version")));
+                String name =c.getString(c.getColumnIndexOrThrow("file"));
+                value = Math.max(value, c.getInt(c.getColumnIndexOrThrow("version")));
             }
         } catch (Exception e) {
             // do nothing
@@ -212,14 +212,14 @@ public class KcaDBHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(sql, null);
         while (c.moveToNext()) {
-            type = c.getString(c.getColumnIndex("type"));
-            url = c.getString(c.getColumnIndex("url"));
-            error = c.getString(c.getColumnIndex("error"));
-            version = c.getString(c.getColumnIndex("version"));
+            type = c.getString(c.getColumnIndexOrThrow("type"));
+            url = c.getString(c.getColumnIndexOrThrow("url"));
+            error = c.getString(c.getColumnIndexOrThrow("error"));
+            version = c.getString(c.getColumnIndexOrThrow("version"));
             if (full) {
-                request = c.getString(c.getColumnIndex("request"));
-                data = c.getString(c.getColumnIndex("data"));
-                timestamp = c.getString(c.getColumnIndex("ts"));
+                request = c.getString(c.getColumnIndexOrThrow("request"));
+                data = c.getString(c.getColumnIndexOrThrow("data"));
+                timestamp = c.getString(c.getColumnIndexOrThrow("ts"));
                 log_list.add(KcaUtils.format("[%s]\t%s\t%s\t%s\t%s\t%s\t%s", type, version, url, error, request, data, timestamp));
             } else {
                 String recent_indicate = version.equals(BuildConfig.VERSION_NAME) ? "*" : "";
@@ -243,7 +243,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         try {
             if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
-                value = c.getString(c.getColumnIndex("VALUE"));
+                value = c.getString(c.getColumnIndexOrThrow("VALUE"));
             }
         } catch (Exception e) {
             recordErrorLog(ERROR_TYPE_DB, "getValue", key, "", getStringFromException(e));
@@ -336,7 +336,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(slotitem_table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
-            set.add(c.getInt(c.getColumnIndex("KEY")));
+            set.add(c.getInt(c.getColumnIndexOrThrow("KEY")));
         }
         c.close();
         return set;
@@ -348,9 +348,9 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("SELECT KEY, KCID, VALUE from ".concat(slotitem_table_name), null);
         while (c.moveToNext()) {
             JsonObject row = new JsonObject();
-            row.addProperty("key", c.getInt(c.getColumnIndex("KEY")));
-            row.addProperty("equip_id", c.getInt(c.getColumnIndex("KCID")));
-            row.addProperty("value", c.getString(c.getColumnIndex("VALUE")));
+            row.addProperty("key", c.getInt(c.getColumnIndexOrThrow("KEY")));
+            row.addProperty("equip_id", c.getInt(c.getColumnIndexOrThrow("KCID")));
+            row.addProperty("value", c.getString(c.getColumnIndexOrThrow("VALUE")));
             data.add(row);
         }
         c.close();
@@ -363,7 +363,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         Cursor c = db.query(slotitem_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
-            value = c.getString(c.getColumnIndex("VALUE"));
+            value = c.getString(c.getColumnIndexOrThrow("VALUE"));
         }
         c.close();
         return value;
@@ -439,8 +439,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         Log.e("KCA", "getCurrentQuestList: " + String.valueOf(c.getCount()));
         while (c.moveToNext()) {
             boolean valid_flag = true;
-            int quest_id = c.getInt(c.getColumnIndex("KEY"));
-            String quest_str = c.getString(c.getColumnIndex("VALUE"));
+            int quest_id = c.getInt(c.getColumnIndexOrThrow("KEY"));
+            String quest_str = c.getString(c.getColumnIndexOrThrow("VALUE"));
 
             if (quest_str != null) {
                 JsonObject quest_data = JsonParser.parseString(quest_str).getAsJsonObject();
@@ -573,7 +573,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(questlist_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
         if (c.moveToFirst()) {
-            value = c.getString(c.getColumnIndex("VALUE"));
+            value = c.getString(c.getColumnIndexOrThrow("VALUE"));
         }
         c.close();
         return value;
@@ -585,7 +585,7 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         Cursor c = db.query(questlist_table_name, null, "KEY=?", new String[]{String.valueOf(key)}, null, null, null, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
-            value = c.getString(c.getColumnIndex("TIME"));
+            value = c.getString(c.getColumnIndexOrThrow("TIME"));
         }
         c.close();
         return value;
@@ -710,9 +710,9 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         StringBuilder sb = new StringBuilder();
         Cursor c = db.query(questlist_table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
-            String key = c.getString(c.getColumnIndex("KEY"));
-            String value = c.getString(c.getColumnIndex("VALUE"));
-            String time = c.getString(c.getColumnIndex("TIME"));
+            String key = c.getString(c.getColumnIndexOrThrow("KEY"));
+            String value = c.getString(c.getColumnIndexOrThrow("VALUE"));
+            String time = c.getString(c.getColumnIndexOrThrow("TIME"));
             sb.append(KcaUtils.format("[%s] %s %s\n", key, value, time));
         }
         c.close();
@@ -732,15 +732,15 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
-            String key = c.getString(c.getColumnIndex("KEY"));
-            String value = c.getString(c.getColumnIndex("VALUE"));
+            String key = c.getString(c.getColumnIndexOrThrow("KEY"));
+            String value = c.getString(c.getColumnIndexOrThrow("VALUE"));
             Log.e("KCA", KcaUtils.format("%s -> %s (%d)", key, value.substring(0, Math.min(50, value.length())), value.length()));
         }
         /*
         c = db.query(slotitem_table_name, null, null, null, null, null, null);
         while(c.moveToNext()) {
-            String key = c.getString(c.getColumnIndex("KEY"));
-            String value = c.getString(c.getColumnIndex("VALUE"));
+            String key = c.getString(c.getColumnIndexOrThrow("KEY"));
+            String value = c.getString(c.getColumnIndexOrThrow("VALUE"));
             Log.e("KCA", KcaUtils.format("%s -> %s (%d)", key, value.substring(0, Math.min(50, value.length())), value.length()));
         }
         */
@@ -752,8 +752,8 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         int count = 0;
         Cursor c = db.query(slotitem_table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
-            String key = c.getString(c.getColumnIndex("KEY"));
-            String value = c.getString(c.getColumnIndex("VALUE"));
+            String key = c.getString(c.getColumnIndexOrThrow("KEY"));
+            String value = c.getString(c.getColumnIndexOrThrow("VALUE"));
             Log.e("KCA", KcaUtils.format("%s -> %s (%d)", key, value.substring(0, Math.min(50, value.length())), value.length()));
             count += 1;
         }
@@ -766,9 +766,9 @@ public class KcaDBHelper extends SQLiteOpenHelper {
         int count = 0;
         Cursor c = db.query(questlist_table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
-            String key = c.getString(c.getColumnIndex("KEY"));
-            String value = c.getString(c.getColumnIndex("VALUE"));
-            String time = c.getString(c.getColumnIndex("TIME"));
+            String key = c.getString(c.getColumnIndexOrThrow("KEY"));
+            String value = c.getString(c.getColumnIndexOrThrow("VALUE"));
+            String time = c.getString(c.getColumnIndexOrThrow("TIME"));
             Log.e("KCA", KcaUtils.format("%s\t%s\t%s", key, value.substring(0, Math.min(50, value.length())), time));
             count += 1;
         }

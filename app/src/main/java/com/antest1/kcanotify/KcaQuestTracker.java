@@ -68,7 +68,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
     }
 
     public static int getInitialCondValue(String id) {
-        if (Arrays.binarySearch(quest_cont_quest_id, Integer.valueOf(id)) >= 0) {
+        if (Arrays.binarySearch(quest_cont_quest_id, Integer.parseInt(id)) >= 0) {
             return 1;
         } else {
             return 0;
@@ -123,7 +123,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         Cursor c = db.query(qt_table_name, null, "KEY=?", new String[]{id_str}, null, null, null, null);
         if (c.moveToFirst()) {
             if (questInfo != null) {
-                String questTime = c.getString(c.getColumnIndex("TIME"));
+                String questTime = c.getString(c.getColumnIndexOrThrow("TIME"));
                 if (checkQuestValid(quest_type, id, questTime)) {
                     db.update(qt_table_name, values, "KEY=?", new String[]{id_str});
                 } else {
@@ -297,7 +297,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
             if (questTrackInfo != null) {
                 int cond_count = questTrackInfo.getAsJsonArray("cond").size();
                 for (int i = 0; i < cond_count; i++) {
-                    info.add(c.getInt(c.getColumnIndex("CND".concat(String.valueOf(i)))));
+                    info.add(c.getInt(c.getColumnIndexOrThrow("CND".concat(String.valueOf(i)))));
                 }
             }
         }
@@ -316,7 +316,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 .concat(" WHERE KEY=? AND ACTIVE=1"), new String[]{id});
         if (c.moveToFirst()) {
             ContentValues values = new ContentValues();
-            values.put("CND" + idx, c.getInt(c.getColumnIndex("CND" + idx)) + 1);
+            values.put("CND" + idx, c.getInt(c.getColumnIndexOrThrow("CND" + idx)) + 1);
             db.update(qt_table_name, values, "KEY=? AND ACTIVE=1", new String[]{id});
         }
         c.close();
@@ -339,13 +339,13 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         while (c.moveToNext()) {
             boolean wflag = false;
             boolean fleetflag = true;
-            String key = c.getString(c.getColumnIndex("KEY"));
-            int cond0 = c.getInt(c.getColumnIndex("CND0"));
-            int cond1 = c.getInt(c.getColumnIndex("CND1"));
-            int cond2 = c.getInt(c.getColumnIndex("CND2"));
-            int cond3 = c.getInt(c.getColumnIndex("CND3"));
-            int cond4 = c.getInt(c.getColumnIndex("CND4"));
-            int cond5 = c.getInt(c.getColumnIndex("CND5"));
+            String key = c.getString(c.getColumnIndexOrThrow("KEY"));
+            int cond0 = c.getInt(c.getColumnIndexOrThrow("CND0"));
+            int cond1 = c.getInt(c.getColumnIndexOrThrow("CND1"));
+            int cond2 = c.getInt(c.getColumnIndexOrThrow("CND2"));
+            int cond3 = c.getInt(c.getColumnIndexOrThrow("CND3"));
+            int cond4 = c.getInt(c.getColumnIndexOrThrow("CND4"));
+            int cond5 = c.getInt(c.getColumnIndexOrThrow("CND5"));
             JsonArray targetData;
             switch (key) {
                 case "214": // 아호
@@ -472,13 +472,13 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         while (c.moveToNext()) {
             boolean wflag = false;
             boolean fleetflag = true;
-            String key = c.getString(c.getColumnIndex("KEY"));
-            int cond0 = c.getInt(c.getColumnIndex("CND0"));
-            int cond1 = c.getInt(c.getColumnIndex("CND1"));
-            int cond2 = c.getInt(c.getColumnIndex("CND2"));
-            int cond3 = c.getInt(c.getColumnIndex("CND3"));
-            int cond4 = c.getInt(c.getColumnIndex("CND4"));
-            int cond5 = c.getInt(c.getColumnIndex("CND5"));
+            String key = c.getString(c.getColumnIndexOrThrow("KEY"));
+            int cond0 = c.getInt(c.getColumnIndexOrThrow("CND0"));
+            int cond1 = c.getInt(c.getColumnIndexOrThrow("CND1"));
+            int cond2 = c.getInt(c.getColumnIndexOrThrow("CND2"));
+            int cond3 = c.getInt(c.getColumnIndexOrThrow("CND3"));
+            int cond4 = c.getInt(c.getColumnIndexOrThrow("CND4"));
+            int cond5 = c.getInt(c.getColumnIndexOrThrow("CND5"));
             JsonArray targetData;
             switch (key) {
                 case "210": // 출격10회
@@ -886,14 +886,14 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                 .concat(qt_table_name)
                 .concat(" WHERE ACTIVE=1"), null);
         while (c.moveToNext()) {
-            String key = c.getString(c.getColumnIndex("KEY"));
-            String cond0 = c.getString(c.getColumnIndex("CND0"));
-            String cond1 = c.getString(c.getColumnIndex("CND1"));
-            String cond2 = c.getString(c.getColumnIndex("CND2"));
-            String cond3 = c.getString(c.getColumnIndex("CND3"));
-            String cond4 = c.getString(c.getColumnIndex("CND4"));
-            String cond5 = c.getString(c.getColumnIndex("CND5"));
-            String time = c.getString(c.getColumnIndex("TIME"));
+            String key = c.getString(c.getColumnIndexOrThrow("KEY"));
+            String cond0 = c.getString(c.getColumnIndexOrThrow("CND0"));
+            String cond1 = c.getString(c.getColumnIndexOrThrow("CND1"));
+            String cond2 = c.getString(c.getColumnIndexOrThrow("CND2"));
+            String cond3 = c.getString(c.getColumnIndexOrThrow("CND3"));
+            String cond4 = c.getString(c.getColumnIndexOrThrow("CND4"));
+            String cond5 = c.getString(c.getColumnIndexOrThrow("CND5"));
+            String time = c.getString(c.getColumnIndexOrThrow("TIME"));
             String[] cond_value = {cond0, cond1, cond2, cond3, cond4, cond5};
             JsonObject questTrackInfo = KcaApiData.getQuestTrackInfo(key);
             if (questTrackInfo != null) {
@@ -924,16 +924,16 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         StringBuilder sb = new StringBuilder();
         Cursor c = db.query(qt_table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
-            String key = c.getString(c.getColumnIndex("KEY"));
-            String active = c.getString(c.getColumnIndex("ACTIVE"));
-            int cond0 = c.getInt(c.getColumnIndex("CND0"));
-            int cond1 = c.getInt(c.getColumnIndex("CND1"));
-            int cond2 = c.getInt(c.getColumnIndex("CND2"));
-            int cond3 = c.getInt(c.getColumnIndex("CND3"));
-            int cond4 = c.getInt(c.getColumnIndex("CND4"));
-            int cond5 = c.getInt(c.getColumnIndex("CND5"));
-            int type = c.getInt(c.getColumnIndex("TYPE"));
-            String time = c.getString(c.getColumnIndex("TIME"));
+            String key = c.getString(c.getColumnIndexOrThrow("KEY"));
+            String active = c.getString(c.getColumnIndexOrThrow("ACTIVE"));
+            int cond0 = c.getInt(c.getColumnIndexOrThrow("CND0"));
+            int cond1 = c.getInt(c.getColumnIndexOrThrow("CND1"));
+            int cond2 = c.getInt(c.getColumnIndexOrThrow("CND2"));
+            int cond3 = c.getInt(c.getColumnIndexOrThrow("CND3"));
+            int cond4 = c.getInt(c.getColumnIndexOrThrow("CND4"));
+            int cond5 = c.getInt(c.getColumnIndexOrThrow("CND5"));
+            int type = c.getInt(c.getColumnIndexOrThrow("TYPE"));
+            String time = c.getString(c.getColumnIndexOrThrow("TIME"));
             sb.append(KcaUtils.format("[%s] A:%s C:%02d,%02d,%02d,%02d,%02d,%02d K:%d T:%s\n",
                     key, active, cond0, cond1, cond2, cond3, cond4, cond5, type, time));
         }
@@ -945,8 +945,8 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(qt_table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
-            String key = c.getString(c.getColumnIndex("KEY"));
-            String time = c.getString(c.getColumnIndex("TIME"));
+            String key = c.getString(c.getColumnIndexOrThrow("KEY"));
+            String time = c.getString(c.getColumnIndexOrThrow("TIME"));
             JsonObject questTrackInfo = KcaApiData.getQuestTrackInfo(key);
             if (questTrackInfo != null) {
                 int type = questTrackInfo.get("type").getAsInt();
@@ -963,16 +963,16 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(qt_table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
-            String key = c.getString(c.getColumnIndex("KEY"));
-            boolean active = c.getInt(c.getColumnIndex("ACTIVE")) == 1;
-            int cond0 = c.getInt(c.getColumnIndex("CND0"));
-            int cond1 = c.getInt(c.getColumnIndex("CND1"));
-            int cond2 = c.getInt(c.getColumnIndex("CND2"));
-            int cond3 = c.getInt(c.getColumnIndex("CND3"));
-            int cond4 = c.getInt(c.getColumnIndex("CND4"));
-            int cond5 = c.getInt(c.getColumnIndex("CND5"));
+            String key = c.getString(c.getColumnIndexOrThrow("KEY"));
+            boolean active = c.getInt(c.getColumnIndexOrThrow("ACTIVE")) == 1;
+            int cond0 = c.getInt(c.getColumnIndexOrThrow("CND0"));
+            int cond1 = c.getInt(c.getColumnIndexOrThrow("CND1"));
+            int cond2 = c.getInt(c.getColumnIndexOrThrow("CND2"));
+            int cond3 = c.getInt(c.getColumnIndexOrThrow("CND3"));
+            int cond4 = c.getInt(c.getColumnIndexOrThrow("CND4"));
+            int cond5 = c.getInt(c.getColumnIndexOrThrow("CND5"));
 
-            String time = c.getString(c.getColumnIndex("TIME"));
+            String time = c.getString(c.getColumnIndexOrThrow("TIME"));
             int[] cond_value = {cond0, cond1, cond2, cond3, cond4, cond5};
             JsonObject questItem = new JsonObject();
             questItem.addProperty("id", key);
@@ -1001,10 +1001,10 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
         int count = 0;
         Cursor c = db.query(qt_table_name, null, null, null, null, null, null);
         while (c.moveToNext()) {
-            String key = c.getString(c.getColumnIndex("KEY"));
-            String active = c.getString(c.getColumnIndex("ACTIVE"));
-            String cond0 = c.getString(c.getColumnIndex("CND0"));
-            String time = c.getString(c.getColumnIndex("TIME"));
+            String key = c.getString(c.getColumnIndexOrThrow("KEY"));
+            String active = c.getString(c.getColumnIndexOrThrow("ACTIVE"));
+            String cond0 = c.getString(c.getColumnIndexOrThrow("CND0"));
+            String time = c.getString(c.getColumnIndexOrThrow("TIME"));
             Log.e("KCA-QT", KcaUtils.format("%s -> %s %s %s", key, active, cond0, time));
             count += 1;
         }
