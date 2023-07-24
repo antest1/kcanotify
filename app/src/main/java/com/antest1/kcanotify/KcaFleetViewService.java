@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
-import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
+import static com.antest1.kcanotify.KcaApiData.getSlotItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
@@ -980,7 +980,7 @@ public class KcaFleetViewService extends Service {
                 }
 
                 String kcItemId = kcItemData.get("id").getAsString();
-                String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
+                String kcItemName = getSlotItemTranslation(kcItemData.get("name").getAsString());
 
                 int fit_state = -1;
                 if (item_fit.has(kcItemId) && ship_fit.has(ship_id)) {
@@ -1019,7 +1019,7 @@ public class KcaFleetViewService extends Service {
                 slot_count += 1;
                 JsonObject kcItemData = getUserItemStatusById(slot_ex, "level", "type,name");
                 if (kcItemData != null) {
-                    String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
+                    String kcItemName = getSlotItemTranslation(kcItemData.get("name").getAsString());
                     int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
                     int lv = kcItemData.get("level").getAsInt();
                     int typeres = 0;

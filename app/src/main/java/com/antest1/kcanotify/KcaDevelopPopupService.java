@@ -185,7 +185,7 @@ public class KcaDevelopPopupService extends Service {
             ed_name.setText(getStringWithLocale(R.string.develop_failed_text));
             typeres = R.mipmap.item_99;
         } else {
-            ed_name.setText(KcaApiData.getItemTranslation(item_name));
+            ed_name.setText(KcaApiData.getSlotItemTranslation(item_name));
             try {
                 typeres = getId(KcaUtils.format("item_%d", data.get("type").getAsInt()), R.mipmap.class);
             } catch (Exception e) {

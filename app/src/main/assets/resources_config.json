@@ -2,9 +2,9 @@
     "common": ["icon_info.json", "akashi_data.json", "akashi_reqitems.json", "akashi_day.json", "edges.json", "map_sub.json", "expedition.json", "quest_track.json", "ships_init_equip_count.json", "world_list.json", "ships_filter_data.json"],
     "langpacks": {
         "jp": ["quests-jp.json", "stype-jp.json"],
-        "ko": ["items-ko.json", "quests-ko.json", "ships-ko.json", "stype-ko.json"],
-        "en": ["items-en.json", "quests-en.json", "ships-en.json", "stype-en.json"],
-        "scn": ["items-scn.json", "quests-scn.json", "ships-scn.json", "stype-scn.json"],
-        "tcn": ["items-tcn.json", "quests-tcn.json", "ships-tcn.json", "stype-tcn.json"]
+        "ko": ["items-ko.json", "quests-ko.json", "ships-ko.json", "stype-ko.json", "useitems-ko.json"],
+        "en": ["items-en.json", "quests-en.json", "ships-en.json", "stype-en.json", "useitems-en.json"],
+        "scn": ["items-scn.json", "quests-scn.json", "ships-scn.json", "stype-scn.json", "useitems-scn.json"],
+        "tcn": ["items-tcn.json", "quests-tcn.json", "ships-tcn.json", "stype-tcn.json", "useitems-tcn.json"]
     }
 }

@@ -31,7 +31,7 @@ import com.google.gson.JsonObject;
 
 import java.util.Calendar;
 
-import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
+import static com.antest1.kcanotify.KcaApiData.getSlotItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_LABSIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -363,7 +363,7 @@ public class KcaLandAirBasePopupService extends Service {
                             .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLabsPlaneInChange));
                 }
 
-                String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
+                String kcItemName = getSlotItemTranslation(kcItemData.get("name").getAsString());
                 int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
                 int typeres = 0;
                 try {

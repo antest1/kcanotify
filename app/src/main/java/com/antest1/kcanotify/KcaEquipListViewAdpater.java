@@ -3,7 +3,6 @@ package com.antest1.kcanotify;
 import android.content.Context;
 import androidx.core.content.ContextCompat;
 
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,7 +105,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
         int item_type_2 = item.getAsJsonArray("api_type").get(2).getAsInt();
         int item_type_3 = item.getAsJsonArray("api_type").get(3).getAsInt();
         boolean is_item_aircraft = KcaApiData.isItemAircraft(item_type_2);
-        String item_name = KcaApiData.getItemTranslation(item.get("api_name").getAsString());
+        String item_name = KcaApiData.getSlotItemTranslation(item.get("api_name").getAsString());
         int item_count = getTotalCount(countInfo, item_id);
         final Integer target = item_id;
 
@@ -295,7 +294,7 @@ public class KcaEquipListViewAdpater extends BaseAdapter {
             listViewItemList = new Gson().fromJson(total_equip_list, listType);
             listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, input -> {
                 int key = input.get("api_id").getAsInt();
-                String item_name = KcaApiData.getItemTranslation(input.get("api_name").getAsString());
+                String item_name = KcaApiData.getSlotItemTranslation(input.get("api_name").getAsString());
                 if (!item_name.contains(searchQuery)) return false;
                 if (filtcond.equals("all")) {
                     return checkCountExist(countInfo, key);

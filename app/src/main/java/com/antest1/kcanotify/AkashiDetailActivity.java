@@ -1,7 +1,5 @@
 package com.antest1.kcanotify;
 
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -26,7 +24,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import static com.antest1.kcanotify.KcaApiData.findRemodelLv;
-import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
+import static com.antest1.kcanotify.KcaApiData.getSlotItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
@@ -104,7 +102,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
             String kcItemName = "";
             if (itemid != 0) {
                 JsonObject kcItemData = getKcItemStatusById(itemid, "type,name");
-                kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
+                kcItemName = getSlotItemTranslation(kcItemData.get("name").getAsString());
                 itemNameTextView.setText(kcItemName);
             } else {
                 Toast.makeText(this, "??", Toast.LENGTH_LONG).show();
@@ -207,7 +205,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
                     if (upgrade.isJsonArray()) {
                         int upgradeItemId = upgrade.getAsJsonArray().get(0).getAsInt();
                         int upgradeItemStar = upgrade.getAsJsonArray().get(1).getAsInt();
-                        String upgradeItemName = getItemTranslation(getKcItemStatusById(upgradeItemId, "name").get("name").getAsString());
+                        String upgradeItemName = getSlotItemTranslation(getKcItemStatusById(upgradeItemId, "name").get("name").getAsString());
                         String upgradeStarString = "";
                         if (upgradeItemStar > 0) {
                             upgradeStarString = upgradeStarString.concat(" ").concat("★").concat(String.valueOf(upgradeItemStar));
@@ -316,7 +314,7 @@ public class AkashiDetailActivity extends AppCompatActivity {
         if (!value_list[4].equals("-")) {
             int count = 0;
             if (item_count.has(value_list[4])) count = item_count.get(value_list[4]).getAsInt();
-            String equipName = getItemTranslation(getKcItemStatusById(Integer.parseInt(value_list[4]), "name")
+            String equipName = getSlotItemTranslation(getKcItemStatusById(Integer.parseInt(value_list[4]), "name")
                     .get("name").getAsString());
             value_list[4] = equipName;
             value_list[6] = String.valueOf(count);

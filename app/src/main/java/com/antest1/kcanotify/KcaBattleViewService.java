@@ -45,14 +45,14 @@ import static com.antest1.kcanotify.KcaApiData.getCurrentNodeSubExist;
 import static com.antest1.kcanotify.KcaApiData.getEngagementString;
 import static com.antest1.kcanotify.KcaApiData.getFormationString;
 import static com.antest1.kcanotify.KcaApiData.getItemString;
-import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
+import static com.antest1.kcanotify.KcaApiData.getSlotItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getNodeColor;
 import static com.antest1.kcanotify.KcaApiData.getNodeFullInfo;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.getUseitemCount;
-import static com.antest1.kcanotify.KcaApiData.getUseitemTranslation;
+import static com.antest1.kcanotify.KcaApiData.getUseItemNameById;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
 import static com.antest1.kcanotify.KcaConstants.*;
@@ -1127,7 +1127,7 @@ public class KcaBattleViewService extends Service {
                 if (api_data.has("api_get_useitem")) {
                     int useitem_id = api_data.getAsJsonObject("api_get_useitem").get("api_useitem_id").getAsInt();
                     ((TextView) battleview.findViewById(R.id.battle_getitem))
-                            .setText(KcaUtils.format("%s (%d)", getUseitemTranslation(useitem_id), getUseitemCount(useitem_id)));
+                            .setText(KcaUtils.format("%s (%d)", getUseItemNameById(useitem_id), getUseitemCount(useitem_id)));
                 }
 
                 if (!is_practice) {
@@ -1318,7 +1318,7 @@ public class KcaBattleViewService extends Service {
                 }
 
                 if (kcItemData != null) {
-                    String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
+                    String kcItemName = getSlotItemTranslation(kcItemData.get("name").getAsString());
                     int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
                     int typeres = KcaApiData.getTypeRes(type);
                     ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_name", i + 1), R.id.class))).setText(kcItemName);
@@ -1339,7 +1339,7 @@ public class KcaBattleViewService extends Service {
             slot_count += 1;
             JsonObject kcItemData = getUserItemStatusById(slot_ex, "level", "type,name");
             if (kcItemData != null) {
-                String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
+                String kcItemName = getSlotItemTranslation(kcItemData.get("name").getAsString());
                 int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
                 int lv = kcItemData.get("level").getAsInt();
                 int typeres = KcaApiData.getTypeRes(type);
@@ -1553,7 +1553,7 @@ public class KcaBattleViewService extends Service {
                 if (friend_contact != -1) {
                     JsonObject f_data = getKcItemStatusById(friend_contact, "name,type,houm");
                     if (f_data != null) {
-                        friendContactText.setText(getItemTranslation(f_data.get("name").getAsString()));
+                        friendContactText.setText(getSlotItemTranslation(f_data.get("name").getAsString()));
                         int type = f_data.getAsJsonArray("type").get(3).getAsInt();
                         int typeres = KcaApiData.getTypeRes(type);
                         friendContactIcon.setImageResource(typeres);
@@ -1578,7 +1578,7 @@ public class KcaBattleViewService extends Service {
                 if (enemy_contact != -1) {
                     JsonObject e_data = getKcItemStatusById(enemy_contact, "name,type,houm");
                     if (e_data != null) {
-                        enemyContactText.setText(getItemTranslation(e_data.get("name").getAsString()));
+                        enemyContactText.setText(getSlotItemTranslation(e_data.get("name").getAsString()));
                         int type = e_data.getAsJsonArray("type").get(3).getAsInt();
                         int typeres = KcaApiData.getTypeRes(type);
                         enemyContactIcon.setImageResource(typeres);

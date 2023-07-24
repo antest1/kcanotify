@@ -31,7 +31,6 @@ import java.util.Set;
 
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
-import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
@@ -54,7 +53,9 @@ public class KcaApiData {
     public static int[] eventMapDifficulty = new int[10];
 
     public static JsonObject kcShipTranslationData = new JsonObject();
-    public static JsonObject kcItemTranslationData = new JsonObject();
+    public static JsonObject kcSlotItemTranslationData = new JsonObject();
+    public static JsonObject kcUseItemTranslationData = new JsonObject();
+
     public static JsonObject kcQuestInfoData = new JsonObject();
     public static JsonArray kcStypeData = new JsonArray();
 
@@ -446,23 +447,34 @@ public class KcaApiData {
         return name.concat(name_suffix);
     }
 
-    public static String getItemTranslation(String jp_name) {
+    public static String getSlotItemTranslation(String jp_name) {
         String name = jp_name;
         if (currentLocaleCode.equals("jp")) {
             return jp_name;
-        } else if (kcItemTranslationData.has(name)) {
-            name = kcItemTranslationData.get(name).getAsString();
+        } else if (kcSlotItemTranslationData.has(name)) {
+            name = kcSlotItemTranslationData.get(name).getAsString();
         }
         return name;
     }
 
-    public static String getUseitemTranslation(int id) {
-        if (kcUseitemData.containsKey(id)) {
-            JsonObject data = kcUseitemData.get(id).getAsJsonObject();
-            return getItemTranslation(data.get("api_name").getAsString());
-        } else {
-            return "";
+    public static String getUseItemTranslation(String jp_name) {
+        String name = jp_name;
+        if (currentLocaleCode.equals("jp")) {
+            return jp_name;
+        } else if (kcUseItemTranslationData.has(name)) {
+            name = kcUseItemTranslationData.get(name).getAsString();
         }
+        return name;
+    }
+
+    public static String getUseItemNameById(int id) {
+        if (kcUseitemData.containsKey(id)) {
+            JsonObject data = kcUseitemData.get(id);
+            if (data != null) {
+                return getUseItemTranslation(data.get("api_name").getAsString());
+            }
+        }
+        return "";
     }
 
     public static int getShipTypeSize() {
@@ -584,13 +596,15 @@ public class KcaApiData {
 
     public static int loadItemTranslationDataFromStorage(Context context) {
         String locale = getResourceLocaleCode();
-        JsonObject data = getJsonObjectFromStorage(context, KcaUtils.format("items-%s.json", locale));
-        if (data != null) {
-            kcItemTranslationData = data.getAsJsonObject();
-            return 1;
-        } else {
-            return -1;
-        }
+        JsonObject slotitem_data = getJsonObjectFromStorage(context, KcaUtils.format("items-%s.json", locale));
+        if (slotitem_data != null) kcSlotItemTranslationData = slotitem_data.getAsJsonObject();
+        else return -1;
+
+        JsonObject useitem_data = getJsonObjectFromStorage(context, KcaUtils.format("useitems-%s.json", locale));
+        if (useitem_data != null) kcUseItemTranslationData = useitem_data.getAsJsonObject();
+        else return -1;
+
+        return 1;
     }
 
     public static int loadStypeTranslationDataFromStorage(Context context) {
@@ -615,36 +629,38 @@ public class KcaApiData {
         }
     }
 
-    public static void loadTranslationData(Context context) {
-        loadTranslationData(context, false);
+    public static int loadTranslationData(Context context) {
+        return loadTranslationData(context, false);
     }
 
-    public static void loadTranslationData(Context context, boolean force) {
+    public static int loadTranslationData(Context context, boolean force) {
         boolean isDataLoaded = (kcShipTranslationData.entrySet().size() != 0) &&
-                (kcItemTranslationData.entrySet().size() != 0) &&
+                (kcSlotItemTranslationData.entrySet().size() != 0) &&
                 (kcQuestInfoData.entrySet().size() != 0);
+        int error_code = 0;
 
         if (force || !isDataLoaded || !currentLocaleCode.equals(getResourceLocaleCode())) {
             currentLocaleCode = getResourceLocaleCode();
             if (!currentLocaleCode.equals("jp")) {
                 int loadShipTranslationDataResult = loadShipTranslationDataFromStorage(context);
                 if (loadShipTranslationDataResult != 1) {
-                    Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+                    error_code += 1;
                 }
                 int loadItemTranslationDataResult = loadItemTranslationDataFromStorage(context);
                 if (loadItemTranslationDataResult != 1) {
-                    Toast.makeText(context, "Error loading Translation Info", Toast.LENGTH_LONG).show();
+                    error_code += 2;
                 }
             }
             int loadStypeTranslationDataResult = loadStypeTranslationDataFromStorage(context);
             if (loadStypeTranslationDataResult != 1) {
-                Toast.makeText(context, "Error loading Stype Info", Toast.LENGTH_LONG).show();
+                error_code += 4;
             }
             int loadQuestInfoTranslationDataResult = loadQuestInfoDataFromStorage(context);
             if (loadQuestInfoTranslationDataResult != 1) {
-                Toast.makeText(context, "Error loading Quest Info", Toast.LENGTH_LONG).show();
+                error_code += 8;
             }
         }
+        return error_code;
     }
 
     public static int loadSimpleExpeditionInfoFromStorage(Context context) {

@@ -152,7 +152,10 @@ public class InitStartActivity extends Activity {
 
         new Thread(() -> {
             runOnUiThread(() -> appmessage.setText("Loading Translation Data..."));
-            loadTranslationData(getApplicationContext());
+            int tl_result = loadTranslationData(getApplicationContext());
+            if (tl_result > 0) {
+                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "error loading traslation data: " + tl_result, Toast.LENGTH_LONG).show());
+            }
 
             runOnUiThread(() -> appmessage.setText("Loading KanColle Game Data..."));
             int setDefaultGameDataResult = KcaUtils.setDefaultGameData(getApplicationContext(), dbHelper);

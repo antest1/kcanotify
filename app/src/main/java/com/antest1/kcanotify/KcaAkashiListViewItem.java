@@ -1,7 +1,5 @@
 package com.antest1.kcanotify;
 
-import android.widget.Toast;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -9,7 +7,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.antest1.kcanotify.KcaApiData.getItemTranslation;
+import static com.antest1.kcanotify.KcaApiData.getSlotItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
@@ -53,7 +51,7 @@ public class KcaAkashiListViewItem {
     public void setEquipDataById(int id) {
         JsonObject kcItemData = getKcItemStatusById(id, "type,name");
 
-        String kcItemName = getItemTranslation(kcItemData.get("name").getAsString());
+        String kcItemName = getSlotItemTranslation(kcItemData.get("name").getAsString());
         int type = kcItemData.getAsJsonArray("type").get(3).getAsInt();
         int typeres = 0;
         try {

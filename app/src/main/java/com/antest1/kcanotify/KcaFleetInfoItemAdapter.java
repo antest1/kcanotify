@@ -13,7 +13,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
-import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.kcTaisenOverPlaneItemData;
 import static com.antest1.kcanotify.KcaUtils.getId;
 
@@ -136,7 +135,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
                     }
                     int item_type = itemData.get("type").getAsJsonArray().get(3).getAsInt();
                     itemData.addProperty("icon", item_type);
-                    itemData.addProperty("name", KcaApiData.getItemTranslation(itemData.get("name").getAsString()));
+                    itemData.addProperty("name", KcaApiData.getSlotItemTranslation(itemData.get("name").getAsString()));
                     ship_item.add(itemData);
                 }
             } else {
@@ -146,7 +145,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
         if (ship_slot_ex > 0) {
             JsonObject ex_item_data = getUserItemStatusById(ship_slot_ex, "level,alv", "name,type");
             if (ex_item_data != null) {
-                ship_ex_item_name = KcaApiData.getItemTranslation(ex_item_data.get("name").getAsString());
+                ship_ex_item_name = KcaApiData.getSlotItemTranslation(ex_item_data.get("name").getAsString());
                 ship_ex_item_icon = ex_item_data.get("type").getAsJsonArray().get(3).getAsInt();
                 ship_ex_item_lv = ex_item_data.get("level").getAsInt();
             }
@@ -202,7 +201,7 @@ public class KcaFleetInfoItemAdapter extends BaseAdapter {
             } else if (i >= ship_slot_num) {
                 holder.ship_equip_slot[i].setVisibility(i == 4 ? View.GONE : View.INVISIBLE);
             } else {
-                holder.ship_equip_slot[i].setText(KcaApiData.getItemTranslation(ship_onslot.get(i).getAsString()));
+                holder.ship_equip_slot[i].setText(KcaApiData.getSlotItemTranslation(ship_onslot.get(i).getAsString()));
                 holder.ship_equip_slot[i].setVisibility(View.VISIBLE);
             }
         }
