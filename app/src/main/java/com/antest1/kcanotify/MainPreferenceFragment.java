@@ -136,8 +136,12 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             }
             preference.setOnPreferenceChangeListener(this);
         }
-        int sniffer_mode = Integer.parseInt(sharedPref.getString(PREF_SNIFFER_MODE, "0"));
-        setActiveSnifferSettingEnabled(sniffer_mode == SNIFFER_ACTIVE);
+
+        String kca_package = sharedPref.getString(PREF_KC_PACKAGE, KC_PACKAGE_NAME);
+        setSnifferModeSettingEnabled(GOTO_PACKAGE_NAME.equals(kca_package)); // disable for KC_PACKAGE_NAME
+
+        int sniffer_mode = Integer.parseInt(sharedPref.getString(PREF_SNIFFER_MODE, String.valueOf(SNIFFER_ACTIVE)));
+        setActiveSnifferSettingEnabled(KC_PACKAGE_NAME.equals(kca_package) || sniffer_mode == SNIFFER_ACTIVE);
     }
 
     @Override
@@ -367,26 +371,30 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         if (!checkActivityValid()) return false;
         String key = preference.getKey();
         Log.e("KCA", "onPreferenceChange " + key);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         if (PREF_KCA_LANGUAGE.equals(key)) {
-            if (!KcaService.getServiceStatus()) {
-                /*
-                String pref = (String) newValue;
-                if (pref.startsWith("default")) {
-                    LocaleUtils.setLocale(Locale.getDefault());
-                } else {
-                    String[] locale = ((String) newValue).split("-");
-                    LocaleUtils.setLocale(new Locale(locale[0], locale[1]));
-                }*/
-            } else {
+            if (KcaService.getServiceStatus()) {
                 showToast(getActivity(), "Cannot change while service is running.", Toast.LENGTH_SHORT);
                 return false;
             }
         }
 
+        if (PREF_KC_PACKAGE.equals(key)) {
+            String val = (String) newValue;
+            ListPreference sm_pref = (ListPreference) findPreference(PREF_SNIFFER_MODE);
+            if (KC_PACKAGE_NAME.equals(val)) {
+                setActiveSnifferSettingEnabled(true);
+                setSnifferModeSettingEnabled(false);
+            } else if (GOTO_PACKAGE_NAME.equals(val)) {
+                int sniffer_mode = Integer.parseInt(prefs.getString(PREF_SNIFFER_MODE, String.valueOf(SNIFFER_ACTIVE)));
+                setActiveSnifferSettingEnabled(sniffer_mode == SNIFFER_ACTIVE);
+                setSnifferModeSettingEnabled(true);
+            }
+        }
+
         if (PREF_SNIFFER_MODE.equals(key)) {
             if (!KcaService.getServiceStatus()) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
                 String val = (String) newValue;
                 if (Integer.parseInt(val) == SNIFFER_PASSIVE) {
                     if (prefs.getBoolean(PREF_VPN_ENABLED, false)) {
@@ -478,6 +486,13 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             e.printStackTrace();
             return "???";
         }
+    }
+
+    private void setSnifferModeSettingEnabled(boolean enabled) {
+        ListPreference pref = findPreference(PREF_SNIFFER_MODE);
+        if (enabled) pref.setSummary(pref.getEntry());
+        else pref.setSummary(getStringWithLocale(R.string.setting_menu_kand_desc_sniffer_type_na));
+        pref.setEnabled(enabled);
     }
 
     private void setActiveSnifferSettingEnabled(boolean enabled) {

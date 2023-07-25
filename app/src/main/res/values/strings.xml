@@ -220,6 +220,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <!--entry--><string name="hp_format_5" translatable="false">HP 30/37 3:24</string>
     <string name="setting_menu_kand_title_kancolle_app">Select KanColle Application</string>
     <string name="setting_menu_kand_title_sniffer_type">Sniffer Mode</string>
+    <string name="setting_menu_kand_desc_sniffer_type_na">Not Applicable</string>
     <string name="setting_menu_kand_title_exp_realtime_show">Track Expedition Time</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">Display remaining/left time for Expeditions on the navbar</string>
     <string name="setting_menu_kand_title_exp_type">Expedition Time View Type</string>

@@ -173,6 +173,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_saku_cal">選擇索敵公式</string>
     <string name="setting_menu_kand_title_kancolle_app">選擇要運行的應用程序</string>
     <string name="setting_menu_kand_title_sniffer_type">Sniffer模式</string>
+    <string name="setting_menu_kand_desc_sniffer_type_na">不適用</string>
     <string name="setting_menu_kand_title_exp_realtime_show">展示遠征時間</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">於裝置的通知欄顯示遠征時間</string>
     <string name="setting_menu_kand_title_exp_type">遠征時間顯示類型</string>

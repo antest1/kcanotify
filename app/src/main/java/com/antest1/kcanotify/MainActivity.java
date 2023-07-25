@@ -14,7 +14,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
-import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -25,6 +24,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -42,7 +42,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -58,10 +57,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-
-import static com.antest1.kcanotify.KcaAlarmService.DELETE_ACTION;
 import static com.antest1.kcanotify.KcaConstants.*;
 import static com.antest1.kcanotify.KcaUseStatConstant.END_APP;
 import static com.antest1.kcanotify.KcaUseStatConstant.END_SERVICE;
@@ -73,7 +68,6 @@ import static com.antest1.kcanotify.KcaUseStatConstant.START_SERVICE;
 import static com.antest1.kcanotify.KcaUseStatConstant.START_SNIFFER;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
-import static com.antest1.kcanotify.KcaUtils.getNotificationId;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
@@ -96,9 +90,6 @@ public class MainActivity extends AppCompatActivity {
     KcaDBHelper dbHelper;
     Toolbar toolbar;
     KcaDownloader downloader;
-    private boolean running = false;
-    private AlertDialog dialogVpn = null;
-    Context ctx;
     ToggleButton vpnbtn, svcbtn;
     Button kcbtn;
     ImageButton kctoolbtn;
@@ -107,10 +98,8 @@ public class MainActivity extends AppCompatActivity {
     TextView textDescription;
     TextView textWarn, textMainUpdate, textSpecial, textMaintenance;
     TextView textSpecial2;
-    Gson gson = new Gson();
 
     SharedPreferences prefs;
-    private WindowManager windowManager;
     private BackPressCloseHandler backPressCloseHandler;
     public static void setHandler(Handler h) {
         sHandler = h;
@@ -135,46 +124,41 @@ public class MainActivity extends AppCompatActivity {
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
-        int sniffer_mode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
 
         vpnbtn = findViewById(R.id.vpnbtn);
         vpnbtn.setTextOff(getStringWithLocale(R.string.ma_vpn_toggleoff));
         vpnbtn.setTextOn(getStringWithLocale(R.string.ma_vpn_toggleon));
         vpnbtn.setText("PASSIVE");
-        vpnbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    JsonObject statProperties = new JsonObject();
-                    try {
-                        final Intent prepare = VpnService.prepare(MainActivity.this);
-                        if (prepare == null) {
-                            //Log.i(TAG, "Prepare done");
-                            onActivityResult(REQUEST_VPN, RESULT_OK, null);
-                        } else {
-                            startActivityForResult(prepare, REQUEST_VPN);
-                        }
-                        statProperties.addProperty("is_success", true);
-                    } catch (Throwable ex) {
-                        // Prepare failed
-                        statProperties.addProperty("is_success", false);
-                        Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+        vpnbtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                JsonObject statProperties = new JsonObject();
+                try {
+                    final Intent prepare = VpnService.prepare(MainActivity.this);
+                    if (prepare == null) {
+                        //Log.i(TAG, "Prepare done");
+                        startActivityResultCallback(RESULT_OK);
+                    } else {
+                        registerForActivityResult(
+                                new ActivityResultContracts.StartActivityForResult(),
+                                result -> startActivityResultCallback(result.getResultCode())
+                        ).launch(prepare);
                     }
-                    sendUserAnalytics(getApplicationContext(), START_SNIFFER, statProperties);
-                } else {
-                    KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
-                    prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
-                    sendUserAnalytics(getApplicationContext(), END_SNIFFER, null);
+                    statProperties.addProperty("is_success", true);
+                } catch (Throwable ex) {
+                    // Prepare failed
+                    statProperties.addProperty("is_success", false);
+                    Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
                 }
+                sendUserAnalytics(getApplicationContext(), START_SNIFFER, statProperties);
+            } else {
+                KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
+                prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                sendUserAnalytics(getApplicationContext(), END_SNIFFER, null);
             }
         });
 
-        if (sniffer_mode == SNIFFER_ACTIVE) {
-            vpnbtn.setEnabled(true);
-
-        } else {
-            vpnbtn.setEnabled(false);
-        }
+        int sniffer_mode = getSnifferMode();
+        vpnbtn.setEnabled(sniffer_mode == SNIFFER_ACTIVE);
 
         Intent serviceIntent = new Intent(MainActivity.this, KcaService.class);
 
@@ -188,8 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     serviceIntent.setAction(KcaService.KCASERVICE_START);
                     if (Build.VERSION.SDK_INT >= 26) {
                         startForegroundService(serviceIntent);
-                    }
-                    else {
+                    } else {
                         startService(serviceIntent);
                     }
                 }
@@ -302,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
                 String mt_end = maintenance_data.get(1).getAsString();
                 if (!mt_start.equals("")) {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z", Locale.US);
-                    Date start_date =  df.parse(mt_start);
+                    Date start_date = df.parse(mt_start);
                     Date end_date = df.parse(mt_end);
 
                     SimpleDateFormat out_df = df;
@@ -438,10 +421,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public final int getSnifferMode() {
+        if (KC_PACKAGE_NAME.equals(getStringPreferences(getApplicationContext(), PREF_KC_PACKAGE))) {
+            return SNIFFER_ACTIVE;
+        } else {
+            return Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
+        }
+    }
+
+    public void startActivityResultCallback(int resultCode) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putBoolean(PREF_VPN_ENABLED, resultCode == RESULT_OK).apply();
+        if (resultCode == RESULT_OK) {
+            KcaVpnService.start("prepared", this);
+        } else if (resultCode == RESULT_CANCELED) {
+            // Canceled
+        }
+    }
+
     public void setVpnBtn() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        int sniffer_mode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
-        if (sniffer_mode == SNIFFER_ACTIVE) {
+        if (getSnifferMode() == SNIFFER_ACTIVE) {
             vpnbtn.setEnabled(true);
             vpnbtn.setChecked(prefs.getBoolean(PREF_VPN_ENABLED, false));
         } else {
@@ -481,22 +481,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Log.i(TAG, "onActivityResult request=" + requestCode + " result=" + resultCode + " ok=" + (resultCode == RESULT_OK));
-        if (requestCode == REQUEST_VPN) {
-            prefs.edit().putBoolean(PREF_VPN_ENABLED, resultCode == RESULT_OK).apply();
-            if (resultCode == RESULT_OK) {
-                KcaVpnService.start("prepared", this);
-            } else if (resultCode == RESULT_CANCELED) {
-                // Canceled
-            }
-        }
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST_EXTERNAL_PERMISSION: {
                 warnType[REQUEST_EXTERNAL_PERMISSION] = !(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
@@ -509,44 +495,4 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         backPressCloseHandler.onBackPressed();
     }
-
-    private void checkRecentVersion() {
-        String currentVersion = BuildConfig.VERSION_NAME;
-        String currentDataVersion = getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION);
-        final Call<String> rv_data = downloader.getRecentVersion();
-        rv_data.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                JsonObject response_data = new JsonObject();
-                try {
-                    if (response.body() != null) {
-                        response_data = JsonParser.parseString(response.body()).getAsJsonObject();
-                    }
-                } catch (Exception e) {
-                    dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "version_check", "", "", getStringFromException(e));
-                }
-
-                Log.e("KCA", response_data.toString());
-                int nid = getNotificationId(NOTI_UPDATE, 0);
-                Intent deleteIntent = new Intent(MainActivity.this, KcaAlarmService.class)
-                        .setAction(DELETE_ACTION.concat(String.valueOf(nid)));
-                startService(deleteIntent);
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                if (KcaUtils.checkOnline(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(),
-                            getStringWithLocale(R.string.sa_checkupdate_servererror),
-                            Toast.LENGTH_LONG).show();
-                    dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "version_check", "", "", t.getMessage());
-                }
-                int nid = getNotificationId(NOTI_UPDATE, 0);
-                Intent deleteIntent = new Intent(MainActivity.this, KcaAlarmService.class)
-                        .setAction(DELETE_ACTION.concat(String.valueOf(nid)));
-                startService(deleteIntent);
-            }
-        });
-    }
 }
-

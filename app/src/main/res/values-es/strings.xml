@@ -165,6 +165,7 @@
     <string name="setting_menu_kand_title_saku_cal">Seleccionar fórmula de LoS</string>
     <string name="setting_menu_kand_title_kancolle_app">Seleccione la aplicación KanColle</string>
     <string name="setting_menu_kand_title_sniffer_type">Modo Sniffer</string>
+    <string name="setting_menu_kand_desc_sniffer_type_na">N/A</string>
     <string name="setting_menu_kand_title_exp_realtime_show">Rastrear Expedición</string>
     <string name="setting_menu_kand_desc_exp_realtime_show">Mostrar tiempo restante para Expediciones en la barra de navegación</string>
     <string name="setting_menu_kand_title_exp_type">Estilo de Tiempo de Expedición</string>
