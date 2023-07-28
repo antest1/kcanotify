@@ -113,6 +113,9 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         Activity activity = getActivity();
         if (activity instanceof Callback) mCallback = (Callback) activity;
 
+        sharedPref = getPreferenceManager().getSharedPreferences();
+        sharedPref.registerOnSharedPreferenceChangeListener(this);
+
         Map<String, ?> allEntries = sharedPref.getAll();
         for (String key : allEntries.keySet()) {
             Preference preference = findPreference(key);
@@ -150,8 +153,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         getPreferenceManager().setSharedPreferencesName("pref");
         setPreferencesFromResource(R.xml.pref_settings, rootKey);
-        sharedPref = getPreferenceManager().getSharedPreferences();
-        sharedPref.registerOnSharedPreferenceChangeListener(this);
+
     }
 
     @Override
@@ -359,7 +361,13 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         Preference preference = findPreference(key);
         if (preference instanceof ListPreference) {
             ListPreference lp = (ListPreference) preference;
-            preference.setSummary(lp.getEntry());
+            if (PREF_KCA_LANGUAGE.equals(key)) {
+                preference.setSummary(KcaUtils.format("%s - %s",
+                        getStringWithLocale(R.string.setting_menu_kand_desc_language),
+                        lp.getEntry()));
+            } else {
+                preference.setSummary(lp.getEntry());
+            }
         }
 
         if (preference instanceof EditTextPreference) {
@@ -375,16 +383,8 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         Log.e("KCA", "onPreferenceChange " + key);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        if (PREF_KCA_LANGUAGE.equals(key)) {
-            if (KcaService.getServiceStatus()) {
-                showToast(getActivity(), "Cannot change while service is running.", Toast.LENGTH_SHORT);
-                return false;
-            }
-        }
-
         if (PREF_KC_PACKAGE.equals(key)) {
             String val = (String) newValue;
-            ListPreference sm_pref = (ListPreference) findPreference(PREF_SNIFFER_MODE);
             if (KC_PACKAGE_NAME.equals(val)) {
                 setActiveSnifferSettingEnabled(true);
                 setSnifferModeSettingEnabled(false);
@@ -396,20 +396,15 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         }
 
         if (PREF_SNIFFER_MODE.equals(key)) {
-            if (!KcaService.getServiceStatus()) {
-                String val = (String) newValue;
-                if (Integer.parseInt(val) == SNIFFER_PASSIVE) {
-                    if (prefs.getBoolean(PREF_VPN_ENABLED, false)) {
-                        KcaVpnService.stop(VPN_STOP_REASON, getActivity());
-                        prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
-                    }
-                    setActiveSnifferSettingEnabled(false);
-                } else if (Integer.parseInt(val) == SNIFFER_ACTIVE) {
-                    setActiveSnifferSettingEnabled(true);
+            String val = (String) newValue;
+            if (Integer.parseInt(val) == SNIFFER_PASSIVE) {
+                if (prefs.getBoolean(PREF_VPN_ENABLED, false)) {
+                    KcaVpnService.stop(VPN_STOP_REASON, getActivity());
+                    prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
                 }
-            } else {
-                showToast(getActivity(), "Cannot change while service is running.", Toast.LENGTH_SHORT);
-                return false;
+                setActiveSnifferSettingEnabled(false);
+            } else if (Integer.parseInt(val) == SNIFFER_ACTIVE) {
+                setActiveSnifferSettingEnabled(true);
             }
         }
 
