@@ -128,6 +128,18 @@
             android:defaultValue=""
             app:iconSpaceReserved="false"
             android:key="fleetview_menu_order"
+            android:summary="@string/setting_menu_kand_desc_fleetview_item_select"
+            android:title="@string/setting_menu_kand_title_fleetview_item_select">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.antest1.kcanotify"
+                android:targetClass="com.antest1.kcanotify.KcaFleetViewItemSelectActivity" />
+        </Preference>
+
+        <Preference
+            android:defaultValue=""
+            app:iconSpaceReserved="false"
+            android:key="fleetview_menu_order"
             android:summary="@string/setting_menu_kand_desc_fleetview_button_order"
             android:title="@string/setting_menu_kand_title_fleetview_button_order">
             <intent

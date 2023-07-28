@@ -81,6 +81,11 @@
 
     <color name="colorNightTargetFleet">#64b5f6</color>
     <color name="colorItemDrop">#64b5f6</color>
+
+    <color name="colorFleetViewItem1">#64b5f6</color>
+    <color name="colorFleetViewItem2">#4CAF50</color>
+    <color name="colorFleetViewItem3">#FF9800</color>
+    <color name="colorFleetViewItem4">#E91E63</color>
     <color name="colorRetreated">#757575</color>
 
     <color name="colorQuestViewMemo">#64b5f6</color>

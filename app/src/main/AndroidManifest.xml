@@ -151,6 +151,13 @@
                 android:value="com.antest1.kcanotify.SettingActivity" />
         </activity>
         <activity
+            android:name="com.antest1.kcanotify.KcaFleetViewItemSelectActivity"
+            android:configChanges="locale|layoutDirection|orientation|screenSize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.antest1.kcanotify.SettingActivity" />
+        </activity>
+        <activity
             android:name="com.antest1.kcanotify.ErrorlogActivity"
             android:configChanges="locale|layoutDirection|orientation|screenSize">
             <meta-data

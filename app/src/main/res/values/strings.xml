@@ -312,7 +312,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_stat_desc_poidb" translatable="false">https://db.kcwiki.org/</string>
 
     <string name="setting_menu_app_head">Application Information</string>
-    <string name="setting_menu_app_title_current" translatable="false">Current Version</string>
+    <string name="setting_menu_app_title_current">Current Version</string>
     <string name="setting_menu_app_title_updatecheckserver">Select Update Check Server</string>
     <string name="setting_menu_app_title_updatecheck">Check For Updates</string>
     <string name="setting_menu_app_title_down">APK Download Site</string>
@@ -845,5 +845,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fairy_size_value_4">Large</string>
     <string name="fairy_size_value_5">Very Large</string>
     <string name="notice_donotsee">Do not see again</string>
+    <string name="fleetview_item_select_description">Up to 4 items can be selected (shown in left color)</string>
+    <string name="setting_menu_kand_title_fleetview_item_select">Items to show on FleetView counter</string>
+    <string name="setting_menu_kand_desc_fleetview_item_select">Target items of the counter (touch to change) at the top right</string>
 
 </resources>

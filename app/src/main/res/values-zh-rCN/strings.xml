@@ -769,4 +769,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="hp_format_0">HP 30/37 (禁用)</string>
     <string name="setting_menu_kand_title_hp_format">舰队信息中的HP显示</string>
     <string name="setting_menu_kand_desc_hp_format">您可以在泊地修理的过程中查看修复进度</string>
+    <string name="fleetview_item_select_description">最多可以选择 4 个项目（以左侧颜色显示）</string>
+    <string name="setting_menu_kand_title_fleetview_item_select">舰队信息柜台上显示的道具</string>
+    <string name="setting_menu_kand_desc_fleetview_item_select">右上计数器（可触摸更改）目标道具</string>
 </resources>
