@@ -848,5 +848,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_item_select_description">Up to 4 items can be selected (shown in left color)</string>
     <string name="setting_menu_kand_title_fleetview_item_select">Items to show on FleetView counter</string>
     <string name="setting_menu_kand_desc_fleetview_item_select">Target items of the counter (touch to change) at the top right</string>
+    <string name="setting_service_running_desc">Cannot change while service is running</string>
 
 </resources>

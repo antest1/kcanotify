@@ -769,4 +769,5 @@
     <string name="fleetview_item_select_description">Se pueden seleccionar hasta 4 elementos (se muestran en el color de la izquierda)</string>
     <string name="setting_menu_kand_title_fleetview_item_select">Artículos para mostrar en el contador de FleetView</string>
     <string name="setting_menu_kand_desc_fleetview_item_select">elementos de destino del contador (toque para cambiar) en la parte superior derecha</string>
+    <string name="setting_service_running_desc">No se puede cambiar mientras el servicio se está ejecutando</string>
 </resources>

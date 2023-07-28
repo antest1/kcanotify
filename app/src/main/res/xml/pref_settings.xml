@@ -127,7 +127,7 @@
         <Preference
             android:defaultValue=""
             app:iconSpaceReserved="false"
-            android:key="fleetview_menu_order"
+            android:key="fleetview_item_select"
             android:summary="@string/setting_menu_kand_desc_fleetview_item_select"
             android:title="@string/setting_menu_kand_title_fleetview_item_select">
             <intent

@@ -765,4 +765,5 @@
     <string name="fleetview_item_select_description">최대 4개 아이템까지 선택 가능 (좌측 색상으로 표시)</string>
     <string name="setting_menu_kand_title_fleetview_item_select">함대정보 카운터에 표시할 아이템</string>
     <string name="setting_menu_kand_desc_fleetview_item_select">우측 상단의 카운터(터치하여 변경 가능)의 대상 아이템</string>
+    <string name="setting_service_running_desc">서비스 동작 중 변경 불가</string>
 </resources>

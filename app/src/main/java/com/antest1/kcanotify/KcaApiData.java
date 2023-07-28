@@ -457,6 +457,26 @@ public class KcaApiData {
         return name;
     }
 
+    public static JsonArray getUseItemDataByUseType(int target_usetype) {
+        JsonArray data = new JsonArray();
+        for (int key: kcUseitemData.keySet()) {
+            JsonObject value = kcUseitemData.get(key);
+            if (value != null) {
+                String name = value.get("api_name").getAsString();
+                if (name.length() == 0) continue;
+
+                int usetype = value.get("api_usetype").getAsInt();
+                if (target_usetype < 0 || usetype == target_usetype) {
+                    JsonObject new_value = new JsonObject();
+                    new_value.addProperty("id", value.get("api_id").getAsInt());
+                    new_value.addProperty("name", getUseItemTranslation(name));
+                    data.add(new_value);
+                }
+            }
+        }
+        return data;
+    }
+
     public static String getUseItemTranslation(String jp_name) {
         String name = jp_name;
         if (currentLocaleCode.equals("jp")) {

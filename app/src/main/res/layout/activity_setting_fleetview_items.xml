@@ -46,6 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
+                android:background="@color/white"
                 android:orientation="horizontal">
 
                 <TextView
@@ -56,7 +57,7 @@
                     android:background="@color/colorFleetViewItem1"
                     android:gravity="center"
                     android:minWidth="72dp"
-                    android:padding="8dp"
+                    android:padding="9dp"
                     android:text="#1"
                     android:textColor="@color/white"
                     android:textSize="16dp" />
@@ -65,14 +66,15 @@
                     android:id="@+id/fleetview_item_1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="8dp" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
+                android:background="@color/white"
                 android:orientation="horizontal">
 
                 <TextView
@@ -83,7 +85,7 @@
                     android:background="@color/colorFleetViewItem2"
                     android:gravity="center"
                     android:minWidth="72dp"
-                    android:padding="8dp"
+                    android:padding="9dp"
                     android:text="#2"
                     android:textColor="@color/white"
                     android:textSize="16dp" />
@@ -92,8 +94,8 @@
                     android:id="@+id/fleetview_item_2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:padding="8dp"
                     tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
 
@@ -101,6 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
+                android:background="@color/white"
                 android:orientation="horizontal">
 
                 <TextView
@@ -111,7 +114,7 @@
                     android:background="@color/colorFleetViewItem3"
                     android:gravity="center"
                     android:minWidth="72dp"
-                    android:padding="8dp"
+                    android:padding="9dp"
                     android:text="#3"
                     android:textColor="@color/white"
                     android:textSize="16dp" />
@@ -120,14 +123,15 @@
                     android:id="@+id/fleetview_item_3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="8dp" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
+                android:background="@color/white"
                 android:orientation="horizontal">
 
                 <TextView
@@ -138,7 +142,7 @@
                     android:background="@color/colorFleetViewItem4"
                     android:gravity="center"
                     android:minWidth="72dp"
-                    android:padding="8dp"
+                    android:padding="9dp"
                     android:text="#4"
                     android:textColor="@color/white"
                     android:textSize="16dp" />
@@ -147,8 +151,8 @@
                     android:id="@+id/fleetview_item_4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="8dp" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1" />
             </LinearLayout>
 
         </LinearLayout>

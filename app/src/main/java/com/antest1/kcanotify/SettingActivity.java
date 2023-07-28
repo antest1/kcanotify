@@ -153,6 +153,12 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
                 return "[]";
             case PREF_KC_PACKAGE:
                 return KC_PACKAGE_NAME;
+            case PREF_FV_ITEM_1:
+                return "68"; // Saury
+            case PREF_FV_ITEM_2:
+            case PREF_FV_ITEM_3:
+            case PREF_FV_ITEM_4:
+                return "-1";
             default:
                 return "";
         }

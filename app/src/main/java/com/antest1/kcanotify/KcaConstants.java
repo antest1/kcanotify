@@ -491,6 +491,13 @@ public final class KcaConstants {
     public static final String PREF_FAIRY_SIZE = "fairy_size";
     public static final String PREF_FAIRY_RANDOM = "fairy_random";
     public static final String PREF_NOTICE_CHK_FLAG = "kr_notice_chk";
+    public static final String PREF_FLEETVIEW_ITEMSELECT = "fleetview_item_select";
+
+    public static final String PREF_FV_ITEM_1 = "fleetview_item_select_value_1";
+    public static final String PREF_FV_ITEM_2 = "fleetview_item_select_value_2";
+    public static final String PREF_FV_ITEM_3 = "fleetview_item_select_value_3";
+    public static final String PREF_FV_ITEM_4 = "fleetview_item_select_value_4";
+
 
     public static final String[] PREF_ARRAY = {
             PREF_CHECK_UPDATE,
@@ -563,7 +570,11 @@ public final class KcaConstants {
             PREF_DEFAULT_APIVER,
             PREF_FAIRY_SIZE,
             PREF_FAIRY_RANDOM,
-            PREF_NOTICE_CHK_FLAG
+            PREF_NOTICE_CHK_FLAG,
+            PREF_FV_ITEM_1,
+            PREF_FV_ITEM_2,
+            PREF_FV_ITEM_3,
+            PREF_FV_ITEM_4
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {

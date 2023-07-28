@@ -772,4 +772,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_item_select_description">最多可以选择 4 个项目（以左侧颜色显示）</string>
     <string name="setting_menu_kand_title_fleetview_item_select">舰队信息柜台上显示的道具</string>
     <string name="setting_menu_kand_desc_fleetview_item_select">右上计数器（可触摸更改）目标道具</string>
+    <string name="setting_service_running_desc">服务运行时无法更改</string>
 </resources>
