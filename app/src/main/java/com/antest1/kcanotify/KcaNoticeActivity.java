@@ -16,10 +16,6 @@ public class KcaNoticeActivity extends AppCompatActivity {
     Toolbar toolbar;
     public static final String TAG = "KCA";
 
-    public KcaNoticeActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

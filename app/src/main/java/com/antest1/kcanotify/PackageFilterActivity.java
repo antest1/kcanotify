@@ -34,9 +34,6 @@ public class PackageFilterActivity extends AppCompatActivity {
     KcaPackageListViewAdpater adapter;
     static UpdateHandler handler;
 
-    public PackageFilterActivity() {
-        LocaleUtils.updateConfig(this);
-    }
 
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);

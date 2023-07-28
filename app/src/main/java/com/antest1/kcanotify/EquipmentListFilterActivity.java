@@ -37,10 +37,6 @@ public class EquipmentListFilterActivity extends AppCompatActivity {
         sHandler = h;
     }
 
-    public EquipmentListFilterActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

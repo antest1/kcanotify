@@ -37,10 +37,6 @@ public class ExpeditionTableActivity extends AppCompatActivity {
     KcaDBHelper dbHelper;
     KcaExpeditionTableViewAdpater adapter;
 
-    public ExpeditionTableActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

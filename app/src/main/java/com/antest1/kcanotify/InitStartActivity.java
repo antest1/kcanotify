@@ -444,10 +444,10 @@ public class InitStartActivity extends Activity {
     private void setAppLocale() {
         String pref = getStringPreferences(getApplicationContext(), PREF_KCA_LANGUAGE);
         if (pref.startsWith("default")) {
-            LocaleUtils.setLocale(Locale.getDefault());
+            LocaleUtils.setLocale(getBaseContext(), Locale.getDefault());
         } else {
             String[] locale = pref.split("-");
-            LocaleUtils.setLocale(new Locale(locale[0], locale[1]));
+            LocaleUtils.setLocale(getBaseContext(), new Locale(locale[0], locale[1]));
         }
         KcaApplication.defaultLocale = LocaleUtils.getLocale();
     }

@@ -33,10 +33,6 @@ public class KcaFleetViewMenuOrderActivity extends AppCompatActivity {
         sHandler = h;
     }
 
-    public KcaFleetViewMenuOrderActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     public String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

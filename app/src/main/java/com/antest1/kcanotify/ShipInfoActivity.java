@@ -67,9 +67,6 @@ public class ShipInfoActivity extends AppCompatActivity {
     TextView export_clipboard_1, export_openpage_1;
     TextView export_clipboard_2, export_openpage_2;
 
-    public ShipInfoActivity() {
-        LocaleUtils.updateConfig(this);
-    }
 
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);

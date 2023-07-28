@@ -85,10 +85,6 @@ public class ExpCalcActivity extends AppCompatActivity {
     boolean load_flag = false;
     JsonObject current_state = new JsonObject();
 
-    public ExpCalcActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

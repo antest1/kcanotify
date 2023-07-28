@@ -196,7 +196,7 @@ public class KcaFleetViewService extends Service {
             case HQINFO_EVENT:
                 // Saury Event Code
                 TextView saurycntview = fleetHqInfoView.findViewById(R.id.fleetview_fish);
-                saurycntview.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorItemDrop));
+                saurycntview.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetViewItem1));
                 saurycntview.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_fish_text), 0, 0));
                 JsonArray useitem_data = dbHelper.getJsonArrayValue(DB_KEY_USEITEMS);
                 int sanma_count = 0;

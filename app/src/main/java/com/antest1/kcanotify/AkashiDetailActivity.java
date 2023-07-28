@@ -48,10 +48,6 @@ public class AkashiDetailActivity extends AppCompatActivity {
     TextView dmat_count, smat_count;
     TextView current_date;
 
-    public AkashiDetailActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

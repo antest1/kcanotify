@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -16,28 +17,16 @@ public class LocaleUtils {
         return sLocale;
     }
 
-    public static void setLocale(Locale locale) {
+    public static void setLocale(Context base_context, Locale locale) {
         sLocale = locale;
         if(sLocale != null) {
             Locale.setDefault(sLocale);
-        }
-    }
-
-    public static void updateConfig(ContextThemeWrapper wrapper) {
-        if(sLocale != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            Configuration configuration = new Configuration();
-            configuration.setLocale(sLocale);
-            wrapper.applyOverrideConfiguration(configuration);
-        }
-    }
-
-    public static void updateConfig(Application app, Configuration configuration) {
-        if(sLocale != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            //Wrapping the configuration to avoid Activity endless loop
-            Configuration config = new Configuration(configuration);
-            config.locale = sLocale;
-            Resources res = app.getBaseContext().getResources();
-            res.updateConfiguration(config, res.getDisplayMetrics());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                Resources res = base_context.getResources();
+                Configuration config = new Configuration(res.getConfiguration());
+                config.locale = sLocale;
+                res.updateConfiguration(config, res.getDisplayMetrics());
+            }
         }
     }
 

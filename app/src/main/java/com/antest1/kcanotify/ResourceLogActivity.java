@@ -76,10 +76,6 @@ public class ResourceLogActivity extends AppCompatActivity {
 
     public int interval_value = INTERVAL_1D;
 
-    public ResourceLogActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     public static boolean getChartHiddenState() {
         return is_hidden;
     }

@@ -25,9 +25,6 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
     public static final int REQUEST_BATOPTIM_PERMISSION = 5;
 
     Toolbar toolbar;
-    public SettingActivity() {
-        LocaleUtils.updateConfig(this);
-    }
 
     public String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);

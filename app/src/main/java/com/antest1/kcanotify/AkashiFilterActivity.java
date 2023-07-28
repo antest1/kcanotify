@@ -37,10 +37,6 @@ public class AkashiFilterActivity extends AppCompatActivity {
         sHandler = h;
     }
 
-    public AkashiFilterActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

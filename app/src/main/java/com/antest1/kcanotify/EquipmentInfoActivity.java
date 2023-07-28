@@ -69,10 +69,6 @@ public class EquipmentInfoActivity extends AppCompatActivity {
     TextView export_clipboard, export_openpage2;
     Vibrator vibrator;
 
-    public EquipmentInfoActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

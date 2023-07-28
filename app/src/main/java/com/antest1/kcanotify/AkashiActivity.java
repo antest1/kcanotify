@@ -62,10 +62,6 @@ public class AkashiActivity extends AppCompatActivity {
     KcaAkashiListViewAdpater adapter;
     UpdateHandler handler;
 
-    public AkashiActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

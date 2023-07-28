@@ -41,10 +41,6 @@ public class ShipInfoSortActivity extends AppCompatActivity {
 
     KcaDBHelper dbHelper;
 
-    public ShipInfoSortActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

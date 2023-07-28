@@ -59,10 +59,6 @@ public class FleetInfoActivity extends AppCompatActivity {
     View export_popup, export_exit;
     TextView export_clipboard, export_openpage, export_openpage2;
 
-    public FleetInfoActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

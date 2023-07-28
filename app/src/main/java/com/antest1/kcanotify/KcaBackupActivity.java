@@ -48,10 +48,6 @@ public class KcaBackupActivity extends AppCompatActivity {
     KcaBackupItemAdpater adapter = new KcaBackupItemAdpater();
     UpdateHandler handler;
 
-    public KcaBackupActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

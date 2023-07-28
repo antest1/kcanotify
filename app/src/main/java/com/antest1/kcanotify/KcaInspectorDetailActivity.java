@@ -53,10 +53,6 @@ public class KcaInspectorDetailActivity extends AppCompatActivity {
     int scroll_touch_count = 0;
     ScheduledExecutorService autoScrollScheduler;
 
-    public KcaInspectorDetailActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

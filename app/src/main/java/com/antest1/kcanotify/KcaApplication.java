@@ -30,18 +30,17 @@ public class KcaApplication extends MultiDexApplication {
 
         if (pref_locale.length == 2) {
             if (pref_locale[0].equals("default")) {
-                LocaleUtils.setLocale(defaultLocale);
+                LocaleUtils.setLocale(getBaseContext(), defaultLocale);
             } else {
                 language = pref_locale[0];
                 country = pref_locale[1];
-                LocaleUtils.setLocale(new Locale(language, country));
+                LocaleUtils.setLocale(getBaseContext(), new Locale(language, country));
             }
         } else {
             pref.edit().remove(PREF_KCA_LANGUAGE).apply();
-            LocaleUtils.setLocale(defaultLocale);
+            LocaleUtils.setLocale(getBaseContext(), defaultLocale);
         }
 
-        LocaleUtils.updateConfig(this, getBaseContext().getResources().getConfiguration());
         FirebaseAnalytics.getInstance(this);
     }
 }

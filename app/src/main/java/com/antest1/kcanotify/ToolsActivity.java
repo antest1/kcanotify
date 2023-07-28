@@ -22,9 +22,6 @@ public class ToolsActivity extends AppCompatActivity {
     KcaDBHelper dbHelper;
     static Gson gson = new Gson();
     LinearLayout view_fleetlist, view_shiplist, view_equipment, view_droplog, view_reslog, view_akashi, view_expcalc, view_expdtable;
-    public ToolsActivity() {
-        LocaleUtils.updateConfig(this);
-    }
 
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);

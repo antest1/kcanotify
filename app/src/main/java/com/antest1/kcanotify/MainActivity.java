@@ -105,9 +105,6 @@ public class MainActivity extends AppCompatActivity {
         sHandler = h;
     }
 
-    public MainActivity() {
-        LocaleUtils.updateConfig(this);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

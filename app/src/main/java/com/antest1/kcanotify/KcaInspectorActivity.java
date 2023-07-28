@@ -52,10 +52,6 @@ public class KcaInspectorActivity extends AppCompatActivity {
     Button packletlogClear, packetlogDump;
     KcaPacketLogger packetLogger;
 
-    public KcaInspectorActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

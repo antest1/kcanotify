@@ -17,10 +17,6 @@ public class KcaInfoActivity extends AppCompatActivity {
     TextView app_gpl, app_source;
     public static final String TAG = "KCA";
 
-    public KcaInfoActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

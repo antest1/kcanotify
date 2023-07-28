@@ -54,10 +54,6 @@ public class ShipInfoFilterActivity extends AppCompatActivity {
     public int count;
     public static SparseArray<String> sort_values = new SparseArray<>();
 
-    public ShipInfoFilterActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

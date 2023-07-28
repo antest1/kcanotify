@@ -65,10 +65,6 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         sHandler = h;
     }
 
-    public KcaFairySelectActivity() {
-        LocaleUtils.updateConfig(this);
-    }
-
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
     }

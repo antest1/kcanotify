@@ -94,9 +94,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
     Type listType = new TypeToken<ArrayList<JsonObject>>(){}.getType();
     Fetch fetch;
 
-    public UpdateCheckActivity() {
-        LocaleUtils.updateConfig(this);
-    }
 
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
