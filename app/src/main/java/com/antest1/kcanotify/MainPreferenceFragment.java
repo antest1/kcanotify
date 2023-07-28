@@ -142,6 +142,8 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
         int sniffer_mode = Integer.parseInt(sharedPref.getString(PREF_SNIFFER_MODE, String.valueOf(SNIFFER_ACTIVE)));
         setActiveSnifferSettingEnabled(KC_PACKAGE_NAME.equals(kca_package) || sniffer_mode == SNIFFER_ACTIVE);
+
+        setSettingDisabledWhenServiceRunning();
     }
 
     @Override
@@ -499,6 +501,16 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         findPreference(PREF_SCREEN_SNIFFER_ALLOW).setEnabled(enabled);
         findPreference(PREF_ALLOW_EXTFILTER).setEnabled(enabled);
         findPreference(PREF_SCREEN_ADV_NETWORK).setEnabled(enabled);
+    }
+
+    private void setSettingDisabledWhenServiceRunning() {
+        String[] keys = {PREF_KCA_LANGUAGE, PREF_SNIFFER_MODE};
+        if (KcaService.getServiceStatus()) {
+            for (String key: keys) {
+                findPreference(key).setEnabled(false);
+                findPreference(key).setSummary(getStringWithLocale(R.string.setting_service_running_desc));
+            }
+        }
     }
 
     private boolean checkActivityValid() {
