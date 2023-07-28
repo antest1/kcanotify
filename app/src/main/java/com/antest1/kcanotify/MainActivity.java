@@ -261,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         textMainUpdate = findViewById(R.id.textMainUpdate);
+        textMainUpdate.setText(getStringWithLocale(R.string.setting_menu_kand_title_game_data_down));
         textMainUpdate.setOnClickListener(v -> {
             startActivity(new Intent(this, UpdateCheckActivity.class));
         });
