@@ -758,7 +758,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="text_api_cost">配置費用</string>
     <string name="text_api_distance">行動半徑</string>
     <string name="ask_to_dev">艦これ 装備王</string>
-    <string name="fleetview_fish_text" formatted="false">[秋刀魚] %03d [沙丁魚] %03d</string>
     <string name="fairy_size_value_4">大</string>
     <string name="fairy_size_value_3">中</string>
     <string name="fairy_size_value_2">小</string>

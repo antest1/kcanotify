@@ -338,26 +338,49 @@
                     android:textSize="@dimen/fleetview_text_tbutton"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/fleetview_fish"
+                <LinearLayout
+                    android:id="@+id/fleetview_item_cnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:background="@color/colorPrimary"
-                    android:ellipsize="end"
                     android:gravity="right"
+                    android:orientation="horizontal"
                     android:paddingStart="8dp"
                     android:paddingLeft="8dp"
                     android:paddingTop="4dp"
                     android:paddingEnd="8dp"
                     android:paddingRight="8dp"
                     android:paddingBottom="4dp"
-                    android:singleLine="true"
-                    android:text="[꽁치] 003 [정어리] 015"
-                    android:textColor="@color/colorSubmarineNode"
-                    android:textSize="@dimen/fleetview_text_tbutton"
-                    android:visibility="gone" />
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/fleetview_item_cnt_icon"
+                        android:layout_width="@dimen/fleetview_text_tbutton"
+                        android:layout_height="@dimen/fleetview_text_tbutton"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="1"
+                        android:src="@mipmap/ic_gift"
+                        app:srcCompat="@mipmap/ic_gift" />
+
+                    <TextView
+                        android:id="@+id/fleetview_item_cnt_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="150/150"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/fleetview_text_tbutton" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

@@ -219,8 +219,8 @@
 
                     <ImageView
                         android:id="@+id/fleetview_cnt1_icon"
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:paddingEnd="2dp"
                         android:paddingRight="2dp"
@@ -243,8 +243,8 @@
 
                     <ImageView
                         android:id="@+id/fleetview_cnt2_icon"
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:paddingEnd="2dp"
                         android:paddingRight="2dp"
@@ -309,20 +309,46 @@
                     android:textSize="12dp"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/fleetview_fish"
+                <LinearLayout
+                    android:id="@+id/fleetview_item_cnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:background="@color/colorPrimary"
-                    android:ellipsize="end"
                     android:gravity="right"
-                    android:singleLine="true"
-                    android:text="[꽁치] 003 [정어리] 015"
-                    android:textColor="@color/colorSubmarineNode"
-                    android:textSize="12dp"
-                    android:visibility="gone" />
+                    android:orientation="horizontal"
+                    android:paddingEnd="4dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingStart="4dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/fleetview_item_cnt_icon"
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:paddingEnd="2dp"
+                        android:paddingRight="2dp"
+                        android:src="@mipmap/ic_gift"
+                        app:srcCompat="@mipmap/ic_gift" />
+
+                    <TextView
+                        android:id="@+id/fleetview_item_cnt_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginRight="4dp"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="150/150"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

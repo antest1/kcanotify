@@ -48,6 +48,7 @@ import static android.view.View.INVISIBLE;
 import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
 import static com.antest1.kcanotify.KcaApiData.getSlotItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
+import static com.antest1.kcanotify.KcaApiData.getUseItemNameById;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.isGameDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.isItemAircraft;
@@ -56,6 +57,10 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_USEITEMS;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_FLEETVIEW;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_FIX_VIEW_LOC;
+import static com.antest1.kcanotify.KcaConstants.PREF_FV_ITEM_1;
+import static com.antest1.kcanotify.KcaConstants.PREF_FV_ITEM_2;
+import static com.antest1.kcanotify.KcaConstants.PREF_FV_ITEM_3;
+import static com.antest1.kcanotify.KcaConstants.PREF_FV_ITEM_4;
 import static com.antest1.kcanotify.KcaConstants.PREF_FV_MENU_ORDER;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.PREF_VIEW_YLOC;
@@ -86,10 +91,14 @@ public class KcaFleetViewService extends Service {
     public static final int FLEET_COMBINED_ID = 4;
     final int fleetview_menu_margin = 40;
 
-    private static final int HQINFO_TOTAL = 2;
+    private static final int HQINFO_TOTAL = 6;
     private static final int HQINFO_EXPVIEW = 0;
     private static final int HQINFO_SECOUNT = 1;
-    private static final int HQINFO_EVENT = 2;
+    private static final int HQINFO_ITEMCNT1 = 2;
+    private static final int HQINFO_ITEMCNT2 = 3;
+    private static final int HQINFO_ITEMCNT3 = 4;
+    private static final int HQINFO_ITEMCNT4 = 5;
+
 
     Context contextWithLocale;
     LayoutInflater mInflater;
@@ -113,6 +122,7 @@ public class KcaFleetViewService extends Service {
     private ScrollView fleetMenu, fleetShipArea;
     private ImageView fleetMenuArrowUp, fleetMenuArrowDown;
     private static boolean isReady;
+    private static int[] hqinfoItems = {-1, -1, -1, -1};
     private static int hqinfoState = 0;
     private JsonObject gunfitData;
 
@@ -151,12 +161,33 @@ public class KcaFleetViewService extends Service {
         }
     }
 
-    private void setHqInfo() {
-        int[] view_id = {R.id.fleetview_exp, R.id.fleetview_cnt, R.id.fleetview_fish};
-        for (int i = 0; i < view_id.length; i++) {
-            fleetHqInfoView.findViewById(view_id[i]).setVisibility((i == hqinfoState) ? View.VISIBLE : View.GONE);
-        }
+    private void setNextState() {
+        hqinfoState = (hqinfoState + 1) % HQINFO_TOTAL;
+        if (hqinfoState>=HQINFO_ITEMCNT1 && hqinfoItems[hqinfoState-HQINFO_ITEMCNT1] == -1) setNextState();
+    }
 
+    private void setHqInfoViewVisibility() {
+        if (hqinfoState == HQINFO_EXPVIEW) {
+            fleetHqInfoView.findViewById(R.id.fleetview_exp).setVisibility(View.VISIBLE);
+            fleetHqInfoView.findViewById(R.id.fleetview_cnt).setVisibility(View.GONE);
+            fleetHqInfoView.findViewById(R.id.fleetview_item_cnt).setVisibility(View.GONE);
+        } else if (hqinfoState == HQINFO_SECOUNT) {
+            fleetHqInfoView.findViewById(R.id.fleetview_exp).setVisibility(View.GONE);
+            fleetHqInfoView.findViewById(R.id.fleetview_cnt).setVisibility(View.VISIBLE);
+            fleetHqInfoView.findViewById(R.id.fleetview_item_cnt).setVisibility(View.GONE);
+        } else {
+            fleetHqInfoView.findViewById(R.id.fleetview_exp).setVisibility(View.GONE);
+            fleetHqInfoView.findViewById(R.id.fleetview_cnt).setVisibility(View.GONE);
+            fleetHqInfoView.findViewById(R.id.fleetview_item_cnt).setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setHqInfo() {
+        String[] pref_items = {PREF_FV_ITEM_1, PREF_FV_ITEM_2, PREF_FV_ITEM_3, PREF_FV_ITEM_4};
+        for (int i = 0; i < pref_items.length; i++) {
+            hqinfoItems[i] = Integer.parseInt(getStringPreferences(getApplicationContext(), pref_items[i]));
+        }
+        setHqInfoViewVisibility();
         switch (hqinfoState) {
             case HQINFO_EXPVIEW:
                 TextView expview = fleetHqInfoView.findViewById(R.id.fleetview_exp);
@@ -193,55 +224,39 @@ public class KcaFleetViewService extends Service {
                             R.color.white), PorterDuff.Mode.MULTIPLY);
                 }
                 break;
-            case HQINFO_EVENT:
-                // Saury Event Code
-                TextView saurycntview = fleetHqInfoView.findViewById(R.id.fleetview_fish);
-                saurycntview.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetViewItem1));
-                saurycntview.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_fish_text), 0, 0));
+            case HQINFO_ITEMCNT1:
+            case HQINFO_ITEMCNT2:
+            case HQINFO_ITEMCNT3:
+            case HQINFO_ITEMCNT4:
+                int item_id = hqinfoItems[hqinfoState-2];
+                int item_count = 0;
+                String item_name = getUseItemNameById(item_id);
+
+                ImageView item_icon = fleetHqInfoView.findViewById(R.id.fleetview_item_cnt_icon);
+                if (item_id == 68 || item_id == 93) {
+                    item_icon.setImageResource(R.mipmap.ic_saury);
+                } else {
+                    item_icon.setImageResource(R.mipmap.ic_gift);
+                }
+                item_icon.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                        KcaUtils.getId("colorFleetViewItem" + (hqinfoState-1), R.color.class)), PorterDuff.Mode.SRC_ATOP);
+
+                TextView itemcntview = fleetHqInfoView.findViewById(R.id.fleetview_item_cnt_value);
+                itemcntview.setTextColor(ContextCompat.getColor(getApplicationContext(),
+                        KcaUtils.getId("colorFleetViewItem" + (hqinfoState-1), R.color.class)));
+                itemcntview.setText(KcaUtils.format("[%s] %02d", item_name, item_count));
+
                 JsonArray useitem_data = dbHelper.getJsonArrayValue(DB_KEY_USEITEMS);
-                int sanma_count = 0;
-                int sardine_count = 0;
                 if (useitem_data != null) {
                     for (int i = 0; i < useitem_data.size(); i++) {
                         JsonObject item = useitem_data.get(i).getAsJsonObject();
-                        int key = item.get("api_id").getAsInt();
-                        if (key == 68) { // SAMMA
-                            sanma_count = item.get("api_count").getAsInt();
-                        } else if (key == 93) {// SARDINE
-                            sardine_count = item.get("api_count").getAsInt();
+                        if (item.get("api_id").getAsInt() == item_id) {
+                            item_count = item.get("api_count").getAsInt();
                         }
                     }
-                    saurycntview.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_fish_text), sanma_count, sardine_count));
+                    itemcntview.setText(KcaUtils.format("[%s] %02d", item_name, item_count));
                 }
                 break;
-
-            /*
-            case HQINFO_EVENT:
-                TextView spring_item_1 = fleetHqInfoView.findViewById(R.id.fleetview_18spring_1);
-                TextView spring_item_2 = fleetHqInfoView.findViewById(R.id.fleetview_18spring_2);
-                TextView spring_item_3 = fleetHqInfoView.findViewById(R.id.fleetview_18spring_3);
-                TextView spring_item_4 = fleetHqInfoView.findViewById(R.id.fleetview_18spring_4);
-
-                JsonArray useitem_data = dbHelper.getJsonArrayValue(DB_KEY_USEITEMS);
-                int[] item_count = {0, 0, 0, 0};
-                if (useitem_data != null) {
-                    for (int i = 0; i < useitem_data.size(); i++) {
-                        JsonObject item = useitem_data.get(i).getAsJsonObject();
-                        int key = item.get("api_id").getAsInt();
-                        switch (key) {
-                            case 85: case 86: case 87: case 88:
-                                item_count[key - 85] += item.get("api_count").getAsInt();
-                                break;
-                        }
-                    }
-                }
-
-                spring_item_1.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_18spring_rice), item_count[0]));
-                spring_item_2.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_18spring_umeboshi), item_count[1]));
-                spring_item_3.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_18spring_nori), item_count[2]));
-                spring_item_4.setText(KcaUtils.format(getStringWithLocale(R.string.fleetview_18spring_tea), item_count[3]));
-                break;
-            */
             default:
                 break;
         }
@@ -378,7 +393,6 @@ public class KcaFleetViewService extends Service {
         setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
 
         fleetInfoLine = mView.findViewById(R.id.fleetview_infoline);
-
         fleetInfoLine.setOnTouchListener(mViewTouchListener);
 
         fleetInfoTitle = mView.findViewById(R.id.fleetview_title);
@@ -391,13 +405,10 @@ public class KcaFleetViewService extends Service {
         fleetMenu = mView.findViewById(R.id.fleetview_menu);
         fleetMenuArrowUp = mView.findViewById(R.id.fleetview_menu_up);
         fleetMenuArrowDown = mView.findViewById(R.id.fleetview_menu_down);
-        fleetMenu.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                ViewTreeObserver observer = fleetMenu.getViewTreeObserver();
-                observer.addOnScrollChangedListener(fleetMenuScrollChangeListener);
-                return false;
-            }
+        fleetMenu.setOnTouchListener((view, motionEvent) -> {
+            ViewTreeObserver observer = fleetMenu.getViewTreeObserver();
+            observer.addOnScrollChangedListener(fleetMenuScrollChangeListener);
+            return false;
         });
     }
 
@@ -593,7 +604,7 @@ public class KcaFleetViewService extends Service {
                                 ((TextView) mView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_1));
                             }
                         } else if (id == mView.findViewById(R.id.fleetview_hqinfo).getId()) {
-                            hqinfoState = (hqinfoState + 1) % HQINFO_TOTAL;
+                            setNextState();
                             JsonObject statProperties = new JsonObject();
                             statProperties.addProperty("state", hqinfoState);
                             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("HqInfo"), statProperties);
