@@ -151,6 +151,14 @@
   public *;
 }
 
+-keep class com.google.firebase.installations.** {
+  *;
+}
+
+-keep interface com.google.firebase.installations.** {
+  *;
+}
+
 -keep class com.antest1.kcanotify.** { *; }
 -keepnames class com.antest1.kcanotify.** { *; }
 
@@ -181,3 +189,11 @@
     void getDataFromNative(byte[], int, int, byte[], byte[], int, int);
  }
 
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+    public static *** e(...);
+    public static *** w(...);
+    public static *** wtf(...);
+}
