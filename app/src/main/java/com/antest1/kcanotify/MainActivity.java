@@ -30,7 +30,6 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Spanned;
@@ -40,7 +39,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -80,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_VPN = 1;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_EXTERNAL_PERMISSION = 3;
+    public static final int REQUEST_NOTIFICATION_PERMISSION = 4;
 
     public String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
@@ -157,27 +156,18 @@ public class MainActivity extends AppCompatActivity {
         int sniffer_mode = getSnifferMode();
         vpnbtn.setEnabled(sniffer_mode == SNIFFER_ACTIVE);
 
-        Intent serviceIntent = new Intent(MainActivity.this, KcaService.class);
-
         svcbtn = findViewById(R.id.svcbtn);
         svcbtn.setTextOff(getStringWithLocale(R.string.ma_svc_toggleoff));
         svcbtn.setTextOn(getStringWithLocale(R.string.ma_svc_toggleon));
         svcbtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) {
-                    sendUserAnalytics(getApplicationContext(), START_SERVICE, null);
-                    serviceIntent.setAction(KcaService.KCASERVICE_START);
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        startForegroundService(serviceIntent);
-                    } else {
-                        startService(serviceIntent);
-                    }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !checkNotificationPermission()) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
+                } else if (!prefs.getBoolean(PREF_SVC_ENABLED, false) && checkNotificationPermission()) {
+                    startKcaService();
                 }
             } else {
-                serviceIntent.setAction(KcaService.KCASERVICE_STOP);
-                startService(serviceIntent);
-                sendUserAnalytics(getApplicationContext(), END_SERVICE, null);
-                prefs.edit().putBoolean(PREF_SVC_ENABLED, false).apply();
+                stopKcaService();
             }
         });
 
@@ -348,6 +338,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void startKcaService() {
+        Intent serviceIntent = new Intent(MainActivity.this, KcaService.class);
+        sendUserAnalytics(getApplicationContext(), START_SERVICE, null);
+        serviceIntent.setAction(KcaService.KCASERVICE_START);
+        if (Build.VERSION.SDK_INT >= 26) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
+    }
+
+    private void stopKcaService() {
+        Intent serviceIntent = new Intent(MainActivity.this, KcaService.class);
+        serviceIntent.setAction(KcaService.KCASERVICE_STOP);
+        startService(serviceIntent);
+        sendUserAnalytics(getApplicationContext(), END_SERVICE, null);
+        prefs.edit().putBoolean(PREF_SVC_ENABLED, false).apply();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -370,15 +379,20 @@ public class MainActivity extends AppCompatActivity {
                 R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         Arrays.fill(warnType, false);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_PERMISSION);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_PERMISSION);
+            }
         }
 
         if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)
                 || getBooleanPreferences(getApplicationContext(), PREF_KCA_QUESTVIEW_USE)) {
             warnType[REQUEST_OVERLAY_PERMISSION] = !checkOverlayPermission();
         }
+
+        warnType[REQUEST_NOTIFICATION_PERMISSION] = !checkNotificationPermission();
         setWarning();
     }
 
@@ -408,6 +422,9 @@ public class MainActivity extends AppCompatActivity {
         }
         if (warnType[REQUEST_EXTERNAL_PERMISSION]) {
             warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_external_denied));
+        }
+        if (warnType[REQUEST_NOTIFICATION_PERMISSION]) {
+            warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_notification_denied));
         }
 
         if (warnText.length() > 0) {
@@ -478,13 +495,28 @@ public class MainActivity extends AppCompatActivity {
                 && !Settings.canDrawOverlays(getApplicationContext()));
     }
 
+    private boolean checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return true;
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST_EXTERNAL_PERMISSION: {
-                warnType[REQUEST_EXTERNAL_PERMISSION] = !(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                warnType[REQUEST_EXTERNAL_PERMISSION] = !(grantResults[0] == PackageManager.PERMISSION_GRANTED);
                 setWarning();
+            }
+            case REQUEST_NOTIFICATION_PERMISSION: {
+                warnType[REQUEST_NOTIFICATION_PERMISSION] = !(grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                setWarning();
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.ma_permission_service_restart), Toast.LENGTH_LONG).show();
+                }
             }
         }
     }

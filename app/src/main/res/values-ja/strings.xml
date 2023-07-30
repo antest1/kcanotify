@@ -766,4 +766,6 @@
     <string name="setting_menu_kand_title_fleetview_item_select">艦隊情報カウンターに表示するアイテム</string>
     <string name="setting_menu_kand_desc_fleetview_item_select">右上のカウンター（タッチして変更可能）の対象アイテム</string>
     <string name="setting_service_running_desc">サービスの実行中は変更できません</string>
+    <string name="ma_permission_notification_denied">Kcanotify 機能には通知権限が必要です。SERVICEボタンをオンにするときに許可する必要があります。</string>
+    <string name="ma_permission_service_restart">SERVICEボタンをもう一度押してkcanotifyを起動します。</string>
 </resources>

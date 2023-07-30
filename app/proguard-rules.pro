@@ -20,9 +20,12 @@
 -dontskipnonpubliclibraryclasses
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
 
--keepattributes Signature
+-keepattributes Signature, InnerClasses, EnclosingMethod
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
+-keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
+-keepattributes AnnotationDefault
+
 -keep public class * extends java.lang.Exception
 
 -keep class com.crashlytics.** { *; }
@@ -34,9 +37,6 @@
 -dontwarn com.google.**
 
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
--keepclassmembernames,allowobfuscation interface * {
-    @retrofit2.http.* <methods>;
-}
 
 -dontwarn org.codehaus.mojo.animal_sniffer.*
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
@@ -50,9 +50,66 @@
 -dontwarn org.apache.http.**
 -dontwarn org.apache.log4j.**
 
-# Gson
--keep class sun.misc.Unsafe { *; }
+# Gson specific classes
+-dontwarn sun.misc.**
 #-keep class com.google.gson.stream.** { *; }
+
+# Application classes that will be serialized/deserialized over Gson
+-keep class com.google.gson.examples.android.model.** { <fields>; }
+
+# Prevent proguard from stripping interface information from TypeAdapter, TypeAdapterFactory,
+# JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
+-keep class * extends com.google.gson.TypeAdapter
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+
+# Prevent R8 from leaving Data object members always null
+-keepclassmembers,allowobfuscation class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}
+
+# Retain generic signatures of TypeToken and its subclasses with R8 version 3.0 and higher.
+-keep,allowobfuscation,allowshrinking class com.google.gson.reflect.TypeToken
+-keep,allowobfuscation,allowshrinking class * extends com.google.gson.reflect.TypeToken
+
+
+# Retrofit
+# Retain service method parameters when optimizing.
+-keepclassmembers,allowshrinking,allowobfuscation interface * {
+    @retrofit2.http.* <methods>;
+}
+
+# Ignore annotation used for build tooling.
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
+# Ignore JSR 305 annotations for embedding nullability information.
+-dontwarn javax.annotation.**
+
+# Guarded by a NoClassDefFoundError try/catch and only used when on the classpath.
+-dontwarn kotlin.Unit
+
+# Top-level functions that can only be used by Kotlin.
+-dontwarn retrofit2.KotlinExtensions
+-dontwarn retrofit2.KotlinExtensions$*
+
+# With R8 full mode, it sees no subtypes of Retrofit interfaces since they are created with a Proxy
+# and replaces all potential values with null. Explicitly keeping the interfaces prevents this.
+-if interface * { @retrofit2.http.* <methods>; }
+-keep,allowobfuscation interface <1>
+
+# Keep inherited services.
+-if interface * { @retrofit2.http.* <methods>; }
+-keep,allowobfuscation interface * extends <1>
+
+# With R8 full mode generic signatures are stripped for classes that are not
+# kept. Suspend functions are wrapped in continuations where the type argument
+# is used.
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+
+# R8 full mode strips generic signatures from return types if not kept.
+-if interface * { @retrofit2.http.* public *** *(...); }
+-keep,allowoptimization,allowshrinking,allowobfuscation class <3>
 
 -dontwarn oauth.**
 -keep class com.woxthebox.draglistview.** { *; }
@@ -86,8 +143,6 @@
 -keepclassmembers class **.R$* {
     public static <fields>;
 }
-
-
 
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule

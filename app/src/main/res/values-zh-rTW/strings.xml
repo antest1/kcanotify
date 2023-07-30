@@ -771,4 +771,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_kand_title_fleetview_item_select">艦隊信息櫃檯上顯示的道具</string>
     <string name="setting_menu_kand_desc_fleetview_item_select">右上計數器（可觸摸更改）目標道具</string>
     <string name="setting_service_running_desc">服務運行時無法更改</string>
+    <string name="ma_permission_notification_denied">Kcanotify 功能需要通知權限。打開“SERVICE”按鈕時需要允許。</string>
+    <string name="ma_permission_service_restart">再次按 SERVICE 按鈕啟動 kcanotify。</string>
 </resources>
