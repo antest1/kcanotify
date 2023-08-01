@@ -284,9 +284,12 @@ public class InitStartActivity extends Activity {
 
         if (response_data.has("kcadata_version")) {
             int common_version = response_data.get("kcadata_version").getAsInt();
-            int langpacks_version = response_data.getAsJsonObject("kcadata_langpacks")
-                    .get(LocaleUtils.getResourceLocaleCode()).getAsInt();
-            int new_resversion = Math.max(common_version, langpacks_version);
+            int new_resversion = common_version;
+            if (response_data.has("kcadata_langpacks")) {
+                int langpacks_version = response_data.getAsJsonObject("kcadata_langpacks")
+                        .get(LocaleUtils.getResourceLocaleCode()).getAsInt();
+                new_resversion = Math.max(common_version, langpacks_version);
+            }
             latest_flag = latest_flag && new_resversion <= currentKcaResVersion;
         }
 
