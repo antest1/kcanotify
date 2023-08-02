@@ -24,6 +24,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
@@ -121,6 +123,11 @@ public class MainActivity extends AppCompatActivity {
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
 
+        ActivityResultLauncher vpnPrepareLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> startActivityResultCallback(result.getResultCode())
+        );
+
         vpnbtn = findViewById(R.id.vpnbtn);
         vpnbtn.setTextOff(getStringWithLocale(R.string.ma_vpn_toggleoff));
         vpnbtn.setTextOn(getStringWithLocale(R.string.ma_vpn_toggleon));
@@ -134,10 +141,7 @@ public class MainActivity extends AppCompatActivity {
                         //Log.i(TAG, "Prepare done");
                         startActivityResultCallback(RESULT_OK);
                     } else {
-                        registerForActivityResult(
-                                new ActivityResultContracts.StartActivityForResult(),
-                                result -> startActivityResultCallback(result.getResultCode())
-                        ).launch(prepare);
+                        vpnPrepareLauncher.launch(prepare);
                     }
                     statProperties.addProperty("is_success", true);
                 } catch (Throwable ex) {
