@@ -1637,6 +1637,12 @@ public class KcaService extends Service {
                                                 questTracker.updateIdCountTracker("678", 0);
                                             case 20: // Type 0 Model 21
                                                 questTracker.updateIdCountTracker("678", 1);
+                                            case 3: // 10cm Twin High-angle Gun Mount
+                                                questTracker.updateIdCountTracker("686", 0);
+                                            case 121: // Type 94 Anti-Aircraft Fire Director
+                                                questTracker.updateIdCountTracker("686", 1);
+                                            case 4: // 14cm Single Gun Mount
+                                                questTracker.updateIdCountTracker("653", 0);
                                             default:
                                                 break;
                                         }
@@ -1657,9 +1663,17 @@ public class KcaService extends Service {
                                                 break;
                                             case T2_FIGHTER:
                                                 questTracker.updateIdCountTracker("675", 0);
+                                                questTracker.updateIdCountTracker("688", 0);
+                                                break;
+                                            case T2_BOMBER:
+                                                questTracker.updateIdCountTracker("688", 1);
+                                                break;
+                                            case T2_TORPEDO_BOMBER:
+                                                questTracker.updateIdCountTracker("688", 2);
                                                 break;
                                             case T2_SEA_SCOUT:
                                                 questTracker.updateIdCountTracker("677", 1);
+                                                questTracker.updateIdCountTracker("688", 3);
                                                 break;
                                             case T2_MACHINE_GUN:
                                                 questTracker.updateIdCountTracker("638");
@@ -2303,13 +2317,7 @@ public class KcaService extends Service {
                         updateQuestView();
                     } else if (api_url.startsWith(API_REQ_PRACTICE_BATTLE_RESULT)) {
                         JsonObject questTrackData = dbHelper.getJsonObjectValue(DB_KEY_QTRACKINFO);
-                        String rank = questTrackData.get("result").getAsString();
-                        questTracker.updateIdCountTracker("303");
-                        if (rank.equals("S") || rank.equals("A") || rank.equals("B")) {
-                            questTracker.updateIdCountTracker("304");
-                            questTracker.updateIdCountTracker("302");
-                            questTracker.updateIdCountTracker("311");
-                        }
+                        questTracker.updateQuestTracker(questTrackData);
                         updateQuestView();
                     }
                 }
