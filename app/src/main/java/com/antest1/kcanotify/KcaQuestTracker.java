@@ -51,7 +51,7 @@ import static com.antest1.kcanotify.KcaUtils.getJapanSimpleDataFormat;
 public class KcaQuestTracker extends SQLiteOpenHelper {
     private static final String qt_db_name = "quest_track_db";
     private static final String qt_table_name = "quest_track_table";
-    private final static int[] quarterly_quest_id = {284, 426, 428, 637, 643, 663, 675, 678, 680, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894, 903};
+    private final static int[] non_quarterly_quest_id = {211, 212};
     private final static int[] quest_cont_quest_id = {411, 607, 608};
     private static boolean ap_dup_flag = false;
 
@@ -259,7 +259,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     }
                     break;
                 case 5: // Quarterly, Else
-                    if (Arrays.binarySearch(quarterly_quest_id, id) >= 0) { // Bq1 ~ Bq12, D24, D26, F35, F39 (Quarterly)
+                    if (Arrays.binarySearch(non_quarterly_quest_id, id) < 0) {
                         int quest_month = Integer.parseInt(quest_time[1]);
                         int quest_quarter = quest_month - quest_month % 3;
                         int current_month = Integer.parseInt(current_time[1]);
