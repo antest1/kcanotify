@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 import com.pixplicity.htmlcompat.HtmlCompat;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -76,11 +77,12 @@ import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "KCAV";
-    public static boolean[] warnType = new boolean[5];
+    public static boolean[] warnType = new boolean[8];
     private static final int REQUEST_VPN = 1;
     public static final int REQUEST_OVERLAY_PERMISSION = 2;
     public static final int REQUEST_EXTERNAL_PERMISSION = 3;
     public static final int REQUEST_NOTIFICATION_PERMISSION = 4;
+    public static final int REQUEST_EXACT_ALARM_PERMISSION = 5;
 
     public String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
@@ -99,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
     TextView textDescription;
     TextView textWarn, textMainUpdate, textSpecial, textMaintenance;
     TextView textSpecial2;
+
+    ActivityResultLauncher<Intent> vpnPrepareLauncher, exactAlarmPrepareLauncher;
 
     SharedPreferences prefs;
     private BackPressCloseHandler backPressCloseHandler;
@@ -123,9 +127,14 @@ public class MainActivity extends AppCompatActivity {
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
 
-        ActivityResultLauncher vpnPrepareLauncher = registerForActivityResult(
+        vpnPrepareLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
-                result -> startActivityResultCallback(result.getResultCode())
+                result -> startActivityResultCallback(REQUEST_VPN, result.getResultCode())
+        );
+
+        exactAlarmPrepareLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> startActivityResultCallback(REQUEST_EXACT_ALARM_PERMISSION, result.getResultCode())
         );
 
         vpnbtn = findViewById(R.id.vpnbtn);
@@ -139,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                     final Intent prepare = VpnService.prepare(MainActivity.this);
                     if (prepare == null) {
                         //Log.i(TAG, "Prepare done");
-                        startActivityResultCallback(RESULT_OK);
+                        startActivityResultCallback(REQUEST_VPN, RESULT_OK);
                     } else {
                         vpnPrepareLauncher.launch(prepare);
                     }
@@ -165,10 +174,11 @@ public class MainActivity extends AppCompatActivity {
         svcbtn.setTextOn(getStringWithLocale(R.string.ma_svc_toggleon));
         svcbtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !checkNotificationPermission()) {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
-                } else if (!prefs.getBoolean(PREF_SVC_ENABLED, false) && checkNotificationPermission()) {
-                    startKcaService();
+                if (checkNotificationPermission() && checkExactAlarmPermssion()) {
+                    if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) startKcaService();
+                } else {
+                    if (!checkNotificationPermission()) grantNotificationPermission();
+                    else if (!checkExactAlarmPermssion()) grantExactAlarmPermission();
                 }
             } else {
                 stopKcaService();
@@ -396,7 +406,7 @@ public class MainActivity extends AppCompatActivity {
             warnType[REQUEST_OVERLAY_PERMISSION] = !checkOverlayPermission();
         }
 
-        warnType[REQUEST_NOTIFICATION_PERMISSION] = !checkNotificationPermission();
+        warnType[REQUEST_NOTIFICATION_PERMISSION] = !(checkNotificationPermission() && checkExactAlarmPermssion());
         setWarning();
     }
 
@@ -427,7 +437,7 @@ public class MainActivity extends AppCompatActivity {
         if (warnType[REQUEST_EXTERNAL_PERMISSION]) {
             warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_external_denied));
         }
-        if (warnType[REQUEST_NOTIFICATION_PERMISSION]) {
+        if (warnType[REQUEST_NOTIFICATION_PERMISSION] || warnType[REQUEST_EXACT_ALARM_PERMISSION]) {
             warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_notification_denied));
         }
 
@@ -448,13 +458,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void startActivityResultCallback(int resultCode) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().putBoolean(PREF_VPN_ENABLED, resultCode == RESULT_OK).apply();
-        if (resultCode == RESULT_OK) {
-            KcaVpnService.start("prepared", this);
-        } else if (resultCode == RESULT_CANCELED) {
-            // Canceled
+    public void startActivityResultCallback(int type, int resultCode) {
+        if (type == REQUEST_VPN) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            prefs.edit().putBoolean(PREF_VPN_ENABLED, resultCode == RESULT_OK).apply();
+            if (resultCode == RESULT_OK) {
+                KcaVpnService.start("prepared", this);
+            } else if (resultCode == RESULT_CANCELED) {
+                // Canceled
+            }
+        }
+        if (type == REQUEST_EXACT_ALARM_PERMISSION) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                new Handler().postDelayed(() -> {
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    warnType[REQUEST_EXACT_ALARM_PERMISSION] = !alarmManager.canScheduleExactAlarms();
+                    setWarning();
+                }, 1000);
+            }
         }
     }
 
@@ -502,8 +523,31 @@ public class MainActivity extends AppCompatActivity {
     private boolean checkNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
-        } else {
-            return true;
+        }
+        return true;
+    }
+
+    private boolean checkExactAlarmPermssion() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            return alarmManager.canScheduleExactAlarms();
+        }
+        return true;
+    }
+
+    private void grantNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
+        }
+    }
+
+    private void grantExactAlarmPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            if (!alarmManager.canScheduleExactAlarms()) {
+                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                exactAlarmPrepareLauncher.launch(intent);
+            }
         }
     }
 
@@ -521,6 +565,7 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(getApplicationContext(), getString(R.string.ma_permission_service_restart), Toast.LENGTH_LONG).show();
                 }
+                if (!checkExactAlarmPermssion()) grantExactAlarmPermission();
             }
         }
     }
