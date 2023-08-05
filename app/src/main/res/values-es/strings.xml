@@ -771,4 +771,5 @@
     <string name="setting_service_running_desc">No se puede cambiar mientras el servicio se está ejecutando</string>
     <string name="ma_permission_notification_denied">Se requiere permiso de notificación para las funciones de Kcanotify. (Debe permitir cuando enciende el botón SERVICIE)</string>
     <string name="ma_permission_service_restart">Vuelva a pulsar el botón SERVICE para iniciar kcanotify.</string>
+    <string name="setting_menu_noti_title_test">Mostrar notificación de prueba</string>
 </resources>

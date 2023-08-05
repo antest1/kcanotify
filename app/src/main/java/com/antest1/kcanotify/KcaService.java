@@ -1149,7 +1149,7 @@ public class KcaService extends Service {
                             boolean ncondition = (isNotSuppliedFlag && isNSVibrateEnabled());
                             if (hcondition || ncondition) {
                                 String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-                                if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
+                                if (soundKind.equals(NOTI_SOUND_KIND_NORMAL) || soundKind.equals(NOTI_SOUND_KIND_MIXED)) {
                                     if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
                                         Uri notificationUri = KcaUtils.getContentUri(getApplicationContext(),
                                                 Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
@@ -2361,7 +2361,7 @@ public class KcaService extends Service {
                 if (heavyDamagedMode != HD_NONE) {
                     if (isHDVibrateEnabled()) {
                         String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-                        if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
+                        if (soundKind.equals(NOTI_SOUND_KIND_NORMAL) || soundKind.equals(NOTI_SOUND_KIND_MIXED)) {
                             if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
                                 Uri notificationUri = KcaUtils.getContentUri(getApplicationContext(),
                                         Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
@@ -2690,14 +2690,19 @@ public class KcaService extends Service {
             time = time - KcaAlarmService.ALARM_DELAY;
             if (time < System.currentTimeMillis()) return;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, alarmIntent);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
-        } else {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
             alarmManager.set(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, alarmIntent);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alarmManager.setExact(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
+            } else {
+                alarmManager.set(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
+            }
         }
-        Log.e("KCA", "Alarm set to: " + String.valueOf(time) + " " + String.valueOf(code));
+        Log.e("KCA", "Alarm set to: " + time + " " + code);
     }
 
     public void updateQuestView() {

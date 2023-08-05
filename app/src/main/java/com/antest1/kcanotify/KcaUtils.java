@@ -1,7 +1,7 @@
 package com.antest1.kcanotify;
 
 import android.app.ActivityManager;
-import android.content.ContentResolver;
+import android.app.Notification;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -11,19 +11,18 @@ import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.MediaStore;
@@ -56,7 +55,6 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -104,8 +102,14 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DATALOAD;
+import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MIXED;
+import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MUTE;
+import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_NORMAL;
+import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_VIBRATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_DATALOAD_ERROR_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
+import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KC_PACKAGE;
 import static com.antest1.kcanotify.KcaConstants.PREF_RES_USELOCAL;
@@ -343,7 +347,7 @@ public class KcaUtils {
 
     public static Uri getContentUri(@NonNull Context context, @NonNull Uri uri) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            if (uri.toString().startsWith("file")) {
+            if (uri.getPath() != null && uri.toString().startsWith("file")) {
                 File file = new File(uri.getPath());
                 return MediaStore.Audio.Media.getContentUriForPath(file.getAbsolutePath());
             } else {
@@ -353,21 +357,11 @@ public class KcaUtils {
         return uri;
     }
 
-    public static boolean checkContentUri(ContentResolver cr, Uri contentUri)  {
-        try {
-            ParcelFileDescriptor parcelFileDescriptor = cr.openFileDescriptor(contentUri,"r");
-            if (parcelFileDescriptor != null) {
-                FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-                if (fileDescriptor != null) {
-                    Log.e("KCA", "valid: " + fileDescriptor.valid());
-                }
-                parcelFileDescriptor.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+    public static boolean checkContentUri(Context context, Uri contentUri)  {
+        RingtoneManager rm = new RingtoneManager(context);
+        rm.setType(RingtoneManager.TYPE_NOTIFICATION);
+        int pos = rm.getRingtonePosition(contentUri);
+        return pos != -1;
     }
 
     public static void playNotificationSound(MediaPlayer mediaPlayer, Context context, Uri uri) {
@@ -396,6 +390,42 @@ public class KcaUtils {
 
     public static int getNotificationId(int type, int n) {
         return n + 1000 * type;
+    }
+
+    public static NotificationCompat.Builder setSoundSetting(Context context, AudioManager am, NotificationCompat.Builder builder) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String soundKind = getStringPreferences(context, PREF_KCA_NOTI_SOUND_KIND);
+            if (soundKind.equals(NOTI_SOUND_KIND_NORMAL) || soundKind.equals(NOTI_SOUND_KIND_MIXED)) {
+                if (am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                    if (soundKind.equals(NOTI_SOUND_KIND_MIXED)) {
+                        builder.setDefaults(Notification.DEFAULT_VIBRATE);
+                    }
+                    Uri content_uri = getContentUri(context,
+                            Uri.parse(getStringPreferences(context, PREF_KCA_NOTI_RINGTONE)));
+                    if (checkContentUri(context, content_uri)) {
+                        builder.setSound(content_uri);
+                    } else {
+                        builder.setSound(RingtoneManager.getActualDefaultRingtoneUri(context,
+                                RingtoneManager.TYPE_NOTIFICATION));
+                    }
+                } else if (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+                    builder.setDefaults(Notification.DEFAULT_VIBRATE);
+                } else {
+                    builder.setDefaults(0);
+                }
+            }
+            if (soundKind.equals(NOTI_SOUND_KIND_VIBRATE)) {
+                if (am.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
+                    builder.setDefaults(Notification.DEFAULT_VIBRATE);
+                } else {
+                    builder.setDefaults(0);
+                }
+            }
+            if (soundKind.equals(NOTI_SOUND_KIND_MUTE)) {
+                builder.setDefaults(0);
+            }
+        }
+        return builder;
     }
 
     public static String getName(Context context, int resid) {

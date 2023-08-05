@@ -316,7 +316,7 @@
         android:title="@string/setting_menu_noti_head"
         app:iconSpaceReserved="false">
         <ListPreference
-            android:defaultValue="@string/sound_kind_value_vibrate"
+            android:defaultValue="vibrate"
             app:iconSpaceReserved="false"
             android:entries="@array/soundOption"
             android:entryValues="@array/soundOptionValue"
@@ -331,6 +331,13 @@
             android:title="@string/setting_menu_noti_title_ringtone"
             android:key="notify_ringtone"
             android:defaultValue="DEFAULT_NOTIFICATION_URI"/>
+
+        <Preference
+            android:defaultValue=""
+            app:iconSpaceReserved="false"
+            android:key="notify_test_show"
+            android:summary=""
+            android:title="@string/setting_menu_noti_title_test" />
 
         <CheckBoxPreference
             android:defaultValue="true"

@@ -768,4 +768,5 @@
     <string name="setting_service_running_desc">サービスの実行中は変更できません</string>
     <string name="ma_permission_notification_denied">Kcanotify 機能には通知権限が必要です。SERVICEボタンをオンにするときに許可する必要があります。</string>
     <string name="ma_permission_service_restart">SERVICEボタンをもう一度押してkcanotifyを起動します。</string>
+    <string name="setting_menu_noti_title_test">テスト通知を表示</string>
 </resources>

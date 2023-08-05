@@ -72,10 +72,10 @@
     </string-array>
 
     <string-array name="soundOptionValue" translatable="false">
-        <item>@string/sound_kind_value_mixed</item>
-        <item>@string/sound_kind_value_normal</item>
-        <item>@string/sound_kind_value_vibrate</item>
-        <item>@string/sound_kind_value_mute</item>
+        <item>mixed</item>
+        <item>sound</item>
+        <item>vibrate</item>
+        <item>mute</item>
     </string-array>
 
     <string-array name="downloadSiteOption" translatable="false">

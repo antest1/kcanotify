@@ -410,9 +410,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sound_kind_normal">Sound</string>
     <string name="sound_kind_vibrate">Vibrate</string>
     <string name="sound_kind_mute">Mute</string>
-    <string name="sound_kind_value_normal" translatable="false">sound</string>
-    <string name="sound_kind_value_vibrate" translatable="false">vibrate</string>
-    <string name="sound_kind_value_mute" translatable="false">mute</string>
     <string name="ma_permission_external_confirmed">Allow External Storage Permission: On</string>
     <string name="ma_permission_external_denied">Allow External Storage: Off (You can use only system notification sound. You cannot export error log.)</string>
     <string name="airbase_term">LBAS</string>
@@ -445,7 +442,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="kca_view_condition_2" formatted="false">Morale #2: %s</string>
     <string name="not_supplied" formatted="false">Fleet %d is not supplied!</string>
     <string name="sound_kind_mixed">Sound+Vibrate</string>
-    <string name="sound_kind_value_mixed" translatable="false">mixed</string>
     <string name="viewbutton_hide">Fairy: bye-bye!</string>
     <string name="fairy_hidden_notification_title">Fairy Hidden</string>
     <string name="fairy_hidden_notification_text">Swipe down to select action</string>
@@ -851,5 +847,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="text_api_houk2">INT</string>
     <string name="ma_permission_notification_denied">Notification Permission is required for Kcanotify functions. You need to allow when you turn on SERVICE button.</string>
     <string name="ma_permission_service_restart">Press SERVICE button again to start kcanotify.</string>
+    <string name="setting_menu_noti_title_test">Show Test Notification</string>
 
 </resources>

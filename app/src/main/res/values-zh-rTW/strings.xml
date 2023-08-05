@@ -773,4 +773,5 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_service_running_desc">服務運行時無法更改</string>
     <string name="ma_permission_notification_denied">Kcanotify 功能需要通知權限。打開“SERVICE”按鈕時需要允許。</string>
     <string name="ma_permission_service_restart">再次按 SERVICE 按鈕啟動 kcanotify。</string>
+    <string name="setting_menu_noti_title_test">顯示測試通知</string>
 </resources>

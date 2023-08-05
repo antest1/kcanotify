@@ -112,7 +112,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_KCA_LANGUAGE:
                 return "R.string.default_locale";
             case PREF_KCA_NOTI_SOUND_KIND:
-                return "R.string.sound_kind_value_vibrate";
+                return "vibrate";
             case PREF_KCA_NOTI_RINGTONE:
                 return RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString();
             case PREF_APK_DOWNLOAD_SITE:

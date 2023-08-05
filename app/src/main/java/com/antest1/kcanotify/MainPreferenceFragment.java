@@ -1,13 +1,20 @@
 package com.antest1.kcanotify;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -27,6 +34,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -37,17 +45,24 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import retrofit2.Call;
 
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
+import static com.antest1.kcanotify.KcaAlarmService.REFRESH_CHANNEL;
 import static com.antest1.kcanotify.KcaConstants.*;
+import static com.antest1.kcanotify.KcaUtils.checkContentUri;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
+import static com.antest1.kcanotify.KcaUtils.createBuilder;
+import static com.antest1.kcanotify.KcaUtils.getContentUri;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
+import static com.antest1.kcanotify.KcaUtils.setSoundSetting;
 import static com.antest1.kcanotify.KcaViewButtonService.FAIRY_FORECHECK_OFF;
 import static com.antest1.kcanotify.KcaViewButtonService.FAIRY_FORECHECK_ON;
 import static com.antest1.kcanotify.SettingActivity.REQUEST_ALERT_RINGTONE;
@@ -57,6 +72,8 @@ import static com.antest1.kcanotify.SettingActivity.REQUEST_USAGESTAT_PERMISSION
 
 public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceChangeListener {
+
+    private final static int TEST_NOTI_ID = 9999;
 
     KcaDBHelper dbHelper;
     private boolean isActivitySet = false;
@@ -68,6 +85,11 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
     ActivityResultLauncher<Intent> startActivityResult;
     private int currentActivity = 0;
+
+    private NotificationManager notificationManager;
+    private AudioManager mAudioManager;
+
+    private String notification_id;
 
     public interface Callback {
         void onNestedPreferenceSelected(int key);
@@ -83,6 +105,17 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         super.onAttach(context);
         dbHelper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
         downloader = KcaUtils.getInfoDownloader(context);
+
+        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
+        sharedPref = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
+        sharedPref.registerOnSharedPreferenceChangeListener(this);
+
+        Activity activity = getActivity();
+        if (activity instanceof Callback) mCallback = (Callback) activity;
+
+        createNotificationChannel(context);
 
         startActivityResult = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -107,14 +140,27 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        deleteNotificationChannel();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sharedPref.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sharedPref.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         isActivitySet = true;
-        Activity activity = getActivity();
-        if (activity instanceof Callback) mCallback = (Callback) activity;
-
-        sharedPref = getPreferenceManager().getSharedPreferences();
-        sharedPref.registerOnSharedPreferenceChangeListener(this);
 
         Map<String, ?> allEntries = sharedPref.getAll();
         for (String key : allEntries.keySet()) {
@@ -207,6 +253,10 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
         if (PREF_CHECK_UPDATE.equals(key)) {
             checkRecentVersion();
+        }
+
+        if (PREF_NOTI_TEST_SHOW.equals(key)) {
+            makeTestNotification();
         }
 
         return super.onPreferenceTreeClick(preference);
@@ -307,18 +357,28 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         }
     }
 
+    @SuppressLint("ApplySharedPref")
     private void callbackAlertRingtoneResult(ActivityResult result) {
-        Preference pref = findPreference(PREF_KCA_NOTI_RINGTONE);
-        if (pref != null && result.getData() != null) {
+        Intent alarmService = new Intent(requireContext(), KcaAlarmService.class);
+        alarmService.setAction(REFRESH_CHANNEL);
+        if (result != null && result.getData() != null) {
+            Preference pref = findPreference(PREF_KCA_NOTI_RINGTONE);
             Uri ringtoneUri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
             String ringtoneTitle = getRingtoneTitle(ringtoneUri);
-            pref.setSummary(ringtoneTitle);
+            if (pref != null) pref.setSummary(ringtoneTitle);
             if (ringtoneUri != null) {
-                sharedPref.edit().putString(PREF_KCA_NOTI_RINGTONE, ringtoneUri.toString()).apply();
+                sharedPref.edit().putString(PREF_KCA_NOTI_RINGTONE, ringtoneUri.toString()).commit();
+                alarmService.putExtra("uri", ringtoneUri.toString());
             } else {
-                sharedPref.edit().putString(PREF_KCA_NOTI_RINGTONE, "").apply();
+                sharedPref.edit().putString(PREF_KCA_NOTI_RINGTONE, "").commit();
+                alarmService.putExtra("uri", "");
             }
+        } else {
+            alarmService.putExtra("uri", getStringPreferences(requireContext(), PREF_KCA_NOTI_RINGTONE));
         }
+        requireActivity().startService(alarmService);
+        deleteNotificationChannel();
+        createNotificationChannel(requireContext());
     }
 
     public void showToast(Context context, String text, int length) {
@@ -374,8 +434,13 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             EditTextPreference etp = (EditTextPreference) preference;
             preference.setSummary(getEditTextSummary(key, etp.getText()));
         }
+
+        if (PREF_KCA_NOTI_SOUND_KIND.equals(key)) {
+            callbackAlertRingtoneResult(null);
+        }
     }
 
+    @SuppressLint("ApplySharedPref")
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (!checkActivityValid()) return false;
@@ -400,7 +465,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             if (Integer.parseInt(val) == SNIFFER_PASSIVE) {
                 if (prefs.getBoolean(PREF_VPN_ENABLED, false)) {
                     KcaVpnService.stop(VPN_STOP_REASON, getActivity());
-                    prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                    prefs.edit().putBoolean(PREF_VPN_ENABLED, false).commit();
                 }
                 setActiveSnifferSettingEnabled(false);
             } else if (Integer.parseInt(val) == SNIFFER_ACTIVE) {
@@ -589,5 +654,74 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 }
             }
         });
+    }
+
+    private void createNotificationChannel(Context context) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String uri = getStringPreferences(context, PREF_KCA_NOTI_RINGTONE);
+            String soundKind = getStringPreferences(context, PREF_KCA_NOTI_SOUND_KIND);
+
+            boolean isSound = soundKind.equals(NOTI_SOUND_KIND_MIXED)
+                    || soundKind.equals(NOTI_SOUND_KIND_NORMAL);
+            boolean isVibrate = soundKind.equals(NOTI_SOUND_KIND_MIXED)
+                    || soundKind.equals(NOTI_SOUND_KIND_VIBRATE);
+
+            notification_id = KcaUtils.format("test_%s_%d", KcaAlarmService.createAlarmId(uri, soundKind), System.currentTimeMillis());
+            NotificationChannel channel = new NotificationChannel(notification_id,
+                    KcaUtils.format("[Test] %s %s", soundKind, uri.hashCode()), NotificationManager.IMPORTANCE_HIGH);
+
+            if (isSound && uri.length() > 0) {
+                AudioAttributes.Builder attrs = new AudioAttributes.Builder();
+                attrs.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
+                attrs.setUsage(AudioAttributes.USAGE_NOTIFICATION);
+
+                Uri content_uri = getContentUri(context, Uri.parse(uri));
+                if (checkContentUri(context, content_uri)) {
+                    channel.setSound(content_uri, attrs.build());
+                } else {
+                    channel.setSound(RingtoneManager.getActualDefaultRingtoneUri(context,
+                            RingtoneManager.TYPE_NOTIFICATION), attrs.build());
+                }
+            } else {
+                channel.setSound(null, null);
+            }
+
+            channel.enableVibration(isVibrate);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void deleteNotificationChannel() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            notificationManager.deleteNotificationChannel(notification_id);
+        }
+    }
+
+    private void makeTestNotification() {
+        try {
+            notificationManager.cancel(TEST_NOTI_ID);
+
+            String title = "[Test] " + getStringWithLocale(R.string.app_name);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss z");
+            String content = sdf.format(new Date());
+
+            Bitmap testBitmap = KcaUtils.decodeSampledBitmapFromResource(getResources(), R.mipmap.expedition_notify_bigicon, 128, 128);
+            NotificationCompat.Builder builder = createBuilder(getContext(), notification_id)
+                    .setSmallIcon(R.mipmap.expedition_notify_icon)
+                    .setLargeIcon(testBitmap)
+                    .setContentTitle(title)
+                    .setContentText(content)
+                    .setAutoCancel(false)
+                    .setTicker(title);
+            builder = setSoundSetting(getContext(), mAudioManager, builder);
+            Notification noti = builder.build();
+            noti.flags = Notification.FLAG_AUTO_CANCEL;
+            notificationManager.notify(TEST_NOTI_ID, noti);
+
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "something went wrong: check error log", Toast.LENGTH_SHORT).show();
+            dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "noti_test_show", "", "", getStringFromException(e));
+        }
     }
 }

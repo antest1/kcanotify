@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
@@ -32,6 +33,7 @@ import static com.antest1.kcanotify.KcaApiData.getShipTranslation;
 import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_NOTI;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_NOTICOUNT_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
@@ -39,6 +41,7 @@ import static com.antest1.kcanotify.KcaConstants.NOTI_AKASHI;
 import static com.antest1.kcanotify.KcaConstants.NOTI_DOCK;
 import static com.antest1.kcanotify.KcaConstants.NOTI_EXP;
 import static com.antest1.kcanotify.KcaConstants.NOTI_MORALE;
+import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MUTE;
 import static com.antest1.kcanotify.KcaConstants.NOTI_UPDATE;
 import static com.antest1.kcanotify.KcaConstants.PREF_ALARM_DELAY;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_AKASHI;
@@ -48,6 +51,9 @@ import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_MORALE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_NOTIFYATSVCOFF;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_RINGTONE;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_NOTI_SOUND_KIND;
+import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MIXED;
+import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_NORMAL;
+import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_VIBRATE;
 import static com.antest1.kcanotify.KcaUtils.checkContentUri;
 import static com.antest1.kcanotify.KcaUtils.createBuilder;
 import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
@@ -55,7 +61,9 @@ import static com.antest1.kcanotify.KcaUtils.getContentUri;
 import static com.antest1.kcanotify.KcaUtils.getId;
 import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getNotificationId;
+import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
+import static com.antest1.kcanotify.KcaUtils.setSoundSetting;
 
 public class KcaAlarmService extends Service {
     public static final int TYPE_EXPEDITION = 1;
@@ -140,7 +148,6 @@ public class KcaAlarmService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        createAlarmChannel();
         Log.e("KCA", "KcaAlarmService Called: " + String.valueOf(startId));
         if (intent != null && intent.getAction() != null) {
             String action = intent.getAction();
@@ -177,17 +184,18 @@ public class KcaAlarmService extends Service {
             }
             Log.e("KCA-N", "A> " + alarm_set.toString());
         } else if (intent != null && intent.getStringExtra("data") != null) {
-            JsonObject data = JsonParser.parseString(intent.getStringExtra("data")).getAsJsonObject();
-            int type = data.get("type").getAsInt();
-            if (type == TYPE_UPDATE) {
-                int utype = data.get("utype").getAsInt();
-                String version = data.get("version").getAsString();
-                int nid = getNotificationId(NOTI_UPDATE, utype);
-                notificationManager.notify(nid, createUpdateNotification(utype, version, nid));
-                alarm_set.add(nid);
+            String extra_data = intent.getStringExtra("data");
+            if (extra_data != null) {
+                JsonObject data = JsonParser.parseString(extra_data).getAsJsonObject();
+                int type = data.get("type").getAsInt();
+                if (type == TYPE_UPDATE) {
+                    int utype = data.get("utype").getAsInt();
+                    String version = data.get("version").getAsString();
+                    int nid = getNotificationId(NOTI_UPDATE, utype);
+                    show_notification(nid, createUpdateNotification(utype, version, nid));
+                    alarm_set.add(nid);
 
-            } else if (getBooleanPreferences(getApplication(), PREF_KCA_NOTI_NOTIFYATSVCOFF) || KcaService.getServiceStatus()) {
-                if (intent.getStringExtra("data") != null) {
+                } else if (getBooleanPreferences(getApplication(), PREF_KCA_NOTI_NOTIFYATSVCOFF) || KcaService.getServiceStatus()) {
                     if (type == TYPE_EXPEDITION) {
                         int idx = data.get("idx").getAsInt();
                         KcaExpedition2.clearMissionData(idx);
@@ -201,7 +209,7 @@ public class KcaAlarmService extends Service {
                             boolean caFlag = data.get("ca_flag").getAsBoolean();
                             // if (caFlag) idx = idx | EXP_CANCEL_FLAG;
                             int nid = getNotificationId(NOTI_EXP, idx);
-                            notificationManager.notify(nid, createExpeditionNotification(mission_no, mission_name, kantai_name, cancelFlag, caFlag, nid));
+                            show_notification(nid, createExpeditionNotification(mission_no, mission_name, kantai_name, cancelFlag, caFlag, nid));
                             alarm_set.add(nid);
                         }
                     } else if (type == TYPE_DOCKING) {
@@ -219,7 +227,7 @@ public class KcaAlarmService extends Service {
                                 }
                             }
                             int nid = getNotificationId(NOTI_DOCK, dockId);
-                            notificationManager.notify(nid, createDockingNotification(dockId, shipName, nid));
+                            show_notification(nid, createDockingNotification(dockId, shipName, nid));
                             alarm_set.add(nid);
                         }
                     } else if (type == TYPE_MORALE) {
@@ -227,14 +235,14 @@ public class KcaAlarmService extends Service {
                         if(isMoraleAlarmEnabled()) {
                             int nid = getNotificationId(NOTI_MORALE, idx);
                             String kantai_name = data.get("kantai_name").getAsString();
-                            notificationManager.notify(nid, createMoraleNotification(idx, kantai_name, nid));
+                            show_notification(nid, createMoraleNotification(idx, kantai_name, nid));
                             alarm_set.add(nid);
                         }
                     } else if (type == TYPE_AKASHI) {
                         if (isAkashiAlarmEnabled()) {
                             int nid = getNotificationId(NOTI_AKASHI, 0);
                             if (KcaAkashiRepairInfo.getAkashiInFlasship()) {
-                                notificationManager.notify(nid, createAkashiRepairNotification(nid));
+                                show_notification(nid, createAkashiRepairNotification(nid));
                                 alarm_set.add(nid);
                             }
                         }
@@ -242,7 +250,8 @@ public class KcaAlarmService extends Service {
                 }
             }
         }
-        Log.e("KCA", "Noti Count: " + String.valueOf(alarm_set.size()));
+
+        Log.e("KCA", "Noti Count: " + alarm_set.size());
         if (sHandler != null) {
             bundle = new Bundle();
             bundle.putString("url", KCA_API_PREF_NOTICOUNT_CHANGED);
@@ -259,36 +268,50 @@ public class KcaAlarmService extends Service {
         super.onDestroy();
     }
 
-    private String createAlarmId(String uri, Boolean isvibrate) {
-        return KcaUtils.format("%s_%s_%s", ALARM_CHANNEL_ID, String.valueOf(uri.hashCode()), String.valueOf(isvibrate));
+    public static String createAlarmId(String uri, String sound_kind) {
+        if (NOTI_SOUND_KIND_VIBRATE.equals(sound_kind) || NOTI_SOUND_KIND_MUTE.equals(sound_kind)) {
+            return KcaUtils.format("%s_%s", ALARM_CHANNEL_ID, sound_kind);
+        } else {
+            return KcaUtils.format("%s_%s_%s", ALARM_CHANNEL_ID, String.valueOf(uri.hashCode()), sound_kind);
+        }
     }
 
     private void createAlarmChannel(String uri) {
         Log.e("KCA-A", "recv: " + uri);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-            boolean isVibrate = soundKind.equals(getString(R.string.sound_kind_value_mixed)) || soundKind.equals(getString(R.string.sound_kind_value_vibrate));
-            notificationManager.deleteNotificationChannel(ALARM_CHANNEL_ID);
-            while (!alarmChannelList.isEmpty()) {
-                notificationManager.deleteNotificationChannel(alarmChannelList.poll());
+            List<NotificationChannel> channels = notificationManager.getNotificationChannels();
+            for (NotificationChannel nc: channels) {
+                if(nc.getId().startsWith(ALARM_CHANNEL_ID)) {
+                    notificationManager.deleteNotificationChannel(nc.getId());
+                }
             }
+            alarmChannelList.clear();
 
-            AudioAttributes.Builder attrs = new AudioAttributes.Builder();
-            attrs.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
-            attrs.setUsage(AudioAttributes.USAGE_NOTIFICATION);
+            boolean isSound = soundKind.equals(NOTI_SOUND_KIND_MIXED) || soundKind.equals(NOTI_SOUND_KIND_NORMAL);
+            boolean isVibrate = soundKind.equals(NOTI_SOUND_KIND_MIXED) || soundKind.equals(NOTI_SOUND_KIND_VIBRATE);
 
-            String channel_name = createAlarmId(uri, isVibrate);
+            String channel_name = createAlarmId(uri, soundKind);
             alarmChannelList.add(channel_name);
             NotificationChannel channel = new NotificationChannel(alarmChannelList.peek(),
                     getStringWithLocale(R.string.notification_appinfo_title), NotificationManager.IMPORTANCE_HIGH);
 
-            Uri content_uri = getContentUri(getApplicationContext(), Uri.parse(uri));
-            if (checkContentUri(getContentResolver(), content_uri)) {
-                channel.setSound(content_uri, attrs.build());
+            if (isSound && uri.length() > 0) {
+                AudioAttributes.Builder attrs = new AudioAttributes.Builder();
+                attrs.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
+                attrs.setUsage(AudioAttributes.USAGE_NOTIFICATION);
+
+                Uri content_uri = getContentUri(getApplicationContext(), Uri.parse(uri));
+                if (checkContentUri(getApplicationContext(), content_uri)) {
+                    channel.setSound(content_uri, attrs.build());
+                } else {
+                    channel.setSound(RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(),
+                            RingtoneManager.TYPE_NOTIFICATION), attrs.build());
+                }
             } else {
-                channel.setSound(RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(),
-                        RingtoneManager.TYPE_NOTIFICATION), attrs.build());
+                channel.setSound(null, null);
             }
+
             channel.enableVibration(isVibrate);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
             notificationManager.createNotificationChannel(channel);
@@ -332,7 +355,7 @@ public class KcaAlarmService extends Service {
                 .setDeleteIntent(deletePendingIntent)
                 .setContentIntent(contentPendingIntent);
 
-        builder = setSoundSetting(builder);
+        builder = setSoundSetting(getApplicationContext(), mAudioManager, builder);
         Notification Notifi = builder.build();
         Notifi.flags = Notification.FLAG_AUTO_CANCEL;
 
@@ -373,7 +396,7 @@ public class KcaAlarmService extends Service {
                 .setDeleteIntent(deletePendingIntent)
                 .setContentIntent(contentPendingIntent);
 
-        builder = setSoundSetting(builder);
+        builder = setSoundSetting(getApplicationContext(), mAudioManager, builder);
         Notification Notifi = builder.build();
         Notifi.flags = Notification.FLAG_AUTO_CANCEL;
 
@@ -411,7 +434,7 @@ public class KcaAlarmService extends Service {
                 .setDeleteIntent(deletePendingIntent)
                 .setContentIntent(contentPendingIntent);
 
-        builder = setSoundSetting(builder);
+        builder = setSoundSetting(getApplicationContext(), mAudioManager, builder);
         Notification Notifi = builder.build();
         Notifi.flags = Notification.FLAG_AUTO_CANCEL;
 
@@ -449,7 +472,7 @@ public class KcaAlarmService extends Service {
                 .setDeleteIntent(deletePendingIntent)
                 .setContentIntent(contentPendingIntent);
 
-        builder = setSoundSetting(builder);
+        builder = setSoundSetting(getApplicationContext(), mAudioManager, builder);
         Notification Notifi = builder.build();
         Notifi.flags = Notification.FLAG_AUTO_CANCEL;
 
@@ -498,44 +521,21 @@ public class KcaAlarmService extends Service {
                 .setDeleteIntent(deletePendingIntent)
                 .setContentIntent(contentPendingIntent);
 
-        builder = setSoundSetting(builder);
+        builder = setSoundSetting(getApplicationContext(), mAudioManager, builder);
         Notification Notifi = builder.build();
         Notifi.flags = Notification.FLAG_AUTO_CANCEL;
         return Notifi;
     }
 
-    private NotificationCompat.Builder setSoundSetting(NotificationCompat.Builder builder) {
-        String soundKind = getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_SOUND_KIND);
-        if (soundKind.equals(getString(R.string.sound_kind_value_normal)) || soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
-            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                if (soundKind.equals(getString(R.string.sound_kind_value_mixed))) {
-                    builder.setDefaults(Notification.DEFAULT_VIBRATE);
-                }
-                Uri content_uri = getContentUri(getApplicationContext(),
-                        Uri.parse(getStringPreferences(getApplicationContext(), PREF_KCA_NOTI_RINGTONE)));
-                if (checkContentUri(getContentResolver(), content_uri)) {
-                    builder.setSound(content_uri);
-                } else {
-                    builder.setSound(RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(),
-                            RingtoneManager.TYPE_NOTIFICATION));
-                }
-            } else if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
-                builder.setDefaults(Notification.DEFAULT_VIBRATE);
-            } else {
-                builder.setDefaults(0);
+    private void show_notification(int id, Notification notification) {
+        try {
+            notificationManager.notify(id, notification);
+        } catch (Exception e) {
+            if (dbHelper != null) {
+                dbHelper.recordErrorLog(ERROR_TYPE_NOTI, "alarm_error", "", "", getStringFromException(e));
             }
         }
-        if (soundKind.equals(getString(R.string.sound_kind_value_vibrate))) {
-            if (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-                builder.setDefaults(Notification.DEFAULT_VIBRATE);
-            } else {
-                builder.setDefaults(0);
-            }
-        }
-        if (soundKind.equals(getString(R.string.sound_kind_value_mute))) {
-            builder.setDefaults(0);
-        }
-        return builder;
+
     }
 
     private int setDefaultGameData() {
