@@ -577,7 +577,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
     }
 
     private class KcaFairyDownloader extends AsyncTask<Integer, Integer, Integer> {
-        boolean is_finishing = false;
         boolean fairy_wait = false;
         int update_version = 0;
         int totalFiles = 0;
@@ -591,7 +590,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            is_finishing = isFinishing();
             mProgressDialog = new ProgressDialog(UpdateCheckActivity.this);
             mProgressDialog.setMessage(getStringWithLocale(R.string.download_progress));
             mProgressDialog.setIndeterminate(true);
@@ -599,13 +597,13 @@ public class UpdateCheckActivity extends AppCompatActivity {
             mProgressDialog.setCancelable(false);
             mProgressDialog.setProgressNumberFormat("%1d file(s)");
 
-            if (!is_finishing) {
+            if (!isFinishing()) {
                 mProgressDialog.show();
             }
         }
 
         private void workFinished()  {
-            if (is_finishing) return;
+            if (isFinishing()) return;
             if (mProgressDialog != null && mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
