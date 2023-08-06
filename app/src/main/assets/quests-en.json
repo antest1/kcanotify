@@ -3191,22 +3191,22 @@
         "code": "F2",
         "name": "The First Development!",
         "desc": "Construct a piece of equipment.",
-        "rewards": "a Development Material",
-        "resources": [[100, 100, 100, 100], [0, 0, 1, 0]]
+        "rewards": "2 Development Materials",
+        "resources": [[100, 100, 100, 100], [0, 0, 2, 0]]
     },
     "603": {
         "code": "F3",
         "name": "The First Dismantlement!",
         "desc": "Scrap a ship.",
-        "rewards": "a Development Material and a Flamethrower",
-        "resources": [[200, 200, 300, 100], [0, 1, 1, 0]]
+        "rewards": "2 Development Materials and a Flamethrower",
+        "resources": [[60, 60, 60, 60], [0, 1, 2, 0]]
     },
     "604": {
         "code": "F4",
         "name": "The First Disposal!",
         "desc": "Scrap a piece of equipment.",
         "rewards": "a Development Material and a Bucket",
-        "resources": [[0, 0, 0, 50], [1, 0, 1, 0]]
+        "resources": [[80, 80, 80, 80], [1, 0, 1, 0]]
     },
     "610": {
         "code": "F10",
@@ -3848,7 +3848,7 @@
         "desc": "Attempt to construct a piece of equipment. Failures count toward this.",
         "memo": "※Orders to Develop New Equipment",
         "rewards": "a Development Material and a Flamethrower",
-        "resources": [[50, 50, 50, 50], [0, 1, 1, 0]]
+        "resources": [[40, 40, 40, 40], [0, 1, 1, 0]]
     },
     "606": {
         "code": "Fd2",
@@ -3856,7 +3856,7 @@
         "desc": "Construct a ship.",
         "memo": "※Orders to Construct a New Ship",
         "rewards": "a Development Material and a Bucket",
-        "resources": [[100, 100, 100, 100], [1, 0, 1, 0]]
+        "resources": [[50, 50, 50, 50], [1, 0, 1, 0]]
     },
     "607": {
         "code": "Fd3",
@@ -3864,7 +3864,7 @@
         "desc": "Attempt to construct 3 pieces of equipment. Failures count toward this.",
         "memo": "※Concentrated Enhanced Equipment Development",
         "rewards": "2 Development Materials",
-        "resources": [[60, 60, 60, 60], [0, 0, 2, 0]]
+        "resources": [[100, 100, 100, 100], [0, 0, 2, 0]]
     },
     "608": {
         "code": "Fd4",
@@ -3872,7 +3872,7 @@
         "desc": "Construct 3 ships.",
         "memo": "※Enhance the Fleet by Constructing Ship Girls!",
         "rewards": "2 Development Materials and a Flamethrower",
-        "resources": [[80, 80, 80, 80], [0, 1, 2, 0]]
+        "resources": [[200, 200, 300, 100], [0, 1, 2, 0]]
     },
     "609": {
         "code": "Fd5",
@@ -3880,7 +3880,7 @@
         "desc": "Scrap 2 ships.",
         "memo": "※In Correspondence With the Disarmament Treaty!",
         "rewards": "a Bucket",
-        "resources": [[40, 40, 40, 40], [1, 0, 0, 0]]
+        "resources": [[0, 0, 0, 50], [1, 0, 0, 0]]
     },
     "619": {
         "code": "Fd6",
