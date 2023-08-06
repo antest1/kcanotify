@@ -245,7 +245,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 }
             } else {
                 // No ringtone has been selected, set to the default
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, DEFAULT_NOTIFICATION_URI);
             }
             currentActivity = REQUEST_ALERT_RINGTONE;
             startActivityResult.launch(intent);
@@ -679,8 +679,11 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 if (checkContentUri(context, content_uri)) {
                     channel.setSound(content_uri, attrs.build());
                 } else {
-                    channel.setSound(RingtoneManager.getActualDefaultRingtoneUri(context,
-                            RingtoneManager.TYPE_NOTIFICATION), attrs.build());
+                    try {
+                        channel.setSound(DEFAULT_NOTIFICATION_URI, attrs.build());
+                    } catch (Exception e) {
+                        dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "noti_test_init", "", "", getStringFromException(e));
+                    }
                 }
             } else {
                 channel.setSound(null, null);

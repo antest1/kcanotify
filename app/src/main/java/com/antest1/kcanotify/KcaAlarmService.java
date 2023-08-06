@@ -1,5 +1,7 @@
 package com.antest1.kcanotify;
 
+import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -305,8 +307,11 @@ public class KcaAlarmService extends Service {
                 if (checkContentUri(getApplicationContext(), content_uri)) {
                     channel.setSound(content_uri, attrs.build());
                 } else {
-                    channel.setSound(RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(),
-                            RingtoneManager.TYPE_NOTIFICATION), attrs.build());
+                    try {
+                        channel.setSound(DEFAULT_NOTIFICATION_URI, attrs.build());
+                    } catch (SecurityException e) {
+                        dbHelper.recordErrorLog(ERROR_TYPE_NOTI, "create_channel", null, null, getStringFromException(e));
+                    }
                 }
             } else {
                 channel.setSound(null, null);

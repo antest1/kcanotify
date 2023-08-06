@@ -100,6 +100,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DATALOAD;
 import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MIXED;
@@ -405,8 +406,7 @@ public class KcaUtils {
                     if (checkContentUri(context, content_uri)) {
                         builder.setSound(content_uri);
                     } else {
-                        builder.setSound(RingtoneManager.getActualDefaultRingtoneUri(context,
-                                RingtoneManager.TYPE_NOTIFICATION));
+                        builder.setSound(DEFAULT_NOTIFICATION_URI);
                     }
                 } else if (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                     builder.setDefaults(Notification.DEFAULT_VIBRATE);
