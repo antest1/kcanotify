@@ -1281,7 +1281,9 @@ public class KcaBattle {
                 int checkresult = HD_NONE;
 
                 JsonObject qtrackData = new JsonObject();
+                qtrackData.add("deck_port", deckportdata);
                 qtrackData.addProperty("result", api_data.get("api_win_rank").getAsString());
+
                 if (url.equals(API_REQ_SORTIE_BATTLE_RESULT)) {
                     if (!isEndReached) {
                         checkresult = checkHeavyDamagedExist();
@@ -1346,7 +1348,6 @@ public class KcaBattle {
                     qtrackData.addProperty("node", currentNode);
                     qtrackData.addProperty("isboss", isBossReached);
                     qtrackData.add("ship_ke", ship_ke);
-                    qtrackData.add("deck_port", deckportdata);
                     qtrackData.add("afterhps_f", friendAfterHps);
                     qtrackData.add("afterhps_e", enemyAfterHps);
                     if (ship_ke_combined != null) {
