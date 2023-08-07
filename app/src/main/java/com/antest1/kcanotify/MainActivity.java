@@ -29,12 +29,15 @@ import android.provider.Settings;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.text.Html;
 import android.text.Spanned;
 import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
@@ -72,6 +75,7 @@ import static com.antest1.kcanotify.KcaUtils.getKcIntent;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
+import static com.antest1.kcanotify.KcaUtils.setPreferences;
 import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
@@ -143,26 +147,13 @@ public class MainActivity extends AppCompatActivity {
         vpnbtn.setText("PASSIVE");
         vpnbtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                JsonObject statProperties = new JsonObject();
-                try {
-                    final Intent prepare = VpnService.prepare(MainActivity.this);
-                    if (prepare == null) {
-                        //Log.i(TAG, "Prepare done");
-                        startActivityResultCallback(REQUEST_VPN, RESULT_OK);
-                    } else {
-                        vpnPrepareLauncher.launch(prepare);
-                    }
-                    statProperties.addProperty("is_success", true);
-                } catch (Throwable ex) {
-                    // Prepare failed
-                    statProperties.addProperty("is_success", false);
-                    Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+                if (getBooleanPreferences(getApplicationContext(), PREF_VPNSERVICE_USAGE_AGREE)) {
+                    startVpnService();
+                } else {
+                    showVpnServiceNotification();
                 }
-                sendUserAnalytics(getApplicationContext(), START_SNIFFER, statProperties);
             } else {
-                KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
-                prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
-                sendUserAnalytics(getApplicationContext(), END_SNIFFER, null);
+                stopVpnService();
             }
         });
 
@@ -573,5 +564,47 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         backPressCloseHandler.onBackPressed();
+    }
+
+    public void startVpnService() {
+        JsonObject statProperties = new JsonObject();
+        try {
+            final Intent prepare = VpnService.prepare(MainActivity.this);
+            if (prepare == null) {
+                //Log.i(TAG, "Prepare done");
+                startActivityResultCallback(REQUEST_VPN, RESULT_OK);
+            } else {
+                vpnPrepareLauncher.launch(prepare);
+            }
+            statProperties.addProperty("is_success", true);
+        } catch (Throwable ex) {
+            // Prepare failed
+            statProperties.addProperty("is_success", false);
+            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+        }
+        sendUserAnalytics(getApplicationContext(), START_SNIFFER, statProperties);
+    }
+
+    public void stopVpnService() {
+        KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
+        prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+        sendUserAnalytics(getApplicationContext(), END_SNIFFER, null);
+    }
+
+    public void showVpnServiceNotification() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        alert.setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog, which) -> {
+            setPreferences(getApplicationContext(), PREF_VPNSERVICE_USAGE_AGREE, true);
+            startVpnService();
+            dialog.dismiss();
+        }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), (dialog, which) -> {
+            prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+            vpnbtn.setChecked(false);
+            dialog.cancel();
+        });
+        alert.setMessage(Html.fromHtml(getStringWithLocale(R.string.ma_dialog_vpn_usage)));
+        AlertDialog dialog = alert.create();
+        dialog.show();
+        ((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
 }

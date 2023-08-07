@@ -494,11 +494,12 @@ public final class KcaConstants {
     public static final String PREF_FLEETVIEW_ITEMSELECT = "fleetview_item_select";
     public static final String PREF_NOTI_TEST_SHOW = "notify_test_show";
 
+    public static final String PREF_VPNSERVICE_USAGE_AGREE = "vpnservice_usage_agree";
+
     public static final String NOTI_SOUND_KIND_MIXED = "mixed";
     public static final String NOTI_SOUND_KIND_NORMAL = "sound";
     public static final String NOTI_SOUND_KIND_VIBRATE = "vibrate";
     public static final String NOTI_SOUND_KIND_MUTE = "mute";
-
 
     public static final String PREF_FV_ITEM_1 = "fleetview_item_select_value_1";
     public static final String PREF_FV_ITEM_2 = "fleetview_item_select_value_2";
@@ -582,7 +583,8 @@ public final class KcaConstants {
             PREF_FV_ITEM_2,
             PREF_FV_ITEM_3,
             PREF_FV_ITEM_4,
-            PREF_NOTI_TEST_SHOW
+            PREF_NOTI_TEST_SHOW,
+            PREF_VPNSERVICE_USAGE_AGREE
     };
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
@@ -616,7 +618,8 @@ public final class KcaConstants {
             PREF_KCAQSYNC_USE,
             PREF_ALLOW_EXTFILTER,
             PREF_HDNOTI_LOCKED,
-            PREF_FAIRY_RANDOM
+            PREF_FAIRY_RANDOM,
+            PREF_VPNSERVICE_USAGE_AGREE
     };
 
     public static final List<String> PREFS_LIST = Arrays.asList(PREF_ARRAY);

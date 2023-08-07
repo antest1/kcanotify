@@ -79,6 +79,7 @@
     <string name="ma_vpn_toggleoff">스니퍼 Off</string>
     <string name="ma_svc_toggleon">서비스 On</string>
     <string name="ma_svc_toggleoff">서비스 Off</string>
+    <string name="ma_dialog_vpn_usage"><![CDATA[시제 깡들리티는 게임 데이터 트래픽을 필터링하기 위해 로컬 VPN(VpnService)을 이용합니다. VPN 권한을 허용하지 않은 경우 다음에 나타나는 창에서 VPN 연결을 허용해주시기 바랍니다. 인터넷 트래픽은 원격 VPN 서버로 전송되지 않습니다.<br/><br/><a href="https://github.com/antest1/kcanotify/blob/master/private_policy.md">개인정보처리방침</a>]]></string>
     <string name="ma_toast_kancolle_not_installed">칸코레가 설치되어 있지 않습니다.</string>
     <string name="ma_toast_gotobrowser_not_installed">고토브라우저가 설치되어 있지 않습니다.</string>
     <string name="ma_toast_overay_diabled">전투예보에 필요한 화면 오버레이 권한이 설정되지 않았습니다. 설정 > 화면 오버레이 설정에서 권한을 설정하세요.</string>

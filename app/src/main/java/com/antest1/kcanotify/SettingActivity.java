@@ -91,6 +91,7 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_ALLOW_EXTFILTER:
             case PREF_HDNOTI_LOCKED:
             case PREF_FAIRY_RANDOM:
+            case PREF_VPNSERVICE_USAGE_AGREE:
                 return "boolean_false";
             case PREF_KCA_EXP_VIEW:
             case PREF_KCA_NOTI_NOTIFYATSVCOFF:

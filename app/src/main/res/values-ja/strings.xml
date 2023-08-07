@@ -769,4 +769,5 @@
     <string name="ma_permission_notification_denied">Kcanotify 機能には通知権限が必要です。SERVICEボタンをオンにするときに許可する必要があります。</string>
     <string name="ma_permission_service_restart">SERVICEボタンをもう一度押してkcanotifyを起動します。</string>
     <string name="setting_menu_noti_title_test">テスト通知を表示</string>
+    <string name="ma_dialog_vpn_usage"><![CDATA[Kcanotifyは、ローカルVPN（VpnService） を使用してゲームのトラフィックをフィルターします。もしVPNの権限を許容してない場合は次のダイアログボックスで VPN接続を許可してください。インター ネット トラフィックは他のVPNサーバーには送信されません。<br/><br/><a href="https://github.com/antest1/kcanotify/blob/master/private_policy.md">プライバシー ポリシー</a>]]></string>
 </resources>

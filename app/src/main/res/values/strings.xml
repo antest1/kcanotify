@@ -412,6 +412,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sound_kind_mute">Mute</string>
     <string name="ma_permission_external_confirmed">Allow External Storage Permission: On</string>
     <string name="ma_permission_external_denied">Allow External Storage: Off (You can use only system notification sound. You cannot export error log.)</string>
+    <string name="ma_dialog_vpn_usage"><![CDATA[Kcanotify uses a local VPN (VpnService) to filter game data traffic. If you didn\'t allowed permission for VPN before, please allow a VPN connection in the next dialog. Your internet traffic is not being sent to a remote VPN server.<br/><br/><a href="https://github.com/antest1/kcanotify/blob/master/private_policy.md">Privacy Policy</a>]]></string>
     <string name="airbase_term">LBAS</string>
     <string name="contact_term">Contact</string>
     <string name="contact_none">(None)</string>

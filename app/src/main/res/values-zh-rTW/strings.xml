@@ -87,6 +87,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_vpn_toggleoff">Sniffer OFF</string>
     <string name="ma_svc_toggleon">Service ON</string>
     <string name="ma_svc_toggleoff">Service OFF</string>
+    <string name="ma_dialog_vpn_usage"><![CDATA[Kcanotify 使用本地 VPN（VpnService） 來過濾遊戲數據流量。如果您之前沒有授予 VPN 權限，請在下一個對話框中允許 VPN 連接。您的互聯網流量不會發送到遠程 VPN 服務器。 <br/><br/><a href="https://github.com/antest1/kcanotify/blob/master/private_policy.md">隱私權政策</a>]]></string>
     <string name="ma_toast_kancolle_not_installed">Android版本的艦これ尚未安裝</string>
     <string name="ma_toast_gotobrowser_not_installed">GotoBrowser尚未安裝</string>
     <string name="ma_toast_overay_diabled">戰鬥劇透需要取得懸浮視窗權限  請至設定 > 允許懸浮視窗的相關設定</string>
