@@ -675,15 +675,17 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                 attrs.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
                 attrs.setUsage(AudioAttributes.USAGE_NOTIFICATION);
 
-                Uri content_uri = getContentUri(context, Uri.parse(uri));
-                if (checkContentUri(context, content_uri)) {
-                    channel.setSound(content_uri, attrs.build());
-                } else {
-                    try {
+                try {
+                    Uri content_uri = getContentUri(context, Uri.parse(uri));
+                    if (DEFAULT_NOTIFICATION_URI.equals(content_uri)) {
                         channel.setSound(DEFAULT_NOTIFICATION_URI, attrs.build());
-                    } catch (Exception e) {
-                        dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "noti_test_init", "", "", getStringFromException(e));
+                    } else if (checkContentUri(context, content_uri)) {
+                        channel.setSound(content_uri, attrs.build());
+                    } else {
+                        channel.setSound(DEFAULT_NOTIFICATION_URI, attrs.build());
                     }
+                } catch (Exception e) {
+                    dbHelper.recordErrorLog(ERROR_TYPE_SETTING, "noti_test_init", "", "", getStringFromException(e));
                 }
             } else {
                 channel.setSound(null, null);

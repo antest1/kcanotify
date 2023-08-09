@@ -103,6 +103,7 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_STARTDATA;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_DATALOAD;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MIXED;
 import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_MUTE;
 import static com.antest1.kcanotify.KcaConstants.NOTI_SOUND_KIND_NORMAL;
@@ -394,19 +395,24 @@ public class KcaUtils {
     }
 
     public static NotificationCompat.Builder setSoundSetting(Context context, AudioManager am, NotificationCompat.Builder builder) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             String soundKind = getStringPreferences(context, PREF_KCA_NOTI_SOUND_KIND);
             if (soundKind.equals(NOTI_SOUND_KIND_NORMAL) || soundKind.equals(NOTI_SOUND_KIND_MIXED)) {
                 if (am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
                     if (soundKind.equals(NOTI_SOUND_KIND_MIXED)) {
                         builder.setDefaults(Notification.DEFAULT_VIBRATE);
                     }
-                    Uri content_uri = getContentUri(context,
-                            Uri.parse(getStringPreferences(context, PREF_KCA_NOTI_RINGTONE)));
-                    if (checkContentUri(context, content_uri)) {
-                        builder.setSound(content_uri);
-                    } else {
-                        builder.setSound(DEFAULT_NOTIFICATION_URI);
+                    try {
+                        Uri content_uri = getContentUri(context, Uri.parse(getStringPreferences(context, PREF_KCA_NOTI_RINGTONE)));
+                        if (DEFAULT_NOTIFICATION_URI.equals(content_uri)) {
+                            builder.setSound(DEFAULT_NOTIFICATION_URI);
+                        } else if (checkContentUri(context, content_uri)) {
+                            builder.setSound(content_uri);
+                        } else {
+                            builder.setSound(DEFAULT_NOTIFICATION_URI);
+                        }
+                    } catch (Exception e) {
+                        builder.setSound(null);
                     }
                 } else if (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                     builder.setDefaults(Notification.DEFAULT_VIBRATE);

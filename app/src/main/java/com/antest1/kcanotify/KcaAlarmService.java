@@ -36,6 +36,7 @@ import static com.antest1.kcanotify.KcaApiData.isExpeditionDataLoaded;
 import static com.antest1.kcanotify.KcaApiData.loadSimpleExpeditionInfoFromStorage;
 import static com.antest1.kcanotify.KcaApiData.loadTranslationData;
 import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_NOTI;
+import static com.antest1.kcanotify.KcaConstants.ERROR_TYPE_SETTING;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_PREF_NOTICOUNT_CHANGED;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_UPDATE_FRONTVIEW;
@@ -303,15 +304,18 @@ public class KcaAlarmService extends Service {
                 attrs.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
                 attrs.setUsage(AudioAttributes.USAGE_NOTIFICATION);
 
-                Uri content_uri = getContentUri(getApplicationContext(), Uri.parse(uri));
-                if (checkContentUri(getApplicationContext(), content_uri)) {
-                    channel.setSound(content_uri, attrs.build());
-                } else {
-                    try {
+                try {
+                    Uri content_uri = getContentUri(getApplicationContext(), Uri.parse(uri));
+                    if (DEFAULT_NOTIFICATION_URI.equals(content_uri)) {
                         channel.setSound(DEFAULT_NOTIFICATION_URI, attrs.build());
-                    } catch (SecurityException e) {
-                        dbHelper.recordErrorLog(ERROR_TYPE_NOTI, "create_channel", null, null, getStringFromException(e));
+                    } else if (checkContentUri(getApplicationContext(), content_uri)) {
+                        channel.setSound(content_uri, attrs.build());
+                    } else {
+                        channel.setSound(DEFAULT_NOTIFICATION_URI, attrs.build());
                     }
+                } catch (Exception e) {
+                    channel.setSound(null, null);
+                    dbHelper.recordErrorLog(ERROR_TYPE_NOTI, "create_channel", null, null, getStringFromException(e));
                 }
             } else {
                 channel.setSound(null, null);
