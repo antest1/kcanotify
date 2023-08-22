@@ -114,7 +114,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_overlay_no">懸浮視窗權限：未取得（將無法使用戰鬥劇透功能）</string>
     <string name="sa_batteryoptim_appearontop">點選應用程式資訊的「電池用量」，將電池使用管理設定為「無限制」。 </string>
     <string name="sa_batteryoptim_ok">電池優化已關閉</string>
-    <string name="sa_batteryoptim_no">電池優化化未關閉（通知等服務可能無法正常運作）</string>
+    <string name="sa_batteryoptim_no">電池優化未關閉（通知等服務可能無法正常運作）</string>
     <string name="sa_usagestat_ok">允許存取使用記錄</string>
     <string name="sa_usagestat_no">禁止存取使用記錄</string>
     <string name="sa_usagestat_dialog_title">UsageStats存取權限</string>
