@@ -113,8 +113,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_overlay_ok">懸浮視窗權限：已取得</string>
     <string name="sa_overlay_no">懸浮視窗權限：未取得（將無法使用戰鬥劇透功能）</string>
     <string name="sa_batteryoptim_appearontop">點選應用程式資訊的「電池用量」，將電池使用管理設定為「無限制」。 </string>
-    <string name="sa_batteryoptim_ok">電池最佳化已關閉</string>
-    <string name="sa_batteryoptim_no">電池最佳化未關閉（通知等服務可能無法正常運作）</string>
+    <string name="sa_batteryoptim_ok">電池優化已關閉</string>
+    <string name="sa_batteryoptim_no">電池優化化未關閉（通知等服務可能無法正常運作）</string>
     <string name="sa_usagestat_ok">允許存取使用記錄</string>
     <string name="sa_usagestat_no">禁止存取使用記錄</string>
     <string name="sa_usagestat_dialog_title">UsageStats存取權限</string>
@@ -123,7 +123,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="sa_bypass_list_invalid">繞行地址列表有誤，請檢查及更正後重試。</string>
 
     <!-- KcaService Strings -->
-    <string name="kca_init_title" formatted="false">%s 直中</string>
+    <string name="kca_init_title" formatted="false">%s 執行中</string>
     <string name="kca_init_content">請從Kcanotify內開啟遊戲</string>
 
     <string name="kca_noti_title_exp_canceled" formatted="false">遠征 %s (%s) 已中止。</string>
@@ -210,8 +210,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="setting_menu_perm_head">應用程式權限設定</string>
     <string name="setting_menu_view_title_overlay_setting">懸浮視窗設定</string>
     <string name="setting_menu_view_desc_overlay_setting">取得懸浮視窗權限（使用戰鬥劇透功能）</string>
-    <string name="setting_menu_perm_title_batoptim_setting">電池最佳化</string>
-    <string name="setting_menu_perm_desc_batoptim_setting">為了使用通知等正常功能，需要關閉應用程式的電池最佳化。 </string>
+    <string name="setting_menu_perm_title_batoptim_setting">電池優化</string>
+    <string name="setting_menu_perm_desc_batoptim_setting">為了使用通知等正常功能，需要關閉應用程式的電池優化。 </string>
 
     <string name="setting_menu_view_head">功能設定</string>
     <string name="setting_menu_view_title_accessibility_setting">輔助功能設定</string>
