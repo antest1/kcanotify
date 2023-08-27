@@ -459,8 +459,8 @@
         <ListPreference
             android:defaultValue="0"
             app:iconSpaceReserved="false"
-            android:entries="@array/downloadSiteOption"
-            android:entryValues="@array/downloadSiteOptionValue"
+            android:entries="@array/downloadSiteOptionWithoutPlayStore"
+            android:entryValues="@array/downloadSiteOptionWithoutPlayStoreValue"
             android:key="apk_download_site"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"

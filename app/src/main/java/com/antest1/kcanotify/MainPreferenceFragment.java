@@ -157,18 +157,25 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
         sharedPref.unregisterOnSharedPreferenceChangeListener(this);
     }
 
+    @SuppressLint("ApplySharedPref")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         isActivitySet = true;
 
         Map<String, ?> allEntries = sharedPref.getAll();
+
+        String playstore_link = getString(R.string.app_download_link_playstore);
+        if (sharedPref.getString(PREF_APK_DOWNLOAD_SITE, "").equals(playstore_link)) {
+            sharedPref.edit().putString(PREF_APK_DOWNLOAD_SITE, getString(R.string.app_download_link_luckyjervis)).commit();
+        }
+
         for (String key : allEntries.keySet()) {
             Preference preference = findPreference(key);
             if (preference == null) continue;
             if (preference instanceof ListPreference) {
+                ListPreference etp = (ListPreference) preference;
                 if (!PREF_KCA_LANGUAGE.equals(preference.getKey())) {
-                    ListPreference etp = (ListPreference) preference;
                     preference.setSummary(etp.getEntry());
                 }
             } else if (preference instanceof EditTextPreference) {
@@ -199,7 +206,6 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         getPreferenceManager().setSharedPreferencesName("pref");
         setPreferencesFromResource(R.xml.pref_settings, rootKey);
-
     }
 
     @Override
@@ -606,28 +612,12 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                         alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
                                 (dialog, which) -> {
                                     String downloadUrl = getStringPreferences(getContext(), PREF_APK_DOWNLOAD_SITE);
+                                    if (downloadUrl.contains(getStringWithLocale(R.string.app_download_link_playstore))) {
+                                        downloadUrl = getStringWithLocale(R.string.app_download_link_luckyjervis);
+                                    }
                                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-                                        startActivity(intent);
-                                    } else if (downloadUrl.contains(getStringWithLocale(R.string.app_download_link_playstore))) {
-                                        showToast(getContext(), "Google Play Store not found", Toast.LENGTH_LONG);
-                                        AlertDialog.Builder apkDownloadPathDialog = new AlertDialog.Builder(getActivity());
-                                        apkDownloadPathDialog.setIcon(R.mipmap.ic_launcher);
-                                        apkDownloadPathDialog.setTitle(getStringWithLocale(R.string.setting_menu_app_title_down));
-                                        apkDownloadPathDialog.setCancelable(true);
-                                        apkDownloadPathDialog.setItems(R.array.downloadSiteOptionWithoutPlayStore, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                String[] path_value = getResources().getStringArray(R.array.downloadSiteOptionWithoutPlayStoreValue);
-                                                setPreferences(getContext(), PREF_APK_DOWNLOAD_SITE, path_value[i]);
-                                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(path_value[i]));
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                startActivity(intent);
-                                            }
-                                        });
-                                        apkDownloadPathDialog.show();
-                                    }
+                                    startActivity(intent);
                                 });
                         alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
                                 (dialog, which) -> {

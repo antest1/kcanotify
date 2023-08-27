@@ -78,37 +78,19 @@
         <item>mute</item>
     </string-array>
 
-    <string-array name="downloadSiteOption" translatable="false">
-        <item>@string/app_download_link_playstore_label</item>
-        <item>@string/app_download_link_googledrive_label</item>
-        <item>@string/app_download_link_mega_label</item>
-        <item>@string/app_download_link_luckyjervis_label</item>
-        <item>@string/app_download_link_kcwiki_label</item>
-    </string-array>
-
-    <string-array name="downloadSiteOptionValue" translatable="false">
-        <item>@string/app_download_link_playstore</item>
-        <item>@string/app_download_link_googledrive</item>
-        <item>@string/app_download_link_mega</item>
-        <item>@string/app_download_link_luckyjervis</item>
-        <item>@string/app_download_link_kcwiki</item>
-    </string-array>
-
     <string-array name="downloadSiteOptionWithoutPlayStore" translatable="false">
+        <item>@string/app_download_link_luckyjervis_label</item>
         <item>@string/app_download_link_googledrive_label</item>
         <item>@string/app_download_link_mega_label</item>
-        <item>@string/app_download_link_luckyjervis_label</item>
         <item>@string/app_download_link_kcwiki_label</item>
     </string-array>
 
     <string-array name="downloadSiteOptionWithoutPlayStoreValue" translatable="false">
+        <item>@string/app_download_link_luckyjervis</item>
         <item>@string/app_download_link_googledrive</item>
         <item>@string/app_download_link_mega</item>
-        <item>@string/app_download_link_luckyjervis</item>
         <item>@string/app_download_link_kcwiki</item>
     </string-array>
-
-
 
     <string-array name="expeditionTypeOption">
         <item>@string/expedition_type_value_0</item>
