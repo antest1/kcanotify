@@ -506,6 +506,12 @@
     "14inch/45 三連装砲": "14inch/45 Triple Gun Mount",
     "Walrus": "Walrus",
     "12cm単装高角砲E型改": "12cm Single High-angle Gun Mount Model E Kai",
+    "21inch艦首魚雷発射管4門(初期型)": "21inch Bow Torpedo Launcher (4 tubes, Initial Model)",
+    "21inch艦首魚雷発射管4門(後期型)": "21inch Bow Torpedo Launcher (4 tubes, Late Model)",
+    "阻塞気球": "Barrage Balloon",
+    "特大発動艇+Ⅲ号戦車J型": "Toku Daihatsu Landing Craft + Panzer III Type J",
+    "Sea Otter": "Sea Otter",
+    "Me 262 A-1a/R1‎": "Me 262 A-1a/R1‎",
     "12.5inch連装副砲": "12.5inch Twin Secondary Gun Mount",
     "12.7mm機銃": "12.7mm Machine Gun",
     "14inch連装砲": "14inch Twin Gun Mount",
@@ -635,5 +641,10 @@
     "深海突破襲撃機": "Abyssal Assault Torpedo Bomber",
     "深海突破襲撃機Ace": "Abyssal Assault Torpedo Bomber Ace",
     "沿岸突撃半水中魚雷艇": "Costal Ambush Semi-submersible Torpedo Boat",
-    "深海3inch単装高角砲+甲板機銃": "Abyssal 3inch Single High-angle Gun Mount + Deck Machine Gun"
+    "深海3inch単装高角砲+甲板機銃": "Abyssal 3inch Single High-angle Gun Mount + Deck Machine Gun",
+    "深海水中探信儀 & 深海調整電探": "Abyssal Active Sonar & Abyssal Adjusted Radar",
+    "深海観測阻塞気球": "Abyssal Observation Barrage Balloon",
+    "深海標準14inch/45 連装砲": "Abyssal Standard 14inch/45 Twin Gun Mount",
+    "深海標準14inch/45 三連装砲": "Abyssal Standard 14inch/45 Triple Gun Mount",
+    "深海3.7cm FlaK": "Abyssal 3.7cm FlaK"
 }
