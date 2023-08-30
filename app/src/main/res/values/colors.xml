@@ -211,6 +211,11 @@
     <color name="colorStatSallyArea8">#FFD180</color>
     <color name="colorStatSallyArea9">#FF9E80</color>
     <color name="colorStatSallyArea10">#B6B6B6</color>
+    <color name="colorStatSallyArea11">#C62828</color>
+    <color name="colorStatSallyArea12">#6A1B9A</color>
+    <color name="colorStatSallyArea13">#283593</color>
+    <color name="colorStatSallyArea14">#0277BD</color>
+    <color name="colorStatSallyArea15">#00695C</color>
 
     <color name="colorStatFighterPower">#16a085</color>
     <color name="colorStatSortCurrentBack">#c0bdbdbd</color>
