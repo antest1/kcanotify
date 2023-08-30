@@ -11,14 +11,13 @@ This application does not modify any incoming/outcoming packet when communicate 
 Requirement
 -------
 - Android 4.1 (JellyBean) or later
-- [Kancolle Android](http://kancolle.wikia.com/wiki/KanColle_Android) or [GotoBrowser](http://luckyjervis.com/GotoBrowser/) must be installed
+- [Kancolle Android](https://en.kancollewiki.net/Kancolle_Android_Version) or [GotoBrowser](http://luckyjervis.com/GotoBrowser/) must be installed
 - Supporting Android VPN service (when using official app)
 - Warning: Kcanotify may not work for specific devices (vendor-dependent issue) and old devices (Android 4.x).
 
 Download
 -------
-<a href='https://play.google.com/store/apps/details?id=com.antest1.kcanotify&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200px"/></a>
-- [Direct Download](http://luckyjervis.com/kcanotify/apk/) 
+- [Direct Download](https://luckyjervis.com/kcanotify/apk/) 
 - [Github Releases](https://github.com/antest1/kcanotify/releases) (All versions)
 - [kcwiki mirror](https://mirrors.kcwiki.org/kcanotify/) (All versions)
 - [Google Drive](http://bit.ly/kcanotify_gdrive) (Latest Version)
@@ -89,7 +88,7 @@ License
 -------
 [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt)
 
-Copyright (c) 2016-2022 antest1(IE10)
+Copyright (c) 2016-2023 antest1(IE10)
 
 All rights reserved
 
