@@ -2016,6 +2016,13 @@
         "rewards": "¶First choice: Either two Medals OR a 25mm Anti-aircraft Autocannon Expansion ★2 OR three Repair Godnesses ¶Second choice: Either a 12.7cm Twin Gun Mount Model C Kai 2 ★max OR a Torpedo Squadron Skilled Lookouts",
         "resources": [[1945, 410, 2023, 707], [0, 0, 0, 0]]
     },
+    "1001": {
+        "code": "B194",
+        "name": "Mainstay of Mainstays [Kiyoshimo Kai Ni], Sortie!",
+        "desc": "Sortie Kiyoshimo Kai Ni (D) as flagship, any 2 of Kasumi, Asashimo, Ooyodo and Ashigara and up to 3 additional ships to [W2-2], [W2-3], [W2-4] and [W7-4]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either three New Model Gun Mount Improvement Materials OR a 12.7cm Twin Gun Mount Model D Kai 2 OR a 61cm Quadruple (Oxygen) Torpedo Mount Late Model ¶Second choice: Either 7 Screws OR 30 Development Materials OR a Type 22 Surface Radar Kai 4 (Late Adjustment Model)",
+        "resources": [[1000, 1000, 0, 0], [0, 0, 0, 0]]
+    },
     "201": {
         "code": "Bd1",
         "name": "Daily Victory",
@@ -3842,6 +3849,27 @@
         "rewards": "¶First choice: Either three 12.7cm Twin Gun Mount Model B Kai 2 OR two 12.7cm Twin High-angle Gun Mount (Late Model) OR a New Model Gun Mount Improvement Material ¶Second choice: Either a 14cm Twin Gun Mount Kai ★3 OR a 15.2cm Twin Gun Mount Kai ★2 OR two 20.3cm (No.2) Twin Gun Mounts",
         "resources": [[250, 0, 0, 0], [0, 0, 0, 0]]
     },
+    "1132": {
+        "code": "F120",
+        "name": "Deployment of the Improved Model D Gun!",
+        "desc": "Have 22 Development Materials, a New Model Artillery Armament Material, 10 12.7cm Twin Gun Mounts, 350 Ammo and 8 Screws. Set Kiyoshimo Kai Ni (D) as secretary with a \\u26058+ 12.7cm Twin Gun Mount Model D Kai 2 in her first slot.",
+        "rewards": "a 12.7cm Twin Gun Mount Model D Kai 3",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1133": {
+        "code": "F121",
+        "name": "Definitive Release of an Improved Combat Radar!",
+        "desc": "Have 40 Development Materials, a \\u26054+ Type 13 Air Radar Kai (Late Model) and 6 Screws. Set Kiyoshimo Kai Ni (D) or Asashimo Kai Ni as secretary with a Type 22 Surface Radar Kai 4 (Calibrated Late Model) in her first slot.",
+        "rewards": "a Passive Radiolocator (E27) + Type 22 Surface Radar Kai 4 (Late Adjustment Model)",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1134": {
+        "code": "F122",
+        "name": "Improvement of the Type 22 Surface Radar!",
+        "desc": "Have 22 Development Materials, 2 New Model Armament Materials, 4 Type 22 Surface Radars and 6 Screws. Set Shigure Kai Ni/San or Michishio Kai Ni as secretary with a \\u2605max Type 22 Surface Radar Kai 4 in her first slot.",
+        "rewards": "a Type 22 Surface Radar Kai 4 (Late Adjustment Model)",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
     "605": {
         "code": "Fd1",
         "name": "Daily Development 1",
@@ -4249,17 +4277,38 @@
         "rewards": "a Development Material",
         "resources": [[88, 88, 0, 0], [0, 0, 1, 0]]
     },
-    "992": {
-        "code": "L2307B1",
-        "name": "DesDiv 16, Sortie! Ensure the Safety of Naval Base Waters!",
-        "desc": "Sortie any 2 of Amatsukaze, Yukikaze, Tokitsukaze and Hatsukaze and up to 4 additional ships to [W1-3], [W1-4] and [W1-5]. A-Rank+ each boss node 3 times.",
-        "rewards": "¶First choice: Either two Irako OR a Reinforcement Expansion OR a Repair Godness ¶Second choice: Either a Remodel Blueprint OR a Dock Opening Key",
-        "resources": [[900, 0, 0, 0], [0, 0, 0, 0]]
+    "370": {
+        "code": "L2311C2",
+        "name": "Weekly [Xmas Limited] Holy Night Maritime Escort Exercise",
+        "desc": "Secure 5 A-Rank+ victories in Exercises within the same day using any 4 of Kashima, Etorofu, Matsuwa, Sado, Fukae, Ukuru, Kishinami, Hayanami, Tanikaze, Kawakaze, Yamagumo, Asagumo, Yamashio Maru, Kaiboukan No.4, Kaiboukan No.22 and Kaiboukan No.30 and up to 2 additional ships.",
+        "rewards": "¶First choice: Either an Irako OR three Development Materials ¶Second choice: Either two Screws OR three Buckets",
+        "resources": [[250, 250, 250, 250], [0, 0, 0, 0]]
     },
-    "994": {
-        "code": "L2307B2",
-        "name": "Mainstay of Mainstays, Weigh Anchor! Destroy the Enemy Fleet!",
-        "desc": "Sortie 1 (F)BB(V) as flagship, 2 Yuugumo-class DD and up to 3 additional ships to [W1-2], [W1-4], [W2-2], [W2-3] and [W2-4]. S-Rank each boss node.",
-        "rewards": "a White Tasuki and either an AO Kamoi OR an AR Akashi OR a CL Ooyodo",
-        "resources": [[1000, 1000, 1000, 0], [0, 0, 0, 0]]}
+    "962": {
+        "code": "L2311B6",
+        "name": "[Xmas Limited] Merry Xmas Destroyer Squadron, Sortie!",
+        "desc": "Sortie any 4 of Yuugumo, Hayanami, Hamanami, Makinami, Oboro, Sazanami, Ushio and Akebono and up to 2 additional ships to [W1-1], [W1-3], [W1-4] and [W1-5]. S-Rank each boss node twice.",
+        "rewards": "a Present Box and either 10 Development Materials OR 4 Screws OR a Furniture Fairy",
+        "resources": [[0, 1224, 0, 0], [0, 0, 0, 0]]
+    },
+    "963": {
+        "code": "L2311B7",
+        "name": "[Xmas Limited] Holy Night Light Cruiser, Weigh Anchor!",
+        "desc": "Sortie any 2 of Ooyodo, Naka, Sakawa, Yahagi Kai Ni+, Sheffield, De Ruyter and Gotland, one of them as flagship and up to 4 additional ships to [W2-3] and [W2-4]. S-Rank each boss node twice.",
+        "rewards": "¶First choice: Either a New Model High Temperature High Pressure Boiler ★2 OR two New Model Gun Mount Improvement Materials OR 6 Buckets ¶Second choice: Either a 15.2cm Twin Gun Mount Kai ★4 OR a 8cm High-angle Gun ★8 OR a Medal",
+        "resources": [[1224, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "964": {
+        "code": "L2311B8",
+        "name": "[Xmas Extra Operation I] Xmas Special Mission Ship, Operation Start!",
+        "desc": "Sortie any 2 of Kamoi, Mizuho, Hayasui, Jingei, Chougei, Akashi, Asahi, Commandant Teste, Nevada, Kashima and Souya, one of them as flagship and up to 4 additional ships to [W4-1], [W6-2] and [W6-3]. S-Rank each boss node twice.",
+        "rewards": "¶First choice: Either two Skilled Crew Members OR a 14cm Twin Gun Mount Kai OR 6 Screws ¶Second choice: Either three New Model Gun Mount Improvement Materials OR three New Model Armament Materials OR a Barracuda Mk.II",
+        "resources": [[0, 0, 1224, 1224], [0, 0, 0, 0]]
+    },
+    "965": {
+        "code": "L2311B9",
+        "name": "[Xmas Extra Operation II] Xmas Final Battle, Begin!",
+        "desc": "Sortie any 3 of Warspite, Sheffield, Houston, Suzuya, Kumano and Kinugasa and up to 3 additional ships to [W4-5], [W5-3] and [W6-4]. S-Rank each boss node twice.",
+        "rewards": "¶First choice: Either two Type 1 Land-based Attack Aircraft Model 22AS OR a Ginga OR two Barracuda Mk.IIs ¶Second choice: Either three New Model Aerial Armament Materials OR two Medals OR a Ne Type Engine",
+        "resources": [[2023, 1225, 0, 0], [0, 0, 0, 0]]}
 }
