@@ -276,17 +276,16 @@ public class KcaService extends Service {
                 nHandler = new kcaNotificationHandler(this);
                 broadcaster = LocalBroadcastManager.getInstance(this);
 
+                String kc_app = getStringPreferences(getApplicationContext(), PREF_KC_PACKAGE);
                 int sniffer_mode = Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_SNIFFER_MODE));
                 Log.e("KCA-S", String.valueOf(sniffer_mode));
-                switch (sniffer_mode) {
-                    case SNIFFER_ACTIVE:
-                        KcaVpnData.setHandler(handler);
-                        break;
-                    case SNIFFER_PASSIVE:
-                        KcaReceiver.setHandler(handler);
-                        break;
-                    default:
-                        stopSelf();
+
+                if (kc_app.equals(KC_PACKAGE_NAME) || sniffer_mode == SNIFFER_ACTIVE) {
+                    KcaVpnData.setHandler(handler);
+                } else if (sniffer_mode == SNIFFER_PASSIVE) {
+                    KcaReceiver.setHandler(handler);
+                } else {
+                    stopSelf();
                 }
 
                 KcaBattle.setHandler(nHandler);
@@ -355,8 +354,6 @@ public class KcaService extends Service {
         }
         return START_REDELIVER_INTENT;
     }
-
-    // 서비스가 종료될 때 할 작업
 
     public void setServiceDown() {
         isPortAccessed = false;

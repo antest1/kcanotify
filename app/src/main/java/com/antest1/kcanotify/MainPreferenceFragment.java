@@ -570,7 +570,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
     }
 
     private void setSettingDisabledWhenServiceRunning() {
-        String[] keys = {PREF_KCA_LANGUAGE, PREF_SNIFFER_MODE};
+        String[] keys = {PREF_KCA_LANGUAGE, PREF_KC_PACKAGE, PREF_SNIFFER_MODE};
         if (KcaService.getServiceStatus()) {
             for (String key: keys) {
                 findPreference(key).setEnabled(false);
