@@ -2023,6 +2023,13 @@
         "rewards": "¶First choice: Either three New Model Gun Mount Improvement Materials OR a 12.7cm Twin Gun Mount Model D Kai 2 OR a 61cm Quadruple (Oxygen) Torpedo Mount Late Model ¶Second choice: Either 7 Screws OR 30 Development Materials OR a Type 22 Surface Radar Kai 4 (Late Adjustment Model)",
         "resources": [[1000, 1000, 0, 0], [0, 0, 0, 0]]
     },
+    "1003": {
+        "code": "B195",
+        "name": "[Submarine Quest] Submarines, Combat Patrol!",
+        "desc": "Assemble a fleet containing any 1 of: \"Salmon or Scamp\" as flagship; and up to 5 XX, then S rank the boss nodes of 1-2, 1-3, 2-3, and 3-1.",
+        "rewards": "¶First choice: Either 800 Fuels OR a 21inch Bow Torpedo Launcher (4 tubes, Late Model) OR 800 Ammos ¶Second choice: Either an SJ Radar + Submarine Conning Tower Equipment OR a Medal",
+        "resources": [[400, 0, 0, 0], [0, 0, 0, 0]]
+    },
     "201": {
         "code": "Bd1",
         "name": "Daily Victory",
@@ -4277,38 +4284,73 @@
         "rewards": "a Development Material",
         "resources": [[88, 88, 0, 0], [0, 0, 1, 0]]
     },
-    "370": {
-        "code": "L2311C2",
-        "name": "Weekly [Xmas Limited] Holy Night Maritime Escort Exercise",
-        "desc": "Secure 5 A-Rank+ victories in Exercises within the same day using any 4 of Kashima, Etorofu, Matsuwa, Sado, Fukae, Ukuru, Kishinami, Hayanami, Tanikaze, Kawakaze, Yamagumo, Asagumo, Yamashio Maru, Kaiboukan No.4, Kaiboukan No.22 and Kaiboukan No.30 and up to 2 additional ships.",
-        "rewards": "¶First choice: Either an Irako OR three Development Materials ¶Second choice: Either two Screws OR three Buckets",
-        "resources": [[250, 250, 250, 250], [0, 0, 0, 0]]
+    "361": {
+        "code": "L2312C1",
+        "name": "[New Year's Holiday] First Escort Fleet, Special Exercise!",
+        "desc": "Assemble a fleet containing 1 CVL, 4 DD, and up to 1 XX, OR 2 DE and up to 4 XX, then score 5 S ranks in PVP within the same day.\r",
+        "rewards": "¶First choice: Either a Mamiya OR two Irako OR three Type 96 Fighters ¶Second choice: Either 4 25mm Single Autocannon Mounts OR three Type 3 Depth Charge Projectors OR 3300 Fuels",
+        "resources": [[1000, 400, 400, 400], [0, 0, 0, 0]]
     },
-    "962": {
-        "code": "L2311B6",
-        "name": "[Xmas Limited] Merry Xmas Destroyer Squadron, Sortie!",
-        "desc": "Sortie any 4 of Yuugumo, Hayanami, Hamanami, Makinami, Oboro, Sazanami, Ushio and Akebono and up to 2 additional ships to [W1-1], [W1-3], [W1-4] and [W1-5]. S-Rank each boss node twice.",
-        "rewards": "a Present Box and either 10 Development Materials OR 4 Screws OR a Furniture Fairy",
-        "resources": [[0, 1224, 0, 0], [0, 0, 0, 0]]
+    "910": {
+        "code": "L2312B1",
+        "name": "[New Year's Holiday] Naval Base Patrol, Strict Vigilance!",
+        "desc": "Assemble a fleet containing 1 CL, 3 DD/DE, and up to 2 XX, then S rank the boss nodes of 1-1, 1-2, and 1-3, twice each.",
+        "rewards": "¶First choice: Either 4 Development Materials OR three Buckets OR two Combat Rations ¶Second choice: Either two Screws OR two Combat Rations OR 4 Type 97 Torpedo Bombers",
+        "resources": [[280, 280, 280, 280], [0, 0, 0, 0]]
     },
-    "963": {
-        "code": "L2311B7",
-        "name": "[Xmas Limited] Holy Night Light Cruiser, Weigh Anchor!",
-        "desc": "Sortie any 2 of Ooyodo, Naka, Sakawa, Yahagi Kai Ni+, Sheffield, De Ruyter and Gotland, one of them as flagship and up to 4 additional ships to [W2-3] and [W2-4]. S-Rank each boss node twice.",
-        "rewards": "¶First choice: Either a New Model High Temperature High Pressure Boiler ★2 OR two New Model Gun Mount Improvement Materials OR 6 Buckets ¶Second choice: Either a 15.2cm Twin Gun Mount Kai ★4 OR a 8cm High-angle Gun ★8 OR a Medal",
-        "resources": [[1224, 0, 0, 0], [0, 0, 0, 0]]
+    "990": {
+        "code": "L2312B2",
+        "name": "[New Year's Holiday] Task Force Patrol, Defend The Nansei Islands",
+        "desc": "Assemble a fleet containing 1 CV(B/L) as flagship, 1 CL, 2 DD, and up to 2 XX, then S rank the boss nodes of 1-4, 2-1, 2-2, 2-3, and 2-4.",
+        "rewards": "¶First choice: Either 10 Development Materials OR a Reinforcement Expansion OR a Medal ¶Second choice: Either a Type 0 Fighter Model 62 (Fighter-bomber) ★7 OR a Shiden Kai 2 ★7 OR three Skilled Crew Members",
+        "resources": [[888, 888, 888, 888], [0, 0, 0, 0]]
     },
-    "964": {
-        "code": "L2311B8",
-        "name": "[Xmas Extra Operation I] Xmas Special Mission Ship, Operation Start!",
-        "desc": "Sortie any 2 of Kamoi, Mizuho, Hayasui, Jingei, Chougei, Akashi, Asahi, Commandant Teste, Nevada, Kashima and Souya, one of them as flagship and up to 4 additional ships to [W4-1], [W6-2] and [W6-3]. S-Rank each boss node twice.",
-        "rewards": "¶First choice: Either two Skilled Crew Members OR a 14cm Twin Gun Mount Kai OR 6 Screws ¶Second choice: Either three New Model Gun Mount Improvement Materials OR three New Model Armament Materials OR a Barracuda Mk.II",
-        "resources": [[0, 0, 1224, 1224], [0, 0, 0, 0]]
+    "1121": {
+        "code": "L2312F1",
+        "name": "[New Year Holidays] Great Cleaning Of The Military Base! Have A Great New Year!",
+        "desc": "Scrap 8 \"Small Caliber Main Guns\", 8 \"Medium Caliber Main Guns\", 8 \"Reconnaissance Seaplane\", and prepare 6 Type 96 Fighter, 4 Combat Ration and 2023 steel.",
+        "rewards": "¶First choice: Either 12 Development Materials OR two New Model Gun Mount Improvement Materials OR 2024 Bauxites ¶Second choice: Either 4 25mm Single Autocannon Mounts OR two New Model Aerial Armament Materials OR 5 Screws",
+        "resources": [[1000, 0, 0, 1000], [0, 0, 0, 0]]
     },
-    "965": {
-        "code": "L2311B9",
-        "name": "[Xmas Extra Operation II] Xmas Final Battle, Begin!",
-        "desc": "Sortie any 3 of Warspite, Sheffield, Houston, Suzuya, Kumano and Kinugasa and up to 3 additional ships to [W4-5], [W5-3] and [W6-4]. S-Rank each boss node twice.",
-        "rewards": "¶First choice: Either two Type 1 Land-based Attack Aircraft Model 22AS OR a Ginga OR two Barracuda Mk.IIs ¶Second choice: Either three New Model Aerial Armament Materials OR two Medals OR a Ne Type Engine",
-        "resources": [[2023, 1225, 0, 0], [0, 0, 0, 0]]}
+    "1122": {
+        "code": "L2312F2",
+        "name": "[New Year Holidays] Continuation: Year-end Renovation Of The Naval Base Jumbo",
+        "desc": "Set a Secretary, equipped with a 25mm Single Autocannon Mount (★Max) in her 1st slot, then prepare 8 Type 97 Torpedo Bomber, 8 Development Materials, 8 Instant Construction Materials, 2800 ammo, and 2800 steel.",
+        "rewards": "a 3.7cm FlaK M42 ★8 and either three Medals OR a B-25 OR a Sinzan",
+        "resources": [[0, 0, 0, 1000], [0, 0, 0, 0]]
+    },
+    "1135": {
+        "code": "L2312F3",
+        "name": "[Time-Limited Quest] Wings Connected To The \"Renzan\"",
+        "desc": "Prepare a Shinzan (★Max), a Type 1 Land-based Attack Aircraft Model 22A, 3 Skilled Crew Member, and 2 New Model Aerial Armament Material.",
+        "rewards": "a Sinzan Kai",
+        "resources": [[0, 0, 0, 200], [0, 0, 0, 0]]
+    },
+    "801": {
+        "code": "L2401B1",
+        "name": "Happy New Year! Fleet, Weigh Anchor In 2024!",
+        "desc": "Assemble a fleet containing 1 CL(T)/CT as flagship, 2 DD, and up to 3 XX, then A+ rank the boss nodes of 1-2, 1-3, and 1-4.",
+        "rewards": "¶First choice: Either an Emergency Repair Material OR a Submarine Supply Material OR two Irako ¶Second choice: Either two Mamiyas OR 4 Screws OR 10 Development Materials",
+        "resources": [[2024, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "802": {
+        "code": "L2401B2",
+        "name": "Reiwa 6th Year, Dispatch The Fleet! Defense Battle For Nansei Islands Area",
+        "desc": "Assemble a fleet containing any 2 of: \"Akatsuki, Hibiki, Ikazuchi, or Inazuma\"; and up to 4 XX, then S rank the boss nodes of 2-1, 2-2, 2-3, and 2-4.",
+        "rewards": "¶First choice: Either two New Model Gun Mount Improvement Materials OR two New Model Aerial Armament Materials OR a Furniture Fairy ¶Second choice: Either two 12.7cm Twin Gun Mount Models A ★max OR a 12.7cm Twin Gun Mount Model A Kai 2 ★2 OR two Medals",
+        "resources": [[0, 2024, 0, 0], [0, 0, 0, 0]]
+    },
+    "803": {
+        "code": "L2401B3",
+        "name": "2024 Spring Festival! Maritine Escort Fleet Heading To The Sea In New Year!",
+        "desc": "Assemble a fleet containing any 2 of: \"Shinyou, Ryuuhou, Zuihou, Yamashio Maru, Sendai, Ooi, Hiei, Souya, the Type D DE (No.30, No.4, No. 22), or any AS\"; and up to 4 XX, then S rank the boss nodes of 1-5 and 7-4, twice each, and reach node N on 1-6 twice.",
+        "rewards": "¶First choice: Either 4 New Model Armament Materials OR two Reinforcement Expansions OR two Medals ¶Second choice: Either two Type 97 Torpedo Bomber (931 Air Group) ★8 OR a Prototype Type 97 Torpedo Bomber Kai No. 3 Model E (w/ Type 6 Airborne Radar Kai) OR two Prototype 15cm Nonuple ASW Rocket Launchers",
+        "resources": [[0, 0, 2024, 0], [0, 0, 0, 0]]
+    },
+    "804": {
+        "code": "L2401B4",
+        "name": "New Year [Extra Operation] New Year Joint Operation Of CarDiv1 And CarDiv5!",
+        "desc": "Assemble a fleet containing any 2 of: \"Akagi, Kaga, Zuikaku, or Shokaku\"; and up to 4 XX, then S rank the boss nodes of 7-2-M, 4-5, 5-2, 5-5, and 6-4.",
+        "rewards": "a Furnitue: Happy New Year! No.101 Scroll and either two Ryuusei Kai (Skilled) ★2 OR a Prototype Flight Deck Catapult OR a Shinden Kai",
+        "resources": [[0, 0, 0, 2024], [0, 0, 0, 0]]}
 }
