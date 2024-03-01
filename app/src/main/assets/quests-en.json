@@ -653,6 +653,13 @@
         "rewards": "a 12.7cm Twin Gun Mount Model D Kai 2 ★2 and either 6 Buckets OR a Furniture Fairy",
         "resources": [[100, 100, 100, 100], [0, 0, 0, 0]]
     },
+    "198": {
+        "code": "A94",
+        "name": "Powerful! DesDiv 7, Prepare to Weigh Anchor!",
+        "desc": "Have ONLY Oboro Kai, Sazanami Kai, Akebono Kai (Ni) and Ushio Kai (Ni) in your fleet.",
+        "rewards": "¶First choice: Either two Combat Rations OR 4 Development Materials ¶Second choice: Either two Irako OR 4 Buckets",
+        "resources": [[70, 70, 70, 70], [0, 0, 0, 0]]
+    },
     "202": {
         "code": "B1",
         "name": "Sortieing for the First Time!",
@@ -2030,6 +2037,13 @@
         "rewards": "¶First choice: Either 800 Fuels OR a 21inch Bow Torpedo Launcher (4 tubes, Late Model) OR 800 Ammos ¶Second choice: Either an SJ Radar + Submarine Conning Tower Equipment OR a Medal",
         "resources": [[400, 0, 0, 0], [0, 0, 0, 0]]
     },
+    "1004": {
+        "code": "B196",
+        "name": "Remodelled Aviation Cruiser Mikuma, Advancing!",
+        "desc": "Sortie Mikuma Kai Ni (Toku) as flagship, and up to 5 additional ships to [W2-3], [W2-4], [W4-5] and [W6-4]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either a Furniture Fairy OR a Mamiya OR a Skilled Crew Member ¶Second choice: Either a Shiun ★2 OR two Medals OR a Prototype 20.3cm (No.4) Twin Gun Mount ★2",
+        "resources": [[880, 880, 0, 880], [0, 0, 0, 0]]
+    },
     "201": {
         "code": "Bd1",
         "name": "Daily Victory",
@@ -2434,6 +2448,14 @@
         "rewards": "¶First choice: Either two Skilled Lookoutss OR 4 Screws OR 9 Buckets ¶Second choice: Either two Medals OR two 12.7cm Twin Gun Mount Model A Kai 2 OR a 61cm Triple (Oxygen) Torpedo Mount Late Model",
         "resources": [[1000, 1000, 1000, 1000], [0, 0, 0, 0]]
     },
+    "1005": {
+        "code": "By13",
+        "name": "Annual DesDev 7 Sortie - Jan",
+        "desc": "Sortie Oboro Kai, Sazanami Kai, Akebono Kai (Ni), Ushio Kai (Ni), and up to 2 additional ships to [W1-2], [W1-3], [W1-5] and [W3-2]. A-Rank+ each boss node.",
+        "memo": "※ This quest resets on the first quest reset of January.\\n\\u203bElite DesDiv 7, Emergency Sortie!",
+        "rewards": "¶First choice: Either 700 Fuels OR 4 Buckets OR two Screws ¶Second choice: Either 7 Development Materials OR a Medal OR a Furniture Fairy",
+        "resources": [[280, 280, 280, 280], [0, 0, 0, 0]]
+    },
     "301": {
         "code": "C1",
         "name": "The First Exercise!",
@@ -2661,14 +2683,6 @@
         "rewards": "¶First choice: Either two Skilled Lookoutss OR two Type 2 Depth Charges OR 8 Buckets ¶Second choice: Either a Furniture Fairy OR 4 Screws OR a Reinforcement Expansion",
         "resources": [[1935, 518, 2023, 614], [0, 0, 0, 0]]
     },
-    "368": {
-        "code": "C78",
-        "name": "Annual DesDiv 16 Exercises - July",
-        "desc": "Secure 3 S-Rank victories in Exercises within the same day using any 2 of Amatsukaze, Yukikaze, Tokitsukaze and Hatsukaze and up to 4 additional ships.",
-        "memo": "※This quest resets on the first quest reset of July. \\u203bDesDiv 16, Exercises!",
-        "rewards": "¶First choice: Either an Irako OR three Buckets OR three Development Materials ¶Second choice: Either a 12.7cm Twin Gun Mount Model C Kai 2 OR two New Model Armament Materials OR three Enhanced Kanhon Type Boilers",
-        "resources": [[160, 160, 160, 0], [0, 0, 0, 0]]
-    },
     "303": {
         "code": "Cd1",
         "name": "Daily Exercises 1",
@@ -2818,6 +2832,14 @@
         "memo": "※This quest resets on the first quest reset of April. ",
         "rewards": "¶First choice: Either three 12.7cm Twin Gun Mount Model AS OR three 61cm Triple Torpedo Mounts OR 6 Development Materials ¶Second choice: Either two Skilled Lookoutss OR three Irako OR 4 Screws",
         "resources": [[110, 110, 110, 110], [0, 0, 0, 0]]
+    },
+    "368": {
+        "code": "Cy11",
+        "name": "Annual DesDiv 16 Exercises - July",
+        "desc": "Secure 3 S-Rank victories in Exercises within the same day using any 2 of Amatsukaze, Yukikaze, Tokitsukaze and Hatsukaze and up to 4 additional ships.",
+        "memo": "※This quest resets on the first quest reset of July. \\u203bDesDiv 16, Exercises!",
+        "rewards": "¶First choice: Either an Irako OR three Buckets OR three Development Materials ¶Second choice: Either a 12.7cm Twin Gun Mount Model C Kai 2 OR two New Model Armament Materials OR three Enhanced Kanhon Type Boilers",
+        "resources": [[160, 160, 160, 0], [0, 0, 0, 0]]
     },
     "313": {
         "code": "Cs1",
@@ -4284,73 +4306,30 @@
         "rewards": "a Development Material",
         "resources": [[88, 88, 0, 0], [0, 0, 1, 0]]
     },
-    "361": {
-        "code": "L2312C1",
-        "name": "[New Year's Holiday] First Escort Fleet, Special Exercise!",
-        "desc": "Assemble a fleet containing 1 CVL, 4 DD, and up to 1 XX, OR 2 DE and up to 4 XX, then score 5 S ranks in PVP within the same day.\r",
-        "rewards": "¶First choice: Either a Mamiya OR two Irako OR three Type 96 Fighters ¶Second choice: Either 4 25mm Single Autocannon Mounts OR three Type 3 Depth Charge Projectors OR 3300 Fuels",
-        "resources": [[1000, 400, 400, 400], [0, 0, 0, 0]]
-    },
-    "910": {
-        "code": "L2312B1",
-        "name": "[New Year's Holiday] Naval Base Patrol, Strict Vigilance!",
-        "desc": "Assemble a fleet containing 1 CL, 3 DD/DE, and up to 2 XX, then S rank the boss nodes of 1-1, 1-2, and 1-3, twice each.",
-        "rewards": "¶First choice: Either 4 Development Materials OR three Buckets OR two Combat Rations ¶Second choice: Either two Screws OR two Combat Rations OR 4 Type 97 Torpedo Bombers",
-        "resources": [[280, 280, 280, 280], [0, 0, 0, 0]]
-    },
-    "990": {
-        "code": "L2312B2",
-        "name": "[New Year's Holiday] Task Force Patrol, Defend The Nansei Islands",
-        "desc": "Assemble a fleet containing 1 CV(B/L) as flagship, 1 CL, 2 DD, and up to 2 XX, then S rank the boss nodes of 1-4, 2-1, 2-2, 2-3, and 2-4.",
-        "rewards": "¶First choice: Either 10 Development Materials OR a Reinforcement Expansion OR a Medal ¶Second choice: Either a Type 0 Fighter Model 62 (Fighter-bomber) ★7 OR a Shiden Kai 2 ★7 OR three Skilled Crew Members",
-        "resources": [[888, 888, 888, 888], [0, 0, 0, 0]]
-    },
-    "1121": {
-        "code": "L2312F1",
-        "name": "[New Year Holidays] Great Cleaning Of The Military Base! Have A Great New Year!",
-        "desc": "Scrap 8 \"Small Caliber Main Guns\", 8 \"Medium Caliber Main Guns\", 8 \"Reconnaissance Seaplane\", and prepare 6 Type 96 Fighter, 4 Combat Ration and 2023 steel.",
-        "rewards": "¶First choice: Either 12 Development Materials OR two New Model Gun Mount Improvement Materials OR 2024 Bauxites ¶Second choice: Either 4 25mm Single Autocannon Mounts OR two New Model Aerial Armament Materials OR 5 Screws",
-        "resources": [[1000, 0, 0, 1000], [0, 0, 0, 0]]
-    },
-    "1122": {
-        "code": "L2312F2",
-        "name": "[New Year Holidays] Continuation: Year-end Renovation Of The Naval Base Jumbo",
-        "desc": "Set a Secretary, equipped with a 25mm Single Autocannon Mount (★Max) in her 1st slot, then prepare 8 Type 97 Torpedo Bomber, 8 Development Materials, 8 Instant Construction Materials, 2800 ammo, and 2800 steel.",
-        "rewards": "a 3.7cm FlaK M42 ★8 and either three Medals OR a B-25 OR a Sinzan",
-        "resources": [[0, 0, 0, 1000], [0, 0, 0, 0]]
-    },
     "1135": {
         "code": "L2312F3",
         "name": "[Time-Limited Quest] Wings Connected To The \"Renzan\"",
         "desc": "Prepare a Shinzan (★Max), a Type 1 Land-based Attack Aircraft Model 22A, 3 Skilled Crew Member, and 2 New Model Aerial Armament Material.",
-        "rewards": "a Sinzan Kai",
-        "resources": [[0, 0, 0, 200], [0, 0, 0, 0]]
+        "rewards": "¶First choice: Either 6 Development Materials OR 4 Buckets OR a Furniture Fairy ¶Second choice: Either a Mamiya OR an Extra Equipment Slots +3",
+        "resources": [[2024, 0, 0, 214], [0, 0, 0, 0]]
     },
-    "801": {
-        "code": "L2401B1",
-        "name": "Happy New Year! Fleet, Weigh Anchor In 2024!",
-        "desc": "Assemble a fleet containing 1 CL(T)/CT as flagship, 2 DD, and up to 3 XX, then A+ rank the boss nodes of 1-2, 1-3, and 1-4.",
-        "rewards": "¶First choice: Either an Emergency Repair Material OR a Submarine Supply Material OR two Irako ¶Second choice: Either two Mamiyas OR 4 Screws OR 10 Development Materials",
-        "resources": [[2024, 0, 0, 0], [0, 0, 0, 0]]
+    "234": {
+        "code": "L2402B1",
+        "name": "Time-Limited 2024 Valentine's Day Quest: First Operation",
+        "desc": "Sortie any 2 of Kinugasa, Furutaka, Kuma, Kamikaze, Murakumo, Akebono, Ushio, Oboro, Jingei, I-201 and I-203, and up to 4 additional ships to [W1-3], [W1-4], [W2-2] and [W2-3]. A-Rank+ each boss node.",
+        "rewards": "¶First choice: Either three Irako OR an Extra Equipment Slots +4 ¶Second choice: Either a Medal OR a Reinforcement Expansion OR an Action Report",
+        "resources": [[0, 2024, 214, 214], [0, 0, 0, 0]]
     },
-    "802": {
-        "code": "L2401B2",
-        "name": "Reiwa 6th Year, Dispatch The Fleet! Defense Battle For Nansei Islands Area",
-        "desc": "Assemble a fleet containing any 2 of: \"Akatsuki, Hibiki, Ikazuchi, or Inazuma\"; and up to 4 XX, then S rank the boss nodes of 2-1, 2-2, 2-3, and 2-4.",
-        "rewards": "¶First choice: Either two New Model Gun Mount Improvement Materials OR two New Model Aerial Armament Materials OR a Furniture Fairy ¶Second choice: Either two 12.7cm Twin Gun Mount Models A ★max OR a 12.7cm Twin Gun Mount Model A Kai 2 ★2 OR two Medals",
-        "resources": [[0, 2024, 0, 0], [0, 0, 0, 0]]
+    "238": {
+        "code": "L2402B2",
+        "name": "Time-Limited 2024 Valentine's Day Quest: Second Operation",
+        "desc": "Sortie any 2 of Hamakaze, Fujinami, Hamanami, Hayanami, Akishimo, Takanami, Suzunami, Sagiri, Akashi, Perth, South Dakota and Kashima, and up to 4 additional ships to [W2-1], [W3-1], [W3-2] and [W4-2]. A-Rank+ each boss node.",
+        "rewards": "¶First choice: Either three Zuiuns OR two Type 2 Depth Charges OR two New Model Aerial Armament Materials ¶Second choice: Either a Furniture Fairy OR two Irako OR three Screws",
+        "resources": [[0, 0, 214, 2024], [0, 0, 0, 0]]
     },
-    "803": {
-        "code": "L2401B3",
-        "name": "2024 Spring Festival! Maritine Escort Fleet Heading To The Sea In New Year!",
-        "desc": "Assemble a fleet containing any 2 of: \"Shinyou, Ryuuhou, Zuihou, Yamashio Maru, Sendai, Ooi, Hiei, Souya, the Type D DE (No.30, No.4, No. 22), or any AS\"; and up to 4 XX, then S rank the boss nodes of 1-5 and 7-4, twice each, and reach node N on 1-6 twice.",
-        "rewards": "¶First choice: Either 4 New Model Armament Materials OR two Reinforcement Expansions OR two Medals ¶Second choice: Either two Type 97 Torpedo Bomber (931 Air Group) ★8 OR a Prototype Type 97 Torpedo Bomber Kai No. 3 Model E (w/ Type 6 Airborne Radar Kai) OR two Prototype 15cm Nonuple ASW Rocket Launchers",
-        "resources": [[0, 0, 2024, 0], [0, 0, 0, 0]]
-    },
-    "804": {
-        "code": "L2401B4",
-        "name": "New Year [Extra Operation] New Year Joint Operation Of CarDiv1 And CarDiv5!",
-        "desc": "Assemble a fleet containing any 2 of: \"Akagi, Kaga, Zuikaku, or Shokaku\"; and up to 4 XX, then S rank the boss nodes of 7-2-M, 4-5, 5-2, 5-5, and 6-4.",
-        "rewards": "a Furnitue: Happy New Year! No.101 Scroll and either two Ryuusei Kai (Skilled) ★2 OR a Prototype Flight Deck Catapult OR a Shinden Kai",
-        "resources": [[0, 0, 0, 2024], [0, 0, 0, 0]]}
+    "349": {
+        "code": "L2402C1",
+        "name": "Time-Limited 2024 Valentine's Day Quest: Special Exercises",
+        "desc": "Secure 4 S-Rank victories in Exercises within the same day using 1 AV, 1 CA(V), 1 CL(T)/CT, 2 DD and up to 1 additional ship.",
+        "rewards": NaN, "resources": NaN}
 }

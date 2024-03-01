@@ -90,7 +90,7 @@
     "10": {
         "improvement": [{
                 "upgrade": [66, 0],
-                "req": [[[false, false, false, false, false, true, true], [428]], [[true, false, false, false, false, true, true], [124, 129, 503, 508]], [[true, true, false, false, false, false, true], [125, 130, 504, 509]]],
+                "req": [[[false, false, false, false, false, true, true], [428]], [[true, false, false, false, false, true, true], [124, 129, 503, 508]], [[true, true, false, false, false, false, true], [125, 130, 504, 509]], [[true, false, false, false, true, true, true], [121, 502, 507]]],
                 "resource": [[10, 40, 70, 20], [2, 3, 2, 3, 10, 1], [3, 4, 3, 4, 10, 1], [5, 8, 6, 10, 3, 1]]
             }
         ],
@@ -410,12 +410,14 @@
     },
     "50": {
         "improvement": [{
-                "upgrade": false,
-                "req": [[[false, false, true, true, false, false, false], [120, 121]]],
-                "resource": [[10, 110, 140, 0], [3, 4, 2, 3, 0, 0], [3, 5, 3, 5, 50, 1], [0, 0, 0, 0, 0, 0]]
+                "upgrade": [520, 0],
+                "req": [[[false, true, true, true, true, false, false], [120, 121, 502, 507]], [[true, false, false, false, false, true, true], [130, 504]]],
+                "require_item": [[2, 2], [7, 1]],
+                "resource": [[10, 110, 140, 0], [3, 4, 2, 3, 0, 0], [3, 5, 3, 5, 50, 1], [5, 10, 8, 14, 6, 10]]
             }
         ],
-        "default_equipped_on": [121, 188, 189, 142]
+        "default_equipped_on": [121, 188, 189, 142],
+        "convert_exception": true
     },
     "51": {
         "improvement": [{
@@ -2530,6 +2532,15 @@
                 "upgrade": false,
                 "req": [[[false, true, true, true, true, false, false], [154, 343]], [[false, false, true, true, false, false, false], [622, 623, 624]]],
                 "resource": [[20, 90, 140, 30], [7, 8, 4, 5, 119, 1], [9, 14, 6, 9, 310, 1], [0, 0, 0, 0, 0, 0]]
+            }
+        ],
+        "convert_exception": true
+    },
+    "520": {
+        "improvement": [{
+                "upgrade": false,
+                "req": [[[true, false, false, false, true, true, true], [502, 507]]],
+                "resource": [[20, 140, 190, 40], [7, 8, 4, 4, 6, 4], [9, 14, 6, 7, 6, 8], [0, 0, 0, 0, 0, 0]]
             }
         ],
         "convert_exception": true}}
