@@ -374,8 +374,9 @@
     <string name="quest_category_7">G</string>
     <string name="quest_category_8">SB</string>
     <string name="quest_category_9">B</string>
-    <string name="quest_category_10">N</string>
+    <string name="quest_category_10">B</string>
     <string name="quest_category_11">F</string>
+    <string name="quest_category_12">U</string>
 
     <string name="quest_label_type_1">1</string>
     <string name="quest_label_type_2">D</string>

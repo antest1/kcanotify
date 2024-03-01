@@ -230,19 +230,16 @@ public class KcaQuestListAdpater extends BaseAdapter {
             if (!test.has("api_label_type")) listViewItemList.clear();
         }
         if (filter != -1) {
-            listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, new Predicate<JsonObject>() {
-                @Override
-                public boolean apply(JsonObject input) {
-                    int category = input.get("api_category").getAsInt();
-                    if (filter == 7) {
-                        return (category == 1 || category == 5 || category == 7);
-                    } else if (filter == 2) {
-                        return (category == 2 || category == 8 || category == 9);
-                    } else if (filter == 6) {
-                        return (category == 6 || category == 11);
-                    } else {
-                        return (category == filter);
-                    }
+            listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, input -> {
+                int category = input.get("api_category").getAsInt();
+                if (filter == 7) {
+                    return (category == 1 || category == 5 || category == 7);
+                } else if (filter == 2) {
+                    return (category == 2 || category == 8 || category == 9 || category == 10);
+                } else if (filter == 6) {
+                    return (category == 6 || category == 11);
+                } else {
+                    return (category == filter);
                 }
             }));
         }

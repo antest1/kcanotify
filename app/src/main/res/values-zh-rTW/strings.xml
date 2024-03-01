@@ -394,8 +394,9 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="quest_category_7">改</string>
     <string name="quest_category_8">出</string>
     <string name="quest_category_9">出</string>
-    <string name="quest_category_10">他</string>
+    <string name="quest_category_10">出</string>
     <string name="quest_category_11">工</string>
+    <string name="quest_category_12">他</string>
 
     <string name="quest_label_type_1">單</string>
     <string name="quest_label_type_2">日</string>
