@@ -600,7 +600,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
                 Log.e("KCA", response_data.toString());
 
-                if (response_data.has("version")) {
+                if (getActivity() != null && response_data.has("version")) {
                     String recentVersion = response_data.get("version").getAsString();
                     if (compareVersion(currentVersion, recentVersion)) { // True if latest
                         showToast(getActivity(),
