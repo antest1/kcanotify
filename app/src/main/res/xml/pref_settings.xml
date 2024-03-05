@@ -443,7 +443,6 @@
         <ListPreference
             android:id="@+id/updateserver_value"
             app:iconSpaceReserved="false"
-            android:defaultValue="@string/default_locale"
             android:entries="@array/ServerLocation"
             android:entryValues="@array/ServerLocationValue"
             android:key="check_update_server"

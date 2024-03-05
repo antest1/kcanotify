@@ -44,7 +44,6 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_download_link_kcwiki" translatable="false">https://mirrors.kcwiki.org/kcanotify/</string>
 
     <!-- Link Information -->
-    <string name="server_swaytwig" translatable="false">https://swaytwig.com/</string>
     <string name="server_liza" translatable="false">https://luckyjervis.com/</string>
     <string name="kcanotify_checkversion_link" translatable="false" formatted="false">kcanotify/v.php</string>
     <string name="api_start2_recent_version_link" translatable="false" formatted="false">kcanotify/kca_api_start2.php?v=recent</string>
