@@ -313,7 +313,11 @@ public class KcaService extends Service {
                 // String initSubContent = KcaUtils.format("%s %s", getStringWithLocale(R.string.app_name), getStringWithLocale(R.string.app_version));
                 kcaFirstDeckInfo = getStringWithLocale(R.string.kca_init_content);
                 initViewNotificationBuilder(notifyTitle, notifyContent);
-                startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build());
+
+                Handler toForegroundHandler = new Handler(getMainLooper());
+                toForegroundHandler.removeCallbacksAndMessages(null);
+                toForegroundHandler.postDelayed(() ->
+                        startForeground(getNotificationId(NOTI_FRONT, 1), notifyBuilder.build()), 24);
 
                 notificationTimeCounter = -1;
                 timer = () -> {
