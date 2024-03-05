@@ -598,40 +598,41 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
                     dbHelper.recordErrorLog(ERROR_TYPE_MAIN, "version_check", "", "", getStringFromException(e));
                 }
 
-                Log.e("KCA", response_data.toString());
-
-                if (getActivity() != null && response_data.has("version")) {
-                    String recentVersion = response_data.get("version").getAsString();
-                    if (compareVersion(currentVersion, recentVersion)) { // True if latest
+                if (isAdded()) {
+                    Log.e("KCA", response_data.toString());
+                    if (response_data.has("version")) {
+                        String recentVersion = response_data.get("version").getAsString();
+                        if (compareVersion(currentVersion, recentVersion)) { // True if latest
+                            showToast(getActivity(),
+                                    KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_latest), currentVersion),
+                                    Toast.LENGTH_LONG);
+                        } else if (!getActivity().isFinishing()) {
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                            alertDialog.setMessage(KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
+                            alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
+                                    (dialog, which) -> {
+                                        String downloadUrl = getStringPreferences(getContext(), PREF_APK_DOWNLOAD_SITE);
+                                        if (downloadUrl.contains(getStringWithLocale(R.string.app_download_link_playstore))) {
+                                            downloadUrl = getStringWithLocale(R.string.app_download_link_luckyjervis);
+                                        }
+                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                    });
+                            alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
+                                    (dialog, which) -> {
+                                        // None
+                                    });
+                            AlertDialog alert = alertDialog.create();
+                            alert.setIcon(R.mipmap.ic_launcher);
+                            alert.setTitle(getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
+                            alert.show();
+                        }
+                    } else {
                         showToast(getActivity(),
-                                KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_latest), currentVersion),
+                                getStringWithLocale(R.string.sa_checkupdate_servererror),
                                 Toast.LENGTH_LONG);
-                    } else if (!getActivity().isFinishing()) {
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                        alertDialog.setMessage(KcaUtils.format(getStringWithLocale(R.string.sa_checkupdate_hasupdate), recentVersion));
-                        alertDialog.setPositiveButton(getStringWithLocale(R.string.dialog_ok),
-                                (dialog, which) -> {
-                                    String downloadUrl = getStringPreferences(getContext(), PREF_APK_DOWNLOAD_SITE);
-                                    if (downloadUrl.contains(getStringWithLocale(R.string.app_download_link_playstore))) {
-                                        downloadUrl = getStringWithLocale(R.string.app_download_link_luckyjervis);
-                                    }
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl));
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                });
-                        alertDialog.setNegativeButton(getStringWithLocale(R.string.dialog_cancel),
-                                (dialog, which) -> {
-                                    // None
-                                });
-                        AlertDialog alert = alertDialog.create();
-                        alert.setIcon(R.mipmap.ic_launcher);
-                        alert.setTitle(getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
-                        alert.show();
                     }
-                } else {
-                    showToast(getActivity(),
-                            getStringWithLocale(R.string.sa_checkupdate_servererror),
-                            Toast.LENGTH_LONG);
                 }
             }
 

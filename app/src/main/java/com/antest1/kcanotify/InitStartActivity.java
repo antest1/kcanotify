@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -216,13 +217,15 @@ public class InitStartActivity extends Activity {
                         JsonObject data = response_data;
                         if (!is_skipped) {
                             runOnUiThread(() -> {
-                                AlertDialog.Builder alertDialog = getUpdateAlertDialog(recentVersion, data);
-                                AlertDialog alert = alertDialog.create();
-                                alert.setIcon(R.mipmap.ic_launcher);
-                                alert.setTitle(
-                                        getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
-                                if (!InitStartActivity.this.isFinishing()) {
+                                try {
+                                    AlertDialog.Builder alertDialog = getUpdateAlertDialog(recentVersion, data);
+                                    AlertDialog alert = alertDialog.create();
+                                    alert.setIcon(R.mipmap.ic_launcher);
+                                    alert.setTitle(
+                                            getStringWithLocale(R.string.sa_checkupdate_dialogtitle));
                                     alert.show();
+                                } catch (WindowManager.BadTokenException e) {
+                                    // activity closed, no need to show dialog
                                 }
                             });
                         }
