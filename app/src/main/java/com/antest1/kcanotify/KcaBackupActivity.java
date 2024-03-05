@@ -124,9 +124,9 @@ public class KcaBackupActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String[] params) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
-            String exportDirPath = KcaUtils.format("/kca_backup_%s", dateFormat.format(new Date()));
+            String exportDirPath = KcaUtils.format("backup/kca_backup_%s", dateFormat.format(new Date()));
 
-            File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(FILE_PATH).concat(exportDirPath));
+            File savedir = new File(getExternalFilesDir(null), exportDirPath);
             if (!savedir.exists()) savedir.mkdirs();
 
             String exportPath = savedir.getPath();
@@ -177,7 +177,7 @@ public class KcaBackupActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String[] params) {
             String backup_fn = params[0];
-            File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(FILE_PATH));
+            File savedir = new File(getExternalFilesDir(null), "backup");
 
             try {
                 File exportFolder = new File(savedir.getAbsolutePath().concat("/").concat(backup_fn).replace(".zip", ""));
@@ -220,7 +220,7 @@ public class KcaBackupActivity extends AppCompatActivity {
 
     private List<JsonObject> getBackupDataList() {
         List<JsonObject> list = new ArrayList<>();
-        File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(FILE_PATH));
+        File savedir = new File(getExternalFilesDir(null), "backup");
         if (savedir.isDirectory()) {
             File[] files = savedir.listFiles();
             for (File f: files) {
@@ -257,7 +257,7 @@ public class KcaBackupActivity extends AppCompatActivity {
         JsonObject obj = gson.fromJson(data, JsonObject.class);
         String backup_fn = obj.get("name").getAsString();
         String action = obj.get("action").getAsString();
-        File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(FILE_PATH));
+        File savedir = new File(getExternalFilesDir(null), "backup");
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(KcaBackupActivity.this);
         if (action.equals("restore")) {

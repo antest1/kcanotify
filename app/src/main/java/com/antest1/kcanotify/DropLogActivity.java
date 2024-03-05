@@ -43,7 +43,6 @@ import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DROPLOG_VERSION;
 
 
 public class DropLogActivity extends AppCompatActivity {
-    private final String FILE_PATH = "/export_data";
     public static final long DAY_MILLISECOND = 86400000;
 
     public static final int RANK_S = 32;
@@ -262,7 +261,7 @@ public class DropLogActivity extends AppCompatActivity {
 
         @Override
         protected Integer doInBackground(String[] params) {
-            File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(FILE_PATH));
+            File savedir = new File(getExternalFilesDir(null), "export_data");
             if (!savedir.exists()) savedir.mkdirs();
             String exportPath = savedir.getPath();
 

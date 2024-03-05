@@ -90,7 +90,7 @@ public class KcaPacketLogger extends SQLiteOpenHelper {
     }
 
     public boolean dump(Context context){
-        File savedir = new File(context.getExternalFilesDir(null).getAbsolutePath().concat(LOG_PATH));
+        File savedir = new File(context.getExternalFilesDir(null), "logs");
         if (!savedir.exists()) savedir.mkdirs();
         String exportPath = savedir.getPath();
 

@@ -359,7 +359,7 @@ public class ResourceLogActivity extends AppCompatActivity {
 
         @Override
         protected Integer doInBackground(String[] params) {
-            File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(FILE_PATH));
+            File savedir = new File(getExternalFilesDir(null), "export_data");
             if (!savedir.exists()) savedir.mkdirs();
             String exportPath = savedir.getPath();
 

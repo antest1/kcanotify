@@ -26,7 +26,6 @@ import static com.antest1.kcanotify.KcaUtils.joinStr;
 
 public class ErrorlogActivity extends AppCompatActivity{
     private final int SHOW_LIMIT = 50;
-    private final String LOG_PATH = "/logs";
     Vibrator vibrator;
     KcaDBHelper dbHelper;
     Toolbar toolbar;
@@ -102,7 +101,7 @@ public class ErrorlogActivity extends AppCompatActivity{
             }
         });
 
-        File savedir = new File(getExternalFilesDir(null).getAbsolutePath().concat(LOG_PATH));
+        File savedir = new File(getExternalFilesDir(null), "logs");
         if (!savedir.exists()) savedir.mkdirs();
         exportPath = savedir.getPath();
         exportPathView = findViewById(R.id.error_path);
