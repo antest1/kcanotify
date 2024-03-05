@@ -175,7 +175,11 @@ public class KcaAkashiViewService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getAction() != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(getApplicationContext())) {
+            // Can not draw overlays: pass
+            stopSelf();
+        } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(SHOW_AKASHIVIEW_ACTION)) {
                 int setViewResult = setView();
                 if (setViewResult == 0) {

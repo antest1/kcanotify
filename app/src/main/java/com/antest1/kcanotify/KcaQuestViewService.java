@@ -273,7 +273,13 @@ public class KcaQuestViewService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         JsonObject statProperties = new JsonObject();
-        if (intent != null && intent.getAction() != null && mView != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(getApplicationContext())) {
+            // Can not draw overlays: pass
+            stopSelf();
+        } else if (!KcaService.getServiceStatus()) {
+            stopSelf();
+        } else if (intent != null && intent.getAction() != null && mView != null) {
             if (intent.getAction().equals(REFRESH_QUESTVIEW_ACTION)) {
                 int extra = intent.getIntExtra("tab_id", -1);
                 updateView(setView(isquestlist, true, extra, currentFilterState), false);

@@ -1762,7 +1762,11 @@ public class KcaBattleViewService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getAction() != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(getApplicationContext())) {
+            // Can not draw overlays: pass
+            stopSelf();
+        } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(SHOW_BATTLEVIEW_ACTION)) {
                 if (!error_flag) {
                     for (int i = 1; i <= 6; i++) {

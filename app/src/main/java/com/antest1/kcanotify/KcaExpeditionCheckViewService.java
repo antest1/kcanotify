@@ -186,7 +186,11 @@ public class KcaExpeditionCheckViewService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getAction() != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(getApplicationContext())) {
+            // Can not draw overlays: pass
+            stopSelf();
+        } if (intent != null && intent.getAction() != null) {
             if (intent.getAction().startsWith(SHOW_EXCHECKVIEW_ACTION)) {
                 deckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
                 if (deckdata != null && deckdata.size() >= 2) {
