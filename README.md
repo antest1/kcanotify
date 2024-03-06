@@ -19,7 +19,7 @@ Download
 -------
 - [Direct Download](https://luckyjervis.com/kcanotify/apk/) 
 - [Github Releases](https://github.com/antest1/kcanotify/releases) (All versions)
-- [kcwiki mirror](https://mirrors.kcwiki.org/kcanotify/) (All versions)
+- [kcwiki mirror](https://mirrors.kcwiki.moe/kcanotify/) (All versions)
 - [Google Drive](http://bit.ly/kcanotify_gdrive) (Latest Version)
 - [MEGA](https://mega.nz/#F!0FtUTBoB!cSUJtRA76C4KBcrnc2-xdw) (All versions)
 
@@ -88,7 +88,7 @@ License
 -------
 [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt)
 
-Copyright (c) 2016-2023 antest1(IE10)
+Copyright (c) 2016-2024 antest1(IE10)
 
 All rights reserved
 
