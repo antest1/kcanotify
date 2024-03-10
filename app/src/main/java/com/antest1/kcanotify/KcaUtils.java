@@ -834,13 +834,6 @@ public class KcaUtils {
         }
     }
 
-    public static void showDataLoadErrorToast(Context ac, Context bc, String text) {
-        if (getBooleanPreferences(ac, PREF_DATALOAD_ERROR_FLAG)) {
-            KcaCustomToast customToast = new KcaCustomToast(ac);
-            showCustomToast(ac, bc, customToast, text, Toast.LENGTH_LONG, ContextCompat.getColor(ac, R.color.colorHeavyDmgStatePanel));
-        }
-    }
-
     public static void showDataLoadErrorToast(Context context, String text) {
         if (getBooleanPreferences(context, PREF_DATALOAD_ERROR_FLAG)) {
             Toast.makeText(context, text, Toast.LENGTH_LONG).show();

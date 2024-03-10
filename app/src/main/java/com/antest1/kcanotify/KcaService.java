@@ -258,7 +258,7 @@ public class KcaService extends Service {
                 loadQuestTrackDataFromStorage(dbHelper, getApplicationContext());
                 dbHelper.initExpScore();
 
-                showDataLoadErrorToast(getApplicationContext(), getBaseContext(), getStringWithLocale(R.string.download_check_error));
+                showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
 
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setOnCompletionListener(mp -> {

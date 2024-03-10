@@ -261,7 +261,7 @@ public class KcaAkashiViewService extends Service {
             return -1;
         }
 
-        showDataLoadErrorToast(getApplicationContext(), getBaseContext(), getStringWithLocale(R.string.download_check_error));
+        showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
         return 1;
     }
 
