@@ -881,7 +881,6 @@ public class KcaService extends Service {
                     KcaApiData.getPortData(reqPortApiData);
                     if (reqPortApiData.has("api_deck_port")) {
                         dbHelper.putValue(DB_KEY_DECKPORT, reqPortApiData.getAsJsonArray("api_deck_port").toString());
-                        dbHelper.test();
                     }
                     if (reqPortApiData.has("api_ship")) {
                         final String ship_data = reqPortApiData.get("api_ship").toString();
@@ -2006,7 +2005,6 @@ public class KcaService extends Service {
                             if (jsonDataObj.has("api_data")) {
                                 JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                                 dbHelper.putValue(DB_KEY_DECKPORT, api_data.get("api_deck_data").getAsJsonArray().toString());
-                                dbHelper.test();
                                 KcaApiData.updateUserShip(api_data.get("api_ship_data").getAsJsonArray().get(0).getAsJsonObject());
                             }
                         }
@@ -2069,7 +2067,6 @@ public class KcaService extends Service {
                         if (jsonDataObj.has("api_data")) {
                             JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
                             dbHelper.putValue(DB_KEY_DECKPORT, api_data.getAsJsonArray("api_deck").toString());
-                            dbHelper.test();
                             updateUserShip(api_data.getAsJsonObject("api_ship"));
                             KcaApiData.deleteUserShip(itemIds, slotDestFlag);
                             if (api_data.has("api_powerup_flag") && api_data.get("api_powerup_flag").getAsInt() == 1) {
