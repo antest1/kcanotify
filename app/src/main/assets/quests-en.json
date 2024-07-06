@@ -2044,6 +2044,55 @@
         "rewards": "¶First choice: Either a Furniture Fairy OR a Mamiya OR a Skilled Crew Member ¶Second choice: Either a Shiun ★2 OR two Medals OR a Prototype 20.3cm (No.4) Twin Gun Mount ★2",
         "resources": [[880, 880, 0, 880], [0, 0, 0, 0]]
     },
+    "1006": {
+        "code": "B197",
+        "name": "DesDiv2, Weigh Anchor!",
+        "desc": "Sortie any 3 of Murasame, Yuudachi, Harusame and Samidare, and up to 3 additional ships to [W1-2], [W1-3], [W1-4] and [W1-5]. A-Rank+ each boss node.",
+        "rewards": "¶First choice: Either 200 Fuels OR two Development Materials OR two Buckets ¶Second choice: Either a Mamiya OR a Furniture Fairy",
+        "resources": [[200, 200, 200, 200], [0, 0, 0, 0]]
+    },
+    "1007": {
+        "code": "B198",
+        "name": "Remodelled Shiratsuyu-class \"Harusame Kai Ni\", Sortie!",
+        "desc": "Sortie Harusame Kai Ni as flagship, 1 CL, 1 DD, and up to 3 additional ships to [W2-2], [W2-3] and [W5-1]. S-Rank each boss node twice.",
+        "rewards": "¶First choice: Either a 12.7cm Twin Gun Mount Model C Kai 2 OR 4 25mm Triple Autocannon Mounts OR two New Model Armament Materials ¶Second choice: Either 15 Development Materials OR 5 Screws OR a Medal",
+        "resources": [[400, 400, 400, 400], [0, 0, 0, 0]]
+    },
+    "1008": {
+        "code": "B199",
+        "name": "Yuudachi-neesan! This Time I'll Go with You!",
+        "desc": "Sortie Yuudachi Kai Ni and Harusame Kai Ni, and up to 4 additional ships to [W4-5], [W5-3], [W5-4] and [W5-5]. S-Rank each boss node.",
+        "rewards": "a 12.7cm Twin Gun Mount Model C Kai 3H ★2 and either 20 Development Materials OR 7 Screws OR an Action Report",
+        "resources": [[880, 880, 880, 880], [0, 0, 0, 0]]
+    },
+    "1013": {
+        "code": "B200",
+        "name": "Shield Of Hachinohe \"Inagi Kai Ni\", Set Sail!",
+        "desc": "Sortie Inagi Kai Ni as flagship and up to 5 additional ship to [W1-3], [W1-4], [W2-2], [W2-3] and [W7-4]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either 8 Buckets OR 8000 Ammos OR a Reinforcement Expansion ¶Second choice: Either a 12cm Single High-angle Gun Mount Model E Kai ★8 OR 8 Screws OR an Action Report",
+        "resources": [[800, 0, 800, 800], [0, 0, 0, 0]]
+    },
+    "1014": {
+        "code": "B201",
+        "name": "Guard The Nearby Waters And Nansei Islands With Patrol Unit!",
+        "desc": "Assemble a fleet containing 3 DE and up to 3 XX OR or 4 DD/DE and up to 2 XX, then A+ rank the boss nodes of 1-1, 1-2, 1-5, and 2-1.",
+        "rewards": "¶First choice: Either 6 Development Materials OR two Irako OR a Furniture Fairy ¶Second choice: Either a New Model Armament Material OR 5 Buckets OR a Medal",
+        "resources": [[170, 170, 170, 0], [0, 0, 0, 0]]
+    },
+    "1015": {
+        "code": "B202",
+        "name": "Air Defense Surface Ships, Sortie!",
+        "desc": "Assemble a fleet containing any 3 of: \"Akizuki-class, Tenryuu-class Kai Ni, Maya Kai+, or Isuzu Kai Ni\"; and up to 3 XX, then S rank the boss nodes of 1-3, 1-4, 2-2, 2-3, and 5-1.",
+        "rewards": "¶First choice: Either 8 Development Materials OR 4 12.7cm Twin High-angle Gun Mounts OR two Screws ¶Second choice: Either 4 10cm Twin High-angle Gun Mounts OR a Medal OR a Reinforcement Expansion",
+        "resources": [[250, 0, 250, 250], [0, 0, 0, 0]]
+    },
+    "1016": {
+        "code": "B203",
+        "name": "Air Defense Destroyer \"Hatsuzuki Kai Ni\", Let's Go!",
+        "desc": "Assemble a fleet containing Hatsuzuki Kai Ni as flagship and up to 5 XX, then S rank the boss nodes of 2-4, 3-5, 7-4, 5-4, and 5-5.",
+        "rewards": "a 10cm Twin High-angle Gun Mount Kai + Anti-Aircraft Fire Director Kai and either two Type 94 Anti-Aircraft Fire Directors OR two Medals OR an Action Report",
+        "resources": [[610, 610, 610, 610], [0, 0, 0, 0]]
+    },
     "201": {
         "code": "Bd1",
         "name": "Daily Victory",
@@ -2456,6 +2505,13 @@
         "rewards": "¶First choice: Either 700 Fuels OR 4 Buckets OR two Screws ¶Second choice: Either 7 Development Materials OR a Medal OR a Furniture Fairy",
         "resources": [[280, 280, 280, 280], [0, 0, 0, 0]]
     },
+    "1012": {
+        "code": "By14",
+        "name": "Ukuru-class Kaiboukan, Defend The Calm Seas!",
+        "desc": "Sortie an Ukuru-class as flagship, 1 DE and up to 2 DE (4 ships) to [W1-1]. S-rank the boss node three times. Sortie to [W1-2] and [W1-5]. A+ rank each boss nodes twice.",
+        "rewards": "¶First choice: Either 880 Fuels OR 6 Buckets OR a Furniture Fairy ¶Second choice: Either 16 Development Materials OR three 12cm Single High-angle Gun Mount Model ES OR three Screws",
+        "resources": [[320, 320, 320, 0], [0, 0, 0, 0]]
+    },
     "301": {
         "code": "C1",
         "name": "The First Exercise!",
@@ -2840,6 +2896,22 @@
         "memo": "※This quest resets on the first quest reset of July. \\u203bDesDiv 16, Exercises!",
         "rewards": "¶First choice: Either an Irako OR three Buckets OR three Development Materials ¶Second choice: Either a 12.7cm Twin Gun Mount Model C Kai 2 OR two New Model Armament Materials OR three Enhanced Kanhon Type Boilers",
         "resources": [[160, 160, 160, 0], [0, 0, 0, 0]]
+    },
+    "371": {
+        "code": "Cy12",
+        "name": "Annual Spring Exercises - April",
+        "desc": "Secure 4 A-Rank+ victiories in Exercises within the same day using Harusame as flagship, any 3 of Murasame, Yuudachi, Samidare, Shiratsuyu and Shigure, and up to 2 additional ships.",
+        "memo": "※This quest resets on the first quest reset of April. ※It's Spring! Harusame, Exercises!",
+        "rewards": "¶First choice: Either a New Model Armament Material OR two Buckets OR 7 Development Materials ¶Second choice: Either two Screws OR two 25mm Triple Autocannon Mounts OR two Combat Rations",
+        "resources": [[200, 270, 0, 0], [0, 0, 0, 0]]
+    },
+    "372": {
+        "code": "Cy13",
+        "name": "Annual Akizuki-class Exercises - June",
+        "desc": "Assemble a fleet containing an Akizuki-class as flagship, 2 BBV, 2 DD, and up to 1 XX, then score 4 A+ ranks in PVP within the same day.",
+        "memo": "※This quest resets on the first quest reset of June. ※Carry Out A Surface Ship \"Fleet Air Defense Exercise\"!",
+        "rewards": "¶First choice: Either a New Model Armament Material OR two 25mm Twin Autocannon Mounts ¶Second choice: Either two Mamiyas OR 10 Development Materials OR a Medal",
+        "resources": [[310, 150, 150, 0], [0, 0, 0, 0]]
     },
     "313": {
         "code": "Cs1",
@@ -3899,6 +3971,21 @@
         "rewards": "a Type 22 Surface Radar Kai 4 (Late Adjustment Model)",
         "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
     },
+    "1137": {
+        "code": "F123",
+        "name": "Development Of Armament For The Ukuru-class Kaiboukan",
+        "desc": "Set an Ukuru-class as Secretary, equipped with a Type 3 Depth Charge Projector in her 1st slot, then, scrap 4 Type 93 Passive Sonars, 4 Type 94 Depth Charge Projector and 4 Type 95 Depth Charges, and prepare 1 Type 3 Depth Charge Projector, and 32 Development Materials.",
+        "memo": "※Consumes the items and resources. ※Any ★ on the Type 3 Depth Charge Projector are lost during conversion.",
+        "rewards": "a Type 3 Depth Charge Projector (Concentrated Deployment)",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1139": {
+        "code": "F124",
+        "name": "[Strengthening Fleet Communications Capabilities] Communications Personnel Training",
+        "desc": "Set Ooyodo as Secretary, equipped with a Type 13 Air Radar in her 1st slot, then, scrap 2 Type 21 Air Radar, 2 Type 13 Air Radar, and 3 Combat Ration, and prepare 20 Development Materials.",
+        "rewards": "a Communication Equipment & Personnel",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
     "605": {
         "code": "Fd1",
         "name": "Daily Development 1",
@@ -4166,9 +4253,17 @@
     "1123": {
         "code": "Fy10",
         "name": "Annual Reconnaissance Seaplane - January",
-        "desc": "Have two New Model Aviation Armament Materials, two Skilled Crew Members and 35 Development Materials. Set Tone Kai Ni or Yura Kai Ni as secretary with a ★max Type 0 Reconnaissance Seaplane in her first slot. Scrap two Type 97 Torpedo Bomber (931 Air Group).",
+        "desc": "Have two New Model Aviation Armament Materials, two Skilled Crew Members, 35 Development Materials and 950 bauxite. Set Tone Kai Ni or Yura Kai Ni as secretary with a ★max Type 0 Reconnaissance Seaplane in her first slot. Scrap two Type 97 Torpedo Bomber (931 Air Group).",
         "memo": "※This quest resets on the first quest reset of January. ※Consumes the items and resources. ※Increasement of Improved 3-seat Reconnaissance Seaplane ",
         "rewards": "a Type 0 Reconnaissance Seaplane Model 11B",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1138": {
+        "code": "Fy11",
+        "name": "Annual Type 94 AAFD - June",
+        "desc": "Set an Akizuki-class as Secretary, then, scrap 4 Type 91 Anti-Aircraft Fire Director, and prepare 16 Development Materials, 4 Instant Construction Materials, 480 steel, 1300 bauxite.",
+        "memo": "※This quest resets on the first quest reset of June. ※[Mass Production Of Anti-Aircraft Equipment] Additional Deployment Of Type 94 AAFD  ※Consumes the resources. ",
+        "rewards": "a Type 94 Anti-Aircraft Fire Director and either three Buckets OR two Screws",
         "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
     },
     "701": {
@@ -4305,31 +4400,5 @@
         "desc": "Scrap 2 pieces of equipment to show your love!",
         "rewards": "a Development Material",
         "resources": [[88, 88, 0, 0], [0, 0, 1, 0]]
-    },
-    "1135": {
-        "code": "L2312F3",
-        "name": "[Time-Limited Quest] Wings Connected To The \"Renzan\"",
-        "desc": "Prepare a Shinzan (★Max), a Type 1 Land-based Attack Aircraft Model 22A, 3 Skilled Crew Member, and 2 New Model Aerial Armament Material.",
-        "rewards": "¶First choice: Either 6 Development Materials OR 4 Buckets OR a Furniture Fairy ¶Second choice: Either a Mamiya OR an Extra Equipment Slots +3",
-        "resources": [[2024, 0, 0, 214], [0, 0, 0, 0]]
-    },
-    "234": {
-        "code": "L2402B1",
-        "name": "Time-Limited 2024 Valentine's Day Quest: First Operation",
-        "desc": "Sortie any 2 of Kinugasa, Furutaka, Kuma, Kamikaze, Murakumo, Akebono, Ushio, Oboro, Jingei, I-201 and I-203, and up to 4 additional ships to [W1-3], [W1-4], [W2-2] and [W2-3]. A-Rank+ each boss node.",
-        "rewards": "¶First choice: Either three Irako OR an Extra Equipment Slots +4 ¶Second choice: Either a Medal OR a Reinforcement Expansion OR an Action Report",
-        "resources": [[0, 2024, 214, 214], [0, 0, 0, 0]]
-    },
-    "238": {
-        "code": "L2402B2",
-        "name": "Time-Limited 2024 Valentine's Day Quest: Second Operation",
-        "desc": "Sortie any 2 of Hamakaze, Fujinami, Hamanami, Hayanami, Akishimo, Takanami, Suzunami, Sagiri, Akashi, Perth, South Dakota and Kashima, and up to 4 additional ships to [W2-1], [W3-1], [W3-2] and [W4-2]. A-Rank+ each boss node.",
-        "rewards": "¶First choice: Either three Zuiuns OR two Type 2 Depth Charges OR two New Model Aerial Armament Materials ¶Second choice: Either a Furniture Fairy OR two Irako OR three Screws",
-        "resources": [[0, 0, 214, 2024], [0, 0, 0, 0]]
-    },
-    "349": {
-        "code": "L2402C1",
-        "name": "Time-Limited 2024 Valentine's Day Quest: Special Exercises",
-        "desc": "Secure 4 S-Rank victories in Exercises within the same day using 1 AV, 1 CA(V), 1 CL(T)/CT, 2 DD and up to 1 additional ship.",
-        "rewards": NaN, "resources": NaN}
+    }
 }
