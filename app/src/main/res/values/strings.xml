@@ -24,7 +24,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="app_name_kancolle">KanColle Android (Official)</string>
     <string name="app_name_gotobrowser">GotoBrowser</string>
 
-    <string name="special_message">Harusame and Lollipop</string>
+    <string name="special_message">Minazuki and Popsicles</string>
     <string name="notification_message">Notification and Information</string>
     <string name="app_notice_link" translatable="false">https://luckyjervis.com/kcanotify/notice</string>
 
