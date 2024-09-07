@@ -213,7 +213,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         export_openpage_2.setText(getStringWithLocale(R.string.shipinfo_export_openpage));
         export_openpage_2.setOnClickListener(v -> {
             Intent bIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://noro6.github.io/kcTools/manager/"));
+                    Uri.parse("https://noro6.github.io/kc-web/#/manager"));
             startActivity(bIntent);
         });
 

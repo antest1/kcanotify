@@ -723,8 +723,10 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetinfo_export_clipboard">複製到剪貼簿</string>
     <string name="fleetinfo_export_openpage1">開啟艦隊模擬器網站</string>
     <string name="fleetinfo_export_openpage2">艦隊編成圖像輸出</string>
+    <string name="fleetinfo_export_openpage_noro6">開啟制空權模擬器</string>
+    <string name="fleetinfo_export_openpage_jervisor">開啟作戰室（Jervis OR）</string>
     <string name="fleetinfo_export_title">匯出到 DeckBuilder</string>
-    <string name="action_export_fleetanalysis">制空權模擬器</string>
+    <string name="action_export_fleetanalysis">匯出</string>
     <string name="equipinfo_export_title">匯出到 制空權模擬器</string>
     <string name="equipinfo_export_clipboard">複製到剪貼簿</string>
     <string name="equipinfo_export_openpage2">開啟制空權模擬器</string>

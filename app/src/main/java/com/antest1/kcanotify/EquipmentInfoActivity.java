@@ -237,10 +237,9 @@ public class EquipmentInfoActivity extends AppCompatActivity {
         export_openpage2.setText(getStringWithLocale(R.string.equipinfo_export_openpage2));
         export_openpage2.setOnClickListener(v -> {
             Intent bIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://noro6.github.io/kcTools/simulator/"));
+                    Uri.parse("https://noro6.github.io/kc-web/#/manager"));
             startActivity(bIntent);
         });
-
     }
 
     private void setSummary() {

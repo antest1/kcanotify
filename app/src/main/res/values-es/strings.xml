@@ -721,8 +721,10 @@
     <string name="fleetinfo_export_clipboard">Copiar</string>
     <string name="fleetinfo_export_openpage1">Exportar a Deckbuilder</string>
     <string name="fleetinfo_export_openpage2">Exportar a ImgKCbuilder</string>
+    <string name="fleetinfo_export_openpage_noro6">Abrir página SeikuukenSimulator</string>
+    <string name="fleetinfo_export_openpage_jervisor">Abrir página FleetHub (Jervis OR)</string>
 
-    <string name="action_export_fleetanalysis">SeikuukenSimulator</string>
+    <string name="action_export_fleetanalysis">Exportar</string>
     <string name="equipinfo_export_title">Exportar a SeikuukenSimulator</string>
     <string name="equipinfo_export_clipboard">Copiar</string>
     <string name="equipinfo_export_openpage2">Abrir página SeikuukenSimulator</string>

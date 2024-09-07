@@ -57,7 +57,7 @@ public class FleetInfoActivity extends AppCompatActivity {
 
     boolean is_popup_on;
     View export_popup, export_exit;
-    TextView export_clipboard, export_openpage, export_openpage2;
+    TextView export_clipboard, export_openpage_noro6, export_openpage_jervisor, export_openpage2;
 
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
@@ -145,18 +145,20 @@ public class FleetInfoActivity extends AppCompatActivity {
                     getStringWithLocale(R.string.copied_to_clipboard), Toast.LENGTH_LONG).show();
         });
 
-        export_openpage = export_popup.findViewById(R.id.export_openpage);
-        export_openpage.setText(getStringWithLocale(R.string.fleetinfo_export_openpage1));
-        export_openpage.setOnClickListener(v -> {
-            String data = content.getText().toString();
-            try {
-                String encoded =  URLEncoder.encode(data, "utf-8");
-                Intent bIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://kancolle-calc.net/deckbuilder.html?predeck=".concat(encoded)));
-                startActivity(bIntent);
-            } catch (UnsupportedEncodingException e) {
-                Toast.makeText(getApplicationContext(), "parsing error", Toast.LENGTH_SHORT).show();
-            }
+        export_openpage_noro6 = export_popup.findViewById(R.id.export_openpage_noro6);
+        export_openpage_noro6.setText(getStringWithLocale(R.string.fleetinfo_export_openpage_noro6));
+        export_openpage_noro6.setOnClickListener(v -> {
+            Intent bIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://noro6.github.io/kc-web/#/aircalc"));
+            startActivity(bIntent);
+        });
+
+        export_openpage_jervisor = export_popup.findViewById(R.id.export_openpage_jervisor);
+        export_openpage_jervisor.setText(getStringWithLocale(R.string.fleetinfo_export_openpage_jervisor));
+        export_openpage_jervisor.setOnClickListener(v -> {
+            Intent bIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://jervis.vercel.app/"));
+            startActivity(bIntent);
         });
 
         export_openpage2 = export_popup.findViewById(R.id.export_openpage2);

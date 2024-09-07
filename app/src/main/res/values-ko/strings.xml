@@ -718,7 +718,10 @@
     <string name="fleetinfo_export_clipboard">클립보드에 복사</string>
     <string name="fleetinfo_export_openpage1">함대시뮬레이터 열기</string>
     <string name="fleetinfo_export_openpage2">편성화면 출력</string>
-    <string name="action_export_fleetanalysis">제공권시뮬레이터</string>
+    <string name="fleetinfo_export_openpage_noro6">제공권시뮬레이터 열기</string>
+    <string name="fleetinfo_export_openpage_jervisor">작전실(Jervis OR) 열기</string>
+
+    <string name="action_export_fleetanalysis">내보내기</string>
     <string name="equipinfo_export_title">제공권시뮬레이터 내보내기</string>
     <string name="equipinfo_export_clipboard">클립보드에 복사</string>
     <string name="equipinfo_export_openpage2">제공권 시뮬레이터 열기</string>

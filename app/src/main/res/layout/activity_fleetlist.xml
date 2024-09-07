@@ -132,7 +132,7 @@
             android:elevation="3dp"
             android:orientation="vertical"
             android:padding="10dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <RelativeLayout
                 android:id="@+id/export_bar"
@@ -199,13 +199,25 @@
                 android:textSize="16dp" />
 
             <TextView
-                android:id="@+id/export_openpage"
+                android:id="@+id/export_openpage_noro6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:background="@color/colorAccent"
                 android:padding="6dp"
-                android:text="@string/fleetinfo_export_openpage1"
+                android:text="@string/fleetinfo_export_openpage_noro6"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/export_openpage_jervisor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@color/colorAccent"
+                android:padding="6dp"
+                android:text="@string/fleetinfo_export_openpage_jervisor"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="16dp" />
