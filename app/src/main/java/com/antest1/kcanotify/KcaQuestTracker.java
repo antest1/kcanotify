@@ -44,7 +44,6 @@ import static com.antest1.kcanotify.KcaApiData.STYPE_SS;
 import static com.antest1.kcanotify.KcaApiData.STYPE_SSV;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
-import static com.antest1.kcanotify.KcaApiData.kcQuestInfoData;
 import static com.antest1.kcanotify.KcaUtils.getJapanCalendarInstance;
 import static com.antest1.kcanotify.KcaUtils.getJapanSimpleDataFormat;
 
@@ -370,10 +369,16 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     for (int i = 0; i < fleet_data.size(); i++) {
                         int item = fleet_data.get(i).getAsInt();
                         if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
-                        if (kcShipType == STYPE_BBV) requiredBBV += 1;
-                        if (kcShipType == STYPE_AO) requiredAO += 1;
+                        JsonObject shipData = getUserShipDataById(item, "ship_id");
+                        if (shipData != null) {
+                            int shipId = shipData.get("ship_id").getAsInt();
+                            JsonObject kcShipData = getKcShipDataById(shipId, "stype");
+                            if (kcShipData != null) {
+                                int kcShipType = kcShipData.get("stype").getAsInt();
+                                if (kcShipType == STYPE_BBV) requiredBBV += 1;
+                                if (kcShipType == STYPE_AO) requiredAO += 1;
+                            }
+                        }
                     }
                     if (requiredBBV >= 2) requiredShip += 1;
                     if (requiredAO >= 2) requiredShip += 1;
@@ -423,6 +428,25 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
 
         int requiredShip;
         JsonObject updateTarget = new JsonObject();
+
+        ArrayList<Integer> kcShipIdList = new ArrayList<>();
+        ArrayList<Integer> kcShipTypeList = new ArrayList<>();
+
+        for (int i = 0; i < fleet_data.size(); i++) {
+            int item = fleet_data.get(i).getAsInt();
+            if (item == -1) break;
+            JsonObject shipData = getUserShipDataById(item, "ship_id");
+            if (shipData != null) {
+                int shipId = shipData.get("ship_id").getAsInt();
+                JsonObject kcShipData = getKcShipDataById(shipId, "id,stype");
+                if (kcShipData != null) {
+                    kcShipIdList.add(kcShipData.get("id").getAsInt());
+                    kcShipTypeList.add(kcShipData.get("stype").getAsInt());
+                }
+            }
+        }
+        int flagshipKcShipType = kcShipTypeList.get(0);
+
         while (c.moveToNext()) {
             boolean wflag = false;
             boolean fleetflag = true;
@@ -440,36 +464,25 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "318":
                     requiredShip = 0;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
+                    for (int kcShipType: kcShipTypeList) {
                         if (kcShipType == STYPE_CL) requiredShip += 1;
                     }
                     wflag = (requiredShip == 2) && isWinRank(rank);
                     break;
                 case "330":
                     requiredShip = 0;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
-                        if (i == 0 && (kcShipType != STYPE_CV && kcShipType != STYPE_CVL && kcShipType != STYPE_CVB)) {
-                            fleetflag = false;
+                    if (flagshipKcShipType != STYPE_CV && flagshipKcShipType != STYPE_CVL && flagshipKcShipType != STYPE_CVB) {
+                        fleetflag = false;
+                    } else {
+                        for (int kcShipType: kcShipTypeList) {
+                            if (kcShipType == STYPE_CV || kcShipType == STYPE_CVL || kcShipType == STYPE_CVB) requiredShip += 1;
                         }
-                        if (kcShipType == STYPE_CV || kcShipType == STYPE_CVL || kcShipType == STYPE_CVB) requiredShip += 1;
                     }
                     wflag = fleetflag && (requiredShip == 2) && isWinRank(rank);
                     break;
                 case "337":
                     requiredShip = 4;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipId = getKcShipDataById(shipId, "id").get("id").getAsInt();
+                    for (int kcShipId: kcShipIdList) {
                         if (kcShipId == 49 || kcShipId == 253 || kcShipId == 464 || kcShipId == 470) requiredShip -= 1;
                         if (kcShipId == 48 || kcShipId == 198 || kcShipId == 252) requiredShip -= 1;
                         if (kcShipId == 17 || kcShipId == 225 || kcShipId == 566) requiredShip -= 1;
@@ -479,11 +492,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "339":
                     requiredShip = 4;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipId = getKcShipDataById(shipId, "id").get("id").getAsInt();
+                    for (int kcShipId: kcShipIdList) {
                         if (kcShipId == 12 || kcShipId == 206 || kcShipId == 666) requiredShip -= 1;
                         if (kcShipId == 368 || kcShipId == 486 || kcShipId == 647) requiredShip -= 1;
                         if (kcShipId == 13 || kcShipId == 195 || kcShipId == 207) requiredShip -= 1;
@@ -493,11 +502,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "342":
                     requiredShip = 0;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
+                    for (int kcShipType: kcShipTypeList) {
                         if (kcShipType == STYPE_CL) requiredShip += 1;
                         if (kcShipType == STYPE_DD || kcShipType == STYPE_DE) requiredShip += 10;
                     }
@@ -595,9 +600,30 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
 
         int requiredShip = 0;
         JsonObject updateTarget = new JsonObject();
+
+        ArrayList<Integer> kcShipIdList = new ArrayList<>();
+        ArrayList<Integer> kcShipTypeList = new ArrayList<>();
+
+        for (int i = 0; i < fleet_data.size(); i++) {
+            int item = fleet_data.get(i).getAsInt();
+            if (item == -1) break;
+            JsonObject shipData = getUserShipDataById(item, "ship_id");
+            if (shipData != null) {
+                int shipId = shipData.get("ship_id").getAsInt();
+                JsonObject kcShipData = getKcShipDataById(shipId, "id,stype");
+                if (kcShipData != null) {
+                    kcShipIdList.add(kcShipData.get("id").getAsInt());
+                    kcShipTypeList.add(kcShipData.get("stype").getAsInt());
+                }
+            }
+        }
+        int flagshipKcShipId = kcShipIdList.get(0);
+        int flagshipKcShipType = kcShipTypeList.get(0);
+
         while (c.moveToNext()) {
             boolean wflag = false;
             boolean fleetflag = true;
+
             String key = c.getString(c.getColumnIndexOrThrow("KEY"));
             int cond0 = c.getInt(c.getColumnIndexOrThrow("CND0"));
             int cond1 = c.getInt(c.getColumnIndexOrThrow("CND1"));
@@ -671,56 +697,53 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "249": // 5전대
                     requiredShip = 3;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipId = getKcShipDataById(shipId, "id").get("id").getAsInt();
+                    for (int kcShipId: kcShipIdList) {
                         if (kcShipId == 62 || kcShipId == 265 || kcShipId == 319) requiredShip -= 1;
                         if (kcShipId == 63 || kcShipId == 192 || kcShipId == 266) requiredShip -= 1;
                         if (kcShipId == 65 || kcShipId == 194 || kcShipId == 268) requiredShip -= 1;
-                        wflag = (world == 2 && map == 5 && isboss && rank.equals("S") && requiredShip == 0);
                     }
+                    wflag = (world == 2 && map == 5 && isboss && rank.equals("S") && requiredShip == 0);
                     break;
                 case "256": // 잠수함대
                     wflag = world == 6 && map == 1 && isboss && rank.equals("S");
                     break;
                 case "257": // 수뢰전대
                     requiredShip = 0;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
-                        if ((i == 0 && kcShipType != STYPE_CL) || (kcShipType != STYPE_DD && kcShipType != STYPE_CL)) {
-                            fleetflag = false;
+                    if (flagshipKcShipType != STYPE_CL) {
+                        fleetflag = false;
+                    } else {
+                        for (int kcShipType: kcShipTypeList) {
+                            if (kcShipType != STYPE_DD && kcShipType != STYPE_CL) {
+                                fleetflag = false;
+                                break;
+                            } else if (kcShipType == STYPE_CL) {
+                                requiredShip += 1;
+                            }
                         }
-                        if (kcShipType == STYPE_CL) requiredShip += 1;
                     }
                     wflag = world == 1 && map == 4 && isboss && rank.equals("S") && fleetflag && requiredShip <= 3;
                     break;
                 case "259": // 수상타격
                     requiredShip = 0;
-                    // required_bb: 나가토급, 야마토급, 이세급, 후소급
-                    int[] required_bb = {26, 27, 77, 80, 81, 82, 87, 88, 131, 136, 143, 148, 275, 276, 286, 287, 411, 412, 541, 546, 553};
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        JsonObject kcShipData = getKcShipDataById(shipId, "stype");
-                        int kcShipType = kcShipData.get("stype").getAsInt();
-                        if (Arrays.binarySearch(required_bb, shipId) >= 0) requiredShip += 10;
+                    // required_bb: 이세급, 후소급, 나가토급, 야마토급
+                    int[] bb_ise_class = {77, 82, 87, 88, 553, 554};
+                    int[] bb_fusou_class = {26, 27, 286, 287, 411, 412};
+                    int[] bb_nagato_class = {80, 81, 275, 276, 541, 573};
+                    int[] bb_yamato_class = {131, 136, 143, 148, 546, 911, 916};
+                    for (int kcShipId: kcShipIdList) {
+                        if (Arrays.binarySearch(bb_ise_class, kcShipId) >= 0) requiredShip += 10;
+                        if (Arrays.binarySearch(bb_fusou_class, kcShipId) >= 0) requiredShip += 10;
+                        if (Arrays.binarySearch(bb_nagato_class, kcShipId) >= 0) requiredShip += 10;
+                        if (Arrays.binarySearch(bb_yamato_class, kcShipId) >= 0) requiredShip += 10;
+                    }
+                    for (int kcShipType: kcShipTypeList) {
                         if (kcShipType == STYPE_CL) requiredShip += 1;
                     }
                     wflag = world == 5 && map == 1 && isboss && rank.equals("S") && requiredShip == 31;
                     break;
                 case "264": // 공모기동
                     requiredShip = 0;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
+                    for (int kcShipType: kcShipTypeList) {
                         if (kcShipType == STYPE_CV || kcShipType == STYPE_CVL || kcShipType == STYPE_CVB)
                             requiredShip += 10;
                         if (kcShipType == STYPE_DD) requiredShip += 1;
@@ -729,33 +752,30 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "266": // 수상반격
                     requiredShip = 0;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
-                        if ((i == 0 && kcShipType != STYPE_DD) || (kcShipType != STYPE_DD && kcShipType != STYPE_CL && kcShipType != STYPE_CA)) {
-                            fleetflag = false;
-                            break;
+                    if (flagshipKcShipType != STYPE_DD) {
+                        fleetflag = false;
+                    } else {
+                        for (int kcShipType: kcShipTypeList) {
+                            if ((kcShipType != STYPE_DD && kcShipType != STYPE_CL && kcShipType != STYPE_CA)) {
+                                fleetflag = false;
+                                break;
+                            }
+                            if (kcShipType == STYPE_CA) requiredShip += 100;
+                            if (kcShipType == STYPE_CL) requiredShip += 10;
+                            if (kcShipType == STYPE_DD) requiredShip += 1;
                         }
-                        if (kcShipType == STYPE_CA) requiredShip += 100;
-                        if (kcShipType == STYPE_CL) requiredShip += 10;
-                        if (kcShipType == STYPE_DD) requiredShip += 1;
                     }
                     wflag = world == 2 && map == 5 && isboss && rank.equals("S") && fleetflag && requiredShip == 114;
                     break;
                 case "280": // 병참선
                     requiredShip = 0;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
+                    for (int kcShipType: kcShipTypeList) {
                         if (kcShipType == STYPE_CVL) requiredShip += 10;
                         if (kcShipType == STYPE_CL) requiredShip += 10;
                         if (kcShipType == STYPE_DD) requiredShip += 1;
                         if (kcShipType == STYPE_DE) requiredShip += 1;
                     }
+
                     if (requiredShip % 10 >= 3 && requiredShip / 10 >= 1) {
                         targetData = new JsonArray();
                         targetData.add(cond0);
@@ -812,11 +832,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     requiredShip = 0;
                     int requiredCL = 0;
                     int requiredAV = 0;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
+                    for (int kcShipType: kcShipTypeList) {
                         if (kcShipType == STYPE_CL) requiredCL += 1;
                         if (kcShipType == STYPE_AV) requiredAV += 1;
                     }
@@ -877,11 +893,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "894": // 항모병참선 분기퀘 (1-3, 1-4, 2-1, 2-2, 2-3)
                     requiredShip = 0;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
+                    for (int kcShipType: kcShipTypeList) {
                         if (kcShipType == STYPE_CV) requiredShip += 1;
                         if (kcShipType == STYPE_CVL) requiredShip += 1;
                         if (kcShipType == STYPE_CVB) requiredShip += 1;
@@ -908,11 +920,7 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "284": // 남서제도 분기퀘 (1-4, 2-1, 2-2, 2-3)
                     requiredShip = 0;
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        int kcShipType = getKcShipDataById(shipId, "stype").get("stype").getAsInt();
+                    for (int kcShipType: kcShipTypeList) {
                         if (kcShipType == STYPE_CL) requiredShip += 10;
                         if (kcShipType == STYPE_CVL) requiredShip += 10;
                         if (kcShipType == STYPE_DD) requiredShip += 1;
@@ -937,12 +945,9 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     break;
                 case "888": // 미카와 분기퀘: 쵸카이, 아오바, 키누가사, 카코, 후루타카, 텐류, 유바리 중 4택
                     requiredShip = 0;
-                    int[] required_mikawa = {51, 59, 60, 61, 69, 115, 123, 142, 213, 262, 263, 264, 272, 293, 295, 416, 417, 427, 477};
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        if (Arrays.binarySearch(required_mikawa, shipId) >= 0) requiredShip += 4;
+                    int[] required_mikawa = {51, 59, 60, 61, 69, 115, 123, 142, 213, 262, 263, 264, 272, 293, 295, 416, 417, 427, 477, 622, 623, 624};
+                    for (int kcShipId: kcShipIdList) {
+                        if (Arrays.binarySearch(required_mikawa, kcShipId) >= 0) requiredShip += 4;
                     }
                     if (requiredShip >= 4) {
                         targetData = new JsonArray();
@@ -962,17 +967,13 @@ public class KcaQuestTracker extends SQLiteOpenHelper {
                     requiredShip = 0;
                     int[] yuubari_kaini = {622, 623, 624};
                     int[] rokusuisen_dd = {1, 2, 30, 31, 164, 254, 255, 259, 261, 308, 434, 435};
-                    for (int i = 0; i < fleet_data.size(); i++) {
-                        int item = fleet_data.get(i).getAsInt();
-                        if (item == -1) break;
-                        int shipId = getUserShipDataById(item, "ship_id").get("ship_id").getAsInt();
-                        if (i == 0) {
-                            if (Arrays.binarySearch(yuubari_kaini, shipId) >= 0) requiredShip += 10;
-                        } else {
-                            if (shipId == 488) requiredShip += 2; // 유라 개2
-                            else if (Arrays.binarySearch(rokusuisen_dd, shipId) >= 0) requiredShip += 1; // 6수전
-                        }
+
+                    if (Arrays.binarySearch(yuubari_kaini, flagshipKcShipId) >= 0) requiredShip += 10;
+                    for (int kcShipId: kcShipIdList) {
+                        if (kcShipId == 488) requiredShip += 2; // 유라 개2
+                        else if (Arrays.binarySearch(rokusuisen_dd, kcShipId) >= 0) requiredShip += 1; // 6수전
                     }
+
                     if (requiredShip >= 12) {
                         targetData = new JsonArray();
                         targetData.add(cond0);

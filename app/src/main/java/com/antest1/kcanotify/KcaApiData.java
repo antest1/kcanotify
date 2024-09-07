@@ -1017,6 +1017,7 @@ public class KcaApiData {
     }
 
     public static JsonObject getUserShipDataById(int id, String list) {
+        if (helper == null) return null;
         JsonObject target_data = null;
         JsonObject return_data = new JsonObject();
         if (userShipData != null) {
@@ -1080,24 +1081,26 @@ public class KcaApiData {
             int kc_item_id = userData.get("api_slotitem_id").getAsInt();
             JsonObject kcData = getKcItemStatusById(kc_item_id, kclist);
 
-            if (list.equals("all")) {
-                for (Map.Entry<String, JsonElement> k : userData.entrySet()) {
-                    kcData.add(k.getKey(), userData.get(k.getKey()));
-                }
-            } else {
-                String[] requestList = list.split(",");
-                for (int i = 0; i < requestList.length; i++) {
-                    String orig_api_item = requestList[i];
-                    String api_item = orig_api_item;
-                    if (!api_item.startsWith("api_")) {
-                        api_item = "api_" + api_item;
+            if (kcData != null) {
+                if (list.equals("all")) {
+                    for (Map.Entry<String, JsonElement> k : userData.entrySet()) {
+                        kcData.add(k.getKey(), userData.get(k.getKey()));
                     }
-                    if (userData.has(api_item)) {
-                        kcData.add(orig_api_item, userData.get(api_item));
+                } else {
+                    String[] requestList = list.split(",");
+                    for (int i = 0; i < requestList.length; i++) {
+                        String orig_api_item = requestList[i];
+                        String api_item = orig_api_item;
+                        if (!api_item.startsWith("api_")) {
+                            api_item = "api_" + api_item;
+                        }
+                        if (userData.has(api_item)) {
+                            kcData.add(orig_api_item, userData.get(api_item));
+                        }
                     }
                 }
+                kcData.remove("");
             }
-            kcData.remove("");
             return kcData;
         } else {
             return null;

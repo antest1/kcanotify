@@ -14,12 +14,10 @@ import com.google.gson.JsonPrimitive;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.T2_SEARCHLIGHT;
 import static com.antest1.kcanotify.KcaApiData.T2_SEARCHLIGHT_LARGE;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
 import static com.antest1.kcanotify.KcaApiData.getUserShipDataById;
-import static com.antest1.kcanotify.KcaApiData.helper;
 import static com.antest1.kcanotify.KcaConstants.API_NODE_EVENT_ID_BOSS;
 import static com.antest1.kcanotify.KcaConstants.API_REQ_COMBINED_AIRBATTLE;
 import static com.antest1.kcanotify.KcaConstants.API_REQ_COMBINED_BATTLE;
@@ -238,15 +236,17 @@ public class KcaBattle {
                     int shipHP = currentHP.get(i).getAsInt();
                     if (shipHP == 1) continue;
                     JsonObject shipData = getUserShipDataById(ship_id, "slot");
-                    JsonArray shipItem = shipData.getAsJsonArray("slot");
-                    for (int j = 0; j < shipItem.size(); j++) {
-                        int item_id = shipItem.get(j).getAsInt();
-                        if (item_id != -1) {
-                            JsonObject itemData = getUserItemStatusById(item_id, "slotitem_id", "type");
-                            if (itemData != null) {
-                                int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
-                                if (itemType == T2_SEARCHLIGHT || itemType == T2_SEARCHLIGHT_LARGE) {
-                                    return true;
+                    if (shipData != null) {
+                        JsonArray shipItem = shipData.getAsJsonArray("slot");
+                        for (int j = 0; j < shipItem.size(); j++) {
+                            int item_id = shipItem.get(j).getAsInt();
+                            if (item_id != -1) {
+                                JsonObject itemData = getUserItemStatusById(item_id, "slotitem_id", "type");
+                                if (itemData != null) {
+                                    int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                                    if (itemType == T2_SEARCHLIGHT || itemType == T2_SEARCHLIGHT_LARGE) {
+                                        return true;
+                                    }
                                 }
                             }
                         }
@@ -284,28 +284,30 @@ public class KcaBattle {
                 int ship_id = fleet_data.get(idx).getAsInt();
                 if (ship_id > 0) {
                     JsonObject shipData = getUserShipDataById(ship_id, "slot,slot_ex,maxhp");
-                    JsonArray shipItem = shipData.getAsJsonArray("slot");
-                    max_hp = shipData.get("maxhp").getAsInt();
-                    for (int j = 0; j < shipItem.size(); j++) {
-                        int item_id = shipItem.get(j).getAsInt();
-                        if (item_id != -1) {
-                            JsonObject itemData = getUserItemStatusById(item_id, "slotitem_id", "type");
+                    if (shipData != null) {
+                        JsonArray shipItem = shipData.getAsJsonArray("slot");
+                        max_hp = shipData.get("maxhp").getAsInt();
+                        for (int j = 0; j < shipItem.size(); j++) {
+                            int item_id = shipItem.get(j).getAsInt();
+                            if (item_id != -1) {
+                                JsonObject itemData = getUserItemStatusById(item_id, "slotitem_id", "type");
+                                if (itemData == null) return value;
+                                int item = itemData.get("slotitem_id").getAsInt();
+                                if (item == 42 || item == 43) { // 요원 / 여신
+                                    damecon_used.add(KcaUtils.format("%d_%d", cb_flag ? 1 : 0, idx));
+                                    return item == 43 ? max_hp : max_hp / 4;
+                                }
+                            }
+                        }
+                        int ex_item_id = shipData.get("slot_ex").getAsInt();
+                        if (ex_item_id > 0) {
+                            JsonObject itemData = getUserItemStatusById(ex_item_id, "slotitem_id", "type");
                             if (itemData == null) return value;
                             int item = itemData.get("slotitem_id").getAsInt();
                             if (item == 42 || item == 43) { // 요원 / 여신
                                 damecon_used.add(KcaUtils.format("%d_%d", cb_flag ? 1 : 0, idx));
                                 return item == 43 ? max_hp : max_hp / 4;
                             }
-                        }
-                    }
-                    int ex_item_id = shipData.get("slot_ex").getAsInt();
-                    if (ex_item_id > 0) {
-                        JsonObject itemData = getUserItemStatusById(ex_item_id, "slotitem_id", "type");
-                        if (itemData == null) return value;
-                        int item = itemData.get("slotitem_id").getAsInt();
-                        if (item == 42 || item == 43) { // 요원 / 여신
-                            damecon_used.add(KcaUtils.format("%d_%d", cb_flag ? 1 : 0, idx));
-                            return item == 43 ? max_hp : max_hp / 4;
                         }
                     }
                 }

@@ -243,16 +243,19 @@ public class KcaLandAirBasePopupService extends Service {
                             int state = plane.get("api_state").getAsInt();
                             ImageView iconView = v.findViewById(getId(KcaUtils.format("lab_icon%d", j + 1), R.id.class));
                             if (state > 0) {
-                                int typeres = 0;
-                                int cond = 1;
-                                if (plane.has("api_cond")) plane.get("api_cond").getAsInt();
                                 int slotid = plane.get("api_slotid").getAsInt();
+                                int typeres = R.mipmap.item_0;;
+                                int cond = 1;
+                                if (plane.has("api_cond")) cond = plane.get("api_cond").getAsInt();
+
                                 JsonObject itemData = getUserItemStatusById(slotid, "id", "type");
-                                int itemType = itemData.get("type").getAsJsonArray().get(3).getAsInt();
-                                try {
-                                    typeres = getId(KcaUtils.format("item_%d", itemType), R.mipmap.class);
-                                } catch (Exception e) {
-                                    typeres = R.mipmap.item_0;
+                                if (itemData != null) {
+                                    int itemType = itemData.get("type").getAsJsonArray().get(3).getAsInt();
+                                    try {
+                                        typeres = getId(KcaUtils.format("item_%d", itemType), R.mipmap.class);
+                                    } catch (Exception e) {
+                                        // do not change default value
+                                    }
                                 }
                                 iconView.setImageResource(typeres);
                                 if (state == 2) {

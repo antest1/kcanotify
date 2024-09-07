@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -113,6 +114,14 @@ public class KcaBackupActivity extends AppCompatActivity {
         }
     }
 
+    public File[] getFileList(File path) {
+        File[] list = path.listFiles();
+        if (list == null) {
+            Toast.makeText(getApplicationContext(), "failed to get file list", Toast.LENGTH_LONG).show();
+        }
+        return list;
+    }
+
     private class BackupSaveTask extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -144,12 +153,14 @@ public class KcaBackupActivity extends AppCompatActivity {
                 ZipFile zipFile = new ZipFile(exportPath.concat(".zip"));
                 zipFile.addFolder(exportFolder);
 
-                for (File file: exportFolder.listFiles()) {
-                    if (!file.isDirectory())
-                        file.delete();
+                File[] exportFolderFiles = getFileList(exportFolder);
+                if (exportFolderFiles != null) {
+                    for (File file: exportFolderFiles) {
+                        if (!file.isDirectory())
+                            file.delete();
+                    }
                 }
                 exportFolder.delete();
-
                 return zipFile.getFile().getPath();
 
             } catch (IOException e) {
@@ -192,9 +203,12 @@ public class KcaBackupActivity extends AppCompatActivity {
                     }
                 }
 
-                for (File file: exportFolder.listFiles()) {
-                    if (!file.isDirectory())
-                        file.delete();
+                File[] exportFolderFiles = getFileList(exportFolder);
+                if (exportFolderFiles != null) {
+                    for (File file: exportFolderFiles) {
+                        if (!file.isDirectory())
+                            file.delete();
+                    }
                 }
                 exportFolder.delete();
                 return backup_fn;
@@ -222,14 +236,16 @@ public class KcaBackupActivity extends AppCompatActivity {
         List<JsonObject> list = new ArrayList<>();
         File savedir = new File(getExternalFilesDir(null), "backup");
         if (savedir.isDirectory()) {
-            File[] files = savedir.listFiles();
-            for (File f: files) {
-                if (!f.getName().endsWith(".zip")) continue;
-                JsonObject item = new JsonObject();
-                item.addProperty("name", f.getName());
-                item.addProperty("size", f.length());
-                list.add(item);
-                Log.e("KCA", item.toString());
+            File[] files = getFileList(savedir);
+            if (files != null) {
+                for (File f: files) {
+                    if (!f.getName().endsWith(".zip")) continue;
+                    JsonObject item = new JsonObject();
+                    item.addProperty("name", f.getName());
+                    item.addProperty("size", f.length());
+                    list.add(item);
+                    Log.e("KCA", item.toString());
+                }
             }
         }
         return list;

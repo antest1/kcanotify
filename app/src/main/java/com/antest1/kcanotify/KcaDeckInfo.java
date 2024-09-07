@@ -78,37 +78,39 @@ public class KcaDeckInfo {
             if (shipId != -1) {
                 noShipCount -= 1;
                 JsonObject shipData = getUserShipDataById(shipId, "slot,slot_ex,sakuteki");
-                int shipSeek = shipData.get("sakuteki").getAsJsonArray().get(0).getAsInt();
-                pureTotalSeek += shipSeek;
-                if (Cn != SEEK_PURE) {
-                    JsonArray shipItem = (JsonArray) shipData.get("slot");
-                    for (int j = 0; j < shipItem.size(); j++) {
-                        int item_id = shipItem.get(j).getAsInt();
-                        if (item_id != -1) {
-                            JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "name,type,saku");
+                if (shipData != null) {
+                    int shipSeek = shipData.get("sakuteki").getAsJsonArray().get(0).getAsInt();
+                    pureTotalSeek += shipSeek;
+                    if (Cn != SEEK_PURE) {
+                        JsonArray shipItem = (JsonArray) shipData.get("slot");
+                        for (int j = 0; j < shipItem.size(); j++) {
+                            int item_id = shipItem.get(j).getAsInt();
+                            if (item_id != -1) {
+                                JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "name,type,saku");
+                                if (itemData == null) continue;
+                                String itemName = itemData.get("name").getAsString();
+                                int itemLevel = itemData.get("level").getAsInt();
+                                int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                                int itemSeek = itemData.get("saku").getAsInt();
+                                shipSeek -= itemSeek;
+                                totalEquipSeek += getEquipSeek(itemType, itemSeek, itemLevel);
+
+                            }
+                        }
+
+                        int ex_item_id = shipData.get("slot_ex").getAsInt();
+                        if (ex_item_id != 0 && ex_item_id != -1) {
+                            JsonObject itemData = getUserItemStatusById(ex_item_id, "level,alv", "type,saku");
                             if (itemData == null) continue;
-                            String itemName = itemData.get("name").getAsString();
-                            int itemLevel = itemData.get("level").getAsInt();
                             int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                            int itemLevel = itemData.get("level").getAsInt();
                             int itemSeek = itemData.get("saku").getAsInt();
                             shipSeek -= itemSeek;
                             totalEquipSeek += getEquipSeek(itemType, itemSeek, itemLevel);
-
                         }
-                    }
 
-                    int ex_item_id = shipData.get("slot_ex").getAsInt();
-                    if (ex_item_id != 0 && ex_item_id != -1) {
-                        JsonObject itemData = getUserItemStatusById(ex_item_id, "level,alv", "type,saku");
-                        if (itemData == null) continue;
-                        int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
-                        int itemLevel = itemData.get("level").getAsInt();
-                        int itemSeek = itemData.get("saku").getAsInt();
-                        shipSeek -= itemSeek;
-                        totalEquipSeek += getEquipSeek(itemType, itemSeek, itemLevel);
+                        totalShipSeek += Math.sqrt(shipSeek);
                     }
-
-                    totalShipSeek += Math.sqrt(shipSeek);
                 }
             }
         }
@@ -197,14 +199,16 @@ public class KcaDeckInfo {
 
     public String getConditionStatus(JsonArray deckPortData, int deckid) {
         String getConditionInfo = "";
-        List<String> conditionList = new ArrayList<String>();
+        List<String> conditionList = new ArrayList<>();
         JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
         for (int i = 0; i < deckShipIdList.size(); i++) {
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 JsonObject shipData = getUserShipDataById(shipId, "cond");
-                int shipCondition = shipData.get("cond").getAsInt();
-                conditionList.add(String.valueOf(shipCondition));
+                if (shipData != null) {
+                    int shipCondition = shipData.get("cond").getAsInt();
+                    conditionList.add(String.valueOf(shipCondition));
+                }
             }
         }
         if(conditionList.size() == 0) {
@@ -298,30 +302,30 @@ public class KcaDeckInfo {
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 JsonObject shipData = getUserShipDataById(shipId, "ship_id,lv,slot,onslot");
-                int shipKcId = shipData.get("ship_id").getAsInt();
-                int shipLv = shipData.get("lv").getAsInt();
-                JsonArray shipItem = (JsonArray) shipData.get("slot");
-                JsonArray shipSlotCount = (JsonArray) shipData.get("onslot");
-                for (int j = 0; j < shipItem.size(); j++) {
-                    int item_id = shipItem.get(j).getAsInt();
-                    int slot = shipSlotCount.get(j).getAsInt();
-                    if (item_id != -1) {
-                        JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "id,name,type,tyku");
-                        if (itemData == null) continue;
-                        String itemName = itemData.get("name").getAsString();
-                        int itemLevel = itemData.get("level").getAsInt();
-                        int itemMastery = 0;
-                        if (itemData.has("alv")) {
-                            itemMastery = itemData.get("alv").getAsInt();
+                if (shipData != null) {
+                    JsonArray shipItem = (JsonArray) shipData.get("slot");
+                    JsonArray shipSlotCount = (JsonArray) shipData.get("onslot");
+                    for (int j = 0; j < shipItem.size(); j++) {
+                        int item_id = shipItem.get(j).getAsInt();
+                        int slot = shipSlotCount.get(j).getAsInt();
+                        if (item_id != -1) {
+                            JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "id,name,type,tyku");
+                            if (itemData == null) continue;
+
+                            int itemLevel = itemData.get("level").getAsInt();
+                            int itemMastery = 0;
+                            if (itemData.has("alv")) {
+                                itemMastery = itemData.get("alv").getAsInt();
+                            }
+                            int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                            int itemAAC = itemData.get("tyku").getAsInt();
+                            double baseAAC = calcBasicAAC(itemType, calcReinforcedAAC(itemType, itemAAC, itemLevel), slot);
+
+                            double[] masteryAAC = calcSlotAACFromMastery(itemType, itemMastery, 0);
+
+                            totalRangeAAC[0] += (int) Math.floor(baseAAC + masteryAAC[0]);
+                            totalRangeAAC[1] += (int) Math.floor(baseAAC + masteryAAC[1]);
                         }
-                        int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
-                        int itemAAC = itemData.get("tyku").getAsInt();
-                        double baseAAC = calcBasicAAC(itemType, calcReinforcedAAC(itemType, itemAAC, itemLevel), slot);
-
-                        double[] masteryAAC = calcSlotAACFromMastery(itemType, itemMastery, 0);
-
-                        totalRangeAAC[0] += (int) Math.floor(baseAAC + masteryAAC[0]);
-                        totalRangeAAC[1] += (int) Math.floor(baseAAC + masteryAAC[1]);
                     }
                 }
             }
@@ -366,35 +370,32 @@ public class KcaDeckInfo {
 
                 int shipId = deckShipIdList.get(i).getAsInt();
                 if (shipId != -1) {
-                    JsonObject shipData = getUserShipDataById(shipId, "ship_id,lv,slot,onslot");
-                    int shipKcId = shipData.get("ship_id").getAsInt();
-                    int shipLv = shipData.get("lv").getAsInt();
-                    JsonArray shipItem = (JsonArray) shipData.get("slot");
-                    JsonArray shipSlotCount = (JsonArray) shipData.get("onslot");
-                    for (int j = 0; j < shipItem.size(); j++) {
-                        int item_id = shipItem.get(j).getAsInt();
-                        int slot = shipSlotCount.get(j).getAsInt();
-                        if (item_id != -1) {
-                            JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "id,name,type,saku,houm");
-                            if (itemData == null) continue;
-                            String itemName = itemData.get("name").getAsString();
-                            int itemLevel = itemData.get("level").getAsInt();
-                            int itemMastery = 0;
-                            if (itemData.has("alv")) itemMastery = itemData.get("alv").getAsInt();
-                            int itemAcc = itemData.get("houm").getAsInt();
-                            int itemSeek = itemData.get("saku").getAsInt();
-                            int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
-                            if (itemType == T2_SEA_SCOUT || itemType == T2_SCOUT || itemType == T2_SCOUT_II || itemType == T2_FLYING_BOAT) {
-                                stage1_prob_sum[0] += Math.sqrt(slot) * itemSeek * 4.0 / 100;
-                                stage1_prob_sum[1] += Math.sqrt(slot) * itemSeek * 2.4 / 100; // 0.6 * 4.0 / 100
-                                Integer key = (10 - itemAcc) * 1000 + n * 100 + i * 10 + j;
-                                stage2_prob_data.put(key, (double) itemSeek);
-                            } else if (itemType == T2_TORPEDO_BOMBER) {
-                                stage1_prob_sum[0] += 0.00001;
-                                Integer key = (10 - itemAcc) * 1000 + n * 100 + i * 10 + j;
-                                stage2_prob_data.put(key, (double) itemSeek);
-                            }
+                    JsonObject shipData = getUserShipDataById(shipId, "slot,onslot");
+                    if (shipData != null) {
+                        JsonArray shipItem = (JsonArray) shipData.get("slot");
+                        JsonArray shipSlotCount = (JsonArray) shipData.get("onslot");
+                        for (int j = 0; j < shipItem.size(); j++) {
+                            int item_id = shipItem.get(j).getAsInt();
+                            int slot = shipSlotCount.get(j).getAsInt();
+                            if (item_id != -1) {
+                                JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "type,saku,houm");
+                                if (itemData == null) continue;
 
+                                int itemAcc = itemData.get("houm").getAsInt();
+                                int itemSeek = itemData.get("saku").getAsInt();
+                                int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+
+                                Integer key = (10 - itemAcc) * 1000 + n * 100 + i * 10 + j;
+                                if (itemType == T2_SEA_SCOUT || itemType == T2_SCOUT || itemType == T2_SCOUT_II || itemType == T2_FLYING_BOAT) {
+                                    stage1_prob_sum[0] += Math.sqrt(slot) * itemSeek * 4.0 / 100;
+                                    stage1_prob_sum[1] += Math.sqrt(slot) * itemSeek * 2.4 / 100; // 0.6 * 4.0 / 100
+                                    stage2_prob_data.put(key, (double) itemSeek);
+                                } else if (itemType == T2_TORPEDO_BOMBER) {
+                                    stage1_prob_sum[0] += 0.00001;
+                                    stage2_prob_data.put(key, (double) itemSeek);
+                                }
+
+                            }
                         }
                     }
                 }
@@ -456,15 +457,17 @@ public class KcaDeckInfo {
                 int shipId = deckShipIdList.get(i).getAsInt();
                 if (shipId != -1) {
                     JsonObject shipData = getUserShipDataById(shipId, "soku");
-                    int soku = shipData.get("soku").getAsInt();
-                    if (soku == SPEED_SLOW) {
-                        is_slow_flag = true;
-                    } else if (soku == SPEED_FAST) {
-                        is_fast_flag = true;
-                    } else if (soku == SPEED_FASTPLUS) {
-                        is_fastplus_flag = true;
-                    } else if (soku == SPEED_SUPERFAST) {
-                        is_superfast_flag = true;
+                    if (shipData != null) {
+                        int soku = shipData.get("soku").getAsInt();
+                        if (soku == SPEED_SLOW) {
+                            is_slow_flag = true;
+                        } else if (soku == SPEED_FAST) {
+                            is_fast_flag = true;
+                        } else if (soku == SPEED_FASTPLUS) {
+                            is_fastplus_flag = true;
+                        } else if (soku == SPEED_SUPERFAST) {
+                            is_superfast_flag = true;
+                        }
                     }
                 }
             }
@@ -518,79 +521,81 @@ public class KcaDeckInfo {
                 int shipId = deckShipIdList.get(i).getAsInt();
                 if (shipId != -1) {
                     JsonObject shipData = getUserShipDataById(shipId, "slot,ship_id,nowhp,maxhp");
-                    int kcShipId = shipData.get("ship_id").getAsInt();
-                    int nowhp = shipData.get("nowhp").getAsInt();
-                    int maxhp = shipData.get("maxhp").getAsInt();
-                    if (nowhp * 4 <= maxhp) continue;
+                    if (shipData != null) {
+                        int kcShipId = shipData.get("ship_id").getAsInt();
+                        int nowhp = shipData.get("nowhp").getAsInt();
+                        int maxhp = shipData.get("maxhp").getAsInt();
+                        if (nowhp * 4 <= maxhp) continue;
 
-                    JsonObject kcShipData = getKcShipDataById(kcShipId, "stype");
-                    if (kcShipData == null) {
-                        int[] dummy = {-1, -1};
-                        return dummy;
-                    }
-                    int stype = kcShipData.get("stype").getAsInt();
+                        JsonObject kcShipData = getKcShipDataById(kcShipId, "stype");
+                        if (kcShipData == null) {
+                            int[] dummy = {-1, -1};
+                            return dummy;
+                        }
+                        int stype = kcShipData.get("stype").getAsInt();
 
-                    switch (stype) {
-                        case STYPE_DD:
-                            totalTP += 5;
-                            break;
-                        case STYPE_CL:
-                            totalTP += 2;
-                            break;
-                        case STYPE_CAV:
-                            totalTP += 4;
-                            break;
-                        case STYPE_BBV:
-                            totalTP += 7;
-                            break;
-                        case STYPE_AV:
-                            totalTP += 9;
-                            break;
-                        case STYPE_LHA:
-                            totalTP += 12;
-                            break;
-                        case STYPE_AS:
-                            totalTP += 7;
-                            break;
-                        case STYPE_CT:
-                            totalTP += 6;
-                            break;
-                        case STYPE_AO:
-                            totalTP += 15;
-                            break;
-                        case STYPE_SSV:
-                            totalTP += 1;
-                        default:
-                            break;
-                    }
+                        switch (stype) {
+                            case STYPE_DD:
+                                totalTP += 5;
+                                break;
+                            case STYPE_CL:
+                                totalTP += 2;
+                                break;
+                            case STYPE_CAV:
+                                totalTP += 4;
+                                break;
+                            case STYPE_BBV:
+                                totalTP += 7;
+                                break;
+                            case STYPE_AV:
+                                totalTP += 9;
+                                break;
+                            case STYPE_LHA:
+                                totalTP += 12;
+                                break;
+                            case STYPE_AS:
+                                totalTP += 7;
+                                break;
+                            case STYPE_CT:
+                                totalTP += 6;
+                                break;
+                            case STYPE_AO:
+                                totalTP += 15;
+                                break;
+                            case STYPE_SSV:
+                                totalTP += 1;
+                            default:
+                                break;
+                        }
 
-                    if (kcShipId == 487) { // kinu kai ni
-                        totalTP += 8;
-                    }
+                        if (kcShipId == 487) { // kinu kai ni
+                            totalTP += 8;
+                        }
 
-                    JsonArray shipItem = (JsonArray) shipData.get("slot");
-                    for (int j = 0; j < shipItem.size(); j++) {
-                        int item_id = shipItem.get(j).getAsInt();
-                        if (item_id != -1) {
-                            JsonObject itemData = getUserItemStatusById(item_id, "level", "type");
-                            if (itemData == null) continue;
-                            int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                        JsonArray shipItem = (JsonArray) shipData.get("slot");
+                        for (int j = 0; j < shipItem.size(); j++) {
+                            int item_id = shipItem.get(j).getAsInt();
+                            if (item_id != -1) {
+                                JsonObject itemData = getUserItemStatusById(item_id, "level", "type");
+                                if (itemData == null) continue;
+                                int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
 
-                            switch (itemType) {
-                                case T2_DRUM_CAN:
-                                    totalTP += 5.0;
-                                    break;
-                                case T2_LANDING_CRAFT:
-                                    totalTP += 8.0;
-                                    break;
-                                case T2_AMP_TANK:
-                                    totalTP += 2.0;
-                                    break;
-                                case T2_COMBAT_FOOD:
-                                    totalTP += 1.0;
-                                    break;
-                                default:
-                                    break;
+                                switch (itemType) {
+                                    case T2_DRUM_CAN:
+                                        totalTP += 5.0;
+                                        break;
+                                    case T2_LANDING_CRAFT:
+                                        totalTP += 8.0;
+                                        break;
+                                    case T2_AMP_TANK:
+                                        totalTP += 2.0;
+                                        break;
+                                    case T2_COMBAT_FOOD:
+                                        totalTP += 1.0;
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         }
                     }
@@ -615,43 +620,10 @@ public class KcaDeckInfo {
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 JsonObject shipData = getUserShipDataById(shipId, "ship_id");
-                kcShipList[i] = shipData.get("ship_id").getAsInt();
+                if (shipData != null) kcShipList[i] = shipData.get("ship_id").getAsInt();
             }
         }
         return kcShipList;
-    }
-
-    public void debugPortInfo(JsonArray deckPortData, int deckid) {
-        JsonArray deckShipIdList = (JsonArray) ((JsonObject) deckPortData.get(deckid)).get("api_ship");
-        for (int i = 0; i < deckShipIdList.size(); i++) {
-            int shipId = deckShipIdList.get(i).getAsInt();
-            if (shipId != -1) {
-                JsonObject shipData = getUserShipDataById(shipId, "ship_id,lv,slot,onslot");
-                int shipKcId = shipData.get("ship_id").getAsInt();
-                int shipLv = shipData.get("lv").getAsInt();
-                JsonObject shipKcData = getKcShipDataById(shipKcId, "name");
-                String shipName = shipKcData.get("name").getAsString();
-                Log.e("KCA", KcaUtils.format("%s (%s)", shipName, shipLv));
-                JsonArray shipItem = (JsonArray) shipData.get("slot");
-                JsonArray shipSlotCount = (JsonArray) shipData.get("onslot");
-                for (int j = 0; j < shipItem.size(); j++) {
-                    int item_id = shipItem.get(j).getAsInt();
-                    int slot = shipSlotCount.get(j).getAsInt();
-                    if (item_id != -1) {
-                        JsonObject itemData = getUserItemStatusById(item_id, "level,alv", "name,type,tyku");
-                        if (itemData == null) continue;
-                        String itemName = itemData.get("name").getAsString();
-                        int itemLevel = itemData.get("level").getAsInt();
-                        int itemMastery = 0;
-                        if (itemData.has("alv")) {
-                            itemMastery = itemData.get("alv").getAsInt();
-                        }
-                        int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
-                        Log.e("KCA", KcaUtils.format("- %s %d %d %d", itemName, itemLevel, itemMastery, slot));
-                    }
-                }
-            }
-        }
     }
 
     public JsonArray getDeckListInfo(JsonArray deckPortData, int deckid, String request_list, String kc_request_list) {
@@ -709,39 +681,41 @@ public class KcaDeckInfo {
                 if (KcaDocking.checkShipInDock(shipId)) continue;
 
                 JsonObject shipData = getUserShipDataById(shipId, "nowhp,maxhp,slot,slot_ex,lv,locked,locked_equip");
-                int level = shipData.get("lv").getAsInt();
-                int locked = shipData.get("locked").getAsInt();
-                int locked_eq = shipData.get("locked_equip").getAsInt();
+                if (shipData != null) {
+                    int level = shipData.get("lv").getAsInt();
+                    int locked = shipData.get("locked").getAsInt();
+                    int locked_eq = shipData.get("locked_equip").getAsInt();
 
-                if (check_locked && (locked == 0 && locked_eq == 0)) continue;
-                if (min_level >= level && locked_eq == 0) continue;
+                    if (check_locked && (locked == 0 && locked_eq == 0)) continue;
+                    if (min_level >= level && locked_eq == 0) continue;
 
-                int shipNowHp = shipData.get("nowhp").getAsInt();
-                int shipMaxHp = shipData.get("maxhp").getAsInt();
-                if (shipNowHp * 4 <= shipMaxHp) {
-                    status[i] = 2;
-                }
+                    int shipNowHp = shipData.get("nowhp").getAsInt();
+                    int shipMaxHp = shipData.get("maxhp").getAsInt();
+                    if (shipNowHp * 4 <= shipMaxHp) {
+                        status[i] = 2;
+                    }
 
-                JsonArray shipItem = (JsonArray) shipData.get("slot");
-                for (int j = 0; j < shipItem.size(); j++) {
-                    int item_id = shipItem.get(j).getAsInt();
-                    if (item_id != -1) {
-                        JsonObject itemData = getUserItemStatusById(item_id, "id", "type");
+                    JsonArray shipItem = (JsonArray) shipData.get("slot");
+                    for (int j = 0; j < shipItem.size(); j++) {
+                        int item_id = shipItem.get(j).getAsInt();
+                        if (item_id != -1) {
+                            JsonObject itemData = getUserItemStatusById(item_id, "id", "type");
+                            if (itemData == null) continue;
+                            int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                            if (itemType == T2_DAMECON && status[i] != 0) {
+                                status[i] = 1;
+                            }
+                        }
+                    }
+                    int ex_item_id = shipData.get("slot_ex").getAsInt();
+                    if (ex_item_id != 0 && ex_item_id != -1) {
+                        Log.e("KCA", String.valueOf(ex_item_id));
+                        JsonObject itemData = getUserItemStatusById(ex_item_id, "id", "type");
                         if (itemData == null) continue;
                         int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                         if (itemType == T2_DAMECON && status[i] != 0) {
                             status[i] = 1;
                         }
-                    }
-                }
-                int ex_item_id = shipData.get("slot_ex").getAsInt();
-                if (ex_item_id != 0 && ex_item_id != -1) {
-                    Log.e("KCA", String.valueOf(ex_item_id));
-                    JsonObject itemData = getUserItemStatusById(ex_item_id, "id", "type");
-                    if (itemData == null) continue;
-                    int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
-                    if (itemType == T2_DAMECON && status[i] != 0) {
-                        status[i] = 1;
                     }
                 }
             }
@@ -763,12 +737,14 @@ public class KcaDeckInfo {
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 JsonObject shipData = getUserShipDataById(shipId, "lv,locked,locked_equip");
-                int level = shipData.get("lv").getAsInt();
-                int locked = shipData.get("locked").getAsInt();
-                int locked_eq = shipData.get("locked_equip").getAsInt();
+                if (shipData != null) {
+                    int level = shipData.get("lv").getAsInt();
+                    int locked = shipData.get("locked").getAsInt();
+                    int locked_eq = shipData.get("locked_equip").getAsInt();
 
-                if (check_locked && (locked == 0 && locked_eq == 0)) heavyDmgCheckStatus[i] = false;
-                if (min_level >= level && locked_eq == 0) heavyDmgCheckStatus[i] = false;
+                    if (check_locked && (locked == 0 && locked_eq == 0)) heavyDmgCheckStatus[i] = false;
+                    if (min_level >= level && locked_eq == 0) heavyDmgCheckStatus[i] = false;
+                }
             }
         }
         return heavyDmgCheckStatus;
@@ -781,25 +757,27 @@ public class KcaDeckInfo {
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 JsonObject shipData = getUserShipDataById(shipId, "slot,slot_ex");
-                JsonArray shipItem = (JsonArray) shipData.get("slot");
-                for (int j = 0; j < shipItem.size(); j++) {
-                    int item_id = shipItem.get(j).getAsInt();
-                    if (item_id != -1) {
-                        JsonObject itemData = getUserItemStatusById(item_id, "id", "type");
+                if (shipData != null) {
+                    JsonArray shipItem = (JsonArray) shipData.get("slot");
+                    for (int j = 0; j < shipItem.size(); j++) {
+                        int item_id = shipItem.get(j).getAsInt();
+                        if (item_id != -1) {
+                            JsonObject itemData = getUserItemStatusById(item_id, "id", "type");
+                            if (itemData == null) continue;
+                            int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
+                            if (itemType == T2_DAMECON) {
+                                dameconStatus[i] = true;
+                            }
+                        }
+                    }
+                    int ex_item_id = shipData.get("slot_ex").getAsInt();
+                    if (ex_item_id != 0 && ex_item_id != -1) {
+                        JsonObject itemData = getUserItemStatusById(ex_item_id, "id", "type");
                         if (itemData == null) continue;
                         int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
                         if (itemType == T2_DAMECON) {
                             dameconStatus[i] = true;
                         }
-                    }
-                }
-                int ex_item_id = shipData.get("slot_ex").getAsInt();
-                if (ex_item_id != 0 && ex_item_id != -1) {
-                    JsonObject itemData = getUserItemStatusById(ex_item_id, "id", "type");
-                    if (itemData == null) continue;
-                    int itemType = itemData.get("type").getAsJsonArray().get(2).getAsInt();
-                    if (itemType == T2_DAMECON) {
-                        dameconStatus[i] = true;
                     }
                 }
             }
@@ -813,14 +791,18 @@ public class KcaDeckInfo {
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 JsonObject shipData = getUserShipDataById(shipId, "ship_id,fuel,bull");
-                int fuel = shipData.get("fuel").getAsInt();
-                int bull = shipData.get("bull").getAsInt();
-                int kcShipId = shipData.get("ship_id").getAsInt();
-                JsonObject kcShipData = getKcShipDataById(kcShipId, "fuel_max,bull_max");
-                int fuel_max = kcShipData.get("fuel_max").getAsInt();
-                int bull_max = kcShipData.get("bull_max").getAsInt();
-                if (fuel_max != fuel || bull_max != bull) {
-                    return true;
+                if (shipData != null) {
+                    int fuel = shipData.get("fuel").getAsInt();
+                    int bull = shipData.get("bull").getAsInt();
+                    int kcShipId = shipData.get("ship_id").getAsInt();
+                    JsonObject kcShipData = getKcShipDataById(kcShipId, "fuel_max,bull_max");
+                    if (kcShipData != null) {
+                        int fuel_max = kcShipData.get("fuel_max").getAsInt();
+                        int bull_max = kcShipData.get("bull_max").getAsInt();
+                        if (fuel_max != fuel || bull_max != bull) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
@@ -845,8 +827,10 @@ public class KcaDeckInfo {
             int shipId = deckShipIdList.get(i).getAsInt();
             if (shipId != -1) {
                 JsonObject shipData = getUserShipDataById(shipId, "cond");
-                int cond = shipData.get("cond").getAsInt();
-                min_cond_value = Math.min(cond, min_cond_value);
+                if (shipData != null) {
+                    int cond = shipData.get("cond").getAsInt();
+                    min_cond_value = Math.min(cond, min_cond_value);
+                }
             }
         }
         return min_cond_value;
@@ -859,8 +843,10 @@ public class KcaDeckInfo {
             int flagship = deckShipIdList.get(0).getAsInt();
             if (flagship != -1) {
                 JsonObject shipData = getUserShipDataById(flagship, "ship_id");
-                int kc_ship_id = shipData.get("ship_id").getAsInt();
-                if (kc_ship_id == 182 || kc_ship_id == 187) deck_id_list.add(i);
+                if (shipData != null) {
+                    int kc_ship_id = shipData.get("ship_id").getAsInt();
+                    if (kc_ship_id == 182 || kc_ship_id == 187) deck_id_list.add(i);
+                }
             }
         }
         return deck_id_list;

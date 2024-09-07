@@ -265,14 +265,15 @@ public class KcaDockingPopupService extends Service {
                         if (ship_id > 0) {
                             String ship_name = "";
                             JsonObject shipData = getUserShipDataById(ship_id, "ship_id");
-
-                            int kc_ship_id = shipData.get("ship_id").getAsInt();
-                            JsonObject kcShipData = KcaApiData.getKcShipDataById(kc_ship_id, "name");
-                            if (kcShipData != null) {
-                                ship_name = getShipTranslation(kcShipData.get("name").getAsString(), kc_ship_id, false);
+                            if (shipData != null) {
+                                int kc_ship_id = shipData.get("ship_id").getAsInt();
+                                JsonObject kcShipData = KcaApiData.getKcShipDataById(kc_ship_id, "name");
+                                if (kcShipData != null) {
+                                    ship_name = getShipTranslation(kcShipData.get("name").getAsString(), kc_ship_id, false);
+                                }
+                                nameview.setText(ship_name);
+                                timeview.setText(getLeftTimeStr(item.get("api_complete_time").getAsLong()));
                             }
-                            nameview.setText(ship_name);
-                            timeview.setText(getLeftTimeStr(item.get("api_complete_time").getAsLong()));
                         } else {
                             nameview.setText("-");
                             timeview.setText("");

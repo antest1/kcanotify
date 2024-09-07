@@ -531,12 +531,10 @@ public class KcaService extends Service {
     }
 
     private void setDockingAlarm(int dockId, int shipId, long complete_time, Intent aIntent) {
-        String shipName = "";
         int shipKcId = -1;
-        if (isGameDataLoaded()) {
-            JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id");
-            shipKcId = shipData.get("ship_id").getAsInt();
-        }
+        JsonObject shipData = KcaApiData.getUserShipDataById(shipId, "ship_id");
+        if (shipData != null) shipKcId = shipData.get("ship_id").getAsInt();
+
         JsonObject dockingAlarmData = new JsonObject();
         dockingAlarmData.addProperty("type", KcaAlarmService.TYPE_DOCKING);
         dockingAlarmData.addProperty("dock_id", dockId);

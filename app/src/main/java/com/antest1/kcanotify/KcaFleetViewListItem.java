@@ -191,24 +191,25 @@ public class KcaFleetViewListItem extends FrameLayout {
 
     private static ShipInfo getShipInfoById(int ship_id) {
         JsonObject userData = KcaApiData.getUserShipDataById(ship_id, "id,ship_id,lv,exp,nowhp,maxhp,cond,sally_area");
-        int mst_ship_id = userData.get("ship_id").getAsInt();
-        JsonObject kcData = KcaApiData.getKcShipDataById(mst_ship_id, "name,stype");
-
-        return new ShipInfo(
-                userData.get("id").getAsInt(),
-                mst_ship_id,
-                kcData == null ? "" : kcData.get("name").getAsString(),
-                kcData == null ? 0 : kcData.get("stype").getAsInt(),
-                userData.get("lv").getAsInt(),
-                userData.getAsJsonArray("exp").get(1).getAsInt(),
-                userData.get("nowhp").getAsInt(), userData.get("maxhp").getAsInt(),
-                userData.get("cond").getAsInt(),
-                userData.has("sally_area") ? userData.get("sally_area").getAsInt() : 0
-        );
+        if (userData != null) {
+            int mst_ship_id = userData.get("ship_id").getAsInt();
+            JsonObject kcData = KcaApiData.getKcShipDataById(mst_ship_id, "name,stype");
+            return new ShipInfo(
+                    userData.get("id").getAsInt(),
+                    mst_ship_id,
+                    kcData == null ? "" : kcData.get("name").getAsString(),
+                    kcData == null ? 0 : kcData.get("stype").getAsInt(),
+                    userData.get("lv").getAsInt(),
+                    userData.getAsJsonArray("exp").get(1).getAsInt(),
+                    userData.get("nowhp").getAsInt(), userData.get("maxhp").getAsInt(),
+                    userData.get("cond").getAsInt(),
+                    userData.has("sally_area") ? userData.get("sally_area").getAsInt() : 0
+            );
+        } else {
+            return null;
+        }
     }
-    // endregion
 
-    // region preferences
     private void updateHPFormatId(SharedPreferences pref) {
         try {
             hp_format_id = Integer.parseInt(pref.getString(PREF_KCA_HP_FORMAT, "1"));

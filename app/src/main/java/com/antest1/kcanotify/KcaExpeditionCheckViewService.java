@@ -896,25 +896,28 @@ public class KcaExpeditionCheckViewService extends Service {
                     if (id > 0) {
                         JsonObject data = new JsonObject();
                         JsonObject usershipinfo = getUserShipDataById(id, "ship_id,lv,slot,cond,karyoku,taisen,taiku,sakuteki");
-                        JsonObject kcshipinfo = getKcShipDataById(usershipinfo.get("ship_id").getAsInt(), "stype");
-                        data.addProperty("ship_id", usershipinfo.get("ship_id").getAsInt());
-                        data.addProperty("lv", usershipinfo.get("lv").getAsInt());
-                        data.addProperty("cond", usershipinfo.get("cond").getAsInt());
-                        data.addProperty("stype", kcshipinfo.get("stype").getAsInt());
-                        data.addProperty("karyoku", usershipinfo.getAsJsonArray("karyoku").get(0).getAsInt());
-                        data.addProperty("taisen", usershipinfo.getAsJsonArray("taisen").get(0).getAsInt());
-                        data.addProperty("taiku", usershipinfo.getAsJsonArray("taiku").get(0).getAsInt());
-                        data.addProperty("sakuteki", usershipinfo.getAsJsonArray("sakuteki").get(0).getAsInt());
-                        data.add("item", new JsonArray());
-                        JsonArray shipslot = usershipinfo.getAsJsonArray("slot");
-                        for (int j = 0; j < shipslot.size(); j++) {
-                            int itemid = shipslot.get(j).getAsInt();
-                            if (itemid > 0) {
-                                JsonObject iteminfo = getUserItemStatusById(itemid, "slotitem_id,level", "type,tais");
-                                if (iteminfo != null) data.getAsJsonArray("item").add(iteminfo);
+                        if (usershipinfo != null) {
+                            JsonObject kcshipinfo = getKcShipDataById(usershipinfo.get("ship_id").getAsInt(), "stype");
+
+                            data.addProperty("ship_id", usershipinfo.get("ship_id").getAsInt());
+                            data.addProperty("lv", usershipinfo.get("lv").getAsInt());
+                            data.addProperty("cond", usershipinfo.get("cond").getAsInt());
+                            data.addProperty("stype", kcshipinfo.get("stype").getAsInt());
+                            data.addProperty("karyoku", usershipinfo.getAsJsonArray("karyoku").get(0).getAsInt());
+                            data.addProperty("taisen", usershipinfo.getAsJsonArray("taisen").get(0).getAsInt());
+                            data.addProperty("taiku", usershipinfo.getAsJsonArray("taiku").get(0).getAsInt());
+                            data.addProperty("sakuteki", usershipinfo.getAsJsonArray("sakuteki").get(0).getAsInt());
+                            data.add("item", new JsonArray());
+                            JsonArray shipslot = usershipinfo.getAsJsonArray("slot");
+                            for (int j = 0; j < shipslot.size(); j++) {
+                                int itemid = shipslot.get(j).getAsInt();
+                                if (itemid > 0) {
+                                    JsonObject iteminfo = getUserItemStatusById(itemid, "slotitem_id,level", "type,tais");
+                                    if (iteminfo != null) data.getAsJsonArray("item").add(iteminfo);
+                                }
                             }
+                            ship_data.add(data);
                         }
-                        ship_data.add(data);
                     }
                 }
 

@@ -123,6 +123,9 @@ public class KcaTimerWidget extends AppWidgetProvider {
     }
 
     public List<AbstractMap.SimpleEntry<String, String>> getTimerData(Context context, int status) {
+        KcaDBHelper dbHelper = new KcaDBHelper(context, null, KCANOTIFY_DB_VERSION);
+        KcaApiData.setDBHelper(dbHelper);
+
         List<AbstractMap.SimpleEntry<String, String>> entries = new ArrayList<>();
         switch (status) {
             case STATE_EXPD:
@@ -165,14 +168,16 @@ public class KcaTimerWidget extends AppWidgetProvider {
                     } else {
                         for (int i = 0; i < ndock.size(); i++) {
                             JsonObject item = ndock.get(i).getAsJsonObject();
-                            if (item.get("api_state").getAsInt() != -1) {
+                            if (item != null && item.get("api_state").getAsInt() != -1) {
                                 int ship_id = item.get("api_ship_id").getAsInt();
                                 if (ship_id > 0) {
                                     String ship_name = "";
                                     JsonObject shipData = getUserShipDataById(ship_id, "ship_id");
-                                    JsonObject kcShipData = KcaApiData.getKcShipDataById(shipData.get("ship_id").getAsInt(), "name");
-                                    if (kcShipData != null) {
-                                        ship_name = getShipTranslation(kcShipData.get("name").getAsString(), ship_id, false);
+                                    if (shipData != null) {
+                                        JsonObject kcShipData = KcaApiData.getKcShipDataById(shipData.get("ship_id").getAsInt(), "name");
+                                        if (kcShipData != null) {
+                                            ship_name = getShipTranslation(kcShipData.get("name").getAsString(), ship_id, false);
+                                        }
                                     }
                                     entries.add(new AbstractMap.SimpleEntry<>(ship_name, getLeftTimeStr(item.get("api_complete_time").getAsLong())));
                                 } else {
