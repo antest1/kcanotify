@@ -134,6 +134,8 @@ public class KcaDeckInfo {
                 return 0.6 * (itemSeek + 1.4 * Math.sqrt(itemLevel));
             case T2_RADAR_SMALL:
                 return 0.6 * (itemSeek + 1.25 * Math.sqrt(itemLevel));
+            case T2_FLYING_BOAT:
+                return 0.6 * (itemSeek + 1.2 * Math.sqrt(itemLevel));
             default:
                 return 0.6 * itemSeek;
         }
