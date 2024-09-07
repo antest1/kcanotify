@@ -2913,6 +2913,14 @@
         "rewards": "¶First choice: Either a New Model Armament Material OR two 25mm Twin Autocannon Mounts ¶Second choice: Either two Mamiyas OR 10 Development Materials OR a Medal",
         "resources": [[310, 150, 150, 0], [0, 0, 0, 0]]
     },
+    "373": {
+        "code": "Cy14",
+        "name": "Annual French Fleet Exercises - July",
+        "desc": "Secure 4 A-Rank+ victiories in Exercises within the same day using 3 French ships, one as flagship, and up to 3 additional ships.",
+        "memo": "※This quest resets on the first quest reset of July.",
+        "rewards": "¶First choice: Either a New Model Armament Material OR a New Model Gun Mount Improvement Material OR 8 Development Materials ¶Second choice: Either three 13.8cm Twin Gun Mounts OR two 15.2cm Triple Main Gun Mounts OR a 38cm Quadruple Gun Mount",
+        "resources": [[600, 600, 300, 300], [0, 0, 0, 0]]
+    },
     "313": {
         "code": "Cs1",
         "name": "Mass Exercises for Fall",
@@ -3984,6 +3992,30 @@
         "name": "[Strengthening Fleet Communications Capabilities] Communications Personnel Training",
         "desc": "Set Ooyodo as Secretary, equipped with a Type 13 Air Radar in her 1st slot, then, scrap 2 Type 21 Air Radar, 2 Type 13 Air Radar, and 3 Combat Ration, and prepare 20 Development Materials.",
         "rewards": "a Communication Equipment & Personnel",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1140": {
+        "code": "F125",
+        "name": "[New Overseas Equipment] Development of the Quadruple Main Gun",
+        "desc": "Have 20 Development Materials and 1 Latest Overseas Warship Technology. Set Richelieu Deux as secretary with two 38cm Quadruple Gun Mount Kai in her first 2 slots. Scrap four 41cm Twin Gun Mounts.",
+        "memo": "※Consumes the items and resources.",
+        "rewards": "a 38cm Quadruple Gun Mount Kai Deux and a Loire 130M",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1141": {
+        "code": "F126",
+        "name": "Development Of The Latest Modified Three-seater Reconnaissance Seaplane",
+        "desc": "Set Yamato Kai Ni/Juu, Yura Kai Ni, or Yahagi Kai Ni/B as Secretary, equipped with a ★max Type 0 Reconnaissance Seaplane Model 11B in her 1st slot, then, scrap 15 Type 0 Reconnaissance Seaplane, and prepare 2 New Model Aerial Armament Materials, 1 Night Skilled Crew Member and 60 Development Materials.",
+        "memo": "※Consumes the items and resources.",
+        "rewards": "a Type 0 Reconnaissance Seaplane Model 11A Kai 2",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1142": {
+        "code": "F127",
+        "name": "Deploying The Elite \"Tenzan\" Equipped Attacker Squadron",
+        "desc": "Set Shoukaku Kai Ni/A as Secretary, equipped with a Tenzan Model 12 (Murata Squadron) in her 1st slot, then, scrap 4 Tenzan, and prepare 1 Tenzan Model 12A Kai (w/ Type 6 Airborne Radar Kai) and 2 New Model Aerial Armament Material, 1 Night Skilled Crew Member 48 Development Materials.",
+        "memo": "※Consumes the items and resources.",
+        "rewards": "a Tenzan Model 12A Kai 2 (Murata Squadron/Radar Equipment)",
         "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
     },
     "605": {
