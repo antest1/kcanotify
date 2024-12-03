@@ -23,6 +23,7 @@ public final class KcaConstants {
     public static final String GOTO_FOREGROUND_ACTION = "com.antest1.gotobrowser.foreground";
 
     public static final String KCA_VERSION = "/kca/version.json";
+    public static final String KCS_VERSION = "/kcs2/version.json";
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
     public static final String KCANOTIFY_USERITEM_CACHE_FILENAME = "kca_userslotitem";
     public static final int KCANOTIFY_DB_VERSION = 5;
@@ -106,6 +107,7 @@ public final class KcaConstants {
     public static final String API_WORLD_GET_ID = "/api_world/get_id";
     public static final String API_START2 = "/api_start2";
     public static final String API_START2_NEW = "/api_start2/getData";
+    public static final String API_START2_OPTIONS = "/api_start2/get_option_setting";
     public static final String API_REQ_MEMBER_GET_INCENTIVE = "/api_req_member/get_incentive";
     public static final String API_GET_MEMBER_REQUIRED_INFO = "/api_get_member/require_info";
     public static final String API_GET_MEMBER_RECORD = "/api_get_member/record";

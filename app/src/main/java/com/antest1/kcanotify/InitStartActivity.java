@@ -164,9 +164,12 @@ public class InitStartActivity extends Activity {
                 runOnUiThread(() -> Toast.makeText(getApplicationContext(), "error loading game data", Toast.LENGTH_LONG).show());
             }
 
+            runOnUiThread(() -> appmessage.setText("Set Kancolle IP Servers..."));
+            KcaVpnData.setKcServerIP();
+
             runOnUiThread(() -> appmessage.setText("Checking External Filter..."));
             boolean allow_ext = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_ALLOW_EXTFILTER);
-            List<String> result = KcaVpnData.setExternalFilter(allow_ext);
+            KcaVpnData.setExternalFilter(allow_ext);
 
             boolean is_default_written = KcaUtils.getStringPreferences(getApplicationContext(), PREF_DEFAULT_APIVER).equals(BuildConfig.VERSION_NAME);
             if (!is_default_written) {

@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 
-import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import android.util.SparseArray;
@@ -15,17 +14,15 @@ import com.google.gson.JsonObject;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.antest1.kcanotify.KcaConstants.KCA_API_RESOURCE_URL;
 import static com.antest1.kcanotify.KcaConstants.KCA_API_VPN_DATA_ERROR;
 import static com.antest1.kcanotify.KcaUtils.byteArrayToHex;
-import static com.antest1.kcanotify.KcaUtils.getBooleanPreferences;
 import static com.antest1.kcanotify.KcaUtils.getStringFromException;
 import static com.antest1.kcanotify.KcaUtils.gzipdecompress;
 import static com.antest1.kcanotify.KcaUtils.unchunkdata;
@@ -47,6 +44,8 @@ public class KcaVpnData {
             "203.104.248"  // Rabaul
     };
 
+    private static String[] kcsUrlPrefixList = {"w00g", "w01y"};
+
     // ooi-based connector ips
     private static String[] kcaExtServiceList = {
             "104.27.146.101",
@@ -56,9 +55,8 @@ public class KcaVpnData {
             "104.31.73.227",
             "125.46.39.225"
     };
-    private static String kcaDmmLoginServer = "202.6"; // DMM prefix
 
-    private static List<String> prefixCheckList = new ArrayList<>(Arrays.asList(kcaServerPrefixList));
+    private static Set<String> prefixCheckList = new HashSet<>(Arrays.asList(kcaServerPrefixList));
     private static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public static int state = NONE;
@@ -87,8 +85,15 @@ public class KcaVpnData {
         handler = h;
     }
 
-    public static List<String> setExternalFilter(boolean use_ext) {
-        prefixCheckList = new ArrayList<>(Arrays.asList(kcaServerPrefixList));
+    public static void setKcServerIP() {
+        for (String kcs: kcsUrlPrefixList) {
+            String url = KcaUtils.format("%s.kancolle-server.com", kcs);
+            String[] kcs_ips = KcaUtils.getIpAddress(url);
+            prefixCheckList.addAll(Arrays.asList(kcs_ips));
+        }
+    }
+
+    public static void setExternalFilter(boolean use_ext) {
         if (use_ext) {
             try {
                 String[] ooi_addresses = {"ooi.moe", "cn.kcwiki.org", "kancolle.su"};
@@ -104,7 +109,6 @@ public class KcaVpnData {
             }
         }
         Log.e("KCA", prefixCheckList.toString());
-        return prefixCheckList;
     }
 
     // Called from native code

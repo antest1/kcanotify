@@ -669,27 +669,11 @@ public class KcaService extends Service {
                 return;
             }
 
-            if (url.startsWith(KCA_VERSION)) {
-
+            if (url.startsWith(KCA_VERSION) || url.startsWith(KCS_VERSION)) {
                 isPortAccessed = false;
                 isInBattle = false;
                 api_start2_init = false;
                 KcaFleetViewService.setReadyFlag(false);
-                //Toast.makeText(contextWithLocale, "KCA_VERSION", Toast.LENGTH_LONG).show();
-                String version_data = new String(raw);
-                JsonObject api_data = gson.fromJson(version_data, JsonObject.class);
-
-                if (api_data != null && api_data.has("api")) {
-                    JsonObject api_version = api_data.getAsJsonObject("api");
-                    kca_version = api_version.get("api_start2").getAsString();
-                    Log.e("KCA", kca_version);
-
-                    setPreferences(getApplicationContext(), PREF_KCA_VERSION, kca_version);
-                    if (!getStringPreferences(getApplicationContext(), PREF_KCA_DATA_VERSION).equals(kca_version)) {
-                        makeToast("new game data detected: " + String.valueOf(kca_version), Toast.LENGTH_LONG,
-                                ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
-                    }
-                }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                         && !Settings.canDrawOverlays(getApplicationContext())) {
@@ -702,7 +686,6 @@ public class KcaService extends Service {
 
                 KcaMoraleInfo.initMoraleValue(Integer.parseInt(getStringPreferences(getApplicationContext(), PREF_KCA_MORALE_MIN)));
                 return;
-                //Toast.makeText(contextWithLocale, getPreferences("kca_version") + " " + String.valueOf(api_start2_down_mode), Toast.LENGTH_LONG).show();
             }
 
             if (url.startsWith(API_WORLD_GET_WORLDINFO)) {
@@ -712,6 +695,10 @@ public class KcaService extends Service {
             }
 
             if (url.startsWith(API_WORLD_GET_ID)) {
+                return;
+            }
+
+            if (url.startsWith(API_START2_OPTIONS)) {
                 return;
             }
 
