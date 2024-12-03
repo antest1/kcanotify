@@ -167,7 +167,7 @@ public class KcaApiData {
 
     public static final int[] T2LIST_LANDBASE = {T2_LBA_AIRCRAFT, T2_ITCP_FIGHTER, T2_LAND_SCOUT, T2_LAGRE_LAND_BOMBER};
 
-    public static final int T3_COUNT = 60;
+    public static final int T3_COUNT = 65;
     public static final int[] T3LIST_IMPROVABLE = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19,
             20, 21, 22, 23, 24, 28, 29, 30, 31, 34, 36, 37, 38, 42, 43, 44, 46, 49, 50, 54};
 

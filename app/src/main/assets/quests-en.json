@@ -1463,7 +1463,7 @@
         "code": "B114",
         "name": "New CarDiv 4, Sortie at Full Strength!",
         "desc": "Sortie Ise Kai, Hyuuga Kai, Ooyodo Kai, at least 1 DD and up to 2 other ships [W1-6], [W2-5], [W3-5] and [W4-5]. Reach [W1-6] node N and A-Rank+ the boss nodes.",
-        "rewards": "a 12cm 30-tube Rocket Launcher Kai Ni and either an Action Report OR a New Model Gun Mount Improvement Material",
+        "rewards": "a 12cm 30-tube Rocket Launcher Kai 2 and either an Action Report OR a New Model Gun Mount Improvement Material",
         "resources": [[400, 400, 400, 400], [0, 0, 0, 0]]
     },
     "880": {
@@ -1576,7 +1576,7 @@
         "code": "B130",
         "name": "Unrivaled 1st Battleship Division, Coming Through! (Extra Operation)",
         "desc": "Sortie Mutsu Kai Ni and Nagato Kai Ni as the first two ships in Fleet 1 along with any other ships to [W2-5], [W5-5] and [W6-4]. S-Rank the boss nodes of each.",
-        "rewards": "a 41cm Twin Gun Mount Kai Ni and either a New Model Gun Mount Improvement Material OR 5 Screws OR a Prototype 46cm Twin Gun Mount",
+        "rewards": "a 41cm Twin Gun Mount Kai 2 and either a New Model Gun Mount Improvement Material OR 5 Screws OR a Prototype 46cm Twin Gun Mount",
         "resources": [[1000, 1000, 1000, 1000], [0, 0, 0, 0]]
     },
     "896": {
@@ -1590,14 +1590,14 @@
         "code": "B132",
         "name": "Supreme 4th Carrier Division, Sortie!",
         "desc": "Sortie Hyuuga Kai Ni, Ise Kai Ni and up to 4 additional ships to [W4-5], [W5-5] and [W6-5]. S-Rank each boss node once. Reach [W1-6] node N twice.",
-        "rewards": "a Zuiun Kai Ni (634 Air Group) and either an S-51J OR two Medals",
+        "rewards": "a Zuiun Kai 2 (634 Air Group) and either an S-51J OR two Medals",
         "resources": [[1000, 1000, 1000, 0], [0, 0, 0, 0]]
     },
     "292": {
         "code": "B133",
         "name": "Highly Remodeled Fast Battleship Kongou Kai Ni C, Break into the South!",
         "desc": "Sortie Kongou Kai Ni C as flagship, 1 other Kongou-class, 2 DD and up to 2 additional ships to [W5-1], [W5-3], [W5-4] and [W5-5]. S-Rank each boss node twice.",
-        "rewards": "a 35.6cm Twin Gun Mount Kai Ni and either an Action Report OR two New Model Gun Mount Improvement Materials OR a Medal",
+        "rewards": "a 35.6cm Twin Gun Mount Kai 2 and either an Action Report OR two New Model Gun Mount Improvement Materials OR a Medal",
         "resources": [[1944, 2019, 0, 0], [0, 0, 0, 0]]
     },
     "291": {
@@ -1675,7 +1675,7 @@
         "code": "B144",
         "name": "Hiei Kai Ni C Arrives! 3rd Battleship Squadron, to the South!",
         "desc": "Sortie Hiei Kai Ni C, one other Kongou-class FBB, 1 CL, 1 DD and up to two additional ships to [W5-1], [W5-2], [W5-3], [W5-4] and [W5-5]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either two New Model Gun Mount Improvement Materials OR a 35.6cm Twin Gun Mount Kai Ni ¶Second choice: Either a Type 0 Reconnaissance Seaplane Model 11B ★2 OR a New Kanhon Design Anti-torpedo Bulge (Large) ★2 OR an Action Report",
+        "rewards": "¶First choice: Either two New Model Gun Mount Improvement Materials OR a 35.6cm Twin Gun Mount Kai 2 ¶Second choice: Either a Type 0 Reconnaissance Seaplane Model 11B ★2 OR a New Kanhon Design Anti-torpedo Bulge (Large) ★2 OR an Action Report",
         "resources": [[1942, 2020, 0, 0], [0, 0, 0, 0]]
     },
     "917": {
@@ -1936,21 +1936,21 @@
         "code": "B181",
         "name": "Remodeled Yamato-class Battleship Yamato Kai Ni, Sortie!",
         "desc": "Sortie a fleet with Yamato Kai Ni (Juu) as flagship, 1 CL, 2 DD and up to 2 additional ships to [W1-4], [W2-5], [W5-1] and [W4-4]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either 10 Buckets OR two New Model Gun Mount Improvement Materials OR a Reinforcement Expansion ¶Second choice: Either a Prototype 51cm Twin Gun Mount OR a 15.5cm Triple Secondary Gun Mount Kai Ni ★2 OR a 10cm Twin High-angle Gun Mount Battery Concentrated Deployment",
+        "rewards": "¶First choice: Either 10 Buckets OR two New Model Gun Mount Improvement Materials OR a Reinforcement Expansion ¶Second choice: Either a Prototype 51cm Twin Gun Mount OR a 15.5cm Triple Secondary Gun Mount Kai 2 ★2 OR a 10cm Twin High-angle Gun Mount Battery Concentrated Deployment",
         "resources": [[880, 880, 0, 0], [0, 0, 0, 0]]
     },
     "977": {
         "code": "B182",
         "name": "Kill on sight! Most Elite Yamato-class 1st Squadron, Weigh Anchor!",
         "desc": "Sortie a fleet with Yamato Kai Ni (Juu), Musashi Kai Ni, 2 DD and up to 2 additional ships to [W4-5], [W5-3], [W7-2-M] and [W6-5]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either a Remodel Blueprint OR an Action Report OR a 10cm Twin High-angle Gun Mount Battery Concentrated Deployment ¶Second choice: Either a 15m Duplex Rangefinder + Type 21 Air Radar Kai Ni OR a 46cm Triple Gun Mount Kai ★8 OR two 15.5cm Triple Secondary Gun Mount Kai Ni ★2",
+        "rewards": "¶First choice: Either a Remodel Blueprint OR an Action Report OR a 10cm Twin High-angle Gun Mount Battery Concentrated Deployment ¶Second choice: Either a 15m Duplex Rangefinder + Type 21 Air Radar Kai 2 OR a 46cm Triple Gun Mount Kai ★8 OR two 15.5cm Triple Secondary Gun Mount Kai 2 ★2",
         "resources": [[1000, 1000, 0, 880], [0, 0, 0, 0]]
     },
     "978": {
         "code": "B183",
         "name": "Extra Operation Heavy Remodel Yamato Kai Ni Juu, Sortie!",
         "desc": "Sortie a fleet with Yamato Kai Ni Juu as flagship and up to 5 additional ships to [W7-3-P], [W7-4], [W5-5] and [W6-4]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either two Mamiyas OR two New Model Armament Materials OR 8 Screws ¶Second choice: Either a 15m Duplex Rangefinder Kai + Type 21 Air Radar Kai Ni + Skilled Fire Direction Center OR a Prototype 51cm Triple Gun Mount OR a 10cm Twin High-angle Gun Mount Battery Concentrated Deployment ★2",
+        "rewards": "¶First choice: Either two Mamiyas OR two New Model Armament Materials OR 8 Screws ¶Second choice: Either a 15m Duplex Rangefinder Kai + Type 21 Air Radar Kai 2 + Skilled Fire Direction Center OR a Prototype 51cm Triple Gun Mount OR a 10cm Twin High-angle Gun Mount Battery Concentrated Deployment ★2",
         "resources": [[1000, 1000, 1000, 1000], [0, 0, 0, 0]]
     },
     "980": {
@@ -1999,7 +1999,7 @@
         "code": "B190",
         "name": "Improved Kongou-class Fast Battleship Haruna Kai Ni B/C, Sortie!",
         "desc": "Sortie Haruna Kai Ni B/C, Kongou Kai Ni C, 2 DD and up to 2 additional ships to [W2-2], [W2-4], [W4-3], [W5-3], [W5-4] and [W7-5-T]. S-Rank each boss node.",
-        "rewards": "¶First choice: Either 4 35.6cm Twin Gun Mount Kais OR two 35.6cm Twin Gun Mount Kai Nis OR two Action Reports ¶Second choice: Either a 35.6cm Twin Gun Mount Kai 3 (Dazzle Camouflage) ★2 OR a Type 42 Air Radar Kai 2 ★6 OR two Remodel Blueprints",
+        "rewards": "¶First choice: Either 4 35.6cm Twin Gun Mount Kais OR two 35.6cm Twin Gun Mount Kai 2 OR two Action Reports ¶Second choice: Either a 35.6cm Twin Gun Mount Kai 3 (Dazzle Camouflage) ★2 OR a Type 42 Air Radar Kai 2 ★6 OR two Remodel Blueprints",
         "resources": [[1945, 2023, 1913, 0], [0, 0, 0, 0]]
     },
     "997": {
@@ -2092,6 +2092,27 @@
         "desc": "Assemble a fleet containing Hatsuzuki Kai Ni as flagship and up to 5 XX, then S rank the boss nodes of 2-4, 3-5, 7-4, 5-4, and 5-5.",
         "rewards": "a 10cm Twin High-angle Gun Mount Kai + Anti-Aircraft Fire Director Kai and either two Type 94 Anti-Aircraft Fire Directors OR two Medals OR an Action Report",
         "resources": [[610, 610, 610, 610], [0, 0, 0, 0]]
+    },
+    "1017": {
+        "code": "B204",
+        "name": "\"DesDiv2 (Late Formation)\", Sortie!",
+        "desc": "Assemble a fleet containing any 3 of: \"Hayashimo, Akishimo, Asashimo, or Kiyoshimo\" with one as flagship; and up to 3 XX, then S rank the boss nodes of 1-2, 1-5, and 2-3, twice each.",
+        "rewards": "¶First choice: Either 2000 Fuels OR a Furniture Fairy OR 10 Development Materials ¶Second choice: Either 4 Mamiyas OR an Action Report",
+        "resources": [[0, 200, 200, 0], [0, 0, 0, 0]]
+    },
+    "1019": {
+        "code": "B205",
+        "name": "Fierce Battle! \"BatDiv3\" Elite Second Platoon!\t",
+        "desc": "Assemble a fleet containing Hiei Kai Ni C, Kirishima Kai Ni C, any 2 of: \"the Shiratsuyu-class OR the Yuugumo-class\"; and up to 2 XX, then S rank the boss nodes of 4-5, 5-5, and 6-5, twice each.",
+        "rewards": "¶First choice: Either two 35.6cm Twin Gun Mount Kai 2 OR a 35.6cm Twin Gun Mount Kai 3 C ¶Second choice: Either an Action Report OR 6 New Model Gun Mount Improvement Materials OR 10 Screws",
+        "resources": [[1300, 1300, 1300, 0], [0, 0, 0, 0]]
+    },
+    "1021": {
+        "code": "B206",
+        "name": "\"Hayashimo Kai Ni\"... Does Not Just Watch Anymore!",
+        "desc": "Assemble a fleet containing Hayashimo Kai Ni as flagship any 1 of: \"Akishimo or Kiyoshimo\" and up to 4 XX, then then S rank the boss nodes of [W2-5], [W7-2-M], [W7-4], and [W5-4].",
+        "rewards": "¶First choice: Either 30 Development Materials OR a Type 13 Air Radar Kai ★3 OR a New Model Gun Mount Improvement Material ¶Second choice: Either an Action Report OR a 12.7cm Twin Gun Mount Model D Kai 2 ★3 OR a Torpedo Squadron Skilled Lookouts",
+        "resources": [[1944, 1026, 0, 0], [0, 0, 0, 0]]
     },
     "201": {
         "code": "Bd1",
@@ -2512,6 +2533,13 @@
         "rewards": "¶First choice: Either 880 Fuels OR 6 Buckets OR a Furniture Fairy ¶Second choice: Either 16 Development Materials OR three 12cm Single High-angle Gun Mount Model ES OR three Screws",
         "resources": [[320, 320, 320, 0], [0, 0, 0, 0]]
     },
+    "1018": {
+        "code": "By15",
+        "name": "\"BatDiv3\" Second Platoon, Heading To Iron Bottom Sound!",
+        "desc": "Assemble a fleet containing Hiei, Kirishima, 2 DD and up to 2 XX, then A+ rank the boss nodes of 5-1, 5-3, 5-4, and 5-5.",
+        "rewards": "¶First choice: Either 5 35.6cm Twin Gun Mounts OR two New Model Armament Materials OR 5 Screws ¶Second choice: Either two Medals OR 5500 Ammos OR an Action Report",
+        "resources": [[300, 500, 500, 300], [0, 0, 0, 0]]
+    },
     "301": {
         "code": "C1",
         "name": "The First Exercise!",
@@ -2739,6 +2767,13 @@
         "rewards": "¶First choice: Either two Skilled Lookoutss OR two Type 2 Depth Charges OR 8 Buckets ¶Second choice: Either a Furniture Fairy OR 4 Screws OR a Reinforcement Expansion",
         "resources": [[1935, 518, 2023, 614], [0, 0, 0, 0]]
     },
+    "376": {
+        "code": "C77",
+        "name": "\"BatDiv3\" Elite Second Platoon, Special Exercise!",
+        "desc": "Assemble a fleet containing Hiei Kai Ni+, Kirishima Kai Ni+, 1 CL, 2 DD, and up to 1 XX, then score 5 S ranks in PVP within the same day.",
+        "rewards": "¶First choice: Either a 35.6cm Twin Gun Mount Kai OR two New Model Gun Mount Improvement Materials OR 30 Development Materials ¶Second choice: Either two 35.6cm Twin Gun Mount Kais OR a 35.6cm Twin Gun Mount Kai ★6 OR a Remodel Blueprint",
+        "resources": [[600, 600, 600, 600], [0, 0, 0, 0]]
+    },
     "303": {
         "code": "Cd1",
         "name": "Daily Exercises 1",
@@ -2920,6 +2955,20 @@
         "memo": "※This quest resets on the first quest reset of July.",
         "rewards": "¶First choice: Either a New Model Armament Material OR a New Model Gun Mount Improvement Material OR 8 Development Materials ¶Second choice: Either three 13.8cm Twin Gun Mounts OR two 15.2cm Triple Main Gun Mounts OR a 38cm Quadruple Gun Mount",
         "resources": [[600, 600, 300, 300], [0, 0, 0, 0]]
+    },
+    "375": {
+        "code": "Cy15",
+        "name": "\"BatDiv3\" Second Platoon, Begin Exercises!",
+        "desc": "Assemble a fleet containing Hiei, Kirishima, 1 CL, 2 DD, and up to 1 XX, then score 4 S ranks in PVP within the same day.",
+        "rewards": "¶First choice: Either 4 35.6cm Twin Gun Mounts OR a New Model Gun Mount Improvement Material OR 10 Development Materials ¶Second choice: Either a Medal OR 5 Screws",
+        "resources": [[400, 400, 400, 400], [0, 0, 0, 0]]
+    },
+    "377": {
+        "code": "Cy16",
+        "name": "\"DesDiv2 (Late Formation)\", Improved Training!",
+        "desc": "Assemble a fleet containing any 1 of: \"Hayashimo, Akishimo, or Kiyoshimo\" as flagship, any 2 of: \"Hayashimo, Akishimo, Kiyoshimo, or Asashimo\", and up to 3 XX, then score 4 S ranks in PVP within the same day.",
+        "rewards": "¶First choice: Either a Mamiya OR a Skilled Lookouts OR three Screws ¶Second choice: Either an Irako OR 6 Development Materials OR a New Model Armament Material",
+        "resources": [[200, 200, 200, 200], [0, 0, 0, 0]]
     },
     "313": {
         "code": "Cs1",
@@ -3701,7 +3750,7 @@
         "name": "Research on a New Type of Main Battery for Aviation Battleships",
         "desc": "Have 40 Development Materials, 50 Flamethrowers, 4500 Steel and 2 New Model Artillery Armament Materials. Set Ise Kai Ni as secretary and equip her with a ★max Prototype 41cm Triple Gun Mount in her FIRST slot. Scrap two Type 22 Surface Radars and three 41cm Twin Gun Mounts.",
         "memo": "※Consumes the resources, items and equipment. Make sure the equipment is unlocked! ",
-        "rewards": "a 41cm Triple Gun Mount Kai Ni",
+        "rewards": "a 41cm Triple Gun Mount Kai 2",
         "resources": [[0, 200, 0, 0], [0, 0, 0, 0]]
     },
     "684": {
@@ -3789,7 +3838,7 @@
         "name": "Formation of the Supreme Zuiun Squadron",
         "desc": "Have 2000 Ammo, 8000 Bauxite, 1 New Model Aviation Armament Materials and 2 Skill Crew Members. Set Ise Kai Ni or Hyuuga Kai Ni as flagship. Equip an unlocked ★max Zuiun Kai Ni (634 Air Group) in her first slot. Scrap 6 Zuiun, 3 Suisei and 1 Prototype Reppuu Late Model.",
         "memo": "※The main requirement is Ise Kai Ni or Hyuuga Kai Ni equipped with a ★max Zuiun Kai Ni (634 Air Group). ※Consumes the resources, items and equipment. ",
-        "rewards": "a Zuiun Kai Ni (634 Air Group / Skilled)",
+        "rewards": "a Zuiun Kai 2 (634 Air Group / Skilled)",
         "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
     },
     "620": {
@@ -4016,6 +4065,13 @@
         "desc": "Set Shoukaku Kai Ni/A as Secretary, equipped with a Tenzan Model 12 (Murata Squadron) in her 1st slot, then, scrap 4 Tenzan, and prepare 1 Tenzan Model 12A Kai (w/ Type 6 Airborne Radar Kai) and 2 New Model Aerial Armament Material, 1 Night Skilled Crew Member 48 Development Materials.",
         "memo": "※Consumes the items and resources.",
         "rewards": "a Tenzan Model 12A Kai 2 (Murata Squadron/Radar Equipment)",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1143": {
+        "code": "F128",
+        "name": "\"Kirishima Kai Ni C\" Arsenal Remodel Quest",
+        "desc": "Set Kirishima Kai Ni C as Secretary, equipped with a ★+8 35.6cm Twin Gun Mount Kai 2 in her 1st slot, then, scrap 8 35.6cm Twin Gun Mount, and prepare 1 35.6cm Twin Gun Mount Kai, 2 New Model Gun Mount Improvement Material, 2 New Model Armament Material, and 7800 steel.",
+        "rewards": "a 35.6cm Twin Gun Mount Kai 3 C and either 3200 Fuels OR 1600 Bauxites OR 10 Development Materials",
         "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
     },
     "605": {
@@ -4432,5 +4488,84 @@
         "desc": "Scrap 2 pieces of equipment to show your love!",
         "rewards": "a Development Material",
         "resources": [[88, 88, 0, 0], [0, 0, 1, 0]]
+    },
+    "374": {
+        "code": "L2409C1",
+        "name": "[Time-limited] \"DesDiv32\" Special Exercises!",
+        "desc": "Assemble a fleet containing any 3 of: \"Tamanami, Suzunami, Fujinami, Hayanami, or Hamanami\"; and up to 3 XX, then score 3 S ranks in PVP within the same day.",
+        "rewards": "¶First choice: Either an Irako OR three 25mm Single Autocannon Mounts OR 4 Buckets ¶Second choice: Either 8 Development Materials OR three Screws OR a Mamiya",
+        "resources": [[320, 320, 0, 320], [0, 0, 0, 0]]
+    },
+    "1020": {
+        "code": "L2409B1",
+        "name": "[Time-limited] \"BatDiv3\" Emergency Deployment!",
+        "desc": "Assemble a fleet containing any 2 Kongou-class and up to 4 XX, then S rank the boss nodes of [W1-4], [W2-1], [W2-2], and [W4-2].",
+        "rewards": "a Furniture: Admiral And 3rd Squadron Table and either three 35.6cm Twin Gun Mounts OR two Irako OR three Screws",
+        "resources": [[500, 300, 300, 300], [0, 0, 0, 0]]
+    },
+    "915": {
+        "code": "L2212B1",
+        "name": "Time-Limited Mission: Fly! Seaplanes of the World!",
+        "desc": "Sortie an AV as flagship, 2 DD/DE and up to 3 additional ships to [W1-4], [W2-3] and [W2-4]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either two SOC Seagulls OR two Ro.43 Reconnaissance Seaplanes OR two Laté 298BS ¶Second choice: Either two S9 Ospreys OR two Swordfish (Seaplane Model) OR a Medal",
+        "resources": [[200, 200, 200, 200], [0, 0, 0, 0]]
+    },
+    "369": {
+        "code": "L2411C1",
+        "name": "[Naval Base Saury Festival] Salt-grilled saury exercise!",
+        "desc": "Assemble a fleet containing any 4 of: \"Oboro, Akebono, Sazanami, Ushio, Shirayuki, Yuugumo, Okinami, Kishinami, Asashimo, Isokaze, Shouhou, Michishio, Shigure Kai Ni+, Mogador, Ranger\", and up to 2 XX, then score 4 A+ ranks in PVP within the same day.",
+        "rewards": "¶First choice: Either two Irako OR a Medal OR a Type 3 Command Liaison Aircraft Kai ¶Second choice: Either an AO Yamashio Maru OR an LHA Kumano Maru OR a Mamiya",
+        "resources": [[600, 0, 600, 600], [0, 0, 0, 0]]
+    },
+    "866": {
+        "code": "L2411B2",
+        "name": "Saury fishing: Naval Base Saury Festival has begun. Let's do our best!",
+        "desc": "Have 4 Saury in the inventory.",
+        "rewards": "¶First choice: Either a DE Tsushima OR an AS Taigei OR two Irako ¶Second choice: Either a DE Hirato OR an AR Akashi OR 10 Buckets",
+        "resources": [[800, 0, 800, 0], [0, 0, 0, 0]]
+    },
+    "867": {
+        "code": "L2411B3",
+        "name": "Saury fishing: Kumarinko saury fishing! Are you ready?",
+        "desc": "Have 16 Saury in the inventory.",
+        "rewards": "¶First choice: Either 7 Screws OR two Reinforcement Expansions OR an Action Report ¶Second choice: Either two Type 22 Surface Radar Kai 4 OR 4 New Model Aerial Armament Materials OR a Remodel Blueprint",
+        "resources": [[1300, 1300, 0, 0], [0, 0, 0, 0]]
+    },
+    "868": {
+        "code": "L2411B4",
+        "name": "Saury fishing: Kumarinko saury fishing! Are you ready?",
+        "desc": "Have 48 Saury in the inventory.",
+        "rewards": "¶First choice: Either two Ne Type Engines OR two Remodel Blueprints OR a Prototype Flight Deck Catapult ¶Second choice: Either a Furniture: Type 23 Big Catch Flag OR a Furniture: Type 24 Big Catch Flag",
+        "resources": [[0, 0, 2400, 2400], [0, 0, 0, 0]]
+    },
+    "959": {
+        "code": "L2411B1",
+        "name": "[Naval Base Saury Festival] Preparations for full-scale operations!",
+        "desc": "Assemble a fleet containing a CL/CT/AR/AS or Souya as flagship; then S rank the boss nodes of 1-2, 1-3, 1-4, 1-5, twice each.",
+        "rewards": "¶First choice: Either three Searchlights OR three Type 3 Active Sonars OR three Screws ¶Second choice: Either three Ka Type Observation Autogyros OR three Type 3 Command Liaison Aircraft (ASW) OR a Medal",
+        "resources": [[400, 0, 0, 400], [0, 0, 0, 0]]
+    },
+    "960": {
+        "code": "L2411B5",
+        "name": "[Saury Festival Extra Operation] Strengthening defense of northern fishing grounds!",
+        "desc": "Assemble a fleet containing any of AR/CT/Souya/Akitsu Maru/Shinshuu Maru/Kumano Maru/Yamashio Maru as flagship; then A+ rank the boss nodes of 3-1, 3-3, 3-4, 3-5, twice each.",
+        "rewards": "¶First choice: Either three New Model Aerial Armament Materials OR an Arctic Gear & Deck Personnel OR 7 Screws ¶Second choice: Either a F6F-5 ★2 OR a Raiden ★3 OR a PBY-5A Catalina ★4",
+        "resources": [[600, 700, 800, 0], [0, 0, 0, 0]]
+    },
+    "1110": {
+        "code": "L2411F1",
+        "name": "Saury Festival [Extra Quest] Deployment of new Army anti-submarine patrol aircraft!",
+        "desc": "Set Yamashio Maru or Kumano Maru or Akitsu Maru as Secretary, equipped with a ★7 Type 3 Command Liaison Aircraft Kai in her 1st slot, then, scrap 4 Type 99 Dive Bomber, and prepare 8 Saury, 2 New Model Aerial Armament Material, 18 Development Materials.",
+        "memo": "※Consumes the items and resources.",
+        "rewards": "a Type 3 Command Liaison Aircraft Kai 2 and either three New Model Armament Materials OR a New Technology Aircraft Blueprint OR 6 Screws",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
+    "1144": {
+        "code": "L2411F2",
+        "name": "Saury Festival [Extra Quest 2024] Finale!",
+        "desc": "Set a Mogami-class as Secretary, equipped with a ★7 20.3cm (No.3) Twin Gun Mount in her 1st slot, then, scrap 2 Prototype Reppuu Late Model, and prepare a ★7 Raiden, 18 Saury, 3 New Model Aerial Armament Material, 40 Development Materials, 1 New Technology Aircraft Blueprint.",
+        "memo": "※Consumes the items and resources.",
+        "rewards": "a Prototype 20.3cm (No.4) Twin Gun Mount ★2 and a Prototype Shinden (Land-based Fighter)",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
     }
 }
