@@ -699,7 +699,6 @@
     <string name="download_reset_message">Inicializando recursos de la aplicación nuevamente.</string>
     <string name="download_check_error">Error al cargar desde almacenamiento (usando datos predeterminados)</string>
     <string name="download_setting_checkatstart">Revisar por actualizaciones al inicar</string>
-    <string name="download_use_internal_data">usar recursos internos</string>
 
     <string name="packagefilter_count_format" formatted="false">Total: %d</string>
     <string name="packagefilter_restart">Debe reinicar el servicio VPN para hacer estas opciones efectivas.</string>

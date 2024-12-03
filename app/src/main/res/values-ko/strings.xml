@@ -696,7 +696,6 @@
     <string name="download_reset_message">리소스를 초기화합니다.</string>
     <string name="download_check_error">데이터 로딩 중 오류 발생 (기본 데이터 사용)</string>
     <string name="download_setting_checkatstart">어플리케이션 시작 시 업데이트 확인</string>
-    <string name="download_use_internal_data">내장 리소스 사용</string>
 
     <string name="packagefilter_count_format" formatted="false">합계: %d</string>
     <string name="packagefilter_restart">해당 설정을 적용하기 위해서는 VPN을 재시작하여야 합니다.</string>

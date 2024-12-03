@@ -80,14 +80,6 @@
                 android:textSize="14sp" />
 
             <CheckBox
-                android:id="@+id/reschk_local"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="use internal resources"
-                android:textSize="14sp" />
-
-            <CheckBox
                 android:id="@+id/reschk_reset"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

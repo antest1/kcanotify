@@ -703,9 +703,8 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_reset_message">初始化应用程式资源</string>
     <string name="download_check_error">从装置载入资源发生错误(使用预设资料)</string>
     <string name="download_setting_checkatstart">启动应用程式时检查更新</string>
-    <string name="download_use_internal_data">使用内建资源</string>
 
-	<string name="packagefilter_count_format" formatted="false">总计：%d</string>
+    <string name="packagefilter_count_format" formatted="false">总计：%d</string>
 	<string name="packagefilter_restart">更改设定后你需要重新启用VPN套用变更</string>
 	<string name="setting_menu_sniffer_title_head">Sniffer(ACTIVE)设定</string>
 	<string name="setting_menu_sniffer_title_package_allow">于其他应用程式使用Sniffer</string>

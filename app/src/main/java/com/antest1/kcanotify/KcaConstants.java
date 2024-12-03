@@ -481,7 +481,6 @@ public final class KcaConstants {
     public static final String PREF_PACKET_LOG = "packet_log";
     public static final String PREF_CHECK_UPDATE_START = "check_update_start";
     public static final String PREF_FAIRY_DOWN_FLAG = "fairy_downloaded_flag";
-    public static final String PREF_RES_USELOCAL = "res_uselocal";
     public static final String PREF_FAIRY_REV = "fairy_rev";
     public static final String PREF_PACKAGE_ALLOW = "package_allow";
     public static final String PREF_ALLOW_EXTFILTER = "allow_external_filter";
@@ -514,7 +513,6 @@ public final class KcaConstants {
             PREF_KCA_VERSION,
             PREF_KCARESOURCE_VERSION,
             PREF_CHECK_UPDATE_START,
-            PREF_RES_USELOCAL,
             PREF_KCA_LANGUAGE,
             PREF_SNIFFER_MODE,
             PREF_KCA_SEEK_CN,
@@ -591,7 +589,6 @@ public final class KcaConstants {
 
     public static final String[] PREF_BOOLEAN_ARRAY = {
             PREF_CHECK_UPDATE_START,
-            PREF_RES_USELOCAL,
             PREF_POIDB_API_USE,
             PREF_AKASHI_STAR_CHECKED,
             PREF_KCA_SET_PRIORITY,

@@ -86,7 +86,6 @@ public class SettingActivity extends AppCompatActivity implements MainPreference
             case PREF_DATALOAD_ERROR_FLAG:
             case PREF_FIX_VIEW_LOC:
             case PREF_PACKET_LOG:
-            case PREF_RES_USELOCAL:
             case PREF_FAIRY_DOWN_FLAG:
             case PREF_ALLOW_EXTFILTER:
             case PREF_HDNOTI_LOCKED:

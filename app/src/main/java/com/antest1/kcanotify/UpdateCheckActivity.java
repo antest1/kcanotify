@@ -57,7 +57,6 @@ import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_DOWN_FLAG;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCARESOURCE_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_DATA_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_RES_USELOCAL;
 import static com.antest1.kcanotify.KcaConstants.PREF_UPDATE_SERVER;
 import static com.antest1.kcanotify.KcaResCheckItemAdpater.RESCHK_KEY;
 import static com.antest1.kcanotify.KcaUtils.compareVersion;
@@ -135,12 +134,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
         checkstart_chkbox.setChecked(getBooleanPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START));
         checkstart_chkbox.setOnCheckedChangeListener((buttonView, isChecked)
                 -> setPreferences(getApplicationContext(), PREF_CHECK_UPDATE_START, isChecked));
-
-        localonly_chkbox = findViewById(R.id.reschk_local);
-        localonly_chkbox.setText(getStringWithLocale(R.string.download_use_internal_data));
-        localonly_chkbox.setChecked(getBooleanPreferences(getApplicationContext(), PREF_RES_USELOCAL));
-        localonly_chkbox.setOnCheckedChangeListener((buttonView, isChecked)
-                -> setPreferences(getApplicationContext(), PREF_RES_USELOCAL,isChecked));
 
         resource_reset = findViewById(R.id.reschk_reset);
         resource_reset.setText(getStringWithLocale(R.string.download_reset));
