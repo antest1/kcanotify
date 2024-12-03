@@ -18,16 +18,11 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.downloader.Error;
+import com.downloader.OnDownloadListener;
+import com.downloader.PRDownloader;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.tonyodev.fetch2.Download;
-import com.tonyodev.fetch2.Fetch;
-import com.tonyodev.fetch2.FetchConfiguration;
-import com.tonyodev.fetch2.FetchListener;
-import com.tonyodev.fetch2.Request;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,11 +47,10 @@ public class KcaFairySelectActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     private static Handler sHandler;
-    static Gson gson = new Gson();
     KcaDBHelper dbHelper;
     GridView gv;
     ProgressDialog mProgressDialog;
-    Fetch fetch;
+
     JsonArray download_data = new JsonArray();
     PowerManager pm;
     PowerManager.WakeLock mWakeLock;
@@ -81,10 +75,7 @@ public class KcaFairySelectActivity extends AppCompatActivity {
         pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, KcaFairySelectActivity.class.getName());
 
-        FetchConfiguration fetchConfiguration = new FetchConfiguration.Builder(getApplicationContext())
-                .setDownloadConcurrentLimit(24)
-                .build();
-        fetch = Fetch.Impl.getInstance(fetchConfiguration);
+        PRDownloader.initialize(getApplicationContext());
 
         mProgressDialog = new ProgressDialog(KcaFairySelectActivity.this);
         mProgressDialog.setMessage(getStringWithLocale(R.string.download_progress));
@@ -232,55 +223,27 @@ public class KcaFairySelectActivity extends AppCompatActivity {
             final File data = new File(root_dir, name);
             if (data.exists()) data.delete();
 
-            final Request request = new Request(url, data.getPath());
-            fetch.enqueue(request, updatedRequest -> {
-                dbHelper.putResVer(name, version);
-            }, error -> {
-                failedFiles += 1;
-                if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
-            });
+            PRDownloader.download(url, root_dir.getPath(), name)
+                    .build()
+                    .start(new OnDownloadListener() {
+                        @Override
+                        public void onDownloadComplete() {
+                            successedFiles += 1;
+                            if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
+                            dbHelper.putResVer(name, version);
+                        }
+
+                        @Override
+                        public void onError(Error error) {
+                            failedFiles += 1;
+                            if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
+                        }
+                    });
         }
-
-
-        FetchListener fetchDownloadListener = new FetchListener() {
-            @Override
-            public void onDeleted(Download download) {}
-
-            @Override
-            public void onRemoved(Download download) {}
-
-            @Override
-            public void onResumed(Download download) {}
-
-            @Override
-            public void onPaused(Download download) {}
-
-            @Override
-            public void onProgress(Download download, long l, long l1) {}
-
-            @Override
-            public void onQueued(Download download, boolean b) {}
-
-            @Override
-            public void onCancelled(Download download) {}
-
-            @Override
-            public void onError(Download download) {
-                failedFiles += 1;
-                if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
-            }
-
-            @Override
-            public void onCompleted(@NotNull Download download) {
-                successedFiles += 1;
-                if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
-            }
-        };
 
         private void startDownloadProgress() {
             fairy_wait = true;
             publishProgress(0);
-            fetch.addListener(fetchDownloadListener);
             totalFiles = download_data.size();
             mProgressDialog.setMax(totalFiles);
             for (int i = 0; i < download_data.size(); i++) {

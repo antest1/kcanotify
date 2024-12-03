@@ -1,11 +1,9 @@
 package com.antest1.kcanotify;
 
 import com.google.common.io.ByteStreams;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.pixplicity.htmlcompat.HtmlCompat;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -36,6 +34,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.text.HtmlCompat;
 
 import android.text.Html;
 import android.text.Spanned;
@@ -262,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         textDescription = findViewById(R.id.textDescription);
-        Spanned fromHtml = HtmlCompat.fromHtml(getApplicationContext(), main_html, 0);
+        Spanned fromHtml = HtmlCompat.fromHtml(main_html, 0);
         textDescription.setMovementMethod(LinkMovementMethod.getInstance());
         textDescription.setText(fromHtml);
         //Linkify.addLinks(textDescription, Linkify.WEB_URLS);

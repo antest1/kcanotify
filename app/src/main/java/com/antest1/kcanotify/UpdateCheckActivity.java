@@ -23,6 +23,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.downloader.Error;
+import com.downloader.OnDownloadListener;
+import com.downloader.PRDownloader;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -30,11 +33,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.tonyodev.fetch2.Download;
-import com.tonyodev.fetch2.Fetch;
-import com.tonyodev.fetch2.FetchConfiguration;
-import com.tonyodev.fetch2.FetchListener;
-import com.tonyodev.fetch2.Request;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -92,8 +90,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
     UpdateHandler handler;
     public KcaDownloader downloader;
     Type listType = new TypeToken<ArrayList<JsonObject>>(){}.getType();
-    Fetch fetch;
-
 
     private String getStringWithLocale(int id) {
         return KcaUtils.getStringWithLocale(getApplicationContext(), getBaseContext(), id);
@@ -126,10 +122,7 @@ public class UpdateCheckActivity extends AppCompatActivity {
         KcaApiData.setDBHelper(dbHelper);
 
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
-        FetchConfiguration fetchConfiguration = new FetchConfiguration.Builder(getApplicationContext())
-                .setDownloadConcurrentLimit(80)
-                .build();
-        fetch = Fetch.Impl.getInstance(fetchConfiguration);
+        PRDownloader.initialize(getApplicationContext());
 
         handler = new UpdateHandler(this);
         gamedata_adapter.setHandler(handler);
@@ -480,77 +473,37 @@ public class UpdateCheckActivity extends AppCompatActivity {
         final File data = new File(root_dir, name);
         if (data.exists()) data.delete();
 
-        final Request request = new Request(KcaUtils.format("%s?t=%d", url, timestamp), data.getPath());
-        fetch.addListener(getFetchListener(url, name, version));
-        fetch.enqueue(request, updatedRequest -> {
-            // do nothing
-        }, error -> {
-            Toast.makeText(getApplicationContext(), "Error when downloading " + name, Toast.LENGTH_LONG).show();
-        });
-    }
-
-    private String getResultFromCall(Call<String> call) {
-        KcaRequestThread thread = new KcaRequestThread(call);
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return thread.getResult();
-    }
-
-    private FetchListener getFetchListener(String url, String name, int version) {
-        return new FetchListener() {
-            @Override
-            public void onDeleted(Download download) {}
-
-            @Override
-            public void onRemoved(Download download) {}
-
-            @Override
-            public void onResumed(Download download) {}
-
-            @Override
-            public void onPaused(Download download) {}
-
-            @Override
-            public void onProgress(Download download, long l, long l1) {}
-
-            @Override
-            public void onQueued(Download download, boolean b) {}
-
-            @Override
-            public void onCancelled(Download download) {}
-
-            @Override
-            public void onError(Download download) {}
-
-            @Override
-            public void onCompleted(@NotNull Download download) {
-                File jsonFile = new File(download.getFile());
-                new DataSaveTask(UpdateCheckActivity.this).execute(name, String.valueOf(version));
-                if (name.equals("icon_info.json")) {
-                    Toast.makeText(getApplicationContext(), "Download Completed: " + name + "\nRetrieving Fairy Images..", Toast.LENGTH_LONG).show();
-                    final Handler handler1 = new Handler();
-                    handler1.postDelayed(() -> new KcaFairyDownloader().execute(), LOAD_DELAY);
-                }
-                int num_count = 0;
-                for (int i = 0; i < resource_info.size(); i++) {
-                    JsonObject item = resource_info.get(i).getAsJsonObject();
-                    if (item.get("name").getAsString().equals(name)) {
-                        int latest_res_v = item.get("version").getAsInt();
-                        item.addProperty("version_str", getVersionString(version, latest_res_v));
-                        item.addProperty("highlight", version < latest_res_v);
-                        if (version < latest_res_v) num_count += 1;
+        PRDownloader.download(KcaUtils.format("%s?t=%d", url, timestamp), root_dir.getPath(), name)
+                .build()
+                .start(new OnDownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                        new DataSaveTask(UpdateCheckActivity.this).execute(name, String.valueOf(version));
+                        if (name.equals("icon_info.json")) {
+                            Toast.makeText(getApplicationContext(), "Download Completed: " + name + "\nRetrieving Fairy Images..", Toast.LENGTH_LONG).show();
+                            final Handler handler1 = new Handler();
+                            handler1.postDelayed(() -> new KcaFairyDownloader().execute(), LOAD_DELAY);
+                        }
+                        int num_count = 0;
+                        for (int i = 0; i < resource_info.size(); i++) {
+                            JsonObject item = resource_info.get(i).getAsJsonObject();
+                            if (item.get("name").getAsString().equals(name)) {
+                                int latest_res_v = item.get("version").getAsInt();
+                                item.addProperty("version_str", getVersionString(version, latest_res_v));
+                                item.addProperty("highlight", version < latest_res_v);
+                                if (version < latest_res_v) num_count += 1;
+                            }
+                        }
+                        resource_adapter.setListItem(resource_info);
+                        resource_adapter.notifyDataSetChanged();
+                        resource_downall.setVisibility(num_count > 0 ? View.VISIBLE : View.GONE);
                     }
-                }
-                resource_adapter.setListItem(resource_info);
-                resource_adapter.notifyDataSetChanged();
-                resource_downall.setVisibility(num_count > 0 ? View.VISIBLE : View.GONE);
-                fetch.removeListener(this);
-            }
-        };
+
+                    @Override
+                    public void onError(Error error) {
+                        Toast.makeText(getApplicationContext(), "Error when downloading " + name, Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     public List<String> getResourcesFilter() {
@@ -620,55 +573,27 @@ public class UpdateCheckActivity extends AppCompatActivity {
             final File data = new File(root_dir, name);
             if (data.exists()) data.delete();
 
-            final Request request = new Request(url, data.getPath());
-            fetch.enqueue(request, updatedRequest -> {
-                dbHelper.putResVer(name, version);
-            }, error -> {
-                failedFiles += 1;
-                if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
-            });
+            PRDownloader.download(url, root_dir.getPath(), name)
+                    .build()
+                    .start(new OnDownloadListener() {
+                        @Override
+                        public void onDownloadComplete() {
+                            successedFiles += 1;
+                            if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
+                            dbHelper.putResVer(name, version);
+                        }
+
+                        @Override
+                        public void onError(Error error) {
+                            failedFiles += 1;
+                            if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
+                        }
+                    });
         }
-
-
-        FetchListener fetchDownloadListener = new FetchListener() {
-            @Override
-            public void onDeleted(Download download) {}
-
-            @Override
-            public void onRemoved(Download download) {}
-
-            @Override
-            public void onResumed(Download download) {}
-
-            @Override
-            public void onPaused(Download download) {}
-
-            @Override
-            public void onProgress(Download download, long l, long l1) {}
-
-            @Override
-            public void onQueued(Download download, boolean b) {}
-
-            @Override
-            public void onCancelled(Download download) {}
-
-            @Override
-            public void onError(Download download) {
-                failedFiles += 1;
-                if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
-            }
-
-            @Override
-            public void onCompleted(@NotNull Download download) {
-                successedFiles += 1;
-                if (totalFiles > 0) publishProgress((successedFiles + failedFiles));
-            }
-        };
 
         private void startDownloadProgress() {
             fairy_wait = true;
             publishProgress(0);
-            fetch.addListener(fetchDownloadListener);
             totalFiles = fairy_queue.size();
             mProgressDialog.setMax(totalFiles);
             for (int i = 0; i < fairy_queue.size(); i++) {
@@ -700,8 +625,6 @@ public class UpdateCheckActivity extends AppCompatActivity {
                 }
             }
             startDownloadProgress();
-
-            //downloadFairyIcon();
             return download_result;
         }
 
