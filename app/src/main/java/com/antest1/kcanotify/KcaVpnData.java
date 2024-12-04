@@ -272,20 +272,18 @@ public class KcaVpnData {
     }
 
     private static boolean checkKcApi(String uri) {
-        boolean isKcaVer = uri.contains("/kca/version");
-        boolean isKcsApi = uri.contains("/kcsapi/api_");
-        //Log.e("KCA", uri + " " + String.valueOf(isKcaVer || isKcsApi));
-        return (isKcaVer || isKcsApi);
+        if (uri.contains("/kca/version") || uri.contains("/kcs2/version")) return true;
+        if (uri.contains("/kcsapi/api_")) return true;
+
+        return false;
     }
 
     private static boolean checkKcRes(String uri) {
-        boolean isKcsSwf = uri.contains("/kc") && uri.contains(".swf");
-        boolean isKcaRes = uri.contains("/kc") && uri.contains("/resources");
-        boolean isKcsSound = uri.contains("/kcs/sound");
-        boolean isKcsWorld = uri.contains("/api_world/get_id/");
-        boolean isKcs2Res = uri.contains("/kcs2/img/");
-        //Log.e("KCA", uri + " " + String.valueOf(isKcaVer || isKcsApi));
-        return (isKcsSwf || isKcaRes || isKcsSound || isKcsWorld | isKcs2Res);
+        if (uri.contains("/api_world/get_id/")) return true;
+        if (uri.contains("/gadget_html5/") || uri.contains("/kcscontents/")) return true;
+        if (uri.contains("/kcs2/js/") || uri.contains("/kcs2/css/") || uri.contains("/kcs2/resources/")
+                || uri.contains("/kcs/sound") || uri.contains("/kcs2/img")) return true;
+        return false;
     }
 
     private static byte[] unchunkAllData(byte[] data, boolean gzipped) throws IOException {

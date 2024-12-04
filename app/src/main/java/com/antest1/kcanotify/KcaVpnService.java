@@ -55,8 +55,7 @@ import eu.faircode.netguard.Util;
 import static com.antest1.kcanotify.KcaConstants.DMMLOGIN_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.GOTO_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
-import static com.antest1.kcanotify.KcaConstants.PREF_ALLOW_EXTFILTER;
-import static com.antest1.kcanotify.KcaConstants.PREF_DNS_NAMESERVERS;
+import static com.antest1.kcanotify.KcaConstants.KC_WV_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_PACKAGE_ALLOW;
 import static com.antest1.kcanotify.KcaConstants.VPN_STOP_REASON;
 
@@ -421,6 +420,7 @@ public class KcaVpnService extends VpnService {
             try {
                 if (!socks5_enable || !socks5_allapps) {
                     builder.addAllowedApplication(KC_PACKAGE_NAME);
+                    builder.addAllowedApplication(KC_WV_PACKAGE_NAME);
                     builder.addAllowedApplication(GOTO_PACKAGE_NAME);
                     if (socks5_enable) builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
                     for (JsonElement pkg: allowed_apps) {
