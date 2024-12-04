@@ -44,8 +44,6 @@ public class KcaVpnData {
             "203.104.248"  // Rabaul
     };
 
-    private static String[] kcsUrlPrefixList = {"w00g", "w01y"};
-
     // ooi-based connector ips
     private static String[] kcaExtServiceList = {
             "104.27.146.101",
@@ -85,14 +83,6 @@ public class KcaVpnData {
         handler = h;
     }
 
-    public static void setKcServerIP() {
-        for (String kcs: kcsUrlPrefixList) {
-            String url = KcaUtils.format("%s.kancolle-server.com", kcs);
-            String[] kcs_ips = KcaUtils.getIpAddress(url);
-            prefixCheckList.addAll(Arrays.asList(kcs_ips));
-        }
-    }
-
     public static void setExternalFilter(boolean use_ext) {
         if (use_ext) {
             try {
@@ -112,19 +102,30 @@ public class KcaVpnData {
     }
 
     // Called from native code
-    private static int containsKcaServer(int type, byte[] source, byte[] target) {
+    private static int containsKcaServer(int type, byte[] source, byte[] target, byte[] head) {
         String saddrstr = new String(source);
         String taddrstr = new String(target);
+
         if (type == REQUEST) {
+            if (prefixCheckList.contains(taddrstr)) {
+                return 1;
+            } else { // detect kcs host from request header
+                String headstr = (new String(head)).split("\r\n\r\n")[0];
+                if (headstr.contains("Host: ") && headstr.contains(".kancolle-server.com\r\n")) {
+                    Log.e("KCAV", "kcs detected: " + taddrstr);
+                    prefixCheckList.add(taddrstr);
+                    return 1;
+                }
+            }
             for (String prefix: prefixCheckList) {
                 if (taddrstr.startsWith(prefix)) return 1;
             }
         } else if (type == RESPONSE) {
+            if (prefixCheckList.contains(saddrstr)) return 1;
             for (String prefix: prefixCheckList) {
                 if (saddrstr.startsWith(prefix)) return 1;
             }
         }
-        //Log.e("KCAV", KcaUtils.format("containsKcaServer[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
         return 0;
     }
 

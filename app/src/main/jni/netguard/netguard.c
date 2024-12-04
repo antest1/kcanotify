@@ -750,8 +750,16 @@ void get_packet_data(const struct arguments *args, char* data, int size, int typ
 
     jbyteArray s = cstr2jbyteArray(env, saddr, -1);
     jbyteArray t = cstr2jbyteArray(env, taddr, -1);
-    method_callback = (*env)->GetStaticMethodID(env, clsData, "containsKcaServer", "(I[B[B)I");
-    int result = (*env)->CallStaticIntMethod(env, clsData, method_callback, type, s, t);
+
+    method_callback = (*env)->GetStaticMethodID(env, clsData, "containsKcaServer", "(I[B[B[B)I");
+    int result;
+    if (type == 1) { // request
+        jbyteArray h = cstr2jbyteArray(env, data, 256); // get header part
+        result = (*env)->CallStaticIntMethod(env, clsData, method_callback, type, s, t, h);
+    } else { // response
+        result = (*env)->CallStaticIntMethod(env, clsData, method_callback, type, s, t, NULL);
+    }
+
     if (result == 1) {
         jbyteArray a = cstr2jbyteArray(env, data, size);
         method_callback = (*env)->GetStaticMethodID(env, clsData, "getDataFromNative", "([BII[B[BII)V");
