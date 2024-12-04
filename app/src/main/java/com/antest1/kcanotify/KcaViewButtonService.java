@@ -67,6 +67,7 @@ import static com.antest1.kcanotify.KcaConstants.KCA_MSG_BATTLE_VIEW_REFRESH;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_DATA;
 import static com.antest1.kcanotify.KcaConstants.KCA_MSG_QUEST_COMPLETE;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
+import static com.antest1.kcanotify.KcaConstants.KC_WV_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_AUTOHIDE;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_ICON;
 import static com.antest1.kcanotify.KcaConstants.PREF_FAIRY_NOTI_LONGCLICK;
@@ -638,6 +639,8 @@ public class KcaViewButtonService extends Service {
                     foregroundPackage = checkForegroundPackage();
                     if (foregroundPackage.trim().length() > 0) {
                         if (foregroundPackage.contains(KC_PACKAGE_NAME)) {
+                            current_foreground_status = true;
+                        } if (foregroundPackage.contains(KC_WV_PACKAGE_NAME)) {
                             current_foreground_status = true;
                         } else if (foregroundPackage.contains(GOTO_PACKAGE_NAME)) {
                             current_foreground_status = true;

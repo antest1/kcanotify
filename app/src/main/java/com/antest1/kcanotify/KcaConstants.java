@@ -7,6 +7,7 @@ import java.util.List;
 
 public final class KcaConstants {
     public final static String KC_PACKAGE_NAME = "com.dmm.dmmlabo.kancolle";
+    public final static String KC_WV_PACKAGE_NAME = "com.example.kcs_webview";
     public final static String DMMLOGIN_PACKAGE_NAME = "com.dmm.app.store";
     public final static String MAINACTIVITY_NAME = "com.antest1.kcanotify.MainActivity";
     public final static String GOTO_PACKAGE_NAME = "com.antest1.gotobrowser";
