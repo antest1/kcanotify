@@ -2114,6 +2114,13 @@
         "rewards": "¶First choice: Either 30 Development Materials OR a Type 13 Air Radar Kai ★3 OR a New Model Gun Mount Improvement Material ¶Second choice: Either an Action Report OR a 12.7cm Twin Gun Mount Model D Kai 2 ★3 OR a Torpedo Squadron Skilled Lookouts",
         "resources": [[1944, 1026, 0, 0], [0, 0, 0, 0]]
     },
+    "1023": {
+        "code": "B207",
+        "name": "DesDiv 32 Fujinami Kai Ni, Escort Choukai!",
+        "desc": "Sortie Fujinami Kai Ni as flagship, Choukai, any one of Tamanami, Suzunami, Fujinami, Hayanami and Hamanami, and up to 3 additional ships to [W2-4], [W2-5], [W7-2-M] and [W5-5]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either 9 Screws OR three New Model Armament Materials OR an Action Report ¶Second choice: Either two Type 13 Air Radar Kai (Late Model) ★3 OR a Passive Radiolocator (E27) + Type 22 Surface Radar Kai 4 (Late Adjustment Model) OR a 12.7cm Twin Gun Mount Model D Kai 3",
+        "resources": [[1944, 1025, 1026, 0], [0, 0, 0, 0]]
+    },
     "201": {
         "code": "Bd1",
         "name": "Daily Victory",
@@ -4074,6 +4081,14 @@
         "rewards": "a 35.6cm Twin Gun Mount Kai 3 C and either 3200 Fuels OR 1600 Bauxites OR 10 Development Materials",
         "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
     },
+    "1145": {
+        "code": "F129",
+        "name": "I-Go Submarine Equipment Expansion",
+        "desc": "Have 4 Type 93 Passive Sonars, a New Model Aviation Armament Material, 60 Development Materials and a New Model Armament Material. Set a submarine as secretary with a \\u26054+ Type 0 Reconnaissance Seaplane in her 1st slot. Scrap 8 Type 0 Reconnaissance Seaplanes and 15 Torpedoes.",
+        "memo": "※Consumes the items and resources.",
+        "rewards": "a Type 0 Small Reconnaissance Seaplane and either two Type 0 Small Reconnaissance Seaplanes OR three Late Model Bow Torpedo Mount (6 tubes) OR 4 Submarine Radar & Waterproof Periscopes",
+        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    },
     "605": {
         "code": "Fd1",
         "name": "Daily Development 1",
@@ -4510,62 +4525,39 @@
         "rewards": "¶First choice: Either two SOC Seagulls OR two Ro.43 Reconnaissance Seaplanes OR two Laté 298BS ¶Second choice: Either two S9 Ospreys OR two Swordfish (Seaplane Model) OR a Medal",
         "resources": [[200, 200, 200, 200], [0, 0, 0, 0]]
     },
-    "369": {
-        "code": "L2411C1",
-        "name": "[Naval Base Saury Festival] Salt-grilled saury exercise!",
-        "desc": "Assemble a fleet containing any 4 of: \"Oboro, Akebono, Sazanami, Ushio, Shirayuki, Yuugumo, Okinami, Kishinami, Asashimo, Isokaze, Shouhou, Michishio, Shigure Kai Ni+, Mogador, Ranger\", and up to 2 XX, then score 4 A+ ranks in PVP within the same day.",
-        "rewards": "¶First choice: Either two Irako OR a Medal OR a Type 3 Command Liaison Aircraft Kai ¶Second choice: Either an AO Yamashio Maru OR an LHA Kumano Maru OR a Mamiya",
-        "resources": [[600, 0, 600, 600], [0, 0, 0, 0]]
+    "962": {
+        "code": "L2412B1",
+        "name": "[Xmas Limited] Merry Xmas Destroyer Squadron, Weigh Anchor!",
+        "desc": "Sortie any 4 of Oyashio, Asagumo, Yamagumo, Arare, Oboro, Sazanami, Ushio, Akebono, Yuugumo, Hayanami, Hamanami, Makinami, Kishinami, Hayashimo, Tanikaze and Hatsukaze, and up to 2 additional ships to [W1-1] and [W1-3]. S-Rank each boss node three times.",
+        "rewards": "a Present Box and either 11 Development Materials OR 4 Screws OR a Furniture Fairy",
+        "resources": [[0, 0, 1224, 0], [0, 0, 0, 0]]
     },
-    "866": {
-        "code": "L2411B2",
-        "name": "Saury fishing: Naval Base Saury Festival has begun. Let's do our best!",
-        "desc": "Have 4 Saury in the inventory.",
-        "rewards": "¶First choice: Either a DE Tsushima OR an AS Taigei OR two Irako ¶Second choice: Either a DE Hirato OR an AR Akashi OR 10 Buckets",
-        "resources": [[800, 0, 800, 0], [0, 0, 0, 0]]
+    "963": {
+        "code": "L2412B2",
+        "name": "[Xmas Limited] Holy Night Special Fleet, Commence Operation!",
+        "desc": "Sortie any 2 of Souya, Akashi, Asahi, Kamoi, Hayasui, Taigei (not Ryuuhou), Jingei, Chougei, Heian Maru, Kumano Maru, Yamashio Maru, Comdt. Teste and Mizuho, one as flagship, and up to 4 additional ships to [W1-2] and [W2-2]. S-Rank each boss node three times.",
+        "rewards": "¶First choice: Either two Daihatsu Landing Craft OR 4 25mm Single Autocannon Mounts OR 6 Buckets ¶Second choice: Either two New Model Armament Materials OR a Reinforcement Expansion OR a Medal",
+        "resources": [[1224, 0, 0, 0], [0, 0, 0, 0]]
     },
-    "867": {
-        "code": "L2411B3",
-        "name": "Saury fishing: Kumarinko saury fishing! Are you ready?",
-        "desc": "Have 16 Saury in the inventory.",
-        "rewards": "¶First choice: Either 7 Screws OR two Reinforcement Expansions OR an Action Report ¶Second choice: Either two Type 22 Surface Radar Kai 4 OR 4 New Model Aerial Armament Materials OR a Remodel Blueprint",
-        "resources": [[1300, 1300, 0, 0], [0, 0, 0, 0]]
+    "964": {
+        "code": "L2412B3",
+        "name": "[Xmas Limited] Xmas Light Cruiser Squadron, Wreak Havoc!",
+        "desc": "Sortie any 2 of Kuma, Naka, Yahagi Kai Ni+, Sakawa, Kashima, Sheffield, Atlanta, Ooyodo and Gotland, one as flagship, and up to 4 additional ships to [W1-4], [W2-3] and [W2-4]. S-Rank each boss node twice.",
+        "rewards": "¶First choice: Either a 14cm Twin Gun Mount Kai ★7 OR a 15.2cm Twin Gun Mount Kai ★5 OR a Medal ¶Second choice: Either two New Model Gun Mount Improvement Materials OR 5 Screws OR a 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)",
+        "resources": [[0, 0, 1224, 1224], [0, 0, 0, 0]]
     },
-    "868": {
-        "code": "L2411B4",
-        "name": "Saury fishing: Kumarinko saury fishing! Are you ready?",
-        "desc": "Have 48 Saury in the inventory.",
-        "rewards": "¶First choice: Either two Ne Type Engines OR two Remodel Blueprints OR a Prototype Flight Deck Catapult ¶Second choice: Either a Furniture: Type 23 Big Catch Flag OR a Furniture: Type 24 Big Catch Flag",
-        "resources": [[0, 0, 2400, 2400], [0, 0, 0, 0]]
+    "965": {
+        "code": "L2412B4",
+        "name": "[Xmas Extra Operation] Xmas Final Battle, Deploy the Fleet!",
+        "desc": "Sortie any 3 of Warspite, Nevada, Ranger, Langley, Johnston, Suzuya, Kumano and Kinugasa, and up to 3 additional ships to [W4-2], [W4-5], [W5-3] and [W6-4]. S-Rank each boss node.",
+        "rewards": "¶First choice: Either two Type 2 Two-seat Fighter Toryuu Model CS OR a Type 4 Heavy Bomber Hiryuu OR 4 SM.79 ¶Second choice: Either a Ne Type Engine OR 4 Skilled Crew Members OR three Medals",
+        "resources": [[2024, 1225, 0, 0], [0, 0, 0, 0]]
     },
-    "959": {
-        "code": "L2411B1",
-        "name": "[Naval Base Saury Festival] Preparations for full-scale operations!",
-        "desc": "Assemble a fleet containing a CL/CT/AR/AS or Souya as flagship; then S rank the boss nodes of 1-2, 1-3, 1-4, 1-5, twice each.",
-        "rewards": "¶First choice: Either three Searchlights OR three Type 3 Active Sonars OR three Screws ¶Second choice: Either three Ka Type Observation Autogyros OR three Type 3 Command Liaison Aircraft (ASW) OR a Medal",
-        "resources": [[400, 0, 0, 400], [0, 0, 0, 0]]
-    },
-    "960": {
-        "code": "L2411B5",
-        "name": "[Saury Festival Extra Operation] Strengthening defense of northern fishing grounds!",
-        "desc": "Assemble a fleet containing any of AR/CT/Souya/Akitsu Maru/Shinshuu Maru/Kumano Maru/Yamashio Maru as flagship; then A+ rank the boss nodes of 3-1, 3-3, 3-4, 3-5, twice each.",
-        "rewards": "¶First choice: Either three New Model Aerial Armament Materials OR an Arctic Gear & Deck Personnel OR 7 Screws ¶Second choice: Either a F6F-5 ★2 OR a Raiden ★3 OR a PBY-5A Catalina ★4",
-        "resources": [[600, 700, 800, 0], [0, 0, 0, 0]]
-    },
-    "1110": {
-        "code": "L2411F1",
-        "name": "Saury Festival [Extra Quest] Deployment of new Army anti-submarine patrol aircraft!",
-        "desc": "Set Yamashio Maru or Kumano Maru or Akitsu Maru as Secretary, equipped with a ★7 Type 3 Command Liaison Aircraft Kai in her 1st slot, then, scrap 4 Type 99 Dive Bomber, and prepare 8 Saury, 2 New Model Aerial Armament Material, 18 Development Materials.",
-        "memo": "※Consumes the items and resources.",
-        "rewards": "a Type 3 Command Liaison Aircraft Kai 2 and either three New Model Armament Materials OR a New Technology Aircraft Blueprint OR 6 Screws",
-        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
-    },
-    "1144": {
-        "code": "L2411F2",
-        "name": "Saury Festival [Extra Quest 2024] Finale!",
-        "desc": "Set a Mogami-class as Secretary, equipped with a ★7 20.3cm (No.3) Twin Gun Mount in her 1st slot, then, scrap 2 Prototype Reppuu Late Model, and prepare a ★7 Raiden, 18 Saury, 3 New Model Aerial Armament Material, 40 Development Materials, 1 New Technology Aircraft Blueprint.",
-        "memo": "※Consumes the items and resources.",
-        "rewards": "a Prototype 20.3cm (No.4) Twin Gun Mount ★2 and a Prototype Shinden (Land-based Fighter)",
-        "resources": [[0, 0, 0, 0], [0, 0, 0, 0]]
+    "1022": {
+        "code": "L2412B5",
+        "name": "Monthly [Time-limited] DesDiv 32 Patrol Combat",
+        "desc": "Sortie any 3 of Tamanami, Suzunami, Fujinami, Hayanami and Hamanami, and up to 3 additional ships to [W2-3], [W4-1], [W5-1] and [W7-1]. A-Rank+ each boss node.",
+        "rewards": "¶First choice: Either 4 7.7mm Machine Guns OR three 25mm Single Autocannon Mounts OR a Mamiya ¶Second choice: Either 4 Screws OR 4000 Fuels OR two Irako",
+        "resources": [[320, 320, 320, 320], [0, 0, 0, 0]]
     }
 }
