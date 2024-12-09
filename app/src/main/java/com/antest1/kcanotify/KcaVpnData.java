@@ -132,19 +132,19 @@ public class KcaVpnData {
     // Called from native code
     private static void getDataFromNative(byte[] data, int size, int type, byte[] source, byte[] target, int sport, int tport) {
         try {
-            String s = new String(data);
             String saddrstr = new String(source);
             String taddrstr = new String(target);
             Log.e("KCAV", KcaUtils.format("getDataFromNative[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
 
             if (type == REQUEST) {
-                if (s.startsWith("GET") || s.startsWith("POST")) {
+                String requestDataStr = new String(data);
+                if (requestDataStr.startsWith("GET") || requestDataStr.startsWith("POST")) {
                     isRequestUriReady = false;
                     state = REQUEST;
                     portToRequestData.put(sport, new StringBuilder());
                 }
                 if (portToRequestData.get(sport) == null) return;
-                else portToRequestData.get(sport).append(s);
+                else portToRequestData.get(sport).append(requestDataStr);
 
                 if(!isRequestUriReady && portToRequestData.get(sport).toString().contains("HTTP/1.1")) {
                     isRequestUriReady = true;
@@ -284,6 +284,7 @@ public class KcaVpnData {
     private static boolean checkKcRes(String uri) {
         if (uri.contains("/api_world/get_id/")) return true;
         if (uri.contains("/gadget_html5/") || uri.contains("/kcscontents/")) return true;
+        if (uri.contains("/kcs2/index.php") || uri.contains("favicon.ico")) return true;
         if (uri.contains("/kcs2/js/") || uri.contains("/kcs2/css/") || uri.contains("/kcs2/resources/")
                 || uri.contains("/kcs/sound") || uri.contains("/kcs2/img")) return true;
         return false;
