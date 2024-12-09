@@ -24,7 +24,7 @@ extern int loglevel;
 extern FILE *pcap_file;
 
 uint16_t get_mtu() {
-    return 1400;
+    return 10000;
 }
 
 uint16_t get_default_mss(int version) {
