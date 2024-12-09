@@ -14,7 +14,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -50,9 +49,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -669,7 +665,7 @@ public class KcaService extends Service {
                 return;
             }
 
-            if (url.startsWith(KCA_VERSION) || url.startsWith(KCS_VERSION)) {
+            if (url.startsWith(KCS_VERSION_A) || url.startsWith(KCS_VERSION)) {
                 isPortAccessed = false;
                 isInBattle = false;
                 api_start2_init = false;

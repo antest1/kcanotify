@@ -23,8 +23,9 @@ public final class KcaConstants {
     public static final String GOTO_BROADCAST_ACTION = "com.antest1.gotobrowser.broadcast";
     public static final String GOTO_FOREGROUND_ACTION = "com.antest1.gotobrowser.foreground";
 
-    public static final String KCA_VERSION = "/kca/version.json";
     public static final String KCS_VERSION = "/kcs2/version.json";
+    public static final String KCS_VERSION_A = "/kcs2/version_a.json";
+
     public static final String KCANOTIFY_S2 = "/kcanotify/kca_api_start2.php";
     public static final String KCANOTIFY_USERITEM_CACHE_FILENAME = "kca_userslotitem";
     public static final int KCANOTIFY_DB_VERSION = 5;
