@@ -186,17 +186,20 @@ public class KcaVpnData {
                         portToResponseHeaderLength.put(tport, portToResponseHeaderPart.get(tport).length());
                         String[] headers = portToResponseHeaderPart.get(tport).split("\r\n");
                         for (String line : headers) {
-                            if (line.startsWith("Content-Encoding: ")) {
+                            String lineLower = line.toLowerCase();
+                            if (lineLower.startsWith("content-encoding: ")) {
                                 portToGzipped.put(tport, line.contains("gzip"));
-                                Log.e("KCA", String.valueOf(tport) + " gzip " + portToGzipped.get(tport));
-                            } else if (line.startsWith("Transfer-Encoding")) {
+                                //Log.e("KCA", String.valueOf(tport) + " gzip " + portToGzipped.get(tport));
+                            }
+                            if (lineLower.startsWith("transfer-encoding")) {
                                 if (line.contains("chunked")) {
                                     portToLength.put(tport, -1);
                                     responseBodyLength = -1;
                                 }
-                            } else if (line.startsWith("Content-Length")) {
-                                portToLength.put(tport, Integer.parseInt(line.replaceAll("Content-Length: ", "").trim()));
-                                responseBodyLength = Integer.parseInt(line.replaceAll("Content-Length: ", "").trim());
+                            } else if (lineLower.startsWith("content-length")) {
+                                int length = Integer.parseInt(lineLower.replace("content-length: ", "").trim());
+                                responseBodyLength = length;
+                                portToLength.put(tport, length);
                             }
                         }
                     }
