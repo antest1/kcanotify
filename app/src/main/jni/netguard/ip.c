@@ -14,14 +14,13 @@
     You should have received a copy of the GNU General Public License
     along with NetGuard.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2015-2017 by Marcel Bokhorst (M66B)
+    Copyright 2015-2024 by Marcel Bokhorst (M66B)
 */
 
 #include "netguard.h"
 
 int max_tun_msg = 0;
 extern int loglevel;
-extern FILE *pcap_file;
 
 uint16_t get_mtu() {
     return 10000;
@@ -46,18 +45,17 @@ int check_tun(const struct arguments *args,
                         args->tun, errno, strerror(errno));
             report_exit(args, "fcntl tun %d F_GETFL error %d: %s",
                         args->tun, errno, strerror(errno));
-        }
-        else
+        } else
             report_exit(args, "tun %d exception", args->tun);
         return -1;
     }
 
     // Check tun read
     if (ev->events & EPOLLIN) {
-        uint8_t *buffer = malloc(get_mtu());
+        uint8_t *buffer = ng_malloc(get_mtu(), "tun read");
         ssize_t length = read(args->tun, buffer, get_mtu());
         if (length < 0) {
-            free(buffer);
+            ng_free(buffer, __FILE__, __LINE__);
 
             log_android(ANDROID_LOG_ERROR, "tun %d read error %d: %s",
                         args->tun, errno, strerror(errno));
@@ -69,12 +67,7 @@ int check_tun(const struct arguments *args,
                             args->tun, errno, strerror(errno));
                 return -1;
             }
-        }
-        else if (length > 0) {
-            // Write pcap record
-            if (pcap_file != NULL)
-                write_pcap_rec(buffer, (size_t) length);
-
+        } else if (length > 0) {
             if (length > max_tun_msg) {
                 max_tun_msg = length;
                 log_android(ANDROID_LOG_WARN, "Maximum tun msg length %d", max_tun_msg);
@@ -83,11 +76,10 @@ int check_tun(const struct arguments *args,
             // Handle IP from tun
             handle_ip(args, buffer, (size_t) length, epoll_fd, sessions, maxsessions);
 
-            free(buffer);
-        }
-        else {
+            ng_free(buffer, __FILE__, __LINE__);
+        } else {
             // tun eof
-            free(buffer);
+            ng_free(buffer, __FILE__, __LINE__);
 
             log_android(ANDROID_LOG_ERROR, "tun %d empty read", args->tun);
             report_exit(args, "tun %d empty read", args->tun);
@@ -129,6 +121,7 @@ void handle_ip(const struct arguments *args,
     char source[INET6_ADDRSTRLEN + 1];
     char dest[INET6_ADDRSTRLEN + 1];
     char flags[10];
+    char data[16];
     int flen = 0;
     uint8_t *payload;
 
@@ -167,8 +160,7 @@ void handle_ip(const struct arguments *args,
                 return;
             }
         }
-    }
-    else if (version == 6) {
+    } else if (version == 6) {
         if (length < sizeof(struct ip6_hdr)) {
             log_android(ANDROID_LOG_WARN, "IP6 packet too short length %d", length);
             return;
@@ -203,8 +195,7 @@ void handle_ip(const struct arguments *args,
         payload = (uint8_t *) (pkt + sizeof(struct ip6_hdr) + off);
 
         // TODO checksum
-    }
-    else {
+    } else {
         log_android(ANDROID_LOG_ERROR, "Unknown version %d", version);
         return;
     }
@@ -216,20 +207,22 @@ void handle_ip(const struct arguments *args,
     int syn = 0;
     uint16_t sport = 0;
     uint16_t dport = 0;
+    *data = 0;
     if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6) {
-        if (length - (payload - pkt) < sizeof(struct icmp)) {
+        if (length - (payload - pkt) < ICMP_MINLEN) {
             log_android(ANDROID_LOG_WARN, "ICMP packet too short");
             return;
         }
 
         struct icmp *icmp = (struct icmp *) payload;
 
+        sprintf(data, "type %d/%d", icmp->icmp_type, icmp->icmp_code);
+
         // http://lwn.net/Articles/443051/
         sport = ntohs(icmp->icmp_id);
         dport = ntohs(icmp->icmp_id);
 
-    }
-    else if (protocol == IPPROTO_UDP) {
+    } else if (protocol == IPPROTO_UDP) {
         if (length - (payload - pkt) < sizeof(struct udphdr)) {
             log_android(ANDROID_LOG_WARN, "UDP packet too short");
             return;
@@ -241,8 +234,7 @@ void handle_ip(const struct arguments *args,
         dport = ntohs(udp->dest);
 
         // TODO checksum (IPv6)
-    }
-    else if (protocol == IPPROTO_TCP) {
+    } else if (protocol == IPPROTO_TCP) {
         if (length - (payload - pkt) < sizeof(struct tcphdr)) {
             log_android(ANDROID_LOG_WARN, "TCP packet too short");
             return;
@@ -267,8 +259,7 @@ void handle_ip(const struct arguments *args,
             flags[flen++] = 'R';
 
         // TODO checksum
-    }
-    else if (protocol != IPPROTO_HOPOPTS && protocol != IPPROTO_IGMP && protocol != IPPROTO_ESP)
+    } else if (protocol != IPPROTO_HOPOPTS && protocol != IPPROTO_IGMP && protocol != IPPROTO_ESP)
         log_android(ANDROID_LOG_WARN, "Unknown protocol %d", protocol);
 
     flags[flen] = 0;
@@ -285,16 +276,40 @@ void handle_ip(const struct arguments *args,
         }
     }
 
-    // Get uid
     jint uid = -1;
+
+    // Get server name
+    char server_name[TLS_SNI_LENGTH + 1];
+    *server_name = 0;
+    if (protocol == IPPROTO_TCP) {
+        const struct tcphdr *tcphdr = (struct tcphdr *) payload;
+        const uint8_t tcpoptlen = (uint8_t) ((tcphdr->doff - 5) * 4);
+        const uint8_t *data = payload + sizeof(struct tcphdr) + tcpoptlen;
+        const uint16_t datalen = (const uint16_t) (length - (data - pkt));
+
+        if (get_sni(data, datalen, server_name)) {
+            log_android(ANDROID_LOG_INFO, "TLS server name: %s", server_name);
+            uid = get_uid(version, protocol, saddr, sport, daddr, dport);
+            dns_resolved(args, server_name, server_name, dest, -1, uid);
+        }
+    }
+
+    if (*server_name != 0)
+        strcpy(data, "sni");
+
+    // Get uid
     if (protocol == IPPROTO_ICMP || protocol == IPPROTO_ICMPV6 ||
         (protocol == IPPROTO_UDP && !has_udp_session(args, pkt, payload)) ||
-        (protocol == IPPROTO_TCP && syn))
-        uid = get_uid(version, protocol, saddr, sport, daddr, dport);
+        (protocol == IPPROTO_TCP && syn)) {
+        if (args->ctx->sdk <= 28) // Android 9 Pie
+            uid = get_uid(version, protocol, saddr, sport, daddr, dport);
+        else
+            uid = get_uid_q(args, version, protocol, source, sport, dest, dport);
+    }
 
     log_android(ANDROID_LOG_DEBUG,
-                "Packet v%d %s/%u > %s/%u proto %d flags %s uid %d",
-                version, source, sport, dest, dport, protocol, flags, uid);
+                "Packet v%d %s/%u > %s/%u proto %d flags %s uid %d sni %s",
+                version, source, sport, dest, dport, protocol, flags, uid, server_name);
 
     // Allow all packets
     int allowed = 1;
@@ -313,52 +328,83 @@ jint get_uid(const int version, const int protocol,
              const void *daddr, const uint16_t dport) {
     jint uid = -1;
 
+    char source[INET6_ADDRSTRLEN + 1];
     char dest[INET6_ADDRSTRLEN + 1];
+    inet_ntop(version == 4 ? AF_INET : AF_INET6, saddr, source, sizeof(source));
     inet_ntop(version == 4 ? AF_INET : AF_INET6, daddr, dest, sizeof(dest));
-    log_android(ANDROID_LOG_INFO, "get uid v%d p%d %u > %s/%u",
-                version, protocol, sport, dest, dport);
+
+    struct timeval time;
+    gettimeofday(&time, NULL);
+    long now = (time.tv_sec * 1000) + (time.tv_usec / 1000);
 
     // Check IPv6 table first
     if (version == 4) {
+        int8_t saddr128[16];
+        memset(saddr128, 0, 10);
+        saddr128[10] = (uint8_t) 0xFF;
+        saddr128[11] = (uint8_t) 0xFF;
+        memcpy(saddr128 + 12, saddr, 4);
+
         int8_t daddr128[16];
         memset(daddr128, 0, 10);
         daddr128[10] = (uint8_t) 0xFF;
         daddr128[11] = (uint8_t) 0xFF;
         memcpy(daddr128 + 12, daddr, 4);
-        uid = get_uid_sub(6, protocol, saddr, sport, daddr128, dport);
+
+        uid = get_uid_sub(6, protocol, saddr128, sport, daddr128, dport, source, dest, now);
+        log_android(ANDROID_LOG_DEBUG, "uid v%d p%d %s/%u > %s/%u => %d as inet6",
+                    version, protocol, source, sport, dest, dport, uid);
     }
 
-    if (uid < 0)
-        uid = get_uid_sub(version, protocol, saddr, sport, daddr, dport);
+    if (uid == -1) {
+        uid = get_uid_sub(version, protocol, saddr, sport, daddr, dport, source, dest, now);
+        log_android(ANDROID_LOG_DEBUG, "uid v%d p%d %s/%u > %s/%u => %d fallback",
+                    version, protocol, source, sport, dest, dport, uid);
+    }
 
-    if (uid < 0)
-        log_android(ANDROID_LOG_ERROR, "uid v%d p%d %u > %s/%u not found",
-                    version, protocol, sport, dest, dport);
+    if (uid == -1)
+        log_android(ANDROID_LOG_WARN, "uid v%d p%d %s/%u > %s/%u => not found",
+                    version, protocol, source, sport, dest, dport);
+    else if (uid >= 0)
+        log_android(ANDROID_LOG_INFO, "uid v%d p%d %s/%u > %s/%u => %d",
+                    version, protocol, source, sport, dest, dport, uid);
 
     return uid;
 }
 
+int uid_cache_size = 0;
+struct uid_cache_entry *uid_cache = NULL;
+
 jint get_uid_sub(const int version, const int protocol,
                  const void *saddr, const uint16_t sport,
-                 const void *daddr, const uint16_t dport) {
-    char line[250];
-    char hex[16 * 2 + 1];
-    int fields;
-    uint8_t _daddr4[4];
-    uint8_t _daddr6[16];
-    int _sport;
-    int _dport;
-    jint uid = -1;
-
-#ifdef PROFILE_UID
-    float mselapsed;
-    struct timeval start, end;
-    gettimeofday(&start, NULL);
-#endif
-
+                 const void *daddr, const uint16_t dport,
+                 const char *source, const char *dest,
+                 long now) {
     // NETLINK is not available on Android due to SELinux policies :-(
     // http://stackoverflow.com/questions/27148536/netlink-implementation-for-the-android-ndk
     // https://android.googlesource.com/platform/system/sepolicy/+/master/private/app.te (netlink_tcpdiag_socket)
+
+    static uint8_t zero[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+    int ws = (version == 4 ? 1 : 4);
+
+    // Check cache
+    for (int i = 0; i < uid_cache_size; i++)
+        if (now - uid_cache[i].time <= UID_MAX_AGE &&
+            uid_cache[i].version == version &&
+            uid_cache[i].protocol == protocol &&
+            uid_cache[i].sport == sport &&
+            (uid_cache[i].dport == dport || uid_cache[i].dport == 0) &&
+            (memcmp(uid_cache[i].saddr, saddr, (size_t) (ws * 4)) == 0 ||
+             memcmp(uid_cache[i].saddr, zero, (size_t) (ws * 4)) == 0) &&
+            (memcmp(uid_cache[i].daddr, daddr, (size_t) (ws * 4)) == 0 ||
+             memcmp(uid_cache[i].daddr, zero, (size_t) (ws * 4)) == 0)) {
+
+            log_android(ANDROID_LOG_INFO, "uid v%d p%d %s/%u > %s/%u => %d (from cache)",
+                        version, protocol, source, sport, dest, dport, uid_cache[i].uid);
+
+            return uid_cache[i].uid;
+        }
 
     // Get proc file name
     char *fn = NULL;
@@ -371,69 +417,91 @@ jint get_uid_sub(const int version, const int protocol,
     else if (protocol == IPPROTO_UDP)
         fn = (version == 4 ? "/proc/net/udp" : "/proc/net/udp6");
     else
-        return uid;
+        return -1;
 
     // Open proc file
     FILE *fd = fopen(fn, "r");
     if (fd == NULL) {
         log_android(ANDROID_LOG_ERROR, "fopen %s error %d: %s", fn, errno, strerror(errno));
-        return uid;
+        return -2;
     }
 
+    jint uid = -1;
+
+    char line[250];
+    int fields;
+
+    char shex[16 * 2 + 1];
+    uint8_t _saddr[16];
+    int _sport;
+
+    char dhex[16 * 2 + 1];
+    uint8_t _daddr[16];
+    int _dport;
+
+    jint _uid;
+
     // Scan proc file
-    jint u;
-    int i = 0;
+    int l = 0;
     *line = 0;
+    int c = 0;
+    const char *fmt = (version == 4
+                       ? "%*d: %8s:%X %8s:%X %*X %*lX:%*lX %*X:%*X %*X %d %*d %*ld"
+                       : "%*d: %32s:%X %32s:%X %*X %*lX:%*lX %*X:%*X %*X %d %*d %*ld");
     while (fgets(line, sizeof(line), fd) != NULL) {
-        if (i++) {
-            *hex = 0;
-            _sport = -1;
-            _dport = -1;
-            u = -1;
-            if (version == 4)
-                fields = sscanf(
-                        line,
-                        "%*d: %*X:%X %8s:%X %*X %*lX:%*lX %*X:%*X %*X %d %*d %*ld",
-                        &_sport, hex, &_dport, &u);
-            else
-                fields = sscanf(
-                        line,
-                        "%*d: %*X:%X %32s:%X %*X %*lX:%*lX %*X:%*X %*X %d %*d %*ld",
-                        &_sport, hex, &_dport, &u);
+        if (!l++)
+            continue;
 
-            if (fields == 4 && (version == 4 ? strlen(hex) == 8 : strlen(hex) == 32)) {
-                if (_sport > 0 && u >= 0) {
-                    hex2bytes(hex, version == 4 ? _daddr4 : _daddr6);
-                    if (version == 4)
-                        ((uint32_t *) _daddr4)[0] = htonl(((uint32_t *) _daddr4)[0]);
-                    else
-                        for (int w = 0; w < 4; w++)
-                            ((uint32_t *) _daddr6)[w] = htonl(((uint32_t *) _daddr6)[w]);
+        fields = sscanf(line, fmt, shex, &_sport, dhex, &_dport, &_uid);
+        if (fields == 5 && strlen(shex) == ws * 8 && strlen(dhex) == ws * 8) {
+            hex2bytes(shex, _saddr);
+            hex2bytes(dhex, _daddr);
 
-                    if (_sport == sport) {
-                        uid = u;
-                        if (_dport == dport &&
-                            memcmp(version == 4 ? _daddr4 : _daddr6, daddr,
-                                   version == 4 ? 4 : 16) == 0)
-                            break;
-                    }
-                }
+            for (int w = 0; w < ws; w++)
+                ((uint32_t *) _saddr)[w] = htonl(((uint32_t *) _saddr)[w]);
+
+            for (int w = 0; w < ws; w++)
+                ((uint32_t *) _daddr)[w] = htonl(((uint32_t *) _daddr)[w]);
+
+            if (_sport == sport &&
+                (_dport == dport || _dport == 0) &&
+                (memcmp(_saddr, saddr, (size_t) (ws * 4)) == 0 ||
+                 memcmp(_saddr, zero, (size_t) (ws * 4)) == 0) &&
+                (memcmp(_daddr, daddr, (size_t) (ws * 4)) == 0 ||
+                 memcmp(_daddr, zero, (size_t) (ws * 4)) == 0))
+                uid = _uid;
+
+            for (; c < uid_cache_size; c++)
+                if (now - uid_cache[c].time > UID_MAX_AGE)
+                    break;
+
+            if (c >= uid_cache_size) {
+                if (uid_cache_size == 0)
+                    uid_cache = ng_malloc(sizeof(struct uid_cache_entry), "uid_cache init");
+                else
+                    uid_cache = ng_realloc(uid_cache,
+                                           sizeof(struct uid_cache_entry) *
+                                           (uid_cache_size + 1), "uid_cache extend");
+                c = uid_cache_size;
+                uid_cache_size++;
             }
-            else
-                log_android(ANDROID_LOG_ERROR, "Invalid field #%d: %s", fields, line);
+
+            uid_cache[c].version = (uint8_t) version;
+            uid_cache[c].protocol = (uint8_t) protocol;
+            memcpy(uid_cache[c].saddr, _saddr, (size_t) (ws * 4));
+            uid_cache[c].sport = (uint16_t) _sport;
+            memcpy(uid_cache[c].daddr, _daddr, (size_t) (ws * 4));
+            uid_cache[c].dport = (uint16_t) _dport;
+            uid_cache[c].uid = _uid;
+            uid_cache[c].time = now;
+        } else {
+            log_android(ANDROID_LOG_ERROR, "Invalid field #%d: %s", fields, line);
+            return -2;
         }
     }
 
     if (fclose(fd))
         log_android(ANDROID_LOG_ERROR, "fclose %s error %d: %s", fn, errno, strerror(errno));
-
-#ifdef PROFILE_UID
-    gettimeofday(&end, NULL);
-    mselapsed = (end.tv_sec - start.tv_sec) * 1000.0 +
-                (end.tv_usec - start.tv_usec) / 1000.0;
-    if (mselapsed > PROFILE_UID)
-        log_android(ANDROID_LOG_WARN, "get uid ip %f", mselapsed);
-#endif
 
     return uid;
 }

@@ -35,21 +35,19 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
 import eu.faircode.netguard.IPUtil;
-import eu.faircode.netguard.Packet;
 import eu.faircode.netguard.ResourceRecord;
-import eu.faircode.netguard.Rule;
 import eu.faircode.netguard.Util;
 
 import static com.antest1.kcanotify.KcaConstants.DMMLOGIN_PACKAGE_NAME;
@@ -59,29 +57,41 @@ import static com.antest1.kcanotify.KcaConstants.KC_WV_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_PACKAGE_ALLOW;
 import static com.antest1.kcanotify.KcaConstants.VPN_STOP_REASON;
 
-public class KcaVpnService extends VpnService {
+public class KcaVpnService extends VpnService implements SharedPreferences.OnSharedPreferenceChangeListener {
     private final static String TAG = "KCAV";
 
     Resources resources;
 
+    private static Object jni_lock = new Object();
+    private static long jni_context = 0;
+    private Thread tunnelThread = null;
     private KcaVpnService.Builder last_builder = null;
     private static ParcelFileDescriptor vpn = null;
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+
+    }
 
     private enum State {none, waiting, enforcing, stats}
 
     private State state = State.none;
 
-    private native void jni_init(int sdk);
+    private native long jni_init(int sdk);
 
-    private native void jni_start(int tun, boolean fwd53, int rcode, int loglevel);
+    private native void jni_start(long context, int loglevel);
 
-    private native void jni_stop(int tun, boolean clr);
+    private native void jni_run(long context, int tun, boolean fwd53, int rcode);
+
+    private native void jni_stop(long context);
+
+    private native void jni_clear(long context);
 
     private native int jni_get_mtu();
 
     private native void jni_socks5(String addr, int port, String username, String password);
 
-    private native void jni_done();
+    private native void jni_done(long context);
 
     private volatile Looper commandLooper;
     private volatile Looper logLooper;
@@ -234,7 +244,7 @@ public class KcaVpnService extends VpnService {
 
         private void start() {
             if (vpn == null) {
-                last_builder = getBuilder(null, null);
+                last_builder = getBuilder();
                 vpn = startVPN(last_builder);
                 if (vpn == null)
                     throw new IllegalStateException("Failed");
@@ -248,14 +258,14 @@ public class KcaVpnService extends VpnService {
         private void reload() {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(KcaVpnService.this);
 
-            KcaVpnService.Builder builder = getBuilder(null, null);
+            KcaVpnService.Builder builder = getBuilder();
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                 last_builder = builder;
                 Log.i(TAG, "Legacy restart");
 
                 if (vpn != null) {
-                    stopNative(vpn, false);
+                    stopNative(vpn);
                     stopVPN(vpn);
                     vpn = null;
                     try {
@@ -268,7 +278,7 @@ public class KcaVpnService extends VpnService {
             } else {
                 if (vpn != null && builder.equals(last_builder)) {
                     Log.i(TAG, "Native restart");
-                    stopNative(vpn, false);
+                    stopNative(vpn);
 
                 } else {
                     last_builder = builder;
@@ -280,7 +290,7 @@ public class KcaVpnService extends VpnService {
 
                     if (prev != null && vpn == null) {
                         Log.w(TAG, "Handover failed");
-                        stopNative(prev, false);
+                        stopNative(prev);
                         stopVPN(prev);
                         prev = null;
                         try {
@@ -293,7 +303,7 @@ public class KcaVpnService extends VpnService {
                     }
 
                     if (prev != null) {
-                        stopNative(prev, false);
+                        stopNative(prev);
                         stopVPN(prev);
                     }
                 }
@@ -306,7 +316,7 @@ public class KcaVpnService extends VpnService {
 
         private void stop() {
             if (vpn != null) {
-                stopNative(vpn, true);
+                stopNative(vpn);
                 stopVPN(vpn);
                 vpn = null;
                 unprepare();
@@ -317,16 +327,28 @@ public class KcaVpnService extends VpnService {
     @Override
     public void onCreate() {
         jni_init(Build.VERSION.SDK_INT);
-        super.onCreate();
-
         //boolean allow_ext = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_ALLOW_EXTFILTER);
         //KcaVpnData.setExternalFilter(allow_ext);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (jni_context != 0) {
+            Log.w(TAG, "Create with context=" + jni_context);
+            jni_stop(jni_context);
+            synchronized (jni_lock) {
+                jni_done(jni_context);
+                jni_context = 0;
+            }
+        }
+
+        // Native init
+        jni_context = jni_init(Build.VERSION.SDK_INT);
+        prefs.registerOnSharedPreferenceChangeListener(this);
+        super.onCreate();
 
         HandlerThread commandThread = new HandlerThread(getString(R.string.app_name) + " command");
         commandThread.start();
         commandLooper = commandThread.getLooper();
         commandHandler = new CommandHandler(commandLooper);
-
     }
 
     @Override
@@ -367,22 +389,40 @@ public class KcaVpnService extends VpnService {
 
     @Override
     public void onDestroy() {
-        if (registeredInteractiveState) {
-            unregisterReceiver(interactiveStateReceiver);
-            registeredInteractiveState = false;
+        synchronized (this) {
+            Log.i(TAG, "Destroy");
+            commandLooper.quit();
+
+            for (Command command : Command.values())
+                commandHandler.removeMessages(command.ordinal());
+
+            // Registered in command loop
+            if (registeredInteractiveState) {
+                unregisterReceiver(interactiveStateReceiver);
+                registeredInteractiveState = false;
+            }
+
+            try {
+                if (vpn != null) {
+                    stopNative(vpn);
+                    stopVPN(vpn);
+                    vpn = null;
+                    unprepare();
+                }
+            } catch (Throwable ex) {
+                Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+            }
+
+            Log.i(TAG, "Destroy context=" + jni_context);
+            synchronized (jni_lock) {
+                jni_done(jni_context);
+                jni_context = 0;
+            }
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            prefs.unregisterOnSharedPreferenceChangeListener(this);
         }
 
-        try {
-            if (vpn != null) {
-                stopNative(vpn, true);
-                stopVPN(vpn);
-                vpn = null;
-                unprepare();
-            }
-        } catch (Throwable ex) {
-            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-        }
-        jni_done();
         super.onDestroy();
     }
 
@@ -394,7 +434,7 @@ public class KcaVpnService extends VpnService {
         super.onRevoke();
     }
 
-    private Builder getBuilder(List<Rule> listAllowed, List<Rule> listRule) {
+    private Builder getBuilder() {
         SharedPreferences prefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
         boolean subnet = prefs.getBoolean("subnet", false);
         boolean tethering = prefs.getBoolean("tethering", false);
@@ -423,7 +463,7 @@ public class KcaVpnService extends VpnService {
                     builder.addAllowedApplication(KC_WV_PACKAGE_NAME);
                     builder.addAllowedApplication(GOTO_PACKAGE_NAME);
                     if (socks5_enable) builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
-                    for (JsonElement pkg: allowed_apps) {
+                    for (JsonElement pkg : allowed_apps) {
                         builder.addAllowedApplication(pkg.getAsString());
                     }
                 }
@@ -436,6 +476,7 @@ public class KcaVpnService extends VpnService {
         String vpn4 = prefs.getString("vpn4", "10.1.10.1");
         Log.i(TAG, "vpn4=" + vpn4);
         builder.addAddress(vpn4, 32);
+
         if (ip6) {
             String vpn6 = prefs.getString("vpn6", "fd00:1:fd00:1:fd00:1:fd00:1");
             Log.i(TAG, "vpn6=" + vpn6);
@@ -444,12 +485,12 @@ public class KcaVpnService extends VpnService {
 
         // DNS address
         //if (filter)
-            for (InetAddress dns : getDns(KcaVpnService.this)) {
-                if (ip6 || dns instanceof Inet4Address) {
-                    Log.i(TAG, "dns=" + dns);
-                    builder.addDnsServer(dns);
-                }
+        for (InetAddress dns : getDns(KcaVpnService.this)) {
+            if (ip6 || dns instanceof Inet4Address) {
+                Log.i(TAG, "dns=" + dns);
+                builder.addDnsServer(dns);
             }
+        }
 
         // Subnet routing
         List<IPUtil.CIDR> listExclude = new ArrayList<>();
@@ -676,10 +717,9 @@ public class KcaVpnService extends VpnService {
             Log.i(TAG, String.format("Proxy enabled, with address %s and port %d, Auth with %s %s", addr, port, username, password));
             // Resolve proxy address
             try {
-                addr = InetAddress.getByName( addr ).getHostAddress();
+                addr = InetAddress.getByName(addr).getHostAddress();
                 Log.i(TAG, "Proxy resolved: " + addr);
-            }
-            catch (UnknownHostException e) {
+            } catch (UnknownHostException e) {
                 Log.w(TAG, "Unknown proxy hostname: " + addr);
             }
             jni_socks5(addr, port, username, password);
@@ -687,7 +727,25 @@ public class KcaVpnService extends VpnService {
             Log.i(TAG, "Proxy disabled");
             jni_socks5("", 0, "", "");
         }
-        jni_start(vpn.getFd(), true, rcode, prio);
+
+        if (tunnelThread == null) {
+            Log.i(TAG, "Starting tunnel thread context=" + jni_context);
+            jni_start(jni_context, prio);
+
+            tunnelThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i(TAG, "Running tunnel context=" + jni_context);
+                    jni_run(jni_context, vpn.getFd(), true, rcode);
+                    Log.i(TAG, "Tunnel exited");
+                    tunnelThread = null;
+                }
+            });
+            //tunnelThread.setPriority(Thread.MAX_PRIORITY);
+            tunnelThread.start();
+
+            Log.i(TAG, "Started tunnel thread");
+        }
     }
 
     private void stopVPN(ParcelFileDescriptor pfd) {
@@ -699,14 +757,29 @@ public class KcaVpnService extends VpnService {
         }
     }
 
-    private void stopNative(ParcelFileDescriptor vpn, boolean clear) {
-        Log.i(TAG, "Stop native clear=" + clear);
-        try {
-            jni_stop(vpn.getFd(), clear);
-        } catch (Throwable ex) {
-            // File descriptor might be closed
-            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-            jni_stop(-1, clear);
+    private void stopNative(ParcelFileDescriptor vpn) {
+        Log.i(TAG, "Stop native");
+
+        if (tunnelThread != null) {
+            Log.i(TAG, "Stopping tunnel thread");
+
+            jni_stop(jni_context);
+
+            Thread thread = tunnelThread;
+            while (thread != null && thread.isAlive()) {
+                try {
+                    Log.i(TAG, "Joining tunnel thread context=" + jni_context);
+                    thread.join();
+                } catch (InterruptedException ignored) {
+                    Log.i(TAG, "Joined tunnel interrupted");
+                }
+                thread = tunnelThread;
+            }
+            tunnelThread = null;
+
+            jni_clear(jni_context);
+
+            Log.i(TAG, "Stopped tunnel thread");
         }
     }
 
@@ -737,6 +810,25 @@ public class KcaVpnService extends VpnService {
             Log.i(TAG, "New IP " + rr);
             prepareUidIPFilters(rr.QName);
         }*/
+    }
+
+    // Called from native code
+    @TargetApi(Build.VERSION_CODES.Q)
+    private int getUidQ(int version, int protocol, String saddr, int sport, String daddr, int dport) {
+        if (protocol != 6 /* TCP */ && protocol != 17 /* UDP */)
+            return Process.INVALID_UID;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        if (cm == null)
+            return Process.INVALID_UID;
+
+        InetSocketAddress local = new InetSocketAddress(saddr, sport);
+        InetSocketAddress remote = new InetSocketAddress(daddr, dport);
+
+        Log.i(TAG, "Get uid local=" + local + " remote=" + remote);
+        int uid = cm.getConnectionOwnerUid(protocol, local, remote);
+        Log.i(TAG, "Get uid=" + uid);
+        return uid;
     }
 
     private boolean isSupported(int protocol) {

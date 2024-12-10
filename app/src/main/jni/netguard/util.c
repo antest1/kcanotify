@@ -14,15 +14,10 @@
     You should have received a copy of the GNU General Public License
     along with NetGuard.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2015-2017 by Marcel Bokhorst (M66B)
+    Copyright 2015-2024 by Marcel Bokhorst (M66B)
 */
 
 #include "netguard.h"
-#ifdef NDEBUG
-#define LOGD(...)
-#else
-#define LOGD(prio, tag, ...) __android_log_print(prio, tag, __VA_ARGS__)
-#endif
 
 extern int loglevel;
 
@@ -50,8 +45,8 @@ int compare_u32(uint32_t s1, uint32_t s2) {
     if (s1 == s2)
         return 0;
 
-    int i1 = s1;
-    int i2 = s2;
+    uint32_t i1 = s1;
+    uint32_t i2 = s2;
     if ((i1 < i2 && i2 - i1 < 0x7FFFFFFF) ||
         (i1 > i2 && i1 - i2 > 0x7FFFFFFF))
         return -1;
@@ -66,15 +61,14 @@ int sdk_int(JNIEnv *env) {
 }
 
 void log_android(int prio, const char *fmt, ...) {
-    /*
     if (prio >= loglevel) {
         char line[1024];
         va_list argptr;
         va_start(argptr, fmt);
         vsprintf(line, fmt, argptr);
-        LOGD(prio, TAG, "%s", line);
+        __android_log_print(prio, TAG, "%s", line);
         va_end(argptr);
-    }*/
+    }
 }
 
 uint8_t char2nible(const char c) {
@@ -136,7 +130,7 @@ char *hex(const u_int8_t *data, const size_t len) {
     char hex_str[] = "0123456789ABCDEF";
 
     char *hexout;
-    hexout = (char *) malloc(len * 3 + 1); // TODO free
+    hexout = (char *) ng_malloc(len * 3 + 1, "hex"); // TODO free
 
     for (size_t i = 0; i < len; i++) {
         hexout[i * 3 + 0] = hex_str[(data[i] >> 4) & 0x0F];
@@ -154,8 +148,7 @@ int32_t get_local_port(const int sock) {
     if (getsockname(sock, (struct sockaddr *) &sin, &len) < 0) {
         log_android(ANDROID_LOG_ERROR, "getsockname error %d: %s", errno, strerror(errno));
         return -1;
-    }
-    else
+    } else
         return ntohs(sin.sin_port);
 }
 
@@ -168,8 +161,7 @@ int is_event(int fd, short event) {
     if (r < 0) {
         log_android(ANDROID_LOG_ERROR, "poll readable error %d: %s", errno, strerror(errno));
         return 0;
-    }
-    else if (r == 0)
+    } else if (r == 0)
         return 0;
     else
         return (p.revents & event);

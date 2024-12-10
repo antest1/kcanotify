@@ -16,7 +16,7 @@ package eu.faircode.netguard;
     You should have received a copy of the GNU General Public License
     along with NetGuard.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2015-2017 by Marcel Bokhorst (M66B)
+    Copyright 2015-2024 by Marcel Bokhorst (M66B)
 */
 
 import java.text.DateFormat;
@@ -29,6 +29,7 @@ public class ResourceRecord {
     public String AName;
     public String Resource;
     public int TTL;
+    public int uid;
 
     private static DateFormat formatter = SimpleDateFormat.getDateTimeInstance();
 
@@ -42,6 +43,7 @@ public class ResourceRecord {
                 " A " + AName +
                 " R " + Resource +
                 " TTL " + TTL +
+                " uid " + uid +
                 " " + formatter.format(new Date(Time + TTL * 1000L).getTime());
     }
 }

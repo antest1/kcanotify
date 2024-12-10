@@ -175,7 +175,6 @@
 -keep class eu.faircode.netguard.IPUtil { *; }
 -keep class eu.faircode.netguard.Packet { *; }
 -keep class eu.faircode.netguard.ResourceRecord { *; }
--keep class eu.faircode.netguard.Rule { *; }
 -keep class eu.faircode.netguard.Util { *; }
 
 -keep class com.antest1.kcanotify.KcaVpnService {

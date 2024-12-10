@@ -16,10 +16,12 @@ package eu.faircode.netguard;
     You should have received a copy of the GNU General Public License
     along with NetGuard.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2015-2017 by Marcel Bokhorst (M66B)
+    Copyright 2015-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -129,7 +131,7 @@ public class IPUtil {
         }
 
         @Override
-        public int compareTo(CIDR other) {
+        public int compareTo(@NonNull CIDR other) {
             Long lcidr = IPUtil.inet2long(this.address);
             Long lother = IPUtil.inet2long(other.address);
             return lcidr.compareTo(lother);
