@@ -477,12 +477,6 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
         Log.i(TAG, "vpn4=" + vpn4);
         builder.addAddress(vpn4, 32);
 
-        if (ip6) {
-            String vpn6 = prefs.getString("vpn6", "fd00:1:fd00:1:fd00:1:fd00:1");
-            Log.i(TAG, "vpn6=" + vpn6);
-            builder.addAddress(vpn6, 128);
-        }
-
         // DNS address
         //if (filter)
         for (InetAddress dns : getDns(KcaVpnService.this)) {
