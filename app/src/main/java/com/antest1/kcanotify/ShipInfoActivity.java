@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
 import static android.widget.Toast.makeText;
+import static com.antest1.kcanotify.KcaApiData.getNationalityInfo;
 import static com.antest1.kcanotify.KcaApiData.getSpecialEquipmentInfo;
 import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipFilterDataFromStorage;
@@ -35,6 +36,7 @@ import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_FILTCOND;
+import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SHIPNAT;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SHIPSTAT;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SORTKEY;
 import static com.antest1.kcanotify.KcaConstants.PREF_SHIPINFO_SPEQUIPS;
@@ -155,11 +157,14 @@ public class ShipInfoActivity extends AppCompatActivity {
         String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
         String special_equip = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SPEQUIPS);
         String ship_status = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPSTAT);
+        String ship_nat = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPNAT);
         setButtonStyle(filterButton, filtcond.length() > 1
                 || special_equip.trim().length() > 0
-                || ship_status.trim().length() > 0);
+                || ship_status.trim().length() > 0
+                || ship_nat.trim().length() > 0);
         adapter.setSpecialEquipment(getSpecialEquipmentInfo());
-        adapter.setListViewItemList(data, deckdata, sortkey, filtcond, special_equip, ship_status);
+        adapter.setNationality(getNationalityInfo());
+        adapter.setListViewItemList(data, deckdata, sortkey, filtcond, special_equip, ship_status, ship_nat);
 
         totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));
         totalexpview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_exp_format), adapter.getTotalExp()));
@@ -236,6 +241,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         String filtcond = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_FILTCOND);
         String special_equip = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SPEQUIPS);
         String ship_status = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPSTAT);
+        String ship_nat = getStringPreferences(getApplicationContext(), PREF_SHIPINFO_SHIPNAT);
         export_popup.setVisibility(View.GONE);
         if (requestCode == SHIPINFO_GET_SORT_KEY) {
             adapter.resortListViewItem(sortkey);
@@ -246,9 +252,12 @@ public class ShipInfoActivity extends AppCompatActivity {
             if (deckdata == null) deckdata = new JsonArray();
             if (shipdata == null) shipdata = new JsonArray();
 
-            adapter.setListViewItemList(shipdata, deckdata, sortkey, filtcond, special_equip, ship_status);
+            adapter.setListViewItemList(shipdata, deckdata, sortkey, filtcond, special_equip, ship_status, ship_nat);
             if (requestCode == SHIPINFO_GET_FILTER_RESULT) {
-                setButtonStyle(filterButton, filtcond.length() > 1);
+                setButtonStyle(filterButton, filtcond.length() > 1
+                        || special_equip.trim().length() > 0
+                        || ship_status.trim().length() > 0
+                        || ship_nat.trim().length() > 0);
             }
         }
         adapter.notifyDataSetChanged();

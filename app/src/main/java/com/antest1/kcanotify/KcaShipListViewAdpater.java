@@ -28,7 +28,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.media.CamcorderProfile.get;
 import static com.antest1.kcanotify.KcaApiData.STYPE_CVE;
 import static com.antest1.kcanotify.KcaApiData.getKcShipDataById;
 import static com.antest1.kcanotify.KcaApiData.getUserItemStatusById;
@@ -42,6 +41,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     private List<JsonObject> listViewItemList = new ArrayList<>();
     private String searchQuery = "";
     private JsonObject specialEquipment = new JsonObject();
+    private JsonObject nationality = new JsonObject();
 
     private static final String[] total_key_list = {
             "api_id", "api_lv", "api_stype", "api_cond", "api_locked",
@@ -104,6 +104,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     }
 
     public void setSpecialEquipment(JsonObject data) { specialEquipment = data; }
+    public void setNationality(JsonObject data) { nationality = data; }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -430,8 +431,8 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         ImageView ship_sally_area;
     }
 
-    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, String special_equip, String ship_status) {
-        setListViewItemList(ship_list, deck_list, sort_key, "|", special_equip, ship_status);
+    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, String special_equip, String ship_status, String ship_nat) {
+        setListViewItemList(ship_list, deck_list, sort_key, "|", special_equip, ship_status, ship_nat);
     }
 
     public String getSeikuukenSimulatorText() {
@@ -525,7 +526,7 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     *
     * */
 
-    private List<JsonObject> addShipInformation(List<JsonObject> data, String sp_eqlist, String ship_status) {
+    private List<JsonObject> addShipInformation(List<JsonObject> data, String sp_eqlist, String ship_status, String ship_nat) {
         List<JsonObject> filteredShipInformation = new ArrayList<>();
         JsonObject deck_ship_info = new JsonObject();
         for (int i = 0; i < deckInfo.size(); i++) {
@@ -551,11 +552,12 @@ public class KcaShipListViewAdpater extends BaseAdapter {
             item.addProperty("api_yasen",
                     item.getAsJsonArray("api_karyoku").get(0).getAsInt() +
                             item.getAsJsonArray("api_raisou").get(0).getAsInt());
-            JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_yomi,api_stype,api_sort_id");
+            JsonObject kcShipData = getKcShipDataById(kc_ship_id, "api_name,api_yomi,api_stype,api_sort_id,api_ctype");
             String name = kcShipData != null ? kcShipData.get("api_name").getAsString() : "";
             name = KcaApiData.getShipTranslation(name, kc_ship_id, false);
             String yomi = kcShipData != null ? kcShipData.get("api_yomi").getAsString() : "";
             int stype = kcShipData != null ? kcShipData.get("api_stype").getAsInt() : 0;
+            int ctype = kcShipData != null ? kcShipData.get("api_ctype").getAsInt() : 0;
 
             boolean name_matched = searchStringFromStart(name, searchQuery, false);
             boolean yomi_matched = searchStringFromStart(yomi, searchQuery, false);
@@ -594,6 +596,18 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                 if (!found_flag) continue;
             }
 
+            if (ship_nat.trim().length() > 0) {
+                String[] nat_list = ship_nat.split(",");
+                boolean found_flag = false;
+                for (String key: nat_list) {
+                    if (nationality.has(key)) {
+                        found_flag = nationality.getAsJsonArray(key).contains(new JsonPrimitive(ctype));
+                        if (found_flag) break;
+                    }
+                }
+                if (!found_flag) continue;
+            }
+
             int max_hp = item.get("api_maxhp").getAsInt();
             int now_hp = item.get("api_nowhp").getAsInt();
             item.addProperty("api_exslot", item.get("api_slot_ex").getAsInt() != 0 ? 1 : 0);
@@ -616,13 +630,13 @@ public class KcaShipListViewAdpater extends BaseAdapter {
         return filteredShipInformation;
     }
 
-    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, final String filter, String special_equip, String ship_status) {
+    public void setListViewItemList(JsonArray ship_list, JsonArray deck_list, String sort_key, final String filter, String special_equip, String ship_status, String ship_nat) {
         exp_sum = 0;
         deckInfo = deck_list;
         Type listType = new TypeToken<List<JsonObject>>() {}.getType();
         listViewItemList = new Gson().fromJson(ship_list, listType);
         if (listViewItemList == null) listViewItemList = new ArrayList<>();
-        listViewItemList = addShipInformation(listViewItemList, special_equip, ship_status);
+        listViewItemList = addShipInformation(listViewItemList, special_equip, ship_status, ship_nat);
         if (!filter.equals("|") && listViewItemList.size() > 1) {
             listViewItemList = new ArrayList<>(Collections2.filter(listViewItemList, input -> {
                 String[] filter_list = filter.split("\\|");

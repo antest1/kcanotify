@@ -524,6 +524,10 @@ public class KcaApiData {
         return kcShipFilterData.getAsJsonObject("equip_special");
     }
 
+    public static JsonObject getNationalityInfo() {
+        return kcShipFilterData.getAsJsonObject("nationality");
+    }
+
     private static JsonObject getJsonObjectFromStorage(Context context, String name) {
         return KcaUtils.getJsonObjectFromStorage(context, name, helper);
     }
