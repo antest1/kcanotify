@@ -32,6 +32,7 @@ import static com.antest1.kcanotify.KcaApiData.getNationalityInfo;
 import static com.antest1.kcanotify.KcaApiData.getSpecialEquipmentInfo;
 import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipFilterDataFromStorage;
+import static com.antest1.kcanotify.KcaApiData.loadShipNationalityFilterDataFromStorage;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -88,6 +89,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
         loadShipFilterDataFromStorage(getApplicationContext());
+        loadShipNationalityFilterDataFromStorage(getApplicationContext());
 
         AssetManager assetManager = getAssets();
         int loadExpShipInfoResult = loadShipExpInfoFromAssets(assetManager);

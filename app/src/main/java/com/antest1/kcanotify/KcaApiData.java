@@ -62,6 +62,7 @@ public class KcaApiData {
     public static JsonObject kcShipAbbrData = new JsonObject(); // For English
     public static JsonObject kcExpeditionData = new JsonObject();
     public static JsonObject kcShipFilterData = new JsonObject();
+    public static JsonObject kcShipNationalityFilterData = new JsonObject();
     public static JsonObject kcShipInitEquipCount = new JsonObject();
     public static Set<Integer> kcNotCountItemData = new HashSet<>();
     public static Set<Integer> kcTaisenOverPlaneItemData = new HashSet<>();
@@ -525,7 +526,7 @@ public class KcaApiData {
     }
 
     public static JsonObject getNationalityInfo() {
-        return kcShipFilterData.getAsJsonObject("nationality");
+        return kcShipNationalityFilterData.getAsJsonObject("nationality");
     }
 
     private static JsonObject getJsonObjectFromStorage(Context context, String name) {
@@ -560,6 +561,16 @@ public class KcaApiData {
         JsonObject data = getJsonObjectFromStorage(context, "ships_filter_data.json");
         if (data != null) {
             kcShipFilterData = data;
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    public static int loadShipNationalityFilterDataFromStorage(Context context) {
+        JsonObject data = getJsonObjectFromStorage(context, "ships_nationality_filter_data.json");
+        if (data != null) {
+            kcShipNationalityFilterData = data;
             return 1;
         } else {
             return -1;
