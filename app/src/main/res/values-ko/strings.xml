@@ -772,4 +772,15 @@
     <string name="ma_permission_notification_denied">알림 권한은 깡들리티의 정상적인 작동을 위해 필요합니다. SERVICE 버튼을 누를 때 나오는 권한 요청을 허용해주세요.</string>
     <string name="ma_permission_service_restart">SERVICE 버튼을 다시 눌러 kcanotify를 시작하세요.</string>
     <string name="setting_menu_noti_title_test">테스트 알림 표시</string>
+    <string name="ship_nat_label">국적 필터</string>
+    <string name="nat1">일본</string>
+    <string name="nat2">미국</string>
+    <string name="nat3">이탈리아</string>
+    <string name="nat4">영국</string>
+    <string name="nat5">독일</string>
+    <string name="nat6">프랑스</string>
+    <string name="nat7">소련</string>
+    <string name="nat8">스웨덴</string>
+    <string name="nat9">호주</string>
+    <string name="nat10">네덜란드</string>
 </resources>

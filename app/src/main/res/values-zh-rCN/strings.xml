@@ -778,4 +778,15 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_permission_notification_denied">Kcanotify功能需要启用通知权限。点选「SERVICE」按钮时允许权限。 </string>
     <string name="ma_permission_service_restart">再次按 SERVICE 按钮启动 kcanotify。</string>
     <string name="setting_menu_noti_title_test">显示测试通知</string>
+    <string name="ship_nat_label">国籍筛选</string>
+    <string name="nat1">日本</string>
+    <string name="nat2">美国</string>
+    <string name="nat3">意大利</string>
+    <string name="nat4">英国</string>
+    <string name="nat5">德国</string>
+    <string name="nat6">法国</string>
+    <string name="nat7">苏联</string>
+    <string name="nat8">瑞典</string>
+    <string name="nat9">澳洲</string>
+    <string name="nat10">荷兰</string>
 </resources>
