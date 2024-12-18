@@ -850,5 +850,16 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_permission_notification_denied">Notification Permission is required for Kcanotify functions. You need to allow when you turn on SERVICE button.</string>
     <string name="ma_permission_service_restart">Press SERVICE button again to start kcanotify.</string>
     <string name="setting_menu_noti_title_test">Show Test Notification</string>
+    <string name="ship_nat_label">Nationality Filter</string>
+    <string name="nat1">Japan</string>
+    <string name="nat2">United States</string>
+    <string name="nat3">Italy</string>
+    <string name="nat4">Great Britain</string>
+    <string name="nat5">Germany</string>
+    <string name="nat6">France</string>
+    <string name="nat7">USSR</string>
+    <string name="nat8">Sweden</string>
+    <string name="nat9">Australia</string>
+    <string name="nat10">Netherlands</string>
 
 </resources>

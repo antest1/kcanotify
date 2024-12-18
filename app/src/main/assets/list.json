@@ -130,4 +130,8 @@
 	"name": "useitems-tcn.json",
 	"version": 2024081001,
 	"url": "https://antest1.github.io/kcanotify-gamedata/files/useitems-tcn.json"
+}, {
+	"name": "ships_nationality_filter_data.json",
+	"version": 2024121701,
+	"url": "https://antest1.github.io/kcanotify-gamedata/files/ships_nationality_filter_data.json"
 }]
