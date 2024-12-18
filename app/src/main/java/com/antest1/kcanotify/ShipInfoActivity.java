@@ -28,11 +28,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
 import static android.widget.Toast.makeText;
-import static com.antest1.kcanotify.KcaApiData.getNationalityInfo;
+import static com.antest1.kcanotify.KcaApiData.getNationalityData;
 import static com.antest1.kcanotify.KcaApiData.getSpecialEquipmentInfo;
 import static com.antest1.kcanotify.KcaApiData.loadShipExpInfoFromAssets;
 import static com.antest1.kcanotify.KcaApiData.loadShipFilterDataFromStorage;
-import static com.antest1.kcanotify.KcaApiData.loadShipNationalityFilterDataFromStorage;
+import static com.antest1.kcanotify.KcaApiData.loadShipNationalityDataFromStorage;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_SHIPIFNO;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
@@ -89,7 +89,7 @@ public class ShipInfoActivity extends AppCompatActivity {
         KcaApiData.setDBHelper(dbHelper);
         setDefaultGameData();
         loadShipFilterDataFromStorage(getApplicationContext());
-        loadShipNationalityFilterDataFromStorage(getApplicationContext());
+        loadShipNationalityDataFromStorage(getApplicationContext());
 
         AssetManager assetManager = getAssets();
         int loadExpShipInfoResult = loadShipExpInfoFromAssets(assetManager);
@@ -165,7 +165,7 @@ public class ShipInfoActivity extends AppCompatActivity {
                 || ship_status.trim().length() > 0
                 || ship_nat.trim().length() > 0);
         adapter.setSpecialEquipment(getSpecialEquipmentInfo());
-        adapter.setNationality(getNationalityInfo());
+        adapter.setNationality(getNationalityData());
         adapter.setListViewItemList(data, deckdata, sortkey, filtcond, special_equip, ship_status, ship_nat);
 
         totalcountview.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_btn_total_format), adapter.getCount()));

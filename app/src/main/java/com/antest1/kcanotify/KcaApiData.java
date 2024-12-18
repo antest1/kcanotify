@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import androidx.core.content.ContextCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
@@ -62,7 +61,7 @@ public class KcaApiData {
     public static JsonObject kcShipAbbrData = new JsonObject(); // For English
     public static JsonObject kcExpeditionData = new JsonObject();
     public static JsonObject kcShipFilterData = new JsonObject();
-    public static JsonObject kcShipNationalityFilterData = new JsonObject();
+    public static JsonObject kcShipNationalityData = new JsonObject();
     public static JsonObject kcShipInitEquipCount = new JsonObject();
     public static Set<Integer> kcNotCountItemData = new HashSet<>();
     public static Set<Integer> kcTaisenOverPlaneItemData = new HashSet<>();
@@ -525,8 +524,8 @@ public class KcaApiData {
         return kcShipFilterData.getAsJsonObject("equip_special");
     }
 
-    public static JsonObject getNationalityInfo() {
-        return kcShipNationalityFilterData.getAsJsonObject("nationality");
+    public static JsonObject getNationalityData() {
+        return kcShipNationalityData;
     }
 
     private static JsonObject getJsonObjectFromStorage(Context context, String name) {
@@ -567,10 +566,10 @@ public class KcaApiData {
         }
     }
 
-    public static int loadShipNationalityFilterDataFromStorage(Context context) {
-        JsonObject data = getJsonObjectFromStorage(context, "ships_nationality_filter_data.json");
+    public static int loadShipNationalityDataFromStorage(Context context) {
+        JsonObject data = getJsonObjectFromStorage(context, "ships_nationality_data.json");
         if (data != null) {
-            kcShipNationalityFilterData = data;
+            kcShipNationalityData = data;
             return 1;
         } else {
             return -1;

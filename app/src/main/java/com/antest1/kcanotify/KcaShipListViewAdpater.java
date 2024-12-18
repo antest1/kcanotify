@@ -41,7 +41,8 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     private List<JsonObject> listViewItemList = new ArrayList<>();
     private String searchQuery = "";
     private JsonObject specialEquipment = new JsonObject();
-    private JsonObject nationality = new JsonObject();
+    private JsonObject nationalityCtype = new JsonObject();
+    private JsonObject nationalityShipId = new JsonObject();
 
     private static final String[] total_key_list = {
             "api_id", "api_lv", "api_stype", "api_cond", "api_locked",
@@ -104,7 +105,10 @@ public class KcaShipListViewAdpater extends BaseAdapter {
     }
 
     public void setSpecialEquipment(JsonObject data) { specialEquipment = data; }
-    public void setNationality(JsonObject data) { nationality = data; }
+    public void setNationality(JsonObject data) {
+        nationalityCtype = data.getAsJsonObject("ctype");
+        nationalityShipId = data.getAsJsonObject("ship_id");
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -600,8 +604,12 @@ public class KcaShipListViewAdpater extends BaseAdapter {
                 String[] nat_list = ship_nat.split(",");
                 boolean found_flag = false;
                 for (String key: nat_list) {
-                    if (nationality.has(key)) {
-                        found_flag = nationality.getAsJsonArray(key).contains(new JsonPrimitive(ctype));
+                    if (nationalityShipId.has(key)) {
+                        found_flag = nationalityShipId.getAsJsonArray(key).contains(new JsonPrimitive(kc_ship_id));
+                        if (found_flag) break;
+                    }
+                    if (nationalityCtype.has(key)) {
+                        found_flag = nationalityCtype.getAsJsonArray(key).contains(new JsonPrimitive(ctype));
                         if (found_flag) break;
                     }
                 }
