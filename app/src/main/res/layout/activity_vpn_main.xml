@@ -88,60 +88,53 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/activity_main_btn_size_botton"
-                    android:weightSum="1.0">
+                    android:layout_height="wrap_content">
 
                     <Button
                         android:id="@+id/kcbtn"
-
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="6dp"
-                        android:layout_weight="0.64"
-                        android:background="@color/colorGameStartBtn"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
                         android:padding="@dimen/activity_main_btn_fairy_padding"
                         android:stateListAnimator="@null"
                         android:text="GAME START"
-                        android:textColor="@color/white"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/kcafairybtn"
                         android:textSize="@dimen/activity_main_btn_textsize" />
-
-                    <ImageButton
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:id="@+id/kcafairybtn"
-
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="6dp"
-                        android:layout_weight="0.18"
-                        android:background="@color/colorFairyShowBtn"
-                        android:gravity="center"
+                        style="?attr/materialIconButtonFilledStyle"
+                        android:layout_marginEnd="6dp"
+                        android:backgroundTint="@color/colorFairyShowBtn"
                         android:padding="@dimen/activity_main_btn_fairy_padding"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/noti_icon_0"
+                        app:icon="@mipmap/noti_icon_0"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/kcatoolbtn"
+                        app:layout_constraintDimensionRatio="1:1"
                         android:stateListAnimator="@null">
-
-
-                    </ImageButton>
-
-                    <ImageButton
+                    </com.google.android.material.button.MaterialButton>
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/kcatoolbtn"
-
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.18"
-                        android:background="@color/colorToolsBtn"
-                        android:gravity="center"
+                        android:layout_height="0dp"
+                        style="?attr/materialIconButtonFilledStyle"
+                        android:backgroundTint="@color/colorToolsBtn"
                         android:padding="@dimen/activity_main_btn_tools_padding"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/ic_dashboard"
+                        app:icon="@mipmap/ic_dashboard"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintDimensionRatio="1:1"
+                        android:layout_alignParentEnd="true"
                         android:stateListAnimator="@null">
+                    </com.google.android.material.button.MaterialButton>
 
 
-                    </ImageButton>
-
-
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
 

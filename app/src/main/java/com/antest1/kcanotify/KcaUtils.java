@@ -14,6 +14,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -27,6 +28,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import android.util.Base64;
@@ -39,6 +41,9 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.button.MaterialButton;
 import com.google.common.io.ByteStreams;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
@@ -817,6 +822,46 @@ public class KcaUtils {
             view.setImageResource(getId(name, R.mipmap.class));
         } else {
             view.setImageResource(R.mipmap.noti_icon_0);
+        }
+    }
+
+    public static void setFairyImageFromStorage(Context context, String name, MaterialButton view, int dp) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        int fairy_id = Integer.parseInt(name.replace("noti_icon_", ""));
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("fairy", Context.MODE_PRIVATE);
+        File myImageFile = new File(directory, KcaUtils.format("%s.png", name));
+        if (myImageFile.exists()) {
+            if (px > 0) {
+                GlideApp.with(context).load(myImageFile.getPath()).dontAnimate().override(px, px).into(new CustomTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        view.setIcon(resource);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        view.setIcon(null);
+                    }
+                });
+            } else {
+                GlideApp.with(context).load(myImageFile.getPath()).into(new CustomTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        view.setIcon(resource);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        view.setIcon(null);
+                    }
+                });
+            }
+        } else if (FAIRY_SPECIAL_FLAG && fairy_id >= FAIRY_SPECIAL_PREFIX) {
+            view.setIconResource(getId(name, R.mipmap.class));
+        } else {
+            view.setIconResource(R.mipmap.noti_icon_0);
         }
     }
 

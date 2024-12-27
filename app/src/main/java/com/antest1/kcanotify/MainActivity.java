@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -13,7 +14,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
-import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.net.VpnService;
@@ -45,7 +45,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
     KcaDownloader downloader;
     ToggleButton vpnbtn, svcbtn;
     Button kcbtn;
-    ImageButton kctoolbtn;
-    public ImageButton kcafairybtn;
+    MaterialButton kctoolbtn;
+    public MaterialButton kcafairybtn;
     public static Handler sHandler;
     TextView textDescription;
     TextView textWarn, textMainUpdate, textSpecial, textMaintenance;
@@ -211,20 +210,16 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, ToolsActivity.class);
             startActivity(intent);
         });
-        kctoolbtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         kcafairybtn = findViewById(R.id.kcafairybtn);
         boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
         if (is_random_fairy) {
-            kcafairybtn.setImageResource(R.mipmap.ic_help);
+            kcafairybtn.setIconResource(R.mipmap.ic_help);
         } else {
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
             String fairyPath = "noti_icon_".concat(fairyIdValue);
             KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
         }
-        kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                R.color.white), PorterDuff.Mode.SRC_ATOP);
         kcafairybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         textWarn = findViewById(R.id.textMainWarn);
         textWarn.setVisibility(View.GONE);
 
-        String main_html = "";
+        String main_html;
         try {
             InputStream ais = assetManager.open("main-".concat(getResourceLocaleCode()).concat(".html"));
             byte[] bytes = ByteStreams.toByteArray(ais);
@@ -270,17 +265,17 @@ public class MainActivity extends AppCompatActivity {
 
         textMaintenance = findViewById(R.id.textMaintenance);
         String maintenanceInfo = dbHelper.getValue(DB_KEY_KCMAINTNC);
-        if (maintenanceInfo != null && maintenanceInfo.trim().length() > 0) {
+        if (maintenanceInfo != null && !maintenanceInfo.trim().isEmpty()) {
             try {
                 JsonArray maintenance_data = (JsonParser.parseString(maintenanceInfo)).getAsJsonArray();
                 String mt_start = maintenance_data.get(0).getAsString();
                 String mt_end = maintenance_data.get(1).getAsString();
-                if (!mt_start.equals("")) {
+                if (!mt_start.isEmpty()) {
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z", Locale.US);
                     Date start_date = df.parse(mt_start);
                     Date end_date = df.parse(mt_end);
 
-                    SimpleDateFormat out_df = df;
+                    SimpleDateFormat out_df;
                     out_df = new SimpleDateFormat(DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEE, dd MMM yyyy HH:mm Z"), Locale.getDefault());
 
                     boolean is_passed = end_date.getTime() < System.currentTimeMillis();
@@ -331,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
 
             final CustomTabsIntent customTabsIntent = intentBuilder.build();
             final List<ResolveInfo> customTabsApps = getPackageManager().queryIntentActivities(customTabsIntent.intent, 0);
-            if (customTabsApps.size() > 0) {
+            if (!customTabsApps.isEmpty()) {
                 customTabsIntent.launchUrl(MainActivity.this, Uri.parse(url));
             } else {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -370,15 +365,13 @@ public class MainActivity extends AppCompatActivity {
         kcafairybtn = findViewById(R.id.kcafairybtn);
         boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
         if (is_random_fairy) {
-            kcafairybtn.setImageResource(R.mipmap.ic_help);
+            kcafairybtn.setIconResource(R.mipmap.ic_help);
         } else {
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
             String fairyPath = "noti_icon_".concat(fairyIdValue);
             KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
             showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
         }
-        kcafairybtn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
-                R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         Arrays.fill(warnType, false);
 
@@ -422,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
             warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_notification_denied));
         }
 
-        if (warnText.length() > 0) {
+        if (!warnText.isEmpty()) {
             textWarn.setVisibility(View.VISIBLE);
             textWarn.setText(warnText.trim());
         } else {
