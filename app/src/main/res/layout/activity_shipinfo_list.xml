@@ -43,7 +43,7 @@
                     <Button
                         android:id="@+id/shipinfo_btn_sort"
                         android:layout_width="0dp"
-                        android:layout_height="36dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginTop="2dp"
@@ -51,7 +51,7 @@
                         android:layout_marginRight="4dp"
                         android:layout_marginBottom="2dp"
                         android:layout_weight="1"
-                        android:background="@color/colorBtn"
+                        android:backgroundTint="@color/colorBtn"
                         android:text="@string/shipinfo_btn_sort"
                         android:textColor="@color/colorBtnText"
                         android:textSize="16dp" />
@@ -59,7 +59,7 @@
                     <Button
                         android:id="@+id/shipinfo_btn_filter"
                         android:layout_width="0dp"
-                        android:layout_height="36dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginTop="2dp"
@@ -67,7 +67,7 @@
                         android:layout_marginRight="4dp"
                         android:layout_marginBottom="2dp"
                         android:layout_weight="1"
-                        android:background="@color/colorBtn"
+                        android:backgroundTint="@color/colorBtn"
                         android:text="@string/shipinfo_btn_filter"
                         android:textColor="@color/colorBtnText"
                         android:textSize="16dp" />
@@ -75,7 +75,7 @@
                     <Button
                         android:id="@+id/shipinfo_btn_search"
                         android:layout_width="0dp"
-                        android:layout_height="36dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginTop="2dp"
@@ -83,7 +83,7 @@
                         android:layout_marginRight="4dp"
                         android:layout_marginBottom="2dp"
                         android:layout_weight="1"
-                        android:background="@color/colorBtn"
+                        android:backgroundTint="@color/colorBtn"
                         android:text="@string/shipinfo_btn_search"
                         android:textColor="@color/colorBtnText"
                         android:textSize="16dp" />
@@ -251,30 +251,24 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <Button
                             android:id="@+id/export_clipboard_1"
+                            style="@style/Widget.Material3.Button.TonalButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_margin="4dp"
                             android:layout_weight="1"
-                            android:background="@color/colorBtn"
-                            android:padding="6dp"
                             android:text="@string/shipinfo_export_clipboard"
-                            android:textAlignment="center"
-                            android:textColor="@android:color/black"
                             android:textSize="14dp" />
 
-                        <TextView
+                        <Button
                             android:id="@+id/export_openpage_1"
+                            style="@style/Widget.Material3.Button.TonalButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_margin="4dp"
                             android:layout_weight="1"
-                            android:background="@color/colorBtn"
-                            android:padding="6dp"
                             android:text="@string/shipinfo_export_openpage"
-                            android:textAlignment="center"
-                            android:textColor="@android:color/black"
                             android:textSize="14dp" />
 
                     </LinearLayout>
@@ -318,30 +312,24 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <Button
                             android:id="@+id/export_clipboard_2"
+                            style="@style/Widget.Material3.Button.TonalButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_margin="4dp"
                             android:layout_weight="1"
-                            android:background="@color/colorBtn"
-                            android:padding="6dp"
                             android:text="@string/shipinfo_export_clipboard"
-                            android:textAlignment="center"
-                            android:textColor="@android:color/black"
                             android:textSize="14dp" />
 
-                        <TextView
+                        <Button
                             android:id="@+id/export_openpage_2"
+                            style="@style/Widget.Material3.Button.TonalButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_margin="4dp"
                             android:layout_weight="1"
-                            android:background="@color/colorBtn"
-                            android:padding="6dp"
                             android:text="@string/shipinfo_export_openpage"
-                            android:textAlignment="center"
-                            android:textColor="@android:color/black"
                             android:textSize="14dp" />
 
                     </LinearLayout>

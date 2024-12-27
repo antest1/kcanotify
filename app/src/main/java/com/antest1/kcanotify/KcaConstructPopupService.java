@@ -12,7 +12,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import android.util.Log;

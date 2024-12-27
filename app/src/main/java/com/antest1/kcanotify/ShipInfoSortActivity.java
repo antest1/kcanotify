@@ -14,13 +14,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +29,6 @@ import static com.antest1.kcanotify.KcaUtils.setPreferences;
 
 public class ShipInfoSortActivity extends AppCompatActivity {
     Toolbar toolbar;
-    static Gson gson = new Gson();
     LinearLayout listview;
     TextView listcounter;
     public int count;
@@ -119,19 +115,16 @@ public class ShipInfoSortActivity extends AppCompatActivity {
             sp.setSelection(KcaShipListViewAdpater.getSortIndexByKey(key));
         }
 
-        desc_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                if (checked) {
-                    compoundButton.setText(getStringWithLocale(R.string.shipinfo_sort_desc));
-                } else {
-                    compoundButton.setText(getStringWithLocale(R.string.shipinfo_sort_asc));
-                }
-                if (sort_values.indexOfKey(target) >= 0) {
-                    int value = Integer.valueOf(sort_values.get(target).split(",")[0]);
-                    sort_values.put(target, makeStatPrefValue(value, checked));
-                    listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
-                }
+        desc_check.setOnCheckedChangeListener((compoundButton, checked) -> {
+            if (checked) {
+                compoundButton.setText(getStringWithLocale(R.string.shipinfo_sort_desc));
+            } else {
+                compoundButton.setText(getStringWithLocale(R.string.shipinfo_sort_asc));
+            }
+            if (sort_values.indexOfKey(target) >= 0) {
+                int value = Integer.valueOf(sort_values.get(target).split(",")[0]);
+                sort_values.put(target, makeStatPrefValue(value, checked));
+                listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
             }
         });
         if(add_flag) {
@@ -145,25 +138,21 @@ public class ShipInfoSortActivity extends AppCompatActivity {
         add_remove_btn.setColorFilter(ContextCompat.getColor(getApplicationContext(),
                 R.color.colorBtnText), PorterDuff.Mode.MULTIPLY);
 
-
-        add_remove_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listview.findViewWithTag(target).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.transparent));
-                ImageView im = (ImageView) view;
-                boolean is_add = (Boolean) im.getTag();
-                if (is_add) {
-                    im.setImageResource(R.mipmap.ic_remove_circle);
-                    im.setTag(false);
-                    makeSortItem(0, false, true);
-                } else {
-                    if (sort_items.size() > 2) {
-                        removeViewByTag(target);
-                        sort_items.remove(Integer.valueOf(target));
-                        sort_values.delete(target);
-                        listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
-                    }
+        add_remove_btn.setOnClickListener(view -> {
+            listview.findViewWithTag(target).setBackgroundColor(
+                    ContextCompat.getColor(getApplicationContext(), R.color.transparent));
+            ImageView im = (ImageView) view;
+            boolean is_add = (Boolean) im.getTag();
+            if (is_add) {
+                im.setImageResource(R.mipmap.ic_remove_circle);
+                im.setTag(false);
+                makeSortItem(0, false, true);
+            } else {
+                if (sort_items.size() > 2) {
+                    removeViewByTag(target);
+                    sort_items.remove(Integer.valueOf(target));
+                    sort_values.delete(target);
+                    listcounter.setText(KcaUtils.format(getStringWithLocale(R.string.shipinfo_criteria_count), sort_values.size() - 1));
                 }
             }
         });

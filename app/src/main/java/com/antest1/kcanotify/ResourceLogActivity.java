@@ -434,7 +434,6 @@ public class ResourceLogActivity extends AppCompatActivity {
             timestamp_list.add(item.get("timestamp").getAsLong());
         }
 
-        int count = 0;
         long time = start;
         while (time < end) {
             int recent_idx = 0;
@@ -451,7 +450,6 @@ public class ResourceLogActivity extends AppCompatActivity {
             new_data.add(item);
 
             time += interval;
-            count += 1;
         }
         JsonObject last_item = KcaUtils.getJsonObjectCopy(data.get(data.size() - 1));
         last_item.addProperty("timestamp", end);
