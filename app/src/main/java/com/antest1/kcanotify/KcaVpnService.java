@@ -456,20 +456,18 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
             builder.setMetered(Util.isMeteredNetwork(this));
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            try {
-                if (!socks5_enable || !socks5_allapps) {
-                    builder.addAllowedApplication(KC_PACKAGE_NAME);
-                    builder.addAllowedApplication(KC_WV_PACKAGE_NAME);
-                    builder.addAllowedApplication(GOTO_PACKAGE_NAME);
-                    if (socks5_enable) builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
-                    for (JsonElement pkg : allowed_apps) {
-                        builder.addAllowedApplication(pkg.getAsString());
-                    }
+        try {
+            if (!socks5_enable || !socks5_allapps) {
+                builder.addAllowedApplication(KC_PACKAGE_NAME);
+                builder.addAllowedApplication(KC_WV_PACKAGE_NAME);
+                builder.addAllowedApplication(GOTO_PACKAGE_NAME);
+                if (socks5_enable) builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
+                for (JsonElement pkg : allowed_apps) {
+                    builder.addAllowedApplication(pkg.getAsString());
                 }
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
             }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
 
         // VPN address

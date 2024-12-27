@@ -281,9 +281,7 @@ public class MainActivity extends AppCompatActivity {
                     Date end_date = df.parse(mt_end);
 
                     SimpleDateFormat out_df = df;
-                    if (Build.VERSION.SDK_INT >= 18) {
-                        out_df = new SimpleDateFormat(DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEE, dd MMM yyyy HH:mm Z"), Locale.getDefault());
-                    }
+                    out_df = new SimpleDateFormat(DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEE, dd MMM yyyy HH:mm Z"), Locale.getDefault());
 
                     boolean is_passed = end_date.getTime() < System.currentTimeMillis();
                     boolean before_maintenance = System.currentTimeMillis() < start_date.getTime();
@@ -383,13 +381,6 @@ public class MainActivity extends AppCompatActivity {
                 R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         Arrays.fill(warnType, false);
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_PERMISSION);
-            }
-        }
 
         if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)
                 || getBooleanPreferences(getApplicationContext(), PREF_KCA_QUESTVIEW_USE)) {

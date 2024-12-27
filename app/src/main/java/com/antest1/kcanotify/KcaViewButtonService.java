@@ -695,7 +695,7 @@ public class KcaViewButtonService extends Service {
     }
 
     private static boolean isForeGroundEvent(UsageEvents.Event event) {
-        if(event == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return false;
+        if(event == null) return false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             return event.getEventType() == UsageEvents.Event.ACTIVITY_RESUMED;
         } else {
@@ -708,41 +708,26 @@ public class KcaViewButtonService extends Service {
         String classByUsageStats = null;
         String packageNameByUsageStats = null;
         String recentPackageName = "";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            UsageStatsManager mUsageStatsManager;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-            } else {
-                //noinspection ResourceType
-                mUsageStatsManager = (UsageStatsManager) getSystemService("usagestats");
-            }
-            final long INTERVAL = 5000;
-            final long end = System.currentTimeMillis();
-            final long begin = end - INTERVAL;
-            final UsageEvents usageEvents = mUsageStatsManager.queryEvents(begin, end);
-
-            while (usageEvents.hasNextEvent()) {
-                UsageEvents.Event event = new UsageEvents.Event();
-                usageEvents.getNextEvent(event);
-                if (isForeGroundEvent(event)) {
-                    packageNameByUsageStats = event.getPackageName();
-                    Date d = new Date(event.getTimeStamp());
-                    classByUsageStats = event.getClassName() + " " + d.toString();
-                    recentPackageName = classByUsageStats;
-                }
-            }
+        UsageStatsManager mUsageStatsManager;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         } else {
-            recentPackageName = "not_kancolle_process";
-            ActivityManager activityManager = (ActivityManager) getSystemService( Context.ACTIVITY_SERVICE );
-            List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
-            for(ActivityManager.RunningAppProcessInfo appProcess : appProcesses){
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND){
-                    if (appProcess.processName.contains(KC_PACKAGE_NAME)) {
-                        recentPackageName = KC_PACKAGE_NAME;
-                    } else if (appProcess.processName.contains(GOTO_PACKAGE_NAME)) {
-                        recentPackageName = GOTO_PACKAGE_NAME;
-                    }
-                }
+            //noinspection ResourceType
+            mUsageStatsManager = (UsageStatsManager) getSystemService("usagestats");
+        }
+        final long INTERVAL = 5000;
+        final long end = System.currentTimeMillis();
+        final long begin = end - INTERVAL;
+        final UsageEvents usageEvents = mUsageStatsManager.queryEvents(begin, end);
+
+        while (usageEvents.hasNextEvent()) {
+            UsageEvents.Event event = new UsageEvents.Event();
+            usageEvents.getNextEvent(event);
+            if (isForeGroundEvent(event)) {
+                packageNameByUsageStats = event.getPackageName();
+                Date d = new Date(event.getTimeStamp());
+                classByUsageStats = event.getClassName() + " " + d.toString();
+                recentPackageName = classByUsageStats;
             }
         }
         return recentPackageName;

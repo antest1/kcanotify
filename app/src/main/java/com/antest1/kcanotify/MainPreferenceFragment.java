@@ -481,8 +481,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
         if (PREF_FAIRY_AUTOHIDE.equals(key)) {
             boolean isTrue = (Boolean) newValue;
-            if (isTrue && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                    !hasUsageStatPermission(getContext())) {
+            if (isTrue && !hasUsageStatPermission(getContext())) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                 alertDialog.setTitle(getStringWithLocale(R.string.sa_usagestat_dialog_title))
                     .setMessage(getStringWithLocale(R.string.sa_usagestat_dialog_desc))
@@ -503,7 +502,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
 
         if (PREF_ALARM_DELAY.equals(key)) {
             String valueString = ((String) newValue);
-            if (valueString.length() == 0 || !TextUtils.isDigitsOnly(valueString)) return false;
+            if (valueString.isEmpty() || !TextUtils.isDigitsOnly(valueString)) return false;
             int value = Integer.parseInt(valueString);
             KcaAlarmService.setAlarmDelay(value);
             if (sHandler != null) {

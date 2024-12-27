@@ -2675,10 +2675,8 @@ public class KcaService extends Service {
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, alarmIntent);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                alarmManager.setExact(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
             } else {
-                alarmManager.set(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, alarmIntent);
             }
         }
         Log.e("KCA", "Alarm set to: " + time + " " + code);

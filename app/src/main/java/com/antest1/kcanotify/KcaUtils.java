@@ -373,14 +373,10 @@ public class KcaUtils {
             }
             if (uri != null && !Uri.EMPTY.equals(uri)) {
                 mediaPlayer.setDataSource(context, uri);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    AudioAttributes attr = new AudioAttributes.Builder()
-                            .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
-                            .build();
-                    mediaPlayer.setAudioAttributes(attr);
-                } else {
-                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
-                }
+                AudioAttributes attr = new AudioAttributes.Builder()
+                        .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
+                        .build();
+                mediaPlayer.setAudioAttributes(attr);
                 mediaPlayer.prepare();
                 mediaPlayer.start();
             }
