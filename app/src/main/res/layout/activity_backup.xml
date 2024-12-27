@@ -52,14 +52,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/backup_export_desc" />
 
-            <TextView
+            <Button
                 android:id="@+id/backup_export_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                android:autoText="false"
-                android:background="@color/colorAccent"
                 android:paddingStart="8dp"
                 android:paddingLeft="8dp"
                 android:paddingTop="6dp"
@@ -68,7 +66,6 @@
                 android:paddingBottom="6dp"
                 android:text="@string/backup_export_button"
                 android:textAlignment="center"
-                android:textColor="@color/white"
                 android:textSize="16sp" />
 
             <TextView

@@ -75,17 +75,14 @@
             android:layout_marginBottom="8dp"
             android:text="@string/notice_donotsee" />
 
-        <TextView
+        <Button
             android:id="@+id/notice_confirmed"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorAccent"
-            android:gravity="center"
-            android:padding="8dp"
             android:text="@string/dialog_ok"
-            android:textColor="@color/white" />
-
+            />
     </RelativeLayout>
 
 
