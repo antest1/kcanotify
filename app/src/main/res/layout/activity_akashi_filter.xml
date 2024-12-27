@@ -500,6 +500,7 @@
 
                 <Button
                     android:id="@+id/akashi_filter_btn_all"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -511,6 +512,7 @@
 
                 <Button
                     android:id="@+id/akashi_filter_btn_none"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -522,6 +524,7 @@
 
                 <Button
                     android:id="@+id/akashi_filter_btn_reverse"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"

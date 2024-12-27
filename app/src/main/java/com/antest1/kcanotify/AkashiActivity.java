@@ -8,13 +8,11 @@ import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -44,7 +42,6 @@ import static com.antest1.kcanotify.KcaUtils.showDataLoadErrorToast;
 
 public class AkashiActivity extends AppCompatActivity {
     Toolbar toolbar;
-    static Gson gson = new Gson();
     JsonObject akashiData, akashiDay;
     int akashiDataLoadingFlag = 0;
     ListView listview;
@@ -70,7 +67,7 @@ public class AkashiActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_akashi_list);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.action_akashi));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,9 +81,9 @@ public class AkashiActivity extends AppCompatActivity {
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0(Sun) ~ 6(Sat)
         currentClicked = dayOfWeek;
         listViewItemList = new ArrayList<>();
-        starButton = (Button) findViewById(R.id.akashi_btn_star);
-        safeButton = (Button) findViewById(R.id.akashi_btn_safe);
-        filterButton = (Button) findViewById(R.id.akashi_btn_filter);
+        starButton = findViewById(R.id.akashi_btn_star);
+        safeButton = findViewById(R.id.akashi_btn_safe);
+        filterButton = findViewById(R.id.akashi_btn_filter);
         isStarChecked = getBooleanPreferences(getApplicationContext(), PREF_AKASHI_STAR_CHECKED);
         setStarButton();
 
@@ -141,55 +138,43 @@ public class AkashiActivity extends AppCompatActivity {
 
             for (int i = 0; i < 7; i++) {
                 final int week = i;
-                TextView tv = (TextView) findViewById(KcaUtils.getId(KcaUtils.format("akashi_day_%d", i), R.id.class));
+                TextView tv = findViewById(KcaUtils.getId(KcaUtils.format("akashi_day_%d", i), R.id.class));
                 if (week == currentClicked) {
                     tv.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
                     tv.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
                 }
-                tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (currentClicked != week) {
-                            TextView tv_prev = (TextView) findViewById(KcaUtils.getId(KcaUtils.format("akashi_day_%d", currentClicked), R.id.class));
-                            tv_prev.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
-                            tv_prev.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnText));
-                            v.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-                            ((TextView) v).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
-                            currentClicked = week;
-                            loadAkashiList(currentClicked, isSafeChecked);
-                            resetListView(true);
-                        }
+                tv.setOnClickListener(v -> {
+                    if (currentClicked != week) {
+                        TextView tv_prev = findViewById(KcaUtils.getId(KcaUtils.format("akashi_day_%d", currentClicked), R.id.class));
+                        tv_prev.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
+                        tv_prev.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnText));
+                        v.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                        ((TextView) v).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
+                        currentClicked = week;
+                        loadAkashiList(currentClicked, isSafeChecked);
+                        resetListView(true);
                     }
                 });
             }
 
-            safeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    isSafeChecked = !isSafeChecked;
-                    setSafeButton();
-                    adapter.setSafeCheckedStatus(isSafeChecked);
-                    loadAkashiList(currentClicked, isSafeChecked);
-                    resetListView(false);
-                }
+            safeButton.setOnClickListener(v -> {
+                isSafeChecked = !isSafeChecked;
+                setSafeButton();
+                adapter.setSafeCheckedStatus(isSafeChecked);
+                loadAkashiList(currentClicked, isSafeChecked);
+                resetListView(false);
             });
 
-            starButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    isStarChecked = !isStarChecked;
-                    setStarButton();
-                    loadAkashiList(currentClicked, isSafeChecked);
-                    resetListView(true);
-                }
+            starButton.setOnClickListener(v -> {
+                isStarChecked = !isStarChecked;
+                setStarButton();
+                loadAkashiList(currentClicked, isSafeChecked);
+                resetListView(true);
             });
 
-            filterButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), AkashiFilterActivity.class);
-                    startActivity(intent);
-                }
+            filterButton.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), AkashiFilterActivity.class);
+                startActivity(intent);
             });
         }
     }
@@ -240,12 +225,8 @@ public class AkashiActivity extends AppCompatActivity {
     private void setStarButton() {
         if (isStarChecked) {
             starButton.setText("★");
-            starButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
-            starButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
         } else {
             starButton.setText("☆");
-            starButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnText));
-            starButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
         }
         setPreferences(getApplicationContext(), PREF_AKASHI_STAR_CHECKED, isStarChecked);
     }
