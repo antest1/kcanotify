@@ -149,7 +149,7 @@ public class KcaAkashiListViewItem {
             equipMaterials = equipMaterials.trim();
             equipScrews = equipScrews.trim();
             equipSupport = equipSupport.trim();
-        } else {
+        } else if (ship.size() == 1) {
             material_data.add(material1[0]);
             material_data.add(material2[0]);
             material_data.add(material3[0]);
