@@ -40,17 +40,23 @@
 
             <Button
                 android:id="@+id/packetlog_clear"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:text="clear" />
+                android:text="Clear" />
 
             <Button
                 android:id="@+id/packetlog_dump"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:text="dump" />
+                android:text="Dump" />
         </LinearLayout>
 
         <RelativeLayout
