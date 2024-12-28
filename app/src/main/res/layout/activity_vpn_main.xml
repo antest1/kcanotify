@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:orientation="vertical">
 
@@ -25,20 +25,19 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:titleTextColor="@color/colorToolbarText" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/background"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/controls"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="0.9"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:background="@color/white"
-                android:elevation="2dp"
                 android:orientation="vertical"
-                android:padding="6dp">
+                android:padding="6dp"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -51,12 +50,9 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_marginEnd="3dp"
-                        android:layout_marginRight="3dp"
                         android:layout_weight=".5"
                         android:background="@drawable/togglebtn"
                         android:stateListAnimator="@null"
@@ -71,12 +67,9 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_marginStart="3dp"
-                        android:layout_marginLeft="3dp"
                         android:layout_weight=".5"
                         android:background="@drawable/togglebtn"
                         android:stateListAnimator="@null"
@@ -96,10 +89,10 @@
                         android:id="@+id/kcbtn"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="6dp"
-                        android:padding="@dimen/activity_main_btn_fairy_padding"
                         android:stateListAnimator="@null"
                         android:text="GAME START"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginEnd="3dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/kcafairybtn"
@@ -109,9 +102,7 @@
                         android:layout_height="0dp"
                         android:id="@+id/kcafairybtn"
                         style="?attr/materialIconButtonFilledStyle"
-                        android:layout_marginEnd="6dp"
                         android:backgroundTint="@color/colorFairyShowBtn"
-                        android:padding="@dimen/activity_main_btn_fairy_padding"
                         app:icon="@mipmap/noti_icon_0"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/kcatoolbtn"
@@ -124,7 +115,6 @@
                         android:layout_height="0dp"
                         style="?attr/materialIconButtonFilledStyle"
                         android:backgroundTint="@color/colorToolsBtn"
-                        android:padding="@dimen/activity_main_btn_tools_padding"
                         app:icon="@mipmap/ic_dashboard"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -140,13 +130,12 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/controls"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+                android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -286,7 +275,7 @@
 
             </RelativeLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </LinearLayout>
