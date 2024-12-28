@@ -249,7 +249,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:weightSum="2">
 
                         <Button
                             android:id="@+id/export_clipboard_1"
@@ -258,8 +259,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
                             android:layout_weight="1"
-                            android:text="@string/shipinfo_export_clipboard"
-                            android:textSize="14dp" />
+                            android:text="@string/shipinfo_export_clipboard"/>
 
                         <Button
                             android:id="@+id/export_openpage_1"
@@ -268,8 +268,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
                             android:layout_weight="1"
-                            android:text="@string/shipinfo_export_openpage"
-                            android:textSize="14dp" />
+                            android:text="@string/shipinfo_export_openpage"/>
 
                     </LinearLayout>
 
@@ -310,27 +309,26 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:weightSum="2">
 
                         <Button
                             android:id="@+id/export_clipboard_2"
                             style="@style/Widget.Material3.Button.TonalButton"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
                             android:layout_weight="1"
-                            android:text="@string/shipinfo_export_clipboard"
-                            android:textSize="14dp" />
+                            android:text="@string/shipinfo_export_clipboard"/>
 
                         <Button
                             android:id="@+id/export_openpage_2"
                             style="@style/Widget.Material3.Button.TonalButton"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
                             android:layout_weight="1"
-                            android:text="@string/shipinfo_export_openpage"
-                            android:textSize="14dp" />
+                            android:text="@string/shipinfo_export_openpage"/>
 
                     </LinearLayout>
 

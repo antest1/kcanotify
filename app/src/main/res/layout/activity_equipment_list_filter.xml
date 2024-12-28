@@ -43,39 +43,33 @@
 
             <Button
                 android:id="@+id/equipment_filter_btn_all"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:background="@color/colorBtn"
-                android:padding="3dp"
                 android:stateListAnimator="@null"
-                android:text="@string/filter_equip_all"
-                android:textSize="14dp" />
+                android:text="@string/filter_equip_all"/>
 
             <Button
                 android:id="@+id/equipment_filter_btn_none"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:background="@color/colorBtn"
-                android:padding="3dp"
                 android:stateListAnimator="@null"
-                android:text="@string/filter_equip_none"
-                android:textSize="14dp" />
+                android:text="@string/filter_equip_none"/>
 
             <Button
                 android:id="@+id/equipment_filter_btn_reverse"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:background="@color/colorBtn"
-                android:padding="3dp"
                 android:stateListAnimator="@null"
-                android:text="@string/filter_equip_rev"
-                android:textSize="14dp" />
+                android:text="@string/filter_equip_rev"/>
         </LinearLayout>
 
         <GridView

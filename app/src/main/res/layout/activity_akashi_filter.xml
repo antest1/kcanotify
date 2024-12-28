@@ -496,16 +496,16 @@
                 android:id="@+id/btn_quick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <Button
                     android:id="@+id/akashi_filter_btn_all"
                     style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="4dp"
                     android:layout_weight="1"
-                    android:padding="3dp"
                     android:stateListAnimator="@null"
                     android:text="@string/filter_equip_all"
                     android:textSize="14dp" />
@@ -513,11 +513,10 @@
                 <Button
                     android:id="@+id/akashi_filter_btn_none"
                     style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="4dp"
                     android:layout_weight="1"
-                    android:padding="3dp"
                     android:stateListAnimator="@null"
                     android:text="@string/filter_equip_none"
                     android:textSize="14dp" />
@@ -525,11 +524,10 @@
                 <Button
                     android:id="@+id/akashi_filter_btn_reverse"
                     style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="4dp"
                     android:layout_weight="1"
-                    android:padding="3dp"
                     android:stateListAnimator="@null"
                     android:text="@string/filter_equip_rev"
                     android:textSize="14dp" />

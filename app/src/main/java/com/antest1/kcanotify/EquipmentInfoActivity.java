@@ -46,7 +46,6 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 
 
 public class EquipmentInfoActivity extends AppCompatActivity {
-    static final int EQUIPINFO_GET_SORT_KEY = 1;
     static final int EQUIPINFO_GET_FILTER_RESULT = 2;
 
     Toolbar toolbar;
@@ -66,7 +65,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
 
     boolean is_popup_on;
     View export_popup, export_exit;
-    TextView export_clipboard, export_openpage2;
+    Button export_clipboard, export_openpage2;
     Vibrator vibrator;
 
     private String getStringWithLocale(int id) {
@@ -175,20 +174,16 @@ public class EquipmentInfoActivity extends AppCompatActivity {
         setSummary();
 
         filterBtn = findViewById(R.id.equipment_btn_filter);
-        filterBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent aIntent = new Intent(EquipmentInfoActivity.this, EquipmentListFilterActivity.class);
-                startActivityForResult(aIntent, EQUIPINFO_GET_FILTER_RESULT);
-            }
+        filterBtn.setOnClickListener(view -> {
+            Intent aIntent = new Intent(EquipmentInfoActivity.this, EquipmentListFilterActivity.class);
+            startActivityForResult(aIntent, EQUIPINFO_GET_FILTER_RESULT);
         });
-        setfilterBtn(!filtcond.equals("all"));
+        setFilterBtn(!filtcond.equals("all"));
 
         searchEditText = findViewById(R.id.equipinfo_search);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -204,7 +199,6 @@ public class EquipmentInfoActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
@@ -264,7 +258,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
         return new_item;
     }
 
-    private void setfilterBtn(boolean is_active) {
+    private void setFilterBtn(boolean is_active) {
         if (is_active) {
             filterBtn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
             filterBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
@@ -282,7 +276,7 @@ public class EquipmentInfoActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && adapter != null && requestCode > 0) {
             if (requestCode == EQUIPINFO_GET_FILTER_RESULT) {
                 adapter.setListViewItemList(equipment_data, counter, ship_equip_info, filtcond);
-                setfilterBtn(!filtcond.equals("all"));
+                setFilterBtn(!filtcond.equals("all"));
             }
             adapter.notifyDataSetChanged();
             listview.setAdapter(adapter);
