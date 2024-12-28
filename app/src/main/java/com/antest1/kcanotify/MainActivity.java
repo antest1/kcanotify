@@ -179,8 +179,7 @@ public class MainActivity extends AppCompatActivity {
             String kcApp = getStringPreferences(getApplicationContext(), PREF_KC_PACKAGE);
             Intent kcIntent = getKcIntent(getApplicationContext());
 
-            boolean is_kca_installed = false;
-            if (!BuildConfig.DEBUG) is_kca_installed = (kcIntent != null);
+            boolean is_kca_installed = (kcIntent != null);
 
             JsonObject statProperties = new JsonObject();
             statProperties.addProperty("browser", kcApp);

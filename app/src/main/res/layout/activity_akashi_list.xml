@@ -157,107 +157,93 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
             android:layout_marginStart="4dp"
-            android:orientation="horizontal">
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="5dp"
+            app:selectionRequired="true"
+            app:singleSelection="true">
 
-            <TextView
+            <Button
                 android:id="@+id/akashi_day_0"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorBtn"
                 android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_0"
-                android:textAlignment="gravity"
-                android:textColor="@color/colorBtnText"
-                android:textSize="18dp" />
+                android:textAlignment="gravity" />
 
-            <TextView
+            <Button
                 android:id="@+id/akashi_day_1"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorBtn"
                 android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_1"
-                android:textAlignment="gravity"
-                android:textColor="@color/colorBtnText"
-                android:textSize="18dp" />
+                android:textAlignment="gravity" />
 
-            <TextView
+            <Button
                 android:id="@+id/akashi_day_2"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorBtn"
                 android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_2"
-                android:textAlignment="gravity"
-                android:textColor="@color/colorBtnText"
-                android:textSize="18dp" />
+                android:textAlignment="gravity" />
 
-            <TextView
+            <Button
                 android:id="@+id/akashi_day_3"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorBtn"
                 android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_3"
-                android:textAlignment="gravity"
-                android:textColor="@color/colorBtnText"
-                android:textSize="18dp" />
+                android:textAlignment="gravity" />
 
-            <TextView
+            <Button
                 android:id="@+id/akashi_day_4"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorBtn"
                 android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_4"
-                android:textAlignment="gravity"
-                android:textColor="@color/colorBtnText"
-                android:textSize="18dp" />
+                android:textAlignment="gravity" />
 
-            <TextView
+            <Button
                 android:id="@+id/akashi_day_5"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorBtn"
                 android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_5"
-                android:textAlignment="gravity"
-                android:textColor="@color/colorBtnText"
-                android:textSize="18dp" />
+                android:textAlignment="gravity" />
 
-            <TextView
+            <Button
                 android:id="@+id/akashi_day_6"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorBtn"
                 android:gravity="center_vertical|center_horizontal"
                 android:padding="2dp"
                 android:text="@string/akashi_term_day_6"
-                android:textAlignment="gravity"
-                android:textColor="@color/colorBtnText"
-                android:textSize="18dp" />
-        </LinearLayout>
+                android:textAlignment="gravity" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
 
 
         <ListView
