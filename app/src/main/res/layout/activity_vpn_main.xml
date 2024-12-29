@@ -14,6 +14,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
+        android:paddingBottom="80dp"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
@@ -71,42 +72,7 @@
                         android:stateListAnimator="@null"
                         android:text="@string/ma_svc_toggleoff"
                         android:textSize="@dimen/activity_main_btn_textsize" />
-
                 </com.google.android.material.button.MaterialButtonToggleGroup>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-
-                    <com.google.android.material.button.MaterialButton
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/kcafairybtn"
-                        style="?attr/materialIconButtonFilledStyle"
-                        android:backgroundTint="@color/colorFairyShowBtn"
-                        android:text="@string/fairy_hidden_notification_action_return"
-                        app:icon="@mipmap/noti_icon_0"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:stateListAnimator="@null">
-                    </com.google.android.material.button.MaterialButton>
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/kcatoolbtn"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/action_tools"
-                        style="?attr/materialIconButtonFilledStyle"
-                        android:backgroundTint="@color/colorToolsBtn"
-                        app:icon="@mipmap/ic_dashboard"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/kcafairybtn"
-                        android:stateListAnimator="@null">
-                    </com.google.android.material.button.MaterialButton>
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
             </LinearLayout>
 
             <RelativeLayout
@@ -137,26 +103,6 @@
                         app:srcCompat="@mipmap/_background" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textMainUpdate"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_alignWithParentIfMissing="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginRight="6dp"
-                    android:background="@color/colorMainBtn"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:minLines="4"
-                    android:padding="4dp"
-                    android:text="@string/setting_menu_kand_title_game_data_down"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="14dp"
-                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/textMaintenance"
@@ -164,12 +110,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignWithParentIfMissing="true"
                     android:layout_above="@id/textMainUpdate"
-                    android:layout_alignParentBottom="false"
                     android:layout_marginStart="6dp"
-                    android:layout_marginLeft="6dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="6dp"
-                    android:layout_marginRight="6dp"
                     android:background="@color/colorDataUpdate"
                     android:gravity="center_vertical|center_horizontal"
                     android:minLines="2"
@@ -180,49 +123,36 @@
                     android:textSize="14dp"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/textSpecial"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@id/textMaintenance"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginRight="6dp"
-                    android:background="@color/colorSpecial"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:minLines="4"
-                    android:padding="4dp"
-                    android:text="Special Text"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorSpecialText"
-                    android:textSize="14dp"
-                    android:visibility="visible" />
+                <Button
+                    android:id="@+id/textMainUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:backgroundTint="@color/colorMainBtn"
+                    android:text="@string/setting_menu_kand_title_game_data_down"
+                    app:icon="@android:drawable/stat_sys_download" />
 
-                <TextView
+                <Button
+                    android:id="@+id/textSpecial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/textMaintenance"
+                    android:backgroundTint="@color/colorSpecial"
+                    android:text="@string/special_message"
+                    android:textColor="@color/colorSpecialText"
+                    app:icon="@android:drawable/ic_menu_gallery"
+                    app:iconTint="@color/colorSpecialText" />
+
+                <Button
                     android:id="@+id/textSpecial2"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_alignWithParentIfMissing="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_above="@id/textSpecial"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginRight="6dp"
-                    android:background="@color/colorUpdate"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:minLines="4"
-                    android:padding="4dp"
+                    android:backgroundTint="@color/colorUpdate"
                     android:text="@string/notification_message"
-                    android:textAlignment="center"
                     android:textColor="@color/colorUpdateText"
-                    android:textSize="14dp"
-                    android:visibility="visible" />
+                    app:icon="@android:drawable/ic_dialog_info"
+                    app:iconTint="@color/colorUpdateText" />
 
                 <TextView
                     android:id="@+id/textDescription"
@@ -238,8 +168,16 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        style="@style/Widget.Material3.BottomAppBar"
+        app:menu="@menu/bottom_app_bar"
+        />
 
-    <FrameLayout
+    <!--<FrameLayout
         android:id="@+id/bottomSheet"
         style="@style/Widget.Material3.BottomSheet"
         android:layout_width="match_parent"
@@ -250,15 +188,15 @@
             android:id="@+id/drag_handle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-    </FrameLayout>
+    </FrameLayout>-->
+
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/kcbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:layout_anchorGravity="top|end"
-        app:layout_anchor="@+id/bottomSheet"
-        android:text="Game Start"
+        android:layout_gravity="bottom|end"
+        android:text="GAME START"
         app:icon="@android:drawable/ic_media_play"/>
 
     <ImageView
@@ -270,6 +208,7 @@
         android:padding="20dp"
         android:src="@mipmap/special_image"
         android:visibility="gone"
+        tools:visibility="gone"
         app:srcCompat="@mipmap/special_image" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

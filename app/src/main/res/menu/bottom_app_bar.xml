@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.antest1.kcanofity.MainActivity">
+
+    <item
+        android:id="@+id/fairy"
+        android:icon="@mipmap/noti_icon_0"
+        android:title="@string/fairy_hidden_notification_action_return"
+        app:showAsAction="ifRoom"
+        app:iconTint="?attr/colorOnSurface"
+        />
+    <item
+        android:id="@+id/tools"
+        android:icon="@mipmap/ic_dashboard"
+        android:title="@string/action_tools"
+        app:showAsAction="ifRoom"
+        app:iconTint="?attr/colorOnSurface"
+        />
+</menu>

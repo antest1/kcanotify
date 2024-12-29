@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -98,12 +99,12 @@ public class MainActivity extends AppCompatActivity {
     KcaDownloader downloader;
     MaterialButton vpnbtn, svcbtn;
     Button kcbtn;
-    MaterialButton kctoolbtn;
-    public MaterialButton kcafairybtn;
+    MenuItem fairyButton;
     public static Handler sHandler;
     TextView textDescription;
-    TextView textMainUpdate, textSpecial, textMaintenance;
-    TextView textSpecial2;
+    TextView textMaintenance;
+    Button textMainUpdate, textSpecial, textSpecial2;
+    BottomAppBar bottomAppBar;
 
     ActivityResultLauncher<Intent> vpnPrepareLauncher, exactAlarmPrepareLauncher;
 
@@ -113,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
     public static void setHandler(Handler h) {
         sHandler = h;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,13 +148,13 @@ public class MainActivity extends AppCompatActivity {
             if (checkedId == R.id.svcbtn) {
                 svcbtn.setText(isChecked ? getStringWithLocale(R.string.ma_svc_toggleon) : getStringWithLocale(R.string.ma_svc_toggleoff));
                 if (isChecked) {
-                    if (checkNotificationPermission() && checkExactAlarmPermssion()) {
+                    if (checkNotificationPermission() && checkExactAlarmPermission()) {
                         if (!prefs.getBoolean(PREF_SVC_ENABLED, false))
                             startKcaService();
                     } else {
                         if (!checkNotificationPermission())
                             grantNotificationPermission();
-                        else if (!checkExactAlarmPermssion())
+                        else if (!checkExactAlarmPermission())
                             grantExactAlarmPermission();
                     }
                 } else {
@@ -210,28 +210,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        kctoolbtn = findViewById(R.id.kcatoolbtn);
-        kctoolbtn.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ToolsActivity.class);
-            startActivity(intent);
-        });
 
-        kcafairybtn = findViewById(R.id.kcafairybtn);
-        boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
-        if (is_random_fairy) {
-            kcafairybtn.setIconResource(R.mipmap.ic_help);
-        } else {
-            String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
-            String fairyPath = "noti_icon_".concat(fairyIdValue);
-            KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
-        }
-        kcafairybtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                        && !Settings.canDrawOverlays(getApplicationContext())) {
-                    // Can not draw overlays: pass
-                } else if (KcaService.getServiceStatus() && sHandler != null) {
+        bottomAppBar = findViewById(R.id.bottomAppBar);
+        bottomAppBar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.fairy) {
+                if (Settings.canDrawOverlays(getApplicationContext()) && KcaService.getServiceStatus() && sHandler != null) {
                     Bundle bundle = new Bundle();
                     bundle.putString("url", KCA_API_FAIRY_RETURN);
                     bundle.putString("data", "");
@@ -239,8 +222,26 @@ public class MainActivity extends AppCompatActivity {
                     sMsg.setData(bundle);
                     sHandler.sendMessage(sMsg);
                 }
+                return true;
+            } else if (item.getItemId() == R.id.tools) {
+                Intent intent = new Intent(MainActivity.this, ToolsActivity.class);
+                startActivity(intent);
+                return true;
+            } else {
+                return false;
             }
         });
+
+
+        fairyButton = bottomAppBar.getMenu().getItem(0);
+        boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
+        if (is_random_fairy) {
+            fairyButton.setIcon(R.mipmap.ic_help);
+        } else {
+            String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
+            String fairyPath = "noti_icon_".concat(fairyIdValue);
+            KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, fairyButton, 24);
+        }
 
         String main_html;
         try {
@@ -261,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
         Spanned fromHtml = HtmlCompat.fromHtml(main_html, 0);
         textDescription.setMovementMethod(LinkMovementMethod.getInstance());
         textDescription.setText(fromHtml);
-        //Linkify.addLinks(textDescription, Linkify.WEB_URLS);
 
         backPressCloseHandler = new BackPressCloseHandler(this);
 
@@ -364,14 +364,14 @@ public class MainActivity extends AppCompatActivity {
         setVpnBtn();
         setCheckBtn();
 
-        kcafairybtn = findViewById(R.id.kcafairybtn);
+        fairyButton = bottomAppBar.getMenu().getItem(0);
         boolean is_random_fairy = getBooleanPreferences(getApplicationContext(), PREF_FAIRY_RANDOM);
         if (is_random_fairy) {
-            kcafairybtn.setIconResource(R.mipmap.ic_help);
+            fairyButton.setIcon(R.mipmap.ic_help);
         } else {
             String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
             String fairyPath = "noti_icon_".concat(fairyIdValue);
-            KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, kcafairybtn, 24);
+            KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, fairyButton, 24);
             showDataLoadErrorToast(getApplicationContext(), getStringWithLocale(R.string.download_check_error));
         }
 
@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
             warnType[REQUEST_OVERLAY_PERMISSION] = !checkOverlayPermission();
         }
 
-        warnType[REQUEST_NOTIFICATION_PERMISSION] = !(checkNotificationPermission() && checkExactAlarmPermssion());
+        warnType[REQUEST_NOTIFICATION_PERMISSION] = !(checkNotificationPermission() && checkExactAlarmPermission());
         setWarning();
     }
 
@@ -509,7 +509,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean checkExactAlarmPermssion() {
+    private boolean checkExactAlarmPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             return alarmManager.canScheduleExactAlarms();
@@ -547,7 +547,7 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(getApplicationContext(), getString(R.string.ma_permission_service_restart), Toast.LENGTH_LONG).show();
                 }
-                if (!checkExactAlarmPermssion()) grantExactAlarmPermission();
+                if (!checkExactAlarmPermission()) grantExactAlarmPermission();
             }
         }
     }

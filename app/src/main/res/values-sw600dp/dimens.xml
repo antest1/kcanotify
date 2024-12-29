@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">18dp</dimen>
 
     <dimen name="activity_main_btn_size_top">64dp</dimen>
-    <dimen name="activity_main_btn_textsize">22dp</dimen>
+    <dimen name="activity_main_btn_textsize">22sp</dimen>
     <dimen name="activity_main_btn_fairy_padding">12dp</dimen>
     <dimen name="activity_main_btn_tools_padding">14dp</dimen>
     <dimen name="activity_text_size">22sp</dimen>

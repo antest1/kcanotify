@@ -36,6 +36,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -825,7 +826,7 @@ public class KcaUtils {
         }
     }
 
-    public static void setFairyImageFromStorage(Context context, String name, MaterialButton view, int dp) {
+    public static void setFairyImageFromStorage(Context context, String name, MenuItem view, int dp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int fairy_id = Integer.parseInt(name.replace("noti_icon_", ""));
         int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
@@ -859,9 +860,9 @@ public class KcaUtils {
                 });
             }
         } else if (FAIRY_SPECIAL_FLAG && fairy_id >= FAIRY_SPECIAL_PREFIX) {
-            view.setIconResource(getId(name, R.mipmap.class));
+            view.setIcon(getId(name, R.mipmap.class));
         } else {
-            view.setIconResource(R.mipmap.noti_icon_0);
+            view.setIcon(R.mipmap.noti_icon_0);
         }
     }
 
