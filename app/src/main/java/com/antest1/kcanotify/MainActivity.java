@@ -49,7 +49,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -586,11 +585,12 @@ public class MainActivity extends AppCompatActivity {
         alert.setPositiveButton(getStringWithLocale(R.string.dialog_ok), (dialog, which) -> {
             setPreferences(getApplicationContext(), PREF_VPNSERVICE_USAGE_AGREE, true);
             startVpnService();
-            dialog.dismiss();
         }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), (dialog, which) -> {
             prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
             vpnbtn.setChecked(false);
-            dialog.cancel();
+        }).setOnDismissListener(dialog -> {
+            prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+            vpnbtn.setChecked(false);
         });
         alert.setMessage(Html.fromHtml(getStringWithLocale(R.string.ma_dialog_vpn_usage)));
         AlertDialog dialog = alert.create();
