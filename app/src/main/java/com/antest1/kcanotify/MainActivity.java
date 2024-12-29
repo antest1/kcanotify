@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     KcaDBHelper dbHelper;
     Toolbar toolbar;
     KcaDownloader downloader;
-    ToggleButton vpnbtn, svcbtn;
+    MaterialButton vpnbtn, svcbtn;
     Button kcbtn;
     MaterialButton kctoolbtn;
     public MaterialButton kcafairybtn;
@@ -108,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences prefs;
     private BackPressCloseHandler backPressCloseHandler;
+
     public static void setHandler(Handler h) {
         sHandler = h;
     }
@@ -140,39 +142,43 @@ public class MainActivity extends AppCompatActivity {
         );
 
         vpnbtn = findViewById(R.id.vpnbtn);
-        vpnbtn.setTextOff(getStringWithLocale(R.string.ma_vpn_toggleoff));
-        vpnbtn.setTextOn(getStringWithLocale(R.string.ma_vpn_toggleon));
-        vpnbtn.setText("PASSIVE");
-        vpnbtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (getBooleanPreferences(getApplicationContext(), PREF_VPNSERVICE_USAGE_AGREE)) {
-                    startVpnService();
+        svcbtn = findViewById(R.id.svcbtn);
+        MaterialButtonToggleGroup toggleGroup = findViewById(R.id.toggleGroup);
+        toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (checkedId == R.id.svcbtn) {
+                svcbtn.setText(isChecked ? getStringWithLocale(R.string.ma_svc_toggleon) : getStringWithLocale(R.string.ma_svc_toggleoff));
+                if (isChecked) {
+                    if (checkNotificationPermission() && checkExactAlarmPermssion()) {
+                        if (!prefs.getBoolean(PREF_SVC_ENABLED, false))
+                            startKcaService();
+                    } else {
+                        if (!checkNotificationPermission())
+                            grantNotificationPermission();
+                        else if (!checkExactAlarmPermssion())
+                            grantExactAlarmPermission();
+                    }
                 } else {
-                    showVpnServiceNotification();
+                    stopKcaService();
                 }
-            } else {
-                stopVpnService();
+            } else if (checkedId == R.id.vpnbtn) {
+                vpnbtn.setText(isChecked ? getStringWithLocale(R.string.ma_vpn_toggleon) : getStringWithLocale(R.string.ma_vpn_toggleoff));
+                if (isChecked) {
+                    if (getBooleanPreferences(getApplicationContext(), PREF_VPNSERVICE_USAGE_AGREE)) {
+                        startVpnService();
+                    } else {
+                        showVpnServiceNotification();
+                    }
+                } else {
+                    stopVpnService();
+                }
             }
         });
 
         int sniffer_mode = getSnifferMode();
         vpnbtn.setEnabled(sniffer_mode == SNIFFER_ACTIVE);
-
-        svcbtn = findViewById(R.id.svcbtn);
-        svcbtn.setTextOff(getStringWithLocale(R.string.ma_svc_toggleoff));
-        svcbtn.setTextOn(getStringWithLocale(R.string.ma_svc_toggleon));
-        svcbtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (checkNotificationPermission() && checkExactAlarmPermssion()) {
-                    if (!prefs.getBoolean(PREF_SVC_ENABLED, false)) startKcaService();
-                } else {
-                    if (!checkNotificationPermission()) grantNotificationPermission();
-                    else if (!checkExactAlarmPermssion()) grantExactAlarmPermission();
-                }
-            } else {
-                stopKcaService();
-            }
-        });
+        if (sniffer_mode != SNIFFER_ACTIVE) {
+            vpnbtn.setText("PASSIVE");
+        }
 
         kcbtn = findViewById(R.id.kcbtn);
         kcbtn.setOnClickListener(v -> {
@@ -455,8 +461,10 @@ public class MainActivity extends AppCompatActivity {
     public void setVpnBtn() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (getSnifferMode() == SNIFFER_ACTIVE) {
+            boolean isChecked = prefs.getBoolean(PREF_VPN_ENABLED, false);
+            vpnbtn.setText(isChecked ? getStringWithLocale(R.string.ma_vpn_toggleon) : getStringWithLocale(R.string.ma_vpn_toggleoff));
             vpnbtn.setEnabled(true);
-            vpnbtn.setChecked(prefs.getBoolean(PREF_VPN_ENABLED, false));
+            vpnbtn.setChecked(isChecked);
         } else {
             vpnbtn.setText("PASSIVE");
             vpnbtn.setEnabled(false);
