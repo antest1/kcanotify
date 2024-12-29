@@ -23,9 +23,13 @@
         android:id="@+id/updatecheck_pref"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
 
 
         <LinearLayout
@@ -119,13 +123,12 @@
                     android:textSize="16sp" />
 
                 <Button
-                    style="?attr/materialButtonOutlinedStyle"
                     android:id="@+id/gamedata_updatecheck"
+                    style="?attr/materialIconButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:strokeColor="@color/colorPrimary"
-                    android:textColor="@color/colorPrimary"
-                    android:text="@string/action_check"/>
+                    app:icon="@android:drawable/stat_notify_sync"
+                    android:layout_marginEnd="4dp"/>
 
             </LinearLayout>
 
@@ -173,24 +176,27 @@
                     android:text="Kcanotify Resources"
                     android:textColor="@color/colorAccent"
                     android:textSize="16sp" />
-                <Button
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:id="@+id/resources_updatecheck"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:strokeColor="@color/colorPrimary"
-                    android:textColor="@color/colorPrimary"
-                    android:text="@string/action_check"/>
 
                 <Button
-                    style="?attr/materialButtonOutlinedStyle"
                     android:id="@+id/resources_downloadall"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    app:strokeColor="@color/colorAccent"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/action_downloadall"
                     android:textColor="@color/colorAccent"
-                    android:text="@string/action_downloadall"/>
+                    app:iconTint="@color/colorAccent"
+                    app:icon="@android:drawable/stat_sys_download"
+                    app:strokeColor="@color/colorAccent" />
+
+                <Button
+                    android:id="@+id/resources_updatecheck"
+                    style="?attr/materialIconButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@android:drawable/stat_notify_sync"
+                    android:layout_marginEnd="4dp"/>
+
 
             </LinearLayout>
 
@@ -205,13 +211,17 @@
                 android:text="Loading..."
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="16dp" />
+                android:textSize="16dp"/>
 
             <ListView
                 android:id="@+id/resources_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:paddingBottom="8dp"
+                android:clipToPadding="false"
+            />
         </LinearLayout>
 
     </LinearLayout>

@@ -96,11 +96,19 @@ public class UpdateCheckActivity extends AppCompatActivity {
     }
 
     private String getVersionString(int current, int latest) {
-        return KcaUtils.format("CURRENT: %d | LATEST: %d", current, latest);
+        if (current == latest) {
+            return KcaUtils.format("UP-TO-DATE: %d", latest);
+        } else {
+            return KcaUtils.format("CURRENT: %d | LATEST: %d", current, latest);
+        }
     }
 
     private String getVersionString(String current, String latest) {
-        return KcaUtils.format("CURRENT: %s | LATEST: %s", current, latest);
+        if (current != null && current.equalsIgnoreCase(latest)) {
+            return KcaUtils.format("UP-TO-DATE: %s", latest);
+        } else {
+            return KcaUtils.format("CURRENT: %s | LATEST: %s", current, latest);
+        }
     }
 
     @Override
