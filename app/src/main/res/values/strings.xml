@@ -773,7 +773,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="download_reset">Initialize all resources</string>
     <string name="download_reset_message">Initializing app resource again.</string>
     <string name="download_check_error">Error when loading from storage (using default data)</string>
-    <string name="download_setting_checkatstart">check update when start application</string>
+    <string name="download_setting_checkatstart">Check update when start application</string>
 
     <string name="packagefilter_count_format" formatted="false">Total Count: %d</string>
     <string name="packagefilter_restart">You need to restart VPN Service to make these options effective.</string>

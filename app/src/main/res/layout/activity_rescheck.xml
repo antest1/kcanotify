@@ -71,22 +71,22 @@
 
             </LinearLayout>
 
-            <CheckBox
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/reschk_checkatstart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="check update when start application"
+                android:text="@string/download_setting_checkatstart"
                 android:textSize="14sp" />
 
-            <CheckBox
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/reschk_reset"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:buttonTint="@color/colorPanelWarning"
                 android:checked="false"
-                android:text="reset all resource files"
+                android:text="@string/download_reset"
                 android:textColor="@color/colorPanelWarning"
                 android:textSize="14sp" />
 
@@ -118,22 +118,14 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="16sp" />
 
-                <TextView
+                <Button
+                    style="?attr/materialButtonOutlinedStyle"
                     android:id="@+id/gamedata_updatecheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:autoText="false"
-                    android:background="@color/colorAccent"
-                    android:paddingBottom="2dp"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingStart="8dp"
-                    android:paddingTop="2dp"
-                    android:text="@string/action_check"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    app:strokeColor="@color/colorPrimary"
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/action_check"/>
 
             </LinearLayout>
 
@@ -149,7 +141,6 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="16dp" />
-
             <ListView
                 android:id="@+id/gamedata_list"
                 android:layout_width="match_parent"
@@ -182,44 +173,24 @@
                     android:text="Kcanotify Resources"
                     android:textColor="@color/colorAccent"
                     android:textSize="16sp" />
-
-                <TextView
+                <Button
+                    style="?attr/materialButtonOutlinedStyle"
                     android:id="@+id/resources_updatecheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
-                    android:autoText="false"
-                    android:background="@color/colorAccent"
-                    android:paddingBottom="2dp"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingStart="8dp"
-                    android:paddingTop="2dp"
-                    android:text="@string/action_check"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    app:strokeColor="@color/colorPrimary"
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/action_check"/>
 
-                <TextView
+                <Button
+                    style="?attr/materialButtonOutlinedStyle"
                     android:id="@+id/resources_downloadall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
                     android:layout_marginStart="4dp"
-                    android:autoText="false"
-                    android:background="@color/colorPrimary"
-                    android:paddingBottom="2dp"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingStart="8dp"
-                    android:paddingTop="2dp"
-                    android:text="@string/action_downloadall"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    app:strokeColor="@color/colorAccent"
+                    android:textColor="@color/colorAccent"
+                    android:text="@string/action_downloadall"/>
 
             </LinearLayout>
 

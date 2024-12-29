@@ -299,14 +299,8 @@ public class KcaUtils {
     public static Context getContextWithLocale(Context ac, Context bc) {
         Locale locale = LocaleUtils.getLocale();
         Configuration configuration = new Configuration(ac.getResources().getConfiguration());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            configuration.setLocale(locale);
-            return bc.createConfigurationContext(configuration);
-        } else {
-            configuration.locale = locale;
-            bc.getResources().updateConfiguration(configuration, bc.getResources().getDisplayMetrics());
-            return bc;
-        }
+        configuration.setLocale(locale);
+        return bc.createConfigurationContext(configuration);
     }
 
     public static String getStringWithLocale(Context ac, Context bc, int id) {
