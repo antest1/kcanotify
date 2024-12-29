@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -51,7 +52,8 @@ public class AkashiActivity extends AppCompatActivity {
     TextView dmat_count, smat_count;
     TextView current_date;
 
-    Button starButton, safeButton, filterButton;
+    MaterialButton unsafeButton, safeButton;
+    Button starButton, filterButton;
     boolean isStarChecked, isSafeChecked = false;
     ArrayList<KcaAkashiListViewItem> listViewItemList;
 
@@ -82,8 +84,13 @@ public class AkashiActivity extends AppCompatActivity {
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0(Sun) ~ 6(Sat)
         currentClicked = dayOfWeek;
         listViewItemList = new ArrayList<>();
+
         starButton = findViewById(R.id.akashi_btn_star);
+
+        unsafeButton = findViewById(R.id.akashi_btn_unsafe);
         safeButton = findViewById(R.id.akashi_btn_safe);
+        unsafeButton.setChecked(true);
+
         filterButton = findViewById(R.id.akashi_btn_filter);
         isStarChecked = getBooleanPreferences(getApplicationContext(), PREF_AKASHI_STAR_CHECKED);
         setStarButton();
@@ -133,9 +140,14 @@ public class AkashiActivity extends AppCompatActivity {
             });
             toggleGroup.check(KcaUtils.getId(KcaUtils.format("akashi_day_%d", currentClicked), R.id.class));
 
+            unsafeButton.setOnClickListener(v -> {
+                isSafeChecked = false;
+                adapter.setSafeCheckedStatus(isSafeChecked);
+                loadAkashiList(currentClicked, isSafeChecked);
+                resetListView(false);
+            });
             safeButton.setOnClickListener(v -> {
-                isSafeChecked = !isSafeChecked;
-                setSafeButton();
+                isSafeChecked = true;
                 adapter.setSafeCheckedStatus(isSafeChecked);
                 loadAkashiList(currentClicked, isSafeChecked);
                 resetListView(false);
@@ -204,18 +216,6 @@ public class AkashiActivity extends AppCompatActivity {
             starButton.setText("☆");
         }
         setPreferences(getApplicationContext(), PREF_AKASHI_STAR_CHECKED, isStarChecked);
-    }
-
-    private void setSafeButton() {
-        if (isSafeChecked) {
-            safeButton.setText(getStringWithLocale(R.string.aa_btn_safe_state1));
-            safeButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
-            safeButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-        } else {
-            safeButton.setText(getStringWithLocale(R.string.aa_btn_safe_state0));
-            safeButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnText));
-            safeButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtn));
-        }
     }
 
     private void resetListView(boolean isTop) {

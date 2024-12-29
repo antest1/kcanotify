@@ -131,18 +131,34 @@
                 android:textColor="@color/colorBtnText"
                 android:textSize="16dp" />
 
-            <Button
-                android:id="@+id/akashi_btn_safe"
-                style="@style/Widget.Material3.Button.TonalButton"
+            <com.google.android.material.button.MaterialButtonToggleGroup
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/colorBtn"
-                android:text="@string/aa_btn_safe_state0"
-                android:textColor="@color/colorBtnText"
-                android:textSize="16dp" />
-
+                android:layout_weight="2"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/akashi_btn_unsafe"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:padding="2dp"
+                    android:text="@string/aa_btn_safe_state0"
+                    android:textAlignment="gravity"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/akashi_btn_safe"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:padding="2dp"
+                    android:text="@string/aa_btn_safe_state1"
+                    android:textAlignment="gravity" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
             <Button
                 android:id="@+id/akashi_btn_filter"
                 style="@style/Widget.Material3.Button.TonalButton"
