@@ -36,16 +36,14 @@
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 app:layout_constraintTop_toTopOf="parent"
-                android:background="@color/white"
                 android:orientation="vertical"
-                android:padding="6dp"
+                android:paddingTop="6dp"
                 android:layout_marginBottom="@dimen/activity_vertical_margin">
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/toggleGroup"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/activity_main_btn_size_top"
-                    android:layout_marginBottom="6dp"
+                    android:layout_height="wrap_content"
                     android:weightSum="2">
 
                     <com.google.android.material.button.MaterialButton
@@ -56,7 +54,6 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="3dp"
                         android:layout_weight="1"
                         android:stateListAnimator="@null"
                         android:text="@string/ma_vpn_toggleoff"
@@ -70,7 +67,6 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginStart="3dp"
                         android:layout_weight="1"
                         android:stateListAnimator="@null"
                         android:text="@string/ma_svc_toggleoff"
@@ -80,31 +76,31 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="42dp"
+                    android:layout_height="wrap_content"
                     >
 
                     <com.google.android.material.button.MaterialButton
                         android:layout_width="0dp"
-                        android:layout_height="42dp"
+                        android:layout_height="wrap_content"
                         android:id="@+id/kcafairybtn"
                         style="?attr/materialIconButtonFilledStyle"
                         android:backgroundTint="@color/colorFairyShowBtn"
+                        android:text="@string/fairy_hidden_notification_action_return"
                         app:icon="@mipmap/noti_icon_0"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintDimensionRatio="1:1"
                         android:stateListAnimator="@null">
                     </com.google.android.material.button.MaterialButton>
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/kcatoolbtn"
                         android:layout_width="0dp"
-                        android:layout_height="42dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_tools"
                         style="?attr/materialIconButtonFilledStyle"
                         android:backgroundTint="@color/colorToolsBtn"
                         app:icon="@mipmap/ic_dashboard"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/kcafairybtn"
-                        app:layout_constraintDimensionRatio="1:1"
                         android:stateListAnimator="@null">
                     </com.google.android.material.button.MaterialButton>
 
@@ -142,32 +138,11 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textMainWarn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginRight="6dp"
-                    android:background="@color/colorPanelWarning"
-                    android:maxLines="8"
-                    android:minHeight="84dp"
-                    android:padding="4dp"
-                    android:scrollbars="vertical"
-                    android:text="화면 오버레이가 설정되지 않았습니다."
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/white"
-                    android:textSize="14dp" />
-
-                <TextView
                     android:id="@+id/textMainUpdate"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@id/textMainWarn"
-                    android:layout_alignParentBottom="false"
+                    android:layout_alignParentBottom="true"
                     android:layout_marginStart="6dp"
                     android:layout_marginLeft="6dp"
                     android:layout_marginTop="4dp"
@@ -270,7 +245,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        tools:visibility="invisible">
+        tools:visibility="gone">
         <com.google.android.material.bottomsheet.BottomSheetDragHandleView
             android:id="@+id/drag_handle"
             android:layout_width="match_parent"

@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     public MaterialButton kcafairybtn;
     public static Handler sHandler;
     TextView textDescription;
-    TextView textWarn, textMainUpdate, textSpecial, textMaintenance;
+    TextView textMainUpdate, textSpecial, textMaintenance;
     TextView textSpecial2;
 
     ActivityResultLauncher<Intent> vpnPrepareLauncher, exactAlarmPrepareLauncher;
@@ -240,9 +241,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        textWarn = findViewById(R.id.textMainWarn);
-        textWarn.setVisibility(View.GONE);
 
         String main_html;
         try {
@@ -409,22 +407,26 @@ public class MainActivity extends AppCompatActivity {
 
     public void setWarning() {
         String warnText = "";
+        View main = findViewById(R.id.activity_main);
         if (warnType[REQUEST_OVERLAY_PERMISSION]) {
             warnText = warnText.concat("\n").concat(getString(R.string.ma_toast_overay_diabled));
+            Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.setting_menu_perm_head), view -> {
+                        // TODO: Share code with MainPreferenceFragment.java
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + getApplicationContext().getPackageName()));
+                        startActivity(intent);
+                    }).show();
         }
         if (warnType[REQUEST_EXTERNAL_PERMISSION]) {
             warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_external_denied));
+            // TODO: Add action
+            Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE).show();
         }
         if (warnType[REQUEST_NOTIFICATION_PERMISSION] || warnType[REQUEST_EXACT_ALARM_PERMISSION]) {
             warnText = warnText.concat("\n").concat(getString(R.string.ma_permission_notification_denied));
-        }
-
-        if (!warnText.isEmpty()) {
-            textWarn.setVisibility(View.VISIBLE);
-            textWarn.setText(warnText.trim());
-        } else {
-            textWarn.setVisibility(View.GONE);
-            textWarn.setText("");
+            // TODO: Add action
+            Snackbar.make(main, warnText.trim(), Snackbar.LENGTH_INDEFINITE).show();
         }
     }
 

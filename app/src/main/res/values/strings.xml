@@ -123,7 +123,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="ma_svc_toggleoff">Service Off</string>
     <string name="ma_toast_kancolle_not_installed">Kancolle For Android is not installed.</string>
     <string name="ma_toast_gotobrowser_not_installed">GotoBrowser is not installed.</string>
-    <string name="ma_toast_overay_diabled">Screen Overlay Permission is required for BattleView. Enable Screen Overlay at Settings > Screen Overlay Settings.</string>
+    <string name="ma_toast_overay_diabled">Screen Overlay Permission is required for BattleView.</string>
     <string name="ma_hasupdate" formatted="false">An update is available. (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">New game data is available. (%s)</string>
     <string name="ma_nextmaintenance" formatted="false">Next Maintenance:\n%s</string>

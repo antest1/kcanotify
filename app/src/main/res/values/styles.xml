@@ -10,6 +10,8 @@
         <item name="colorButtonNormal">@color/colorBtn</item>
         <item name="colorSecondaryContainer">@color/colorBtn</item>
         <item name="colorPrimaryContainer">@color/colorAccent</item>
+        <item name="colorPrimaryInverse">@color/colorAccent</item>
+
     </style>
 
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">

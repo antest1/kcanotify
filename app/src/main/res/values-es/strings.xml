@@ -83,7 +83,7 @@
     <string name="ma_dialog_vpn_usage"><![CDATA[Kcanotify usa una VPN local (VpnService) para filtrar el tráfico de datos del juego. Si no permitió el permiso para VPN antes, permita una conexión VPN en el siguiente cuadro de diálogo. Su tráfico de Internet no se envía a un servidor VPN remoto.<br/><br/><a href="https://github.com/antest1/kcanotify/blob/master/private_policy.md">Privacy Policy</a>]]></string>
     <string name="ma_toast_kancolle_not_installed">Kancolle para Android no está instalado.</string>
     <string name="ma_toast_gotobrowser_not_installed">GotoBrowser no está instalado.</string>
-    <string name="ma_toast_overay_diabled">Permiso de superposición de pantalla necesario para Predicción de Batalla. Activable en Ajustes.</string>
+    <string name="ma_toast_overay_diabled">Permiso de superposición de pantalla necesario para Predicción de Batalla.</string>
     <string name="ma_hasupdate" formatted="false">Actualización disponible. (%s)</string>
     <string name="ma_hasdataupdate" formatted="false">Nuevos datos del juego disponibles. (%s)</string>
     <string name="ma_nextmaintenance" formatted="false">Siguiente mantenimiento:\n%s</string>
