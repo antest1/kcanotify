@@ -78,7 +78,6 @@ import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
-import static org.apache.commons.lang3.StringUtils.split;
 
 public class KcaFleetViewService extends Service {
     public static final String SHOW_FLEETVIEW_ACTION = "show_fleetview_action";
@@ -296,19 +295,13 @@ public class KcaFleetViewService extends Service {
             deckInfoCalc = new KcaDeckInfo(getApplicationContext(), contextWithLocale);
             gunfitData = loadGunfitData(getAssets());
 
-            //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mInflater = LayoutInflater.from(contextWithLocale);
             initView();
 
             fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
             itemView = mInflater.inflate(R.layout.view_battleview_items, null);
             mHandler = new Handler();
-            timer = new Runnable() {
-                @Override
-                public void run() {
-                    updateFleetInfoLine();
-                }
-            };
+            timer = this::updateFleetInfoLine;
             runTimer();
 
             mManager.addView(mView, mParams);
@@ -434,8 +427,7 @@ public class KcaFleetViewService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
@@ -739,7 +731,7 @@ public class KcaFleetViewService extends Service {
         } else {
             airPowerValue = deckInfoCalc.getAirPowerRangeString(deckportdata, idx, null);
         }
-        if (airPowerValue.length() > 0) {
+        if (!airPowerValue.isEmpty()) {
             infoList.add(airPowerValue);
         }
 

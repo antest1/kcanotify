@@ -186,7 +186,7 @@
 
         app:behavior_expandedOffset="80dp"
         app:behavior_fitToContents="false"
-        app:behavior_halfExpandedRatio="0.4"
+        app:behavior_halfExpandedRatio="0.6"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         tools:visibility="visible">
 
