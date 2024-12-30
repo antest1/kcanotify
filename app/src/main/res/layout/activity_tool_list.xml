@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -29,253 +28,300 @@
             android:orientation="vertical"
             android:padding="5dp">
 
-            <LinearLayout
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/action_fleetlist"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="2dp"
-                android:background="@color/colorMenuBack"
-                android:orientation="horizontal"
-                android:padding="8dp">
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
 
-                <ImageView
-                    android:id="@+id/fleetinfo_icon"
-                    android:layout_width="30sp"
-                    android:layout_height="30sp"
-                    android:background="@color/colorAccent"
-                    android:padding="5dp"
-                    android:src="@mipmap/ic_flag"
-                    app:srcCompat="@mipmap/ic_flag" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/colorMenuBack"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
-                <TextView
-                    android:id="@+id/fleetlist_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginStart="10sp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text="@string/action_fleetlist"
-                    android:textColor="@color/darkgray"
-                    android:textSize="22sp" />
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="30sp"
+                        android:layout_height="30sp"
+                        android:background="@color/colorAccent"
+                        android:padding="5dp"
+                        android:src="@mipmap/ic_flag"
+                        app:srcCompat="@mipmap/ic_flag" />
 
-            <LinearLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/action_fleetlist"
+                        android:textColor="@color/darkgray"
+                        android:textSize="22sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/action_shiplist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:background="@color/colorMenuBack"
-                android:orientation="horizontal"
-                android:padding="8dp">
+                android:layout_margin="8dp">
 
-                <ImageView
-                    android:id="@+id/shiplist_icon"
-                    android:layout_width="30sp"
-                    android:layout_height="30sp"
-                    android:background="@color/colorAccent"
-                    android:padding="5dp"
-                    android:src="@mipmap/ic_ship"
-                    app:srcCompat="@mipmap/ic_ship" />
-
-                <TextView
-                    android:id="@+id/shiplist_text"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginStart="10sp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text="@string/action_shipinfo"
-                    android:textColor="@color/darkgray"
-                    android:textSize="22sp" />
-            </LinearLayout>
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/colorMenuBack"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
-            <LinearLayout
+                    <ImageView
+                        android:id="@+id/shiplist_icon"
+                        android:layout_width="30sp"
+                        android:layout_height="30sp"
+                        android:background="@color/colorAccent"
+                        android:padding="5dp"
+                        android:src="@mipmap/ic_ship"
+                        app:srcCompat="@mipmap/ic_ship" />
+
+                    <TextView
+                        android:id="@+id/shiplist_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/action_shipinfo"
+                        android:textColor="@color/darkgray"
+                        android:textSize="22sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/action_equipment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:background="@color/colorMenuBack"
-                android:orientation="horizontal"
-                android:padding="8dp">
+                android:layout_margin="8dp">
 
-                <ImageView
-                    android:id="@+id/equipment_icon"
-                    android:layout_width="30sp"
-                    android:layout_height="30sp"
-                    android:background="@color/colorAccent"
-                    android:padding="5dp"
-                    android:src="@mipmap/ic_equip"
-                    app:srcCompat="@mipmap/ic_equip" />
-
-                <TextView
-                    android:id="@+id/equipment_text"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginStart="10sp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text="@string/action_equipmentinfo"
-                    android:textColor="@color/darkgray"
-                    android:textSize="22sp" />
-            </LinearLayout>
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/colorMenuBack"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
-            <LinearLayout
+                    <ImageView
+                        android:id="@+id/equipment_icon"
+                        android:layout_width="30sp"
+                        android:layout_height="30sp"
+                        android:background="@color/colorAccent"
+                        android:padding="5dp"
+                        android:src="@mipmap/ic_equip"
+                        app:srcCompat="@mipmap/ic_equip" />
+
+                    <TextView
+                        android:id="@+id/equipment_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/action_equipmentinfo"
+                        android:textColor="@color/darkgray"
+                        android:textSize="22sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/action_droplog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:background="@color/colorMenuBack"
-                android:orientation="horizontal"
-                android:padding="8dp">
+                android:layout_margin="8dp">
 
-                <ImageView
-                    android:id="@+id/droplog_icon"
-                    android:layout_width="30sp"
-                    android:layout_height="30sp"
-                    android:background="@color/colorAccent"
-                    android:padding="5dp"
-                    android:src="@mipmap/ic_droplog"
-                    app:srcCompat="@mipmap/ic_droplog" />
-
-                <TextView
-                    android:id="@+id/droplog_text"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginStart="10sp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text="@string/action_droplog"
-                    android:textColor="@color/darkgray"
-                    android:textSize="22sp" />
-            </LinearLayout>
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/colorMenuBack"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
-            <LinearLayout
+                    <ImageView
+                        android:id="@+id/droplog_icon"
+                        android:layout_width="30sp"
+                        android:layout_height="30sp"
+                        android:background="@color/colorAccent"
+                        android:padding="5dp"
+                        android:src="@mipmap/ic_droplog"
+                        app:srcCompat="@mipmap/ic_droplog" />
+
+                    <TextView
+                        android:id="@+id/droplog_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/action_droplog"
+                        android:textColor="@color/darkgray"
+                        android:textSize="22sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/action_reslog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:background="@color/colorMenuBack"
-                android:orientation="horizontal"
-                android:padding="8dp">
+                android:layout_margin="8dp">
 
-                <ImageView
-                    android:id="@+id/reslog_icon"
-                    android:layout_width="30sp"
-                    android:layout_height="30sp"
-                    android:background="@color/colorAccent"
-                    android:padding="5dp"
-                    android:src="@mipmap/ic_graph"
-                    app:srcCompat="@mipmap/ic_graph" />
-
-                <TextView
-                    android:id="@+id/reslog_text"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginStart="10sp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text="@string/action_reslog"
-                    android:textColor="@color/darkgray"
-                    android:textSize="22sp" />
-            </LinearLayout>
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/colorMenuBack"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
-            <LinearLayout
+                    <ImageView
+                        android:id="@+id/reslog_icon"
+                        android:layout_width="30sp"
+                        android:layout_height="30sp"
+                        android:background="@color/colorAccent"
+                        android:padding="5dp"
+                        android:src="@mipmap/ic_graph"
+                        app:srcCompat="@mipmap/ic_graph" />
+
+                    <TextView
+                        android:id="@+id/reslog_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/action_reslog"
+                        android:textColor="@color/darkgray"
+                        android:textSize="22sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/action_akashi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:background="@color/colorMenuBack"
-                android:orientation="horizontal"
-                android:padding="8dp">
+                android:layout_margin="8dp">
 
-                <ImageView
-                    android:id="@+id/akashi_icon"
-                    android:layout_width="30sp"
-                    android:layout_height="30sp"
-                    android:background="@color/colorAccent"
-                    android:padding="5dp"
-                    android:src="@mipmap/ic_screw"
-                    app:srcCompat="@mipmap/ic_screw" />
-
-                <TextView
-                    android:id="@+id/akashi_text"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginStart="10sp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text="@string/action_akashi"
-                    android:textColor="@color/darkgray"
-                    android:textSize="22sp" />
-            </LinearLayout>
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/colorMenuBack"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
-            <LinearLayout
+                    <ImageView
+                        android:id="@+id/akashi_icon"
+                        android:layout_width="30sp"
+                        android:layout_height="30sp"
+                        android:background="@color/colorAccent"
+                        android:padding="5dp"
+                        android:src="@mipmap/ic_screw"
+                        app:srcCompat="@mipmap/ic_screw" />
+
+                    <TextView
+                        android:id="@+id/akashi_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/action_akashi"
+                        android:textColor="@color/darkgray"
+                        android:textSize="22sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/action_expcalc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:background="@color/colorMenuBack"
-                android:orientation="horizontal"
-                android:padding="8dp">
+                android:layout_margin="8dp">
 
-                <ImageView
-                    android:id="@+id/expcalc_icon"
-                    android:layout_width="30sp"
-                    android:layout_height="30sp"
-                    android:background="@color/colorAccent"
-                    android:padding="5dp"
-                    android:src="@mipmap/ic_expcalc"
-                    app:srcCompat="@mipmap/ic_expcalc" />
-
-                <TextView
-                    android:id="@+id/expcalc_text"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginStart="10sp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text="@string/action_expcalc"
-                    android:textColor="@color/darkgray"
-                    android:textSize="22sp" />
-            </LinearLayout>
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/colorMenuBack"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
-            <LinearLayout
+                    <ImageView
+                        android:id="@+id/expcalc_icon"
+                        android:layout_width="30sp"
+                        android:layout_height="30sp"
+                        android:background="@color/colorAccent"
+                        android:padding="5dp"
+                        android:src="@mipmap/ic_expcalc"
+                        app:srcCompat="@mipmap/ic_expcalc" />
+
+                    <TextView
+                        android:id="@+id/expcalc_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/action_expcalc"
+                        android:textColor="@color/darkgray"
+                        android:textSize="22sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/action_expdtable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:background="@color/colorMenuBack"
-                android:orientation="horizontal"
-                android:padding="8dp">
+                android:layout_margin="8dp">
 
-                <ImageView
-                    android:id="@+id/expdtable_icon"
-                    android:layout_width="30sp"
-                    android:layout_height="30sp"
-                    android:background="@color/colorAccent"
-                    android:padding="5dp"
-                    android:src="@mipmap/ic_expdtable"
-                    app:srcCompat="@mipmap/ic_expdtable" />
-
-                <TextView
-                    android:id="@+id/expdtable_text"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginStart="10sp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text="@string/action_expdtable"
-                    android:textColor="@color/darkgray"
-                    android:textSize="22sp" />
-            </LinearLayout>
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/colorMenuBack"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/expdtable_icon"
+                        android:layout_width="30sp"
+                        android:layout_height="30sp"
+                        android:background="@color/colorAccent"
+                        android:padding="5dp"
+                        android:src="@mipmap/ic_expdtable"
+                        app:srcCompat="@mipmap/ic_expdtable" />
+
+                    <TextView
+                        android:id="@+id/expdtable_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/action_expdtable"
+                        android:textColor="@color/darkgray"
+                        android:textSize="22sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
     </ScrollView>
