@@ -177,27 +177,58 @@
         app:menu="@menu/bottom_app_bar"
         />
 
-    <!--<FrameLayout
+    <FrameLayout
         android:id="@+id/bottomSheet"
         style="@style/Widget.Material3.BottomSheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+
+        app:behavior_expandedOffset="80dp"
+        app:behavior_fitToContents="false"
+        app:behavior_halfExpandedRatio="0.4"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        tools:visibility="gone">
+        tools:visibility="visible">
+
         <com.google.android.material.bottomsheet.BottomSheetDragHandleView
             android:id="@+id/drag_handle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </FrameLayout>-->
+            android:layout_height="wrap_content" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragment_container_view"
+                android:name="com.antest1.kcanotify.ToolsFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="16dp" />
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/anchor_dummy"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_marginTop="-16dp"
+            android:focusable="false"
+            android:text=""
+            android:visibility="invisible" />
+
+    </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/kcbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_margin="16dp"
-        android:layout_gravity="bottom|end"
         android:text="GAME START"
-        app:icon="@android:drawable/ic_media_play"/>
+        app:icon="@android:drawable/ic_media_play"
+        app:layout_anchor="@id/anchor_dummy"
+        app:layout_anchorGravity="end" />
 
     <ImageView
         android:id="@+id/special_image"

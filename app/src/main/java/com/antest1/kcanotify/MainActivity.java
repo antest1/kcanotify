@@ -1,6 +1,7 @@
 package com.antest1.kcanotify;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -48,6 +49,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -210,6 +212,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        FrameLayout bottomSheet = findViewById(R.id.bottomSheet);
+        BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         bottomAppBar = findViewById(R.id.bottomAppBar);
         bottomAppBar.setOnMenuItemClickListener(item -> {
@@ -223,9 +228,9 @@ public class MainActivity extends AppCompatActivity {
                     sHandler.sendMessage(sMsg);
                 }
                 return true;
-            } else if (item.getItemId() == R.id.tools) {
-                Intent intent = new Intent(MainActivity.this, ToolsActivity.class);
-                startActivity(intent);
+            } else if (item.getItemId() == R.id.tools)
+            {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
                 return true;
             } else {
                 return false;
@@ -242,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
             String fairyPath = "noti_icon_".concat(fairyIdValue);
             KcaUtils.setFairyImageFromStorage(getApplicationContext(), fairyPath, fairyButton, 24);
         }
+
 
         String main_html;
         try {
