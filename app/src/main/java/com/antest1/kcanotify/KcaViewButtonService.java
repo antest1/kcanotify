@@ -1,7 +1,6 @@
 package com.antest1.kcanotify;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.app.Service;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
@@ -47,7 +46,6 @@ import com.google.gson.JsonObject;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -273,7 +271,7 @@ public class KcaViewButtonService extends Service {
             }
             viewBitmapId = "noti_icon_".concat(fairyIdValue);
             setFairyImage();
-            if (icon_info.size() > 0) {
+            if (!icon_info.isEmpty()) {
                 int fairy_id = Integer.parseInt(fairyIdValue);
                 int rev_internal = 0;
                 if (fairy_id < icon_info.size()) {
@@ -307,12 +305,12 @@ public class KcaViewButtonService extends Service {
             display.getSize(size);
             screenWidth = size.x;
             screenHeight = size.y;
-            Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+            Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
             JsonObject locdata = null;
             String ori_prefix = getOrientationPrefix(getResources().getConfiguration().orientation);
             if (dbHelper != null) locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
-            if (locdata != null && locdata.toString().length() > 0) {
+            if (locdata != null && !locdata.toString().isEmpty()) {
                 if (locdata.has(ori_prefix.concat("x"))) {
                     mParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
                 }
@@ -337,8 +335,7 @@ public class KcaViewButtonService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (!KcaService.getServiceStatus()) {
@@ -388,7 +385,7 @@ public class KcaViewButtonService extends Service {
                 String fairyIdValue = getStringPreferences(getApplicationContext(), PREF_FAIRY_ICON);
                 viewBitmapId = "noti_icon_".concat(fairyIdValue);
                 setFairyImage();
-                if (icon_info.size() > 0) {
+                if (!icon_info.isEmpty()) {
                     int fairy_id = Integer.parseInt(fairyIdValue);
                     int rev_internal = 0;
                     if (fairy_id < icon_info.size()) {
@@ -444,9 +441,6 @@ public class KcaViewButtonService extends Service {
                 break;
             case 2:
                 size_dp = getResources().getDimensionPixelSize(R.dimen.button_size_small);
-                break;
-            case 3:
-                size_dp = getResources().getDimensionPixelSize(R.dimen.button_size_normal);
                 break;
             case 4:
                 size_dp = getResources().getDimensionPixelSize(R.dimen.button_size_large);
@@ -709,12 +703,7 @@ public class KcaViewButtonService extends Service {
         String packageNameByUsageStats = null;
         String recentPackageName = "";
         UsageStatsManager mUsageStatsManager;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        } else {
-            //noinspection ResourceType
-            mUsageStatsManager = (UsageStatsManager) getSystemService("usagestats");
-        }
+        mUsageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         final long INTERVAL = 5000;
         final long end = System.currentTimeMillis();
         final long begin = end - INTERVAL;
@@ -741,13 +730,13 @@ public class KcaViewButtonService extends Service {
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
-        Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+        Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
         JsonObject locdata = null;
         if (dbHelper != null) {
             locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
 
-            if (locdata != null && locdata.toString().length() > 0) {
+            if (locdata != null && !locdata.toString().isEmpty()) {
                 if (locdata.has(ori_prefix.concat("x"))) {
                     mParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
                 }
@@ -764,7 +753,7 @@ public class KcaViewButtonService extends Service {
                 mManager.updateViewLayout(mView, mParams);
             }
 
-            if (locdata != null && locdata.toString().length() > 0) {
+            if (locdata != null && !locdata.toString().isEmpty()) {
                 locdata.addProperty(ori_prefix.concat("x"), mParams.x);
                 locdata.addProperty(ori_prefix.concat("y"), mParams.y);
             } else {
