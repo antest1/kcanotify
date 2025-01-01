@@ -711,152 +711,104 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button"
                             android:id="@+id/viewbutton_quest"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
+                            android:backgroundTint="@color/colorFleetInfoBtn"
+                            android:padding="0dp"
                             android:text="@string/viewmenu_quest"
-                            android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            app:cornerRadius="8dp" />
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button"
                             android:id="@+id/viewbutton_excheck"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
+                            android:backgroundTint="@color/colorFleetInfoBtn"
+                            android:padding="0dp"
                             android:text="@string/viewmenu_excheck"
-                            android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            app:cornerRadius="8dp" />
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button"
                             android:id="@+id/viewbutton_develop"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
+                            android:backgroundTint="@color/colorFleetInfoBtn"
+                            android:padding="0dp"
                             android:text="@string/viewmenu_develop"
-                            android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            app:cornerRadius="8dp" />
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button"
                             android:id="@+id/viewbutton_construction"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
-                            android:scrollIndicators="right"
+                            android:backgroundTint="@color/colorFleetInfoBtn"
+                            android:padding="0dp"
                             android:text="@string/viewmenu_construction"
-                            android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            app:cornerRadius="8dp" />
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button"
                             android:id="@+id/viewbutton_docking"
-                            android:layout_width="match_parent"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
+                            android:backgroundTint="@color/colorFleetInfoBtn"
+                            android:padding="0dp"
                             android:text="@string/viewmenu_docking"
-                            android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            app:cornerRadius="8dp" />
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button"
                             android:id="@+id/viewbutton_maphp"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
+                            android:backgroundTint="@color/colorFleetInfoBtn"
+                            android:padding="0dp"
                             android:text="@string/viewmenu_maphp"
-                            android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            app:cornerRadius="8dp" />
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button"
                             android:id="@+id/viewbutton_fchk"
-                            android:layout_width="match_parent"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
-                            android:scrollIndicators="right"
+                            android:backgroundTint="@color/colorFleetInfoBtn"
+                            android:padding="0dp"
                             android:text="@string/viewmenu_fchk"
-                            android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            app:cornerRadius="8dp" />
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button"
                             android:id="@+id/viewbutton_labinfo"
-                            android:layout_width="match_parent"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
-                            android:scrollIndicators="right"
+                            android:backgroundTint="@color/colorFleetInfoBtn"
+                            android:padding="0dp"
                             android:text="@string/viewmenu_labinfo"
-                            android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            app:cornerRadius="8dp" />
 
-                        <TextView
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Material3.Button"
                             android:id="@+id/viewbutton_akashi"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/colorFleetInfoBtn"
-                            android:gravity="center"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
-                            android:paddingTop="8dp"
+                            android:backgroundTint="@color/colorFleetInfoBtn"
+                            android:padding="0dp"
                             android:text="@string/viewmenu_akashi"
-                            android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            app:cornerRadius="8dp" />
                     </LinearLayout>
                 </ScrollView>
 
