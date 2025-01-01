@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark"
+    android:background="@drawable/overlay_background_solid"
     android:orientation="vertical"
-    android:padding="4dp">
+    android:padding="12dp">
 
     <LinearLayout
         android:id="@+id/view_slot"

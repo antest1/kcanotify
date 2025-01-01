@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="450dp"
         android:layout_height="match_parent"
-        android:background="@drawable/overlay_background"
+        android:background="@drawable/overlay_background_solid"
         android:orientation="vertical"
         android:padding="12dp">
 

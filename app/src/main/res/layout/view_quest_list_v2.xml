@@ -24,7 +24,7 @@
             android:id="@+id/questviewpanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/overlay_background"
+            android:background="@drawable/overlay_background_solid"
             android:orientation="vertical"
             android:padding="@dimen/view_padding">
 
