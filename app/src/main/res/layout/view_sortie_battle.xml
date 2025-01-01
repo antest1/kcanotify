@@ -24,7 +24,6 @@
             android:id="@+id/battleviewpanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:alpha="0.8"
             android:background="@drawable/overlay_background"
             android:orientation="vertical"
             android:padding="@dimen/battleview_padding">
