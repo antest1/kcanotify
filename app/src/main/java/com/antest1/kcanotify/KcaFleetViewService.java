@@ -588,9 +588,7 @@ public class KcaFleetViewService extends Service {
     }
 
     private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
-        private static final int MAX_CLICK_DURATION = 200;
         private long startClickTime = -1;
-        private long clickDuration;
         private float mBeforeY, mAfterY;
 
         @Override
@@ -655,7 +653,6 @@ public class KcaFleetViewService extends Service {
                     break;
                 case MotionEvent.ACTION_UP:
                     Log.e("KCA-FV", "ACTION_UP");
-                    clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                     if (id == fleetInfoLine.getId()) {
                         fleetInfoLine.setSelected(false);
                     }
@@ -1167,6 +1164,7 @@ public class KcaFleetViewService extends Service {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+        contextWithLocale = new ContextThemeWrapper(contextWithLocale, R.style.AppTheme);
         if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();

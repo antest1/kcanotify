@@ -45,9 +45,9 @@
 
             <ImageView
                 android:id="@+id/fleetview_tool"
-                android:layout_width="20dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="top"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_weight="0"
@@ -56,9 +56,9 @@
 
             <ImageView
                 android:id="@+id/fleetview_exit"
-                android:layout_width="20dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="top"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_weight="0"
