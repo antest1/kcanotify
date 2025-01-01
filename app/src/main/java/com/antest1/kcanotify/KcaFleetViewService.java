@@ -564,24 +564,24 @@ public class KcaFleetViewService extends Service {
                     }
 
                     if (clickDuration < MAX_CLICK_DURATION) {
-                        if (id == mView.findViewById(R.id.fleetview_head).getId()) {
+                        if (id == R.id.fleetview_head) {
                             JsonObject statProperties = new JsonObject();
                             statProperties.addProperty("manual", true);
                             if (mView != null) mView.setVisibility(GONE);
                             if (itemView != null) itemView.setVisibility(GONE);
-                        } else if (id == mView.findViewById(R.id.fleetview_tool).getId()) {
+                        } else if (id == R.id.fleetview_tool) {
                             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Tools"), null);
                             if (mView != null) mView.setVisibility(GONE);
                             if (itemView != null) itemView.setVisibility(GONE);
                             Intent toolIntent = new Intent(KcaFleetViewService.this, ToolsActivity.class);
                             toolIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(toolIntent);
-                        } else if (id == mView.findViewById(R.id.fleetview_cn_change).getId()) {
+                        } else if (id == R.id.fleetview_cn_change) {
                             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("CnChange"), null);
                             changeInternalSeekCn();
                             fleetCnChangeBtn.setText(getSeekType());
                             processDeckInfo(selected, isCombinedFlag(selected));
-                        } else if (id == mView.findViewById(R.id.fleetview_fleetswitch).getId()) {
+                        } else if (id == R.id.fleetview_fleetswitch) {
                             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("FleetChange"), null);
                             if (switch_status == 1) {
                                 switch_status = 2;
@@ -594,65 +594,65 @@ public class KcaFleetViewService extends Service {
                                 mView.findViewById(R.id.fleet_list_combined).setVisibility(View.GONE);
                                 ((TextView) mView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_1));
                             }
-                        } else if (id == mView.findViewById(R.id.fleetview_hqinfo).getId()) {
+                        } else if (id == R.id.fleetview_hqinfo) {
                             setNextState();
                             JsonObject statProperties = new JsonObject();
                             statProperties.addProperty("state", hqinfoState);
                             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("HqInfo"), statProperties);
                             setHqInfo();
-                        } else if (id == mView.findViewById(R.id.viewbutton_quest).getId()) {
+                        } else if (id == R.id.viewbutton_quest) {
                             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Quest"), null);
                             qintent = new Intent(getBaseContext(), KcaQuestViewService.class);
                             qintent.setAction(SHOW_QUESTVIEW_ACTION_NEW);
                             startService(qintent);
-                        } else if (id == mView.findViewById(R.id.viewbutton_akashi).getId()) {
+                        } else if (id == R.id.viewbutton_akashi) {
                             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Akashi"), null);
                             qintent = new Intent(getBaseContext(), KcaAkashiViewService.class);
                             qintent.setAction(SHOW_AKASHIVIEW_ACTION);
                             startService(qintent);
-                        } else if (id == mView.findViewById(R.id.viewbutton_develop).getId()) {
+                        } else if (id == R.id.viewbutton_develop) {
                             if (isGameDataLoaded()) {
                                 sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Develop"), null);
                                 qintent = new Intent(getBaseContext(), KcaDevelopPopupService.class);
                                 startService(qintent);
                             }
-                        } else if (id == mView.findViewById(R.id.viewbutton_construction).getId()) {
+                        } else if (id == R.id.viewbutton_construction) {
                             if (isGameDataLoaded()) {
                                 sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Constr"), null);
                                 qintent = new Intent(getBaseContext(), KcaConstructPopupService.class);
                                 qintent.setAction(KcaConstructPopupService.CONSTR_DATA_ACTION);
                                 startService(qintent);
                             }
-                        } else if (id == mView.findViewById(R.id.viewbutton_docking).getId()) {
+                        } else if (id == R.id.viewbutton_docking) {
                             if (isGameDataLoaded()) {
                                 sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("Docking"), null);
                                 qintent = new Intent(getBaseContext(), KcaDockingPopupService.class);
                                 qintent.setAction(KcaDockingPopupService.DOCKING_DATA_ACTION);
                                 startService(qintent);
                             }
-                        } else if (id == mView.findViewById(R.id.viewbutton_maphp).getId()) {
+                        } else if (id == R.id.viewbutton_maphp) {
                             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("MapHP"), null);
                             qintent = new Intent(getBaseContext(), KcaMapHpPopupService.class);
                             qintent.setAction(KcaMapHpPopupService.MAPHP_SHOW_ACTION);
                             startService(qintent);
-                        } else if (id == mView.findViewById(R.id.viewbutton_fchk).getId()) {
+                        } else if (id == R.id.viewbutton_fchk) {
                             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("FleetCheck"), null);
                             qintent = new Intent(getBaseContext(), KcaFleetCheckPopupService.class);
                             qintent.setAction(KcaFleetCheckPopupService.FCHK_SHOW_ACTION);
                             startService(qintent);
-                        } else if (id == mView.findViewById(R.id.viewbutton_labinfo).getId()) {
+                        } else if (id == R.id.viewbutton_labinfo) {
                             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("LandAirBaseInfo"), null);
                             qintent = new Intent(getBaseContext(), KcaLandAirBasePopupService.class);
                             qintent.setAction(KcaLandAirBasePopupService.LAB_DATA_ACTION);
                             startService(qintent);
-                        } else if (id == mView.findViewById(R.id.viewbutton_excheck).getId()) {
+                        } else if (id == R.id.viewbutton_excheck) {
                             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("ExpeditionCheck"), null);
                             qintent = new Intent(getBaseContext(), KcaExpeditionCheckViewService.class);
                             qintent.setAction(KcaExpeditionCheckViewService.SHOW_EXCHECKVIEW_ACTION.concat("/").concat(String.valueOf(selected)));
                             startService(qintent);
                         } else {
                             for (int i = 0; i < 5; i++) {
-                                if (id == mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
+                                if (id == getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)) {
                                     selected = i;
                                     setView();
                                     break;
@@ -666,7 +666,7 @@ public class KcaFleetViewService extends Service {
                     mAfterY = event.getRawY();
                     break;
             }
-            if (id == mView.findViewById(R.id.fleetview_shiparea).getId()) return false;
+            if (id == R.id.fleetview_shiparea) return false;
             else return true;
         }
     };
@@ -774,7 +774,7 @@ public class KcaFleetViewService extends Service {
             sum_level += setFleetInfo(ship_id_list, 0);
         }
 
-        isAkashiTimerActive = deckInfoCalc.checkAkashiFlagship(deckportdata).size() > 0;
+        isAkashiTimerActive = !deckInfoCalc.checkAkashiFlagship(deckportdata).isEmpty();
 
         infoList.add("LV ".concat(String.valueOf(sum_level)));
         fleetCalcInfoText = joinStr(infoList, " / ");
