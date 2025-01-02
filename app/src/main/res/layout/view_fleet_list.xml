@@ -688,103 +688,76 @@
                         android:orientation="vertical">
 
                         <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.Material3.Button"
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_quest"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorFleetInfoBtn"
-                            android:padding="0dp"
                             android:text="@string/viewmenu_quest"
-                            android:textSize="@dimen/fleetview_text_rbutton"
-                            app:cornerRadius="8dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
                         <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.Material3.Button"
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_excheck"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorFleetInfoBtn"
-                            android:padding="0dp"
                             android:text="@string/viewmenu_excheck"
-                            android:textSize="@dimen/fleetview_text_rbutton"
-                            app:cornerRadius="8dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
                         <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.Material3.Button"
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_develop"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorFleetInfoBtn"
-                            android:padding="0dp"
                             android:text="@string/viewmenu_develop"
-                            android:textSize="@dimen/fleetview_text_rbutton"
-                            app:cornerRadius="8dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
                         <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.Material3.Button"
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_construction"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorFleetInfoBtn"
-                            android:padding="0dp"
                             android:text="@string/viewmenu_construction"
-                            android:textSize="@dimen/fleetview_text_rbutton"
-                            app:cornerRadius="8dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
                         <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.Material3.Button"
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_docking"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorFleetInfoBtn"
-                            android:padding="0dp"
                             android:text="@string/viewmenu_docking"
-                            android:textSize="@dimen/fleetview_text_rbutton"
-                            app:cornerRadius="8dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
                         <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.Material3.Button"
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_maphp"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorFleetInfoBtn"
-                            android:padding="0dp"
                             android:text="@string/viewmenu_maphp"
-                            android:textSize="@dimen/fleetview_text_rbutton"
-                            app:cornerRadius="8dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
                         <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.Material3.Button"
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_fchk"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorFleetInfoBtn"
-                            android:padding="0dp"
                             android:text="@string/viewmenu_fchk"
-                            android:textSize="@dimen/fleetview_text_rbutton"
-                            app:cornerRadius="8dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
                         <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.Material3.Button"
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_labinfo"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorFleetInfoBtn"
-                            android:padding="0dp"
                             android:text="@string/viewmenu_labinfo"
-                            android:textSize="@dimen/fleetview_text_rbutton"
-                            app:cornerRadius="8dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
 
                         <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.Material3.Button"
+                            style="@style/OverlayButton"
                             android:id="@+id/viewbutton_akashi"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/colorFleetInfoBtn"
-                            android:padding="0dp"
                             android:text="@string/viewmenu_akashi"
-                            android:textSize="@dimen/fleetview_text_rbutton"
-                            app:cornerRadius="8dp" />
+                            android:textSize="@dimen/fleetview_text_rbutton"/>
                     </LinearLayout>
                 </ScrollView>
 
