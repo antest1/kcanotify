@@ -849,7 +849,6 @@ public class KcaFleetViewService extends Service {
     }
 
     public void updateFleetInfoLine(long moraleCompleteTime) {
-        boolean is_landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         final String displayText;
         if (KcaService.isPortAccessed) {
             if (moraleCompleteTime < -1) {
@@ -893,11 +892,15 @@ public class KcaFleetViewService extends Service {
                     } else {
                         fleetAkashiTimerBtn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetAkashiTimerBtnDeactive));
                     }
-                    fleetAkashiTimerBtn.setText(akashi_timer_text);
+                    if (!akashi_timer_text.contentEquals(fleetAkashiTimerBtn.getText())) {
+                        fleetAkashiTimerBtn.setText(akashi_timer_text);
+                    }
                     fleetAkashiTimerBtn.setVisibility(View.VISIBLE);
                 }
             } else {
-                fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
+                if (!getStringWithLocale(R.string.kca_init_content).contentEquals(fleetInfoLine.getText())) {
+                    fleetInfoLine.setText(getStringWithLocale(R.string.kca_init_content));
+                }
                 fleetAkashiTimerBtn.setVisibility(View.GONE);
             }
         });
