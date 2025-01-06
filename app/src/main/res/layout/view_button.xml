@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.antest1.kcanotify.DraggableOverlayButtonLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
+    <View
+        android:id="@+id/bg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignStart="@id/viewbutton"
+        android:layout_alignEnd="@id/viewbutton"
+        android:layout_alignTop="@id/viewbutton"
+        android:layout_alignBottom="@id/viewbutton"/>
 
     <ImageView
         android:id="@+id/viewbutton"
@@ -13,4 +22,5 @@
         android:layout_gravity="center_vertical"
         android:src="@mipmap/noti_icon_0" />
 
-</RelativeLayout>
+
+</com.antest1.kcanotify.DraggableOverlayButtonLayout>
