@@ -82,12 +82,11 @@
                 app:layout_constraintTop_toBottomOf="@id/controls"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+                android:layout_marginEnd="@dimen/activity_horizontal_margin">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/textSpecial2"
+                    android:layout_above="@id/chipGroup"
                     android:gravity="right"
                     android:orientation="horizontal">
 
@@ -109,7 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignWithParentIfMissing="true"
-                    android:layout_above="@id/textMainUpdate"
+                    android:layout_above="@id/chipGroup"
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="6dp"
@@ -123,42 +122,54 @@
                     android:textSize="14dp"
                     android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/textMainUpdate"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:backgroundTint="@color/colorMainBtn"
-                    android:text="@string/setting_menu_kand_title_game_data_down"
-                    app:icon="@android:drawable/stat_sys_download" />
+                    app:chipSpacingVertical="-8dp">
 
-                <Button
-                    android:id="@+id/textSpecial"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/textMaintenance"
-                    android:backgroundTint="@color/colorSpecial"
-                    android:text="@string/special_message"
-                    android:textColor="@color/colorSpecialText"
-                    app:icon="@android:drawable/ic_menu_gallery"
-                    app:iconTint="@color/colorSpecialText" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/textSpecial2"
+                        style="@style/Widget.Material3.Chip.Assist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/notification_message"
+                        android:textColor="@color/colorUpdateText"
+                        app:chipBackgroundColor="@color/colorUpdate"
+                        app:chipIcon="@android:drawable/ic_dialog_info"
+                        app:chipIconTint="@color/colorUpdateText" />
 
-                <Button
-                    android:id="@+id/textSpecial2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/textSpecial"
-                    android:backgroundTint="@color/colorUpdate"
-                    android:text="@string/notification_message"
-                    android:textColor="@color/colorUpdateText"
-                    app:icon="@android:drawable/ic_dialog_info"
-                    app:iconTint="@color/colorUpdateText" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/textSpecial"
+                        style="@style/Widget.Material3.Chip.Assist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/special_message"
+                        android:textColor="@color/colorSpecialText"
+                        app:chipBackgroundColor="@color/colorSpecial"
+                        app:chipIcon="@android:drawable/ic_menu_gallery"
+                        app:chipIconTint="@color/colorSpecialText" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/textMainUpdate"
+                        style="@style/Widget.Material3.Chip.Assist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_menu_kand_title_game_data_down"
+                        android:textColor="@color/white"
+                        app:chipBackgroundColor="@color/colorMainBtn"
+                        app:chipIcon="@android:drawable/stat_sys_download"
+                        app:chipIconTint="@color/white" />
+
+                </com.google.android.material.chip.ChipGroup>
+
 
                 <TextView
                     android:id="@+id/textDescription"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_above="@id/textSpecial2"
+                    android:layout_above="@id/chipGroup"
                     android:text="TextView"
                     android:textColor="@color/colorActivityText"
                     android:textSize="@dimen/activity_text_size" />
