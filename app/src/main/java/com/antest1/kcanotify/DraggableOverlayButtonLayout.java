@@ -2,12 +2,17 @@ package com.antest1.kcanotify;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Rect;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.OvershootInterpolator;
 import android.widget.RelativeLayout;
+
+import java.util.Collections;
+import java.util.List;
 
 public class DraggableOverlayButtonLayout extends RelativeLayout {
     public DraggableOverlayButtonLayout(Context context) {
@@ -20,6 +25,17 @@ public class DraggableOverlayButtonLayout extends RelativeLayout {
 
     public DraggableOverlayButtonLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    // Avoid gesture conflict with back navigation
+    private final List<Rect> exclusionRects = Collections.singletonList(new Rect(0, 0, 1, 1));
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            exclusionRects.get(0).set(l, t, r, b);
+            setSystemGestureExclusionRects(exclusionRects);
+        }
+        super.onLayout(changed, l, t, r, b);
     }
 
     @Override
@@ -36,6 +52,8 @@ public class DraggableOverlayButtonLayout extends RelativeLayout {
         // Always consume the event
         return true;
     }
+
+
 
     private ValueAnimator animatorX;
     private ValueAnimator animatorY;
