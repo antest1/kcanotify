@@ -11,7 +11,9 @@
         <item name="colorSecondaryContainer">@color/colorBtn</item>
         <item name="colorPrimaryContainer">@color/colorAccent</item>
         <item name="colorPrimaryInverse">@color/colorAccent</item>
+    </style>
 
+    <style name="AppThemeDark" parent="Theme.Material3.Dark.NoActionBar">
     </style>
 
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">

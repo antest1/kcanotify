@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -32,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.material.chip.Chip;
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -1115,22 +1117,17 @@ public class KcaFleetViewService extends Service {
         for (int i = 0; i < 5; i++) {
             int view_id = getId("fleet_".concat(String.valueOf(i + 1)), R.id.class);
             if (idx == i) {
-                mView.findViewById(view_id).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                ((Chip)mView.findViewById(view_id)).setChipStrokeColorResource(R.color.colorAccent);
             } else {
                 if (i < 4 && KcaExpedition2.isInExpedition(i)) {
-                    mView.findViewById(view_id).setBackgroundColor(
-                            ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpeditionBtn));
+                    ((Chip)mView.findViewById(view_id)).setChipStrokeColorResource(R.color.colorFleetInfoExpeditionBtn);
                 } else if (i < 4 && KcaMoraleInfo.getMoraleCompleteTime(i) > 0) {
-                    mView.findViewById(view_id).setBackgroundColor(
-                            ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNotGoodStatusBtn));
+                    ((Chip)mView.findViewById(view_id)).setChipStrokeColorResource(R.color.colorFleetInfoNotGoodStatusBtn);
                 } else if (i == FLEET_COMBINED_ID &&
                         (KcaMoraleInfo.getMoraleCompleteTime(0) > 0 || KcaMoraleInfo.getMoraleCompleteTime(1) > 0)) { // Combined Morale
-                    mView.findViewById(view_id).setBackgroundColor(
-                            ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNotGoodStatusBtn));
+                    ((Chip)mView.findViewById(view_id)).setChipStrokeColorResource(R.color.colorFleetInfoNotGoodStatusBtn);
                 } else {
-                    mView.findViewById(view_id).setBackgroundColor(
-                            ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+                    ((Chip)mView.findViewById(view_id)).setChipStrokeColorResource(R.color.colorFleetInfoNormalBtn);
                 }
             }
         }

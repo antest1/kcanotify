@@ -12,7 +12,7 @@
     <color name="colorBtn">#d6d6d6</color>
     <color name="colorBtnText">#000000</color>
     <color name="colorBtnTextAccent">#ffffff</color>
-    <color name="colorFleetInfoBtn">#313447</color>
+    <color name="colorFleetInfoBtn">#7376A4</color>
 
     <color name="colorGameStartBtn">#CD1F19</color>
     <color name="colorFairyShowBtn">#2B5B26</color>
@@ -143,8 +143,9 @@
     <color name="colorFleetInfoNoShip">#aaaaaa</color>
 
     <color name="colorFleetInfoHeavyDamagedBtn">#d50000</color>
-    <color name="colorFleetInfoNotGoodStatusBtn">#ae7a00</color>
-    <color name="colorFleetInfoExpeditionBtn">#5c6bc0</color>
+    <color name="colorFleetInfoNotGoodStatusBtn">#BAA085</color>
+    <color name="colorFleetInfoExpeditionBtn">#75A3B1</color>
+    <color name="colorFleetInfoNormalBtn">#8E8E8E</color>
 
     <color name="colorFleetSwitchBtn">#9e9d24</color>
     <color name="colorFleetAirStatBtn">#303f9f</color>
