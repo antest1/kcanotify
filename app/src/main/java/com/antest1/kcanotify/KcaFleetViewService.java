@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -133,7 +132,7 @@ public class KcaFleetViewService extends Service {
 
     WindowManager.LayoutParams mParams;
 
-    int selected;
+    int selectedFleetIndex;
 
     @Nullable
     @Override
@@ -151,11 +150,11 @@ public class KcaFleetViewService extends Service {
 
     public int setView() {
         try {
-            Log.e("KCA-FV", String.valueOf(selected));
+            Log.e("KCA-FV", String.valueOf(selectedFleetIndex));
             setHqInfo();
             fleetInfoTitle.setVisibility(View.VISIBLE);
-            updateSelectedView(selected);
-            processDeckInfo(selected, isCombinedFlag(selected));
+            updateSelectedFleetView(selectedFleetIndex);
+            processDeckInfo(selectedFleetIndex, isCombinedFlag(selectedFleetIndex));
             return 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -267,7 +266,7 @@ public class KcaFleetViewService extends Service {
 
     void runTimer() {
         timeScheduler = Executors.newSingleThreadScheduledExecutor();
-        timeScheduler.scheduleAtFixedRate(timer, 0, 1, TimeUnit.SECONDS);
+        timeScheduler.scheduleWithFixedDelay(timer, 0, 1, TimeUnit.SECONDS);
     }
 
     void stopTimer() {
@@ -387,7 +386,7 @@ public class KcaFleetViewService extends Service {
         mView.findViewById(R.id.viewbutton_excheck).setOnClickListener(v -> {
             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("ExpeditionCheck"), null);
             Intent qintent = new Intent(getBaseContext(), KcaExpeditionCheckViewService.class);
-            qintent.setAction(KcaExpeditionCheckViewService.SHOW_EXCHECKVIEW_ACTION.concat("/").concat(String.valueOf(selected)));
+            qintent.setAction(KcaExpeditionCheckViewService.SHOW_EXCHECKVIEW_ACTION.concat("/").concat(String.valueOf(selectedFleetIndex)));
             startService(qintent);
         });
         mView.findViewById(R.id.viewbutton_develop).setOnClickListener(v -> {
@@ -451,7 +450,7 @@ public class KcaFleetViewService extends Service {
             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("CnChange"), null);
             changeInternalSeekCn();
             fleetCnChangeBtn.setText(getSeekType());
-            processDeckInfo(selected, isCombinedFlag(selected));
+            processDeckInfo(selectedFleetIndex, isCombinedFlag(selectedFleetIndex));
         });
         mView.findViewById(R.id.fleetview_fleetswitch).setOnClickListener(v -> {
             sendUserAnalytics(getApplicationContext(), FV_BTN_PRESS.concat("FleetChange"), null);
@@ -477,7 +476,7 @@ public class KcaFleetViewService extends Service {
         for (int i = 0; i < 5; i++) {
             int finalI = i;
             mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnClickListener(v -> {
-                selected = finalI;
+                selectedFleetIndex = finalI;
                 setView();
             });
         }
@@ -614,7 +613,7 @@ public class KcaFleetViewService extends Service {
                             JsonArray data;
                             JsonObject udata, kcdata;
 
-                            if (isCombinedFlag(selected)) {
+                            if (isCombinedFlag(selectedFleetIndex)) {
                                 if (i < 6) {
                                     data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 0, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
                                 } else {
@@ -623,7 +622,7 @@ public class KcaFleetViewService extends Service {
                                 udata = data.get(i % 6).getAsJsonObject().getAsJsonObject("user");
                                 kcdata = data.get(i % 6).getAsJsonObject().getAsJsonObject("kc");
                             } else {
-                                data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), selected, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
+                                data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), selectedFleetIndex, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
                                 udata = data.get(i).getAsJsonObject().getAsJsonObject("user");
                                 kcdata = data.get(i).getAsJsonObject().getAsJsonObject("kc");
                             }
@@ -789,13 +788,13 @@ public class KcaFleetViewService extends Service {
         infoList.add("LV ".concat(String.valueOf(sum_level)));
         fleetCalcInfoText = joinStr(infoList, " / ");
         long moraleCompleteTime;
-        if (selected == FLEET_COMBINED_ID) {
+        if (selectedFleetIndex == FLEET_COMBINED_ID) {
             moraleCompleteTime = Math.max(KcaMoraleInfo.getMoraleCompleteTime(0),
                     KcaMoraleInfo.getMoraleCompleteTime(1));
         } else {
-            moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(selected);
+            moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(selectedFleetIndex);
         }
-        if (selected < 4 && KcaExpedition2.isInExpedition(selected)) {
+        if (selectedFleetIndex < 4 && KcaExpedition2.isInExpedition(selectedFleetIndex)) {
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoExpedition));
         } else if (moraleCompleteTime > 0) {
             fleetInfoLine.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoNotGoodStatus));
@@ -854,11 +853,11 @@ public class KcaFleetViewService extends Service {
         final String displayText;
         if (KcaService.isPortAccessed) {
             if (moraleCompleteTime < -1) {
-                if (selected == FLEET_COMBINED_ID) {
+                if (selectedFleetIndex == FLEET_COMBINED_ID) {
                     moraleCompleteTime = Math.max(KcaMoraleInfo.getMoraleCompleteTime(0),
                             KcaMoraleInfo.getMoraleCompleteTime(1));
                 } else {
-                    moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(selected);
+                    moraleCompleteTime = KcaMoraleInfo.getMoraleCompleteTime(selectedFleetIndex);
                 }
             }
             if (moraleCompleteTime > 0) {
@@ -1113,21 +1112,23 @@ public class KcaFleetViewService extends Service {
         seekcn_internal %= 5;
     }
 
-    private void updateSelectedView(int idx) {
+    private void updateSelectedFleetView(int selected) {
         for (int i = 0; i < 5; i++) {
             int view_id = getId("fleet_".concat(String.valueOf(i + 1)), R.id.class);
-            if (idx == i) {
-                ((Chip)mView.findViewById(view_id)).setChipStrokeColorResource(R.color.colorAccent);
+            Chip chip = mView.findViewById(view_id);
+            chip.setChecked(selected == i);
+            if (selected == i) {
+                chip.setChipStrokeColorResource(R.color.colorAccent);
             } else {
                 if (i < 4 && KcaExpedition2.isInExpedition(i)) {
-                    ((Chip)mView.findViewById(view_id)).setChipStrokeColorResource(R.color.colorFleetInfoExpeditionBtn);
+                    chip.setChipStrokeColorResource(R.color.colorFleetInfoExpeditionBtn);
                 } else if (i < 4 && KcaMoraleInfo.getMoraleCompleteTime(i) > 0) {
-                    ((Chip)mView.findViewById(view_id)).setChipStrokeColorResource(R.color.colorFleetInfoNotGoodStatusBtn);
+                    chip.setChipStrokeColorResource(R.color.colorFleetInfoNotGoodStatusBtn);
                 } else if (i == FLEET_COMBINED_ID &&
                         (KcaMoraleInfo.getMoraleCompleteTime(0) > 0 || KcaMoraleInfo.getMoraleCompleteTime(1) > 0)) { // Combined Morale
-                    ((Chip)mView.findViewById(view_id)).setChipStrokeColorResource(R.color.colorFleetInfoNotGoodStatusBtn);
+                    chip.setChipStrokeColorResource(R.color.colorFleetInfoNotGoodStatusBtn);
                 } else {
-                    ((Chip)mView.findViewById(view_id)).setChipStrokeColorResource(R.color.colorFleetInfoNormalBtn);
+                    chip.setChipStrokeColorResource(R.color.colorFleetInfoNormalBtn);
                 }
             }
         }

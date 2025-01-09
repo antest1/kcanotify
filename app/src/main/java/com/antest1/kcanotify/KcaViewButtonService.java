@@ -149,7 +149,7 @@ public class KcaViewButtonService extends Service {
 
     public void runForegroundCheck() {
         checkForegroundScheduler = Executors.newSingleThreadScheduledExecutor();
-        checkForegroundScheduler.scheduleAtFixedRate(mForegroundCheckRunnable, 0,
+        checkForegroundScheduler.scheduleWithFixedDelay(mForegroundCheckRunnable, 0,
                 FOREGROUND_CHECK_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
@@ -629,7 +629,7 @@ public class KcaViewButtonService extends Service {
                     current_foreground_status = gotoFgReceiver.checkForeground();
                 } else {
                     foregroundPackage = checkForegroundPackage();
-                    if (foregroundPackage.trim().length() > 0) {
+                    if (!foregroundPackage.trim().isEmpty()) {
                         if (foregroundPackage.contains(KC_PACKAGE_NAME)) {
                             current_foreground_status = true;
                         } if (foregroundPackage.contains(KC_WV_PACKAGE_NAME)) {
