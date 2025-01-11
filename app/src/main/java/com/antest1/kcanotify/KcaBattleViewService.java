@@ -1937,7 +1937,7 @@ public class KcaBattleViewService extends Service {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
+            int xMargin = (int) getResources().getDimension(R.dimen.item_popup_margin);
             if (menuView.getParent() != null) {
                 return false;
             }

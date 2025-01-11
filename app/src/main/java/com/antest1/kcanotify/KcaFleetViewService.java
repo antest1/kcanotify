@@ -343,11 +343,9 @@ public class KcaFleetViewService extends Service {
     private void setFleetMenu() {
         LinearLayout fleetMenuArea = fleetView.findViewById(R.id.viewbutton_area);
         List<TextView> menuBtnList = new ArrayList<>();
-        for (int i = 0; i < fleetview_menu_keys.length; i++) {
-            String key = fleetview_menu_keys[i];
+        for (String key : fleetview_menu_keys) {
             TextView tv = fleetView.findViewById(KcaUtils.getId(KcaUtils.format("viewbutton_%s", key), R.id.class));
             tv.setText(getStringWithLocale(KcaUtils.getId(KcaUtils.format("viewmenu_%s", key), R.string.class)));
-            tv.setOnTouchListener(fleetViewTouchListener);
             menuBtnList.add(tv);
             ((ViewGroup) tv.getParent()).removeView(tv);
         }
@@ -365,19 +363,13 @@ public class KcaFleetViewService extends Service {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         fleetView = (DraggableOverlayLayout) mInflater.inflate(R.layout.view_fleet_list, null);
         fleetView.setVisibility(GONE);
         KcaUtils.resizeFullWidthView(getApplicationContext(), fleetView);
 
         fleetView.findViewById(R.id.fleetview_head).setOnTouchListener(draggableLayoutTouchListener);
-
-        fleetView.findViewById(R.id.fleetview_shiparea).setOnTouchListener(fleetViewTouchListener);
-        fleetView.findViewById(R.id.fleetview_tool).setOnTouchListener(fleetViewTouchListener);
-//        fleetView.findViewById(R.id.fleetview_head).setOnTouchListener(fleetViewTouchListener);
-        fleetView.findViewById(R.id.fleetview_cn_change).setOnTouchListener(fleetViewTouchListener);
-        fleetView.findViewById(R.id.fleetview_fleetswitch).setOnTouchListener(fleetViewTouchListener);
-        fleetView.findViewById(R.id.fleetview_hqinfo).setOnTouchListener(fleetViewTouchListener);
 
         fleetView.findViewById(R.id.fleetview_head).setOnClickListener(v -> {
             JsonObject statProperties = new JsonObject();
@@ -490,13 +482,8 @@ public class KcaFleetViewService extends Service {
             });
         }
 
-
-
-        for (int i = 0; i < 5; i++) {
-            fleetView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnTouchListener(fleetViewTouchListener);
-        }
         for (int i = 0; i < 12; i++) {
-            getFleetViewItem(i).setOnTouchListener(fleetViewTouchListener);
+            getFleetViewItem(i).setOnTouchListener(fleetViewItemTouchListener);
         }
 
         setFleetMenu();
@@ -513,14 +500,13 @@ public class KcaFleetViewService extends Service {
         setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
 
         fleetInfoLine = fleetView.findViewById(R.id.fleetview_infoline);
-        fleetInfoLine.setOnTouchListener(fleetViewTouchListener);
-
         fleetInfoTitle = fleetView.findViewById(R.id.fleetview_title);
         fleetHqInfoView = fleetView.findViewById(R.id.fleetview_hqinfo);
         fleetCnChangeBtn = fleetView.findViewById(R.id.fleetview_cn_change);
         fleetAkashiTimerBtn = fleetView.findViewById(R.id.fleetview_akashi_timer);
         fleetSwitchBtn = fleetView.findViewById(R.id.fleetview_fleetswitch);
         fleetSwitchBtn.setVisibility(View.GONE);
+
         fleetMenu = fleetView.findViewById(R.id.fleetview_menu);
         fleetMenuArrowUp = fleetView.findViewById(R.id.fleetview_menu_up);
         fleetMenuArrowDown = fleetView.findViewById(R.id.fleetview_menu_down);
@@ -611,7 +597,12 @@ public class KcaFleetViewService extends Service {
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            int maxTop = screenHeight - fleetView.getHeight();
+            if (getBooleanPreferences(getApplicationContext(), PREF_FIX_VIEW_LOC)) {
+                return false;
+            }
+
+            int maxY = screenHeight - fleetView.getHeight();
+            float finalX, finalY;
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     startRawX = event.getRawX();
@@ -634,22 +625,25 @@ public class KcaFleetViewService extends Service {
 
                     float finalXUncap = layoutParams.x + dx / dt * 400;
                     float finalYUncap = layoutParams.y + dy / dt * 400;
-                    float finalX = 0f;
+                    finalX = 0f;
                     // Snap to either top, center, or bottom
-                    float finalY;
-                    if (finalYUncap < maxTop / 4f) {
+                    if (finalYUncap < maxY / 4f) {
                         finalY = 0;
-                    } else if (finalYUncap < maxTop / 4f * 3f) {
-                        finalY = maxTop / 2f;
+                        view_status = -1;
+                    } else if (finalYUncap < maxY / 4f * 3f) {
+                        finalY = maxY / 2f;
+                        view_status = 0;
                     } else {
-                        finalY = maxTop;
+                        finalY = maxY;
+                        view_status = 1;
                     }
                     fleetView.animateTo(layoutParams.x, layoutParams.y,
                             0, (int) finalY,
                             finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
                             500, windowManager, layoutParams);
 
-                    // TODO: save to DB
+                    // Save new preference to DB
+                    setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                     break;
 
                 case MotionEvent.ACTION_MOVE:
@@ -674,94 +668,94 @@ public class KcaFleetViewService extends Service {
         }
     };
 
-    private View.OnTouchListener fleetViewTouchListener = new View.OnTouchListener() {
-        private long startClickTime = -1;
-        private float mBeforeY, mAfterY;
+    private final View.OnTouchListener fleetViewItemTouchListener = new View.OnTouchListener() {
+        private boolean isInsideView(View view, float x, float y) {
+            int[] location = new int[2];
+            view.getLocationOnScreen(location);
 
+            float viewLeft = location[0];
+            float viewTop = location[1];
+            float viewRight = viewLeft + view.getWidth();
+            float viewBottom = viewTop + view.getHeight();
+
+            return (x >= viewLeft && x <= viewRight && y >= viewTop && y <= viewBottom);
+        }
+
+        int selected = -1;
+        @SuppressLint({"RtlHardcoded", "ClickableViewAccessibility"})
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            boolean view_fix = getBooleanPreferences(getApplicationContext(), PREF_FIX_VIEW_LOC);
             WindowManager.LayoutParams itemViewParams;
-            int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
+            int margin = (int) getResources().getDimension(R.dimen.item_popup_margin);
 
-            int id = v.getId();
+            float x = event.getRawX();
+            float y = event.getRawY();
+
             switch (event.getAction()) {
+                case MotionEvent.ACTION_MOVE:
                 case MotionEvent.ACTION_DOWN:
                     Log.e("KCA-FV", "ACTION_DOWN");
-                    mBeforeY = event.getRawY();
-                    mAfterY = event.getRawY();
-                    startClickTime = Calendar.getInstance().getTimeInMillis();
-                    if (id == fleetInfoLine.getId()) {
-                        fleetInfoLine.setSelected(true);
-                    }
                     for (int i = 0; i < 12; i++) {
-                        if (id == getFleetViewItem(i).getId()) {
-                            JsonArray data;
-                            JsonObject udata, kcdata;
+                        // Check the x, y position is inside the view, instead of id
+                        // because the ACTION_MOVE event is fired on the original start-touch item, not the item current touching
+                        if (isInsideView(getFleetViewItem(i), x , y)) {
+                            if (selected != i) {
+                                // Reload data if selecting another ship
+                                JsonArray data;
+                                JsonObject udata, kcdata;
 
-                            if (isCombinedFlag(selectedFleetIndex)) {
-                                if (i < 6) {
-                                    data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 0, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
+                                if (isCombinedFlag(selectedFleetIndex)) {
+                                    if (i < 6) {
+                                        data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 0, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
+                                    } else {
+                                        data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 1, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
+                                    }
+                                    udata = data.get(i % 6).getAsJsonObject().getAsJsonObject("user");
+                                    kcdata = data.get(i % 6).getAsJsonObject().getAsJsonObject("kc");
                                 } else {
-                                    data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 1, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
+                                    data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), selectedFleetIndex, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
+                                    udata = data.get(i).getAsJsonObject().getAsJsonObject("user");
+                                    kcdata = data.get(i).getAsJsonObject().getAsJsonObject("kc");
                                 }
-                                udata = data.get(i % 6).getAsJsonObject().getAsJsonObject("user");
-                                kcdata = data.get(i % 6).getAsJsonObject().getAsJsonObject("kc");
-                            } else {
-                                data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), selectedFleetIndex, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
-                                udata = data.get(i).getAsJsonObject().getAsJsonObject("user");
-                                kcdata = data.get(i).getAsJsonObject().getAsJsonObject("kc");
+
+                                String ship_id = udata.get("ship_id").getAsString();
+                                int ship_married = udata.get("lv").getAsInt() >= 100 ? 1 : 0;
+                                JsonObject itemData = new JsonObject();
+                                itemData.add("api_slot", udata.get("slot"));
+                                itemData.add("api_slot_ex", udata.get("slot_ex"));
+                                itemData.add("api_onslot", udata.get("onslot"));
+                                itemData.add("api_maxslot", kcdata.get("maxeq"));
+                                setItemViewLayout(itemData, ship_id, ship_married);
                             }
 
-                            String ship_id = udata.get("ship_id").getAsString();
-                            int ship_married = udata.get("lv").getAsInt() >= 100 ? 1 : 0;
-                            JsonObject itemdata = new JsonObject();
-                            itemdata.add("api_slot", udata.get("slot"));
-                            itemdata.add("api_slot_ex", udata.get("slot_ex"));
-                            itemdata.add("api_onslot", udata.get("onslot"));
-                            itemdata.add("api_maxslot", kcdata.get("maxeq"));
-
-                            setItemViewLayout(itemdata, ship_id, ship_married);
                             itemViewParams = new WindowManager.LayoutParams(
                                     WindowManager.LayoutParams.WRAP_CONTENT,
                                     WindowManager.LayoutParams.WRAP_CONTENT,
                                     getWindowLayoutType(),
                                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                                     PixelFormat.TRANSLUCENT);
-                            itemViewParams.x = (int) (event.getRawX() + xMargin);
-                            itemViewParams.y = (int) event.getRawY();
-                            itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
+                            itemViewParams.x = (int) (event.getRawX() + margin);
+                            itemViewParams.y = screenHeight - (int) event.getRawY() + margin;
+                            itemViewParams.gravity = Gravity.BOTTOM | Gravity.LEFT;
+
                             if (itemView.getParent() != null) {
-                                windowManager.removeViewImmediate(itemView);
+                                if (selected == -1 || selected != i) {
+                                    windowManager.removeViewImmediate(itemView);
+                                    windowManager.addView(itemView, itemViewParams);
+                                } else {
+                                    windowManager.updateViewLayout(itemView, itemViewParams);
+                                }
+                            } else {
+                                windowManager.addView(itemView, itemViewParams);
                             }
-                            windowManager.addView(itemView, itemViewParams);
+                            selected = i;
+                            return true;
                         }
                     }
-                    break;
                 case MotionEvent.ACTION_UP:
                     Log.e("KCA-FV", "ACTION_UP");
-                    if (id == fleetInfoLine.getId()) {
-                        fleetInfoLine.setSelected(false);
-                    }
-
-                    for (int i = 0; i < 12; i++) {
-                        if (id == getFleetViewItem(i).getId()) {
-                            itemView.setVisibility(GONE);
-                            break;
-                        }
-                    }
-
-                    int y_direction = (int) (mAfterY - mBeforeY);
-                    if (!view_fix && Math.abs(y_direction) > 400) {
-                        int status_change = y_direction > 0 ? 1 : -1;
-                        view_status = Math.min(Math.max(view_status + status_change, -1), 1);
-                        //layoutParams.gravity = KcaUtils.getGravity(view_status);
-                        windowManager.updateViewLayout(fleetView, layoutParams);
-                        setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
-                    }
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    mAfterY = event.getRawY();
+                    itemView.setVisibility(GONE);
+                    selected = -1;
                     break;
             }
             return false;

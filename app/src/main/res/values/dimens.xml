@@ -48,7 +48,7 @@
     <dimen name="item_popup_icon_size">14dp</dimen>
     <dimen name="item_popup_text_size_large">11dp</dimen>
     <dimen name="item_popup_text_size_small">10dp</dimen>
-    <dimen name="item_popup_xmargin">72dp</dimen>
+    <dimen name="item_popup_margin">24dp</dimen>
 
     <dimen name="button_size_xsmall">32dp</dimen>
     <dimen name="button_size_small">48dp</dimen>

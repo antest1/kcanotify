@@ -412,7 +412,7 @@ public class KcaLandAirBasePopupService extends Service {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             int id = v.getId();
-            int xMargin = (int) getResources().getDimension(R.dimen.item_popup_xmargin);
+            int xMargin = (int) getResources().getDimension(R.dimen.item_popup_margin);
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
