@@ -49,6 +49,7 @@ import java.util.concurrent.TimeUnit;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.antest1.kcanotify.KcaAkashiViewService.SHOW_AKASHIVIEW_ACTION;
 import static com.antest1.kcanotify.KcaApiData.getSlotItemTranslation;
 import static com.antest1.kcanotify.KcaApiData.getKcItemStatusById;
@@ -153,18 +154,18 @@ public class KcaFleetViewService extends Service {
         isReady = flag;
     }
 
-    public int setView() {
+    public boolean setView() {
         try {
             Log.e("KCA-FV", String.valueOf(selectedFleetIndex));
             setHqInfo();
-            fleetInfoTitle.setVisibility(View.VISIBLE);
+            fleetInfoTitle.setVisibility(VISIBLE);
             updateSelectedFleetView(selectedFleetIndex);
             processDeckInfo(selectedFleetIndex, isCombinedFlag(selectedFleetIndex));
-            return 0;
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             sendReport(e, 0);
-            return 1;
+            return false;
         }
     }
 
@@ -175,17 +176,17 @@ public class KcaFleetViewService extends Service {
 
     private void setHqInfoViewVisibility() {
         if (hqinfoState == HQINFO_EXPVIEW) {
-            fleetHqInfoView.findViewById(R.id.fleetview_exp).setVisibility(View.VISIBLE);
+            fleetHqInfoView.findViewById(R.id.fleetview_exp).setVisibility(VISIBLE);
             fleetHqInfoView.findViewById(R.id.fleetview_cnt).setVisibility(View.GONE);
             fleetHqInfoView.findViewById(R.id.fleetview_item_cnt).setVisibility(View.GONE);
         } else if (hqinfoState == HQINFO_SECOUNT) {
             fleetHqInfoView.findViewById(R.id.fleetview_exp).setVisibility(View.GONE);
-            fleetHqInfoView.findViewById(R.id.fleetview_cnt).setVisibility(View.VISIBLE);
+            fleetHqInfoView.findViewById(R.id.fleetview_cnt).setVisibility(VISIBLE);
             fleetHqInfoView.findViewById(R.id.fleetview_item_cnt).setVisibility(View.GONE);
         } else {
             fleetHqInfoView.findViewById(R.id.fleetview_exp).setVisibility(View.GONE);
             fleetHqInfoView.findViewById(R.id.fleetview_cnt).setVisibility(View.GONE);
-            fleetHqInfoView.findViewById(R.id.fleetview_item_cnt).setVisibility(View.VISIBLE);
+            fleetHqInfoView.findViewById(R.id.fleetview_item_cnt).setVisibility(VISIBLE);
         }
     }
 
@@ -458,11 +459,11 @@ public class KcaFleetViewService extends Service {
             if (switch_status == 1) {
                 switch_status = 2;
                 fleetView.findViewById(R.id.fleet_list_main).setVisibility(View.GONE);
-                fleetView.findViewById(R.id.fleet_list_combined).setVisibility(View.VISIBLE);
+                fleetView.findViewById(R.id.fleet_list_combined).setVisibility(VISIBLE);
                 ((TextView) fleetView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_2));
             } else {
                 switch_status = 1;
-                fleetView.findViewById(R.id.fleet_list_main).setVisibility(View.VISIBLE);
+                fleetView.findViewById(R.id.fleet_list_main).setVisibility(VISIBLE);
                 fleetView.findViewById(R.id.fleet_list_combined).setVisibility(View.GONE);
                 ((TextView) fleetView.findViewById(R.id.fleetview_fleetswitch)).setText(getStringWithLocale(R.string.fleetview_switch_1));
             }
@@ -493,10 +494,17 @@ public class KcaFleetViewService extends Service {
                 getWindowLayoutType(),
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 PixelFormat.TRANSLUCENT);
-        //layoutParams.gravity = KcaUtils.getGravity(view_status);
         layoutParams.gravity = Gravity.TOP;
-        // TODO: Set Y according to old setting
-        layoutParams.y = 0;
+        fleetView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (bottom - top == oldBottom - oldTop) return;
+            int height = bottom - top;
+            layoutParams.y = (screenHeight - height) * (view_status + 1) / 2;
+            if ((fleetView.getParent() != null)) {
+                windowManager.updateViewLayout(fleetView, layoutParams);
+            }
+        });
+        // Hide at bottom before the fleetView is first rendered
+        layoutParams.y = screenHeight;
         setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
 
         fleetInfoLine = fleetView.findViewById(R.id.fleetview_infoline);
@@ -528,8 +536,8 @@ public class KcaFleetViewService extends Service {
                     fleetMenuArrowDown.setVisibility(View.GONE);
                     fleetMenuArrowUp.setAlpha(0.9f);
                 } else {
-                    fleetMenuArrowUp.setVisibility(View.VISIBLE);
-                    fleetMenuArrowDown.setVisibility(View.VISIBLE);
+                    fleetMenuArrowUp.setVisibility(VISIBLE);
+                    fleetMenuArrowDown.setVisibility(VISIBLE);
                     fleetMenuArrowUp.setAlpha(0.6f);
                     fleetMenuArrowDown.setAlpha(0.6f);
                 }
@@ -544,12 +552,11 @@ public class KcaFleetViewService extends Service {
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(SHOW_FLEETVIEW_ACTION)) {
-                if (fleetView != null && fleetView.getVisibility() != View.VISIBLE) {
+                if (fleetView != null && fleetView.getVisibility() != VISIBLE) {
                     if (seekcn_internal == -1) seekcn_internal = getSeekCn();
                     fleetCnChangeBtn.setText(getSeekType());
-                    int setViewResult = setView();
-                    if (setViewResult == 0) {
-                        fleetView.setVisibility(View.VISIBLE);
+                    if (setView()) {
+                        fleetView.setVisibility(VISIBLE);
                         if (fleetView.getParent() != null) {
                             windowManager.removeViewImmediate(fleetView);
                         }
@@ -559,8 +566,7 @@ public class KcaFleetViewService extends Service {
                 }
             }
             if (intent.getAction().equals(REFRESH_FLEETVIEW_ACTION)) {
-                int setViewResult = setView();
-                if (setViewResult == 0) {
+                if (setView()) {
                     if (fleetView != null && fleetView.getParent() != null) {
                         fleetView.invalidate();
                         windowManager.updateViewLayout(fleetView, layoutParams);
@@ -587,13 +593,13 @@ public class KcaFleetViewService extends Service {
     }
 
 
-    private final float[] lastX = new float[3];
-    private final float[] lastY = new float[3];
-    private final long[] lastT = new long[3];
-    private int curr = 0;
-    private float startRawX, startRawY; // Starting finger x y
-    private int startViewX, startViewY; // Starting view x y
     private final View.OnTouchListener draggableLayoutTouchListener = new View.OnTouchListener() {
+        private float startRawX, startRawY; // Starting finger x y
+        private int startViewX, startViewY; // Starting view x y
+        private final float[] lastX = new float[3];
+        private final float[] lastY = new float[3];
+        private final long[] lastT = new long[3];
+        private int curr = 0;
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -792,13 +798,13 @@ public class KcaFleetViewService extends Service {
 
         if (is_landscape) {
             fleetSwitchBtn.setVisibility(View.GONE);
-            fleetView.findViewById(R.id.fleet_list_main).setVisibility(View.VISIBLE);
-            fleetView.findViewById(R.id.fleet_list_combined).setVisibility(is_combined ? View.VISIBLE : INVISIBLE);
+            fleetView.findViewById(R.id.fleet_list_main).setVisibility(VISIBLE);
+            fleetView.findViewById(R.id.fleet_list_combined).setVisibility(is_combined ? VISIBLE : INVISIBLE);
         } else {
             boolean switch_is_one = switch_status == 1;
-            fleetSwitchBtn.setVisibility(is_combined ? View.VISIBLE : View.GONE);
-            fleetView.findViewById(R.id.fleet_list_main).setVisibility((!is_combined || switch_is_one) ? View.VISIBLE : View.GONE);
-            fleetView.findViewById(R.id.fleet_list_combined).setVisibility((is_combined && !switch_is_one) ? View.VISIBLE : View.GONE);
+            fleetSwitchBtn.setVisibility(is_combined ? VISIBLE : View.GONE);
+            fleetView.findViewById(R.id.fleet_list_main).setVisibility((!is_combined || switch_is_one) ? VISIBLE : View.GONE);
+            fleetView.findViewById(R.id.fleet_list_combined).setVisibility((is_combined && !switch_is_one) ? VISIBLE : View.GONE);
         }
 
         int cn = seekcn_internal;
@@ -857,7 +863,7 @@ public class KcaFleetViewService extends Service {
 
             int[] ship_id_list = deckInfoCalc.getDeckList(deckportdata, idx);
             if (ship_id_list.length > 6) { // if need to show combined fleet (maybe 遊撃艦隊)
-                fleetView.findViewById(R.id.fleet_list_combined).setVisibility(View.VISIBLE);
+                fleetView.findViewById(R.id.fleet_list_combined).setVisibility(VISIBLE);
             }
 
             sum_level += setFleetInfo(ship_id_list, 0);
@@ -976,7 +982,7 @@ public class KcaFleetViewService extends Service {
                     if (!akashi_timer_text.contentEquals(fleetAkashiTimerBtn.getText())) {
                         fleetAkashiTimerBtn.setText(akashi_timer_text);
                     }
-                    fleetAkashiTimerBtn.setVisibility(View.VISIBLE);
+                    fleetAkashiTimerBtn.setVisibility(VISIBLE);
                 }
             } else {
                 if (!getStringWithLocale(R.string.kca_init_content).contentEquals(fleetInfoLine.getText())) {
@@ -1030,7 +1036,7 @@ public class KcaFleetViewService extends Service {
                     if (lv > 0) {
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)))
                                 .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
-                        itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(View.VISIBLE);
+                        itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(VISIBLE);
                     } else {
                         itemView.findViewById(getId(KcaUtils.format("item%d_level", i + 1), R.id.class)).setVisibility(GONE);
                     }
@@ -1041,7 +1047,7 @@ public class KcaFleetViewService extends Service {
                         int alvColorId = (alv <= 3) ? 1 : 2;
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)))
                                 .setTextColor(ContextCompat.getColor(getApplicationContext(), getId(KcaUtils.format("itemalv%d", alvColorId), R.color.class)));
-                        itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)).setVisibility(View.VISIBLE);
+                        itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)).setVisibility(VISIBLE);
                     } else {
                         itemView.findViewById(getId(KcaUtils.format("item%d_alv", i + 1), R.id.class)).setVisibility(GONE);
                     }
@@ -1054,7 +1060,7 @@ public class KcaFleetViewService extends Service {
                         int maxSlotValue = maxslot.get(i).getAsInt();
                         ((TextView) itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)))
                                 .setText(KcaUtils.format("[%02d/%02d]", nowSlotValue, maxSlotValue));
-                        itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(View.VISIBLE);
+                        itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(VISIBLE);
                     } else {
                         itemView.findViewById(getId(KcaUtils.format("item%d_slot", i + 1), R.id.class)).setVisibility(INVISIBLE);
                     }
@@ -1095,7 +1101,7 @@ public class KcaFleetViewService extends Service {
                 }
 
                 ((ImageView) itemView.findViewById(getId(KcaUtils.format("item%d_icon", i + 1), R.id.class))).setImageResource(typeres);
-                itemView.findViewById(getId("item".concat(String.valueOf(i + 1)), R.id.class)).setVisibility(View.VISIBLE);
+                itemView.findViewById(getId("item".concat(String.valueOf(i + 1)), R.id.class)).setVisibility(VISIBLE);
             }
         }
 
@@ -1116,11 +1122,11 @@ public class KcaFleetViewService extends Service {
                     }
                     ((TextView) itemView.findViewById(R.id.item_ex_name)).setText(kcItemName);
                     ((ImageView) itemView.findViewById(R.id.item_ex_icon)).setImageResource(typeres);
-                    itemView.findViewById(R.id.item_ex_icon).setVisibility(View.VISIBLE);
+                    itemView.findViewById(R.id.item_ex_icon).setVisibility(VISIBLE);
                     if (lv > 0) {
                         ((TextView) itemView.findViewById(R.id.item_ex_level))
                                 .setText(getStringWithLocale(R.string.lv_star).concat(String.valueOf(lv)));
-                        itemView.findViewById(R.id.item_ex_level).setVisibility(View.VISIBLE);
+                        itemView.findViewById(R.id.item_ex_level).setVisibility(VISIBLE);
                     } else {
                         itemView.findViewById(R.id.item_ex_level).setVisibility(GONE);
                     }
@@ -1134,7 +1140,7 @@ public class KcaFleetViewService extends Service {
                 itemView.findViewById(R.id.item_ex_level).setVisibility(GONE);
                 itemView.findViewById(R.id.item_ex_slot_list).setVisibility(INVISIBLE);
             }
-            itemView.findViewById(R.id.view_slot_ex).setVisibility(View.VISIBLE);
+            itemView.findViewById(R.id.view_slot_ex).setVisibility(VISIBLE);
         } else {
             itemView.findViewById(R.id.view_slot_ex).setVisibility(GONE);
         }
@@ -1146,7 +1152,7 @@ public class KcaFleetViewService extends Service {
             itemView.findViewById(R.id.item_slot_list).setVisibility(GONE);
             itemView.findViewById(R.id.item_ex_slot_list).setVisibility(GONE);
         } else {
-            itemView.findViewById(R.id.item_slot_list).setVisibility(View.VISIBLE);
+            itemView.findViewById(R.id.item_slot_list).setVisibility(VISIBLE);
         }
 
         if (slot_count == 0) {
@@ -1156,9 +1162,9 @@ public class KcaFleetViewService extends Service {
             itemView.findViewById(R.id.item1_level).setVisibility(GONE);
             itemView.findViewById(R.id.item1_alv).setVisibility(GONE);
             itemView.findViewById(R.id.item1_slot).setVisibility(GONE);
-            itemView.findViewById(R.id.item1).setVisibility(View.VISIBLE);
+            itemView.findViewById(R.id.item1).setVisibility(VISIBLE);
         }
-        itemView.setVisibility(View.VISIBLE);
+        itemView.setVisibility(VISIBLE);
     }
 
     private int getSeekCn() {
@@ -1260,8 +1266,7 @@ public class KcaFleetViewService extends Service {
                 initView();
                 windowManager.addView(fleetView, layoutParams);
 
-                int setViewResult = setView();
-                if (setViewResult == 0) {
+                if (setView()) {
                     if (fleetView.getParent() != null) {
                         fleetView.invalidate();
                         windowManager.updateViewLayout(fleetView, layoutParams);

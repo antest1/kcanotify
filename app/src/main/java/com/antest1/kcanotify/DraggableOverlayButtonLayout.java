@@ -69,7 +69,9 @@ public class DraggableOverlayButtonLayout extends RelativeLayout {
             // Get the current animated value
             layoutParams.x = (int) animation.getAnimatedValue();
             layoutParams.y = (int) animatorY.getAnimatedValue();
-            windowManager.updateViewLayout(this, layoutParams);
+            if (this.getParent() != null) {
+                windowManager.updateViewLayout(this, layoutParams);
+            }
         });
 
         // Start the animation
