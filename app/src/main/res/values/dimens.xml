@@ -15,7 +15,7 @@
     <dimen name="fleetview_text_statusarea">14dp</dimen>
     <dimen name="fleetview_text_moralearea">40dp</dimen>
     <dimen name="fleetview_text_tbutton">15dp</dimen>
-    <dimen name="fleetview_text_rbutton">20dp</dimen>
+    <dimen name="fleetview_text_rbutton">18dp</dimen>
     <dimen name="fleetview_text_ship_large">14dp</dimen>
     <dimen name="fleetview_text_ship_medium">12dp</dimen>
     <dimen name="fleetview_text_ship_small">10dp</dimen>
