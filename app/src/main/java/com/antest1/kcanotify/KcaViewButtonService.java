@@ -510,13 +510,13 @@ public class KcaViewButtonService extends Service {
         super.onDestroy();
     }
 
-    private final float[] lastX = new float[3];
-    private final float[] lastY = new float[3];
-    private final long[] lastT = new long[3];
-    private int curr = 0;
-    private float startX, startY;
-    private int mViewX, mViewY;
+    private int startViewX, startViewY;
     private final View.OnTouchListener backgroundOnTouchListener = new View.OnTouchListener() {
+        private final float[] lastX = new float[3];
+        private final float[] lastY = new float[3];
+        private final long[] lastT = new long[3];
+        private float startX, startY;
+        private int curr = 0;
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -528,9 +528,9 @@ public class KcaViewButtonService extends Service {
                     lastY[curr] = startY;
                     lastT[curr] = Calendar.getInstance().getTimeInMillis();
                     curr = (curr + 1) % 3;
-                    mViewX = layoutParams.x;
-                    mViewY = layoutParams.y;
-                    Log.e("KCA", KcaUtils.format("mView: %d %d", mViewX, mViewY));
+                    startViewX = layoutParams.x;
+                    startViewY = layoutParams.y;
+                    Log.e("KCA", KcaUtils.format("mView: %d %d", startViewX, startViewY));
 
                     mView.cancelAnimations();
                     break;
@@ -569,8 +569,8 @@ public class KcaViewButtonService extends Service {
                     lastY[curr] = event.getRawY();
                     lastT[curr] = Calendar.getInstance().getTimeInMillis();
                     curr = (curr + 1) % 3;
-                    layoutParams.x = mViewX + x;
-                    layoutParams.y = mViewY + y;
+                    layoutParams.x = startViewX + x;
+                    layoutParams.y = startViewY + y;
                     windowManager.updateViewLayout(mView, layoutParams);
                     break;
             }
@@ -581,7 +581,7 @@ public class KcaViewButtonService extends Service {
     private final View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (abs(layoutParams.x - mViewX) < 20 && abs(layoutParams.y - mViewY) < 20) {
+            if (abs(layoutParams.x - startViewX) < 20 && abs(layoutParams.y - startViewY) < 20) {
                 clickcount += 1;
                 if (battleviewEnabled && isBattleViewEnabled()) {
                     Intent qintent = new Intent(getBaseContext(), KcaBattleViewService.class);
@@ -603,7 +603,7 @@ public class KcaViewButtonService extends Service {
     private final View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-            if (abs(layoutParams.x - mViewX) < 20 && abs(layoutParams.y - mViewY) < 20) {
+            if (abs(layoutParams.x - startViewX) < 20 && abs(layoutParams.y - startViewY) < 20) {
                 if (getBooleanPreferences(getApplicationContext(), PREF_FAIRY_NOTI_LONGCLICK)) {
                     doVibrate(vibrator, 100);
                 }
@@ -627,7 +627,7 @@ public class KcaViewButtonService extends Service {
         }
     };
 
-    private Runnable mForegroundCheckRunnable = new Runnable() {
+    private final Runnable mForegroundCheckRunnable = new Runnable() {
         @Override
         public void run() {
             try {
@@ -671,7 +671,7 @@ public class KcaViewButtonService extends Service {
         }
     };
 
-    private Runnable mGlowRunner = new Runnable() {
+    private final Runnable mGlowRunner = new Runnable() {
         @Override
         public void run() {
             try {

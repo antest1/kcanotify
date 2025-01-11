@@ -373,10 +373,12 @@ public class KcaFleetViewService extends Service {
         fleetView.findViewById(R.id.fleetview_head).setOnTouchListener(draggableLayoutTouchListener);
 
         fleetView.findViewById(R.id.fleetview_head).setOnClickListener(v -> {
-            JsonObject statProperties = new JsonObject();
-            statProperties.addProperty("manual", true);
-            if (fleetView != null) fleetView.setVisibility(GONE);
-            if (itemView != null) itemView.setVisibility(GONE);
+            if (abs(layoutParams.x - startViewX) < 20 && abs(layoutParams.y - startViewY) < 20) {
+                JsonObject statProperties = new JsonObject();
+                statProperties.addProperty("manual", true);
+                if (fleetView != null) fleetView.setVisibility(GONE);
+                if (itemView != null) itemView.setVisibility(GONE);
+            }
         });
 
         fleetView.findViewById(R.id.viewbutton_quest).setOnClickListener(v -> {
@@ -593,9 +595,9 @@ public class KcaFleetViewService extends Service {
     }
 
 
+    private int startViewX, startViewY; // Starting view x y
     private final View.OnTouchListener draggableLayoutTouchListener = new View.OnTouchListener() {
         private float startRawX, startRawY; // Starting finger x y
-        private int startViewX, startViewY; // Starting view x y
         private final float[] lastX = new float[3];
         private final float[] lastY = new float[3];
         private final long[] lastT = new long[3];

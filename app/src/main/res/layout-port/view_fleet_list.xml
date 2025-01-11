@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fleetviewlayout"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="false"
     android:orientation="vertical"
@@ -12,7 +12,7 @@
 
     <LinearLayout
         android:id="@+id/fleetviewpanel"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/overlay_background"
         android:orientation="vertical"
@@ -23,8 +23,8 @@
 
         <LinearLayout
             android:id="@+id/fleetview_head"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <TextView
@@ -96,7 +96,7 @@
 
             <ImageView
                 android:id="@+id/imageView5"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="4dp"
@@ -329,19 +329,19 @@
         </HorizontalScrollView>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:orientation="horizontal">
 
             <ScrollView
                 android:id="@+id/fleetview_shiparea"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0">
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
@@ -427,7 +427,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
                         android:layout_marginTop="2dp"
@@ -435,8 +435,8 @@
 
                         <LinearLayout
                             android:id="@+id/fleet_list_main"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginRight="6dp"
                             android:layout_weight="1.0"
                             android:orientation="vertical">
@@ -504,8 +504,8 @@
 
                         <LinearLayout
                             android:id="@+id/fleet_list_combined"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginRight="6dp"
                             android:layout_weight="1.0"
                             android:orientation="vertical">
@@ -611,7 +611,7 @@
                         <com.google.android.material.button.MaterialButton
                             style="@style/OverlayButton"
                             android:id="@+id/viewbutton_develop"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/viewmenu_develop"
                             android:textSize="16dp"/>
@@ -619,7 +619,7 @@
                         <com.google.android.material.button.MaterialButton
                             style="@style/OverlayButton"
                             android:id="@+id/viewbutton_construction"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/viewmenu_construction"
                             android:textSize="16dp"/>
@@ -627,7 +627,7 @@
                         <com.google.android.material.button.MaterialButton
                             style="@style/OverlayButton"
                             android:id="@+id/viewbutton_docking"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/viewmenu_docking"
                             android:textSize="16dp"/>
@@ -635,7 +635,7 @@
                         <com.google.android.material.button.MaterialButton
                             style="@style/OverlayButton"
                             android:id="@+id/viewbutton_maphp"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/viewmenu_maphp"
                             android:textSize="16dp"/>
@@ -643,7 +643,7 @@
                         <com.google.android.material.button.MaterialButton
                             style="@style/OverlayButton"
                             android:id="@+id/viewbutton_fchk"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/viewmenu_fchk"
                             android:textSize="16dp"/>
@@ -651,7 +651,7 @@
                         <com.google.android.material.button.MaterialButton
                             style="@style/OverlayButton"
                             android:id="@+id/viewbutton_labinfo"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/viewmenu_labinfo"
                             android:textSize="16dp"/>
@@ -659,7 +659,7 @@
                         <com.google.android.material.button.MaterialButton
                             style="@style/OverlayButton"
                             android:id="@+id/viewbutton_akashi"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/viewmenu_akashi"
                             android:textSize="16dp"/>
