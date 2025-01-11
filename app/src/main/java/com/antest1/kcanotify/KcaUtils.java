@@ -186,17 +186,16 @@ public class KcaUtils {
     }
 
     public static String getUpdateServer(Context ctx) {
-        String currentUpdateServer = getStringPreferences(ctx, PREF_UPDATE_SERVER);
-        boolean isServerFound = false;
-        String[] listEntry = ctx.getResources().getStringArray(R.array.ServerLocationValue);
-        for (int i = 0; i < listEntry.length; i++) if (currentUpdateServer.equals(listEntry[i])) {
-            isServerFound = true;
-            break;
-        }
-        if (!isServerFound) {
+        String currentUpdateServer;
+
+        // workaround for ssl handshake issue in android 7.0
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
+            currentUpdateServer = ctx.getString(R.string.server_liza_http);
+        } else {
             currentUpdateServer = ctx.getString(R.string.server_liza);
-            setPreferences(ctx, PREF_UPDATE_SERVER, currentUpdateServer);
         }
+        setPreferences(ctx, PREF_UPDATE_SERVER, currentUpdateServer);
+
         return currentUpdateServer;
     }
 
