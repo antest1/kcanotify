@@ -110,7 +110,7 @@ public class KcaViewButtonService extends Service {
     private BroadcastReceiver battlenode_receiver;
     private BroadcastReceiver questcmpl_receiver;
     private DraggableOverlayButtonLayout mView;
-    private WindowManager mManager;
+    private WindowManager windowManager;
     private Handler mHandler;
     private Vibrator vibrator;
     private ImageView button;
@@ -279,7 +279,7 @@ public class KcaViewButtonService extends Service {
             button.setOnLongClickListener(longClickListener);
 
             View bg = mView.findViewById(R.id.bg);
-            bg.setOnTouchListener(mViewTouchListener);
+            bg.setOnTouchListener(backgroundOnTouchListener);
             button.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             buttonWidth = button.getMeasuredWidth();
             buttonHeight = button.getMeasuredHeight();
@@ -293,11 +293,7 @@ public class KcaViewButtonService extends Service {
 
             layoutParams.gravity = Gravity.TOP | Gravity.START;
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            screenWidth = size.x;
-            screenHeight = size.y;
+            updateScreenSize();
             Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
             JsonObject locdata = null;
@@ -305,17 +301,25 @@ public class KcaViewButtonService extends Service {
             if (dbHelper != null) locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
             if (locdata != null && !locdata.toString().isEmpty()) {
                 if (locdata.has(ori_prefix.concat("x"))) {
-                    layoutParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
+                    try {
+                        layoutParams.x = locdata.get(ori_prefix.concat("x")).getAsInt();
+                    } catch (NumberFormatException e) {
+                        layoutParams.x = 0;
+                    }
                 }
                 if (locdata.has(ori_prefix.concat("y"))) {
-                    layoutParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
+                    try {
+                        layoutParams.y = locdata.get(ori_prefix.concat("y")).getAsInt();
+                    } catch (NumberFormatException e) {
+                        layoutParams.y = 0;
+                    }
                 }
             } else {
                 layoutParams.y = screenHeight - buttonHeight / 2;
             }
 
-            mManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            mManager.addView(mView, layoutParams);
+            windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+            windowManager.addView(mView, layoutParams);
 
             battleviewEnabled = false;
             questviewEnabled = false;
@@ -324,6 +328,14 @@ public class KcaViewButtonService extends Service {
                 runForegroundCheck();
             }
         }
+    }
+
+    private void updateScreenSize() {
+        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
     }
 
     @Override
@@ -494,18 +506,17 @@ public class KcaViewButtonService extends Service {
         if (checkForegroundScheduler != null && !checkForegroundScheduler.isShutdown()) {
             checkForegroundScheduler.shutdown();
         }
-        if (mManager != null) mManager.removeView(mView);
+        if (windowManager != null) windowManager.removeView(mView);
         super.onDestroy();
     }
 
-    final float[] lastX = new float[3];
-    final float[] lastY = new float[3];
-    final long[] lastT = new long[3];
-    int curr = 0;
+    private final float[] lastX = new float[3];
+    private final float[] lastY = new float[3];
+    private final long[] lastT = new long[3];
+    private int curr = 0;
     private float startX, startY;
     private int mViewX, mViewY;
-
-    private final View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener backgroundOnTouchListener = new View.OnTouchListener() {
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -536,7 +547,7 @@ public class KcaViewButtonService extends Service {
                     mView.animateTo(layoutParams.x, layoutParams.y,
                             (int) finalX, (int) finalY,
                             finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
-                            500, mManager, layoutParams);
+                            500, windowManager, layoutParams);
 
                     JsonObject locdata = dbHelper.getJsonObjectValue(DB_KEY_FAIRYLOC);
                     String ori_prefix = getOrientationPrefix(getResources().getConfiguration().orientation);
@@ -560,7 +571,7 @@ public class KcaViewButtonService extends Service {
                     curr = (curr + 1) % 3;
                     layoutParams.x = mViewX + x;
                     layoutParams.y = mViewY + y;
-                    mManager.updateViewLayout(mView, layoutParams);
+                    windowManager.updateViewLayout(mView, layoutParams);
                     break;
             }
             return false;
@@ -721,11 +732,7 @@ public class KcaViewButtonService extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         String ori_prefix = getOrientationPrefix(newConfig.orientation);
-        Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
+        updateScreenSize();
         Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
         JsonObject locdata = null;
@@ -741,13 +748,13 @@ public class KcaViewButtonService extends Service {
                 }
             }
 
-            if (mManager != null && layoutParams != null) {
+            if (windowManager != null && layoutParams != null) {
                 if (layoutParams.x < 0) layoutParams.x = 0;
                 else if (layoutParams.x > screenWidth - buttonWidth / 2) layoutParams.x = screenWidth - buttonWidth / 2;
                 if (layoutParams.y < 0) layoutParams.y = 0;
                 else if (layoutParams.y > screenHeight - buttonHeight / 2) layoutParams.y = screenHeight - buttonHeight / 2;
 
-                mManager.updateViewLayout(mView, layoutParams);
+                windowManager.updateViewLayout(mView, layoutParams);
             }
 
             if (locdata != null && !locdata.toString().isEmpty()) {
