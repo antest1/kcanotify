@@ -22,7 +22,7 @@
 
     <dimen name="questview_tag_size">42dp</dimen>
     <dimen name="questview_desc_height">52dp</dimen>
-    <dimen name="questview_text_top">22dp</dimen>
+    <dimen name="questview_text_top">14dp</dimen>
     <dimen name="questview_button_top">20dp</dimen>
     <dimen name="questview_text_large">18dp</dimen>
     <dimen name="questview_text_medium">15dp</dimen>

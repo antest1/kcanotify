@@ -5,7 +5,7 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Build;
@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.material.chip.Chip;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -166,7 +167,6 @@ public class KcaQuestViewService extends Service {
                 questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
                 contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
                 broadcaster = LocalBroadcastManager.getInstance(this);
-                //mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 mInflater = LayoutInflater.from(contextWithLocale);
                 mView = mInflater.inflate(R.layout.view_quest_list_v2, null);
                 KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
@@ -390,11 +390,12 @@ public class KcaQuestViewService extends Service {
                             for (int i = 0; i < 5; i++) {
                                 if (id == KcaUtils.getId("quest_class_" + (i+1), R.id.class)) {
                                     for (int j = 0; j < 5; j++) {
-                                        questView.findViewById(KcaUtils.getId("quest_class_" + (j+1), R.id.class))
-                                                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+                                        ((Chip)questView.findViewById(KcaUtils.getId("quest_class_" + (j+1), R.id.class)))
+                                                .setTextColor(Color.WHITE);
                                     }
                                     if (currentFilterState != i) {
-                                        v.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
+                                        // Selection Changed
+                                        ((Chip)v).setTextColor(ContextCompat.getColor(getApplicationContext(),
                                                 KcaUtils.getId(KcaUtils.format("colorQuestCategory%d", filterCategoryList[i]), R.color.class)));
                                         setQuestView(currentQuestList, false, filterCategoryList[i]);
                                         currentFilterState = i;
