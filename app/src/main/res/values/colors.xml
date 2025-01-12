@@ -58,6 +58,7 @@
     <color name="colorHeavyDmgStateWarn">#ff5252</color>
 
     <color name="colorHeavyDmgStatePanel">#7e2424</color>
+    <color name="colorHeavyDmgStateTransparentPanel">#cd7e2424</color>
     <color name="colorWarningPanel">#ae6000</color>
 
     <color name="colorElite">#d50000</color>

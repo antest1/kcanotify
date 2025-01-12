@@ -614,7 +614,7 @@ https://github.com/antest1/kcanotify/blob/master/app/src/main/res/values/strings
     <string name="fleetview_combined">联合</string>
     <string name="fleetview_switch_1">第1舰队</string>
     <string name="fleetview_switch_2">第2舰队</string>
-    <string name="fleetview_expview" formatted="false">[现在]%.2f / [今天]%.2f</string>
+    <string name="fleetview_expview" formatted="false">[现在] %.2f / [今天] %.2f</string>
     <string name="fleetview_seekvalue_d" formatted="false">索敌: %d</string>
     <string name="fleetview_seekvalue_f" formatted="false">索敌: %.2f</string>
     <string name="fleetview_contactvalue" formatted="false">接%s/选%s</string>

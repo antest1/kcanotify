@@ -748,6 +748,7 @@ public class KcaFleetViewService extends Service {
 
                             if (itemView.getParent() != null) {
                                 if (selected == -1 || selected != i) {
+                                    // Selection changed
                                     windowManager.removeViewImmediate(itemView);
                                     windowManager.addView(itemView, itemViewParams);
                                 } else {
