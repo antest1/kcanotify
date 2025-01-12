@@ -224,7 +224,7 @@
             <ListView
                 android:id="@+id/quest_list"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
+                android:layout_height="300dp"
                 android:divider="@null"
                 android:dividerHeight="0dp" />
 

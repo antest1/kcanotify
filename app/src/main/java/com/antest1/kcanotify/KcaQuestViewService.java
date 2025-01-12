@@ -51,6 +51,8 @@ public class KcaQuestViewService extends Service {
     public static final String SHOW_QUESTVIEW_ACTION_NEW = "show_questview_new";
     public static final String CLOSE_QUESTVIEW_ACTION = "close_questview";
 
+    private static final int PAGE_SIZE = 5;
+
     Context contextWithLocale;
     LayoutInflater mInflater;
     private LocalBroadcastManager broadcaster;
@@ -371,7 +373,7 @@ public class KcaQuestViewService extends Service {
                             for (int i = 0; i < pageIndexList.length; i++) {
                                 if (id == questView.findViewById(pageIndexList[i]).getId()) {
                                     int current_page = Integer.parseInt(((TextView) v).getText().toString());
-                                    int pos = (current_page - 1) * 5;
+                                    int pos = (current_page - 1) * PAGE_SIZE;
                                     scrollListView(pos);
                                     setTopBottomNavigation(current_page, total_size);
                                 }
@@ -380,8 +382,8 @@ public class KcaQuestViewService extends Service {
                                 scrollListView(0);
                                 setTopBottomNavigation(1, total_size);
                             } else if (id == questView.findViewById(R.id.quest_page_bottom).getId()) {
-                                int total_page = (total_size - 1) / 5 + 1;
-                                int last_idx = Math.max(total_size - 5, 0);
+                                int total_page = (total_size - 1) / PAGE_SIZE + 1;
+                                int last_idx = Math.max(total_size - PAGE_SIZE, 0);
                                 setTopBottomNavigation(total_page, total_size);
                                 scrollListView(last_idx);
                             }
@@ -420,7 +422,7 @@ public class KcaQuestViewService extends Service {
     }
 
     private void setTopBottomNavigation(int centerPage, int totalItemSize) {
-        int totalPage = (totalItemSize - 1) / 5 + 1;
+        int totalPage = (totalItemSize - 1) / PAGE_SIZE + 1;
         int startPage = centerPage - 2;
 
         if (totalPage <= 5) startPage = 1;
@@ -453,7 +455,7 @@ public class KcaQuestViewService extends Service {
 
         String memo = data.get("memo").getAsString();
         TextView memoView = questDescPopupView.findViewById(R.id.view_qd_memo);
-        if (memo.length() > 0) {
+        if (!memo.isEmpty()) {
             memoView.setText(memo);
             memoView.setVisibility(View.VISIBLE);
         } else {
@@ -461,7 +463,7 @@ public class KcaQuestViewService extends Service {
         }
 
         String rewards = data.get("rewards").getAsString();
-        if (rewards.length() > 0) {
+        if (!rewards.isEmpty()) {
             ((TextView) questDescPopupView.findViewById(R.id.view_qd_rewards)).setText(rewards);
             questDescPopupView.findViewById(R.id.view_qd_rewards_layout).setVisibility(View.VISIBLE);
         } else {
