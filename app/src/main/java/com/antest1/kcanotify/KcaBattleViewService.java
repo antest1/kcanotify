@@ -1190,7 +1190,25 @@ public class KcaBattleViewService extends Service {
         }
     }
 
-    public void setItemViewLayout(int id) {
+    private boolean isShipIdAvailable(int id) {
+        int realID = id - 1;
+        if (realID < 100) { // Main
+            if (realID < 20) {
+                return friendShipData.size() > realID;
+            } else {
+                return enemyShipData.size() > realID - 20;
+            }
+        } else { // Combined
+            realID = realID % 100;
+            if (realID < 20) {
+                return friendCombinedShipData.size() >realID;
+            } else {
+                return enemyCombinedShipData.size() >realID - 20;
+            }
+        }
+    }
+
+    private void setItemViewLayout(int id) {
         if (api_data == null || id == -1) return;
         int realID = id - 1;
         JsonObject data;
@@ -1916,7 +1934,7 @@ public class KcaBattleViewService extends Service {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 PixelFormat.TRANSLUCENT);;
         int selected = -1;
 
@@ -1934,7 +1952,9 @@ public class KcaBattleViewService extends Service {
                     if (api_data != null) {
                         try {
                             int newSelected = getShipId(x, y);
-
+                            if (!isShipIdAvailable(newSelected)) {
+                                return false;
+                            }
                             if (selected != newSelected) {
                                 setItemViewLayout(newSelected);
                             }

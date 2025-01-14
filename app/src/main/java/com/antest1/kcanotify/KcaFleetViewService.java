@@ -338,6 +338,9 @@ public class KcaFleetViewService extends Service {
         if (fleetView != null) {
             if (fleetView.getParent() != null) windowManager.removeViewImmediate(fleetView);
         }
+        if (snapIndicatorLayout != null) {
+            if (snapIndicatorLayout.getParent() != null) windowManager.removeViewImmediate(snapIndicatorLayout);
+        }
         if (itemView != null) {
             if (itemView.getParent() != null) windowManager.removeViewImmediate(itemView);
         }
@@ -602,6 +605,10 @@ public class KcaFleetViewService extends Service {
                     if (fleetView.getParent() != null) {
                         windowManager.removeViewImmediate(fleetView);
                     }
+                    snapIndicatorLayout.setVisibility(GONE);
+                    if (snapIndicatorLayout.getParent() != null) {
+                        windowManager.removeViewImmediate(snapIndicatorLayout);
+                    }
                     itemView.setVisibility(GONE);
                     if (itemView.getParent() != null) {
                         windowManager.removeViewImmediate(itemView);
@@ -748,7 +755,7 @@ public class KcaFleetViewService extends Service {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 PixelFormat.TRANSLUCENT);
 
         int selected = -1;
@@ -771,30 +778,31 @@ public class KcaFleetViewService extends Service {
                             if (selected != i) {
                                 // Reload data if selecting another ship
                                 JsonArray data;
-                                JsonObject udata, kcdata;
-
+                                int shipIndex;
                                 if (isCombinedFlag(selectedFleetIndex)) {
                                     if (i < 6) {
                                         data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 0, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
                                     } else {
                                         data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), 1, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
                                     }
-                                    udata = data.get(i % 6).getAsJsonObject().getAsJsonObject("user");
-                                    kcdata = data.get(i % 6).getAsJsonObject().getAsJsonObject("kc");
+                                    shipIndex = i % 6;
                                 } else {
                                     data = deckInfoCalc.getDeckListInfo(dbHelper.getJsonArrayValue(DB_KEY_DECKPORT), selectedFleetIndex, DECKINFO_REQ_LIST, KC_DECKINFO_REQ_LIST);
-                                    udata = data.get(i).getAsJsonObject().getAsJsonObject("user");
-                                    kcdata = data.get(i).getAsJsonObject().getAsJsonObject("kc");
+                                    shipIndex = i;
                                 }
+                                if (shipIndex < data.size()) {
+                                    JsonObject udata = data.get(shipIndex).getAsJsonObject().getAsJsonObject("user");
+                                    JsonObject kcdata = data.get(shipIndex).getAsJsonObject().getAsJsonObject("kc");
 
-                                String ship_id = udata.get("ship_id").getAsString();
-                                int ship_married = udata.get("lv").getAsInt() >= 100 ? 1 : 0;
-                                JsonObject itemData = new JsonObject();
-                                itemData.add("api_slot", udata.get("slot"));
-                                itemData.add("api_slot_ex", udata.get("slot_ex"));
-                                itemData.add("api_onslot", udata.get("onslot"));
-                                itemData.add("api_maxslot", kcdata.get("maxeq"));
-                                setItemViewLayout(itemData, ship_id, ship_married);
+                                    String ship_id = udata.get("ship_id").getAsString();
+                                    int ship_married = udata.get("lv").getAsInt() >= 100 ? 1 : 0;
+                                    JsonObject itemData = new JsonObject();
+                                    itemData.add("api_slot", udata.get("slot"));
+                                    itemData.add("api_slot_ex", udata.get("slot_ex"));
+                                    itemData.add("api_onslot", udata.get("onslot"));
+                                    itemData.add("api_maxslot", kcdata.get("maxeq"));
+                                    setItemViewLayout(itemData, ship_id, ship_married);
+                                }
                             }
 
                             itemViewParams.x = (int) (event.getRawX() + margin);
