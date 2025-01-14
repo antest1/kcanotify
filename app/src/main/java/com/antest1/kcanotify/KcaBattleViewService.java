@@ -1,5 +1,6 @@
 package com.antest1.kcanotify;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,7 +11,6 @@ import android.content.res.ColorStateList;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -71,6 +71,8 @@ import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 import static com.antest1.kcanotify.KcaUtils.joinStr;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
 
 
 public class KcaBattleViewService extends Service {
@@ -124,14 +126,17 @@ public class KcaBattleViewService extends Service {
     JsonArray api_formation;
     JsonObject api_kouku;
 
-    private View battleViewLayout;
+    private DraggableOverlayLayout battleViewLayout;
     private View itemView, acView, menuView;
     private WindowManager windowManager;
     KcaCustomToast customToast;
 
+    private SnapIndicator snapIndicator;
+
     JsonArray deckData, portData;
 
-    int displayWidth = 0;
+    private int fleetViewHeight = 0;
+
 
     public static final int ERORR_INIT = 0;
     public static final int ERORR_VIEW = 1;
@@ -139,7 +144,7 @@ public class KcaBattleViewService extends Service {
 
     private int[] slotViewList = {R.id.item1, R.id.item2, R.id.item3, R.id.item4, R.id.item5};
 
-    private WindowManager.LayoutParams mParams, acViewParams;
+    private WindowManager.LayoutParams layoutParams, acViewParams;
     private ScrollView battleview;
 
     @Nullable
@@ -1382,12 +1387,16 @@ public class KcaBattleViewService extends Service {
                 customToast = new KcaCustomToast(getApplicationContext());
                 prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+                windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
                 mInflater = LayoutInflater.from(contextWithLocale);
-                battleViewLayout = mInflater.inflate(R.layout.view_sortie_battle, null);
+                battleViewLayout = (DraggableOverlayLayout) mInflater.inflate(R.layout.view_sortie_battle, null);
+                snapIndicator = new SnapIndicator(windowManager, mInflater);
+
                 KcaUtils.resizeFullWidthView(getApplicationContext(), battleViewLayout);
                 battleViewLayout.setVisibility(View.GONE);
                 battleview = battleViewLayout.findViewById(R.id.battleview);
-                battleview.setOnTouchListener(mViewTouchListener);
+                battleview.findViewById(R.id.battleviewpanel).setOnTouchListener(draggableLayoutTouchListener);
+                battleview.findViewById(R.id.battleviewpanel).setOnClickListener(onClickListener);
                 battleview.findViewById(R.id.battle_node_area).setOnTouchListener(infoListViewTouchListener);
                 itemView = mInflater.inflate(R.layout.view_battleview_items, null);
                 acView = mInflater.inflate(R.layout.view_battleview_aircombat, null);
@@ -1405,21 +1414,28 @@ public class KcaBattleViewService extends Service {
                 menuView.findViewById(R.id.view_item2).setOnClickListener(battleViewMenuListener);
                 ((TextView) menuView.findViewById(R.id.view_bm_title)).setText(getStringWithLocale(R.string.battleview_menu_head));
 
-                mParams = new WindowManager.LayoutParams(
+                layoutParams = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.MATCH_PARENT,
                         WindowManager.LayoutParams.WRAP_CONTENT,
                         getWindowLayoutType(),
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                         PixelFormat.TRANSLUCENT);
-                mParams.gravity = KcaUtils.getGravity(view_status);
+                layoutParams.gravity = Gravity.TOP;
+                // Hide at bottom before the fleetView is first rendered
+                updateScreenSize();
+                layoutParams.y = screenHeight;
                 setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
-                windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-                windowManager.addView(battleViewLayout, mParams);
 
-                Display display = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-                Point size = new Point();
-                display.getSize(size);
-                displayWidth = size.x;
+                battleViewLayout.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                    if (bottom - top == oldBottom - oldTop) return;
+                    fleetViewHeight = bottom - top;
+                    updateScreenSize();
+                    layoutParams.y = (screenHeight - fleetViewHeight) * (view_status + 1) / 2;
+                    if ((battleViewLayout.getParent() != null)) {
+                        windowManager.updateViewLayout(battleViewLayout, layoutParams);
+                    }
+                });
+                windowManager.addView(battleViewLayout, layoutParams);
 
                 refreshreceiver = new BroadcastReceiver() {
                     @Override
@@ -1442,7 +1458,7 @@ public class KcaBattleViewService extends Service {
                                 battleViewLayout.setVisibility(View.GONE);
                             }
                             battleViewLayout.invalidate();
-                            windowManager.updateViewLayout(battleViewLayout, mParams);
+                            windowManager.updateViewLayout(battleViewLayout, layoutParams);
                         }
                     }
                 };
@@ -1733,14 +1749,16 @@ public class KcaBattleViewService extends Service {
         if (menuView != null) {
             if (menuView.getParent() != null) windowManager.removeViewImmediate(menuView);
         }
+        if (snapIndicator != null) {
+            snapIndicator.remove();
+        }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(refreshreceiver);
         super.onDestroy();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
@@ -1757,51 +1775,110 @@ public class KcaBattleViewService extends Service {
                 JsonObject statProperties = new JsonObject();
                 statProperties.addProperty("manual", true);
                 sendUserAnalytics(getApplicationContext(), CLOSE_BATTEVIEW, statProperties);
+                snapIndicator.remove();
             }
         }
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
-        private static final int MAX_CLICK_DURATION = 200;
-        private long startClickTime = -1;
-        private long clickDuration;
-        private float mBeforeY, mAfterY;
+    private int startViewX, startViewY; // Starting view x y
+    private final View.OnTouchListener draggableLayoutTouchListener = new View.OnTouchListener() {
+        private float startRawX, startRawY; // Starting finger x y
+        private final float[] lastX = new float[3];
+        private final float[] lastY = new float[3];
+        private final long[] lastT = new long[3];
+        private int curr = 0;
 
+        @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            boolean view_fix = getBooleanPreferences(getApplicationContext(), PREF_FIX_VIEW_LOC);
+            if (getBooleanPreferences(getApplicationContext(), PREF_FIX_VIEW_LOC)) {
+                return false;
+            }
+            int maxY = screenHeight - battleViewLayout.getHeight();
+            float finalX, finalY;
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    mBeforeY = event.getRawY();
-                    mAfterY = event.getRawY();
-                    startClickTime = Calendar.getInstance().getTimeInMillis();
+                    startRawX = event.getRawX();
+                    startRawY = event.getRawY();
+                    lastX[curr] = startRawX;
+                    lastY[curr] = startRawY;
+                    lastT[curr] = Calendar.getInstance().getTimeInMillis();
+                    curr = (curr + 1) % 3;
+                    startViewX = layoutParams.x;
+                    startViewY = layoutParams.y;
+                    Log.e("KCA", KcaUtils.format("mView: %d %d", startViewX, startViewY));
+                    snapIndicator.show(layoutParams.y, maxY, fleetViewHeight);
+                    battleViewLayout.cancelAnimations();
                     break;
                 case MotionEvent.ACTION_UP:
-                    int y_direction = (int) (mAfterY - mBeforeY);
-                    if (!view_fix && Math.abs(y_direction) > 400) {
-                        int status_change = y_direction > 0 ? 1 : -1;
-                        view_status = Math.min(Math.max(view_status + status_change, -1), 1);
-                        mParams.gravity = KcaUtils.getGravity(view_status);
-                        setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
-                        windowManager.updateViewLayout(battleViewLayout, mParams);
+                    float dx = event.getRawX() - lastX[(curr + 1) % 3];
+                    float dy = event.getRawY() - lastY[(curr + 1) % 3];
+                    long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
+                    float finalXUncap = layoutParams.x + dx / dt * 400;
+                    float finalYUncap = layoutParams.y + dy / dt * 400;
+                    finalX = 0f;
+                    // Snap to either top, center, or bottom
+                    if (finalYUncap < maxY / 4f) {
+                        finalY = 0;
+                        view_status = -1;
+                    } else if (finalYUncap < maxY / 4f * 3f) {
+                        finalY = maxY / 2f;
+                        view_status = 0;
                     } else {
-                        clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                        if (clickDuration < MAX_CLICK_DURATION) {
-                            if (battleViewLayout != null) battleViewLayout.setVisibility(View.GONE);
-                            if (itemView != null) itemView.setVisibility(View.GONE);
-                            JsonObject statProperties = new JsonObject();
-                            statProperties.addProperty("manual", false);
-                            sendUserAnalytics(getApplicationContext(), CLOSE_BATTEVIEW, statProperties);
-                        }
+                        finalY = maxY;
+                        view_status = 1;
                     }
+                    battleViewLayout.animateTo(layoutParams.x, layoutParams.y,
+                            0, (int) finalY,
+                            finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
+                            500, windowManager, layoutParams);
+                    snapIndicator.remove();
+
+                    // Save new preference to DB
+                    setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    mAfterY = event.getRawY();
-                    break;
+                    int x = (int) (event.getRawX() - startRawX);
+                    int y = (int) (event.getRawY() - startRawY);
+                    Log.e("KCA", KcaUtils.format("Coord: %d %d", x, y));
 
+                    lastX[curr] = event.getRawX();
+                    lastY[curr] = event.getRawY();
+                    lastT[curr] = Calendar.getInstance().getTimeInMillis();
+                    curr = (curr + 1) % 3;
+                    finalX = startViewX + x;
+                    finalY = startViewY + y;
+
+                    layoutParams.x = (int) finalX;
+                    layoutParams.y = (int) finalY;
+
+                    windowManager.updateViewLayout(battleViewLayout, layoutParams);
+                    snapIndicator.update(finalY, maxY);
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    battleViewLayout.cancelAnimations();
+                    snapIndicator.remove();
+                    layoutParams.x = startViewX;
+                    layoutParams.y = startViewY;
+                    windowManager.updateViewLayout(battleViewLayout, layoutParams);
+                    break;
             }
             return false;
+        }
+    };
+
+
+    private final View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (abs(layoutParams.x - startViewX) < 20 && abs(layoutParams.y - startViewY) < 20) {
+                if (battleViewLayout != null) battleViewLayout.setVisibility(View.GONE);
+                if (itemView != null) itemView.setVisibility(View.GONE);
+                JsonObject statProperties = new JsonObject();
+                statProperties.addProperty("manual", false);
+                sendUserAnalytics(getApplicationContext(), CLOSE_BATTEVIEW, statProperties);
+            }
         }
     };
 
@@ -1828,7 +1905,7 @@ public class KcaBattleViewService extends Service {
         acViewParams.y = (screenHeight - popupHeight) / 2;
     }
 
-    private View.OnTouchListener acViewTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener acViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
 
         private long startClickTime;
@@ -1884,7 +1961,7 @@ public class KcaBattleViewService extends Service {
         }
     };
 
-    private View.OnTouchListener fleetViewTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener fleetViewTouchListener = new View.OnTouchListener() {
         private int getShipId(float x, float y) {
             for (int i = 1; i <= 7; i++) {
                 if (isInsideView(battleview.findViewById(getId(KcaUtils.format("fm_%d", i), R.id.class)), x, y)) {
@@ -1934,7 +2011,7 @@ public class KcaBattleViewService extends Service {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);;
         int selected = -1;
 
@@ -1984,6 +2061,7 @@ public class KcaBattleViewService extends Service {
                     }
                     Log.e("KCA", "ACTION_DOWN");
                     return true;
+                case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
                     itemView.setVisibility(View.GONE);
                     selected = -1;
@@ -1994,7 +2072,7 @@ public class KcaBattleViewService extends Service {
         }
     };
 
-    private View.OnTouchListener infoListViewTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener infoListViewTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
@@ -2021,7 +2099,7 @@ public class KcaBattleViewService extends Service {
         }
     };
 
-    private View.OnClickListener battleViewMenuListener = new View.OnClickListener() {
+    private final View.OnClickListener battleViewMenuListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent qintent;

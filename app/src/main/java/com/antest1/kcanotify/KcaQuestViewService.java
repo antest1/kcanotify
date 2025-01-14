@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -169,6 +170,7 @@ public class KcaQuestViewService extends Service {
                 helper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
                 questTracker = new KcaQuestTracker(getApplicationContext(), null, KCANOTIFY_QTDB_VERSION);
                 contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+                contextWithLocale = new ContextThemeWrapper(contextWithLocale, R.style.AppTheme);
                 broadcaster = LocalBroadcastManager.getInstance(this);
                 mInflater = LayoutInflater.from(contextWithLocale);
                 mView = mInflater.inflate(R.layout.view_quest_list_v2, null);

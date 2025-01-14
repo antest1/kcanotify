@@ -30,7 +30,6 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -124,8 +123,11 @@ public class KcaFleetViewService extends Service {
     static int view_status = 0;
     static boolean error_flag = false;
     boolean active;
+
     private DraggableOverlayLayout fleetView;
     private int fleetViewHeight = 0;
+    private WindowManager.LayoutParams layoutParams;
+
     private View itemView, fleetHqInfoView;
     private TextView fleetInfoTitle, fleetInfoLine, fleetCnChangeBtn, fleetSwitchBtn, fleetAkashiTimerBtn;
     private WindowManager windowManager;
@@ -138,8 +140,7 @@ public class KcaFleetViewService extends Service {
 
     int displayWidth = 0;
 
-    private View snapIndicatorLayout, snapIndicator;
-    private WindowManager.LayoutParams layoutParams, snapLayoutParams;
+    private SnapIndicator snapIndicator;
 
     int selectedFleetIndex;
 
@@ -338,8 +339,8 @@ public class KcaFleetViewService extends Service {
         if (fleetView != null) {
             if (fleetView.getParent() != null) windowManager.removeViewImmediate(fleetView);
         }
-        if (snapIndicatorLayout != null) {
-            if (snapIndicatorLayout.getParent() != null) windowManager.removeViewImmediate(snapIndicatorLayout);
+        if (snapIndicator != null) {
+            snapIndicator.remove();
         }
         if (itemView != null) {
             if (itemView.getParent() != null) windowManager.removeViewImmediate(itemView);
@@ -376,14 +377,7 @@ public class KcaFleetViewService extends Service {
         fleetView.setVisibility(GONE);
         KcaUtils.resizeFullWidthView(getApplicationContext(), fleetView);
 
-        snapIndicatorLayout = mInflater.inflate(R.layout.view_snap_indicator, null);
-        snapIndicator = snapIndicatorLayout.findViewById(R.id.indicator);
-        snapIndicatorLayout.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            if (bottom - top == oldBottom - oldTop) return;
-            int height = bottom - top;
-            snapLayoutParams.y = (screenHeight - height) * (view_status + 1) / 2;
-        });
-
+        snapIndicator = new SnapIndicator(windowManager, mInflater);
 
         fleetView.findViewById(R.id.fleetview_head).setOnTouchListener(draggableLayoutTouchListener);
 
@@ -513,14 +507,6 @@ public class KcaFleetViewService extends Service {
                 PixelFormat.TRANSLUCENT);
         layoutParams.gravity = Gravity.TOP;
 
-        snapLayoutParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                getWindowLayoutType(),
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                PixelFormat.TRANSLUCENT);
-        snapLayoutParams.gravity = Gravity.TOP;
-
         fleetView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             if (bottom - top == oldBottom - oldTop) return;
             fleetViewHeight = bottom - top;
@@ -605,10 +591,7 @@ public class KcaFleetViewService extends Service {
                     if (fleetView.getParent() != null) {
                         windowManager.removeViewImmediate(fleetView);
                     }
-                    snapIndicatorLayout.setVisibility(GONE);
-                    if (snapIndicatorLayout.getParent() != null) {
-                        windowManager.removeViewImmediate(snapIndicatorLayout);
-                    }
+                    snapIndicator.remove();
                     itemView.setVisibility(GONE);
                     if (itemView.getParent() != null) {
                         windowManager.removeViewImmediate(itemView);
@@ -650,31 +633,13 @@ public class KcaFleetViewService extends Service {
                     startViewX = layoutParams.x;
                     startViewY = layoutParams.y;
                     Log.e("KCA", KcaUtils.format("mView: %d %d", startViewX, startViewY));
-
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.MATCH_PARENT,
-                            fleetViewHeight
-                    );
-                    snapIndicator.setLayoutParams(params);
-                    snapIndicator.requestLayout();
-                    if (layoutParams.y < maxY / 4f) {
-                        snapLayoutParams.y = 0;
-                    } else if (layoutParams.y < maxY / 4f * 3f) {
-                        snapLayoutParams.y = maxY / 2;
-                    } else {
-                        snapLayoutParams.y = maxY;
-                    }
-                    windowManager.addView(snapIndicatorLayout, snapLayoutParams);
-
-
+                    snapIndicator.show(layoutParams.y, maxY, fleetViewHeight);
                     fleetView.cancelAnimations();
                     break;
-
                 case MotionEvent.ACTION_UP:
                     float dx = event.getRawX() - lastX[(curr + 1) % 3];
                     float dy = event.getRawY() - lastY[(curr + 1) % 3];
                     long dt = Calendar.getInstance().getTimeInMillis() - lastT[(curr + 1) % 3];
-
                     float finalXUncap = layoutParams.x + dx / dt * 400;
                     float finalYUncap = layoutParams.y + dy / dt * 400;
                     finalX = 0f;
@@ -693,12 +658,11 @@ public class KcaFleetViewService extends Service {
                             0, (int) finalY,
                             finalXUncap == finalX ? 0 : max(2f, abs(dx / dt) / 2f), finalYUncap == finalY ? 0 : max(2f, abs(dy / dt) / 2f),
                             500, windowManager, layoutParams);
-                    windowManager.removeViewImmediate(snapIndicatorLayout);
+                    snapIndicator.remove();
 
                     // Save new preference to DB
                     setPreferences(getApplicationContext(), PREF_VIEW_YLOC, view_status);
                     break;
-
                 case MotionEvent.ACTION_MOVE:
                     int x = (int) (event.getRawX() - startRawX);
                     int y = (int) (event.getRawY() - startRawY);
@@ -714,21 +678,12 @@ public class KcaFleetViewService extends Service {
                     layoutParams.x = (int) finalX;
                     layoutParams.y = (int) finalY;
 
-                    if (finalY < maxY / 4f) {
-                        snapLayoutParams.y = 0;
-                    } else if (finalY < maxY / 4f * 3f) {
-                        snapLayoutParams.y = maxY / 2;
-                    } else {
-                        snapLayoutParams.y = maxY;
-                    }
-                    windowManager.updateViewLayout(snapIndicatorLayout, snapLayoutParams);
-
                     windowManager.updateViewLayout(fleetView, layoutParams);
+                    snapIndicator.update(finalY, maxY);
                     break;
-
                 case MotionEvent.ACTION_CANCEL:
                     fleetView.cancelAnimations();
-                    windowManager.removeViewImmediate(snapIndicatorLayout);
+                    snapIndicator.remove();
                     layoutParams.x = startViewX;
                     layoutParams.y = startViewY;
                     windowManager.updateViewLayout(fleetView, layoutParams);
@@ -755,7 +710,7 @@ public class KcaFleetViewService extends Service {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 getWindowLayoutType(),
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
         int selected = -1;
