@@ -573,6 +573,13 @@ public class KcaViewButtonService extends Service {
                     layoutParams.y = startViewY + y;
                     windowManager.updateViewLayout(buttonView, layoutParams);
                     break;
+
+                case MotionEvent.ACTION_CANCEL:
+                    layoutParams.x = startViewX;
+                    layoutParams.y = startViewY;
+                    buttonView.cancelAnimations();
+                    windowManager.updateViewLayout(buttonView, layoutParams);
+                break;
             }
             return false;
         }

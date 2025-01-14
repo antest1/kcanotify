@@ -9,7 +9,8 @@
     android:clickable="false"
     android:orientation="vertical"
     android:padding="4dp"
-    android:visibility="visible">
+    android:visibility="visible"
+    tools:ignore="SpUsage" >
 
     <ScrollView
         android:id="@+id/battleview"
@@ -917,7 +918,7 @@
                                     android:maxLines="1"
                                     android:minHeight="@dimen/battleview_text_c_large"
                                     android:textColor="@android:color/white"
-                                    android:textSize="@dimen/battleview_text_c_large" />
+                                    android:textSize="@dimen/battleview_text_c_large"/>
 
                                 <TextView
                                     android:id="@+id/fm_5_cond"

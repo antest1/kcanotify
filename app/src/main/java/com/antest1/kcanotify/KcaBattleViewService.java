@@ -1912,7 +1912,12 @@ public class KcaBattleViewService extends Service {
 
             return (x >= viewLeft && x <= viewRight && y >= viewTop && y <= viewBottom);
         }
-        WindowManager.LayoutParams itemViewParams;
+        final WindowManager.LayoutParams itemViewParams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                getWindowLayoutType(),
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);;
         int selected = -1;
 
         @Override
@@ -1933,15 +1938,9 @@ public class KcaBattleViewService extends Service {
                             if (selected != newSelected) {
                                 setItemViewLayout(newSelected);
                             }
-                            itemViewParams = new WindowManager.LayoutParams(
-                                    WindowManager.LayoutParams.WRAP_CONTENT,
-                                    WindowManager.LayoutParams.WRAP_CONTENT,
-                                    getWindowLayoutType(),
-                                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                                    PixelFormat.TRANSLUCENT);
-                            itemViewParams.x = (int) (event.getRawX() + margin);
                             updateScreenSize();
-                            itemViewParams.y = screenHeight - (int) event.getRawY() + margin;
+                            itemViewParams.x = (int) (event.getRawX() + margin);
+                            itemViewParams.y = screenHeight - (int) event.getRawY() + 2 * margin;
                             itemViewParams.gravity = Gravity.BOTTOM | Gravity.LEFT;
                             if (itemView.getParent() != null) {
                                 if (newSelected == -1) {
