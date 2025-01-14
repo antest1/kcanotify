@@ -10,9 +10,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_alignStart="@id/viewbutton"
-        android:layout_alignEnd="@id/viewbutton"
         android:layout_alignTop="@id/viewbutton"
-        android:layout_alignBottom="@id/viewbutton"/>
+        android:layout_alignEnd="@id/viewbutton"
+        android:layout_alignBottom="@id/viewbutton" />
 
     <ImageView
         android:id="@+id/viewbutton"
@@ -20,6 +20,7 @@
         android:layout_height="@dimen/button_size_normal"
         android:layout_centerInParent="true"
         android:layout_gravity="center_vertical"
+        android:alpha="0.9"
         android:src="@mipmap/noti_icon_0" />
 
 

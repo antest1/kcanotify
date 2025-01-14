@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -393,12 +394,12 @@ public class KcaQuestViewService extends Service {
                                 if (id == KcaUtils.getId("quest_class_" + (i+1), R.id.class)) {
                                     for (int j = 0; j < 5; j++) {
                                         ((Chip)questView.findViewById(KcaUtils.getId("quest_class_" + (j+1), R.id.class)))
-                                                .setTextColor(Color.WHITE);
+                                                .setChipBackgroundColor(ColorStateList.valueOf(Color.TRANSPARENT));
                                     }
                                     if (currentFilterState != i) {
                                         // Selection Changed
-                                        ((Chip)v).setTextColor(ContextCompat.getColor(getApplicationContext(),
-                                                KcaUtils.getId(KcaUtils.format("colorQuestCategory%d", filterCategoryList[i]), R.color.class)));
+                                        ((Chip)v).setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(),
+                                                KcaUtils.getId(KcaUtils.format("colorQuestCategory%d", filterCategoryList[i]), R.color.class))));
                                         setQuestView(currentQuestList, false, filterCategoryList[i]);
                                         currentFilterState = i;
                                     } else {
