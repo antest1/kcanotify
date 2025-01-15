@@ -130,7 +130,7 @@ public class KcaFleetCheckPopupService extends Service {
             display.getSize(size);
             screenWidth = size.x;
             screenHeight = size.y;
-            Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+            Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
             mParams.x = (screenWidth - popupWidth) / 2;
             mParams.y = (screenHeight - popupHeight) / 2;
@@ -234,7 +234,7 @@ public class KcaFleetCheckPopupService extends Service {
 
     private String getSeekType() {
         int cn = Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
-        String seekType = "";
+        String seekType;
         switch (cn) {
             case 1:
                 seekType = getStringWithLocale(R.string.seek_type_1);
@@ -361,7 +361,7 @@ public class KcaFleetCheckPopupService extends Service {
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
-        Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+        Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
         if (mParams != null) {
             if (mParams.x < 0) mParams.x = 0;

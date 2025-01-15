@@ -397,19 +397,18 @@ public class KcaLandAirBasePopupService extends Service {
     }
 
     private float mTouchX, mTouchY;
-    private int mViewX, mViewY, itemViewX, itemViewY;
+    private int mViewX, mViewY;
 
     private View.OnTouchListener mViewTouchListener = new View.OnTouchListener() {
         private static final int MAX_CLICK_DURATION = 200;
-        private static final int LONG_CLICK_DURATION = 800;
-        int itemViewWidth, itemViewHeight;
+        int itemViewHeight;
 
         private long startClickTime;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             int id = v.getId();
-            int xMargin = (int) getResources().getDimension(R.dimen.item_popup_margin);
+            int margin = (int) getResources().getDimension(R.dimen.item_popup_margin);
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -417,8 +416,6 @@ public class KcaLandAirBasePopupService extends Service {
                     mTouchY = event.getRawY();
                     mViewX = mParams.x;
                     mViewY = mParams.y;
-                    itemViewX = itemViewParams.x;
-                    itemViewY = itemViewParams.y;
                     Log.e("KCA", KcaUtils.format("mView: %d %d", mViewX, mViewY));
                     startClickTime = Calendar.getInstance().getTimeInMillis();
 
@@ -432,11 +429,9 @@ public class KcaLandAirBasePopupService extends Service {
                             JsonObject item = api_air_base.get(tag).getAsJsonObject();
                             setItemViewLayout(item);
                             itemView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                            itemViewWidth = itemView.getMeasuredWidth();
                             itemViewHeight = itemView.getMeasuredHeight();
-
-                            itemViewParams.x = (int) (event.getRawX() - xMargin - itemViewWidth);
-                            itemViewParams.y = (int) (event.getRawY() - itemViewHeight / 2);
+                            itemViewParams.x = (int) event.getRawX() + margin;
+                            itemViewParams.y = (int) event.getRawY() - 2 * margin - itemViewHeight;
                             itemViewParams.gravity = Gravity.TOP | Gravity.LEFT;
                             if (itemView.getParent() != null) {
                                 mManager.removeViewImmediate(itemView);
@@ -481,8 +476,8 @@ public class KcaLandAirBasePopupService extends Service {
                     mManager.updateViewLayout(mView, mParams);
 
                     if (itemView.getParent() != null) {
-                        itemViewParams.x = (int) (event.getRawX() - xMargin - itemViewWidth);
-                        itemViewParams.y = (int) (event.getRawY() - itemViewHeight / 2);
+                        itemViewParams.x = (int) event.getRawX() + margin;
+                        itemViewParams.y = (int) event.getRawY() - 2 * margin - itemViewHeight;
                         mManager.updateViewLayout(itemView, itemViewParams);
                     }
                     break;

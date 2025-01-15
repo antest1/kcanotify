@@ -2139,7 +2139,7 @@ public class KcaService extends Service {
         private final WeakReference<KcaService> mService;
 
         kcaNotificationHandler(KcaService service) {
-            mService = new WeakReference<KcaService>(service);
+            mService = new WeakReference<>(service);
         }
 
         @Override
@@ -2164,7 +2164,7 @@ public class KcaService extends Service {
 
         JsonObject jsonDataObj = null;
         try {
-            if (data != null && data.length() > 0) {
+            if (data != null && !data.isEmpty()) {
                 jsonDataObj = gson.fromJson(data, JsonObject.class);
             }
 

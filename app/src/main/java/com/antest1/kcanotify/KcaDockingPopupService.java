@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -121,7 +120,7 @@ public class KcaDockingPopupService extends Service {
             display.getSize(size);
             screenWidth = size.x;
             screenHeight = size.y;
-            Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+            Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
             mParams.x = (screenWidth - popupWidth) / 2;
             mParams.y = (screenHeight - popupHeight) / 2;

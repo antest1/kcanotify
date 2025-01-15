@@ -156,7 +156,7 @@ public class KcaVpnService extends VpnService implements SharedPreferences.OnSha
                         Log.e(TAG, "Unknown command message=" + msg.what);
                 }
             } catch (Throwable ex) {
-                Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
+                Log.e(TAG, ex + "\n" + Log.getStackTraceString(ex));
             } finally {
                 synchronized (this) {
                     queue--;

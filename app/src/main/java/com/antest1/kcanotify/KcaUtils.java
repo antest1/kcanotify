@@ -461,13 +461,13 @@ public class KcaUtils {
 
     // True: latest, False: need to update
     public static boolean compareVersion(String version_current, String version_default) {
-        if (version_current != null && version_current.length() == 0) return false;
+        if (version_current != null && version_current.isEmpty()) return false;
         if (version_current.equals(version_default)) return true;
         String[] current_split = version_current.replace("r", ".0.").split("\\.");
         String[] default_split = version_default.replace("r", ".0.").split("\\.");
         int min_length = Math.min(current_split.length, default_split.length);
         for (int i = 0; i < min_length; i++) {
-            if (current_split[i].trim().length() > 0 && default_split[i].trim().length() > 0) {
+            if (!current_split[i].trim().isEmpty() && !default_split[i].trim().isEmpty()) {
                 if (Integer.parseInt(current_split[i]) > Integer.parseInt(default_split[i])) {
                     return true;
                 } else if (Integer.parseInt(current_split[i]) < Integer.parseInt(default_split[i])) {
@@ -489,13 +489,11 @@ public class KcaUtils {
     }
 
     public static int getWindowLayoutType() {
-        int windowLayoutType = -1;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            windowLayoutType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+            return WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
-            windowLayoutType = WindowManager.LayoutParams.TYPE_PHONE;
+            return WindowManager.LayoutParams.TYPE_PHONE;
         }
-        return windowLayoutType;
     }
 
     public static NotificationCompat.Builder createBuilder(Context context, String channel) {
