@@ -347,6 +347,8 @@ public class KcaService extends Service {
                 stopService(new Intent(this, KcaViewButtonService.class));
                 stopService(new Intent(this, KcaExpeditionCheckViewService.class));
                 stopService(new Intent(this, KcaCustomToastService.class));
+                stopService(new Intent(this, KcaFleetCheckPopupService.class));
+                stopService(new Intent(this, KcaDockingPopupService.class));
                 setServiceDown();
                 KcaAlarmService.clearAlarmCount();
                 stopSelfResult(startId);
@@ -671,8 +673,7 @@ public class KcaService extends Service {
                 api_start2_init = false;
                 KcaFleetViewService.setReadyFlag(false);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                        && !Settings.canDrawOverlays(getApplicationContext())) {
+                if (!Settings.canDrawOverlays(getApplicationContext())) {
                     // Can not draw overlays: pass
                 } else {
                     startService(new Intent(this, KcaViewButtonService.class));
@@ -942,8 +943,7 @@ public class KcaService extends Service {
                         break;
                     }
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                        && !Settings.canDrawOverlays(getApplicationContext())) {
+                if (!Settings.canDrawOverlays(getApplicationContext())) {
                     // Can not draw overlays: pass
                 } else if (jsonDataObj.has("api_data")) {
                     JsonObject api_data = jsonDataObj.getAsJsonObject("api_data");
@@ -1150,10 +1150,7 @@ public class KcaService extends Service {
                 }
 
                 if (url.startsWith(API_GET_MEMBER_MAPINFO) || url.startsWith(API_GET_MEMBER_PRACTICE)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                            && !Settings.canDrawOverlays(getApplicationContext())) {
-                        // Can not draw overlays: pass
-                    } else {
+                    if (Settings.canDrawOverlays(getApplicationContext())) {
                         Intent qintent = new Intent(this, KcaBattleViewService.class);
                         startService(qintent);
                     }
@@ -2668,11 +2665,7 @@ public class KcaService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
             alarmManager.set(android.app.AlarmManager.RTC_WAKEUP, time, alarmIntent);
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, alarmIntent);
-            } else {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, alarmIntent);
-            }
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, alarmIntent);
         }
         Log.e("KCA", "Alarm set to: " + time + " " + code);
     }

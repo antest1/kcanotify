@@ -504,8 +504,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkOverlayPermission() {
-        return !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext()));
+        return Settings.canDrawOverlays(getApplicationContext());
     }
 
     private boolean checkNotificationPermission() {

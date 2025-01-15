@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
@@ -89,8 +88,7 @@ public class KcaFleetCheckPopupService extends Service {
     public void onCreate() {
         super.onCreate();
         active = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else {
@@ -144,8 +142,7 @@ public class KcaFleetCheckPopupService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("KCA-MPS", "onStartCommand");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {

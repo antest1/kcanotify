@@ -90,8 +90,7 @@ public class KcaDockingPopupService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else {
@@ -228,12 +227,11 @@ public class KcaDockingPopupService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("KCA-CPS", "onStartCommand");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else if (intent != null && intent.getAction() != null) {
-            if(intent.getAction().equals(DOCKING_DATA_ACTION)) {
+            if (intent.getAction().equals(DOCKING_DATA_ACTION)) {
                 api_ndock = dbHelper.getJsonArrayValue(DB_KEY_NDOCKDATA);
                 updatePopup();
             }
