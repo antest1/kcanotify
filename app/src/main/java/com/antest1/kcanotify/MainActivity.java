@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
         textDescription.setMovementMethod(LinkMovementMethod.getInstance());
         textDescription.setText(fromHtml);
 
-        backPressCloseHandler = new BackPressCloseHandler(this);
+        backPressCloseHandler = new BackPressCloseHandler();
 
         textMaintenance = findViewById(R.id.textMaintenance);
         String maintenanceInfo = dbHelper.getValue(DB_KEY_KCMAINTNC);
@@ -604,5 +604,40 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = alert.create();
         dialog.show();
         ((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private class BackPressCloseHandler {
+        private static final int INTERVAL = 1500;
+        long pressedTime = 0;
+        Toast toast;
+
+        public BackPressCloseHandler (){}
+
+        public void onBackPressed() {
+            FrameLayout bottomSheet = findViewById(R.id.bottomSheet);
+            BottomSheetBehavior<FrameLayout> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+            if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                return;
+            }
+            if (System.currentTimeMillis() > pressedTime + INTERVAL) {
+                pressedTime = System.currentTimeMillis();
+                showMessage();
+                return;
+            }
+            if (System.currentTimeMillis() <= pressedTime + INTERVAL) {
+                MainActivity.this.finish();
+                toast.cancel();
+            }
+        }
+
+        public String getStringWithLocale(int id) {
+            return KcaUtils.getStringWithLocale(MainActivity.this.getApplication(), MainActivity.this.getBaseContext(), id);
+        }
+
+        public void showMessage() {
+            toast = Toast.makeText(MainActivity.this, getStringWithLocale(R.string.backpress_msg), Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 }

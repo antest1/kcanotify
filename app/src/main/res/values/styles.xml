@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textAppearanceButton">@style/TextAppearance.AppCompat.Button.Custom</item>
         <item name="colorButtonNormal">@color/colorBtn</item>

@@ -78,8 +78,7 @@ public class KcaLandAirBasePopupService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(getApplicationContext())) {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
         } else {
@@ -117,7 +116,7 @@ public class KcaLandAirBasePopupService extends Service {
             display.getSize(size);
             screenWidth = size.x;
             screenHeight = size.y;
-            Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+            Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
             mParams.x = (screenWidth - popupWidth) / 2;
             mParams.y = (screenHeight - popupHeight) / 2;
@@ -171,7 +170,7 @@ public class KcaLandAirBasePopupService extends Service {
             JsonArray api_air_base = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
             String value = "";
             try {
-                if (api_air_base != null && api_air_base.size() > 0) {
+                if (api_air_base != null && !api_air_base.isEmpty()) {
                     for (int i = 0; i < api_air_base.size(); i++) {
                         JsonObject item = api_air_base.get(i).getAsJsonObject();
                         View v = vi.inflate(R.layout.listivew_lab, null);

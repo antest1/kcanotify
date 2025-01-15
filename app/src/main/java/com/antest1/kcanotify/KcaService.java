@@ -1233,15 +1233,10 @@ public class KcaService extends Service {
                             KcaBattle.setDeckPortData(api_data);
                             KcaBattle.setStartHeavyDamageExist(checkvalue);
 
-                            if (isBattleViewEnabled()) {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                                        && !Settings.canDrawOverlays(getApplicationContext())) {
-                                    // Can not draw overlays: pass
-                                } else {
-                                    startService(new Intent(this, KcaViewButtonService.class)
-                                            .setAction(KcaViewButtonService.ACTIVATE_BATTLEVIEW_ACTION));
-                                    startService(new Intent(this, KcaBattleViewService.class));
-                                }
+                            if (isBattleViewEnabled() &&Settings.canDrawOverlays(getApplicationContext())) {
+                                startService(new Intent(this, KcaViewButtonService.class)
+                                        .setAction(KcaViewButtonService.ACTIVATE_BATTLEVIEW_ACTION));
+                                startService(new Intent(this, KcaBattleViewService.class));
                             }
                         }
                         KcaBattle.processData(dbHelper, url, battleApiData);
@@ -1298,8 +1293,8 @@ public class KcaService extends Service {
                 if (url.startsWith(API_REQ_NYUKYO_SPEEDCHAGNE)) {
                     int ndock_id = -1;
                     String[] requestData = request.split("&");
-                    for (int i = 0; i < requestData.length; i++) {
-                        String decodedData = URLDecoder.decode(requestData[i], "utf-8");
+                    for (String requestDatum : requestData) {
+                        String decodedData = URLDecoder.decode(requestDatum, "utf-8");
                         if (decodedData.startsWith("api_ndock_id")) {
                             ndock_id = Integer.valueOf(decodedData.replace("api_ndock_id=", "")) - 1;
                             break;

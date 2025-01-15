@@ -68,7 +68,6 @@ import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.gzipdecompress;
 import static com.antest1.kcanotify.KcaUtils.sendUserAnalytics;
 import static com.antest1.kcanotify.KcaUtils.setPreferences;
-import static com.antest1.kcanotify.LocaleUtils.getResourceLocaleCode;
 
 public class InitStartActivity extends Activity {
     public static final String ACTION_RESET = "ACTION_RESET";
@@ -117,7 +116,6 @@ public class InitStartActivity extends Activity {
         KcaApiData.setDBHelper(dbHelper);
 
         appname = findViewById(R.id.app_title);
-        appname.setText(getStringWithLocale(R.string.app_name));
 
         appversion = findViewById(R.id.app_version);
         appversion.setText(getString(R.string.app_version));
