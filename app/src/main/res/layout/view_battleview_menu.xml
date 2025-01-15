@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/overlay_background_solid"
+    android:elevation="8dp"
+    android:padding="4dp"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="450dp"
+        android:layout_width="350dp"
         android:layout_height="match_parent"
-        android:background="@drawable/overlay_background_solid"
         android:orientation="vertical"
         android:padding="12dp">
 
@@ -77,7 +80,7 @@
 
                         <TextView
                             android:id="@+id/view_menu_fleetinfo"
-                            android:layout_width="120dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:padding="8dp"
@@ -86,7 +89,7 @@
                             android:textSize="14dp" />
 
                         <LinearLayout
-                            android:layout_width="200dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
@@ -99,7 +102,7 @@
                                 android:padding="8dp"
                                 android:text="@string/battleview_menu0"
                                 android:textColor="@color/white"
-                                android:textSize="20dp" />
+                                android:textSize="16dp" />
 
                             <TextView
                                 android:id="@+id/view_item1"
@@ -109,7 +112,7 @@
                                 android:padding="8dp"
                                 android:text="@string/battleview_menu1"
                                 android:textColor="@color/white"
-                                android:textSize="20dp" />
+                                android:textSize="16dp" />
 
                             <TextView
                                 android:id="@+id/view_item2"
@@ -119,7 +122,7 @@
                                 android:padding="8dp"
                                 android:text="@string/battleview_menu2"
                                 android:textColor="@color/white"
-                                android:textSize="20dp" />
+                                android:textSize="16dp" />
                         </LinearLayout>
                     </LinearLayout>
 

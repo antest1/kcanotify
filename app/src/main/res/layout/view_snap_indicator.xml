@@ -14,16 +14,14 @@
         android:id="@+id/indicator_outline"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="4dp">
+        android:orientation="vertical">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0.8"
             android:background="@drawable/overlay_snap_indicator"
-            android:orientation="vertical"
-            android:padding="4dp" />
+            android:orientation="vertical"/>
     </LinearLayout>
 
 

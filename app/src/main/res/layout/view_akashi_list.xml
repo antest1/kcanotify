@@ -6,7 +6,9 @@
     android:id="@+id/akashiviewlayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/overlay_background_solid"
     android:clickable="false"
+    android:elevation="8dp"
     android:orientation="vertical"
     android:padding="4dp"
     android:visibility="visible">
@@ -15,7 +17,6 @@
         android:id="@+id/akashiviewpanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/overlay_background_solid"
         android:orientation="vertical"
         android:padding="@dimen/view_padding">
 

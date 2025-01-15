@@ -970,7 +970,7 @@ public class KcaUtils {
     public static void resizeFullWidthView(Context context, View v) {
         if (v == null) return;
         int statusBarHeight = 0;
-        int defaultHeight = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? 24 : 25;
+        int defaultHeight = 24;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);

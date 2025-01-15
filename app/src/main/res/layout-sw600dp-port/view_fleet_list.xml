@@ -7,13 +7,14 @@
     android:clickable="false"
     android:orientation="vertical"
     android:padding="4dp"
+    android:background="@drawable/overlay_background"
+    android:elevation="8dp"
     android:visibility="visible">
 
     <LinearLayout
         android:id="@+id/fleetviewpanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/overlay_background"
         android:orientation="vertical"
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"

@@ -5,27 +5,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/battleviewlayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:clickable="false"
     android:orientation="vertical"
-    android:padding="4dp"
     android:visibility="visible"
+    android:elevation="8dp"
+    android:background="@drawable/overlay_background"
     tools:ignore="SpUsage" >
 
-    <ScrollView
+    <LinearLayout
         android:id="@+id/battleview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_centerVertical="true">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/battleviewpanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/overlay_background"
             android:orientation="vertical"
             android:padding="@dimen/battleview_padding">
 
@@ -3492,7 +3488,7 @@
             </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
 </com.antest1.kcanotify.DraggableOverlayLayout>
 

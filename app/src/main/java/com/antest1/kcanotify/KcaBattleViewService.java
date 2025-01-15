@@ -24,6 +24,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -145,7 +146,7 @@ public class KcaBattleViewService extends Service {
     private int[] slotViewList = {R.id.item1, R.id.item2, R.id.item3, R.id.item4, R.id.item5};
 
     private WindowManager.LayoutParams layoutParams, acViewParams;
-    private ScrollView battleview;
+    private ViewGroup battleview;
 
     @Nullable
     @Override
