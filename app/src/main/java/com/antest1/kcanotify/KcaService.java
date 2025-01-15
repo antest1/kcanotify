@@ -1125,7 +1125,7 @@ public class KcaService extends Service {
                             }
                         }
 
-                        if (message.length() > 0) {
+                        if (!message.isEmpty()) {
                             boolean hcondition = (isHeavyDamagedFlag && isHDVibrateEnabled());
                             boolean ncondition = (isNotSuppliedFlag && isNSVibrateEnabled());
                             if (hcondition || ncondition) {

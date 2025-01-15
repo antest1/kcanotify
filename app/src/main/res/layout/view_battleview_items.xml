@@ -6,7 +6,7 @@
     android:background="@drawable/overlay_background_solid"
     android:orientation="vertical"
     android:elevation="8dp"
-    android:padding="12dp">
+    android:padding="@dimen/popup_padding">
 
     <LinearLayout
         android:id="@+id/view_slot"

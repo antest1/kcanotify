@@ -51,7 +51,7 @@ public class KcaConstructPopupService extends Service {
     private int popupWidth, popupHeight;
     private KcaDBHelper dbHelper;
     private boolean spoilerStatus = true;
-    TextView constructionViewButton;
+    View constructionViewButton;
 
     WindowManager.LayoutParams mParams;
 
@@ -126,13 +126,10 @@ public class KcaConstructPopupService extends Service {
 
             spoilerStatus = getBooleanPreferences(getApplicationContext(), PREF_SHOW_CONSTRSHIP_NAME);
             constructionViewButton = mView.findViewById(R.id.view_sc_btn);
-            constructionViewButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    spoilerStatus = !spoilerStatus;
-                    updateSpoilerButton();
-                    updatePopup();
-                }
+            constructionViewButton.setOnClickListener(v -> {
+                spoilerStatus = !spoilerStatus;
+                updateSpoilerButton();
+                updatePopup();
             });
 
             updateSpoilerButton();

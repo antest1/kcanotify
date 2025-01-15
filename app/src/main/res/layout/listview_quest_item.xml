@@ -8,7 +8,6 @@
         android:id="@+id/quest"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/colorPrimaryDark"
         android:orientation="horizontal"
         android:padding="2dp">
 

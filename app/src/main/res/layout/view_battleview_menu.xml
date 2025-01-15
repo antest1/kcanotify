@@ -5,14 +5,13 @@
     android:layout_height="wrap_content"
     android:background="@drawable/overlay_background_solid"
     android:elevation="8dp"
-    android:padding="4dp"
+    android:padding="@dimen/popup_padding"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="350dp"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/view_menu"

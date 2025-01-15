@@ -75,7 +75,7 @@
     <dimen name="popup_t2_width">250dp</dimen>
     <dimen name="popup_t3_width">300dp</dimen>
     <dimen name="popup_t4_width">350dp</dimen>
-    <dimen name="popup_padding">6dp</dimen>
+    <dimen name="popup_padding">12dp</dimen>
 
     <dimen name="aircombat_text_mid">11dp</dimen>
     <dimen name="aircombat_mid_width">100dp</dimen>

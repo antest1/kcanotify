@@ -2,25 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/excheckviewlayout"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/overlay_background_solid"
     android:clickable="false"
+    android:elevation="8dp"
     android:orientation="vertical"
-    android:padding="4dp"
+    android:padding="@dimen/popup_padding"
     android:visibility="visible">
 
     <LinearLayout
         android:id="@+id/excheckviewpanel"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/overlay_background_solid"
-        android:orientation="vertical"
-        android:padding="@dimen/view_padding">
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/excheckview_head"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <TextView
@@ -109,7 +109,7 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="2dp"
@@ -123,14 +123,14 @@
             android:src="@android:drawable/divider_horizontal_bright" />
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/excheck_info"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="1.0"

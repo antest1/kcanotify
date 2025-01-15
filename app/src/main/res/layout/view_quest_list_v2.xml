@@ -20,14 +20,13 @@
         android:layout_centerVertical="true"
         android:background="@drawable/overlay_background_solid"
         android:elevation="8dp"
-        android:padding="4dp">
+        android:padding="@dimen/popup_padding">
 
         <LinearLayout
             android:id="@+id/questviewpanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/view_padding">
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/quest_head"
