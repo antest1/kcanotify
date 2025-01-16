@@ -33,66 +33,61 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/view_text_title" />
 
-            <LinearLayout
+            <com.google.android.material.chip.ChipGroup
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="8dp"
+                android:layout_marginTop="-6dp"
                 android:layout_marginRight="8dp"
-                android:alwaysDrawnWithCache="true"
-                android:orientation="horizontal">
+                android:layout_marginBottom="-6dp"
+                android:orientation="horizontal"
+                app:selectionRequired="true"
+                app:singleLine="true"
+                app:singleSelection="true">
 
-                <TextView
+                <com.google.android.material.chip.Chip
                     android:id="@+id/fleet_2"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginRight="8dp"
-                    android:background="@color/colorFleetInfoBtn"
-                    android:gravity="top"
-                    android:paddingBottom="4dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="4dp"
-                    android:text="\#2"
+                    android:checked="true"
+                    android:text="2"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/excheckview_text_tbutton" />
+                    android:textSize="@dimen/excheckview_text_tbutton"
+                    android:theme="@style/AppThemeDark"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipStrokeColor="@color/colorAccent"
+                    app:chipSurfaceColor="@android:color/transparent" />
 
-                <TextView
+                <com.google.android.material.chip.Chip
                     android:id="@+id/fleet_3"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginRight="8dp"
-                    android:background="@color/colorFleetInfoBtn"
                     android:gravity="top"
-                    android:paddingBottom="4dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="4dp"
-                    android:text="\#3"
+                    android:text="3"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/excheckview_text_tbutton" />
+                    android:textSize="@dimen/excheckview_text_tbutton"
+                    android:theme="@style/AppThemeDark"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@android:color/transparent" />
 
-                <TextView
+                <com.google.android.material.chip.Chip
                     android:id="@+id/fleet_4"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginRight="8dp"
-                    android:background="@color/colorFleetInfoBtn"
                     android:gravity="top"
-                    android:paddingBottom="4dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="4dp"
-                    android:text="\#4"
+                    android:text="4"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/excheckview_text_tbutton" />
-            </LinearLayout>
+                    android:textSize="@dimen/excheckview_text_tbutton"
+                    android:theme="@style/AppThemeDark"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@android:color/transparent" />
+            </com.google.android.material.chip.ChipGroup>
 
             <TextView
-                android:id="@+id/pad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
@@ -257,7 +252,6 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/excheck_row_1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">

@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
 import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.chip.Chip;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -145,6 +146,7 @@ public class KcaExpeditionCheckViewService extends Service {
             checkdata = new HashMap<>();
             dbHelper = new KcaDBHelper(getApplicationContext(), null, KCANOTIFY_DB_VERSION);
             contextWithLocale = KcaUtils.getContextWithLocale(getApplicationContext(), getBaseContext());
+            contextWithLocale = new ContextThemeWrapper(contextWithLocale, R.style.AppTheme);
             mInflater = LayoutInflater.from(contextWithLocale);
             mView = mInflater.inflate(R.layout.view_excheck_list, null);
             KcaUtils.resizeFullWidthView(getApplicationContext(), mView);
@@ -188,7 +190,8 @@ public class KcaExpeditionCheckViewService extends Service {
         if (!Settings.canDrawOverlays(getApplicationContext())) {
             // Can not draw overlays: pass
             stopSelf();
-        } if (intent != null && intent.getAction() != null) {
+        }
+        if (intent != null && intent.getAction() != null) {
             if (intent.getAction().startsWith(SHOW_EXCHECKVIEW_ACTION)) {
                 deckdata = dbHelper.getJsonArrayValue(DB_KEY_DECKPORT);
                 if (deckdata != null && deckdata.size() >= 2) {
@@ -210,7 +213,7 @@ public class KcaExpeditionCheckViewService extends Service {
                     mView.findViewById(R.id.excheckview_head).setOnClickListener(mViewClickListener);
                     mView.findViewById(R.id.excheck_detail_reward).setOnClickListener(mViewClickListener);
                     for (int i = 1; i < 4; i++) {
-                        mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnClickListener(mViewClickListener);
+                        mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).setOnClickListener(fleetChipOnClickListener);
                     }
                     for (int i = 1; i <= 7; i++) {
                         mView.findViewById(getId("expd_world_".concat(String.valueOf(i)), R.id.class)).setOnClickListener(mViewClickListener);
@@ -403,7 +406,7 @@ public class KcaExpeditionCheckViewService extends Service {
                 for (JsonElement itemobj : obj.getAsJsonArray("item")) {
                     int level = itemobj.getAsJsonObject().get("level").getAsInt();
                     int type_t2 = itemobj.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
-                    if (type_t2 == T2_SONAR || type_t2 == T2_SONAR_LARGE || type_t2 == T2_DEPTH_CHARGE ) {
+                    if (type_t2 == T2_SONAR || type_t2 == T2_SONAR_LARGE || type_t2 == T2_DEPTH_CHARGE) {
                         total_asw_bonus += Math.sqrt(level);
                     }
                 }
@@ -439,7 +442,7 @@ public class KcaExpeditionCheckViewService extends Service {
                 for (JsonElement itemobj : obj.getAsJsonArray("item")) {
                     int level = itemobj.getAsJsonObject().get("level").getAsInt();
                     int type_t2 = itemobj.getAsJsonObject().getAsJsonArray("type").get(2).getAsInt();
-                    if (type_t2 == T2_RADAR_SMALL || type_t2 == T2_RADAR_LARGE || type_t2 == T2_RADER_LARGE_II ) {
+                    if (type_t2 == T2_RADAR_SMALL || type_t2 == T2_RADAR_LARGE || type_t2 == T2_RADER_LARGE_II) {
                         total_los_value += Math.sqrt(level);
                     }
                 }
@@ -510,7 +513,8 @@ public class KcaExpeditionCheckViewService extends Service {
                 int slotitem_id = itemobj.getAsJsonObject().get("slotitem_id").getAsInt();
                 int level = itemobj.getAsJsonObject().get("level").getAsInt();
                 int tais = itemobj.getAsJsonObject().get("tais").getAsInt();
-                if (KcaApiData.isItemAircraft(type_t2) || type_t2 == T2_AUTOGYRO || type_t2 == T2_ANTISUB_PATROL) plane_tais_value += tais;
+                if (KcaApiData.isItemAircraft(type_t2) || type_t2 == T2_AUTOGYRO || type_t2 == T2_ANTISUB_PATROL)
+                    plane_tais_value += tais;
 
                 if (type_t2 == T2_GUN_MEDIUM || type_t2 == T2_GUN_LARGE || type_t2 == T2_GUN_LARGE_II) {
                     total_firepower += Math.sqrt(level);
@@ -520,7 +524,7 @@ public class KcaExpeditionCheckViewService extends Service {
                     total_firepower += 0.15 * Math.sqrt(level);
                 }
 
-                if (type_t2 == T2_SONAR || type_t2 == T2_SONAR_LARGE || type_t2 == T2_DEPTH_CHARGE ) {
+                if (type_t2 == T2_SONAR || type_t2 == T2_SONAR_LARGE || type_t2 == T2_DEPTH_CHARGE) {
                     total_asw_bonus += Math.sqrt(level);
                 }
 
@@ -563,7 +567,7 @@ public class KcaExpeditionCheckViewService extends Service {
         result.addProperty("toku", toku_count);
         result.addProperty("level", bonus_level);
         result.addProperty("firepower", (int) total_firepower);
-        result.addProperty("asw", Math.floor(total_asw_value - plane_tais_value + total_asw_bonus * 2 / 3) );
+        result.addProperty("asw", Math.floor(total_asw_value - plane_tais_value + total_asw_bonus * 2 / 3));
         result.addProperty("los", total_los);
         return result;
     }
@@ -590,9 +594,9 @@ public class KcaExpeditionCheckViewService extends Service {
 
         int value_bonus = 0;
         if (is_gs) {
-            value_bonus = (int)(value * 3 * (1 + bonus_default) / 2) + (int)(value * 3 * bonus_toku / 2);
+            value_bonus = (int) (value * 3 * (1 + bonus_default) / 2) + (int) (value * 3 * bonus_toku / 2);
         } else {
-            value_bonus = (int)(value * (1 + bonus_default)) + (int)(value * bonus_toku);
+            value_bonus = (int) (value * (1 + bonus_default)) + (int) (value * bonus_toku);
         }
         return value_bonus;
     }
@@ -1020,13 +1024,6 @@ public class KcaExpeditionCheckViewService extends Service {
                         return;
                     }
                 }
-                for (int i = 1; i < 4; i++) {
-                    if (id == mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
-                        if (i < deckdata.size()) { selected = i; }
-                        setView();
-                        return;
-                    }
-                }
                 for (int i = 0; i < 15; i++) {
                     if (id == mView.findViewById(getId("expd_btn_".concat(String.valueOf(i)), R.id.class)).getId()) {
                         button = i;
@@ -1037,4 +1034,35 @@ public class KcaExpeditionCheckViewService extends Service {
             }
         }
     };
+
+    private final View.OnClickListener fleetChipOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+            for (int i = 1; i < 4; i++) {
+                if (id == mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class)).getId()) {
+                    updateFleetChips(i);
+                    if (i < deckdata.size()) {
+                        selected = i;
+                    }
+                    if (checkUserShipDataLoaded()) {
+                        JsonObject bonus_info = getBonusInfo();
+                        setView();
+                        return;
+                    }
+                }
+            }
+        }
+    };
+
+    private void updateFleetChips(int newSelected) {
+        for (int i = 1; i < 4; i++) {
+            Chip chip = mView.findViewById(getId("fleet_".concat(String.valueOf(i + 1)), R.id.class));
+            if (newSelected == i) {
+                chip.setChipStrokeColorResource(R.color.colorAccent);
+            } else {
+                chip.setChipStrokeColorResource(R.color.colorFleetInfoNormalBtn);
+            }
+        }
+    }
 }
