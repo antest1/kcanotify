@@ -27,7 +27,7 @@
 
 memtrack_t memtrack = {0};
 int loglevel = 0;
-const char *logtag = "pcapdroid-native";
+const char *logtag = "kcanotify-native";
 void (*logcallback)(int lvl, const char *msg) = NULL;
 
 // Needed for local compilation, don't remove

@@ -2,17 +2,26 @@ package com.antest1.kcanotify;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import androidx.annotation.NonNull;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
+import com.antest1.kcanotify.remote_capture.Utils;
+import com.antest1.kcanotify.remote_capture.model.MatchList;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import java.lang.ref.WeakReference;
 import java.util.Locale;
 
+import static com.antest1.kcanotify.KcaConstants.PREF_DECRYPTION_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 
 public class KcaApplication extends MultiDexApplication {
     public static Locale defaultLocale;
+    private static WeakReference<KcaApplication> mInstance;
+    private Context mLocalizedContext;
+    private MatchList mDecryptionList;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -23,6 +32,10 @@ public class KcaApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        mInstance = new WeakReference<>(this);
+        mLocalizedContext = createConfigurationContext(Utils.getLocalizedConfig(this));
+
         String language, country;
         defaultLocale = Locale.getDefault();
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
@@ -42,5 +55,16 @@ public class KcaApplication extends MultiDexApplication {
         }
 
         FirebaseAnalytics.getInstance(this);
+    }
+
+    public static @NonNull KcaApplication getInstance() {
+        return mInstance.get();
+    }
+
+    public MatchList getDecryptionList() {
+        if(mDecryptionList == null)
+            mDecryptionList = new MatchList(mLocalizedContext, PREF_DECRYPTION_LIST);
+
+        return mDecryptionList;
     }
 }

@@ -498,6 +498,7 @@ public final class KcaConstants {
     public static final String PREF_FLEETVIEW_ITEMSELECT = "fleetview_item_select";
     public static final String PREF_NOTI_TEST_SHOW = "notify_test_show";
 
+    public static final String PREF_DECRYPTION_LIST = "decryption_list";
     public static final String PREF_VPNSERVICE_USAGE_AGREE = "vpnservice_usage_agree";
 
     public static final String NOTI_SOUND_KIND_MIXED = "mixed";

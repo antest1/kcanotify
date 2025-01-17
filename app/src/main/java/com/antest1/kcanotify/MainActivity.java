@@ -1,5 +1,8 @@
 package com.antest1.kcanotify;
 
+import com.antest1.kcanotify.remote_capture.CaptureHelper;
+import com.antest1.kcanotify.remote_capture.CaptureService;
+import com.antest1.kcanotify.remote_capture.model.CaptureSettings;
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -16,7 +19,6 @@ import android.content.res.AssetManager;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -113,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
         sHandler = h;
     }
 
+    private CaptureHelper mCapHelper;
+    private boolean mWasStarted = false;
+    private boolean mStartPressed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +130,15 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
         prefs.edit().putBoolean(PREF_SVC_ENABLED, KcaService.getServiceStatus()).apply();
-        // prefs.edit().putBoolean(PREF_VPN_ENABLED, KcaVpnService.checkOn()).apply();
+        prefs.edit().putBoolean(PREF_VPN_ENABLED, CaptureService.isServiceActive()).apply();
+
+        mCapHelper = new CaptureHelper(this, true);
+        mCapHelper.setListener(success -> {
+            if(!success) {
+                Log.w(TAG, "Capture start failed");
+                // appStateReady();
+            }
+        });
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
@@ -340,6 +353,24 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(browserIntent);
             }
         });
+
+        CaptureService.observeStatus(this, serviceStatus -> {
+            Log.d(TAG, "Service status: " + serviceStatus.name());
+
+            if (serviceStatus == CaptureService.ServiceStatus.STARTED) {
+                //appStateRunning();
+                mWasStarted = true;
+            } else if (mWasStarted) { /* STARTED -> STOPPED */
+                // The service may still be active (on premature native termination)
+                if (CaptureService.isServiceActive()) CaptureService.stopService();
+                // appStateReady();
+                mWasStarted = false;
+                mStartPressed = false;
+            } else {
+                /* STOPPED -> STOPPED */
+                // appStateReady();
+            }
+        });
     }
 
     private void startKcaService() {
@@ -414,6 +445,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        mCapHelper = null;
         sendUserAnalytics(getApplicationContext(), END_APP, null);
         dbHelper.close();
         super.onDestroy();
@@ -449,15 +481,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startActivityResultCallback(int type, int resultCode) {
-        if (type == REQUEST_VPN) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            prefs.edit().putBoolean(PREF_VPN_ENABLED, resultCode == RESULT_OK).apply();
-            if (resultCode == RESULT_OK) {
-                // KcaVpnService.start("prepared", this);
-            } else if (resultCode == RESULT_CANCELED) {
-                // Canceled
-            }
-        }
         if (type == REQUEST_EXACT_ALARM_PERMISSION) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 new Handler().postDelayed(() -> {
@@ -566,26 +589,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startVpnService() {
+        mStartPressed = true;
+        startCapture();
+        prefs.edit().putBoolean(PREF_VPN_ENABLED, true).apply();
         JsonObject statProperties = new JsonObject();
-        try {
-            final Intent prepare = VpnService.prepare(MainActivity.this);
-            if (prepare == null) {
-                //Log.i(TAG, "Prepare done");
-                startActivityResultCallback(REQUEST_VPN, RESULT_OK);
-            } else {
-                vpnPrepareLauncher.launch(prepare);
-            }
-            statProperties.addProperty("is_success", true);
-        } catch (Throwable ex) {
-            // Prepare failed
-            statProperties.addProperty("is_success", false);
-            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-        }
+        statProperties.addProperty("is_success", true);
         sendUserAnalytics(getApplicationContext(), START_SNIFFER, statProperties);
     }
 
     public void stopVpnService() {
-        // KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
+        stopCapture();
         prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
         sendUserAnalytics(getApplicationContext(), END_SNIFFER, null);
     }
@@ -606,4 +619,48 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
         ((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
+
+    private void doStartCaptureService(String input_pcap_path) {
+        // appStateStarting();
+        CaptureSettings settings = new CaptureSettings(this, prefs);
+        settings.input_pcap_path = input_pcap_path;
+        mCapHelper.startCapture(settings);
+    }
+
+    public void startCapture() {
+        /* TODO: MITM settings
+        if(Prefs.getTlsDecryptionEnabled(mPrefs)) {
+            if (MitmAddon.needsSetup(this)) {
+                Intent intent = new Intent(this, MitmSetupWizard.class);
+                startActivity(intent);
+                return;
+            }
+
+            if (!MitmAddon.getNewVersionAvailable(this).isEmpty()) {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.update_available)
+                        .setMessage(R.string.mitm_addon_update_available)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.update_action, (dialog, whichButton) -> {
+                            Intent intent = new Intent(this, MitmSetupWizard.class);
+                            startActivity(intent);
+                        })
+                        .setNegativeButton(R.string.cancel_action, (dialog, whichButton) -> {
+                            MitmAddon.ignoreNewVersion(this);
+                            startCapture();
+                        })
+                        .show();
+
+                return;
+            }
+        }*/
+
+        doStartCaptureService(null);
+    }
+
+    public void stopCapture() {
+        // appStateStopping();
+        CaptureService.stopService();
+    }
+
 }

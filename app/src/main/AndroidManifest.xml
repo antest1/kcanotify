@@ -288,6 +288,16 @@
             </intent-filter>
         </service>
         -->
+        <service
+            android:name=".remote_capture.CaptureService"
+            android:label="@string/app_vpn_name"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
         <receiver
             android:name=".KcaAutomationReceiver"
             android:enabled="true"
