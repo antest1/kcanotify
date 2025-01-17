@@ -8,7 +8,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 33
         versionCode 211005
-        versionName "2.11r5"
+        versionName "2.25"
 
         multiDexEnabled true
         externalNativeBuild {
@@ -27,12 +27,6 @@ android {
         lintOptions {
             checkReleaseBuilds false
             abortOnError false
-        }
-    }
-
-    externalNativeBuild {
-        cmake {
-            path "CMakeLists.txt"
         }
     }
 

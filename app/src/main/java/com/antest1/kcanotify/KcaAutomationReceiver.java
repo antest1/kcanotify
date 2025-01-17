@@ -29,6 +29,7 @@ public class KcaAutomationReceiver extends BroadcastReceiver {
         if (action != null) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             switch (action) {
+                /*
                 case SNIFFER_ON_ACTION:
                     try {
                         VpnService.prepare(context);
@@ -44,7 +45,7 @@ public class KcaAutomationReceiver extends BroadcastReceiver {
                     KcaVpnService.stop(VPN_STOP_REASON, context);
                     prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
                     break;
-
+                */
                 default:
                     break;
             }

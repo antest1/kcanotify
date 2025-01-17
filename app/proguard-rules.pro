@@ -171,22 +171,23 @@
 }
 
 #JNI callbacks
--keep class eu.faircode.netguard.** { *; }
--keep class eu.faircode.netguard.IPUtil { *; }
--keep class eu.faircode.netguard.Packet { *; }
--keep class eu.faircode.netguard.ResourceRecord { *; }
--keep class eu.faircode.netguard.Util { *; }
+#-keep class eu.faircode.netguard.** { *; }
+#-keep class eu.faircode.netguard.IPUtil { *; }
+#-keep class eu.faircode.netguard.Packet { *; }
+#-keep class eu.faircode.netguard.ResourceRecord { *; }
+#-keep class eu.faircode.netguard.Util { *; }
 
--keep class com.antest1.kcanotify.KcaVpnService {
-    void nativeExit(java.lang.String);
-    void nativeError(int, java.lang.String);
-    void dnsResolved(eu.faircode.netguard.ResourceRecord);
-}
 
--keep class com.antest1.kcanotify.KcaVpnData {
-    int containsKcaServer(int, byte[], byte[], byte[]);
-    void getDataFromNative(byte[], int, int, byte[], byte[], int, int);
- }
+#-keep class com.antest1.kcanotify.KcaVpnService {
+#    void nativeExit(java.lang.String);
+#    void nativeError(int, java.lang.String);
+#    void dnsResolved(eu.faircode.netguard.ResourceRecord);
+#}
+
+#-keep class com.antest1.kcanotify.KcaVpnData {
+#    int containsKcaServer(int, byte[], byte[], byte[]);
+#    void getDataFromNative(byte[], int, int, byte[], byte[], int, int);
+# }
 
 -assumenosideeffects class android.util.Log {
     public static *** d(...);

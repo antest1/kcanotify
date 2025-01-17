@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
         prefs.edit().putBoolean(PREF_SVC_ENABLED, KcaService.getServiceStatus()).apply();
-        prefs.edit().putBoolean(PREF_VPN_ENABLED, KcaVpnService.checkOn()).apply();
+        // prefs.edit().putBoolean(PREF_VPN_ENABLED, KcaVpnService.checkOn()).apply();
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         downloader = KcaUtils.getInfoDownloader(getApplicationContext());
@@ -453,7 +453,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             prefs.edit().putBoolean(PREF_VPN_ENABLED, resultCode == RESULT_OK).apply();
             if (resultCode == RESULT_OK) {
-                KcaVpnService.start("prepared", this);
+                // KcaVpnService.start("prepared", this);
             } else if (resultCode == RESULT_CANCELED) {
                 // Canceled
             }
@@ -585,7 +585,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void stopVpnService() {
-        KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
+        // KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
         prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
         sendUserAnalytics(getApplicationContext(), END_SNIFFER, null);
     }

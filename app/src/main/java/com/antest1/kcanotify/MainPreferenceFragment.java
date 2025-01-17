@@ -470,7 +470,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat implements
             String val = (String) newValue;
             if (Integer.parseInt(val) == SNIFFER_PASSIVE) {
                 if (prefs.getBoolean(PREF_VPN_ENABLED, false)) {
-                    KcaVpnService.stop(VPN_STOP_REASON, getActivity());
+                    // KcaVpnService.stop(VPN_STOP_REASON, getActivity());
                     prefs.edit().putBoolean(PREF_VPN_ENABLED, false).commit();
                 }
                 setActiveSnifferSettingEnabled(false);
