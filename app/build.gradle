@@ -5,7 +5,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 android {
     defaultConfig {
         applicationId "com.antest1.kcanotify"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode 211005
         versionName "2.25"
@@ -14,7 +14,7 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags ""
-                arguments "-DANDROID_PLATFORM=android-16"
+                arguments "-DANDROID_PLATFORM=android-21"
                 // https://developer.android.com/ndk/guides/cmake.html
             }
         }
@@ -38,11 +38,29 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
+    packagingOptions {
+        jniLibs {
+            // NOTE: needed to unpack libpcapd.so when installed as app bundle
+            useLegacyPackaging = true
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/jni/CMakeLists.txt')
+            version "3.22.1"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    ndkVersion '23.1.7779620'
+    ndkVersion '26.1.10909125'
     namespace 'com.antest1.kcanotify'
     compileSdk 33
 }
