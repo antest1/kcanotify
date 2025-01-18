@@ -91,7 +91,7 @@
                 android:paddingEnd="4dp"
                 android:paddingRight="4dp"
                 android:singleLine="true"
-                android:text="00:15:23"
+                android:text="00:00:00"
                 android:textColor="@color/white"
                 android:textSize="12dp" />
 

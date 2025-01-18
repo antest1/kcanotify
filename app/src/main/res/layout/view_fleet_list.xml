@@ -357,7 +357,7 @@
                 android:paddingRight="8dp"
                 android:paddingTop="2dp"
                 android:singleLine="true"
-                android:text="00:15:23"
+                android:text="00:00:00"
                 android:textColor="@color/white"
                 android:textSize="@dimen/fleetview_text_statusarea" />
 
