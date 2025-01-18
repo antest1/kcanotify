@@ -166,7 +166,6 @@ public class KcaLandAirBasePopupService extends Service {
             LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view_list.removeAllViews();
             JsonArray api_air_base = dbHelper.getJsonArrayValue(DB_KEY_LABSIFNO);
-            String value = "";
             try {
                 if (api_air_base != null && !api_air_base.isEmpty()) {
                     for (int i = 0; i < api_air_base.size(); i++) {
@@ -503,7 +502,7 @@ public class KcaLandAirBasePopupService extends Service {
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
-        Log.e("KCA", "w/h: " + String.valueOf(screenWidth) + " " + String.valueOf(screenHeight));
+        Log.e("KCA", "w/h: " + screenWidth + " " + screenHeight);
 
         if (mParams != null) {
             if (mParams.x < 0) mParams.x = 0;

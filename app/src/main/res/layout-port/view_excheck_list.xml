@@ -134,115 +134,112 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/excheckview_text_statusarea" />
 
-            <LinearLayout
+            <com.google.android.material.chip.ChipGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                app:chipSpacingVertical="-8dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/expd_world_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:padding="5dp"
+                    android:text="@string/expdtable_btn_w1"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@color/transparent"
+                    app:chipStrokeColor="@color/colorExpeditionTable1" />
 
-                    <TextView
-                        android:id="@+id/expd_world_1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_weight="1"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:padding="6dp"
-                        android:text="@string/expdtable_btn_w1"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/popup_text_normal" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/expd_world_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:padding="5dp"
+                    android:text="@string/expdtable_btn_w2"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@color/transparent"
+                    app:chipStrokeColor="@color/colorExpeditionTable2" />
 
-                    <TextView
-                        android:id="@+id/expd_world_2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_weight="1"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:padding="6dp"
-                        android:text="@string/expdtable_btn_w2"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/popup_text_normal" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/expd_world_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:padding="5dp"
+                    android:text="@string/expdtable_btn_w3"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@color/transparent"
+                    app:chipStrokeColor="@color/colorExpeditionTable3" />
 
-                    <TextView
-                        android:id="@+id/expd_world_3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_weight="1"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:padding="6dp"
-                        android:text="@string/expdtable_btn_w3"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/popup_text_normal" />
-                </LinearLayout>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/expd_world_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:padding="5dp"
+                    android:text="@string/expdtable_btn_w7"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@color/transparent"
+                    app:chipStrokeColor="@color/colorExpeditionTable7" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/expd_world_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:padding="5dp"
+                    android:text="@string/expdtable_btn_w4"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@color/transparent"
+                    app:chipStrokeColor="@color/colorExpeditionTable4" />
 
-                    <TextView
-                        android:id="@+id/expd_world_7"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:padding="6dp"
-                        android:text="@string/expdtable_btn_w7"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/popup_text_normal" />
 
-                    <TextView
-                        android:id="@+id/expd_world_5"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:padding="6dp"
-                        android:text="@string/expdtable_btn_w5"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/popup_text_normal" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/expd_world_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:padding="5dp"
+                    android:text="@string/expdtable_btn_w5"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@color/transparent"
+                    app:chipStrokeColor="@color/colorExpeditionTable5" />
 
-                    <TextView
-                        android:id="@+id/expd_world_4"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:padding="6dp"
-                        android:text="@string/expdtable_btn_w4"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/popup_text_normal" />
-
-                    <TextView
-                        android:id="@+id/expd_world_6"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@color/colorFleetInfoBtn"
-                        android:padding="6dp"
-                        android:text="@string/expdtable_btn_w6"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/popup_text_normal"
-                        android:visibility="gone" />
-                </LinearLayout>
-
-            </LinearLayout>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/expd_world_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:padding="5dp"
+                    android:text="@string/expdtable_btn_w6"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:visibility="visible"
+                    app:chipBackgroundColor="@color/transparent"
+                    app:chipSurfaceColor="@color/transparent"
+                    app:chipStrokeColor="@color/colorExpeditionTable6" />
+            </com.google.android.material.chip.ChipGroup>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -256,237 +253,180 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <com.google.android.material.chip.ChipGroup
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        app:chipSpacingVertical="-8dp">
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_0"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="1"
-                            android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_1"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="2"
-                            android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_2"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="3"
-                            android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_3"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
-                            android:text="9"
-                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_4"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
-                            android:text="10"
-                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                    </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/excheck_row_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_5"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
-                            android:text="11"
-                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="6"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_6"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
-                            android:text="17"
-                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_7"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
-                            android:text="18"
-                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="8"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_8"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
-                            android:text="19"
-                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A1"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_9"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
-                            android:text="25"
-                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A2"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/excheck_row_3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_10"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
-                            android:text="26"
-                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A3"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_11"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
-                            android:text="27"
-                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A4"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_12"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
-                            android:text="33"
-                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A5"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_13"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
-                            android:text="34"
-                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A6"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip" />
 
-                        <TextView
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/expd_btn_14"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_weight="1.0"
-                            android:background="@color/colorFleetInfoNoShip"
-                            android:padding="6dp"
-                            android:text="14"
-                            android:textAlignment="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/popup_text_large" />
-                    </LinearLayout>
+                            android:textSize="@dimen/popup_text_large"
+                            app:chipBackgroundColor="@color/transparent"
+                            app:chipSurfaceColor="@android:color/transparent"
+                            app:strokeColor="@color/colorFleetInfoNoShip"
+                            android:visibility="gone"/>
+
+                    </com.google.android.material.chip.ChipGroup>
 
                 </LinearLayout>
 

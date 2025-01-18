@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -19,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -2178,7 +2180,27 @@ public class KcaBattleViewService extends Service {
         return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
     }
 
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        updateScreenSize();
+        int maxY = screenHeight - battleViewLayout.getMeasuredHeight();
+        if (battleViewLayout != null) {
+            battleViewLayout.cancelAnimations();
+            snapIndicator.remove();
+            layoutParams.x = 0;
+            // Snap to either top, center, or bottom
+            if (view_status == -1) {
+                layoutParams.y = 0;
+            } else if (view_status == 0) {
+                layoutParams.y = maxY / 2;
+            } else {
+                layoutParams.y = maxY;
+            }
+            snapIndicator.remove();
+            windowManager.updateViewLayout(battleViewLayout, layoutParams);
+        }
+    }
 
     public void showCustomToast(KcaCustomToast toast, String body, int duration, int color) {
         KcaUtils.showCustomToast(getApplicationContext(), getBaseContext(), toast, body, duration, color);

@@ -10,9 +10,9 @@ import android.os.IBinder;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.android.material.chip.Chip;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -28,15 +29,12 @@ import java.util.Calendar;
 
 import static com.antest1.kcanotify.KcaConstants.DB_KEY_DECKPORT;
 import static com.antest1.kcanotify.KcaConstants.KCANOTIFY_DB_VERSION;
-import static com.antest1.kcanotify.KcaConstants.PREF_KCA_SEEK_CN;
 import static com.antest1.kcanotify.KcaConstants.SEEK_PURE;
 import static com.antest1.kcanotify.KcaUtils.getContextWithLocale;
-import static com.antest1.kcanotify.KcaUtils.getStringPreferences;
 import static com.antest1.kcanotify.KcaUtils.getWindowLayoutType;
 
 public class KcaFleetCheckPopupService extends Service {
     public static final String FCHK_SHOW_ACTION = "fchk_show_action";
-    public static final String FCHK_RESET_ACTION = "fchk_reset_action";
 
     private static final int FCHK_FUNC_SEEKTP = 0;
     private static final int FCHK_FUNC_AIRBATTLE = 1;
@@ -96,6 +94,7 @@ public class KcaFleetCheckPopupService extends Service {
             deckInfoCalc = new KcaDeckInfo(getApplicationContext(), getBaseContext());
 
             contextWithLocale = getContextWithLocale(getApplicationContext(), getBaseContext());
+            contextWithLocale = new ContextThemeWrapper(contextWithLocale, R.style.AppTheme);
 
             mInflater = LayoutInflater.from(contextWithLocale);
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
@@ -190,8 +189,6 @@ public class KcaFleetCheckPopupService extends Service {
             }
 
             if (KcaApiData.isGameDataLoaded() && KcaApiData.checkUserShipDataLoaded() && portdeckdata != null) {
-                int cn = getSeekCn();
-                String seekType = getSeekType();
 
                 switch (current_func) {
                     case FCHK_FUNC_SEEKTP:
@@ -226,30 +223,6 @@ public class KcaFleetCheckPopupService extends Service {
                 fchk_info.setText("data not loaded");
             }
         }
-    }
-
-    private int getSeekCn() {
-        return Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
-    }
-
-    private String getSeekType() {
-        int cn = Integer.valueOf(getStringPreferences(getApplicationContext(), PREF_KCA_SEEK_CN));
-        String seekType;
-        switch (cn) {
-            case 1:
-                seekType = getStringWithLocale(R.string.seek_type_1);
-                break;
-            case 3:
-                seekType = getStringWithLocale(R.string.seek_type_3);
-                break;
-            case 4:
-                seekType = getStringWithLocale(R.string.seek_type_4);
-                break;
-            default:
-                seekType = getStringWithLocale(R.string.seek_type_0);
-                break;
-        }
-        return seekType;
     }
 
     private float mTouchX, mTouchY;
@@ -322,31 +295,28 @@ public class KcaFleetCheckPopupService extends Service {
         }
     };
 
-    private void setFchkFleetBtnColor(int n, int size) {
+    private void setFchkFleetBtnColor(int selected, int size) {
         for (int i = 0; i < FCHK_FLEET_LIST.length; i++) {
             int fleet_id = FCHK_FLEET_LIST[i];
+            Chip chip = mView.findViewById(fleet_id);
+            chip.setChecked(selected == i);
             if (size < 4 && i >= size) {
-                mView.findViewById(fleet_id).setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
-                ((TextView) mView.findViewById(fleet_id)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-            } else if (i == n) {
-                mView.findViewById(fleet_id).setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-                ((TextView) mView.findViewById(fleet_id)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
+                chip.setChipStrokeColorResource(R.color.grey);
+            } else if (i == selected) {
+                chip.setChipStrokeColorResource(R.color.colorAccent);
             } else {
-                mView.findViewById(fleet_id).setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
-                ((TextView) mView.findViewById(fleet_id)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                chip.setChipStrokeColorResource(R.color.colorFleetInfoNormalBtn);
             }
         }
     }
 
-    private void setFchkFuncBtnColor(int n) {
+    private void setFchkFuncBtnColor(int selected) {
         for (int i = 0; i < FCHK_BTN_LIST.length; i++) {
-            int fchk_id = FCHK_BTN_LIST[i];
-            if (i == n) {
-                mView.findViewById(fchk_id).setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-                ((TextView) mView.findViewById(fchk_id)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBtnTextAccent));
+            Chip chip = mView.findViewById(FCHK_BTN_LIST[i]);
+            if (i == selected) {
+                chip.setChipStrokeColorResource(R.color.colorAccent);
             } else {
-                mView.findViewById(fchk_id).setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
-                ((TextView) mView.findViewById(fchk_id)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+                chip.setChipStrokeColorResource(R.color.colorFleetInfoBtn);
             }
         }
     }

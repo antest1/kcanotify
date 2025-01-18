@@ -107,13 +107,11 @@ public class KcaExpeditionCheckViewService extends Service {
         }
 
         for (int i = 1; i <= 7; i++) {
-            int view_id = getId("expd_world_".concat(String.valueOf(i)), R.id.class);
+            int view_id = getId("expd_world_" + i, R.id.class);
             if (world == i) {
-                mView.findViewById(view_id).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                ((Chip)mView.findViewById(view_id)).setChipBackgroundColorResource(getId("colorExpeditionTable" + i, R.color.class));
             } else {
-                mView.findViewById(view_id).setBackgroundColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorFleetInfoBtn));
+                ((Chip)mView.findViewById(view_id)).setChipBackgroundColorResource(R.color.transparent);
             }
         }
 
@@ -693,9 +691,11 @@ public class KcaExpeditionCheckViewService extends Service {
     }
 
     public void setItemViewLayout(int index, JsonObject bonus_info) {
-        double gs_ratio = isGreatSuccess ? 1.5 : 1.0;
+        if (index >= expedition_data.size()) {
+            return;
+        }
         int expd_value = expedition_data.get(index);
-        Log.e("KCA", String.valueOf(index) + " " + expd_value);
+        Log.e("KCA", index + " " + expd_value);
         JsonObject data = KcaApiData.getExpeditionInfo(expd_value);
 
         String no = data.get("no").getAsString();
