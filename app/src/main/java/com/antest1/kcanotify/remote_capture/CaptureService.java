@@ -19,6 +19,12 @@
 
 package com.antest1.kcanotify.remote_capture;
 
+import static com.antest1.kcanotify.KcaConstants.DMMLOGIN_PACKAGE_NAME;
+import static com.antest1.kcanotify.KcaConstants.GOTO_PACKAGE_NAME;
+import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
+import static com.antest1.kcanotify.KcaConstants.KC_WV_PACKAGE_NAME;
+import static com.antest1.kcanotify.KcaConstants.PREF_PACKAGE_ALLOW;
+
 import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -54,6 +60,7 @@ import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
 import com.antest1.kcanotify.KcaApplication;
+import com.antest1.kcanotify.KcaUtils;
 import com.antest1.kcanotify.R;
 import com.antest1.kcanotify.remote_capture.model.AppDescriptor;
 import com.antest1.kcanotify.remote_capture.model.BlacklistDescriptor;
@@ -69,6 +76,9 @@ import com.antest1.kcanotify.remote_capture.pcap_dump.HTTPServer;
 import com.antest1.kcanotify.remote_capture.interfaces.PcapDumper;
 import com.antest1.kcanotify.remote_capture.pcap_dump.UDPDumper;
 import com.antest1.kcanotify.mitm.MitmAPI;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -457,39 +467,26 @@ public class CaptureService extends VpnService implements Runnable {
                 }
             }
 
-            if ((mSettings.app_filter != null) && (!mSettings.app_filter.isEmpty())) {
-                Log.d(TAG, "Setting app filter: " + mSettings.app_filter);
+            // only allow kc-related and specified apps
+            try {
+                SharedPreferences prefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
+                boolean socks5_enable = prefs.getBoolean("socks5_enable", false);
+                boolean socks5_allapps = prefs.getBoolean("socks5_allapps", false);
 
-                try {
-                    // NOTE: the API requires a package name, however it is converted to a UID
-                    // (see Vpn.java addUserToRanges). This means that vpn routing happens on a UID basis,
-                    // not on a package-name basis!
-                    for (String package_name: mSettings.app_filter)
-                        builder.addAllowedApplication(package_name);
-                } catch (PackageManager.NameNotFoundException e) {
-                    Toast.makeText(this, "app not found", Toast.LENGTH_SHORT).show();
-                    return abortStart();
-                }
-            } else {
-                // VPN exceptions
-                Set<String> exceptions = mPrefs.getStringSet(Prefs.PREF_VPN_EXCEPTIONS, new HashSet<>());
-                for(String packageName: exceptions) {
-                    try {
-                        builder.addDisallowedApplication(packageName);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
+                if (!socks5_enable || !socks5_allapps) {
+                    builder.addAllowedApplication(KC_PACKAGE_NAME);
+                    builder.addAllowedApplication(KC_WV_PACKAGE_NAME);
+                    builder.addAllowedApplication(GOTO_PACKAGE_NAME);
+                    if (socks5_enable) builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
+
+                    JsonArray allowed_apps = JsonParser.parseString(KcaUtils.getStringPreferences(
+                            getApplicationContext(), PREF_PACKAGE_ALLOW)).getAsJsonArray();
+                    for (JsonElement pkg : allowed_apps) {
+                        builder.addAllowedApplication(pkg.getAsString());
                     }
                 }
-
-                if(mSettings.tls_decryption) {
-                    // Exclude the mitm addon traffic in case system-wide decryption is performed
-                    // Important: cannot call addDisallowedApplication with addAllowedApplication
-                    try {
-                        builder.addDisallowedApplication(MitmAPI.PACKAGE_NAME);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
             }
 
             if(Prefs.isPortMappingEnabled(mPrefs)) {
