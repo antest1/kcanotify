@@ -32,7 +32,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.ServiceInfo;
 import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.Network;
@@ -53,7 +52,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -61,7 +59,6 @@ import androidx.preference.PreferenceManager;
 
 import com.antest1.kcanotify.KcaApplication;
 import com.antest1.kcanotify.KcaUtils;
-import com.antest1.kcanotify.R;
 import com.antest1.kcanotify.remote_capture.model.AppDescriptor;
 import com.antest1.kcanotify.remote_capture.model.BlacklistDescriptor;
 import com.antest1.kcanotify.remote_capture.model.CaptureSettings;
@@ -71,11 +68,7 @@ import com.antest1.kcanotify.remote_capture.model.MatchList;
 import com.antest1.kcanotify.remote_capture.model.PortMapping;
 import com.antest1.kcanotify.remote_capture.model.Prefs;
 import com.antest1.kcanotify.remote_capture.model.CaptureStats;
-import com.antest1.kcanotify.remote_capture.pcap_dump.FileDumper;
-import com.antest1.kcanotify.remote_capture.pcap_dump.HTTPServer;
-import com.antest1.kcanotify.remote_capture.interfaces.PcapDumper;
-import com.antest1.kcanotify.remote_capture.pcap_dump.UDPDumper;
-import com.antest1.kcanotify.mitm.MitmAPI;
+import com.antest1.kcanotify.remote_capture.pcap_dump.PktsPcapDumper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -88,7 +81,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -129,7 +121,7 @@ public class CaptureService extends VpnService implements Runnable {
     private long last_bytes;
     private int last_connections;
     private int[] mAppFilterUids;
-    private PcapDumper mDumper;
+    private com.antest1.kcanotify.remote_capture.interfaces.PcapDumper mDumper;
     private ConnectionsRegister conn_reg;
     private Uri mPcapUri;
     private String mPcapFname;
@@ -280,6 +272,7 @@ public class CaptureService extends VpnService implements Runnable {
             mSettings.auto_block_private_dns = false;
             mSettings.capture_interface = mSettings.input_pcap_path;
         }
+        mSettings.dump_mode = Prefs.DumpMode.PCAP_FILE;
 
         // Retrieve DNS server
         String fallbackDnsV4 = Prefs.getDnsServerV4(mPrefs);
@@ -332,47 +325,18 @@ public class CaptureService extends VpnService implements Runnable {
         mPcapFname = null;
         HAS_ERROR = false;
 
-        // Possibly allocate the dumper
-        if(mSettings.dump_mode == Prefs.DumpMode.HTTP_SERVER)
-            mDumper = new HTTPServer(this, mSettings.http_server_port, mSettings.pcapng_format);
-        else if(mSettings.dump_mode == Prefs.DumpMode.PCAP_FILE) {
-            mPcapFname = !mSettings.pcap_name.isEmpty() ? mSettings.pcap_name : Utils.getUniquePcapFileName(this, mSettings.pcapng_format);
 
-            if(!mSettings.pcap_uri.isEmpty())
-                mPcapUri = Uri.parse(mSettings.pcap_uri);
-            else
-                mPcapUri = Utils.getDownloadsUri(this, mPcapFname);
+        // Max memory usage = (JAVA_PCAP_BUFFER_SIZE * 64) = 32 MB
+        mDumper = new PktsPcapDumper();
+        mDumpQueue = new LinkedBlockingDeque<>(64);
 
-            if(mPcapUri == null)
-                return abortStart();
-
-            mDumper = new FileDumper(this, mPcapUri);
-        } else if(mSettings.dump_mode == Prefs.DumpMode.UDP_EXPORTER) {
-            InetAddress addr;
-
-            try {
-                addr = InetAddress.getByName(mSettings.collector_address);
-            } catch (UnknownHostException e) {
-                reportError(e.getLocalizedMessage());
-                e.printStackTrace();
-                return abortStart();
-            }
-
-            mDumper = new UDPDumper(new InetSocketAddress(addr, mSettings.collector_port), mSettings.pcapng_format);
-        }
-
-        if(mDumper != null) {
-            // Max memory usage = (JAVA_PCAP_BUFFER_SIZE * 64) = 32 MB
-            mDumpQueue = new LinkedBlockingDeque<>(64);
-
-            try {
-                mDumper.startDumper();
-            } catch (IOException | SecurityException e) {
-                reportError(e.getLocalizedMessage());
-                e.printStackTrace();
-                mDumper = null;
-                return abortStart();
-            }
+        try {
+            mDumper.startDumper();
+        } catch (IOException | SecurityException e) {
+            reportError(e.getLocalizedMessage());
+            e.printStackTrace();
+            mDumper = null;
+            return abortStart();
         }
 
         mSocks5Address = "";
