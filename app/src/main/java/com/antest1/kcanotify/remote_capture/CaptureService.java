@@ -59,6 +59,7 @@ import androidx.preference.PreferenceManager;
 
 import com.antest1.kcanotify.KcaApplication;
 import com.antest1.kcanotify.KcaUtils;
+import com.antest1.kcanotify.R;
 import com.antest1.kcanotify.remote_capture.model.AppDescriptor;
 import com.antest1.kcanotify.remote_capture.model.BlacklistDescriptor;
 import com.antest1.kcanotify.remote_capture.model.CaptureSettings;
@@ -90,14 +91,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class CaptureService extends VpnService implements Runnable {
     private static final String TAG = "CaptureService";
-    private static final String VpnSessionName = "PCAPdroid VPN";
-    private static final String NOTIFY_CHAN_VPNSERVICE = "VPNService";
-    private static final String NOTIFY_CHAN_MALWARE_DETECTION = "Malware detection";
-    private static final String NOTIFY_CHAN_OTHER = "Other";
     private static final int VPN_MTU = 10000;
-    public static final int NOTIFY_ID_VPNSERVICE = 1;
-    public static final int NOTIFY_ID_LOW_MEMORY = 2;
-    public static final int NOTIFY_ID_APP_BLOCKED = 3;
     private static CaptureService INSTANCE;
     private static boolean HAS_ERROR = false;
     final ReentrantLock mLock = new ReentrantLock();
@@ -226,7 +220,7 @@ public class CaptureService extends VpnService implements Runnable {
 
         // NOTE: onStartCommand may be called when the capture is already running, e.g. if the user
         // turns on the always-on VPN while the capture is running in root mode
-        if(mCaptureThread != null) {
+        if (mCaptureThread != null) {
             // Restarting the capture requires calling stopAndJoinThreads, which is blocking.
             // Choosing not to support this right now.
             Log.e(TAG, "Restarting the capture is not supported");
@@ -241,7 +235,7 @@ public class CaptureService extends VpnService implements Runnable {
         // It can be simulated by starting the capture, putting PCAPdroid in the background and then running:
         //  adb shell ps | grep remote_capture | awk '{print $2}' | xargs adb shell run-as com.antest1.kcanotify.remote_capture.debug kill
         CaptureSettings settings = ((intent == null) ? null : Utils.getSerializableExtra(intent, "settings", CaptureSettings.class));
-        if(settings == null) {
+        if (settings == null) {
             // Use the settings from mPrefs
 
             // An Intent without extras is delivered in case of always on VPN
@@ -257,12 +251,12 @@ public class CaptureService extends VpnService implements Runnable {
         mIsAlwaysOnVPN |= isAlwaysOnVpnDetected();
 
         Log.d(TAG, "alwaysOn? " + mIsAlwaysOnVPN);
-        if(mIsAlwaysOnVPN) {
+        if (mIsAlwaysOnVPN) {
             mSettings.root_capture = false;
             mSettings.input_pcap_path = null;
         }
 
-        if(mSettings.readFromPcap()) {
+        if (mSettings.readFromPcap()) {
             // Disable incompatible settings
             mSettings.dump_mode = Prefs.DumpMode.NONE;
             mSettings.app_filter.clear();
@@ -286,21 +280,21 @@ public class CaptureService extends VpnService implements Runnable {
         mIfIndexToName = new SparseArray<>();
 
         Enumeration<NetworkInterface> ifaces = Utils.getNetworkInterfaces();
-        while(ifaces.hasMoreElements()) {
+        while (ifaces.hasMoreElements()) {
             NetworkInterface iface = ifaces.nextElement();
 
             Log.d(TAG, "ifidx " + iface.getIndex() + " -> " + iface.getName());
             mIfIndexToName.put(iface.getIndex(), iface.getName());
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Service.CONNECTIVITY_SERVICE);
             Network net = cm.getActiveNetwork();
 
-            if(net != null) {
+            if (net != null) {
                 handleLinkProperties(cm.getLinkProperties(net));
 
-                if(Prefs.useSystemDns(mPrefs) || mSettings.root_capture) {
+                if (Prefs.useSystemDns(mPrefs) || mSettings.root_capture) {
                     dns_server = Utils.getDnsServer(cm, net);
                     if (dns_server == null)
                         dns_server = fallbackDnsV4;
@@ -341,8 +335,8 @@ public class CaptureService extends VpnService implements Runnable {
 
         mSocks5Address = "";
         mSocks5Enabled = mSettings.socks5_enabled || mSettings.tls_decryption;
-        if(mSocks5Enabled) {
-            if(mSettings.tls_decryption) {
+        if (mSocks5Enabled) {
+            if (mSettings.tls_decryption) {
                 // Built-in decryption
                 mSocks5Address = "127.0.0.1";
                 mSocks5Port = MitmReceiver.TLS_DECRYPTION_PROXY_PORT;
@@ -350,7 +344,7 @@ public class CaptureService extends VpnService implements Runnable {
 
                 mMitmReceiver = new MitmReceiver(this, mSettings, mSocks5Auth);
                 try {
-                    if(!mMitmReceiver.start())
+                    if (!mMitmReceiver.start())
                         return abortStart();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -361,42 +355,21 @@ public class CaptureService extends VpnService implements Runnable {
                 mSocks5Address = mSettings.socks5_proxy_address;
                 mSocks5Port = mSettings.socks5_proxy_port;
 
-                if(!mSettings.socks5_username.isEmpty() && !mSettings.socks5_password.isEmpty())
+                if (!mSettings.socks5_username.isEmpty() && !mSettings.socks5_password.isEmpty())
                     mSocks5Auth = mSettings.socks5_username + ":" + mSettings.socks5_password;
                 else
                     mSocks5Auth = null;
             }
         }
 
-        if(mSettings.tls_decryption && !mSettings.root_capture && !mSettings.readFromPcap())
+        if (mSettings.tls_decryption) {
             mDecryptionList = KcaApplication.getInstance().getDecryptionList();
-        else
+            Log.d(TAG, "mDecryptionList: " + mDecryptionList.getSize());
+        } else {
             mDecryptionList = null;
+        }
 
-        if ((mSettings.app_filter != null) && (!mSettings.app_filter.isEmpty())) {
-            ArrayList<Integer> uids = new ArrayList<>();
-
-            for (String package_name: mSettings.app_filter) {
-                int uid;
-
-                try {
-                    uid = Utils.getPackageUid(getPackageManager(), package_name, 0);
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                    continue;
-                }
-
-                uids.add(uid);
-            }
-
-            // populate the array only with resolved UIDs
-            mAppFilterUids = new int[uids.size()];
-
-            int i = 0;
-            for (Integer uid: uids)
-                mAppFilterUids[i++] = uid;
-        } else
-            mAppFilterUids = new int[0];
+        mAppFilterUids = new int[0];
 
         if(!mSettings.root_capture && !mSettings.readFromPcap()) {
             Log.i(TAG, "Using DNS server " + dns_server);
@@ -453,7 +426,7 @@ public class CaptureService extends VpnService implements Runnable {
                 e.printStackTrace();
             }
 
-            if(Prefs.isPortMappingEnabled(mPrefs)) {
+            if (Prefs.isPortMappingEnabled(mPrefs)) {
                 PortMapping portMap = new PortMapping(this);
                 Iterator<PortMapping.PortMap> it = portMap.iter();
                 while (it.hasNext()) {
@@ -463,11 +436,11 @@ public class CaptureService extends VpnService implements Runnable {
             }
 
             try {
-                mParcelFileDescriptor = builder.setSession(CaptureService.VpnSessionName).establish();
+                mParcelFileDescriptor = builder.setSession(getString(R.string.app_vpn_name)).establish();
             } catch (IllegalArgumentException | IllegalStateException | SecurityException e) {
                 e.printStackTrace();
                 // Utils.showToast(this, R.string.vpn_setup_failed);
-                Toast.makeText(getApplicationContext(), "vpn_setup_failed", Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), "vpn_setup_failed", Toast.LENGTH_LONG).show();
                 return abortStart();
             }
         }

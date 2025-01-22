@@ -1,7 +1,9 @@
 package com.antest1.kcanotify;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 
 import androidx.annotation.NonNull;
 import androidx.multidex.MultiDex;
@@ -14,6 +16,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
+import static com.antest1.kcanotify.KcaApiData.getDecryptionListFromFile;
 import static com.antest1.kcanotify.KcaConstants.PREF_DECRYPTION_LIST;
 import static com.antest1.kcanotify.KcaConstants.PREF_KCA_LANGUAGE;
 
@@ -61,10 +64,14 @@ public class KcaApplication extends MultiDexApplication {
         return mInstance.get();
     }
 
+    @SuppressLint("ApplySharedPref")
     public MatchList getDecryptionList() {
-        if(mDecryptionList == null)
+        if(mDecryptionList == null) {
+            SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+            String list = getDecryptionListFromFile(getApplicationContext());
+            pref.edit().putString(PREF_DECRYPTION_LIST, list).commit();
             mDecryptionList = new MatchList(mLocalizedContext, PREF_DECRYPTION_LIST);
-
+        }
         return mDecryptionList;
     }
 }
