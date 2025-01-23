@@ -31,6 +31,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.antest1.kcanotify.R;
 import com.antest1.kcanotify.remote_capture.interfaces.ConnectionsListener;
 import com.antest1.kcanotify.remote_capture.interfaces.MitmListener;
 import com.antest1.kcanotify.remote_capture.model.CaptureSettings;
@@ -471,7 +472,7 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
     public void onMitmGetCaCertificateResult(@Nullable String ca_pem) {
         if(!MitmAddon.isCAInstallationSkipped(mContext) && !Utils.isCAInstalled(ca_pem)) {
             // The certificate has been uninstalled from the system
-            Toast.makeText(mContext, "cert_reinstall_required", Toast.LENGTH_LONG).show();
+            Utils.showToastLong(mContext, R.string.cert_reinstall_required);
             MitmAddon.setDecryptionSetupDone(mContext, false);
             CaptureService.stopService();
             return;
@@ -485,7 +486,7 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
         }
 
         if (MitmAddon.isDozeEnabled(mContext)) {
-            Toast.makeText(mContext, "mitm_doze_notice", Toast.LENGTH_LONG).show();
+            Utils.showToastLong(mContext, R.string.mitm_doze_notice);
             mAddon.disableDoze();
         }
 

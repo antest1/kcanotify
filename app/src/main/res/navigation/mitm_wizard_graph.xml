@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress NavigationFile -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mitm_wizard_graph"
+    app:startDestination="@id/intro">
+
+    <fragment
+        android:id="@+id/intro"
+        android:name="com.antest1.kcanotify.remote_capture.fragments.mitmwizard.Intro"
+        tools:layout="@layout/fragment_mitm_wizard" >
+        <action
+            android:id="@+id/navto_install_addon"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/installMitmApp" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/installMitmApp"
+        android:name="com.antest1.kcanotify.remote_capture.fragments.mitmwizard.InstallAddon"
+        tools:layout="@layout/fragment_mitm_wizard" >
+        <action
+            android:id="@+id/navto_install_cert"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/InstallCertificate" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/InstallCertificate"
+        android:name="com.antest1.kcanotify.remote_capture.fragments.mitmwizard.InstallCertificate"
+        tools:layout="@layout/fragment_mitm_wizard">
+        <action
+            android:id="@+id/navto_done"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/Done" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/Done"
+        android:name="com.antest1.kcanotify.remote_capture.fragments.mitmwizard.Done"
+        tools:layout="@layout/fragment_mitm_wizard" />
+
+</navigation>

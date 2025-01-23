@@ -90,6 +90,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.woxthebox:draglistview:1.5.2'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation group: 'io.pkts', name: 'pkts-core', version: '3.0.10'
     implementation group: 'io.pkts', name: 'pkts-streams', version: '3.0.10'

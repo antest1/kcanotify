@@ -24,6 +24,7 @@ import static com.antest1.kcanotify.KcaConstants.GOTO_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.KC_WV_PACKAGE_NAME;
 import static com.antest1.kcanotify.KcaConstants.PREF_PACKAGE_ALLOW;
+import static com.antest1.kcanotify.KcaConstants.PREF_USE_TLS_DECRYPTION;
 
 import android.annotation.TargetApi;
 import android.app.Service;
@@ -266,6 +267,8 @@ public class CaptureService extends VpnService implements Runnable {
             mSettings.auto_block_private_dns = false;
             mSettings.capture_interface = mSettings.input_pcap_path;
         }
+
+        mSettings.tls_decryption = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_USE_TLS_DECRYPTION);
         mSettings.dump_mode = Prefs.DumpMode.PCAP_FILE;
 
         // Retrieve DNS server

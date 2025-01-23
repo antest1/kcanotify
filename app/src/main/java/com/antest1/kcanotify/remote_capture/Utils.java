@@ -80,6 +80,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -88,6 +89,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.text.HtmlCompat;
 import androidx.preference.PreferenceManager;
 
+import com.antest1.kcanotify.R;
 import com.antest1.kcanotify.BuildConfig;
 import com.antest1.kcanotify.remote_capture.interfaces.TextAdapter;
 import com.antest1.kcanotify.remote_capture.model.AppDescriptor;
@@ -787,6 +789,18 @@ public class Utils {
         ComponentName comp = intent.resolveActivity(context.getPackageManager());
 
         return((comp != null) && (!"com.google.android.tv.frameworkpackagestubs".equals(comp.getPackageName())));
+    }
+
+    public static boolean launchFileDialog(Context context, Intent intent, ActivityResultLauncher<Intent> launcher) {
+        if(Utils.supportsFileDialog(context, intent)) {
+            try {
+                launcher.launch(intent);
+                return true;
+            } catch (ActivityNotFoundException ignored) {}
+        }
+
+        Utils.showToastLong(context, R.string.no_activity_file_selection);
+        return false;
     }
 
     // Get a URI to write a file into the downloads folder, into a folder named "PCAPdroid"

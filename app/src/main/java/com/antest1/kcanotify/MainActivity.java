@@ -2,6 +2,7 @@ package com.antest1.kcanotify;
 
 import com.antest1.kcanotify.remote_capture.CaptureHelper;
 import com.antest1.kcanotify.remote_capture.CaptureService;
+import com.antest1.kcanotify.remote_capture.MitmAddon;
 import com.antest1.kcanotify.remote_capture.model.CaptureSettings;
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
@@ -158,14 +159,16 @@ public class MainActivity extends AppCompatActivity {
         vpnbtn.setTextOn(getStringWithLocale(R.string.ma_vpn_toggleon));
         vpnbtn.setText("PASSIVE");
         vpnbtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (getBooleanPreferences(getApplicationContext(), PREF_VPNSERVICE_USAGE_AGREE)) {
-                    startVpnService();
+            if (buttonView.isPressed()) {
+                if (isChecked) {
+                    if (getBooleanPreferences(getApplicationContext(), PREF_VPNSERVICE_USAGE_AGREE)) {
+                        startVpnService();
+                    } else {
+                        showVpnServiceNotification();
+                    }
                 } else {
-                    showVpnServiceNotification();
+                    stopVpnService();
                 }
-            } else {
-                stopVpnService();
             }
         });
 
@@ -362,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
                 mWasStarted = true;
             } else if (mWasStarted) { /* STARTED -> STOPPED */
                 // The service may still be active (on premature native termination)
-                if (CaptureService.isServiceActive()) CaptureService.stopService();
+                stopVpnService();
                 // appStateReady();
                 mWasStarted = false;
                 mStartPressed = false;
@@ -414,13 +417,6 @@ public class MainActivity extends AppCompatActivity {
                 R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         Arrays.fill(warnType, false);
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_PERMISSION);
-            }
-        }
 
         if (getBooleanPreferences(getApplicationContext(), PREF_KCA_BATTLEVIEW_USE)
                 || getBooleanPreferences(getApplicationContext(), PREF_KCA_QUESTVIEW_USE)) {
@@ -590,17 +586,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void startVpnService() {
         mStartPressed = true;
-        startCapture();
-        prefs.edit().putBoolean(PREF_VPN_ENABLED, true).apply();
-        JsonObject statProperties = new JsonObject();
-        statProperties.addProperty("is_success", true);
-        sendUserAnalytics(getApplicationContext(), START_SNIFFER, statProperties);
+        boolean result = startCapture();
+        if (result) {
+            prefs.edit().putBoolean(PREF_VPN_ENABLED, true).apply();
+            JsonObject statProperties = new JsonObject();
+            statProperties.addProperty("is_success", true);
+            sendUserAnalytics(getApplicationContext(), START_SNIFFER, statProperties);
+        } else {
+            vpnbtn.setChecked(false);
+        }
     }
 
     public void stopVpnService() {
-        stopCapture();
+        boolean result = stopCapture();
         prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
-        sendUserAnalytics(getApplicationContext(), END_SNIFFER, null);
+        vpnbtn.setChecked(false);
+        if (result) sendUserAnalytics(getApplicationContext(), END_SNIFFER, null);
     }
 
     public void showVpnServiceNotification() {
@@ -610,8 +611,7 @@ public class MainActivity extends AppCompatActivity {
             startVpnService();
             dialog.dismiss();
         }).setNegativeButton(getStringWithLocale(R.string.dialog_cancel), (dialog, which) -> {
-            prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
-            vpnbtn.setChecked(false);
+            stopVpnService();
             dialog.cancel();
         });
         alert.setMessage(Html.fromHtml(getStringWithLocale(R.string.ma_dialog_vpn_usage)));
@@ -627,14 +627,15 @@ public class MainActivity extends AppCompatActivity {
         mCapHelper.startCapture(settings);
     }
 
-    public void startCapture() {
-        if (CaptureService.isServiceActive()) return;
-        /* TODO: MITM settings
-        if(Prefs.getTlsDecryptionEnabled(mPrefs)) {
+    public boolean startCapture() {
+        if (CaptureService.isServiceActive()) return false;
+
+        if (getBooleanPreferences(this, PREF_USE_TLS_DECRYPTION)) {
+            MitmAddon.setCAInstallationSkipped(this, false);
             if (MitmAddon.needsSetup(this)) {
-                Intent intent = new Intent(this, MitmSetupWizard.class);
+                Intent intent = new Intent(this, MitmSetupWizardActivity.class);
                 startActivity(intent);
-                return;
+                return false;
             }
 
             if (!MitmAddon.getNewVersionAvailable(this).isEmpty()) {
@@ -643,7 +644,7 @@ public class MainActivity extends AppCompatActivity {
                         .setMessage(R.string.mitm_addon_update_available)
                         .setCancelable(false)
                         .setPositiveButton(R.string.update_action, (dialog, whichButton) -> {
-                            Intent intent = new Intent(this, MitmSetupWizard.class);
+                            Intent intent = new Intent(this, MitmSetupWizardActivity.class);
                             startActivity(intent);
                         })
                         .setNegativeButton(R.string.cancel_action, (dialog, whichButton) -> {
@@ -651,18 +652,20 @@ public class MainActivity extends AppCompatActivity {
                             startCapture();
                         })
                         .show();
-
-                return;
+                return false;
             }
-        }*/
+        }
 
         doStartCaptureService(null);
+        return true;
     }
 
-    public void stopCapture() {
+    public boolean stopCapture() {
         // appStateStopping();
-        if (!CaptureService.isServiceActive()) return;
+        if (!CaptureService.isServiceActive()) return false;
+
         CaptureService.stopService();
+        return true;
     }
 
 }

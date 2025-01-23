@@ -498,6 +498,7 @@ public final class KcaConstants {
     public static final String PREF_FLEETVIEW_ITEMSELECT = "fleetview_item_select";
     public static final String PREF_NOTI_TEST_SHOW = "notify_test_show";
 
+    public static final String PREF_USE_TLS_DECRYPTION = "use_tls_decryption";
     public static final String PREF_DECRYPTION_LIST = "decryption_list";
     public static final String PREF_VPNSERVICE_USAGE_AGREE = "vpnservice_usage_agree";
 
@@ -589,6 +590,7 @@ public final class KcaConstants {
             PREF_FV_ITEM_3,
             PREF_FV_ITEM_4,
             PREF_NOTI_TEST_SHOW,
+            PREF_USE_TLS_DECRYPTION,
             PREF_VPNSERVICE_USAGE_AGREE
     };
 
@@ -623,6 +625,7 @@ public final class KcaConstants {
             PREF_ALLOW_EXTFILTER,
             PREF_HDNOTI_LOCKED,
             PREF_FAIRY_RANDOM,
+            PREF_USE_TLS_DECRYPTION,
             PREF_VPNSERVICE_USAGE_AGREE
     };
 

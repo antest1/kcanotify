@@ -160,7 +160,12 @@ public class KcaUtils {
 
     public static Boolean getBooleanPreferences(Context ctx, String key) {
         SharedPreferences pref = ctx.getSharedPreferences("pref", Context.MODE_PRIVATE);
-        return pref.getBoolean(key, false);
+        try {
+            return pref.getBoolean(key, false);
+        } catch (Exception e) {
+            // do nothing, assume false
+        }
+        return false;
     }
 
     // 값 저장하기

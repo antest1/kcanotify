@@ -223,6 +223,24 @@
         <CheckBoxPreference
             android:defaultValue="false"
             app:iconSpaceReserved="false"
+            android:key="use_tls_decryption"
+            android:title="@string/tls_decryption"
+            android:summary="@string/tls_decryption_summary" />
+
+        <Preference
+            android:defaultValue=""
+            app:iconSpaceReserved="false"
+            android:key="mitm_setup_wizard"
+            android:title="@string/mitm_setup_wizard">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.antest1.kcanotify"
+                android:targetClass="com.antest1.kcanotify.MitmSetupWizardActivity" />
+        </Preference>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            app:iconSpaceReserved="false"
             android:key="allow_external_filter"
             android:title="@string/setting_menu_sniffer_title_extfilter_use"
             android:summary="@string/setting_menu_sniffer_desc_extfilter_use" />
