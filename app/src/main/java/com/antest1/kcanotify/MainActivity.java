@@ -628,6 +628,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startCapture() {
+        if (CaptureService.isServiceActive()) return;
         /* TODO: MITM settings
         if(Prefs.getTlsDecryptionEnabled(mPrefs)) {
             if (MitmAddon.needsSetup(this)) {
@@ -660,6 +661,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void stopCapture() {
         // appStateStopping();
+        if (!CaptureService.isServiceActive()) return;
         CaptureService.stopService();
     }
 
