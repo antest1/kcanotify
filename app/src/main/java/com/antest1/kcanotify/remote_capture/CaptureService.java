@@ -70,7 +70,6 @@ import com.antest1.kcanotify.remote_capture.model.MatchList;
 import com.antest1.kcanotify.remote_capture.model.PortMapping;
 import com.antest1.kcanotify.remote_capture.model.Prefs;
 import com.antest1.kcanotify.remote_capture.model.CaptureStats;
-import com.antest1.kcanotify.remote_capture.pcap_dump.PktsPcapDumper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -81,7 +80,6 @@ import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -269,7 +267,7 @@ public class CaptureService extends VpnService implements Runnable {
         }
 
         mSettings.tls_decryption = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_USE_TLS_DECRYPTION);
-        mSettings.dump_mode = Prefs.DumpMode.PCAP_FILE;
+        mSettings.dump_mode = Prefs.DumpMode.NONE; // PCAP_FILE;
         mSettings.full_payload = true;
 
         // Retrieve DNS server
@@ -325,17 +323,7 @@ public class CaptureService extends VpnService implements Runnable {
 
 
         // Max memory usage = (JAVA_PCAP_BUFFER_SIZE * 64) = 32 MB
-        mDumper = new PktsPcapDumper();
         mDumpQueue = new LinkedBlockingDeque<>(64);
-
-        try {
-            mDumper.startDumper();
-        } catch (IOException | SecurityException e) {
-            reportError(e.getLocalizedMessage());
-            e.printStackTrace();
-            mDumper = null;
-            return abortStart();
-        }
 
         mSocks5Address = "";
         mSocks5Enabled = mSettings.socks5_enabled || mSettings.tls_decryption;

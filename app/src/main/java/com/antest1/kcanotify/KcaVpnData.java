@@ -34,6 +34,7 @@ public class KcaVpnData {
     public static final int NONE = 0;
     public static final int REQUEST = 1;
     public static final int RESPONSE = 2;
+    public static final int HEADER_INSPECT_SIZE = 256;
 
     // ooi-based connector ips
     private static String[] kcaExtServiceList = {

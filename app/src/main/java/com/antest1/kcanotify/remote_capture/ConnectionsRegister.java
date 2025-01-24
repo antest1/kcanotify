@@ -20,23 +20,22 @@
 package com.antest1.kcanotify.remote_capture;
 
 import android.content.Context;
-import android.util.SparseArray;
 import android.util.SparseIntArray;
 
 import androidx.annotation.Nullable;
-import androidx.collection.ArraySet;
 
 import com.antest1.kcanotify.remote_capture.interfaces.ConnectionsListener;
-import com.antest1.kcanotify.remote_capture.model.AppDescriptor;
-import com.antest1.kcanotify.remote_capture.model.AppStats;
 import com.antest1.kcanotify.remote_capture.model.ConnectionDescriptor;
 import com.antest1.kcanotify.remote_capture.model.ConnectionUpdate;
+import com.antest1.kcanotify.remote_capture.model.PayloadChunk;
+
+import static com.antest1.kcanotify.KcaVpnData.containsKcaServer;
+import static com.antest1.kcanotify.KcaVpnData.getDataFromNative;
+
+import com.antest1.kcanotify.KcaVpnData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 /* A container for the connections. This is used to store active/closed connections until the capture
  * is stopped. Active connections are also kept in the native side.
@@ -59,25 +58,16 @@ public class ConnectionsRegister {
     private int mTail;
     private final int mSize;
     private int mCurItems;
-    private int mUntrackedItems; // number of old connections which were discarded due to the rollover
-    private int mNumMalicious;
-    private int mNumBlocked;
-    private long mLastFirewallBlock;
-    private final SparseArray<AppStats> mAppsStats;
     private final SparseIntArray mConnsByIface;
     private final ArrayList<ConnectionsListener> mListeners;
-    private final AppsResolver mAppsResolver;
 
     public ConnectionsRegister(Context ctx, int _size) {
         mTail = 0;
         mCurItems = 0;
-        mUntrackedItems = 0;
         mSize = _size;
         mItemsRing = new ConnectionDescriptor[mSize];
         mListeners = new ArrayList<>();
-        mAppsStats = new SparseArray<>(); // uid -> AppStats
         mConnsByIface = new SparseIntArray();
-        mAppsResolver = new AppsResolver(ctx);
     }
 
     // returns the position in mItemsRing of the oldest connection
@@ -95,7 +85,6 @@ public class ConnectionsRegister {
         if(conns.length > mSize) {
             // this should only occur while testing with small register sizes
             // take the most recent connections
-            mUntrackedItems += conns.length - mSize;
             conns = Arrays.copyOfRange(conns, conns.length - mSize, conns.length);
         }
 
@@ -122,8 +111,6 @@ public class ConnectionsRegister {
                         else
                             mConnsByIface.put(conn.ifidx, num_conn);
                     }
-                    if(conn.isBlacklisted())
-                        mNumMalicious--;
                 }
 
                 removedItems[i] = conn;
@@ -137,25 +124,14 @@ public class ConnectionsRegister {
             mTail = (mTail + 1) % mSize;
             mCurItems = Math.min(mCurItems + 1, mSize);
 
-            // update the apps stats
-            int uid = conn.uid;
-            AppStats stats = getAppsStatsOrCreate(uid);
-
             if(conn.ifidx > 0) {
                 int num_conn = mConnsByIface.get(conn.ifidx);
                 mConnsByIface.put(conn.ifidx, num_conn + 1);
             }
 
-            AppDescriptor app = mAppsResolver.getAppByUid(conn.uid, 0);
-            if(app != null)
-                conn.encrypted_payload = Utils.hasEncryptedPayload(app, conn);
-
-            stats.numConnections++;
-            stats.rcvdBytes += conn.rcvd_bytes;
-            stats.sentBytes += conn.sent_bytes;
+            processPayloadChunks(conn, null);
+            conn.dropPayload(); // clear payload after processing
         }
-
-        mUntrackedItems += out_items;
 
         for(ConnectionsListener listener: mListeners) {
             if(out_items > 0)
@@ -189,13 +165,8 @@ public class ConnectionsRegister {
                 ConnectionDescriptor conn = mItemsRing[pos];
                 assert(conn.incr_id == id);
 
-                // update the app stats
-                AppStats stats = getAppsStatsOrCreate(conn.uid);
-                stats.sentBytes += update.sent_bytes - conn.sent_bytes;
-                stats.rcvdBytes += update.rcvd_bytes - conn.rcvd_bytes;
-
                 //Log.d(TAG, "update " + update.incr_id + " -> " + update.update_type);
-                conn.processUpdate(update);
+                processPayloadChunks(conn, update);
                 changed_pos[k++] = (pos + mSize - first_pos) % mSize;
             }
         }
@@ -217,9 +188,7 @@ public class ConnectionsRegister {
             mItemsRing[i] = null;
 
         mCurItems = 0;
-        mUntrackedItems = 0;
         mTail = 0;
-        mAppsStats.clear();
 
         for(ConnectionsListener listener: mListeners)
             listener.connectionsChanges(mCurItems);
@@ -238,14 +207,6 @@ public class ConnectionsRegister {
         mListeners.remove(listener);
 
         Log.d(TAG, "(remove) new connections listeners size: " + mListeners.size());
-    }
-
-    public int getConnCount() {
-        return mCurItems;
-    }
-
-    public int getUntrackedConnCount() {
-        return mUntrackedItems;
     }
 
     // get the i-th oldest connection
@@ -278,84 +239,64 @@ public class ConnectionsRegister {
         return getConn(pos);
     }
 
-    public synchronized AppStats getAppStats(int uid) {
-        return mAppsStats.get(uid);
-    }
-
-    public synchronized List<AppStats> getAppsStats() {
-        ArrayList<AppStats> rv = new ArrayList<>(mAppsStats.size());
-
-        for(int i=0; i<mAppsStats.size(); i++) {
-            // Create a clone to avoid concurrency issues
-            AppStats stats = mAppsStats.valueAt(i).clone();
-
-            rv.add(stats);
-        }
-
-        return rv;
-    }
-
-    private synchronized AppStats getAppsStatsOrCreate(int uid) {
-        AppStats stats = mAppsStats.get(uid);
-        if(stats == null) {
-            stats = new AppStats(uid);
-            mAppsStats.put(uid, stats);
-        }
-
-        return stats;
-    }
-
-    public synchronized void resetAppsStats() {
-        mAppsStats.clear();
-    }
-
-    public synchronized Set<Integer> getSeenUids() {
-        ArraySet<Integer> rv = new ArraySet<>();
-
-        for(int i=0; i<mAppsStats.size(); i++)
-            rv.add(mAppsStats.keyAt(i));
-
-        return rv;
-    }
-
-    public int getNumMaliciousConnections() {
-        return mNumMalicious;
-    }
-
-    public int getNumBlockedConnections() {
-        return mNumBlocked;
-    }
-
-    public long getLastFirewallBlock() {
-        return mLastFirewallBlock;
-    }
-
-    public synchronized boolean hasSeenMultipleInterfaces() {
-        return(mConnsByIface.size() > 1);
-    }
-
-    // Returns a sorted list of seen network interfaces
-    public synchronized List<String> getSeenInterfaces() {
-        List<String> rv = new ArrayList<>();
-
-        for(int i=0; i<mConnsByIface.size(); i++) {
-            int ifidx = mConnsByIface.keyAt(i);
-            String ifname = CaptureService.getInterfaceName(ifidx);
-
-            if(!ifname.isEmpty())
-                rv.add(ifname);
-        }
-
-        Collections.sort(rv);
-        return rv;
-    }
-
     public synchronized void releasePayloadMemory() {
         Log.i(TAG, "releaseFullPayloadMemory called");
 
         for(int i=0; i<mCurItems; i++) {
             ConnectionDescriptor conn = mItemsRing[i];
             conn.dropPayload();
+        }
+    }
+
+    private void processPayloadChunks(ConnectionDescriptor conn, ConnectionUpdate update) {
+        byte[] source;
+        byte[] destination;
+        int sport;
+        int dport;
+        int pkt_type;
+
+        // check HTTP traffic only
+        if (conn.src_port != 80 && conn.dst_port != 80) return;
+
+        // get new or updated chunks from connection info
+        ArrayList<PayloadChunk> payload_chunks = new ArrayList<>();
+        if (update == null) {
+            for (int i = 0; i < conn.getNumPayloadChunks(); i++) {
+                payload_chunks.add(conn.getPayloadChunk(i));
+            }
+        } else if (update.payload_chunks != null) {
+            payload_chunks = update.payload_chunks;
+        } else {
+            return;
+        }
+
+        // read chunk payload
+        for (PayloadChunk chunk: payload_chunks) {
+            if (chunk != null) {
+                if (chunk.is_sent) {
+                    pkt_type = KcaVpnData.REQUEST;
+                    source = conn.src_ip.getBytes();
+                    destination = conn.dst_ip.getBytes();
+                    sport = conn.src_port;
+                    dport = conn.dst_port;
+                } else {
+                    pkt_type = KcaVpnData.RESPONSE;
+                    source = conn.dst_ip.getBytes();
+                    destination = conn.src_ip.getBytes();
+                    sport = conn.dst_port;
+                    dport = conn.src_port;
+                }
+
+                byte[] payload = chunk.payload;
+                byte[] head = null;
+                if (pkt_type == 1 && payload.length > KcaVpnData.HEADER_INSPECT_SIZE) {
+                    head = Arrays.copyOfRange(payload, 0, KcaVpnData.HEADER_INSPECT_SIZE);
+                }
+
+                if (containsKcaServer(pkt_type, source, destination, head) == 1) {
+                    getDataFromNative(payload, payload.length, pkt_type, source, destination, sport, dport);
+                }
+            }
         }
     }
 }
