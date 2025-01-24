@@ -23,29 +23,29 @@ public class TcpPacketHandler implements PacketHandler {
     public boolean nextPacket(Packet packet) throws IOException {
         if (packet.hasProtocol(Protocol.TCP)) {
             TCPPacket tcpPacket = (TCPPacket) packet.getPacket(Protocol.TCP);
-            IPPacket ipPacket = tcpPacket.getParentPacket();
-
             int sport = tcpPacket.getSourcePort();
             int dport = tcpPacket.getDestinationPort();
 
-            int pkt_type = KcaVpnData.NONE;
-            if (dport == 80 || dport == 443) pkt_type = KcaVpnData.REQUEST;
-            if (sport == 80 || sport == 443) pkt_type = KcaVpnData.RESPONSE;
+            // check HTTP traffic only
+            if (dport == 80 || sport == 80) {
+                int pkt_type = (dport == 80) ? KcaVpnData.REQUEST : KcaVpnData.RESPONSE;
+                IPPacket ipPacket = tcpPacket.getParentPacket();
 
-            byte[] source = ipPacket.getSourceIP().getBytes();
-            byte[] destination = ipPacket.getDestinationIP().getBytes();
+                byte[] source = ipPacket.getSourceIP().getBytes();
+                byte[] destination = ipPacket.getDestinationIP().getBytes();
 
-            Buffer buffer = tcpPacket.getPayload();
-            if (buffer != null) {
-                byte[] arr = buffer.getArray();
-                byte[] head = null;
+                Buffer buffer = tcpPacket.getPayload();
+                if (buffer != null) {
+                    byte[] arr = buffer.getArray();
+                    byte[] head = null;
 
-                if (pkt_type == 1 && arr.length > HEADER_INSPECT_SIZE) {
-                    head = Arrays.copyOfRange(arr, 0, HEADER_INSPECT_SIZE);
-                }
+                    if (pkt_type == 1 && arr.length > HEADER_INSPECT_SIZE) {
+                        head = Arrays.copyOfRange(arr, 0, HEADER_INSPECT_SIZE);
+                    }
 
-                if (containsKcaServer(pkt_type, source, destination, head) == 1) {
-                    getDataFromNative(arr, arr.length, pkt_type, source, destination, sport, dport);
+                    if (containsKcaServer(pkt_type, source, destination, head) == 1) {
+                        getDataFromNative(arr, arr.length, pkt_type, source, destination, sport, dport);
+                    }
                 }
             }
         }

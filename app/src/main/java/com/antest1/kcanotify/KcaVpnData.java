@@ -123,9 +123,13 @@ public class KcaVpnData {
     // Called from native code
     public static void getDataFromNative(byte[] data, int size, int type, byte[] source, byte[] target, int sport, int tport) {
         try {
-            String saddrstr = new String(source);
-            String taddrstr = new String(target);
-            Log.e("KCAV", KcaUtils.format("getDataFromNative[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
+            if (source != null && target != null) {
+                String saddrstr = new String(source);
+                String taddrstr = new String(target);
+                Log.e("KCAV", KcaUtils.format("getDataFromNative[%d] %s:%d => %s:%d", type, saddrstr, sport, taddrstr, tport));
+            } else {
+                Log.e("KCAV", KcaUtils.format("getDataFromNative[%d] MitM %d => %d", type, sport, tport));
+            }
 
             if (type == REQUEST) {
                 String requestDataStr = new String(data);

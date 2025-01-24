@@ -41,6 +41,9 @@ import com.antest1.kcanotify.remote_capture.model.PayloadChunk.ChunkType;
 import com.antest1.kcanotify.remote_capture.model.Prefs;
 import com.antest1.kcanotify.mitm.MitmAPI;
 
+import com.antest1.kcanotify.KcaVpnData;
+import static com.antest1.kcanotify.KcaVpnData.getDataFromNative;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedOutputStream;
@@ -264,8 +267,15 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
                     Log.i(TAG, "MITM proxy is running");
                     proxyStatus.postValue(Status.RUNNING);
                 } else {
+                    // assuming that only kc traffic is received (defined in `assets/kc_server_hosts.json`)
+                    if (type == MsgType.HTTP_REQUEST || type == MsgType.HTTP_REPLY) {
+                        int pkt_type = (type == MsgType.HTTP_REQUEST) ? KcaVpnData.REQUEST : KcaVpnData.RESPONSE;
+                        int sport = (type == MsgType.HTTP_REQUEST) ? port : 443;
+                        int dport = (type == MsgType.HTTP_REQUEST) ? 443 : port;
+                        getDataFromNative(msg, msg.length, pkt_type, null, null, sport, dport);
+                    }
+
                     ConnectionDescriptor conn = getConnByLocalPort(port);
-                    //Log.d(TAG, "MSG." + type.name() + "[" + msg_len + " B]: port=" + port + ", match=" + (conn != null));
 
                     if(conn != null)
                         handleMessage(conn, type, msg, tstamp);
@@ -367,7 +377,7 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
                 return MsgType.HTTP_ERROR;
             case "http_req":
                 return MsgType.HTTP_REQUEST;
-            case "http_rep":
+            case "http_res":
                 return MsgType.HTTP_REPLY;
             case "tcp_climsg":
                 return MsgType.TCP_CLIENT_MSG;
@@ -400,7 +410,6 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
                 mKeylog = new BufferedOutputStream(
                         mContext.getContentResolver().openOutputStream(
                                 Uri.fromFile(getKeylogFilePath(mContext)), "rwt"));
-
             mKeylog.write(master_secret);
             mKeylog.write(0xa);
         }

@@ -270,6 +270,7 @@ public class CaptureService extends VpnService implements Runnable {
 
         mSettings.tls_decryption = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_USE_TLS_DECRYPTION);
         mSettings.dump_mode = Prefs.DumpMode.PCAP_FILE;
+        mSettings.full_payload = true;
 
         // Retrieve DNS server
         String fallbackDnsV4 = Prefs.getDnsServerV4(mPrefs);
