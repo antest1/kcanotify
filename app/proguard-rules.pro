@@ -126,10 +126,6 @@
 -keep public class android.support.v7.internal.widget.** { *; }
 -keep public class android.support.v7.internal.view.menu.** { *; }
 
--keep public class * extends android.support.v4.view.ActionProvider {
-    public <init>(android.content.Context);
-}
-
 # Design
 -dontwarn android.support.**
 -dontwarn android.support.design.**
@@ -162,27 +158,10 @@
 -keep class com.antest1.kcanotify.** { *; }
 -keepnames class com.antest1.kcanotify.** { *; }
 
-#NetGuard
--keepnames class eu.faircode.netguard.** { *; }
-
 #JNI
 -keepclasseswithmembernames class * {
     native <methods>;
 }
-
-#JNI callbacks
-#-keep class eu.faircode.netguard.** { *; }
-#-keep class eu.faircode.netguard.IPUtil { *; }
-#-keep class eu.faircode.netguard.Packet { *; }
-#-keep class eu.faircode.netguard.ResourceRecord { *; }
-#-keep class eu.faircode.netguard.Util { *; }
-
-
-#-keep class com.antest1.kcanotify.KcaVpnService {
-#    void nativeExit(java.lang.String);
-#    void nativeError(int, java.lang.String);
-#    void dnsResolved(eu.faircode.netguard.ResourceRecord);
-#}
 
 -keep class com.antest1.kcanotify.KcaVpnData {
     int containsKcaServer(int, byte[], byte[], byte[]);
