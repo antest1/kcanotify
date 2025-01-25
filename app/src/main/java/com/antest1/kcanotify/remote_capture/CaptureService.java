@@ -101,10 +101,8 @@ public class CaptureService extends VpnService implements Runnable {
     private Handler mHandler;
     private Thread mCaptureThread;
     private Thread mConnUpdateThread;
-    private Thread mDumperThread;
     private MitmReceiver mMitmReceiver;
     private final LinkedBlockingDeque<Pair<ConnectionDescriptor[], ConnectionUpdate[]>> mPendingUpdates = new LinkedBlockingDeque<>(32);
-    private LinkedBlockingDeque<byte[]> mDumpQueue;
     private String vpn_ipv4;
     private String vpn_dns;
     private String dns_server;
@@ -246,19 +244,7 @@ public class CaptureService extends VpnService implements Runnable {
             mSettings.input_pcap_path = null;
         }
 
-        if (mSettings.readFromPcap()) {
-            // Disable incompatible settings
-            mSettings.dump_mode = Prefs.DumpMode.NONE;
-            mSettings.app_filter.clear();
-            mSettings.socks5_enabled = false;
-            mSettings.tls_decryption = false;
-            mSettings.root_capture = false;
-            mSettings.auto_block_private_dns = false;
-            mSettings.capture_interface = mSettings.input_pcap_path;
-        }
-
         mSettings.tls_decryption = KcaUtils.getBooleanPreferences(getApplicationContext(), PREF_USE_TLS_DECRYPTION);
-        mSettings.dump_mode = Prefs.DumpMode.NONE; // PCAP_FILE;
         mSettings.full_payload = true;
 
         // Retrieve DNS server
@@ -306,13 +292,9 @@ public class CaptureService extends VpnService implements Runnable {
         last_connections = 0;
         mLowMemory = false;
         conn_reg = new ConnectionsRegister(this, CONNECTIONS_LOG_SIZE);
-        mDumpQueue = null;
         mPendingUpdates.clear();
         HAS_ERROR = false;
 
-
-        // Max memory usage = (JAVA_PCAP_BUFFER_SIZE * 64) = 32 MB
-        mDumpQueue = new LinkedBlockingDeque<>(64);
 
         mSocks5Address = "";
         mSocks5Enabled = mSettings.socks5_enabled || mSettings.tls_decryption;
@@ -352,78 +334,77 @@ public class CaptureService extends VpnService implements Runnable {
 
         mAppFilterUids = new int[0];
 
-        if(!mSettings.root_capture && !mSettings.readFromPcap()) {
-            Log.i(TAG, "Using DNS server " + dns_server);
 
-            // VPN
-            /* In order to see the DNS packets into the VPN we must set an internal address as the DNS
-             * server. */
-            Builder builder = new Builder()
-                    .setMtu(VPN_MTU);
+        Log.i(TAG, "Using DNS server " + dns_server);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                builder.setMetered(false);
+        // VPN
+        /* In order to see the DNS packets into the VPN we must set an internal address as the DNS
+         * server. */
+        Builder builder = new Builder()
+                .setMtu(VPN_MTU);
 
-            if (getIPv4Enabled() == 1) {
-                builder.addAddress(vpn_ipv4, 30)
-                        .addRoute("0.0.0.0", 1)
-                        .addRoute("128.0.0.0", 1)
-                        .addDnsServer(vpn_dns);
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            builder.setMetered(false);
 
-            if (getIPv6Enabled() == 1) {
-                builder.addAddress(VPN_IP6_ADDRESS, 128);
+        if (getIPv4Enabled() == 1) {
+            builder.addAddress(vpn_ipv4, 30)
+                    .addRoute("0.0.0.0", 1)
+                    .addRoute("128.0.0.0", 1)
+                    .addDnsServer(vpn_dns);
+        }
 
-                // Route unicast IPv6 addresses
-                builder.addRoute("2000::", 3);
-                builder.addRoute("fc00::", 7);
+        if (getIPv6Enabled() == 1) {
+            builder.addAddress(VPN_IP6_ADDRESS, 128);
 
-                try {
-                    builder.addDnsServer(InetAddress.getByName(Prefs.getDnsServerV6(mPrefs)));
-                } catch (UnknownHostException | IllegalArgumentException e) {
-                    Log.w(TAG, "Could not set IPv6 DNS server");
-                }
-            }
-
-            // only allow kc-related and specified apps
-            try {
-                SharedPreferences prefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
-                boolean socks5_enable = prefs.getBoolean("socks5_enable", false);
-                boolean socks5_allapps = prefs.getBoolean("socks5_allapps", false);
-
-                if (!socks5_enable || !socks5_allapps) {
-                    builder.addAllowedApplication(KC_PACKAGE_NAME);
-                    builder.addAllowedApplication(KC_WV_PACKAGE_NAME);
-                    builder.addAllowedApplication(GOTO_PACKAGE_NAME);
-                    if (socks5_enable) builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
-
-                    JsonArray allowed_apps = JsonParser.parseString(KcaUtils.getStringPreferences(
-                            getApplicationContext(), PREF_PACKAGE_ALLOW)).getAsJsonArray();
-                    for (JsonElement pkg : allowed_apps) {
-                        builder.addAllowedApplication(pkg.getAsString());
-                    }
-                }
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            if (Prefs.isPortMappingEnabled(mPrefs)) {
-                PortMapping portMap = new PortMapping(this);
-                Iterator<PortMapping.PortMap> it = portMap.iter();
-                while (it.hasNext()) {
-                    PortMapping.PortMap mapping = it.next();
-                    addPortMapping(mapping.ipproto, mapping.orig_port, mapping.redirect_port, mapping.redirect_ip);
-                }
-            }
+            // Route unicast IPv6 addresses
+            builder.addRoute("2000::", 3);
+            builder.addRoute("fc00::", 7);
 
             try {
-                mParcelFileDescriptor = builder.setSession(getString(R.string.app_vpn_name)).establish();
-            } catch (IllegalArgumentException | IllegalStateException | SecurityException e) {
-                e.printStackTrace();
-                // Utils.showToast(this, R.string.vpn_setup_failed);
-                Toast.makeText(getApplicationContext(), "vpn_setup_failed", Toast.LENGTH_LONG).show();
-                return abortStart();
+                builder.addDnsServer(InetAddress.getByName(Prefs.getDnsServerV6(mPrefs)));
+            } catch (UnknownHostException | IllegalArgumentException e) {
+                Log.w(TAG, "Could not set IPv6 DNS server");
             }
+        }
+
+        // only allow kc-related and specified apps
+        try {
+            SharedPreferences prefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
+            boolean socks5_enable = prefs.getBoolean("socks5_enable", false);
+            boolean socks5_allapps = prefs.getBoolean("socks5_allapps", false);
+
+            if (!socks5_enable || !socks5_allapps) {
+                builder.addAllowedApplication(KC_PACKAGE_NAME);
+                builder.addAllowedApplication(KC_WV_PACKAGE_NAME);
+                builder.addAllowedApplication(GOTO_PACKAGE_NAME);
+                if (socks5_enable) builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
+
+                JsonArray allowed_apps = JsonParser.parseString(KcaUtils.getStringPreferences(
+                        getApplicationContext(), PREF_PACKAGE_ALLOW)).getAsJsonArray();
+                for (JsonElement pkg : allowed_apps) {
+                    builder.addAllowedApplication(pkg.getAsString());
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (Prefs.isPortMappingEnabled(mPrefs)) {
+            PortMapping portMap = new PortMapping(this);
+            Iterator<PortMapping.PortMap> it = portMap.iter();
+            while (it.hasNext()) {
+                PortMapping.PortMap mapping = it.next();
+                addPortMapping(mapping.ipproto, mapping.orig_port, mapping.redirect_port, mapping.redirect_ip);
+            }
+        }
+
+        try {
+            mParcelFileDescriptor = builder.setSession(getString(R.string.app_vpn_name)).establish();
+        } catch (IllegalArgumentException | IllegalStateException | SecurityException e) {
+            e.printStackTrace();
+            // Utils.showToast(this, R.string.vpn_setup_failed);
+            Toast.makeText(getApplicationContext(), "vpn_setup_failed", Toast.LENGTH_LONG).show();
+            return abortStart();
         }
 
         mConnUpdateThread = new Thread(this::connUpdateWork, "UpdateListener");
@@ -541,10 +522,7 @@ public class CaptureService extends VpnService implements Runnable {
             mPrivateDnsMode = Utils.getPrivateDnsMode(linkProperties);
             Log.i(TAG, "Private DNS: " + mPrivateDnsMode);
 
-            if(mSettings.readFromPcap()) {
-                mDnsEncrypted = false;
-                setPrivateDnsBlocked(false);
-            } else if(!mSettings.root_capture && mSettings.auto_block_private_dns) {
+            if(mSettings.auto_block_private_dns) {
                 mDnsEncrypted = mPrivateDnsMode.equals(Utils.PrivateDnsMode.STRICT);
                 boolean opportunistic_mode = mPrivateDnsMode.equals(Utils.PrivateDnsMode.OPPORTUNISTIC);
 
@@ -573,7 +551,6 @@ public class CaptureService extends VpnService implements Runnable {
 
     private void signalServicesTermination() {
         mPendingUpdates.offer(new Pair<>(null, null));
-        stopPcapDump();
     }
 
     // NOTE: do not call this on the main thread, otherwise it will be an ANR
@@ -591,16 +568,6 @@ public class CaptureService extends VpnService implements Runnable {
             }
         }
         mConnUpdateThread = null;
-
-        while((mDumperThread != null) && (mDumperThread.isAlive())) {
-            try {
-                Log.d(TAG, "Joining dumper thread...");
-                mDumperThread.join();
-            } catch (InterruptedException ignored) {
-                stopPcapDump();
-            }
-        }
-        mDumperThread = null;
 
         if(mMitmReceiver != null) {
             try {
@@ -708,10 +675,6 @@ public class CaptureService extends VpnService implements Runnable {
         return((INSTANCE != null) ? INSTANCE.mSettings.http_server_port : 0);
     }
 
-    public static Prefs.DumpMode getDumpMode() {
-        return((INSTANCE != null) ? INSTANCE.mSettings.dump_mode : Prefs.DumpMode.NONE);
-    }
-
     public static String getDNSServer() {
         return((INSTANCE != null) ? INSTANCE.getDnsServer() : "");
     }
@@ -746,11 +709,6 @@ public class CaptureService extends VpnService implements Runnable {
     public static boolean isDecryptingTLS() {
         return((INSTANCE != null) &&
                 (INSTANCE.isTlsDecryptionEnabled() == 1));
-    }
-
-    public static boolean isReadingFromPcapFile() {
-        return((INSTANCE != null) &&
-                (INSTANCE.isPcapFileCapture() == 1));
     }
 
     public static boolean isIPv6Enabled() {
@@ -944,17 +902,11 @@ public class CaptureService extends VpnService implements Runnable {
 
     public int getIPv6Enabled() { return((mSettings.ip_mode != Prefs.IpMode.IPV4_ONLY) ? 1 : 0); }
 
-    public int isVpnCapture() { return (isRootCapture() | isPcapFileCapture()) == 1 ? 0 : 1; }
+    public int isVpnCapture() { return (isRootCapture()) == 1 ? 0 : 1; }
 
     public int isRootCapture() { return(mSettings.root_capture ? 1 : 0); }
 
-    public int isPcapFileCapture() { return(mSettings.readFromPcap() ? 1 : 0); }
-
     public int isTlsDecryptionEnabled() { return mSettings.tls_decryption ? 1 : 0; }
-
-    public int dumpExtensionsEnabled() { return(mSettings.dump_extensions ? 1 : 0); }
-
-    public int isPcapngEnabled() { return(mSettings.pcapng_format ? 1 : 0); }
 
     public int[] getAppFilterUids() { return(mAppFilterUids); }
 
@@ -975,11 +927,6 @@ public class CaptureService extends VpnService implements Runnable {
     public int getVpnMTU()      { return VPN_MTU; }
 
     public int getBlockQuickMode() { return mSettings.block_quic_mode.ordinal(); }
-
-    // returns 1 if dumpPcapData should be called
-    public int pcapDumpEnabled() {
-        return((mSettings.dump_mode != Prefs.DumpMode.NONE) ? 1 : 0);
-    }
 
     @Override
     public boolean protect(int socket) {
@@ -1093,15 +1040,6 @@ public class CaptureService extends VpnService implements Runnable {
         return "";
     }
 
-    public void dumpPcapData(byte[] data) {
-
-    }
-
-    public void stopPcapDump() {
-        if((mDumpQueue != null) && (mDumperThread != null) && (mDumperThread.isAlive()))
-            mDumpQueue.offer(new byte[0]);
-    }
-
     public void reportError(String msg) {
         HAS_ERROR = true;
 
@@ -1178,11 +1116,7 @@ public class CaptureService extends VpnService implements Runnable {
     private static native void setDnsServer(String server);
     private static native void addPortMapping(int ipproto, int orig_port, int redirect_port, String redirect_ip);
     private static native boolean reloadDecryptionList(MatchList.ListDescriptor whitelist);
-    public static native void askStatsDump();
-    public static native byte[] getPcapHeader();
     public static native int rootCmd(String prog, String args);
     public static native void setPayloadMode(int mode);
     public static native List<String> getL7Protocols();
-    public static native void dumpMasterSecret(byte[] secret);
-    public static native boolean hasSeenDumpExtensions();
 }

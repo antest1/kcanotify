@@ -21,13 +21,11 @@
 #include <assert.h> // NOTE: look for "assertion" in logcat
 #include <pthread.h>
 #include "pcapdroid.h"
-#include "pcap_dump.h"
 #include "common/utils.h"
 #include "pcapd/pcapd.h"
 #include "ndpi_protocol_ids.h"
 
 extern int run_vpn(pcapdroid_t *pd);
-extern int run_pcap(pcapdroid_t *pd);
 extern void pcap_iter_connections(pcapdroid_t *pd, conn_cb cb);
 extern void vpn_process_ndpi(pcapdroid_t *pd, const zdtun_5tuple_t *tuple, pd_conn_t *data);
 
@@ -713,30 +711,10 @@ static void iter_active_connections(pcapdroid_t *pd, conn_cb cb) {
 
 /* ******************************************************* */
 
-// Check if a previously blacklisted connection is now whitelisted
-static int check_blacklisted_conn_cb(pcapdroid_t *pd, const zdtun_5tuple_t *tuple, pd_conn_t *data) {
-    // continue
-    return 0;
-}
-
-/* ******************************************************* */
-
-static void stop_pcap_dump(pcapdroid_t *pd) {
-    pcap_destroy_dumper(pd->pcap_dump.dumper);
-    pd->pcap_dump.dumper = NULL;
-
-    if(pd->cb.stop_pcap_dump)
-        pd->cb.stop_pcap_dump(pd);
-}
-
-/* ******************************************************* */
-
 /* Perfom periodic tasks. This should be called after processing a packet or after some time has
  * passed (e.g. after a select with no packet). */
 void pd_housekeeping(pcapdroid_t *pd) {
-    if(dump_capture_stats_now ||
-            (pd->capture_stats.new_stats && ((pd->now_ms - pd->capture_stats.last_update_ms) >= CAPTURE_STATS_UPDATE_FREQUENCY_MS))) {
-        dump_capture_stats_now = false;
+    if((pd->capture_stats.new_stats && ((pd->now_ms - pd->capture_stats.last_update_ms) >= CAPTURE_STATS_UPDATE_FREQUENCY_MS))) {
         //log_d("Send stats");
 
         if(pd->vpn_capture)
@@ -762,8 +740,7 @@ void pd_housekeeping(pcapdroid_t *pd) {
         last_connections_dump = pd->now_ms;
         next_connections_dump = pd->now_ms + CONNECTION_DUMP_UPDATE_FREQUENCY_MS;
         netd_resolve_waiting = 0;
-    } else if(pd->pcap_dump.dumper && pcap_check_export(pd->pcap_dump.dumper))
-        ;
+    }
 
     if(pd->tls_decryption.new_list) {
         // Load new whitelist
@@ -816,16 +793,6 @@ void pd_process_packet(pcapdroid_t *pd, zdtun_pkt_t *pkt, bool is_tx, const zdtu
 
 /* ******************************************************* */
 
-void pd_dump_packet(pcapdroid_t *pd, const char *pktbuf, int pktlen, const struct timeval *tv, int uid, u_int ifidx) {
-    if(!pd->pcap_dump.dumper)
-        return;
-
-    if(!pcap_dump_packet(pd->pcap_dump.dumper, pktbuf, pktlen, tv, uid, ifidx))
-        stop_pcap_dump(pd);
-}
-
-/* ******************************************************* */
-
 /* Update the stats for the current packet and dump it if requested. */
 void pd_account_stats(pcapdroid_t *pd, pkt_context_t *pctx) {
     zdtun_pkt_t *pkt = pctx->pkt;
@@ -855,13 +822,6 @@ void pd_account_stats(pcapdroid_t *pd, pkt_context_t *pctx) {
     pd->capture_stats.new_stats = true;
     data->update_type |= CONN_UPDATE_STATS;
     pd_notify_connection_update(pd, pctx->tuple, pctx->data);
-
-    if((pd->pcap_dump.dumper) &&
-            ((pd->pcap_dump.max_pkts_per_flow <= 0) ||
-                ((data->sent_pkts + data->rcvd_pkts) <= pd->pcap_dump.max_pkts_per_flow))) {
-        u_int ifidx = !pd->vpn_capture ? pctx->data->pcap.ifidx : 0;
-        pd_dump_packet(pd, pkt->buf, pkt->len, &pctx->tv, pctx->data->uid, ifidx);
-    }
 }
 
 /* ******************************************************* */
@@ -869,7 +829,6 @@ void pd_account_stats(pcapdroid_t *pd, pkt_context_t *pctx) {
 int pd_run(pcapdroid_t *pd) {
     /* Important: init global state every time. Android may reuse the service. */
     running = true;
-    has_seen_dump_extensions = false;
     netd_resolve_waiting = 0;
 
     /* nDPI */
@@ -881,37 +840,14 @@ int pd_run(pcapdroid_t *pd) {
 
     pd->ip_to_host = ip_lru_init(MAX_HOST_LRU_SIZE);
 
-    if(pd->pcap_dump.enabled) {
-        int max_snaplen = !pd->vpn_capture ? PCAPD_SNAPLEN : VPN_BUFFER_SIZE;
-
-        // use the snaplen provided by the API
-        if((pd->pcap_dump.snaplen <= 0) || (pd->pcap_dump.snaplen > max_snaplen))
-            pd->pcap_dump.snaplen = max_snaplen;
-
-        pcap_dump_format_t dump_fmt = pd->pcap_dump.pcapng_format ? PCAPNG_DUMP : PCAP_DUMP;
-        bool dump_extensions = pd->pcap_dump.dump_extensions;
-
-        log_d("dump_mode: %d - extensions: %u", dump_fmt, dump_extensions);
-        pd->pcap_dump.dumper = pcap_new_dumper(dump_fmt, dump_extensions,
-                                               pd->pcap_dump.snaplen,
-                                               pd->pcap_dump.max_dump_size,
-                                               pd->cb.send_pcap_dump, pd);
-        if(!pd->pcap_dump.dumper) {
-            log_f("Could not initialize the PCAP dumper");
-            running = false;
-        }
-    }
-
     memset(&pd->stats, 0, sizeof(pd->stats));
 
     pd_refresh_time(pd);
     last_connections_dump = pd->now_ms;
     next_connections_dump = last_connections_dump + 500 /* first update after 500 ms */;
-    bl_num_checked_connections = 0;
-    fw_num_checked_connections = 0;
 
     // Run the capture
-    int rv = pd->vpn_capture ? run_vpn(pd) : run_pcap(pd);
+    int rv = run_vpn(pd);
 
     log_i("Stopped packet loop");
 
@@ -932,9 +868,6 @@ int pd_run(pcapdroid_t *pd) {
 #ifndef FUZZING
     ndpi_exit_detection_module(pd->ndpi);
 #endif
-
-    if(pd->pcap_dump.dumper)
-        stop_pcap_dump(pd);
 
     uid_to_app_t *e, *tmp;
     HASH_ITER(hh, pd->uid2app, e, tmp) {

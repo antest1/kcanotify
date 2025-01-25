@@ -93,7 +93,7 @@ static void sendStatsDump(pcapdroid_t *pd) {
                            allocs_summary,
                            capstats->sent_bytes, capstats->rcvd_bytes,
                            capstats->ipv6_sent_bytes, capstats->ipv6_rcvd_bytes,
-                           (jlong)(pd->pcap_dump.dumper ? pcap_get_dump_size(pd->pcap_dump.dumper) : 0),
+                           0,
                            capstats->sent_pkts, capstats->rcvd_pkts,
                            min(pd->num_dropped_pkts, INT_MAX), pd->num_dropped_connections,
                            stats->num_open_sockets, stats->all_max_fd, active_conns, tot_conns,
@@ -106,32 +106,6 @@ static void sendStatsDump(pcapdroid_t *pd) {
 
     (*env)->DeleteLocalRef(env, allocs_summary);
     (*env)->DeleteLocalRef(env, stats_obj);
-}
-
-/* ******************************************************* */
-
-static void sendPcapDump(struct pcapdroid *pd, const int8_t *buf, int dump_size) {
-    JNIEnv *env = pd->env;
-
-    //log_d("Exporting a %d B PCAP buffer", pd->pcap_dump.buffer_idx);
-
-    jbyteArray barray = (*env)->NewByteArray(env, dump_size);
-    if(jniCheckException(env))
-        return;
-
-    (*env)->SetByteArrayRegion(env, barray, 0, dump_size, buf);
-    jniCheckException(env);
-
-    (*env)->DeleteLocalRef(env, barray);
-}
-
-/* ******************************************************* */
-
-static void stopPcapDump(pcapdroid_t *pd) {
-    JNIEnv *env = pd->env;
-
-    (*env)->CallVoidMethod(env, pd->capture_service, mids.stopPcapDump);
-    jniCheckException(env);
 }
 
 /* ******************************************************* */
@@ -436,8 +410,6 @@ static void init_jni(JNIEnv *env) {
     mids.loadUidMapping = jniGetMethodID(env, cls.vpn_service, "loadUidMapping", "(ILjava/lang/String;Ljava/lang/String;)V"),
     mids.getCountryCode = jniGetMethodID(env, cls.vpn_service, "getCountryCode", "(Ljava/lang/String;)Ljava/lang/String;"),
     mids.protect = jniGetMethodID(env, cls.vpn_service, "protect", "(I)Z");
-    mids.dumpPcapData = jniGetMethodID(env, cls.vpn_service, "dumpPcapData", "([B)V");
-    mids.stopPcapDump = jniGetMethodID(env, cls.vpn_service, "stopPcapDump", "()V");
     mids.updateConnections = jniGetMethodID(env, cls.vpn_service, "updateConnections", "([Lcom/antest1/kcanotify/remote_capture/model/ConnectionDescriptor;[Lcom/antest1/kcanotify/remote_capture/model/ConnectionUpdate;)V");
     mids.sendStatsDump = jniGetMethodID(env, cls.vpn_service, "sendStatsDump", "(Lcom/antest1/kcanotify/remote_capture/model/CaptureStats;)V");
     mids.sendServiceStatus = jniGetMethodID(env, cls.vpn_service, "sendServiceStatus", "(Ljava/lang/String;)V");
@@ -488,23 +460,12 @@ Java_com_antest1_kcanotify_remote_1capture_CaptureService_runPacketLoop(JNIEnv *
                     .get_libprog_path = getLibprogPath,
                     .send_stats_dump = sendStatsDump,
                     .send_connections_dump = sendConnectionsDump,
-                    .send_pcap_dump = sendPcapDump,
-                    .stop_pcap_dump = stopPcapDump,
                     .notify_service_status = notifyServiceStatus,
                     .dump_payload_chunk = dumpPayloadChunk,
             },
             .mitm_addon_uid = getIntPref(env, vpn, "getMitmAddonUid"),
             .vpn_capture = (bool) getIntPref(env, vpn, "isVpnCapture"),
-            .pcap_file_capture = (bool) getIntPref(env, vpn, "isPcapFileCapture"),
             .payload_mode = (payload_mode_t) getIntPref(env, vpn, "getPayloadMode"),
-            .pcap_dump = {
-                    .enabled = (bool) getIntPref(env, vpn, "pcapDumpEnabled"),
-                    .dump_extensions = (bool)getIntPref(env, vpn, "dumpExtensionsEnabled"),
-                    .pcapng_format = (bool)getIntPref(env, vpn, "isPcapngEnabled"),
-                    .snaplen = getIntPref(env, vpn, "getSnaplen"),
-                    .max_pkts_per_flow = getIntPref(env, vpn, "getMaxPktsPerFlow"),
-                    .max_dump_size = getIntPref(env, vpn, "getMaxDumpSize"),
-            },
             .socks5 = {
                     .enabled = (bool) getIntPref(env, vpn, "getSocks5Enabled"),
                     .proxy_ip = getIPPref(env, vpn, "getSocks5ProxyAddress", &pd.socks5.proxy_ipver),
@@ -588,14 +549,6 @@ Java_com_antest1_kcanotify_remote_1capture_CaptureService_initPlatformInfo(JNIEn
 
 /* ******************************************************* */
 
-JNIEXPORT void JNICALL
-Java_com_antest1_kcanotify_remote_1capture_CaptureService_askStatsDump(JNIEnv *env, jclass clazz) {
-    if(running)
-        dump_capture_stats_now = true;
-}
-
-/* ******************************************************* */
-
 JNIEXPORT jint JNICALL
 Java_com_antest1_kcanotify_remote_1capture_CaptureService_getFdSetSize(JNIEnv *env, jclass clazz) {
     return FD_SETSIZE;
@@ -615,37 +568,6 @@ Java_com_antest1_kcanotify_remote_1capture_CaptureService_setDnsServer(JNIEnv *e
     (*env)->ReleaseStringUTFChars(env, server, value);
 }
 
-/* ******************************************************* */
-
-JNIEXPORT jbyteArray JNICALL
-Java_com_antest1_kcanotify_remote_1capture_CaptureService_getPcapHeader(JNIEnv *env, jclass clazz) {
-    pcapdroid_t *pd = global_pd;
-    if(!pd || !pd->pcap_dump.dumper) {
-        log_e("NULL pd/dumper instance");
-        return false;
-    }
-
-    char *pcap_hdr = NULL;
-    int hdr_size = pcap_get_preamble(pd->pcap_dump.dumper, &pcap_hdr);
-    if((hdr_size < 0) || !pcap_hdr)
-        return NULL;
-
-    jbyteArray barray = (*env)->NewByteArray(env, hdr_size);
-    if((barray == NULL) || jniCheckException(env)) {
-        free(pcap_hdr);
-        return NULL;
-    }
-
-    (*env)->SetByteArrayRegion(env, barray, 0, hdr_size, (jbyte*)pcap_hdr);
-    pd_free(pcap_hdr);
-
-    if(jniCheckException(env)) {
-        (*env)->DeleteLocalRef(env, barray);
-        return NULL;
-    }
-
-    return barray;
-}
 
 /* ******************************************************* */
 
@@ -1068,25 +990,5 @@ bool getCountryCode(pcapdroid_t *pd, const char *host, char out[3]) {
 }
 
 /* ******************************************************* */
-
-JNIEXPORT void JNICALL
-Java_com_antest1_kcanotify_remote_1capture_CaptureService_dumpMasterSecret(JNIEnv *env, jclass clazz,
-                                                                   jbyteArray secret) {
-    jsize sec_len = (*env)->GetArrayLength(env, secret);
-    jbyte* sec_data = (*env)->GetByteArrayElements(env, secret, 0);
-
-    if(global_pd && global_pd->pcap_dump.dumper)
-        pcap_dump_secret(global_pd->pcap_dump.dumper, sec_data, sec_len);
-
-    (*env)->ReleaseByteArrayElements(env, secret, sec_data, 0);
-}
-
-/* ******************************************************* */
-
-JNIEXPORT jboolean JNICALL
-Java_com_antest1_kcanotify_remote_1capture_CaptureService_hasSeenDumpExtensions(JNIEnv *env,
-                                                                        jclass clazz) {
-    return has_seen_dump_extensions;
-}
 
 #endif // ANDROID

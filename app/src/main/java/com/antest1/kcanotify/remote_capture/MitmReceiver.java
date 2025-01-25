@@ -20,7 +20,6 @@
 package com.antest1.kcanotify.remote_capture;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
 import android.util.LruCache;
@@ -38,7 +37,6 @@ import com.antest1.kcanotify.remote_capture.model.CaptureSettings;
 import com.antest1.kcanotify.remote_capture.model.ConnectionDescriptor;
 import com.antest1.kcanotify.remote_capture.model.PayloadChunk;
 import com.antest1.kcanotify.remote_capture.model.PayloadChunk.ChunkType;
-import com.antest1.kcanotify.remote_capture.model.Prefs;
 import com.antest1.kcanotify.mitm.MitmAPI;
 
 import com.antest1.kcanotify.KcaVpnData;
@@ -76,7 +74,6 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
     private final Context mContext;
     private final MitmAddon mAddon;
     private final MitmAPI.MitmConfig mConfig;
-    private final boolean mPcapngFormat;
     private static final MutableLiveData<Status> proxyStatus = new MutableLiveData<>(Status.NOT_STARTED);
     private ParcelFileDescriptor mSocketFd;
     private BufferedOutputStream mKeylog;
@@ -130,14 +127,13 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
         mContext = ctx;
         mReg = CaptureService.requireConnsRegister();
         mAddon = new MitmAddon(mContext, this);
-        mPcapngFormat = settings.pcapng_format;
 
         mConfig = new MitmAPI.MitmConfig();
         mConfig.proxyPort = TLS_DECRYPTION_PROXY_PORT;
         mConfig.proxyAuth = proxyAuth;
-        mConfig.dumpMasterSecrets = (CaptureService.getDumpMode() != Prefs.DumpMode.NONE);
         mConfig.additionalOptions = settings.mitmproxy_opts;
-        mConfig.shortPayload = !settings.full_payload;
+        mConfig.dumpMasterSecrets = false;
+        mConfig.shortPayload = false;
 
         /* upstream certificate verification is disabled because the app does not provide a way to let the user
            accept a given cert. Moreover, it provides a workaround for a bug with HTTPS proxies described in
@@ -259,9 +255,9 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
                 }
                 istream.readFully(msg);
 
-                if(type == MsgType.MASTER_SECRET)
-                    logMasterSecret(msg);
-                else if(type == MsgType.LOG) {
+                if(type == MsgType.MASTER_SECRET) {
+                    // do nothing: originally logMasterSecret(msg);
+                } else if(type == MsgType.LOG) {
                     handleLog(msg);
                 } else if(type == MsgType.RUNNING) {
                     Log.i(TAG, "MITM proxy is running");
@@ -399,19 +395,6 @@ public class MitmReceiver implements Runnable, ConnectionsListener, MitmListener
                 return MsgType.JS_INJECTED;
             default:
                 return MsgType.UNKNOWN;
-        }
-    }
-
-    private void logMasterSecret(byte[] master_secret) throws IOException {
-        if(mPcapngFormat)
-            CaptureService.dumpMasterSecret(master_secret);
-        else {
-            if(mKeylog == null)
-                mKeylog = new BufferedOutputStream(
-                        mContext.getContentResolver().openOutputStream(
-                                Uri.fromFile(getKeylogFilePath(mContext)), "rwt"));
-            mKeylog.write(master_secret);
-            mKeylog.write(0xa);
         }
     }
 

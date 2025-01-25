@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 
 public class CaptureSettings implements Serializable {
-    public Prefs.DumpMode dump_mode;
     public Set<String> app_filter;
     public String collector_address;
     public int collector_port;
@@ -27,21 +26,17 @@ public class CaptureSettings implements Serializable {
     public Prefs.IpMode ip_mode;
     public String input_pcap_path;
     public boolean root_capture;
-    public boolean dump_extensions;
     public boolean full_payload;
     public Prefs.BlockQuicMode block_quic_mode;
     public boolean auto_block_private_dns;
     public boolean pcapng_format;
     public String capture_interface;
-    public String pcap_uri = "";
-    public String pcap_name = "";
     public int snaplen = 0;
     public int max_pkts_per_flow = 0;
     public int max_dump_size = 0;
     public String mitmproxy_opts;
 
     public CaptureSettings(Context ctx, SharedPreferences prefs) {
-        dump_mode = Prefs.getDumpMode(prefs);
         app_filter = Prefs.getAppFilter(prefs);
         collector_address = Prefs.getCollectorIp(prefs);
         collector_port = Prefs.getCollectorPort(prefs);
@@ -53,7 +48,6 @@ public class CaptureSettings implements Serializable {
         socks5_password = Prefs.isSocks5AuthEnabled(prefs) ? Prefs.getSocks5Password(prefs) : "";
         ip_mode = Prefs.getIPMode(prefs);
         root_capture = Prefs.isRootCaptureEnabled(prefs);
-        dump_extensions = Prefs.isPcapdroidMetadataEnabled(prefs);
         capture_interface = Prefs.getCaptureInterface(prefs);
         tls_decryption = Prefs.getTlsDecryptionEnabled(prefs);
         full_payload = Prefs.getFullPayloadMode(prefs);
@@ -63,7 +57,6 @@ public class CaptureSettings implements Serializable {
     }
 
     public CaptureSettings(Context ctx, Intent intent) {
-        dump_mode = Prefs.getDumpMode(getString(intent, "pcap_dump_mode", "none"));
         app_filter = new HashSet<>(getStringList(intent, Prefs.PREF_APP_FILTER));
         collector_address = getString(intent, Prefs.PREF_COLLECTOR_IP_KEY, "127.0.0.1");
         collector_port = getInt(intent, Prefs.PREF_COLLECTOR_PORT_KEY, 1234);
@@ -75,11 +68,7 @@ public class CaptureSettings implements Serializable {
         socks5_password = getString(intent, Prefs.PREF_SOCKS5_PASSWORD_KEY, "");
         ip_mode = Prefs.getIPMode(getString(intent, Prefs.PREF_IP_MODE, Prefs.IP_MODE_DEFAULT));
         root_capture = getBool(intent, Prefs.PREF_ROOT_CAPTURE, false);
-        dump_extensions = getBool(intent, Prefs.PREF_DUMP_EXTENSIONS, false) ||
-                getBool(intent, "pcapdroid_trailer", false) /* deprecated */;
         capture_interface = getString(intent, Prefs.PREF_CAPTURE_INTERFACE, "@inet");
-        pcap_uri = getString(intent, "pcap_uri", "");
-        pcap_name = getString(intent, "pcap_name", "");
         snaplen = getInt(intent, Prefs.PREF_SNAPLEN, 0);
         max_pkts_per_flow = getInt(intent, Prefs.PREF_MAX_PKTS_PER_FLOW, 0);
         max_dump_size = getInt(intent, Prefs.PREF_MAX_DUMP_SIZE, 0);

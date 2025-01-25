@@ -24,7 +24,6 @@
 #include "zdtun.h"
 #include "ip_lru.h"
 #include "blacklist.h"
-#include "pcap_dump.h"
 #include "ndpi_api.h"
 #include "common/jni_utils.h"
 #include "common/uid_resolver.h"
@@ -161,13 +160,9 @@ struct pcapdroid;
 // Used to decouple pcapdroid.c from the JNI calls
 typedef struct {
     void (*get_libprog_path)(struct pcapdroid *pd, const char *prog_name, char *buf, int bufsize);
-     int (*load_blacklists_info)(struct pcapdroid *pd);
     void (*send_stats_dump)(struct pcapdroid *pd);
     void (*send_connections_dump)(struct pcapdroid *pd);
-    void (*send_pcap_dump)(struct pcapdroid *pd, const int8_t *buf, int dump_size);
-    void (*stop_pcap_dump)(struct pcapdroid *pd);
     void (*notify_service_status)(struct pcapdroid *pd, const char *status);
-    void (*notify_blacklists_loaded)(struct pcapdroid *pd, bl_status_arr_t *status_arr);
     bool (*dump_payload_chunk)(struct pcapdroid *pd, const pkt_context_t *pctx, int dump_size);
 } pd_callbacks_t;
 
@@ -196,7 +191,6 @@ typedef struct pcapdroid {
     // config
     jint mitm_addon_uid;
     bool vpn_capture;
-    bool pcap_file_capture;
     payload_mode_t payload_mode;
 
     // stats
@@ -236,16 +230,6 @@ typedef struct pcapdroid {
             int app_filter_uids_size;
         } pcap;
     };
-
-    struct {
-        bool enabled;
-        bool dump_extensions;
-        bool pcapng_format;
-        int snaplen;
-        int max_pkts_per_flow;
-        int max_dump_size;
-        pcap_dumper_t *dumper;
-    } pcap_dump;
 
     struct {
         bool enabled;
@@ -289,8 +273,6 @@ typedef struct {
     jmethodID loadUidMapping;
     jmethodID getCountryCode;
     jmethodID protect;
-    jmethodID dumpPcapData;
-    jmethodID stopPcapDump;
     jmethodID updateConnections;
     jmethodID connInit;
     jmethodID connProcessUpdate;
@@ -345,10 +327,6 @@ extern jni_enum_t enums;
 extern bool running;
 extern uint32_t new_dns_server;
 extern bool block_private_dns;
-extern bool dump_capture_stats_now;
-extern bool has_seen_dump_extensions;
-extern int bl_num_checked_connections;
-extern int fw_num_checked_connections;
 extern char *pd_appver;
 extern char *pd_device;
 extern char *pd_os;

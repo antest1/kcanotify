@@ -35,12 +35,6 @@ import java.util.Set;
 import com.antest1.kcanotify.BuildConfig;
 
 public class Prefs {
-    public static final String DUMP_NONE = "none";
-    public static final String DUMP_HTTP_SERVER = "http_server";
-    public static final String DUMP_UDP_EXPORTER = "udp_exporter";
-    public static final String DUMP_PCAP_FILE = "pcap_file";
-    public static final String DEFAULT_DUMP_MODE = DUMP_NONE;
-
     public static final String IP_MODE_IPV4_ONLY = "ipv4";
     public static final String IP_MODE_IPV6_ONLY = "ipv6";
     public static final String IP_MODE_BOTH = "both";
@@ -64,12 +58,10 @@ public class Prefs {
     public static final String PREF_TLS_DECRYPTION_KEY = "tls_decryption";
     public static final String PREF_APP_FILTER = "app_filter";
     public static final String PREF_HTTP_SERVER_PORT = "http_server_port";
-    public static final String PREF_PCAP_DUMP_MODE = "pcap_dump_mode_v2";
     public static final String PREF_IP_MODE = "ip_mode";
     public static final String PREF_APP_LANGUAGE = "app_language";
     public static final String PREF_ROOT_CAPTURE = "root_capture";
     public static final String PREF_VISUALIZATION_MASK = "vis_mask";
-    public static final String PREF_DUMP_EXTENSIONS = "dump_extensions";
     public static final String PREF_START_AT_BOOT = "start_at_boot";
     public static final String PREF_SNAPLEN = "snaplen";
     public static final String PREF_MAX_PKTS_PER_FLOW = "max_pkts_per_flow";
@@ -94,16 +86,8 @@ public class Prefs {
     public static final String PREF_DNS_SERVER_V4 = "dns_v4";
     public static final String PREF_DNS_SERVER_V6 = "dns_v6";
     public static final String PREF_USE_SYSTEM_DNS = "system_dns";
-    public static final String PREF_PCAPNG_ENABLED = "pcapng_format";
     public static final String PREF_RESTART_ON_DISCONNECT = "restart_on_disconnect";
     public static final String PREF_IGNORED_MITM_VERSION = "ignored_mitm_version";
-
-    public enum DumpMode {
-        NONE,
-        HTTP_SERVER,
-        PCAP_FILE,
-        UDP_EXPORTER
-    }
 
     public enum IpMode {
         IPV4_ONLY,
@@ -121,15 +105,6 @@ public class Prefs {
         NONE,
         MINIMAL,
         FULL
-    }
-
-    public static DumpMode getDumpMode(String pref) {
-        switch (pref) {
-            case DUMP_HTTP_SERVER:      return DumpMode.HTTP_SERVER;
-            case DUMP_PCAP_FILE:        return DumpMode.PCAP_FILE;
-            case DUMP_UDP_EXPORTER:     return DumpMode.UDP_EXPORTER;
-            default:                    return DumpMode.NONE;
-        }
     }
 
     public static IpMode getIPMode(String pref) {
@@ -175,7 +150,6 @@ public class Prefs {
     /* Prefs with defaults */
     public static String getCollectorIp(SharedPreferences p) { return(p.getString(PREF_COLLECTOR_IP_KEY, "127.0.0.1")); }
     public static int getCollectorPort(SharedPreferences p)  { return(Integer.parseInt(p.getString(PREF_COLLECTOR_PORT_KEY, "1234"))); }
-    public static DumpMode getDumpMode(SharedPreferences p)  { return(getDumpMode(p.getString(PREF_PCAP_DUMP_MODE, DEFAULT_DUMP_MODE))); }
     public static int getHttpServerPort(SharedPreferences p) { return(Integer.parseInt(p.getString(Prefs.PREF_HTTP_SERVER_PORT, "8080"))); }
     public static boolean getTlsDecryptionEnabled(SharedPreferences p) { return(p.getBoolean(PREF_TLS_DECRYPTION_KEY, false)); }
     public static boolean getSocks5Enabled(SharedPreferences p)     { return(p.getBoolean(PREF_SOCKS5_ENABLED_KEY, false)); }
@@ -189,7 +163,6 @@ public class Prefs {
     public static BlockQuicMode getBlockQuicMode(SharedPreferences p) { return(getBlockQuicMode(p.getString(PREF_BLOCK_QUIC, BLOCK_QUIC_MODE_DEFAULT))); }
     public static boolean useEnglishLanguage(SharedPreferences p){ return("english".equals(p.getString(PREF_APP_LANGUAGE, "system")));}
     public static boolean isRootCaptureEnabled(SharedPreferences p) { return(Utils.isRootAvailable() && p.getBoolean(PREF_ROOT_CAPTURE, false)); }
-    public static boolean isPcapdroidMetadataEnabled(SharedPreferences p) { return(p.getBoolean(PREF_DUMP_EXTENSIONS, false)); }
     public static String getCaptureInterface(SharedPreferences p) { return(p.getString(PREF_CAPTURE_INTERFACE, "@inet")); }
         public static boolean startAtBoot(SharedPreferences p)        { return(p.getBoolean(PREF_START_AT_BOOT, false)); }
     public static boolean restartOnDisconnect(SharedPreferences p)        { return(p.getBoolean(PREF_RESTART_ON_DISCONNECT, false)); }
@@ -233,8 +206,7 @@ public class Prefs {
         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(ctx);
 
         // NOTE: possibly sensitive info like the collector IP address not shown
-        return "DumpMode: " + getDumpMode(p) +
-                "\nFullPayload: " + getFullPayloadMode(p) +
+        return "FullPayload: " + getFullPayloadMode(p) +
                 "\nTLSDecryption: " + getTlsDecryptionEnabled(p) +
                 "\nTLSSetupOk: " + isTLSDecryptionSetupDone(p) +
                 "\nCAInstallSkipped: " + MitmAddon.isCAInstallationSkipped(ctx) +
@@ -245,7 +217,6 @@ public class Prefs {
                 "\nCaptureInterface: " + getCaptureInterface(p) +
                 "\nTargetApps: " + getAppFilter(p) +
                 "\nIpMode: " + getIPMode(p) +
-                "\nDumpExtensions: " + isPcapdroidMetadataEnabled(p) +
                 "\nStartAtBoot: " + startAtBoot(p);
     }
 }

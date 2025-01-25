@@ -143,11 +143,6 @@ public class CaptureHelper {
 
         mSettings = settings;
 
-        if(settings.root_capture || settings.readFromPcap()) {
-            resolveHosts();
-            return;
-        }
-
         Intent vpnPrepareIntent = VpnService.prepare(mContext);
         if(vpnPrepareIntent != null) {
             if (mLauncher != null)
